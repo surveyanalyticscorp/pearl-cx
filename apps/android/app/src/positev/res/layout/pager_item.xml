@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.questionpro.whitelabelapps.views.CustomTextView
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.1"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="@color/ms_title_text_color"
+        android:textSize="48sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:background="#11000000"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.questionpro.whitelabelapps.views.CustomTextView
+            android:id="@+id/msTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="Get Notified dalhlh  adhlahd lhdlh als"
+            android:textAlignment="center"
+            android:textColor="@color/ms_title_text_color"
+            android:textSize="@dimen/ms_title_size"
+            android:textStyle="normal" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/msIcon"
+                android:layout_width="@dimen/ms_icon_size"
+                android:layout_height="@dimen/ms_icon_size"
+                android:adjustViewBounds="true"
+                android:clickable="false"
+                android:scaleType="fitCenter"
+                android:src="@drawable/testing" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ms_divider_line"
+            android:layout_width="@dimen/ms_divider_line_width"
+            android:layout_height="3dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/ms_divider_line_color"
+            android:visibility="gone" />
+
+        <com.questionpro.whitelabelapps.views.CustomTextView
+            android:id="@+id/msText"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Push notifications of when respondents take your survey or alerts when specific response criterion are met."
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/ms_text_size"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"/>
+</LinearLayout>

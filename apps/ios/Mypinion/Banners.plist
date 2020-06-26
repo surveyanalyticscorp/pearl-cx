@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>header</key>
+		<string>MyPinion</string>
+		<key>description</key>
+		<string>Take surveys on your mobile and earn great rewards.</string>
+		<key>image</key>
+		<string>MarketingOne</string>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string>Complete Surveys</string>
+		<key>description</key>
+		<string>Tell companies what you think. Test new products. Share your opinions.</string>
+		<key>image</key>
+		<string>MarketingTwo</string>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string>Earn Points</string>
+		<key>description</key>
+		<string>Get points for each survey you take. Receive additional points for inviting your friends to MyPinion.</string>
+		<key>image</key>
+		<string>MarketingThree</string>
+	</dict>
+</array>
+</plist>

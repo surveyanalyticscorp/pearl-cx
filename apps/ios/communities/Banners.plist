@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>header</key>
+		<string>Online Community</string>
+		<key>description</key>
+		<string>Mobile app for maximum community engagement.</string>
+		<key>image</key>
+		<string>MarketingOne</string>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string>Push Notifications</string>
+		<key>description</key>
+		<string>Never miss out on messages or opportunities with push notifications.</string>
+		<key>image</key>
+		<string>MarketingTwo</string>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string>Ideation</string>
+		<key>description</key>
+		<string>Capture ideas and share them via an idea board.</string>
+		<key>image</key>
+		<string>MarketingThree</string>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string>Rewards</string>
+		<key>description</key>
+		<string>Earn points and redeem those points for rewards.</string>
+		<key>image</key>
+		<string>MarketingFour</string>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string>Geo-location Surveys</string>
+		<key>description</key>
+		<string>Surveys can be triggered for specific locations.</string>
+		<key>image</key>
+		<string>MarketingFive</string>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string>Discussions</string>
+		<key>description</key>
+		<string>Post comments, like other comments, collaborate with members.</string>
+		<key>image</key>
+		<string>MarketingSix</string>
+	</dict>
+</array>
+</plist>

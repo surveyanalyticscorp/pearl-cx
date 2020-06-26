@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PRd-y8-Sc5">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNovaBold.otf">
+            <string>ProximaNovaA-Bold</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="lR7-0z-dJb">
+            <objects>
+                <viewController id="PRd-y8-Sc5" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nD4-b9-c7c">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IntroViewBackground" translatesAutoresizingMaskIntoConstraints="NO" id="i49-bv-ee7">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <viewLayoutGuide key="safeArea" id="odW-eW-NMk"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="QPLogo" translatesAutoresizingMaskIntoConstraints="NO" id="LXC-MK-uxU">
+                                <rect key="frame" x="92.5" y="308.5" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="CUT-vD-tr1"/>
+                                    <constraint firstAttribute="height" constant="50" id="rCY-vj-0IH"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="COMMUNITIES" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GGP-kv-w3o">
+                                <rect key="frame" x="152.5" y="308.5" width="212.5" height="50"/>
+                                <fontDescription key="fontDescription" name="ProximaNovaA-Bold" family="Proxima Nova Alt" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.20000000000000001" green="0.70980392160000005" blue="0.8980392157" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="LXC-MK-uxU" firstAttribute="centerY" secondItem="nD4-b9-c7c" secondAttribute="centerY" id="5I5-45-oFO"/>
+                            <constraint firstItem="GGP-kv-w3o" firstAttribute="leading" secondItem="LXC-MK-uxU" secondAttribute="trailing" constant="10" id="G6d-Zf-z3d"/>
+                            <constraint firstItem="i49-bv-ee7" firstAttribute="top" secondItem="nD4-b9-c7c" secondAttribute="top" id="TyA-kO-yTj"/>
+                            <constraint firstItem="i49-bv-ee7" firstAttribute="leading" secondItem="0Le-7q-xjP" secondAttribute="leading" id="UlA-1p-eUz"/>
+                            <constraint firstItem="0Le-7q-xjP" firstAttribute="trailing" secondItem="GGP-kv-w3o" secondAttribute="trailing" constant="10" id="eTw-Hv-RgR"/>
+                            <constraint firstItem="LXC-MK-uxU" firstAttribute="centerX" secondItem="0Le-7q-xjP" secondAttribute="centerX" constant="-70" id="l44-h7-beQ"/>
+                            <constraint firstItem="i49-bv-ee7" firstAttribute="trailing" secondItem="0Le-7q-xjP" secondAttribute="trailing" id="mkP-zu-ot1"/>
+                            <constraint firstAttribute="bottom" secondItem="i49-bv-ee7" secondAttribute="bottom" id="nfX-aW-Yqf"/>
+                            <constraint firstItem="GGP-kv-w3o" firstAttribute="height" secondItem="LXC-MK-uxU" secondAttribute="height" id="pLo-Td-wsc"/>
+                            <constraint firstItem="GGP-kv-w3o" firstAttribute="top" secondItem="LXC-MK-uxU" secondAttribute="top" id="s46-Px-DLR"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="0Le-7q-xjP"/>
+                    </view>
+                    <connections>
+                        <outlet property="view" destination="nD4-b9-c7c" id="uAv-BC-v8u"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NzL-4v-Goj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="148" y="184"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="IntroViewBackground" width="621" height="1104"/>
+        <image name="QPLogo" width="72" height="72"/>
+    </resources>
+</document>

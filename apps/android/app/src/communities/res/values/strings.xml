@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Communities</string>
+
+    <string name="ms_title_1">Centralized Community Portal</string>
+    <string name="ms_text_1">Built-in communication system, reminders, engagements tools, analytics and dashboards all in one place. </string>
+    <string name="ms_title_2">Mobile Integration</string>
+    <string name="ms_text_2">Providing real-time mobile access to surveys, reports and discussions from any mobile device.</string>
+    <string name="ms_title_3">All-In-One Dashboard</string>
+    <string name="ms_text_3">Measure your recruiting, referrals and participations efforts by having easy access to growth and attrition statistics.</string>
+    <string name="ms_title_4">Gamifications &amp; Rewards</string>
+    <string name="ms_text_4">Choose from a variety of rewards options to compensate your customers for their participations and promote using social media.</string>
+
+
+    <string-array name="ms_titles">
+        <item>Online Community</item>
+        <item>Push Notifications</item>
+        <item>Ideation</item>
+        <item>Rewards</item>
+        <item>Geo-location Surveys</item>
+        <item>Discussions</item>
+    </string-array>
+    <string-array name="ms_texts">
+        <item>Mobile app for maximum community engagement.</item>
+        <item>Never miss out on messages or opportunities with push notifications.</item>
+        <item>Capture ideas and share them via an idea board.</item>
+        <item>Earn points and redeem those points for rewards.</item>
+        <item>Surveys can be triggered for specific locations.</item>
+        <item>Post comments, like other comments, collaborate with members.</item>
+    </string-array>
+    <array name="ms_icons">
+        <item>@drawable/ms_global_communities</item>
+        <item>@drawable/ms_push_notifications</item>
+        <item>@drawable/ms_ideation</item>
+        <item>@drawable/ms_rewards</item>
+        <item>@drawable/ms_geo_location_surveys</item>
+        <item>@drawable/ms_discussions</item>
+    </array>
+    <string name="company_code">Access Code</string>
+    <string name="what_is_company_code">What is Access Code?</string>
+    <string name="company_code_description">Your Panel Access Code is the Unique Identification Number/Text for your respective Panel. If you don\'t have it yet, please contact your Panel Admin for the correct access code.</string>
+
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="surveys">Surveys</string>
+    <string name="collaborate">Collaborate</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="logout">Logout</string>
+</resources>

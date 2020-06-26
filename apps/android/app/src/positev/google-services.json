@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "172969729243",
+    "firebase_url": "https://questionpro-mobile.firebaseio.com",
+    "project_id": "questionpro-mobile",
+    "storage_bucket": "questionpro-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172969729243:android:dd84d0d3517630cc",
+        "android_client_info": {
+          "package_name": "com.questionpro.positev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "172969729243-dh913bo4j90prus5obrdf20iv30nv85r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfvsSX0ObqP8h4PdWYaqxtzEvMVMfLdO8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

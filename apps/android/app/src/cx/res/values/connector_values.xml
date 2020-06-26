@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="required_company_code">true</bool>
+    <string name="base_url">https://api.questionpro.com</string>
+    <string name="auth_url">/a/nativehtml/cx.auth.CXLogin</string>
+    <bool name="has_company_code_screen">true</bool>
+    <string name="forgot_password_url">/a/nativehtml/cx.auth.CXForgotPasswordOTP</string>
+    <string name="verify_otp_url">/a/nativehtml/cx.auth.ValidateCXUserOTP</string>
+    <string name="update_password_url">/a/nativehtml/cx.auth.CXUpdatePassword</string>
+</resources>

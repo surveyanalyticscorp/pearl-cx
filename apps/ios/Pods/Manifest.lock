@@ -1,0 +1,203 @@
+PODS:
+  - Alamofire (4.8.2)
+  - AppAuth (1.3.0):
+    - AppAuth/Core (= 1.3.0)
+    - AppAuth/ExternalUserAgent (= 1.3.0)
+  - AppAuth/Core (1.3.0)
+  - AppAuth/ExternalUserAgent (1.3.0)
+  - boost-for-react-native (1.63.0)
+  - DoubleConversion (1.1.6)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - Folly (2018.10.22.00):
+    - boost-for-react-native
+    - DoubleConversion
+    - glog
+  - glog (0.3.5)
+  - GoogleAnalytics (3.17.0)
+  - GoogleSignIn (5.0.2):
+    - AppAuth (~> 1.2)
+    - GTMAppAuth (~> 1.0)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - GTMAppAuth (1.0.0):
+    - AppAuth/Core (~> 1.0)
+    - GTMSessionFetcher (~> 1.1)
+  - GTMSessionFetcher (1.4.0):
+    - GTMSessionFetcher/Full (= 1.4.0)
+  - GTMSessionFetcher/Core (1.4.0)
+  - GTMSessionFetcher/Full (1.4.0):
+    - GTMSessionFetcher/Core (= 1.4.0)
+  - ReachabilitySwift (5.0.0)
+  - React (0.59.5):
+    - React/Core (= 0.59.5)
+  - react-native-document-picker (3.4.0):
+    - React
+  - react-native-material-kit (0.6.0-beta.1):
+    - React
+  - react-native-webview (8.0.6):
+    - React
+  - React/ART (0.59.5):
+    - React/Core
+  - React/Core (0.59.5):
+    - yoga (= 0.59.5.React)
+  - React/CxxBridge (0.59.5):
+    - Folly (= 2018.10.22.00)
+    - React/Core
+    - React/cxxreact
+    - React/jsiexecutor
+  - React/cxxreact (0.59.5):
+    - boost-for-react-native (= 1.63.0)
+    - DoubleConversion
+    - Folly (= 2018.10.22.00)
+    - glog
+    - React/jsinspector
+  - React/DevSupport (0.59.5):
+    - React/Core
+    - React/RCTWebSocket
+  - React/fishhook (0.59.5)
+  - React/jsi (0.59.5):
+    - DoubleConversion
+    - Folly (= 2018.10.22.00)
+    - glog
+  - React/jsiexecutor (0.59.5):
+    - DoubleConversion
+    - Folly (= 2018.10.22.00)
+    - glog
+    - React/cxxreact
+    - React/jsi
+  - React/jsinspector (0.59.5)
+  - React/RCTActionSheet (0.59.5):
+    - React/Core
+  - React/RCTAnimation (0.59.5):
+    - React/Core
+  - React/RCTBlob (0.59.5):
+    - React/Core
+  - React/RCTImage (0.59.5):
+    - React/Core
+    - React/RCTNetwork
+  - React/RCTLinkingIOS (0.59.5):
+    - React/Core
+  - React/RCTNetwork (0.59.5):
+    - React/Core
+  - React/RCTText (0.59.5):
+    - React/Core
+  - React/RCTWebSocket (0.59.5):
+    - React/Core
+    - React/fishhook
+    - React/RCTBlob
+  - RNDeviceInfo (0.9.3):
+    - React
+  - RNFS (2.16.6):
+    - React
+  - RNGestureHandler (1.1.0):
+    - React
+  - RNI18n (2.0.15):
+    - React
+  - RNReanimated (1.0.1):
+    - React
+  - RNVectorIcons (6.6.0):
+    - React
+  - yoga (0.59.5.React)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.8.0)
+  - DoubleConversion (from `../react-app/node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - FMDB
+  - Folly (from `../react-app/node_modules/react-native/third-party-podspecs/Folly.podspec`)
+  - glog (from `../react-app/node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - GoogleAnalytics
+  - GoogleSignIn
+  - ReachabilitySwift
+  - react-native-document-picker (from `../react-app/node_modules/react-native-document-picker`)
+  - react-native-material-kit (from `../react-app/node_modules/react-native-material-kit`)
+  - react-native-webview (from `../react-app/node_modules/react-native-webview`)
+  - React/ART (from `../react-app/node_modules/react-native`)
+  - React/Core (from `../react-app/node_modules/react-native`)
+  - React/CxxBridge (from `../react-app/node_modules/react-native`)
+  - React/DevSupport (from `../react-app/node_modules/react-native`)
+  - React/RCTActionSheet (from `../react-app/node_modules/react-native`)
+  - React/RCTAnimation (from `../react-app/node_modules/react-native`)
+  - React/RCTImage (from `../react-app/node_modules/react-native`)
+  - React/RCTLinkingIOS (from `../react-app/node_modules/react-native`)
+  - React/RCTNetwork (from `../react-app/node_modules/react-native`)
+  - React/RCTText (from `../react-app/node_modules/react-native`)
+  - React/RCTWebSocket (from `../react-app/node_modules/react-native`)
+  - RNDeviceInfo (from `../react-app/node_modules/react-native-device-info`)
+  - RNFS (from `../react-app/node_modules/react-native-fs`)
+  - RNGestureHandler (from `../react-app/node_modules/react-native-gesture-handler`)
+  - RNI18n (from `../react-app/node_modules/react-native-i18n`)
+  - RNReanimated (from `../react-app/node_modules/react-native-reanimated`)
+  - RNVectorIcons (from `../react-app/node_modules/react-native-vector-icons`)
+  - yoga (from `../react-app/node_modules/react-native/ReactCommon/yoga`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - AppAuth
+    - boost-for-react-native
+    - FMDB
+    - GoogleAnalytics
+    - GoogleSignIn
+    - GTMAppAuth
+    - GTMSessionFetcher
+    - ReachabilitySwift
+
+EXTERNAL SOURCES:
+  DoubleConversion:
+    :podspec: "../react-app/node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
+  Folly:
+    :podspec: "../react-app/node_modules/react-native/third-party-podspecs/Folly.podspec"
+  glog:
+    :podspec: "../react-app/node_modules/react-native/third-party-podspecs/glog.podspec"
+  React:
+    :path: "../react-app/node_modules/react-native"
+  react-native-document-picker:
+    :path: "../react-app/node_modules/react-native-document-picker"
+  react-native-material-kit:
+    :path: "../react-app/node_modules/react-native-material-kit"
+  react-native-webview:
+    :path: "../react-app/node_modules/react-native-webview"
+  RNDeviceInfo:
+    :path: "../react-app/node_modules/react-native-device-info"
+  RNFS:
+    :path: "../react-app/node_modules/react-native-fs"
+  RNGestureHandler:
+    :path: "../react-app/node_modules/react-native-gesture-handler"
+  RNI18n:
+    :path: "../react-app/node_modules/react-native-i18n"
+  RNReanimated:
+    :path: "../react-app/node_modules/react-native-reanimated"
+  RNVectorIcons:
+    :path: "../react-app/node_modules/react-native-vector-icons"
+  yoga:
+    :path: "../react-app/node_modules/react-native/ReactCommon/yoga"
+
+SPEC CHECKSUMS:
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
+  boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  Folly: de497beb10f102453a1afa9edbf8cf8a251890de
+  glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
+  GoogleAnalytics: f42cc53a87a51fe94334821868d9c8481ff47a7b
+  GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
+  GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
+  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  React: 90adac468c7b72bf1fa6c64bf230650f851a8388
+  react-native-document-picker: d694111879537cec2c258a1dcd2243d9df746824
+  react-native-material-kit: fcd29a6ad901670f8073433d382df2abaadb831f
+  react-native-webview: e11b5d7da61ac3acee13f3ae3184d417f773c5d5
+  RNDeviceInfo: dc3cbee96cd2392cf03d6ff6191dc15f1606a166
+  RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
+  RNGestureHandler: b65d391f4f570178d657b99a16ec99d09b8656b0
+  RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
+  RNReanimated: c8dd490ca98a4edcba229bfa49f2516c95a43afb
+  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
+  yoga: 2e571f113e8cbeb0eb752aeebc86c1bfe7a8200c
+
+PODFILE CHECKSUM: f580a81db25fe0ecfb2ae180b397551171a73687
+
+COCOAPODS: 1.9.1

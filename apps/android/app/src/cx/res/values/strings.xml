@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Customer\nExperience</string>
+
+    <string-array name="ms_titles">
+        <item>Connect and engage with your customers. Anytime, anywhere</item>
+        <item>Take full control of your customer’s journey</item>
+        <item>Manage real-time analytics in one dashboard</item>
+        <item>Make immediate business decisions</item>
+        <item>Fuel growth organically</item>
+    </string-array>
+    <string-array name="ms_texts">
+        <item>Communicate with customers or prospects through a wide selection of feedback channels at every touchpoint anywhere, no matter the device.</item>
+        <item>Analyze your customer’s 360 experience and quickly identify actionable insights and trends.</item>
+        <item>Easily monitor your business with the role-based, customizable dashboard from anywhere.</item>
+        <item>Prioritize actions quickly based on customer data to excel their expectations with our closed-loop feedback system with real-time alerts.</item>
+        <item>Identify your best customers and help them become your brand ambassadors through social referrals with our unique Promoter Amplification system.</item>
+    </string-array>
+    <array name="ms_icons">
+    <item>@drawable/ms_connect_engage</item>
+    <item>@drawable/ms_take_control</item>
+    <item>@drawable/ms_mobile_dashboard</item>
+    <item>@drawable/ms_drive_business_decisions</item>
+    <item>@drawable/ms_full_growth</item>
+    </array>
+    <string name="what_is_company_code">What is Company Code?</string>
+    <string name="company_code_description">Your Company Code is the Unique Identification Number/Text for your organisation\'s Customer Experience account. If you don\'t have it yet, please contact your Supervisor for the correct company code.</string>
+
+</resources>

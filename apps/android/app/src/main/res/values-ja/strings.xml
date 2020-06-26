@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Communities</string>
+
+    <string name="home">ホーム</string>
+    <string name="logout">ログアウト</string>
+    <string name="done">完了</string>
+    <string name="cancel">キャンセル</string>
+    <string name="yes">はい</string>
+    <string name="logout_message">本当にログアウトしますか？</string>
+    <string name="documents">文書</string>
+    <string name="events">イベント</string>
+    <string name="surveys">調査</string>
+</resources>

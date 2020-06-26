@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>QuestionPro</title>
+    <script src="jquery.min.js"></script>
+    <script src="highcharts.js"></script>
+</head>
+<body>
+<div id="content"></div>
+
+<script>
+    var interval = setInterval(function() {
+        console.log('interval');
+        if (WebViewBridge) {
+            console.log('bridge found');
+            clearInterval(interval);
+            WebViewBridge.send(JSON.stringify({event: "getData"}));
+
+            WebViewBridge.onMessage = function(message) {
+                console.log('onMessage: ' + message);
+                var data = JSON.parse(message);
+                console.log('JSON Parsed: ' + data);
+
+                $('#content').height(data.dimensions.height);
+
+                for(var i in data.question){
+                    var result = data.question[i];
+
+                    $divTitle = $('<p style="color:#10518d;text-align: center ;"><font size="4">'+result.text+'</font></p>').appendTo('#content');
+
+                    $div1 = $('<div align="center" style="width: 300; margin-bottom: 40px"></div>').appendTo('#content');
+
+
+                    $div1.attr("id", "result_"+result.ID);
+                    $div1.highcharts(result.chart);
+                }
+                //new Highcharts.Chart('content', data.question.chart);
+            };
+        }
+    }, 200);
+</script>
+</body>
+</html>

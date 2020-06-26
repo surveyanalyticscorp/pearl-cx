@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">HealthTrust</string>
+
+
+    <string-array name="ms_titles">
+        <item>WELCOME</item>
+         <item>COLLABORATIONS</item>
+        <item>LEADERBOARD</item>
+        <item>PROFILE</item>
+    </string-array>
+    <string-array name="ms_texts">
+        <item>Collaborate with peers &amp; provide real time feedback in a member focused environment.</item>
+        <item>Collaborate with your peers to provide your knowledge and expertise in the product selection process.</item>
+        <item>Earn points and see your ranking for taking surveys and participating in key discussions.</item>
+        <item>Edit and manage your profile to communicate your personal brand.</item>
+    </string-array>
+    <array name="ms_icons">
+        <item>@drawable/ms_healthtrust_logo_white</item>
+        <item>@drawable/ms_intro_two</item>
+        <item>@drawable/ms_intro_three</item>
+        <item>@drawable/ms_intro_four</item>
+
+    </array>
+    <string name="company_code">Access Code</string>
+    <string name="what_is_company_code">What is Access Code?</string>
+    <string name="company_code_description">Your Panel Access Code is the Unique Identification Number/Text for your respective Panel. If you don\'t have it yet, please contact your Panel Admin for the correct access code.</string>
+
+
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="collaborate">Collaborate</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="logout">Logout</string>
+
+    <string-array name="ideaboard_menu">
+        <item>All Trends &amp; Ideas</item>
+        <item>Popular Trends &amp; Ideas</item>
+        <item>My Trends &amp; Ideas</item>
+        <item>Favorites</item>
+    </string-array>
+    <bool name="use_translation_for_tabs">false</bool>
+    <string-array name="topics_menu">
+        <item>ALL Contract Topics</item>
+        <item>Popular Contract Topics</item>
+        <item>My Contract Topics</item>
+        <item>Favorites</item>
+    </string-array>
+
+    <string-array name="collaborate_tab_menu">
+        <item>Contract Topics</item>
+        <item>Trends &amp; Ideas</item>
+        <item>Chat</item>
+    </string-array>
+
+</resources>

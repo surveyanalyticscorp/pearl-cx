@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>QuestionPro</title>
+    <script src="jquery.min.js"></script>
+    <script src="highcharts.js"></script>
+
+</head>
+<body>
+<div id="content"></div>
+
+<script>
+    var interval = setInterval(function() {
+        console.log('interval');
+        if (WebViewBridge) {
+            console.log('bridge found');
+            clearInterval(interval);
+            WebViewBridge.send(JSON.stringify({event: "getData"}));
+
+            WebViewBridge.onMessage = function(message) {
+                //console.log('onMessage: ' + message);
+                var data = JSON.parse(message);
+                var colorCode = data.color;
+                //console.log('JSON Parsed: ' + data);
+
+                $('#content').height(data.dimensions.height);
+
+
+                    var result = data.question;
+
+
+
+                    $divMain = $('<div style="width: 300px;height:250px; display:block; margin: 0 auto 20px;position: relative; "></div>').appendTo('#content');
+                    $divMain.attr("id", "result_"+result.ID);
+
+                    $divChart=$('<div style="position:absolute; left:0px; top:0px;"></div>').appendTo($divMain);
+                    $divChart.attr("id", "container_"+result.ID)
+
+                    $divChartText =$('<div style="position:absolute; left:0px; top:0px;"></div>').appendTo($divMain);
+                    $divChartText.attr("id", "addText_"+result.ID);
+
+                    var chart = new Highcharts.Chart("container_"+result.ID, result.chart);
+
+                    var textX = chart.plotLeft + (chart.plotWidth  * 0.5);
+                    var textY = chart.plotTop  + (chart.plotHeight * 0.5);
+
+                   //handling the decimal points
+                    var percentage = result.percentage+"";
+                    if(percentage.length > 3){
+                        percentage = percentage.substr(0,2);
+                    }
+
+                    var span = '<span id="pieChartInfoText'+result.ID+'" style="position:absolute;color:'+colorCode+';text-align:center;">';
+                    span += '<H3 style="font-size: 60px">'+percentage+'<sup style= "font-size: 30px; padding-top: 20px">%</sup></H3>';
+
+
+                    span += '</span>';
+
+                    $("#addText_"+result.ID).append(span);
+                    span = $('#pieChartInfoText'+result.ID);
+                    span.css('left', textX + (span.width() * -0.5));
+                    span.css('top', textY + (span.height() * -0.5));
+
+
+
+            };
+        }
+    }, 200);
+</script>
+</body>
+</html>

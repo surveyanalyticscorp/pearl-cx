@@ -1,0 +1,99 @@
+# Uncomment this line to define a global platform for your project
+ platform :ios, '9.0'
+ 
+def available_pods
+pod 'React', :path => '../react-app/node_modules/react-native', :subspecs => [
+'Core', # Include this to enable In-App Devmenu if RN >= 0.43
+'DevSupport', # Devmenu
+'CxxBridge',
+'RCTText',
+'RCTWebSocket',  # needed for debugging
+'RCTImage',
+'RCTAnimation',
+'RCTNetwork',
+'RCTLinkingIOS',
+'ART',
+'RCTActionSheet',
+]
+pod 'yoga', :path => '../react-app/node_modules/react-native/ReactCommon/yoga'
+pod 'RNFS', :path => '../react-app/node_modules/react-native-fs'
+pod 'RNI18n', :path => '../react-app/node_modules/react-native-i18n'
+pod 'RNDeviceInfo', :path => '../react-app/node_modules/react-native-device-info'
+pod 'RNVectorIcons', :path => '../react-app/node_modules/react-native-vector-icons'
+pod 'RNGestureHandler', :path => '../react-app/node_modules/react-native-gesture-handler'
+pod 'RNReanimated', :path => '../react-app/node_modules/react-native-reanimated'
+
+pod 'react-native-document-picker', :path => '../react-app/node_modules/react-native-document-picker'
+
+pod 'react-native-material-kit', :path => '../react-app/node_modules/react-native-material-kit' 
+
+# Third party deps podspec link
+pod 'DoubleConversion', :podspec => '../react-app/node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+pod 'react-native-webview', :path => '../react-app/node_modules/react-native-webview'
+pod 'glog', :podspec => '../react-app/node_modules/react-native/third-party-podspecs/glog.podspec'
+pod 'Folly', :podspec => '../react-app/node_modules/react-native/third-party-podspecs/Folly.podspec'
+pod 'GoogleSignIn'
+pod 'FMDB'
+pod 'GoogleAnalytics'
+pod 'Alamofire', '~> 4.8.0'
+pod 'ReachabilitySwift'
+end
+ 
+target 'Communities' do
+  available_pods
+  use_frameworks!
+  pod 'GoogleAnalytics'
+end
+ 
+target 'HealthTrust' do
+  available_pods
+  use_frameworks!
+  pod 'GoogleAnalytics'
+  pod 'FMDB'
+end
+ 
+ 
+target 'Surveys' do
+end
+ 
+target 'CX' do
+  available_pods
+  use_frameworks!
+  pod 'GoogleAnalytics'
+  pod 'FMDB'
+end
+ 
+ 
+target 'Pulse' do
+   available_pods
+   use_frameworks!
+   pod 'GoogleAnalytics'
+   pod 'FMDB'
+end
+ 
+target 'MyPinion' do
+available_pods
+pod 'GoogleAnalytics'
+end
+ 
+target 'POSITEv' do
+    available_pods
+    pod 'GoogleAnalytics'
+end
+ 
+target 'Vizientinc' do
+    available_pods
+    pod 'GoogleAnalytics'
+end
+
+target 'Energizer Idea Lab' do
+  available_pods
+  pod 'GoogleAnalytics'
+end
+
+target 'HealthTrust Collaboratives' do
+  available_pods
+  use_frameworks!
+  pod 'GoogleAnalytics'
+  pod 'FMDB'
+end

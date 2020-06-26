@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.questionpro.views.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/materialize_toolbar"
+    android:minHeight="@dimen/materialize_toolbar"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:id="@+id/menuIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/home_icon_selector" />
+
+        <com.questionpro.views.CustomTextView
+            android:id="@+id/menuTitle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Home"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp"
+            android:textStyle="normal"
+
+            />
+
+        <com.questionpro.views.CustomTextView
+            android:id="@+id/menuBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="20"
+            android:visibility="gone"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp"
+            android:textStyle="normal"
+
+            />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/context_menu_divider" />
+</com.questionpro.views.CheckableLinearLayout>

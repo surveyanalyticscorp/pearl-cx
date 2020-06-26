@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PRd-y8-Sc5">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="lR7-0z-dJb">
+            <objects>
+                <viewController id="PRd-y8-Sc5" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nD4-b9-c7c">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IntroViewBackground" translatesAutoresizingMaskIntoConstraints="NO" id="RIk-kY-KP0">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="822"/>
+                                <viewLayoutGuide key="safeArea" id="qCr-1C-PM4"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HTLogo" translatesAutoresizingMaskIntoConstraints="NO" id="rXZ-bW-O96">
+                                <rect key="frame" x="30" y="374" width="315" height="64"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="rXZ-bW-O96" firstAttribute="leading" secondItem="qC3-dW-QW7" secondAttribute="leading" constant="30" id="2Gn-GX-jaW"/>
+                            <constraint firstItem="rXZ-bW-O96" firstAttribute="centerY" secondItem="nD4-b9-c7c" secondAttribute="centerY" id="5qP-AA-hJN"/>
+                            <constraint firstItem="qC3-dW-QW7" firstAttribute="trailing" secondItem="rXZ-bW-O96" secondAttribute="trailing" constant="30" id="Ud6-VV-2ZU"/>
+                            <constraint firstItem="qC3-dW-QW7" firstAttribute="bottom" secondItem="RIk-kY-KP0" secondAttribute="bottom" constant="-44" id="ZUH-tQ-n1e"/>
+                            <constraint firstItem="RIk-kY-KP0" firstAttribute="leading" secondItem="qC3-dW-QW7" secondAttribute="leading" id="hMk-rL-NcN"/>
+                            <constraint firstItem="qC3-dW-QW7" firstAttribute="trailing" secondItem="RIk-kY-KP0" secondAttribute="trailing" id="mhh-RX-Lfz"/>
+                            <constraint firstItem="rXZ-bW-O96" firstAttribute="centerX" secondItem="qC3-dW-QW7" secondAttribute="centerX" id="svn-fM-6m8"/>
+                            <constraint firstItem="RIk-kY-KP0" firstAttribute="top" secondItem="qC3-dW-QW7" secondAttribute="top" constant="-44" id="yua-Yp-eek"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="qC3-dW-QW7"/>
+                    </view>
+                    <connections>
+                        <outlet property="view" destination="nD4-b9-c7c" id="uAv-BC-v8u"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NzL-4v-Goj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="148" y="184"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="HTLogo" width="256" height="64.666664123535156"/>
+        <image name="IntroViewBackground" width="414" height="736"/>
+    </resources>
+</document>

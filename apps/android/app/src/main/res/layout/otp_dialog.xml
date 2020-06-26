@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:padding="20dp">
+    <com.questionpro.views.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:text="@string/otp_description"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="10dp"/>
+    <com.questionpro.views.CustomTextView
+        android:id="@+id/invalidOTPText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#e73827"
+        android:text="@string/invalid_email_password"
+        android:visibility="invisible" />
+    <com.questionpro.views.CustomEditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:inputType="number"
+        android:background="#AAFFFFFF"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+        android:hint="@string/one_time_password"
+        android:ems="10"
+        android:id="@+id/otp" />
+
+</LinearLayout>

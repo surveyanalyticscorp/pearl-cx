@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">POSITEv</string>
+    <string name="show">Show</string>
+    <string name="forgot_password_dialog_title">Forgot Password?</string>
+    <string name="forgot_password_dialog_text">Call our project assistance line at <font color='#1976D2'><a href="tel:1-800-957-6457">1-800-957-6457</a></font> between 9 am and 5 pm, Eastern Time, Monday through Friday or email us at <font color='#1976D2'><a href="mailto:fdastudy@rti.org">fdastudy@rti.org</a></font></string>
+    <string-array name="ms_titles">
+        <item>Welcome</item>
+        <item>Introduction</item>
+    </string-array>
+
+    <string-array name="ms_texts">
+        <item>Welcome to the Point of Sale Intervention\n for Tobacco Evaluation Study!</item>
+        <item>Thank you for agreeing to participate in the smartphone app portion of the study.\n\n This new approach to research uses your phone\'s technology to determine how often you go to stores that sell tobacco products.\n\nThe app will also ask you to complete a short questionnaire (5 minutes or less) three times between 2018 and 2020.</item>
+
+
+    </string-array>
+    <array name="ms_icons">
+        <item>@drawable/ms_welcome</item>
+        <item>@drawable/arrow_up</item>
+    </array>
+
+    <string name="email_place_holder">Enter your RTI ID</string>
+</resources>

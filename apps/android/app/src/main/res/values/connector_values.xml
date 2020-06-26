@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="ms_divider_want_to_show">false</bool>
+    <bool name="required_company_code">false</bool>
+    <bool name="hasCompanyCode">false</bool>
+    <bool name="use_global_login">false</bool>
+    <bool name="show_right_logo">false</bool>
+    <bool name="is_white_label">false</bool>
+    <bool name="has_social_auth_login">false</bool>
+    <bool name="has_company_code_screen">false</bool>
+    <bool name="extended_context_menu">false</bool>
+    <bool name="has_signup">false</bool>
+    <bool name="has_api_key">false</bool>
+    <bool name="has_forgot_password">true</bool>
+    <bool name="has_location_surveys">true</bool>
+    <string name="base_url">http://api.questionpro.com</string>
+    <string name="global_panel_auth_url">/a/nativehtml/panel.auth.PanelRequestHandler</string>
+    <string name="auth_url">/a/nativehtml/survey.auth.SurveyLogin</string>
+    <string name="signup_url">/a/nativehtml/survey.auth.SurveyLogin</string>
+    <string name="forgot_password_url">/a/nativehtml/flashlet.ForgotFlashLetLoginPassword</string>
+    <string name="verify_otp_url">/a/nativehtml/panel.auth.ValidatePanelMemberOTP</string>
+    <string name="update_password_url">/a/nativehtml/panel.auth.PanelMemberUpdatePassword</string>
+    <string name="upload_location_result_url">/a/nativehtml/panel.locationsurvey.LocationTrack</string>
+    <string name="location_survey_data_url">/a/nativehtml/panel.locationsurvey.LocationSurveys</string>
+    <string name="slack_client_id">3409868097.145985904821</string>
+    <string name="slack_client_secret">4c1226b41fedd29f485eafd28f56ce3b</string>
+    <string name="slack_domain">questionpro.com</string>
+    <string name="api_key">NA</string>
+
+
+    <string-array name="permissions">
+
+        <item>android.permission.WRITE_EXTERNAL_STORAGE</item>
+        <item>android.permission.READ_EXTERNAL_STORAGE</item>
+        <item>android.permission.READ_CONTACTS</item>
+        <item>android.permission.WRITE_CONTACTS</item>
+        <item>android.permission.CAMERA</item>
+    </string-array>
+
+    <string name="login_domain">dummy</string>
+
+    <bool name="has_logout_api">false</bool>
+</resources>

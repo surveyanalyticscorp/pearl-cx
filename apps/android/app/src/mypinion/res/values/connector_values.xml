@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <bool name="required_company_code">false</bool>
+    <bool name="use_global_login">false</bool>
+    <string name="auth_url">/a/nativehtml/panel.auth.PanelLogin</string>
+    <string name="base_url">https://api.surveyanalytics.com</string>
+    <string name="signup_url">/a/nativehtml/panel.auth.PanelMemberSignUp</string>
+    <string name="forgot_password_url">/a/nativehtml/panel.auth.PanelMemberForgotPassword</string>
+    <string name="verify_otp_url">/a/nativehtml/panel.auth.ValidatePanelMemberOTP</string>
+    <string name="update_password_url">/a/nativehtml/panel.auth.PanelMemberUpdatePassword</string>
+    <bool name="has_api_key">true</bool>
+    <bool name="has_signup">true</bool>
+    <string name="api_key">0562de16-cf59-451e-86ba-0ae8ed5924f0</string>
+</resources>

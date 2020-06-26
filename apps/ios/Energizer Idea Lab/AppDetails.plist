@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>isWhiteLabel</key>
+	<false/>
+	<key>kGATrackID</key>
+	<string>UA-30165-24</string>
+	<key>kGlobalDataServiceHost</key>
+	<string>https://api.questionpro.com</string>
+	<key>kServiceHost</key>
+	<string>https://api.questionpro.com</string>
+	<key>kGlobalDataService</key>
+	<string>/a/nativehtml/panel.auth.PanelRequestHandler</string>
+	<key>kLoginService</key>
+	<string>/a/nativehtml/panel.auth.PanelLogin</string>
+	<key>kResetPasswordService</key>
+	<string>/a/nativehtml/panel.auth.PanelMemberForgotPassword</string>
+	<key>kOTPService</key>
+	<string>/a/nativehtml/panel.auth.ValidatePanelMemberOTP</string>
+	<key>kUpdatePasswordService</key>
+	<string>/a/nativehtml/panel.auth.PanelMemberUpdatePassword</string>
+	<key>kPushNotificationService</key>
+	<string>/a/nativehtml/panel.notification.PanelRegisterPushToken</string>
+	<key>kForgotPasswordContent</key>
+	<string>Please enter the details below and hit Reset Password button to reset your password.</string>
+	<key>kUpdatePasswordContent</key>
+	<string>Please enter the new password and hit the update button to change your password.</string>
+	<key>kHelpButtonTitle</key>
+	<string>What is Access Code?</string>
+	<key>kHelpButtonMessage</key>
+	<string>Your Panel Access Code is the Unique Identification Number/Text for your respective Panel. If you don&apos;t have it yet, please contact your Panel Admin for the correct access code.</string>
+	<key>AccessCode</key>
+	<false/>
+	<key>GlobalLogin</key>
+	<false/>
+	<key>AccessCodePlaceHolder</key>
+	<string>Access Code</string>
+	<key>navigationBarColor</key>
+	<string>#1a2a55</string>
+	<key>buttonBG</key>
+	<string>#0095dc</string>
+	<key>buttonTitleColor</key>
+	<string>#ffffff</string>
+	<key>kSocialSignIn</key>
+	<false/>
+	<key>isGoogleIntegrationEnable</key>
+	<false/>
+	<key>isSlackntegrationEnable</key>
+	<false/>
+	<key>isOfficeIntegrationEnable</key>
+	<false/>
+	<key>kSignupService</key>
+	<string>/a/nativehtml/panel.auth.PanelMemberSignUp</string>
+	<key>kPanelAPIKey</key>
+	<string>87111a12-3d5f-4251-b397-ed382444b044</string>
+	<key>hasSignUp</key>
+	<true/>
+	<key>dataUploadWhileLogout</key>
+	<false/>
+	<key>useTranslationsForTabs</key>
+	<string>true</string>
+    <key>leaderBoardMenu</key>
+    <array>
+        <string>recent</string>
+        <string>popular</string>
+        <string>posted_by_me</string>
+        <string>favorites</string>
+    </array>
+    <key>topicTabMenu</key>
+       <array>
+           <string>recent</string>
+           <string>popular</string>
+           <string>posted_by_me</string>
+           <string>favorites</string>
+       </array>
+       <key>collabrateMenu</key>
+       <array>
+           <string>topic</string>
+           <string>ideaboard</string>
+       </array>
+       <key>profileTabMenu</key>
+       <array>
+           <string>myProfile</string>
+           <string>myRewards</string>
+       </array>
+</dict>
+</plist>

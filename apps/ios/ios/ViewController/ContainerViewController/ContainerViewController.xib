@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContainerViewController" customModule="CX" customModuleProvider="target">
+            <connections>
+                <outlet property="iReactRootView" destination="5og-xm-O26" id="H87-0k-HV3"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5og-xm-O26">
+                    <rect key="frame" x="0.0" y="44" width="375" height="734"/>
+                    <color key="backgroundColor" red="0.070781610910000001" green="0.24750822780000001" blue="0.40944704409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="tintColor" red="0.070781610910000001" green="0.24750822780000001" blue="0.40944704409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.070781610910000001" green="0.24750822780000001" blue="0.40944704409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="tintColor" red="0.070781610910000001" green="0.24750822780000001" blue="0.40944704409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="6O7-pW-05g" firstAttribute="top" secondItem="5og-xm-O26" secondAttribute="top" id="Dkf-rG-PIW"/>
+                <constraint firstItem="6O7-pW-05g" firstAttribute="bottom" secondItem="5og-xm-O26" secondAttribute="bottom" id="PpM-Cv-TfV"/>
+                <constraint firstItem="5og-xm-O26" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="b12-MZ-A8y"/>
+                <constraint firstAttribute="trailing" secondItem="5og-xm-O26" secondAttribute="trailing" id="fpt-S2-LJD"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <viewLayoutGuide key="safeArea" id="6O7-pW-05g"/>
+            <point key="canvasLocation" x="56" y="323"/>
+        </view>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="NXd-qO-V0b">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="89m-ZX-Vq7">
+                    <rect key="frame" x="0.0" y="44" width="375" height="734"/>
+                    <color key="backgroundColor" red="0.070781610910000001" green="0.24750822780000001" blue="0.40944704409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="tintColor" red="0.070781610910000001" green="0.24750822780000001" blue="0.40944704409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.070781610910000001" green="0.24750822780000001" blue="0.40944704409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="tintColor" red="0.070781610910000001" green="0.24750822780000001" blue="0.40944704409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="89m-ZX-Vq7" secondAttribute="trailing" id="OcZ-7c-Uzo"/>
+                <constraint firstItem="89m-ZX-Vq7" firstAttribute="leading" secondItem="NXd-qO-V0b" secondAttribute="leading" id="f97-Zq-Wle"/>
+                <constraint firstItem="r1g-Aw-RgX" firstAttribute="bottom" secondItem="89m-ZX-Vq7" secondAttribute="bottom" id="hT1-e7-MkD"/>
+                <constraint firstItem="r1g-Aw-RgX" firstAttribute="top" secondItem="89m-ZX-Vq7" secondAttribute="top" id="ruo-Il-PnP"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <viewLayoutGuide key="safeArea" id="r1g-Aw-RgX"/>
+            <point key="canvasLocation" x="56" y="323"/>
+        </view>
+    </objects>
+</document>

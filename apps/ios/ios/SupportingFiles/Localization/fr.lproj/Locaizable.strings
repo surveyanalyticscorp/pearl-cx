@@ -1,0 +1,16 @@
+/* 
+  Locaizable.strings
+  ios
+
+  Created by QuestionPro on 12/6/18.
+  Copyright © 2018 Jignesh. All rights reserved.
+*/
+
+"Home" = "Accueil";
+"Collaborate" = "Collaborer";
+"Profile" = "Profil";
+"Leaderboard" = "Classement";
+"Logout" = "Connectez - Out";
+"Surveys" = "Surveys";
+"Documents" = "Documents";
+"Events" = "Evénements";

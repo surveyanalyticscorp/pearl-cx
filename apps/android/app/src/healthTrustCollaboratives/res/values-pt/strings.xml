@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HealthTrust</string>
+    <string name="home">Inicio</string>
+    <string name="profile">Perfil</string>
+    <string name="collaborate">Ativiades</string>
+    <string name="leaderboard">Lideres</string>
+    <string name="logout">Sair</string>
+</resources>

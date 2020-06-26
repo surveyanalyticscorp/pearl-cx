@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>header</key>
+		<string>Real-time Dashboards &amp; Filtering</string>
+		<key>description</key>
+		<string>Get a live mobile dashboard with advanced filtering capabilities include date and response status filters.</string>
+		<key>image</key>
+		<string>MarketingOne</string>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string>Focus on what matters to you</string>
+		<key>description</key>
+		<string>Select sections or questions which matter to you and hide the rest.</string>
+		<key>image</key>
+		<string>MarketingTwo</string>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string>Get notified</string>
+		<key>description</key>
+		<string>Push notifications of when respondents take your survey or alerts when specific response criterias are met.</string>
+		<key>image</key>
+		<string>MarketingThree</string>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string>Insights &amp; Snapshots</string>
+		<key>description</key>
+		<string>Share snapshots of a specific chart or the whole report - including data-segments and cross-tabs.</string>
+		<key>image</key>
+		<string>MarketingFour</string>
+	</dict>
+	<dict>
+		<key>header</key>
+		<string>Cross tabulate</string>
+		<key>description</key>
+		<string>Advanced analysis using mobile crosstabulation to help you compare relationship between two variables.</string>
+		<key>image</key>
+		<string>MarketingOne</string>
+	</dict>
+</array>
+</plist>

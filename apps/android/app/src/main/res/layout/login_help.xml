@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:text="This is a paragraph of a text and need to add more"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="10dp"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/getCompanyCodeButton"
+        style="@style/AppTheme.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/get_your_company_code" />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/forgotPasswordButton"
+        style="@style/AppTheme.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/forgot_password" />
+</LinearLayout>

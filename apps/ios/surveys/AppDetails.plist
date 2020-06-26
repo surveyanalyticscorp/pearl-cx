@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>isWhiteLabel</key>
+	<false/>
+	<key>kGATrackID</key>
+	<string>UA-30165-21</string>
+	<key>kGlobalDataServiceHost</key>
+	<string></string>
+	<key>kServiceHost</key>
+	<string>https://api.questionpro.com</string>
+	<key>kLoginService</key>
+	<string>/a/nativehtml/survey.auth.SurveyLogin</string>
+	<key>kResetPasswordService</key>
+	<string></string>
+	<key>kOTPService</key>
+	<string></string>
+	<key>kUpdatePasswordService</key>
+	<string></string>
+	<key>kPushNotificationService</key>
+	<string>/a/nativehtml/flashlet.general.FlashLetRegisterPushToken</string>
+	<key>kForgotPasswordContent</key>
+	<string>Please enter email address associated to your account.</string>
+	<key>kUpdatePasswordContent</key>
+	<string>Please enter the new password and hit the Update button to change your password.</string>
+	<key>kHelpButtonTitle</key>
+	<string></string>
+	<key>kHelpButtonMessage</key>
+	<string></string>
+	<key>AccessCode</key>
+	<false/>
+	<key>GlobalLogin</key>
+	<false/>
+	<key>AccessCodePlaceHolder</key>
+	<string></string>
+	<key>navigationBarColor</key>
+	<string>#003566</string>
+	<key>buttonBG</key>
+	<string>#404A5B</string>
+	<key>buttonTitleColor</key>
+	<string>#FFFFFF</string>
+	<key>kSocialSignIn</key>
+	<false/>
+	<key>isGoogleIntegrationEnable</key>
+	<false/>
+	<key>isSlackntegrationEnable</key>
+	<false/>
+	<key>isOfficeIntegrationEnable</key>
+	<false/>
+	<key>dataUploadWhileLogout</key>
+	<false/>
+	<key>useTranslationsForTabs</key>
+	<string>true</string>
+</dict>
+</plist>

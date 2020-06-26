@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Energizer</string>
+
+    <string name="home">ホーム</string>
+    <string name="profile">プロフィール</string>
+    <string name="collaborate">協働する</string>
+    <string name="leaderboard">リーダーボード</string>
+    <string name="logout">ログアウト</string>
+</resources>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIcons</key>
+	<dict/>
+	<key>CFBundleIcons~ipad</key>
+	<dict/>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.3</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.9</string>
+	<key>Fabric</key>
+	<dict>
+		<key>APIKey</key>
+		<string>471d747205581aed1594d4d8d1bb0584372fd132</string>
+		<key>Kits</key>
+		<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict/>
+				<key>KitName</key>
+				<string>Crashlytics</string>
+			</dict>
+		</array>
+	</dict>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>This allows us to use your camera to upload photos and videos in the question types while you are taking the survey.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>This app requires contacts access to function properly.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Location access is required for geo-fencing supported surveys for research. Surveys are sent based on your visits to the stores.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location access is required for geo-fencing supported surveys for research. Surveys are sent based on your visits to the stores.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Location access is required for geo-fencing supported surveys for research. Surveys are sent based on your visits to the stores.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location access is required for geo-fencing supported surveys for research. Surveys are sent based on your visits to the stores.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This allows us to use your microphone to provide you audio upload features in the question types while you are taking the survey.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This allows us to use your photo library to upload photos and videos features in the question types while you are taking the survey.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>ProximaNovaBold.otf</string>
+		<string>ProximaNovaLight.otf</string>
+		<string>ProximaNovaRegular.otf</string>
+		<string>ProximaNovaAltSemibold.otf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>location</string>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>POSITEvLaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>allowsBackgroundLocationUpdates</key>
+	<true/>
+</dict>
+</plist>

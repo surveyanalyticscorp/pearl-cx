@@ -1,0 +1,142 @@
+<resources>
+    <string name="app_name">QPNativeHTMLApp</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_marketing">MarketingActivity</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!--String related to Objectives and Goals-->
+    <string name="active">Active</string>
+    <string name="archived">Archived</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="forgot_password_dialog_title">Forgot Password?</string>
+    <string name="forgot_password_dialog_text">Call our project assistance line at <font color='#1976D2'><a href="tel:1-800-957-6457">1-800-957-6457</a></font> between 9 am and 5 pm, Eastern Time, Monday through Friday or email us at <font color='#1976D2'><a href="mailTo:fdastudy@rti.org">fdastudy@rti.org</a></font></string>
+    <string name="got_it">Got It</string>
+
+    <string name="ms_title_1">Surveys</string>
+    <string name="ms_text_1">With our automated reports, slice and dice your employee survey data immediately to identify your top teams and top strengths.</string>
+    <string name="ms_title_2">360 Reviews</string>
+    <string name="ms_text_2">Get a comprehensive view of an individual with a 360 degree feedback review.</string>
+    <string name="ms_title_3">Weekly Pulse</string>
+    <string name="ms_text_3">Establish a regular communication channel and get a real-time gauge on employee mood and morale.</string>
+    <string name="ms_title_4">Frameworks</string>
+    <string name="ms_text_4">Don’t know what to ask? Deploy a survey using our expert frameworks.</string>
+
+    <string-array name="ms_titles">
+        <item>Real-time Dashboards &amp; Filtering</item>
+        <item>Focus on what matters to you</item>
+        <item>Get notified</item>
+        <item>Insights &amp; Snapshots</item>
+        <item>Cross tabulate</item>
+    </string-array>
+    <string-array name="ms_texts">
+        <item>Get a live mobile dashboard with advanced filtering capabilities include date and response status filters.</item>
+        <item>Select sections or questions which matter to you and hide the rest.</item>
+        <item>Push notifications of when respondents take your survey or alerts when specific response criterion are met.</item>
+        <item>Share snapshots of a specific chart or the whole report - including data-segments and cross-tabs.</item>
+        <item>Advanced analysis using mobile crosstabulation to help you compare relationship between two variables.</item>
+    </string-array>
+
+    <array name="ms_icons">
+    </array>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="company_code">Company Code</string>
+    <string name="show">Show</string>
+    <string name="invalid_email_password">Invalid Email Address or Password</string>
+    <string name="login_all_fields_required">All the fields are required.</string>
+    <string name="help"><u>Help?</u></string>
+    <string name="sign_in">Sign In</string>
+    <string name="signing_in">Signing In...</string>
+    <string name="get_your_company_code">Get Your Company Code?</string>
+    <string name="forgot_password"><u>Forgot Password?</u></string>
+    <string name="not_a_member_yet">Not a member yet?</string>
+    <string name="join_now"><u>Join Now</u></string>
+    <string name="already_registered">Already registered?</string>
+    <string name="login_u"><u>Login</u></string>
+    <string name="register">Register</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+
+    <string name="sign_in_with">or sign in with</string>
+    <string name="send_company_code">Send Company Code</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="reset_password_description">Please enter the details below and hit Reset Password button to reset your password.</string>
+    <string name="update_password_description">Please enter the new password and hit the Update button to change your password.</string>
+    <string name="otp_description">Please enter the One Time Password received on your email.</string>
+    <string name="update_password">Update Password</string>
+    <string name="one_time_password">One Time Password (OTP)</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="logout_message">Do you really want to logout?</string>
+    <string name="what_is_company_code">What is Company Code?</string>
+    <string name="company_code_description">Your Company Code is the Unique Identification Number/Text for your organisation\'s Customer Experience account.\nIf you don\'t have it yet, please contact your Supervisor for the correct company code.</string>
+    <string name="no_internet_message">No Working internet connection found. Please check your network settings.</string>
+    
+    
+    <string name="login">Login</string>
+    <string name="slack">Slack</string>
+    <string name="google">Google</string>
+    <string name="office_365">Office 365</string>
+    <string name="login_with_company_code"><u>Login with Company Code</u></string>
+
+    <string name="home">Home</string>
+    <string name="logout">Logout</string>
+    <string name="version">Version</string>
+    <bool name="use_translation_for_tabs">true</bool>
+    <string-array name="collaborate_tab_menu">
+        <item>topic</item>
+        <item>ideaboard</item>
+        <item>chat</item>
+    </string-array>
+
+    <string-array name="profile_tab_menu">
+        <item>myProfile</item>
+        <item>myRewards</item>
+        <item>shareWithFriend</item>
+    </string-array>
+
+    <string-array name="ideaboard_menu">
+        <item>recent</item>
+        <item>popular</item>
+        <item>posted_by_me</item>
+        <item>favorites</item>
+    </string-array>
+    <string-array name="topics_menu">
+        <item>recent</item>
+        <item>popular</item>
+        <item>posted_by_me</item>
+        <item>favorites</item>
+    </string-array>
+    <string-array name="leader_board_tab_menu">
+        <item>This Month</item>
+        <item>Last Month</item>
+        <item>All Time</item>
+    </string-array>
+
+
+    <string name="profile">Profile</string>
+    <string name="surveys">Surveys</string>
+    <string name="collaborate">Collaborate</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="documents">Documents</string>
+    <string name="events">Events</string>
+
+</resources>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.questionpro.views.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:minHeight="@dimen/materialize_toolbar"
+    android:orientation="vertical">
+
+    <com.questionpro.views.CheckableLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/materialize_toolbar"
+        android:clickable="true"
+        android:id="@+id/active"
+        android:layout_gravity="center_horizontal"
+        android:background="?android:selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.questionpro.views.CustomTextView
+            android:id="@+id/menuText"
+            style="@style/context_menu"
+            android:layout_weight="0.9"
+            android:text="@string/active"/>
+
+        <com.questionpro.views.CustomTextView
+            android:id="@+id/menuItemText1"
+            style="@style/context_menu"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:layout_weight="0.1"
+            android:textAlignment="textEnd"
+            />
+    </com.questionpro.views.CheckableLinearLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/context_menu_divider" />
+
+    <com.questionpro.views.CheckableLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/materialize_toolbar"
+        android:clickable="true"
+
+        android:background="?android:selectableItemBackground"
+        android:layout_weight="1"
+        android:id="@+id/archieved"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.questionpro.views.CustomTextView
+            android:id="@+id/menuText1"
+            android:layout_marginRight="@dimen/cast_libraries_material_featurehighlight_inner_radius"
+            android:layout_weight="0.9"
+            style="@style/context_menu"
+            android:text="@string/archived" />
+
+        <com.questionpro.views.CustomTextView
+            android:id="@+id/menuItemText2"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:layout_weight="0.1"
+            android:gravity="center_horizontal|end"
+            style="@style/context_menu"
+            android:textAlignment="textEnd"/>
+
+    </com.questionpro.views.CheckableLinearLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/context_menu_divider" />
+</com.questionpro.views.CheckableLinearLayout>

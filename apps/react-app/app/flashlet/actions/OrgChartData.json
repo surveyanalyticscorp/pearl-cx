@@ -1,0 +1,142 @@
+{
+  "body": {
+    "id": -1,
+    "text": "Pulse",
+    "active": true,
+    "parentID": 0,
+    "imageURI": "https://leadershipcompound.com/wp-content/uploads/2016/10/icon-organizations.png",
+    "children": [{
+      "id": 1,
+      "text": "Kora Chatin",
+      "active": true,
+      "parentID": -1,
+      "imageURI": "https://robohash.org/quaeperspiciatisenim.png?size=50x50&set=set1",
+      "children": [
+        {
+          "id": 2,
+          "text": "Kareem Gorusso",
+          "active": true,
+          "parentID": 1,
+          "imageURI": "https://robohash.org/harumexpeditamollitia.png?size=50x50&set=set1",
+          "children": [
+            {
+              "id": 3,
+              "text": "Frederique Dudman",
+              "active": true,
+              "parentID": 2,
+              "imageURI": "https://robohash.org/inventorequivelit.png?size=50x50&set=set1",
+              "children": [
+                {
+                  "id": 18,
+                  "text": "Raynard Bene",
+                  "active": true,
+                  "parentID": 3,
+                  "imageURI": "https://robohash.org/teneturdolorperspiciatis.png?size=50x50&set=set1",
+                  "children": []
+                },
+                {
+                  "id": 19,
+                  "text": "Karlik Wonter",
+                  "active": true,
+                  "parentID": 3,
+                  "imageURI": "https://robohash.org/omnisliberosint.png?size=50x50&set=set1",
+                  "children": [
+                    {
+                      "id": 21,
+                      "text": "Staffard Cumberbatch",
+                      "active": true,
+                      "parentID": 19,
+                      "imageURI": "https://robohash.org/assumendaeumet.png?size=50x50&set=set1",
+                      "children": []
+                    },
+                    {
+                      "id": 22,
+                      "text": "Masha Wildes",
+                      "active": true,
+                      "parentID": 19,
+                      "imageURI": "https://robohash.org/similiquecorporisomnis.png?size=50x50&set=set1",
+                      "children": []
+                    },
+                    {
+                      "id": 23,
+                      "text": "Elayne Panyer",
+                      "active": true,
+                      "parentID": 19,
+                      "imageURI": "https://robohash.org/sintrepudiandaeet.png?size=50x50&set=set1",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "id": 20,
+                  "text": "Dahlia Upshall",
+                  "active": true,
+                  "parentID": 3,
+                  "imageURI": "https://robohash.org/facereautoptio.png?size=50x50&set=set1",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 4,
+              "text": "Yorker Salandino",
+              "active": true,
+              "parentID": 2,
+              "imageURI": "https://robohash.org/harumexplicaboalias.png?size=50x50&set=set1",
+              "children": []
+            },
+            {
+              "id": 5,
+              "text": "Hersch Nutt",
+              "active": true,
+              "parentID": 2,
+              "imageURI": "https://robohash.org/rerumlaborumqui.png?size=50x50&set=set1",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "text": "Luca Antonat",
+          "active": true,
+          "parentID": 1,
+          "imageURI": "https://robohash.org/accusamusremomnis.png?size=50x50&set=set1",
+          "children": [
+            {
+              "id": 7,
+              "text": "Beatrix Flaxman",
+              "active": true,
+              "parentID": 6,
+              "imageURI": "https://robohash.org/rerumsequiquas.png?size=50x50&set=set1",
+              "children": []
+            },
+            {
+              "id": 8,
+              "text": "Ricard Merryweather",
+              "active": true,
+              "parentID": 6,
+              "imageURI": "https://robohash.org/autetqui.png?size=50x50&set=set1",
+              "children": []
+            },
+            {
+              "id": 9,
+              "text": "Dael Hadfield",
+              "active": true,
+              "parentID": 6,
+              "imageURI": "https://robohash.org/eumcumatque.png?size=50x50&set=set1",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "text": "Jarib Server",
+          "active": true,
+          "parentID": 1,
+          "imageURI": "https://robohash.org/omnisimpeditomnis.png?size=50x50&set=set1",
+          "children": []
+        }
+      ]
+    }]
+  }
+}

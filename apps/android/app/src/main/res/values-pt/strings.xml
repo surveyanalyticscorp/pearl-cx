@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home">Início</string>
+        
+    <string name="logout">Sair</string>
+        
+    <string name="done">Feito</string>
+        
+    <string name="cancel">Cancelar</string>
+        
+    <string name="yes">Sim</string>
+        
+    <string name="logout_message">Você realmente quer sair?</string>
+    <string name="documents">Documentos</string>
+    <string name="events">Eventos</string>
+    <string name="surveys">pesquisas</string>
+</resources>

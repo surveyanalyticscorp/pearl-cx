@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">MyPinion</string>
+
+    <string name="ms_title_1">Centralized Community Portal</string>
+    <string name="ms_text_1">Built-in communication system, reminders, engagements tools, analytics and dashboards all in one place.</string>
+    <string name="ms_title_2">Mobile Integration</string>
+    <string name="ms_text_2">Providing real-time mobile access to surveys, reports and discussions from any mobile device.</string>
+    <string name="ms_title_3">All-In-One Dashboard</string>
+    <string name="ms_text_3">Measure your recruiting, referrals and participation efforts by having easy access to growth and attrition statistics.</string>
+    <string name="ms_title_4">Gamifications &amp; Rewards</string>
+    <string name="ms_text_4">Choose from a variety of rewards options to compensate your customers for their participation and promote using social media.</string>
+
+
+    <string-array name="ms_titles">
+        <item>MyPinion</item>
+        <item>Complete Survey</item>
+        <item>Earn Points</item>
+
+    </string-array>
+    <string-array name="ms_texts">
+        <item>Take survey on your mobile and earn great rewards.</item>
+        <item>Tell companies what you think. Test new products. Share your opinions.</item>
+        <item>Get point for each survey you take. Receive additional points for inviting your friends to MyPinion.</item>
+
+    </string-array>
+    <array name="ms_icons">
+        <item>@drawable/ms_smart_opinion</item>
+        <item>@drawable/ms_complete_survey</item>
+        <item>@drawable/ms_earn_points</item>
+
+    </array>
+    <string name="company_code">Access Code</string>
+    <string name="what_is_company_code">What is Access Code?</string>
+    <string name="company_code_description">Your Panel Access Code is the Unique Identification Number/Text for your respective Panel. If you don\'t have it yet, please contact your Panel Admin for the correct access code.</string>
+</resources>

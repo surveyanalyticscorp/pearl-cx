@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  ios
+
+  Created by Jignesh on 03/07/17.
+  Copyright © 2017 QuestionPro Pvt Ltd. All rights reserved.
+*/
+
+// side menu string
+
+"Home" = "Accueil";
+"Collaborate" = "Collaborer";
+"Profile" = "Profil";
+"Leaderboard" = "Tableau de classement";
+"Logout" = "Connectez - Out";

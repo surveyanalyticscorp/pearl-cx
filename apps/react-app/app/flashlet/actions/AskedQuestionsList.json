@@ -1,0 +1,79 @@
+{
+  "employeeCount": 200,
+  "schedules": [
+    {
+      "date" : "24-04-2020 08:00 AM PST",
+      "canAddQuestion": true,
+      "questions": [{
+        "text" : "How was your week?",
+        "id" : 1,
+        "type": "U",
+        "subtype": "F",
+        "pointScale": 3,
+        "panelMemberId": 123,
+        "enableDynamicComment": true,
+        "scheduledDate": "25-04-2020 08:00 AM PST",
+        "sendType": 2,
+        "created": "20-04-2020 08:00 AM PST",
+        "panelMember": {
+          "name" : "Sumit Kothari",
+          "id" : 123,
+          "profilePicURL": "https://www.questionpro.com/qp_userimages/profilepic/24275/pic_593455.jpeg?timestamp=1589963520811"
+        }
+      },{
+        "text" : "Takos or Mole?",
+        "id" : 2,
+        "type": "U",
+        "subtype": "F",
+        "pointScale": 2,
+        "panelMemberId": 56,
+        "enableDynamicComment": true,
+        "scheduledDate": "25-04-2020 08:00 AM PST",
+        "sendType": 2,
+        "created": "20-04-2020 08:00 AM PST",
+        "panelMember": {
+          "name" : "Anup Surendram",
+          "id" : 56,
+          "profilePicURL": "https://www.questionpro.com/qp_userimages/profilepic/24275/pic_593455.jpeg?timestamp=1589963520811"
+        }
+      }]
+    },
+    {
+      "date" : "01-05-2020 08:00 AM PST",
+      "canAddQuestion": false,
+      "questions": [{
+        "text" : "How was your week?",
+        "id" : 1,
+        "type": "U",
+        "subtype": "F",
+        "pointScale": 3,
+        "panelMemberId": 123,
+        "enableDynamicComment": true,
+        "scheduledDate": "25-04-2020 08:00 AM PST",
+        "sendType": 2,
+        "created": "20-04-2020 08:00 AM PST",
+        "panelMember": {
+          "name" : "Sumit Kothari",
+          "id" : 123,
+          "profilePicURL": "https://www.questionpro.com/qp_userimages/profilepic/24275/pic_593455.jpeg?timestamp=1589963520811"
+        }
+      },{
+        "text" : "What does the Fox say?",
+        "id" : 2,
+        "type": "U",
+        "subtype": "F",
+        "pointScale": 3,
+        "panelMemberId": 2,
+        "enableDynamicComment": true,
+        "scheduledDate": "25-04-2020 08:00 AM PST",
+        "sendType": 2,
+        "created": "20-04-2020 08:00 AM PST",
+        "panelMember": {
+          "name" : "Vivek",
+          "id" : 2,
+          "profilePicURL": "https://www.questionpro.com/qp_userimages/profilepic/24275/pic_593455.jpeg?timestamp=1589963520811"
+        }
+      }]
+    }
+  ]
+}

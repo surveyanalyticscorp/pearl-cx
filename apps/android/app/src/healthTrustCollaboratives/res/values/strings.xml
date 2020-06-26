@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">HealthTrust Collaboratives</string>
+
+
+    <string-array name="ms_titles">
+        <item>WELCOME</item>
+         <item>COLLABORATIONS</item>
+        <item>PROFILE</item>
+    </string-array>
+    <string-array name="ms_texts">
+        <item>Together we can empower excellence and impact care.</item>
+        <item>Collaborate with your peers to provide your knowledge and expertise in the product selection process.</item>
+        <item>Edit and manage your profile to communicate your personal brand.</item>
+    </string-array>
+    <array name="ms_icons">
+        <item>@drawable/ms_ht_collaboratives_logo_white</item>
+        <item>@drawable/ms_intro_two</item>
+        <item>@drawable/ms_intro_three</item>
+
+    </array>
+    <string name="company_code">Access Code</string>
+    <string name="what_is_company_code">What is Access Code?</string>
+    <string name="company_code_description">Your Panel Access Code is the Unique Identification Number/Text for your respective Panel. If you don\'t have it yet, please contact your Panel Admin for the correct access code.</string>
+
+
+    <string name="home">Home</string>
+    <string name="surveys">Surveys</string>
+    <string name="leaderboard">Leaderboard</string>
+
+    <string name="reimbursement">Reimbursement</string>
+    <string name="profile">Profile</string>
+    <string name="collaborate">Collaborate</string>
+    <string name="logout">Logout</string>
+
+    <bool name="use_translation_for_tabs">true</bool>
+    <string-array name="collaborate_tab_menu">
+        <item>discussion</item>
+        <item>chat</item>
+    </string-array>
+
+    <string-array name="profile_tab_menu">
+        <item>myProfile</item>
+    </string-array>
+
+    <string-array name="ideaboard_menu">
+        <item>recent</item>
+        <item>popular</item>
+        <item>posted_by_me</item>
+        <item>favorites</item>
+    </string-array>
+    <string-array name="topics_menu">
+        <item>recent</item>
+        <item>popular</item>
+        <item>posted_by_me</item>
+        <item>favorites</item>
+    </string-array>
+    <string-array name="leader_board_tab_menu">
+        <item>This Month</item>
+        <item>Last Month</item>
+        <item>All Time</item>
+    </string-array>
+
+    <string name="documents">Documents</string>
+    <string name="events">Events</string>
+</resources>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="h6M-nV-swj">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="VFa-uj-u94">
+            <objects>
+                <viewController id="h6M-nV-swj" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="VGl-YA-nJN">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IntroViewBackground" translatesAutoresizingMaskIntoConstraints="NO" id="F7j-Xq-RRs">
+                                <rect key="frame" x="0.0" y="-24" width="375" height="735"/>
+                                <viewLayoutGuide key="safeArea" id="38g-E7-DZj"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LoginIcon" translatesAutoresizingMaskIntoConstraints="NO" id="ilU-gU-FfZ">
+                                <rect key="frame" x="62.5" y="143.5" width="250" height="250"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="1CT-fm-qMn"/>
+                                    <constraint firstAttribute="width" constant="250" id="ehp-hd-ynY"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vizient Voice" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mXs-fp-qcR">
+                                <rect key="frame" x="62.5" y="443.5" width="250" height="36"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="mXs-fp-qcR" firstAttribute="leading" secondItem="ilU-gU-FfZ" secondAttribute="leading" id="6B7-br-eK5"/>
+                            <constraint firstItem="QC5-V9-OBU" firstAttribute="trailing" secondItem="F7j-Xq-RRs" secondAttribute="trailing" id="8yx-WY-JzC"/>
+                            <constraint firstItem="ilU-gU-FfZ" firstAttribute="centerX" secondItem="QC5-V9-OBU" secondAttribute="centerX" id="Bnj-L4-KLQ"/>
+                            <constraint firstItem="F7j-Xq-RRs" firstAttribute="leading" secondItem="QC5-V9-OBU" secondAttribute="leading" id="POc-WK-w2w"/>
+                            <constraint firstItem="F7j-Xq-RRs" firstAttribute="top" secondItem="QC5-V9-OBU" secondAttribute="top" constant="-44" id="SOM-Qe-dq4"/>
+                            <constraint firstItem="ilU-gU-FfZ" firstAttribute="centerY" secondItem="QC5-V9-OBU" secondAttribute="centerY" constant="-75" id="YUF-hz-1fe"/>
+                            <constraint firstItem="QC5-V9-OBU" firstAttribute="bottom" secondItem="F7j-Xq-RRs" secondAttribute="bottom" constant="-44" id="a0S-c8-UdK"/>
+                            <constraint firstItem="mXs-fp-qcR" firstAttribute="top" secondItem="ilU-gU-FfZ" secondAttribute="bottom" constant="50" id="ovl-Wc-JRx"/>
+                            <constraint firstItem="mXs-fp-qcR" firstAttribute="trailing" secondItem="ilU-gU-FfZ" secondAttribute="trailing" id="z2L-I7-nAJ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="QC5-V9-OBU"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ckj-Rl-1ly" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="52" y="130.88455772113943"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="IntroViewBackground" width="621" height="1104"/>
+        <image name="LoginIcon" width="224" height="54"/>
+    </resources>
+</document>
