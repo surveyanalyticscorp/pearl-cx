@@ -725,8 +725,6 @@
 		33A8FAD120B690A8006FE20E /* BannerDescriptionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerDescriptionView.swift; sourceTree = "<group>"; };
 		33A8FAD220B690A8006FE20E /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		33A8FAD320B690A9006FE20E /* IntroViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroViewController.xib; sourceTree = "<group>"; };
-		33A8FAD820B6C4ED006FE20E /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
-		33A8FAD920B6C4ED006FE20E /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		33A8FADD20B6D863006FE20E /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		33A8FADE20B6D863006FE20E /* ForgotPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ForgotPasswordViewController.xib; sourceTree = "<group>"; };
 		33B925DC1F5FCEC3001820E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -1893,15 +1891,6 @@
 			path = POSITEv;
 			sourceTree = "<group>";
 		};
-		33A8FAD720B6C4ED006FE20E /* POSITEv */ = {
-			isa = PBXGroup;
-			children = (
-				33A8FAD820B6C4ED006FE20E /* LoginViewController.xib */,
-				33A8FAD920B6C4ED006FE20E /* LoginViewController.swift */,
-			);
-			path = POSITEv;
-			sourceTree = "<group>";
-		};
 		33A8FADC20B6D863006FE20E /* POSITEv */ = {
 			isa = PBXGroup;
 			children = (
@@ -2150,7 +2139,6 @@
 			isa = PBXGroup;
 			children = (
 				F794D1F9219965EE00E13242 /* CX */,
-				33A8FAD720B6C4ED006FE20E /* POSITEv */,
 				33E7A0511F62D235006ED401 /* LoginViewController.swift */,
 				33E7A0521F62D235006ED401 /* LoginViewController.xib */,
 			);
