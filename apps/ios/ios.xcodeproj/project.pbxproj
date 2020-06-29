@@ -315,7 +315,6 @@
 		54ACF3E320F38CE500D1D892 /* ios.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3398ECD21F67AF8E000C5325 /* ios.xcassets */; };
 		54EEDBFF21C0E64600A3D554 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 54EEDBFB21C0E64600A3D554 /* Podfile */; };
 		E09D0B522296D3800047D085 /* SignupServiceInvocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ADB79621BA8314004D99B7 /* SignupServiceInvocation.swift */; };
-		E09D0B532296D3870047D085 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54ADB76A21BA812C004D99B7 /* SignUpViewController.swift */; };
 		E0D85C4122CA155900A2E368 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0D85C3A22CA150C00A2E368 /* Feather.ttf */; };
 		E0E9D0A122C348FB0057CDA4 /* arrowRightWhite.png in Resources */ = {isa = PBXBuildFile; fileRef = E0E9D08D22C348F30057CDA4 /* arrowRightWhite.png */; };
 		E0E9D0AB22C349420057CDA4 /* people.png in Resources */ = {isa = PBXBuildFile; fileRef = E0E9D0A622C3493D0057CDA4 /* people.png */; };
@@ -1192,10 +1191,8 @@
 		5438C1C621B8F83F0055D826 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Locaizable.strings; sourceTree = "<group>"; };
 		5438C1C821B8F88D0055D826 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Locaizable.strings; sourceTree = "<group>"; };
 		54489D682182F9550023F234 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		54ADB76A21BA812C004D99B7 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		54ADB79621BA8314004D99B7 /* SignupServiceInvocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupServiceInvocation.swift; sourceTree = "<group>"; };
 		54ADB79A21BA90BD004D99B7 /* communities.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = communities.xcassets; path = communities/communities.xcassets; sourceTree = SOURCE_ROOT; };
-		54C8B12921BA964800B6D3BF /* SignUpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignUpViewController.xib; sourceTree = "<group>"; };
 		54CCE72321B933290080B9A0 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Locaizable.strings"; sourceTree = "<group>"; };
 		54CCE72421B933340080B9A0 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Locaizable.strings"; sourceTree = "<group>"; };
 		54EEDBFB21C0E64600A3D554 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -1679,7 +1676,6 @@
 		33A2DE5E1F5FEFDA00EF8C5F /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				54ADB76921BA80FB004D99B7 /* SignUpViewController */,
 				337D41C720BE890C008F4554 /* ObjAndGoalsViewController */,
 				33BDCC0020AAEAD800CBFD5B /* ContextMenuViewController */,
 				3367E18720A1B0EF00035397 /* MenuViewController */,
@@ -2854,15 +2850,6 @@
 			path = Localization;
 			sourceTree = "<group>";
 		};
-		54ADB76921BA80FB004D99B7 /* SignUpViewController */ = {
-			isa = PBXGroup;
-			children = (
-				54ADB76A21BA812C004D99B7 /* SignUpViewController.swift */,
-				54C8B12921BA964800B6D3BF /* SignUpViewController.xib */,
-			);
-			path = SignUpViewController;
-			sourceTree = "<group>";
-		};
 		54ADB79521BA8314004D99B7 /* SignupService */ = {
 			isa = PBXGroup;
 			children = (
@@ -3750,7 +3737,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E09D0B532296D3870047D085 /* SignUpViewController.swift in Sources */,
 				E09D0B522296D3800047D085 /* SignupServiceInvocation.swift in Sources */,
 				33FF7BC320ADA37100A0A46D /* MSOutlookClient.m in Sources */,
 				33BDCC5220AC427C00CBFD5B /* LocalizationModuleManager.m in Sources */,
