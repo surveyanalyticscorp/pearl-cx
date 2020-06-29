@@ -100,14 +100,14 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "033A0821-85D4-4038-A4B5-84B2DC304C8A - 51433959a640ac0b"
+                  uuid = "033A0821-85D4-4038-A4B5-84B2DC304C8A - 9185776213d26960"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Pulse.QPServiceDataCenterInvocation.invoke() -&gt; ()"
-                  moduleName = "Pulse"
+                  symbolName = "CX.QPServiceDataCenterInvocation.invoke() -&gt; ()"
+                  moduleName = "CX"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/apple/pearl.git/apps/ios/ios/GeneralUtilityModule/WebServiceManager/WebServiceModule/DataCenterService/QPServiceDataCenterInvocation.swift"
+                  urlString = "file:///Users/apple/pearl-cx/apps/ios/ios/GeneralUtilityModule/WebServiceManager/WebServiceModule/DataCenterService/QPServiceDataCenterInvocation.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "37"
@@ -115,14 +115,14 @@
                   offsetFromSymbolStart = "1831">
                </Location>
                <Location
-                  uuid = "033A0821-85D4-4038-A4B5-84B2DC304C8A - 51433959a640ac0b"
+                  uuid = "033A0821-85D4-4038-A4B5-84B2DC304C8A - 9185776213d26960"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Pulse.QPServiceDataCenterInvocation.invoke() -&gt; ()"
-                  moduleName = "Pulse"
+                  symbolName = "CX.QPServiceDataCenterInvocation.invoke() -&gt; ()"
+                  moduleName = "CX"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/apple/pearl.git/apps/ios/ios/GeneralUtilityModule/WebServiceManager/WebServiceModule/DataCenterService/QPServiceDataCenterInvocation.swift"
+                  urlString = "file:///Users/apple/pearl-cx/apps/ios/ios/GeneralUtilityModule/WebServiceManager/WebServiceModule/DataCenterService/QPServiceDataCenterInvocation.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "37"
