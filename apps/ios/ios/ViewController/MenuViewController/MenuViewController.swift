@@ -15,9 +15,7 @@ protocol MenuViewControllerDelegate: class {
 
 class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate{
     
-    @IBOutlet weak var languageImagView: UIImageView!
-    @IBOutlet weak var languageLabel: UILabel!
-    @IBOutlet weak var languageButton: UIButton!
+
     @IBOutlet weak var iTableView: UITableView!
     @IBOutlet weak var iUserIcon: UIImageView?
     @IBOutlet weak var iHeaderBGView: UIImageView?
@@ -130,14 +128,6 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateLeftSlideMenuLabels), name: NSNotification.Name(rawValue: kEmployInfoUpdateNotification), object: nil)
         self.dropperView = Dropper(width: self.iTableView.frame.width , height: self.iTableView.frame.height)
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-             
-        if appDelegate.appType == PocketAppType.QUESTIONPRO_PULSE_APP {
-            self.languageLabel.isHidden = true
-            self.languageButton.isHidden = true
-            self.languageImagView.isHidden = true
-        }
-        
     }
     
     @objc func updateLeftSlideMenuLabels()  {
@@ -157,11 +147,6 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             UserDefaults.standard.set(false, forKey: kUpdateAsk)
             UserDefaults.standard.synchronize()
         }
-        
-        
-        if let languageTitle = UserDefaults.standard.value(forKey: kUpdateMenuTitle) as? String {
-            self.languageLabel.text = languageTitle
-        }
     }
     
     @objc func updateUIForLanguageInfo(notification : NSNotification) {
@@ -172,13 +157,6 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
     }
-    
-    @IBAction func languageButtonClicked(_ sender: Any) {
-        self.iContextMenuManager.showLanguagePicker()
-        slideMenuController()?.closeLeft()
-    }
-    
-    
     
     //    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
     //        return self.iBootomFooter
