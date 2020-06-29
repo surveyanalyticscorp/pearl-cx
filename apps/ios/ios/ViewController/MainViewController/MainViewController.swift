@@ -47,12 +47,12 @@ class MainViewController: UIViewController, MainViewDelegate, MMDrawerContollerD
     }
     
     func launchSocialSignInView() {
-        if let appDetailsDict = GlobalData.fetchAppDetailsDict(),
-            let isSocialSignInEnable = appDetailsDict["kSocialSignIn"] as? Bool, isSocialSignInEnable  {
-            let socialSignInViewController = SocialSignInViewController(nibName: "SocialSignInViewController", bundle: nil)
-            socialSignInViewController.iDelegate = self
-            self.navigationController?.pushViewController(socialSignInViewController, animated:false)
-        }
+//        if let appDetailsDict = GlobalData.fetchAppDetailsDict(),
+//            let isSocialSignInEnable = appDetailsDict["kSocialSignIn"] as? Bool, isSocialSignInEnable  {
+//            let socialSignInViewController = SocialSignInViewController(nibName: "SocialSignInViewController", bundle: nil)
+//            socialSignInViewController.iDelegate = self
+//            self.navigationController?.pushViewController(socialSignInViewController, animated:false)
+//        }
     }
     
     func launchLoginView()  {

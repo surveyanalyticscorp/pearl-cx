@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0B7AF63628838EA9EE19959D /* Pods_CX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B3090F296DE1129CEFA0E49 /* Pods_CX.framework */; };
-		1889018224A9C094004C4A90 /* SocialSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332A58C71F6A4FE300844C3D /* SocialSignInViewController.swift */; };
 		18C44AD3247576F0001A64BB /* React.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C44AD2247576F0001A64BB /* React.framework */; };
 		18C44AD4247576F8001A64BB /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A31B4420BD216F0061EA45 /* CoreLocation.framework */; };
 		18C44AD5247576FE001A64BB /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33A8FACE20B68E7D006FE20E /* CoreData.framework */; };
@@ -42,7 +41,6 @@
 		3308201D1F66A32A00E7F349 /* MenuType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330820061F66A0AF00E7F349 /* MenuType.swift */; };
 		330820231F66A33100E7F349 /* WebPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330820071F66A0AF00E7F349 /* WebPage.swift */; };
 		330820291F66A34300E7F349 /* ContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330820031F66A0AF00E7F349 /* ContextMenu.swift */; };
-		332A58D21F6A500800844C3D /* SocialSignInViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 332A58C81F6A4FE300844C3D /* SocialSignInViewController.xib */; };
 		332A58D91F6A5CA700844C3D /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332A58D51F6A5CA700844C3D /* UIImageView.swift */; };
 		332A58E21F6A5E4600844C3D /* CustomActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332A58DD1F6A5E4100844C3D /* CustomActivityIndicatorView.swift */; };
 		3330064720A0615B00C49F67 /* ContainerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3330064220A0615B00C49F67 /* ContainerViewController.xib */; };
@@ -628,8 +626,6 @@
 		331549DE20AEB2CE0047E50F /* CommunitiesLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CommunitiesLaunchScreen.storyboard; sourceTree = "<group>"; };
 		332A58C31F6A49DB00844C3D /* PulseLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PulseLaunchScreen.storyboard; sourceTree = "<group>"; };
 		332A58C51F6A4ABD00844C3D /* ios-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ios-Bridging-Header.h"; sourceTree = "<group>"; };
-		332A58C71F6A4FE300844C3D /* SocialSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSignInViewController.swift; sourceTree = "<group>"; };
-		332A58C81F6A4FE300844C3D /* SocialSignInViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SocialSignInViewController.xib; sourceTree = "<group>"; };
 		332A58D51F6A5CA700844C3D /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		332A58DD1F6A5E4100844C3D /* CustomActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityIndicatorView.swift; sourceTree = "<group>"; };
 		332A58EC1F6A63E600844C3D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -724,8 +720,6 @@
 		33A8FAD120B690A8006FE20E /* BannerDescriptionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerDescriptionView.swift; sourceTree = "<group>"; };
 		33A8FAD220B690A8006FE20E /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		33A8FAD320B690A9006FE20E /* IntroViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroViewController.xib; sourceTree = "<group>"; };
-		33A8FADD20B6D863006FE20E /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
-		33A8FADE20B6D863006FE20E /* ForgotPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ForgotPasswordViewController.xib; sourceTree = "<group>"; };
 		33B925DC1F5FCEC3001820E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33BDCC0220AAEAD800CBFD5B /* ContextMenuCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContextMenuCell.xib; sourceTree = "<group>"; };
 		33BDCC0320AAEAD800CBFD5B /* ContextMenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextMenuCell.swift; sourceTree = "<group>"; };
@@ -1480,15 +1474,6 @@
 			path = LaunchScreen;
 			sourceTree = "<group>";
 		};
-		332A58C61F6A4FE300844C3D /* SocialSignInViewController */ = {
-			isa = PBXGroup;
-			children = (
-				332A58C71F6A4FE300844C3D /* SocialSignInViewController.swift */,
-				332A58C81F6A4FE300844C3D /* SocialSignInViewController.xib */,
-			);
-			path = SocialSignInViewController;
-			sourceTree = "<group>";
-		};
 		332A58DC1F6A5E4100844C3D /* ActivityIndiCator */ = {
 			isa = PBXGroup;
 			children = (
@@ -1638,7 +1623,6 @@
 		3398ECD91F67B9E6000C5325 /* ForgotPasswordViewController */ = {
 			isa = PBXGroup;
 			children = (
-				33A8FADC20B6D863006FE20E /* POSITEv */,
 				3398ECDB1F67B9E6000C5325 /* ForgotPasswordViewController.swift */,
 				3398ECDC1F67B9E6000C5325 /* ForgotPasswordViewController.xib */,
 			);
@@ -1680,7 +1664,6 @@
 				33BDCC0020AAEAD800CBFD5B /* ContextMenuViewController */,
 				3367E18720A1B0EF00035397 /* MenuViewController */,
 				3330064120A0615B00C49F67 /* ContainerViewController */,
-				332A58C61F6A4FE300844C3D /* SocialSignInViewController */,
 				3398ECF51F67C526000C5325 /* UpdatePasswordViewController */,
 				3398ECD91F67B9E6000C5325 /* ForgotPasswordViewController */,
 				33E7A0501F62D235006ED401 /* LoginViewController */,
@@ -1883,15 +1866,6 @@
 				33A8FAD120B690A8006FE20E /* BannerDescriptionView.swift */,
 				33A8FAD220B690A8006FE20E /* IntroViewController.swift */,
 				33A8FAD320B690A9006FE20E /* IntroViewController.xib */,
-			);
-			path = POSITEv;
-			sourceTree = "<group>";
-		};
-		33A8FADC20B6D863006FE20E /* POSITEv */ = {
-			isa = PBXGroup;
-			children = (
-				33A8FADD20B6D863006FE20E /* ForgotPasswordViewController.swift */,
-				33A8FADE20B6D863006FE20E /* ForgotPasswordViewController.xib */,
 			);
 			path = POSITEv;
 			sourceTree = "<group>";
@@ -3514,7 +3488,6 @@
 				21680694238FD7AE00A2D403 /* Ionicons.ttf in Resources */,
 				F798033E21B55CD7007F5757 /* back_chevron.png in Resources */,
 				F798001621B55CD6007F5757 /* comment@2x.png in Resources */,
-				332A58D21F6A500800844C3D /* SocialSignInViewController.xib in Resources */,
 				F79800BE21B55CD6007F5757 /* survey_icon@2x.png in Resources */,
 				F798004621B55CD6007F5757 /* send_icon@3x.png in Resources */,
 				F79801C621B55CD6007F5757 /* android_icon.png in Resources */,
@@ -3753,7 +3726,6 @@
 				33FF7D1220ADA4F300A0A46D /* MSODataHttpConnection.m in Sources */,
 				33FF7B7320ADA30900A0A46D /* MSOutlookRecurrencePattern.m in Sources */,
 				33FF7AC620ADA23400A0A46D /* ADWebResponse.m in Sources */,
-				1889018224A9C094004C4A90 /* SocialSignInViewController.swift in Sources */,
 				33FF7D0320ADA4E300A0A46D /* MSODataOAuthCredentials.m in Sources */,
 				33FF7A7A20ADA1EC00A0A46D /* ADHelpers.m in Sources */,
 				33FF7D7D20ADA57D00A0A46D /* URL+OAuthSwift.swift in Sources */,
