@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0B7AF63628838EA9EE19959D /* Pods_CX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B3090F296DE1129CEFA0E49 /* Pods_CX.framework */; };
 		182A3FFF248E69210065BA31 /* SocialSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332A58C71F6A4FE300844C3D /* SocialSignInViewController.swift */; };
+		1889018224A9C094004C4A90 /* SocialSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 332A58C71F6A4FE300844C3D /* SocialSignInViewController.swift */; };
 		189F48352484E27200168372 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E7A0511F62D235006ED401 /* LoginViewController.swift */; };
 		189F483B2484F29900168372 /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 189F48372484F29800168372 /* GoogleSignIn.bundle */; };
 		189F483D2484F29900168372 /* GoogleSignInDependencies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 189F48392484F29800168372 /* GoogleSignInDependencies.framework */; };
@@ -9990,7 +9991,7 @@
 		};
 		18C44AD924757755001A64BB /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -10001,7 +10002,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "APP_PATH=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}\"\nfind \"$APP_PATH\" -name '*.framework' -type d | while read -r FRAMEWORK\ndo\nFRAMEWORK_EXECUTABLE_NAME=$(defaults read \"$FRAMEWORK/Info.plist\" CFBundleExecutable)\nFRAMEWORK_EXECUTABLE_PATH=\"$FRAMEWORK/$FRAMEWORK_EXECUTABLE_NAME\"\necho \"Executable is $FRAMEWORK_EXECUTABLE_PATH\"\nEXTRACTED_ARCHS=()\nfor ARCH in $ARCHS\ndo\necho \"Extracting $ARCH from $FRAMEWORK_EXECUTABLE_NAME\"\nlipo -extract \"$ARCH\" \"$FRAMEWORK_EXECUTABLE_PATH\" -o \"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\"\nEXTRACTED_ARCHS+=(\"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\")\ndone\necho \"Merging extracted architectures: ${ARCHS}\"\nlipo -o \"$FRAMEWORK_EXECUTABLE_PATH-merged\" -create \"${EXTRACTED_ARCHS[@]}\"\nrm \"${EXTRACTED_ARCHS[@]}\"\necho \"Replacing original executable with thinned version\"\nrm \"$FRAMEWORK_EXECUTABLE_PATH\"\nmv \"$FRAMEWORK_EXECUTABLE_PATH-merged\" \"$FRAMEWORK_EXECUTABLE_PATH\"\ndone\n\n";
 		};
@@ -11799,6 +11800,7 @@
 				33FF7D1220ADA4F300A0A46D /* MSODataHttpConnection.m in Sources */,
 				33FF7B7320ADA30900A0A46D /* MSOutlookRecurrencePattern.m in Sources */,
 				33FF7AC620ADA23400A0A46D /* ADWebResponse.m in Sources */,
+				1889018224A9C094004C4A90 /* SocialSignInViewController.swift in Sources */,
 				33FF7D0320ADA4E300A0A46D /* MSODataOAuthCredentials.m in Sources */,
 				33FF7A7A20ADA1EC00A0A46D /* ADHelpers.m in Sources */,
 				33FF7D7D20ADA57D00A0A46D /* URL+OAuthSwift.swift in Sources */,
@@ -13992,12 +13994,14 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: QuestionPro Inc. (32Y3X84598)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1.8;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 32Y3X84598;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/CX/CXInfo.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.5;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.questionpro.cx;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = QP_CX_Productions;
@@ -14023,6 +14027,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.5;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.questionpro.cx;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = QP_CX_Productions;
