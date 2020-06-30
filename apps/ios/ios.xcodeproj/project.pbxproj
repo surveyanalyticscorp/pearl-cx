@@ -62,10 +62,6 @@
 		3367E1AC20A1B3E700035397 /* DropperDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3367E1A620A1B3E700035397 /* DropperDelegate.swift */; };
 		3367E1B220A1B3E700035397 /* Dropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3367E1A720A1B3E700035397 /* Dropper.swift */; };
 		3367E1B820A1B3E700035397 /* DropperExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3367E1A820A1B3E700035397 /* DropperExtensions.swift */; };
-		337D41CF20BE890C008F4554 /* ObjAndGoals.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 337D41C820BE890C008F4554 /* ObjAndGoals.storyboard */; };
-		337D41D620BE890C008F4554 /* ObjAndGoalsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337D41C920BE890C008F4554 /* ObjAndGoalsCell.swift */; };
-		337D41DD20BE890C008F4554 /* ObjAndGoalsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337D41CA20BE890C008F4554 /* ObjAndGoalsViewController.swift */; };
-		337D41E420BE890C008F4554 /* EditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337D41CB20BE890C008F4554 /* EditCell.swift */; };
 		337D41EA20BE98B1008F4554 /* LocationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A31B4120BD21470061EA45 /* LocationHandler.swift */; };
 		337D41EF20BE98C2008F4554 /* LocationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A31B4820BD226B0061EA45 /* LocationStruct.swift */; };
 		3395477C1F67C8C700077C9B /* QPUpdatePasswordServiceInvocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FDCBD61F66659A002D0199 /* QPUpdatePasswordServiceInvocation.swift */; };
@@ -656,10 +652,6 @@
 		3367E1A720A1B3E700035397 /* Dropper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dropper.swift; sourceTree = "<group>"; };
 		3367E1A820A1B3E700035397 /* DropperExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropperExtensions.swift; sourceTree = "<group>"; };
 		337526E41F61296400D4F234 /* Communities.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Communities.entitlements; sourceTree = "<group>"; };
-		337D41C820BE890C008F4554 /* ObjAndGoals.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ObjAndGoals.storyboard; sourceTree = "<group>"; };
-		337D41C920BE890C008F4554 /* ObjAndGoalsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjAndGoalsCell.swift; sourceTree = "<group>"; };
-		337D41CA20BE890C008F4554 /* ObjAndGoalsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjAndGoalsViewController.swift; sourceTree = "<group>"; };
-		337D41CB20BE890C008F4554 /* EditCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCell.swift; sourceTree = "<group>"; };
 		338F8DCE1F6AAE4F007C1927 /* Bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bridge.swift; sourceTree = "<group>"; };
 		338F8DCF1F6AAE4F007C1927 /* Collection+OAuthSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+OAuthSwift.swift"; sourceTree = "<group>"; };
 		338F8DD01F6AAE4F007C1927 /* Data+OAuthSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+OAuthSwift.swift"; sourceTree = "<group>"; };
@@ -1571,17 +1563,6 @@
 			path = Dropper;
 			sourceTree = "<group>";
 		};
-		337D41C720BE890C008F4554 /* ObjAndGoalsViewController */ = {
-			isa = PBXGroup;
-			children = (
-				337D41C820BE890C008F4554 /* ObjAndGoals.storyboard */,
-				337D41C920BE890C008F4554 /* ObjAndGoalsCell.swift */,
-				337D41CA20BE890C008F4554 /* ObjAndGoalsViewController.swift */,
-				337D41CB20BE890C008F4554 /* EditCell.swift */,
-			);
-			path = ObjAndGoalsViewController;
-			sourceTree = "<group>";
-		};
 		338F8DCC1F6AAE4F007C1927 /* Slack */ = {
 			isa = PBXGroup;
 			children = (
@@ -1660,7 +1641,6 @@
 		33A2DE5E1F5FEFDA00EF8C5F /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				337D41C720BE890C008F4554 /* ObjAndGoalsViewController */,
 				33BDCC0020AAEAD800CBFD5B /* ContextMenuViewController */,
 				3367E18720A1B0EF00035397 /* MenuViewController */,
 				3330064120A0615B00C49F67 /* ContainerViewController */,
@@ -3546,7 +3526,6 @@
 				F79802E621B55CD7007F5757 /* checkbox_unchecked.png in Resources */,
 				F798007E21B55CD6007F5757 /* send_icon.png in Resources */,
 				F79800EE21B55CD6007F5757 /* mail@3x.png in Resources */,
-				337D41CF20BE890C008F4554 /* ObjAndGoals.storyboard in Resources */,
 				2168067A238FD77400A2D403 /* FontAwesome5_Regular.ttf in Resources */,
 				33E7A05C1F62D24A006ED401 /* LoginViewController.xib in Resources */,
 				F79801F621B55CD6007F5757 /* edit_profile.png in Resources */,
@@ -3789,7 +3768,6 @@
 				33FF7C4520ADA3FA00A0A46D /* MSOutlookFolderCollectionOperations.m in Sources */,
 				33FF7B5520ADA2EC00A0A46D /* MSOutlookItemBody.m in Sources */,
 				33FF7A7F20ADA1F100A0A46D /* ADInstanceDiscovery.m in Sources */,
-				337D41DD20BE890C008F4554 /* ObjAndGoalsViewController.swift in Sources */,
 				33FF7AA220ADA21100A0A46D /* ADRegistrationInformation.m in Sources */,
 				33F9E6CF20C6B1A400CD33A8 /* QPUploadResponseInvocation.swift in Sources */,
 				33A423DA1F6273E300BE9B0C /* iOSAppManager.swift in Sources */,
@@ -3898,14 +3876,12 @@
 				33FF7AB220ADA21F00A0A46D /* ADTokenCacheValue.m in Sources */,
 				33BDCC3920AC2C6F00CBFD5B /* ActionBarModuleManager.m in Sources */,
 				33FF7D4B20ADA54700A0A46D /* OAuth1Swift.swift in Sources */,
-				337D41D620BE890C008F4554 /* ObjAndGoalsCell.swift in Sources */,
 				33FF7D4F20ADA54B00A0A46D /* OAuth2Swift.swift in Sources */,
 				33FF7BAF20ADA35D00A0A46D /* MSOutlookCalendarGroupCollectionOperations.m in Sources */,
 				33FF7C1D20ADA3CD00A0A46D /* MSOutlookEventMessageFetcher.m in Sources */,
 				3367E1AC20A1B3E700035397 /* DropperDelegate.swift in Sources */,
 				5499DA6D21BF819E00921A8E /* WebServiceTXManager.swift in Sources */,
 				33FF7C9020ADA44300A0A46D /* MSOutlookUserCollectionFetcher.m in Sources */,
-				337D41E420BE890C008F4554 /* EditCell.swift in Sources */,
 				33FF7B1520ADA2AA00A0A46D /* MSOutlookCalendar.m in Sources */,
 				33FF7C7220ADA42700A0A46D /* MSOutlookItemFetcher.m in Sources */,
 				33FF7C6D20ADA42000A0A46D /* MSOutlookItemCollectionOperations.m in Sources */,

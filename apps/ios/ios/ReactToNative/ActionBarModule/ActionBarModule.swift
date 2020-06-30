@@ -39,9 +39,6 @@ class ActionBarModule: NSObject {
         let data = content.data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)!
         do {
             let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: AnyObject]
-            DispatchQueue.main.sync {
-                NotificationCenter.default.post(name: NSNotification.Name(kUpdateObjAndGoalsContent), object: json)
-            }
         } catch let error as NSError {
             print("Failed to load: \(error.localizedDescription)")
         }

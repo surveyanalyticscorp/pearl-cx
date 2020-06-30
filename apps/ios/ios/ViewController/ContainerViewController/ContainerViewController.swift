@@ -44,7 +44,7 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
     var showContextMenu = false
     var showStat = false
     var showCloseButton = false
-    var objAndGoalsController: ObjAndGoalsViewController!
+    //var objAndGoalsController: ObjAndGoalsViewController!
     var contextMenuOpen: Bool = false
     // @sujan Prevent multiple back press.
     var preNavClickTime: UInt64 = 0
@@ -101,7 +101,6 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
         NotificationCenter.default.addObserver(self, selector:#selector(self.updateUIForLanguageInfo(notification:)), name:NSNotification.Name(kUpdateLanguageInfo), object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(self.fetchUserLocation(notification:)), name:NSNotification.Name(kDatabaseLocation), object: nil)
         // @sujan Notification to show contents on the context menu for objective and goals.
-        NotificationCenter.default.addObserver(self, selector:#selector(self.openObjAndGoalsMenu(notification:)), name:NSNotification.Name(kUpdateObjAndGoalsContent), object: nil)
         
         if let appDetailsDict = GlobalData.fetchAppDetailsDict(),
             let isWhiteLableApp : Bool = appDetailsDict["isWhiteLabel"] as? Bool, isWhiteLableApp{
@@ -287,23 +286,7 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
             UserDefaults.standard.set(false, forKey: kUpdateToSurveyPage)
             UserDefaults.standard.synchronize()
         }
-        let leaderboardTabMenu: String = GlobalData.getLeaderBoardItemForTheApp()
-        let topicTabMenu: String = GlobalData.getTopicBoardItemForTheApp()
-        let collaborateTabMenu: String = GlobalData.getCollaborateMenuForTheApp()
-        let profileTabMenu: String = GlobalData.getProfileTabMenuForTheApp()
-        let userInfoDict = GlobalData.getUserInfoFromUserDefault(kUserInfo)
-        var bodyDict : NSMutableDictionary = NSMutableDictionary.init()
-        if let dict = userInfoDict[kBody] as? NSDictionary{
-            let tempDict = NSMutableDictionary.init(dictionary: dict)
-            tempDict.setValue(leaderboardTabMenu, forKey: "ideaboardMenu")
-            tempDict.setValue(topicTabMenu, forKey: "topicsTabMenu")
-            tempDict.setValue(collaborateTabMenu, forKey: "collaborateTabMenu")
-            tempDict.setValue(profileTabMenu, forKey: "profileTabMenu")
-            tempDict.setValue(GlobalData.getApplicationName(), forKey: "appName")
-            let useTranslationsForTabs = GlobalData.getifTranslationsRequiredForTheApp()
-            tempDict.setValue(useTranslationsForTabs, forKey: "useTranslationsForTabs")
-            bodyDict = tempDict
-        }
+    
         
         var pushToken : String = "" 
         if  GlobalData.getPushTokenFromUserDefault(key: kPushToken).length > 0{
@@ -312,7 +295,6 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
         
         var baseURL : String = ""
         if let appDetailsDict = GlobalData.fetchAppDetailsDict(),
-           // let loginService = appDetailsDict["kLoginService"] as? String,
             let serviceHost = appDetailsDict["kServiceHost"] as? String {
             baseURL = serviceHost
         }
@@ -321,9 +303,8 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
             languageID = GlobalData.getPreferredLanguage(key: kPreferedLanguageID)
         }
         let scene = showSurveyPage ? "Surveys" : "Home"
-        let propsDict = ["APP_NAME": GlobalData.getApplicationName(), "APP_VERSION":GlobalData.getApplicationVersion(), "BASE_URL" : baseURL, "APP_USER":bodyDict, "TOKEN":pushToken, "fromLogin" : self.fromLogin, "LANGUAGE_ID" : languageID, "scene": scene
+        let propsDict = ["APP_NAME": GlobalData.getApplicationName(), "APP_VERSION":GlobalData.getApplicationVersion(), "BASE_URL" : baseURL, "TOKEN":pushToken, "fromLogin" : self.fromLogin, "LANGUAGE_ID" : languageID, "scene": scene
             ] as [String : Any]
-        print(bodyDict)
         print(propsDict)
         self.rootView = RCTRootView(bundleURL: jsCodeLocation as URL?, moduleName:"ReactApp", initialProperties: propsDict as [NSObject : AnyObject], launchOptions: nil)
         self.rootView.translatesAutoresizingMaskIntoConstraints = false
@@ -540,17 +521,6 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
         // Dispose of any resources that can be recreated.
     }
     
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }
 
 extension ContainerViewController {
@@ -563,71 +533,9 @@ extension ContainerViewController {
         showStat ? self.iNavigationManager.contextAction() : self.iNavigationManager.objEditAction()
     }
     
-    // @sujan Method to show contents on the context menu for objective and goals.
-    @objc func openObjAndGoalsMenu(notification: NSNotification) {
-        if (!contextMenuOpen) {
-            contextMenuOpen = !contextMenuOpen
-            let objAndGoalsStoryboard = UIStoryboard(name: "ObjAndGoals", bundle: nil)
-            self.objAndGoalsController = objAndGoalsStoryboard.instantiateViewController(withIdentifier: "ObjAndGoals") as! ObjAndGoalsViewController
-            if let navigationBarInfo = notification.object as? [String:Any] ,
-                let objDict = navigationBarInfo["contextMenuContent"] as? [String:Any]{
-                self.objAndGoalsController.statDict = objDict
-            }
-            UIApplication.shared.keyWindow?.addSubview(self.objAndGoalsController.view)
-            self.objAndGoalsController.delegate = self
-            self.objAndGoalsController.view.tag = objAndGoalsTag
-            self.objAndGoalsController.view.frame = CGRect(x:self.view.frame.origin.x + self.view.frame.width ,y:self.getTopSpaceForContextMenu(), width:self.view.frame.width, height:self.view.frame.height + 66 - CGFloat(kContextViewTopPortrait))
-            UIView.transition(with: self.objAndGoalsController.view, duration: 0.3, options: UIViewAnimationOptions.curveEaseIn, animations: {
-                // animation
-                self.objAndGoalsController.view.frame = CGRect(x:self.view.frame.origin.x, y:self.getTopSpaceForContextMenu(), width:self.view.frame.width, height:self.view.frame.height + 66 - CGFloat(kContextViewTopPortrait))
-            }, completion:{ finished in
-                self.objAndGoalsController.view.backgroundColor = UIColor.clear
-                
-                if (self.iOverlayView == nil) {
-                    self.iOverlayView = UIView()
-                }
-                self.iOverlayView!.frame = self.iReactRootView!.frame
-                self.view.addSubview(self.iOverlayView!)
-                self.iOverlayView!.backgroundColor = GlobalData.getContextMenuBGColor().withAlphaComponent(0.3)
-            })
-        }
-        
-    } // @sujan
-    
     // @sujan Method to hide the context menu for objective and goals.
     func closeObjAndGoals() {
-        if (self.objAndGoalsController != nil && contextMenuOpen) {
-            contextMenuOpen = !contextMenuOpen
-            self.objAndGoalsController.view.backgroundColor = UIColor.clear
-            UIView.transition(with: self.objAndGoalsController.view, duration: 0.3, options: UIViewAnimationOptions.curveEaseIn, animations: {
-                // animation
-                self.objAndGoalsController.view.frame = CGRect(x:self.view.frame.origin.x + self.view.frame.width, y:CGFloat(kContextViewTopPortrait), width:self.view.frame.width, height:self.view.frame.height + 66-CGFloat(kContextViewTopPortrait))
-            }, completion: { finished in
-                self.iOverlayView!.backgroundColor = UIColor.clear
-                if (self.iOverlayView != nil) {
-                    self.iOverlayView?.removeFromSuperview()
-                }
-                UIApplication.shared.keyWindow?.viewWithTag(objAndGoalsTag)?.removeFromSuperview()
-            })
-        }
     } // @sujan
-}
-
-// @sujan Delegate to handle actions from Closable protocol
-extension ContainerViewController: Closable {
-    func closeView() {
-        self.closeObjAndGoals()
-    }
-    
-    func applyFilter(option: String) {
-        self.iContextMenuManager.reloadObjAndGoalsScreen(option)
-        self.closeObjAndGoals()
-    }
-    
-    func editAction() {
-        self.iContextMenuManager.editObjAndGoal()
-        self.closeObjAndGoals()
-    }
 }
 
 extension ContainerViewController : LocationDataServiceDelegate {
