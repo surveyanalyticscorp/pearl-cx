@@ -34,15 +34,7 @@ class ActionBarModule: NSObject {
         }
     }
     
-    @objc(updateObjAndGoalsContent:)
-    func updateObjAndGoalsContent(content : NSString) -> Void {
-        let data = content.data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)!
-        do {
-            let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: AnyObject]
-        } catch let error as NSError {
-            print("Failed to load: \(error.localizedDescription)")
-        }
-    }
+
     
     @objc(updateSelectedMenuItem:)
     func updateSelectedMenuItem(setAsk: NSString) -> Void {

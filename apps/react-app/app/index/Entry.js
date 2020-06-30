@@ -20,7 +20,7 @@ import {NotificationsAndroid, NotificationsIOS, PendingNotifications} from "reac
 import {apiHandler} from "../global/api/APIHandler";
 
 import CX from "../cx/CX";
-import Flashlet from "../flashlet/Flashlet";
+
 var AppActions = require('./AppActions');
 
 if (!__DEV__) {
@@ -175,17 +175,7 @@ export default class Entry extends React.Component {
 
     render() {
           mainScreen = this;
-        switch (this.props.APP_NAME) {
-            case "Workforce":
-            case "Pulse":
-                return (<Flashlet {...this.props}/>);
-            case "CX":
-            case "Customer Experience":
-                return(<CX {...this.props} />);
-
-            default:
-                return (<View></View>);
-        }
+          return (<CX {...this.props} />);
     }
 
 }

@@ -41,23 +41,6 @@ public class ActionBarModule extends ReactContextBaseJavaModule {
         }
     }
 
-    // @minu Method to show contents on the context menu for objective and goals.
-    @ReactMethod
-    public void updateObjAndGoalsContent(final String actionBarJsonString) {
-        final ReactHomeActivity activity = (ReactHomeActivity)getCurrentActivity();
-        if (activity != null) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject jsonObject = JSONObject.parseObject(actionBarJsonString);
-                    if(jsonObject!=null ) {
-                        activity.updateObj(actionBarJsonString);
-                    }
-                }
-            });
-        }
-    }
-
     @ReactMethod
     public void toggleBackButton(final boolean showBackButton){
         Log.i("Sachin", "ToggleBackButtonCalled>"+ showBackButton);

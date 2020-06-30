@@ -99,8 +99,8 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
         NotificationCenter.default.addObserver(self, selector:#selector(self.reloadPulseHomeScreen), name:NSNotification.Name("reloadPulseHome"), object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(self.reloadNotificationContent(notification:)), name:NSNotification.Name(kNotificationReload), object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(self.updateUIForLanguageInfo(notification:)), name:NSNotification.Name(kUpdateLanguageInfo), object: nil)
-        NotificationCenter.default.addObserver(self, selector:#selector(self.fetchUserLocation(notification:)), name:NSNotification.Name(kDatabaseLocation), object: nil)
-        // @sujan Notification to show contents on the context menu for objective and goals.
+        
+    
         
         if let appDetailsDict = GlobalData.fetchAppDetailsDict(),
             let isWhiteLableApp : Bool = appDetailsDict["isWhiteLabel"] as? Bool, isWhiteLableApp{

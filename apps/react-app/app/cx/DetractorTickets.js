@@ -9,7 +9,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux'
 import {ActionCreators} from './actions'
 import BaseComponent from "../global/components/BaseComponent";
-import QPTabView from "../communities/QPTabView";
+import QPTabView from "./QPTabView";
 
 class DetractorTickets extends BaseComponent {
 
@@ -165,7 +165,6 @@ class DetractorTickets extends BaseComponent {
             return <View/>;
         }
         return (
-
             <View style={{ alignItems: 'center', margin: 10, backgroundColor: 'white', padding: 10 }}>
                     <CustomText style={{ color: 'black', fontSize: 16 }}>{'There are no ' + this.state.routes[this.state.index].title + ' tickets.'}</CustomText>
             </View>
@@ -192,35 +191,6 @@ class DetractorTickets extends BaseComponent {
 
 
     };
-
-    // _renderLabel = (props) => ({ route, index }) => {
-    //     const inputRange = props.navigationState.routes.map((x, i) => i);
-    //     const outputRange = inputRange.map(inputIndex => inputIndex === index ? '#D6356C' : '#222');
-    //     const color = props.position.interpolate({
-    //         inputRange,
-    //         outputRange,
-    //     });
-    //
-    //     return (
-    //         <Animated.Text style={[styles.label, { color }]}>
-    //             {route.title}
-    //         </Animated.Text>
-    //     );
-    // };
-
-    // _renderHeader = (props) => {
-    //     return (
-    //         <TabBarTop
-    //             {...props}
-    //             pressColor='rgba(255, 64, 129, .5)'
-    //             onTabPress={this._handleTabItemPress}
-    //             renderLabel={this._renderLabel(props)}
-    //             indicatorStyle={styles.indicator}
-    //             tabStyle={styles.tab}
-    //             style={styles.tabbar}
-    //             />
-    //     );
-    // };
 
     _renderScene = ({ route }) => {
         if (this.state.index == this.state.routes.indexOf(route)) {

@@ -98,12 +98,8 @@
 		33BDCC1B20AAEAD900CBFD5B /* ContextMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BDCC0520AAEAD800CBFD5B /* ContextMenuViewController.swift */; };
 		33BDCC2220AC035E00CBFD5B /* ActionBarModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BDCC1E20AC035E00CBFD5B /* ActionBarModule.swift */; };
 		33BDCC3920AC2C6F00CBFD5B /* ActionBarModuleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33BDCC3520AC2C6F00CBFD5B /* ActionBarModuleManager.m */; };
-		33BDCC4B20AC426900CBFD5B /* LocalizationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BDCC4720AC426900CBFD5B /* LocalizationModule.swift */; };
-		33BDCC5220AC427C00CBFD5B /* LocalizationModuleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33BDCC4E20AC427C00CBFD5B /* LocalizationModuleManager.m */; };
 		33BDCC5920AC438900CBFD5B /* AuthenticationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BDCC5520AC438900CBFD5B /* AuthenticationModule.swift */; };
 		33BDCC6020AC439700CBFD5B /* AuthenticationModuleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33BDCC5C20AC439700CBFD5B /* AuthenticationModuleManager.m */; };
-		33BDCC6720AC4BFD00CBFD5B /* LocationModuleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33BDCC6320AC4BFD00CBFD5B /* LocationModuleManager.m */; };
-		33BDCC6E20AC4C0900CBFD5B /* LocationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BDCC6A20AC4C0900CBFD5B /* LocationModule.swift */; };
 		33BDCC7520AC4C2400CBFD5B /* GAEventModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BDCC7120AC4C2400CBFD5B /* GAEventModule.swift */; };
 		33BDCC7C20AC4C2F00CBFD5B /* GAEventModuleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33BDCC7820AC4C2F00CBFD5B /* GAEventModuleManager.m */; };
 		33BDCC9920AD875000CBFD5B /* ContextMenuManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33D82A1B20A969AA0029FC93 /* ContextMenuManager.m */; };
@@ -599,8 +595,6 @@
 		18C44ADA24757937001A64BB /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		18C44B0A24763A4E001A64BB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		18C44B0C24763A6A001A64BB /* CXDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CXDebug.entitlements; sourceTree = "<group>"; };
-		18C44B5824780FF7001A64BB /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		18C44B5924780FF9001A64BB /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Locaizable.strings; sourceTree = "<group>"; };
 		18D0D022242E14AB001050F1 /* React.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = React.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21680504238EACF400A2D403 /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		21692A7723A8FD59003951BB /* HealthTrustLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HealthTrustLaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -719,12 +713,8 @@
 		33BDCC0520AAEAD800CBFD5B /* ContextMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextMenuViewController.swift; sourceTree = "<group>"; };
 		33BDCC1E20AC035E00CBFD5B /* ActionBarModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionBarModule.swift; sourceTree = "<group>"; };
 		33BDCC3520AC2C6F00CBFD5B /* ActionBarModuleManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActionBarModuleManager.m; sourceTree = "<group>"; };
-		33BDCC4720AC426900CBFD5B /* LocalizationModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationModule.swift; sourceTree = "<group>"; };
-		33BDCC4E20AC427C00CBFD5B /* LocalizationModuleManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalizationModuleManager.m; sourceTree = "<group>"; };
 		33BDCC5520AC438900CBFD5B /* AuthenticationModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationModule.swift; sourceTree = "<group>"; };
 		33BDCC5C20AC439700CBFD5B /* AuthenticationModuleManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AuthenticationModuleManager.m; sourceTree = "<group>"; };
-		33BDCC6320AC4BFD00CBFD5B /* LocationModuleManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationModuleManager.m; sourceTree = "<group>"; };
-		33BDCC6A20AC4C0900CBFD5B /* LocationModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationModule.swift; sourceTree = "<group>"; };
 		33BDCC7120AC4C2400CBFD5B /* GAEventModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAEventModule.swift; sourceTree = "<group>"; };
 		33BDCC7820AC4C2F00CBFD5B /* GAEventModuleManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GAEventModuleManager.m; sourceTree = "<group>"; };
 		33BDCC7F20AD62B600CBFD5B /* ContextMenuManagerBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ContextMenuManagerBridge.m; sourceTree = "<group>"; };
@@ -1171,16 +1161,10 @@
 		51D213DC6EF8921BA86A8468 /* libPods-MyPinion.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyPinion.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51F6681476C5ED76FED2E7E6 /* Pods_HealthTrust.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HealthTrust.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5423D15320CE7CE3003ED5AD /* VizientincLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VizientincLaunchScreen.storyboard; sourceTree = "<group>"; };
-		5438C1B121B8F7AB0055D826 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5438C1C321B8F7E40055D826 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Locaizable.strings; sourceTree = "<group>"; };
-		5438C1C521B8F7EB0055D826 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Locaizable.strings; sourceTree = "<group>"; };
-		5438C1C621B8F83F0055D826 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Locaizable.strings; sourceTree = "<group>"; };
-		5438C1C821B8F88D0055D826 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Locaizable.strings; sourceTree = "<group>"; };
 		54489D682182F9550023F234 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		54ADB79621BA8314004D99B7 /* SignupServiceInvocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupServiceInvocation.swift; sourceTree = "<group>"; };
 		54ADB79A21BA90BD004D99B7 /* communities.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = communities.xcassets; path = communities/communities.xcassets; sourceTree = SOURCE_ROOT; };
-		54CCE72321B933290080B9A0 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Locaizable.strings"; sourceTree = "<group>"; };
-		54CCE72421B933340080B9A0 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Locaizable.strings"; sourceTree = "<group>"; };
 		54EEDBFB21C0E64600A3D554 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		576D2E84A86BC599124AD79E /* Pods-Pulse.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pulse.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pulse/Pods-Pulse.release.xcconfig"; sourceTree = "<group>"; };
 		57C492490C47C14AAD871513 /* libPods-Energizer Idea Lab.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Energizer Idea Lab.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1979,9 +1963,7 @@
 			isa = PBXGroup;
 			children = (
 				33D82A2220A969AA0029FC93 /* AuthenticationModule */,
-				33D82A2520A969AA0029FC93 /* LocalizationModule */,
 				33D82A2820A969AA0029FC93 /* ActionBarModule */,
-				33D82A3720A969AA0029FC93 /* LocationModule */,
 				33D82A3A20A969AA0029FC93 /* RCTContacts */,
 				33D82A3D20A969AA0029FC93 /* RNImagePicker */,
 				33D82A4020A969AA0029FC93 /* GAEventModule */,
@@ -2000,15 +1982,6 @@
 			path = AuthenticationModule;
 			sourceTree = "<group>";
 		};
-		33D82A2520A969AA0029FC93 /* LocalizationModule */ = {
-			isa = PBXGroup;
-			children = (
-				33BDCC4720AC426900CBFD5B /* LocalizationModule.swift */,
-				33BDCC4E20AC427C00CBFD5B /* LocalizationModuleManager.m */,
-			);
-			path = LocalizationModule;
-			sourceTree = "<group>";
-		};
 		33D82A2820A969AA0029FC93 /* ActionBarModule */ = {
 			isa = PBXGroup;
 			children = (
@@ -2016,15 +1989,6 @@
 				33BDCC1E20AC035E00CBFD5B /* ActionBarModule.swift */,
 			);
 			path = ActionBarModule;
-			sourceTree = "<group>";
-		};
-		33D82A3720A969AA0029FC93 /* LocationModule */ = {
-			isa = PBXGroup;
-			children = (
-				33BDCC6A20AC4C0900CBFD5B /* LocationModule.swift */,
-				33BDCC6320AC4BFD00CBFD5B /* LocationModuleManager.m */,
-			);
-			path = LocationModule;
 			sourceTree = "<group>";
 		};
 		33D82A3A20A969AA0029FC93 /* RCTContacts */ = {
@@ -3217,12 +3181,6 @@
 			knownRegions = (
 				en,
 				Base,
-				es,
-				fr,
-				ja,
-				"pt-BR",
-				"pt-PT",
-				ar,
 			);
 			mainGroup = 33B925C61F5FCEC3001820E2;
 			productRefGroup = 33B925D01F5FCEC3001820E2 /* Products */;
@@ -3691,7 +3649,6 @@
 			files = (
 				E09D0B522296D3800047D085 /* SignupServiceInvocation.swift in Sources */,
 				33FF7BC320ADA37100A0A46D /* MSOutlookClient.m in Sources */,
-				33BDCC5220AC427C00CBFD5B /* LocalizationModuleManager.m in Sources */,
 				33FF7B2620ADA2BC00A0A46D /* MSOutlookContactFolder.m in Sources */,
 				33FF7C8120ADA43600A0A46D /* MSOutlookMessageCollectionOperations.m in Sources */,
 				33FF7A3720ADA1A400A0A46D /* ADALiOS.m in Sources */,
@@ -3725,7 +3682,6 @@
 				33FF7CEF20ADA4D000A0A46D /* NSString+NSStringExtensions.m in Sources */,
 				3398ECFB1F67C52D000C5325 /* UpdatePasswordViewController.swift in Sources */,
 				3367E1A220A1B0EF00035397 /* MenuViewController.swift in Sources */,
-				33BDCC6E20AC4C0900CBFD5B /* LocationModule.swift in Sources */,
 				33FF7B8C20ADA33700A0A46D /* MSOutlookAttachmentCollectionOperations.m in Sources */,
 				33FF7CBD20ADA49400A0A46D /* MSODataExecutable.m in Sources */,
 				33FF7AFD20ADA28700A0A46D /* MSDiscoveryServiceInfoCollectionOperations.m in Sources */,
@@ -3777,7 +3733,6 @@
 				33FF7B9120ADA33B00A0A46D /* MSOutlookAttachmentFetcher.m in Sources */,
 				3395477C1F67C8C700077C9B /* QPUpdatePasswordServiceInvocation.swift in Sources */,
 				F794D2122199662D00E13242 /* KeychainWrapper.swift in Sources */,
-				33BDCC6720AC4BFD00CBFD5B /* LocationModuleManager.m in Sources */,
 				33FDCBE81F6666FD002D0199 /* QPServiceDataCenterInvocation.swift in Sources */,
 				33D82AD320A96A950029FC93 /* Toast.m in Sources */,
 				F794D1F42199655C00E13242 /* QPLocationDataServiceInvocation.swift in Sources */,
@@ -3910,7 +3865,6 @@
 				33FF7A6120ADA1CF00A0A46D /* ADAuthenticationResult.m in Sources */,
 				33FF7C1320ADA3C400A0A46D /* MSOutlookEventMessageCollectionFetcher.m in Sources */,
 				33FF7C1820ADA3C900A0A46D /* MSOutlookEventMessageCollectionOperations.m in Sources */,
-				33BDCC4B20AC426900CBFD5B /* LocalizationModule.swift in Sources */,
 				33FF7C8B20ADA43E00A0A46D /* MSOutlookMessageOperations.m in Sources */,
 				33BDCC5920AC438900CBFD5B /* AuthenticationModule.swift in Sources */,
 				33FF7BFA20ADA3AA00A0A46D /* MSOutlookEntityFetcher.m in Sources */,
@@ -3955,8 +3909,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				33B925DC1F5FCEC3001820E2 /* Base */,
-				5438C1B121B8F7AB0055D826 /* es */,
-				18C44B5824780FF7001A64BB /* ar */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -3965,12 +3917,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				5438C1C321B8F7E40055D826 /* en */,
-				5438C1C521B8F7EB0055D826 /* es */,
-				5438C1C621B8F83F0055D826 /* fr */,
-				5438C1C821B8F88D0055D826 /* ja */,
-				54CCE72321B933290080B9A0 /* pt-BR */,
-				54CCE72421B933340080B9A0 /* pt-PT */,
-				18C44B5924780FF9001A64BB /* ar */,
 			);
 			name = Locaizable.strings;
 			sourceTree = "<group>";
