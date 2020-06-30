@@ -17,8 +17,8 @@ import ScrollViewWithRefreshControl from '../../global/ui/ScrollViewWithRefreshC
 import PollResultWidget from './PollResultWidget';
 import PollQuestionWidget from './PollQuestionWidget';
 import NewsFeedItem from './NewsFeedItem';
-import {ActionBarModule, LocalizationModule} from '../../global/native-modules/NativeModules';
-import {LocationModule} from '../../global/native-modules/NativeModules';
+import {ActionBarModule} from '../../global/native-modules/NativeModules';
+
 const {height, width} = Dimensions.get('window');
 const factor = width > height ? height : width;
 const {ContextMenuManager} = NativeModules;
@@ -46,7 +46,7 @@ class HomeTab extends BaseComponentWithoutScroll {
                 let langugaeSelected = this.props.languageData.languages.filter(lang => lang.googleCode === this.props.LANGUAGE_ID)
                 if (langugaeSelected) {
                     ActionBarModule.updateLanguageMenuTitle(langugaeSelected[0].languageName);
-                    LocalizationModule.updatePreferedLanguage(langugaeSelected[0].googleCode);
+
                 }
             }
         }
@@ -88,7 +88,7 @@ class HomeTab extends BaseComponentWithoutScroll {
             if (langugaeSelected) {
                 this.getPanelHome();
                 ActionBarModule.updateLanguageMenuTitle(langugaeSelected[0].languageName);
-                LocalizationModule.updatePreferedLanguage(langugaeSelected[0].googleCode);
+
             } else {
                 this.getPanelHome();
             }
@@ -131,50 +131,10 @@ class HomeTab extends BaseComponentWithoutScroll {
         this.checkForLocationSurveyData();
     }
 
-    checkForLocationSurveyData(){
-        let hasLocationSurveys = this.props.HAS_LOCATION_SURVEY;
-        if(Platform.OS !== 'ios' && hasLocationSurveys === 'true') { //On iOS it is handled natively.
-            LocationModule.checkVersionAndDownloadLocationDatabase((location) => {
-                    LocationModule.updateDatabaseFileLocation(location);
-                },
-                (error) => {
-                    console.log("Error-" + error);
-                })
-        }
-    }
 
 
-    processLocationSurveyDatabaseDownload(response){
-        const path = DocumentDirectoryPath + '/LocationSurvey.sqlite';
-        if (response && response.body) {
-            let locationSurveyData = response.body;
-            let locationGroups = locationSurveyData.groups;
-            if(locationGroups && locationGroups.length > 0) {
-                AsyncStorage.getItem("SURVEY_DB_MODIFIED_TIME", (err, result) => {
-                    if (!result || result !== (locationSurveyData.locationSurveyDBTimestamp + "")) {
-                        let originalURL =locationSurveyData.surveyDBFile;
-                        const downloadOptions = {
-                            fromUrl: originalURL,
-                            toFile: path
-                        };
-                        RNFS.downloadFile(downloadOptions).promise
-                            .then(res => {
-                                console.log("Downloaded file path- " + JSON.stringify(res));
-                                LocationModule.updateDatabaseFileLocation(path);
-                            });
-                        AsyncStorage.setItem("SURVEY_DB_MODIFIED_TIME", "" + locationSurveyData.locationSurveyDBTimestamp);
-                    } else {
-                        console.log("Downloaded empty data base");
-                        LocationModule.updateDatabaseFileLocation(path);
-                    }
-                });
-            }
-            else {
-                console.log("No location groups. So no location Service.");
-            }
 
-        }
-    }
+
 
     processPollSubmitResponse(result) {
         this.props.homeData.poll.result = result;

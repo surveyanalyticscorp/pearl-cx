@@ -36,8 +36,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux'
 import {ActionCreators} from './actions';
 import {
-    ActionBarModule,
-    LocalizationModule
+    ActionBarModule
 } from '../../app/global/native-modules/NativeModules';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
@@ -104,7 +103,7 @@ class LanguagePickerModal extends Component {
                 this.props.changeLanguage(this.itemList[this.state.selectedItem])
                     .then(response => {
                         ActionBarModule.updateLanguageMenuTitle(languageName);
-                        LocalizationModule.updatePreferedLanguage(response.body.updatedLanguage.googleCode);
+
                     });
             });
         }

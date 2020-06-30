@@ -8,7 +8,6 @@ import {ActionCreators} from '../actions/index';
 import CustomText from '../../global/ui/CustomText';
 import OnTouchHighlightWidget from "../../global/widgets/ui/OnTouchHighlightWidget";
 import {ActionBarModule} from '../../global/native-modules/NativeModules';
-import {LocationModule} from '../../global/native-modules/NativeModules';
 const {height, width} = Dimensions.get('window');
 const screenHeight = (height - (Platform.OS === 'ios' ? 54 : 70))
 const factor = width > height ? height : width;
@@ -59,50 +58,10 @@ class Surveys extends BaseComponentWithoutScroll {
             }
 
         }
-        this.checkForLocationSurveyData();
     }
 
-    checkForLocationSurveyData(){
-        if(Platform.OS !== 'ios') {//On iOS it is handled natively.
-            LocationModule.checkVersionAndDownloadLocationDatabase((location) => {
-                    LocationModule.updateDatabaseFileLocation(location);
-                },
-                (error) => {
-                    console.log("Error-" + error);
-                })
-        }
-    }
 
-    processLocationSurveyDatabaseDownload(response){
-        const path = DocumentDirectoryPath + '/LocationSurvey.sqlite';
-        if (response && response.body) {
-            let locationSurveyData = response.body;
-            let locationGroups = locationSurveyData.groups;
-            if(locationGroups && locationGroups.length > 0) {
-                AsyncStorage.getItem("SURVEY_DB_MODIFIED_TIME", (err, result) => {
-                    if (!result ||  result != (locationSurveyData.locationSurveyDBTimestamp + "")) {
-                        let originalURL =locationSurveyData.surveyDBFile;
-                        const downloadOptions = {
-                            fromUrl: originalURL,
-                            toFile: path
-                        };
-                        RNFS.downloadFile(downloadOptions).promise
-                            .then(res => {
-                                console.log("Downloaded file path- " + JSON.stringify(res));
-                                LocationModule.updateDatabaseFileLocation(path);
-                            });
-                        AsyncStorage.setItem("SURVEY_DB_MODIFIED_TIME", "" + locationSurveyData.locationSurveyDBTimestamp);
-                    } else {
-                        LocationModule.updateDatabaseFileLocation(path);
-                    }
-                });
-            }
-            else {
-                console.log("No location groups. So no location Service.");
-            }
 
-        }
-    }
 
     renderChild() {
         let surveys = [];
