@@ -20,7 +20,7 @@ import {Actions} from "react-native-router-flux";
 import AnimatedHideView from "./AnimatedHideView";
 import MonthYearSelector from "../../../../global/widgets/MonthYearSelector";
 import moment from 'moment';
-import QPTabView from "../../../../communities/QPTabView";
+import QPTabView from "../../../QPTabView";
 
 const {NavigationManager} = NativeModules;
 const {width, height} = Dimensions.get('window');
