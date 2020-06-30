@@ -288,20 +288,10 @@ public class ReactHomeActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
     }
 
-    private static final int OVERLAY_PERMISSION_REQUEST_CODE = 2;
-
     @TargetApi(Build.VERSION_CODES.M)
     private void askForOverlayPermission() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (BuildConfig.DEBUG){
-                if (!Settings.canDrawOverlays(this)) {
-                    Intent settingsIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                            Uri.parse("package:" + getPackageName()));
-                    startActivityForResult(settingsIntent, OVERLAY_PERMISSION_REQUEST_CODE);
-                }
-            }
             PermissionUtils.checkAllPermissions(this);
-
         }
 
     }
@@ -457,9 +447,6 @@ public class ReactHomeActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode){
-            case OVERLAY_PERMISSION_REQUEST_CODE:
-                askForOverlayPermission();
-                break;
             case LOCATION_SETTINGS_REQUEST_CODE:
                 if(resultCode == RESULT_OK){
                     LocationMonitorInterface.getInstance(this)
