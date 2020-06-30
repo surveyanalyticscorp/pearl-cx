@@ -18,10 +18,9 @@ import {
 import {ActionBarModule} from "../global/native-modules/NativeModules";
 import {NotificationsAndroid, NotificationsIOS, PendingNotifications} from "react-native-notifications";
 import {apiHandler} from "../global/api/APIHandler";
-///import SurveyList from "../survey/home/SurveyList";
+
 import CX from "../cx/CX";
 import Flashlet from "../flashlet/Flashlet";
-import Communities from "../communities/Communities";
 var AppActions = require('./AppActions');
 
 if (!__DEV__) {
@@ -183,17 +182,6 @@ export default class Entry extends React.Component {
             case "CX":
             case "Customer Experience":
                 return(<CX {...this.props} />);
-
-            case "Communities":
-            case "HealthTrust":
-            case "MyPinion":
-            case "POSITEv":
-            case "Vizientinc":
-            case "Vizient Voice":
-            case "Energizer Idea Lab":
-            case "HealthTrust Collaboratives":
-               return (<Communities {...this.props}/>);
-
 
             default:
                 return (<View></View>);

@@ -202,6 +202,7 @@ public class ReactHomeActivity extends AppCompatActivity
 //                showPopupWindow();
 //            }
 //        });
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         versionText = (TextView) drawer.findViewById(R.id.versionText);
 
@@ -271,7 +272,6 @@ public class ReactHomeActivity extends AppCompatActivity
             WritableMap writableMap = new WritableNativeMap();
             writableMap.putString("ObjEditMenu", "");
             sendNativeEventToReact("ObjEditMenu", writableMap);
-
 
         }
     }
