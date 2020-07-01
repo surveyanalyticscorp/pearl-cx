@@ -55,9 +55,4 @@ public class ActionBarModule extends ReactContextBaseJavaModule {
             });
         }
     }
-
-    @ReactMethod
-    public void updateLanguageMenuTitle(final String languageName){
-        CoreApplication.changePreferredLanguage(getCurrentActivity(), languageName);
-    }
 }

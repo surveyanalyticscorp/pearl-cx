@@ -12,6 +12,5 @@
 
 RCT_EXTERN_METHOD(updateTitleAndMenu:(NSString*)aActionBarInfo)
 RCT_EXTERN_METHOD(toggleBackButton:(BOOL)showBackButton)
-RCT_EXTERN_METHOD(updateLanguageMenuTitle:(NSString*)label)
 
 @end

@@ -33,12 +33,6 @@ class ActionBarModule: NSObject {
             NotificationCenter.default.post(name: NSNotification.Name(kUpdateBackButton), object: showBackButton as NSNumber)
         }
     }
-
-    @objc(updateLanguageMenuTitle:)
-    func updateLanguageMenuTitle(label: NSString) -> Void {
-        UserDefaults.standard.set(label, forKey: kUpdateMenuTitle)
-        UserDefaults.standard.synchronize()
-    }
     
 }
 
