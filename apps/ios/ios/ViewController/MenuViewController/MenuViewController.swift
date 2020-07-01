@@ -105,27 +105,14 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.menuList = NSMutableArray(contentsOfFile: path!)!
         
         self.iTableView.register(UINib(nibName: "MenuCell", bundle: nil), forCellReuseIdentifier: "Cell")
-        //self.iTableView.tableFooterView = self.iBootomFooter
-        //self.iTableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
         self.iTableView.separatorColor = GlobalData.getTableViewCellSelectionColorForMainMenu()
         let px = 1 / UIScreen.main.scale
         let frame = CGRect(x: 0, y: 0, width: self.iTableView.frame.size.width, height: px)
         let line: UIView = UIView(frame: frame)
         self.iTableView.tableHeaderView = line
         line.backgroundColor = self.iTableView.separatorColor
-        
-        if let value = UserDefaults.standard.value(forKey: kUpdateToSurveyPageFromBackground) as? Bool, value == true {
-            self.lastSelectedIndexPath = IndexPath(row: 1, section: 0)
-            UserDefaults.standard.setValue(false, forKey: kUpdateToSurveyPageFromBackground);
-            UserDefaults.standard.setValue(false, forKey: kUpdateToSurveyPage);
-            UserDefaults.standard.synchronize();
-        } else if let value = UserDefaults.standard.value(forKey: kUpdateToSurveyPage) as? Bool, value == true {
-            self.lastSelectedIndexPath = IndexPath(row: 1, section: 0)
-        } else {
-            self.lastSelectedIndexPath = IndexPath(row: 0, section: 0)
-        }
+        self.lastSelectedIndexPath = IndexPath(row: 0, section: 0)
         self.iTableView.rowHeight = GlobalData.getTableViewRowHeight()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updateLeftSlideMenuLabels), name: NSNotification.Name(rawValue: kEmployInfoUpdateNotification), object: nil)
         self.dropperView = Dropper(width: self.iTableView.frame.width , height: self.iTableView.frame.height)
         
     }
@@ -136,14 +123,6 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.menuList = GlobalData.fetchMenuSettingList()
         }
         self.iTableView.reloadData()
-    }
-    
-    @objc func updateUIForLanguageInfo(notification : NSNotification) {
-        let languageInfo : String = notification.object as! String
-        if languageInfo.length > 0 {
-            GlobalData.setPreferredLanguage(languageID: languageInfo, key: kPreferedLanguageID)
-            self.iTableView.reloadData()
-        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -353,8 +332,6 @@ extension MenuViewController: DropperDelegate {
     func DropperSelectedRow(path: IndexPath, contents: NSDictionary) {
         print("selected row = \("contents")")
         UIView.animate(withDuration: 0.2) { () -> Void in
-            // self.iEmailSelection!.transform = CGAffineTransformMakeRotation(0)
-            // self.iTableView.hidden = false
             self.slideMenuController()?.closeLeft()
         }
     }

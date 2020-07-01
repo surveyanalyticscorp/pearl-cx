@@ -268,14 +268,6 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
         //        #endif
         // let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios", fallbackResource: nil)
         var showSurveyPage = false;
-        if let value = UserDefaults.standard.value(forKey: kUpdateToSurveyPage) as? Bool, value == true {
-            showSurveyPage = true;
-            self.iContextMenuManager.refreshProfileScreenWithdata("Surveys", withTitle: "Surveys");
-            UserDefaults.standard.set(false, forKey: kUpdateToSurveyPage)
-            UserDefaults.standard.synchronize()
-        }
-    
-        
         var pushToken : String = "" 
         if  GlobalData.getPushTokenFromUserDefault(key: kPushToken).length > 0{
             pushToken =   GlobalData.getPushTokenFromUserDefault(key: kPushToken)
@@ -380,7 +372,7 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
             self.showContextMenu = objWebPage.showMenuIcon
             self.fromObjAndGoals = objWebPage.showMenuIcon
             self.showCloseButton = objWebPage.showCloseButton
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: kEmployInfoUpdateNotification), object: nil)
+
             if objWebPage.contextMenu.count > 0 {
                 iOSManager.sharedInstance.iOptionMenuItems = objWebPage.contextMenu[0].menuItems
                 self.addButtonToToolbar(isToggleEnable: self.isToggleButton, titleText:title, isOptionMenuEnable: true)

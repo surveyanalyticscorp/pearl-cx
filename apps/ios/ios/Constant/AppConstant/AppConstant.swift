@@ -102,8 +102,6 @@ let kPushNotificationTypeCommentedOnTopic = "CommentAddedNotificationTrigger"
 let kPushNotificationTypeNewsAvailabel = "NewsAvailableNotificationTrigger"
 let kRemoteNotificationReceivedNotification = "RemoteNotificationReceivedWhileRunning"
 
-/************ Employ Info   **************/
-let kEmployInfoUpdateNotification = "EmployInfoUpdateNotification"
 
 /************ iPhone X   **************/
 let kiPhoneXSize = 2436
@@ -180,8 +178,6 @@ let kUpdateActionBarInfo = "UpdateActionBarInfo"
 let kUpdateBackButton = "UpdateBackButton"
 let kLogoutUser = "LogoutUser"
 let kNotificationReload = "notificationOpened" //"NotificationReload"
-let kUpdateToSurveyPage = "UpdateToSurveyPage"
-let kUpdateToSurveyPageFromBackground = "UpdateToSurveyPageFromBackground"
 let kUpdateMenuTitle = "UpdateMenuTitle"
 // Mark: DB Constant
 

@@ -6,9 +6,6 @@ import {
 } from '../native-modules/NativeModules';
 import WebServiceHanlder from './WebServiceHandler';
 
-import {setting} from './Setting';
-import {urlConstants} from './URLConstants';
-
 
 class APIHandler {
 

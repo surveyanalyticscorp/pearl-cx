@@ -223,8 +223,7 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
         }else {
             title = ""
         }
-        
-        NSNotificationCenter.defaultCenter().postNotificationName(kEmployInfoUpdateNotification, object: nil)
+
         
         if objWebPage.contextMenu.count > 0 {
             iOSManager.sharedInstance.iOptionMenuItems = objWebPage.contextMenu[0].menuItems

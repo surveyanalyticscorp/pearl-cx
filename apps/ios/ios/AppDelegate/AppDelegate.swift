@@ -100,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         application.applicationIconBadgeNumber = 0
-    
+        
         if GlobalData.isNextSyncAvaliable() {
             WebServiceTXManager.uploadLocationDataService(aDelegate: self)
             WebServiceTXManager.invokeLocationDataService(aDelegate: self)
@@ -188,13 +188,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let userInfoDict = GlobalData.getUserInfoFromUserDefault(kUserInfo)
         if let bodyDict : NSDictionary = userInfoDict[kBody] as? NSDictionary, let ID = bodyDict["ID"] as? CLong {
             if let memberDict = response.notification.request.content.userInfo["info"] as? NSDictionary, let memberID = memberDict["memberID"] as? CLong , ID == memberID  {
-                if let type = memberDict["type"] as? Int , type == 1 {
-                    UserDefaults.standard.set(true, forKey: kUpdateToSurveyPage)
-                    UserDefaults.standard.synchronize()
-                } else {
-                    UIApplication.shared.applicationIconBadgeNumber = 0
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: kNotificationReload), object: nil, userInfo: response.notification.request.content.userInfo)
-                }
+                UIApplication.shared.applicationIconBadgeNumber = 0
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: kNotificationReload), object: nil, userInfo: response.notification.request.content.userInfo)
+                
             }
         }
     }
@@ -224,20 +220,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                         })
                     }
                 }else {
-                    if let type = memberDict["type"] as? Int , type == 1{
-                        self.setSurveyPage(applicationState: application.applicationState)
-                    }
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: kNotificationReload), object: nil, userInfo: userInfo)
                 }
             }
         }
     }
-    
-    
-    func setSurveyPage(applicationState: UIApplicationState) {
-        UserDefaults.standard.set(true, forKey: kUpdateToSurveyPage)
-        UserDefaults.standard.synchronize();
-    }
+
     
     func launchMainView()  {
         let mainViewController = MainViewController();
