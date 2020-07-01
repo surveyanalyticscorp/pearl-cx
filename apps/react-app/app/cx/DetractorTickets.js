@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, Animated, Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import {TabBarTop, TabViewAnimated} from 'react-native-tab-view';
 import {apiHandler} from '../global/api/APIHandler';
 import CustomText from '../global/ui/CustomText';

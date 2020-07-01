@@ -3,7 +3,6 @@ import React,{Component} from 'react';
 import {
     Dimensions,
     StyleSheet,
-    View
 } from 'react-native';
 import {TabBar, TabView} from 'react-native-tab-view';
 

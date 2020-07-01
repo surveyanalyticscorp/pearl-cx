@@ -3,10 +3,7 @@ import {
     Dimensions,
     ActivityIndicator,
     FlatList,
-    Animated,
-    Platform,
     StyleSheet,
-    UIManager,
     BackHandler,
     LayoutAnimation,
     View,
@@ -23,7 +20,7 @@ import moment from 'moment';
 import QPTabView from "../../../QPTabView";
 
 const {NavigationManager} = NativeModules;
-const {width, height} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 export default class FeedbackListTabs extends BaseComponentWithoutScroll {
     constructor(props) {
@@ -155,20 +152,7 @@ export default class FeedbackListTabs extends BaseComponentWithoutScroll {
         }
 
     }
-    // _renderLabel = (props) => ({route, index}) => {
-    //     const inputRange = props.navigationState.routes.map((x, i) => i);
-    //     const outputRange = inputRange.map(inputIndex => inputIndex === index ? '#187CE2' : '#9C9C9C');
-    //     const color = props.position.interpolate({
-    //         inputRange,
-    //         outputRange,
-    //     });
-    //
-    //     return (
-    //         <Animated.Text style={[styles.label, {color}]}>
-    //             {route.title+" "}
-    //         </Animated.Text>
-    //     );
-    // };
+
     _renderRow = ({item, index}) => {
         const selected = this.state.selectedRowID === item.responseSetID;
 
@@ -183,19 +167,6 @@ export default class FeedbackListTabs extends BaseComponentWithoutScroll {
             />
         )
     }
-    // _renderHeader = (props) => {
-    //     return (
-    //         <TabBarTop
-    //             {...props}
-    //             pressColor='rgba(255, 64, 129, .5)'
-    //             onTabPress={this._handleTabItemPress}
-    //             renderLabel={this._renderLabel(props)}
-    //             indicatorStyle={styles.indicator}
-    //             tabStyle={styles.tab}
-    //             style={styles.tabbar}
-    //         />
-    //     );
-    // };
 
     _renderScene = ({route}) => {
         if (this.state.index === this.state.routes.indexOf(route)) {
@@ -243,9 +214,7 @@ export default class FeedbackListTabs extends BaseComponentWithoutScroll {
         })
 
     }
-    // componentWillUpdate() {
-    //     //LayoutAnimation.configureNext(this.CustomLayoutLinear)
-    // }
+
     renderTicketList() {
         if (this.state.isLoadingTail || !this.props.isLoading) {
             const items = this.props.feedbacks.allResponses || [];
