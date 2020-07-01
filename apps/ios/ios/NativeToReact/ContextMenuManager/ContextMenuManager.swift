@@ -39,10 +39,6 @@ class ContextMenuManager:  RCTEventEmitter {
         self.sendEvent(withName: "ContextMenuItemClick", body: dataDict)
     }
     
-    @objc func reloadHomeScreenForPulse() {
-        self.sendEvent(withName: "reloadScreen", body: "")
-    }
-    
     @objc func reloadObjAndGoalsScreen(option : NSString) {
         let dataDict : [String:Any] = ["filter":option]
         self.sendEvent(withName: "GoalsFilterAction", body: dataDict)

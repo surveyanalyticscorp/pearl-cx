@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.questionpro.utils.StringUtil;
 import com.questionpro.utils.Utils;
-import com.questionpro.geoFencing.LocationAlertReceiverService;
 
 /**
  * Created by sachinsable on 18/08/16.
@@ -236,12 +235,6 @@ public class AppUser {
             editor.putString("emailAddress","");
         }
         editor.commit();
-
-        //Clear preferences for location based survey
-        SharedPreferences prefs = context.getSharedPreferences(LocationAlertReceiverService.PREF_NAME_STARTED_LOCATION_SURVEYS, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor1 = prefs.edit();
-        editor1.clear();
-        editor1.commit();
     }
 
     public static boolean isLoggedIn(Context context){

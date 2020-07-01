@@ -136,13 +136,6 @@ class ContextMenuViewController: UIViewController, UITableViewDelegate, UITableV
         return cell
     }
     
-//     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell,forRowAtIndexPath indexPath: NSIndexPath) {
-//        let separatorThickness = CGFloat(1)
-//        let separatorView = UIView(frame: CGRectMake(0,cell.frame.size.height - separatorThickness, cell.frame.size.width,separatorThickness))
-//        separatorView.backgroundColor = GlobalData.getTableViewSeperatorColor()
-//       // cell.addSubview(separatorView)
-//    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 98.0
     }
@@ -152,8 +145,6 @@ class ContextMenuViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        
         let menuLink : MenuLinks = self.iOptionMenuList[indexPath.row]
         if let url = menuLink.url, menuLink.name == MenuTypes.SHARE.description {
             self.displayShareSheet(shareContent: url)
@@ -162,7 +153,6 @@ class ContextMenuViewController: UIViewController, UITableViewDelegate, UITableV
                 self.iDelegate?.closeContextViewWithDictionaryData(contextDict:data)
             }
         }
-
     }
     
     func displayAlert(title: String, message: String) {
@@ -188,16 +178,5 @@ class ContextMenuViewController: UIViewController, UITableViewDelegate, UITableV
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

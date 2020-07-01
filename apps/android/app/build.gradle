@@ -76,11 +76,6 @@ android {
 
     flavorDimensions "app"
     productFlavors{
-        communities{
-            applicationId "com.questionpro.communities"
-            versionCode 7
-            versionName "1.5"
-        }
         cx{
             applicationId "com.questionpro.cx"
             versionCode 5

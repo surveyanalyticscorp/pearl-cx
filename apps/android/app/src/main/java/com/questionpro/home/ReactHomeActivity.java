@@ -84,11 +84,6 @@ import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
 import com.questionpro.whitelabelapps.R;
 import com.questionpro.app.CoreApplication;
-import com.questionpro.geoFencing.GeoUtils;
-import com.questionpro.geoFencing.LocationMonitorInterface;
-import com.questionpro.geoFencing.database.LocationResponseDBHelper;
-import com.questionpro.geoFencing.model.QPLocationResult;
-import com.questionpro.geoFencing.sync.QPLocationResultUploadTask;
 import com.questionpro.login.LoginActivity;
 import com.questionpro.pushnotification.QPGcmToken;
 import com.questionpro.reactnative.ReactAppCallbackModules;
@@ -122,7 +117,6 @@ import java.util.concurrent.Executors;
 import io.github.elyx0.reactnativedocumentpicker.DocumentPickerPackage;
 
 import static android.os.Build.VERSION.SDK_INT;
-import static com.questionpro.geoFencing.Constants.LOCATION_SETTINGS_REQUEST_CODE;
 import static com.wix.reactnativenotifications.Defs.TOKEN_RECEIVED_EVENT_NAME;
 
 /**
@@ -208,6 +202,7 @@ public class ReactHomeActivity extends AppCompatActivity
 //                showPopupWindow();
 //            }
 //        });
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         versionText = (TextView) drawer.findViewById(R.id.versionText);
 
@@ -277,7 +272,6 @@ public class ReactHomeActivity extends AppCompatActivity
             WritableMap writableMap = new WritableNativeMap();
             writableMap.putString("ObjEditMenu", "");
             sendNativeEventToReact("ObjEditMenu", writableMap);
-
 
         }
     }
@@ -447,16 +441,6 @@ public class ReactHomeActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode){
-            case LOCATION_SETTINGS_REQUEST_CODE:
-                if(resultCode == RESULT_OK){
-                    LocationMonitorInterface.getInstance(this)
-                            .checkPermissionAndStartLocationServices(this);
-                }
-                else {
-                    Toast.makeText(this,"Location Settings should be turned on!",
-                            Toast.LENGTH_LONG).show();
-                }
-                break;
 
         }
         mReactInstanceManager.onActivityResult(this,requestCode,resultCode,data);
@@ -704,7 +688,7 @@ public class ReactHomeActivity extends AppCompatActivity
                 break;
             case SHARE:
                 try {
-                     GeoUtils.exportDatabase(this, getString(R.string.app_name));
+                     //GeoUtils.exportDatabase(this, getString(R.string.app_name));
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -757,7 +741,6 @@ public class ReactHomeActivity extends AppCompatActivity
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ArrayList<QPLocationResult> qpLocationResults = LocationResponseDBHelper.getInstance(ReactHomeActivity.this).getAllLocationResults();
                 if(getResources().getBoolean(R.bool.has_logout_api)){
                     uploadLocationResponsesAndLogout();
                 }
@@ -782,25 +765,12 @@ public class ReactHomeActivity extends AppCompatActivity
         progressBar.setTitle("Log out");
         progressBar.setMessage("Logging out...");
         progressBar.show();
-        new QPLocationResultUploadTask(CoreApplication.getContext(), new QPLocationResultUploadTask.ResultCallback() {
-            @Override
-            public void onSuccess(Object result) {
-                doLogoutPostProcedure();
-                if (progressBar != null && progressBar.isShowing()) {
-                    progressBar.dismiss();
-                }
-            }
 
-            @Override
-            public void onFailure(Object error) {
-                if (progressBar != null && progressBar.isShowing()) {
-                    progressBar.dismiss();
-                }
-                Toast.makeText(ReactHomeActivity.this,
-                        "There is some error in logging you out. Please try again later.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }).execute();
+        doLogoutPostProcedure();
+
+        if (progressBar != null && progressBar.isShowing()) {
+            progressBar.dismiss();
+        }
     }
 
     private void doLogoutPostProcedure(){
@@ -813,7 +783,7 @@ public class ReactHomeActivity extends AppCompatActivity
         CoreApplication.clearLanguagePreference();
 
         //Stop Geo fence service
-        LocationMonitorInterface.getInstance(ReactHomeActivity.this).stopAllLocationRelatedActivities();
+        //LocationMonitorInterface.getInstance(ReactHomeActivity.this).stopAllLocationRelatedActivities();
     }
 
     /**
@@ -957,15 +927,6 @@ public class ReactHomeActivity extends AppCompatActivity
             toggle.syncState();
         }
 
-
-    }
-
-    public void updateSelectedMenuItem(String menuItemName) {
-        switch (menuItemName) {
-            case "Ask":
-                onDrawerMenuSelected(askMenuIndex);
-                break;
-        }
 
     }
 

@@ -59,66 +59,8 @@ import Reachability
         return myDict
     }
     
-    class func getProfileTabMenuForTheApp() -> String {
-          let details = self.fetchAppDetailsDict()
-        if let profile = details?["profileTabMenu"] as? [String] {
-            let profileTabMenuStr = GlobalData().convertIntoJSONString(arrayObject: profile)
-            return profileTabMenuStr ?? ""
-        } else {
-            var profileTabMenu: [String] = []
-                        profileTabMenu.append("myProfile");
-                                         profileTabMenu.append("myRewards");
-                                         profileTabMenu.append("shareWithFriend");
-                       let profileTabMenuStr = GlobalData().convertIntoJSONString(arrayObject: profileTabMenu)
-                       return profileTabMenuStr ?? ""
-        }
-    }
     
-    class func getLeaderBoardItemForTheApp() -> String {
-        let details = self.fetchAppDetailsDict()
-        if let leaderboard = details?["leaderBoardMenu"] as? [String] {
-            let leaderboardMenuStr = GlobalData().convertIntoJSONString(arrayObject: leaderboard)
-            return leaderboardMenuStr ?? ""
-        } else {
-            var leaderboardMenu: [String] = []
-            leaderboardMenu.append("recent")
-            leaderboardMenu.append("popular")
-            leaderboardMenu.append("posted_by_me")
-            leaderboardMenu.append("favorites")
-            let leaderboardMenuStr = GlobalData().convertIntoJSONString(arrayObject: leaderboardMenu)
-            return leaderboardMenuStr ?? ""
-        }
-    }
-    class func getTopicBoardItemForTheApp() -> String {
-        let details = self.fetchAppDetailsDict()
-        if let leaderboard = details?["leaderBoardMenu"] as? [String] {
-            let leaderboardMenuStr = GlobalData().convertIntoJSONString(arrayObject: leaderboard)
-            return leaderboardMenuStr ?? ""
-        } else {
-            var leaderboardMenu: [String] = []
-            leaderboardMenu.append("recent")
-            leaderboardMenu.append("popular")
-            leaderboardMenu.append("posted_by_me")
-            leaderboardMenu.append("favorites")
-            let leaderboardMenuStr = GlobalData().convertIntoJSONString(arrayObject: leaderboardMenu)
-            return leaderboardMenuStr ?? ""
-        }
-    }
     
-    class func getCollaborateMenuForTheApp() -> String {
-        let details = self.fetchAppDetailsDict()
-        if let collaborate = details?["collabrateMenu"] as? [String] {
-            let collaborateMenuStr = GlobalData().convertIntoJSONString(arrayObject: collaborate)
-            return collaborateMenuStr ?? ""
-        } else {
-            var collaborateTabMenu: [String] = []
-            collaborateTabMenu.append("topic");
-            collaborateTabMenu.append("ideaboard");
-            collaborateTabMenu.append("chat");
-            let collaborateTabMenuStr = GlobalData().convertIntoJSONString(arrayObject: collaborateTabMenu)
-            return collaborateTabMenuStr ?? ""
-        }
-    }
     
     class func getifTranslationsRequiredForTheApp() -> String {
         let details = self.fetchAppDetailsDict()

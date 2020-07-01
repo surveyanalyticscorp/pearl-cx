@@ -9,7 +9,7 @@
 import UIKit
 import CoreGraphics
 
-class LoginViewController: UIViewController, UITextFieldDelegate, DataCenterServiceDelegate, AuthenticateServiceDelegate, SignUpViewDelegate {
+class LoginViewController: UIViewController, UITextFieldDelegate, DataCenterServiceDelegate, AuthenticateServiceDelegate {
     
     @IBOutlet weak var iEmailView: UIView?
     @IBOutlet weak var iEmailTextField: UITextField?
@@ -417,11 +417,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate, DataCenterServ
     
     @IBAction func signUp(_ sender: Any) {
         
-        let signupViewController = SignUpViewController(nibName: "SignUpViewController", bundle: nil)
-        signupViewController.iDelegate = self
-        let signupNavController = UINavigationController(rootViewController: signupViewController)
-        signupNavController.navigationBar.isHidden = true
-        self.present(signupNavController, animated:true, completion: nil)
+//        let signupViewController = SignUpViewController(nibName: "SignUpViewController", bundle: nil)
+//        signupViewController.iDelegate = self
+//        let signupNavController = UINavigationController(rootViewController: signupViewController)
+//        signupNavController.navigationBar.isHidden = true
+//        self.present(signupNavController, animated:true, completion: nil)
     }
     
     

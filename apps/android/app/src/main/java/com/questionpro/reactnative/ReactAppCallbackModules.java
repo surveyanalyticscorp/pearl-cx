@@ -4,8 +4,6 @@ import android.app.Activity;
 
 import com.questionpro.reactnative.modules.ActionBarModule;
 import com.questionpro.reactnative.modules.AuthenticationModule;
-import com.questionpro.reactnative.modules.LocalizationModule;
-import com.questionpro.reactnative.modules.LocationModule;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
@@ -39,8 +37,8 @@ public class ReactAppCallbackModules implements ReactPackage {
 
         modules.add(new AuthenticationModule(reactContext));
         modules.add(new ActionBarModule(reactContext));
-        modules.add(new LocalizationModule(reactContext));
-        modules.add(new LocationModule(reactContext,mActivity));
+        //modules.add(new LocalizationModule(reactContext));
+        //modules.add(new LocationModule(reactContext,mActivity));
         return modules;
     }
 }

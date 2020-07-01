@@ -47,10 +47,6 @@ RCT_EXPORT_MODULE();
     [self sendEventWithName:@"SceneTransition" body:dataDict];
 }
 
--(void)reloadHomeScreenForPulse {
-    [self sendEventWithName:@"reloadScreen" body:@""];
-}
-
 -(void)showLanguagePicker {
     [self sendEventWithName:@"LanguagePicker" body:@""];
 }
