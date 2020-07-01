@@ -14,7 +14,6 @@
 RCT_EXTERN_METHOD(refreshContextMenuWithdata:(NSDictionary*)aContextMenuDict)
 RCT_EXTERN_METHOD(refreshProfileScreenWithdata:(NSString*)aProfileMenu withTitle:(NSString*)aTitle)
 RCT_EXTERN_METHOD(logoutUser)
-RCT_EXTERN_METHOD(reloadHomeScreenForPulse)
 RCT_EXTERN_METHOD(reloadObjAndGoalsScreen:(NSString*)option)
 RCT_EXTERN_METHOD(editObjAndGoal)
 

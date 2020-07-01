@@ -138,29 +138,13 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.iTableView.reloadData()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updateUIForLanguageInfo(notification:)), name: NSNotification.Name(kUpdateLanguageInfo), object: nil)
-        print(self.lastSelectedIndexPath ?? IndexPath(row: 1, section: 0))
-        if let updateAsk = UserDefaults.standard.value(forKey: kUpdateAsk) as? String, updateAsk == "Ask" {
-            self.lastSelectedIndexPath = IndexPath(row: 5, section: 0)
-            self.iTableView.reloadData()
-            UserDefaults.standard.set(false, forKey: kUpdateAsk)
-            UserDefaults.standard.synchronize()
-        }
-    }
-    
     @objc func updateUIForLanguageInfo(notification : NSNotification) {
         let languageInfo : String = notification.object as! String
         if languageInfo.length > 0 {
             GlobalData.setPreferredLanguage(languageID: languageInfo, key: kPreferedLanguageID)
             self.iTableView.reloadData()
         }
-        
     }
-    
-    //    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-    //        return self.iBootomFooter
-    //    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.menuList.count
@@ -224,7 +208,6 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func showLogoutPromt()  {
-        
         let alertController = UIAlertController(title: "Logout".localized(), message: "Do you really want to logout?".localized(), preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Cancel".localized(), style: .default) {
             UIAlertAction in

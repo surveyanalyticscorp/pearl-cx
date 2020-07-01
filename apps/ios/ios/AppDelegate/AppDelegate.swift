@@ -100,20 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         application.applicationIconBadgeNumber = 0
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadPulseHome"), object: nil)
-        //Handle the notification
-        let appUserInfo : AppUser = AppUser.fromJSON(responseDict: GlobalData.getAuthResponseFromUserDefault(key: kAuthResponse))
-        if let value = UserDefaults.standard.value(forKey: kUpdateToSurveyPage) as? Bool, value == true , state == "background" {
-            let contextManager = ContextMenuManager()
-            contextManager.refreshProfileScreenWithdata("Surveys", withTitle: "Surveys")
-            UserDefaults.standard.setValue(true, forKey: kUpdateToSurveyPageFromBackground);
-            UserDefaults.standard.synchronize();
-        }
-        if let authToken = appUserInfo.authToken, (authToken.length > 0 && self.appType == PocketAppType.POSITEv_APP || self.appType == PocketAppType.QUESTIONPRO_COMMUNITY_APP) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-                LocationHandler.sharedLocationHandler.checkLocationPermission()
-            })
-        }
+    
         if GlobalData.isNextSyncAvaliable() {
             WebServiceTXManager.uploadLocationDataService(aDelegate: self)
             WebServiceTXManager.invokeLocationDataService(aDelegate: self)
@@ -125,41 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func CheckApplicationType()  {
-        let appName = Bundle.main.infoDictionary![kCFBundleNameKey as String] as! String
-        if appName == "CX" {
-            self.appType = PocketAppType.QUESTIONPRO_CX_APP
-        }
-        if appName == "HealthTrust" {
-            self.appType = PocketAppType.HEALTHTRUST_APP
-        }
-        if appName == "Pulse" {
-            self.appType = PocketAppType.QUESTIONPRO_PULSE_APP
-        }
-        //ADD for Energizer also
-        #if QUESTIONPRO_SURVEY
-        self.appType = PocketAppType.QUESTIONPRO_SURVEY_APP
-        #elseif QUESTIONPRO_CX
         self.appType = PocketAppType.QUESTIONPRO_CX_APP
-        #elseif QUESTIONPRO_PULSE
-        self.appType = PocketAppType.QUESTIONPRO_PULSE_APP
-        #elseif QUESTIONPRO_COMMUNITY
-        self.appType = PocketAppType.QUESTIONPRO_COMMUNITY_APP
-        #elseif VIZIENTINC
-        self.appType = PocketAppType.QUESTIONPRO_VIZIENTINC_APP
-        #elseif MYPINION
-        self.appType = PocketAppType.MYPINION_APP
-        #elseif HEALTHTRUST
-        self.appType = PocketAppType.HEALTHTRUST_APP
-        #elseif POSITEv
-        self.appType = PocketAppType.POSITEv_APP
-        #elseif ENERGIZER_IDER_LABS
-        self.appType = PocketAppType.ENERGIZER_IDEA_LAB
-        #elseif HEALTHTRUST_COLLABORATIVES
-        self.appType = PocketAppType.HEALTHTRUST_COLLABORATIVES
-        
-        #else
-        print("no target found");
-        #endif
     }
     
     func applicationType() -> PocketAppType {

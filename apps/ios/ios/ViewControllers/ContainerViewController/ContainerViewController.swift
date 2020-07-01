@@ -76,8 +76,7 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
         NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(self.updateNavigationBarInfo(_:)), name:"updateActionBarInfo", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(self.updateBackButton(_:)), name:"updateBackButton", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(self.logoutUser), name:"logoutUser", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(self.reloadPulseHomeScreen), name:"reloadPulseHome", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(self.updateUIForLanguageInfo(_:)), name:"updateLanguageInfo", object: nil)
+
 
         let appDetailsDict = GlobalData.fetchAppDetailsDict()
         if appDetailsDict["isWhiteLabel"] as! Bool == true {
@@ -86,10 +85,7 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
             self.setNavigationBarItem(kLeftSideMenuImage, rightImageName: "", titleText: "", enableRightButton: false)
         }
     }
-    
-    func reloadPulseHomeScreen() {
-        self.iContextMenuManager.reloadHomeScreenForPulse();
-    }
+
     
     func updateUIForLanguageInfo(notification : NSNotification) {
         self.iContextMenuManager.reloadHomeScreenForPulse();        

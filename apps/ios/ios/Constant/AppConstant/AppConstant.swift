@@ -178,12 +178,10 @@ let kValidEmailError = "Please enter valid email address."
 
 let kUpdateActionBarInfo = "UpdateActionBarInfo"
 let kUpdateBackButton = "UpdateBackButton"
-let kUpdateLanguageInfo = "UpdateLanguageInfo"
 let kLogoutUser = "LogoutUser"
 let kNotificationReload = "notificationOpened" //"NotificationReload"
 let kUpdateToSurveyPage = "UpdateToSurveyPage"
 let kUpdateToSurveyPageFromBackground = "UpdateToSurveyPageFromBackground"
-let kUpdateAsk = "UpdateToAskMenu"
 let kUpdateMenuTitle = "UpdateMenuTitle"
 // Mark: DB Constant
 

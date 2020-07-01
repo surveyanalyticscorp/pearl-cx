@@ -56,24 +56,6 @@ public class ActionBarModule extends ReactContextBaseJavaModule {
         }
     }
 
-    /**
-     * Method to call from react side, to update menu item in drawer menu.
-     * @param menuItemName: Name of the menu item to set as selected.
-     * */
-    @ReactMethod
-    public void updateSelectedMenuItem(final String menuItemName) {
-        final Activity activity = getCurrentActivity();
-
-        if (activity != null) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ((ReactHomeActivity) activity).updateSelectedMenuItem(menuItemName);
-                }
-            });
-        }
-    }
-
     @ReactMethod
     public void updateLanguageMenuTitle(final String languageName){
         CoreApplication.changePreferredLanguage(getCurrentActivity(), languageName);

@@ -16,8 +16,6 @@
 
 -(void)refreshProfileScreenWithdata:(NSString*)aProfileMenuDict withTitle:(NSString*)aTitle;
 
--(void)reloadHomeScreenForPulse;
-
 -(void)logoutUser;
 
 -(void)showLanguagePicker;

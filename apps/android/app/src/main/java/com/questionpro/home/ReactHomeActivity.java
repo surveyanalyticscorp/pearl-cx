@@ -930,15 +930,6 @@ public class ReactHomeActivity extends AppCompatActivity
 
     }
 
-    public void updateSelectedMenuItem(String menuItemName) {
-        switch (menuItemName) {
-            case "Ask":
-                onDrawerMenuSelected(askMenuIndex);
-                break;
-        }
-
-    }
-
     private String getHomeURL() {
 
         return getString(R.string.base_url) + mainMenus.get(0).url;
