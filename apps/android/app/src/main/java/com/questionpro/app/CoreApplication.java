@@ -12,12 +12,10 @@ import android.util.Log;
 
 import androidx.multidex.MultiDex;
 
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.questionpro.pushnotification.QPGcmToken;
 import com.questionpro.pushnotification.QPPushNotification;
 import com.wix.reactnativenotifications.RNNotificationsPackage;
@@ -84,8 +82,6 @@ public class CoreApplication extends Application implements ReactApplication,INo
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-                    new RNI18nPackage(),
-                    new RNDeviceInfo(),
                     new RNNotificationsPackage(CoreApplication.this),
                     new VectorIconsPackage()
             );

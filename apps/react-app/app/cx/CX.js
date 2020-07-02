@@ -137,9 +137,7 @@ export default class CX extends Component{
     }
 
     render(){
-
         let App = ()=> (this.getApp());
-        let  mainScreen = this;
         global.BASE_URL = this.props.BASE_URL ? this.props.BASE_URL + "/" : "http://api.questionpro.com/";
 
         let APP = withNetworkConnectivity({

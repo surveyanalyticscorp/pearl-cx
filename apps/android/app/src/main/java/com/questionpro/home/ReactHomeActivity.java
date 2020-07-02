@@ -47,7 +47,6 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.alibaba.fastjson.JSON;
 import com.questionpro.login.CompanyCodeActivity;
 import com.questionpro.login.SocialLoginActivity;
@@ -77,7 +76,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
 import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 import com.google.android.material.navigation.NavigationView;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
+
 
 import com.questionpro.whitelabelapps.R;
 import com.questionpro.app.CoreApplication;
@@ -392,8 +391,6 @@ public class ReactHomeActivity extends AppCompatActivity
                 .setBundleAssetName("index.android.bundle")
                 .setJSMainModulePath("index.android")
                 .addPackage(new MainReactPackage())
-                .addPackage(new RNI18nPackage())
-                .addPackage(new RNDeviceInfo())
                 .addPackage(new RNNotificationsPackage(getApplication()))
                 .addPackage(new ReactAppCallbackModules(this))
                 .addPackage(new WebViewBridgePackage())
