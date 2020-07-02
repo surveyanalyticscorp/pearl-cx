@@ -23,8 +23,6 @@ pod 'RNVectorIcons', :path => '../react-app/node_modules/react-native-vector-ico
 pod 'RNGestureHandler', :path => '../react-app/node_modules/react-native-gesture-handler'
 pod 'RNReanimated', :path => '../react-app/node_modules/react-native-reanimated'
 
-pod 'react-native-document-picker', :path => '../react-app/node_modules/react-native-document-picker'
-
 pod 'react-native-material-kit', :path => '../react-app/node_modules/react-native-material-kit' 
 
 # Third party deps podspec link
@@ -39,23 +37,6 @@ pod 'Alamofire', '~> 4.8.0'
 pod 'ReachabilitySwift'
 end
  
-target 'Communities' do
-  available_pods
-  use_frameworks!
-  pod 'GoogleAnalytics'
-end
- 
-target 'HealthTrust' do
-  available_pods
-  use_frameworks!
-  pod 'GoogleAnalytics'
-  pod 'FMDB'
-end
- 
- 
-target 'Surveys' do
-end
- 
 target 'CX' do
   available_pods
   use_frameworks!
@@ -64,36 +45,4 @@ target 'CX' do
 end
  
  
-target 'Pulse' do
-   available_pods
-   use_frameworks!
-   pod 'GoogleAnalytics'
-   pod 'FMDB'
-end
- 
-target 'MyPinion' do
-available_pods
-pod 'GoogleAnalytics'
-end
- 
-target 'POSITEv' do
-    available_pods
-    pod 'GoogleAnalytics'
-end
- 
-target 'Vizientinc' do
-    available_pods
-    pod 'GoogleAnalytics'
-end
 
-target 'Energizer Idea Lab' do
-  available_pods
-  pod 'GoogleAnalytics'
-end
-
-target 'HealthTrust Collaboratives' do
-  available_pods
-  use_frameworks!
-  pod 'GoogleAnalytics'
-  pod 'FMDB'
-end

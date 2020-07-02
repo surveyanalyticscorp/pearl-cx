@@ -31,8 +31,6 @@ PODS:
   - ReachabilitySwift (5.0.0)
   - React (0.59.5):
     - React/Core (= 0.59.5)
-  - react-native-document-picker (3.4.0):
-    - React
   - react-native-material-kit (0.6.0-beta.1):
     - React
   - react-native-webview (8.0.6):
@@ -109,7 +107,6 @@ DEPENDENCIES:
   - GoogleAnalytics
   - GoogleSignIn
   - ReachabilitySwift
-  - react-native-document-picker (from `../react-app/node_modules/react-native-document-picker`)
   - react-native-material-kit (from `../react-app/node_modules/react-native-material-kit`)
   - react-native-webview (from `../react-app/node_modules/react-native-webview`)
   - React/ART (from `../react-app/node_modules/react-native`)
@@ -152,8 +149,6 @@ EXTERNAL SOURCES:
     :podspec: "../react-app/node_modules/react-native/third-party-podspecs/glog.podspec"
   React:
     :path: "../react-app/node_modules/react-native"
-  react-native-document-picker:
-    :path: "../react-app/node_modules/react-native-document-picker"
   react-native-material-kit:
     :path: "../react-app/node_modules/react-native-material-kit"
   react-native-webview:
@@ -187,7 +182,6 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   React: 90adac468c7b72bf1fa6c64bf230650f851a8388
-  react-native-document-picker: d694111879537cec2c258a1dcd2243d9df746824
   react-native-material-kit: fcd29a6ad901670f8073433d382df2abaadb831f
   react-native-webview: e11b5d7da61ac3acee13f3ae3184d417f773c5d5
   RNDeviceInfo: dc3cbee96cd2392cf03d6ff6191dc15f1606a166
@@ -198,6 +192,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   yoga: 2e571f113e8cbeb0eb752aeebc86c1bfe7a8200c
 
-PODFILE CHECKSUM: f580a81db25fe0ecfb2ae180b397551171a73687
+PODFILE CHECKSUM: 510fb3701a1a6d66e34f9a50b6c054b58e8db945
 
 COCOAPODS: 1.9.1
