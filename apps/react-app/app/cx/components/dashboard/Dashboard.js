@@ -11,12 +11,12 @@ import {
     Dimensions
 } from 'react-native';
 
-import BaseComponent from '../../global/components/BaseComponent';
-import {apiHandler} from '../../global/api/APIHandler';
-import MainContainer from '../../global/ui/MainContainer';
-import QPCard from '../../global/widgets/card/QPCard';
-import CustomText from '../../global/ui/CustomText';
-import QPChartWidget from '../../global/widgets/QPChartWidget';
+import BaseComponent from '../../../global/components/BaseComponent';
+import {apiHandler} from '../../../global/api/APIHandler';
+import MainContainer from '../../../global/ui/MainContainer';
+import QPCard from '../../../global/widgets/card/QPCard';
+import CustomText from '../../../global/ui/CustomText';
+import QPChartWidget from '../../../global/widgets/QPChartWidget';
 
 
 export default class Dashboard extends BaseComponent {
