@@ -87,7 +87,6 @@ import com.questionpro.reactnative.ReactAppCallbackModules;
 import com.questionpro.uiutils.CircleTransform;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.rnfs.RNFSPackage;
-import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.squareup.picasso.Picasso;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
@@ -398,7 +397,6 @@ public class ReactHomeActivity extends AppCompatActivity
                 .addPackage(new RNNotificationsPackage(getApplication()))
                 .addPackage(new ReactAppCallbackModules(this))
                 .addPackage(new WebViewBridgePackage())
-                .addPackage(new ReactNativeContacts())
                 .addPackage(new MPAndroidChartPackage())
                 .addPackage(new RNFSPackage())
                 .addPackage(new AndroidKeyboardAdjustPackage(this))

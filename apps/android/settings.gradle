@@ -4,12 +4,8 @@ include ':materialDesign'
 include ':react-native-webview-bridge'
 project(':react-native-webview-bridge').projectDir = file('../react-app/node_modules/react-native-webview-bridge/android')
 
-include ':react-native-contacts'
-project(':react-native-contacts').projectDir = new File('../react-app/node_modules/react-native-contacts/android')
-
 include ':react-native-android-keyboard-adjust'
 project(':react-native-android-keyboard-adjust').projectDir = new File('../react-app/node_modules/react-native-android-keyboard-adjust/android')
-
 
 include ':reactnativenotifications'
 project(':reactnativenotifications').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-notifications/android')
@@ -35,6 +31,7 @@ project(':react-native-vector-icons').projectDir = new File(rootProject.projectD
 
 include ':react-native-reanimated'
 project(':react-native-reanimated').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-reanimated/android')
+
 include ':react-native-gesture-handler'
 project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-gesture-handler/android')
 

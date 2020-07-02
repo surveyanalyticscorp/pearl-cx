@@ -10,9 +10,7 @@ import {
     NativeEventEmitter,
     NativeModules,
     Navigator,
-    NavigatorIOS,
-    Platform,
-    View
+    Platform
 } from "react-native";
 
 import {ActionBarModule} from "../global/native-modules/NativeModules";
@@ -32,7 +30,9 @@ if (!__DEV__) {
 //global.BASE_URL = "http://wf-api.questionpro.com/";
 /* global URL for HT, Communities, Cx, Survey App */
 global.BASE_URL = "https://wflabs.questionpro.com/";
+
 console.log(global.BASE_URL)
+
 BackHandler.addEventListener('hardwareBackPress', () => {
     console.log("BackPRess");
     if (_navigator) {
@@ -50,9 +50,10 @@ BackHandler.addEventListener('hardwareBackPress', () => {
     return false;
 });
 
-var _navigator;
+let _navigator;
 
 global.appUser = {};
+
 let mainScreen;
 
 export default class Entry extends React.Component {
@@ -156,28 +157,27 @@ export default class Entry extends React.Component {
     }
 
 
-    onPushRegistrationFailed(error) {
+    onPushRegistrationFailed = (error) =>{
         console.error(error);
-    }
+    };
 
-    onNotificationOpened(notification) {
+    onNotificationOpened = (notification)=> {
         console.log("Notification opened by device user", notification);
         if (mainScreen) {
             AppActions.notificationOpened(notification);
         }
-    }
+    };
 
 
 
-    configureScene() {
+    configureScene = () => {
         return Navigator.SceneConfigs.FloatFromRight;
-    }
+    };
 
     render() {
           mainScreen = this;
           return (<CX {...this.props} />);
     }
-
 }
 
 

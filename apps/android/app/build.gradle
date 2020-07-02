@@ -106,7 +106,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation project(':react-native-i18n')
     implementation project(':react-native-device-info')
-    implementation project(':react-native-contacts')
     implementation project(':react-native-android-keyboard-adjust')
     implementation project(':react-native-fs')
     implementation project(':reactnativenotifications')

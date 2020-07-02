@@ -205,13 +205,6 @@ class APIHandler {
 
     }
 
-
-    getSurveys(successCallback, data = {}, errorCallback = () => {
-    }) {
-        return this.callAPI(global.BASE_URL + 'a/nativehtml/survey.SurveyList',
-            successCallback, data, errorCallback);
-    }
-
     getSurveyDashboard(successCallback, data = {}, errorCallback = () => {
     }) {
         return this.callAPI(global.BASE_URL + 'a/nativehtml/survey.dashboard.SurveyDashboard',
