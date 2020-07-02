@@ -322,7 +322,7 @@ public class ReactHomeActivity extends AppCompatActivity
         launchOptions.putString("HAS_LOCATION_SURVEY", ""+getResources().getBoolean(R.bool.has_location_surveys));
         launchOptions.putString("BASE_URL", appUser.baseURL);
 
-        Bundle bundle = new Bundle();
+        /*Bundle bundle = new Bundle();
 
         bundle.putLong("ID", appUser.ID);
         bundle.putString("emailID", appUser.emailAddress);
@@ -338,9 +338,9 @@ public class ReactHomeActivity extends AppCompatActivity
         bundle.putString("topicsTabMenu",new JSONArray(Arrays.asList(getResources().getStringArray(R.array.topics_menu))).toString());
         bundle.putString("ideaboardMenu",new JSONArray(Arrays.asList(getResources().getStringArray(R.array.ideaboard_menu))).toString());
         bundle.putString("useTranslationsForTabs",getResources().getBoolean(R.bool.use_translation_for_tabs)+"");
-        bundle.putString("profileTabMenu", new JSONArray(Arrays.asList(getResources().getStringArray(R.array.profile_tab_menu))).toString());
+        bundle.putString("profileTabMenu", new JSONArray(Arrays.asList(getResources().getStringArray(R.array.profile_tab_menu))).toString());*/
 
-        launchOptions.putBundle("APP_USER", bundle);
+        //launchOptions.putBundle("APP_USER", bundle);
         if (getIntent() != null && getIntent().getExtras() != null) {
             launchOptions.putString("scene", getIntent().getExtras().getString("launchScreen"));
         } else {

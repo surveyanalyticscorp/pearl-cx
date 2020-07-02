@@ -30,23 +30,6 @@
 	<string name="ms_title_4">Frameworks</string>
 	<string name="ms_text_4">Don’t know what to ask? Deploy a survey using our expert frameworks.</string>
 
-	<string-array name="ms_titles">
-		<item>Real-time Dashboards &amp; Filtering</item>
-		<item>Focus on what matters to you</item>
-		<item>Get notified</item>
-		<item>Insights &amp; Snapshots</item>
-		<item>Cross tabulate</item>
-	</string-array>
-	<string-array name="ms_texts">
-		<item>Get a live mobile dashboard with advanced filtering capabilities include date and response status filters.</item>
-		<item>Select sections or questions which matter to you and hide the rest.</item>
-		<item>Push notifications of when respondents take your survey or alerts when specific response criterion are met.</item>
-		<item>Share snapshots of a specific chart or the whole report - including data-segments and cross-tabs.</item>
-		<item>Advanced analysis using mobile crosstabulation to help you compare relationship between two variables.</item>
-	</string-array>
-
-	<array name="ms_icons">
-	</array>
 	<string name="email_address">Email Address</string>
 	<string name="password">Password</string>
 	<string name="confirm_password">Confirm Password</string>
