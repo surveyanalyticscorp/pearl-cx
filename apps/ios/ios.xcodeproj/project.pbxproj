@@ -580,7 +580,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0D583EC577958DFFD026174E /* Pods-Vizientinc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vizientinc.release.xcconfig"; path = "Pods/Target Support Files/Pods-Vizientinc/Pods-Vizientinc.release.xcconfig"; sourceTree = "<group>"; };
 		139052AB416515561BE0712D /* libPods-Vizientinc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Vizientinc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13C201E75512C4426E91F541 /* Pods_Communities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Communities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		189F48372484F29800168372 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleSignIn.bundle; sourceTree = "<group>"; };
@@ -601,9 +600,7 @@
 		21692A9623A8FD88003951BB /* HTCollaboratives.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HTCollaboratives.storyboard; sourceTree = "<group>"; };
 		2199C327237D59860074EC25 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../../react-app/node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		21BD4F1523C5B12C007E827A /* main.jsbundle.meta */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle.meta; sourceTree = "<group>"; };
-		255CF5090FCF790A0F607655 /* Pods-HealthTrust.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrust.release.xcconfig"; path = "Pods/Target Support Files/Pods-HealthTrust/Pods-HealthTrust.release.xcconfig"; sourceTree = "<group>"; };
 		27B5AB03FB1807AFD79D31CE /* Pods_HealthTrust_Collaboratives.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HealthTrust_Collaboratives.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2B2D78BBA9BA43BE3E91DB20 /* Pods-Surveys.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Surveys.release.xcconfig"; path = "Pods/Target Support Files/Pods-Surveys/Pods-Surveys.release.xcconfig"; sourceTree = "<group>"; };
 		2D7DB09117DA32597525E917 /* Pods-CX.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CX.release.xcconfig"; path = "Pods/Target Support Files/Pods-CX/Pods-CX.release.xcconfig"; sourceTree = "<group>"; };
 		33081FED1F66702A00E7F349 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		33081FF41F6676E600E7F349 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
@@ -1155,9 +1152,6 @@
 		33FDCBD71F66659A002D0199 /* WebServiceAsyncInvocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServiceAsyncInvocation.swift; sourceTree = "<group>"; };
 		33FDCBD81F66659A002D0199 /* WebServiceTXManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServiceTXManager.swift; sourceTree = "<group>"; };
 		33FF7D8820ADA6B200A0A46D /* cx.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = cx.xcassets; sourceTree = "<group>"; };
-		40668E05CC8A9ED0BF8B332C /* Pods-Communities.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Communities.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Communities/Pods-Communities.debug.xcconfig"; sourceTree = "<group>"; };
-		410952D5000BC76E0473F627 /* Pods-POSITEv.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-POSITEv.debug.xcconfig"; path = "Pods/Target Support Files/Pods-POSITEv/Pods-POSITEv.debug.xcconfig"; sourceTree = "<group>"; };
-		438EDAA2F4BBD95D8B89AE95 /* Pods-Pulse.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pulse.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pulse/Pods-Pulse.debug.xcconfig"; sourceTree = "<group>"; };
 		51D213DC6EF8921BA86A8468 /* libPods-MyPinion.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyPinion.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51F6681476C5ED76FED2E7E6 /* Pods_HealthTrust.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HealthTrust.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5423D15320CE7CE3003ED5AD /* VizientincLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = VizientincLaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -1166,24 +1160,12 @@
 		54ADB79621BA8314004D99B7 /* SignupServiceInvocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupServiceInvocation.swift; sourceTree = "<group>"; };
 		54ADB79A21BA90BD004D99B7 /* communities.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = communities.xcassets; path = communities/communities.xcassets; sourceTree = SOURCE_ROOT; };
 		54EEDBFB21C0E64600A3D554 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		576D2E84A86BC599124AD79E /* Pods-Pulse.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pulse.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pulse/Pods-Pulse.release.xcconfig"; sourceTree = "<group>"; };
 		57C492490C47C14AAD871513 /* libPods-Energizer Idea Lab.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Energizer Idea Lab.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		691F3AC4BAE5E06E704671D9 /* Pods-MyPinion.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyPinion.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyPinion/Pods-MyPinion.release.xcconfig"; sourceTree = "<group>"; };
-		6970E3BE7382CC6BD31D2F90 /* Pods-HealthTrust Collaboratives.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrust Collaboratives.release.xcconfig"; path = "Pods/Target Support Files/Pods-HealthTrust Collaboratives/Pods-HealthTrust Collaboratives.release.xcconfig"; sourceTree = "<group>"; };
-		6C026773FE33922E6D08E0CD /* Pods-HealthTrust Collaboratives.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrust Collaboratives.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HealthTrust Collaboratives/Pods-HealthTrust Collaboratives.debug.xcconfig"; sourceTree = "<group>"; };
 		6C25F2A63CE1578AC04F3C9D /* libPods-Surveys.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Surveys.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CB4A450955030B8BE681332 /* Pods_Pulse.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pulse.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		78A49DB05ED8E1E35AE50F8B /* Pods-Energizer Idea Lab.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Energizer Idea Lab.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Energizer Idea Lab/Pods-Energizer Idea Lab.debug.xcconfig"; sourceTree = "<group>"; };
 		7B3090F296DE1129CEFA0E49 /* Pods_CX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DFEB468040965F7706820EA /* Pods-CX.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CX.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CX/Pods-CX.debug.xcconfig"; sourceTree = "<group>"; };
-		9B966EDDF5EA3878655C958F /* Pods-HealthTrust.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HealthTrust.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HealthTrust/Pods-HealthTrust.debug.xcconfig"; sourceTree = "<group>"; };
-		A3C6CDFAFD7F88A01B684887 /* Pods-Vizientinc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vizientinc.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vizientinc/Pods-Vizientinc.debug.xcconfig"; sourceTree = "<group>"; };
-		ACA76D4FAAF182B93617726B /* Pods-POSITEv.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-POSITEv.release.xcconfig"; path = "Pods/Target Support Files/Pods-POSITEv/Pods-POSITEv.release.xcconfig"; sourceTree = "<group>"; };
 		B2CDE5ADA72626109C0D15D8 /* libPods-POSITEv.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-POSITEv.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C570DAD6843E25DBEC5DA29E /* Pods-MyPinion.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyPinion.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyPinion/Pods-MyPinion.debug.xcconfig"; sourceTree = "<group>"; };
-		C6EC5CC35B86FD345C6FE37B /* Pods-Energizer Idea Lab.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Energizer Idea Lab.release.xcconfig"; path = "Pods/Target Support Files/Pods-Energizer Idea Lab/Pods-Energizer Idea Lab.release.xcconfig"; sourceTree = "<group>"; };
-		C70F2EF3010CA208666F1526 /* Pods-Communities.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Communities.release.xcconfig"; path = "Pods/Target Support Files/Pods-Communities/Pods-Communities.release.xcconfig"; sourceTree = "<group>"; };
-		DD03A83AF1CA1A45ADA57F43 /* Pods-Surveys.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Surveys.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Surveys/Pods-Surveys.debug.xcconfig"; sourceTree = "<group>"; };
 		E025121722CA1B5D0080D698 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
 		E025122722CA1B5E0080D698 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		E025122822CA1B5E0080D698 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
@@ -2730,24 +2712,6 @@
 				54EEDBFB21C0E64600A3D554 /* Podfile */,
 				7DFEB468040965F7706820EA /* Pods-CX.debug.xcconfig */,
 				2D7DB09117DA32597525E917 /* Pods-CX.release.xcconfig */,
-				40668E05CC8A9ED0BF8B332C /* Pods-Communities.debug.xcconfig */,
-				C70F2EF3010CA208666F1526 /* Pods-Communities.release.xcconfig */,
-				78A49DB05ED8E1E35AE50F8B /* Pods-Energizer Idea Lab.debug.xcconfig */,
-				C6EC5CC35B86FD345C6FE37B /* Pods-Energizer Idea Lab.release.xcconfig */,
-				9B966EDDF5EA3878655C958F /* Pods-HealthTrust.debug.xcconfig */,
-				255CF5090FCF790A0F607655 /* Pods-HealthTrust.release.xcconfig */,
-				6C026773FE33922E6D08E0CD /* Pods-HealthTrust Collaboratives.debug.xcconfig */,
-				6970E3BE7382CC6BD31D2F90 /* Pods-HealthTrust Collaboratives.release.xcconfig */,
-				C570DAD6843E25DBEC5DA29E /* Pods-MyPinion.debug.xcconfig */,
-				691F3AC4BAE5E06E704671D9 /* Pods-MyPinion.release.xcconfig */,
-				410952D5000BC76E0473F627 /* Pods-POSITEv.debug.xcconfig */,
-				ACA76D4FAAF182B93617726B /* Pods-POSITEv.release.xcconfig */,
-				438EDAA2F4BBD95D8B89AE95 /* Pods-Pulse.debug.xcconfig */,
-				576D2E84A86BC599124AD79E /* Pods-Pulse.release.xcconfig */,
-				DD03A83AF1CA1A45ADA57F43 /* Pods-Surveys.debug.xcconfig */,
-				2B2D78BBA9BA43BE3E91DB20 /* Pods-Surveys.release.xcconfig */,
-				A3C6CDFAFD7F88A01B684887 /* Pods-Vizientinc.debug.xcconfig */,
-				0D583EC577958DFFD026174E /* Pods-Vizientinc.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -3551,26 +3515,25 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CX/Pods-CX-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire-framework/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/AppAuth-framework/AppAuth.framework",
-				"${BUILT_PRODUCTS_DIR}/DoubleConversion-framework/DoubleConversion.framework",
-				"${BUILT_PRODUCTS_DIR}/FMDB-framework/FMDB.framework",
-				"${BUILT_PRODUCTS_DIR}/Folly-framework/folly.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMAppAuth-framework/GTMAppAuth.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher-framework/GTMSessionFetcher.framework",
-				"${BUILT_PRODUCTS_DIR}/RNDeviceInfo-framework/RNDeviceInfo.framework",
-				"${BUILT_PRODUCTS_DIR}/RNFS-framework/RNFS.framework",
-				"${BUILT_PRODUCTS_DIR}/RNGestureHandler-framework/RNGestureHandler.framework",
-				"${BUILT_PRODUCTS_DIR}/RNI18n-framework/RNI18n.framework",
-				"${BUILT_PRODUCTS_DIR}/RNReanimated-framework/RNReanimated.framework",
-				"${BUILT_PRODUCTS_DIR}/RNVectorIcons-framework/RNVectorIcons.framework",
-				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift-framework/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR}/React-framework/React.framework",
-				"${BUILT_PRODUCTS_DIR}/glog-framework/glog.framework",
-				"${BUILT_PRODUCTS_DIR}/react-native-document-picker-framework/react_native_document_picker.framework",
-				"${BUILT_PRODUCTS_DIR}/react-native-material-kit-framework/react_native_material_kit.framework",
-				"${BUILT_PRODUCTS_DIR}/react-native-webview-framework/react_native_webview.framework",
-				"${BUILT_PRODUCTS_DIR}/yoga-framework/yoga.framework",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework",
+				"${BUILT_PRODUCTS_DIR}/DoubleConversion/DoubleConversion.framework",
+				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
+				"${BUILT_PRODUCTS_DIR}/Folly/folly.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMAppAuth/GTMAppAuth.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/RNDeviceInfo/RNDeviceInfo.framework",
+				"${BUILT_PRODUCTS_DIR}/RNFS/RNFS.framework",
+				"${BUILT_PRODUCTS_DIR}/RNGestureHandler/RNGestureHandler.framework",
+				"${BUILT_PRODUCTS_DIR}/RNI18n/RNI18n.framework",
+				"${BUILT_PRODUCTS_DIR}/RNReanimated/RNReanimated.framework",
+				"${BUILT_PRODUCTS_DIR}/RNVectorIcons/RNVectorIcons.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
+				"${BUILT_PRODUCTS_DIR}/React/React.framework",
+				"${BUILT_PRODUCTS_DIR}/glog/glog.framework",
+				"${BUILT_PRODUCTS_DIR}/react-native-material-kit/react_native_material_kit.framework",
+				"${BUILT_PRODUCTS_DIR}/react-native-webview/react_native_webview.framework",
+				"${BUILT_PRODUCTS_DIR}/yoga/yoga.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3590,7 +3553,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/glog.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/react_native_document_picker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/react_native_material_kit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/react_native_webview.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
