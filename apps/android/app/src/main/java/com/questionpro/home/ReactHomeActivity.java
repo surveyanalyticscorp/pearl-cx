@@ -48,10 +48,7 @@ import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
-import com.BV.LinearGradient.LinearGradientPackage;
 import com.alibaba.fastjson.JSON;
-import com.imagepicker.ImagePickerPackage;
-import com.imagepicker.permissions.OnImagePickerPermissionsCallback;
 import com.questionpro.login.CompanyCodeActivity;
 import com.questionpro.login.SocialLoginActivity;
 import com.questionpro.model.AppUser;
@@ -114,7 +111,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-import io.github.elyx0.reactnativedocumentpicker.DocumentPickerPackage;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static com.wix.reactnativenotifications.Defs.TOKEN_RECEIVED_EVENT_NAME;
@@ -125,7 +121,7 @@ import static com.wix.reactnativenotifications.Defs.TOKEN_RECEIVED_EVENT_NAME;
 
 public class ReactHomeActivity extends AppCompatActivity
         implements DefaultHardwareBackBtnHandler, ReactInstanceManager.ReactInstanceEventListener,
-        OnImagePickerPermissionsCallback, PermissionAwareActivity, ActivityCompat.OnRequestPermissionsResultCallback, View.OnClickListener {
+        PermissionAwareActivity, ActivityCompat.OnRequestPermissionsResultCallback, View.OnClickListener {
     private static final int OVERLAY_PERMISSION_REQ_CODE = 1234;
     private PermissionListener listener;
     private NavigationView navigationView;
@@ -405,14 +401,11 @@ public class ReactHomeActivity extends AppCompatActivity
                 .addPackage(new ReactNativeContacts())
                 .addPackage(new MPAndroidChartPackage())
                 .addPackage(new RNFSPackage())
-                .addPackage(new ImagePickerPackage())
                 .addPackage(new AndroidKeyboardAdjustPackage(this))
                 .addPackage(new ReactNativeWheelPickerPackage())
-                .addPackage(new LinearGradientPackage())
                 .addPackage(new ReanimatedPackage())
                 .addPackage(new RNGestureHandlerPackage())
                 .addPackage(new RNCWebViewPackage())
-                .addPackage(new DocumentPickerPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
                 .build();
@@ -1244,11 +1237,6 @@ public class ReactHomeActivity extends AppCompatActivity
             return true;
         }
         return super.onKeyUp(keyCode, event);
-    }
-
-    @Override
-    public void setPermissionListener(PermissionListener listener) {
-        this.listener = listener;
     }
 
     @Override

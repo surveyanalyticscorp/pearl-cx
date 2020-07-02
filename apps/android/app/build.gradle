@@ -108,13 +108,10 @@ dependencies {
     implementation project(':react-native-device-info')
     implementation project(':react-native-contacts')
     implementation project(':react-native-android-keyboard-adjust')
-    implementation project(':react-native-image-picker')
     implementation project(':react-native-fs')
     implementation project(':reactnativenotifications')
-    implementation project (':react-native-linear-gradient')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-webview')
-    implementation project(':react-native-document-picker')
 
 
     implementation 'com.squareup.picasso:picasso:2.5.2'

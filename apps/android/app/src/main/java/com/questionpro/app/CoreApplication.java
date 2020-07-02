@@ -17,7 +17,6 @@ import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
-import com.imagepicker.ImagePickerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.questionpro.pushnotification.QPGcmToken;
 import com.questionpro.pushnotification.QPPushNotification;
@@ -88,7 +87,6 @@ public class CoreApplication extends Application implements ReactApplication,INo
                     new RNI18nPackage(),
                     new RNDeviceInfo(),
                     new RNNotificationsPackage(CoreApplication.this),
-                    new ImagePickerPackage(),
                     new VectorIconsPackage()
             );
         }

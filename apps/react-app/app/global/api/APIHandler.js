@@ -254,6 +254,11 @@ class APIHandler {
         return this.callAPI(global.BASE_URL + 'a/nativehtml/cx.CXDetractorTicket', successCallback, data, errorCallback);
     }
 
+    registerPushToken(successCallback, appName = "", data = {}, errorCallback = () => { }) {
+        return this.callAPI(global.BASE_URL + 'a/nativehtml/' + this.getPushTokenRegisterRoute(appName) + '', successCallback, data, errorCallback);
+    }
+
+
 
     getPushTokenRegisterRoute(appName) {
         switch (appName) {
