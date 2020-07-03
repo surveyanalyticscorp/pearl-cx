@@ -47,11 +47,7 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
-import com.BV.LinearGradient.LinearGradientPackage;
 import com.alibaba.fastjson.JSON;
-import com.imagepicker.ImagePickerPackage;
-import com.imagepicker.permissions.OnImagePickerPermissionsCallback;
 import com.questionpro.login.CompanyCodeActivity;
 import com.questionpro.login.SocialLoginActivity;
 import com.questionpro.model.AppUser;
@@ -80,7 +76,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
 import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 import com.google.android.material.navigation.NavigationView;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
+
 
 import com.questionpro.whitelabelapps.R;
 import com.questionpro.app.CoreApplication;
@@ -90,7 +86,6 @@ import com.questionpro.reactnative.ReactAppCallbackModules;
 import com.questionpro.uiutils.CircleTransform;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.rnfs.RNFSPackage;
-import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.squareup.picasso.Picasso;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
@@ -114,7 +109,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-import io.github.elyx0.reactnativedocumentpicker.DocumentPickerPackage;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static com.wix.reactnativenotifications.Defs.TOKEN_RECEIVED_EVENT_NAME;
@@ -125,7 +119,7 @@ import static com.wix.reactnativenotifications.Defs.TOKEN_RECEIVED_EVENT_NAME;
 
 public class ReactHomeActivity extends AppCompatActivity
         implements DefaultHardwareBackBtnHandler, ReactInstanceManager.ReactInstanceEventListener,
-        OnImagePickerPermissionsCallback, PermissionAwareActivity, ActivityCompat.OnRequestPermissionsResultCallback, View.OnClickListener {
+        PermissionAwareActivity, ActivityCompat.OnRequestPermissionsResultCallback, View.OnClickListener {
     private static final int OVERLAY_PERMISSION_REQ_CODE = 1234;
     private PermissionListener listener;
     private NavigationView navigationView;
@@ -328,7 +322,7 @@ public class ReactHomeActivity extends AppCompatActivity
         launchOptions.putString("HAS_LOCATION_SURVEY", ""+getResources().getBoolean(R.bool.has_location_surveys));
         launchOptions.putString("BASE_URL", appUser.baseURL);
 
-        Bundle bundle = new Bundle();
+        /*Bundle bundle = new Bundle();
 
         bundle.putLong("ID", appUser.ID);
         bundle.putString("emailID", appUser.emailAddress);
@@ -344,9 +338,9 @@ public class ReactHomeActivity extends AppCompatActivity
         bundle.putString("topicsTabMenu",new JSONArray(Arrays.asList(getResources().getStringArray(R.array.topics_menu))).toString());
         bundle.putString("ideaboardMenu",new JSONArray(Arrays.asList(getResources().getStringArray(R.array.ideaboard_menu))).toString());
         bundle.putString("useTranslationsForTabs",getResources().getBoolean(R.bool.use_translation_for_tabs)+"");
-        bundle.putString("profileTabMenu", new JSONArray(Arrays.asList(getResources().getStringArray(R.array.profile_tab_menu))).toString());
+        bundle.putString("profileTabMenu", new JSONArray(Arrays.asList(getResources().getStringArray(R.array.profile_tab_menu))).toString());*/
 
-        launchOptions.putBundle("APP_USER", bundle);
+        //launchOptions.putBundle("APP_USER", bundle);
         if (getIntent() != null && getIntent().getExtras() != null) {
             launchOptions.putString("scene", getIntent().getExtras().getString("launchScreen"));
         } else {
@@ -397,22 +391,16 @@ public class ReactHomeActivity extends AppCompatActivity
                 .setBundleAssetName("index.android.bundle")
                 .setJSMainModulePath("index.android")
                 .addPackage(new MainReactPackage())
-                .addPackage(new RNI18nPackage())
-                .addPackage(new RNDeviceInfo())
                 .addPackage(new RNNotificationsPackage(getApplication()))
                 .addPackage(new ReactAppCallbackModules(this))
                 .addPackage(new WebViewBridgePackage())
-                .addPackage(new ReactNativeContacts())
                 .addPackage(new MPAndroidChartPackage())
                 .addPackage(new RNFSPackage())
-                .addPackage(new ImagePickerPackage())
                 .addPackage(new AndroidKeyboardAdjustPackage(this))
                 .addPackage(new ReactNativeWheelPickerPackage())
-                .addPackage(new LinearGradientPackage())
                 .addPackage(new ReanimatedPackage())
                 .addPackage(new RNGestureHandlerPackage())
                 .addPackage(new RNCWebViewPackage())
-                .addPackage(new DocumentPickerPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
                 .build();
@@ -1244,11 +1232,6 @@ public class ReactHomeActivity extends AppCompatActivity
             return true;
         }
         return super.onKeyUp(keyCode, event);
-    }
-
-    @Override
-    public void setPermissionListener(PermissionListener listener) {
-        this.listener = listener;
     }
 
     @Override

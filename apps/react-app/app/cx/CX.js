@@ -102,7 +102,7 @@ export default class CX extends Component{
             this.persistor.purge();
         }
     }
-    onSceneTransition(data){
+    onSceneTransition = (data) =>{
         switch(data.Scene){
             case "Feedback":
                 Actions.cxFeedback();
@@ -114,9 +114,9 @@ export default class CX extends Component{
                 ActionBarModule.toggleBackButton(false);
                 break;
         }
-    }
+    };
 
-    getApp(){
+    getApp = () =>{
         const navigationStateHandler = new NavigationStateHandler();
 
         return (
@@ -134,12 +134,10 @@ export default class CX extends Component{
             </RouterWithRedux>
 
         )
-    }
+    };
 
     render(){
-
         let App = ()=> (this.getApp());
-        let  mainScreen = this;
         global.BASE_URL = this.props.BASE_URL ? this.props.BASE_URL + "/" : "http://api.questionpro.com/";
 
         let APP = withNetworkConnectivity({

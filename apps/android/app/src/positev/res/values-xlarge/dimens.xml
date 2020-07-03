@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <dimen name="ms_icon_size">200dp</dimen>
-    <dimen name="ms_title_size">48sp</dimen>
-    <dimen name="ms_text_size">24sp</dimen>
-    <dimen name="ms_button_text_size">20sp</dimen>
-    <dimen name="ms_divider_line_width">450dp</dimen>
-</resources>

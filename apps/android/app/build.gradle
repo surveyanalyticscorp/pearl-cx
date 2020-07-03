@@ -104,17 +104,11 @@ dependencies {
     implementation "com.facebook.fresco:animated-base-support:1.3.0"
     compile files('libs/gcm.jar')
     testImplementation 'junit:junit:4.12'
-    implementation project(':react-native-i18n')
-    implementation project(':react-native-device-info')
-    implementation project(':react-native-contacts')
     implementation project(':react-native-android-keyboard-adjust')
-    implementation project(':react-native-image-picker')
     implementation project(':react-native-fs')
     implementation project(':reactnativenotifications')
-    implementation project (':react-native-linear-gradient')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-webview')
-    implementation project(':react-native-document-picker')
 
 
     implementation 'com.squareup.picasso:picasso:2.5.2'

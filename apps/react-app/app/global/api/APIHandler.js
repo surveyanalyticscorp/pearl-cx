@@ -205,13 +205,6 @@ class APIHandler {
 
     }
 
-
-    getSurveys(successCallback, data = {}, errorCallback = () => {
-    }) {
-        return this.callAPI(global.BASE_URL + 'a/nativehtml/survey.SurveyList',
-            successCallback, data, errorCallback);
-    }
-
     getSurveyDashboard(successCallback, data = {}, errorCallback = () => {
     }) {
         return this.callAPI(global.BASE_URL + 'a/nativehtml/survey.dashboard.SurveyDashboard',
@@ -253,6 +246,11 @@ class APIHandler {
     }) {
         return this.callAPI(global.BASE_URL + 'a/nativehtml/cx.CXDetractorTicket', successCallback, data, errorCallback);
     }
+
+    registerPushToken(successCallback, appName = "", data = {}, errorCallback = () => { }) {
+        return this.callAPI(global.BASE_URL + 'a/nativehtml/' + this.getPushTokenRegisterRoute(appName) + '', successCallback, data, errorCallback);
+    }
+
 
 
     getPushTokenRegisterRoute(appName) {

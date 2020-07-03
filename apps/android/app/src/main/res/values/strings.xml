@@ -28,14 +28,6 @@
     <string name="forgot_password_dialog_text">Call our project assistance line at <font color='#1976D2'><a href="tel:1-800-957-6457">1-800-957-6457</a></font> between 9 am and 5 pm, Eastern Time, Monday through Friday or email us at <font color='#1976D2'><a href="mailTo:fdastudy@rti.org">fdastudy@rti.org</a></font></string>
     <string name="got_it">Got It</string>
 
-    <string name="ms_title_1">Surveys</string>
-    <string name="ms_text_1">With our automated reports, slice and dice your employee survey data immediately to identify your top teams and top strengths.</string>
-    <string name="ms_title_2">360 Reviews</string>
-    <string name="ms_text_2">Get a comprehensive view of an individual with a 360 degree feedback review.</string>
-    <string name="ms_title_3">Weekly Pulse</string>
-    <string name="ms_text_3">Establish a regular communication channel and get a real-time gauge on employee mood and morale.</string>
-    <string name="ms_title_4">Frameworks</string>
-    <string name="ms_text_4">Don’t know what to ask? Deploy a survey using our expert frameworks.</string>
 
     <string-array name="ms_titles">
         <item>Real-time Dashboards &amp; Filtering</item>
@@ -101,36 +93,6 @@
     <string name="logout">Logout</string>
     <string name="version">Version</string>
     <bool name="use_translation_for_tabs">true</bool>
-    <string-array name="collaborate_tab_menu">
-        <item>topic</item>
-        <item>ideaboard</item>
-        <item>chat</item>
-    </string-array>
-
-    <string-array name="profile_tab_menu">
-        <item>myProfile</item>
-        <item>myRewards</item>
-        <item>shareWithFriend</item>
-    </string-array>
-
-    <string-array name="ideaboard_menu">
-        <item>recent</item>
-        <item>popular</item>
-        <item>posted_by_me</item>
-        <item>favorites</item>
-    </string-array>
-    <string-array name="topics_menu">
-        <item>recent</item>
-        <item>popular</item>
-        <item>posted_by_me</item>
-        <item>favorites</item>
-    </string-array>
-    <string-array name="leader_board_tab_menu">
-        <item>This Month</item>
-        <item>Last Month</item>
-        <item>All Time</item>
-    </string-array>
-
 
     <string name="profile">Profile</string>
     <string name="surveys">Surveys</string>

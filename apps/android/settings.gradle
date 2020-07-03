@@ -4,24 +4,14 @@ include ':materialDesign'
 include ':react-native-webview-bridge'
 project(':react-native-webview-bridge').projectDir = file('../react-app/node_modules/react-native-webview-bridge/android')
 
-include ':react-native-contacts'
-project(':react-native-contacts').projectDir = new File('../react-app/node_modules/react-native-contacts/android')
-
 include ':react-native-android-keyboard-adjust'
 project(':react-native-android-keyboard-adjust').projectDir = new File('../react-app/node_modules/react-native-android-keyboard-adjust/android')
-
 
 include ':reactnativenotifications'
 project(':reactnativenotifications').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-notifications/android')
 
-include ':react-native-image-picker'
-project(':react-native-image-picker').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-image-picker/android')
-
 include ':react-native-fs'
 project(':react-native-fs').projectDir = new File(settingsDir, '../react-app/node_modules/react-native-fs/android')
-
-include ':react-native-device-info'
-project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-device-info/android')
 
 include ':react-native-charts-wrapper'
 project(':react-native-charts-wrapper').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-charts-wrapper/android')
@@ -29,22 +19,14 @@ project(':react-native-charts-wrapper').projectDir = new File(rootProject.projec
 include ':react-native-wheel-picker'
 project(':react-native-wheel-picker').projectDir = new File(settingsDir, '../react-app/node_modules/react-native-wheel-picker/android')
 
-include ':react-native-i18n'
-project(':react-native-i18n').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-i18n/android')
-
-include ':react-native-linear-gradient'
-project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-linear-gradient/android')
-
 include ':react-native-vector-icons'
 project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-vector-icons/android')
 
 include ':react-native-reanimated'
 project(':react-native-reanimated').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-reanimated/android')
+
 include ':react-native-gesture-handler'
 project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-gesture-handler/android')
 
 include ':react-native-webview'
 project(':react-native-webview').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-webview/android')
-
-include ':react-native-document-picker'
-project(':react-native-document-picker').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-document-picker/android')
