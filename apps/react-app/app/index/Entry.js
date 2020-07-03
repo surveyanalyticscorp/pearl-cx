@@ -10,9 +10,7 @@ import {
     NativeEventEmitter,
     NativeModules,
     Navigator,
-    NavigatorIOS,
-    Platform,
-    View
+    Platform
 } from "react-native";
 
 import {ActionBarModule} from "../global/native-modules/NativeModules";
@@ -20,7 +18,7 @@ import {NotificationsAndroid, NotificationsIOS, PendingNotifications} from "reac
 import {apiHandler} from "../global/api/APIHandler";
 
 import CX from "../cx/CX";
-import Flashlet from "../flashlet/Flashlet";
+
 var AppActions = require('./AppActions');
 
 if (!__DEV__) {
@@ -32,7 +30,9 @@ if (!__DEV__) {
 //global.BASE_URL = "http://wf-api.questionpro.com/";
 /* global URL for HT, Communities, Cx, Survey App */
 global.BASE_URL = "https://wflabs.questionpro.com/";
+
 console.log(global.BASE_URL)
+
 BackHandler.addEventListener('hardwareBackPress', () => {
     console.log("BackPRess");
     if (_navigator) {
@@ -50,9 +50,10 @@ BackHandler.addEventListener('hardwareBackPress', () => {
     return false;
 });
 
-var _navigator;
+let _navigator;
 
 global.appUser = {};
+
 let mainScreen;
 
 export default class Entry extends React.Component {
@@ -123,7 +124,7 @@ export default class Entry extends React.Component {
         this.goalsFilterListener = this.sceneEventEmitter.addListener("GoalsFilterAction", (mapData) => {
             console.log("Goals filter clicked!");
             AppActions.onGoalsFilterClicked(mapData);
-        })
+        });
 
         this.logoutListener = this.sceneEventEmitter.addListener("Logout", (mapData) => {
             console.log("Logged Out!");
@@ -156,38 +157,27 @@ export default class Entry extends React.Component {
     }
 
 
-    onPushRegistrationFailed(error) {
+    onPushRegistrationFailed = (error) =>{
         console.error(error);
-    }
+    };
 
-    onNotificationOpened(notification) {
+    onNotificationOpened = (notification)=> {
         console.log("Notification opened by device user", notification);
         if (mainScreen) {
             AppActions.notificationOpened(notification);
         }
-    }
+    };
 
 
 
-    configureScene() {
+    configureScene = () => {
         return Navigator.SceneConfigs.FloatFromRight;
-    }
+    };
 
     render() {
           mainScreen = this;
-        switch (this.props.APP_NAME) {
-            case "Workforce":
-            case "Pulse":
-                return (<Flashlet {...this.props}/>);
-            case "CX":
-            case "Customer Experience":
-                return(<CX {...this.props} />);
-
-            default:
-                return (<View></View>);
-        }
+          return (<CX {...this.props} />);
     }
-
 }
 
 

@@ -102,8 +102,6 @@ let kPushNotificationTypeCommentedOnTopic = "CommentAddedNotificationTrigger"
 let kPushNotificationTypeNewsAvailabel = "NewsAvailableNotificationTrigger"
 let kRemoteNotificationReceivedNotification = "RemoteNotificationReceivedWhileRunning"
 
-/************ Employ Info   **************/
-let kEmployInfoUpdateNotification = "EmployInfoUpdateNotification"
 
 /************ iPhone X   **************/
 let kiPhoneXSize = 2436
@@ -178,14 +176,8 @@ let kValidEmailError = "Please enter valid email address."
 
 let kUpdateActionBarInfo = "UpdateActionBarInfo"
 let kUpdateBackButton = "UpdateBackButton"
-let kUpdateLanguageInfo = "UpdateLanguageInfo"
 let kLogoutUser = "LogoutUser"
-let kDatabaseLocation = "DatabaseLocation"
 let kNotificationReload = "notificationOpened" //"NotificationReload"
-let kUpdateObjAndGoalsContent = "UpdateObjAndGoalsContent"
-let kUpdateToSurveyPage = "UpdateToSurveyPage"
-let kUpdateToSurveyPageFromBackground = "UpdateToSurveyPageFromBackground"
-let kUpdateAsk = "UpdateToAskMenu"
 let kUpdateMenuTitle = "UpdateMenuTitle"
 // Mark: DB Constant
 

@@ -41,23 +41,6 @@ public class ActionBarModule extends ReactContextBaseJavaModule {
         }
     }
 
-    // @minu Method to show contents on the context menu for objective and goals.
-    @ReactMethod
-    public void updateObjAndGoalsContent(final String actionBarJsonString) {
-        final ReactHomeActivity activity = (ReactHomeActivity)getCurrentActivity();
-        if (activity != null) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject jsonObject = JSONObject.parseObject(actionBarJsonString);
-                    if(jsonObject!=null ) {
-                        activity.updateObj(actionBarJsonString);
-                    }
-                }
-            });
-        }
-    }
-
     @ReactMethod
     public void toggleBackButton(final boolean showBackButton){
         Log.i("Sachin", "ToggleBackButtonCalled>"+ showBackButton);
@@ -71,28 +54,5 @@ public class ActionBarModule extends ReactContextBaseJavaModule {
                 }
             });
         }
-    }
-
-    /**
-     * Method to call from react side, to update menu item in drawer menu.
-     * @param menuItemName: Name of the menu item to set as selected.
-     * */
-    @ReactMethod
-    public void updateSelectedMenuItem(final String menuItemName) {
-        final Activity activity = getCurrentActivity();
-
-        if (activity != null) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ((ReactHomeActivity) activity).updateSelectedMenuItem(menuItemName);
-                }
-            });
-        }
-    }
-
-    @ReactMethod
-    public void updateLanguageMenuTitle(final String languageName){
-        CoreApplication.changePreferredLanguage(getCurrentActivity(), languageName);
     }
 }
