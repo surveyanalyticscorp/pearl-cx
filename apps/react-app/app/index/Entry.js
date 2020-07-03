@@ -124,7 +124,7 @@ export default class Entry extends React.Component {
         this.goalsFilterListener = this.sceneEventEmitter.addListener("GoalsFilterAction", (mapData) => {
             console.log("Goals filter clicked!");
             AppActions.onGoalsFilterClicked(mapData);
-        })
+        });
 
         this.logoutListener = this.sceneEventEmitter.addListener("Logout", (mapData) => {
             console.log("Logged Out!");

@@ -21,46 +21,7 @@
         completions."
     </string>
 
-	<string name="ms_title_1">Surveys</string>
-	<string name="ms_text_1">With our automated reports, slice and dice your employee survey data immediately to identify your top teams and top strengths.</string>
-	<string name="ms_title_2">360 Reviews</string>
-	<string name="ms_text_2">Get a comprehensive view of an individual with a 360 degree feedback review.</string>
-	<string name="ms_title_3">Weekly Pulse</string>
-	<string name="ms_text_3">Establish a regular communication channel and get a real-time gauge on employee mood and morale.</string>
-	<string name="ms_title_4">Frameworks</string>
-	<string name="ms_text_4">Don’t know what to ask? Deploy a survey using our expert frameworks.</string>
 
-	<string name="email_address">Email Address</string>
-	<string name="password">Password</string>
-	<string name="confirm_password">Confirm Password</string>
-	<string name="company_code">Company Code</string>
-	<string name="show">Show</string>
-	<string name="invalid_email_password">Invalid Email Address or Password</string>
-	<string name="login_all_fields_required">All the fields are required.</string>
-	<string name="help"><u>Help?</u></string>
-	<string name="sign_in">Sign In</string>
-	<string name="signing_in">Signing In...</string>
-	<string name="get_your_company_code">Get Your Company Code?</string>
-	<string name="forgot_password"><u>Forgot Password?</u></string>
-	<string name="sign_in_with">or sign in with</string>
-	<string name="send_company_code">Send Company Code</string>
-	<string name="reset_password">Reset Password</string>
-	<string name="reset_password_description">Please enter the details below and hit Reset Password button to reset your password.</string>
-	<string name="update_password_description">Please enter the new password and hit the Update button to change your password.</string>
-	<string name="otp_description">Please enter the One Time Password received on your email.</string>
-	<string name="update_password">Update Password</string>
-	<string name="one_time_password">One Time Password (OTP)</string>
-
-	<string name="what_is_company_code">What is Company Code?</string>
-	<string name="company_code_description">Your Company Code is the Unique Identification Number/Text for your organisation\'s Customer Experience account.\nIf you don\'t have it yet, please contact your Supervisor for the correct company code.</string>
-	<string name="no_internet_message">No Working internet connection found. Please check your network settings.</string>
-
-
-	<string name="login">Login</string>
-	<string name="slack">Slack</string>
-	<string name="google">Google</string>
-	<string name="office_365">Office 365</string>
-	<string name="login_with_company_code"><u>Login with Company Code</u></string>
 
 	<string name="home">Accueil</string>
 	<string name="logout">Connectez - Out</string>
