@@ -84,13 +84,9 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
-  - RNDeviceInfo (0.9.3):
-    - React
   - RNFS (2.16.6):
     - React
   - RNGestureHandler (1.1.0):
-    - React
-  - RNI18n (2.0.15):
     - React
   - RNReanimated (1.0.1):
     - React
@@ -120,10 +116,8 @@ DEPENDENCIES:
   - React/RCTNetwork (from `../react-app/node_modules/react-native`)
   - React/RCTText (from `../react-app/node_modules/react-native`)
   - React/RCTWebSocket (from `../react-app/node_modules/react-native`)
-  - RNDeviceInfo (from `../react-app/node_modules/react-native-device-info`)
   - RNFS (from `../react-app/node_modules/react-native-fs`)
   - RNGestureHandler (from `../react-app/node_modules/react-native-gesture-handler`)
-  - RNI18n (from `../react-app/node_modules/react-native-i18n`)
   - RNReanimated (from `../react-app/node_modules/react-native-reanimated`)
   - RNVectorIcons (from `../react-app/node_modules/react-native-vector-icons`)
   - yoga (from `../react-app/node_modules/react-native/ReactCommon/yoga`)
@@ -153,14 +147,10 @@ EXTERNAL SOURCES:
     :path: "../react-app/node_modules/react-native-material-kit"
   react-native-webview:
     :path: "../react-app/node_modules/react-native-webview"
-  RNDeviceInfo:
-    :path: "../react-app/node_modules/react-native-device-info"
   RNFS:
     :path: "../react-app/node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../react-app/node_modules/react-native-gesture-handler"
-  RNI18n:
-    :path: "../react-app/node_modules/react-native-i18n"
   RNReanimated:
     :path: "../react-app/node_modules/react-native-reanimated"
   RNVectorIcons:
@@ -184,14 +174,12 @@ SPEC CHECKSUMS:
   React: 90adac468c7b72bf1fa6c64bf230650f851a8388
   react-native-material-kit: fcd29a6ad901670f8073433d382df2abaadb831f
   react-native-webview: e11b5d7da61ac3acee13f3ae3184d417f773c5d5
-  RNDeviceInfo: dc3cbee96cd2392cf03d6ff6191dc15f1606a166
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNGestureHandler: b65d391f4f570178d657b99a16ec99d09b8656b0
-  RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
   RNReanimated: c8dd490ca98a4edcba229bfa49f2516c95a43afb
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   yoga: 2e571f113e8cbeb0eb752aeebc86c1bfe7a8200c
 
-PODFILE CHECKSUM: 510fb3701a1a6d66e34f9a50b6c054b58e8db945
+PODFILE CHECKSUM: 30a043c3fc84dd0ef299a0dba851921678bd0c5f
 
 COCOAPODS: 1.9.1
