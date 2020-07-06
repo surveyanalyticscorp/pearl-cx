@@ -1,12 +1,6 @@
 include ':app',':gmslibrary'
 include ':materialDesign'
 
-include ':react-native-webview-bridge'
-project(':react-native-webview-bridge').projectDir = file('../react-app/node_modules/react-native-webview-bridge/android')
-
-include ':react-native-android-keyboard-adjust'
-project(':react-native-android-keyboard-adjust').projectDir = new File('../react-app/node_modules/react-native-android-keyboard-adjust/android')
-
 include ':reactnativenotifications'
 project(':reactnativenotifications').projectDir = new File(rootProject.projectDir, '../react-app/node_modules/react-native-notifications/android')
 

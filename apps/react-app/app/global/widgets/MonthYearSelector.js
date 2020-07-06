@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Dimensions, StyleSheet, View, Button,TouchableHighlight} from 'react-native';
 
-import Picker from 'react-native-wheel-picker'
+import Picker from '@gregfrench/react-native-wheel-picker'
 import CustomText from "../ui/CustomText";
 
 import Icon from 'react-native-vector-icons/MaterialIcons'

@@ -11,22 +11,18 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,18 +30,14 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.questionpro.whitelabelapps.BuildConfig;
-import androidx.appcompat.app.ActionBarDrawerToggle;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ListPopupWindow;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.questionpro.login.CompanyCodeActivity;
@@ -73,32 +65,20 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.core.PermissionAwareActivity;
 import com.facebook.react.modules.core.PermissionListener;
 import com.facebook.react.shell.MainReactPackage;
-import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
 import com.github.wuxudong.rncharts.MPAndroidChartPackage;
-import com.google.android.material.navigation.NavigationView;
 
 
 import com.questionpro.whitelabelapps.R;
 import com.questionpro.app.CoreApplication;
 import com.questionpro.login.LoginActivity;
-import com.questionpro.pushnotification.QPGcmToken;
 import com.questionpro.reactnative.ReactAppCallbackModules;
 import com.questionpro.uiutils.CircleTransform;
-import com.reactnativecommunity.webview.RNCWebViewPackage;
-import com.rnfs.RNFSPackage;
 import com.squareup.picasso.Picasso;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
-import com.wix.reactnativenotifications.RNNotificationsPackage;
 import com.zyu.ReactNativeWheelPickerPackage;
 
-import net.zubricky.AndroidKeyboardAdjust.AndroidKeyboardAdjustPackage;
-
-
-import org.json.JSONArray;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -111,7 +91,6 @@ import java.util.concurrent.Executors;
 
 
 import static android.os.Build.VERSION.SDK_INT;
-import static com.wix.reactnativenotifications.Defs.TOKEN_RECEIVED_EVENT_NAME;
 
 /**
  * Created by sachinsable on 13/09/16.
@@ -122,31 +101,31 @@ public class ReactHomeActivity extends AppCompatActivity
         PermissionAwareActivity, ActivityCompat.OnRequestPermissionsResultCallback, View.OnClickListener {
     private static final int OVERLAY_PERMISSION_REQ_CODE = 1234;
     private PermissionListener listener;
-    private NavigationView navigationView;
+    //private NavigationView navigationView;
     private final int ORIGINAL_MENU = 1001;
     private final int USER_DETAILS_MENU = 1002;
     private ArrayList<MenuLinks> contextMenus = new ArrayList<>();
     private ArrayList<MenuActive> contextMenusContent = new ArrayList<>();
     private Map<Integer, MenuLinks> mainMenus = new LinkedHashMap<>();
     private Map<Integer, MenuLinks> secondoryMenus = new LinkedHashMap<>();
-    private ActionBarDrawerToggle toggle;
+    //private ActionBarDrawerToggle toggle;
     private Toolbar toolbar;
-    private DrawerLayout drawer;
-    private RelativeLayout headerTitleLayout;
-    private ImageView headerTitleArrow;
+    //private DrawerLayout drawer;
+    //private RelativeLayout headerTitleLayout;
+    //private ImageView headerTitleArrow;
     private final ExecutorService threadPool = Executors.newCachedThreadPool();
-    private View headerView, footerView;
-    private Menu sideNavigationMenu;
+    //private View headerView, footerView;
+    //private Menu sideNavigationMenu;
     private ReactRootView mReactRootView;
     private ReactInstanceManager mReactInstanceManager;
     private ImageButton contextMenuButton;
     private CustomTextView titleTextView;
     private View contentView;
     private MenuListAdapter contextMenuListAdapter;
-    private TextView versionText;
+    //private TextView versionText;
     private View dimmedOverlayView;
-    private ListView drawerMenuListView;
-    private DrawerMenuListAdapter drawerMenuListAdapter;
+    //private ListView drawerMenuListView;
+    //private DrawerMenuListAdapter drawerMenuListAdapter;
     private ReactContext reactContext;
     private int selectedID = 0;
 
@@ -171,7 +150,7 @@ public class ReactHomeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        contentView = LayoutInflater.from(this).inflate(R.layout.react_home_activity, null);
+        contentView = LayoutInflater.from(this).inflate(R.layout.app_bar_home, null);
 
         QPUIContext.getInstance().initTypeface(this);
         setContentView(contentView);
@@ -190,34 +169,28 @@ public class ReactHomeActivity extends AppCompatActivity
         userProfileImg.setVisibility(View.GONE);
 
         contextMenuButton.setOnClickListener(this);
-//        contextMenuButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showPopupWindow();
-//            }
-//        });
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        versionText = (TextView) drawer.findViewById(R.id.versionText);
+        /*drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        versionText = (TextView) drawer.findViewById(R.id.versionText);*/
 
-        versionText.setText(getString(R.string.version) + " " + getAppVersionName());
-        toggle = new ActionBarDrawerToggle(
+        //versionText.setText(getString(R.string.version) + " " + getAppVersionName());
+        /*toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        toggle.syncState();*/
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        /*navigationView = (NavigationView) findViewById(R.id.nav_view);
         headerView = navigationView.getHeaderView(0);
         drawerMenuListView = (ListView) navigationView.findViewById(R.id.drawerMenuListView);
         footerView = navigationView.findViewById(R.id.footerView);
-        sideNavigationMenu = navigationView.getMenu();
-        addMainMenu();
+        sideNavigationMenu = navigationView.getMenu();*/
+        //addMainMenu();
 
-        headerTitleLayout = (RelativeLayout) headerView.findViewById(R.id.headerTitleView);
-        headerTitleArrow = (ImageView) headerView.findViewById(R.id.headerTitleArrow);
+        //headerTitleLayout = (RelativeLayout) headerView.findViewById(R.id.headerTitleView);
+        //headerTitleArrow = (ImageView) headerView.findViewById(R.id.headerTitleArrow);
         dimmedOverlayView = findViewById(R.id.dimmedOverlayView);
-        headerTitleLayout.setTag(ORIGINAL_MENU);
-        headerTitleLayout.setOnClickListener(headerToggleListener);
+        //headerTitleLayout.setTag(ORIGINAL_MENU);
+        //headerTitleLayout.setOnClickListener(headerToggleListener);
         setupCompanyLogo();
         ((RelativeLayout) findViewById(R.id.content_home)).addView(mReactRootView, 0,
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -299,7 +272,7 @@ public class ReactHomeActivity extends AppCompatActivity
 
         this.reactContext = context;
         // Note: Cannot assume react-context exists cause this is an async dispatched service.
-        if (reactContext != null && reactContext.hasActiveCatalystInstance()) {
+        /*if (reactContext != null && reactContext.hasActiveCatalystInstance()) {
             //Getting gcm token on main thread causes an exception
             Thread t = new Thread(new Runnable() {
                 @Override
@@ -310,7 +283,7 @@ public class ReactHomeActivity extends AppCompatActivity
                 }
             });
             t.start();
-        }
+        }*/
         setLanguageId();
     }
 
@@ -368,7 +341,7 @@ public class ReactHomeActivity extends AppCompatActivity
     }
 
     private void setupCompanyLogo() {
-        ImageView logoImageView = (ImageView) headerView.findViewById(R.id.imageView);
+       /* ImageView logoImageView = (ImageView) headerView.findViewById(R.id.imageView);
 
         AppUser appUser = AppUser.loadFromContext(CoreApplication.getContext());
         if (StringUtil.isNotEmpty(appUser.mainMenu.companyLogoUrl)) {
@@ -379,7 +352,7 @@ public class ReactHomeActivity extends AppCompatActivity
                     .into(logoImageView);
 
 
-        } /*else if (!getResources().getBoolean(R.bool.is_white_label)) {
+        } *//*else if (!getResources().getBoolean(R.bool.is_white_label)) {
             footerView.findViewById(R.id.poweredByIcon).setVisibility(View.GONE);
         }*/
     }
@@ -391,16 +364,11 @@ public class ReactHomeActivity extends AppCompatActivity
                 .setBundleAssetName("index.android.bundle")
                 .setJSMainModulePath("index.android")
                 .addPackage(new MainReactPackage())
-                .addPackage(new RNNotificationsPackage(getApplication()))
                 .addPackage(new ReactAppCallbackModules(this))
-                .addPackage(new WebViewBridgePackage())
                 .addPackage(new MPAndroidChartPackage())
-                .addPackage(new RNFSPackage())
-                .addPackage(new AndroidKeyboardAdjustPackage(this))
-                .addPackage(new ReactNativeWheelPickerPackage())
                 .addPackage(new ReanimatedPackage())
                 .addPackage(new RNGestureHandlerPackage())
-                .addPackage(new RNCWebViewPackage())
+                .addPackage(new ReactNativeWheelPickerPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
                 .build();
@@ -468,7 +436,7 @@ public class ReactHomeActivity extends AppCompatActivity
     }
 
     private void addMainMenu() {
-        sideNavigationMenu.clear();
+        //sideNavigationMenu.clear();
         Resources resources = CoreApplication.getContext().getResources();
         Log.i("Sachin", "Locale is- "+Locale.getDefault().getDisplayName());
         TypedArray menuTexts = resources.obtainTypedArray(R.array.primary_side_menu_texts);
@@ -542,31 +510,30 @@ public class ReactHomeActivity extends AppCompatActivity
         menuItems.get(emailIndex).icon = getResources().getDrawable(R.drawable.at_icon_selector);
         menuItems.get(emailIndex).enabled = false;
 
-        TextView title = (TextView) headerView.findViewById(R.id.title);
-        title.setText(appUser.emailAddress);
-        TextView subTitle = (TextView) headerView.findViewById(R.id.subTitle);
-        subTitle.setText(StringUtil.isNotEmpty(appUser.organizationName) ?
-                appUser.organizationName : "");
-        drawerMenuListAdapter = new DrawerMenuListAdapter(mainMenus);
+//        TextView title = (TextView) headerView.findViewById(R.id.title);
+//        title.setText(appUser.emailAddress);
+//        TextView subTitle = (TextView) headerView.findViewById(R.id.subTitle);
+//        subTitle.setText(StringUtil.isNotEmpty(appUser.organizationName) ?
+//                appUser.organizationName : "");
+        /*drawerMenuListAdapter = new DrawerMenuListAdapter(mainMenus);
         drawerMenuListView.setAdapter(drawerMenuListAdapter);
-        drawerMenuListView.setItemChecked(0, true);
+        drawerMenuListView.setItemChecked(0, true);*/
 
         /* App language pop-up*/
-        Button appLanguage = footerView.findViewById(R.id.app_language_button);
+        /*Button appLanguage = footerView.findViewById(R.id.app_language_button);
         if(!getString(R.string.app_name).equalsIgnoreCase("Pulse")) {
             appLanguage.setText(CoreApplication.getPreferredLanguage(getApplicationContext()));
             appLanguage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    drawer.closeDrawer(GravityCompat.START);
+                    //drawer.closeDrawer(GravityCompat.START);
                     WritableMap writableMap = new WritableNativeMap();
-                    //writableMap.putString("Logout", "true");
                     sendNativeEventToReact("LanguagePicker", writableMap);
                 }
             });
         } else {
             appLanguage.setVisibility(View.INVISIBLE);
-        }
+        }*/
     }
 
     /**
@@ -649,7 +616,7 @@ public class ReactHomeActivity extends AppCompatActivity
 
     public boolean onDrawerMenuSelected(int id) {
         // Handle navigation view item clicks here.
-        MenuLinks menuLinks = headerTitleLayout.getTag().equals(ORIGINAL_MENU) ?
+        /*MenuLinks menuLinks = headerTitleLayout.getTag().equals(ORIGINAL_MENU) ?
                 mainMenus.get(id) : secondoryMenus.get(id);
         closeDrawer();
         switch (menuLinks.type) {
@@ -686,7 +653,7 @@ public class ReactHomeActivity extends AppCompatActivity
                 break;
 
         }
-
+*/
         return true;
     }
 
@@ -705,17 +672,17 @@ public class ReactHomeActivity extends AppCompatActivity
         mainMenus.get(selectedID).active = false;
         mainMenus.get(id).active = true;
         selectedID = id;
-        drawerMenuListAdapter.notifyDataSetChanged();
+        //drawerMenuListAdapter.notifyDataSetChanged();
 
     }
 
     private void goToHome() {
-        navigationView.setCheckedItem(0);
+        //navigationView.setCheckedItem(0);
 
     }
 
     private void closeDrawer() {
-        drawer.closeDrawer(GravityCompat.START);
+        //drawer.closeDrawer(GravityCompat.START);
     }
 
     /**
@@ -741,7 +708,7 @@ public class ReactHomeActivity extends AppCompatActivity
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                navigationView.setCheckedItem(0);
+                //navigationView.setCheckedItem(0);
             }
         });
         builder.show();
@@ -867,7 +834,7 @@ public class ReactHomeActivity extends AppCompatActivity
             MenuLinks menuLinks = mainMenus.get(i);
             if (menuLinks.type == MenuType.DYNAMIC_WITH_BADGE) {
                 menuLinks.badge = memerCount;
-                drawerMenuListAdapter.notifyDataSetChanged();
+                //drawerMenuListAdapter.notifyDataSetChanged();
                 break;
             }
         }
@@ -900,19 +867,19 @@ public class ReactHomeActivity extends AppCompatActivity
 
                 }
             });
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         } else {
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            toggle.setDrawerIndicatorEnabled(true);
+            //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            //toggle.setDrawerIndicatorEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    drawer.openDrawer(GravityCompat.START);
+                    //drawer.openDrawer(GravityCompat.START);
                 }
             });
-            toggle.syncState();
+            //toggle.syncState();
         }
 
 
@@ -1191,7 +1158,7 @@ public class ReactHomeActivity extends AppCompatActivity
     }
 
 
-    View.OnClickListener headerToggleListener = new View.OnClickListener() {
+    /*View.OnClickListener headerToggleListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             headerTitleArrow.clearAnimation();
@@ -1204,16 +1171,16 @@ public class ReactHomeActivity extends AppCompatActivity
             }
             toggleMenu((int) v.getTag());
         }
-    };
+    };*/
 
     private void toggleMenu(int tag) {
-        if (tag == ORIGINAL_MENU) {
+        /*if (tag == ORIGINAL_MENU) {
             drawerMenuListAdapter.setMenuLinksArrayList(mainMenus);
 
         } else {
             drawerMenuListAdapter.setMenuLinksArrayList(secondoryMenus);
         }
-        drawerMenuListAdapter.notifyDataSetChanged();
+        drawerMenuListAdapter.notifyDataSetChanged();*/
     }
 
     @Override

@@ -16,14 +16,12 @@ import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
-import com.questionpro.pushnotification.QPGcmToken;
 import com.questionpro.pushnotification.QPPushNotification;
 import com.wix.reactnativenotifications.RNNotificationsPackage;
 import com.wix.reactnativenotifications.core.AppLaunchHelper;
 import com.wix.reactnativenotifications.core.AppLifecycleFacade;
 import com.wix.reactnativenotifications.core.notification.INotificationsApplication;
 import com.wix.reactnativenotifications.core.notification.IPushNotification;
-import com.wix.reactnativenotifications.gcm.IGcmToken;
 import com.wix.reactnativenotifications.gcm.INotificationsGcmApplication;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.yariksoffice.lingver.Lingver;
@@ -37,7 +35,7 @@ import java.util.List;
  * Created by sachinsable on 23/08/16.
  */
 
-public class CoreApplication extends Application implements ReactApplication,INotificationsApplication, INotificationsGcmApplication {
+public class CoreApplication extends Application implements ReactApplication,INotificationsApplication {
     public static final String FORCE_LOCAL = "force_local";
     public static final String PREFERRED_LANGUAGE = "preferredLanguage";
     private static Context context = null;
@@ -98,10 +96,10 @@ public class CoreApplication extends Application implements ReactApplication,INo
         return new QPPushNotification(context,bundle,facade,defaultAppLaunchHelper);
     }
 
-    @Override
+   /* @Override
     public IGcmToken getGcmToken(Context context) {
         return new QPGcmToken(this);
-    }
+    }*/
 
     public void clearApplicationData() {
         if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
@@ -155,7 +153,7 @@ public class CoreApplication extends Application implements ReactApplication,INo
      */
     public static void updateLanguage(Context ctx, String lang) {
         SharedPreferences force_pref = PreferenceManager.getDefaultSharedPreferences(ctx);
-        force_pref.edit().putString(FORCE_LOCAL, lang).apply();
+        force_pref.edit().putString(FORCE_LOCAL, lang).commit();
         Lingver.getInstance().setLocale(ctx, lang);
     }
 

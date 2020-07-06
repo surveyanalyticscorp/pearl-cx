@@ -1,6 +1,7 @@
 /**
  * Created by sachinsable on 10/07/17.
  */
+
 'use strict';
 
 import React from "react";
@@ -18,6 +19,7 @@ import {NotificationsAndroid, NotificationsIOS, PendingNotifications} from "reac
 import {apiHandler} from "../global/api/APIHandler";
 
 import CX from "../cx/CX";
+import CxHome from "../cx/CxHome";
 
 var AppActions = require('./AppActions');
 
@@ -176,7 +178,7 @@ export default class Entry extends React.Component {
 
     render() {
           mainScreen = this;
-          return (<CX {...this.props} />);
+          return (<CxHome {...this.props} />);
     }
 }
 
