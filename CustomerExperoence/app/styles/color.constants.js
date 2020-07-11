@@ -18,6 +18,7 @@ const Colors = {
   imageOverlay: '#d3d3d3',
   crossColor: 'rgba(10,35,54,0.8)',
   transparent: 'rgba(255, 255, 255, 0.5)',
+  fullTransparent: 'rgba(255, 255, 255, 0)',
   modalBackgroundForSurveyList: '#2c2b2c',
   toggleButtonColor: '#6DBEB7',
   settingsBackground: '#F5F5F5',

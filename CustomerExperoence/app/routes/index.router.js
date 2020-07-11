@@ -10,6 +10,7 @@ import SplashScreen from '../login/SplashScreen';
 import SignInScreen from '../login/SignIn';
 import CompanyCode from '../login/CompanyCode';
 import MarketingScreen from '../login/MarketingScreen';
+import ForgotPassword from '../login/ForgotPassword';
 
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -20,6 +21,7 @@ const SignInStackScreen = ({navigation}) => (
     <RootStack.Screen name="MarketingScreen" component={MarketingScreen} />
     <RootStack.Screen name="CompanyCodeScreen" component={CompanyCode} />
     <RootStack.Screen name="SignInScreen" component={SignInScreen} />
+    <RootStack.Screen name="ForgotPassword" component={ForgotPassword} />
   </RootStack.Navigator>
 );
 

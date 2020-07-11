@@ -25,7 +25,7 @@ const MarketingScreen = props => {
   }
 
   const onPress = () => {
-      props.navigation.navigate('CompanyCodeScreen');
+    props.navigation.navigate('CompanyCodeScreen');
   };
 
   return (
@@ -46,9 +46,12 @@ const MarketingScreen = props => {
           {introPages}
         </Swiper>
       </ImageBackground>
-      <TouchableOpacity style={styles.button} onPress={onPress}>
-        <Text>Press Here</Text>
-      </TouchableOpacity>
+
+      {index === 4 ? (
+        <TouchableOpacity style={styles.button} onPress={onPress}>
+          <Text>Get Started</Text>
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 };

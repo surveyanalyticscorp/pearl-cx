@@ -1,13 +1,147 @@
-import {Text, View} from 'react-native';
-import {styles} from '../styles/styles';
+import {
+  Image,
+  ImageBackground,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
+import {MarginConstants} from '../styles/margin.constants';
+import {Colors, textColors} from '../styles/color.constants';
+import {TextSizes} from '../styles/textsize.constants';
 
 const SignInScreen = ({navigation}) => {
+  const onSignInPress = () => {
+    navigation.navigate('SignInScreen');
+  };
+  const onForgotPswdPress = () => {
+    navigation.navigate('ForgotPassword');
+  };
+
+  const onBackPress = () => {
+    navigation.pop();
+  };
+
+  const handleEmail = text => {};
+
   return (
-    <View style={styles.center}>
-      <Text style={styles.title}>Sign In </Text>
+    <View style={{flex: 1}}>
+      <ImageBackground
+        resizeMode={'stretch'}
+        source={require('../images/background_inverted.png')}
+        style={styles.imageBackgroundContainer}>
+        <View style={styles.signInInContainer}>
+          <Image
+            style={styles.logoImage}
+            resizeMode="contain"
+            source={require('../images/login_logo.png')}
+          />
+          <TextInput
+            style={styles.emailInput}
+            underlineColorAndroid="transparent"
+            placeholder="Email Address"
+            placeholderTextColor="#707070"
+            autoCapitalize="none"
+            onChangeText={handleEmail}
+          />
+          <TextInput
+            style={styles.passwordInput}
+            underlineColorAndroid="transparent"
+            placeholder="Password"
+            placeholderTextColor="#707070"
+            autoCapitalize="none"
+            onChangeText={handleEmail}
+          />
+
+          <TouchableOpacity style={styles.nextButton} onPress={onSignInPress}>
+            <Text styele={styles.nextText}> Sing In </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.forgotPswdButton}
+            onPress={onForgotPswdPress}>
+            <Text styele={styles.nextText}> Forgot Password? </Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity style={styles.companyCode} onPress={onBackPress}>
+          <Text style={styles.backButton}>Back </Text>
+        </TouchableOpacity>
+      </ImageBackground>
     </View>
   );
 };
 
 export default SignInScreen;
+
+const styles = StyleSheet.create({
+  imageBackgroundContainer: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  companyCode: {
+    position: 'absolute',
+    top: MarginConstants.tab2,
+    left: MarginConstants.tab2,
+    color: textColors.primary,
+    fontSize: Platform.isPad ? TextSizes.largeText : TextSizes.largeText,
+  },
+
+  signInInContainer: {
+    alignItems: 'center',
+    width: '100%',
+  },
+  logoImage: {
+    width: '70%',
+  },
+  emailInput: {
+    width: '90%',
+    marginTop: MarginConstants.tab3,
+    paddingHorizontal: MarginConstants.tab2,
+    textAlign: 'left',
+    borderRadius: 5,
+    backgroundColor: '#FFFFFF',
+  },
+  passwordInput: {
+    width: '90%',
+    marginTop: MarginConstants.tab2,
+    paddingHorizontal: MarginConstants.tab2,
+    textAlign: 'left',
+    borderRadius: 5,
+    backgroundColor: '#FFFFFF',
+  },
+  nextButton: {
+    width: '90%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: MarginConstants.tab4,
+    borderRadius: 5,
+    backgroundColor: '#FFFFFF',
+  },
+  nextText: {
+    alignSelf: 'center',
+    color: textColors.primary,
+  },
+  forgotPswdButton: {
+    width: '90%',
+    height: 40,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    marginTop: MarginConstants.tab1,
+    borderRadius: 5,
+    backgroundColor: Colors.fullTransparent,
+  },
+  backButton: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: textColors.primary,
+    alignSelf: 'flex-start',
+  },
+});
