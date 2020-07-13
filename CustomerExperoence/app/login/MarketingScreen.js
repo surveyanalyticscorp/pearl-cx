@@ -25,7 +25,7 @@ const MarketingScreen = props => {
   }
 
   const onPress = () => {
-    props.navigation.navigate('CompanyCodeScreen');
+    props.navigation.navigate('CompanyCode');
   };
 
   return (
@@ -48,10 +48,8 @@ const MarketingScreen = props => {
       </ImageBackground>
 
       {index === 4 ? (
-        <TouchableOpacity onPress={onPress}>
-          <View style={styles.button}>
-            <Text style={styles.buttonTextColor}>Get Started</Text>
-          </View>
+        <TouchableOpacity style={styles.getStartedButton} onPress={onPress}>
+          <Text style={styles.buttonTextColor}>Get Started</Text>
         </TouchableOpacity>
       ) : null}
     </View>
@@ -133,7 +131,7 @@ const styles = StyleSheet.create({
   buttonTextColor: {
     color: '#FFFFFF',
   },
-  button: {
+  getStartedButton: {
     color: '#FFFFFF',
     alignItems: 'center',
     borderColor: '#FFFFFF',

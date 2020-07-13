@@ -71,8 +71,9 @@ const NavigationDrawer = ({navigation}) => (
 
 const SignInStackScreen = props => (
   <RootStack.Navigator headerMode="none">
+      <RootStack.Screen name="MarketingScreen" component={MarketingScreen} />
     <RootStack.Screen
-      name="CompanyCodeScreen"
+      name="CompanyCode"
       component={CompanyCode}
       options={{title: 'My home'}}
     />
@@ -83,7 +84,7 @@ const SignInStackScreen = props => (
 
 const AppNavigator = createSwitchNavigator(
   {
-    AuthLoading: NavigationDrawer,
+    AuthLoading: SignInStackScreen,
   },
   {
     initialRouteName: 'AuthLoading',
