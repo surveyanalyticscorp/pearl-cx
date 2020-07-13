@@ -48,8 +48,10 @@ const MarketingScreen = props => {
       </ImageBackground>
 
       {index === 4 ? (
-        <TouchableOpacity style={styles.button} onPress={onPress}>
-          <Text>Get Started</Text>
+        <TouchableOpacity onPress={onPress}>
+          <View style={styles.button}>
+            <Text style={styles.buttonTextColor}>Get Started</Text>
+          </View>
         </TouchableOpacity>
       ) : null}
     </View>
@@ -128,9 +130,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dotSelectedColor,
   },
 
+  buttonTextColor: {
+    color: '#FFFFFF',
+  },
   button: {
+    color: '#FFFFFF',
     alignItems: 'center',
-    backgroundColor: '#DDDDDD',
+    borderColor: '#FFFFFF',
+    borderRadius: 1.0,
+    borderWidth: 1,
     padding: 10,
     position: 'absolute',
     bottom: 10,

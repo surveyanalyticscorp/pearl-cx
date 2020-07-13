@@ -80,7 +80,7 @@ const SignInStackScreen = ({navigation}) => (
 
 const AppNavigator = createSwitchNavigator(
   {
-    AuthLoading: navigationDrawer,
+    AuthLoading: SignInStackScreen,
   },
   {
     initialRouteName: 'AuthLoading',
