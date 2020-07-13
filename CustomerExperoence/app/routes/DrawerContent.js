@@ -1,131 +1,83 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {
-  useTheme,
-  Avatar,
-  Title,
-  Caption,
-  Paragraph,
-  Drawer,
-  Text,
-  TouchableRipple,
-  Switch,
-} from 'react-native-paper';
+import {View, StyleSheet, Image} from 'react-native';
+import {useTheme, Caption, Drawer} from 'react-native-paper';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Colors} from '../styles/color.constants';
 
-import {AuthContext} from '../components/context';
+//import {AuthContext} from '../components/context';
 
 export function DrawerContent(props) {
   const paperTheme = useTheme();
 
-  const {signOut, toggleTheme} = React.useContext(AuthContext);
+  //const {signOut, toggleTheme} = React.useContext(AuthContext);
 
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
-            <View style={{flexDirection: 'row', marginTop: 15}}>
-              <Avatar.Image
-                source={{
-                  uri: 'https://api.adorable.io/avatars/50/abott@adorable.png',
-                }}
-                size={50}
+            <View style={styles.navDrawerHeaderImageContainer}>
+              <Image
+                style={styles.navDrawerHeaderImage}
+                source={require('../images/login_logo.png')}
+                resizeMode="contain"
               />
-              <View style={{marginLeft: 15, flexDirection: 'column'}}>
-                <Title style={styles.title}>John Doe</Title>
-                <Caption style={styles.caption}>@j_doe</Caption>
-              </View>
             </View>
 
-            <View style={styles.row}>
-              <View style={styles.section}>
-                <Paragraph style={[styles.paragraph, styles.caption]}>
-                  80
-                </Paragraph>
-                <Caption style={styles.caption}>Following</Caption>
-              </View>
-              <View style={styles.section}>
-                <Paragraph style={[styles.paragraph, styles.caption]}>
-                  100
-                </Paragraph>
-                <Caption style={styles.caption}>Followers</Caption>
-              </View>
+            <View style={styles.userEmail}>
+              <Caption style={styles.caption}>
+                datta.kunde@questionpro.com
+              </Caption>
+              <Caption style={styles.caption}>company Name</Caption>
             </View>
           </View>
 
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
-                <Icon name="home-outline" color={color} size={size} />
+                <Image
+                  source={require('../images/feedback_icon.png')}
+                  resizeMode="contain"
+                  style={{width: 20, height: 20, tintColor: Colors.black}}
+                />
               )}
-              label="Home"
+              label="Feedback"
+              labelStyle={{color: Colors.black}}
               onPress={() => {
-                props.navigation.navigate('Home');
+                props.navigation.navigate('Feedback');
               }}
             />
             <DrawerItem
               icon={({color, size}) => (
-                <Icon name="account-outline" color={color} size={size} />
+                <Image
+                  source={require('../images/dashboard_icon.png')}
+                  resizeMode="contain"
+                  style={{width: 20, height: 20, tintColor: Colors.black}}
+                />
               )}
-              label="Profile"
+              label="Dashboard"
+              labelStyle={{color: Colors.black}}
               onPress={() => {
-                props.navigation.navigate('Profile');
+                props.navigation.navigate('Dashboard');
               }}
             />
-            <DrawerItem
-              icon={({color, size}) => (
-                <Icon name="bookmark-outline" color={color} size={size} />
-              )}
-              label="Bookmarks"
-              onPress={() => {
-                props.navigation.navigate('BookmarkScreen');
-              }}
-            />
-            <DrawerItem
-              icon={({color, size}) => (
-                <Icon name="settings-outline" color={color} size={size} />
-              )}
-              label="Settings"
-              onPress={() => {
-                props.navigation.navigate('SettingScreen');
-              }}
-            />
-            <DrawerItem
-              icon={({color, size}) => (
-                <Icon name="account-check-outline" color={color} size={size} />
-              )}
-              label="Support"
-              onPress={() => {
-                props.navigation.navigate('SupportScreen');
-              }}
-            />
-          </Drawer.Section>
-          <Drawer.Section title="Preferences">
-            <TouchableRipple
-              onPress={() => {
-                toggleTheme();
-              }}>
-              <View style={styles.preference}>
-                <Text>Dark Theme</Text>
-                <View pointerEvents="none">
-                  <Switch value={paperTheme.dark} />
-                </View>
-              </View>
-            </TouchableRipple>
           </Drawer.Section>
         </View>
       </DrawerContentScrollView>
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
           icon={({color, size}) => (
-            <Icon name="exit-to-app" color={color} size={size} />
+            <Image
+              source={require('../images/logout.png')}
+              resizeMode="contain"
+              style={{width: 20, height: 20, tintColor: Colors.black}}
+            />
           )}
           label="Sign Out"
+          labelStyle={{color: Colors.black}}
           onPress={() => {
-            signOut();
+            //signOut();
           }}
         />
       </Drawer.Section>
@@ -149,10 +101,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 14,
   },
-  row: {
+  userEmail: {
     marginTop: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   section: {
     flexDirection: 'row',
@@ -176,5 +126,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 12,
     paddingHorizontal: 16,
+  },
+  navDrawerHeaderImageContainer: {
+    flex: 0.3,
+    justifyContent: 'center',
+  },
+  navDrawerHeaderImage: {
+    height: 40,
+    width: undefined,
+    marginTop: 50,
   },
 });
