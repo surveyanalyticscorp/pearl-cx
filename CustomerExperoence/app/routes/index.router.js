@@ -23,7 +23,7 @@ import SignInScreen from '../login/SignIn';
 import CompanyCode from '../login/CompanyCode';
 import MarketingScreen from '../login/MarketingScreen';
 import ForgotPassword from '../login/ForgotPassword';
-
+import HeaderBackButton from '../widgets/HeaderBackButton';
 import {DrawerContent} from './DrawerContent';
 
 import Screen1 from '../drawerTabs/Screen1';
@@ -69,10 +69,30 @@ const navigationDrawer = ({navigation}) => (
   </Drawer.Navigator>
 );
 
+CompanyCode.navigationOptions = ({navigation}) => ({
+  headerLeft: (
+    <HeaderBackButton
+      onPress={() => {
+        navigation.navigate('Home');
+      }}
+    />
+  ),
+});
+
+const navigationOptions = ({navigation}) => ({
+  headerLeft: (
+    <HeaderBackButton
+      onPress={() => {
+        navigation.navigate('Home');
+      }}
+    />
+  ),
+});
+
 const SignInStackScreen = ({navigation}) => (
   <RootStack.Navigator headerMode="none">
     <RootStack.Screen name="MarketingScreen" component={MarketingScreen} />
-    <RootStack.Screen name="CompanyCodeScreen" component={CompanyCode} />
+    <RootStack.Screen name="CompanyCodeScreen" component={CompanyCode} navigationOptions/>
     <RootStack.Screen name="SignInScreen" component={SignInScreen} />
     <RootStack.Screen name="ForgotPassword" component={ForgotPassword} />
   </RootStack.Navigator>

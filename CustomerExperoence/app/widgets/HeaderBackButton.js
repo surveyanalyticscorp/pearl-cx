@@ -12,46 +12,16 @@ import React from 'react';
 import {textColors, Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
-
-const CompanyCode = ({navigation}) => {
-  const onPress = () => {
-    navigation.navigate('SignInScreen');
-  };
-
-  const handleEmail = text => {};
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
+const HeaderBackButton = ({props}) => {
   return (
-    <View style={{flex: 1}}>
-      <ImageBackground
-        resizeMode={'stretch'}
-        source={require('../images/background_inverted.png')}
-        style={styles.imageBackgroundContainer}>
-        <View style={styles.companyCodeContainer}>
-          <Image
-            style={styles.logoImage}
-            resizeMode="contain"
-            source={require('../images/whiteCXLogo.png')}
-          />
-          <TextInput
-            style={styles.companyCodeInput}
-            underlineColorAndroid="transparent"
-            placeholder="Company Code"
-            placeholderTextColor="#707070"
-            autoCapitalize="none"
-            onChangeText={handleEmail}
-          />
-          <TouchableOpacity style={styles.nextButton} onPress={onPress}>
-            <Text styele={styles.nextText}> Next </Text>
-          </TouchableOpacity>
-        </View>
-
-        <Text style={styles.companyCode}>Company Code </Text>
-      </ImageBackground>
-    </View>
+    <TouchableOpacity onPress={props.onPress}>
+      <Icon name="chevron-left" size={35} color="white" />
+    </TouchableOpacity>
   );
 };
 
-export default CompanyCode;
+export default HeaderBackButton;
 
 const styles = StyleSheet.create({
   imageBackgroundContainer: {
