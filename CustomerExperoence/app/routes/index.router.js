@@ -26,15 +26,19 @@ import ForgotPassword from '../login/ForgotPassword';
 
 import {DrawerContent} from './DrawerContent';
 
-import Screen1 from '../drawerTabs/Screen1';
+import FeedbackAll from '../drawerTabs/FeedbackAll';
+import FeedbackDetractor from '../drawerTabs/FeedbackDetractor';
 import Screen2 from '../drawerTabs/Screen2';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+
 import {Colors} from '../styles/color.constants';
 
 const RootStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+const MaterialTopTabs = createMaterialTopTabNavigator();
 
 const CustomDefaultTheme = {
   ...NavigationDefaultTheme,
@@ -58,18 +62,31 @@ const CustomDarkTheme = {
   },
 };
 
-const navigationDrawer = ({navigation}) => (
+const createFeedbackTopTabs = props => {
+  return (
+    <MaterialTopTabs.Navigator
+      scrollEnabled={true}
+      tabStyle={{backgroundColor: Colors.white}}>
+      <MaterialTopTabs.Screen name="All" component={FeedbackAll} />
+      <MaterialTopTabs.Screen name="Detractor" component={FeedbackDetractor} />
+      <MaterialTopTabs.Screen name="Passive" component={FeedbackAll} />
+      <MaterialTopTabs.Screen name="Promoter" component={FeedbackDetractor} />
+    </MaterialTopTabs.Navigator>
+  );
+};
+
+const NavigationDrawer = ({navigation}) => (
   <Drawer.Navigator
     drawerStyle={{
       backgroundColor: Colors.white,
     }}
     drawerContent={props => <DrawerContent {...props} />}>
-    <Drawer.Screen name="Feedback" component={Screen1} />
+    <Drawer.Screen name="Feedback" children={createFeedbackTopTabs} />
     <Drawer.Screen name="Dashboard" component={Screen2} />
   </Drawer.Navigator>
 );
 
-const SignInStackScreen = ({navigation}) => (
+const SignInStackScreen = props => (
   <RootStack.Navigator headerMode="none">
     <RootStack.Screen name="MarketingScreen" component={MarketingScreen} />
     <RootStack.Screen name="CompanyCodeScreen" component={CompanyCode} />

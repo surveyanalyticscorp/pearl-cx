@@ -3,10 +3,10 @@ import {View, Text} from 'react-native';
 
 import {styles} from '../styles/styles';
 
-Screen1 = () => (
+FeedbackDetractor = () => (
   <View style={styles.center}>
-    <Text style={styles.title}>Screen one </Text>
+    <Text style={styles.title}>Feedback detractor </Text>
   </View>
 );
 
-export default Screen1;
+export default FeedbackDetractor;

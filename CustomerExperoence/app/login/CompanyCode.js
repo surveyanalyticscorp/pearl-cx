@@ -13,9 +13,9 @@ import {textColors, Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
 
-const CompanyCode = ({navigation}) => {
+const CompanyCode = props => {
   const onPress = () => {
-    navigation.navigate('SignInScreen');
+    props.navigation.navigate('SignInScreen');
   };
 
   const handleEmail = text => {};

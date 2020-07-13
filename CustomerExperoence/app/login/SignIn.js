@@ -13,16 +13,16 @@ import {MarginConstants} from '../styles/margin.constants';
 import {Colors, textColors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 
-const SignInScreen = ({navigation}) => {
+const SignInScreen = props => {
   const onSignInPress = () => {
-    navigation.navigate('SignInScreen');
+    props.navigation.navigate('SignInScreen');
   };
   const onForgotPswdPress = () => {
-    navigation.navigate('ForgotPassword');
+    props.navigation.navigate('ForgotPassword');
   };
 
   const onBackPress = () => {
-    navigation.pop();
+    props.navigation.pop();
   };
 
   const handleEmail = text => {};
