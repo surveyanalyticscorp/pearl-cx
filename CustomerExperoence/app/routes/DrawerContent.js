@@ -14,7 +14,7 @@ export function DrawerContent(props) {
   //const {signOut, toggleTheme} = React.useContext(AuthContext);
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, elevation: 5, zIndex: 100}}>
       <DrawerContentScrollView {...props}>
         <View style={routesStyles.drawerContent}>
           <View style={routesStyles.userInfoSection}>

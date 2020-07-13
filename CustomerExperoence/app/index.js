@@ -2,16 +2,22 @@ import React, {Component} from 'react';
 
 import {initStore} from './store/store';
 import {Provider} from 'react-redux';
-import {View} from 'react-native';
-import {reduxifyNavigator} from 'react-navigation-redux-helpers';
+import {View, TouchableOpacity, Text} from 'react-native';
+
 import {
-  Appearance,
   useColorScheme,
   AppearanceProvider,
 } from 'react-native-appearance';
-import {NavigationContainer, DarkTheme} from '@react-navigation/native';
-
+import {
+  NavigationContainer,
+  DarkTheme,
+  useNavigation,
+  DrawerActions,
+} from '@react-navigation/native';
+import NavigationDrawer from './routes/drawer.router';
 import AppNavigator from './routes/index.router';
+import {createStackNavigator} from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const store = initStore();
 
@@ -28,7 +34,20 @@ const CxApp: () => React$Node = () => {
       border: 'green',
     },
   };
-
+  const HeaderLeft = () => {
+    const navigation = useNavigation();
+    return (
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.dispatch(DrawerActions.toggleDrawer());
+          }}>
+          <Icon name="menu" size={35} color="white" />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  const Stack = createStackNavigator();
   //const App1 = reduxifyNavigator(AppNavigator, 'root');
 
   return (
@@ -36,9 +55,15 @@ const CxApp: () => React$Node = () => {
       <AppearanceProvider>
         <NavigationContainer
           theme={colorScheme == 'dark' ? DarkTheme : MyTheme}>
-          <View style={{flex: 1}}>
-            <AppNavigator />
-          </View>
+          <Stack.Navigator>
+            <Stack.Screen
+              options={{
+                headerLeft: ({}) => <HeaderLeft />,
+              }}
+              component={NavigationDrawer}
+              name="Drawer"
+            />
+          </Stack.Navigator>
         </NavigationContainer>
       </AppearanceProvider>
     </Provider>
