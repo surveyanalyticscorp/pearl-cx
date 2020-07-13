@@ -40,33 +40,16 @@ const RootStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const MaterialTopTabs = createMaterialTopTabNavigator();
 
-const CustomDefaultTheme = {
-  ...NavigationDefaultTheme,
-  ...PaperDefaultTheme,
-  colors: {
-    ...NavigationDefaultTheme.colors,
-    ...PaperDefaultTheme.colors,
-    background: '#ffffff',
-    text: '#333333',
-  },
-};
-
-const CustomDarkTheme = {
-  ...NavigationDarkTheme,
-  ...PaperDarkTheme,
-  colors: {
-    ...NavigationDarkTheme.colors,
-    ...PaperDarkTheme.colors,
-    background: '#333333',
-    text: '#ffffff',
-  },
-};
-
 const createFeedbackTopTabs = props => {
   return (
     <MaterialTopTabs.Navigator
-      scrollEnabled={true}
-      tabStyle={{backgroundColor: Colors.white}}>
+      tabBarOptions={{
+        indicatorStyle: {backgroundColor: '#FF0000'},
+        scrollEnabled: true,
+        labelStyle: {color: '#000000', fontSize: 12},
+        tabStyle: {width: 150},
+        style: {backgroundColor: '#FFFFFF'},
+      }}>
       <MaterialTopTabs.Screen name="All" component={FeedbackAll} />
       <MaterialTopTabs.Screen name="Detractor" component={FeedbackDetractor} />
       <MaterialTopTabs.Screen name="Passive" component={FeedbackAll} />
@@ -88,8 +71,11 @@ const NavigationDrawer = ({navigation}) => (
 
 const SignInStackScreen = props => (
   <RootStack.Navigator headerMode="none">
-    <RootStack.Screen name="MarketingScreen" component={MarketingScreen} />
-    <RootStack.Screen name="CompanyCodeScreen" component={CompanyCode} />
+    <RootStack.Screen
+      name="CompanyCodeScreen"
+      component={CompanyCode}
+      options={{title: 'My home'}}
+    />
     <RootStack.Screen name="SignInScreen" component={SignInScreen} />
     <RootStack.Screen name="ForgotPassword" component={ForgotPassword} />
   </RootStack.Navigator>
@@ -97,7 +83,7 @@ const SignInStackScreen = props => (
 
 const AppNavigator = createSwitchNavigator(
   {
-    AuthLoading: SignInStackScreen,
+    AuthLoading: NavigationDrawer,
   },
   {
     initialRouteName: 'AuthLoading',
