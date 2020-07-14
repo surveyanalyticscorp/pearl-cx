@@ -13,7 +13,7 @@
     <bool name="has_api_key">false</bool>
     <bool name="has_forgot_password">true</bool>
     <bool name="has_location_surveys">true</bool>
-    <string name="base_url">http://cxlabs1.questionpro.com</string>
+    <string name="base_url">http://api.questionpro.com</string>
     <string name="global_panel_auth_url">/a/nativehtml/panel.auth.PanelRequestHandler</string>
     <string name="auth_url">/a/nativehtml/survey.auth.SurveyLogin</string>
     <string name="signup_url">/a/nativehtml/survey.auth.SurveyLogin</string>

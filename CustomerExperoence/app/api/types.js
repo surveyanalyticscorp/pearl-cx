@@ -1,3 +1,6 @@
+export const BASE_URL = 'https://api.questionpro.com/';
+export const AUTH_URL = '/a/nativehtml/cx.auth.CXLogin';
+
 export const CX_DASHBOARD = 'CX_DASHBOARD';
 export const CX_DETRACTOR_TICKETS_NEW = 'CX_DETRACTOR_TICKETS_NEW';
 export const CX_DETRACTOR_TICKETS_PENDING = 'CX_DETRACTOR_TICKETS_PENDING';

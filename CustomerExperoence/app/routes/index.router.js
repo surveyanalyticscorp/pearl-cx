@@ -43,6 +43,7 @@ const MaterialTopTabs = createMaterialTopTabNavigator();
 const createFeedbackTopTabs = props => {
   return (
     <MaterialTopTabs.Navigator
+      swipeEnabled={false}
       tabBarOptions={{
         indicatorStyle: {backgroundColor: '#FF0000'},
         scrollEnabled: true,
@@ -71,7 +72,7 @@ const NavigationDrawer = ({navigation}) => (
 
 const SignInStackScreen = props => (
   <RootStack.Navigator headerMode="none">
-      <RootStack.Screen name="MarketingScreen" component={MarketingScreen} />
+    <RootStack.Screen name="MarketingScreen" component={MarketingScreen} />
     <RootStack.Screen
       name="CompanyCode"
       component={CompanyCode}
