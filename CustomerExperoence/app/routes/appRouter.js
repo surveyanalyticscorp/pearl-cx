@@ -51,14 +51,20 @@ const AppRouter = () => {
       </View>
     );
   };
+
   const MaterialTopTabs = createMaterialTopTabNavigator();
-  //const App1 = reduxifyNavigator(AppNavigator, 'root');
 
   const createFeedbackTopTabs = props => {
     return (
       <MaterialTopTabs.Navigator
-        scrollEnabled={true}
-        tabStyle={{backgroundColor: Colors.white}}>
+        swipeEnabled={false}
+        tabBarOptions={{
+          indicatorStyle: {backgroundColor: '#FF0000'},
+          scrollEnabled: true,
+          labelStyle: {color: '#000000', fontSize: 12},
+          tabStyle: {width: 150},
+          style: {backgroundColor: '#FFFFFF'},
+        }}>
         <MaterialTopTabs.Screen name="All" component={FeedbackAll} />
         <MaterialTopTabs.Screen
           name="Detractor"
@@ -93,7 +99,7 @@ const AppRouter = () => {
       />
     </RootStack.Navigator>
   );
-  const signIn = false;
+  const signIn = true;
   return (
     <Provider store={store}>
       <AppearanceProvider>

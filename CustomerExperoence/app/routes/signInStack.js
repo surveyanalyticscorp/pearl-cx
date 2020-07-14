@@ -1,8 +1,6 @@
 import React from 'react';
 
 import {createStackNavigator} from '@react-navigation/stack';
-
-import SplashScreen from '../login/SplashScreen';
 import SignInScreen from '../login/SignIn';
 import CompanyCode from '../login/CompanyCode';
 import ForgotPassword from '../login/ForgotPassword';
