@@ -14,18 +14,22 @@ import {Colors, textColors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {apiHandler} from '../api/ApiHandler';
 import DeviceInfo from 'react-native-device-info';
+import AsyncStorage from '@react-native-community/async-storage';
+import {AUTH_TOKEN} from '../api/types';
 
 const SignInScreen = props => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [userData, setUserData] = useState({
+    email: '',
+    password: '',
+  });
 
   const onSignInPress = () => {
     props.navigation.navigate('SignInScreen');
 
     let data = {
       accessCode: props.route.params.accessCode,
-      emailAddress: email,
-      password: password,
+      emailAddress: userData.email,
+      password: userData.password,
       platform: Platform.OS,
       sourceMode: 'email',
       udId: DeviceInfo.getUniqueId(), //'d0edd045737f8a74',
@@ -33,8 +37,13 @@ const SignInScreen = props => {
 
     apiHandler.login(
       data,
-      response => {
-        console.log('Login response: ' + JSON.stringify(response));
+      async response => {
+        console.log('Login response: ' + JSON.stringify(response.authToken));
+        try {
+          await AsyncStorage.setItem(AUTH_TOKEN, response.authToken);
+        } catch (e) {
+          console.log(e);
+        }
       },
       () => {},
     );
@@ -48,11 +57,18 @@ const SignInScreen = props => {
   };
 
   const handleEmail = text => {
-    setEmail(text);
+    setUserData({
+      ...userData,
+      email: text,
+    });
   };
 
   const handlePassword = text => {
-    setPassword(text);
+    //setPassword(text);
+    setUserData({
+      ...userData,
+      password: text,
+    });
   };
 
   return (

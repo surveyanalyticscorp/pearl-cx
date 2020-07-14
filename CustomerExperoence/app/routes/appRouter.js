@@ -11,6 +11,7 @@ import {
   useNavigation,
   DrawerActions,
 } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../styles/color.constants';
@@ -21,11 +22,13 @@ import FeedbackAll from '../drawerTabs/FeedbackAll';
 import FeedbackDetractor from '../drawerTabs/FeedbackDetractor';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SignInStack from './signInStack';
+import {isStringNullOrEmpty} from '../Utils/Utility';
 
 const Drawer = createDrawerNavigator();
 const store = initStore();
 const RootStack = createStackNavigator();
-const AppRouter = () => {
+
+const AppRouter = props => {
   const colorScheme = useColorScheme();
 
   const MyTheme = {
@@ -33,7 +36,7 @@ const AppRouter = () => {
     colors: {
       primary: 'white',
       background: 'white',
-      card: '#65509f',
+      card: Colors.accent,
       text: 'white',
       border: 'green',
     },
@@ -41,12 +44,12 @@ const AppRouter = () => {
   const HeaderLeft = () => {
     const navigation = useNavigation();
     return (
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row', marginLeft: 20}}>
         <TouchableOpacity
           onPress={() => {
             navigation.dispatch(DrawerActions.toggleDrawer());
           }}>
-          <Icon name="menu" size={35} color="white" />
+          <Icon name="menu" size={30} color="white" />
         </TouchableOpacity>
       </View>
     );
@@ -79,7 +82,7 @@ const AppRouter = () => {
   const feedbackStack = props => (
     <RootStack.Navigator>
       <RootStack.Screen
-        name="AlL"
+        name="Feedback"
         component={createFeedbackTopTabs}
         options={{
           headerLeft: props => <HeaderLeft />,
@@ -99,29 +102,25 @@ const AppRouter = () => {
       />
     </RootStack.Navigator>
   );
-  const signIn = true;
+
+  const signIn = !isStringNullOrEmpty(props.authToken);
   return (
-    <Provider store={store}>
-      <AppearanceProvider>
-        <NavigationContainer
-          theme={colorScheme == 'dark' ? DarkTheme : MyTheme}>
-          {signIn ? (
-            <Drawer.Navigator
-              drawerStyle={{
-                backgroundColor: Colors.white,
-                elevation: 5,
-                zIndex: 100,
-              }}
-              drawerContent={props => <DrawerContent {...props} />}>
-              <Drawer.Screen name="Feedback" children={feedbackStack} />
-              <Drawer.Screen name="Dashboard" component={dashboardStack} />
-            </Drawer.Navigator>
-          ) : (
-            <SignInStack />
-          )}
-        </NavigationContainer>
-      </AppearanceProvider>
-    </Provider>
+    <NavigationContainer theme={colorScheme == 'dark' ? DarkTheme : MyTheme}>
+      {signIn ? (
+        <Drawer.Navigator
+          drawerStyle={{
+            backgroundColor: Colors.white,
+            elevation: 5,
+            zIndex: 100,
+          }}
+          drawerContent={props => <DrawerContent {...props} />}>
+          <Drawer.Screen name="Feedback" children={feedbackStack} />
+          <Drawer.Screen name="Dashboard" component={dashboardStack} />
+        </Drawer.Navigator>
+      ) : (
+        <SignInStack />
+      )}
+    </NavigationContainer>
   );
 };
 

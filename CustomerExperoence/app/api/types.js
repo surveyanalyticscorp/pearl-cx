@@ -1,3 +1,5 @@
+export const AUTH_TOKEN = 'authToken';
+
 export const BASE_URL = 'https://api.questionpro.com/';
 export const AUTH_URL = '/a/nativehtml/cx.auth.CXLogin';
 

@@ -12,11 +12,19 @@ import React, {useState} from 'react';
 import {textColors, Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
+import AsyncStorage from '@react-native-community/async-storage';
+import {AUTH_TOKEN} from '../api/types';
 
 const CompanyCode = props => {
   const [accessCode, setAccessCode] = useState('');
   const onPress = () => {
+    getUserToken();
     props.navigation.navigate('SignInScreen', {accessCode: accessCode});
+  };
+
+  const getUserToken = async () => {
+    console.log('Auth Token: ' + (await AsyncStorage.getItem(AUTH_TOKEN)));
+    return await AsyncStorage.getItem(AUTH_TOKEN);
   };
 
   const handleEmail = text => {
