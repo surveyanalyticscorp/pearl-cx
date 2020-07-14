@@ -17,7 +17,7 @@ const SignInStack = ({navigation}) => (
       options={{title: 'My home'}}
     />
     <RootStack.Screen
-      name="CompanyCodeScreen"
+      name="CompanyCode"
       component={CompanyCode}
       options={{title: 'My home'}}
     />
