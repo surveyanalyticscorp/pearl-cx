@@ -13,10 +13,20 @@ class ApiHandler {
       });
   }
 
-  login(data, token, successCallback, errorCallback = () => {}) {
+  login(data, successCallback, errorCallback = () => {}) {
     return this.callAPIInternal(
-      token,
+      '',
       BASE_URL + 'a/nativehtml/cx.auth.CXLogin',
+      data,
+      successCallback,
+      errorCallback,
+    );
+  }
+
+  forgotPassword(data, successCallback, errorCallback = () => {}) {
+    return this.callAPIInternal(
+      '',
+      BASE_URL + 'a/nativehtml/cx.auth.CXForgotPasswordOTP',
       data,
       successCallback,
       errorCallback,

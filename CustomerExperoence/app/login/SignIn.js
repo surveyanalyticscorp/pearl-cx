@@ -33,7 +33,6 @@ const SignInScreen = props => {
 
     apiHandler.login(
       data,
-      '',
       response => {
         console.log('Login response: ' + JSON.stringify(response));
       },
