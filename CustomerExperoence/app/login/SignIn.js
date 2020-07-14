@@ -13,20 +13,22 @@ import {MarginConstants} from '../styles/margin.constants';
 import {Colors, textColors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {apiHandler} from '../api/ApiHandler';
+import DeviceInfo from 'react-native-device-info';
 
 const SignInScreen = props => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const onSignInPress = () => {
     props.navigation.navigate('SignInScreen');
 
     let data = {
-      accessCode: 'access',
+      accessCode: props.route.params.accessCode,
       emailAddress: email,
       password: password,
-      platform: 'android',
+      platform: Platform.OS,
       sourceMode: 'email',
-      udId: 'd0edd045737f8a74',
+      udId: DeviceInfo.getUniqueId(), //'d0edd045737f8a74',
     };
 
     apiHandler.login(

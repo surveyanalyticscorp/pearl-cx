@@ -4,10 +4,7 @@ import {initStore} from './store/store';
 import {Provider} from 'react-redux';
 import {View, TouchableOpacity, Text} from 'react-native';
 
-import {
-  useColorScheme,
-  AppearanceProvider,
-} from 'react-native-appearance';
+import {useColorScheme, AppearanceProvider} from 'react-native-appearance';
 import {
   NavigationContainer,
   DarkTheme,
@@ -55,15 +52,9 @@ const CxApp: () => React$Node = () => {
       <AppearanceProvider>
         <NavigationContainer
           theme={colorScheme == 'dark' ? DarkTheme : MyTheme}>
-          <Stack.Navigator>
-            <Stack.Screen
-              options={{
-                headerLeft: ({}) => <HeaderLeft />,
-              }}
-              component={NavigationDrawer}
-              name="Drawer"
-            />
-          </Stack.Navigator>
+          <View style={{flex: 1}}>
+            <AppNavigator />
+          </View>
         </NavigationContainer>
       </AppearanceProvider>
     </Provider>
