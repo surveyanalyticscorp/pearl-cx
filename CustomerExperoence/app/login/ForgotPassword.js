@@ -8,21 +8,43 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {MarginConstants} from '../styles/margin.constants';
 import {Colors, textColors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
+import {apiHandler} from '../api/ApiHandler';
 
 const ForgotPassword = props => {
+  const [email, setEmail] = useState('');
+  const [accessCode, setAccessCode] = useState('');
+
   const onSignInPress = () => {
-    props.navigation.navigate('SignInScreen');
+    //props.navigation.navigate('SignInScreen');
+
+    let data = {
+      emailAddress: email,
+      accessCode: accessCode,
+    };
+    apiHandler.forgotPassword(
+      data,
+      response => {
+        console.log('Forgot pswd api response' + JSON.stringify(response));
+        //response{"uniqueAPICallIdentifier":0,"body":{"message":"One time password has been sent to you registered email address"},"statusCode":200}
+      },
+      () => {},
+    );
   };
 
   const onBackPress = () => {
     props.navigation.pop();
   };
 
-  const handleEmail = text => {};
+  const handleEmail = text => {
+    setEmail(text);
+  };
+  const handleAccessCode = text => {
+    setAccessCode(text);
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -80,7 +102,7 @@ const ForgotPassword = props => {
             placeholder="Company Code"
             placeholderTextColor="#707070"
             autoCapitalize="none"
-            onChangeText={handleEmail}
+            onChangeText={handleAccessCode}
           />
 
           <TouchableOpacity style={styles.nextButton} onPress={onSignInPress}>

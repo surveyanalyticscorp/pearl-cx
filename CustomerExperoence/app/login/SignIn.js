@@ -8,14 +8,36 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {MarginConstants} from '../styles/margin.constants';
 import {Colors, textColors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
+import {apiHandler} from '../api/ApiHandler';
+import DeviceInfo from 'react-native-device-info';
 
 const SignInScreen = props => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const onSignInPress = () => {
     props.navigation.navigate('SignInScreen');
+
+    let data = {
+      accessCode: props.route.params.accessCode,
+      emailAddress: email,
+      password: password,
+      platform: Platform.OS,
+      sourceMode: 'email',
+      udId: DeviceInfo.getUniqueId(), //'d0edd045737f8a74',
+    };
+
+    apiHandler.login(
+      data,
+      response => {
+        console.log('Login response: ' + JSON.stringify(response));
+      },
+      () => {},
+    );
   };
   const onForgotPswdPress = () => {
     props.navigation.navigate('ForgotPassword');
@@ -25,7 +47,13 @@ const SignInScreen = props => {
     props.navigation.pop();
   };
 
-  const handleEmail = text => {};
+  const handleEmail = text => {
+    setEmail(text);
+  };
+
+  const handlePassword = text => {
+    setPassword(text);
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -53,7 +81,7 @@ const SignInScreen = props => {
             placeholder="Password"
             placeholderTextColor="#707070"
             autoCapitalize="none"
-            onChangeText={handleEmail}
+            onChangeText={handlePassword}
           />
 
           <TouchableOpacity style={styles.nextButton} onPress={onSignInPress}>

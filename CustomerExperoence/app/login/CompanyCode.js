@@ -8,17 +8,20 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {textColors, Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
 
 const CompanyCode = props => {
+  const [accessCode, setAccessCode] = useState('');
   const onPress = () => {
-    props.navigation.navigate('SignInScreen');
+    props.navigation.navigate('SignInScreen', {accessCode: accessCode});
   };
 
-  const handleEmail = text => {};
+  const handleEmail = text => {
+    setAccessCode(text);
+  };
 
   return (
     <View style={{flex: 1}}>
