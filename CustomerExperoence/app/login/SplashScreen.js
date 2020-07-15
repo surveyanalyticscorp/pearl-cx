@@ -18,14 +18,17 @@ const SplashScreen = props => {
     });
   }, []);
 
+
   useEffect(() => {
     let timer1 = setTimeout(() => {
-      setNavigateToScreen(true);
+      //setNavigateToScreen(true);
+      props.navigation.navigate('SignedOut');
     }, 1000);
     return () => {
       clearTimeout(timer1);
     };
   }, [props.navigation]);
+
 
   let renderSplashScreenView = () => {
     return (
@@ -39,7 +42,8 @@ const SplashScreen = props => {
     return <AppRouter authToken={authToken} />;
   };
 
-  return navigateToScreen ? renderAppScreens() : renderSplashScreenView();
+  //return navigateToScreen ? renderAppScreens() : renderSplashScreenView();
+  return renderSplashScreenView();
 };
 
 export default SplashScreen;
