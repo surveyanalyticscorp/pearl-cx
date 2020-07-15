@@ -1,4 +1,4 @@
-import {Text, View} from 'react-native';
+import {Text, View, ImageBackground, Image} from 'react-native';
 import {styles} from '../styles/styles';
 import React, {useEffect, useState} from 'react';
 import AppRouter from '../routes/appRouter';
@@ -18,7 +18,6 @@ const SplashScreen = props => {
     });
   }, []);
 
-
   useEffect(() => {
     let timer1 = setTimeout(() => {
       //setNavigateToScreen(true);
@@ -29,11 +28,25 @@ const SplashScreen = props => {
     };
   }, [props.navigation]);
 
-
   let renderSplashScreenView = () => {
     return (
-      <View style={styles.center}>
-        <Text style={styles.title}>Splash screen</Text>
+      <View style={{flex: 1}}>
+        <ImageBackground
+          resizeMode={'stretch'}
+          source={require('../images/background_inverted.png')}
+          style={{
+            width: '100%',
+            height: '100%',
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Image
+            style={{width: '70%'}}
+            resizeMode="contain"
+            source={require('../images/whiteCXLogo.png')}
+          />
+        </ImageBackground>
       </View>
     );
   };
