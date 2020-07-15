@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 
-import {styles} from '../styles/styles';
+import {styles} from '../../styles/styles';
 
-Screen2 = () => (
+const Dashboard = (props) => (
   <View style={styles.center}>
     <Text style={styles.title}>Screen 2</Text>
   </View>
 );
 
-export default Screen2;
+export default Dashboard;
