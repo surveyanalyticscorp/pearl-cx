@@ -187,13 +187,13 @@ const styles = StyleSheet.create({
   passwordInput: {
     width: screen.width / 1.1,
     height: MarginConstants.tab3,
-    marginTop: MarginConstants.halfTab,
+    marginTop: MarginConstants.tab1,
     marginBottom: MarginConstants.tab3,
     paddingHorizontal: MarginConstants.halfTab,
   },
   nextButton: {
     width: '90%',
-    height: 50,
+    height: MarginConstants.tab4,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: MarginConstants.tab4,

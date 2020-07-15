@@ -1,20 +1,24 @@
 import {
+  Dimensions,
   Image,
   ImageBackground,
   Platform,
   StyleSheet,
   Text,
-  TextInput,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import React, {useState} from 'react';
 import {MarginConstants} from '../styles/margin.constants';
-import {Colors, textColors} from '../styles/color.constants';
+import {buttonColors, Colors, textColors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {apiHandler} from '../api/ApiHandler';
 import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {fontFamily} from '../styles/font.constants';
+import QPTextField from '../widgets/TextField';
+import QPButton from '../widgets/Button';
+const screen = Dimensions.get('screen');
 const ForgotPassword = props => {
   const [email, setEmail] = useState('');
   const [accessCode, setAccessCode] = useState('');
@@ -55,6 +59,21 @@ const ForgotPassword = props => {
     setAccessCode(text);
   };
 
+  const renderBackButton = () => {
+    return (
+      <View
+        style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            console.log(props);
+            props.navigation.goBack();
+          }}>
+          <Icon name="keyboard-arrow-left" size={35} color="white" />
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
   return (
     <View style={{flex: 1}}>
       <ImageBackground
@@ -62,61 +81,48 @@ const ForgotPassword = props => {
         source={require('../images/background_inverted.png')}
         style={{flex: 1}}>
         <View style={styles.forgotPswdContainer}>
-          <View style={styles.navigationBar}>
-            <TouchableOpacity style={styles.backButton} onPress={onBackPress}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  color: textColors.primary,
-                  alignSelf: 'center',
-                }}>
-                Back
-              </Text>
-            </TouchableOpacity>
+          {renderBackButton()}
+          <View
+            style={{
+              marginVertical: MarginConstants.tab4 * 3,
+              alignItems: 'center',
+              width: '100%',
+            }}>
+            <Image
+              style={styles.logoImage}
+              resizeMode="contain"
+              source={require('../images/whiteCXLogo.png')}
+            />
             <Text
               style={{
-                width: '100%',
-                fontSize: 20,
-                fontWeight: 'bold',
+                fontSize: 15,
+                width: '90%',
+                textAlign: 'center',
+                fontFamily: fontFamily.Medium,
                 color: textColors.primary,
                 alignSelf: 'center',
+                marginTop: MarginConstants.halfTab,
+                paddingHorizontal: MarginConstants.tab2,
               }}>
-              Forgot Password?
+              Please enter the details below and hit Reset Password button to
+              reset your password.
             </Text>
+            <QPTextField
+              label={'Email Address'}
+              style={styles.emailInput}
+              onSubmit={handleEmail}
+            />
+            <QPTextField
+              label={'Company Code'}
+              style={styles.passwordInput}
+              onSubmit={handleAccessCode}
+            />
+            <QPButton
+              style={styles.nextButton}
+              onPress={onSignInPress()}
+              buttonText={'Reset Password'}
+            />
           </View>
-
-          <Text
-            style={{
-              fontSize: 15,
-              color: textColors.primary,
-              alignSelf: 'flex-start',
-              marginTop: MarginConstants.tab3,
-              paddingHorizontal: MarginConstants.tab2,
-            }}>
-            Please enter the details below and hit Reset Password button to
-            reset your password.
-          </Text>
-          <TextInput
-            style={styles.emailInput}
-            underlineColorAndroid="transparent"
-            placeholder="Email Address"
-            placeholderTextColor="#707070"
-            autoCapitalize="none"
-            onChangeText={handleEmail}
-          />
-          <TextInput
-            style={styles.passwordInput}
-            underlineColorAndroid="transparent"
-            placeholder="Company Code"
-            placeholderTextColor="#707070"
-            autoCapitalize="none"
-            onChangeText={handleAccessCode}
-          />
-
-          <TouchableOpacity style={styles.nextButton} onPress={onSignInPress}>
-            <Text styele={styles.nextText}> Reset Password </Text>
-          </TouchableOpacity>
         </View>
       </ImageBackground>
     </View>
@@ -126,7 +132,13 @@ const ForgotPassword = props => {
 export default ForgotPassword;
 
 const styles = StyleSheet.create({
+  logoImage: {
+    width: '70%',
+    marginTop: MarginConstants.tab4,
+  },
   forgotPswdContainer: {
+    flex: 1,
+    marginVertical: MarginConstants.tab3,
     alignItems: 'center',
     width: '100%',
   },
@@ -143,29 +155,27 @@ const styles = StyleSheet.create({
     fontSize: Platform.isPad ? TextSizes.largeText : TextSizes.largeText,
   },
   emailInput: {
-    width: '90%',
-    marginTop: MarginConstants.tab3,
-    paddingHorizontal: MarginConstants.tab2,
-    textAlign: 'left',
-    borderRadius: 5,
-    backgroundColor: '#FFFFFF',
+    width: screen.width / 1.1,
+    height: MarginConstants.tab3,
+    marginTop: MarginConstants.tab4,
+    marginBottom: MarginConstants.tab2,
+    paddingHorizontal: MarginConstants.halfTab,
   },
   passwordInput: {
-    width: '90%',
-    marginTop: MarginConstants.tab2,
-    paddingHorizontal: MarginConstants.tab2,
-    textAlign: 'left',
-    borderRadius: 5,
-    backgroundColor: '#FFFFFF',
+    width: screen.width / 1.1,
+    height: MarginConstants.tab3,
+    marginTop: MarginConstants.tab1,
+    marginBottom: MarginConstants.tab3,
+    paddingHorizontal: MarginConstants.halfTab,
   },
   nextButton: {
     width: '90%',
-    height: 50,
+    height: MarginConstants.tab4,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: MarginConstants.tab4,
     borderRadius: 5,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: buttonColors.backgroundColor,
   },
   nextText: {
     alignSelf: 'center',
