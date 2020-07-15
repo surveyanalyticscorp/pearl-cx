@@ -5,6 +5,8 @@ import {useTheme, Caption, Drawer} from 'react-native-paper';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 
 import {Colors} from '../styles/color.constants';
+import AsyncStorage from '@react-native-community/async-storage';
+import {AUTH_TOKEN} from '../api/types';
 
 //import {AuthContext} from '../components/context';
 
@@ -78,7 +80,7 @@ export function DrawerContent(props) {
           label="Sign Out"
           labelStyle={{color: Colors.black}}
           onPress={() => {
-            //signOut();
+            AsyncStorage.clear().then(() => {});
           }}
         />
       </Drawer.Section>

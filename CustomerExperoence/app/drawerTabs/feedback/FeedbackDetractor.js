@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {View, Text} from 'react-native';
 
-import {styles} from '../styles/styles';
+import {styles} from '../../styles/styles';
 
-FeedbackDetractor = () => (
+const FeedbackDetractor = (props) => (
   <View style={styles.center}>
     <Text style={styles.title}>Feedback detractor </Text>
   </View>

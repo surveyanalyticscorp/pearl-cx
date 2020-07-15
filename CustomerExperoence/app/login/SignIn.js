@@ -14,31 +14,52 @@ import {Colors, textColors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {apiHandler} from '../api/ApiHandler';
 import DeviceInfo from 'react-native-device-info';
+import AsyncStorage from '@react-native-community/async-storage';
+import {AUTH_TOKEN} from '../api/types';
+import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
 
 const SignInScreen = props => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [userData, setUserData] = useState({
+    email: '',
+    password: '',
+  });
 
   const onSignInPress = () => {
-    props.navigation.navigate('SignInScreen');
+    if (
+      validateEmail(userData.email) &&
+      !isStringNullOrEmpty(userData.password)
+    ) {
+      let data = {
+        accessCode: props.route.params.accessCode,
+        emailAddress: userData.email,
+        password: userData.password,
+        platform: Platform.OS,
+        sourceMode: 'email',
+        udId: DeviceInfo.getUniqueId(),
+      };
 
-    let data = {
-      accessCode: props.route.params.accessCode,
-      emailAddress: email,
-      password: password,
-      platform: Platform.OS,
-      sourceMode: 'email',
-      udId: DeviceInfo.getUniqueId(), //'d0edd045737f8a74',
-    };
-
-    apiHandler.login(
-      data,
-      response => {
-        console.log('Login response: ' + JSON.stringify(response));
-      },
-      () => {},
-    );
+      apiHandler.login(
+        data,
+        async response => {
+          console.log('Login response: ' + JSON.stringify(response));
+          if (response.statusCode == 200) {
+            try {
+              await AsyncStorage.setItem(AUTH_TOKEN, response.authToken);
+              props.navigation.navigate('');
+            } catch (e) {
+              console.log(e);
+            }
+          } else {
+            errorHandle();
+          }
+        },
+        () => {},
+      );
+    }
   };
+
+  const errorHandle = () => {};
+
   const onForgotPswdPress = () => {
     props.navigation.navigate('ForgotPassword');
   };
@@ -48,11 +69,18 @@ const SignInScreen = props => {
   };
 
   const handleEmail = text => {
-    setEmail(text);
+    setUserData({
+      ...userData,
+      email: text,
+    });
   };
 
   const handlePassword = text => {
-    setPassword(text);
+    //setPassword(text);
+    setUserData({
+      ...userData,
+      password: text,
+    });
   };
 
   return (

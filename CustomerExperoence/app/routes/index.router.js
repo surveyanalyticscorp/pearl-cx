@@ -23,12 +23,11 @@ import SignInScreen from '../login/SignIn';
 import CompanyCode from '../login/CompanyCode';
 import MarketingScreen from '../login/MarketingScreen';
 import ForgotPassword from '../login/ForgotPassword';
-import HeaderBackButton from '../widgets/HeaderBackButton';
 import {DrawerContent} from './DrawerContent';
 
-import FeedbackAll from '../drawerTabs/FeedbackAll';
-import FeedbackDetractor from '../drawerTabs/FeedbackDetractor';
-import Screen2 from '../drawerTabs/Screen2';
+import FeedbackAll from '../drawerTabs/feedback/FeedbackAll';
+import FeedbackDetractor from '../drawerTabs/feedback/FeedbackDetractor';
+import Screen2 from '../drawerTabs/dashboard/Dashboard';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';

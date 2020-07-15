@@ -33,9 +33,25 @@ class ApiHandler {
     );
   }
 
-  getCXDashBoard(successCallback, data, errorCallback = () => {}) {
-    return this.callAPI(
+  getCXDashBoard(token, successCallback, data = {}, errorCallback = () => {}) {
+    return this.callAPIInternal(
+      token,
       BASE_URL + 'a/nativehtml/cx.CXHome',
+      data,
+      successCallback,
+      errorCallback,
+    );
+  }
+
+  getSurveyDashboard(
+    token,
+    data = {},
+    successCallback,
+    errorCallback = () => {},
+  ) {
+    return this.callAPIInternal(
+      token,
+      BASE_URL + 'a/nativehtml/survey.dashboard.SurveyDashboard',
       successCallback,
       data,
       errorCallback,

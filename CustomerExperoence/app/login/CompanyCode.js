@@ -13,11 +13,17 @@ import React, {useState} from 'react';
 import {textColors, Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
+import AsyncStorage from '@react-native-community/async-storage';
+import {AUTH_TOKEN} from '../api/types';
+import {isStringNullOrEmpty} from '../Utils/Utility';
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const CompanyCode = props => {
   const [accessCode, setAccessCode] = useState('');
   const onPress = () => {
-    props.navigation.navigate('SignInScreen', {accessCode: accessCode});
+    if (accessCode.length > 2) {
+      props.navigation.navigate('SignInScreen', {accessCode: accessCode});
+    }
   };
 
   const handleEmail = text => {
