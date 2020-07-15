@@ -13,6 +13,7 @@ import {MarginConstants} from '../styles/margin.constants';
 import {Colors, textColors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {apiHandler} from '../api/ApiHandler';
+import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
 
 const ForgotPassword = props => {
   const [email, setEmail] = useState('');
@@ -20,19 +21,27 @@ const ForgotPassword = props => {
 
   const onSignInPress = () => {
     //props.navigation.navigate('SignInScreen');
+    if (isValidateInput()) {
+      let data = {
+        emailAddress: email,
+        accessCode: accessCode,
+      };
+      apiHandler.forgotPassword(
+        data,
+        response => {
+          console.log('Forgot pswd api response' + JSON.stringify(response));
+          //response{"uniqueAPICallIdentifier":0,"body":{"message":"One time password has been sent to you registered email address"},"statusCode":200}
+        },
+        () => {},
+      );
+    }
+  };
 
-    let data = {
-      emailAddress: email,
-      accessCode: accessCode,
-    };
-    apiHandler.forgotPassword(
-      data,
-      response => {
-        console.log('Forgot pswd api response' + JSON.stringify(response));
-        //response{"uniqueAPICallIdentifier":0,"body":{"message":"One time password has been sent to you registered email address"},"statusCode":200}
-      },
-      () => {},
-    );
+  const isValidateInput = () => {
+    if (validateEmail(email) && !isStringNullOrEmpty(accessCode)) {
+      return true;
+    }
+    return false;
   };
 
   const onBackPress = () => {

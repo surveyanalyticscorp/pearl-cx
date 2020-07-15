@@ -14,17 +14,14 @@ import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AUTH_TOKEN} from '../api/types';
+import {isStringNullOrEmpty} from '../Utils/Utility';
 
 const CompanyCode = props => {
   const [accessCode, setAccessCode] = useState('');
   const onPress = () => {
-    getUserToken();
-    props.navigation.navigate('SignInScreen', {accessCode: accessCode});
-  };
-
-  const getUserToken = async () => {
-    console.log('Auth Token: ' + (await AsyncStorage.getItem(AUTH_TOKEN)));
-    return await AsyncStorage.getItem(AUTH_TOKEN);
+    if (accessCode.length > 2) {
+      props.navigation.navigate('SignInScreen', {accessCode: accessCode});
+    }
   };
 
   const handleEmail = text => {
@@ -51,7 +48,7 @@ const CompanyCode = props => {
             autoCapitalize="none"
             onChangeText={handleEmail}
           />
-          <TouchableOpacity style={styles.nextButton} onPress={onPress}>
+          <TouchableOpacity disabled={false}  style={styles.nextButton} onPress={onPress}>
             <Text styele={styles.nextText}> Next </Text>
           </TouchableOpacity>
         </View>

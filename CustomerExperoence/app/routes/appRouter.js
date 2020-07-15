@@ -16,10 +16,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../styles/color.constants';
 import {DrawerContent} from '../routes/DrawerContent';
-import Screen2 from '../drawerTabs/Screen2';
+import CxDashboard from '../drawerTabs/dashboard/CxDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import FeedbackAll from '../drawerTabs/FeedbackAll';
-import FeedbackDetractor from '../drawerTabs/FeedbackDetractor';
+import FeedbackAll from '../drawerTabs/feedback/FeedbackAll';
+import FeedbackDetractor from '../drawerTabs/feedback/FeedbackDetractor';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SignInStack from './signInStack';
 import {isStringNullOrEmpty} from '../Utils/Utility';
@@ -95,7 +95,7 @@ const AppRouter = props => {
     <RootStack.Navigator>
       <RootStack.Screen
         name="Dashboard"
-        component={Screen2}
+        component={CxDashboard}
         options={{
           headerLeft: props => <HeaderLeft />,
         }}

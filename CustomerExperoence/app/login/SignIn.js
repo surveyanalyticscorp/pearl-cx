@@ -16,6 +16,7 @@ import {apiHandler} from '../api/ApiHandler';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AUTH_TOKEN} from '../api/types';
+import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
 
 const SignInScreen = props => {
   const [userData, setUserData] = useState({
@@ -24,30 +25,41 @@ const SignInScreen = props => {
   });
 
   const onSignInPress = () => {
-    props.navigation.navigate('SignInScreen');
+    if (
+      validateEmail(userData.email) &&
+      !isStringNullOrEmpty(userData.password)
+    ) {
+      let data = {
+        accessCode: props.route.params.accessCode,
+        emailAddress: userData.email,
+        password: userData.password,
+        platform: Platform.OS,
+        sourceMode: 'email',
+        udId: DeviceInfo.getUniqueId(),
+      };
 
-    let data = {
-      accessCode: props.route.params.accessCode,
-      emailAddress: userData.email,
-      password: userData.password,
-      platform: Platform.OS,
-      sourceMode: 'email',
-      udId: DeviceInfo.getUniqueId(), //'d0edd045737f8a74',
-    };
-
-    apiHandler.login(
-      data,
-      async response => {
-        console.log('Login response: ' + JSON.stringify(response.authToken));
-        try {
-          await AsyncStorage.setItem(AUTH_TOKEN, response.authToken);
-        } catch (e) {
-          console.log(e);
-        }
-      },
-      () => {},
-    );
+      apiHandler.login(
+        data,
+        async response => {
+          console.log('Login response: ' + JSON.stringify(response));
+          if (response.statusCode == 200) {
+            try {
+              await AsyncStorage.setItem(AUTH_TOKEN, response.authToken);
+              props.navigation.navigate('');
+            } catch (e) {
+              console.log(e);
+            }
+          } else {
+            errorHandle();
+          }
+        },
+        () => {},
+      );
+    }
   };
+
+  const errorHandle = () => {};
+
   const onForgotPswdPress = () => {
     props.navigation.navigate('ForgotPassword');
   };
