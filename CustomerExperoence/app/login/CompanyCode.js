@@ -7,12 +7,13 @@ import {
   Platform,
   Image,
   TextInput,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import React, {useState} from 'react';
 import {textColors, Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
 const CompanyCode = props => {
   const [accessCode, setAccessCode] = useState('');
   const onPress = () => {
@@ -23,6 +24,20 @@ const CompanyCode = props => {
     setAccessCode(text);
   };
 
+  const renderBackButton = () => {
+    return (
+      <View style={{position: 'absolute', top: 0, left: 4}}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            console.log(props);
+            props.navigation.goBack();
+          }}>
+          <Icon name="keyboard-arrow-left" size={35} color="white" />
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
   return (
     <View style={{flex: 1}}>
       <ImageBackground
@@ -30,25 +45,27 @@ const CompanyCode = props => {
         source={require('../images/background_inverted.png')}
         style={styles.imageBackgroundContainer}>
         <View style={styles.companyCodeContainer}>
-          <Image
-            style={styles.logoImage}
-            resizeMode="contain"
-            source={require('../images/whiteCXLogo.png')}
-          />
-          <TextInput
-            style={styles.companyCodeInput}
-            underlineColorAndroid="transparent"
-            placeholder="Company Code"
-            placeholderTextColor="#707070"
-            autoCapitalize="none"
-            onChangeText={handleEmail}
-          />
-          <TouchableOpacity style={styles.nextButton} onPress={onPress}>
-            <Text styele={styles.nextText}> Next </Text>
-          </TouchableOpacity>
+          {renderBackButton()}
+          <View
+            style={{marginVertical: 100, alignItems: 'center', width: '100%'}}>
+            <Image
+              style={styles.logoImage}
+              resizeMode="contain"
+              source={require('../images/whiteCXLogo.png')}
+            />
+            <TextInput
+              style={styles.companyCodeInput}
+              underlineColorAndroid="transparent"
+              placeholder="Company Code"
+              placeholderTextColor="#707070"
+              autoCapitalize="none"
+              onChangeText={handleEmail}
+            />
+            <TouchableOpacity style={styles.nextButton} onPress={onPress}>
+              <Text styele={styles.nextText}> Next </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-
-        <Text style={styles.companyCode}>Company Code </Text>
       </ImageBackground>
     </View>
   );
@@ -73,6 +90,8 @@ const styles = StyleSheet.create({
   },
 
   companyCodeContainer: {
+    flex: 1,
+    marginVertical: 40,
     alignItems: 'center',
     width: '100%',
   },
@@ -92,7 +111,7 @@ const styles = StyleSheet.create({
     height: 45,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: MarginConstants.tab3,
+    marginVertical: MarginConstants.tab3,
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
   },

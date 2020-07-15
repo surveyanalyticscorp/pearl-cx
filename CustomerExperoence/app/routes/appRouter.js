@@ -99,7 +99,7 @@ const AppRouter = () => {
       />
     </RootStack.Navigator>
   );
-  const signIn = true;
+  const signIn = false;
   return (
     <Provider store={store}>
       <AppearanceProvider>
