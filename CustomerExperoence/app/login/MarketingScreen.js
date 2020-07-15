@@ -131,6 +131,9 @@ const styles = StyleSheet.create({
   buttonTextColor: {
     color: '#FFFFFF',
   },
+  wrapper: {
+    marginBottom: 20,
+  },
   getStartedButton: {
     color: '#FFFFFF',
     alignItems: 'center',
@@ -139,7 +142,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     position: 'absolute',
-    bottom: 10,
+    bottom: 20,
     right: 10,
     width: 100,
     height: 40,

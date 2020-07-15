@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     color: textColors.primary,
     textAlign: 'center',
     paddingHorizontal: MarginConstants.tab1,
-    //fontFamily: FontFamily.Light,
   },
   introText: {
     width: '100%',

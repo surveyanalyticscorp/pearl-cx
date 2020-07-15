@@ -1,4 +1,5 @@
 const Colors = {
+  textTintColor: '#D5D8DE',
   primary: '#707070',
   secondary: '#909090',
   red: '#990000',
@@ -41,6 +42,7 @@ const textColors = {
 };
 
 const buttonColors = {
+  backgroundColor: '#193F8B',
   positive: Colors.accent,
   negative: Colors.secondary,
 };

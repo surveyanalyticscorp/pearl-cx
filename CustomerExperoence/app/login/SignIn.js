@@ -1,23 +1,26 @@
 import {
+  Dimensions,
   Image,
   ImageBackground,
   Platform,
   StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import React, {useState} from 'react';
 import {MarginConstants} from '../styles/margin.constants';
-import {Colors, textColors} from '../styles/color.constants';
+import {buttonColors, Colors, textColors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {apiHandler} from '../api/ApiHandler';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AUTH_TOKEN} from '../api/types';
 import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import QPTextField from '../widgets/TextField';
+import QPButton from '../widgets/Button';
+import {fontFamily} from '../styles/font.constants';
+const screen = Dimensions.get('screen');
 const SignInScreen = props => {
   const [userData, setUserData] = useState({
     email: '',
@@ -60,7 +63,7 @@ const SignInScreen = props => {
 
   const errorHandle = () => {};
 
-  const onForgotPswdPress = () => {
+  const onForgotPasswordPress = () => {
     props.navigation.navigate('ForgotPassword');
   };
 
@@ -83,6 +86,21 @@ const SignInScreen = props => {
     });
   };
 
+  const renderBackButton = () => {
+    return (
+      <View
+        style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            console.log(props);
+            props.navigation.goBack();
+          }}>
+          <Icon name="keyboard-arrow-left" size={35} color="white" />
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
   return (
     <View style={{flex: 1}}>
       <ImageBackground
@@ -90,42 +108,42 @@ const SignInScreen = props => {
         source={require('../images/background_inverted.png')}
         style={styles.imageBackgroundContainer}>
         <View style={styles.signInInContainer}>
-          <Image
-            style={styles.logoImage}
-            resizeMode="contain"
-            source={require('../images/login_logo.png')}
-          />
-          <TextInput
-            style={styles.emailInput}
-            underlineColorAndroid="transparent"
-            placeholder="Email Address"
-            placeholderTextColor="#707070"
-            autoCapitalize="none"
-            onChangeText={handleEmail}
-          />
-          <TextInput
-            style={styles.passwordInput}
-            underlineColorAndroid="transparent"
-            placeholder="Password"
-            placeholderTextColor="#707070"
-            autoCapitalize="none"
-            onChangeText={handlePassword}
-          />
+          {renderBackButton()}
+          <View
+            style={{
+              marginVertical: MarginConstants.tab4 * 3,
+              alignItems: 'center',
+              width: '100%',
+            }}>
+            <Image
+              style={styles.logoImage}
+              resizeMode="contain"
+              source={require('../images/whiteCXLogo.png')}
+            />
+            <QPTextField
+              label={'Email Address'}
+              style={styles.emailInput}
+              onSubmit={handleEmail}
+            />
+            <QPTextField
+              label={'Password'}
+              style={styles.passwordInput}
+              onSubmit={handlePassword}
+            />
+            <QPButton
+              style={styles.nextButton}
+              onPress={onSignInPress()}
+              buttonText={'Sign In'}
+            />
 
-          <TouchableOpacity style={styles.nextButton} onPress={onSignInPress}>
-            <Text styele={styles.nextText}> Sing In </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.forgotPswdButton}
-            onPress={onForgotPswdPress}>
-            <Text styele={styles.nextText}> Forgot Password? </Text>
-          </TouchableOpacity>
+            <QPButton
+              style={styles.forgotPswdButton}
+              onPress={onForgotPasswordPress}
+              textStyle={styles.nextText}
+              buttonText={'Forgot Password?'}
+            />
+          </View>
         </View>
-
-        <TouchableOpacity style={styles.companyCode} onPress={onBackPress}>
-          <Text style={styles.backButton}>Back </Text>
-        </TouchableOpacity>
       </ImageBackground>
     </View>
   );
@@ -150,27 +168,28 @@ const styles = StyleSheet.create({
   },
 
   signInInContainer: {
+    flex: 1,
+    marginVertical: MarginConstants.tab3,
     alignItems: 'center',
     width: '100%',
   },
   logoImage: {
     width: '70%',
+    marginVertical: MarginConstants.tab4,
   },
   emailInput: {
-    width: '90%',
-    marginTop: MarginConstants.tab3,
-    paddingHorizontal: MarginConstants.tab2,
-    textAlign: 'left',
-    borderRadius: 5,
-    backgroundColor: '#FFFFFF',
+    width: screen.width / 1.1,
+    height: MarginConstants.tab3,
+    marginTop: MarginConstants.tab4,
+    marginBottom: MarginConstants.tab2,
+    paddingHorizontal: MarginConstants.halfTab,
   },
   passwordInput: {
-    width: '90%',
-    marginTop: MarginConstants.tab2,
-    paddingHorizontal: MarginConstants.tab2,
-    textAlign: 'left',
-    borderRadius: 5,
-    backgroundColor: '#FFFFFF',
+    width: screen.width / 1.1,
+    height: MarginConstants.tab3,
+    marginTop: MarginConstants.halfTab,
+    marginBottom: MarginConstants.tab3,
+    paddingHorizontal: MarginConstants.halfTab,
   },
   nextButton: {
     width: '90%',
@@ -179,11 +198,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: MarginConstants.tab4,
     borderRadius: 5,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: buttonColors.backgroundColor,
   },
   nextText: {
-    alignSelf: 'center',
+    alignSelf: 'flex-end',
     color: textColors.primary,
+    fontFamily: fontFamily.SemiBold,
+    fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
   },
   forgotPswdButton: {
     width: '90%',

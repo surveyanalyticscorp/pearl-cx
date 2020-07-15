@@ -1,38 +1,36 @@
 import {
-  Text,
   View,
-  TouchableOpacity,
   StyleSheet,
   ImageBackground,
   Platform,
   Image,
-  TextInput,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback, Dimensions,
 } from 'react-native';
 import React, {useState} from 'react';
 import {textColors, Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
-import AsyncStorage from '@react-native-community/async-storage';
-import {AUTH_TOKEN} from '../api/types';
-import {isStringNullOrEmpty} from '../Utils/Utility';
-
+import QPTextField from '../widgets/TextField';
+import QPButton from '../widgets/Button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+const screen = Dimensions.get('screen');
 const CompanyCode = props => {
   const [accessCode, setAccessCode] = useState('');
-  const onPress = () => {
+
+  const signInButtonPressed = () => {
     if (accessCode.length > 2) {
       props.navigation.navigate('SignInScreen', {accessCode: accessCode});
     }
   };
 
-  const handleEmail = text => {
+  const handleAccessCode = text => {
     setAccessCode(text);
   };
 
   const renderBackButton = () => {
     return (
-      <View style={{position: 'absolute', top: 0, left: 4}}>
+      <View
+        style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
         <TouchableWithoutFeedback
           onPress={() => {
             console.log(props);
@@ -53,23 +51,23 @@ const CompanyCode = props => {
         <View style={styles.companyCodeContainer}>
           {renderBackButton()}
           <View
-            style={{marginVertical: 100, alignItems: 'center', width: '100%'}}>
+            style={{
+              marginVertical: MarginConstants.tab4 * 3,
+              alignItems: 'center',
+              width: '100%',
+            }}>
             <Image
               style={styles.logoImage}
               resizeMode="contain"
               source={require('../images/whiteCXLogo.png')}
             />
-            <TextInput
+            <QPTextField
+              label={'Company code'}
               style={styles.companyCodeInput}
               underlineColorAndroid="transparent"
-              placeholder="Company Code"
-              placeholderTextColor="#707070"
-              autoCapitalize="none"
-              onChangeText={handleEmail}
+              onSubmit={handleAccessCode}
             />
-            <TouchableOpacity style={styles.nextButton} onPress={onPress}>
-              <Text styele={styles.nextText}> Next </Text>
-            </TouchableOpacity>
+            <QPButton onPress={signInButtonPressed} buttonText={'Next'} />
           </View>
         </View>
       </ImageBackground>
@@ -97,24 +95,24 @@ const styles = StyleSheet.create({
 
   companyCodeContainer: {
     flex: 1,
-    marginVertical: 40,
+    marginVertical: MarginConstants.tab3,
     alignItems: 'center',
     width: '100%',
   },
   logoImage: {
     width: '70%',
+    marginVertical: MarginConstants.tab4,
   },
   companyCodeInput: {
-    width: '90%',
-    marginVertical: MarginConstants.tab3,
-    paddingHorizontal: MarginConstants.tab2,
+    width: screen.width / 1.1,
+    height: MarginConstants.tab3,
+    marginVertical: MarginConstants.tab4,
+    paddingHorizontal: MarginConstants.halfTab,
     textAlign: 'left',
-    borderRadius: 10,
-    backgroundColor: '#FFFFFF',
   },
   nextButton: {
     width: '90%',
-    height: 45,
+    height: MarginConstants.tab3 * 1.5,
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: MarginConstants.tab3,
