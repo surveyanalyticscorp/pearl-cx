@@ -48,7 +48,7 @@ const SignInScreen = props => {
           if (response.statusCode == 200) {
             try {
               await AsyncStorage.setItem(AUTH_TOKEN, response.authToken);
-              props.navigation.navigate('');
+              props.navigation.navigate('SignedIn');
             } catch (e) {
               console.log(e);
             }

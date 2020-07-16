@@ -1,12 +1,11 @@
 import {Text, View, ImageBackground, Image} from 'react-native';
 import {styles} from '../styles/styles';
 import React, {useEffect, useState} from 'react';
-import AppRouter from '../routes/appRouter';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AUTH_TOKEN} from '../api/types';
+import {isStringNullOrEmpty} from '../Utils/Utility';
 
 const SplashScreen = props => {
-  const [navigateToScreen, setNavigateToScreen] = useState(false);
   const [authToken, setAuthToken] = useState('');
 
   useEffect(() => {
@@ -21,12 +20,16 @@ const SplashScreen = props => {
   useEffect(() => {
     let timer1 = setTimeout(() => {
       //setNavigateToScreen(true);
-      props.navigation.navigate('SignedOut');
+      if (isStringNullOrEmpty(props.authToken)) {
+        props.navigation.navigate('SignedOut');
+      } else {
+        props.navigation.navigate('SignedIn');
+      }
     }, 1000);
     return () => {
       clearTimeout(timer1);
     };
-  }, [props.navigation]);
+  }, [props.authToken, props.navigation]);
 
   let renderSplashScreenView = () => {
     return (
@@ -50,12 +53,6 @@ const SplashScreen = props => {
       </View>
     );
   };
-
-  let renderAppScreens = () => {
-    return <AppRouter authToken={authToken} />;
-  };
-
-  //return navigateToScreen ? renderAppScreens() : renderSplashScreenView();
   return renderSplashScreenView();
 };
 

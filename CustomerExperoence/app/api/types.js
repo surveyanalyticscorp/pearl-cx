@@ -1,6 +1,6 @@
 export const AUTH_TOKEN = 'authToken';
 
-export const BASE_URL = 'https://api.questionpro.com/';
+export const BASE_URL = 'https://qa.questionpro.com/';
 export const AUTH_URL = '/a/nativehtml/cx.auth.CXLogin';
 
 export const CX_DASHBOARD = 'CX_DASHBOARD';
@@ -10,3 +10,5 @@ export const CX_DETRACTOR_TICKETS_RESOLVED = 'CX_DETRACTOR_TICKETS_RESOLVED';
 export const CX_FEEDBACK_LIST = 'CX_FEEDBACK_LIST';
 export const CX_FEEDBACK_SELECTED = 'CX_FEEDBACK_SELECTED';
 export const CX_FEEDBACK_UPDATED = 'CX_FEEDBACK_UPDATED';
+export const LOADING_PROGRESS = 'LOADING_PROGRESS';
+export const LOADING_ERROR = 'ERROR';
