@@ -12,6 +12,11 @@ const QPTextField = props => {
     props.onSubmit && props.onSubmit(field.value());
   };
 
+  const onEndEditing = () => {
+    let {current: field} = fieldRef;
+    props.onEndEdit && props.onEndEdit(field.value());
+  };
+
   const onChange = () => {
     let {current: field} = fieldRef;
     props.onChange && props.onChange(field.value());
@@ -52,6 +57,7 @@ const QPTextField = props => {
         label={label}
         secureTextEntry={secureText}
         keyboardType={keyboardType}
+        onEndEditing={onEndEditing}
         onSubmitEditing={onSubmit}
         onChangeText={onChange}
         ref={fieldRef}

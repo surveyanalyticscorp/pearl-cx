@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import React, {useState} from 'react';
 import {MarginConstants} from '../styles/margin.constants';
 import {buttonColors, Colors, textColors} from '../styles/color.constants';
@@ -112,17 +113,17 @@ const SignInScreen = props => {
         <QPTextField
           label={'Email Address'}
           style={styles.emailInput}
-          onSubmit={handleEmail}
+          onEndEdit={handleEmail}
         />
         <QPTextField
           secureText={true}
           label={'Password'}
           style={styles.passwordInput}
-          onSubmit={handlePassword}
+          onEndEdit={handlePassword}
         />
         <QPButton
           style={styles.nextButton}
-          onPress={onSignInPress()}
+          onPress={onSignInPress}
           buttonText={'Sign In'}
         />
 

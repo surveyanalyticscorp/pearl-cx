@@ -66,7 +66,7 @@ const CompanyCode = props => {
               label={'Company code'}
               style={styles.companyCodeInput}
               underlineColorAndroid="transparent"
-              onSubmit={handleAccessCode}
+              onEndEdit={handleAccessCode}
             />
             <QPButton onPress={signInButtonPressed} buttonText={'Next'} />
           </View>
