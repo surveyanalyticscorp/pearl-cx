@@ -21,7 +21,7 @@ const SplashScreen = props => {
     let timer1 = setTimeout(() => {
       //setNavigateToScreen(true);
       if (isStringNullOrEmpty(authToken)) {
-        props.navigation.navigate('SignedOut');
+        props.navigation.navigate('SignedIn');
       } else {
         props.navigation.navigate('SignedIn');
       }

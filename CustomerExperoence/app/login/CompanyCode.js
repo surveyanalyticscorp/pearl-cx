@@ -18,6 +18,7 @@ const CompanyCode = props => {
   const [accessCode, setAccessCode] = useState('');
 
   const signInButtonPressed = () => {
+    //props.navigation.popToTop();
     if (accessCode.length > 2) {
       props.navigation.navigate('SignInScreen', {accessCode: accessCode});
     }
