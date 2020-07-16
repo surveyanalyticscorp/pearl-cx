@@ -67,10 +67,6 @@ const SignInScreen = props => {
     props.navigation.navigate('ForgotPassword');
   };
 
-  const onBackPress = () => {
-    props.navigation.pop();
-  };
-
   const handleEmail = text => {
     setUserData({
       ...userData,
@@ -79,7 +75,6 @@ const SignInScreen = props => {
   };
 
   const handlePassword = text => {
-    //setPassword(text);
     setUserData({
       ...userData,
       password: text,
@@ -101,6 +96,45 @@ const SignInScreen = props => {
     );
   };
 
+  const renderSignTextFieldAndButton = () => {
+    return (
+      <View
+        style={{
+          marginVertical: MarginConstants.tab4 * 3,
+          alignItems: 'center',
+          width: '100%',
+        }}>
+        <Image
+          style={styles.logoImage}
+          resizeMode="contain"
+          source={require('../images/whiteCXLogo.png')}
+        />
+        <QPTextField
+          label={'Email Address'}
+          style={styles.emailInput}
+          onSubmit={handleEmail}
+        />
+        <QPTextField
+          label={'Password'}
+          style={styles.passwordInput}
+          onSubmit={handlePassword}
+        />
+        <QPButton
+          style={styles.nextButton}
+          onPress={onSignInPress()}
+          buttonText={'Sign In'}
+        />
+
+        <QPButton
+          style={styles.forgotPswdButton}
+          onPress={onForgotPasswordPress}
+          textStyle={styles.nextText}
+          buttonText={'Forgot Password?'}
+        />
+      </View>
+    );
+  };
+
   return (
     <View style={{flex: 1}}>
       <ImageBackground
@@ -109,40 +143,7 @@ const SignInScreen = props => {
         style={styles.imageBackgroundContainer}>
         <View style={styles.signInInContainer}>
           {renderBackButton()}
-          <View
-            style={{
-              marginVertical: MarginConstants.tab4 * 3,
-              alignItems: 'center',
-              width: '100%',
-            }}>
-            <Image
-              style={styles.logoImage}
-              resizeMode="contain"
-              source={require('../images/whiteCXLogo.png')}
-            />
-            <QPTextField
-              label={'Email Address'}
-              style={styles.emailInput}
-              onSubmit={handleEmail}
-            />
-            <QPTextField
-              label={'Password'}
-              style={styles.passwordInput}
-              onSubmit={handlePassword}
-            />
-            <QPButton
-              style={styles.nextButton}
-              onPress={onSignInPress()}
-              buttonText={'Sign In'}
-            />
-
-            <QPButton
-              style={styles.forgotPswdButton}
-              onPress={onForgotPasswordPress}
-              textStyle={styles.nextText}
-              buttonText={'Forgot Password?'}
-            />
-          </View>
+          {renderSignTextFieldAndButton()}
         </View>
       </ImageBackground>
     </View>

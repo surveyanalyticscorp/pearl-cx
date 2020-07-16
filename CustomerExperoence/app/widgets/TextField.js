@@ -17,10 +17,14 @@ const QPTextField = props => {
 
   let keyboardType = props.keyboardType ? props.keyboardType : 'default';
   let label = props.label ? props.label : '';
+  let style = [props.style, {paddingVertical: 0}]
   return (
     <TextField
+      underlineColorAndroid="transparent"
+      autoCapitalize={'none'}
+      autoCorrect={false}
       tintColor={Colors.textTintColor}
-      containerStyle={props.style}
+      containerStyle={style}
       label={label}
       keyboardType={keyboardType}
       onSubmitEditing={onSubmit}
