@@ -27,17 +27,13 @@ const FeedbackAll = props => {
   //let data = {pageOffset: 0, sentiment: 'All', month: '7', year: '2018'};
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.counterTitle}>Counter</Text>
       <View style={styles.counterContainer}>
         <TouchableOpacity onPress={props.getFeedbackList}>
-          <Text style={styles.buttonText}>+</Text>
+          <Text style={styles.buttonText}>GET</Text>
         </TouchableOpacity>
         <Text style={styles.counterText}>
           {props.feedback.response.statusCode}
         </Text>
-        <TouchableOpacity onPress={props.getFeedbackList}>
-          <Text style={styles.buttonText}>-</Text>
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
