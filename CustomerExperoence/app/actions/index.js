@@ -1,9 +1,10 @@
 export const GET_FEEDBACK = 'GET_FEEDBACK';
 export const FEEDBACK_RECEIVED = 'FEEDBACK_RECEIVED';
 
-export const getFeedbackList = () => ({
+export const getFeedbackList = (param, token) => ({
   type: GET_FEEDBACK,
-  value: 1,
+  param,
+  token,
 });
 
 export const showLoading = (

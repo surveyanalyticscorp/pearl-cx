@@ -2,35 +2,36 @@ import React, {useEffect, Component} from 'react';
 import {
   Text,
   View,
-  Dimensions,
   SafeAreaView,
-  TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AUTH_TOKEN} from '../../api/types';
-import {apiHandler} from '../../api/ApiHandler';
-import {increaseCounter, getFeedbackList} from '../../actions';
-
-const {height, width} = Dimensions.get('window');
+import {getFeedbackList} from '../../actions';
 
 const FeedbackAll = props => {
   useEffect(() => {
-    /*let token =
-      'eyJpc3MiOiJodHRwczovL3FhLnF1ZXN0aW9ucHJvLmNvbS8iLCJ1aWQiOjE3MzI5LCJwaWQiOjEwMjY2LCJleHAiOjE1OTU0MjEzNzcsImlhdCI6MTU5NDgxNjU3NywiYWxnIjoiSFMyNTYifQ.eyJpc3MiOiJodHRwczovL3FhLnF1ZXN0aW9ucHJvLmNvbS8ifQ.0QliYAgAIfKzpwfK4saiU38VLWt5DkGvXmUU_MdMMEk';
-    let data = {pageOffset: 0, sentiment: 'All', month: '7', year: '2018'};
-    let dashboard = apiHandler.getCXFeedbackList(token, data, false);
-    let sections = dashboard.body;
-    console.log('Responses: ' + JSON.stringify(sections));*/
-  });
-  //let data = {pageOffset: 0, sentiment: 'All', month: '7', year: '2018'};
+    async function getAuthToken() {
+      return await AsyncStorage.getItem(AUTH_TOKEN);
+    }
+
+    getAuthToken().then(token => {
+      if (token) {
+        const data = {
+          pageOffset: 0,
+          sentiment: 'All',
+          month: '7',
+          year: '2018',
+        };
+        props.getFeedbackList(data, token);
+      }
+    });
+  }, [props]);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.counterContainer}>
-        <TouchableOpacity onPress={props.getFeedbackList}>
-          <Text style={styles.buttonText}>GET</Text>
-        </TouchableOpacity>
         <Text style={styles.counterText}>
           {props.feedback.response.statusCode}
         </Text>
@@ -84,11 +85,8 @@ const mapStateToProps = state => {
 };
 // Map Dispatch To Props (Dispatch Actions To Reducers. Reducers Then Modify The Data And Assign It To Your Props)
 const mapDispatchToProps = dispatch => ({
-  getFeedbackList: () => {
-    dispatch(getFeedbackList());
-  },
-  reduxIncreaseCounter: () => {
-    dispatch(increaseCounter(true));
+  getFeedbackList: (data, token) => {
+    dispatch(getFeedbackList(data, token));
   },
 });
 
