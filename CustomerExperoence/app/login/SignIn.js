@@ -115,6 +115,7 @@ const SignInScreen = props => {
           onSubmit={handleEmail}
         />
         <QPTextField
+          secureText={true}
           label={'Password'}
           style={styles.passwordInput}
           onSubmit={handlePassword}
