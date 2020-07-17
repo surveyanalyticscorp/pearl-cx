@@ -131,7 +131,11 @@ const SignOutStack = props => (
   <NavigationContainer>
     <RootStack.Navigator headerMode="none">
       <RootStack.Screen name="MarketingScreen" component={MarketingScreen} />
-      <RootStack.Screen name="CompanyCode" component={CompanyCode} navigation={props.navigation}/>
+      <RootStack.Screen
+        name="CompanyCode"
+        component={CompanyCode}
+        navigation={props.navigation}
+      />
       <RootStack.Screen name="SignInScreen" component={SignInScreen} />
       <RootStack.Screen name="ForgotPassword" component={ForgotPassword} />
     </RootStack.Navigator>

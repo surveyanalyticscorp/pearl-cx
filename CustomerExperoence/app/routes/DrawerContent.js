@@ -1,89 +1,148 @@
-import React from 'react';
-import {View, Image} from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Image,
+  Platform,
+  StyleSheet,
+  ImageBackground,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {routesStyles} from './routes.styles';
-import {useTheme, Caption, Drawer} from 'react-native-paper';
+import {useTheme, Caption, Drawer, Text} from 'react-native-paper';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../styles/color.constants';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AUTH_TOKEN} from '../api/types';
+import {fontFamily} from '../styles/font.constants';
+import {TextSizes} from '../styles/textsize.constants';
+import {MarginConstants} from '../styles/margin.constants';
 
 //import {AuthContext} from '../components/context';
 
 export function DrawerContent(props) {
   const paperTheme = useTheme();
-
+  const [openDropper, setOpenDropper] = useState(false);
   //const {signOut, toggleTheme} = React.useContext(AuthContext);
 
-  return (
-    <View style={{flex: 1, elevation: 5, zIndex: 100}}>
-      <DrawerContentScrollView {...props}>
-        <View style={routesStyles.drawerContent}>
-          <View style={routesStyles.userInfoSection}>
-            <View style={routesStyles.navDrawerHeaderImageContainer}>
-              <Image
-                style={routesStyles.navDrawerHeaderImage}
-                source={require('../images/login_logo.png')}
-                resizeMode="contain"
-              />
-            </View>
-
-            <View style={routesStyles.userEmail}>
-              <Caption style={routesStyles.caption}>
-                datta.kunde@questionpro.com
-              </Caption>
-              <Caption style={routesStyles.caption}>company Name</Caption>
-            </View>
+  const renderDrawerButtons = () => {
+    return (
+      <View>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            props.navigation.navigate('Feedback');
+          }}>
+          <View style={{flexDirection: 'row', marginTop: MarginConstants.tab2}}>
+            <Image
+              source={require('../images/feedback_icon.png')}
+              resizeMode="contain"
+              style={{width: 20, height: 30, tintColor: Colors.black}}
+            />
+            <Caption style={styles.labelStyle}>Feedback</Caption>
           </View>
-
-          <Drawer.Section style={routesStyles.drawerSection}>
-            <DrawerItem
-              icon={({color, size}) => (
-                <Image
-                  source={require('../images/feedback_icon.png')}
-                  resizeMode="contain"
-                  style={{width: 20, height: 20, tintColor: Colors.black}}
-                />
-              )}
-              label="Feedback"
-              labelStyle={{color: Colors.black}}
-              onPress={() => {
-                props.navigation.navigate('Feedback');
-              }}
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            props.navigation.navigate('Dashboard');
+          }}>
+          <View style={{flexDirection: 'row', marginTop: MarginConstants.tab2}}>
+            <Image
+              source={require('../images/dashboard_icon.png')}
+              resizeMode="contain"
+              style={{width: 20, height: 30, tintColor: Colors.black}}
             />
-            <DrawerItem
-              icon={({color, size}) => (
-                <Image
-                  source={require('../images/dashboard_icon.png')}
-                  resizeMode="contain"
-                  style={{width: 20, height: 20, tintColor: Colors.black}}
-                />
-              )}
-              label="Dashboard"
-              labelStyle={{color: Colors.black}}
-              onPress={() => {
-                props.navigation.navigate('Dashboard');
-              }}
-            />
-          </Drawer.Section>
-        </View>
-      </DrawerContentScrollView>
-      <Drawer.Section style={routesStyles.bottomDrawerSection}>
-        <DrawerItem
-          icon={({color, size}) => (
+            <Caption style={styles.labelStyle}>Dashboard</Caption>
+          </View>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            AsyncStorage.clear().then(() => {});
+          }}>
+          <View style={{flexDirection: 'row', marginTop: MarginConstants.tab2}}>
             <Image
               source={require('../images/logout.png')}
               resizeMode="contain"
-              style={{width: 20, height: 20, tintColor: Colors.black}}
+              style={{width: 20, height: 30, tintColor: Colors.black}}
             />
-          )}
-          label="Sign Out"
-          labelStyle={{color: Colors.black}}
-          onPress={() => {
-            AsyncStorage.clear().then(() => {});
-          }}
-        />
-      </Drawer.Section>
+            <Caption style={styles.labelStyle}>Logout</Caption>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
+  let getExpandIcon = () => {
+    return openDropper ? 'expand-less' : 'expand-more';
+  };
+
+  return (
+    <View
+      style={{
+        flex: 1,
+        elevation: 5,
+        zIndex: 100,
+        backgroundColor: Colors.transparent,
+      }}>
+      <ImageBackground
+        resizeMode={'stretch'}
+        source={require('../images/drawerBanner.png')}
+        style={{
+          width: '100%',
+          height: '100%',
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <View style={{flex: 1}}>
+          <Image
+            style={{
+              marginTop: MarginConstants.tab4,
+              width: MarginConstants.tab4 * 6,
+              height: MarginConstants.tab4 * 4,
+            }}
+            source={require('../images/login_logo.png')}
+            resizeMode="contain"
+          />
+          <View style={{marginTop: MarginConstants.halfTab}}>
+            <Caption style={styles.emailCaption}>
+              datta.kunde@questionpro.com
+            </Caption>
+            <Caption style={styles.companyCaptions}>company Name</Caption>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                setOpenDropper(!openDropper);
+              }}>
+              <View style={{position: 'absolute', right: 0, top: 20}}>
+                <Icon
+                  name={getExpandIcon()}
+                  size={30}
+                  color={Colors.secondary}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+          {!openDropper && renderDrawerButtons()}
+        </View>
+      </ImageBackground>
     </View>
   );
 }
+const styles = StyleSheet.create({
+  labelStyle: {
+    marginLeft: MarginConstants.tab3,
+    fontFamily: fontFamily.Light,
+    fontSize: TextSizes.primary,
+  },
+  emailCaption: {
+    fontFamily: fontFamily.Light,
+    fontSize: TextSizes.secondary,
+  },
+  companyCaptions: {
+    fontFamily: fontFamily.Light,
+    fontSize: TextSizes.secondary,
+  },
+  drawerSection: {
+    marginTop: 15,
+    backgroundColor: Colors.transparent,
+  },
+});

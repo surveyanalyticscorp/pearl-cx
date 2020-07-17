@@ -1,8 +1,10 @@
 import {StyleSheet} from 'react-native';
+import {Colors} from '../styles/color.constants';
 
 export const routesStyles = StyleSheet.create({
   drawerContent: {
     flex: 1,
+    backgroundColor: Colors.transparent,
   },
   userInfoSection: {
     paddingLeft: 20,
@@ -25,6 +27,7 @@ export const routesStyles = StyleSheet.create({
   navDrawerHeaderImageContainer: {
     flex: 0.3,
     justifyContent: 'center',
+    backgroundColor: Colors.transparent,
   },
   navDrawerHeaderImage: {
     height: 40,
