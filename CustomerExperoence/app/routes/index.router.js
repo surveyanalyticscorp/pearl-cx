@@ -17,7 +17,7 @@ import SignInScreen from '../login/SignIn';
 import CompanyCode from '../login/CompanyCode';
 import MarketingScreen from '../login/MarketingScreen';
 import ForgotPassword from '../login/ForgotPassword';
-import {DrawerContent} from './DrawerContent';
+import DrawerContent from './DrawerContent';
 
 import FeedbackAll from '../drawerTabs/feedback/FeedbackAll';
 import FeedbackDetractor from '../drawerTabs/feedback/FeedbackDetractor';

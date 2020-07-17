@@ -2,25 +2,23 @@ import React, {useState} from 'react';
 import {
   View,
   Image,
-  Platform,
   StyleSheet,
   ImageBackground,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {routesStyles} from './routes.styles';
-import {useTheme, Caption, Drawer, Text} from 'react-native-paper';
-import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
+import {useTheme, Caption} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../styles/color.constants';
 import AsyncStorage from '@react-native-community/async-storage';
-import {AUTH_TOKEN} from '../api/types';
 import {fontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
+import {doLogin} from '../actions';
+import {connect} from 'react-redux';
 
 //import {AuthContext} from '../components/context';
 
-export function DrawerContent(props) {
+const DrawerContent = props => {
   const paperTheme = useTheme();
   const [openDropper, setOpenDropper] = useState(false);
   //const {signOut, toggleTheme} = React.useContext(AuthContext);
@@ -126,7 +124,28 @@ export function DrawerContent(props) {
       </ImageBackground>
     </View>
   );
-}
+};
+
+const mapStateToProps = state => {
+  console.log('SignIn State:');
+  console.log(state);
+  return {
+    userInfo: state.global.userInfo,
+    isLoading: state.global.isLoading,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  loginClick: data => {
+    dispatch(doLogin(data));
+  },
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DrawerContent);
+
 const styles = StyleSheet.create({
   labelStyle: {
     marginLeft: MarginConstants.tab3,

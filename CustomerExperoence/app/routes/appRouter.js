@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../styles/color.constants';
-import {DrawerContent} from '../routes/DrawerContent';
+import DrawerContent from '../routes/DrawerContent';
 import CxDashboard from '../drawerTabs/dashboard/CxDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import FeedbackAll from '../drawerTabs/feedback/FeedbackAll';
@@ -23,9 +23,9 @@ import FeedbackDetractor from '../drawerTabs/feedback/FeedbackDetractor';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SignInStack from './signInStack';
 import {isStringNullOrEmpty} from '../Utils/Utility';
+import {connect} from 'react-redux';
 
 const Drawer = createDrawerNavigator();
-const store = initStore();
 const RootStack = createStackNavigator();
 
 const AppRouter = props => {
@@ -103,7 +103,7 @@ const AppRouter = props => {
     </RootStack.Navigator>
   );
 
-  const signIn = !isStringNullOrEmpty(props.authToken);
+  const signIn = !isStringNullOrEmpty(props.userInfo.authToken);
   return (
     <NavigationContainer theme={colorScheme == 'dark' ? DarkTheme : MyTheme}>
       {signIn ? (
@@ -124,4 +124,17 @@ const AppRouter = props => {
   );
 };
 
-export default AppRouter;
+const mapStateToProps = state => {
+  console.log('SignIn State:');
+  console.log(state);
+  return {
+    userInfo: state.global.userInfo,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AppRouter);

@@ -4,9 +4,11 @@ import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AUTH_TOKEN} from '../api/types';
 import {isStringNullOrEmpty} from '../Utils/Utility';
+import AppRouter from '../routes/appRouter';
 
 const SplashScreen = props => {
   const [authToken, setAuthToken] = useState('');
+  const [moveNext, setMoveNext] = useState(false);
 
   useEffect(() => {
     async function getAuthToken() {
@@ -18,15 +20,16 @@ const SplashScreen = props => {
   }, []);
 
   useEffect(() => {
-    let timer1 = setTimeout(() => {
+    let timer = setTimeout(() => {
       if (isStringNullOrEmpty(authToken)) {
-        props.navigation.navigate('SignedOut');
+        //props.navigation.navigate('SignedOut');
       } else {
-        props.navigation.navigate('SignedOut');
+        //props.navigation.navigate('SignedOut');
       }
+      setMoveNext(true);
     }, 1000);
     return () => {
-      clearTimeout(timer1);
+      clearTimeout(timer);
     };
   }, [authToken, props.navigation]);
 
@@ -52,7 +55,12 @@ const SplashScreen = props => {
       </View>
     );
   };
-  return renderSplashScreenView();
+
+  let appRouter = () => {
+    return <AppRouter authToken={authToken} />;
+  };
+
+  return moveNext ? appRouter() : renderSplashScreenView();
 };
 
 export default SplashScreen;
