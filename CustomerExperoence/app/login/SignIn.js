@@ -1,17 +1,12 @@
 import {
-  Dimensions,
   Image,
   ImageBackground,
   Platform,
-  StyleSheet,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {MarginConstants} from '../styles/margin.constants';
-import {buttonColors, Colors, textColors} from '../styles/color.constants';
-import {TextSizes} from '../styles/textsize.constants';
-import {apiHandler} from '../api/ApiHandler';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AUTH_TOKEN, USER_INFO} from '../api/types';
@@ -19,10 +14,12 @@ import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import QPTextField from '../widgets/TextField';
 import QPButton from '../widgets/Button';
-import {fontFamily} from '../styles/font.constants';
 import {connect} from 'react-redux';
-import {doLogin} from '../actions';
-const screen = Dimensions.get('screen');
+import {doLogin, showLoading} from '../actions';
+import {loginStyles} from './login.styles';
+import {BarIndicator} from 'react-native-indicators';
+import {Colors} from '../styles/color.constants';
+
 const SignInScreen = props => {
   const [userData, setUserData] = useState({
     email: '',
@@ -38,12 +35,11 @@ const SignInScreen = props => {
         JSON.stringify(props.userInfo.body),
       );
     };
-    if (props.userInfo) {
+    if (props.userInfo.authToken) {
       saveData();
     }
-    if (props.userInfo.authToken) {
-    }
   }, [props.userInfo]);
+
   const onSignInPress = () => {
     if (
       validateEmail(userData.email) &&
@@ -61,8 +57,6 @@ const SignInScreen = props => {
       props.loginClick(data);
     }
   };
-
-  const errorHandle = () => {};
 
   const onForgotPasswordPress = () => {
     props.navigation.navigate('ForgotPassword');
@@ -106,31 +100,38 @@ const SignInScreen = props => {
           width: '100%',
         }}>
         <Image
-          style={styles.logoImage}
+          style={loginStyles.logoImage}
           resizeMode="contain"
           source={require('../images/whiteCXLogo.png')}
         />
         <QPTextField
           label={'Email Address'}
-          style={styles.emailInput}
+          style={loginStyles.emailInput}
           onEndEdit={handleEmail}
         />
         <QPTextField
           secureText={true}
           label={'Password'}
-          style={styles.passwordInput}
+          style={loginStyles.passwordInput}
           onEndEdit={handlePassword}
         />
-        <QPButton
-          style={styles.nextButton}
-          onPress={onSignInPress}
-          buttonText={'Sign In'}
-        />
+
+        {props.isLoading ? (
+          <View style={loginStyles.nextButton}>
+            <BarIndicator color="#2589E3" count={5} size={35} />
+          </View>
+        ) : (
+          <QPButton
+            style={loginStyles.nextButton}
+            onPress={onSignInPress}
+            buttonText={'Sign In'}
+          />
+        )}
 
         <QPButton
-          style={styles.forgotPswdButton}
+          style={loginStyles.forgotPswdButton}
           onPress={onForgotPasswordPress}
-          textStyle={styles.nextText}
+          textStyle={loginStyles.nextText}
           buttonText={'Forgot Password?'}
         />
       </View>
@@ -142,8 +143,8 @@ const SignInScreen = props => {
       <ImageBackground
         resizeMode={'stretch'}
         source={require('../images/background_inverted.png')}
-        style={styles.imageBackgroundContainer}>
-        <View style={styles.signInInContainer}>
+        style={loginStyles.imageBackgroundContainer}>
+        <View style={loginStyles.signInInContainer}>
           {renderBackButton()}
           {renderSignTextFieldAndButton()}
         </View>
@@ -157,12 +158,14 @@ const mapStateToProps = state => {
   console.log(state);
   return {
     userInfo: state.global.userInfo,
+    isLoading: state.global.isLoading,
   };
 };
-// Map Dispatch To Props (Dispatch Actions To Reducers. Reducers Then Modify The Data And Assign It To Your Props)
+
 const mapDispatchToProps = dispatch => ({
   loginClick: data => {
     dispatch(doLogin(data));
+    dispatch(showLoading(true));
   },
 });
 
@@ -170,75 +173,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(SignInScreen);
-
-const styles = StyleSheet.create({
-  imageBackgroundContainer: {
-    width: '100%',
-    height: '100%',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  companyCode: {
-    position: 'absolute',
-    top: MarginConstants.tab2,
-    left: MarginConstants.tab2,
-    color: textColors.primary,
-    fontSize: Platform.isPad ? TextSizes.largeText : TextSizes.largeText,
-  },
-
-  signInInContainer: {
-    flex: 1,
-    marginVertical: MarginConstants.tab3,
-    alignItems: 'center',
-    width: '100%',
-  },
-  logoImage: {
-    width: '70%',
-    marginVertical: MarginConstants.tab4,
-  },
-  emailInput: {
-    width: screen.width / 1.1,
-    height: MarginConstants.tab3,
-    marginTop: MarginConstants.tab4,
-    marginBottom: MarginConstants.tab2,
-    paddingHorizontal: MarginConstants.halfTab,
-  },
-  passwordInput: {
-    width: screen.width / 1.1,
-    height: MarginConstants.tab3,
-    marginTop: MarginConstants.tab1,
-    marginBottom: MarginConstants.tab3,
-    paddingHorizontal: MarginConstants.halfTab,
-  },
-  nextButton: {
-    width: '90%',
-    height: MarginConstants.tab4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: MarginConstants.tab4,
-    borderRadius: 5,
-    backgroundColor: buttonColors.backgroundColor,
-  },
-  nextText: {
-    alignSelf: 'flex-end',
-    color: textColors.primary,
-    fontFamily: fontFamily.SemiBold,
-    fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
-  },
-  forgotPswdButton: {
-    width: '90%',
-    height: 40,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    marginTop: MarginConstants.tab1,
-    borderRadius: 5,
-    backgroundColor: Colors.fullTransparent,
-  },
-  backButton: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: textColors.primary,
-    alignSelf: 'flex-start',
-  },
-});

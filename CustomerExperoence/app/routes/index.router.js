@@ -10,15 +10,7 @@ import {
   NavigationContainer,
   useNavigation,
   DrawerActions,
-  DefaultTheme as NavigationDefaultTheme,
-  DarkTheme as NavigationDarkTheme,
 } from '@react-navigation/native';
-
-import {
-  Provider as PaperProvider,
-  DefaultTheme as PaperDefaultTheme,
-  DarkTheme as PaperDarkTheme,
-} from 'react-native-paper';
 
 import SplashScreen from '../login/SplashScreen';
 import SignInScreen from '../login/SignIn';
@@ -29,7 +21,6 @@ import {DrawerContent} from './DrawerContent';
 
 import FeedbackAll from '../drawerTabs/feedback/FeedbackAll';
 import FeedbackDetractor from '../drawerTabs/feedback/FeedbackDetractor';
-import Screen2 from '../drawerTabs/dashboard/Dashboard';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';

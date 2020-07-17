@@ -7,6 +7,13 @@ export const FEEDBACK_RECEIVED = 'FEEDBACK_RECEIVED';
 export const GET_DASHBOARD = 'GET_FEEDBACK';
 export const DASHBOARD_RECEIVED = 'FEEDBACK_RECEIVED';
 
+export const IS_LOADING = 'IS_LOADING';
+
+export const showLoading = (isLoading = true) => ({
+  type: IS_LOADING,
+  payload: {isLoading: isLoading},
+});
+
 export const doLogin = param => ({
   type: GET_LOGIN,
   param,
@@ -21,14 +28,4 @@ export const getFeedbackList = (param, token) => ({
 export const getDashboardContent = token => ({
   type: GET_DASHBOARD,
   token,
-});
-
-
-export const showLoading = (
-  isLoading = true,
-  message = 'Loading...',
-  extraData = {},
-) => ({
-  type: 'INCREASE_COUNTER',
-  payload: {isLoading: isLoading, message: message, extraData: extraData},
 });
