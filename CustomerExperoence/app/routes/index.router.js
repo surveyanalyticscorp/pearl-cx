@@ -122,7 +122,7 @@ const NavigationDrawer = props => (
       }}
       drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen name="Feedback" children={feedbackStack} />
-      <Drawer.Screen name="Dashboard" component={dashboardStack} />
+      <Drawer.Screen name="Dashboard" children={dashboardStack} />
     </Drawer.Navigator>
   </NavigationContainer>
 );
