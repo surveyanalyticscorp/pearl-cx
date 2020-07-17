@@ -7,20 +7,21 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {MarginConstants} from '../styles/margin.constants';
 import {buttonColors, Colors, textColors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {apiHandler} from '../api/ApiHandler';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
-import {AUTH_TOKEN} from '../api/types';
+import {AUTH_TOKEN, USER_INFO} from '../api/types';
 import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import QPTextField from '../widgets/TextField';
 import QPButton from '../widgets/Button';
 import {fontFamily} from '../styles/font.constants';
+import {connect} from 'react-redux';
+import {doLogin} from '../actions';
 const screen = Dimensions.get('screen');
 const SignInScreen = props => {
   const [userData, setUserData] = useState({
@@ -28,6 +29,21 @@ const SignInScreen = props => {
     password: '',
   });
 
+  useEffect(() => {
+    console.log('Getting user info: ' + props.userInfo.authToken);
+    const saveData = async () => {
+      await AsyncStorage.setItem(AUTH_TOKEN, props.userInfo.authToken);
+      await AsyncStorage.setItem(
+        USER_INFO,
+        JSON.stringify(props.userInfo.body),
+      );
+    };
+    if (props.userInfo) {
+      saveData();
+    }
+    if (props.userInfo.authToken) {
+    }
+  }, [props.userInfo]);
   const onSignInPress = () => {
     if (
       validateEmail(userData.email) &&
@@ -42,23 +58,7 @@ const SignInScreen = props => {
         udId: DeviceInfo.getUniqueId(),
       };
 
-      apiHandler.login(
-        data,
-        async response => {
-          console.log('Login response: ' + JSON.stringify(response));
-          if (response.statusCode == 200) {
-            try {
-              await AsyncStorage.setItem(AUTH_TOKEN, response.authToken);
-              props.navigation.navigate('SignedIn');
-            } catch (e) {
-              console.log(e);
-            }
-          } else {
-            errorHandle();
-          }
-        },
-        () => {},
-      );
+      props.loginClick(data);
     }
   };
 
@@ -152,7 +152,24 @@ const SignInScreen = props => {
   );
 };
 
-export default SignInScreen;
+const mapStateToProps = state => {
+  console.log('SignIn State:');
+  console.log(state);
+  return {
+    userInfo: state.global.userInfo,
+  };
+};
+// Map Dispatch To Props (Dispatch Actions To Reducers. Reducers Then Modify The Data And Assign It To Your Props)
+const mapDispatchToProps = dispatch => ({
+  loginClick: data => {
+    dispatch(doLogin(data));
+  },
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignInScreen);
 
 const styles = StyleSheet.create({
   imageBackgroundContainer: {

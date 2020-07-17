@@ -4,8 +4,13 @@ import {all, fork} from 'redux-saga/effects';
 
 import {watchGetFeedback} from './feedbackSaga';
 import {watchGetDashboard} from './dashboardSaga';
+import {watchDoLogin} from './loginInSaga';
 
 // Redux Saga: Root Saga
 export function* rootSaga() {
-  yield all([fork(watchGetFeedback, watchGetDashboard)]);
+  yield all([
+    fork(watchGetFeedback),
+    fork(watchGetDashboard),
+    fork(watchDoLogin),
+  ]);
 }
