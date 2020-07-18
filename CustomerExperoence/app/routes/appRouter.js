@@ -1,17 +1,15 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 
-import {initStore} from '../store/store';
-import {Provider} from 'react-redux';
-import {View, TouchableOpacity, Text} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 
-import {useColorScheme, AppearanceProvider} from 'react-native-appearance';
+import {useColorScheme} from 'react-native-appearance';
 import {
   NavigationContainer,
   DarkTheme,
   useNavigation,
   DrawerActions,
 } from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
+
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../styles/color.constants';
@@ -22,25 +20,24 @@ import FeedbackAll from '../drawerTabs/feedback/FeedbackAll';
 import FeedbackDetractor from '../drawerTabs/feedback/FeedbackDetractor';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SignInStack from './signInStack';
-import {isStringNullOrEmpty} from '../Utils/Utility';
+import {MyTheme} from '../styles/styles';
 import {connect} from 'react-redux';
+import {isStringNullOrEmpty} from '../Utils/Utility';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
+const MaterialTopTabs = createMaterialTopTabNavigator();
 
 const AppRouter = props => {
   const colorScheme = useColorScheme();
+  const [signIn, setSignIn] = useState(!isStringNullOrEmpty(props.authToken));
 
-  const MyTheme = {
-    dark: false,
-    colors: {
-      primary: 'white',
-      background: 'white',
-      card: Colors.accent,
-      text: 'white',
-      border: 'green',
-    },
-  };
+  useEffect(() => {
+    if (props.userInfo && !isStringNullOrEmpty(props.userInfo.authToken)) {
+      setSignIn(props.isLogin);
+    }
+  }, [props.isLogin, props.userInfo, props.userInfo.authToken]);
+
   const HeaderLeft = () => {
     const navigation = useNavigation();
     return (
@@ -54,8 +51,6 @@ const AppRouter = props => {
       </View>
     );
   };
-
-  const MaterialTopTabs = createMaterialTopTabNavigator();
 
   const createFeedbackTopTabs = props => {
     return (
@@ -103,7 +98,7 @@ const AppRouter = props => {
     </RootStack.Navigator>
   );
 
-  const signIn = !isStringNullOrEmpty(props.userInfo.authToken);
+  //const signIn = !isStringNullOrEmpty(props.userInfo.authToken);
   return (
     <NavigationContainer theme={colorScheme == 'dark' ? DarkTheme : MyTheme}>
       {signIn ? (
@@ -125,10 +120,11 @@ const AppRouter = props => {
 };
 
 const mapStateToProps = state => {
-  console.log('SignIn State:');
+  console.log('AppRouter State:');
   console.log(state);
   return {
     userInfo: state.global.userInfo,
+    isLogin: state.global.isLogin,
   };
 };
 

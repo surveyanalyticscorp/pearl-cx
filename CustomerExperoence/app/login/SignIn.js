@@ -15,10 +15,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import QPTextField from '../widgets/TextField';
 import QPButton from '../widgets/Button';
 import {connect} from 'react-redux';
-import {doLogin, showLoading} from '../actions';
+import {doLogin, showLoading, setIsLogin} from '../actions';
 import {loginStyles} from './login.styles';
 import {BarIndicator} from 'react-native-indicators';
-import {Colors} from '../styles/color.constants';
 
 const SignInScreen = props => {
   const [userData, setUserData] = useState({
@@ -27,18 +26,19 @@ const SignInScreen = props => {
   });
 
   useEffect(() => {
-    console.log('Getting user info: ' + props.userInfo.authToken);
     const saveData = async () => {
       await AsyncStorage.setItem(AUTH_TOKEN, props.userInfo.authToken);
       await AsyncStorage.setItem(
         USER_INFO,
         JSON.stringify(props.userInfo.body),
       );
+
+      props.setIsLogin();
     };
     if (props.userInfo.authToken) {
       saveData();
     }
-  }, [props.userInfo]);
+  }, [props, props.userInfo]);
 
   const onSignInPress = () => {
     if (
@@ -166,6 +166,10 @@ const mapDispatchToProps = dispatch => ({
   loginClick: data => {
     dispatch(doLogin(data));
     dispatch(showLoading(true));
+  },
+
+  setIsLogin: () => {
+    dispatch(setIsLogin(true));
   },
 });
 
