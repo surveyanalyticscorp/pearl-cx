@@ -12,6 +12,8 @@ import {MarginConstants} from '../../styles/margin.constants';
 const initialLayout = { width: Dimensions.get('window').width };
 import {EventRegister} from "react-native-event-listeners";
 import CalendarScreen from '../../screens/calendarScreen';
+import {getFeedbackList} from '../../actions';
+import {connect} from 'react-redux';
 const Feedback = props => {
     const [calendar, setCalendar] = useState(false);
     const [selectedYear, setSelectedYear] = useState({})
@@ -20,7 +22,7 @@ const Feedback = props => {
         { key: 'all', title: 'ALL' },
         { key: 'detractor', title: 'DETRACTOR' },
         { key: 'passive', title: 'PASSIVE'},
-        { key: 'promoter', title: 'PROMOTER'}
+        { key: 'promoter', title: 'PROMOTER'},
     ]);
 
     useEffect(() => {
@@ -35,15 +37,15 @@ const Feedback = props => {
     const renderScene = ({ route }) => {
         switch (route.key) {
             case 'all':
-                return <FeedbackAll />;
+                return <FeedbackAll {...props}/>;
             case 'detractor':
-                return <FeedbackDetractor />;
+                return <FeedbackDetractor {...props}/>;
             case 'passive':
-                return <FeedbackAll />;
+                return <FeedbackAll {...props}/>;
             case 'promoter':
-                return <FeedbackAll />;
+                return <FeedbackAll {...props}/>;
             default:
-                return <FeedbackAll />;
+                return <FeedbackAll {...props}/>;
         }
     };
 
@@ -62,14 +64,6 @@ const Feedback = props => {
 
     const renderTabView = () => {
         return ( <TabView
-            labelStyle={{
-                indicatorStyle: {backgroundColor: '#FF0000'},
-                scrollEnabled: true,
-                labelStyle: {color: '#000000', fontSize: 12},
-                tabStyle: {width: 150},
-
-            }}
-            tabStyle={{width: 'auto'}}
             navigationState={{ index, routes }}
             renderScene={renderScene}
             onIndexChange={setIndex}
@@ -77,9 +71,17 @@ const Feedback = props => {
             renderTabBar={props =>
                 <TabBar
                     {...props}
+                    labelStyle={{
+                        indicatorStyle: {backgroundColor: '#FF0000'},
+                        scrollEnabled: true,
+                        labelStyle: {color: '#000000', fontSize: 12},
+                        tabStyle: {width: 150},
+
+                    }}
                     indicatorStyle={{ backgroundColor: Colors.red}}
                     style={{ backgroundColor: 'white', }}
-                    tabStyle={{minHeight: 30 }} // here
+                    scrollEnabled={true}
+                    tabStyle={{minHeight: 30,width: 150}} // here
                     renderLabel={({ route, focused, color }) => (
                         <Text style={{ color: Colors.primary,  fontFamily: fontFamily.Medium,
                             fontSize: TextSizes.secondary, marginVertical: MarginConstants.tab1}}>
@@ -93,5 +95,22 @@ const Feedback = props => {
     return calendar ? renderCalendarView() : renderTabView();
 
 };
+const mapStateToProps = state => {
+    console.log('State:');
+    console.log(state);
+    return {
+        feedback: state.feedback,
+    };
+};
+// Map Dispatch To Props (Dispatch Actions To Reducers. Reducers Then Modify The Data And Assign It To Your Props)
+const mapDispatchToProps = dispatch => ({
+    getFeedbackList: (data, token) => {
+        dispatch(getFeedbackList(data, token));
+    },
+});
 
-export default Feedback;
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(Feedback);
+

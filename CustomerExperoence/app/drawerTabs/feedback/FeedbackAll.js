@@ -1,19 +1,9 @@
 /* eslint-disable */
 import React, {useEffect, useState} from 'react';
-import {EventRegister} from 'react-native-event-listeners';
 import {Text, View, SafeAreaView, StyleSheet} from 'react-native';
-import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../api/types';
-import {getFeedbackList} from '../../actions';
-import MonthYearSelector from '../../widgets/MonthYearSelector';
-import moment from 'moment';
 const FeedbackAll = props => {
-  const [calendar, setCalendar] = useState(false);
-  let month = moment().month() + 1; //Need to check as it returns month number starting 0
-  let year = moment().year();
-
-
 
   useEffect(() => {
     async function getAuthToken() {
@@ -33,22 +23,6 @@ const FeedbackAll = props => {
     });
   }, []);
 
-  const getCalendarView = () => {
-    return (
-      <MonthYearSelector
-        month={month}
-        year={year}
-        minYear={2010}
-        maxYear={moment().year()}
-        onSubmit={(month, year) => {
-          setCalendar(false);
-        }}
-        onCancel={() => {
-          setCalendar(false);
-        }}
-      />
-    );
-  };
 
   const renderFeedbackStatus = () => {
     return (
@@ -62,7 +36,7 @@ const FeedbackAll = props => {
     );
   };
 
-  return calendar ? getCalendarView() : renderFeedbackStatus();
+  return renderFeedbackStatus();
 };
 
 // Styles
@@ -99,22 +73,4 @@ const styles = StyleSheet.create({
     marginRight: 40,
   },
 });
-// Map State To Props (Redux Store Passes State To Component)
-const mapStateToProps = state => {
-  console.log('State:');
-  console.log(state);
-  return {
-    feedback: state.feedback,
-  };
-};
-// Map Dispatch To Props (Dispatch Actions To Reducers. Reducers Then Modify The Data And Assign It To Your Props)
-const mapDispatchToProps = dispatch => ({
-  getFeedbackList: (data, token) => {
-    dispatch(getFeedbackList(data, token));
-  },
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(FeedbackAll);
+export default FeedbackAll;
