@@ -30,7 +30,7 @@ import {DrawerContent} from './DrawerContent';
 import FeedbackAll from '../drawerTabs/feedback/FeedbackAll';
 import FeedbackDetractor from '../drawerTabs/feedback/FeedbackDetractor';
 import Screen2 from '../drawerTabs/dashboard/Dashboard';
-
+import Feedback from '../drawerTabs/feedback/Feedback';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -39,7 +39,7 @@ import {Colors} from '../styles/color.constants';
 import {TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CxDashboard from '../drawerTabs/dashboard/CxDashboard';
-
+import {EventRegister} from 'react-native-event-listeners';
 const RootStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const MaterialTopTabs = createMaterialTopTabNavigator();
@@ -88,14 +88,29 @@ const HeaderLeft = () => {
   );
 };
 
+const HeaderRight = route => {
+  const navigation = useNavigation();
+  return (
+    <View style={{flexDirection: 'row', marginLeft: 20}}>
+      <TouchableOpacity
+        onPress={() => {
+          EventRegister.emit('openCalendar', true);
+        }}>
+        <Icon name="more-vert" size={30} color="white" />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const feedbackStack = props => (
   <RootStack.Navigator>
     <RootStack.Screen
       name="Feedback"
       component={createFeedbackTopTabs}
-      options={{
-        headerLeft: props => <HeaderLeft />,
-      }}
+      options={({route}) => ({
+        headerLeft: props => <HeaderLeft route={route} />,
+        headerRight: props => <HeaderRight route={route} />,
+      })}
     />
   </RootStack.Navigator>
 );
@@ -105,9 +120,7 @@ const dashboardStack = props => (
     <RootStack.Screen
       name="Dashboard"
       component={CxDashboard}
-      options={{
-        headerLeft: props => <HeaderLeft />,
-      }}
+      options={({route}) => ({headerLeft: props => <HeaderLeft />})}
     />
   </RootStack.Navigator>
 );

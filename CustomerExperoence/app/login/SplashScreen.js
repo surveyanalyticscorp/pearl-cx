@@ -19,10 +19,10 @@ const SplashScreen = props => {
 
   useEffect(() => {
     let timer1 = setTimeout(() => {
-      if (isStringNullOrEmpty(authToken)) {
+      if (!isStringNullOrEmpty(authToken)) {
         props.navigation.navigate('SignedIn');
       } else {
-        props.navigation.navigate('SignedOut');
+        props.navigation.navigate('SignedIn');
       }
     }, 1000);
     return () => {
