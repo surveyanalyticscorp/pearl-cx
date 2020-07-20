@@ -5,7 +5,7 @@ import {
   createAppContainer,
   StackActions,
 } from 'react-navigation';
-
+import {EventRegister} from 'react-native-event-listeners';
 import {
   NavigationContainer,
   useNavigation,

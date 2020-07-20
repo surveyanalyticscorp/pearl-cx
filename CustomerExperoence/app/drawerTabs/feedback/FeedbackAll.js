@@ -13,16 +13,7 @@ const FeedbackAll = props => {
   let month = moment().month() + 1; //Need to check as it returns month number starting 0
   let year = moment().year();
 
-  useEffect(() => {
-    this.listener = EventRegister.addEventListener('openCalendar', data => {
-      console.log(props.route);
 
-      setCalendar(!calendar);
-    });
-    return () => {
-      EventRegister.removeEventListener(this.listener);
-    };
-  }, [calendar, props.route]);
 
   useEffect(() => {
     async function getAuthToken() {

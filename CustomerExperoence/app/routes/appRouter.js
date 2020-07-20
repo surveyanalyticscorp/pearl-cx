@@ -5,10 +5,10 @@ import {View, TouchableOpacity} from 'react-native';
 
 import {useColorScheme} from 'react-native-appearance';
 import {
-  NavigationContainer,
-  DarkTheme,
-  useNavigation,
-  DrawerActions,
+    NavigationContainer,
+    DarkTheme,
+    useNavigation,
+    DrawerActions,
 } from '@react-navigation/native';
 
 import {createStackNavigator} from '@react-navigation/stack';
@@ -24,114 +24,130 @@ import SignInStack from './signInStack';
 import {MyTheme} from '../styles/styles';
 import {connect} from 'react-redux';
 import {isStringNullOrEmpty} from '../Utils/Utility';
+import Feedback from '../drawerTabs/feedback/Feedback';
+import {EventRegister} from 'react-native-event-listeners';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
 const MaterialTopTabs = createMaterialTopTabNavigator();
 
 const AppRouter = props => {
-  const colorScheme = useColorScheme();
-  const [signIn, setSignIn] = useState(!isStringNullOrEmpty(props.authToken));
+    const colorScheme = useColorScheme();
+    const [signIn, setSignIn] = useState(!isStringNullOrEmpty(props.authToken));
 
-  useEffect(() => {
-    if (props.userInfo && !isStringNullOrEmpty(props.userInfo.authToken)) {
-      setSignIn(props.isLogin);
-    }
-  }, [props.isLogin, props.userInfo, props.userInfo.authToken]);
+    useEffect(() => {
+        if (props.userInfo && !isStringNullOrEmpty(props.userInfo.authToken)) {
+            setSignIn(props.isLogin);
+        }
+    }, [props.isLogin, props.userInfo, props.userInfo.authToken]);
 
-  const HeaderLeft = () => {
-    const navigation = useNavigation();
-    return (
-      <View style={{flexDirection: 'row', marginLeft: 20}}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.dispatch(DrawerActions.toggleDrawer());
-          }}>
-          <Icon name="menu" size={30} color="white" />
-        </TouchableOpacity>
-      </View>
+    const HeaderLeft = () => {
+        const navigation = useNavigation();
+        return (
+            <View style={{flexDirection: 'row', marginLeft: 20}}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.dispatch(DrawerActions.toggleDrawer());
+                    }}>
+                    <Icon name="menu" size={30} color="white"/>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    const createFeedbackTopTabs = props => {
+        return (
+            <MaterialTopTabs.Navigator
+                swipeEnabled={false}
+                tabBarOptions={{
+                    indicatorStyle: {backgroundColor: '#FF0000'},
+                    scrollEnabled: true,
+                    labelStyle: {color: '#000000', fontSize: 12},
+                    tabStyle: {width: 150},
+                    style: {backgroundColor: '#FFFFFF'},
+                }}>
+                <MaterialTopTabs.Screen name="All" component={FeedbackAll}/>
+                <MaterialTopTabs.Screen
+                    name="Detractor"
+                    component={FeedbackDetractor}
+                />
+                <MaterialTopTabs.Screen name="Passive" component={FeedbackAll}/>
+                <MaterialTopTabs.Screen name="Promoter" component={FeedbackDetractor}/>
+            </MaterialTopTabs.Navigator>
+        );
+    };
+
+    const HeaderRight = () => {
+        return (
+            <View style={{flexDirection: 'row', marginLeft: 20}}>
+                <TouchableOpacity
+                    onPress={() => {
+                        EventRegister.emit('openCalendar', true);
+                    }}>
+                    <Icon name="more-vert" size={30} color="white"/>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    const feedbackStack = props => (
+        <RootStack.Navigator>
+            <RootStack.Screen
+                name="Feedback"
+                component={Feedback}
+                options={{
+                    headerLeft: props => <HeaderLeft/>,
+                    headerRight: props => <HeaderRight/>,
+                }}
+            />
+        </RootStack.Navigator>
     );
-  };
 
-  const createFeedbackTopTabs = props => {
-    return (
-      <MaterialTopTabs.Navigator
-        swipeEnabled={false}
-        tabBarOptions={{
-          indicatorStyle: {backgroundColor: '#FF0000'},
-          scrollEnabled: true,
-          labelStyle: {color: '#000000', fontSize: 12},
-          tabStyle: {width: 150},
-          style: {backgroundColor: '#FFFFFF'},
-        }}>
-        <MaterialTopTabs.Screen name="All" component={FeedbackAll} />
-        <MaterialTopTabs.Screen
-          name="Detractor"
-          component={FeedbackDetractor}
-        />
-        <MaterialTopTabs.Screen name="Passive" component={FeedbackAll} />
-        <MaterialTopTabs.Screen name="Promoter" component={FeedbackDetractor} />
-      </MaterialTopTabs.Navigator>
+    const dashboardStack = props => (
+        <RootStack.Navigator>
+            <RootStack.Screen
+                name="Dashboard"
+                component={CxDashboard}
+                options={{
+                    headerLeft: props => <HeaderLeft/>,
+                }}
+            />
+        </RootStack.Navigator>
     );
-  };
 
-  const feedbackStack = props => (
-    <RootStack.Navigator>
-      <RootStack.Screen
-        name="Feedback"
-        component={createFeedbackTopTabs}
-        options={{
-          headerLeft: props => <HeaderLeft />,
-        }}
-      />
-    </RootStack.Navigator>
-  );
-
-  const dashboardStack = props => (
-    <RootStack.Navigator>
-      <RootStack.Screen
-        name="Dashboard"
-        component={CxDashboard}
-        options={{
-          headerLeft: props => <HeaderLeft />,
-        }}
-      />
-    </RootStack.Navigator>
-  );
-  
-  //const signIn = !isStringNullOrEmpty(props.userInfo.authToken);
-  return (
-    <NavigationContainer theme={colorScheme == 'dark' ? DarkTheme : MyTheme}>
-      {signIn ? (
-        <Drawer.Navigator
-          drawerStyle={{
-            backgroundColor: Colors.white,
-            elevation: 5,
-            zIndex: 100,
-          }}
-          drawerContent={props => <DrawerContent {...props} />}>
-          <Drawer.Screen name="Feedback" children={feedbackStack} />
-          <Drawer.Screen name="Dashboard" component={dashboardStack} />
-        </Drawer.Navigator>
-      ) : (
-        <SignInStack />
-      )}
-    </NavigationContainer>
-  );
+    //const signIn = !isStringNullOrEmpty(props.userInfo.authToken);
+    return (
+        <NavigationContainer theme={colorScheme == 'dark' ? DarkTheme : MyTheme}>
+            {signIn ? (
+                <Drawer.Navigator
+                    drawerStyle={{
+                        backgroundColor: Colors.white,
+                        elevation: 5,
+                        zIndex: 100,
+                    }}
+                    drawerContent={props => <DrawerContent {...props} />}>
+                    <Drawer.Screen name="Feedback" children={feedbackStack}/>
+                    <Drawer.Screen name="Dashboard" component={dashboardStack}/>
+                </Drawer.Navigator>
+            ) : (
+                <SignInStack/>
+            )}
+        </NavigationContainer>
+    );
 };
 
 const mapStateToProps = state => {
-  console.log('AppRouter State:');
-  console.log(state);
-  return {
-    userInfo: state.global.userInfo,
-    isLogin: state.global.isLogin,
-  };
+    console.log('AppRouter State:');
+    console.log(state);
+    return {
+        userInfo: state.global.userInfo,
+        isLogin: state.global.isLogin,
+    };
 };
 
 const mapDispatchToProps = dispatch => ({});
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
+    mapStateToProps,
+    mapDispatchToProps,
 )(AppRouter);
