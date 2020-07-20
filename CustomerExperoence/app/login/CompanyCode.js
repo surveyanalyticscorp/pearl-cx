@@ -4,7 +4,9 @@ import {
   ImageBackground,
   Platform,
   Image,
-  TouchableWithoutFeedback, Dimensions,
+  TouchableWithoutFeedback,
+  Dimensions,
+  TextInput,
 } from 'react-native';
 import React, {useState} from 'react';
 import {textColors, Colors} from '../styles/color.constants';
@@ -14,7 +16,9 @@ import QPTextField from '../widgets/TextField';
 import QPButton from '../widgets/Button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const screen = Dimensions.get('screen');
+import {OutlinedTextField} from 'react-native-material-textfield';
 const CompanyCode = props => {
+  const fieldRef = React.createRef();
   const [accessCode, setAccessCode] = useState('');
 
   const signInButtonPressed = () => {
@@ -26,6 +30,10 @@ const CompanyCode = props => {
 
   const handleAccessCode = text => {
     setAccessCode(text);
+  };
+
+  const formatText = text => {
+    return text.replace(/[^+\d]/g, '');
   };
 
   const renderBackButton = () => {
@@ -62,12 +70,16 @@ const CompanyCode = props => {
               resizeMode="contain"
               source={require('../images/whiteCXLogo.png')}
             />
-            <QPTextField
-              label={'Company code'}
+
+            <TextInput
               style={styles.companyCodeInput}
               underlineColorAndroid="transparent"
-              onEndEdit={handleAccessCode}
+              placeholder="Company Code"
+              placeholderTextColor="#9a73ef"
+              autoCapitalize="none"
+              onChangeText={handleAccessCode}
             />
+
             <QPButton onPress={signInButtonPressed} buttonText={'Next'} />
           </View>
         </View>
@@ -106,10 +118,11 @@ const styles = StyleSheet.create({
   },
   companyCodeInput: {
     width: screen.width / 1.1,
-    height: MarginConstants.tab3,
+    paddingStart: MarginConstants.tab2,
     marginVertical: MarginConstants.tab4,
     paddingHorizontal: MarginConstants.halfTab,
     textAlign: 'left',
+    color: Colors.white,
   },
   nextButton: {
     width: '90%',

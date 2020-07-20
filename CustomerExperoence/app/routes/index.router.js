@@ -10,27 +10,18 @@ import {
   NavigationContainer,
   useNavigation,
   DrawerActions,
-  DefaultTheme as NavigationDefaultTheme,
-  DarkTheme as NavigationDarkTheme,
 } from '@react-navigation/native';
-
-import {
-  Provider as PaperProvider,
-  DefaultTheme as PaperDefaultTheme,
-  DarkTheme as PaperDarkTheme,
-} from 'react-native-paper';
 
 import SplashScreen from '../login/SplashScreen';
 import SignInScreen from '../login/SignIn';
 import CompanyCode from '../login/CompanyCode';
 import MarketingScreen from '../login/MarketingScreen';
 import ForgotPassword from '../login/ForgotPassword';
-import {DrawerContent} from './DrawerContent';
+import DrawerContent from './DrawerContent';
 
 import FeedbackAll from '../drawerTabs/feedback/FeedbackAll';
 import FeedbackDetractor from '../drawerTabs/feedback/FeedbackDetractor';
-import Screen2 from '../drawerTabs/dashboard/Dashboard';
-import Feedback from '../drawerTabs/feedback/Feedback';
+
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -39,7 +30,7 @@ import {Colors} from '../styles/color.constants';
 import {TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CxDashboard from '../drawerTabs/dashboard/CxDashboard';
-import {EventRegister} from 'react-native-event-listeners';
+
 const RootStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const MaterialTopTabs = createMaterialTopTabNavigator();
@@ -120,7 +111,9 @@ const dashboardStack = props => (
     <RootStack.Screen
       name="Dashboard"
       component={CxDashboard}
-      options={({route}) => ({headerLeft: props => <HeaderLeft />})}
+      options={{
+        headerLeft: props => <HeaderLeft />,
+      }}
     />
   </RootStack.Navigator>
 );
