@@ -12,6 +12,7 @@ import {StyleSheet} from 'react-native';
 import ThreeDot from '../../Utils/ThreeDots';
 import StringUtils from '../../Utils/StringUtils';
 import ArrayUtils from '../../Utils/ArrayUtils';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const ProgressColor = {
   5: '#ff0101',
@@ -83,10 +84,7 @@ class FeedbackCell extends Component {
                 </Text>
               </View>
               {!disable && (
-                <Image
-                  style={styles.rightIcon}
-                  source={_getImageUri('right_arrow_grey.png')}
-                />
+                <Icon name="keyboard-arrow-right" size={32} color="grey" />
               )}
             </View>
           </View>
