@@ -1,5 +1,5 @@
-export const AUTH_TOKEN = 'authToken';
-export const USER_INFO = 'userInfo';
+export const ASYNC_AUTH_TOKEN = 'authToken';
+export const ASYNC_USER_INFO = 'userInfo';
 
 export const BASE_URL = 'https://api.questionpro.com/';
 export const AUTH_URL = '/a/nativehtml/cx.auth.CXLogin';

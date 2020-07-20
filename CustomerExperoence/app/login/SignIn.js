@@ -9,7 +9,7 @@ import React, {useState, useEffect} from 'react';
 import {MarginConstants} from '../styles/margin.constants';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
-import {AUTH_TOKEN, USER_INFO} from '../api/types';
+import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/types';
 import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import QPTextField from '../widgets/TextField';
@@ -27,9 +27,9 @@ const SignInScreen = props => {
 
   useEffect(() => {
     const saveData = async () => {
-      await AsyncStorage.setItem(AUTH_TOKEN, props.userInfo.authToken);
+      await AsyncStorage.setItem(ASYNC_AUTH_TOKEN, props.userInfo.authToken);
       await AsyncStorage.setItem(
-        USER_INFO,
+        ASYNC_USER_INFO,
         JSON.stringify(props.userInfo.body),
       );
 

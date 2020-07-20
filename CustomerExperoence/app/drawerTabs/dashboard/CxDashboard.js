@@ -3,14 +3,14 @@ import {View, Text} from 'react-native';
 
 import {styles} from '../../styles/styles';
 import AsyncStorage from '@react-native-community/async-storage';
-import {AUTH_TOKEN} from '../../api/types';
+import {ASYNC_AUTH_TOKEN} from '../../api/types';
 import {getDashboardContent} from '../../actions';
 import {connect} from 'react-redux';
 
 const CxDashboard = props => {
   useEffect(() => {
     async function getAuthToken() {
-      return await AsyncStorage.getItem(AUTH_TOKEN);
+      return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
     }
     getAuthToken().then(token => {});
   });

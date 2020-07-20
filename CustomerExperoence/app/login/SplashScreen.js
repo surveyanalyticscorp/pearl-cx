@@ -2,7 +2,7 @@ import {Text, View, ImageBackground, Image} from 'react-native';
 import {styles} from '../styles/styles';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import {AUTH_TOKEN} from '../api/types';
+import {ASYNC_AUTH_TOKEN} from '../api/types';
 import {isStringNullOrEmpty} from '../Utils/Utility';
 import AppRouter from '../routes/appRouter';
 
@@ -12,7 +12,7 @@ const SplashScreen = props => {
 
   useEffect(() => {
     async function getAuthToken() {
-      return await AsyncStorage.getItem(AUTH_TOKEN);
+      return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
     }
     getAuthToken().then(value => {
       setAuthToken(value);

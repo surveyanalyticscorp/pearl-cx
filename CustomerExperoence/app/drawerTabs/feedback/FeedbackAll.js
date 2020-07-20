@@ -4,7 +4,7 @@ import {EventRegister} from 'react-native-event-listeners';
 import {Text, View, SafeAreaView, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import {AUTH_TOKEN} from '../../api/types';
+import {ASYNC_AUTH_TOKEN} from '../../api/types';
 import {getFeedbackList} from '../../actions';
 import MonthYearSelector from '../../widgets/MonthYearSelector';
 import moment from 'moment';
@@ -26,7 +26,7 @@ const FeedbackAll = props => {
 
   useEffect(() => {
     async function getAuthToken() {
-      return await AsyncStorage.getItem(AUTH_TOKEN);
+      return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
     }
     getAuthToken().then(token => {
       const data = {
