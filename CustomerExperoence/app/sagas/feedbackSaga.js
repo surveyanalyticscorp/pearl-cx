@@ -7,7 +7,7 @@ import {GET_FEEDBACK, FEEDBACK_RECEIVED} from '../actions';
 // Worker: Increase Counter Async (Delayed By 4 Seconds)
 function* fetchFeedbackAsync(action) {
   try {
-    console.log('DD:' + action.param.year);
+    console.log('DD fetchFeedbackAsync:' + action.param.year);
     const json = yield WebServiceHandler.post(
       BASE_URL + 'a/nativehtml/cx.CXGetAllResponses',
       {'Auth-Token': action.token},

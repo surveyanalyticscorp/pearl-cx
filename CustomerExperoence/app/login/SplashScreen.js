@@ -1,10 +1,11 @@
 import {Text, View, ImageBackground, Image} from 'react-native';
-import {styles} from '../styles/styles';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN} from '../api/types';
-import {isStringNullOrEmpty} from '../Utils/Utility';
+import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/types';
 import AppRouter from '../routes/appRouter';
+import {connect} from 'react-redux';
+import {fillUserInfo} from '../actions';
+import {isStringNullOrEmpty} from '../Utils/Utility';
 
 const SplashScreen = props => {
   const [authToken, setAuthToken] = useState('');
@@ -20,12 +21,18 @@ const SplashScreen = props => {
   }, []);
 
   useEffect(() => {
-    let timer = setTimeout(() => {
-      if (isStringNullOrEmpty(authToken)) {
-        //props.navigation.navigate('SignedOut');
-      } else {
-        //props.navigation.navigate('SignedOut');
+    async function getUserInfo() {
+      return await AsyncStorage.getItem(ASYNC_USER_INFO);
+    }
+    getUserInfo().then(value => {
+      if (!isStringNullOrEmpty(value)) {
+        props.saveUserInfo(JSON.parse(value));
       }
+    });
+  }, [props]);
+
+  useEffect(() => {
+    let timer = setTimeout(() => {
       setMoveNext(true);
     }, 1000);
     return () => {
@@ -63,4 +70,20 @@ const SplashScreen = props => {
   return moveNext ? appRouter() : renderSplashScreenView();
 };
 
-export default SplashScreen;
+const mapStateToProps = state => {
+  console.log('Splash screen State:');
+  console.log(state);
+  return {};
+};
+
+// noinspection JSAnnotator
+const mapDispatchToProps = dispatch => ({
+  saveUserInfo: userInfo => {
+    dispatch(fillUserInfo(userInfo));
+  },
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SplashScreen);

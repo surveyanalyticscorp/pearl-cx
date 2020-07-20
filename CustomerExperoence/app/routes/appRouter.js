@@ -39,7 +39,7 @@ const AppRouter = props => {
         if (props.userInfo && !isStringNullOrEmpty(props.userInfo.authToken)) {
             setSignIn(props.isLogin);
         }
-    }, [props.isLogin, props.userInfo, props.userInfo.authToken]);
+    }, [props.isLogin, props.userInfo]);
 
     const HeaderLeft = () => {
         const navigation = useNavigation();
