@@ -81,7 +81,7 @@ export default class WebServiceHandler {
         body: JSON.stringify(parameter),
       })
         .then(function(response) {
-          console.log(response.status);
+          console.log('Api response:' + response.status);
           if (!response.ok) {
             throw {
               name: response.status,
