@@ -20,7 +20,11 @@ const FeedbackDetail = props => {
   ]);
 
   const onActionButtonPress = () => {
-    const pushAction = StackActions.push('Change Status', {});
+    const pushAction = StackActions.push('Change Status', {
+      data: props.route.params.data,
+      ticketStatus: props.route.params.ticketStatus,
+      token: props.route.params.authToken,
+    });
     props.navigation.dispatch(pushAction);
   };
 

@@ -8,6 +8,7 @@ export const TextSizes = {
   largeText: 1.4 * rem * factor,
   primary: 1.2 * rem * factor,
   secondary: rem * factor,
+  semiMediumText: 0.8 * rem * factor,
   mediumText: 0.7 * rem * factor,
   smallText: 0.6 * rem * factor,
 };
