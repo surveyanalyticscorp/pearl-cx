@@ -53,10 +53,9 @@ const DrawerContent = props => {
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
-          onPress={() => {
-            AsyncStorage.clear().then(() => {
-              props.setIsLogin();
-            });
+          onPress={async () => {
+            await AsyncStorage.clear();
+            props.setIsLogin();
           }}>
           <View style={{flexDirection: 'row', marginTop: MarginConstants.tab2}}>
             <Image
