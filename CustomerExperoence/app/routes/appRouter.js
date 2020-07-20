@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {useState, useEffect} from 'react';
 
 import {View, TouchableOpacity} from 'react-native';
@@ -97,7 +98,7 @@ const AppRouter = props => {
       />
     </RootStack.Navigator>
   );
-
+  
   //const signIn = !isStringNullOrEmpty(props.userInfo.authToken);
   return (
     <NavigationContainer theme={colorScheme == 'dark' ? DarkTheme : MyTheme}>
