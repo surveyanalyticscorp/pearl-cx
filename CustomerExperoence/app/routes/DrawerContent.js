@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {fontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
-import {doLogin} from '../actions';
+import {doLogin, setIsLogin} from '../actions';
 import {connect} from 'react-redux';
 
 //import {AuthContext} from '../components/context';
@@ -54,7 +54,9 @@ const DrawerContent = props => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            AsyncStorage.clear().then(() => {});
+            AsyncStorage.clear().then(() => {
+              props.setIsLogin();
+            });
           }}>
           <View style={{flexDirection: 'row', marginTop: MarginConstants.tab2}}>
             <Image
@@ -136,8 +138,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  loginClick: data => {
-    dispatch(doLogin(data));
+  setIsLogin: data => {
+    dispatch(setIsLogin(false));
   },
 });
 
