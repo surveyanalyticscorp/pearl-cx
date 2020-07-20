@@ -2,7 +2,7 @@
 import React, {useState, useEffect} from 'react';
 
 import {View, TouchableOpacity} from 'react-native';
-
+import { StackActions } from 'react-navigation';
 import {useColorScheme} from 'react-native-appearance';
 import {
     NavigationContainer,
@@ -25,7 +25,10 @@ import {MyTheme} from '../styles/styles';
 import {connect} from 'react-redux';
 import {isStringNullOrEmpty} from '../Utils/Utility';
 import Feedback from '../drawerTabs/feedback/Feedback';
+import FeedbackDetail from  '../drawerTabs/feedback/FeedbackDetails'
 import {EventRegister} from 'react-native-event-listeners';
+import FeedbackUpdate from '../drawerTabs/feedback/FeedbackUpdate'
+import { CommonActions } from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -90,6 +93,21 @@ const AppRouter = props => {
         );
     };
 
+    const HeaderBackLeft = (routeName) => {
+        const navigation = useNavigation();
+        return (
+            <View style={{flexDirection: 'row', marginLeft: 10}}>
+                <TouchableOpacity
+                    onPress={() => {
+                        const popAction = CommonActions.goBack();
+                        navigation.dispatch(popAction);
+                    }}>
+                    <Icon name="keyboard-arrow-left" size={32} color="white"/>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
     const feedbackStack = props => (
         <RootStack.Navigator>
             <RootStack.Screen
@@ -100,6 +118,21 @@ const AppRouter = props => {
                     headerRight: props => <HeaderRight/>,
                 }}
             />
+            <RootStack.Screen
+                name="Feedback Details"
+                component={FeedbackDetail}
+                options={{
+                    headerLeft: props => <HeaderBackLeft routeName={'Feedback'}/>,
+                }}
+            />
+            <RootStack.Screen
+                name="Change Status"
+                component={FeedbackUpdate}
+                options={{
+                    headerLeft: props => <HeaderBackLeft routeName={'Feedback Details'}/>,
+                }}
+            />
+
         </RootStack.Navigator>
     );
 
