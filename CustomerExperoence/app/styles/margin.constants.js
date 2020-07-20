@@ -1,6 +1,6 @@
 import {Platform} from 'react-native';
 const factor = 0.5;
-let rem = Platform.OS === 'ios' ? 15 : 14;
+export let rem = Platform.OS === 'ios' ? 15 : 14;
 
 export const MarginConstants = {
   tab1: factor * rem,
