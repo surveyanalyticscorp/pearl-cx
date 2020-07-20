@@ -8,13 +8,15 @@ import {
   Text,
   Dimensions,
 } from 'react-native';
+import {connect} from 'react-redux';
 import Slider from '@react-native-community/slider';
 import {MarginConstants} from '../../styles/margin.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {fontFamily} from '../../styles/font.constants';
 import ArrayUtils from '../../Utils/ArrayUtils';
+import StringUtils from '../../Utils/StringUtils';
 const {width} = Dimensions.get('window');
 const sliderItemWidth = width / 3;
+import {updateFeedback} from '../../actions';
 const FeedbackUpdate = props => {
   const [comment, setComment] = useState('');
   let ticketStatuses = ArrayUtils.removeMatchingObjectAndReturnNewArray(
@@ -31,6 +33,29 @@ const FeedbackUpdate = props => {
           .indexOf(props.route.params.data.ticketStatus)
       : 0,
   );
+
+  const buildFeedbackUpdateObject = () => {
+    let selectedFeedback = props.route.params.data;
+    return {
+      ticketID: selectedFeedback.ticketID,
+      status: ticketStatuses[value].id,
+      emailAddress: selectedFeedback.emailAddress,
+      comment: comment,
+      storeId: selectedFeedback.businessUnitID,
+      panelMemberID: selectedFeedback.panelMemberID,
+      responseSetID: selectedFeedback.responseSetID,
+    };
+  };
+
+  const _press = () => {
+    if (StringUtils.isNotEmpty(comment)) {
+      Keyboard.dismiss();
+      props.updateFeedback(buildFeedbackUpdateObject(),props.route.params.token).then(() => {});
+    } else {
+      console.log('Please enter comment to update the ticket.');
+    }
+  };
+
   const renderTextInput = () => {
     return (
       <View>
@@ -167,7 +192,7 @@ const FeedbackUpdate = props => {
           </TouchableWithoutFeedback>
         )}
         {value !== 3 && (
-          <TouchableWithoutFeedback onPress={() => _onSliderChange(3)}>
+          <TouchableWithoutFeedback onPress={() => _onSliderChange(5)}>
             <View
               style={[
                 {
@@ -199,7 +224,9 @@ const FeedbackUpdate = props => {
             paddingHorizontal: MarginConstants.tab3,
             paddingVertical: MarginConstants.tab1,
           }}
-          onPress={() => {}}>
+          onPress={() => {
+            _press();
+          }}>
           <View>
             <Text style={{color: 'white'}}>Submit</Text>
           </View>
@@ -221,10 +248,19 @@ const FeedbackUpdate = props => {
         }}>
         {renderTextInput()}
         {getSliderContainer()}
-        {renderSubmitButton()}
+        {StringUtils.isNotEmpty(comment) && renderSubmitButton()}
       </View>
     </TouchableWithoutFeedback>
   );
 };
 
-export default FeedbackUpdate;
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+  updateFeedback: (data, token) => dispatch(updateFeedback(data,token)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(FeedbackUpdate);

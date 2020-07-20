@@ -23,7 +23,7 @@ const FeedbackDetail = props => {
     const pushAction = StackActions.push('Change Status', {
       data: props.route.params.data,
       ticketStatus: props.route.params.ticketStatus,
-      token: props.route.params.authToken,
+      token: props.route.params.token,
     });
     props.navigation.dispatch(pushAction);
   };

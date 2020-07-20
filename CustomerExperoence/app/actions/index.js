@@ -13,6 +13,8 @@ export const FILL_USER_INFO = 'FILL_USER_INFO';
 export const API_ERROR = 'API_ERROR';
 export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
 
+export const UPDATE_FEEDBACK = 'UPDATE_FEEDBACK';
+export const FEEDBACK_UPDATED = 'FEEDBACK_UPDATED';
 export const showLoading = (isLoading = true) => ({
   type: IS_LOADING,
   payload: {isLoading: isLoading},
@@ -44,6 +46,11 @@ export const fillUserInfo = userInfo => ({
   payload: {userInfo: userInfo},
 });
 
+export const updateFeedback = (params, token) => ({
+  type: UPDATE_FEEDBACK,
+  params,
+  token,
+});
 export const clearError = (isLoading = true) => ({
   type: CLEAR_API_ERROR,
   payload: {isLoading: isLoading},
