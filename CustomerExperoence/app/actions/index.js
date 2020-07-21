@@ -11,6 +11,7 @@ export const IS_LOADING = 'IS_LOADING';
 export const IS_LOGIN = 'IS_LOGIN';
 export const FILL_USER_INFO = 'FILL_USER_INFO';
 export const API_ERROR = 'API_ERROR';
+export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
 
 export const showLoading = (isLoading = true) => ({
   type: IS_LOADING,
@@ -41,4 +42,9 @@ export const getDashboardContent = token => ({
 export const fillUserInfo = userInfo => ({
   type: FILL_USER_INFO,
   payload: {userInfo: userInfo},
+});
+
+export const clearError = (isLoading = true) => ({
+  type: CLEAR_API_ERROR,
+  payload: {isLoading: isLoading},
 });

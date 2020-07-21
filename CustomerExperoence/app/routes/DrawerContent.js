@@ -106,7 +106,9 @@ const DrawerContent = props => {
             <Caption style={styles.emailCaption}>
               datta.kunde@questionpro.com
             </Caption>
-            <Caption style={styles.companyCaptions}>company Name</Caption>
+            <Caption style={styles.companyCaptions}>
+              {props.userInfo.organizationName}
+            </Caption>
             <TouchableWithoutFeedback
               onPress={() => {
                 setOpenDropper(!openDropper);

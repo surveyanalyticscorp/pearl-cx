@@ -4,6 +4,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   View,
+  Text,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {MarginConstants} from '../styles/margin.constants';
@@ -15,7 +16,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import QPTextField from '../widgets/TextField';
 import QPButton from '../widgets/Button';
 import {connect} from 'react-redux';
-import {doLogin, showLoading, setIsLogin} from '../actions';
+import {doLogin, showLoading, setIsLogin, clearError} from '../actions';
 import {loginStyles} from './login.styles';
 import {BarIndicator} from 'react-native-indicators';
 
@@ -91,6 +92,17 @@ const SignInScreen = props => {
     );
   };
 
+  const renderErrorMessage = () => {
+    if (props.isError) {
+      return (
+        <View style={loginStyles.errorMessageContainer}>
+          <Text style={loginStyles.errorMessage}>{props.errorMessage.message}</Text>
+        </View>
+      );
+    }
+    return <View style={{flex: 1}} />;
+  };
+
   const renderSignTextFieldAndButton = () => {
     return (
       <View
@@ -115,6 +127,8 @@ const SignInScreen = props => {
           style={loginStyles.passwordInput}
           onEndEdit={handlePassword}
         />
+
+        {renderErrorMessage()}
 
         {props.isLoading ? (
           <View style={loginStyles.nextButton}>
@@ -159,11 +173,14 @@ const mapStateToProps = state => {
   return {
     userInfo: state.global.userInfo,
     isLoading: state.global.isLoading,
+    isError: state.global.isError,
+    errorMessage: state.global.errorMessage,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   loginClick: data => {
+    dispatch(clearError());
     dispatch(doLogin(data));
     dispatch(showLoading(true));
   },

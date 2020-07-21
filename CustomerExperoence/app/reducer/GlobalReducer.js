@@ -4,6 +4,7 @@ import {
   IS_LOGIN,
   LOGIN_RESPONSE,
   API_ERROR,
+  CLEAR_API_ERROR,
 } from '../actions';
 
 const initialState = {
@@ -41,6 +42,14 @@ const globalReducer = (state = initialState, action) => {
         isError: true,
         errorMessage: action.error,
         isLoading: false,
+      };
+    }
+    case CLEAR_API_ERROR: {
+      return {
+        ...state,
+        isError: false,
+        errorMessage: '',
+        isLoading: action.payload.isLoading,
       };
     }
     default: {

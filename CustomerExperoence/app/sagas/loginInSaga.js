@@ -1,7 +1,7 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../api/WebServiceHandler';
 import {BASE_URL} from '../api/types';
-import {LOGIN_RESPONSE, GET_LOGIN} from '../actions';
+import {LOGIN_RESPONSE, GET_LOGIN, API_ERROR} from '../actions';
 
 function* doLoginAsync(action) {
   try {
@@ -17,11 +17,13 @@ function* doLoginAsync(action) {
       response: json,
     });
   } catch (error) {
-    console.log(error);
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
   }
 }
 
 export function* watchDoLogin() {
-  console.log('DD watchDoLogin');
   yield takeLatest(GET_LOGIN, doLoginAsync);
 }

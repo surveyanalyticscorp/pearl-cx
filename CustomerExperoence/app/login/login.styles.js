@@ -75,4 +75,14 @@ export const loginStyles = StyleSheet.create({
     color: textColors.primary,
     alignSelf: 'flex-start',
   },
+  errorMessageContainer: {
+    flex: 1,
+      alignItems:'center',
+    marginVertical: MarginConstants.tab2,
+  },
+  errorMessage: {
+    fontSize: TextSizes.secondary,
+    marginHorizontal: MarginConstants.tab2,
+    color: 'red',
+  },
 });
