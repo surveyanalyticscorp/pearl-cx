@@ -9,9 +9,9 @@ function* fetchFeedbackAsync(action) {
   try {
     console.log('DD fetchFeedbackAsync:' + action.param);
     const json = yield WebServiceHandler.post(
-      BASE_URL + 'a/nativehtml/cx.CXAddOrUpdateTicket',
+      'https://war.questionpro.com/' + 'a/nativehtml/cx.CXAddOrUpdateTicket',
       {'Auth-Token': action.token},
-      action.param,
+      action.params,
     );
 
     // Dispatch Action To Redux Store

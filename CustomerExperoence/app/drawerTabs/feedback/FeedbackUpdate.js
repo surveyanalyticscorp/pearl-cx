@@ -50,7 +50,10 @@ const FeedbackUpdate = props => {
   const _press = () => {
     if (StringUtils.isNotEmpty(comment)) {
       Keyboard.dismiss();
-      props.updateFeedback(buildFeedbackUpdateObject(),props.route.params.token).then(() => {});
+      props.updateFeedback(
+        buildFeedbackUpdateObject(),
+        props.route.params.token,
+      );
     } else {
       console.log('Please enter comment to update the ticket.');
     }
@@ -257,7 +260,7 @@ const FeedbackUpdate = props => {
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
-  updateFeedback: (data, token) => dispatch(updateFeedback(data,token)),
+  updateFeedback: (data, token) => dispatch(updateFeedback(data, token)),
 });
 
 export default connect(
