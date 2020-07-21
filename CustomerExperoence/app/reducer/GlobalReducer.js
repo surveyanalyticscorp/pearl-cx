@@ -1,8 +1,16 @@
-import {FILL_USER_INFO, IS_LOADING, IS_LOGIN, LOGIN_RESPONSE} from '../actions';
+import {
+  FILL_USER_INFO,
+  IS_LOADING,
+  IS_LOGIN,
+  LOGIN_RESPONSE,
+  API_ERROR,
+} from '../actions';
 
 const initialState = {
   isLoading: false,
   isLogin: false,
+  isError: false,
+  errorMessage: '',
   userInfo: {},
 };
 
@@ -25,6 +33,14 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         userInfo: action.payload.userInfo,
+      };
+    }
+    case API_ERROR: {
+      return {
+        ...state,
+        isError: true,
+        errorMessage: action.error,
+        isLoading: false,
       };
     }
     default: {

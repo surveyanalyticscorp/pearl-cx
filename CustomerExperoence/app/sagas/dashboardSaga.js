@@ -2,7 +2,7 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../api/WebServiceHandler';
 import {BASE_URL} from '../api/types';
-import {DASHBOARD_RECEIVED, GET_DASHBOARD} from '../actions';
+import {DASHBOARD_RECEIVED, GET_DASHBOARD, API_ERROR} from '../actions';
 
 // Worker: Increase Counter Async (Delayed By 4 Seconds)
 function* fetchDashboardAsync(action) {
@@ -19,7 +19,11 @@ function* fetchDashboardAsync(action) {
       response: json,
     });
   } catch (error) {
-    console.log(error);
+    console.log('Dashboard saga error:' + JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
   }
 }
 

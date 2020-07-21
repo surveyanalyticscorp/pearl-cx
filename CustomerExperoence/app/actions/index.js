@@ -10,6 +10,7 @@ export const DASHBOARD_RECEIVED = 'DASHBOARD_RECEIVED';
 export const IS_LOADING = 'IS_LOADING';
 export const IS_LOGIN = 'IS_LOGIN';
 export const FILL_USER_INFO = 'FILL_USER_INFO';
+export const API_ERROR = 'API_ERROR';
 
 export const showLoading = (isLoading = true) => ({
   type: IS_LOADING,
