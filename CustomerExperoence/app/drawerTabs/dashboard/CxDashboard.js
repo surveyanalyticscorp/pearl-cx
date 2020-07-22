@@ -7,8 +7,7 @@ import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../api/types';
 import BarIndicator from 'react-native-indicators/src/components/bar-indicator';
-import {TextSizes} from '../../styles/textsize.constants';
-import {MarginConstants} from '../../styles/margin.constants';
+import {dashboardStyles} from './dashboard.style';
 
 const CxDashboard = props => {
   const [callApi, setCallAPI] = useState(false);
@@ -91,17 +90,4 @@ export default connect(
   mapDispatchToProps,
 )(CxDashboard);
 
-const dashboardStyles = StyleSheet.create({
-  cxContainer: {
-    flex: 1,
-  },
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 36,
-    marginBottom: 16,
-  },
-});
+
