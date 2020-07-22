@@ -1,7 +1,7 @@
 export const ASYNC_AUTH_TOKEN = 'authToken';
 export const ASYNC_USER_INFO = 'userInfo';
 
-export const BASE_URL = 'https://qa.questionpro.com/';
+export const BASE_URL = 'https://war.questionpro.com/';
 export const AUTH_URL = '/a/nativehtml/cx.auth.CXLogin';
 
 export const CX_DASHBOARD = 'CX_DASHBOARD';

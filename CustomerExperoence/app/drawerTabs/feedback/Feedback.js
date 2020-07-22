@@ -96,8 +96,6 @@ const Feedback = props => {
 
 };
 const mapStateToProps = state => {
-    console.log('State:');
-    console.log(state);
     return {
         feedback: state.feedback,
     };

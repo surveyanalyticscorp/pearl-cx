@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import Toast from 'react-native-simple-toast';
 import {
   View,
   TextInput,
@@ -16,7 +17,8 @@ import ArrayUtils from '../../Utils/ArrayUtils';
 import StringUtils from '../../Utils/StringUtils';
 const {width} = Dimensions.get('window');
 const sliderItemWidth = width / 3;
-import {updateFeedback} from '../../actions';
+import {CommonActions} from '@react-navigation/native';
+import {updateFeedback, cleanUpdateFeedBack} from '../../actions';
 const FeedbackUpdate = props => {
   const [comment, setComment] = useState('');
   let ticketStatuses = ArrayUtils.removeMatchingObjectAndReturnNewArray(
@@ -33,6 +35,22 @@ const FeedbackUpdate = props => {
           .indexOf(props.route.params.data.ticketStatus)
       : 0,
   );
+
+  useEffect(() => {
+    if (props.feedback.body) {
+      if (props.feedback.body.Success) {
+        Toast.show(props.feedback.body.Success);
+        let timer = setTimeout(() => {
+          const popAction = CommonActions.goBack();
+          props.navigation.dispatch(popAction);
+          props.cleanUpdateFeedback();
+        }, 1000);
+        return () => {
+          clearTimeout(timer);
+        };
+      }
+    }
+  }, [props.feedback, props.navigation]);
 
   const buildFeedbackUpdateObject = () => {
     let selectedFeedback = props.route.params.data;
@@ -257,9 +275,14 @@ const FeedbackUpdate = props => {
   );
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => {
+  return {
+    feedback: state.feedback.updateResponse,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
+  cleanUpdateFeedback: () => dispatch(cleanUpdateFeedBack()),
   updateFeedback: (data, token) => dispatch(updateFeedback(data, token)),
 });
 

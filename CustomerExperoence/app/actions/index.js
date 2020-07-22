@@ -36,6 +36,11 @@ export const getFeedbackList = (param, token) => ({
   token,
 });
 
+export const cleanUpdateFeedBack = () => ({
+  type: FEEDBACK_UPDATED,
+  response: {},
+})
+
 export const getDashboardContent = token => ({
   type: GET_DASHBOARD,
   token,
@@ -55,3 +60,4 @@ export const clearError = (isLoading = true) => ({
   type: CLEAR_API_ERROR,
   payload: {isLoading: isLoading},
 });
+

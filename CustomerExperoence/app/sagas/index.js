@@ -2,10 +2,9 @@
 import {all, fork} from 'redux-saga/effects';
 // Imports: Redux Sagas
 
-import {watchGetFeedback} from './feedbackSaga';
+import {watchGetFeedback, watchUpdateFeedback} from './feedbackSaga';
 import {watchGetDashboard} from './dashboardSaga';
 import {watchDoLogin} from './loginInSaga';
-import {watchUpdateFeedback} from './updateFeedbackSaga';
 
 // Redux Saga: Root Saga
 export function* rootSaga() {

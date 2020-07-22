@@ -1,7 +1,8 @@
-import {FEEDBACK_RECEIVED} from '../actions';
+import {FEEDBACK_RECEIVED, FEEDBACK_UPDATED} from '../actions';
 
 const initialState = {
   response: {},
+  updateResponse: {},
 };
 
 const feedbackReducer = (state = initialState, action) => {
@@ -10,6 +11,12 @@ const feedbackReducer = (state = initialState, action) => {
       return {
         ...state,
         response: action.response,
+      };
+    }
+    case FEEDBACK_UPDATED: {
+      return {
+        ...state,
+        updateResponse: action.response,
       };
     }
     default: {
