@@ -16,10 +16,15 @@ import {getFeedbackList} from '../../actions';
 import {connect} from 'react-redux';
 import {DotIndicator} from 'react-native-indicators';
 import {showMessage} from 'react-native-flash-message';
-
+import moment from 'moment';
+import AsyncStorage from '@react-native-community/async-storage';
+import {ASYNC_AUTH_TOKEN} from '../../api/types';
 const Feedback = props => {
+    let month = moment().month() + 1; //Need to check as it returns month number starting 0
+    let year = moment().year();
     const [calendar, setCalendar] = useState(false);
-    const [selectedYear, setSelectedYear] = useState({})
+    const [getFeedbackApi,setFeedbackAPI] = useState(true);
+    const [selectedYear, setSelectedYear] = useState({month: month, year: year})
     const [index, setIndex] = useState(0);
     const [routes] = React.useState([
         { key: 'all', title: 'ALL' },
@@ -27,6 +32,26 @@ const Feedback = props => {
         { key: 'passive', title: 'PASSIVE'},
         { key: 'promoter', title: 'PROMOTER'},
     ]);
+
+    useEffect(() => {
+        async function getAuthToken() {
+            return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
+        }
+            getAuthToken().then(token => {
+                setAuthToken(token);
+                const data = {
+                    pageOffset: 0,
+                    sentiment: 'All',
+                    month: selectedYear.month+'',
+                    year: selectedYear.year+'',
+                };
+                props.getFeedbackList(
+                    data,
+                    token,
+                );
+            });
+
+    }, [selectedYear]);
 
     useEffect(() => {
         this.listener = EventRegister.addEventListener('openCalendar', data => {
@@ -53,10 +78,13 @@ const Feedback = props => {
         }
     }, [props.isError]);
 
+
     const renderScene = ({ route }) => {
         switch (route.key) {
             case 'all':
-                return <FeedbackAll {...props}/>;
+                return <FeedbackAll {...props} onRefresh={() => {
+
+                }}/>;
             case 'detractor':
                 return <FeedbackDetractor {...props}/>;
             case 'passive':

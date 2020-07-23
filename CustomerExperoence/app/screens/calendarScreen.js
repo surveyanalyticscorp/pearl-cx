@@ -60,35 +60,29 @@ const CalendarScreen = props => {
         <SafeAreaView
           forceInset={{vertical: 'never', horizontal: 'never'}}
           style={{flex: 1, marginTop: -60, paddingTop: 40}}>
-          <TouchableWithoutFeedback
-            style={{flex: 1}}
-            onPress={() => {
-              props.closeCalendar && props.closeCalendar(false);
-            }}>
-            <View
-              style={[
-                {
-                  flex: 1,
-                  backgroundColor: 'rgba(62,62,62,0.95)',
-                  marginTop: Platform.select({ios: 20, android: 0}),
-                },
-              ]}>
-              {renderCloseButton()}
-              <MonthYearSelector
-                month={month}
-                year={year}
-                minYear={2010}
-                maxYear={moment().year()}
-                onSubmit={(month, year) => {
-                  let selectedYear = {month: month, year: year};
-                  props.onSubmit && props.onSubmit(selectedYear);
-                }}
-                onCancel={() => {
-                  props.closeCalendar && props.closeCalendar(false);
-                }}
-              />
-            </View>
-          </TouchableWithoutFeedback>
+          <View
+            style={[
+              {
+                flex: 1,
+                backgroundColor: 'rgba(62,62,62,0.95)',
+                marginTop: Platform.select({ios: 20, android: 0}),
+              },
+            ]}>
+            {renderCloseButton()}
+            <MonthYearSelector
+              month={month}
+              year={year}
+              minYear={2010}
+              maxYear={moment().year()}
+              onSubmit={(month, year) => {
+                let selectedYear = {month: month, year: year};
+                props.onSubmit && props.onSubmit(selectedYear);
+              }}
+              onCancel={() => {
+                props.closeCalendar && props.closeCalendar(false);
+              }}
+            />
+          </View>
         </SafeAreaView>
       </Modal>
     );

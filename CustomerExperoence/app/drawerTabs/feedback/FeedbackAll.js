@@ -11,29 +11,6 @@ const FeedbackAll = props => {
     const [authToken, setAuthToken] = useState('');
     const [selectedRowID, setSelectedRowID] = useState(0);
     const [callApi, setCallAPI] = useState(true);
-    useEffect(() => {
-        async function getAuthToken() {
-            return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
-        }
-
-        if (callApi) {
-            getAuthToken().then(token => {
-                setAuthToken(token);
-                const data = {
-                    pageOffset: 0,
-                    sentiment: 'All',
-                    month: '7',
-                    year: '2018',
-                };
-                props.getFeedbackList(
-                    data,
-                    token,
-                );
-            });
-            setCallAPI(false);
-        }
-
-    }, [callApi]);
 
     const _onPressRow = (data) => {
         const pushAction = StackActions.push('Feedback Details', {
@@ -102,8 +79,7 @@ const FeedbackAll = props => {
                         refreshing={false}
                         ListEmptyComponent={renderNoDataFound}
                         onRefresh={() => {
-                            setCallAPI(true);
-                            //getFeedbackList(true);
+                         props.onRefresh && props.onRefresh();
                         }}
                     />
                 </SafeAreaView>
