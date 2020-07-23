@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {useState, useEffect} from 'react';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
@@ -51,9 +52,14 @@ const FeedbackUpdate = props => {
         type: 'error',
         icon: 'auto',
       });
-      props.cleanUpdateFeedback();
+      let timer = setTimeout(() => {
+        props.cleanError();
+      }, 1000);
+      return () => {
+        clearTimeout(timer);
+      };
     }
-  }, [props, props.errorMessage.message, props.isError]);
+  }, [props.isError]);
 
   useEffect(() => {
     if (props.feedback.body) {
@@ -312,14 +318,16 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
+  cleanError: () => {
+    dispatch(clearError(false));
+    dispatch(cleanUpdateFeedBack());
+  },
   cleanUpdateFeedback: () => {
     dispatch(cleanUpdateFeedBack());
-    dispatch(showLoading(false));
-    dispatch(clearError());
+    dispatch(clearError(false));
   },
   updateFeedback: (data, token) => {
-    dispatch(clearError());
-    dispatch(showLoading(true));
+    dispatch(clearError(true));
     dispatch(updateFeedback(data, token));
   },
 });

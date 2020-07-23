@@ -6,7 +6,7 @@ import {
   GET_FEEDBACK,
   FEEDBACK_RECEIVED,
   FEEDBACK_UPDATED,
-  UPDATE_FEEDBACK, API_ERROR,
+  UPDATE_FEEDBACK, API_ERROR, IS_LOADING,
 } from '../actions';
 
 // Worker: Increase Counter Async (Delayed By 4 Seconds)
@@ -40,8 +40,8 @@ export function* watchGetFeedback() {
 // Worker: Increase Counter Async (Delayed By 4 Seconds)
 function* updateFetchFeedbackAsync(action) {
   try {
-    console.log('DD fetchFeedbackAsync:' + action.param);
-    const json = yield WebServiceHandler.post(
+    yield put({type: IS_LOADING, payload: {isLoading: true}});
+    const json = yield WebServiceHandler.postNew(
       BASE_URL + 'a/nativehtml/cx.CXAddOrUpdateTicket',
       {'Auth-Token': action.token},
       action.params,
@@ -52,7 +52,9 @@ function* updateFetchFeedbackAsync(action) {
       type: FEEDBACK_UPDATED,
       response: json,
     });
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({
       type: API_ERROR,
       error: error,
