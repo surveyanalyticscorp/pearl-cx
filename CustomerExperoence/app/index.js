@@ -1,17 +1,17 @@
 import React from 'react';
-
 import {store} from './store/store';
 import {Provider} from 'react-redux';
-
 import {AppearanceProvider} from 'react-native-appearance';
-import AppNavigator from './routes/index.router';
+import FlashMessage from 'react-native-flash-message';
 import SplashScreen from './login/SplashScreen';
 
 const CxApp = () => {
+  let ref = React.forwardRef();
   return (
     <Provider store={store}>
       <AppearanceProvider>
         <SplashScreen />
+        <FlashMessage position="top" ref={ref} />
       </AppearanceProvider>
     </Provider>
   );

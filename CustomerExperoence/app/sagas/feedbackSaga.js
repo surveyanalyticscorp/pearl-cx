@@ -6,7 +6,7 @@ import {
   GET_FEEDBACK,
   FEEDBACK_RECEIVED,
   FEEDBACK_UPDATED,
-  UPDATE_FEEDBACK,
+  UPDATE_FEEDBACK, API_ERROR,
 } from '../actions';
 
 // Worker: Increase Counter Async (Delayed By 4 Seconds)
@@ -25,7 +25,10 @@ function* fetchFeedbackAsync(action) {
       response: json,
     });
   } catch (error) {
-    console.log(error);
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
   }
 }
 
@@ -39,7 +42,7 @@ function* updateFetchFeedbackAsync(action) {
   try {
     console.log('DD fetchFeedbackAsync:' + action.param);
     const json = yield WebServiceHandler.post(
-      'https://war.questionpro.com/' + 'a/nativehtml/cx.CXAddOrUpdateTicket',
+      BASE_URL + 'a/nativehtml/cx.CXAddOrUpdateTicket',
       {'Auth-Token': action.token},
       action.params,
     );
@@ -50,7 +53,10 @@ function* updateFetchFeedbackAsync(action) {
       response: json,
     });
   } catch (error) {
-    console.log(error);
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
   }
 }
 

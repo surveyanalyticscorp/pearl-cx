@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import Toast from 'react-native-simple-toast';
+import {showMessage, hideMessage} from 'react-native-flash-message';
+
 import {
   View,
   TextInput,
@@ -18,7 +19,13 @@ import StringUtils from '../../Utils/StringUtils';
 const {width} = Dimensions.get('window');
 const sliderItemWidth = width / 3;
 import {CommonActions} from '@react-navigation/native';
-import {updateFeedback, cleanUpdateFeedBack} from '../../actions';
+import {DotIndicator} from 'react-native-indicators';
+import {
+  updateFeedback,
+  cleanUpdateFeedBack,
+  clearError,
+  showLoading,
+} from '../../actions';
 const FeedbackUpdate = props => {
   const [comment, setComment] = useState('');
   let ticketStatuses = ArrayUtils.removeMatchingObjectAndReturnNewArray(
@@ -26,6 +33,7 @@ const FeedbackUpdate = props => {
     'id',
     -1,
   );
+
   const [value, setValue] = useState(
     props.route.params.data.ticketStatus > 0
       ? ticketStatuses
@@ -37,24 +45,38 @@ const FeedbackUpdate = props => {
   );
 
   useEffect(() => {
-    if (props.feedback.body) {
-      if (props.feedback.body.Success) {
-        Toast.show(props.feedback.body.Success);
-        let timer = setTimeout(() => {
-          const popAction = CommonActions.goBack();
-          props.navigation.dispatch(popAction);
-          props.cleanUpdateFeedback();
-        }, 1000);
-        return () => {
-          clearTimeout(timer);
-        };
-      }
+    if (props.isError) {
+      showMessage({
+        message: props.errorMessage.message,
+        type: 'error',
+        icon: 'auto',
+      });
+      props.cleanUpdateFeedback();
     }
-  }, [props.feedback, props.navigation]);
+  }, [props, props.errorMessage.message, props.isError]);
+
+  useEffect(() => {
+    if (props.feedback.body) {
+      showMessage({
+        message: 'Ticket status updated successfully.',
+        type: 'success',
+        icon: 'auto',
+      });
+      let timer = setTimeout(() => {
+        const popAction = CommonActions.goBack();
+        props.navigation.dispatch(popAction);
+        props.cleanUpdateFeedback();
+      }, 1000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [props, props.feedback, props.navigation]);
 
   const buildFeedbackUpdateObject = () => {
     let selectedFeedback = props.route.params.data;
     return {
+      //ticketID: selectedFeedback.id,
       ticketID: selectedFeedback.ticketID,
       status: ticketStatuses[value].id,
       emailAddress: selectedFeedback.emailAddress,
@@ -257,33 +279,49 @@ const FeedbackUpdate = props => {
   };
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'flex-start',
-          margin: MarginConstants.tab1,
+    <View style={{flex: 1}}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
         }}>
-        {renderTextInput()}
-        {getSliderContainer()}
-        {StringUtils.isNotEmpty(comment) && renderSubmitButton()}
-      </View>
-    </TouchableWithoutFeedback>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'flex-start',
+            margin: MarginConstants.tab1,
+          }}>
+          {renderTextInput()}
+          {getSliderContainer()}
+          {StringUtils.isNotEmpty(comment) && renderSubmitButton()}
+          {props.isLoading && (
+            <DotIndicator color="#2589E3" count={3} size={10} />
+          )}
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
 
 const mapStateToProps = state => {
   return {
     feedback: state.feedback.updateResponse,
+    isLoading: state.global.isLoading,
+    isError: state.global.isError,
+    errorMessage: state.global.errorMessage,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  cleanUpdateFeedback: () => dispatch(cleanUpdateFeedBack()),
-  updateFeedback: (data, token) => dispatch(updateFeedback(data, token)),
+  cleanUpdateFeedback: () => {
+    dispatch(cleanUpdateFeedBack());
+    dispatch(showLoading(false));
+    dispatch(clearError());
+  },
+  updateFeedback: (data, token) => {
+    dispatch(clearError());
+    dispatch(showLoading(true));
+    dispatch(updateFeedback(data, token));
+  },
 });
 
 export default connect(
