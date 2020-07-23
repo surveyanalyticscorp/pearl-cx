@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, {useState, useEffect} from 'react';
-import {Dimensions, Text} from 'react-native';
+import {Dimensions, Text, View} from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
 
 import FeedbackAll from './FeedbackAll';
@@ -14,6 +14,9 @@ import {EventRegister} from "react-native-event-listeners";
 import CalendarScreen from '../../screens/calendarScreen';
 import {getFeedbackList} from '../../actions';
 import {connect} from 'react-redux';
+import {DotIndicator} from 'react-native-indicators';
+import {showMessage} from 'react-native-flash-message';
+
 const Feedback = props => {
     const [calendar, setCalendar] = useState(false);
     const [selectedYear, setSelectedYear] = useState({})
@@ -33,6 +36,22 @@ const Feedback = props => {
             EventRegister.removeEventListener(this.listener);
         };
     }, []);
+
+    useEffect(() => {
+        if (props.isError) {
+            showMessage({
+                message: props.errorMessage.message,
+                type: 'error',
+                icon: 'auto',
+            });
+            let timer = setTimeout(() => {
+                props.cleanError();
+            }, 1000);
+            return () => {
+                clearTimeout(timer);
+            };
+        }
+    }, [props.isError]);
 
     const renderScene = ({ route }) => {
         switch (route.key) {
@@ -63,7 +82,8 @@ const Feedback = props => {
 
 
     const renderTabView = () => {
-        return ( <TabView
+        return ( <View style={{flex: 1}}>
+            <TabView
             navigationState={{ index, routes }}
             renderScene={renderScene}
             onIndexChange={setIndex}
@@ -89,7 +109,11 @@ const Feedback = props => {
                         </Text>
                     )}
                 />}
-        />);
+        />
+            {props.isLoading && (
+                <DotIndicator color="#2589E3" count={3} size={10} />
+            )}
+        </View>);
     }
 
     return calendar ? renderCalendarView() : renderTabView();
@@ -98,6 +122,9 @@ const Feedback = props => {
 const mapStateToProps = state => {
     return {
         feedback: state.feedback,
+        isLoading: state.global.isLoading,
+        isError: state.global.isError,
+        errorMessage: state.global.errorMessage,
     };
 };
 // Map Dispatch To Props (Dispatch Actions To Reducers. Reducers Then Modify The Data And Assign It To Your Props)

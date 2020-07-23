@@ -12,8 +12,8 @@ import {
 // Worker: Increase Counter Async (Delayed By 4 Seconds)
 function* fetchFeedbackAsync(action) {
   try {
-    console.log('DD fetchFeedbackAsync:' + action.param.year);
-    const json = yield WebServiceHandler.post(
+    yield put({type: IS_LOADING, payload: {isLoading: true}});
+    const json = yield WebServiceHandler.postNew(
       BASE_URL + 'a/nativehtml/cx.CXGetAllResponses',
       {'Auth-Token': action.token},
       action.param,
@@ -24,7 +24,9 @@ function* fetchFeedbackAsync(action) {
       type: FEEDBACK_RECEIVED,
       response: json,
     });
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({
       type: API_ERROR,
       error: error,
