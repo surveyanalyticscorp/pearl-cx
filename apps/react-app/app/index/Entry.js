@@ -178,7 +178,7 @@ export default class Entry extends React.Component {
 
     render() {
           mainScreen = this;
-          return (<CxHome {...this.props} />);
+          return (<CX {...this.props} />);
     }
 }
 

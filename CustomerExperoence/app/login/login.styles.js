@@ -23,7 +23,7 @@ export const loginStyles = StyleSheet.create({
 
   signInInContainer: {
     flex: 1,
-    marginVertical: MarginConstants.tab3,
+    marginVertical: MarginConstants.tab2,
     alignItems: 'center',
     width: '100%',
   },
@@ -77,8 +77,8 @@ export const loginStyles = StyleSheet.create({
   },
   errorMessageContainer: {
     flex: 1,
-      alignItems:'center',
-    marginVertical: MarginConstants.tab2,
+    alignItems: 'center',
+    marginTop: MarginConstants.tab2,
   },
   errorMessage: {
     fontSize: TextSizes.secondary,

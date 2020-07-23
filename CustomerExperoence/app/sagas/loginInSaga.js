@@ -6,7 +6,7 @@ import {LOGIN_RESPONSE, GET_LOGIN, API_ERROR} from '../actions';
 function* doLoginAsync(action) {
   try {
     console.log('DD Login:' + action.param.accessCode);
-    const json = yield WebServiceHandler.post(
+    const response = yield WebServiceHandler.postNew(
       BASE_URL + 'a/nativehtml/cx.auth.CXLogin',
       {},
       action.param,
@@ -14,7 +14,7 @@ function* doLoginAsync(action) {
 
     yield put({
       type: LOGIN_RESPONSE,
-      response: json,
+      response: response,
     });
   } catch (error) {
     yield put({

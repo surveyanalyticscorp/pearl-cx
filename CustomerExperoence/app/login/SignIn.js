@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {
   Image,
   ImageBackground,
@@ -19,12 +20,15 @@ import {connect} from 'react-redux';
 import {doLogin, showLoading, setIsLogin, clearError} from '../actions';
 import {loginStyles} from './login.styles';
 import {BarIndicator} from 'react-native-indicators';
+import StringUtils from '../Utils/StringUtils';
 
 const SignInScreen = props => {
   const [userData, setUserData] = useState({
     email: '',
     password: '',
   });
+
+  const [validation, setValidation] = useState('');
 
   useEffect(() => {
     const saveData = async () => {
@@ -39,13 +43,10 @@ const SignInScreen = props => {
     if (props.userInfo.authToken) {
       saveData();
     }
-  }, [props, props.userInfo]);
+  }, [props.userInfo]);
 
   const onSignInPress = () => {
-    if (
-      validateEmail(userData.email) &&
-      !isStringNullOrEmpty(userData.password)
-    ) {
+    if (checkValidation()) {
       let data = {
         accessCode: props.route.params.accessCode,
         emailAddress: userData.email,
@@ -56,7 +57,22 @@ const SignInScreen = props => {
       };
 
       props.loginClick(data);
+    }else{
+
     }
+  };
+
+  const checkValidation = () =>{
+      if(!validateEmail((userData.email))){
+        setValidation('Invalid email address');
+        return false;
+      }
+      if(isStringNullOrEmpty(userData.password)){
+          setValidation('Invalid password');
+          return false;
+      }
+      setValidation('');
+      return true;
   };
 
   const onForgotPasswordPress = () => {
@@ -83,8 +99,9 @@ const SignInScreen = props => {
         style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
         <TouchableWithoutFeedback
           onPress={() => {
-            console.log(props);
-            props.navigation.goBack();
+              //console.log(props);
+              props.clearError();
+              props.navigation.goBack();
           }}>
           <Icon name="keyboard-arrow-left" size={35} color="white" />
         </TouchableWithoutFeedback>
@@ -97,13 +114,26 @@ const SignInScreen = props => {
       return (
         <View style={loginStyles.errorMessageContainer}>
           <Text style={loginStyles.errorMessage}>
-            {props.errorMessage.message}
+            {props.errorMessage.errorAlert}
           </Text>
         </View>
       );
     }
     return <View style={{flex: 1}} />;
   };
+
+    const renderLocalValidation = () => {
+        if (!StringUtils.isEmpty(validation)) {
+            return (
+                <View style={loginStyles.errorMessageContainer}>
+                    <Text style={loginStyles.errorMessage}>
+                        {validation}
+                    </Text>
+                </View>
+            );
+        }
+        return <View style={{flex: 1}} />;
+    };
 
   const renderSignTextFieldAndButton = () => {
     return (
@@ -131,6 +161,7 @@ const SignInScreen = props => {
         />
 
         {renderErrorMessage()}
+        {renderLocalValidation()}
 
         {props.isLoading ? (
           <View style={loginStyles.nextButton}>
@@ -186,9 +217,11 @@ const mapDispatchToProps = dispatch => ({
     dispatch(doLogin(data));
     dispatch(showLoading(true));
   },
-
-  setIsLogin: () => {
-    dispatch(setIsLogin(true));
+    clearError : () =>{
+      dispatch(clearError(false));
+    },
+    setIsLogin: () => {
+      dispatch(setIsLogin(true));
   },
 });
 

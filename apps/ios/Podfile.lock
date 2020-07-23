@@ -31,9 +31,7 @@ PODS:
   - ReachabilitySwift (5.0.0)
   - React (0.59.5):
     - React/Core (= 0.59.5)
-  - react-native-material-kit (0.6.0-beta.1):
-    - React
-  - react-native-webview (8.0.6):
+  - react-native-webview (8.2.1):
     - React
   - React/ART (0.59.5):
     - React/Core
@@ -86,9 +84,9 @@ PODS:
     - React/RCTBlob
   - RNFS (2.16.6):
     - React
-  - RNGestureHandler (1.1.0):
+  - RNGestureHandler (1.6.1):
     - React
-  - RNReanimated (1.0.1):
+  - RNReanimated (1.9.0):
     - React
   - RNVectorIcons (6.6.0):
     - React
@@ -103,7 +101,6 @@ DEPENDENCIES:
   - GoogleAnalytics
   - GoogleSignIn
   - ReachabilitySwift
-  - react-native-material-kit (from `../react-app/node_modules/react-native-material-kit`)
   - react-native-webview (from `../react-app/node_modules/react-native-webview`)
   - React/ART (from `../react-app/node_modules/react-native`)
   - React/Core (from `../react-app/node_modules/react-native`)
@@ -143,8 +140,6 @@ EXTERNAL SOURCES:
     :podspec: "../react-app/node_modules/react-native/third-party-podspecs/glog.podspec"
   React:
     :path: "../react-app/node_modules/react-native"
-  react-native-material-kit:
-    :path: "../react-app/node_modules/react-native-material-kit"
   react-native-webview:
     :path: "../react-app/node_modules/react-native-webview"
   RNFS:
@@ -172,14 +167,13 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   React: 90adac468c7b72bf1fa6c64bf230650f851a8388
-  react-native-material-kit: fcd29a6ad901670f8073433d382df2abaadb831f
-  react-native-webview: e11b5d7da61ac3acee13f3ae3184d417f773c5d5
+  react-native-webview: d3cf75764f98fd433f1222f5a7ca8e355ada2a15
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
-  RNGestureHandler: b65d391f4f570178d657b99a16ec99d09b8656b0
-  RNReanimated: c8dd490ca98a4edcba229bfa49f2516c95a43afb
+  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
+  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   yoga: 2e571f113e8cbeb0eb752aeebc86c1bfe7a8200c
 
-PODFILE CHECKSUM: 30a043c3fc84dd0ef299a0dba851921678bd0c5f
+PODFILE CHECKSUM: 4f616c93ea537e9e0cad020851d0134b7687de68
 
 COCOAPODS: 1.9.1

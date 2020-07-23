@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   TextInput,
+  Text,
 } from 'react-native';
 import React, {useState} from 'react';
 import {textColors, Colors} from '../styles/color.constants';
@@ -17,23 +18,25 @@ import QPButton from '../widgets/Button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const screen = Dimensions.get('screen');
 import {OutlinedTextField} from 'react-native-material-textfield';
+import StringUtils from '../Utils/StringUtils';
+import {loginStyles} from './login.styles';
+
 const CompanyCode = props => {
   const fieldRef = React.createRef();
   const [accessCode, setAccessCode] = useState('');
+  const [validation, setValidation] = useState('');
 
   const signInButtonPressed = () => {
-    //props.navigation.popToTop();
     if (accessCode.length > 2) {
       props.navigation.navigate('SignInScreen', {accessCode: accessCode});
+    } else {
+      setValidation('Please enter access code');
     }
   };
 
   const handleAccessCode = text => {
     setAccessCode(text);
-  };
-
-  const formatText = text => {
-    return text.replace(/[^+\d]/g, '');
+    setValidation('');
   };
 
   const renderBackButton = () => {
@@ -43,10 +46,19 @@ const CompanyCode = props => {
         <TouchableWithoutFeedback
           onPress={() => {
             console.log(props);
+            setValidation('');
             props.navigation.goBack();
           }}>
           <Icon name="keyboard-arrow-left" size={35} color="white" />
         </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
+  const renderLocalValidation = () => {
+    return (
+      <View style={{flex: 1, alignItems: 'center'}}>
+        <Text style={loginStyles.errorMessage}>{validation}</Text>
       </View>
     );
   };
@@ -80,6 +92,8 @@ const CompanyCode = props => {
               onChangeText={handleAccessCode}
             />
 
+            {renderLocalValidation()}
+
             <QPButton onPress={signInButtonPressed} buttonText={'Next'} />
           </View>
         </View>
@@ -108,7 +122,7 @@ const styles = StyleSheet.create({
 
   companyCodeContainer: {
     flex: 1,
-    marginVertical: MarginConstants.tab3,
+    marginVertical: MarginConstants.tab2,
     alignItems: 'center',
     width: '100%',
   },
