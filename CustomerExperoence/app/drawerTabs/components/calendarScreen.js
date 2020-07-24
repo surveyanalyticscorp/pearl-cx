@@ -1,16 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Modal,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import React from 'react';
+import {Modal, Platform, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import MonthYearSelector from '../widgets/MonthYearSelector';
+import MonthYearSelector from '../../widgets/MonthYearSelector';
 import moment from 'moment';
-import {MarginConstants} from '../styles/margin.constants';
-import {Colors} from '../styles/color.constants';
+import {MarginConstants} from '../../styles/margin.constants';
+import {Colors} from '../../styles/color.constants';
 import SafeAreaView from 'react-native-safe-area-view';
 
 const CalendarScreen = props => {

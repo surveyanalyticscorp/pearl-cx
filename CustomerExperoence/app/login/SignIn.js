@@ -111,10 +111,11 @@ const SignInScreen = props => {
 
   const renderErrorMessage = () => {
     if (props.isError) {
+        let errorMessage = props.errorMessage.errorAlert ? (props.errorMessage.errorAlert) : (props.errorMessage.message);
       return (
         <View style={loginStyles.errorMessageContainer}>
           <Text style={loginStyles.errorMessage}>
-            {props.errorMessage.errorAlert}
+            {errorMessage}
           </Text>
         </View>
       );

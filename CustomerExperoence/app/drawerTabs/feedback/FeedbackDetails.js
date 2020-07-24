@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {Text, View, Image, TouchableHighlight, Dimensions} from 'react-native';
+import {Dimensions, Text, View} from 'react-native';
 
-import FeedbackCell from '../../screens/rows/FeedbackCells';
+import FeedbackCell from '../components/FeedbackCells';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {TabBar, TabView} from 'react-native-tab-view';
 import {Colors} from '../../styles/color.constants';
@@ -11,6 +11,7 @@ import {MarginConstants} from '../../styles/margin.constants';
 import QPWebView from '../../widgets/QPWebView';
 import ActionButton from 'react-native-action-button';
 import {StackActions} from '@react-navigation/native';
+
 const FeedbackDetail = props => {
   const [index, setIndex] = useState(0);
   const [routes] = React.useState([
@@ -47,7 +48,7 @@ const FeedbackDetail = props => {
       case 'activity':
         return (
           <QPWebView
-            authToken={props.route.params.token}
+            authToken={props.route.params.token}ø
             uri={props.route.params.data.activityURL}
           />
         );
@@ -70,7 +71,7 @@ const FeedbackDetail = props => {
               labelStyle: {color: '#000000', fontSize: 12},
               tabStyle: {width: 150},
             }}
-            indicatorStyle={{backgroundColor: 'rgb(29, 119, 186)'}}
+            indicatorStyle={{backgroundColor: 'rgb(29,O 119, 186)'}}
             style={{backgroundColor: 'white'}}
             scrollEnabled={true}
             tabStyle={{

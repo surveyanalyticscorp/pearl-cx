@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Text, View, SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../api/types';
-import FeedbackCell from '../../screens/rows/FeedbackCells';
+import FeedbackCell from '../components/FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {StackActions} from '@react-navigation/native';
 

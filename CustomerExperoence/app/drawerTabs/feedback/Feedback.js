@@ -11,7 +11,7 @@ import {MarginConstants} from '../../styles/margin.constants';
 
 const initialLayout = {width: Dimensions.get('window').width};
 import {EventRegister} from 'react-native-event-listeners';
-import CalendarScreen from '../../screens/calendarScreen';
+import CalendarScreen from '../components/calendarScreen';
 import {getFeedbackList} from '../../actions';
 import {connect} from 'react-redux';
 import {DotIndicator} from 'react-native-indicators';
