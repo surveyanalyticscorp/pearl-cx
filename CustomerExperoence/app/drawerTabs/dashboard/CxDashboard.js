@@ -1,14 +1,25 @@
 import React, {useEffect, Component, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  ImageBackground,
+  Dimensions,
+  TouchableHighlight,
+} from 'react-native';
 
 import {styles} from '../../styles/styles';
 import {getDashboardContent, showLoading} from '../../actions';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../api/types';
-import BarIndicator from 'react-native-indicators/src/components/bar-indicator';
 import {dashboardStyles} from './dashboard.style';
-
+import {DotIndicator} from 'react-native-indicators';
+import {Colors} from '../../styles/color.constants';
+import {MarginConstants} from '../../styles/margin.constants';
+import Pie from 'react-native-pie';
+import {PaddingConstants} from '../../styles/padding.constants';
+const {height, width} = Dimensions.get('window');
+const factor = width > height ? height : width;
 const CxDashboard = props => {
   const [callApi, setCallAPI] = useState(false);
 
@@ -24,46 +35,161 @@ const CxDashboard = props => {
     }
   }, [callApi, props]);
 
-  useEffect(() => {
-    if (props.dashboardData) {
-      console.log('Dashboard data: ' + props.dashboardData.body);
-    }
-  }, [props.dashboardData]);
-
   const renderErrorMessage = () => {
     if (props.isError) {
       return (
         <View style={styles.errorMessageContainer}>
-          <Text style={styles.errorMessage}>
-            {props.errorMessage.message}
-          </Text>
+          <Text style={styles.errorMessage}>{props.errorMessage.message}</Text>
         </View>
       );
     }
     return <View style={{flex: 1}} />;
+  };
+
+  const getTrimmedNoOfResponses = () => {
+    let numberOfResponsesNumber = 0;
+    if (props.dashboardData.body.primaryStoreNPS.totalResponses) {
+      numberOfResponsesNumber =
+        props.dashboardData.body.primaryStoreNPS.totalResponses;
+    }
+    let numberOfResponses = numberOfResponsesNumber + '';
+
+    if (numberOfResponsesNumber >= 10000) {
+      numberOfResponses =
+        Math.round(numberOfResponsesNumber / 1000).toFixed(
+          numberOfResponsesNumber > 10000 ? 0 : 1,
+        ) + 'K';
+    } else if (numberOfResponsesNumber >= 1000) {
+      numberOfResponses = (numberOfResponsesNumber / 1000).toFixed(1) + 'K';
+    }
+    let responseText = numberOfResponses > 1 ? 'Responses' : 'Response';
+    let textView = (
+      <View style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode={'tail'}
+          style={dashboardStyles.responseText}>
+          {numberOfResponses}
+        </Text>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode={'tail'}
+          style={dashboardStyles.response}>
+          {responseText}
+        </Text>
+      </View>
+    );
+
+    return textView;
+  };
+
+  const getTicketText = () => {
+    let ticketText = '';
+    let pendingCount = props.dashboardData.body.DetractorTicketsCount.pending;
+    let newCount = props.dashboardData.body.DetractorTicketsCount.new;
+    if (pendingCount > 0) {
+      ticketText =
+        pendingCount + ' Pending ' + (pendingCount > 1 ? 'tickets' : 'ticket');
+    }
+    if (newCount > 0) {
+      if (pendingCount > 0) {
+        ticketText = newCount + ' New, ' + ticketText;
+      } else {
+        ticketText = newCount + ' New ' + (newCount > 1 ? 'tickets' : 'ticket');
+      }
+    }
+    if (newCount == 0 && pendingCount == 0) {
+      ticketText = 'No Pending tickets';
+    }
+    return ticketText;
+  };
+
+  const getTicketsButton = () => {
+    return (
+      <TouchableHighlight style={{flex: 1}} onPress={() => {}}>
+        <View style={dashboardStyles.ticketButton}>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode={'tail'}
+            style={dashboardStyles.ticketText}>
+            {getTicketText()}
+          </Text>
+        </View>
+      </TouchableHighlight>
+    );
+  };
+
+  const renderDonutChart = () => {
+    let percent = props.dashboardData.body.primaryStoreNPS.npsPercentage;
+    let color = percent < 0 ? Colors.negativePassive : Colors.positivePassive;
+    let roundColor =
+      percent < 0 ? Colors.negativePromter : Colors.positivePromter;
+    return (
+      <View style={dashboardStyles.chartContainer}>
+        <View style={{flexDirection: 'row'}}>
+          <View style={{flex: 0.5}}>
+            <Pie
+              radius={80}
+              innerRadius={60}
+              sections={[
+                {
+                  percentage: percent,
+                  color: roundColor,
+                },
+              ]}
+              backgroundColor={color}
+            />
+            <View style={dashboardStyles.gauge}>
+              <Text style={dashboardStyles.gaugeText}>{percent + ''}</Text>
+              <Text style={dashboardStyles.npmGaugeText}>NPS</Text>
+            </View>
+          </View>
+          {getTrimmedNoOfResponses()}
+        </View>
+      </View>
+    );
   };
 
   const renderDashboardContent = () => {
     if (!props.isError) {
       return (
         <View style={dashboardStyles.center}>
-          <Text style={styles.title}> Dashboard content</Text>
+          {renderDonutChart()}
+          {getTicketsButton()}
         </View>
       );
     }
     return <View style={{flex: 1}} />;
   };
 
-  return props.isLoading ? (
-    <View style={dashboardStyles.center}>
-      <BarIndicator color="#2589E3" count={5} size={35} />
-    </View>
-  ) : (
-    <View style={dashboardStyles.cxContainer}>
-      {renderErrorMessage()}
-      {renderDashboardContent()}
-    </View>
-  );
+  const renderDashboard = () => {
+    return (
+      <ImageBackground
+        resizeMode={'stretch'}
+        source={require('../../images/background.png')}
+        style={dashboardStyles.imageBackgroundContainer}>
+        {props.isLoading ? renderIndicator() : renderScreen()}
+      </ImageBackground>
+    );
+  };
+
+  const renderScreen = () => {
+    return (
+      <View style={dashboardStyles.cxContainer}>
+        {renderDashboardContent()}
+      </View>
+    );
+  };
+
+  const renderIndicator = () => {
+    return (
+      <View style={dashboardStyles.center}>
+        <DotIndicator color={Colors.white} count={3} size={10} />
+      </View>
+    );
+  };
+
+  return renderDashboard();
 };
 
 const mapStateToProps = state => {
@@ -89,5 +215,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(CxDashboard);
-
-

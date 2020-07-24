@@ -10,9 +10,7 @@ const Dashboard = props => {
     async function getAuthToken() {
       return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
     }
-    getAuthToken().then(token => {
-
-    });
+    getAuthToken().then(token => {});
   });
   return (
     <View style={styles.center}>

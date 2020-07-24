@@ -4,6 +4,7 @@ import {Dimensions, PixelRatio, Platform} from 'react-native';
 const factor = DeviceInfo.isTablet() ? 0.8 : 1;
 const rem = Platform.OS === 'ios' ? 15 : 14;
 export const TextSizes = {
+  donutPercentText: 2.2 * rem * factor,
   extraLargeText: 1.8 * rem * factor,
   largeText: 1.4 * rem * factor,
   primary: 1.2 * rem * factor,
