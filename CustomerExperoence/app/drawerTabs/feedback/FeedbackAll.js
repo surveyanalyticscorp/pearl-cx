@@ -8,15 +8,13 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {StackActions} from '@react-navigation/native';
 
 const FeedbackAll = props => {
-    const [authToken, setAuthToken] = useState('');
     const [selectedRowID, setSelectedRowID] = useState(0);
-    const [callApi, setCallAPI] = useState(true);
 
     const _onPressRow = (data) => {
         const pushAction = StackActions.push('Feedback Details', {
             data: data,
             ticketStatus: props.feedback.response.body.cxTicketStatusValues,
-            token: authToken
+            token: props.authToken
         });
         props.navigation.dispatch(pushAction);
     };
@@ -65,9 +63,20 @@ const FeedbackAll = props => {
     };
 
 
+    const getItems = () => {
+        if (props.sentiment === 'All') {
+            return props.feedback.response.body.allResponses
+        } else {
+            let responses  = props.feedback.response.body.allResponses
+            let bigResponse = responses.filter(res => res.sentiment === props.sentiment);
+            return bigResponse;
+        }
+    }
+
+
     const renderFeedbackStatus = () => {
         if (props.feedback.response.body) {
-            let items = props.feedback.response.body.allResponses;
+            let items = getItems();
             return (
                 <SafeAreaView style={styles.container}>
                     <FlatList

@@ -58,28 +58,6 @@ const AppRouter = props => {
         );
     };
 
-    const createFeedbackTopTabs = props => {
-        return (
-            <MaterialTopTabs.Navigator
-                swipeEnabled={false}
-                tabBarOptions={{
-                    indicatorStyle: {backgroundColor: '#FF0000'},
-                    scrollEnabled: true,
-                    labelStyle: {color: '#000000', fontSize: 12},
-                    tabStyle: {width: 150},
-                    style: {backgroundColor: '#FFFFFF'},
-                }}>
-                <MaterialTopTabs.Screen name="All" component={FeedbackAll}/>
-                <MaterialTopTabs.Screen
-                    name="Detractor"
-                    component={FeedbackDetractor}
-                />
-                <MaterialTopTabs.Screen name="Passive" component={FeedbackAll}/>
-                <MaterialTopTabs.Screen name="Promoter" component={FeedbackDetractor}/>
-            </MaterialTopTabs.Navigator>
-        );
-    };
-
     const HeaderRight = () => {
         return (
             <View style={{flexDirection: 'row', marginLeft: 20}}>
