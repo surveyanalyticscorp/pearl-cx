@@ -7,6 +7,7 @@ import {PaddingConstants} from '../../styles/padding.constants';
 export const dashboardStyles = StyleSheet.create({
   cxContainer: {
     flex: 1,
+    justifyContent: 'flex-start',
   },
   center: {
     flex: 1,
@@ -69,4 +70,21 @@ export const dashboardStyles = StyleSheet.create({
     fontFamily: fontFamily.Regular,
     fontSize: TextSizes.largeText,
   },
+  listViewContainer: {
+    backgroundColor: 'white',
+    height: MarginConstants.tab4 * 5,
+  },
+  textView:{
+    height: MarginConstants.tab4 * 1.5,
+    justifyContent: 'center',
+    paddingLeft: PaddingConstants.tab1,
+    paddingVertical: PaddingConstants.tab2,
+    backgroundColor: Colors.grey,
+  },
+  listTitle: {
+    color: textColors.accent,
+    fontFamily: fontFamily.Regular,
+    fontSize: TextSizes.secondary,
+  },
+  responseView: {flex: 0.5, justifyContent: 'center', alignItems: 'center'}
 });

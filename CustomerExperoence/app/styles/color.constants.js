@@ -43,7 +43,7 @@ const Colors = {
 const textColors = {
   primary: Colors.white,
   secondary: Colors.secondary,
-  accent: '#00508E',
+  accent: '#124F8E',
 };
 
 const buttonColors = {

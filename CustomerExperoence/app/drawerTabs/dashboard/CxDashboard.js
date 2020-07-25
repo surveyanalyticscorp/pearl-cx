@@ -3,12 +3,12 @@ import {
   View,
   Text,
   ImageBackground,
-  Dimensions,
   TouchableHighlight,
   ScrollView,
   RefreshControl,
+  FlatList,
 } from 'react-native';
-
+import CXTrendItemWidget from './components/CXTrendItemWidget';
 import {styles} from '../../styles/styles';
 import {getDashboardContent, showLoading} from '../../actions';
 import {connect} from 'react-redux';
@@ -18,8 +18,6 @@ import {dashboardStyles} from './dashboard.style';
 import {DotIndicator} from 'react-native-indicators';
 import {Colors} from '../../styles/color.constants';
 import Pie from 'react-native-pie';
-const {height, width} = Dimensions.get('window');
-const factor = width > height ? height : width;
 const wait = timeout => {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
@@ -76,7 +74,7 @@ const CxDashboard = props => {
     }
     let responseText = numberOfResponses > 1 ? 'Responses' : 'Response';
     let textView = (
-      <View style={{flex: 0.5, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={dashboardStyles.responseView}>
         <Text
           numberOfLines={1}
           ellipsizeMode={'tail'}
@@ -118,8 +116,10 @@ const CxDashboard = props => {
 
   const getTicketsButton = () => {
     return (
-      <TouchableHighlight style={{flex: 1}} onPress={() => {}}>
-        <View style={dashboardStyles.ticketButton}>
+      <TouchableHighlight
+        style={dashboardStyles.ticketButton}
+        onPress={() => {}}>
+        <View>
           <Text
             numberOfLines={1}
             ellipsizeMode={'tail'}
@@ -162,12 +162,85 @@ const CxDashboard = props => {
     );
   };
 
+  const renderStoreNPSList = () => {
+    if (props.dashboardData.body.storeNPSList.length > 0) {
+      let list = props.dashboardData.body.storeNPSList;
+      let data = list.slice(0, 5);
+      let title = props.dashboardData.body.systemPreferences.businessUnitName
+        ? props.dashboardData.body.systemPreferences.businessUnitName
+        : 'Business';
+      return renderLists(data, title);
+    }
+  };
+
+  const renderProductNPSList = () => {
+    if (props.dashboardData.body.productNPSList.length > 0) {
+      let list = props.dashboardData.body.productNPSList;
+      let title = 'Products';
+      return renderLists(list, title);
+    }
+  };
+
+  const renderNoDataFound = () => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          marginTop: 20,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'transparent',
+        }}>
+        <Text style={{color: 'black', fontSize: 16}}>
+          No feedbacks received.
+        </Text>
+      </View>
+    );
+  };
+
+  const renderRow = storeItem => {
+    let name = storeItem.item.filterName
+      ? storeItem.item.filterName
+      : storeItem.item.storeName;
+    let clickable = storeItem.item.filterName ? false : true;
+    return (
+      <CXTrendItemWidget
+        storeName={name}
+        nps={storeItem.item.NPSScore.npsPercentage}
+        promoter={storeItem.item.NPSScore.promoters}
+        passive={storeItem.item.NPSScore.passive}
+        detractor={storeItem.item.NPSScore.detractors}
+        isClickable={clickable}
+        onPress={() => {}}
+      />
+    );
+  };
+  const renderLists = (list, title) => {
+    return (
+      <View style={dashboardStyles.listViewContainer}>
+        <View style={dashboardStyles.textView}>
+          <Text style={dashboardStyles.listTitle}>{title}</Text>
+        </View>
+        <FlatList
+          data={list}
+          keyExtractor={item => item.filterName}
+          renderItem={renderRow}
+          onEndReachedThreshold={0.01}
+          refreshing={false}
+          ListEmptyComponent={renderNoDataFound}
+        />
+      </View>
+    );
+  };
+
   const renderDashboardContent = () => {
-    if (!props.isError) {
+    if (!props.isError && !props.isLoading) {
       return (
         <View style={dashboardStyles.center}>
           {renderDonutChart()}
           {getTicketsButton()}
+          {renderStoreNPSList()}
+          {renderProductNPSList()}
         </View>
       );
     }
