@@ -1,10 +1,12 @@
-import React, {useEffect, Component, useState} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 import {
   View,
   Text,
   ImageBackground,
   Dimensions,
   TouchableHighlight,
+  ScrollView,
+  RefreshControl,
 } from 'react-native';
 
 import {styles} from '../../styles/styles';
@@ -15,22 +17,32 @@ import {ASYNC_AUTH_TOKEN} from '../../api/types';
 import {dashboardStyles} from './dashboard.style';
 import {DotIndicator} from 'react-native-indicators';
 import {Colors} from '../../styles/color.constants';
-import {MarginConstants} from '../../styles/margin.constants';
 import Pie from 'react-native-pie';
-import {PaddingConstants} from '../../styles/padding.constants';
 const {height, width} = Dimensions.get('window');
 const factor = width > height ? height : width;
+const wait = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout);
+  });
+};
 const CxDashboard = props => {
-  const [callApi, setCallAPI] = useState(false);
+  const [callApi, setCallAPI] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setCallAPI(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     async function getAuthToken() {
       return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
     }
-    if (!callApi) {
+    if (callApi) {
       getAuthToken().then(token => {
         props.getDashboardContent(token);
-        setCallAPI(true);
+        setCallAPI(false);
       });
     }
   }, [callApi, props]);
@@ -168,25 +180,30 @@ const CxDashboard = props => {
         resizeMode={'stretch'}
         source={require('../../images/background.png')}
         style={dashboardStyles.imageBackgroundContainer}>
-        {props.isLoading ? renderIndicator() : renderScreen()}
+        {renderScreen()}
       </ImageBackground>
     );
   };
 
   const renderScreen = () => {
     return (
-      <View style={dashboardStyles.cxContainer}>
-        {renderDashboardContent()}
-      </View>
+      <ScrollView
+        contentContainerStyle={dashboardStyles.cxContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <View style={dashboardStyles.cxContainer}>
+          {renderDashboardContent()}
+          {renderIndicator()}
+        </View>
+      </ScrollView>
     );
   };
 
   const renderIndicator = () => {
-    return (
-      <View style={dashboardStyles.center}>
-        <DotIndicator color={Colors.white} count={3} size={10} />
-      </View>
-    );
+    if (props.isLoading) {
+      return <DotIndicator color={Colors.white} count={3} size={10} />;
+    }
   };
 
   return renderDashboard();
