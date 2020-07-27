@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import {DotIndicator} from 'react-native-indicators';
 import {Colors} from '../../../styles/color.constants';
 import {TabBar, TabView} from 'react-native-tab-view';
-import {getDetractorContent} from '../../../actions';
 import {fontFamily} from '../../../styles/font.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -16,6 +15,7 @@ import DetractorScenes from './DetractorScenes';
 
 const DetractorTickets = props => {
     const [index, setIndex] = useState(0);
+    const [authToken, setAuthToken] = useState('');
     const [routes] = React.useState([
         {key: 'new', title: 'NEW'},
         {key: 'pending', title: 'PENDING'},
@@ -49,6 +49,7 @@ const DetractorTickets = props => {
             return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
         }
         getAuthToken().then(token => {
+            setAuthToken(token);
             for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
                 let params = responseData[responseCount];
                 apiHandler.getCXDetractorTicket(
@@ -74,14 +75,39 @@ const DetractorTickets = props => {
         }
     };
 
+    const getDetractorAPI = (dataCount) => {
+        let params = responseData[dataCount];
+        let pageCount = parseInt(params.pageOffset) + 1;
+        params.pageOffset = pageCount + '';
+        apiHandler.getCXDetractorTicket(
+            authToken,
+            params,
+            response => {
+                let data = [...responseData];
+                data[dataCount].pageOffset = response.body.pageOffset;
+                data[dataCount].data.tickets = [...data[dataCount].data.tickets, ...response.body.tickets];
+                setResponseData(data)
+            },
+            error => {
+                console.log(error);
+            },
+        );
+    }
+
     const renderScene = ({route}) => {
         switch (route.key) {
             case 'new':
-                return <DetractorScenes data={responseData[0].data.tickets}/>;
+                return <DetractorScenes data={responseData[0].data.tickets} endReached={() => {
+                    getDetractorAPI(0)
+                }}/>;
             case 'pending':
-                return <DetractorScenes data={responseData[1].data.tickets}/>;
+                return <DetractorScenes data={responseData[1].data.tickets} endReached={() => {
+                    getDetractorAPI(1)
+                }}/>;
             case 'resolved':
-                return <DetractorScenes data={responseData[2].data.tickets}/>;
+                return <DetractorScenes data={responseData[2].data.tickets} endReached={() => {
+                    getDetractorAPI(2)
+                }}/>;
         }
     };
 
@@ -91,7 +117,6 @@ const DetractorTickets = props => {
                 navigationState={{index, routes}}
                 renderScene={renderScene}
                 onIndexChange={setIndex}
-                //initialLayout={initialLayout}
                 renderTabBar={props => (
                     <TabBar
                         {...props}
@@ -143,9 +168,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    getDetractorContents: (param, token) => {
-        getDetractorContent(param, token);
-    },
 });
 
 export default connect(

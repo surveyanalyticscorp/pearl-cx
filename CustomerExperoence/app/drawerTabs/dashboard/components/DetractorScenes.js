@@ -35,6 +35,10 @@ const DetractorScenes = props => {
         );
     }
 
+    const onEndReached = () => {
+        props.endReached && props.endReached()
+    }
+
     return (
         <ImageBackground
             resizeMode={'stretch'}
@@ -47,6 +51,7 @@ const DetractorScenes = props => {
                 renderItem={renderRow}
                 onEndReachedThreshold={0.01}
                 refreshing={false}
+                onEndReached={onEndReached}
                 ListEmptyComponent={renderNoDataFound}
             />
         </ImageBackground>
