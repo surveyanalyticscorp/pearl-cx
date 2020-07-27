@@ -73,7 +73,7 @@ class ApiHandler {
     }*/
   }
 
-  getCXDashBoard(token, successCallback, data = {}, errorCallback = () => {}) {
+  getCXDashBoard(token, data = {}, successCallback, errorCallback = () => {}) {
     return this.callAPIInternal(
       token,
       BASE_URL + 'a/nativehtml/cx.CXHome',

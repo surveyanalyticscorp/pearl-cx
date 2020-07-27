@@ -24,6 +24,7 @@ import {DotIndicator} from 'react-native-indicators';
 import {Colors} from '../../../styles/color.constants';
 import Pie from 'react-native-pie';
 import {MarginConstants} from '../../../styles/margin.constants';
+import {apiHandler} from '../../../api/ApiHandler';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -39,6 +40,7 @@ class DashBoardStoreDetails extends Component {
       callApi: true,
     };
     this.apiCall();
+    this.storeData = '';
   }
   apiCall = () => {
     async function getAuthToken() {
@@ -48,16 +50,27 @@ class DashBoardStoreDetails extends Component {
     if (this.state.callApi) {
       getAuthToken().then(token => {
         this.setState({authToken: token});
-        this.props.getDashboardContent(token, this.props.route.params.data);
-        this.setState({callApi: false});
+        //this.props.getDashboardContent(token, this.props.route.params.data);
+        apiHandler.getCXDashBoard(
+          token,
+          this.props.route.params.data,
+          response => {
+            console.log(response);
+            this.storeData = response;
+            this.setState({callApi: false});
+          },
+          error => {
+            console.log(error);
+          },
+        );
       });
     }
   };
 
   getTrimmedNoOfResponses = () => {
     let numberOfResponsesNumber = 0;
-    if (this.props.storeData.body.primaryStoreNPS.totalResponses) {
-      numberOfResponsesNumber = this.props.storeData.body.primaryStoreNPS
+    if (this.storeData.body.primaryStoreNPS.totalResponses) {
+      numberOfResponsesNumber = this.storeData.body.primaryStoreNPS
         .totalResponses;
     }
     let numberOfResponses = numberOfResponsesNumber + '';
@@ -93,8 +106,8 @@ class DashBoardStoreDetails extends Component {
 
   getTicketText = () => {
     let ticketText = '';
-    let pendingCount = this.props.storeData.body.DetractorTicketsCount.pending;
-    let newCount = this.props.storeData.body.DetractorTicketsCount.new;
+    let pendingCount = this.storeData.body.DetractorTicketsCount.pending;
+    let newCount = this.storeData.body.DetractorTicketsCount.new;
     if (pendingCount > 0) {
       ticketText =
         pendingCount + ' Pending ' + (pendingCount > 1 ? 'tickets' : 'ticket');
@@ -118,9 +131,9 @@ class DashBoardStoreDetails extends Component {
         style={dashboardStyles.ticketButton}
         onPress={() => {
           let data = {
-            storeId: '' + this.props.storeData.body.primaryStoreId,
-            title: this.props.storeData.body.primaryStoreName + ' - Tickets',
-            token: authToken,
+            storeId: '' + this.storeData.body.primaryStoreId,
+            title: this.storeData.body.primaryStoreName + ' - Tickets',
+            token: this.state.authToken,
           };
           const pushAction = StackActions.push('DetractorTickets', {
             data: data,
@@ -140,7 +153,7 @@ class DashBoardStoreDetails extends Component {
   };
 
   renderDonutChart = () => {
-    let percent = this.props.storeData.body.primaryStoreNPS.npsPercentage;
+    let percent = this.storeData.body.primaryStoreNPS.npsPercentage;
     let color = percent < 0 ? Colors.negativePassive : Colors.positivePassive;
     let roundColor =
       percent < 0 ? Colors.negativePromter : Colors.positivePromter;
@@ -171,19 +184,19 @@ class DashBoardStoreDetails extends Component {
   };
 
   renderStoreNPSList = () => {
-    if (this.props.storeData.body.storeNPSList.length > 0) {
-      let list = this.props.storeData.body.storeNPSList;
+    if (this.storeData.body.storeNPSList.length > 0) {
+      let list = this.storeData.body.storeNPSList;
       let data = list.slice(0, 5);
-      let title = this.props.storeData.body.systemPreferences.businessUnitName
-        ? this.props.storeData.body.systemPreferences.businessUnitName
+      let title = this.storeData.body.systemPreferences.businessUnitName
+        ? this.storeData.body.systemPreferences.businessUnitName
         : 'Business';
       return this.renderLists(data, title);
     }
   };
 
   renderProductNPSList = () => {
-    if (this.props.storeData.body.productNPSList.length > 0) {
-      let list = this.props.storeData.body.productNPSList;
+    if (this.storeData.body.productNPSList.length > 0) {
+      let list = this.storeData.body.productNPSList;
       let title = 'Products';
       return this.renderLists(list, title);
     }
@@ -221,7 +234,7 @@ class DashBoardStoreDetails extends Component {
         isClickable={clickable}
         onPress={() => {
           let data = {storeId: storeItem.item.storeId + ''};
-          let titleJSON = {title: this.props.storeData.body.primaryStoreName};
+          let titleJSON = {title: this.storeData.body.primaryStoreName};
           const pushAction = StackActions.push('DashBoardStoreDetails', {
             data: data,
           });
@@ -236,7 +249,7 @@ class DashBoardStoreDetails extends Component {
       <View
         style={[
           dashboardStyles.listViewContainer,
-          {height: MarginConstants.tab4 * 10},
+          {height: ( MarginConstants.tab4 * 2 +  MarginConstants.tab4 * 1.5 * list.length)},
         ]}>
         <View style={dashboardStyles.textView}>
           <Text style={dashboardStyles.listTitle}>{title}</Text>
@@ -273,7 +286,7 @@ class DashBoardStoreDetails extends Component {
         resizeMode={'stretch'}
         source={require('../../../images/background.png')}
         style={dashboardStyles.imageBackgroundContainer}>
-        {this.props.storeData === '' || this.props.isLoading
+        {this.storeData === '' || this.props.isLoading
           ? this.renderIndicator()
           : this.renderScreen()}
       </ImageBackground>
@@ -292,7 +305,7 @@ class DashBoardStoreDetails extends Component {
   };
 
   renderIndicator = () => {
-    if (this.props.storeData === '' || this.props.isLoading) {
+    if (this.storeData === '' || this.props.isLoading) {
       return <DotIndicator color={Colors.white} count={3} size={10} />;
     }
   };
@@ -303,8 +316,6 @@ class DashBoardStoreDetails extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log('CxDashboard State:');
-  console.log(state);
   return {
     storeData: state.dashboard.storeDashboard,
     userInfo: state.global.userInfo,
