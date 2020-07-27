@@ -17,8 +17,6 @@ import {Colors} from '../styles/color.constants';
 import DrawerContent from '../routes/DrawerContent';
 import CxDashboard from '../drawerTabs/dashboard/CxDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import FeedbackAll from '../drawerTabs/feedback/FeedbackAll';
-import FeedbackDetractor from '../drawerTabs/feedback/FeedbackDetractor';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SignInStack from './signInStack';
 import {MyTheme} from '../styles/styles';
@@ -29,6 +27,7 @@ import FeedbackDetail from  '../drawerTabs/feedback/FeedbackDetails'
 import {EventRegister} from 'react-native-event-listeners';
 import FeedbackUpdate from '../drawerTabs/feedback/FeedbackUpdate'
 import { CommonActions } from '@react-navigation/native';
+import DetractorTickets from '../drawerTabs/dashboard/components/DetractorTickets';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -71,7 +70,7 @@ const AppRouter = props => {
         );
     };
 
-    const HeaderBackLeft = (routeName) => {
+    const HeaderBackLeft = () => {
         const navigation = useNavigation();
         return (
             <View style={{flexDirection: 'row', marginLeft: 10}}>
@@ -100,14 +99,14 @@ const AppRouter = props => {
                 name="Feedback Details"
                 component={FeedbackDetail}
                 options={{
-                    headerLeft: props => <HeaderBackLeft routeName={'Feedback'}/>,
+                    headerLeft: props => <HeaderBackLeft />,
                 }}
             />
             <RootStack.Screen
                 name="Change Status"
                 component={FeedbackUpdate}
                 options={{
-                    headerLeft: props => <HeaderBackLeft routeName={'Feedback Details'}/>,
+                    headerLeft: props => <HeaderBackLeft />,
                 }}
             />
 
@@ -121,6 +120,13 @@ const AppRouter = props => {
                 component={CxDashboard}
                 options={{
                     headerLeft: props => <HeaderLeft/>,
+                }}
+            />
+            <RootStack.Screen
+                name="DetractorTicket"
+                component={DetractorTickets}
+                options={{
+                    headerLeft: props => <HeaderBackLeft />,
                 }}
             />
         </RootStack.Navigator>
