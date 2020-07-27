@@ -8,6 +8,7 @@ import {
   API_ERROR,
   DETRACTOR_TICKET_RECEIVED,
   IS_LOADING,
+  GET_DETRACTOR_TICKET,
 } from '../actions';
 
 // Worker: Increase Counter Async (Delayed By 4 Seconds)
@@ -42,10 +43,10 @@ export function* watchGetDashboard() {
 function* fetchDetractorTicketAsync(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
-    const json = yield WebServiceHandler.post(
+    const json = yield WebServiceHandler.postNew(
       BASE_URL + 'a/nativehtml/cx.CXDetractorTicket',
       {'Auth-Token': action.token},
-      {},
+      action.param,
     );
     yield put({
       type: DETRACTOR_TICKET_RECEIVED,
@@ -54,7 +55,6 @@ function* fetchDetractorTicketAsync(action) {
     yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
     yield put({type: IS_LOADING, payload: {isLoading: false}});
-    console.log('Dashboard saga error:' + JSON.stringify(error));
     yield put({
       type: API_ERROR,
       error: error,
@@ -64,5 +64,5 @@ function* fetchDetractorTicketAsync(action) {
 
 // Watcher: Increase Counter Async
 export function* watchGetDetractorTicket() {
-  yield takeLatest(GET_DASHBOARD, fetchDetractorTicketAsync);
+  yield takeLatest(GET_DETRACTOR_TICKET, fetchDetractorTicketAsync);
 }

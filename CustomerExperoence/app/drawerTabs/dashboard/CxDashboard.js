@@ -25,6 +25,7 @@ const wait = timeout => {
   });
 };
 const CxDashboard = props => {
+  const [authToken, setAuthToken] = useState('');
   const [callApi, setCallAPI] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -40,6 +41,7 @@ const CxDashboard = props => {
     }
     if (callApi) {
       getAuthToken().then(token => {
+        setAuthToken(token);
         props.getDashboardContent(token);
         setCallAPI(false);
       });
@@ -123,6 +125,7 @@ const CxDashboard = props => {
           let data = {
             storeId: '' + props.dashboardData.body.primaryStoreId,
             title: props.dashboardData.body.primaryStoreName + ' - Tickets',
+            token: authToken,
           };
           const pushAction = StackActions.push('DetractorTickets', {
             data: data,

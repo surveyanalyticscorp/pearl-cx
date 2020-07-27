@@ -71,7 +71,7 @@ const FeedbackDetail = props => {
               labelStyle: {color: '#000000', fontSize: 12},
               tabStyle: {width: 150},
             }}
-            indicatorStyle={{backgroundColor: 'rgb(29,O 119, 186)'}}
+            indicatorStyle={{backgroundColor: Colors.red}}
             style={{backgroundColor: 'white'}}
             scrollEnabled={true}
             tabStyle={{
