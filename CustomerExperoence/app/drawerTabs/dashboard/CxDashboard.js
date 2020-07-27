@@ -226,8 +226,8 @@ const CxDashboard = props => {
         isClickable={clickable}
         onPress={() => {
           let data = {storeId: storeItem.item.storeId + ''};
-          let titleJSON = {title: props.dashboardData.body.primaryStoreName};
           const pushAction = StackActions.push('DashBoardStoreDetails', {
+            name: props.dashboardData.body.primaryStoreName,
             data: data,
           });
           props.navigation.dispatch(pushAction);

@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useCallback, useState} from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -10,12 +10,7 @@ import {
 } from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import CXTrendItemWidget from '../components/CXTrendItemWidget';
-import {styles} from '../../../styles/styles';
-import {
-  clearError,
-  getStoreDashboardContent,
-  showLoading,
-} from '../../../actions';
+import {clearError, showLoading} from '../../../actions';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../../api/types';
@@ -57,6 +52,9 @@ class DashBoardStoreDetails extends Component {
           response => {
             console.log(response);
             this.storeData = response;
+            this.props.navigation.setParams({
+              name: response.body.primaryStoreName,
+            });
             this.setState({callApi: false});
           },
           error => {
@@ -234,8 +232,8 @@ class DashBoardStoreDetails extends Component {
         isClickable={clickable}
         onPress={() => {
           let data = {storeId: storeItem.item.storeId + ''};
-          let titleJSON = {title: this.storeData.body.primaryStoreName};
           const pushAction = StackActions.push('DashBoardStoreDetails', {
+            name: this.storeData.body.primaryStoreName,
             data: data,
           });
           this.props.navigation.dispatch(pushAction);
@@ -249,7 +247,11 @@ class DashBoardStoreDetails extends Component {
       <View
         style={[
           dashboardStyles.listViewContainer,
-          {height: ( MarginConstants.tab4 * 2 +  MarginConstants.tab4 * 1.5 * list.length)},
+          {
+            height:
+              MarginConstants.tab4 * 2 +
+              MarginConstants.tab4 * 1.5 * list.length,
+          },
         ]}>
         <View style={dashboardStyles.textView}>
           <Text style={dashboardStyles.listTitle}>{title}</Text>
@@ -317,7 +319,6 @@ class DashBoardStoreDetails extends Component {
 
 const mapStateToProps = state => {
   return {
-    storeData: state.dashboard.storeDashboard,
     userInfo: state.global.userInfo,
     isLoading: state.global.isLoading,
     isError: state.global.isError,

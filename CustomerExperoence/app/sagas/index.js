@@ -6,7 +6,6 @@ import {watchGetFeedback, watchUpdateFeedback} from './feedbackSaga';
 import {
   watchGetDashboard,
   watchGetDetractorTicket,
-  watchGetStoreDashboard,
 } from './dashboardSaga';
 import {
   watchDoLogin,
@@ -24,6 +23,5 @@ export function* rootSaga() {
     fork(watchValidateUserOtp),
     fork(watchUpdateFeedback),
     fork(watchGetDetractorTicket),
-    fork(watchGetStoreDashboard),
   ]);
 }

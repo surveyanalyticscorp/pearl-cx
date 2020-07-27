@@ -1,13 +1,8 @@
-import {
-  DASHBOARD_RECEIVED,
-  DETRACTOR_TICKET_RECEIVED,
-  STORE_DASHBOARD_RECEIVED,
-} from '../actions';
+import {DASHBOARD_RECEIVED, DETRACTOR_TICKET_RECEIVED} from '../actions';
 
 const initialState = {
   dashboardData: {},
   detractorTickets: {},
-  storeDashboard: '',
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -16,12 +11,6 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         dashboardData: action.response,
-      };
-    }
-    case STORE_DASHBOARD_RECEIVED: {
-      return {
-        ...state,
-        storeDashboard: action.response,
       };
     }
     case DETRACTOR_TICKET_RECEIVED: {

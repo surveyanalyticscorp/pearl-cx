@@ -123,9 +123,10 @@ const AppRouter = props => {
             <RootStack.Screen
                 name="DashBoardStoreDetails"
                 component={DashBoardStoreDetails}
-                options={{
+                options={({ route }) => ({
+                    title: route.params.name ? route.params.name : 'DashBoardStore',
                     headerLeft: props => <HeaderBackLeft />,
-                }}
+                })}
             />
             <RootStack.Screen
                 name="DetractorTickets"
