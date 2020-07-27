@@ -8,6 +8,7 @@ import {
   RefreshControl,
   FlatList,
 } from 'react-native';
+import {StackActions} from '@react-navigation/native';
 import CXTrendItemWidget from './components/CXTrendItemWidget';
 import {styles} from '../../styles/styles';
 import {getDashboardContent, showLoading} from '../../actions';
@@ -118,7 +119,16 @@ const CxDashboard = props => {
     return (
       <TouchableHighlight
         style={dashboardStyles.ticketButton}
-        onPress={() => {}}>
+        onPress={() => {
+          let data = {
+            storeId: '' + props.dashboardData.body.primaryStoreId,
+            title: props.dashboardData.body.primaryStoreName + ' - Tickets',
+          };
+          const pushAction = StackActions.push('DetractorTickets', {
+            data: data,
+          });
+          props.navigation.dispatch(pushAction);
+        }}>
         <View>
           <Text
             numberOfLines={1}

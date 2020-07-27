@@ -123,7 +123,7 @@ const AppRouter = props => {
                 }}
             />
             <RootStack.Screen
-                name="DetractorTicket"
+                name="DetractorTickets"
                 component={DetractorTickets}
                 options={{
                     headerLeft: props => <HeaderBackLeft />,

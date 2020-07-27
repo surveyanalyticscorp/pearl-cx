@@ -7,6 +7,9 @@ export const FEEDBACK_RECEIVED = 'FEEDBACK_RECEIVED';
 export const GET_DASHBOARD = 'GET_FEEDBACK';
 export const DASHBOARD_RECEIVED = 'DASHBOARD_RECEIVED';
 
+export const GET_DETRACTOR_TICKET = 'GET_DETRACTOR_TICKET';
+export const DETRACTOR_TICKET_RECEIVED = 'DETRACTOR_TICKET_RECEIVED';
+
 export const IS_LOADING = 'IS_LOADING';
 export const IS_LOGIN = 'IS_LOGIN';
 export const FILL_USER_INFO = 'FILL_USER_INFO';
@@ -39,12 +42,18 @@ export const getFeedbackList = (param, token) => ({
 export const cleanUpdateFeedBack = () => ({
   type: FEEDBACK_UPDATED,
   response: {},
-})
+});
 
 export const getDashboardContent = token => ({
   type: GET_DASHBOARD,
   token,
 });
+
+export const getDetractorContent = (param, token) => ({
+  type: GET_DETRACTOR_TICKET,
+  param,
+  token,
+})
 
 export const fillUserInfo = userInfo => ({
   type: FILL_USER_INFO,
@@ -60,4 +69,3 @@ export const clearError = (isLoading = true) => ({
   type: CLEAR_API_ERROR,
   payload: {isLoading: isLoading},
 });
-

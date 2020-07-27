@@ -2,7 +2,13 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../api/WebServiceHandler';
 import {BASE_URL} from '../api/types';
-import {DASHBOARD_RECEIVED, GET_DASHBOARD, API_ERROR} from '../actions';
+import {
+  DASHBOARD_RECEIVED,
+  GET_DASHBOARD,
+  API_ERROR,
+  DETRACTOR_TICKET_RECEIVED,
+  IS_LOADING,
+} from '../actions';
 
 // Worker: Increase Counter Async (Delayed By 4 Seconds)
 function* fetchDashboardAsync(action) {
@@ -30,4 +36,33 @@ function* fetchDashboardAsync(action) {
 // Watcher: Increase Counter Async
 export function* watchGetDashboard() {
   yield takeLatest(GET_DASHBOARD, fetchDashboardAsync);
+}
+
+// Worker: Increase Counter Async (Delayed By 4 Seconds)
+function* fetchDetractorTicketAsync(action) {
+  try {
+    yield put({type: IS_LOADING, payload: {isLoading: true}});
+    const json = yield WebServiceHandler.post(
+      BASE_URL + 'a/nativehtml/cx.CXDetractorTicket',
+      {'Auth-Token': action.token},
+      {},
+    );
+    yield put({
+      type: DETRACTOR_TICKET_RECEIVED,
+      response: json,
+    });
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    console.log('Dashboard saga error:' + JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+
+// Watcher: Increase Counter Async
+export function* watchGetDetractorTicket() {
+  yield takeLatest(GET_DASHBOARD, fetchDetractorTicketAsync);
 }
