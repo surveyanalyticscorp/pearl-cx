@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/types';
 import AppRouter from '../routes/appRouter';
 import {connect} from 'react-redux';
-import {fillUserInfo} from '../actions';
+import {fillUserInfo, setIsLogin} from '../actions';
 import {isStringNullOrEmpty} from '../Utils/Utility';
 
 const SplashScreen = props => {
@@ -79,6 +79,7 @@ const mapStateToProps = state => {
 // noinspection JSAnnotator
 const mapDispatchToProps = dispatch => ({
   saveUserInfo: userInfo => {
+    dispatch(setIsLogin(true));
     dispatch(fillUserInfo(userInfo));
   },
 });

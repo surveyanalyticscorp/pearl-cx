@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Image,
@@ -15,13 +15,29 @@ import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {doLogin, setIsLogin} from '../actions';
 import {connect} from 'react-redux';
+import {ASYNC_USER_CREDENTIALS} from '../api/types';
+import DialogContainer from '../widgets/dialog/Container';
+import DialogTitle from '../widgets/dialog/Title';
+import DialogInput from '../widgets/dialog/Input';
+import DialogButton from '../widgets/dialog/Button';
+import {isStringNullOrEmpty} from '../Utils/Utility';
 
 //import {AuthContext} from '../components/context';
 
 const DrawerContent = props => {
   const paperTheme = useTheme();
   const [openDropper, setOpenDropper] = useState(false);
-  //const {signOut, toggleTheme} = React.useContext(AuthContext);
+  const [userCredentials, setUserCredentials] = useState();
+  const [logoutAlert, setLogoutAlert] = useState(false);
+
+  useEffect(() => {
+    async function getAuthToken() {
+      return await AsyncStorage.getItem(ASYNC_USER_CREDENTIALS);
+    }
+    getAuthToken().then(value => {
+      setUserCredentials(JSON.parse(value));
+    });
+  }, []);
 
   const renderDrawerButtons = () => {
     return (
@@ -54,8 +70,9 @@ const DrawerContent = props => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={async () => {
-            await AsyncStorage.clear();
-            props.setIsLogin();
+            //await AsyncStorage.clear();
+            //props.setIsLogin();
+            setLogoutAlert(true);
           }}>
           <View style={{flexDirection: 'row', marginTop: MarginConstants.tab2}}>
             <Image
@@ -72,6 +89,30 @@ const DrawerContent = props => {
 
   let getExpandIcon = () => {
     return openDropper ? 'expand-less' : 'expand-more';
+  };
+
+  const handleDialogCancel = () => {
+    setLogoutAlert(false);
+  };
+
+  const handleDialogDone = () => {
+    async function clearData() {
+      return await AsyncStorage.clear();
+    }
+    clearData().then(() => {
+      props.setIsLogin();
+      setLogoutAlert(false);
+    });
+  };
+
+  const renderDialog = () => {
+    return (
+      <DialogContainer visible={logoutAlert}>
+        <DialogTitle>Are you sure you want to logout?</DialogTitle>
+        <DialogButton label={'No'} onPress={handleDialogCancel} />
+        <DialogButton label={'Yes'} onPress={handleDialogDone} />
+      </DialogContainer>
+    );
   };
 
   return (
@@ -104,7 +145,7 @@ const DrawerContent = props => {
           />
           <View style={{marginTop: MarginConstants.halfTab}}>
             <Caption style={styles.emailCaption}>
-              datta.kunde@questionpro.com
+              {userCredentials ? userCredentials.email : ''}
             </Caption>
             <Caption style={styles.companyCaptions}>
               {props.userInfo.organizationName}
@@ -124,6 +165,7 @@ const DrawerContent = props => {
           </View>
           {!openDropper && renderDrawerButtons()}
         </View>
+        {renderDialog()}
       </ImageBackground>
     </View>
   );

@@ -215,13 +215,11 @@ const ForgotPassword = props => {
             </Text>
             <QPTextField
               label={'Email Address'}
-              defaultValue={'datta.kunde@questionpro.com'}
               style={styles.emailInput}
               onEndEdit={handleEmail}
             />
             <QPTextField
               label={'Company Code'}
-              defaultValue={'Datta'}
               style={styles.passwordInput}
               onEndEdit={handleAccessCode}
             />
