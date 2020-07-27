@@ -1,6 +1,12 @@
 export const GET_LOGIN = 'GET_LOGIN';
 export const LOGIN_RESPONSE = 'LOGIN_RESPONSE';
 
+export const GET_FORGOT_PSWD_OTP = 'GET_FORGOT_PSWD_OTP';
+export const FORGOT_PSWD_OTP_RESPONSE = 'FORGOT_PSWD_OTP_RESPONSE';
+
+export const VALIDATE_USER_OTP = 'VALIDATE_USER_OTP';
+export const VALIDATE_USER_OTP_RESPONSE = 'VALIDATE_USER_OTP_RESPONSE';
+
 export const GET_FEEDBACK = 'GET_FEEDBACK';
 export const FEEDBACK_RECEIVED = 'FEEDBACK_RECEIVED';
 
@@ -33,6 +39,16 @@ export const setIsLogin = isLogin => ({
 
 export const doLogin = param => ({
   type: GET_LOGIN,
+  param,
+});
+
+export const requestOtp = param => ({
+  type: GET_FORGOT_PSWD_OTP,
+  param,
+});
+
+export const validateUserOtp = param => ({
+  type: VALIDATE_USER_OTP,
   param,
 });
 
