@@ -1,4 +1,3 @@
-// Imports: Dependencies
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../api/WebServiceHandler';
 import {BASE_URL} from '../api/types';
@@ -6,10 +5,11 @@ import {
   GET_FEEDBACK,
   FEEDBACK_RECEIVED,
   FEEDBACK_UPDATED,
-  UPDATE_FEEDBACK, API_ERROR, IS_LOADING,
+  UPDATE_FEEDBACK,
+  API_ERROR,
+  IS_LOADING,
 } from '../actions';
 
-// Worker: Increase Counter Async (Delayed By 4 Seconds)
 function* fetchFeedbackAsync(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
@@ -19,7 +19,6 @@ function* fetchFeedbackAsync(action) {
       action.param,
     );
 
-    // Dispatch Action To Redux Store
     yield put({
       type: FEEDBACK_RECEIVED,
       response: json,
@@ -34,12 +33,10 @@ function* fetchFeedbackAsync(action) {
   }
 }
 
-// Watcher: Increase Counter Async
 export function* watchGetFeedback() {
   yield takeLatest(GET_FEEDBACK, fetchFeedbackAsync);
 }
 
-// Worker: Increase Counter Async (Delayed By 4 Seconds)
 function* updateFetchFeedbackAsync(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
@@ -49,14 +46,19 @@ function* updateFetchFeedbackAsync(action) {
       action.params,
     );
 
-    // Dispatch Action To Redux Store
     yield put({
       type: FEEDBACK_UPDATED,
       response: json,
     });
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({
+      type: IS_LOADING,
+      payload: {isLoading: false},
+    });
   } catch (error) {
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({
+      type: IS_LOADING,
+      payload: {isLoading: false},
+    });
     yield put({
       type: API_ERROR,
       error: error,
@@ -64,7 +66,6 @@ function* updateFetchFeedbackAsync(action) {
   }
 }
 
-// Watcher: Increase Counter Async
 export function* watchUpdateFeedback() {
   yield takeLatest(UPDATE_FEEDBACK, updateFetchFeedbackAsync);
 }

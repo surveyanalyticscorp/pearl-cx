@@ -17,8 +17,6 @@ import QPTextField from '../widgets/TextField';
 import QPButton from '../widgets/Button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const screen = Dimensions.get('screen');
-import {OutlinedTextField} from 'react-native-material-textfield';
-import StringUtils from '../Utils/StringUtils';
 import {loginStyles} from './login.styles';
 
 const CompanyCode = props => {

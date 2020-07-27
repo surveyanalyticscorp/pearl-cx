@@ -7,6 +7,7 @@ import {
   CLEAR_API_ERROR,
   FORGOT_PSWD_OTP_RESPONSE,
   VALIDATE_USER_OTP_RESPONSE,
+  UPDATE_PASSWORD_RESPONSE,
 } from '../actions';
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
   userInfo: {},
   forgotPasswordResponse: {},
   validateOtpResponse: {},
+  updatePasswordResponse: {},
 };
 
 const globalReducer = (state = initialState, action) => {
@@ -40,6 +42,13 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         validateOtpResponse: action.response,
+      };
+    }
+
+    case UPDATE_PASSWORD_RESPONSE: {
+      return {
+        ...state,
+        updatePasswordResponse: action.response,
       };
     }
 

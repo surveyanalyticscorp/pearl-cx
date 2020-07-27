@@ -7,6 +7,9 @@ export const FORGOT_PSWD_OTP_RESPONSE = 'FORGOT_PSWD_OTP_RESPONSE';
 export const VALIDATE_USER_OTP = 'VALIDATE_USER_OTP';
 export const VALIDATE_USER_OTP_RESPONSE = 'VALIDATE_USER_OTP_RESPONSE';
 
+export const UPDATE_PASSWORD = 'UPDATE_PASSWORD';
+export const UPDATE_PASSWORD_RESPONSE = 'UPDATE_PASSWORD_RESPONSE';
+
 export const GET_FEEDBACK = 'GET_FEEDBACK';
 export const FEEDBACK_RECEIVED = 'FEEDBACK_RECEIVED';
 
@@ -44,6 +47,11 @@ export const requestOtp = param => ({
   param,
 });
 
+export const updatePassword = param => ({
+  type: UPDATE_PASSWORD,
+  param,
+});
+
 export const validateUserOtp = param => ({
   type: VALIDATE_USER_OTP,
   param,
@@ -69,7 +77,7 @@ export const getDetractorContent = (token, param) => ({
   type: GET_DETRACTOR_TICKET,
   param,
   token,
-})
+});
 
 export const fillUserInfo = userInfo => ({
   type: FILL_USER_INFO,

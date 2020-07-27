@@ -11,6 +11,7 @@ import {
   watchDoLogin,
   watchForgotPasswordOtp,
   watchValidateUserOtp,
+  watchUpdatePassword,
 } from './loginInSaga';
 
 // Redux Saga: Root Saga
@@ -21,6 +22,7 @@ export function* rootSaga() {
     fork(watchDoLogin),
     fork(watchForgotPasswordOtp),
     fork(watchValidateUserOtp),
+    fork(watchUpdatePassword),
     fork(watchUpdateFeedback),
     fork(watchGetDetractorTicket),
   ]);

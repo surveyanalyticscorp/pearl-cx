@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {
   Dimensions,
   Image,
@@ -15,18 +16,31 @@ import QPTextField from '../widgets/TextField';
 import {loginStyles} from './login.styles';
 import BarIndicator from 'react-native-indicators/src/components/bar-indicator';
 import QPButton from '../widgets/Button';
-import React, {useState} from 'react';
-import {clearError, requestOtp, showLoading, validateUserOtp} from '../actions';
-import connect from 'react-redux/es/connect/connect';
+import React, {useEffect, useState} from 'react';
+import {clearError, updatePassword} from '../actions';
+import {connect} from 'react-redux';
 import {TextSizes} from '../styles/textsize.constants';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
+import {isStringNullOrEmpty} from '../Utils/Utility';
+import StringUtils from '../Utils/StringUtils';
+import {showMessage} from 'react-native-flash-message';
 const screen = Dimensions.get('screen');
 
 const ResetPassword = props => {
   const [password, setPassword] = useState('');
   const [confirmPswd, setConfirmPswd] = useState('');
   const [validation, setValidation] = useState('');
+
+  useEffect(() => {
+    if (props.updatePasswordResponse.body) {
+      showMessage({
+        message: props.updatePasswordResponse.body.message,
+        type: 'info',
+        icon: 'auto',
+      });
+      props.navigation.pop();
+    }
+  }, [props.updatePasswordResponse]);
 
   const renderBackButton = () => {
     return (
@@ -45,21 +59,26 @@ const ResetPassword = props => {
 
   const onUpdatePasswordClick = () => {
     if (isValidateInput()) {
-      /*let data = {
-                emailAddress: email,
-                accessCode: accessCode,
-            };
-            props.requestOtp(data);*/
+      let data = {
+        emailAddress: props.route.params.email,
+        accessCode: props.route.params.accessCode,
+        password: password,
+      };
+      props.updatePassword(data);
     }
   };
 
   const isValidateInput = () => {
-    if (!isStringNullOrEmpty(password)) {
-      setValidation('Invalid email address');
+    if (isStringNullOrEmpty(password)) {
+      setValidation('Invalid password');
       return false;
     }
     if (isStringNullOrEmpty(confirmPswd)) {
       setValidation('Invalid password');
+      return false;
+    }
+    if (password !== confirmPswd) {
+      setValidation('Password and Confirm password not matching');
       return false;
     }
     setValidation('');
@@ -73,6 +92,31 @@ const ResetPassword = props => {
   const handleConfirmPassword = text => {
     setConfirmPswd(text);
     setValidation('');
+  };
+
+  const renderErrorMessage = () => {
+    if (props.isError) {
+      let errorMessage = props.errorMessage.errorAlert
+        ? props.errorMessage.errorAlert
+        : props.errorMessage.message;
+      return (
+        <View style={loginStyles.errorMessageContainer}>
+          <Text style={loginStyles.errorMessage}>{errorMessage}</Text>
+        </View>
+      );
+    }
+    return <View style={{flex: 1}} />;
+  };
+
+  const renderLocalValidation = () => {
+    if (!StringUtils.isEmpty(validation)) {
+      return (
+        <View style={loginStyles.errorMessageContainer}>
+          <Text style={loginStyles.errorMessage}>{validation}</Text>
+        </View>
+      );
+    }
+    return <View style={{flex: 1}} />;
   };
 
   return (
@@ -119,6 +163,9 @@ const ResetPassword = props => {
               onEndEdit={handleConfirmPassword}
             />
 
+            {renderErrorMessage()}
+            {renderLocalValidation()}
+
             {props.isLoading ? (
               <View style={loginStyles.nextButton}>
                 <BarIndicator color="#2589E3" count={5} size={35} />
@@ -144,13 +191,15 @@ const mapStateToProps = state => {
     isLoading: state.global.isLoading,
     isError: state.global.isError,
     errorMessage: state.global.errorMessage,
-    forgotPasswordResponse: state.global.forgotPasswordResponse,
-    validateOtpResponse: state.global.validateOtpResponse,
+    updatePasswordResponse: state.global.updatePasswordResponse,
   };
 };
 const mapDispatchToProps = dispatch => ({
   clearError: () => {
     dispatch(clearError(false));
+  },
+  updatePassword: data => {
+    dispatch(updatePassword(data));
   },
 });
 

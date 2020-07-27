@@ -23,6 +23,7 @@ export default class DialogInput extends React.PureComponent {
       textInputRef,
       multiline,
       numberOfLines,
+      onChangeText,
       ...otherProps
     } = this.props;
     const lines = (multiline && numberOfLines) || 1;
@@ -35,6 +36,7 @@ export default class DialogInput extends React.PureComponent {
           style={[styles.textInput, style, {height}]}
           multiline={multiline}
           numberOfLines={numberOfLines}
+          onChangeText={onChangeText}
           {...otherProps}
         />
       </View>
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
     },
   }),
   textInput: Platform.select({
-    ios: {borderBottomWidth: 1.0,},
+    ios: {borderBottomWidth: 1.0},
     android: {
       marginLeft: -4,
       paddingLeft: 4,

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {
   Dimensions,
   Image,
@@ -33,6 +34,7 @@ const ForgotPassword = props => {
   const [email, setEmail] = useState('');
   const [accessCode, setAccessCode] = useState('');
   const [validation, setValidation] = useState('');
+  const [otp, setOtp] = useState('');
   const [otpAlert, setOtpAlert] = useState(false);
 
   useEffect(() => {
@@ -49,11 +51,14 @@ const ForgotPassword = props => {
   useEffect(() => {
     if (props.validateOtpResponse.body) {
       if (props.validateOtpResponse.body.success) {
-        props.navigation.navigate('ResetPassword');
+        setOtpAlert(false);
+        props.navigation.replace('ResetPassword', {
+          email: email,
+          accessCode: accessCode,
+        });
       }
-      setOtpAlert(true);
     }
-  }, [props.navigation, props.validateOtpResponse]);
+  }, [props.validateOtpResponse]);
 
   const onResetPasswordClick = () => {
     if (isValidateInput()) {
@@ -131,18 +136,25 @@ const ForgotPassword = props => {
     return <View style={{flex: 1}} />;
   };
 
-  const handleCancel = () => {
+  const handleDialogCancel = () => {
     setOtpAlert(false);
   };
 
-  const handleDone = () => {
-    //setOtpAlert(false);
-    let data = {
-      emailAddress: email,
-      accessCode: accessCode,
-      otp: 1234,
-    };
-    props.validateUserOtp(data);
+  const handleDialogDone = () => {
+    if (!isStringNullOrEmpty(otp)) {
+      let data = {
+        emailAddress: email,
+        accessCode: accessCode,
+        otp: otp,
+      };
+      props.validateUserOtp(data);
+    } else {
+      setValidation('Enter OTP');
+    }
+  };
+
+  const handleOnTextChange = text => {
+    setOtp(text);
   };
 
   const renderDialog = () => {
@@ -157,9 +169,13 @@ const ForgotPassword = props => {
         <DialogTitle>
           Please enter One Time Password received on your email{' '}
         </DialogTitle>
-        <DialogInput label={errorMessage} />
-        <DialogButton label={'Cancel'} onPress={handleCancel} />
-        <DialogButton label={'Done'} onPress={handleDone} />
+        <DialogInput
+          label={errorMessage}
+          keyboardType={'numeric'}
+          onChangeText={handleOnTextChange}
+        />
+        <DialogButton label={'Cancel'} onPress={handleDialogCancel} />
+        <DialogButton label={'Done'} onPress={handleDialogDone} />
       </DialogContainer>
     );
   };

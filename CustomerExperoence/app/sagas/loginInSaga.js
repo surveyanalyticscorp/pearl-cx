@@ -9,6 +9,8 @@ import {
   FORGOT_PSWD_OTP_RESPONSE,
   VALIDATE_USER_OTP,
   VALIDATE_USER_OTP_RESPONSE,
+  UPDATE_PASSWORD,
+  UPDATE_PASSWORD_RESPONSE,
 } from '../actions';
 
 function* doLoginApiCall(action) {
@@ -36,6 +38,8 @@ export function* watchDoLogin() {
   yield takeLatest(GET_LOGIN, doLoginApiCall);
 }
 
+
+
 function* doForgotPasswordOtpApiCall(action) {
   try {
     console.log('DD reset pswd otp:' + action.param.accessCode);
@@ -61,6 +65,8 @@ export function* watchForgotPasswordOtp() {
   yield takeLatest(GET_FORGOT_PSWD_OTP, doForgotPasswordOtpApiCall);
 }
 
+
+
 function* validateUserOtpApiCall(action) {
   try {
     console.log('DD Validate otp:' + action.param.accessCode);
@@ -84,4 +90,32 @@ function* validateUserOtpApiCall(action) {
 
 export function* watchValidateUserOtp() {
   yield takeLatest(VALIDATE_USER_OTP, validateUserOtpApiCall);
+}
+
+
+
+
+function* updatePasswordApiCall(action) {
+  try {
+    console.log('DD Validate otp:' + action.param.accessCode);
+    const response = yield WebServiceHandler.postNew(
+      BASE_URL + '/a/nativehtml/cx.auth.CXUpdatePassword',
+      {},
+      action.param,
+    );
+
+    yield put({
+      type: UPDATE_PASSWORD_RESPONSE,
+      response: response,
+    });
+  } catch (error) {
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+
+export function* watchUpdatePassword() {
+  yield takeLatest(UPDATE_PASSWORD, updatePasswordApiCall);
 }
