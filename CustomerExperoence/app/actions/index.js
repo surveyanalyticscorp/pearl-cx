@@ -73,7 +73,7 @@ export const getDashboardContent = token => ({
   token,
 });
 
-export const getDetractorContent = (token, param) => ({
+export const getDetractorContent = (param, token) => ({
   type: GET_DETRACTOR_TICKET,
   param,
   token,

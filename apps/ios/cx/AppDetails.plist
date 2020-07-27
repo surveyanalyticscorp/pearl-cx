@@ -7,9 +7,9 @@
 	<key>kGATrackID</key>
 	<string>UA-30165-23</string>
 	<key>kGlobalDataServiceHost</key>
-	<string>https://war.questionpro.com</string>
+	<string>https://qa.questionpro.com</string>
 	<key>kServiceHost</key>
-	<string>https://war.questionpro.com</string>
+	<string>https://qa.questionpro.com</string>
 	<key>kLoginService</key>
 	<string>/a/nativehtml/cx.auth.CXLogin</string>
 	<key>kResetPasswordService</key>

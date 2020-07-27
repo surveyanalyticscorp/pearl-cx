@@ -21,16 +21,10 @@ class ApiHandler {
   callAPIInternalWithDispatch(type, token, url, data) {
     return WebServiceHandler.post(url, {'Auth-Token': token}, data)
       .then(response => {
-        //dispatch({type: type, data: response, requestData: data});
-        //dispatch({type: LOADING_PROGRESS, isLoading: false});
-        //dispatch({type: LOADING_ERROR, error: false});
         return response;
       })
       .catch(error => {
         console.log('ERror- ' + error.message);
-        //dispatch({type: LOADING_PROGRESS, isLoading: false});
-        //dispatch({type: LOADING_ERROR, error: error});
-        //dispatch({type: type});
         return error;
       });
   }
@@ -77,6 +71,21 @@ class ApiHandler {
     return this.callAPIInternal(
       token,
       BASE_URL + 'a/nativehtml/cx.CXHome',
+      data,
+      successCallback,
+      errorCallback,
+    );
+  }
+
+  getCXDetractorTicket(
+    token,
+    data = {},
+    successCallback,
+    errorCallback = () => {},
+  ) {
+    return this.callAPIInternal(
+      token,
+      BASE_URL + 'a/nativehtml/cx.CXDetractorTicket',
       data,
       successCallback,
       errorCallback,

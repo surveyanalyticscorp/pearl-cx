@@ -9,104 +9,146 @@ import {getDetractorContent} from '../../../actions';
 import {fontFamily} from '../../../styles/font.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
+import AsyncStorage from '@react-native-community/async-storage';
+import {ASYNC_AUTH_TOKEN} from '../../../api/types';
+import {apiHandler} from '../../../api/ApiHandler';
+import DetractorScenes from './DetractorScenes';
 
 const DetractorTickets = props => {
-  const [index, setIndex] = useState(0);
-  const [routes] = React.useState([
-    {key: 'new', title: 'NEW'},
-    {key: 'pending', title: 'PENDING'},
-    {key: 'resolved', title: 'RESOLVED'},
-  ]);
-  useEffect(() => {
-    let param = {
-      pageOffset: '0',
-      status: '0',
-      storeId: props.route.params.data.storeId,
+    const [index, setIndex] = useState(0);
+    const [routes] = React.useState([
+        {key: 'new', title: 'NEW'},
+        {key: 'pending', title: 'PENDING'},
+        {key: 'resolved', title: 'RESOLVED'},
+    ]);
+    const [responseData, setResponseData] = useState([{
+        key: 'new',
+        data: {tickets: []},
+        pageOffset: '0',
+        status: '0',
+        index: 0,
+        storeId: props.route.params.data.storeId,
+    }, {
+        key: 'pending',
+        data: {tickets: []},
+        pageOffset: '0',
+        status: '1',
+        index: 1,
+        storeId: props.route.params.data.storeId,
+    }, {
+        key: 'resolved',
+        data: {tickets: []},
+        pageOffset: '0',
+        status: '2',
+        index: 2,
+        storeId: props.route.params.data.storeId,
+    }])
+
+    useEffect(() => {
+        async function getAuthToken() {
+            return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
+        }
+        getAuthToken().then(token => {
+            for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
+                let params = responseData[responseCount];
+                apiHandler.getCXDetractorTicket(
+                    token,
+                    params,
+                    response => {
+                        let data = [...responseData];
+                        data[responseCount].data = response.body;
+                        setResponseData(data)
+                    },
+                    error => {
+                        console.log(error);
+                    },
+                );
+            }
+
+        });
+    }, []);
+
+    const renderIndicator = () => {
+        if (props.isLoading) {
+            return <DotIndicator color={Colors.white} count={3} size={10}/>;
+        }
     };
-    props.getDetractorContents(param, props.route.params.data.token);
-  }, []);
 
-  const renderIndicator = () => {
-    if (props.isLoading) {
-      return <DotIndicator color={Colors.white} count={3} size={10} />;
-    }
-  };
+    const renderScene = ({route}) => {
+        switch (route.key) {
+            case 'new':
+                return <DetractorScenes data={responseData[0].data.tickets}/>;
+            case 'pending':
+                return <DetractorScenes data={responseData[1].data.tickets}/>;
+            case 'resolved':
+                return <DetractorScenes data={responseData[2].data.tickets}/>;
+        }
+    };
 
-  const renderScene = ({route}) => {
-    switch (route.key) {
-      case 'feedback':
-        return <View style={{backgroundColor: 'red'}} />;
-      case 'profile':
-        return <View style={{backgroundColor: 'blue'}} />;
-      case 'activity':
-        return <View style={{backgroundColor: 'green'}} />;
-    }
-  };
+    const renderTabView = () => {
+        return (
+            <TabView
+                navigationState={{index, routes}}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                //initialLayout={initialLayout}
+                renderTabBar={props => (
+                    <TabBar
+                        {...props}
+                        labelStyle={{
+                            indicatorStyle: {backgroundColor: '#FF0000'},
+                            scrollEnabled: true,
+                            labelStyle: {color: '#000000', fontSize: 12},
+                            tabStyle: {width: 150},
+                        }}
+                        style={{backgroundColor: 'white'}}
+                        scrollEnabled={true}
+                        indicatorStyle={{backgroundColor: Colors.red}}
+                        tabStyle={{
+                            minHeight: 30,
+                            width: Dimensions.get('window').width / 3,
+                        }} // here
+                        renderLabel={({route, focused, color}) => (
+                            <Text
+                                style={{
+                                    color: Colors.primary,
+                                    fontFamily: fontFamily.Light,
+                                    fontSize: TextSizes.secondary,
+                                    marginVertical: MarginConstants.halfTab,
+                                }}>
+                                {route.title}
+                            </Text>
+                        )}
+                    />
+                )}
+            />
+        );
+    };
 
-  const renderTabView = () => {
     return (
-      <TabView
-        navigationState={{index, routes}}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        //initialLayout={initialLayout}
-        renderTabBar={props => (
-          <TabBar
-            {...props}
-            labelStyle={{
-              indicatorStyle: {backgroundColor: '#FF0000'},
-              scrollEnabled: true,
-              labelStyle: {color: '#000000', fontSize: 12},
-              tabStyle: {width: 150},
-            }}
-            style={{backgroundColor: 'white'}}
-            scrollEnabled={true}
-            indicatorStyle={{backgroundColor: Colors.red}}
-            tabStyle={{
-              minHeight: 30,
-              width: Dimensions.get('window').width / 3,
-            }} // here
-            renderLabel={({route, focused, color}) => (
-              <Text
-                style={{
-                  color: Colors.primary,
-                  fontFamily: fontFamily.Light,
-                  fontSize: TextSizes.secondary,
-                  marginVertical: MarginConstants.halfTab,
-                }}>
-                {route.title}
-              </Text>
-            )}
-          />
-        )}
-      />
+        <View style={{flex: 1}}>
+            {renderTabView()}
+            {renderIndicator()}
+        </View>
     );
-  };
-
-  return (
-    <View style={{flex: 1}}>
-      {renderTabView()}
-      {renderIndicator()}
-    </View>
-  );
 };
 
 const mapStateToProps = state => {
-  return {
-    userInfo: state.global.userInfo,
-    isLoading: state.global.isLoading,
-    isError: state.global.isError,
-    errorMessage: state.global.errorMessage,
-  };
+    return {
+        userInfo: state.global.userInfo,
+        isLoading: state.global.isLoading,
+        isError: state.global.isError,
+        errorMessage: state.global.errorMessage,
+    };
 };
 
 const mapDispatchToProps = dispatch => ({
-  getDetractorContents: (param, token) => {
-    getDetractorContent(param, token);
-  },
+    getDetractorContents: (param, token) => {
+        getDetractorContent(param, token);
+    },
 });
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
+    mapStateToProps,
+    mapDispatchToProps,
 )(DetractorTickets);
