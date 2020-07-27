@@ -9,22 +9,27 @@ import {
   FlatList,
 } from 'react-native';
 import {StackActions} from '@react-navigation/native';
-import CXTrendItemWidget from './components/CXTrendItemWidget';
-import {styles} from '../../styles/styles';
-import {getDashboardContent, showLoading} from '../../actions';
+import CXTrendItemWidget from '../components/CXTrendItemWidget';
+import {styles} from '../../../styles/styles';
+import {
+  clearError,
+  getStoreDashboardContent,
+  showLoading,
+} from '../../../actions';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN} from '../../api/types';
-import {dashboardStyles} from './dashboard.style';
+import {ASYNC_AUTH_TOKEN} from '../../../api/types';
+import {dashboardStyles} from '../dashboard.style';
 import {DotIndicator} from 'react-native-indicators';
-import {Colors} from '../../styles/color.constants';
+import {Colors} from '../../../styles/color.constants';
 import Pie from 'react-native-pie';
+
 const wait = timeout => {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
   });
 };
-const CxDashboard = props => {
+const DashBoardStoreDetails = props => {
   const [authToken, setAuthToken] = useState('');
   const [callApi, setCallAPI] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -39,10 +44,11 @@ const CxDashboard = props => {
     async function getAuthToken() {
       return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
     }
+
     if (callApi) {
       getAuthToken().then(token => {
         setAuthToken(token);
-        props.getDashboardContent(token);
+        props.getDashboardContent(token, props.route.params.data);
         setCallAPI(false);
       });
     }
@@ -61,9 +67,9 @@ const CxDashboard = props => {
 
   const getTrimmedNoOfResponses = () => {
     let numberOfResponsesNumber = 0;
-    if (props.dashboardData.body.primaryStoreNPS.totalResponses) {
+    if (props.storeData.body.primaryStoreNPS.totalResponses) {
       numberOfResponsesNumber =
-        props.dashboardData.body.primaryStoreNPS.totalResponses;
+        props.storeData.body.primaryStoreNPS.totalResponses;
     }
     let numberOfResponses = numberOfResponsesNumber + '';
 
@@ -98,8 +104,8 @@ const CxDashboard = props => {
 
   const getTicketText = () => {
     let ticketText = '';
-    let pendingCount = props.dashboardData.body.DetractorTicketsCount.pending;
-    let newCount = props.dashboardData.body.DetractorTicketsCount.new;
+    let pendingCount = props.storeData.body.DetractorTicketsCount.pending;
+    let newCount = props.storeData.body.DetractorTicketsCount.new;
     if (pendingCount > 0) {
       ticketText =
         pendingCount + ' Pending ' + (pendingCount > 1 ? 'tickets' : 'ticket');
@@ -123,8 +129,8 @@ const CxDashboard = props => {
         style={dashboardStyles.ticketButton}
         onPress={() => {
           let data = {
-            storeId: '' + props.dashboardData.body.primaryStoreId,
-            title: props.dashboardData.body.primaryStoreName + ' - Tickets',
+            storeId: '' + props.storeData.body.primaryStoreId,
+            title: props.storeData.body.primaryStoreName + ' - Tickets',
             token: authToken,
           };
           const pushAction = StackActions.push('DetractorTickets', {
@@ -145,7 +151,7 @@ const CxDashboard = props => {
   };
 
   const renderDonutChart = () => {
-    let percent = props.dashboardData.body.primaryStoreNPS.npsPercentage;
+    let percent = props.storeData.body.primaryStoreNPS.npsPercentage;
     let color = percent < 0 ? Colors.negativePassive : Colors.positivePassive;
     let roundColor =
       percent < 0 ? Colors.negativePromter : Colors.positivePromter;
@@ -176,19 +182,19 @@ const CxDashboard = props => {
   };
 
   const renderStoreNPSList = () => {
-    if (props.dashboardData.body.storeNPSList.length > 0) {
-      let list = props.dashboardData.body.storeNPSList;
+    if (props.storeData.body.storeNPSList.length > 0) {
+      let list = props.storeData.body.storeNPSList;
       let data = list.slice(0, 5);
-      let title = props.dashboardData.body.systemPreferences.businessUnitName
-        ? props.dashboardData.body.systemPreferences.businessUnitName
+      let title = props.storeData.body.systemPreferences.businessUnitName
+        ? props.storeData.body.systemPreferences.businessUnitName
         : 'Business';
       return renderLists(data, title);
     }
   };
 
   const renderProductNPSList = () => {
-    if (props.dashboardData.body.productNPSList.length > 0) {
-      let list = props.dashboardData.body.productNPSList;
+    if (props.storeData.body.productNPSList.length > 0) {
+      let list = props.storeData.body.productNPSList;
       let title = 'Products';
       return renderLists(list, title);
     }
@@ -226,8 +232,8 @@ const CxDashboard = props => {
         isClickable={clickable}
         onPress={() => {
           let data = {storeId: storeItem.item.storeId + ''};
-          let titleJSON = {title: props.dashboardData.body.primaryStoreName};
-          const pushAction = StackActions.push('DashBoardStoreDetails', {
+          let titleJSON = {title: props.storeData.body.primaryStoreName};
+          const pushAction = StackActions.push('Dashboard', {
             data: data,
           });
           props.navigation.dispatch(pushAction);
@@ -271,9 +277,11 @@ const CxDashboard = props => {
     return (
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../../images/background.png')}
+        source={require('../../../images/background.png')}
         style={dashboardStyles.imageBackgroundContainer}>
-        {renderScreen()}
+        {props.storeData === '' || props.isLoading
+          ? renderIndicator()
+          : renderScreen()}
       </ImageBackground>
     );
   };
@@ -294,19 +302,19 @@ const CxDashboard = props => {
   };
 
   const renderIndicator = () => {
-    if (props.isLoading) {
+    if (props.storeData === '' || props.isLoading) {
       return <DotIndicator color={Colors.white} count={3} size={10} />;
     }
   };
 
-  return renderDashboard();
+  return renderDashboard()
 };
 
 const mapStateToProps = state => {
   console.log('CxDashboard State:');
   console.log(state);
   return {
-    dashboardData: state.dashboard.dashboardData,
+    storeData: state.dashboard.storeDashboard,
     userInfo: state.global.userInfo,
     isLoading: state.global.isLoading,
     isError: state.global.isError,
@@ -315,13 +323,16 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  getDashboardContent: token => {
+  cleanError: () => {
+    dispatch(clearError(false));
+  },
+  getDashboardContent: (token, param) => {
     dispatch(showLoading(true));
-    dispatch(getDashboardContent(token));
+    dispatch(getStoreDashboardContent(token, param));
   },
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(CxDashboard);
+)(DashBoardStoreDetails);

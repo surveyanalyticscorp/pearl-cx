@@ -28,7 +28,7 @@ import {EventRegister} from 'react-native-event-listeners';
 import FeedbackUpdate from '../drawerTabs/feedback/FeedbackUpdate'
 import { CommonActions } from '@react-navigation/native';
 import DetractorTickets from '../drawerTabs/dashboard/components/DetractorTickets';
-
+import DashBoardStoreDetails from '../drawerTabs/dashboard/components/DashBoardStoreDetails'
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
 const MaterialTopTabs = createMaterialTopTabNavigator();
@@ -120,6 +120,13 @@ const AppRouter = props => {
                 component={CxDashboard}
                 options={{
                     headerLeft: props => <HeaderLeft/>,
+                }}
+            />
+            <RootStack.Screen
+                name="DashBoardStoreDetails"
+                component={DashBoardStoreDetails}
+                options={{
+                    headerLeft: props => <HeaderBackLeft />,
                 }}
             />
             <RootStack.Screen

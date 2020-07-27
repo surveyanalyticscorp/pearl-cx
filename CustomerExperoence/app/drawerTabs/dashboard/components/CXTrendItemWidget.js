@@ -2,6 +2,8 @@ import React from 'react';
 import {StyleSheet, View, TouchableHighlight, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {TextSizes} from '../../../styles/textsize.constants';
+import {Colors} from '../../../styles/color.constants';
+import {MarginConstants} from '../../../styles/margin.constants';
 const CXTrendItemWidget = props => {
   let total = props.promoter + props.detractor + props.passive;
   let promoterPercent = (props.promoter / total) * 100;
@@ -60,7 +62,7 @@ const CXTrendItemWidget = props => {
         </View>
         {props.isClickable && (
           <View style={styles.arrowContainer}>
-            <Icon size={10} name="keyboard-arrow-right" color={'white'} />
+            <Icon size={20} name="keyboard-arrow-right" color={'#3b3b3b'} />
           </View>
         )}
       </View>
@@ -120,8 +122,6 @@ const styles = StyleSheet.create({
   },
   arrowContainer: {
     flex: 0.05,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
   },
 });
 export default CXTrendItemWidget;
