@@ -28,6 +28,7 @@ const QPTextField = props => {
 
   let keyboardType = props.keyboardType ? props.keyboardType : 'default';
   let label = props.label ? props.label : '';
+  let defaultValue = props.defaultValue ? props.defaultValue : '';
   let style = [props.style, {paddingVertical: 0}];
   let icon = secureText ? 'visibility-off' : 'visibility';
 
@@ -55,6 +56,7 @@ const QPTextField = props => {
         autoCorrect={false}
         tintColor={Colors.textTintColor}
         label={label}
+        defaultValue={defaultValue}
         secureTextEntry={secureText}
         keyboardType={keyboardType}
         onEndEditing={onEndEditing}

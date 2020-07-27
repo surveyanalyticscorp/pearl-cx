@@ -5,6 +5,8 @@ import {
   LOGIN_RESPONSE,
   API_ERROR,
   CLEAR_API_ERROR,
+  FORGOT_PSWD_OTP_RESPONSE,
+  VALIDATE_USER_OTP_RESPONSE,
 } from '../actions';
 
 const initialState = {
@@ -13,6 +15,8 @@ const initialState = {
   isError: false,
   errorMessage: '',
   userInfo: {},
+  forgotPasswordResponse: {},
+  validateOtpResponse: {},
 };
 
 const globalReducer = (state = initialState, action) => {
@@ -24,6 +28,21 @@ const globalReducer = (state = initialState, action) => {
         isLoading: false,
       };
     }
+    case FORGOT_PSWD_OTP_RESPONSE: {
+      return {
+        ...state,
+        forgotPasswordResponse: action.response,
+        isLoading: false,
+      };
+    }
+
+    case VALIDATE_USER_OTP_RESPONSE: {
+      return {
+        ...state,
+        validateOtpResponse: action.response,
+      };
+    }
+
     case IS_LOADING: {
       return {...state, isLoading: action.payload.isLoading};
     }

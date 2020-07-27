@@ -5,6 +5,7 @@ import SignInScreen from '../login/SignIn';
 import CompanyCode from '../login/CompanyCode';
 import ForgotPassword from '../login/ForgotPassword';
 import MarketingScreen from '../login/MarketingScreen';
+import ResetPassword from '../login/ResetPassword';
 import {TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
@@ -34,6 +35,7 @@ const SignInStack = ({navigation}) => (
     <RootStack.Screen name="CompanyCode" component={CompanyCode} />
     <RootStack.Screen name="SignInScreen" component={SignInScreen} />
     <RootStack.Screen name="ForgotPassword" component={ForgotPassword} />
+    <RootStack.Screen name="ResetPassword" component={ResetPassword} />
   </RootStack.Navigator>
 );
 
