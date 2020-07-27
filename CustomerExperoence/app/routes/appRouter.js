@@ -17,7 +17,6 @@ import {Colors} from '../styles/color.constants';
 import DrawerContent from '../routes/DrawerContent';
 import CxDashboard from '../drawerTabs/dashboard/CxDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SignInStack from './signInStack';
 import {MyTheme} from '../styles/styles';
 import {connect} from 'react-redux';
@@ -31,7 +30,6 @@ import DetractorTickets from '../drawerTabs/dashboard/components/DetractorTicket
 import DashBoardStoreDetails from '../drawerTabs/dashboard/components/DashBoardStoreDetails'
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
-const MaterialTopTabs = createMaterialTopTabNavigator();
 
 const AppRouter = props => {
     const colorScheme = useColorScheme();

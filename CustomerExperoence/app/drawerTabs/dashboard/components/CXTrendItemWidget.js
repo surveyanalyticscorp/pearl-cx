@@ -10,9 +10,9 @@ const CXTrendItemWidget = props => {
   let detractorPercent = (props.detractor / total) * 100;
   let passivePercent = (props.passive / total) * 100;
   let state = {
-    promoterPercent: promoterPercent,
-    detractorPercent: detractorPercent,
-    passivePercent: passivePercent,
+    promoterPercent: isNaN(promoterPercent) ? 0 : promoterPercent,
+    detractorPercent: isNaN(detractorPercent) ? 0 : detractorPercent,
+    passivePercent: isNaN(passivePercent) ? 0 : passivePercent,
   };
 
   return (
