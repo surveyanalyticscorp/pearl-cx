@@ -5,6 +5,7 @@ import {TouchableOpacity, View, Text} from 'react-native';
 import {Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {MarginConstants} from '../../styles/margin.constants';
+const stringConst = require('../../config/locales/en');
 import IntroPage from './IntroPage';
 import Swiper from 'react-native-swiper'; //https://www.npmjs.com/package/react-native-swiper
 
@@ -49,7 +50,9 @@ const MarketingScreen = props => {
 
       {index === 4 ? (
         <TouchableOpacity style={styles.getStartedButton} onPress={onPress}>
-          <Text style={styles.buttonTextColor}>Get Started</Text>
+          <Text style={styles.buttonTextColor}>
+            {stringConst.getStarted}
+          </Text>
         </TouchableOpacity>
       ) : null}
     </View>

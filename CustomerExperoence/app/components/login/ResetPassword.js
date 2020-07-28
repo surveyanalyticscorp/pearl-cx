@@ -25,6 +25,7 @@ import {isStringNullOrEmpty} from '../../Utils/Utility';
 import StringUtils from '../../Utils/StringUtils';
 import {showMessage} from 'react-native-flash-message';
 const screen = Dimensions.get('screen');
+const stringConst = require('../../config/locales/en');
 
 const ResetPassword = props => {
   const [password, setPassword] = useState('');
@@ -70,15 +71,15 @@ const ResetPassword = props => {
 
   const isValidateInput = () => {
     if (isStringNullOrEmpty(password)) {
-      setValidation('Invalid password');
+      setValidation(stringConst.invalidPassword);
       return false;
     }
     if (isStringNullOrEmpty(confirmPswd)) {
-      setValidation('Invalid password');
+      setValidation(stringConst.invalidPassword);
       return false;
     }
     if (password !== confirmPswd) {
-      setValidation('Password and Confirm password not matching');
+      setValidation(stringConst.passwordNotMatching);
       return false;
     }
     setValidation('');
@@ -149,8 +150,7 @@ const ResetPassword = props => {
                 marginTop: MarginConstants.halfTab,
                 paddingHorizontal: MarginConstants.tab2,
               }}>
-              Please enter the new password and hit the Update button to change
-              your password.
+                {stringConst.resetPasswordMessage}
             </Text>
             <QPTextField
               label={'Password'}

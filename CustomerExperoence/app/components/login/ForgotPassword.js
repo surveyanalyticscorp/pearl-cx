@@ -23,6 +23,7 @@ import {connect} from 'react-redux';
 import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
 import BarIndicator from 'react-native-indicators/src/components/bar-indicator';
+const stringConst = require('../../config/locales/en');
 const screen = Dimensions.get('screen');
 import {showMessage} from 'react-native-flash-message';
 import DialogContainer from '../../widgets/dialog/Container';
@@ -73,11 +74,11 @@ const ForgotPassword = props => {
 
   const isValidateInput = () => {
     if (!validateEmail(email)) {
-      setValidation('Invalid email address');
+      setValidation(stringConst.invalidEmail);
       return false;
     }
     if (isStringNullOrEmpty(accessCode)) {
-      setValidation('Invalid password');
+      setValidation(stringConst.invalidPassword);
       return false;
     }
     setValidation('');
@@ -146,7 +147,7 @@ const ForgotPassword = props => {
       };
       props.validateUserOtp(data);
     } else {
-      setValidation('Enter OTP');
+      setValidation(stringConst.otpRequired);
     }
   };
 
@@ -167,7 +168,7 @@ const ForgotPassword = props => {
     return (
       <DialogContainer visible={otpAlert}>
         <DialogTitle>
-          Please enter One Time Password received on your email{' '}
+          {stringConst.enterOtp}
         </DialogTitle>
         <DialogInput
           labelStyle={{color: messageColor}}
@@ -175,8 +176,8 @@ const ForgotPassword = props => {
           keyboardType={'numeric'}
           onChangeText={handleOnTextChange}
         />
-        <DialogButton label={'Cancel'} onPress={handleDialogCancel} />
-        <DialogButton label={'Done'} onPress={handleDialogDone} />
+        <DialogButton label={stringConst.cancel} onPress={handleDialogCancel} />
+        <DialogButton label={stringConst.done} onPress={handleDialogDone} />
       </DialogContainer>
     );
   };
@@ -211,16 +212,15 @@ const ForgotPassword = props => {
                 marginTop: MarginConstants.halfTab,
                 paddingHorizontal: MarginConstants.tab2,
               }}>
-              Please enter the details below and hit Reset Password button to
-              reset your password.
+                {stringConst.forgotPasswordMessage}
             </Text>
             <QPTextField
-              label={'Email Address'}
+              label={stringConst.email}
               style={styles.emailInput}
               onEndEdit={handleEmail}
             />
             <QPTextField
-              label={'Company Code'}
+              label={stringConst.companyCode}
               style={styles.passwordInput}
               onEndEdit={handleAccessCode}
             />
@@ -236,7 +236,7 @@ const ForgotPassword = props => {
               <QPButton
                 style={styles.nextButton}
                 onPress={onResetPasswordClick}
-                buttonText={'Reset Password'}
+                buttonText={stringConst.resetPassword}
               />
             )}
           </View>

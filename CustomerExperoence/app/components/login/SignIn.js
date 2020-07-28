@@ -21,6 +21,7 @@ import {doLogin, showLoading, setIsLogin, clearError} from '../../redux/actions/
 import {loginStyles} from './login.styles';
 import {BarIndicator} from 'react-native-indicators';
 import StringUtils from '../../Utils/StringUtils';
+const stringConst = require('../../config/locales/en');
 
 const SignInScreen = props => {
   const [userData, setUserData] = useState({
@@ -65,11 +66,11 @@ const SignInScreen = props => {
 
   const checkValidation = () =>{
       if(!validateEmail((userData.email))){
-        setValidation('Invalid email address');
+        setValidation(stringConst.invalidEmail);
         return false;
       }
       if(isStringNullOrEmpty(userData.password)){
-          setValidation('Invalid password');
+          setValidation(stringConst.invalidPassword);
           return false;
       }
       setValidation('');
@@ -151,7 +152,7 @@ const SignInScreen = props => {
           source={require('../../images/whiteCXLogo.png')}
         />
         <QPTextField
-          label={'Email Address'}
+          label={stringConst.email}
           defaultValue={'saloni.shah@questionpro.com'}
           style={loginStyles.emailInput}
           onEndEdit={handleEmail}
@@ -174,7 +175,7 @@ const SignInScreen = props => {
           <QPButton
             style={loginStyles.nextButton}
             onPress={onSignInPress}
-            buttonText={'Sign In'}
+            buttonText={stringConst.signIn}
           />
         )}
 
@@ -182,7 +183,7 @@ const SignInScreen = props => {
           style={loginStyles.forgotPswdButton}
           onPress={onForgotPasswordPress}
           textStyle={loginStyles.nextText}
-          buttonText={'Forgot Password?'}
+          buttonText={stringConst.forgotPassword}
         />
       </View>
     );

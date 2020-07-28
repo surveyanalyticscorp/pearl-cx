@@ -18,6 +18,7 @@ import QPButton from '../../widgets/Button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const screen = Dimensions.get('screen');
 import {loginStyles} from './login.styles';
+import stringConst from '../../config/locales/en'
 
 const CompanyCode = props => {
   const fieldRef = React.createRef();
@@ -28,7 +29,7 @@ const CompanyCode = props => {
     if (accessCode.length > 2) {
       props.navigation.navigate('SignInScreen', {accessCode: accessCode});
     } else {
-      setValidation('Please enter access code');
+      setValidation(stringConst.accessCodeRequired);
     }
   };
 
