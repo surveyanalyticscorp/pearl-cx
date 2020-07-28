@@ -1,7 +1,7 @@
 // Imports: Dependencies
 import {takeLatest, put} from 'redux-saga/effects';
-import WebServiceHandler from '../api/WebServiceHandler';
-import {BASE_URL} from '../api/types';
+import WebServiceHandler from '../../api/WebServiceHandler';
+import {BASE_URL} from '../../api/types';
 import {
   DASHBOARD_RECEIVED,
   GET_DASHBOARD,
@@ -9,7 +9,7 @@ import {
   DETRACTOR_TICKET_RECEIVED,
   IS_LOADING,
   GET_DETRACTOR_TICKET,
-} from '../actions';
+} from '../actions/index';
 
 // Worker: Increase Counter Async (Delayed By 4 Seconds)
 function* fetchDashboardAsync(action) {

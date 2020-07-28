@@ -1,6 +1,6 @@
 import {takeLatest, put} from 'redux-saga/effects';
-import WebServiceHandler from '../api/WebServiceHandler';
-import {BASE_URL} from '../api/types';
+import WebServiceHandler from '../../api/WebServiceHandler';
+import {BASE_URL} from '../../api/types';
 import {
   GET_FEEDBACK,
   FEEDBACK_RECEIVED,
@@ -8,7 +8,7 @@ import {
   UPDATE_FEEDBACK,
   API_ERROR,
   IS_LOADING,
-} from '../actions';
+} from '../actions/index';
 
 function* fetchFeedbackAsync(action) {
   try {

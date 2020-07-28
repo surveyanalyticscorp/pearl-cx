@@ -1,4 +1,4 @@
-import {FEEDBACK_RECEIVED, FEEDBACK_UPDATED} from '../actions';
+import {FEEDBACK_RECEIVED, FEEDBACK_UPDATED} from '../actions/index';
 
 const initialState = {
   response: {},

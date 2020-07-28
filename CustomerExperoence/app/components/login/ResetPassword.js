@@ -9,20 +9,20 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {MarginConstants} from '../styles/margin.constants';
-import {fontFamily} from '../styles/font.constants';
-import {buttonColors, Colors, textColors} from '../styles/color.constants';
-import QPTextField from '../widgets/TextField';
+import {MarginConstants} from '../../styles/margin.constants';
+import {fontFamily} from '../../styles/font.constants';
+import {buttonColors, Colors, textColors} from '../../styles/color.constants';
+import QPTextField from '../../widgets/TextField';
 import {loginStyles} from './login.styles';
 import BarIndicator from 'react-native-indicators/src/components/bar-indicator';
-import QPButton from '../widgets/Button';
+import QPButton from '../../widgets/Button';
 import React, {useEffect, useState} from 'react';
-import {clearError, updatePassword} from '../redux/actions';
+import {clearError, updatePassword} from '../../redux/actions/index';
 import {connect} from 'react-redux';
-import {TextSizes} from '../styles/textsize.constants';
+import {TextSizes} from '../../styles/textsize.constants';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {isStringNullOrEmpty} from '../Utils/Utility';
-import StringUtils from '../Utils/StringUtils';
+import {isStringNullOrEmpty} from '../../Utils/Utility';
+import StringUtils from '../../Utils/StringUtils';
 import {showMessage} from 'react-native-flash-message';
 const screen = Dimensions.get('screen');
 
@@ -123,7 +123,7 @@ const ResetPassword = props => {
     <View style={{flex: 1}}>
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../images/background_inverted.png')}
+        source={require('../../images/background_inverted.png')}
         style={{flex: 1}}>
         <View style={styles.forgotPswdContainer}>
           {renderBackButton()}
@@ -136,7 +136,7 @@ const ResetPassword = props => {
             <Image
               style={styles.logoImage}
               resizeMode="contain"
-              source={require('../images/whiteCXLogo.png')}
+              source={require('../../images/whiteCXLogo.png')}
             />
             <Text
               style={{

@@ -9,7 +9,7 @@ import {
   VALIDATE_USER_OTP_RESPONSE,
   UPDATE_PASSWORD_RESPONSE,
   CLEAR_USER_INFO,
-} from '../actions';
+} from '../actions/index';
 
 const initialState = {
   isLoading: false,

@@ -10,25 +10,25 @@ import {
   View,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {MarginConstants} from '../styles/margin.constants';
-import {buttonColors, Colors, textColors} from '../styles/color.constants';
-import {TextSizes} from '../styles/textsize.constants';
-import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
+import {MarginConstants} from '../../styles/margin.constants';
+import {buttonColors, Colors, textColors} from '../../styles/color.constants';
+import {TextSizes} from '../../styles/textsize.constants';
+import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {fontFamily} from '../styles/font.constants';
-import QPTextField from '../widgets/TextField';
-import QPButton from '../widgets/Button';
-import {clearError, requestOtp, showLoading, validateUserOtp} from '../redux/actions';
+import {fontFamily} from '../../styles/font.constants';
+import QPTextField from '../../widgets/TextField';
+import QPButton from '../../widgets/Button';
+import {clearError, requestOtp, showLoading, validateUserOtp} from '../../redux/actions/index';
 import {connect} from 'react-redux';
 import {loginStyles} from './login.styles';
-import StringUtils from '../Utils/StringUtils';
+import StringUtils from '../../Utils/StringUtils';
 import BarIndicator from 'react-native-indicators/src/components/bar-indicator';
 const screen = Dimensions.get('screen');
 import {showMessage} from 'react-native-flash-message';
-import DialogContainer from '../widgets/dialog/Container';
-import DialogTitle from '../widgets/dialog/Title';
-import DialogInput from '../widgets/dialog/Input';
-import DialogButton from '../widgets/dialog/Button';
+import DialogContainer from '../../widgets/dialog/Container';
+import DialogTitle from '../../widgets/dialog/Title';
+import DialogInput from '../../widgets/dialog/Input';
+import DialogButton from '../../widgets/dialog/Button';
 
 const ForgotPassword = props => {
   const [email, setEmail] = useState('');
@@ -185,7 +185,7 @@ const ForgotPassword = props => {
     <View style={{flex: 1}}>
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../images/background_inverted.png')}
+        source={require('../../images/background_inverted.png')}
         style={{flex: 1}}>
         <View style={styles.forgotPswdContainer}>
           {renderBackButton()}
@@ -198,7 +198,7 @@ const ForgotPassword = props => {
             <Image
               style={styles.logoImage}
               resizeMode="contain"
-              source={require('../images/whiteCXLogo.png')}
+              source={require('../../images/whiteCXLogo.png')}
             />
             <Text
               style={{

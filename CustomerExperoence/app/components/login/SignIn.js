@@ -8,19 +8,19 @@ import {
   Text,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {MarginConstants} from '../styles/margin.constants';
+import {MarginConstants} from '../../styles/margin.constants';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN, ASYNC_USER_CREDENTIALS, ASYNC_USER_INFO} from '../api/types';
-import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
+import {ASYNC_AUTH_TOKEN, ASYNC_USER_CREDENTIALS, ASYNC_USER_INFO} from '../../api/types';
+import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import QPTextField from '../widgets/TextField';
-import QPButton from '../widgets/Button';
+import QPTextField from '../../widgets/TextField';
+import QPButton from '../../widgets/Button';
 import {connect} from 'react-redux';
-import {doLogin, showLoading, setIsLogin, clearError} from '../redux/actions';
+import {doLogin, showLoading, setIsLogin, clearError} from '../../redux/actions/index';
 import {loginStyles} from './login.styles';
 import {BarIndicator} from 'react-native-indicators';
-import StringUtils from '../Utils/StringUtils';
+import StringUtils from '../../Utils/StringUtils';
 
 const SignInScreen = props => {
   const [userData, setUserData] = useState({
@@ -148,7 +148,7 @@ const SignInScreen = props => {
         <Image
           style={loginStyles.logoImage}
           resizeMode="contain"
-          source={require('../images/whiteCXLogo.png')}
+          source={require('../../images/whiteCXLogo.png')}
         />
         <QPTextField
           label={'Email Address'}
@@ -192,7 +192,7 @@ const SignInScreen = props => {
     <View style={{flex: 1}}>
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../images/background_inverted.png')}
+        source={require('../../images/background_inverted.png')}
         style={loginStyles.imageBackgroundContainer}>
         <View style={loginStyles.signInInContainer}>
           {renderBackButton()}

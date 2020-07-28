@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Dimensions, Text, View} from 'react-native';
 
-import FeedbackCell from '../components/FeedbackCells';
+import FeedbackCell from '../view/FeedbackCells';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {TabBar, TabView} from 'react-native-tab-view';
 import {Colors} from '../../styles/color.constants';

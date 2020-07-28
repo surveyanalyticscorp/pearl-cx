@@ -8,10 +8,10 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import {MarginConstants} from '../styles/margin.constants';
-import {TextSizes} from '../styles/textsize.constants';
-import {textColors} from '../styles/color.constants';
-import {fontFamily} from '../styles/font.constants';
+import {MarginConstants} from '../../styles/margin.constants';
+import {TextSizes} from '../../styles/textsize.constants';
+import {textColors} from '../../styles/color.constants';
+import {fontFamily} from '../../styles/font.constants';
 export default function IntroPage(props) {
   const {marketingComponent} = props;
   return (

@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {fontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
-import {clearUserInfo, doLogin, setIsLogin} from '../actions';
+import {clearUserInfo, doLogin, setIsLogin} from '../redux/actions';
 import {connect} from 'react-redux';
 import {ASYNC_USER_CREDENTIALS} from '../api/types';
 import DialogContainer from '../widgets/dialog/Container';

@@ -1,8 +1,8 @@
 import {Platform, StyleSheet, Dimensions} from 'react-native';
-import {MarginConstants} from '../styles/margin.constants';
-import {buttonColors, Colors, textColors} from '../styles/color.constants';
-import {TextSizes} from '../styles/textsize.constants';
-import {fontFamily} from '../styles/font.constants';
+import {MarginConstants} from '../../styles/margin.constants';
+import {buttonColors, Colors, textColors} from '../../styles/color.constants';
+import {TextSizes} from '../../styles/textsize.constants';
+import {fontFamily} from '../../styles/font.constants';
 const screen = Dimensions.get('screen');
 
 export const loginStyles = StyleSheet.create({

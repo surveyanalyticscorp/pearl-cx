@@ -9,8 +9,8 @@ import {
   FlatList,
 } from 'react-native';
 import {StackActions} from '@react-navigation/native';
-import CXTrendItemWidget from '../components/CXTrendItemWidget';
-import {clearError, showLoading} from '../../../redux/actions';
+import CXTrendItemWidget from './CXTrendItemWidget';
+import {clearError, showLoading} from '../../../redux/actions/index';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../../api/types';

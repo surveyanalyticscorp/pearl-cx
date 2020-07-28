@@ -11,7 +11,7 @@ import {
 import {StackActions} from '@react-navigation/native';
 import CXTrendItemWidget from './components/CXTrendItemWidget';
 import {styles} from '../../styles/styles';
-import {getDashboardContent, showLoading} from '../../redux/actions';
+import {getDashboardContent, showLoading} from '../../redux/actions/index';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../api/types';

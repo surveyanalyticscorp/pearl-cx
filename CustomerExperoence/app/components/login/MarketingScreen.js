@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {isLandscape} from '../Utils/DeviceUtil';
+import {isLandscape} from '../../Utils/DeviceUtil';
 import {ImageBackground, StyleSheet} from 'react-native';
 import {TouchableOpacity, View, Text} from 'react-native';
-import {Colors, textColors} from '../styles/color.constants';
-import {TextSizes} from '../styles/textsize.constants';
-import {MarginConstants} from '../styles/margin.constants';
+import {Colors, textColors} from '../../styles/color.constants';
+import {TextSizes} from '../../styles/textsize.constants';
+import {MarginConstants} from '../../styles/margin.constants';
 import IntroPage from './IntroPage';
 import Swiper from 'react-native-swiper'; //https://www.npmjs.com/package/react-native-swiper
 
@@ -32,7 +32,7 @@ const MarketingScreen = props => {
     <View style={{flex: 1}}>
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../images/background.png')}
+        source={require('../../images/background.png')}
         style={styles.imageBackgroundContainer}>
         <Swiper
           loop={false}
@@ -59,35 +59,35 @@ const MarketingScreen = props => {
 function getMarketingScreenContent() {
   return [
     {
-      introImage: require('../images/ms_connect_engage.png'),
+      introImage: require('../../images/ms_connect_engage.png'),
       isLogoRequired: true,
       introTitle: 'Connect and engage with your customers. Anytime, anywhere',
       description:
         'Communicate with customers or prospects through a wide selection of feedback channels at every touchpoint anywhere, no matter the device.',
     },
     {
-      introImage: require('../images/ms_take_control.png'),
+      introImage: require('../../images/ms_take_control.png'),
       introTitle: 'Take full control of your customer’s journey',
       isLogoRequired: true,
       description:
         'Analyze your customer’s 360 experience and quickly identify actionable insights and trends.',
     },
     {
-      introImage: require('../images/ms_mobile_dashboard.png'),
+      introImage: require('../../images/ms_mobile_dashboard.png'),
       introTitle: 'Manage real-time analytics in one dashboard',
       isLogoRequired: true,
       description:
         'Easily monitor your business with the role-based, customizable dashboard from anywhere.',
     },
     {
-      introImage: require('../images/ms_drive_business_decisions.png'),
+      introImage: require('../../images/ms_drive_business_decisions.png'),
       introTitle: 'Make immediate business decisions',
       isLogoRequired: true,
       description:
         'Prioritize actions quickly based on customer data to excel their expectations with our closed-loop feedback system with real-time alerts.',
     },
     {
-      introImage: require('../images/ms_full_growth.png'),
+      introImage: require('../../images/ms_full_growth.png'),
       introTitle: 'Fuel growth organically',
       isLogoRequired: true,
       description:
