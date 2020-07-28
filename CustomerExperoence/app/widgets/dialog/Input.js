@@ -18,6 +18,7 @@ export default class DialogInput extends React.PureComponent {
   render() {
     const {
       label,
+      labelStyle,
       style,
       wrapperStyle,
       textInputRef,
@@ -30,7 +31,7 @@ export default class DialogInput extends React.PureComponent {
     const height = 18 + Platform.select({ios: 14, android: 22}) * lines;
     return (
       <View style={[styles.textInputWrapper, wrapperStyle]}>
-        {label && <Text style={styles.label}>{label}</Text>}
+        {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
         <TextInput
           ref={textInputRef}
           style={[styles.textInput, style, {height}]}

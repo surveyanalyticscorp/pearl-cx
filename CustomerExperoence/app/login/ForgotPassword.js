@@ -51,6 +51,7 @@ const ForgotPassword = props => {
   useEffect(() => {
     if (props.validateOtpResponse.body) {
       if (props.validateOtpResponse.body.success) {
+        props.clearError();
         setOtpAlert(false);
         props.navigation.replace('ResetPassword', {
           email: email,
@@ -159,10 +160,13 @@ const ForgotPassword = props => {
 
   const renderDialog = () => {
     let errorMessage = 'One Time password(OTP)';
+    let messageColor ='white';
     if (props.isError) {
       errorMessage = props.errorMessage.errorAlert
         ? props.errorMessage.errorAlert
         : props.errorMessage.message;
+
+        messageColor= 'red';
     }
     return (
       <DialogContainer visible={otpAlert}>
@@ -170,6 +174,7 @@ const ForgotPassword = props => {
           Please enter One Time Password received on your email{' '}
         </DialogTitle>
         <DialogInput
+          labelStyle={{color: messageColor}}
           label={errorMessage}
           keyboardType={'numeric'}
           onChangeText={handleOnTextChange}
@@ -262,14 +267,14 @@ const mapDispatchToProps = dispatch => ({
   requestOtp: data => {
     dispatch(clearError());
     dispatch(requestOtp(data));
-    dispatch(showLoading(true));
   },
   validateUserOtp: data => {
+    dispatch(clearError());
     dispatch(validateUserOtp(data));
   },
-  clearError: () => {
-    dispatch(clearError(false));
-  },
+  clearError: () =>{
+      dispatch(clearError(false));
+  }
 });
 
 export default connect(
