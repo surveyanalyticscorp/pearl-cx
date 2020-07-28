@@ -18,7 +18,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {fontFamily} from '../styles/font.constants';
 import QPTextField from '../widgets/TextField';
 import QPButton from '../widgets/Button';
-import {clearError, requestOtp, showLoading, validateUserOtp} from '../actions';
+import {clearError, requestOtp, showLoading, validateUserOtp} from '../redux/actions';
 import {connect} from 'react-redux';
 import {loginStyles} from './login.styles';
 import StringUtils from '../Utils/StringUtils';
@@ -84,10 +84,6 @@ const ForgotPassword = props => {
     return true;
   };
 
-  const onBackPress = () => {
-    props.navigation.pop();
-  };
-
   const handleEmail = text => {
     setEmail(text);
     setValidation('');
@@ -103,7 +99,7 @@ const ForgotPassword = props => {
         style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
         <TouchableWithoutFeedback
           onPress={() => {
-            console.log(props);
+            //console.log(props);
             props.navigation.goBack();
           }}>
           <Icon name="keyboard-arrow-left" size={35} color="white" />

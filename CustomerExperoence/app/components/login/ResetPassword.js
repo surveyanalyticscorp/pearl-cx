@@ -17,7 +17,7 @@ import {loginStyles} from './login.styles';
 import BarIndicator from 'react-native-indicators/src/components/bar-indicator';
 import QPButton from '../widgets/Button';
 import React, {useEffect, useState} from 'react';
-import {clearError, updatePassword} from '../actions';
+import {clearError, updatePassword} from '../redux/actions';
 import {connect} from 'react-redux';
 import {TextSizes} from '../styles/textsize.constants';
 import Icon from 'react-native-vector-icons/MaterialIcons';

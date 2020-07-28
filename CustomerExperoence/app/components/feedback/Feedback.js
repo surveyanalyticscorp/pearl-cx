@@ -12,7 +12,7 @@ import {MarginConstants} from '../../styles/margin.constants';
 const initialLayout = {width: Dimensions.get('window').width};
 import {EventRegister} from 'react-native-event-listeners';
 import CalendarScreen from '../components/calendarScreen';
-import {getFeedbackList} from '../../actions';
+import {getFeedbackList} from '../../redux/actions';
 import {connect} from 'react-redux';
 import {DotIndicator} from 'react-native-indicators';
 import {showMessage} from 'react-native-flash-message';

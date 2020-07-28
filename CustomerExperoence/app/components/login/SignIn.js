@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import QPTextField from '../widgets/TextField';
 import QPButton from '../widgets/Button';
 import {connect} from 'react-redux';
-import {doLogin, showLoading, setIsLogin, clearError} from '../actions';
+import {doLogin, showLoading, setIsLogin, clearError} from '../redux/actions';
 import {loginStyles} from './login.styles';
 import {BarIndicator} from 'react-native-indicators';
 import StringUtils from '../Utils/StringUtils';
