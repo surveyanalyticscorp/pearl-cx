@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {fontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
-import {doLogin, setIsLogin} from '../actions';
+import {clearUserInfo, doLogin, setIsLogin} from '../actions';
 import {connect} from 'react-redux';
 import {ASYNC_USER_CREDENTIALS} from '../api/types';
 import DialogContainer from '../widgets/dialog/Container';
@@ -100,7 +100,7 @@ const DrawerContent = props => {
       return await AsyncStorage.clear();
     }
     clearData().then(() => {
-      props.setIsLogin();
+      props.logoutUser();
       setLogoutAlert(false);
     });
   };
@@ -181,8 +181,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setIsLogin: data => {
+  logoutUser: data => {
     dispatch(setIsLogin(false));
+    dispatch(clearUserInfo());
   },
 });
 
