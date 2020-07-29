@@ -1,13 +1,13 @@
 /* eslint-disable */
 import {
-  Dimensions,
-  Image,
-  ImageBackground,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
+    Dimensions,
+    Image,
+    ImageBackground, Keyboard,
+    Platform, SafeAreaView,
+    StyleSheet,
+    Text,
+    TouchableWithoutFeedback,
+    View,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -23,7 +23,8 @@ import {requestOtp, validateUserOtp} from '../../redux/actions/login.actions';
 import {connect} from 'react-redux';
 import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
-import BarIndicator from 'react-native-indicators/src/components/bar-indicator';
+import {DotIndicator} from 'react-native-indicators';
+
 const stringConst = require('../../config/locales/en');
 const screen = Dimensions.get('screen');
 import {showMessage} from 'react-native-flash-message';
@@ -33,300 +34,312 @@ import DialogInput from '../../widgets/dialog/Input';
 import DialogButton from '../../widgets/dialog/Button';
 
 const ForgotPassword = props => {
-  const [email, setEmail] = useState('');
-  const [accessCode, setAccessCode] = useState('');
-  const [validation, setValidation] = useState('');
-  const [otp, setOtp] = useState('');
-  const [otpAlert, setOtpAlert] = useState(false);
+    const [email, setEmail] = useState('');
+    const [accessCode, setAccessCode] = useState('');
+    const [validation, setValidation] = useState('');
+    const [otp, setOtp] = useState('');
+    const [otpAlert, setOtpAlert] = useState(false);
 
-  useEffect(() => {
-    if (props.forgotPasswordResponse.body) {
-      showMessage({
-        message: props.forgotPasswordResponse.body.message,
-        type: 'info',
-        icon: 'auto',
-      });
-      setOtpAlert(true);
-    }
-  }, [props.forgotPasswordResponse]);
+    useEffect(() => {
+        if (props.forgotPasswordResponse.body) {
+            showMessage({
+                message: props.forgotPasswordResponse.body.message,
+                type: 'info',
+                icon: 'auto',
+            });
+            setOtpAlert(true);
+        }
+    }, [props.forgotPasswordResponse]);
 
-  useEffect(() => {
-    if (props.validateOtpResponse.body) {
-      if (props.validateOtpResponse.body.success) {
-        props.clearError();
+    useEffect(() => {
+        if (props.validateOtpResponse.body) {
+            if (props.validateOtpResponse.body.success) {
+                props.clearError();
+                setOtpAlert(false);
+                props.navigation.replace('ResetPassword', {
+                    email: email,
+                    accessCode: accessCode,
+                });
+            }
+        }
+    }, [props.validateOtpResponse]);
+
+
+    useEffect(() => {
+        if (StringUtils.isNotEmpty(validation)) {
+            showMessage({
+                message: validation,
+                type: 'danger',
+                icon: 'auto',
+                backgroundColor: Colors.red,
+                color: Colors.white, // text color
+            });
+            let timer = setTimeout(() => {
+                setValidation('')
+            }, 1000);
+            return () => {
+                clearTimeout(timer);
+            };
+        }
+    }, [validation]);
+
+    useEffect(() => {
+        if (props.isError) {
+            showMessage({
+                message: props.errorMessage.errorAlert,
+                type: 'danger',
+                icon: 'auto',
+                backgroundColor: Colors.red,
+                color: Colors.white, // text color
+            });
+            let timer = setTimeout(() => {
+                props.clearError();
+            }, 1000);
+            return () => {
+                clearTimeout(timer);
+            };
+        }
+    }, [props.isError]);
+
+    const onResetPasswordClick = () => {
+        if (isValidateInput()) {
+            let data = {
+                emailAddress: email,
+                accessCode: accessCode,
+            };
+            props.requestOtp(data);
+        }
+    };
+
+    const isValidateInput = () => {
+        if (!validateEmail(email)) {
+            setValidation(stringConst.invalidEmail);
+            return false;
+        }
+        if (isStringNullOrEmpty(accessCode)) {
+            setValidation(stringConst.invalidPassword);
+            return false;
+        }
+        setValidation('');
+        return true;
+    };
+
+    const handleEmail = text => {
+        setEmail(text);
+        setValidation('');
+    };
+    const handleAccessCode = text => {
+        setAccessCode(text);
+        setValidation('');
+    };
+
+    const renderBackButton = () => {
+        return (
+            <View
+                style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
+                <TouchableWithoutFeedback
+                    onPress={() => {
+                        //console.log(props);
+                        props.navigation.goBack();
+                    }}>
+                    <Icon name="keyboard-arrow-left" size={35} color="white"/>
+                </TouchableWithoutFeedback>
+            </View>
+        );
+    };
+
+    const handleDialogCancel = () => {
         setOtpAlert(false);
-        props.navigation.replace('ResetPassword', {
-          email: email,
-          accessCode: accessCode,
-        });
-      }
-    }
-  }, [props.validateOtpResponse]);
+    };
 
-  const onResetPasswordClick = () => {
-    if (isValidateInput()) {
-      let data = {
-        emailAddress: email,
-        accessCode: accessCode,
-      };
-      props.requestOtp(data);
-    }
-  };
+    const handleDialogDone = () => {
+        if (!isStringNullOrEmpty(otp)) {
+            let data = {
+                emailAddress: email,
+                accessCode: accessCode,
+                otp: otp,
+            };
+            props.validateUserOtp(data);
+        } else {
+            setValidation(stringConst.otpRequired);
+        }
+    };
 
-  const isValidateInput = () => {
-    if (!validateEmail(email)) {
-      setValidation(stringConst.invalidEmail);
-      return false;
-    }
-    if (isStringNullOrEmpty(accessCode)) {
-      setValidation(stringConst.invalidPassword);
-      return false;
-    }
-    setValidation('');
-    return true;
-  };
+    const handleOnTextChange = text => {
+        setOtp(text);
+    };
 
-  const handleEmail = text => {
-    setEmail(text);
-    setValidation('');
-  };
-  const handleAccessCode = text => {
-    setAccessCode(text);
-    setValidation('');
-  };
+    const renderDialog = () => {
+        let errorMessage = 'One Time password(OTP)';
+        let messageColor = 'white';
+        if (props.isError) {
+            errorMessage = props.errorMessage.errorAlert
+                ? props.errorMessage.errorAlert
+                : props.errorMessage.message;
 
-  const renderBackButton = () => {
+            messageColor = 'red';
+        }
+        return (
+            <DialogContainer visible={otpAlert}>
+                <DialogTitle>
+                    {stringConst.enterOtp}
+                </DialogTitle>
+                <DialogInput
+                    labelStyle={{color: messageColor}}
+                    label={errorMessage}
+                    keyboardType={'numeric'}
+                    onChangeText={handleOnTextChange}
+                />
+                <DialogButton label={stringConst.cancel} onPress={handleDialogCancel}/>
+                <DialogButton label={stringConst.done} onPress={handleDialogDone}/>
+            </DialogContainer>
+        );
+    };
+    const handleUnhandledTouches = () => {
+        Keyboard.dismiss();
+        return false;
+    };
+
+
     return (
-      <View
-        style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            //console.log(props);
-            props.navigation.goBack();
-          }}>
-          <Icon name="keyboard-arrow-left" size={35} color="white" />
-        </TouchableWithoutFeedback>
-      </View>
+        <SafeAreaView style={{flex: 1, backgroundColor: Colors.accent}}>
+            <ImageBackground
+                resizeMode={'stretch'}
+                source={require('../../config/images/background_inverted.png')}
+                style={{flex: 1}}>
+                <View style={styles.forgotPswdContainer} onStartShouldSetResponder={handleUnhandledTouches}>
+                    {renderBackButton()}
+                    <View
+                        style={{
+                            marginVertical: MarginConstants.tab4 * 3,
+                            alignItems: 'center',
+                            width: '100%',
+                        }}>
+                        <Image
+                            style={styles.logoImage}
+                            resizeMode="contain"
+                            source={require('../../config/images/whiteCXLogo.png')}
+                        />
+                        <Text
+                            style={{
+                                fontSize: 15,
+                                width: '90%',
+                                textAlign: 'center',
+                                fontFamily: fontFamily.Medium,
+                                color: textColors.primary,
+                                alignSelf: 'center',
+                                marginTop: MarginConstants.halfTab,
+                                paddingHorizontal: MarginConstants.tab2,
+                            }}>
+                            {stringConst.forgotPasswordMessage}
+                        </Text>
+                        <QPTextField
+                            autofocus={true}
+                            label={stringConst.email}
+                            style={styles.emailInput}
+                            onEndEdit={handleEmail}
+                        />
+                        <QPTextField
+                            label={stringConst.companyCode}
+                            style={styles.companyCode}
+                            onEndEdit={handleAccessCode}
+                        />
+                        {props.isLoading ? (
+                            <View style={loginStyles.nextButton}>
+                                <DotIndicator color={Colors.white} count={3} size={10}/>
+                            </View>
+                        ) : (
+                            <QPButton
+                                style={styles.nextButton}
+                                onPress={onResetPasswordClick}
+                                buttonText={stringConst.resetPassword}
+                            />
+                        )}
+                    </View>
+                </View>
+            </ImageBackground>
+
+            {renderDialog()}
+        </SafeAreaView>
     );
-  };
-
-  const renderErrorMessage = () => {
-    if (props.isError) {
-      let errorMessage = props.errorMessage.errorAlert
-        ? props.errorMessage.errorAlert
-        : props.errorMessage.message;
-      return (
-        <View style={loginStyles.errorMessageContainer}>
-          <Text style={loginStyles.errorMessage}>{errorMessage}</Text>
-        </View>
-      );
-    }
-    return <View style={{flex: 1}} />;
-  };
-
-  const renderLocalValidation = () => {
-    if (!StringUtils.isEmpty(validation)) {
-      return (
-        <View style={loginStyles.errorMessageContainer}>
-          <Text style={loginStyles.errorMessage}>{validation}</Text>
-        </View>
-      );
-    }
-    return <View style={{flex: 1}} />;
-  };
-
-  const handleDialogCancel = () => {
-    setOtpAlert(false);
-  };
-
-  const handleDialogDone = () => {
-    if (!isStringNullOrEmpty(otp)) {
-      let data = {
-        emailAddress: email,
-        accessCode: accessCode,
-        otp: otp,
-      };
-      props.validateUserOtp(data);
-    } else {
-      setValidation(stringConst.otpRequired);
-    }
-  };
-
-  const handleOnTextChange = text => {
-    setOtp(text);
-  };
-
-  const renderDialog = () => {
-    let errorMessage = 'One Time password(OTP)';
-    let messageColor ='white';
-    if (props.isError) {
-      errorMessage = props.errorMessage.errorAlert
-        ? props.errorMessage.errorAlert
-        : props.errorMessage.message;
-
-        messageColor= 'red';
-    }
-    return (
-      <DialogContainer visible={otpAlert}>
-        <DialogTitle>
-          {stringConst.enterOtp}
-        </DialogTitle>
-        <DialogInput
-          labelStyle={{color: messageColor}}
-          label={errorMessage}
-          keyboardType={'numeric'}
-          onChangeText={handleOnTextChange}
-        />
-        <DialogButton label={stringConst.cancel} onPress={handleDialogCancel} />
-        <DialogButton label={stringConst.done} onPress={handleDialogDone} />
-      </DialogContainer>
-    );
-  };
-
-  return (
-    <View style={{flex: 1}}>
-      <ImageBackground
-        resizeMode={'stretch'}
-        source={require('../../config/images/background_inverted.png')}
-        style={{flex: 1}}>
-        <View style={styles.forgotPswdContainer}>
-          {renderBackButton()}
-          <View
-            style={{
-              marginVertical: MarginConstants.tab4 * 3,
-              alignItems: 'center',
-              width: '100%',
-            }}>
-            <Image
-              style={styles.logoImage}
-              resizeMode="contain"
-              source={require('../../config/images/whiteCXLogo.png')}
-            />
-            <Text
-              style={{
-                fontSize: 15,
-                width: '90%',
-                textAlign: 'center',
-                fontFamily: fontFamily.Medium,
-                color: textColors.primary,
-                alignSelf: 'center',
-                marginTop: MarginConstants.halfTab,
-                paddingHorizontal: MarginConstants.tab2,
-              }}>
-                {stringConst.forgotPasswordMessage}
-            </Text>
-            <QPTextField
-              label={stringConst.email}
-              style={styles.emailInput}
-              onEndEdit={handleEmail}
-            />
-            <QPTextField
-              label={stringConst.companyCode}
-              style={styles.passwordInput}
-              onEndEdit={handleAccessCode}
-            />
-
-            {renderErrorMessage()}
-            {renderLocalValidation()}
-
-            {props.isLoading ? (
-              <View style={loginStyles.nextButton}>
-                <BarIndicator color="#2589E3" count={5} size={35} />
-              </View>
-            ) : (
-              <QPButton
-                style={styles.nextButton}
-                onPress={onResetPasswordClick}
-                buttonText={stringConst.resetPassword}
-              />
-            )}
-          </View>
-        </View>
-      </ImageBackground>
-
-      {renderDialog()}
-    </View>
-  );
 };
 
 const mapStateToProps = state => {
-  console.log('Forgot pswd State:');
-  console.log(state);
-  return {
-    isLoading: state.global.isLoading,
-    isError: state.global.isError,
-    errorMessage: state.global.errorMessage,
-    forgotPasswordResponse: state.global.forgotPasswordResponse,
-    validateOtpResponse: state.global.validateOtpResponse,
-  };
+    return {
+        isLoading: state.global.isLoading,
+        isError: state.global.isError,
+        errorMessage: state.global.errorMessage,
+        forgotPasswordResponse: state.global.forgotPasswordResponse,
+        validateOtpResponse: state.global.validateOtpResponse,
+    };
 };
 const mapDispatchToProps = dispatch => ({
-  requestOtp: data => {
-    dispatch(clearError());
-    dispatch(requestOtp(data));
-  },
-  validateUserOtp: data => {
-    dispatch(clearError());
-    dispatch(validateUserOtp(data));
-  },
-  clearError: () =>{
-      dispatch(clearError(false));
-  }
+    requestOtp: data => {
+        dispatch(clearError());
+        dispatch(requestOtp(data));
+    },
+    validateUserOtp: data => {
+        dispatch(clearError());
+        dispatch(validateUserOtp(data));
+    },
+    clearError: () => {
+        dispatch(clearError(false));
+    },
 });
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
+    mapStateToProps,
+    mapDispatchToProps,
 )(ForgotPassword);
 
 const styles = StyleSheet.create({
-  logoImage: {
-    width: '70%',
-    marginTop: MarginConstants.tab4,
-  },
-  forgotPswdContainer: {
-    flex: 1,
-    marginVertical: MarginConstants.tab3,
-    alignItems: 'center',
-    width: '100%',
-  },
-  navigationBar: {
-    width: '100%',
-    height: 50,
-    flexDirection: 'row',
-    backgroundColor: Colors.accent,
-    alignItems: 'flex-start',
-  },
+    logoImage: {
+        width: '70%',
+        marginTop: MarginConstants.tab4,
+    },
+    forgotPswdContainer: {
+        flex: 1,
+        marginVertical: MarginConstants.tab3,
+        alignItems: 'center',
+        width: '100%',
+    },
+    navigationBar: {
+        width: '100%',
+        height: 50,
+        flexDirection: 'row',
+        backgroundColor: Colors.accent,
+        alignItems: 'flex-start',
+    },
 
-  backButton: {
-    color: textColors.primary,
-    fontSize: Platform.isPad ? TextSizes.largeText : TextSizes.largeText,
-  },
-  emailInput: {
-    width: screen.width / 1.1,
-    height: MarginConstants.tab3,
-    marginTop: MarginConstants.tab4,
-    marginBottom: MarginConstants.tab2,
-    paddingHorizontal: MarginConstants.halfTab,
-  },
-  passwordInput: {
-    width: screen.width / 1.1,
-    height: MarginConstants.tab3,
-    marginTop: MarginConstants.tab1,
-    marginBottom: MarginConstants.tab3,
-    paddingHorizontal: MarginConstants.halfTab,
-  },
-  nextButton: {
-    width: '90%',
-    height: MarginConstants.tab4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: MarginConstants.tab4,
-    borderRadius: 5,
-    backgroundColor: buttonColors.backgroundColor,
-  },
-  nextText: {
-    alignSelf: 'center',
-    color: textColors.primary,
-  },
+    backButton: {
+        color: textColors.primary,
+        fontSize: Platform.isPad ? TextSizes.largeText : TextSizes.largeText,
+    },
+    emailInput: {
+        width: screen.width / 1.1,
+        height: MarginConstants.tab3,
+        marginTop: MarginConstants.tab4,
+        marginBottom: MarginConstants.tab2,
+        paddingHorizontal: MarginConstants.halfTab,
+    },
+    companyCode: {
+        width: screen.width / 1.1,
+        height: MarginConstants.tab3,
+        marginTop: MarginConstants.tab2,
+        marginBottom: MarginConstants.tab3,
+        paddingHorizontal: MarginConstants.halfTab,
+    },
+    nextButton: {
+        width: '90%',
+        height: MarginConstants.tab4,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: MarginConstants.tab4,
+        borderRadius: 5,
+        backgroundColor: buttonColors.backgroundColor,
+    },
+    nextText: {
+        alignSelf: 'center',
+        color: textColors.primary,
+    },
 });

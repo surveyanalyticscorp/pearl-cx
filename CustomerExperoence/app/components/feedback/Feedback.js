@@ -19,6 +19,7 @@ import {showMessage} from 'react-native-flash-message';
 import moment from 'moment';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../api/Constant';
+import {clearError} from '../../redux/actions';
 
 const Feedback = props => {
     let month = moment().month() + 1; //Need to check as it returns month number starting 0
@@ -79,7 +80,7 @@ const Feedback = props => {
                 icon: 'auto',
             });
             let timer = setTimeout(() => {
-                props.cleanError();
+                props.clearError();
             }, 1000);
             return () => {
                 clearTimeout(timer);
@@ -193,6 +194,9 @@ const mapStateToProps = state => {
 };
 // Map Dispatch To Props (Dispatch Actions To Reducers. Reducers Then Modify The Data And Assign It To Your Props)
 const mapDispatchToProps = dispatch => ({
+    clearError: () => {
+        dispatch(clearError(false));
+    },
     getFeedbackList: (data, token) => {
         dispatch(getFeedbackList(data, token));
     },
