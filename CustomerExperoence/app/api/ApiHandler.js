@@ -1,7 +1,7 @@
 import {
   BASE_URL,
-  LOADING_PROGRESS,
-  LOADING_ERROR,
+  CX_HOME,
+  CX_DETRACTOR_TICKETS,
   CX_FEEDBACK_LIST,
 } from './Constant';
 import WebServiceHandler from './WebServiceHandler';
@@ -9,6 +9,23 @@ import WebServiceHandler from './WebServiceHandler';
 class ApiHandler {
   callAPIInternal(token, url, data, successCallback, errorCallback) {
     return WebServiceHandler.post(url, {'Auth-Token': token}, data)
+      .then(response => {
+        //this.updateActionBar(JSON.stringify(response));
+        successCallback(response);
+      })
+      .catch(error => {
+        errorCallback(error);
+      });
+  }
+
+  callAPIInternallyWithSuccessAndError(
+    token,
+    url,
+    data,
+    successCallback,
+    errorCallback,
+  ) {
+    return WebServiceHandler.postNew(url, {'Auth-Token': token}, data)
       .then(response => {
         //this.updateActionBar(JSON.stringify(response));
         successCallback(response);
@@ -68,9 +85,9 @@ class ApiHandler {
   }
 
   getCXDashBoard(token, data = {}, successCallback, errorCallback = () => {}) {
-    return this.callAPIInternal(
+    return this.callAPIInternallyWithSuccessAndError(
       token,
-      BASE_URL + 'a/nativehtml/cx.CXHome',
+      CX_HOME,
       data,
       successCallback,
       errorCallback,
@@ -85,7 +102,7 @@ class ApiHandler {
   ) {
     return this.callAPIInternal(
       token,
-      BASE_URL + 'a/nativehtml/cx.CXDetractorTicket',
+      CX_DETRACTOR_TICKETS,
       data,
       successCallback,
       errorCallback,

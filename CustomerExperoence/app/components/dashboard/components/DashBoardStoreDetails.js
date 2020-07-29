@@ -20,19 +20,15 @@ import {Colors} from '../../../styles/color.constants';
 import Pie from 'react-native-pie';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {apiHandler} from '../../../api/ApiHandler';
-
-const wait = timeout => {
-  return new Promise(resolve => {
-    setTimeout(resolve, timeout);
-  });
-};
-
+import {showMessage} from 'react-native-flash-message';
 class DashBoardStoreDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
       authToken: '',
       callApi: true,
+      isLoading: false,
+      isError: false,
     };
     this.apiCall();
     this.storeData = '';
@@ -43,14 +39,13 @@ class DashBoardStoreDetails extends Component {
     }
 
     if (this.state.callApi) {
+      this.setState({isLoading: true});
       getAuthToken().then(token => {
         this.setState({authToken: token});
-        //this.props.getDashboardContent(token, this.props.route.params.data);
         apiHandler.getCXDashBoard(
           token,
           this.props.route.params.data,
           response => {
-            console.log(response);
             this.storeData = response;
             this.props.navigation.setParams({
               name: response.body.primaryStoreName,
@@ -58,12 +53,31 @@ class DashBoardStoreDetails extends Component {
             this.setState({callApi: false});
           },
           error => {
-            console.log(error);
+            this.setState({isLoading: false});
+            this.setState({isError: true});
           },
         );
       });
     }
   };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.isError) {
+      showMessage({
+        message: 'There was an error completing this request!',
+        type: 'danger',
+        icon: 'auto',
+        backgroundColor: Colors.red,
+        color: Colors.white,
+      });
+      let timer = setTimeout(() => {
+        this.setState({isError: false});
+      }, 1000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }
 
   getTrimmedNoOfResponses = () => {
     let numberOfResponsesNumber = 0;
@@ -269,7 +283,7 @@ class DashBoardStoreDetails extends Component {
   };
 
   renderDashboardContent = () => {
-    if (!this.props.isError && !this.props.isLoading) {
+    if (!this.state.isLoading) {
       return (
         <View style={dashboardStyles.center}>
           {this.renderDonutChart()}
@@ -288,7 +302,7 @@ class DashBoardStoreDetails extends Component {
         resizeMode={'stretch'}
         source={require('../../../config/images/background.png')}
         style={dashboardStyles.imageBackgroundContainer}>
-        {this.storeData === '' || this.props.isLoading
+        {this.storeData === '' || this.state.isLoading
           ? this.renderIndicator()
           : this.renderScreen()}
       </ImageBackground>
@@ -307,7 +321,7 @@ class DashBoardStoreDetails extends Component {
   };
 
   renderIndicator = () => {
-    if (this.storeData === '' || this.props.isLoading) {
+    if (this.state.isLoading) {
       return <DotIndicator color={Colors.white} count={3} size={10} />;
     }
   };
@@ -320,19 +334,12 @@ class DashBoardStoreDetails extends Component {
 const mapStateToProps = state => {
   return {
     userInfo: state.global.userInfo,
-    isLoading: state.global.isLoading,
-    isError: state.global.isError,
-    errorMessage: state.global.errorMessage,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   cleanError: () => {
     dispatch(clearError(false));
-  },
-  getDashboardContent: (token, param) => {
-    dispatch(showLoading(true));
-    dispatch(getStoreDashboardContent(token, param));
   },
 });
 
