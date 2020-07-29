@@ -1,7 +1,7 @@
-// Imports: Dependencies
+/* eslint-disable */
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
-import {BASE_URL} from '../../api/types';
+import {CX_HOME, CX_DETRACTOR_TICKETS} from '../../api/Constant';
 import {
   DASHBOARD_RECEIVED,
   GET_DASHBOARD,
@@ -15,7 +15,7 @@ import {
 function* fetchDashboardAsync(action) {
   try {
     const json = yield WebServiceHandler.post(
-      BASE_URL + 'a/nativehtml/cx.CXHome',
+      CX_HOME,
       {'Auth-Token': action.token},
       {},
     );
@@ -44,7 +44,7 @@ function* fetchDetractorTicketAsync(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
     const json = yield WebServiceHandler.postNew(
-      BASE_URL + 'a/nativehtml/cx.CXDetractorTicket',
+      CX_DETRACTOR_TICKETS,
       {'Auth-Token': action.token},
       action.param,
     );

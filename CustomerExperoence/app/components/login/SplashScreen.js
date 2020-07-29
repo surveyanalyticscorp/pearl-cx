@@ -1,7 +1,7 @@
 import {Text, View, ImageBackground, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../../api/types';
+import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../../api/Constant';
 import AppRouter from '../../routes/appRouter';
 import {connect} from 'react-redux';
 import {fillUserInfo} from '../../redux/actions/index';

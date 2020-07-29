@@ -1,6 +1,7 @@
+/* eslint-disable */
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
-import {BASE_URL} from '../../api/types';
+import {AUTH_LOGIN, AUTH_REQUEST_OTP, AUTH_VALIDATE_OTP, AUTH_UPDATE_PASSWORD} from '../../api/Constant';
 import {
   LOGIN_RESPONSE,
   GET_LOGIN,
@@ -17,7 +18,7 @@ function* doLoginApiCall(action) {
   try {
     console.log('DD Login:' + action.param.accessCode);
     const response = yield WebServiceHandler.postNew(
-      BASE_URL + 'a/nativehtml/cx.auth.CXLogin',
+        AUTH_LOGIN,
       {},
       action.param,
     );
@@ -44,7 +45,7 @@ function* doForgotPasswordOtpApiCall(action) {
   try {
     console.log('DD reset pswd otp:' + action.param.accessCode);
     const response = yield WebServiceHandler.postNew(
-      BASE_URL + 'a/nativehtml/cx.auth.CXForgotPasswordOTP',
+        AUTH_REQUEST_OTP,
       {},
       action.param,
     );
@@ -66,12 +67,11 @@ export function* watchForgotPasswordOtp() {
 }
 
 
-
 function* validateUserOtpApiCall(action) {
   try {
     console.log('DD Validate otp:' + action.param.accessCode);
     const response = yield WebServiceHandler.postNew(
-      BASE_URL + 'a/nativehtml/cx.auth.ValidateCXUserOTP',
+        AUTH_VALIDATE_OTP,
       {},
       action.param,
     );
@@ -97,9 +97,9 @@ export function* watchValidateUserOtp() {
 
 function* updatePasswordApiCall(action) {
   try {
-    console.log('DD Validate otp:' + action.param.accessCode);
+    console.log('DD update pswd:' + action.param.accessCode);
     const response = yield WebServiceHandler.postNew(
-      BASE_URL + '/a/nativehtml/cx.auth.CXUpdatePassword',
+        AUTH_UPDATE_PASSWORD,
       {},
       action.param,
     );

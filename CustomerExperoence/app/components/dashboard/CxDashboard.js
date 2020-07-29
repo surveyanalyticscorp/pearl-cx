@@ -16,7 +16,7 @@ import {showLoading} from '../../redux/actions/index';
 import {getDashboardContent} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN} from '../../api/types';
+import {ASYNC_AUTH_TOKEN} from '../../api/Constant';
 import {dashboardStyles} from './dashboard.style';
 import {DotIndicator} from 'react-native-indicators';
 import {Colors} from '../../styles/color.constants';

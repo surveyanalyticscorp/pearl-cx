@@ -9,7 +9,7 @@ import {fontFamily} from '../../../styles/font.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN} from '../../../api/types';
+import {ASYNC_AUTH_TOKEN} from '../../../api/Constant';
 import {apiHandler} from '../../../api/ApiHandler';
 import DetractorScenes from './DetractorScenes';
 

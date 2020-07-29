@@ -3,7 +3,7 @@ import {
   LOADING_PROGRESS,
   LOADING_ERROR,
   CX_FEEDBACK_LIST,
-} from './types';
+} from './Constant';
 import WebServiceHandler from './WebServiceHandler';
 
 class ApiHandler {

@@ -1,6 +1,6 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
-import {BASE_URL} from '../../api/types';
+import {CX_GET_ALL_RESPONSE, CX_ADD_UPDATE_TICKET} from '../../api/Constant';
 import {
   GET_FEEDBACK,
   FEEDBACK_RECEIVED,
@@ -14,7 +14,7 @@ function* fetchFeedbackAsync(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
     const json = yield WebServiceHandler.postNew(
-      BASE_URL + 'a/nativehtml/cx.CXGetAllResponses',
+      CX_GET_ALL_RESPONSE,
       {'Auth-Token': action.token},
       action.param,
     );
@@ -41,7 +41,7 @@ function* updateFetchFeedbackAsync(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
     const json = yield WebServiceHandler.postNew(
-      BASE_URL + 'a/nativehtml/cx.CXAddOrUpdateTicket',
+      CX_ADD_UPDATE_TICKET,
       {'Auth-Token': action.token},
       action.params,
     );

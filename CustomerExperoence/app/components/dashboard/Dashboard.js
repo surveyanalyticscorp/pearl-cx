@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 
 import {styles} from '../../styles/styles';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN} from '../../api/types';
+import {ASYNC_AUTH_TOKEN} from '../../api/Constant';
 
 const Dashboard = props => {
   useEffect(() => {

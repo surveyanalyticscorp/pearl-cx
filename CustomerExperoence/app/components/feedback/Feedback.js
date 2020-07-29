@@ -18,7 +18,7 @@ import {DotIndicator} from 'react-native-indicators';
 import {showMessage} from 'react-native-flash-message';
 import moment from 'moment';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN} from '../../api/types';
+import {ASYNC_AUTH_TOKEN} from '../../api/Constant';
 
 const Feedback = props => {
     let month = moment().month() + 1; //Need to check as it returns month number starting 0

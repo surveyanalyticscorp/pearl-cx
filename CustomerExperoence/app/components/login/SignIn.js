@@ -11,7 +11,7 @@ import React, {useState, useEffect} from 'react';
 import {MarginConstants} from '../../styles/margin.constants';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN, ASYNC_USER_CREDENTIALS, ASYNC_USER_INFO} from '../../api/types';
+import {ASYNC_AUTH_TOKEN, ASYNC_USER_CREDENTIALS, ASYNC_USER_INFO} from '../../api/Constant';
 import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import QPTextField from '../../widgets/TextField';
