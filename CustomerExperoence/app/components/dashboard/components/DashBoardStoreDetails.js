@@ -332,7 +332,7 @@ const mapDispatchToProps = dispatch => ({
   },
   getDashboardContent: (token, param) => {
     dispatch(showLoading(true));
-    dispatch(getStoreDashboardContent(token, param));
+    //dispatch(getStoreDashboardContent(token, param));
   },
 });
 

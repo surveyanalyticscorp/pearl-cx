@@ -65,11 +65,11 @@ const FeedbackAll = props => {
         if (props.sentiment === 'All') {
             return props.feedback.response.body.allResponses
         } else {
-            let responses  = props.feedback.response.body.allResponses
+            let responses  = props.feedback.response.body.allResponses;
             let bigResponse = responses.filter(res => res.sentiment === props.sentiment);
             return bigResponse;
         }
-    }
+    };
 
 
     const renderFeedbackStatus = () => {
@@ -97,6 +97,7 @@ const FeedbackAll = props => {
 
     return renderFeedbackStatus();
 };
+export default FeedbackAll;
 
 // Styles
 const styles = StyleSheet.create({
@@ -131,4 +132,3 @@ const styles = StyleSheet.create({
         marginRight: 40,
     },
 });
-export default FeedbackAll;

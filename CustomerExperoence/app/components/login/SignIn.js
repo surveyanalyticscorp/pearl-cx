@@ -252,8 +252,6 @@ const SignInScreen = props => {
 };
 
 const mapStateToProps = state => {
-    console.log('SignIn State:');
-    console.log(state);
     return {
         userInfo: state.global.userInfo,
         isLoading: state.global.isLoading,
