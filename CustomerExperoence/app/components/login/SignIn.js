@@ -150,7 +150,7 @@ const SignInScreen = props => {
         <Image
           style={loginStyles.logoImage}
           resizeMode="contain"
-          source={require('../../images/whiteCXLogo.png')}
+          source={require('../../config/images/whiteCXLogo.png')}
         />
         <QPTextField
           label={stringConst.email}
@@ -194,7 +194,7 @@ const SignInScreen = props => {
     <View style={{flex: 1}}>
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../../images/background_inverted.png')}
+        source={require('../../config/images/background_inverted.png')}
         style={loginStyles.imageBackgroundContainer}>
         <View style={loginStyles.signInInContainer}>
           {renderBackButton()}

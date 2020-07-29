@@ -45,7 +45,7 @@ const DrawerContent = props => {
           }}>
           <View style={{flexDirection: 'row', marginTop: MarginConstants.tab2}}>
             <Image
-              source={require('../images/feedback_icon.png')}
+              source={require('../config/images/feedback_icon.png')}
               resizeMode="contain"
               style={{width: 20, height: 30, tintColor: Colors.black}}
             />
@@ -58,7 +58,7 @@ const DrawerContent = props => {
           }}>
           <View style={{flexDirection: 'row', marginTop: MarginConstants.tab2}}>
             <Image
-              source={require('../images/dashboard_icon.png')}
+              source={require('../config/images/dashboard_icon.png')}
               resizeMode="contain"
               style={{width: 20, height: 30, tintColor: Colors.black}}
             />
@@ -73,7 +73,7 @@ const DrawerContent = props => {
           }}>
           <View style={{flexDirection: 'row', marginTop: MarginConstants.tab2}}>
             <Image
-              source={require('../images/logout.png')}
+              source={require('../config/images/logout.png')}
               resizeMode="contain"
               style={{width: 20, height: 30, tintColor: Colors.black}}
             />
@@ -122,7 +122,7 @@ const DrawerContent = props => {
       }}>
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../images/drawerBanner.png')}
+        source={require('../config/images/drawerBanner.png')}
         style={{
           width: '100%',
           height: '100%',
@@ -137,7 +137,7 @@ const DrawerContent = props => {
               width: MarginConstants.tab4 * 6,
               height: MarginConstants.tab4 * 4,
             }}
-            source={require('../images/login_logo.png')}
+            source={require('../config/images/login_logo.png')}
             resizeMode="contain"
           />
           <View style={{marginTop: MarginConstants.halfTab}}>

@@ -42,7 +42,7 @@ const DetractorScenes = props => {
     return (
         <ImageBackground
             resizeMode={'stretch'}
-            source={require('../../../images/background.png')}
+            source={require('../../../config/images/background.png')}
             style={{flex: 1, backgroundColor: 'transparent'}}>
             <FlatList
                 contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}
