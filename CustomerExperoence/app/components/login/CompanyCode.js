@@ -10,14 +10,15 @@ import {
   Text,
 } from 'react-native';
 import React, {useState} from 'react';
-import {textColors, Colors} from '../styles/color.constants';
-import {MarginConstants} from '../styles/margin.constants';
-import {TextSizes} from '../styles/textsize.constants';
-import QPTextField from '../widgets/TextField';
-import QPButton from '../widgets/Button';
+import {textColors, Colors} from '../../styles/color.constants';
+import {MarginConstants} from '../../styles/margin.constants';
+import {TextSizes} from '../../styles/textsize.constants';
+import QPTextField from '../../widgets/TextField';
+import QPButton from '../../widgets/Button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const screen = Dimensions.get('screen');
 import {loginStyles} from './login.styles';
+import stringConst from '../../config/locales/en'
 
 const CompanyCode = props => {
   const fieldRef = React.createRef();
@@ -28,7 +29,7 @@ const CompanyCode = props => {
     if (accessCode.length > 2) {
       props.navigation.navigate('SignInScreen', {accessCode: accessCode});
     } else {
-      setValidation('Please enter access code');
+      setValidation(stringConst.accessCodeRequired);
     }
   };
 
@@ -65,7 +66,7 @@ const CompanyCode = props => {
     <View style={{flex: 1}}>
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../images/background_inverted.png')}
+        source={require('../../images/background_inverted.png')}
         style={styles.imageBackgroundContainer}>
         <View style={styles.companyCodeContainer}>
           {renderBackButton()}
@@ -78,7 +79,7 @@ const CompanyCode = props => {
             <Image
               style={styles.logoImage}
               resizeMode="contain"
-              source={require('../images/whiteCXLogo.png')}
+              source={require('../../images/whiteCXLogo.png')}
             />
 
             <TextInput

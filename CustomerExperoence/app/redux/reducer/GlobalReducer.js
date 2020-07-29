@@ -8,7 +8,8 @@ import {
   FORGOT_PSWD_OTP_RESPONSE,
   VALIDATE_USER_OTP_RESPONSE,
   UPDATE_PASSWORD_RESPONSE,
-} from '../actions';
+  CLEAR_USER_INFO,
+} from '../actions/index';
 
 const initialState = {
   isLoading: false,
@@ -64,6 +65,14 @@ const globalReducer = (state = initialState, action) => {
         userInfo: action.payload.userInfo,
       };
     }
+
+    case CLEAR_USER_INFO: {
+      return {
+        ...state,
+        userInfo: {},
+      };
+    }
+
     case API_ERROR: {
       return {
         ...state,

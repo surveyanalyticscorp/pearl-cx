@@ -1,11 +1,11 @@
 import {Text, View, ImageBackground, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/types';
-import AppRouter from '../routes/appRouter';
+import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../../api/types';
+import AppRouter from '../../routes/appRouter';
 import {connect} from 'react-redux';
-import {fillUserInfo} from '../actions';
-import {isStringNullOrEmpty} from '../Utils/Utility';
+import {fillUserInfo, setIsLogin} from '../../redux/actions/index';
+import {isStringNullOrEmpty} from '../../Utils/Utility';
 
 const SplashScreen = props => {
   const [authToken, setAuthToken] = useState('');
@@ -45,7 +45,7 @@ const SplashScreen = props => {
       <View style={{flex: 1}}>
         <ImageBackground
           resizeMode={'stretch'}
-          source={require('../images/background_inverted.png')}
+          source={require('../../images/background_inverted.png')}
           style={{
             width: '100%',
             height: '100%',
@@ -56,7 +56,7 @@ const SplashScreen = props => {
           <Image
             style={{width: '70%'}}
             resizeMode="contain"
-            source={require('../images/whiteCXLogo.png')}
+            source={require('../../images/whiteCXLogo.png')}
           />
         </ImageBackground>
       </View>
@@ -79,6 +79,7 @@ const mapStateToProps = state => {
 // noinspection JSAnnotator
 const mapDispatchToProps = dispatch => ({
   saveUserInfo: userInfo => {
+    dispatch(setIsLogin(true));
     dispatch(fillUserInfo(userInfo));
   },
 });

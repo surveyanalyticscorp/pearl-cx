@@ -26,7 +26,7 @@ import {
   cleanUpdateFeedBack,
   clearError,
   showLoading,
-} from '../../actions';
+} from '../../redux/actions/index';
 const FeedbackUpdate = props => {
   const [comment, setComment] = useState('');
   let ticketStatuses = ArrayUtils.removeMatchingObjectAndReturnNewArray(

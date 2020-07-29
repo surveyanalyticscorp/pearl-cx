@@ -12,15 +12,15 @@ import {
   DrawerActions,
 } from '@react-navigation/native';
 
-import SplashScreen from '../login/SplashScreen';
-import SignInScreen from '../login/SignIn';
-import CompanyCode from '../login/CompanyCode';
-import MarketingScreen from '../login/MarketingScreen';
-import ForgotPassword from '../login/ForgotPassword';
+import SplashScreen from '../components/login/SplashScreen';
+import SignInScreen from '../components/login/SignIn';
+import CompanyCode from '../components/login/CompanyCode';
+import MarketingScreen from '../components/login/MarketingScreen';
+import ForgotPassword from '../components/login/ForgotPassword';
 import DrawerContent from './DrawerContent';
 
-import FeedbackAll from '../drawerTabs/feedback/FeedbackAll';
-import FeedbackDetractor from '../drawerTabs/feedback/FeedbackDetractor';
+import FeedbackAll from '../components/feedback/FeedbackAll';
+import FeedbackDetractor from '../components/feedback/FeedbackDetractor';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -29,7 +29,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {Colors} from '../styles/color.constants';
 import {TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import CxDashboard from '../drawerTabs/dashboard/CxDashboard';
+import CxDashboard from '../components/dashboard/CxDashboard';
 
 const RootStack = createStackNavigator();
 const Drawer = createDrawerNavigator();

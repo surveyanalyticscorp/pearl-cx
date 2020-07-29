@@ -8,19 +8,20 @@ import {
   Text,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {MarginConstants} from '../styles/margin.constants';
+import {MarginConstants} from '../../styles/margin.constants';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/types';
-import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
+import {ASYNC_AUTH_TOKEN, ASYNC_USER_CREDENTIALS, ASYNC_USER_INFO} from '../../api/types';
+import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import QPTextField from '../widgets/TextField';
-import QPButton from '../widgets/Button';
+import QPTextField from '../../widgets/TextField';
+import QPButton from '../../widgets/Button';
 import {connect} from 'react-redux';
-import {doLogin, showLoading, setIsLogin, clearError} from '../actions';
+import {doLogin, showLoading, setIsLogin, clearError} from '../../redux/actions/index';
 import {loginStyles} from './login.styles';
 import {BarIndicator} from 'react-native-indicators';
-import StringUtils from '../Utils/StringUtils';
+import StringUtils from '../../Utils/StringUtils';
+const stringConst = require('../../config/locales/en');
 
 const SignInScreen = props => {
   const [userData, setUserData] = useState({
@@ -33,6 +34,7 @@ const SignInScreen = props => {
   useEffect(() => {
     const saveData = async () => {
       await AsyncStorage.setItem(ASYNC_AUTH_TOKEN, props.userInfo.authToken);
+      await AsyncStorage.setItem(ASYNC_USER_CREDENTIALS, JSON.stringify(userData));
       await AsyncStorage.setItem(
         ASYNC_USER_INFO,
         JSON.stringify(props.userInfo.body),
@@ -64,11 +66,11 @@ const SignInScreen = props => {
 
   const checkValidation = () =>{
       if(!validateEmail((userData.email))){
-        setValidation('Invalid email address');
+        setValidation(stringConst.invalidEmail);
         return false;
       }
       if(isStringNullOrEmpty(userData.password)){
-          setValidation('Invalid password');
+          setValidation(stringConst.invalidPassword);
           return false;
       }
       setValidation('');
@@ -147,16 +149,17 @@ const SignInScreen = props => {
         <Image
           style={loginStyles.logoImage}
           resizeMode="contain"
-          source={require('../images/whiteCXLogo.png')}
+          source={require('../../images/whiteCXLogo.png')}
         />
         <QPTextField
-          label={'Email Address'}
+          label={stringConst.email}
+          defaultValue={'saloni.shah@questionpro.com'}
           style={loginStyles.emailInput}
           onEndEdit={handleEmail}
         />
         <QPTextField
           secureText={true}
-          label={'Password'}
+          defaultValue={'ordkfn'}
           style={loginStyles.passwordInput}
           onEndEdit={handlePassword}
         />
@@ -172,7 +175,7 @@ const SignInScreen = props => {
           <QPButton
             style={loginStyles.nextButton}
             onPress={onSignInPress}
-            buttonText={'Sign In'}
+            buttonText={stringConst.signIn}
           />
         )}
 
@@ -180,7 +183,7 @@ const SignInScreen = props => {
           style={loginStyles.forgotPswdButton}
           onPress={onForgotPasswordPress}
           textStyle={loginStyles.nextText}
-          buttonText={'Forgot Password?'}
+          buttonText={stringConst.forgotPassword}
         />
       </View>
     );
@@ -190,7 +193,7 @@ const SignInScreen = props => {
     <View style={{flex: 1}}>
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../images/background_inverted.png')}
+        source={require('../../images/background_inverted.png')}
         style={loginStyles.imageBackgroundContainer}>
         <View style={loginStyles.signInInContainer}>
           {renderBackButton()}

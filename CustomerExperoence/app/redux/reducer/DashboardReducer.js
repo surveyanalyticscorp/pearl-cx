@@ -1,4 +1,4 @@
-import {DASHBOARD_RECEIVED, DETRACTOR_TICKET_RECEIVED} from '../actions';
+import {DASHBOARD_RECEIVED, DETRACTOR_TICKET_RECEIVED} from '../actions/index';
 
 const initialState = {
   dashboardData: {},

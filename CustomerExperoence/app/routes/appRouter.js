@@ -15,19 +15,19 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../styles/color.constants';
 import DrawerContent from '../routes/DrawerContent';
-import CxDashboard from '../drawerTabs/dashboard/CxDashboard';
+import CxDashboard from '../components/dashboard/CxDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import SignInStack from './signInStack';
 import {MyTheme} from '../styles/styles';
 import {connect} from 'react-redux';
 import {isStringNullOrEmpty} from '../Utils/Utility';
-import Feedback from '../drawerTabs/feedback/Feedback';
-import FeedbackDetail from  '../drawerTabs/feedback/FeedbackDetails'
+import Feedback from '../components/feedback/Feedback';
+import FeedbackDetail from '../components/feedback/FeedbackDetails'
 import {EventRegister} from 'react-native-event-listeners';
-import FeedbackUpdate from '../drawerTabs/feedback/FeedbackUpdate'
+import FeedbackUpdate from '../components/feedback/FeedbackUpdate'
 import { CommonActions } from '@react-navigation/native';
-import DetractorTickets from '../drawerTabs/dashboard/components/DetractorTickets';
-import DashBoardStoreDetails from '../drawerTabs/dashboard/components/DashBoardStoreDetails'
+import DetractorTickets from '../components/dashboard/components/DetractorTickets';
+import DashBoardStoreDetails from '../components/dashboard/components/DashBoardStoreDetails'
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
 

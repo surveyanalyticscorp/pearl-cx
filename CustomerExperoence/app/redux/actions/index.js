@@ -22,11 +22,13 @@ export const DETRACTOR_TICKET_RECEIVED = 'DETRACTOR_TICKET_RECEIVED';
 export const IS_LOADING = 'IS_LOADING';
 export const IS_LOGIN = 'IS_LOGIN';
 export const FILL_USER_INFO = 'FILL_USER_INFO';
+export const CLEAR_USER_INFO = 'CLEAR_USER_INFO';
 export const API_ERROR = 'API_ERROR';
 export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
 
 export const UPDATE_FEEDBACK = 'UPDATE_FEEDBACK';
 export const FEEDBACK_UPDATED = 'FEEDBACK_UPDATED';
+
 export const showLoading = (isLoading = true) => ({
   type: IS_LOADING,
   payload: {isLoading: isLoading},
@@ -82,6 +84,10 @@ export const getDetractorContent = (param, token) => ({
 export const fillUserInfo = userInfo => ({
   type: FILL_USER_INFO,
   payload: {userInfo: userInfo},
+});
+
+export const clearUserInfo = () => ({
+  type: CLEAR_USER_INFO,
 });
 
 export const updateFeedback = (params, token) => ({

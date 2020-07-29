@@ -10,25 +10,26 @@ import {
   View,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {MarginConstants} from '../styles/margin.constants';
-import {buttonColors, Colors, textColors} from '../styles/color.constants';
-import {TextSizes} from '../styles/textsize.constants';
-import {isStringNullOrEmpty, validateEmail} from '../Utils/Utility';
+import {MarginConstants} from '../../styles/margin.constants';
+import {buttonColors, Colors, textColors} from '../../styles/color.constants';
+import {TextSizes} from '../../styles/textsize.constants';
+import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {fontFamily} from '../styles/font.constants';
-import QPTextField from '../widgets/TextField';
-import QPButton from '../widgets/Button';
-import {clearError, requestOtp, showLoading, validateUserOtp} from '../actions';
+import {fontFamily} from '../../styles/font.constants';
+import QPTextField from '../../widgets/TextField';
+import QPButton from '../../widgets/Button';
+import {clearError, requestOtp, showLoading, validateUserOtp} from '../../redux/actions/index';
 import {connect} from 'react-redux';
 import {loginStyles} from './login.styles';
-import StringUtils from '../Utils/StringUtils';
+import StringUtils from '../../Utils/StringUtils';
 import BarIndicator from 'react-native-indicators/src/components/bar-indicator';
+const stringConst = require('../../config/locales/en');
 const screen = Dimensions.get('screen');
 import {showMessage} from 'react-native-flash-message';
-import DialogContainer from '../widgets/dialog/Container';
-import DialogTitle from '../widgets/dialog/Title';
-import DialogInput from '../widgets/dialog/Input';
-import DialogButton from '../widgets/dialog/Button';
+import DialogContainer from '../../widgets/dialog/Container';
+import DialogTitle from '../../widgets/dialog/Title';
+import DialogInput from '../../widgets/dialog/Input';
+import DialogButton from '../../widgets/dialog/Button';
 
 const ForgotPassword = props => {
   const [email, setEmail] = useState('');
@@ -51,6 +52,7 @@ const ForgotPassword = props => {
   useEffect(() => {
     if (props.validateOtpResponse.body) {
       if (props.validateOtpResponse.body.success) {
+        props.clearError();
         setOtpAlert(false);
         props.navigation.replace('ResetPassword', {
           email: email,
@@ -72,19 +74,15 @@ const ForgotPassword = props => {
 
   const isValidateInput = () => {
     if (!validateEmail(email)) {
-      setValidation('Invalid email address');
+      setValidation(stringConst.invalidEmail);
       return false;
     }
     if (isStringNullOrEmpty(accessCode)) {
-      setValidation('Invalid password');
+      setValidation(stringConst.invalidPassword);
       return false;
     }
     setValidation('');
     return true;
-  };
-
-  const onBackPress = () => {
-    props.navigation.pop();
   };
 
   const handleEmail = text => {
@@ -102,7 +100,7 @@ const ForgotPassword = props => {
         style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
         <TouchableWithoutFeedback
           onPress={() => {
-            console.log(props);
+            //console.log(props);
             props.navigation.goBack();
           }}>
           <Icon name="keyboard-arrow-left" size={35} color="white" />
@@ -149,7 +147,7 @@ const ForgotPassword = props => {
       };
       props.validateUserOtp(data);
     } else {
-      setValidation('Enter OTP');
+      setValidation(stringConst.otpRequired);
     }
   };
 
@@ -159,23 +157,27 @@ const ForgotPassword = props => {
 
   const renderDialog = () => {
     let errorMessage = 'One Time password(OTP)';
+    let messageColor ='white';
     if (props.isError) {
       errorMessage = props.errorMessage.errorAlert
         ? props.errorMessage.errorAlert
         : props.errorMessage.message;
+
+        messageColor= 'red';
     }
     return (
       <DialogContainer visible={otpAlert}>
         <DialogTitle>
-          Please enter One Time Password received on your email{' '}
+          {stringConst.enterOtp}
         </DialogTitle>
         <DialogInput
+          labelStyle={{color: messageColor}}
           label={errorMessage}
           keyboardType={'numeric'}
           onChangeText={handleOnTextChange}
         />
-        <DialogButton label={'Cancel'} onPress={handleDialogCancel} />
-        <DialogButton label={'Done'} onPress={handleDialogDone} />
+        <DialogButton label={stringConst.cancel} onPress={handleDialogCancel} />
+        <DialogButton label={stringConst.done} onPress={handleDialogDone} />
       </DialogContainer>
     );
   };
@@ -184,7 +186,7 @@ const ForgotPassword = props => {
     <View style={{flex: 1}}>
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../images/background_inverted.png')}
+        source={require('../../images/background_inverted.png')}
         style={{flex: 1}}>
         <View style={styles.forgotPswdContainer}>
           {renderBackButton()}
@@ -197,7 +199,7 @@ const ForgotPassword = props => {
             <Image
               style={styles.logoImage}
               resizeMode="contain"
-              source={require('../images/whiteCXLogo.png')}
+              source={require('../../images/whiteCXLogo.png')}
             />
             <Text
               style={{
@@ -210,18 +212,15 @@ const ForgotPassword = props => {
                 marginTop: MarginConstants.halfTab,
                 paddingHorizontal: MarginConstants.tab2,
               }}>
-              Please enter the details below and hit Reset Password button to
-              reset your password.
+                {stringConst.forgotPasswordMessage}
             </Text>
             <QPTextField
-              label={'Email Address'}
-              defaultValue={'datta.kunde@questionpro.com'}
+              label={stringConst.email}
               style={styles.emailInput}
               onEndEdit={handleEmail}
             />
             <QPTextField
-              label={'Company Code'}
-              defaultValue={'Datta'}
+              label={stringConst.companyCode}
               style={styles.passwordInput}
               onEndEdit={handleAccessCode}
             />
@@ -237,7 +236,7 @@ const ForgotPassword = props => {
               <QPButton
                 style={styles.nextButton}
                 onPress={onResetPasswordClick}
-                buttonText={'Reset Password'}
+                buttonText={stringConst.resetPassword}
               />
             )}
           </View>
@@ -264,14 +263,14 @@ const mapDispatchToProps = dispatch => ({
   requestOtp: data => {
     dispatch(clearError());
     dispatch(requestOtp(data));
-    dispatch(showLoading(true));
   },
   validateUserOtp: data => {
+    dispatch(clearError());
     dispatch(validateUserOtp(data));
   },
-  clearError: () => {
-    dispatch(clearError(false));
-  },
+  clearError: () =>{
+      dispatch(clearError(false));
+  }
 });
 
 export default connect(

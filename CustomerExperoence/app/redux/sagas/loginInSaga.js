@@ -1,6 +1,6 @@
 import {takeLatest, put} from 'redux-saga/effects';
-import WebServiceHandler from '../api/WebServiceHandler';
-import {BASE_URL} from '../api/types';
+import WebServiceHandler from '../../api/WebServiceHandler';
+import {BASE_URL} from '../../api/types';
 import {
   LOGIN_RESPONSE,
   GET_LOGIN,
@@ -11,7 +11,7 @@ import {
   VALIDATE_USER_OTP_RESPONSE,
   UPDATE_PASSWORD,
   UPDATE_PASSWORD_RESPONSE,
-} from '../actions';
+} from '../actions/index';
 
 function* doLoginApiCall(action) {
   try {

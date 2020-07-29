@@ -9,22 +9,23 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {MarginConstants} from '../styles/margin.constants';
-import {fontFamily} from '../styles/font.constants';
-import {buttonColors, Colors, textColors} from '../styles/color.constants';
-import QPTextField from '../widgets/TextField';
+import {MarginConstants} from '../../styles/margin.constants';
+import {fontFamily} from '../../styles/font.constants';
+import {buttonColors, Colors, textColors} from '../../styles/color.constants';
+import QPTextField from '../../widgets/TextField';
 import {loginStyles} from './login.styles';
 import BarIndicator from 'react-native-indicators/src/components/bar-indicator';
-import QPButton from '../widgets/Button';
+import QPButton from '../../widgets/Button';
 import React, {useEffect, useState} from 'react';
-import {clearError, updatePassword} from '../actions';
+import {clearError, updatePassword} from '../../redux/actions/index';
 import {connect} from 'react-redux';
-import {TextSizes} from '../styles/textsize.constants';
+import {TextSizes} from '../../styles/textsize.constants';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {isStringNullOrEmpty} from '../Utils/Utility';
-import StringUtils from '../Utils/StringUtils';
+import {isStringNullOrEmpty} from '../../Utils/Utility';
+import StringUtils from '../../Utils/StringUtils';
 import {showMessage} from 'react-native-flash-message';
 const screen = Dimensions.get('screen');
+const stringConst = require('../../config/locales/en');
 
 const ResetPassword = props => {
   const [password, setPassword] = useState('');
@@ -70,15 +71,15 @@ const ResetPassword = props => {
 
   const isValidateInput = () => {
     if (isStringNullOrEmpty(password)) {
-      setValidation('Invalid password');
+      setValidation(stringConst.invalidPassword);
       return false;
     }
     if (isStringNullOrEmpty(confirmPswd)) {
-      setValidation('Invalid password');
+      setValidation(stringConst.invalidPassword);
       return false;
     }
     if (password !== confirmPswd) {
-      setValidation('Password and Confirm password not matching');
+      setValidation(stringConst.passwordNotMatching);
       return false;
     }
     setValidation('');
@@ -123,7 +124,7 @@ const ResetPassword = props => {
     <View style={{flex: 1}}>
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../images/background_inverted.png')}
+        source={require('../../images/background_inverted.png')}
         style={{flex: 1}}>
         <View style={styles.forgotPswdContainer}>
           {renderBackButton()}
@@ -136,7 +137,7 @@ const ResetPassword = props => {
             <Image
               style={styles.logoImage}
               resizeMode="contain"
-              source={require('../images/whiteCXLogo.png')}
+              source={require('../../images/whiteCXLogo.png')}
             />
             <Text
               style={{
@@ -149,8 +150,7 @@ const ResetPassword = props => {
                 marginTop: MarginConstants.halfTab,
                 paddingHorizontal: MarginConstants.tab2,
               }}>
-              Please enter the new password and hit the Update button to change
-              your password.
+                {stringConst.resetPasswordMessage}
             </Text>
             <QPTextField
               label={'Password'}

@@ -1,11 +1,11 @@
 import React from 'react';
 
 import {createStackNavigator} from '@react-navigation/stack';
-import SignInScreen from '../login/SignIn';
-import CompanyCode from '../login/CompanyCode';
-import ForgotPassword from '../login/ForgotPassword';
-import MarketingScreen from '../login/MarketingScreen';
-import ResetPassword from '../login/ResetPassword';
+import SignInScreen from '../components/login/SignIn';
+import CompanyCode from '../components/login/CompanyCode';
+import ForgotPassword from '../components/login/ForgotPassword';
+import MarketingScreen from '../components/login/MarketingScreen';
+import ResetPassword from '../components/login/ResetPassword';
 import {TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
