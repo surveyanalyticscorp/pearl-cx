@@ -11,8 +11,7 @@ import {
   GET_DETRACTOR_TICKET,
 } from '../actions/index';
 
-// Worker: Increase Counter Async (Delayed By 4 Seconds)
-function* fetchDashboardAsync(action) {
+function* fetchDashboard(action) {
   try {
     const json = yield WebServiceHandler.post(
       CX_HOME,
@@ -20,7 +19,6 @@ function* fetchDashboardAsync(action) {
       {},
     );
 
-    // Dispatch Action To Redux Store
     yield put({
       type: DASHBOARD_RECEIVED,
       response: json,
@@ -34,13 +32,11 @@ function* fetchDashboardAsync(action) {
   }
 }
 
-// Watcher: Increase Counter Async
 export function* watchGetDashboard() {
-  yield takeLatest(GET_DASHBOARD, fetchDashboardAsync);
+  yield takeLatest(GET_DASHBOARD, fetchDashboard);
 }
 
-// Worker: Increase Counter Async (Delayed By 4 Seconds)
-function* fetchDetractorTicketAsync(action) {
+function* fetchDetractorTicket(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
     const json = yield WebServiceHandler.postNew(
@@ -62,7 +58,6 @@ function* fetchDetractorTicketAsync(action) {
   }
 }
 
-// Watcher: Increase Counter Async
 export function* watchGetDetractorTicket() {
-  yield takeLatest(GET_DETRACTOR_TICKET, fetchDetractorTicketAsync);
+  yield takeLatest(GET_DETRACTOR_TICKET, fetchDetractorTicket);
 }
