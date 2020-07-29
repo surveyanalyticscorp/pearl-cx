@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Modal, Platform, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MonthYearSelector from '../../widgets/MonthYearSelector';
@@ -10,6 +10,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 const CalendarScreen = props => {
   let month = moment().month() + 1; //Need to check as it returns month number starting 0
   let year = moment().year();
+  const [selectedYear, setSelectedYear] = useState({month: month, year: year})
   const renderCloseButton = () => {
     return (
       <TouchableOpacity
@@ -64,12 +65,13 @@ const CalendarScreen = props => {
             ]}>
             {renderCloseButton()}
             <MonthYearSelector
-              month={month}
-              year={year}
+              month={selectedYear.month}
+              year={selectedYear.year}
               minYear={2010}
               maxYear={moment().year()}
               onSubmit={(month, year) => {
                 let selectedYear = {month: month, year: year};
+                setSelectedYear(selectedYear);
                 props.onSubmit && props.onSubmit(selectedYear);
               }}
               onCancel={() => {
