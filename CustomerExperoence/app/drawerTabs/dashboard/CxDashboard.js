@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {useEffect, useCallback, useState} from 'react';
 import {
   View,
@@ -46,7 +47,7 @@ const CxDashboard = props => {
         setCallAPI(false);
       });
     }
-  }, [callApi, props]);
+  }, [callApi]);
 
   const renderErrorMessage = () => {
     if (props.isError) {
@@ -303,8 +304,6 @@ const CxDashboard = props => {
 };
 
 const mapStateToProps = state => {
-  console.log('CxDashboard State:');
-  console.log(state);
   return {
     dashboardData: state.dashboard.dashboardData,
     userInfo: state.global.userInfo,
