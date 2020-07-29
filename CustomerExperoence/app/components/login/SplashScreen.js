@@ -46,7 +46,7 @@ const SplashScreen = props => {
       <View style={{flex: 1}}>
         <ImageBackground
           resizeMode={'stretch'}
-          source={require('../../images/background_inverted.png')}
+          source={require('../../config/images/background_inverted.png')}
           style={{
             width: '100%',
             height: '100%',
@@ -57,7 +57,7 @@ const SplashScreen = props => {
           <Image
             style={{width: '70%'}}
             resizeMode="contain"
-            source={require('../../images/whiteCXLogo.png')}
+            source={require('../../config/images/whiteCXLogo.png')}
           />
         </ImageBackground>
       </View>

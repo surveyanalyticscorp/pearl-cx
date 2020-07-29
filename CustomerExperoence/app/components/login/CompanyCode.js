@@ -66,7 +66,7 @@ const CompanyCode = props => {
     <View style={{flex: 1}}>
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../../images/background_inverted.png')}
+        source={require('../../config/images/background_inverted.png')}
         style={styles.imageBackgroundContainer}>
         <View style={styles.companyCodeContainer}>
           {renderBackButton()}
@@ -79,7 +79,7 @@ const CompanyCode = props => {
             <Image
               style={styles.logoImage}
               resizeMode="contain"
-              source={require('../../images/whiteCXLogo.png')}
+              source={require('../../config/images/whiteCXLogo.png')}
             />
 
             <TextInput

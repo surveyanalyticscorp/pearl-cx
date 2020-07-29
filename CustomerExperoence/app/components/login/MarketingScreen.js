@@ -33,7 +33,7 @@ const MarketingScreen = props => {
     <View style={{flex: 1}}>
       <ImageBackground
         resizeMode={'stretch'}
-        source={require('../../images/background.png')}
+        source={require('../../config/images/background.png')}
         style={styles.imageBackgroundContainer}>
         <Swiper
           loop={false}
@@ -62,35 +62,35 @@ const MarketingScreen = props => {
 function getMarketingScreenContent() {
   return [
     {
-      introImage: require('../../images/ms_connect_engage.png'),
+      introImage: require('../../config/images/ms_connect_engage.png'),
       isLogoRequired: true,
       introTitle: 'Connect and engage with your customers. Anytime, anywhere',
       description:
         'Communicate with customers or prospects through a wide selection of feedback channels at every touchpoint anywhere, no matter the device.',
     },
     {
-      introImage: require('../../images/ms_take_control.png'),
+      introImage: require('../../config/images/ms_take_control.png'),
       introTitle: 'Take full control of your customer’s journey',
       isLogoRequired: true,
       description:
         'Analyze your customer’s 360 experience and quickly identify actionable insights and trends.',
     },
     {
-      introImage: require('../../images/ms_mobile_dashboard.png'),
+      introImage: require('../../config/images/ms_mobile_dashboard.png'),
       introTitle: 'Manage real-time analytics in one dashboard',
       isLogoRequired: true,
       description:
         'Easily monitor your business with the role-based, customizable dashboard from anywhere.',
     },
     {
-      introImage: require('../../images/ms_drive_business_decisions.png'),
+      introImage: require('../../config/images/ms_drive_business_decisions.png'),
       introTitle: 'Make immediate business decisions',
       isLogoRequired: true,
       description:
         'Prioritize actions quickly based on customer data to excel their expectations with our closed-loop feedback system with real-time alerts.',
     },
     {
-      introImage: require('../../images/ms_full_growth.png'),
+      introImage: require('../../config/images/ms_full_growth.png'),
       introTitle: 'Fuel growth organically',
       isLogoRequired: true,
       description:
