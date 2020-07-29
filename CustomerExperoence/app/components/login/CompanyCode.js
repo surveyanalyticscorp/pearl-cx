@@ -6,9 +6,11 @@ import {
   Image,
   TouchableWithoutFeedback,
   Dimensions,
-  TextInput,
   Text,
+  SafeAreaView,
+  Keyboard,
 } from 'react-native';
+import {CommonActions} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {textColors, Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -21,7 +23,6 @@ import {loginStyles} from './login.styles';
 import stringConst from '../../config/locales/en';
 
 const CompanyCode = props => {
-  const fieldRef = React.createRef();
   const [accessCode, setAccessCode] = useState('');
   const [validation, setValidation] = useState('');
 
@@ -44,9 +45,9 @@ const CompanyCode = props => {
         style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
         <TouchableWithoutFeedback
           onPress={() => {
-            console.log(props);
             setValidation('');
-            props.navigation.goBack();
+            const popAction = CommonActions.goBack();
+            props.navigation.dispatch(popAction);
           }}>
           <Icon name="keyboard-arrow-left" size={35} color="white" />
         </TouchableWithoutFeedback>
@@ -61,14 +62,20 @@ const CompanyCode = props => {
       </View>
     );
   };
+  const handleUnhandledTouches = () => {
+    Keyboard.dismiss();
+    return false;
+  };
 
   return (
-    <View style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: Colors.accent}}>
       <ImageBackground
         resizeMode={'stretch'}
         source={require('../../config/images/background_inverted.png')}
         style={styles.imageBackgroundContainer}>
-        <View style={styles.companyCodeContainer}>
+        <View
+          style={styles.companyCodeContainer}
+          onStartShouldSetResponder={handleUnhandledTouches}>
           {renderBackButton()}
           <View
             style={{
@@ -91,6 +98,7 @@ const CompanyCode = props => {
               placeholderTextColor="#9a73ef"
               autoCapitalize="none"
               onChange={handleAccessCode}
+              onEndEdit={handleAccessCode}
             />
 
             {renderLocalValidation()}
@@ -99,7 +107,7 @@ const CompanyCode = props => {
           </View>
         </View>
       </ImageBackground>
-    </View>
+    </SafeAreaView>
   );
 };
 

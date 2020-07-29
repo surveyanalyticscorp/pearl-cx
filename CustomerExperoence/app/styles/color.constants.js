@@ -6,7 +6,7 @@ const Colors = {
   lightRed: '#FC1154',
   white: '#ffffff',
   black: '#000000',
-  accent: '#2589E3',
+  accent: '#193F8B',
   gradientColor: '#8AC0EA',
   grey: '#f9f9f9',
   darkerGrey: '#eeeeee',
@@ -43,7 +43,7 @@ const Colors = {
 const textColors = {
   primary: Colors.white,
   secondary: Colors.secondary,
-  accent: '#124F8E',
+  accent: '#193F8B',
 };
 
 const buttonColors = {
