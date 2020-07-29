@@ -54,6 +54,7 @@ const QPTextField = props => {
         underlineColorAndroid="transparent"
         autoCapitalize={'none'}
         autoCorrect={false}
+        autoFocus={props.autofocus}
         tintColor={Colors.textTintColor}
         label={label}
         defaultValue={defaultValue}

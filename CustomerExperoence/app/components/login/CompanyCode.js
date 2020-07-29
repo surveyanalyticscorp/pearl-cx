@@ -18,7 +18,7 @@ import QPButton from '../../widgets/Button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const screen = Dimensions.get('screen');
 import {loginStyles} from './login.styles';
-import stringConst from '../../config/locales/en'
+import stringConst from '../../config/locales/en';
 
 const CompanyCode = props => {
   const fieldRef = React.createRef();
@@ -82,13 +82,15 @@ const CompanyCode = props => {
               source={require('../../config/images/whiteCXLogo.png')}
             />
 
-            <TextInput
+            <QPTextField
+              autofocus={true}
+              label={stringConst.companyCode}
               style={styles.companyCodeInput}
               underlineColorAndroid="transparent"
               placeholder="Company Code"
               placeholderTextColor="#9a73ef"
               autoCapitalize="none"
-              onChangeText={handleAccessCode}
+              onChange={handleAccessCode}
             />
 
             {renderLocalValidation()}
@@ -131,11 +133,10 @@ const styles = StyleSheet.create({
   },
   companyCodeInput: {
     width: screen.width / 1.1,
-    paddingStart: MarginConstants.tab2,
-    marginVertical: MarginConstants.tab4,
+    height: MarginConstants.tab3,
+    marginTop: MarginConstants.tab4,
+    marginBottom: MarginConstants.tab2,
     paddingHorizontal: MarginConstants.halfTab,
-    textAlign: 'left',
-    color: Colors.white,
   },
   nextButton: {
     width: '90%',

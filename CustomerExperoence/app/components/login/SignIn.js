@@ -154,13 +154,14 @@ const SignInScreen = props => {
         />
         <QPTextField
           label={stringConst.email}
-          defaultValue={'saloni.shah@questionpro.com'}
+          defaultValue={''}
           style={loginStyles.emailInput}
           onEndEdit={handleEmail}
         />
         <QPTextField
           secureText={true}
-          defaultValue={'ordkfn'}
+          label={stringConst.password}
+          defaultValue={''}
           style={loginStyles.passwordInput}
           onEndEdit={handlePassword}
         />

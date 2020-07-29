@@ -6,6 +6,7 @@
   "invalidPassword": "Invalid password",
   "otpRequired": "Please enter a OTP",
   "email": "Email Address",
+  "password": "Password",
   "companyCode": "Company Code",
   "signIn": "Sign In",
   "forgotPassword": "Forgot Password?",
