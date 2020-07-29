@@ -13,16 +13,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {fontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
-import {clearUserInfo, doLogin, setIsLogin} from '../redux/actions';
+import {clearUserInfo} from '../redux/actions';
+import {setIsLogin} from '../redux/actions/login.actions';
 import {connect} from 'react-redux';
 import {ASYNC_USER_CREDENTIALS} from '../api/types';
 import DialogContainer from '../widgets/dialog/Container';
 import DialogTitle from '../widgets/dialog/Title';
-import DialogInput from '../widgets/dialog/Input';
 import DialogButton from '../widgets/dialog/Button';
-import {isStringNullOrEmpty} from '../Utils/Utility';
-
-//import {AuthContext} from '../components/context';
 
 const DrawerContent = props => {
   const paperTheme = useTheme();

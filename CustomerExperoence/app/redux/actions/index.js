@@ -34,47 +34,6 @@ export const showLoading = (isLoading = true) => ({
   payload: {isLoading: isLoading},
 });
 
-export const setIsLogin = isLogin => ({
-  type: IS_LOGIN,
-  payload: {isLogin: isLogin},
-});
-
-export const doLogin = param => ({
-  type: GET_LOGIN,
-  param,
-});
-
-export const requestOtp = param => ({
-  type: GET_FORGOT_PSWD_OTP,
-  param,
-});
-
-export const updatePassword = param => ({
-  type: UPDATE_PASSWORD,
-  param,
-});
-
-export const validateUserOtp = param => ({
-  type: VALIDATE_USER_OTP,
-  param,
-});
-
-export const getFeedbackList = (param, token) => ({
-  type: GET_FEEDBACK,
-  param,
-  token,
-});
-
-export const cleanUpdateFeedBack = () => ({
-  type: FEEDBACK_UPDATED,
-  response: {},
-});
-
-export const getDashboardContent = token => ({
-  type: GET_DASHBOARD,
-  token,
-});
-
 export const getDetractorContent = (param, token) => ({
   type: GET_DETRACTOR_TICKET,
   param,
@@ -90,11 +49,6 @@ export const clearUserInfo = () => ({
   type: CLEAR_USER_INFO,
 });
 
-export const updateFeedback = (params, token) => ({
-  type: UPDATE_FEEDBACK,
-  params,
-  token,
-});
 export const clearError = (isLoading = true) => ({
   type: CLEAR_API_ERROR,
   payload: {isLoading: isLoading},
