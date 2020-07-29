@@ -50,34 +50,28 @@ const CxDashboard = props => {
     }
   }, [callApi]);
 
-  const renderErrorMessage = () => {
-    if (props.isError) {
-      return (
-        <View style={styles.errorMessageContainer}>
-          <Text style={styles.errorMessage}>{props.errorMessage.message}</Text>
-        </View>
-      );
-    }
-    return <View style={{flex: 1}} />;
-  };
-
   const getTrimmedNoOfResponses = () => {
-    let numberOfResponsesNumber = 0;
-    if (props.dashboardData.body.primaryStoreNPS.totalResponses) {
-      numberOfResponsesNumber =
-        props.dashboardData.body.primaryStoreNPS.totalResponses;
-    }
-    let numberOfResponses = numberOfResponsesNumber + '';
+    let responseText = "";
+    let numberOfResponses = "";
+    if (props.dashboardData.body) {
+      let numberOfResponsesNumber = 0;
+      if (props.dashboardData.body.primaryStoreNPS.totalResponses) {
+        numberOfResponsesNumber =
+            props.dashboardData.body.primaryStoreNPS.totalResponses;
+      }
+      let numberOfResponses = numberOfResponsesNumber + '';
 
-    if (numberOfResponsesNumber >= 10000) {
-      numberOfResponses =
-        Math.round(numberOfResponsesNumber / 1000).toFixed(
-          numberOfResponsesNumber > 10000 ? 0 : 1,
-        ) + 'K';
-    } else if (numberOfResponsesNumber >= 1000) {
-      numberOfResponses = (numberOfResponsesNumber / 1000).toFixed(1) + 'K';
+      if (numberOfResponsesNumber >= 10000) {
+        numberOfResponses =
+            Math.round(numberOfResponsesNumber / 1000).toFixed(
+                numberOfResponsesNumber > 10000 ? 0 : 1,
+            ) + 'K';
+      } else if (numberOfResponsesNumber >= 1000) {
+        numberOfResponses = (numberOfResponsesNumber / 1000).toFixed(1) + 'K';
+      }
+      responseText = numberOfResponses > 1 ? 'Responses' : 'Response';
     }
-    let responseText = numberOfResponses > 1 ? 'Responses' : 'Response';
+
     let textView = (
       <View style={dashboardStyles.responseView}>
         <Text
@@ -147,7 +141,10 @@ const CxDashboard = props => {
   };
 
   const renderDonutChart = () => {
-    let percent = props.dashboardData.body.primaryStoreNPS.npsPercentage;
+    let percent = 0
+    if (props.dashboardData.body) {
+      percent = props.dashboardData.body.primaryStoreNPS.npsPercentage;
+    }
     let color = percent < 0 ? Colors.negativePassive : Colors.positivePassive;
     let roundColor =
       percent < 0 ? Colors.negativePromter : Colors.positivePromter;

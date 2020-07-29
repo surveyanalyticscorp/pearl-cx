@@ -13,7 +13,6 @@ import {
 
 function* fetchFeedback(action) {
   try {
-    console.log('Get feedback list: '+ action.param.sentiment);
     yield put({type: IS_LOADING, payload: {isLoading: true}});
 
     const json = yield WebServiceHandler.postNew(
