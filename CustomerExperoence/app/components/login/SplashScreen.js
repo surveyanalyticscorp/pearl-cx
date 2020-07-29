@@ -4,7 +4,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../../api/types';
 import AppRouter from '../../routes/appRouter';
 import {connect} from 'react-redux';
-import {fillUserInfo, setIsLogin} from '../../redux/actions/index';
+import {fillUserInfo} from '../../redux/actions/index';
+import {setIsLogin} from '../../redux/actions/login.actions';
 import {isStringNullOrEmpty} from '../../Utils/Utility';
 
 const SplashScreen = props => {

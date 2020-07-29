@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, {useState, useEffect} from 'react';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import {showMessage} from 'react-native-flash-message';
 
 import {
   View,
@@ -21,12 +21,9 @@ const {width} = Dimensions.get('window');
 const sliderItemWidth = width / 3;
 import {CommonActions} from '@react-navigation/native';
 import {DotIndicator} from 'react-native-indicators';
-import {
-  updateFeedback,
-  cleanUpdateFeedBack,
-  clearError,
-  showLoading,
-} from '../../redux/actions/index';
+import {clearError} from '../../redux/actions/index';
+import {cleanUpdateFeedBack, updateFeedback} from '../../redux/actions/feedback.actions';
+
 const FeedbackUpdate = props => {
   const [comment, setComment] = useState('');
   let ticketStatuses = ArrayUtils.removeMatchingObjectAndReturnNewArray(
