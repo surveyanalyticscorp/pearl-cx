@@ -11,7 +11,7 @@ import {
   Keyboard,
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {textColors, Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {TextSizes} from '../../styles/textsize.constants';
@@ -19,12 +19,31 @@ import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const screen = Dimensions.get('screen');
-import {loginStyles} from './login.styles';
 import stringConst from '../../config/locales/en';
+import StringUtils from '../../Utils/StringUtils';
+import {showMessage} from 'react-native-flash-message';
 
 const CompanyCode = props => {
   const [accessCode, setAccessCode] = useState('');
   const [validation, setValidation] = useState('');
+
+  useEffect(() => {
+    if (StringUtils.isNotEmpty(validation)) {
+      showMessage({
+        message: validation,
+        type: 'danger',
+        icon: 'auto',
+        backgroundColor: Colors.red,
+        color: Colors.white, // text color
+      });
+      let timer = setTimeout(() => {
+        setValidation('');
+      }, 1000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [validation]);
 
   const signInButtonPressed = () => {
     if (accessCode.length > 2) {
@@ -55,13 +74,6 @@ const CompanyCode = props => {
     );
   };
 
-  const renderLocalValidation = () => {
-    return (
-      <View style={{flex: 1, alignItems: 'center'}}>
-        <Text style={loginStyles.errorMessage}>{validation}</Text>
-      </View>
-    );
-  };
   const handleUnhandledTouches = () => {
     Keyboard.dismiss();
     return false;
@@ -100,8 +112,6 @@ const CompanyCode = props => {
               onChange={handleAccessCode}
               onEndEdit={handleAccessCode}
             />
-
-            {renderLocalValidation()}
 
             <QPButton onPress={signInButtonPressed} buttonText={'Next'} />
           </View>
