@@ -117,7 +117,7 @@ const ForgotPassword = props => {
             return false;
         }
         if (isStringNullOrEmpty(accessCode)) {
-            setValidation(stringConst.invalidPassword);
+            setValidation(stringConst.invalidCompanyCode);
             return false;
         }
         setValidation('');
@@ -275,11 +275,9 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => ({
     requestOtp: data => {
-        dispatch(clearError());
         dispatch(requestOtp(data));
     },
     validateUserOtp: data => {
-        dispatch(clearError());
         dispatch(validateUserOtp(data));
     },
     clearError: () => {

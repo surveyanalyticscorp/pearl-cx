@@ -4,6 +4,7 @@
   "accessCodeRequired": "Please enter access code",
   "invalidEmail": "Invalid email address",
   "invalidPassword": "Invalid password",
+  "invalidCompanyCode": "Invalid company code",
   "otpRequired": "Please enter a OTP",
   "email": "Email Address",
   "password": "Password",
