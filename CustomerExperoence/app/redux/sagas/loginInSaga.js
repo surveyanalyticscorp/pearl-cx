@@ -15,111 +15,112 @@ import {
 } from '../actions/index';
 
 function* doLoginApiCall(action) {
-  try {
-    console.log('DD Login:' + action.param.accessCode);
-    const response = yield WebServiceHandler.postNew(
-        AUTH_LOGIN,
-      {},
-      action.param,
-    );
+    try {
+        console.log('DD Login:' + action.param.accessCode);
+        const response = yield WebServiceHandler.postNew(
+            AUTH_LOGIN,
+            {},
+            action.param,
+        );
 
-    yield put({
-      type: LOGIN_RESPONSE,
-      response: response,
-    });
-  } catch (error) {
-    yield put({
-      type: API_ERROR,
-      error: error,
-    });
-  }
+        yield put({
+            type: LOGIN_RESPONSE,
+            response: response,
+        });
+    } catch (error) {
+        yield put({
+            type: API_ERROR,
+            error: error,
+        });
+    }
 }
 
 export function* watchDoLogin() {
-  yield takeLatest(GET_LOGIN, doLoginApiCall);
+    yield takeLatest(GET_LOGIN, doLoginApiCall);
 }
 
 
 
 function* doForgotPasswordOtpApiCall(action) {
-  try {
-      yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
+    try {
+        yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
 
-      console.log('DD reset pswd otp:' + action.param.accessCode);
-      const response = yield WebServiceHandler.postNew(
-         AUTH_REQUEST_OTP,
-          {},
-          action.param,
-      );
+        console.log('DD reset pswd otp:' + action.param.accessCode);
+        const response = yield WebServiceHandler.postNew(
+            AUTH_REQUEST_OTP,
+            {},
+            action.param,
+        );
 
-      yield put({
-        type: FORGOT_PSWD_OTP_RESPONSE,
-          response: response,
-    });
-  } catch (error) {
-    yield put({
-      type: API_ERROR,
-      error: error,
-    });
-  }
+        yield put({
+            type: FORGOT_PSWD_OTP_RESPONSE,
+            response: response,
+        });
+    } catch (error) {
+        yield put({
+            type: API_ERROR,
+            error: error,
+        });
+    }
 }
 
 export function* watchForgotPasswordOtp() {
-  yield takeLatest(GET_FORGOT_PSWD_OTP, doForgotPasswordOtpApiCall);
+    yield takeLatest(GET_FORGOT_PSWD_OTP, doForgotPasswordOtpApiCall);
 }
 
 
 function* validateUserOtpApiCall(action) {
-  try {
-      yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
+    try {
+        yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
 
-      console.log('DD Validate otp:' + action.param.accessCode);
-      const response = yield WebServiceHandler.postNew(
-         AUTH_VALIDATE_OTP,
-        {},
-        action.param,
-      );
+        console.log('DD Validate otp:' + action.param.accessCode);
+        const response = yield WebServiceHandler.postNew(
+            AUTH_VALIDATE_OTP,
+            {},
+            action.param,
+        );
 
-      yield put({
-        type: VALIDATE_USER_OTP_RESPONSE,
-        response: response,
-      });
-  } catch (error) {
-    yield put({
-      type: API_ERROR,
-      error: error,
-    });
-  }
+        yield put({
+            type: VALIDATE_USER_OTP_RESPONSE,
+            response: response,
+        });
+    } catch (error) {
+        yield put({
+            type: API_ERROR,
+            error: error,
+        });
+    }
 }
 
 export function* watchValidateUserOtp() {
-  yield takeLatest(VALIDATE_USER_OTP, validateUserOtpApiCall);
+    yield takeLatest(VALIDATE_USER_OTP, validateUserOtpApiCall);
 }
 
 
 
 
 function* updatePasswordApiCall(action) {
-  try {
-    console.log('DD update pswd:' + action.param.accessCode);
-    const response = yield WebServiceHandler.postNew(
-        AUTH_UPDATE_PASSWORD,
-      {},
-      action.param,
-    );
+    try {
+        yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
+        console.log('DD update pswd:' + action.param.accessCode);
+        const response = yield WebServiceHandler.postNew(
+            AUTH_UPDATE_PASSWORD,
+            {},
+            action.param,
+        );
 
-    yield put({
-      type: UPDATE_PASSWORD_RESPONSE,
-      response: response,
-    });
-  } catch (error) {
-    yield put({
-      type: API_ERROR,
-      error: error,
-    });
-  }
+        yield put({
+            type: UPDATE_PASSWORD_RESPONSE,
+            response: response,
+        });
+    } catch (error) {
+        yield put({
+            type: API_ERROR,
+            error: error,
+        });
+    }
 }
 
 export function* watchUpdatePassword() {
-  yield takeLatest(UPDATE_PASSWORD, updatePasswordApiCall);
+    yield takeLatest(UPDATE_PASSWORD, updatePasswordApiCall);
 }
