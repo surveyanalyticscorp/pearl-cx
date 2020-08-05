@@ -25,6 +25,7 @@
     "moment": "^2.27.0",
     "prop-types": "latest",
     "react": "16.11.0",
+    "react-dom": "^16.13.1",
     "react-native": "0.62.2",
     "react-native-action-button": "^2.8.5",
     "react-native-appearance": "^0.3.3",
@@ -64,13 +65,22 @@
     "@babel/runtime": "7.10.4",
     "@react-native-community/eslint-config": "0.0.5",
     "babel-jest": "24.9.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^5.16.0",
-    "jest": "24.9.0",
+    "jest": "^26.2.2",
+    "jsdom": "^16.3.0",
     "metro-react-native-babel-preset": "0.58.0",
-    "react-test-renderer": "16.11.0",
+    "react-native-mock": "^0.3.1",
+    "react-native-mock-render": "^0.1.9",
+    "react-test-renderer": "^16.13.1",
     "redux-logger": "^3.0.6"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "testEnvironment": "jsdom",
+    "setupFiles": [
+      "./setupTests.js"
+    ]
   }
 }
