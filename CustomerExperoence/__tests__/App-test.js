@@ -1,7 +1,7 @@
 /**
  * @format
  */
-
+/* eslint-disable */
 import 'react-native';
 import React from 'react';
 import {mount, shallow} from 'enzyme';
@@ -15,6 +15,17 @@ describe('CompanyCode', () => {
       const app = shallow(<CompanyCode />);
       const input = app.find("[testID='rectangleLengthInput']");
       expect(input).toHaveLength(1);
+    });
+  });
+  describe('#QPButton', () => {
+    it('should render the button with testID rectangleAreaButton and text "Next"', () => {
+      const app = shallow(<CompanyCode />);
+      const button = app.find("[testID='nextButtonCompanycode']").dive();
+      const text = button
+        .find('Text')
+        .dive()
+        .text();
+      expect(text).toEqual("Next");
     });
   });
 });

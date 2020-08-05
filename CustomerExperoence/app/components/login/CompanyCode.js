@@ -114,7 +114,11 @@ const CompanyCode = props => {
               onEndEdit={handleAccessCode}
             />
 
-            <QPButton onPress={signInButtonPressed} buttonText={'Next'} />
+            <QPButton
+              testID="nextButtonCompanycode"
+              onPress={signInButtonPressed}
+              buttonText={'Next'}
+            />
           </View>
         </View>
       </ImageBackground>

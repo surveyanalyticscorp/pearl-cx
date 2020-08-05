@@ -23,7 +23,7 @@ const QPButton = props => {
 
   return (
     <TouchableOpacity style={style} onPress={onPress}>
-      <Text style={textStyle}> {props.buttonText} </Text>
+      <Text style={textStyle}>{props.buttonText}</Text>
     </TouchableOpacity>
   );
 };
