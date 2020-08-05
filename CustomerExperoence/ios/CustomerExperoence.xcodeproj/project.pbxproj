@@ -12,6 +12,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		181D834824DACEFC005F57C2 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 181D834724DACEFC005F57C2 /* libRNDeviceInfo.a */; };
 		184A469324BC608A0048FF84 /* FiraSans-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 184A468E24BC60890048FF84 /* FiraSans-Medium.otf */; };
 		184A469424BC608A0048FF84 /* FiraSans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 184A468F24BC60890048FF84 /* FiraSans-Regular.otf */; };
 		184A469524BC608A0048FF84 /* FiraSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 184A469024BC60890048FF84 /* FiraSans-Bold.otf */; };
@@ -63,6 +64,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = CustomerExperoence/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = CustomerExperoence/main.m; sourceTree = "<group>"; };
 		16516CCB359946E29FB9C1AA /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		181D834724DACEFC005F57C2 /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		184A468E24BC60890048FF84 /* FiraSans-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Medium.otf"; sourceTree = "<group>"; };
 		184A468F24BC60890048FF84 /* FiraSans-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Regular.otf"; sourceTree = "<group>"; };
 		184A469024BC60890048FF84 /* FiraSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.otf"; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				181D834824DACEFC005F57C2 /* libRNDeviceInfo.a in Frameworks */,
 				4BFB0F7DE9D843210C7036ED /* libPods-CustomerExperoence.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -201,6 +204,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				181D834724DACEFC005F57C2 /* libRNDeviceInfo.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				7E2CAD71F6FE36AD15E4F21F /* libPods-CustomerExperoence.a */,

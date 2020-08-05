@@ -102,6 +102,7 @@ const CompanyCode = props => {
             />
 
             <QPTextField
+              testID="rectangleLengthInput"
               autofocus={true}
               label={stringConst.companyCode}
               style={styles.companyCodeInput}
