@@ -6,7 +6,6 @@ import {
   Image,
   TouchableWithoutFeedback,
   Dimensions,
-  Text,
   SafeAreaView,
   Keyboard,
 } from 'react-native';

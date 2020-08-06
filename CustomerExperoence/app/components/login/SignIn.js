@@ -196,6 +196,7 @@ const SignInScreen = props => {
                     source={require('../../config/images/whiteCXLogo.png')}
                 />
                 <QPTextField
+                    testID='emailTextField'
                     autofocus={true}
                     label={stringConst.email}
                     defaultValue={''}
@@ -203,6 +204,7 @@ const SignInScreen = props => {
                     onEndEdit={handleEmail}
                 />
                 <QPTextField
+                    testID='passwordTextField'
                     secureText={true}
                     label={stringConst.password}
                     defaultValue={''}
@@ -216,6 +218,7 @@ const SignInScreen = props => {
                     </View>
                 ) : (
                     <QPButton
+                        testID='SignInButton'
                         style={loginStyles.nextButton}
                         onPress={onSignInPress}
                         buttonText={stringConst.signIn}
