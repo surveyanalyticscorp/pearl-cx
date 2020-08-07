@@ -14,7 +14,7 @@ import {
     UPDATE_PASSWORD_RESPONSE, IS_LOADING, CLEAR_API_ERROR,
 } from '../actions/index';
 
-function* doLoginApiCall(action) {
+export function* doLoginApiCall(action) {
     try {
         console.log('DD Login:' + action.param.accessCode);
         const response = yield WebServiceHandler.postNew(
@@ -22,7 +22,7 @@ function* doLoginApiCall(action) {
             {},
             action.param,
         );
-
+        console.log(response)
         yield put({
             type: LOGIN_RESPONSE,
             response: response,

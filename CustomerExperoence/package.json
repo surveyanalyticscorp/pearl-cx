@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.3",
@@ -22,6 +24,7 @@
     "@react-navigation/material-top-tabs": "^5.0.1",
     "@react-navigation/native": "^5.7.0",
     "@react-navigation/stack": "^5.0.1",
+    "@redux-saga/testing-utils": "^1.1.3",
     "moment": "^2.27.0",
     "prop-types": "latest",
     "react": "16.11.0",
@@ -70,12 +73,14 @@
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^5.16.0",
     "jest": "^26.2.2",
+    "jest-cli": "^26.2.2",
     "jsdom": "^16.3.0",
     "metro-react-native-babel-preset": "0.58.0",
     "react-native-mock": "^0.3.1",
     "react-native-mock-render": "^0.1.9",
     "react-test-renderer": "^16.13.1",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "redux-saga-test-plan": "^4.0.0-rc.3"
   },
   "jest": {
     "preset": "react-native",
