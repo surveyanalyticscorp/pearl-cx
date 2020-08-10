@@ -1,7 +1,8 @@
 import * as actions from './login.actions';
-import * as feedbackactions from './feedback.actions';
+import * as feedbackActions from './feedback.actions';
+import * as dashboardActions from './dashboard.actions';
 import {
-  FEEDBACK_UPDATED,
+  FEEDBACK_UPDATED, GET_DASHBOARD,
   GET_FEEDBACK,
   GET_FORGOT_PSWD_OTP,
   GET_LOGIN,
@@ -43,19 +44,25 @@ describe('ACTIONS', () => {
     const expectedAction = {
       type: GET_FEEDBACK,
     };
-    expect(feedbackactions.getFeedbackList()).toEqual(expectedAction);
+    expect(feedbackActions.getFeedbackList()).toEqual(expectedAction);
   });
   it('should create an action with correct type cleanUpdateFeedBack', () => {
     const expectedAction = {
       type: FEEDBACK_UPDATED,
       response: {},
     };
-    expect(feedbackactions.cleanUpdateFeedBack()).toEqual(expectedAction);
+    expect(feedbackActions.cleanUpdateFeedBack()).toEqual(expectedAction);
   });
   it('should create an action with correct type updateFeedback', () => {
     const expectedAction = {
       type: UPDATE_FEEDBACK,
     };
-    expect(feedbackactions.updateFeedback()).toEqual(expectedAction);
+    expect(feedbackActions.updateFeedback()).toEqual(expectedAction);
+  });
+  it('should create an action with correct type dashboardActions', () => {
+    const expectedAction = {
+      type: GET_DASHBOARD,
+    };
+    expect(dashboardActions.getDashboardContent()).toEqual(expectedAction);
   });
 });
