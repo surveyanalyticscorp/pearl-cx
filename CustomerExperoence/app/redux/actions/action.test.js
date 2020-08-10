@@ -45,4 +45,17 @@ describe('ACTIONS', () => {
     };
     expect(feedbackactions.getFeedbackList()).toEqual(expectedAction);
   });
+  it('should create an action with correct type cleanUpdateFeedBack', () => {
+    const expectedAction = {
+      type: FEEDBACK_UPDATED,
+      response: {},
+    };
+    expect(feedbackactions.cleanUpdateFeedBack()).toEqual(expectedAction);
+  });
+  it('should create an action with correct type updateFeedback', () => {
+    const expectedAction = {
+      type: UPDATE_FEEDBACK,
+    };
+    expect(feedbackactions.updateFeedback()).toEqual(expectedAction);
+  });
 });
