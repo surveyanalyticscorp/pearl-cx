@@ -11,18 +11,10 @@ import {
   IS_LOADING,
 } from '../actions/index';
 
-function* fetchFeedback(action) {
+export function* fetchFeedback(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
-
-    const json = yield WebServiceHandler.postNew(
-      CX_GET_ALL_RESPONSE,
-      {'Auth-Token': action.token},
-      action.param,
-    );
-
-    yield put({type: FEEDBACK_RECEIVED, response: json});
-
+    feedbackAPICall(action);
     yield put({type: IS_LOADING, payload: {isLoading: false}});
 
   } catch (error) {
@@ -31,13 +23,23 @@ function* fetchFeedback(action) {
   }
 }
 
+export function*  feedbackAPICall(action) {
+  const json = yield WebServiceHandler.postNew(
+      CX_GET_ALL_RESPONSE,
+      {'Auth-Token': action.token},
+      action.param,
+  );
+
+  yield put({type: FEEDBACK_RECEIVED, response: json});
+}
+
 export function* watchGetFeedback() {
   yield takeLatest(GET_FEEDBACK, fetchFeedback);
 }
 
 
 
-function* updateFetchFeedback(action) {
+export function* updateFetchFeedback(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
     const json = yield WebServiceHandler.postNew(

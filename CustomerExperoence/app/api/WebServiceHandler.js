@@ -111,8 +111,6 @@ export default class WebServiceHandler {
     console.log('WebServiceHandler:Initiating POST request');
 
     return new Promise(function(success, failed) {
-      console.log('URL:-' + url);
-      console.log('Request Data:-' + JSON.stringify(parameter));
       fetch(url, {
         method: 'post',
         headers: WebServiceHandler.header(headerParam),
