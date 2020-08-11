@@ -14,23 +14,19 @@ import {
 export function* fetchFeedback(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
-    feedbackAPICall(action);
+    const json = yield WebServiceHandler.postNew(
+        CX_GET_ALL_RESPONSE,
+        {'Auth-Token': action.token},
+        action.param,
+    );
+
+    yield put({type: FEEDBACK_RECEIVED, response: json});
     yield put({type: IS_LOADING, payload: {isLoading: false}});
 
   } catch (error) {
     yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({type: API_ERROR, error: error});
   }
-}
-
-export function*  feedbackAPICall(action) {
-  const json = yield WebServiceHandler.postNew(
-      CX_GET_ALL_RESPONSE,
-      {'Auth-Token': action.token},
-      action.param,
-  );
-
-  yield put({type: FEEDBACK_RECEIVED, response: json});
 }
 
 export function* watchGetFeedback() {
