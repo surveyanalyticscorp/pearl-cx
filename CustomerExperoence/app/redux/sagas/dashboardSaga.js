@@ -11,9 +11,9 @@ import {
   GET_DETRACTOR_TICKET,
 } from '../actions/index';
 
-function* fetchDashboard(action) {
+export function* fetchDashboard(action) {
   try {
-    const json = yield WebServiceHandler.post(
+    const json = yield WebServiceHandler.postNew(
       CX_HOME,
       {'Auth-Token': action.token},
       {},
