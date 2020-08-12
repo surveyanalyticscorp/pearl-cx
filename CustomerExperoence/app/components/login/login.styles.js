@@ -29,7 +29,6 @@ export const loginStyles = StyleSheet.create({
   },
   logoImage: {
     width: '70%',
-    marginVertical: MarginConstants.tab4,
   },
   emailInput: {
     width: screen.width / 1.1,

@@ -141,7 +141,7 @@ const SignInScreen = props => {
     const renderBackButton = () => {
         return (
             <View
-                style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
+                style={{position: 'absolute', top: 0, left: MarginConstants.halfTab, flex: 0.05}}>
                 <TouchableWithoutFeedback
                     onPress={() => {
                         //console.log(props);
@@ -186,6 +186,7 @@ const SignInScreen = props => {
         return (
             <View
                 style={{
+                    flex: 0.95,
                     marginVertical: MarginConstants.tab4 * 3,
                     alignItems: 'center',
                     width: '100%',

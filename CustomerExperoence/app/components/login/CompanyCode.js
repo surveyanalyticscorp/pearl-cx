@@ -90,6 +90,7 @@ const CompanyCode = props => {
           {renderBackButton()}
           <View
             style={{
+              flex: 1,
               marginVertical: MarginConstants.tab4 * 3,
               alignItems: 'center',
               width: '100%',
@@ -151,7 +152,6 @@ const styles = StyleSheet.create({
   },
   logoImage: {
     width: '70%',
-    marginVertical: MarginConstants.tab4,
   },
   companyCodeInput: {
     width: screen.width / 1.1,
