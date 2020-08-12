@@ -5,10 +5,11 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableWithoutFeedback,
+  Text,
 } from 'react-native';
-import {useTheme, Caption} from 'react-native-paper';
+import {Caption} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Colors} from '../styles/color.constants';
+import {Colors, textColors} from '../styles/color.constants';
 import AsyncStorage from '@react-native-community/async-storage';
 import {fontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
@@ -22,7 +23,7 @@ import DialogTitle from '../widgets/dialog/Title';
 import DialogButton from '../widgets/dialog/Button';
 
 const DrawerContent = props => {
-  const paperTheme = useTheme();
+  const [selectedState, setSelectedState] = useState('feedback');
   const [openDropper, setOpenDropper] = useState(false);
   const [userCredentials, setUserCredentials] = useState();
   const [logoutAlert, setLogoutAlert] = useState(false);
@@ -67,8 +68,6 @@ const DrawerContent = props => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={async () => {
-            //await AsyncStorage.clear();
-            //props.setIsLogin();
             setLogoutAlert(true);
           }}>
           <View style={{flexDirection: 'row', marginTop: MarginConstants.tab2}}>
@@ -112,6 +111,34 @@ const DrawerContent = props => {
     );
   };
 
+  const renderDropperView = () => {
+    let firstName = props.userInfo.body
+      ? props.userInfo.body.firstName
+      : props.userInfo.firstName;
+    let lastName = props.userInfo.body
+      ? props.userInfo.body.lastName
+      : props.userInfo.lastName;
+    let organizationName = props.userInfo.body
+      ? props.userInfo.body.organizationName
+      : props.userInfo.organizationName;
+    return (
+      <View style={{marginTop: MarginConstants.tab1}}>
+        {getDropperView('person', ' ' + firstName + ' ' + lastName)}
+        {getDropperView('business', organizationName)}
+        {getDropperView('email', userCredentials ? userCredentials.email : '')}
+      </View>
+    );
+  };
+
+  let getDropperView = (icon, text) => {
+    return (
+      <View style={styles.dropperView}>
+        <Icon name={icon} size={20} color={Colors.black} />
+        <Text style={styles.dropperText}>{' ' + text}</Text>
+      </View>
+    );
+  };
+
   return (
     <View
       style={{
@@ -145,7 +172,9 @@ const DrawerContent = props => {
               {userCredentials ? userCredentials.email : ''}
             </Caption>
             <Caption style={styles.companyCaptions}>
-              {props.userInfo.organizationName}
+              {props.userInfo.body
+                ? props.userInfo.body.organizationName
+                : props.userInfo.organizationName}
             </Caption>
             <TouchableWithoutFeedback
               onPress={() => {
@@ -160,7 +189,7 @@ const DrawerContent = props => {
               </View>
             </TouchableWithoutFeedback>
           </View>
-          {!openDropper && renderDrawerButtons()}
+          {openDropper ? renderDropperView() : renderDrawerButtons()}
         </View>
         {renderDialog()}
       </ImageBackground>
@@ -169,8 +198,6 @@ const DrawerContent = props => {
 };
 
 const mapStateToProps = state => {
-  console.log('SignIn State:');
-  console.log(state);
   return {
     userInfo: state.global.userInfo,
     isLoading: state.global.isLoading,
@@ -206,5 +233,14 @@ const styles = StyleSheet.create({
   drawerSection: {
     marginTop: 15,
     backgroundColor: Colors.transparent,
+  },
+  dropperText: {
+    fontFamily: fontFamily.Regular,
+    fontSize: TextSizes.secondary,
+    color: textColors.secondary,
+  },
+  dropperView: {
+    flexDirection: 'row',
+    height: MarginConstants.tab4,
   },
 });
