@@ -91,6 +91,7 @@ const SignInScreen = props => {
     }, [props.isError]);
 
     const onSignInPress = () => {
+        Keyboard.dismiss();
         if (checkValidation()) {
             let data = {
                 accessCode: props.route.params.accessCode,
@@ -121,21 +122,26 @@ const SignInScreen = props => {
     };
 
     const onForgotPasswordPress = () => {
+        Keyboard.dismiss();
         props.navigation.navigate('ForgotPassword');
     };
 
     const handleEmail = text => {
-        setUserData({
-            ...userData,
-            email: text,
-        });
+        if (userData.email !== text) {
+            setUserData({
+                ...userData,
+                email: text,
+            });
+        }
     };
 
     const handlePassword = text => {
-        setUserData({
-            ...userData,
-            password: text,
-        });
+        if (userData.password !== text) {
+            setUserData({
+                ...userData,
+                password: text,
+            });
+        }
     };
 
     const renderBackButton = () => {
@@ -153,33 +159,6 @@ const SignInScreen = props => {
                 </TouchableWithoutFeedback>
             </View>
         );
-    };
-
-    const renderErrorMessage = () => {
-        if (props.isError) {
-            let errorMessage = props.errorMessage.errorAlert ? (props.errorMessage.errorAlert) : (props.errorMessage.message);
-            return (
-                <View style={loginStyles.errorMessageContainer}>
-                    <Text style={loginStyles.errorMessage}>
-                        {errorMessage}
-                    </Text>
-                </View>
-            );
-        }
-        return <View style={{flex: 1}}/>;
-    };
-
-    const renderLocalValidation = () => {
-        if (!StringUtils.isEmpty(validation)) {
-            return (
-                <View style={loginStyles.errorMessageContainer}>
-                    <Text style={loginStyles.errorMessage}>
-                        {validation}
-                    </Text>
-                </View>
-            );
-        }
-        return <View style={{flex: 1}}/>;
     };
 
     const renderSignTextFieldAndButton = () => {
@@ -203,6 +182,7 @@ const SignInScreen = props => {
                     defaultValue={''}
                     style={loginStyles.emailInput}
                     onEndEdit={handleEmail}
+                    onChange={handleEmail}
                 />
                 <QPTextField
                     testID='passwordTextField'
@@ -211,6 +191,7 @@ const SignInScreen = props => {
                     defaultValue={''}
                     style={loginStyles.passwordInput}
                     onEndEdit={handlePassword}
+                    onChange={handlePassword}
                 />
 
                 {props.isLoading ? (
