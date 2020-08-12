@@ -17,9 +17,9 @@ const QPTextField = props => {
     props.onEndEdit && props.onEndEdit(field.value());
   };
 
-  const onChange = () => {
-    let {current: field} = fieldRef;
-    props.onChange && props.onChange(field.value());
+  const onChange = text => {
+    // let {current: field} = fieldRef;
+    props.onChange && props.onChange(text);
   };
 
   const changePwdType = () => {

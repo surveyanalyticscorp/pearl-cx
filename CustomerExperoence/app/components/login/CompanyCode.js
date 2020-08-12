@@ -53,6 +53,7 @@ const CompanyCode = props => {
   };
 
   const handleAccessCode = text => {
+    console.log(text);
     setAccessCode(text);
     setValidation('');
   };

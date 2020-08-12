@@ -56,7 +56,7 @@
 		06698EB4E7896ECB3EFEFCDC /* libPods-CustomerExperoence-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CustomerExperoence-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0851EBABB11B78194D4536AC /* libPods-CustomerExperoence-CustomerExperoenceTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CustomerExperoence-CustomerExperoenceTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F0C9E63594A41E18CF98FEE /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* CustomerExperoence.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CustomerExperoence.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* CX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = CustomerExperoence/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = CustomerExperoence/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -241,7 +241,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* CustomerExperoence.app */,
+				13B07F961A680F5B00A75B9A /* CX.app */,
 				00E356EE1AD99517003FC87E /* CustomerExperoenceTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* CustomerExperoence-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* CustomerExperoence-tvOSTests.xctest */,
@@ -305,7 +305,7 @@
 			);
 			name = CustomerExperoence;
 			productName = CustomerExperoence;
-			productReference = 13B07F961A680F5B00A75B9A /* CustomerExperoence.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* CX.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* CustomerExperoence-tvOS */ = {
@@ -812,7 +812,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = CustomerExperoence;
+				PRODUCT_NAME = CX;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -834,7 +834,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = CustomerExperoence;
+				PRODUCT_NAME = CX;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
