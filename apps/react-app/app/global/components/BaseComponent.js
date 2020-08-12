@@ -22,7 +22,6 @@ import CustomText from '../ui/CustomText';
 import Toast from 'react-native-root-toast';
 import { ConnectivityRenderer } from 'react-native-offline';
 import * as Messages from '../api/messages';
-import QPProgressBar from '../../global/widgets/QPProgressBar';
 const { height, width } = Dimensions.get('window');
 import {utils} from '../../global/Utils';
 import LoadingIndicator from "../../cx/components/LoadingIndicator";

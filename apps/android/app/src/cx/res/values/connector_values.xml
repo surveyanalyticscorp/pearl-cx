@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <bool name="required_company_code">true</bool>
-    <string name="base_url">https://cxlabs1.questionpro.com</string>
+    <string name="base_url">https://qa.questionpro.com</string>
     <string name="auth_url">/a/nativehtml/cx.auth.CXLogin</string>
     <bool name="has_company_code_screen">true</bool>
     <string name="forgot_password_url">/a/nativehtml/cx.auth.CXForgotPasswordOTP</string>

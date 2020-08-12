@@ -153,6 +153,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func registerForPushNotification(application: UIApplication)  {
         
+        if UIApplication.shared.responds(to: #selector(UIApplication.registerUserNotificationSettings(_:))) {
+            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil))
+            UIApplication.shared.registerForRemoteNotifications()
+        } else {
+            UIApplication.shared.registerForRemoteNotifications(
+                matching: [.badge, .sound, .alert])
+        }
+
         if #available(iOS 10.0, *){
             let center  = UNUserNotificationCenter.current()
             center.delegate = self as UNUserNotificationCenterDelegate

@@ -17,13 +17,9 @@ pod 'React', :path => '../react-app/node_modules/react-native', :subspecs => [
 ]
 pod 'yoga', :path => '../react-app/node_modules/react-native/ReactCommon/yoga'
 pod 'RNFS', :path => '../react-app/node_modules/react-native-fs'
-pod 'RNI18n', :path => '../react-app/node_modules/react-native-i18n'
-pod 'RNDeviceInfo', :path => '../react-app/node_modules/react-native-device-info'
 pod 'RNVectorIcons', :path => '../react-app/node_modules/react-native-vector-icons'
 pod 'RNGestureHandler', :path => '../react-app/node_modules/react-native-gesture-handler'
-pod 'RNReanimated', :path => '../react-app/node_modules/react-native-reanimated'
-
-pod 'react-native-material-kit', :path => '../react-app/node_modules/react-native-material-kit' 
+pod 'RNReanimated', :path => '../react-app/node_modules/react-native-reanimated' 
 
 # Third party deps podspec link
 pod 'DoubleConversion', :podspec => '../react-app/node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'

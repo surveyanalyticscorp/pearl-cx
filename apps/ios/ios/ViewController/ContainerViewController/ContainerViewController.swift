@@ -259,12 +259,12 @@ class ContainerViewController: UIViewController, ContextMenuViewControllerDelega
         if self.rootView != nil {
             self.rootView.removeFromSuperview()
         }
-      // var jsCodeLocation :NSURL = NSURL()
+      var jsCodeLocation :NSURL = NSURL()
         //        #if DEBUG
-       // jsCodeLocation = Bundle.main.url(forResource: "main", withExtension: "jsbundle")! as NSURL
+      jsCodeLocation = Bundle.main.url(forResource: "main", withExtension: "jsbundle")! as NSURL
         //        #else
         // let text = "http://localhost:8081/index.ios.bundle?platform=ios"
-      let jsCodeLocation = URL(string: "http://localhost:8081/index.ios.bundle?platform=ios")
+      //let jsCodeLocation = URL(string: "http://localhost:8081/index.ios.bundle?platform=ios")
         //        #endif
         // let jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios", fallbackResource: nil)
         var showSurveyPage = false;

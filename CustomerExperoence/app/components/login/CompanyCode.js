@@ -1,0 +1,176 @@
+import {
+  View,
+  StyleSheet,
+  ImageBackground,
+  Platform,
+  Image,
+  TouchableWithoutFeedback,
+  Dimensions,
+  SafeAreaView,
+  Keyboard,
+} from 'react-native';
+import {CommonActions} from '@react-navigation/native';
+import React, {useState, useEffect} from 'react';
+import {textColors, Colors} from '../../styles/color.constants';
+import {MarginConstants} from '../../styles/margin.constants';
+import {TextSizes} from '../../styles/textsize.constants';
+import QPTextField from '../../widgets/TextField';
+import QPButton from '../../widgets/Button';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+const screen = Dimensions.get('screen');
+import stringConst from '../../config/locales/en';
+import StringUtils from '../../Utils/StringUtils';
+import {showMessage} from 'react-native-flash-message';
+
+const CompanyCode = props => {
+  const [accessCode, setAccessCode] = useState('');
+  const [validation, setValidation] = useState('');
+
+  useEffect(() => {
+    if (StringUtils.isNotEmpty(validation)) {
+      showMessage({
+        message: validation,
+        type: 'danger',
+        icon: 'auto',
+        backgroundColor: Colors.red,
+        color: Colors.white, // text color
+      });
+      let timer = setTimeout(() => {
+        setValidation('');
+      }, 1000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [validation]);
+
+  const signInButtonPressed = () => {
+    if (accessCode.length > 2) {
+      props.navigation.navigate('SignInScreen', {accessCode: accessCode});
+    } else {
+      setValidation(stringConst.accessCodeRequired);
+    }
+  };
+
+  const handleAccessCode = text => {
+    setAccessCode(text);
+    setValidation('');
+  };
+
+  const renderBackButton = () => {
+    return (
+      <View
+        style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setValidation('');
+            const popAction = CommonActions.goBack();
+            props.navigation.dispatch(popAction);
+          }}>
+          <Icon name="keyboard-arrow-left" size={35} color="white" />
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
+  const handleUnhandledTouches = () => {
+    Keyboard.dismiss();
+    return false;
+  };
+
+  return (
+    <SafeAreaView style={{flex: 1, backgroundColor: Colors.accent}}>
+      <ImageBackground
+        resizeMode={'stretch'}
+        source={require('../../config/images/background_inverted.png')}
+        style={styles.imageBackgroundContainer}>
+        <View
+          style={styles.companyCodeContainer}
+          onStartShouldSetResponder={handleUnhandledTouches}>
+          {renderBackButton()}
+          <View
+            style={{
+              marginVertical: MarginConstants.tab4 * 3,
+              alignItems: 'center',
+              width: '100%',
+            }}>
+            <Image
+              style={styles.logoImage}
+              resizeMode="contain"
+              source={require('../../config/images/whiteCXLogo.png')}
+            />
+
+            <QPTextField
+              testID="rectangleLengthInput"
+              autofocus={true}
+              label={stringConst.companyCode}
+              style={styles.companyCodeInput}
+              underlineColorAndroid="transparent"
+              placeholder="Company Code"
+              placeholderTextColor="#9a73ef"
+              autoCapitalize="none"
+              onChange={handleAccessCode}
+              onEndEdit={handleAccessCode}
+            />
+
+            <QPButton
+              testID="nextButtonCompanycode"
+              onPress={signInButtonPressed}
+              buttonText={'Next'}
+            />
+          </View>
+        </View>
+      </ImageBackground>
+    </SafeAreaView>
+  );
+};
+
+export default CompanyCode;
+
+const styles = StyleSheet.create({
+  imageBackgroundContainer: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  companyCode: {
+    position: 'absolute',
+    top: MarginConstants.tab2,
+    left: MarginConstants.tab2,
+    color: textColors.primary,
+    fontSize: Platform.isPad ? TextSizes.largeText : TextSizes.largeText,
+  },
+
+  companyCodeContainer: {
+    flex: 1,
+    marginVertical: MarginConstants.tab2,
+    alignItems: 'center',
+    width: '100%',
+  },
+  logoImage: {
+    width: '70%',
+    marginVertical: MarginConstants.tab4,
+  },
+  companyCodeInput: {
+    width: screen.width / 1.1,
+    height: MarginConstants.tab3,
+    marginTop: MarginConstants.tab4,
+    marginBottom: MarginConstants.tab2,
+    paddingHorizontal: MarginConstants.halfTab,
+  },
+  nextButton: {
+    width: '90%',
+    height: MarginConstants.tab3 * 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: MarginConstants.tab3,
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+  },
+  nextText: {
+    alignSelf: 'center',
+    color: textColors.primary,
+  },
+});

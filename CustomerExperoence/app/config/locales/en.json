@@ -1,0 +1,21 @@
+{
+  "translation_for": "English",
+  "getStarted":"Get Started",
+  "accessCodeRequired": "Please enter access code",
+  "invalidEmail": "Invalid email address",
+  "invalidPassword": "Invalid password",
+  "invalidCompanyCode": "Invalid company code",
+  "otpRequired": "Please enter a OTP",
+  "email": "Email Address",
+  "password": "Password",
+  "companyCode": "Company Code",
+  "signIn": "Sign In",
+  "forgotPassword": "Forgot Password?",
+  "resetPassword": "Reset Password",
+  "done": "Done",
+  "cancel": "Cancel",
+  "passwordNotMatching": "Password and Confirm password not matching",
+  "enterOtp": "Please enter One Time Password received on your email",
+  "forgotPasswordMessage": "Please enter the details below and hit Reset Password button to reset your password.",
+  "resetPasswordMessage": "Please enter the new password and hit the Update button to change your password."
+}
