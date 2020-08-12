@@ -47,14 +47,9 @@ const MarketingScreen = props => {
           {introPages}
         </Swiper>
       </ImageBackground>
-
-      {index === 4 ? (
-        <TouchableOpacity style={styles.getStartedButton} onPress={onPress}>
-          <Text style={styles.buttonTextColor}>
-            {stringConst.getStarted}
-          </Text>
-        </TouchableOpacity>
-      ) : null}
+      <TouchableOpacity style={styles.getStartedButton} onPress={onPress}>
+        <Text style={styles.buttonTextColor}>{stringConst.getStarted}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
