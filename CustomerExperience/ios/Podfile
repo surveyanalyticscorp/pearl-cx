@@ -44,8 +44,8 @@ def flipper_post_install(installer)
   end
 end
 
-target 'CustomerExperoence' do
-  # Pods for CustomerExperoence
+target 'CustomerExperience' do
+  # Pods for CustomerExperience
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -86,7 +86,7 @@ target 'CustomerExperoence' do
 
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 
-  target 'CustomerExperoenceTests' do
+  target 'CustomerExperienceTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -103,10 +103,10 @@ target 'CustomerExperoence' do
   end
 end
 
-target 'CustomerExperoence-tvOS' do
-  # Pods for CustomerExperoence-tvOS
+target 'CustomerExperience-tvOS' do
+  # Pods for CustomerExperience-tvOS
 
-  target 'CustomerExperoence-tvOSTests' do
+  target 'CustomerExperience-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
