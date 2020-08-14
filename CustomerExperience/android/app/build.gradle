@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.customerexperience"
+        applicationId "com.questionpro.cx"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
