@@ -17,7 +17,11 @@ const CXTrendItemWidget = props => {
 
   return (
     <TouchableHighlight
-      onPress={props.onPress}
+      onPress={() => {
+        if (props.isClickable) {
+          props.onPress();
+        }
+      }}
       activeOpacity={0.6}
       underlayColor={'#CCCCCC'}>
       <View style={styles.mainContainer}>
