@@ -1,4 +1,3 @@
-/* eslint-disable */
 import {
     FILL_USER_INFO,
     IS_LOADING,

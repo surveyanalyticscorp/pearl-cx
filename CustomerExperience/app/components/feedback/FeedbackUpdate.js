@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, {useState, useEffect} from 'react';
 import {showMessage} from 'react-native-flash-message';
 

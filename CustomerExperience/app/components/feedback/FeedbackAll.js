@@ -1,5 +1,4 @@
-/* eslint-disable */
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Text, View, SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import FeedbackCell from '../view/FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';

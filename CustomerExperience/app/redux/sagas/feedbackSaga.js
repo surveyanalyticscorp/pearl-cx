@@ -1,4 +1,3 @@
-/* eslint-disable */
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {CX_GET_ALL_RESPONSE, CX_ADD_UPDATE_TICKET} from '../../api/Constant';
@@ -13,7 +12,6 @@ import {
 
 export function* fetchFeedback(action) {
   try {
-    yield put({type: IS_LOADING, payload: {isLoading: true}});
     const json = yield WebServiceHandler.postNew(
         CX_GET_ALL_RESPONSE,
         {'Auth-Token': action.token},
@@ -21,7 +19,6 @@ export function* fetchFeedback(action) {
     );
 
     yield put({type: FEEDBACK_RECEIVED, response: json});
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
 
   } catch (error) {
     yield put({type: IS_LOADING, payload: {isLoading: false}});
@@ -32,8 +29,6 @@ export function* fetchFeedback(action) {
 export function* watchGetFeedback() {
   yield takeLatest(GET_FEEDBACK, fetchFeedback);
 }
-
-
 
 export function* updateFetchFeedback(action) {
   try {

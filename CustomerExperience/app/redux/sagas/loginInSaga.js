@@ -1,4 +1,3 @@
-/* eslint-disable */
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {AUTH_LOGIN, AUTH_REQUEST_OTP, AUTH_VALIDATE_OTP, AUTH_UPDATE_PASSWORD} from '../../api/Constant';
@@ -11,7 +10,7 @@ import {
     VALIDATE_USER_OTP,
     VALIDATE_USER_OTP_RESPONSE,
     UPDATE_PASSWORD,
-    UPDATE_PASSWORD_RESPONSE, IS_LOADING, CLEAR_API_ERROR,
+    UPDATE_PASSWORD_RESPONSE, CLEAR_API_ERROR,
 } from '../actions/index';
 
 export function* doLoginApiCall(action) {

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, {useEffect, useState} from 'react';
 import {View, Text, Dimensions} from 'react-native';
 import {connect} from 'react-redux';

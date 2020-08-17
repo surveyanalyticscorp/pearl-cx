@@ -1,4 +1,3 @@
-/* eslint-disable */
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {CX_HOME, CX_DETRACTOR_TICKETS} from '../../api/Constant';

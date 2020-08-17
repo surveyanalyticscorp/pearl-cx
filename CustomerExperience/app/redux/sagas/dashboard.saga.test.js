@@ -87,7 +87,6 @@ describe('SAGAS', () => {
     };
     const generator = fetchDashboard(action);
     generator.next();
-
     expect(generator.next(mockResponse).value).toEqual(
       put({type: DASHBOARD_RECEIVED, response: mockResponse}),
     );

@@ -1,11 +1,10 @@
-/* eslint-disable */
 import {
     Image,
     ImageBackground,
     Platform,
     TouchableWithoutFeedback,
     View,
-    Text, SafeAreaView, Keyboard,
+    SafeAreaView, Keyboard,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {MarginConstants} from '../../styles/margin.constants';

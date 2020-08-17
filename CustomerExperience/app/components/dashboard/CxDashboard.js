@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, {useEffect, useCallback, useState} from 'react';
 import {
   View,
@@ -11,7 +10,6 @@ import {
 } from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import CXTrendItemWidget from './components/CXTrendItemWidget';
-import {styles} from '../../styles/styles';
 import {showLoading} from '../../redux/actions/index';
 import {getDashboardContent} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';

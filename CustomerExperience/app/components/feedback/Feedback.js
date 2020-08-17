@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, {useState, useEffect} from 'react';
 import {Dimensions, Text, View} from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
@@ -19,7 +18,7 @@ import {showMessage} from 'react-native-flash-message';
 import moment from 'moment';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../api/Constant';
-import {clearError} from '../../redux/actions';
+import {clearError, showLoading} from '../../redux/actions';
 
 const Feedback = props => {
     let month = moment().month() + 1; //Need to check as it returns month number starting 0
@@ -62,6 +61,10 @@ const Feedback = props => {
 
 
     }, [selectedYear, getFeedbackApi]);
+
+    useEffect(() => {
+        props.showLoading(false);
+    },[props.feedback.response.statusCode]);
 
     useEffect(() => {
         this.listener = EventRegister.addEventListener('openCalendar', data => {
@@ -158,13 +161,11 @@ const Feedback = props => {
                             indicatorStyle: {backgroundColor: '#FF0000'},
                             scrollEnabled: true,
                             labelStyle: {color: '#000000', fontSize: 12},
-                            tabStyle: {width: 150},
-
                         }}
                         indicatorStyle={{backgroundColor: Colors.red}}
-                        style={{backgroundColor: 'white'}}
+                        style={{backgroundColor: 'white', width:'100%'}}
                         scrollEnabled={true}
-                        tabStyle={{minHeight: 30, width: 150}} // here
+                        tabStyle={{minHeight: 30}} // here
                         renderLabel={({route, focused, color}) => (
                             <Text style={{
                                 color: Colors.primary, fontFamily: fontFamily.Medium,
@@ -192,14 +193,18 @@ const mapStateToProps = state => {
         errorMessage: state.global.errorMessage,
     };
 };
-// Map Dispatch To Props (Dispatch Actions To Reducers. Reducers Then Modify The Data And Assign It To Your Props)
+
 const mapDispatchToProps = dispatch => ({
     clearError: () => {
         dispatch(clearError(false));
     },
     getFeedbackList: (data, token) => {
+        dispatch(showLoading(true));
         dispatch(getFeedbackList(data, token));
     },
+    showLoading: (flag) => {
+        dispatch(showLoading(flag));
+    }
 });
 
 export default connect(

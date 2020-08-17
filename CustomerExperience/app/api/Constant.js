@@ -1,4 +1,3 @@
-/* eslint-disable */
 export const ASYNC_AUTH_TOKEN = 'authToken';
 export const ASYNC_USER_INFO = 'userInfo';
 export const ASYNC_USER_CREDENTIALS = 'userCredentials';

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import {View, Text, ImageBackground, FlatList} from 'react-native';
 import TicketWidget from './TicketWidget';

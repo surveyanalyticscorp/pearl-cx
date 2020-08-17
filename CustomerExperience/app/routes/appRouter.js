@@ -1,8 +1,5 @@
-/* eslint-disable */
 import React, {useState, useEffect} from 'react';
-
 import {View, TouchableOpacity} from 'react-native';
-import { StackActions } from 'react-navigation';
 import {useColorScheme} from 'react-native-appearance';
 import {
     NavigationContainer,
@@ -10,7 +7,6 @@ import {
     useNavigation,
     DrawerActions,
 } from '@react-navigation/native';
-
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../styles/color.constants';
