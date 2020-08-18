@@ -20,8 +20,7 @@ export function* doLoginApiCall(action) {
             {},
             action.param,
         );
-        yield put({type: LOGIN_RESPONSE, response: response,
-        });
+        yield put({type: LOGIN_RESPONSE, response: response});
     } catch (error) {
         yield put({type: API_ERROR, error: error});
     }
@@ -34,8 +33,6 @@ export function* watchDoLogin() {
 function* doForgotPasswordOtpApiCall(action) {
     try {
         yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
-
-        console.log('DD reset pswd otp:' + action.param.accessCode);
         const response = yield WebServiceHandler.postNew(
             AUTH_REQUEST_OTP,
             {},
@@ -62,8 +59,6 @@ export function* watchForgotPasswordOtp() {
 function* validateUserOtpApiCall(action) {
     try {
         yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
-
-        console.log('DD Validate otp:' + action.param.accessCode);
         const response = yield WebServiceHandler.postNew(
             AUTH_VALIDATE_OTP,
             {},
@@ -92,7 +87,6 @@ export function* watchValidateUserOtp() {
 function* updatePasswordApiCall(action) {
     try {
         yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
-        console.log('DD update pswd:' + action.param.accessCode);
         const response = yield WebServiceHandler.postNew(
             AUTH_UPDATE_PASSWORD,
             {},
