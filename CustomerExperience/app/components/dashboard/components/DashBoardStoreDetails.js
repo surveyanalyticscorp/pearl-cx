@@ -5,12 +5,11 @@ import {
   ImageBackground,
   TouchableHighlight,
   ScrollView,
-  RefreshControl,
   FlatList,
 } from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import CXTrendItemWidget from './CXTrendItemWidget';
-import {clearError, showLoading} from '../../../redux/actions/index';
+import {clearError} from '../../../redux/actions/index';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../../api/Constant';

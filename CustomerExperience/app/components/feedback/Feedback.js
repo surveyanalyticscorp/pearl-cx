@@ -19,6 +19,7 @@ import moment from 'moment';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../api/Constant';
 import {clearError, showLoading} from '../../redux/actions';
+import {isObjectEmpty} from '../../Utils/Utility';
 
 const Feedback = props => {
     let month = moment().month() + 1; //Need to check as it returns month number starting 0
@@ -63,8 +64,10 @@ const Feedback = props => {
     }, [selectedYear, getFeedbackApi]);
 
     useEffect(() => {
-        props.showLoading(false);
-    },[props.feedback.response.statusCode]);
+        if(!isObjectEmpty(props.feedback)){
+            props.showLoading(false);
+        }
+    },[props.feedback]);
 
     useEffect(() => {
         this.listener = EventRegister.addEventListener('openCalendar', data => {

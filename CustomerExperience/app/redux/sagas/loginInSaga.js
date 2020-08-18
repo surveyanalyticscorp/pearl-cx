@@ -15,30 +15,21 @@ import {
 
 export function* doLoginApiCall(action) {
     try {
-        console.log('DD Login:' + action.param.accessCode);
         const response = yield WebServiceHandler.postNew(
             AUTH_LOGIN,
             {},
             action.param,
         );
-        console.log(response)
-        yield put({
-            type: LOGIN_RESPONSE,
-            response: response,
+        yield put({type: LOGIN_RESPONSE, response: response,
         });
     } catch (error) {
-        yield put({
-            type: API_ERROR,
-            error: error,
-        });
+        yield put({type: API_ERROR, error: error});
     }
 }
 
 export function* watchDoLogin() {
     yield takeLatest(GET_LOGIN, doLoginApiCall);
 }
-
-
 
 function* doForgotPasswordOtpApiCall(action) {
     try {

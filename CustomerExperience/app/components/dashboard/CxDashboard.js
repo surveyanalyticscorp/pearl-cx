@@ -19,6 +19,7 @@ import {dashboardStyles} from './dashboard.style';
 import {DotIndicator} from 'react-native-indicators';
 import {Colors} from '../../styles/color.constants';
 import Pie from 'react-native-pie';
+import {isObjectEmpty} from '../../Utils/Utility';
 const wait = timeout => {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
@@ -34,6 +35,12 @@ const CxDashboard = props => {
     setCallAPI(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
+
+  useEffect(() => {
+    if(!isObjectEmpty(props.dashboardData)){
+      props.showLoading(false);
+    }
+  },[props.dashboardData]);
 
   useEffect(() => {
     async function getAuthToken() {
@@ -314,6 +321,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(showLoading(true));
     dispatch(getDashboardContent(token));
   },
+  showLoading: (flag) => {
+    dispatch(showLoading(flag));
+  }
 });
 
 export default connect(
