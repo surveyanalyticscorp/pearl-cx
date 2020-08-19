@@ -1,6 +1,6 @@
-import * as actions from './login.actions';
-import * as feedbackActions from './feedback.actions';
-import * as dashboardActions from './dashboard.actions';
+import * as actions from '../redux/actions/login.actions';
+import * as feedbackActions from '../redux/actions/feedback.actions';
+import * as dashboardActions from '../redux/actions/dashboard.actions';
 import {
   FEEDBACK_UPDATED, GET_DASHBOARD,
   GET_FEEDBACK,
@@ -9,7 +9,7 @@ import {
   UPDATE_FEEDBACK,
   UPDATE_PASSWORD,
   VALIDATE_USER_OTP,
-} from './index';
+} from '../redux/actions';
 
 describe('ACTIONS', () => {
   it('should create an action with correct type', () => {

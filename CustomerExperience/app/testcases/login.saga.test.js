@@ -1,6 +1,6 @@
 import {put, takeLatest} from 'redux-saga/effects';
-import {doLoginApiCall, watchDoLogin} from './loginInSaga';
-import {API_ERROR, GET_LOGIN, LOGIN_RESPONSE} from '../actions';
+import {doLoginApiCall, watchDoLogin} from '../redux/sagas/loginInSaga';
+import {GET_LOGIN, LOGIN_RESPONSE} from '../redux/actions';
 
 describe('SAGAS', () => {
   it('should dispatch action "GET_LOGIN" ', () => {

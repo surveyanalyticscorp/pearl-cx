@@ -1,4 +1,4 @@
-import globalReducer from './GlobalReducer';
+import globalReducer from '../redux/reducer/GlobalReducer';
 
 describe('globalReducer', () => {
   it('should return the initial state', () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import {mount} from 'enzyme';
 import configureStore from 'redux-mock-store';
-import TimeAgo from '../TimeAgo';
+import TimeAgo from '../../widgets/TimeAgo';
 import '../../../setupTests';
 
 it('should render correctly <TimeAgo> component', () => {

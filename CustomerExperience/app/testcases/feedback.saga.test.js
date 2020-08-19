@@ -1,6 +1,6 @@
-import {fetchFeedback, watchGetFeedback} from './feedbackSaga';
+import {fetchFeedback, watchGetFeedback} from '../redux/sagas/feedbackSaga';
 import {put, takeLatest} from 'redux-saga/effects';
-import {FEEDBACK_RECEIVED, GET_FEEDBACK, IS_LOADING} from '../actions';
+import {FEEDBACK_RECEIVED, GET_FEEDBACK} from '../redux/actions';
 
 const mockResponse = {
   body: {

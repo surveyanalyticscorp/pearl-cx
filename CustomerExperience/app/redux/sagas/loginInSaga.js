@@ -55,7 +55,6 @@ export function* watchForgotPasswordOtp() {
     yield takeLatest(GET_FORGOT_PSWD_OTP, doForgotPasswordOtpApiCall);
 }
 
-
 function* validateUserOtpApiCall(action) {
     try {
         yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
@@ -80,9 +79,6 @@ function* validateUserOtpApiCall(action) {
 export function* watchValidateUserOtp() {
     yield takeLatest(VALIDATE_USER_OTP, validateUserOtpApiCall);
 }
-
-
-
 
 function* updatePasswordApiCall(action) {
     try {
