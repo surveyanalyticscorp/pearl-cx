@@ -80,21 +80,6 @@ const ResetPassword = props => {
         }
     }, [props.isError]);
 
-    const renderBackButton = () => {
-        return (
-            <View
-                style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
-                <TouchableWithoutFeedback
-                    onPress={() => {
-                        console.log(props);
-                        props.navigation.goBack();
-                    }}>
-                    <Icon name="keyboard-arrow-left" size={35} color="white"/>
-                </TouchableWithoutFeedback>
-            </View>
-        );
-    };
-
     const onUpdatePasswordClick = () => {
         if (isValidateInput()) {
             let data = {
@@ -140,7 +125,6 @@ const ResetPassword = props => {
                 source={require('../../config/images/background_inverted.png')}
                 style={{flex: 1}}>
                 <View style={styles.forgotPswdContainer}>
-                    {renderBackButton()}
                     <View
                         style={{
                             marginVertical: MarginConstants.tab4 * 3,
@@ -232,11 +216,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: Colors.accent,
         alignItems: 'flex-start',
-    },
-
-    backButton: {
-        color: textColors.primary,
-        fontSize: Platform.isPad ? TextSizes.largeText : TextSizes.largeText,
     },
     emailInput: {
         width: screen.width / 1.1,

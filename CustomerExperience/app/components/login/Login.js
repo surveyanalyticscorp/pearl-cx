@@ -2,17 +2,14 @@ import {
     Image,
     ImageBackground,
     Platform,
-    TouchableWithoutFeedback,
     View,
-    SafeAreaView, Keyboard,
+    SafeAreaView, Keyboard, KeyboardAvoidingView, ScrollView
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {MarginConstants} from '../../styles/margin.constants';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_CREDENTIALS, ASYNC_USER_INFO} from '../../api/Constant';
 import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import {connect} from 'react-redux';
@@ -21,11 +18,11 @@ import {doLogin, setIsLogin} from '../../redux/actions/login.actions';
 import {loginStyles} from './login.styles';
 import {DotIndicator} from 'react-native-indicators';
 import StringUtils from '../../Utils/StringUtils';
-
-const stringConst = require('../../config/locales/en');
-import {CommonActions} from '@react-navigation/native';
 import {Colors} from '../../styles/color.constants';
 import {showMessage} from 'react-native-flash-message';
+import QPSpinner from '../../widgets/QPSpinner';
+
+const stringConst = require('../../config/locales/en');
 
 const Login = props => {
     const [userData, setUserData] = useState({
@@ -36,6 +33,12 @@ const Login = props => {
     const [validation, setValidation] = useState('');
 
     useEffect(() => {
+        return function cleanup() {
+            props.clearError()
+        };
+    },[]);
+
+    useEffect(() => {
         const saveData = async () => {
             await AsyncStorage.setItem(ASYNC_AUTH_TOKEN, props.userInfo.authToken);
             await AsyncStorage.setItem(ASYNC_USER_CREDENTIALS, JSON.stringify(userData));
@@ -43,12 +46,10 @@ const Login = props => {
                 ASYNC_USER_INFO,
                 JSON.stringify(props.userInfo.body),
             );
-
             props.setIsLogin();
         };
         if (props.userInfo.authToken) {
-            saveData().then(() => {
-            });
+            saveData().then(() => {});
         }
     }, [props.userInfo]);
 
@@ -60,7 +61,7 @@ const Login = props => {
                 type: 'danger',
                 icon: 'auto',
                 backgroundColor: Colors.red,
-                color: Colors.white, // text color
+                color: Colors.white,
             });
             let timer = setTimeout(() => {
                 setValidation('')
@@ -78,7 +79,7 @@ const Login = props => {
                 type: 'danger',
                 icon: 'auto',
                 backgroundColor: Colors.red,
-                color: Colors.white, // text color
+                color: Colors.white,
             });
             let timer = setTimeout(() => {
                 props.clearError();
@@ -143,95 +144,88 @@ const Login = props => {
         }
     };
 
-    const renderBackButton = () => {
-        return (
-            <View
-                style={{position: 'absolute', top: 0, left: MarginConstants.halfTab, flex: 0.05}}>
-                <TouchableWithoutFeedback
-                    onPress={() => {
-                        //console.log(props);
-                        props.clearError();
-                        const popAction = CommonActions.goBack();
-                        props.navigation.dispatch(popAction);
-                    }}>
-                    <Icon name="keyboard-arrow-left" size={35} color="white"/>
-                </TouchableWithoutFeedback>
+    let renderSpinnerLoginButton = () => {
+        return props.isLoading ?
+            <View style={loginStyles.nextButton}>
+                <QPSpinner spinnerColor={Colors.white}/>
             </View>
-        );
+            :
+            <QPButton
+                testID='SignInButton'
+                style={loginStyles.nextButton}
+                onPress={onSignInPress}
+                buttonText={stringConst.signIn}
+            />
     };
 
     const renderSignTextFieldAndButton = () => {
         return (
-            <View
-                style={{
-                    flex: 0.95,
-                    marginVertical: MarginConstants.tab4 * 3,
-                    alignItems: 'center',
-                    width: '100%',
-                }}>
-                <Image
-                    style={loginStyles.logoImage}
-                    resizeMode="contain"
-                    source={require('../../config/images/whiteCXLogo.png')}
-                />
-                <QPTextField
-                    testID='emailTextField'
-                    autofocus={true}
-                    label={stringConst.email}
-                    defaultValue={''}
-                    style={loginStyles.emailInput}
-                    onEndEdit={handleEmail}
-                    onChange={handleEmail}
-                />
-                <QPTextField
-                    testID='passwordTextField'
-                    secureText={true}
-                    label={stringConst.password}
-                    defaultValue={''}
-                    style={loginStyles.passwordInput}
-                    onEndEdit={handlePassword}
-                    onChange={handlePassword}
-                />
-
-                {props.isLoading ? (
-                    <View style={loginStyles.nextButton}>
-                        <DotIndicator color={Colors.white} count={3} size={10}/>
+            <ScrollView contentContainerStyle={loginStyles.scrollContainer}
+                        keyboardDismissMode='on-drag'
+                        keyboardShouldPersistTaps={'handled'}
+                        onStartShouldSetResponder={handleUnhandledTouches}
+            >
+                <KeyboardAvoidingView behavior='position'
+                                      style={loginStyles.container}
+                                      keyboardVerticalOffset={Platform.select({
+                                          ios: Platform.isPad ? -200 : -150,
+                                          android: -200
+                                      })}
+                                      enabled>
+                    <View style={loginStyles.logo}>
+                        <Image
+                            style={loginStyles.logoImage}
+                            resizeMode="contain"
+                            source={require('../../config/images/whiteCXLogo.png')}
+                        />
                     </View>
-                ) : (
-                    <QPButton
-                        testID='SignInButton'
-                        style={loginStyles.nextButton}
-                        onPress={onSignInPress}
-                        buttonText={stringConst.signIn}
-                    />
-                )}
+                    <View style={loginStyles.textFieldContainer}>
 
-                <QPButton
-                    style={loginStyles.forgotPswdButton}
-                    onPress={onForgotPasswordPress}
-                    textStyle={loginStyles.nextText}
-                    buttonText={stringConst.forgotPassword}
-                />
-            </View>
+                        <QPTextField
+                            testID='emailTextField'
+                            autofocus={true}
+                            label={stringConst.email}
+                            defaultValue={''}
+                            style={loginStyles.emailInput}
+                            onEndEdit={handleEmail}
+                            onChange={handleEmail}
+                        />
+                        <QPTextField
+                            testID='passwordTextField'
+                            secureText={true}
+                            label={stringConst.password}
+                            defaultValue={''}
+                            style={loginStyles.passwordInput}
+                            onEndEdit={handlePassword}
+                            onChange={handlePassword}
+                        />
+                        {renderSpinnerLoginButton()}
+                        <QPButton
+                            style={loginStyles.forgotPswdButton}
+                            onPress={onForgotPasswordPress}
+                            textStyle={loginStyles.nextText}
+                            buttonText={stringConst.forgotPassword}
+                        />
+                    </View>
+                </KeyboardAvoidingView>
+            </ScrollView>
         );
     };
+
     const handleUnhandledTouches = () => {
         Keyboard.dismiss();
         return false;
     };
 
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: Colors.accent}}>
-            <ImageBackground
-                resizeMode={'stretch'}
-                source={require('../../config/images/background_inverted.png')}
-                style={loginStyles.imageBackgroundContainer}>
-                <View style={loginStyles.signInInContainer} onStartShouldSetResponder={handleUnhandledTouches}>
-                    {renderBackButton()}
-                    {renderSignTextFieldAndButton()}
-                </View>
-            </ImageBackground>
-        </SafeAreaView>
+        <ImageBackground
+            resizeMode={'cover'}
+            source={require('../../config/images/background_inverted.png')}
+            style={loginStyles.container}>
+            <SafeAreaView>
+                {renderSignTextFieldAndButton()}
+            </SafeAreaView>
+        </ImageBackground>
     );
 };
 

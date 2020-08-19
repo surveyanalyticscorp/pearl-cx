@@ -134,7 +134,6 @@ const AppRouter = props => {
         </RootStack.Navigator>
     );
 
-    //const signIn = !isStringNullOrEmpty(props.userInfo.authToken);
     return (
         <NavigationContainer theme={colorScheme == 'dark' ? DarkTheme : MyTheme}>
             {signIn ? (
@@ -156,8 +155,6 @@ const AppRouter = props => {
 };
 
 const mapStateToProps = state => {
-    console.log('AppRouter State:');
-    console.log(state);
     return {
         userInfo: state.global.userInfo,
         isLogin: state.global.isLogin,

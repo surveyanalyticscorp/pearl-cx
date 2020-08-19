@@ -173,7 +173,7 @@ const CxDashboard = props => {
     };
 
     const renderStoreNPSList = () => {
-        if (props.dashboardData.body.storeNPSList.length > 0) {
+        if (props.dashboardData && props.dashboardData.body && props.dashboardData.body.storeNPSList.length > 0) {
             let list = props.dashboardData.body.storeNPSList;
             let data = list.slice(0, 5);
             let title = props.dashboardData.body.systemPreferences.businessUnitName

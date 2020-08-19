@@ -4,14 +4,17 @@ import {buttonColors, Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {fontFamily} from '../../styles/font.constants';
 const screen = Dimensions.get('screen');
+let { height, width }= Dimensions.get('window');
+
 
 export const loginStyles = StyleSheet.create({
-  imageBackgroundContainer: {
-    width: '100%',
-    height: '100%',
+  container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scrollContainer: {
+    flexGrow: 1
   },
   companyCode: {
     position: 'absolute',
@@ -20,15 +23,18 @@ export const loginStyles = StyleSheet.create({
     color: textColors.primary,
     fontSize: Platform.isPad ? TextSizes.largeText : TextSizes.largeText,
   },
-
   signInInContainer: {
     flex: 1,
-    marginVertical: MarginConstants.tab2,
     alignItems: 'center',
     width: '100%',
   },
   logoImage: {
-    width: '70%',
+    width: width * 0.75 ,
+    height: width * 0.45,
+  },
+  logo: {
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   emailInput: {
     width: screen.width / 1.1,
@@ -68,12 +74,6 @@ export const loginStyles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: Colors.fullTransparent,
   },
-  backButton: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: textColors.primary,
-    alignSelf: 'flex-start',
-  },
   errorMessageContainer: {
     flex: 1,
     alignItems: 'center',
@@ -84,4 +84,8 @@ export const loginStyles = StyleSheet.create({
     marginHorizontal: MarginConstants.tab2,
     color: 'red',
   },
+  textFieldContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });

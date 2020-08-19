@@ -4,23 +4,22 @@ import {
   ImageBackground,
   Platform,
   Image,
-  TouchableWithoutFeedback,
   Dimensions,
   SafeAreaView,
   Keyboard,
 } from 'react-native';
-import {CommonActions} from '@react-navigation/native';
 import React, {useState, useEffect} from 'react';
 import {textColors, Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-const screen = Dimensions.get('screen');
 import stringConst from '../../config/locales/en';
 import StringUtils from '../../Utils/StringUtils';
 import {showMessage} from 'react-native-flash-message';
+
+const screen = Dimensions.get('screen');
+
 
 const CompanyCode = props => {
   const [accessCode, setAccessCode] = useState('');
@@ -53,25 +52,8 @@ const CompanyCode = props => {
   };
 
   const handleAccessCode = text => {
-    console.log(text);
     setAccessCode(text);
     setValidation('');
-  };
-
-  const renderBackButton = () => {
-    return (
-      <View
-        style={{position: 'absolute', top: 0, left: MarginConstants.halfTab}}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            setValidation('');
-            const popAction = CommonActions.goBack();
-            props.navigation.dispatch(popAction);
-          }}>
-          <Icon name="keyboard-arrow-left" size={35} color="white" />
-        </TouchableWithoutFeedback>
-      </View>
-    );
   };
 
   const handleUnhandledTouches = () => {
@@ -80,63 +62,52 @@ const CompanyCode = props => {
   };
 
   return (
-    <SafeAreaView forceInset={{bottom: 'never'}} style={styles.safeAreaView}>
       <ImageBackground
-        resizeMode={'stretch'}
-        source={require('../../config/images/background_inverted.png')}
-        style={styles.imageBackgroundContainer}>
-        <View
-          style={styles.companyCodeContainer}
-          onStartShouldSetResponder={handleUnhandledTouches}>
-          {renderBackButton()}
+          resizeMode={'cover'}
+          source={require('../../config/images/background_inverted.png')}
+          style={styles.imageBackgroundContainer}>
+        <SafeAreaView>
           <View
-            style={{
-              flex: 1,
-              marginVertical: MarginConstants.tab4 * 3,
-              alignItems: 'center',
-              width: '100%',
-            }}>
-            <Image
-              style={styles.logoImage}
-              resizeMode="contain"
-              source={require('../../config/images/whiteCXLogo.png')}
-            />
+              style={styles.companyCodeContainer}
+              onStartShouldSetResponder={handleUnhandledTouches}>
+            <View
+                style={styles.logoContainer}>
+              <Image
+                  style={styles.logoImage}
+                  resizeMode="contain"
+                  source={require('../../config/images/whiteCXLogo.png')}
+              />
 
-            <QPTextField
-              testID="rectangleLengthInput"
-              autofocus={true}
-              label={stringConst.companyCode}
-              style={styles.companyCodeInput}
-              underlineColorAndroid= "transparent"
-              placeholder= "Company Code"
-              placeholderTextColor= "#9a73ef"
-              autoCapitalize= "none"
-              onChange={handleAccessCode}
-              onEndEdit={handleAccessCode}
-            />
+              <QPTextField
+                  testID="rectangleLengthInput"
+                  autofocus={true}
+                  label={stringConst.companyCode}
+                  style={styles.companyCodeInput}
+                  underlineColorAndroid= "transparent"
+                  placeholder= "Company Code"
+                  placeholderTextColor= "#9a73ef"
+                  autoCapitalize= "none"
+                  onChange={handleAccessCode}
+                  onEndEdit={handleAccessCode}
+              />
 
-            <QPButton
-              testID="nextButtonCompanycode"
-              onPress={signInButtonPressed}
-              buttonText={'Next'}
-            />
+              <QPButton
+                  testID="nextButtonCompanycode"
+                  onPress={signInButtonPressed}
+                  buttonText={'Next'}
+              />
+            </View>
           </View>
-        </View>
+        </SafeAreaView>
       </ImageBackground>
-    </SafeAreaView>
   );
 };
 
 export default CompanyCode;
 
 const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-    backgroundColor: Colors.accent
-  },
   imageBackgroundContainer: {
-    width:'100%',
-    height:'100%'
+    flex: 1
   },
   companyCode: {
     position: 'absolute',
@@ -175,4 +146,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: textColors.primary,
   },
+  logoContainer: {
+    flex: 1,
+    marginVertical: MarginConstants.tab4 * 3,
+    alignItems: 'center',
+    width: '100%',
+  }
 });
