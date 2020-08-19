@@ -2,24 +2,19 @@ import {
     Dimensions,
     Image,
     ImageBackground,
-    Platform,
     StyleSheet,
     Text,
-    TouchableWithoutFeedback,
     View,
 } from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';
 import {fontFamily} from '../../styles/font.constants';
 import {buttonColors, Colors, textColors} from '../../styles/color.constants';
 import QPTextField from '../../widgets/TextField';
-import {loginStyles} from './login.styles';
 import QPButton from '../../widgets/Button';
 import React, {useEffect, useState} from 'react';
 import {clearError} from '../../redux/actions/index';
 import {updatePassword} from '../../redux/actions/login.actions';
 import {connect} from 'react-redux';
-import {TextSizes} from '../../styles/textsize.constants';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import {isStringNullOrEmpty} from '../../Utils/Utility';
 import StringUtils from '../../Utils/StringUtils';
 import {showMessage} from 'react-native-flash-message';
@@ -160,7 +155,7 @@ const ResetPassword = props => {
                             onEndEdit={handleConfirmPassword}
                         />
                         {props.isLoading ? (
-                            <View style={loginStyles.nextButton}>
+                            <View style={styles.nextButton}>
                                 <DotIndicator color={Colors.white} count={3} size={10}/>
                             </View>
                         ) : (

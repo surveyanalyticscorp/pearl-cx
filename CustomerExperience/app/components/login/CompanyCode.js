@@ -56,11 +56,6 @@ const CompanyCode = props => {
     setValidation('');
   };
 
-  const handleUnhandledTouches = () => {
-    Keyboard.dismiss();
-    return false;
-  };
-
   return (
       <ImageBackground
           resizeMode={'cover'}
@@ -68,8 +63,7 @@ const CompanyCode = props => {
           style={styles.imageBackgroundContainer}>
         <SafeAreaView>
           <View
-              style={styles.companyCodeContainer}
-              onStartShouldSetResponder={handleUnhandledTouches}>
+              style={styles.companyCodeContainer}>
             <View
                 style={styles.logoContainer}>
               <Image
@@ -80,7 +74,7 @@ const CompanyCode = props => {
 
               <QPTextField
                   testID="rectangleLengthInput"
-                  autofocus={true}
+                  autofocus={false}
                   label={stringConst.companyCode}
                   style={styles.companyCodeInput}
                   underlineColorAndroid= "transparent"

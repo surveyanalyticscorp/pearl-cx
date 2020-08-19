@@ -3,6 +3,7 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {buttonColors, Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {fontFamily} from '../../styles/font.constants';
+import {PaddingConstants} from '../../styles/padding.constants';
 const screen = Dimensions.get('screen');
 let { height, width }= Dimensions.get('window');
 
@@ -11,22 +12,11 @@ export const loginStyles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: 2*PaddingConstants.tab4
   },
   scrollContainer: {
-    flexGrow: 1
-  },
-  companyCode: {
-    position: 'absolute',
-    top: MarginConstants.tab2,
-    left: MarginConstants.tab2,
-    color: textColors.primary,
-    fontSize: Platform.isPad ? TextSizes.largeText : TextSizes.largeText,
-  },
-  signInInContainer: {
-    flex: 1,
-    alignItems: 'center',
-    width: '100%',
+    flexGrow: 1,
   },
   logoImage: {
     width: width * 0.75 ,
@@ -39,7 +29,7 @@ export const loginStyles = StyleSheet.create({
   emailInput: {
     width: screen.width / 1.1,
     height: MarginConstants.tab3,
-    marginTop: MarginConstants.tab4,
+    marginTop: MarginConstants.tab2,
     marginBottom: MarginConstants.tab2,
     paddingHorizontal: MarginConstants.halfTab,
   },

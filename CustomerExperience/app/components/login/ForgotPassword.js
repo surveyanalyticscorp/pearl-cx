@@ -2,35 +2,32 @@ import {
     Dimensions,
     Image,
     ImageBackground, Keyboard,
-    Platform, SafeAreaView,
+    SafeAreaView,
     StyleSheet,
     Text,
-    TouchableWithoutFeedback,
     View,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {MarginConstants} from '../../styles/margin.constants';
 import {buttonColors, Colors, textColors} from '../../styles/color.constants';
-import {TextSizes} from '../../styles/textsize.constants';
 import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import {fontFamily} from '../../styles/font.constants';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import {clearError} from '../../redux/actions/index';
 import {requestOtp, validateUserOtp} from '../../redux/actions/login.actions';
 import {connect} from 'react-redux';
-import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
 import {DotIndicator} from 'react-native-indicators';
-
-const stringConst = require('../../config/locales/en');
-const screen = Dimensions.get('screen');
 import {showMessage} from 'react-native-flash-message';
 import DialogContainer from '../../widgets/dialog/Container';
 import DialogTitle from '../../widgets/dialog/Title';
 import DialogInput from '../../widgets/dialog/Input';
 import DialogButton from '../../widgets/dialog/Button';
+
+const stringConst = require('../../config/locales/en');
+const screen = Dimensions.get('screen');
+
 
 const ForgotPassword = props => {
     const [email, setEmail] = useState('');
@@ -228,7 +225,7 @@ const ForgotPassword = props => {
                             onEndEdit={handleAccessCode}
                         />
                         {props.isLoading ? (
-                            <View style={loginStyles.nextButton}>
+                            <View style={styles.nextButton}>
                                 <DotIndicator color={Colors.white} count={3} size={10}/>
                             </View>
                         ) : (
@@ -318,4 +315,5 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         color: textColors.primary,
     },
+
 });

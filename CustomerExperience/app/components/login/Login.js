@@ -5,7 +5,7 @@ import {
     View,
     SafeAreaView, Keyboard, KeyboardAvoidingView, ScrollView
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_CREDENTIALS, ASYNC_USER_INFO} from '../../api/Constant';
@@ -16,7 +16,6 @@ import {connect} from 'react-redux';
 import {showLoading, clearError} from '../../redux/actions/index';
 import {doLogin, setIsLogin} from '../../redux/actions/login.actions';
 import {loginStyles} from './login.styles';
-import {DotIndicator} from 'react-native-indicators';
 import StringUtils from '../../Utils/StringUtils';
 import {Colors} from '../../styles/color.constants';
 import {showMessage} from 'react-native-flash-message';
@@ -25,6 +24,9 @@ import QPSpinner from '../../widgets/QPSpinner';
 const stringConst = require('../../config/locales/en');
 
 const Login = props => {
+    let timer = useRef(null);
+    let textFieldTimer = useRef(null);
+
     const [userData, setUserData] = useState({
         email: '',
         password: '',
@@ -34,7 +36,9 @@ const Login = props => {
 
     useEffect(() => {
         return function cleanup() {
-            props.clearError()
+            props.clearError();
+            clearTimeout(timer);
+            clearTimeout(textFieldTimer);
         };
     },[]);
 
@@ -63,12 +67,9 @@ const Login = props => {
                 backgroundColor: Colors.red,
                 color: Colors.white,
             });
-            let timer = setTimeout(() => {
+            timer = setTimeout(() => {
                 setValidation('')
             }, 1000);
-            return () => {
-                clearTimeout(timer);
-            };
         }
     }, [validation]);
 
@@ -81,12 +82,9 @@ const Login = props => {
                 backgroundColor: Colors.red,
                 color: Colors.white,
             });
-            let timer = setTimeout(() => {
+            timer = setTimeout(() => {
                 props.clearError();
             }, 1000);
-            return () => {
-                clearTimeout(timer);
-            };
         }
     }, [props.isError]);
 
@@ -163,7 +161,6 @@ const Login = props => {
             <ScrollView contentContainerStyle={loginStyles.scrollContainer}
                         keyboardDismissMode='on-drag'
                         keyboardShouldPersistTaps={'handled'}
-                        onStartShouldSetResponder={handleUnhandledTouches}
             >
                 <KeyboardAvoidingView behavior='position'
                                       style={loginStyles.container}
@@ -183,12 +180,18 @@ const Login = props => {
 
                         <QPTextField
                             testID='emailTextField'
-                            autofocus={true}
+                            autofocus={false}
                             label={stringConst.email}
                             defaultValue={''}
                             style={loginStyles.emailInput}
                             onEndEdit={handleEmail}
                             onChange={handleEmail}
+                            onSubmitEditing={() => {
+                                textFieldTimer = setTimeout(() => {
+                                    Keyboard.dismiss()
+                                }, 5);
+                            }}
+                            clearButtonMode={'while-editing'}
                         />
                         <QPTextField
                             testID='passwordTextField'
@@ -198,6 +201,12 @@ const Login = props => {
                             style={loginStyles.passwordInput}
                             onEndEdit={handlePassword}
                             onChange={handlePassword}
+                            onSubmitEditing={() => {
+                                textFieldTimer = setTimeout(() => {
+                                    Keyboard.dismiss()
+                                }, 5);
+                            }}
+                            clearButtonMode={'while-editing'}
                         />
                         {renderSpinnerLoginButton()}
                         <QPButton
@@ -210,11 +219,6 @@ const Login = props => {
                 </KeyboardAvoidingView>
             </ScrollView>
         );
-    };
-
-    const handleUnhandledTouches = () => {
-        Keyboard.dismiss();
-        return false;
     };
 
     return (

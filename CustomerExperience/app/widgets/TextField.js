@@ -64,6 +64,7 @@ const QPTextField = props => {
         onSubmitEditing={onSubmit}
         onChangeText={onChange}
         ref={fieldRef}
+        clearButtonMode={'while-editing'}
       />
       {props.secureText && renderVisibility()}
     </View>
