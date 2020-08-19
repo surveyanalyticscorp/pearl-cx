@@ -8,7 +8,7 @@ import {mount, shallow} from 'enzyme';
 import { Provider } from "react-redux";
 import configureMockStore from "redux-mock-store";
 import CompanyCode from '../app/components/login/CompanyCode';
-import SignInScreen from '../app/components/login/SignIn';
+import SignInScreen from '../app/components/login/Login';
 jest.mock('@react-native-community/async-storage');
 const mockStore = configureMockStore();
 const store = mockStore({});

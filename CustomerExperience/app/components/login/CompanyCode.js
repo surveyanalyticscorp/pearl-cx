@@ -46,7 +46,7 @@ const CompanyCode = props => {
 
   const signInButtonPressed = () => {
     if (accessCode.length > 2) {
-      props.navigation.navigate('SignInScreen', {accessCode: accessCode});
+      props.navigation.navigate('Login', {accessCode: accessCode});
     } else {
       setValidation(stringConst.accessCodeRequired);
     }
@@ -80,7 +80,7 @@ const CompanyCode = props => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: Colors.accent}}>
+    <SafeAreaView forceInset={{bottom: 'never'}} style={styles.safeAreaView}>
       <ImageBackground
         resizeMode={'stretch'}
         source={require('../../config/images/background_inverted.png')}
@@ -107,10 +107,10 @@ const CompanyCode = props => {
               autofocus={true}
               label={stringConst.companyCode}
               style={styles.companyCodeInput}
-              underlineColorAndroid="transparent"
-              placeholder="Company Code"
-              placeholderTextColor="#9a73ef"
-              autoCapitalize="none"
+              underlineColorAndroid= "transparent"
+              placeholder= "Company Code"
+              placeholderTextColor= "#9a73ef"
+              autoCapitalize= "none"
               onChange={handleAccessCode}
               onEndEdit={handleAccessCode}
             />
@@ -130,12 +130,13 @@ const CompanyCode = props => {
 export default CompanyCode;
 
 const styles = StyleSheet.create({
-  imageBackgroundContainer: {
-    width: '100%',
-    height: '100%',
+  safeAreaView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: Colors.accent
+  },
+  imageBackgroundContainer: {
+    width:'100%',
+    height:'100%'
   },
   companyCode: {
     position: 'absolute',

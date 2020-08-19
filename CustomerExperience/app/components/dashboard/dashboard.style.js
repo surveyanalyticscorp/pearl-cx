@@ -5,6 +5,9 @@ import {TextSizes} from '../../styles/textsize.constants';
 import {fontFamily} from '../../styles/font.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 export const dashboardStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   cxContainer: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -86,5 +89,18 @@ export const dashboardStyles = StyleSheet.create({
     fontFamily: fontFamily.Regular,
     fontSize: TextSizes.secondary,
   },
-  responseView: {flex: 0.5, justifyContent: 'center', alignItems: 'center'}
+  responseView: {
+    flex: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {createStackNavigator} from '@react-navigation/stack';
-import SignInScreen from '../components/login/SignIn';
+import Login from '../components/login/Login';
 import CompanyCode from '../components/login/CompanyCode';
 import ForgotPassword from '../components/login/ForgotPassword';
 import MarketingScreen from '../components/login/MarketingScreen';
@@ -33,7 +33,7 @@ const SignInStack = ({navigation}) => (
       options={{title: 'My home'}}
     />
     <RootStack.Screen name="CompanyCode" component={CompanyCode} />
-    <RootStack.Screen name="SignInScreen" component={SignInScreen} />
+    <RootStack.Screen name="Login" component={Login} />
     <RootStack.Screen name="ForgotPassword" component={ForgotPassword} />
     <RootStack.Screen name="ResetPassword" component={ResetPassword} />
   </RootStack.Navigator>

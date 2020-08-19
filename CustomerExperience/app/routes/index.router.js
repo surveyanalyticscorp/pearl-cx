@@ -13,7 +13,7 @@ import {
 } from '@react-navigation/native';
 
 import SplashScreen from '../components/login/SplashScreen';
-import SignInScreen from '../components/login/SignIn';
+import Login from '../components/login/Login';
 import CompanyCode from '../components/login/CompanyCode';
 import MarketingScreen from '../components/login/MarketingScreen';
 import ForgotPassword from '../components/login/ForgotPassword';
@@ -142,7 +142,7 @@ const SignOutStack = props => (
         component={CompanyCode}
         navigation={props.navigation}
       />
-      <RootStack.Screen name="SignInScreen" component={SignInScreen} />
+      <RootStack.Screen name="Login" component={Login} />
       <RootStack.Screen name="ForgotPassword" component={ForgotPassword} />
     </RootStack.Navigator>
   </NavigationContainer>

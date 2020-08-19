@@ -1,29 +1,31 @@
-import React, {useState, useEffect} from 'react';
-import {Dimensions, Text, View} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {Dimensions, Text, View, StyleSheet} from 'react-native';
 import {TabView, TabBar} from 'react-native-tab-view';
-
 import FeedbackAll from './FeedbackAll';
 import {Colors} from '../../styles/color.constants';
 import {fontFamily} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {MarginConstants} from '../../styles/margin.constants';
-
-const initialLayout = {width: Dimensions.get('window').width};
 import {EventRegister} from 'react-native-event-listeners';
 import CalendarScreen from '../view/calendarScreen';
 import {getFeedbackList} from '../../redux/actions/feedback.actions';
 import {connect} from 'react-redux';
-import {DotIndicator} from 'react-native-indicators';
 import {showMessage} from 'react-native-flash-message';
 import moment from 'moment';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../api/Constant';
 import {clearError, showLoading} from '../../redux/actions';
 import {isObjectEmpty} from '../../Utils/Utility';
+import QPSpinner from '../../widgets/QPSpinner';
+import {PaddingConstants} from '../../styles/padding.constants';
+
+const initialLayout = {width: Dimensions.get('window').width};
 
 const Feedback = props => {
     let month = moment().month() + 1; //Need to check as it returns month number starting 0
     let year = moment().year();
+
+    let listener = useRef(null);
 
     const [authToken, setAuthToken] = useState('');
 
@@ -59,8 +61,6 @@ const Feedback = props => {
             });
             setFeedbackAPI(false);
         }
-
-
     }, [selectedYear, getFeedbackApi]);
 
     useEffect(() => {
@@ -70,11 +70,11 @@ const Feedback = props => {
     },[props.feedback]);
 
     useEffect(() => {
-        this.listener = EventRegister.addEventListener('openCalendar', data => {
+        listener = EventRegister.addEventListener('openCalendar', data => {
             setCalendar(true);
         });
         return () => {
-            EventRegister.removeEventListener(this.listener);
+            EventRegister.removeEventListener(listener);
         };
     }, []);
 
@@ -151,41 +151,52 @@ const Feedback = props => {
 
 
     const renderTabView = () => {
-        return (<View style={{flex: 1}}>
-            <TabView
-                navigationState={{index, routes}}
-                renderScene={renderScene}
-                onIndexChange={setIndex}
-                initialLayout={initialLayout}
-                renderTabBar={props =>
-                    <TabBar
-                        {...props}
-                        labelStyle={{
-                            indicatorStyle: {backgroundColor: '#FF0000'},
-                            scrollEnabled: true,
-                            labelStyle: {color: '#000000', fontSize: 12},
-                        }}
-                        indicatorStyle={{backgroundColor: Colors.red}}
-                        style={{backgroundColor: 'white', width:'100%'}}
-                        scrollEnabled={true}
-                        tabStyle={{minHeight: 30}} // here
-                        renderLabel={({route, focused, color}) => (
-                            <Text style={{
-                                color: Colors.primary, fontFamily: fontFamily.Medium,
-                                fontSize: TextSizes.secondary, marginVertical: MarginConstants.tab1,
-                            }}>
-                                {route.title}
-                            </Text>
-                        )}
-                    />}
-            />
-            {props.isLoading && (
-                <DotIndicator color="#2589E3" count={3} size={10}/>
-            )}
-        </View>);
+        return <TabView
+                    navigationState={{index, routes}}
+                    renderScene={renderScene}
+                    onIndexChange={setIndex}
+                    initialLayout={initialLayout}
+                    renderTabBar={props =>
+                        <TabBar
+                            {...props}
+                            labelStyle={{
+                                indicatorStyle: {backgroundColor: '#FF0000'},
+                                scrollEnabled: false,
+                                labelStyle: {color: '#000000', fontSize: 12, width: initialLayout.width/5},
+                            }}
+                            indicatorStyle={{backgroundColor: Colors.red}}
+                            style={{backgroundColor: 'white', width: '100%'}}
+                            scrollEnabled={false}
+                            tabStyle={{height: 2*PaddingConstants.tab4}}
+                            renderLabel={({route, focused, color}) => (
+                                <Text style={{
+                                    color: Colors.primary, fontFamily: fontFamily.Medium,
+                                    fontSize: TextSizes.secondary, marginVertical: MarginConstants.tab1,
+                                }}>
+                                    {route.title}
+                                </Text>
+                            )}
+                        />}
+                />
     };
 
-    return calendar ? renderCalendarView() : renderTabView();
+    let renderSpinner = () => {
+        if(props.isLoading) {
+            return (
+                <View style={styles.loading}>
+                    <QPSpinner/>
+                </View>
+            )
+        }
+    };
+
+    return (
+        <View style={styles.container}>
+            {calendar ? renderCalendarView() : renderTabView()}
+            {renderSpinner()}
+        </View>
+
+    )
 
 };
 const mapStateToProps = state => {
@@ -215,3 +226,18 @@ export default connect(
     mapDispatchToProps,
 )(Feedback);
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+
+});

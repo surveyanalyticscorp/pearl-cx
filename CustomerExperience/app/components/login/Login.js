@@ -27,7 +27,7 @@ import {CommonActions} from '@react-navigation/native';
 import {Colors} from '../../styles/color.constants';
 import {showMessage} from 'react-native-flash-message';
 
-const SignInScreen = props => {
+const Login = props => {
     const [userData, setUserData] = useState({
         email: '',
         password: '',
@@ -261,4 +261,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(SignInScreen);
+)(Login);
