@@ -24,6 +24,7 @@ import FeedbackUpdate from '../components/feedback/FeedbackUpdate'
 import { CommonActions } from '@react-navigation/native';
 import DetractorTickets from '../components/dashboard/components/DetractorTickets';
 import DashBoardStoreDetails from '../components/dashboard/components/DashBoardStoreDetails'
+
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
 
@@ -79,6 +80,19 @@ const AppRouter = props => {
         );
     };
 
+    const DashboardHeaderRight = () => {
+        return (
+            <View style={{flexDirection: 'row', marginLeft: 20}}>
+                <TouchableOpacity
+                    onPress={() => {
+                        EventRegister.emit('openDashboardCalendar', true);
+                    }}>
+                    <Icon name="more-vert" size={30} color="white"/>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
     const feedbackStack = props => (
         <RootStack.Navigator>
             <RootStack.Screen
@@ -114,6 +128,7 @@ const AppRouter = props => {
                 component={CxDashboard}
                 options={{
                     headerLeft: props => <HeaderLeft/>,
+                    headerRight: props => <DashboardHeaderRight/>,
                 }}
             />
             <RootStack.Screen

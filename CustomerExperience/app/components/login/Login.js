@@ -43,17 +43,13 @@ const Login = props => {
     },[]);
 
     useEffect(() => {
-        const saveData = async () => {
-            await AsyncStorage.setItem(ASYNC_AUTH_TOKEN, props.userInfo.authToken);
-            await AsyncStorage.setItem(ASYNC_USER_CREDENTIALS, JSON.stringify(userData));
-            await AsyncStorage.setItem(
-                ASYNC_USER_INFO,
-                JSON.stringify(props.userInfo.body),
-            );
+        const saveData = () => {
+            let data = [[ASYNC_AUTH_TOKEN,props.userInfo.authToken],[ASYNC_USER_CREDENTIALS, JSON.stringify(userData)],[ASYNC_USER_INFO, JSON.stringify(props.userInfo.body)]];
+            AsyncStorage.multiSet(data, (error) => {});
             props.setIsLogin();
         };
         if (props.userInfo.authToken) {
-            saveData().then(() => {});
+            saveData();
         }
     }, [props.userInfo]);
 
@@ -101,8 +97,6 @@ const Login = props => {
             };
 
             props.loginClick(data);
-        } else {
-
         }
     };
 
