@@ -213,4 +213,8 @@ export default class StringUtils {
   static uppercaseFirstChar(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
+
+  static getStringFromNumber(number) {
+    return number.toString()
+  }
 }

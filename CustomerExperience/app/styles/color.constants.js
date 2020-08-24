@@ -7,6 +7,7 @@ const Colors = {
   white: '#ffffff',
   black: '#000000',
   accent: '#193F8B',
+  accentGradient: 'rgba(25, 63, 139, 0.2)',
   gradientColor: '#8AC0EA',
   grey: '#f9f9f9',
   darkerGrey: '#eeeeee',

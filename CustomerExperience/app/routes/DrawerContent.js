@@ -23,7 +23,6 @@ import DialogTitle from '../widgets/dialog/Title';
 import DialogButton from '../widgets/dialog/Button';
 
 const DrawerContent = props => {
-  const [selectedState, setSelectedState] = useState('feedback');
   const [openDropper, setOpenDropper] = useState(false);
   const [userCredentials, setUserCredentials] = useState();
   const [logoutAlert, setLogoutAlert] = useState(false);

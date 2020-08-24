@@ -1,8 +1,10 @@
-import {DASHBOARD_RECEIVED, DETRACTOR_TICKET_RECEIVED} from '../actions/index';
+import {DASHBOARD_RECEIVED, SET_DASHBOARD_RANGE_FILTER} from '../actions/dashboard.actions';
+import {DETRACTOR_TICKET_RECEIVED} from '../actions';
 
 const initialState = {
   dashboardData: {},
   detractorTickets: {},
+  range:{}
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -17,6 +19,12 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         detractorTickets: action.response,
+      };
+    }
+    case SET_DASHBOARD_RANGE_FILTER: {
+      return {
+        ...state,
+        range: action.range,
       };
     }
     default: {

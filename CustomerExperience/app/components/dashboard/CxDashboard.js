@@ -1,9 +1,9 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState, useRef} from 'react';
 import {FlatList, ImageBackground, RefreshControl, ScrollView, Text, TouchableHighlight, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import CXTrendItemWidget from './components/CXTrendItemWidget';
 import {showLoading} from '../../redux/actions/index';
-import {getDashboardContent} from '../../redux/actions/dashboard.actions';
+import {getDashboardContent, setDashboardRangeFilter} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN} from '../../api/Constant';
@@ -12,6 +12,8 @@ import {Colors} from '../../styles/color.constants';
 import Pie from 'react-native-pie';
 import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
+import {EventRegister} from "react-native-event-listeners";
+import RangeCalendar from '../../widgets/RangeCalendar';
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -19,14 +21,26 @@ const wait = timeout => {
     });
 };
 const CxDashboard = props => {
-    const [authToken, setAuthToken] = useState('');
-    const [callApi, setCallAPI] = useState(true);
-    const [refreshing, setRefreshing] = useState(false);
+    let [authToken, setAuthToken] = useState('');
+    let [callApi, setCallAPI] = useState(true);
+    let [refreshing, setRefreshing] = useState(false);
+    let [calendar, setCalendar] = useState(false);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         setCallAPI(true);
         wait(2000).then(() => setRefreshing(false));
+    }, []);
+
+    let listener = useRef(null);
+
+    useEffect(() => {
+        listener = EventRegister.addEventListener('openDashboardCalendar', data => {
+            setCalendar(true);
+        });
+        return () => {
+            EventRegister.removeEventListener(listener);
+        };
     }, []);
 
     useEffect(() => {
@@ -47,6 +61,23 @@ const CxDashboard = props => {
             });
         }
     }, [callApi]);
+
+    const renderCalendarView = () => {
+        return (<RangeCalendar
+            showCalendar={calendar}
+            closeCalendar={() => {
+                setCalendar(false);
+            }}
+            onSubmit={(startDate, endDate) => {
+                let range = {
+                    startDate: startDate,
+                    endDate: endDate
+                };
+                setCalendar(false);
+                props.setRange(range)
+            }}
+        />);
+    };
 
     const getTrimmedNoOfResponses = () => {
         let responseText = "";
@@ -173,7 +204,7 @@ const CxDashboard = props => {
     };
 
     const renderStoreNPSList = () => {
-        if (props.dashboardData && props.dashboardData.body && props.dashboardData.body.storeNPSList.length > 0) {
+        if (props.dashboardData && props.dashboardData.body && props.dashboardData.body.storeNPSList && props.dashboardData.body.storeNPSList.length > 0) {
             let list = props.dashboardData.body.storeNPSList;
             let data = list.slice(0, 5);
             let title = props.dashboardData.body.systemPreferences.businessUnitName
@@ -184,7 +215,7 @@ const CxDashboard = props => {
     };
 
     const renderProductNPSList = () => {
-        if (props.dashboardData.body.productNPSList.length > 0) {
+        if (props.dashboardData && props.dashboardData.body && props.dashboardData.body.productNPSList && props.dashboardData.body.productNPSList.length > 0) {
             let list = props.dashboardData.body.productNPSList;
             let title = 'Products';
             return renderLists(list, title);
@@ -296,13 +327,18 @@ const CxDashboard = props => {
         if(props.isLoading) {
             return (
                 <View style={dashboardStyles.loading}>
-                    <QPSpinner/>
+                    <QPSpinner spinnerColor={Colors.white}/>
                 </View>
             )
         }
     };
 
-    return renderDashboard();
+    return (
+        <View style={dashboardStyles.container}>
+            {calendar ? renderCalendarView() : renderDashboard()}
+        </View>
+
+    )
 };
 
 const mapStateToProps = state => {
@@ -322,6 +358,9 @@ const mapDispatchToProps = dispatch => ({
     },
     showLoading: (flag) => {
         dispatch(showLoading(flag));
+    },
+    setRange: (range) => {
+        dispatch(setDashboardRangeFilter(range))
     }
 });
 

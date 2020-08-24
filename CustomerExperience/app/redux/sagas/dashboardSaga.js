@@ -2,13 +2,12 @@ import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {CX_HOME, CX_DETRACTOR_TICKETS} from '../../api/Constant';
 import {
-  DASHBOARD_RECEIVED,
-  GET_DASHBOARD,
   API_ERROR,
   DETRACTOR_TICKET_RECEIVED,
   IS_LOADING,
   GET_DETRACTOR_TICKET,
 } from '../actions/index';
+import {DASHBOARD_RECEIVED, GET_DASHBOARD} from '../actions/dashboard.actions';
 
 export function* fetchDashboard(action) {
   try {
