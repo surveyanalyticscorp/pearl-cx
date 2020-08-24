@@ -2,14 +2,15 @@ import * as actions from '../redux/actions/login.actions';
 import * as feedbackActions from '../redux/actions/feedback.actions';
 import * as dashboardActions from '../redux/actions/dashboard.actions';
 import {
-  FEEDBACK_UPDATED, GET_DASHBOARD,
-  GET_FEEDBACK,
   GET_FORGOT_PSWD_OTP,
   GET_LOGIN,
-  UPDATE_FEEDBACK,
   UPDATE_PASSWORD,
   VALIDATE_USER_OTP,
 } from '../redux/actions';
+import {GET_FEEDBACK} from '../redux/actions/feedback.actions';
+import {FEEDBACK_UPDATED} from '../redux/actions/feedback.actions';
+import {UPDATE_FEEDBACK} from '../redux/actions/feedback.actions';
+import {GET_DASHBOARD} from '../redux/actions/dashboard.actions';
 
 describe('ACTIONS', () => {
   it('should create an action with correct type', () => {

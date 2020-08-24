@@ -34,6 +34,7 @@ const AppRouter = props => {
 
     useEffect(() => {
         if (props.userInfo && !isStringNullOrEmpty(props.userInfo.authToken)) {
+            console.log(props.isLogin)
             setSignIn(props.isLogin);
         }
     }, [props.isLogin, props.userInfo]);

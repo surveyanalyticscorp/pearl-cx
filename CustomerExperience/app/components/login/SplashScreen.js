@@ -72,8 +72,6 @@ const SplashScreen = props => {
 };
 
 const mapStateToProps = state => {
-  console.log('Splash screen State:');
-  console.log(state);
   return {};
 };
 

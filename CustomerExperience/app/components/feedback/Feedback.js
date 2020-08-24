@@ -8,7 +8,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {EventRegister} from 'react-native-event-listeners';
 import CalendarScreen from '../view/calendarScreen';
-import {getFeedbackList} from '../../redux/actions/feedback.actions';
+import {getFeedbackList, setFeedbackRangeFilter} from '../../redux/actions/feedback.actions';
 import {connect} from 'react-redux';
 import {showMessage} from 'react-native-flash-message';
 import moment from 'moment';
@@ -22,13 +22,12 @@ import {PaddingConstants} from '../../styles/padding.constants';
 const initialLayout = {width: Dimensions.get('window').width};
 
 const Feedback = props => {
-    let month = moment().month() + 1; //Need to check as it returns month number starting 0
-    let year = moment().year();
+    let month = props.feedback.range.month ? props.feedback.range.month : moment().month() + 1; //Need to check as it returns month number starting 0
+    let year = props.feedback.range.year ? props.feedback.range.year : moment().year();
 
     let listener = useRef(null);
 
     const [authToken, setAuthToken] = useState('');
-
     const [calendar, setCalendar] = useState(false);
     const [getFeedbackApi, setFeedbackAPI] = useState(true);
     const [selectedYear, setSelectedYear] = useState({month: month, year: year});
@@ -141,10 +140,12 @@ const Feedback = props => {
             closeCalendar={() => {
                 setCalendar(false);
             }}
+            selectedDate={selectedYear}
             onSubmit={(selectedYear) => {
                 setFeedbackAPI(true);
                 setSelectedYear(selectedYear);
                 setCalendar(false);
+                props.setRange(selectedYear);
             }}
         />);
     };
@@ -218,6 +219,9 @@ const mapDispatchToProps = dispatch => ({
     },
     showLoading: (flag) => {
         dispatch(showLoading(flag));
+    },
+    setRange: (range) => {
+        dispatch(setFeedbackRangeFilter(range))
     }
 });
 

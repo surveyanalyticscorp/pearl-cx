@@ -8,9 +8,8 @@ import {Colors} from '../../styles/color.constants';
 import SafeAreaView from 'react-native-safe-area-view';
 
 const CalendarScreen = props => {
-  let month = moment().month() + 1; //Need to check as it returns month number starting 0
-  let year = moment().year();
-  const [selectedYear, setSelectedYear] = useState({month: month, year: year})
+
+  const [selectedYear, setSelectedYear] = useState({month: props.selectedDate.month, year: props.selectedDate.year});
   const renderCloseButton = () => {
     return (
       <TouchableOpacity

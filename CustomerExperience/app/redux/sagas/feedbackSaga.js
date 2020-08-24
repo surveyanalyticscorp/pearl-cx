@@ -2,13 +2,10 @@ import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {CX_GET_ALL_RESPONSE, CX_ADD_UPDATE_TICKET} from '../../api/Constant';
 import {
-  GET_FEEDBACK,
-  FEEDBACK_RECEIVED,
-  FEEDBACK_UPDATED,
-  UPDATE_FEEDBACK,
   API_ERROR,
   IS_LOADING,
 } from '../actions/index';
+import {FEEDBACK_RECEIVED, FEEDBACK_UPDATED, GET_FEEDBACK, UPDATE_FEEDBACK} from '../actions/feedback.actions';
 
 export function* fetchFeedback(action) {
   try {

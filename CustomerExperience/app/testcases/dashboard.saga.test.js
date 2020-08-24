@@ -1,6 +1,6 @@
 import {put, takeLatest} from 'redux-saga/effects';
-import {DASHBOARD_RECEIVED, GET_DASHBOARD} from '../redux/actions';
 import {fetchDashboard, watchGetDashboard} from '../redux/sagas/dashboardSaga';
+import {DASHBOARD_RECEIVED, GET_DASHBOARD} from '../redux/actions/dashboard.actions';
 
 const mockResponse = {
   DetractorTicketsCount: {new: 63, pending: 4, resolved: 4, totalTickets: 71},
