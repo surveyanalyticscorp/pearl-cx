@@ -15,7 +15,6 @@ import {fontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {clearUserInfo} from '../redux/actions';
-import {setIsLogin} from '../redux/actions/login.actions';
 import {connect} from 'react-redux';
 import {ASYNC_USER_CREDENTIALS} from '../api/Constant';
 import DialogContainer from '../widgets/dialog/Container';
@@ -176,7 +175,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   logoutUser: data => {
-    dispatch(setIsLogin(false));
     dispatch(clearUserInfo());
   },
 });

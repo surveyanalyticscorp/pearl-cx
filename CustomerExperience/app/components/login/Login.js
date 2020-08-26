@@ -12,7 +12,7 @@ import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import {connect} from 'react-redux';
 import {showLoading, clearError} from '../../redux/actions/index';
-import {doLogin, setIsLogin} from '../../redux/actions/login.actions';
+import {doLogin} from '../../redux/actions/login.actions';
 import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
 import {Colors} from '../../styles/color.constants';
@@ -229,10 +229,7 @@ const mapDispatchToProps = dispatch => ({
     },
     clearError: () => {
         dispatch(clearError(false));
-    },
-    setIsLogin: () => {
-        dispatch(setIsLogin(true));
-    },
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

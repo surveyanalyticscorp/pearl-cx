@@ -1,7 +1,6 @@
 import {
     FILL_USER_INFO,
     IS_LOADING,
-    IS_LOGIN,
     LOGIN_RESPONSE,
     API_ERROR,
     CLEAR_API_ERROR,
@@ -15,7 +14,6 @@ const initialState = {
     authToken:'',
     userInfo: {},
     isLoading: false,
-    isLogin: false,
     isError: false,
     errorMessage: '',
     forgotPasswordResponse: {},
@@ -58,9 +56,6 @@ const globalReducer = (state = initialState, action) => {
 
         case IS_LOADING: {
             return {...state, isLoading: action.payload.isLoading};
-        }
-        case IS_LOGIN: {
-            return {...state, isLogin: action.payload.isLogin};
         }
         case FILL_USER_INFO: {
             return {

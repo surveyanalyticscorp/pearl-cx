@@ -6,7 +6,6 @@ describe('globalReducer', () => {
       globalReducer(
         {
           isLoading: false,
-          isLogin: false,
           isError: false,
           errorMessage: '',
           userInfo: {},
@@ -18,7 +17,6 @@ describe('globalReducer', () => {
       ),
     ).toEqual({
       isLoading: false,
-      isLogin: false,
       isError: false,
       errorMessage: '',
       userInfo: {},
@@ -59,12 +57,6 @@ describe('globalReducer', () => {
     it('should handle "IS_LOADING" action', () => {
         expect(globalReducer({}, {type: 'IS_LOADING',payload:{isLoading: true}})).toEqual({
             isLoading: true,
-        });
-    });
-
-    it('should handle "IS_LOGIN" action', () => {
-        expect(globalReducer({}, {type: 'IS_LOGIN',payload:{isLogin: true}})).toEqual({
-            isLogin: true,
         });
     });
 

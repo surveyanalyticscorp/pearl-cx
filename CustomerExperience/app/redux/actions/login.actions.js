@@ -1,15 +1,9 @@
 import {
   GET_FORGOT_PSWD_OTP,
   GET_LOGIN,
-  IS_LOGIN,
   UPDATE_PASSWORD,
   VALIDATE_USER_OTP,
 } from './index';
-
-export const setIsLogin = isLogin => ({
-  type: IS_LOGIN,
-  payload: {isLogin: isLogin},
-});
 
 export const doLogin = param => ({
   type: GET_LOGIN,
