@@ -1,20 +1,25 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {View, Text} from 'react-native';
 
 import {styles} from '../../styles/styles';
 import MonthYearSelector from '../../widgets/MonthYearSelector';
 import moment from 'moment';
 import {EventRegister} from 'react-native-event-listeners';
+
 const FeedbackDetractor = props => {
   const [calendar, setCalendar] = useState(false);
   let month = moment().month() + 1; //Need to check as it returns month number starting 0
   let year = moment().year();
 
+  let listener = useRef(null);
+
   useEffect(() => {
-    console.log('Feedback Detractor');
-    this.listener = EventRegister.addEventListener('openCalendar', data => {
+    listener = EventRegister.addEventListener('openCalendar', data => {
       setCalendar(!calendar);
     });
+    return () => {
+      EventRegister.removeEventListener(listener);
+    };
   }, [calendar]);
 
   const getCalendarView = () => {

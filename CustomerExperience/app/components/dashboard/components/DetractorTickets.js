@@ -54,7 +54,7 @@ const DetractorTickets = props => {
                     setResponseData(data)
                 },
                 error => {
-                    console.log(error);
+                    // console.log(error);
                 },
             );
         }
@@ -80,7 +80,7 @@ const DetractorTickets = props => {
                 setResponseData(data)
             },
             error => {
-                console.log(error);
+                // console.log(error);
             },
         );
     }

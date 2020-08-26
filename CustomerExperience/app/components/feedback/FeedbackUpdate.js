@@ -94,8 +94,6 @@ const FeedbackUpdate = props => {
           buildFeedbackUpdateObject(),
           props.route.params.token,
       );
-    } else {
-      console.log('Please enter comment to update the ticket.');
     }
   };
 
