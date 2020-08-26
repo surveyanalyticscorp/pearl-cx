@@ -1,14 +1,12 @@
 import React, {Component} from 'react';
 import {
   View,
-  Image,
   Platform,
   TouchableOpacity,
   TouchableHighlight,
   Text,
 } from 'react-native';
 import {StyleSheet} from 'react-native';
-
 import ThreeDot from '../../Utils/ThreeDots';
 import StringUtils from '../../Utils/StringUtils';
 import ArrayUtils from '../../Utils/ArrayUtils';

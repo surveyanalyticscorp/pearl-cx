@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Dimensions, Text, View} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
 import FeedbackCell from '../view/FeedbackCells';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -77,17 +77,9 @@ export default function FeedbackDetails(props){
             tabStyle={{
               minHeight: 30,
               width: Dimensions.get('window').width / 3,
-            }} // here
+            }}
             renderLabel={({route, focused, color}) => (
-              <Text
-                style={{
-                  color: Colors.primary,
-                  fontFamily: fontFamily.Light,
-                  fontSize: TextSizes.secondary,
-                  marginVertical: MarginConstants.halfTab,
-                }}>
-                {route.title}
-              </Text>
+              <Text style={styles.routeTitle}>{route.title}</Text>
             )}
           />
         )}
@@ -95,7 +87,7 @@ export default function FeedbackDetails(props){
     );
   };
   return (
-    <View style={{flex: 1, paddingTop: 5}}>
+    <View style={styles.container}>
       <FeedbackCell
         item={props.route.params.data}
         origin="Detail"
@@ -106,8 +98,22 @@ export default function FeedbackDetails(props){
         elevation={8}
         buttonColor="rgba(28,118,185,1)"
         onPress={onActionButtonPress}
-        icon={<Icon size={30} name="comment" color={'white'} />}
+        renderIcon={() => <Icon size={30} name="comment" color={'white'} />}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingTop: 5
+    },
+    routeTitle: {
+        color: Colors.primary,
+        fontFamily: fontFamily.Light,
+        fontSize: TextSizes.secondary,
+        marginVertical: MarginConstants.halfTab,
+    }
+
+});

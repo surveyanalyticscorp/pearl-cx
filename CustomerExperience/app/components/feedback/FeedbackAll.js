@@ -3,6 +3,7 @@ import {Text, View, SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import FeedbackCell from '../view/FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {StackActions} from '@react-navigation/native';
+import {Colors} from '../../styles/color.constants';
 
 const FeedbackAll = props => {
     const [selectedRowID, setSelectedRowID] = useState(0);
@@ -17,7 +18,6 @@ const FeedbackAll = props => {
     };
 
     const onEndReached = () => {
-
         // Checking if the list has responses in multiples of 10
         // if((props.feedbacks.lastAddedCount > 0 && this.props.feedbacks.lastAddedCount % 10 === 0   ) && !this.state.isLoadingTail)
         //   this.setState({
@@ -25,7 +25,6 @@ const FeedbackAll = props => {
         //   }, ()=>{
         //     this.getFeedbackList(false);
         //   })
-
     };
 
     const _renderRow = ({item}) => {
@@ -44,32 +43,20 @@ const FeedbackAll = props => {
 
     const renderNoDataFound = () => {
         return (
-            <View
-                style={{
-                    flex: 1,
-                    marginTop: 20,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: 'transparent',
-                }}
-            >
-                <Text style={{color: 'black', fontSize: 16}}>No feedbacks received.</Text>
-
+            <View style={styles.emptyView}>
+                <Text style={styles.emptyText}>No feedbacks received.</Text>
             </View>
         );
     };
-
 
     const getItems = () => {
         if (props.sentiment === 'All') {
             return props.feedback.response.body.allResponses
         } else {
-            let responses  = props.feedback.response.body.allResponses;
-            let bigResponse = responses.filter(res => res.sentiment === props.sentiment);
-            return bigResponse;
+            let responses = props.feedback.response.body.allResponses;
+            return responses.filter(res => res.sentiment === props.sentiment);
         }
     };
-
 
     const renderFeedbackStatus = () => {
         if (props.feedback.response.body) {
@@ -78,15 +65,13 @@ const FeedbackAll = props => {
                 <SafeAreaView style={styles.container}>
                     <FlatList
                         data={items}
-                        keyExtractor={item => item.responseSetID}
+                        keyExtractor={item => item.responseSetID+''}
                         renderItem={_renderRow}
                         onEndReached={onEndReached}
                         onEndReachedThreshold={0.01}
                         refreshing={false}
                         ListEmptyComponent={renderNoDataFound}
-                        onRefresh={() => {
-                         props.onRefresh && props.onRefresh();
-                        }}
+                        onRefresh={props.onRefresh}
                     />
                 </SafeAreaView>
             );
@@ -98,11 +83,21 @@ const FeedbackAll = props => {
 };
 export default FeedbackAll;
 
-// Styles
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         margin: MarginConstants.tab1,
+    },
+    emptyView: {
+        flex: 1,
+        marginTop: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent',
+    },
+    emptyText: {
+        color: Colors.black,
+        fontSize: 16
     },
     counterContainer: {
         display: 'flex',

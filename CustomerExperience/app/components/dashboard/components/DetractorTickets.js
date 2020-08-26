@@ -14,7 +14,6 @@ import DetractorScenes from './DetractorScenes';
 
 const DetractorTickets = props => {
     const [index, setIndex] = useState(0);
-    const [authToken, setAuthToken] = useState('');
     const [routes] = React.useState([
         {key: 'new', title: 'NEW'},
         {key: 'pending', title: 'PENDING'},
@@ -41,31 +40,24 @@ const DetractorTickets = props => {
         status: '2',
         index: 2,
         storeId: props.route.params.data.storeId,
-    }])
+    }]);
 
     useEffect(() => {
-        async function getAuthToken() {
-            return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
+        for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
+            let params = responseData[responseCount];
+            apiHandler.getCXDetractorTicket(
+                props.authToken,
+                params,
+                response => {
+                    let data = [...responseData];
+                    data[responseCount].data = response.body;
+                    setResponseData(data)
+                },
+                error => {
+                    console.log(error);
+                },
+            );
         }
-        getAuthToken().then(token => {
-            setAuthToken(token);
-            for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
-                let params = responseData[responseCount];
-                apiHandler.getCXDetractorTicket(
-                    token,
-                    params,
-                    response => {
-                        let data = [...responseData];
-                        data[responseCount].data = response.body;
-                        setResponseData(data)
-                    },
-                    error => {
-                        console.log(error);
-                    },
-                );
-            }
-
-        });
     }, []);
 
     const renderIndicator = () => {
@@ -79,7 +71,7 @@ const DetractorTickets = props => {
         let pageCount = parseInt(params.pageOffset) + 1;
         params.pageOffset = pageCount + '';
         apiHandler.getCXDetractorTicket(
-            authToken,
+            props.authToken,
             params,
             response => {
                 let data = [...responseData];
@@ -163,13 +155,11 @@ const mapStateToProps = state => {
         isLoading: state.global.isLoading,
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
+        authToken: state.global.authToken
     };
 };
 
 const mapDispatchToProps = dispatch => ({
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(DetractorTickets);
+export default connect(mapStateToProps, mapDispatchToProps)(DetractorTickets);

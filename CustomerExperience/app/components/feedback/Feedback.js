@@ -12,8 +12,6 @@ import {getFeedbackList, setFeedbackRangeFilter} from '../../redux/actions/feedb
 import {connect} from 'react-redux';
 import {showMessage} from 'react-native-flash-message';
 import moment from 'moment';
-import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN} from '../../api/Constant';
 import {clearError, showLoading} from '../../redux/actions';
 import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
@@ -27,7 +25,6 @@ const Feedback = props => {
 
     let listener = useRef(null);
 
-    const [authToken, setAuthToken] = useState('');
     const [calendar, setCalendar] = useState(false);
     const [getFeedbackApi, setFeedbackAPI] = useState(true);
     const [selectedYear, setSelectedYear] = useState({month: month, year: year});
@@ -40,29 +37,23 @@ const Feedback = props => {
     ]);
 
     useEffect(() => {
-        async function getAuthToken() {
-            return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
-        }
-
         if (getFeedbackApi) {
-            getAuthToken().then(token => {
-                setAuthToken(token);
-                const data = {
-                    pageOffset: 0,
-                    sentiment: 'All',
-                    month: selectedYear.month + '',
-                    year: selectedYear.year + '',
-                };
-                props.getFeedbackList(
-                    data,
-                    token,
-                );
-            });
+            const data = {
+                pageOffset: 0,
+                sentiment: 'All',
+                month: selectedYear.month + '',
+                year: selectedYear.year + '',
+            };
+            props.getFeedbackList(
+                data,
+                props.authToken,
+            );
             setFeedbackAPI(false);
         }
     }, [selectedYear, getFeedbackApi]);
 
     useEffect(() => {
+        console.log("nehal "+props.feedback);
         if(!isObjectEmpty(props.feedback)){
             props.showLoading(false);
         }
@@ -97,35 +88,35 @@ const Feedback = props => {
         switch (route.key) {
             case 'all':
                 return <FeedbackAll {...props}
-                                    authToken={authToken}
+                                    authToken={props.authToken}
                                     sentiment={'All'}
                                     onRefresh={() => {
                                         setFeedbackAPI(true);
                                     }}/>;
             case 'detractor':
                 return <FeedbackAll {...props}
-                                    authToken={authToken}
+                                    authToken={props.authToken}
                                     sentiment={'Detractor'}
                                     onRefresh={() => {
                                         setFeedbackAPI(true);
                                     }}/>;
             case 'passive':
                 return <FeedbackAll {...props}
-                                    authToken={authToken}
+                                    authToken={props.authToken}
                                     sentiment={'Passive'}
                                     onRefresh={() => {
                                         setFeedbackAPI(true);
                                     }}/>;
             case 'promoter':
                 return <FeedbackAll {...props}
-                                    authToken={authToken}
+                                    authToken={props.authToken}
                                     sentiment={'Promoter'}
                                     onRefresh={() => {
                                         setFeedbackAPI(true);
                                     }}/>;
             default:
                 return <FeedbackAll {...props}
-                                    authToken={authToken}
+                                    authToken={props.authToken}
                                     sentiment={'All'}
                                     onRefresh={() => {
                                         setFeedbackAPI(true);
@@ -133,9 +124,8 @@ const Feedback = props => {
         }
     };
 
-
     const renderCalendarView = () => {
-        return (<CalendarScreen
+        return <CalendarScreen
             showCalendar={calendar}
             closeCalendar={() => {
                 setCalendar(false);
@@ -147,38 +137,36 @@ const Feedback = props => {
                 setCalendar(false);
                 props.setRange(selectedYear);
             }}
-        />);
+        />
     };
-
 
     const renderTabView = () => {
         return <TabView
-                    navigationState={{index, routes}}
-                    renderScene={renderScene}
-                    onIndexChange={setIndex}
-                    initialLayout={initialLayout}
-                    renderTabBar={props =>
-                        <TabBar
-                            {...props}
-                            labelStyle={{
-                                indicatorStyle: {backgroundColor: '#FF0000'},
-                                scrollEnabled: false,
-                                labelStyle: {color: '#000000', fontSize: 12, width: initialLayout.width/5},
-                            }}
-                            indicatorStyle={{backgroundColor: Colors.red}}
-                            style={{backgroundColor: 'white', width: '100%'}}
-                            scrollEnabled={false}
-                            tabStyle={{height: 2*PaddingConstants.tab4}}
-                            renderLabel={({route, focused, color}) => (
-                                <Text style={{
-                                    color: Colors.primary, fontFamily: fontFamily.Medium,
-                                    fontSize: TextSizes.secondary, marginVertical: MarginConstants.tab1,
-                                }}>
-                                    {route.title}
-                                </Text>
-                            )}
-                        />}
-                />
+            navigationState={{index, routes}}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            initialLayout={initialLayout}
+            renderTabBar={props =>
+                <TabBar
+                    {...props}
+                    labelStyle={{
+                        scrollEnabled: false,
+                        labelStyle: {color: Colors.black, fontSize: 12, width: initialLayout.width/5},
+                    }}
+                    indicatorStyle={{backgroundColor: Colors.accent}}
+                    style={{backgroundColor: Colors.white, width: '100%'}}
+                    scrollEnabled={false}
+                    tabStyle={{height: 2*PaddingConstants.tab4}}
+                    renderLabel={({route, focused, color}) => (
+                        <Text style={{
+                            color: Colors.primary, fontFamily: fontFamily.Medium,
+                            fontSize: TextSizes.secondary, marginVertical: MarginConstants.tab1,
+                        }}>
+                            {route.title}
+                        </Text>
+                    )}
+                />}
+        />
     };
 
     let renderSpinner = () => {
@@ -196,7 +184,6 @@ const Feedback = props => {
             {calendar ? renderCalendarView() : renderTabView()}
             {renderSpinner()}
         </View>
-
     )
 
 };
@@ -206,6 +193,7 @@ const mapStateToProps = state => {
         isLoading: state.global.isLoading,
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
+        authToken: state.global.authToken
     };
 };
 
@@ -225,10 +213,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(Feedback);
+export default connect(mapStateToProps, mapDispatchToProps)(Feedback);
 
 const styles = StyleSheet.create({
     container: {

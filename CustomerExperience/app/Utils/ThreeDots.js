@@ -2,7 +2,7 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 
 const ThreeDot = props => {
-  var circles = [];
+  let circles = [];
   for (let i = 0; i < 3; i++) {
     circles.push(<Circle color={props.color} key={i} />);
   }

@@ -12,7 +12,7 @@ const dashboardReducer = (state = initialState, action) => {
     case DASHBOARD_RECEIVED: {
       return {
         ...state,
-        dashboardData: action.response,
+        dashboardData: action.response.body,
       };
     }
     case DETRACTOR_TICKET_RECEIVED: {

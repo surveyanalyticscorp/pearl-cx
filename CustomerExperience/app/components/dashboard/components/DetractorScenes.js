@@ -1,25 +1,14 @@
 import React from 'react';
 import {View, Text, ImageBackground, FlatList} from 'react-native';
 import TicketWidget from './TicketWidget';
-import {Colors} from '../../../styles/color.constants';
-import {fontFamily} from '../../../styles/font.constants';
-import {TextSizes} from '../../../styles/textsize.constants';
+import {dashboardStyles} from '../dashboard.style';
 
 const DetractorScenes = props => {
 
     const renderNoDataFound = () => {
         return (
-            <View
-                style={{
-                    flex: 1,
-                    marginTop: 20,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: 'transparent',
-                }}>
-                <Text style={{color: Colors.white, fontFamily: fontFamily.Bold ,fontSize: TextSizes.largeText}}>
-                   There is no Pending tickets.
-                </Text>
+            <View style={dashboardStyles.emptyView}>
+                <Text style={dashboardStyles.detractorEmptyText}>There is no Pending tickets.</Text>
             </View>
         );
     };
@@ -32,17 +21,17 @@ const DetractorScenes = props => {
                 />
             </View>
         );
-    }
+    };
 
     const onEndReached = () => {
         props.endReached && props.endReached()
-    }
+    };
 
     return (
         <ImageBackground
-            resizeMode={'stretch'}
+            resizeMode={'cover'}
             source={require('../../../config/images/background.png')}
-            style={{flex: 1, backgroundColor: 'transparent'}}>
+            style={dashboardStyles.detractorView}>
             <FlatList
                 contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}
                 data={props.data}
