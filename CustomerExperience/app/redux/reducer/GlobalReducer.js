@@ -8,15 +8,16 @@ import {
     FORGOT_PSWD_OTP_RESPONSE,
     VALIDATE_USER_OTP_RESPONSE,
     UPDATE_PASSWORD_RESPONSE,
-    CLEAR_USER_INFO,
+    CLEAR_USER_INFO, SET_AUTH_TOKEN,
 } from '../actions/index';
 
 const initialState = {
+    authToken:'',
+    userInfo: {},
     isLoading: false,
     isLogin: false,
     isError: false,
     errorMessage: '',
-    userInfo: {},
     forgotPasswordResponse: {},
     validateOtpResponse: {},
     updatePasswordResponse: {},
@@ -27,7 +28,8 @@ const globalReducer = (state = initialState, action) => {
         case LOGIN_RESPONSE: {
             return {
                 ...state,
-                userInfo: action.response,
+                authToken:action.response.authToken,
+                userInfo: action.response.body,
                 isLoading: false,
             };
         }
@@ -88,6 +90,12 @@ const globalReducer = (state = initialState, action) => {
                 isError: false,
                 errorMessage: '',
                 isLoading: action.payload.isLoading,
+            };
+        }
+        case SET_AUTH_TOKEN: {
+            return {
+                ...state,
+                authToken: action.payload.authToken
             };
         }
         default: {

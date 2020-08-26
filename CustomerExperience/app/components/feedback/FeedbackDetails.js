@@ -12,7 +12,7 @@ import QPWebView from '../../widgets/QPWebView';
 import ActionButton from 'react-native-action-button';
 import {StackActions} from '@react-navigation/native';
 
-const FeedbackDetail = props => {
+export default function FeedbackDetails(props){
   const [index, setIndex] = useState(0);
   const [routes] = React.useState([
     {key: 'feedback', title: 'Feedback'},
@@ -111,5 +111,3 @@ const FeedbackDetail = props => {
     </View>
   );
 };
-
-export default FeedbackDetail;

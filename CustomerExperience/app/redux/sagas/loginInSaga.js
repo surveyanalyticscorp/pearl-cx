@@ -1,6 +1,12 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
-import {AUTH_LOGIN, AUTH_REQUEST_OTP, AUTH_VALIDATE_OTP, AUTH_UPDATE_PASSWORD} from '../../api/Constant';
+import {
+    AUTH_LOGIN,
+    AUTH_REQUEST_OTP,
+    AUTH_VALIDATE_OTP,
+    AUTH_UPDATE_PASSWORD,
+    ASYNC_USER_CREDENTIALS,
+} from '../../api/Constant';
 import {
     LOGIN_RESPONSE,
     GET_LOGIN,
@@ -12,6 +18,8 @@ import {
     UPDATE_PASSWORD,
     UPDATE_PASSWORD_RESPONSE, CLEAR_API_ERROR,
 } from '../actions/index';
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 export function* doLoginApiCall(action) {
     try {
@@ -21,6 +29,11 @@ export function* doLoginApiCall(action) {
             action.param,
         );
         yield put({type: LOGIN_RESPONSE, response: response});
+        let userData = {
+            email: action.param.emailAddress,
+            password: action.param.password
+        };
+        AsyncStorage.setItem(ASYNC_USER_CREDENTIALS, JSON.stringify(userData))
     } catch (error) {
         yield put({type: API_ERROR, error: error});
     }

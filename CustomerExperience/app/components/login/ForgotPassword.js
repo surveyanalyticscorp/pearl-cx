@@ -18,16 +18,15 @@ import {clearError} from '../../redux/actions/index';
 import {requestOtp, validateUserOtp} from '../../redux/actions/login.actions';
 import {connect} from 'react-redux';
 import StringUtils from '../../Utils/StringUtils';
-import {DotIndicator} from 'react-native-indicators';
 import {showMessage} from 'react-native-flash-message';
 import DialogContainer from '../../widgets/dialog/Container';
 import DialogTitle from '../../widgets/dialog/Title';
 import DialogInput from '../../widgets/dialog/Input';
 import DialogButton from '../../widgets/dialog/Button';
+import QPSpinner from '../../widgets/QPSpinner';
 
 const stringConst = require('../../config/locales/en');
 const screen = Dimensions.get('screen');
-
 
 const ForgotPassword = props => {
     const [email, setEmail] = useState('');
@@ -152,13 +151,13 @@ const ForgotPassword = props => {
 
     const renderDialog = () => {
         let errorMessage = 'One Time password(OTP)';
-        let messageColor = 'white';
+        let messageColor = Colors.white;
         if (props.isError) {
             errorMessage = props.errorMessage.errorAlert
                 ? props.errorMessage.errorAlert
                 : props.errorMessage.message;
 
-            messageColor = 'red';
+            messageColor = Colors.red;
         }
         return (
             <DialogContainer visible={otpAlert}>
@@ -181,66 +180,49 @@ const ForgotPassword = props => {
         return false;
     };
 
-
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: Colors.accent}}>
-            <ImageBackground
-                resizeMode={'stretch'}
-                source={require('../../config/images/background_inverted.png')}
-                style={{flex: 1}}>
+        <ImageBackground
+            resizeMode={'cover'}
+            source={require('../../config/images/background_inverted.png')}
+            style={{flex: 1}}>
+            <SafeAreaView style={styles.container}>
                 <View style={styles.forgotPswdContainer} onStartShouldSetResponder={handleUnhandledTouches}>
-                    <View
-                        style={{
-                            marginVertical: MarginConstants.tab4 * 3,
-                            alignItems: 'center',
-                            width: '100%',
-                        }}>
-                        <Image
-                            style={styles.logoImage}
-                            resizeMode="contain"
-                            source={require('../../config/images/whiteCXLogo.png')}
+                    <Image
+                        style={styles.logoImage}
+                        resizeMode="contain"
+                        source={require('../../config/images/whiteCXLogo.png')}
+                    />
+                    <Text
+                        style={styles.forgotPasswordMessage}>
+                        {stringConst.forgotPasswordMessage}
+                    </Text>
+                    <QPTextField
+                        autofocus={true}
+                        label={stringConst.email}
+                        style={styles.emailInput}
+                        onEndEdit={handleEmail}
+                    />
+                    <QPTextField
+                        label={stringConst.companyCode}
+                        style={styles.companyCode}
+                        onEndEdit={handleAccessCode}
+                    />
+                    {props.isLoading ? (
+                        <View style={styles.nextButton}>
+                            <QPSpinner spinnerColor={Colors.white}/>
+                        </View>
+                    ) : (
+                        <QPButton
+                            style={styles.nextButton}
+                            onPress={onResetPasswordClick}
+                            buttonText={stringConst.resetPassword}
                         />
-                        <Text
-                            style={{
-                                fontSize: 15,
-                                width: '90%',
-                                textAlign: 'center',
-                                fontFamily: fontFamily.Medium,
-                                color: textColors.primary,
-                                alignSelf: 'center',
-                                marginTop: MarginConstants.halfTab,
-                                paddingHorizontal: MarginConstants.tab2,
-                            }}>
-                            {stringConst.forgotPasswordMessage}
-                        </Text>
-                        <QPTextField
-                            autofocus={true}
-                            label={stringConst.email}
-                            style={styles.emailInput}
-                            onEndEdit={handleEmail}
-                        />
-                        <QPTextField
-                            label={stringConst.companyCode}
-                            style={styles.companyCode}
-                            onEndEdit={handleAccessCode}
-                        />
-                        {props.isLoading ? (
-                            <View style={styles.nextButton}>
-                                <DotIndicator color={Colors.white} count={3} size={10}/>
-                            </View>
-                        ) : (
-                            <QPButton
-                                style={styles.nextButton}
-                                onPress={onResetPasswordClick}
-                                buttonText={stringConst.resetPassword}
-                            />
-                        )}
-                    </View>
+                    )}
                 </View>
-            </ImageBackground>
-
+            </SafeAreaView>
             {renderDialog()}
-        </SafeAreaView>
+        </ImageBackground>
+
     );
 };
 
@@ -265,19 +247,20 @@ const mapDispatchToProps = dispatch => ({
     },
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(ForgotPassword);
+export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: Colors.accent
+    },
     logoImage: {
         width: '70%',
         marginTop: MarginConstants.tab4,
     },
     forgotPswdContainer: {
         flex: 1,
-        marginVertical: MarginConstants.tab3,
+        marginVertical: MarginConstants.tab4 * 3 + MarginConstants.tab3,
         alignItems: 'center',
         width: '100%',
     },
@@ -315,5 +298,15 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         color: textColors.primary,
     },
+    forgotPasswordMessage: {
+        fontSize: 15,
+        width: '90%',
+        textAlign: 'center',
+        fontFamily: fontFamily.Medium,
+        color: textColors.primary,
+        alignSelf: 'center',
+        marginTop: MarginConstants.halfTab,
+        paddingHorizontal: MarginConstants.tab2,
+    }
 
 });

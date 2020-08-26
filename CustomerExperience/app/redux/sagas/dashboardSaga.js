@@ -22,7 +22,6 @@ export function* fetchDashboard(action) {
       response: json,
     });
   } catch (error) {
-    console.log('Dashboard saga error:' + JSON.stringify(error));
     yield put({
       type: API_ERROR,
       error: error,

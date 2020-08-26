@@ -12,6 +12,7 @@ import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import { CommonActions } from '@react-navigation/native';
 import {Colors} from '../styles/color.constants';
+
 const RootStack = createStackNavigator();
 
 const stackHeaderProps = (route, navigation) => {

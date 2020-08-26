@@ -1,89 +1,74 @@
-import {Text, View, ImageBackground, Image} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {ImageBackground, Image, StyleSheet} from 'react-native';
+import React, {useEffect, useState, useRef} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../../api/Constant';
 import AppRouter from '../../routes/appRouter';
 import {connect} from 'react-redux';
-import {fillUserInfo} from '../../redux/actions/index';
-import {setIsLogin} from '../../redux/actions/login.actions';
+import {fillUserInfo, setAuthToken} from '../../redux/actions/index';
 import {isStringNullOrEmpty} from '../../Utils/Utility';
 
-const SplashScreen = props => {
-  const [authToken, setAuthToken] = useState('');
-  const [moveNext, setMoveNext] = useState(false);
+function SplashScreen(props) {
+  let [moveNext, setMoveNext] = useState(false);
+  let splashTimer = useRef(null);
+
 
   useEffect(() => {
-    async function getAuthToken() {
-      return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
-    }
-    getAuthToken().then(value => {
-      setAuthToken(value);
-    });
-  }, []);
 
-  useEffect(() => {
-    async function getUserInfo() {
-      return await AsyncStorage.getItem(ASYNC_USER_INFO);
-    }
-    getUserInfo().then(value => {
-      if (!isStringNullOrEmpty(value)) {
-        props.saveUserInfo(JSON.parse(value));
-      }
-    });
-  }, [props]);
+    splashTimer = setTimeout(() => {
+      AsyncStorage.multiGet([ASYNC_AUTH_TOKEN, ASYNC_USER_INFO]).then(response => {
+        let token = response[0][1];
+        let userInfo = response[1][1];
+        props.setToken(token);
+        if (!isStringNullOrEmpty(userInfo)) {
+          props.saveUserInfo(JSON.parse(userInfo));
+        }
+        setMoveNext(true)
+      })
+    },1000);
 
-  useEffect(() => {
-    let timer = setTimeout(() => {
-      setMoveNext(true);
-    }, 1000);
     return () => {
-      clearTimeout(timer);
+      clearTimeout(splashTimer);
     };
-  }, [authToken, props.navigation]);
+  }, []);
 
   let renderSplashScreenView = () => {
     return (
-      <View style={{flex: 1}}>
         <ImageBackground
-          resizeMode={'stretch'}
-          source={require('../../config/images/background_inverted.png')}
-          style={{
-            width: '100%',
-            height: '100%',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+            resizeMode={'cover'}
+            source={require('../../config/images/background_inverted.png')}
+            style={styles.backgroundContainer}>
           <Image
-            style={{width: '70%'}}
-            resizeMode="contain"
-            source={require('../../config/images/whiteCXLogo.png')}
+              style={{width:'70%'}}
+              resizeMode={'contain'}
+              source={require('../../config/images/whiteCXLogo.png')}
           />
         </ImageBackground>
-      </View>
     );
   };
 
-  let appRouter = () => {
-    return <AppRouter authToken={authToken} />;
-  };
-
-  return moveNext ? appRouter() : renderSplashScreenView();
-};
+  return moveNext ? <AppRouter /> : renderSplashScreenView();
+}
 
 const mapStateToProps = state => {
-  return {};
+  return {}
 };
 
-// noinspection JSAnnotator
 const mapDispatchToProps = dispatch => ({
   saveUserInfo: userInfo => {
-    dispatch(setIsLogin(true));
     dispatch(fillUserInfo(userInfo));
   },
+  setToken: (token) => {
+    dispatch(setAuthToken(token))
+  }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SplashScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);
+
+const styles = StyleSheet.create({
+  backgroundContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
+
+});

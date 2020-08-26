@@ -19,6 +19,7 @@ export const FILL_USER_INFO = 'FILL_USER_INFO';
 export const CLEAR_USER_INFO = 'CLEAR_USER_INFO';
 export const API_ERROR = 'API_ERROR';
 export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
+export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 
 
 export const showLoading = (isLoading = true) => ({
@@ -44,4 +45,9 @@ export const clearUserInfo = () => ({
 export const clearError = (isLoading = true) => ({
   type: CLEAR_API_ERROR,
   payload: {isLoading: isLoading},
+});
+
+export const setAuthToken = (token) => ({
+  type: SET_AUTH_TOKEN,
+  payload: {authToken: token},
 });
