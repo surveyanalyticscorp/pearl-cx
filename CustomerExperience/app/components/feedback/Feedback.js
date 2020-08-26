@@ -36,7 +36,7 @@ const Feedback = props => {
         {key: 'promoter', title: 'PROMOTER'},
     ]);
 
-    useEffect(() => {
+    let getFeedbackData = () => {
         if (getFeedbackApi) {
             const data = {
                 pageOffset: 0,
@@ -50,16 +50,20 @@ const Feedback = props => {
             );
             setFeedbackAPI(false);
         }
+    };
+
+    useEffect(() => {
+        getFeedbackData()
     }, [selectedYear, getFeedbackApi]);
 
     useEffect(() => {
-        console.log("nehal "+props.feedback);
         if(!isObjectEmpty(props.feedback)){
             props.showLoading(false);
         }
     },[props.feedback]);
 
     useEffect(() => {
+        getFeedbackData();
         listener = EventRegister.addEventListener('openCalendar', data => {
             setCalendar(true);
         });

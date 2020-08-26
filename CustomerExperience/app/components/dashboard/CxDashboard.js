@@ -33,6 +33,7 @@ const CxDashboard = props => {
     let listener = useRef(null);
 
     useEffect(() => {
+        props.getDashboardContent(props.authToken);
         listener = EventRegister.addEventListener('openDashboardCalendar', data => {
             setCalendar(true);
         });
@@ -75,7 +76,7 @@ const CxDashboard = props => {
     const getTrimmedNoOfResponses = () => {
         let responseText = "";
         let numberOfResponses = "";
-        if (props.dashboardData) {
+        if (!isObjectEmpty(props.dashboardData)) {
             let numberOfResponsesNumber = 0;
             if (props.dashboardData.primaryStoreNPS.totalResponses) {
                 numberOfResponsesNumber =
@@ -114,7 +115,7 @@ const CxDashboard = props => {
 
     const getTicketText = () => {
         let ticketText = '';
-        if(props.dashboardData && !isObjectEmpty(props.dashboardData.DetractorTicketsCount)) {
+        if(!isObjectEmpty(props.dashboardData) && !isObjectEmpty(props.dashboardData.DetractorTicketsCount)) {
             let pendingCount = props.dashboardData.DetractorTicketsCount.pending;
             let newCount = props.dashboardData.DetractorTicketsCount.new;
             if (pendingCount > 0) {
@@ -164,7 +165,7 @@ const CxDashboard = props => {
 
     const renderDonutChart = () => {
         let percent = 0;
-        if (props.dashboardData) {
+        if (!isObjectEmpty(props.dashboardData)) {
             percent = props.dashboardData.primaryStoreNPS.npsPercentage;
         }
         let color = percent < 0 ? Colors.negativePassive : Colors.positivePassive;
@@ -197,7 +198,7 @@ const CxDashboard = props => {
     };
 
     const renderStoreNPSList = () => {
-        if (props.dashboardData && ArrayUtils.isNotEmpty(props.dashboardData.storeNPSList)) {
+        if (!isObjectEmpty(props.dashboardData) && ArrayUtils.isNotEmpty(props.dashboardData.storeNPSList)) {
             let list = props.dashboardData.storeNPSList;
             let data = list.slice(0, 5);
             let title = props.dashboardData.systemPreferences.businessUnitName
@@ -208,7 +209,7 @@ const CxDashboard = props => {
     };
 
     const renderProductNPSList = () => {
-        if (props.dashboardData && ArrayUtils.isNotEmpty(props.dashboardData.productNPSList)) {
+        if (!isObjectEmpty(props.dashboardData) && ArrayUtils.isNotEmpty(props.dashboardData.productNPSList)) {
             let list = props.dashboardData.productNPSList;
             let title = 'Products';
             return renderLists(list, title);
