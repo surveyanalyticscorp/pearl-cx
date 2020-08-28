@@ -35,7 +35,6 @@ const Tab = createMaterialTopTabNavigator();
 
 let { width } = Dimensions.get('window');
 
-
 const AppRouter = props => {
 
     const authToken = useSelector(state => state.global.authToken);
