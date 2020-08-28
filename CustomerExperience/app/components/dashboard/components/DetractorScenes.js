@@ -1,14 +1,60 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import {View, Text, ImageBackground, FlatList} from 'react-native';
 import TicketWidget from './TicketWidget';
 import {dashboardStyles} from '../dashboard.style';
+import {apiHandler} from '../../../api/ApiHandler';
+import QPSpinner from '../../../widgets/QPSpinner';
+import {connect} from 'react-redux';
 
 const DetractorScenes = props => {
+
+    let [responseData, setResponseData] = useState([
+        {
+            key: 'new',
+            data: {tickets: []},
+            pageOffset: '0',
+            status: '0',
+            index: 0,
+            storeId: props.route.params.data.storeId,
+        }, {
+            key: 'pending',
+            data: {tickets: []},
+            pageOffset: '0',
+            status: '1',
+            index: 1,
+            storeId: props.route.params.data.storeId,
+        }, {
+            key: 'resolved',
+            data: {tickets: []},
+            pageOffset: '0',
+            status: '2',
+            index: 2,
+            storeId: props.route.params.data.storeId,
+        }
+    ]);
+
+    useEffect(() => {
+        for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
+            let params = responseData[responseCount];
+            apiHandler.getCXDetractorTicket(
+                props.authToken,
+                params,
+                response => {
+                    let data = [...responseData];
+                    data[responseCount].data = response.body;
+                    setResponseData(data)
+                },
+                error => {
+                    // console.log(error);
+                },
+            );
+        }
+    }, []);
 
     const renderNoDataFound = () => {
         return (
             <View style={dashboardStyles.emptyView}>
-                <Text style={dashboardStyles.detractorEmptyText}>There is no Pending tickets.</Text>
+                <Text style={dashboardStyles.detractorEmptyText}>There are no Pending tickets.</Text>
             </View>
         );
     };
@@ -24,26 +70,68 @@ const DetractorScenes = props => {
     };
 
     const onEndReached = () => {
-        props.endReached && props.endReached()
+        getDetractorAPI()
     };
 
-    return (
-        <ImageBackground
-            resizeMode={'cover'}
-            source={require('../../../config/images/background.png')}
-            style={dashboardStyles.detractorView}>
-            <FlatList
-                contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}
-                data={props.data}
-                keyExtractor={item => item.filterName}
-                renderItem={renderRow}
-                onEndReachedThreshold={0.01}
-                refreshing={false}
-                onEndReached={onEndReached}
-                ListEmptyComponent={renderNoDataFound}
-            />
-        </ImageBackground>
-    );
+    const getDetractorAPI = () => {
+        let dataCount = props.route.params.dataCount;
+        let params = responseData[dataCount];
+        let pageCount = parseInt(params.pageOffset) + 1;
+        params.pageOffset = pageCount + '';
+        apiHandler.getCXDetractorTicket(
+            props.authToken,
+            params,
+            response => {
+                let data = [...responseData];
+                data[dataCount].pageOffset = response.body.pageOffset;
+                data[dataCount].data.tickets = [...data[dataCount].data.tickets, ...response.body.tickets];
+                setResponseData(data)
+            },
+            error => {
+                // console.log(error);
+            },
+        );
+    };
+
+    let renderDetractorTickets = () => {
+        let dataCount = props.route.params.dataCount;
+        let tickets = responseData[dataCount].data["tickets"];
+        return (
+            <ImageBackground
+                resizeMode={'cover'}
+                source={require('../../../config/images/background.png')}
+                style={dashboardStyles.imageBackgroundContainer}>
+                <View style={dashboardStyles.container}>
+                    <FlatList
+                        contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}
+                        data={tickets}
+                        // keyExtractor={item => item.filterName}
+                        renderItem={renderRow}
+                        onEndReachedThreshold={0.01}
+                        refreshing={false}
+                        onEndReached={onEndReached}
+                        ListEmptyComponent={renderNoDataFound}
+                    />
+                </View>
+            </ImageBackground>
+        );
+    };
+
+    return renderDetractorTickets()
 };
 
-export default DetractorScenes;
+const mapStateToProps = state => {
+    return {
+        userInfo: state.global.userInfo,
+        isLoading: state.global.isLoading,
+        isError: state.global.isError,
+        errorMessage: state.global.errorMessage,
+        authToken: state.global.authToken
+    };
+};
+
+const mapDispatchToProps = dispatch => ({
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DetractorScenes);
+

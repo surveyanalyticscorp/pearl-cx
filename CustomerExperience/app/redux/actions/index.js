@@ -10,9 +10,6 @@ export const VALIDATE_USER_OTP_RESPONSE = 'VALIDATE_USER_OTP_RESPONSE';
 export const UPDATE_PASSWORD = 'UPDATE_PASSWORD';
 export const UPDATE_PASSWORD_RESPONSE = 'UPDATE_PASSWORD_RESPONSE';
 
-export const GET_DETRACTOR_TICKET = 'GET_DETRACTOR_TICKET';
-export const DETRACTOR_TICKET_RECEIVED = 'DETRACTOR_TICKET_RECEIVED';
-
 export const IS_LOADING = 'IS_LOADING';
 export const IS_LOGIN = 'IS_LOGIN';
 export const FILL_USER_INFO = 'FILL_USER_INFO';
@@ -25,12 +22,6 @@ export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const showLoading = (isLoading = true) => ({
   type: IS_LOADING,
   payload: {isLoading: isLoading},
-});
-
-export const getDetractorContent = (param, token) => ({
-  type: GET_DETRACTOR_TICKET,
-  param,
-  token,
 });
 
 export const fillUserInfo = userInfo => ({

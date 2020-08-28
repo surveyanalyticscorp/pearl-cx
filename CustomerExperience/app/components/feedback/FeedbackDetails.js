@@ -8,10 +8,23 @@ import {MarginConstants} from '../../styles/margin.constants';
 import QPWebView from '../../widgets/QPWebView';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {StackActions} from '@react-navigation/native';
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 
 let { width } = Dimensions.get('window');
 
 export default function FeedbackDetails(props){
+
+    const onActionButtonPress = () => {
+        const pushAction = StackActions.push('Change Status', {
+            data: props.route.params.data,
+            ticketStatus: props.route.params.ticketStatus,
+            token: props.route.params.token,
+        });
+        props.navigation.dispatch(pushAction);
+    };
     return (
         <View style={styles.container}>
             <FeedbackCell
@@ -20,6 +33,12 @@ export default function FeedbackDetails(props){
                 ticketStatuses={props.route.params.ticketStatus}
             />
             <FeedbackDetailsTabStack {...props}/>
+            <ActionButton
+                elevation={8}
+                buttonColor="rgba(28,118,185,1)"
+                onPress={onActionButtonPress}
+                icon={<Icon size={30} name="comment" color={'white'} />}
+            />
         </View>
     );
 };

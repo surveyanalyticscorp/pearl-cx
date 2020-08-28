@@ -46,7 +46,7 @@ const CxDashboard = props => {
         if(props.dashboardData.DetractorTicketsCount){
             props.showLoading(false);
         }
-    },[props.dashboardData]);
+    },[props.dashboardData.DetractorTicketsCount]);
 
     useEffect(() => {
 

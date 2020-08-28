@@ -28,10 +28,12 @@ import {useSelector} from "react-redux";
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
+import DetractorScenes from '../components/dashboard/components/DetractorScenes';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
-const Tab = createMaterialTopTabNavigator();
+const FeedbackTab = createMaterialTopTabNavigator();
+const DetractorTicketsTab = createMaterialTopTabNavigator();
 
 let { width } = Dimensions.get('window');
 
@@ -102,7 +104,7 @@ const AppRouter = props => {
     };
 
     const FeedbackTabStack = props => (
-        <Tab.Navigator tabBarOptions={{
+        <FeedbackTab.Navigator tabBarOptions={{
             labelStyle: {color: Colors.primary, width: width/4, fontSize: TextSizes.secondary},
             indicatorStyle: {backgroundColor: Colors.accent},
             style:{backgroundColor: Colors.white, width: '100%'},
@@ -111,11 +113,28 @@ const AppRouter = props => {
         }}
                        keyboardDismissMode={'auto'}
         >
-            <Tab.Screen name="All" component={Feedback} options={{ tabBarLabel: 'ALL' }}/>
-            <Tab.Screen name="Detractor" component={Feedback} options={{ tabBarLabel: 'DETRACTOR' }}/>
-            <Tab.Screen name="Passive" component={Feedback} options={{ tabBarLabel: 'PASSIVE' }}/>
-            <Tab.Screen name="Promoter" component={Feedback} options={{ tabBarLabel: 'PROMOTER' }}/>
-        </Tab.Navigator>
+            <FeedbackTab.Screen name="All" component={Feedback} />
+            <FeedbackTab.Screen name="Detractor" component={Feedback} />
+            <FeedbackTab.Screen name="Passive" component={Feedback} />
+            <FeedbackTab.Screen name="Promoter" component={Feedback} />
+        </FeedbackTab.Navigator>
+    );
+
+    const DetractorTicketsTabStack = props => (
+        <DetractorTicketsTab.Navigator tabBarOptions={{
+            labelStyle: {color: Colors.primary, width: width/3, fontSize: TextSizes.secondary},
+            indicatorStyle: {backgroundColor: Colors.accent},
+            style:{backgroundColor: Colors.white, width: '100%'},
+            initialLayout: {width: Dimensions.get('window').width},
+            tabStyle:{height: 1.5*PaddingConstants.tab4}
+        }}
+                                       lazy
+                               keyboardDismissMode={'auto'}
+        >
+            <DetractorTicketsTab.Screen name="New" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:0}}/>
+            <DetractorTicketsTab.Screen name="Pending" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:1}}/>
+            <DetractorTicketsTab.Screen name="Resolved" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:2}}/>
+        </DetractorTicketsTab.Navigator>
     );
 
     const feedbackStack = props => (
@@ -166,7 +185,7 @@ const AppRouter = props => {
             />
             <RootStack.Screen
                 name="DetractorTickets"
-                component={DetractorTickets}
+                component={DetractorTicketsTabStack}
                 options={{
                     headerLeft: props => <HeaderBackLeft />,
                 }}

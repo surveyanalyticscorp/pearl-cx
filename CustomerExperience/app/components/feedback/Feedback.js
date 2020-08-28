@@ -74,7 +74,7 @@ function Feedback(props){
         if(props.feedback.allResponses){
             props.showLoading(false);
         }
-    },[props.dashboardData]);
+    },[props.feedback.allResponses]);
 
     const _onPressRow = (data) => {
         const pushAction = StackActions.push('Feedback Details', {
