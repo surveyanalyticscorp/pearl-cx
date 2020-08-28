@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
 import {
     NavigationContainer,
     useNavigation,
@@ -25,23 +25,30 @@ import DashBoardStoreDetails from '../components/dashboard/components/DashBoardS
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useSelector} from "react-redux";
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {PaddingConstants} from '../styles/padding.constants';
+import {TextSizes} from '../styles/textsize.constants';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
+const Tab = createMaterialTopTabNavigator();
+
+let { width } = Dimensions.get('window');
+
 
 const AppRouter = props => {
 
-    const signIn = useSelector(state => state.global.authToken);
+    const authToken = useSelector(state => state.global.authToken);
     const userInfo = useSelector(state => state.global.userInfo);
 
     useEffect(() => {
-        if (!isStringNullOrEmpty(signIn)) {
-            let data = [[ASYNC_AUTH_TOKEN, signIn],[ASYNC_USER_INFO, JSON.stringify(userInfo)]];
+        if (!isStringNullOrEmpty(authToken)) {
+            let data = [[ASYNC_AUTH_TOKEN, authToken],[ASYNC_USER_INFO, JSON.stringify(userInfo)]];
             AsyncStorage.multiSet(data, (error) => {});
         }
-    }, [signIn]);
+    }, [authToken]);
 
-    const HeaderLeft = () => {
+    const MenuIcon = () => {
         const navigation = useNavigation();
         return (
             <View style={styles.rightHeaderButton}>
@@ -54,13 +61,12 @@ const AppRouter = props => {
             </View>
         );
     };
-
-    const HeaderRight = () => {
+    const FeedbackCalendar = (props) => {
         return (
             <View style={styles.rightHeaderButton}>
                 <TouchableOpacity
                     onPress={() => {
-                        EventRegister.emit('openCalendar', true);
+                        props.route.params.openCalendar()
                     }}>
                     <MaterialIcon name="more-vert" size={30} color="white"/>
                 </TouchableOpacity>
@@ -83,7 +89,7 @@ const AppRouter = props => {
         );
     };
 
-    const DashboardHeaderRight = () => {
+    const DashboardCalendar = () => {
         return (
             <View style={styles.rightHeaderButton}>
                 <TouchableOpacity
@@ -96,15 +102,32 @@ const AppRouter = props => {
         );
     };
 
+    const FeedbackTabStack = props => (
+        <Tab.Navigator tabBarOptions={{
+            labelStyle: {color: Colors.primary, width: width/4, fontSize: TextSizes.secondary},
+            indicatorStyle: {backgroundColor: Colors.accent},
+            style:{backgroundColor: Colors.white, width: '100%'},
+            initialLayout: {width: Dimensions.get('window').width},
+            tabStyle:{height: 1.7*PaddingConstants.tab4}
+        }}
+                       keyboardDismissMode={'auto'}
+        >
+            <Tab.Screen name="All" component={Feedback} options={{ tabBarLabel: 'ALL' }}/>
+            <Tab.Screen name="Detractor" component={Feedback} options={{ tabBarLabel: 'DETRACTOR' }}/>
+            <Tab.Screen name="Passive" component={Feedback} options={{ tabBarLabel: 'PASSIVE' }}/>
+            <Tab.Screen name="Promoter" component={Feedback} options={{ tabBarLabel: 'PROMOTER' }}/>
+        </Tab.Navigator>
+    );
+
     const feedbackStack = props => (
         <RootStack.Navigator>
             <RootStack.Screen
                 name="Feedback"
-                component={Feedback}
-                options={{
-                    headerLeft: props => <HeaderLeft/>,
-                    headerRight: props => <HeaderRight/>,
-                }}
+                component={FeedbackTabStack}
+                options={({ navigation, route }) => ({
+            headerLeft: props => <MenuIcon />,
+            headerRight: props => <FeedbackCalendar {...props} route={route}/>,
+        })}
             />
             <RootStack.Screen
                 name="Feedback Details"
@@ -130,8 +153,8 @@ const AppRouter = props => {
                 name="Dashboard"
                 component={CxDashboard}
                 options={{
-                    headerLeft: props => <HeaderLeft/>,
-                    headerRight: props => <DashboardHeaderRight/>,
+                    headerLeft: props => <MenuIcon/>,
+                    headerRight: props => <DashboardCalendar/>,
                 }}
             />
             <RootStack.Screen
@@ -154,7 +177,7 @@ const AppRouter = props => {
 
     return (
         <NavigationContainer theme={MyTheme}>
-            {signIn ? <Drawer.Navigator
+            {authToken ? <Drawer.Navigator
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
                     <Drawer.Screen name="Feedback" children={feedbackStack}/>
@@ -168,6 +191,7 @@ const AppRouter = props => {
 };
 
 export default AppRouter;
+
 
 const styles = StyleSheet.create({
     drawerStyle: {

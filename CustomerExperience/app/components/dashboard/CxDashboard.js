@@ -43,7 +43,7 @@ const CxDashboard = props => {
     }, []);
 
     useEffect(() => {
-        if(!isObjectEmpty(props.dashboardData)){
+        if(props.dashboardData.DetractorTicketsCount){
             props.showLoading(false);
         }
     },[props.dashboardData]);

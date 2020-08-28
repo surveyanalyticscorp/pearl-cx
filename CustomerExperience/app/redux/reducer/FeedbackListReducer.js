@@ -11,7 +11,7 @@ const feedbackReducer = (state = initialState, action) => {
     case FEEDBACK_RECEIVED: {
       return {
         ...state,
-        response: action.response,
+        response: action.response.body,
       };
     }
     case FEEDBACK_UPDATED: {

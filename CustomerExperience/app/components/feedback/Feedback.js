@@ -1,43 +1,30 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Dimensions, Text, View, StyleSheet} from 'react-native';
-import {TabView, TabBar} from 'react-native-tab-view';
-import FeedbackAll from './FeedbackAll';
-import {Colors} from '../../styles/color.constants';
-import {fontFamily} from '../../styles/font.constants';
-import {TextSizes} from '../../styles/textsize.constants';
+import {Text, View, SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import FeedbackCell from '../view/FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
-import {EventRegister} from 'react-native-event-listeners';
-import CalendarScreen from '../view/calendarScreen';
+import {StackActions} from '@react-navigation/native';
+import {Colors} from '../../styles/color.constants';
+import {clearError, showLoading} from '../../redux/actions';
 import {getFeedbackList, setFeedbackRangeFilter} from '../../redux/actions/feedback.actions';
 import {connect} from 'react-redux';
-import {showMessage} from 'react-native-flash-message';
 import moment from 'moment';
-import {clearError, showLoading} from '../../redux/actions';
-import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
-import {PaddingConstants} from '../../styles/padding.constants';
+import {showMessage} from 'react-native-flash-message';
+import CalendarScreen from '../view/calendarScreen';
+import {isObjectEmpty} from '../../Utils/Utility';
+import ArrayUtils from '../../Utils/ArrayUtils';
 
-const initialLayout = {width: Dimensions.get('window').width};
+function Feedback(props){
 
-const Feedback = props => {
-    let month = props.feedback.range.month ? props.feedback.range.month : moment().month() + 1; //Need to check as it returns month number starting 0
-    let year = props.feedback.range.year ? props.feedback.range.year : moment().year();
+    let month = props.feedbackRange.month ? props.feedbackRange.month : moment().month() + 1; //Need to check as it returns month number starting 0
+    let year = props.feedbackRange.year ? props.feedbackRange.year : moment().year();
 
-    let listener = useRef(null);
-
+    const [selectedRowID, setSelectedRowID] = useState(0);
     const [calendar, setCalendar] = useState(false);
-    const [getFeedbackApi, setFeedbackAPI] = useState(true);
     const [selectedYear, setSelectedYear] = useState({month: month, year: year});
-    const [index, setIndex] = useState(0);
-    const [routes] = React.useState([
-        {key: 'all', title: 'ALL'},
-        {key: 'detractor', title: 'DETRACTOR'},
-        {key: 'passive', title: 'PASSIVE'},
-        {key: 'promoter', title: 'PROMOTER'},
-    ]);
+    let [feedbackData, setFeedbackData] = useState([]);
 
     let getFeedbackData = () => {
-        if (getFeedbackApi) {
             const data = {
                 pageOffset: 0,
                 sentiment: 'All',
@@ -48,28 +35,23 @@ const Feedback = props => {
                 data,
                 props.authToken,
             );
-            setFeedbackAPI(false);
-        }
     };
 
     useEffect(() => {
         getFeedbackData()
-    }, [selectedYear, getFeedbackApi]);
+    }, [selectedYear]);
+
 
     useEffect(() => {
-        if(!isObjectEmpty(props.feedback)){
-            props.showLoading(false);
-        }
+        getItems()
     },[props.feedback]);
 
+    let openFeedbackCalendar = () => {
+        setCalendar(true)
+    };
+
     useEffect(() => {
-        getFeedbackData();
-        listener = EventRegister.addEventListener('openCalendar', data => {
-            setCalendar(true);
-        });
-        return () => {
-            EventRegister.removeEventListener(listener);
-        };
+        props.navigation.dangerouslyGetParent().setParams({'openCalendar': openFeedbackCalendar});
     }, []);
 
     useEffect(() => {
@@ -88,47 +70,59 @@ const Feedback = props => {
         }
     }, [props.isError]);
 
-    const renderScene = ({route}) => {
-        switch (route.key) {
-            case 'all':
-                return <FeedbackAll {...props}
-                                    authToken={props.authToken}
-                                    sentiment={'All'}
-                                    onRefresh={() => {
-                                        setFeedbackAPI(true);
-                                    }}/>;
-            case 'detractor':
-                return <FeedbackAll {...props}
-                                    authToken={props.authToken}
-                                    sentiment={'Detractor'}
-                                    onRefresh={() => {
-                                        setFeedbackAPI(true);
-                                    }}/>;
-            case 'passive':
-                return <FeedbackAll {...props}
-                                    authToken={props.authToken}
-                                    sentiment={'Passive'}
-                                    onRefresh={() => {
-                                        setFeedbackAPI(true);
-                                    }}/>;
-            case 'promoter':
-                return <FeedbackAll {...props}
-                                    authToken={props.authToken}
-                                    sentiment={'Promoter'}
-                                    onRefresh={() => {
-                                        setFeedbackAPI(true);
-                                    }}/>;
-            default:
-                return <FeedbackAll {...props}
-                                    authToken={props.authToken}
-                                    sentiment={'All'}
-                                    onRefresh={() => {
-                                        setFeedbackAPI(true);
-                                    }}/>;
+    useEffect(() => {
+        if(props.feedback.allResponses){
+            props.showLoading(false);
+        }
+    },[props.dashboardData]);
+
+    const _onPressRow = (data) => {
+        const pushAction = StackActions.push('Feedback Details', {
+            data: data,
+            ticketStatus: props.feedback.cxTicketStatusValues,
+            token: props.authToken
+        });
+        props.navigation.dispatch(pushAction);
+    };
+
+    const _renderRow = ({item}) => {
+        const selected = selectedRowID === item.responseSetID;
+        let ticketStatuses = props.feedback.cxTicketStatusValues;
+        return (
+            <FeedbackCell
+                item={item}
+                onSelect={() => _onPressRow(item)}
+                origin="List"
+                ticketStatuses={ticketStatuses}
+                selected={selected}
+            />
+        );
+    };
+
+    const renderNoDataFound = () => {
+        return (
+            <View style={styles.emptyView}>
+                <Text style={styles.emptyText}>No feedbacks received.</Text>
+            </View>
+        );
+    };
+
+    const getItems = () => {
+        if(props.route) {
+            if (props.route.name === 'All') {
+                setFeedbackData(props.feedback.allResponses);
+            } else {
+                let responses = props.feedback.allResponses;
+                if(ArrayUtils.isNotEmpty(responses)) {
+                    setFeedbackData(responses.filter(res => res.sentiment === props.route.name));
+                } else {
+                    setFeedbackData([])
+                }
+            }
         }
     };
 
-    const renderCalendarView = () => {
+    let renderCalendarView = () => {
         return <CalendarScreen
             showCalendar={calendar}
             closeCalendar={() => {
@@ -136,40 +130,11 @@ const Feedback = props => {
             }}
             selectedDate={selectedYear}
             onSubmit={(selectedYear) => {
-                setFeedbackAPI(true);
+                // setFeedbackAPI(true);
                 setSelectedYear(selectedYear);
                 setCalendar(false);
                 props.setRange(selectedYear);
             }}
-        />
-    };
-
-    const renderTabView = () => {
-        return <TabView
-            navigationState={{index, routes}}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            initialLayout={initialLayout}
-            renderTabBar={props =>
-                <TabBar
-                    {...props}
-                    labelStyle={{
-                        scrollEnabled: false,
-                        labelStyle: {color: Colors.black, fontSize: 12, width: initialLayout.width/5},
-                    }}
-                    indicatorStyle={{backgroundColor: Colors.accent}}
-                    style={{backgroundColor: Colors.white, width: '100%'}}
-                    scrollEnabled={false}
-                    tabStyle={{height: 2*PaddingConstants.tab4}}
-                    renderLabel={({route, focused, color}) => (
-                        <Text style={{
-                            color: Colors.primary, fontFamily: fontFamily.Medium,
-                            fontSize: TextSizes.secondary, marginVertical: MarginConstants.tab1,
-                        }}>
-                            {route.title}
-                        </Text>
-                    )}
-                />}
         />
     };
 
@@ -183,21 +148,39 @@ const Feedback = props => {
         }
     };
 
-    return (
-        <View style={styles.container}>
-            {calendar ? renderCalendarView() : renderTabView()}
+    const renderFeedbackStatus = () => {
+        if (!isObjectEmpty(props.feedback)) {
+            return (
+                <SafeAreaView style={styles.container}>
+                    <FlatList
+                        data={feedbackData}
+                        keyExtractor={item => item.responseSetID+''}
+                        renderItem={_renderRow}
+                        // onEndReached={onEndReached}
+                        onEndReachedThreshold={0.01}
+                        refreshing={false}
+                        ListEmptyComponent={renderNoDataFound}
+                        onRefresh={() => {getFeedbackData()}}
+                    />
+                </SafeAreaView>
+            );
+        }
+        return <View style={{flex: 1}}>
             {renderSpinner()}
         </View>
-    )
+    };
 
-};
+    return calendar ? renderCalendarView() : renderFeedbackStatus();
+}
+
 const mapStateToProps = state => {
     return {
-        feedback: state.feedback,
+        feedback: state.feedback.response,
         isLoading: state.global.isLoading,
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
-        authToken: state.global.authToken
+        authToken: state.global.authToken,
+        feedbackRange: state.feedback.range
     };
 };
 
@@ -222,6 +205,44 @@ export default connect(mapStateToProps, mapDispatchToProps)(Feedback);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        margin: MarginConstants.tab1,
+    },
+    emptyView: {
+        flex: 1,
+        marginTop: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent',
+    },
+    emptyText: {
+        color: Colors.black,
+        fontSize: 16
+    },
+    counterContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    counterTitle: {
+        fontFamily: 'System',
+        fontSize: 32,
+        fontWeight: '700',
+        color: '#000',
+    },
+    counterText: {
+        fontFamily: 'System',
+        fontSize: 36,
+        fontWeight: '400',
+        color: '#000',
+    },
+    buttonText: {
+        fontFamily: 'System',
+        fontSize: 50,
+        fontWeight: '300',
+        color: '#007AFF',
+        marginLeft: 40,
+        marginRight: 40,
     },
     loading: {
         position: 'absolute',
@@ -232,5 +253,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     }
-
 });
+
+
+// const onEndReached = () => {
+//     // Checking if the list has responses in multiples of 10
+//     // if((props.feedbacks.lastAddedCount > 0 && this.props.feedbacks.lastAddedCount % 10 === 0   ) && !this.state.isLoadingTail)
+//     //   this.setState({
+//     //     isLoadingTail: true
+//     //   }, ()=>{
+//     //     this.getFeedbackList(false);
+//     //   })
+// };
