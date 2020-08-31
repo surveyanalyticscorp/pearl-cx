@@ -41,7 +41,7 @@ class ApiHandler {
         return response;
       })
       .catch(error => {
-        console.log('ERror- ' + error.message);
+        // console.log('ERror- ' + error.message);
         return error;
       });
   }

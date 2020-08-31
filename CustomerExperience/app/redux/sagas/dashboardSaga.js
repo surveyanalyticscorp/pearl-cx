@@ -3,11 +3,14 @@ import WebServiceHandler from '../../api/WebServiceHandler';
 import {CX_HOME, CX_DETRACTOR_TICKETS} from '../../api/Constant';
 import {
   API_ERROR,
-  DETRACTOR_TICKET_RECEIVED,
   IS_LOADING,
-  GET_DETRACTOR_TICKET,
 } from '../actions/index';
-import {DASHBOARD_RECEIVED, GET_DASHBOARD} from '../actions/dashboard.actions';
+import {
+  DASHBOARD_RECEIVED,
+  DETRACTOR_TICKET_RECEIVED,
+  GET_DASHBOARD,
+  GET_DETRACTOR_TICKET,
+} from '../actions/dashboard.actions';
 
 export function* fetchDashboard(action) {
   try {
@@ -22,7 +25,6 @@ export function* fetchDashboard(action) {
       response: json,
     });
   } catch (error) {
-    console.log('Dashboard saga error:' + JSON.stringify(error));
     yield put({
       type: API_ERROR,
       error: error,

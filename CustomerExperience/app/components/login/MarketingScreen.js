@@ -5,9 +5,10 @@ import {TouchableOpacity, View, Text} from 'react-native';
 import {Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {MarginConstants} from '../../styles/margin.constants';
-const stringConst = require('../../config/locales/en');
 import IntroPage from './IntroPage';
 import Swiper from 'react-native-swiper'; //https://www.npmjs.com/package/react-native-swiper
+
+const stringConst = require('../../config/locales/en');
 
 const MarketingScreen = props => {
   const [orientation, setOrientation] = useState(isLandscape());
@@ -32,7 +33,7 @@ const MarketingScreen = props => {
   return (
     <View style={{flex: 1}}>
       <ImageBackground
-        resizeMode={'stretch'}
+        resizeMode={'cover'}
         source={require('../../config/images/background.png')}
         style={styles.imageBackgroundContainer}>
         <Swiper
@@ -102,8 +103,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkerGrey,
   },
   imageBackgroundContainer: {
-    width: '100%',
-    height: '100%',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -112,7 +111,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.darkerGrey,
   },
-
   dot: {
     width: TextSizes.smallText,
     height: TextSizes.smallText,
@@ -121,22 +119,20 @@ const styles = StyleSheet.create({
     marginLeft: MarginConstants.halfTab,
     marginRight: MarginConstants.halfTab,
   },
-
   selectedDot: {
     backgroundColor: Colors.dotSelectedColor,
   },
-
   buttonTextColor: {
-    color: '#FFFFFF',
+    color: Colors.white,
   },
   wrapper: {
     marginBottom: 20,
   },
   getStartedButton: {
-    color: '#FFFFFF',
+    color: Colors.white,
     alignItems: 'center',
-    borderColor: '#FFFFFF',
-    borderRadius: 1.0,
+    borderColor: Colors.white,
+    borderRadius: 1,
     borderWidth: 1,
     padding: 10,
     position: 'absolute',

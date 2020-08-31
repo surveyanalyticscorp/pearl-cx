@@ -7,14 +7,12 @@ import {
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import DeviceInfo from 'react-native-device-info';
-import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN, ASYNC_USER_CREDENTIALS, ASYNC_USER_INFO} from '../../api/Constant';
 import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import {connect} from 'react-redux';
 import {showLoading, clearError} from '../../redux/actions/index';
-import {doLogin, setIsLogin} from '../../redux/actions/login.actions';
+import {doLogin} from '../../redux/actions/login.actions';
 import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
 import {Colors} from '../../styles/color.constants';
@@ -41,18 +39,6 @@ const Login = props => {
             clearTimeout(textFieldTimer);
         };
     },[]);
-
-    useEffect(() => {
-        const saveData = () => {
-            let data = [[ASYNC_AUTH_TOKEN,props.userInfo.authToken],[ASYNC_USER_CREDENTIALS, JSON.stringify(userData)],[ASYNC_USER_INFO, JSON.stringify(props.userInfo.body)]];
-            AsyncStorage.multiSet(data, (error) => {});
-            props.setIsLogin();
-        };
-        if (props.userInfo.authToken) {
-            saveData();
-        }
-    }, [props.userInfo]);
-
 
     useEffect(() => {
         if (StringUtils.isNotEmpty(validation)) {
@@ -229,7 +215,6 @@ const Login = props => {
 
 const mapStateToProps = state => {
     return {
-        userInfo: state.global.userInfo,
         isLoading: state.global.isLoading,
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
@@ -244,13 +229,7 @@ const mapDispatchToProps = dispatch => ({
     },
     clearError: () => {
         dispatch(clearError(false));
-    },
-    setIsLogin: () => {
-        dispatch(setIsLogin(true));
-    },
+    }
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

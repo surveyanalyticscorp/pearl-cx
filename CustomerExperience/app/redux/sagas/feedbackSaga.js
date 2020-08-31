@@ -16,6 +16,7 @@ export function* fetchFeedback(action) {
     );
 
     yield put({type: FEEDBACK_RECEIVED, response: json});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
 
   } catch (error) {
     yield put({type: IS_LOADING, payload: {isLoading: false}});

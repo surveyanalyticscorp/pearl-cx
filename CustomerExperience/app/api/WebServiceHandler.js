@@ -6,7 +6,7 @@ const HTTP_FAILED =
 export default class WebServiceHandler {
   // HTTP Header Generator.
   static header(headerParam) {
-    console.log('Header Parameter:' + JSON.stringify(headerParam));
+    // console.log('Header Parameter:' + JSON.stringify(headerParam));
     let headers = new Headers();
     headers.append('Accept', 'application/json');
     Object.keys(headerParam).forEach(function(key) {
@@ -33,17 +33,17 @@ export default class WebServiceHandler {
 
   // HTTP Get Request
   static get(url, headerParam, parameter, dispatch) {
-    console.log('WebServiceHandler:Initiating GET request');
+    // console.log('WebServiceHandler:Initiating GET request');
 
     return new Promise(function(success, failed) {
       let URL = url + WebServiceHandler.parameter(parameter);
-      console.log('URL:-' + URL);
+      // console.log('URL:-' + URL);
       fetch(URL, {
         method: 'get',
         headers: WebServiceHandler.header(headerParam),
       })
         .then(function(response) {
-          console.log(response.status);
+          // console.log(response.status);
           if (!response.ok) {
             throw {
               name: response.status,
@@ -54,15 +54,15 @@ export default class WebServiceHandler {
           return response.json();
         })
         .then(function(jsonResponse) {
-          console.log(
-            '************************ HTTP GET Succes ************************ ',
-          );
+          // console.log(
+          //   '************************ HTTP GET Succes ************************ ',
+          // );
           success(jsonResponse);
         })
         .catch(function(err) {
-          console.log(
-            '************************ HTTP GET Failed **************************',
-          );
+          // console.log(
+          //   '************************ HTTP GET Failed **************************',
+          // );
           failed(err);
         });
     });
@@ -70,18 +70,18 @@ export default class WebServiceHandler {
 
   // HTTP POST Request
   static post(url, headerParam, parameter) {
-    console.log('WebServiceHandler:Initiating POST request');
+    // console.log('WebServiceHandler:Initiating POST request');
 
     return new Promise(function(success, failed) {
-      console.log('URL:-' + url);
-      console.log('Request Data:-' + JSON.stringify(parameter));
+      // console.log('URL:-' + url);
+      // console.log('Request Data:-' + JSON.stringify(parameter));
       fetch(url, {
         method: 'post',
         headers: WebServiceHandler.header(headerParam),
         body: JSON.stringify(parameter),
       })
         .then(function(response) {
-          console.log('Api response:' + response.status);
+          // console.log('Api response:' + response.status);
           if (!response.ok) {
             throw {
               name: response.status,
@@ -92,23 +92,23 @@ export default class WebServiceHandler {
           return response.json();
         })
         .then(function(jsonResponse) {
-          console.log(
-            '************************ HTTP POST Success ************************ ',
-          );
+          // console.log(
+          //   '************************ HTTP POST Success ************************ ',
+          // );
           success(jsonResponse);
         })
         .catch(function(err) {
-          console.log('Failure Response- ' + JSON.stringify(err));
-          console.log(
-            '************************ HTTP POST Failed **************************',
-          );
+          // console.log('Failure Response- ' + JSON.stringify(err));
+          // console.log(
+          //   '************************ HTTP POST Failed **************************',
+          // );
           failed(err);
         });
     });
   }
 
   static postNew(url, headerParam, parameter) {
-    console.log('WebServiceHandler:Initiating POST request');
+    // console.log('WebServiceHandler:Initiating POST request');
 
     return new Promise(function(success, failed) {
       fetch(url, {
@@ -118,9 +118,9 @@ export default class WebServiceHandler {
       })
         .then(response => response.json())
         .then(response => {
-          console.log(
-            '************************ HTTP POST Success ************************ ',
-          );
+          // console.log(
+          //   '************************ HTTP POST Success ************************ ',
+          // );
           if (response.statusCode === 200) {
             success(response);
           } else {
@@ -128,17 +128,17 @@ export default class WebServiceHandler {
           }
         })
         .catch(function(err) {
-          console.log('Failure Response- ' + JSON.stringify(err));
-          console.log(
-            '************************ HTTP POST Failed **************************',
-          );
+          // console.log('Failure Response- ' + JSON.stringify(err));
+          // console.log(
+          //   '************************ HTTP POST Failed **************************',
+          // );
           failed(err);
         });
     });
   }
 
   static uploadFile(url, token, data) {
-    console.log('WebServiceHandler:Initiating POST request');
+    // console.log('WebServiceHandler:Initiating POST request');
 
     return new Promise(function(success, failed) {
       let options = {
@@ -153,10 +153,10 @@ export default class WebServiceHandler {
       for (let key in data) {
         options.body.append(key, data[key]);
       }
-      console.log('URL:-' + url);
+      // console.log('URL:-' + url);
       fetch(url, options)
         .then(function(response) {
-          console.log(response.status);
+          // console.log(response.status);
           if (!response.ok) {
             throw {
               name: response.status,
@@ -167,17 +167,17 @@ export default class WebServiceHandler {
           return response.json();
         })
         .then(function(jsonResponse) {
-          console.log(
-            '************************ HTTP POST Succes ************************ ',
-          );
+          // console.log(
+          //   '************************ HTTP POST Succes ************************ ',
+          // );
 
           success(jsonResponse);
         })
         .catch(function(err) {
-          console.log('Failure Response- ' + JSON.stringify(err));
-          console.log(
-            '************************ HTTP POST Failed **************************',
-          );
+          // console.log('Failure Response- ' + JSON.stringify(err));
+          // console.log(
+          //   '************************ HTTP POST Failed **************************',
+          // );
           failed(err);
         });
     });

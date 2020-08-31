@@ -10,7 +10,6 @@ export const dashboardStyles = StyleSheet.create({
   },
   cxContainer: {
     flex: 1,
-    justifyContent: 'flex-start',
   },
   center: {
     flex: 1,
@@ -28,7 +27,7 @@ export const dashboardStyles = StyleSheet.create({
   },
   imageBackgroundContainer: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   },
   gauge: {
     position: 'absolute',
@@ -102,5 +101,21 @@ export const dashboardStyles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  emptyText: {
+    color: Colors.black,
+    fontSize: 16
+  },
+  emptyView: {
+    flex: 1,
+    marginTop: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  detractorEmptyText: {
+    color: Colors.white,
+    fontFamily: fontFamily.Bold ,
+    fontSize: TextSizes.largeText
   }
 });

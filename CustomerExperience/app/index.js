@@ -5,12 +5,14 @@ import FlashMessage from 'react-native-flash-message';
 import SplashScreen from './components/login/SplashScreen';
 import {NetworkMonitor} from 'react-native-redux-connectivity'
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import { enableScreens } from 'react-native-screens';
 
 export default class CxApp extends Component {
 
     constructor(){
         super();
         this.networkMonitor = new NetworkMonitor(store);
+        enableScreens()
     }
 
     componentDidMount() {

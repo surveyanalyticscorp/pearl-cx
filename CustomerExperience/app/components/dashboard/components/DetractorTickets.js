@@ -1,20 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Dimensions} from 'react-native';
+import {View, Text, Dimensions, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
-import {DotIndicator} from 'react-native-indicators';
 import {Colors} from '../../../styles/color.constants';
 import {TabBar, TabView} from 'react-native-tab-view';
 import {fontFamily} from '../../../styles/font.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
-import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN} from '../../../api/Constant';
 import {apiHandler} from '../../../api/ApiHandler';
 import DetractorScenes from './DetractorScenes';
+import QPSpinner from '../../../widgets/QPSpinner';
 
 const DetractorTickets = props => {
     const [index, setIndex] = useState(0);
-    const [authToken, setAuthToken] = useState('');
     const [routes] = React.useState([
         {key: 'new', title: 'NEW'},
         {key: 'pending', title: 'PENDING'},
@@ -26,51 +23,48 @@ const DetractorTickets = props => {
         pageOffset: '0',
         status: '0',
         index: 0,
-        storeId: props.route.params.data.storeId,
+        storeId: ''//props.route.params.data.storeId,
     }, {
         key: 'pending',
         data: {tickets: []},
         pageOffset: '0',
         status: '1',
         index: 1,
-        storeId: props.route.params.data.storeId,
+        storeId: ''//props.route.params.data.storeId,
     }, {
         key: 'resolved',
         data: {tickets: []},
         pageOffset: '0',
         status: '2',
         index: 2,
-        storeId: props.route.params.data.storeId,
-    }])
+        storeId: ''//props.route.params.data.storeId,
+    }]);
 
     useEffect(() => {
-        async function getAuthToken() {
-            return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
+        for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
+            let params = responseData[responseCount];
+            apiHandler.getCXDetractorTicket(
+                props.authToken,
+                params,
+                response => {
+                    let data = [...responseData];
+                    data[responseCount].data = response.body;
+                    setResponseData(data)
+                },
+                error => {
+                    // console.log(error);
+                },
+            );
         }
-        getAuthToken().then(token => {
-            setAuthToken(token);
-            for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
-                let params = responseData[responseCount];
-                apiHandler.getCXDetractorTicket(
-                    token,
-                    params,
-                    response => {
-                        let data = [...responseData];
-                        data[responseCount].data = response.body;
-                        setResponseData(data)
-                    },
-                    error => {
-                        console.log(error);
-                    },
-                );
-            }
-
-        });
     }, []);
 
-    const renderIndicator = () => {
-        if (props.isLoading) {
-            return <DotIndicator color={Colors.white} count={3} size={10}/>;
+    let renderSpinner = () => {
+        if(props.isLoading) {
+            return (
+                <View style={styles.loading}>
+                    <QPSpinner/>
+                </View>
+            )
         }
     };
 
@@ -79,7 +73,7 @@ const DetractorTickets = props => {
         let pageCount = parseInt(params.pageOffset) + 1;
         params.pageOffset = pageCount + '';
         apiHandler.getCXDetractorTicket(
-            authToken,
+            props.authToken,
             params,
             response => {
                 let data = [...responseData];
@@ -88,7 +82,7 @@ const DetractorTickets = props => {
                 setResponseData(data)
             },
             error => {
-                console.log(error);
+                // console.log(error);
             },
         );
     }
@@ -150,9 +144,9 @@ const DetractorTickets = props => {
     };
 
     return (
-        <View style={{flex: 1}}>
+        <View style={styles.container}>
             {renderTabView()}
-            {renderIndicator()}
+            {renderSpinner()}
         </View>
     );
 };
@@ -163,13 +157,26 @@ const mapStateToProps = state => {
         isLoading: state.global.isLoading,
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
+        authToken: state.global.authToken
     };
 };
 
 const mapDispatchToProps = dispatch => ({
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(DetractorTickets);
+export default connect(mapStateToProps, mapDispatchToProps)(DetractorTickets);
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+});

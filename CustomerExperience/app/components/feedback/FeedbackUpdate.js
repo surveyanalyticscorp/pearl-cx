@@ -16,30 +16,28 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import StringUtils from '../../Utils/StringUtils';
-const {width} = Dimensions.get('window');
-const sliderItemWidth = width / 3;
 import {CommonActions} from '@react-navigation/native';
 import {DotIndicator} from 'react-native-indicators';
 import {clearError} from '../../redux/actions/index';
 import {cleanUpdateFeedBack, updateFeedback} from '../../redux/actions/feedback.actions';
 
+const {width} = Dimensions.get('window');
+const sliderItemWidth = width / 3;
+
 const FeedbackUpdate = props => {
+
   const [comment, setComment] = useState('');
-  let ticketStatuses = ArrayUtils.removeMatchingObjectAndReturnNewArray(
-    props.route.params.ticketStatus,
-    'id',
-    -1,
-  );
+
+  let ticketStatuses =  props.route.params.ticketStatus.filter(item => item.id !== -1);
+  // ArrayUtils.removeMatchingObjectAndReturnNewArray(
+  //   props.route.params.ticketStatus,
+  //   'id',
+  //   -1,
+  // );
 
   const [value, setValue] = useState(
-    props.route.params.data.ticketStatus > 0
-      ? ticketStatuses
-          .map(function(e) {
-            return e.id;
-          })
-          .indexOf(props.route.params.data.ticketStatus)
-      : 0,
-  );
+      ArrayUtils.isNotEmpty(props.route.params.data.ticketStatus)
+          ? ticketStatuses.map(item => item.id).indexOf(props.route.params.data.ticketStatus) : 0);
 
   useEffect(() => {
     if (props.isError) {
@@ -73,7 +71,7 @@ const FeedbackUpdate = props => {
         clearTimeout(timer);
       };
     }
-  }, [props, props.feedback, props.navigation]);
+  }, [props.feedback, props.navigation]);
 
   const buildFeedbackUpdateObject = () => {
     let selectedFeedback = props.route.params.data;
@@ -93,37 +91,35 @@ const FeedbackUpdate = props => {
     if (StringUtils.isNotEmpty(comment)) {
       Keyboard.dismiss();
       props.updateFeedback(
-        buildFeedbackUpdateObject(),
-        props.route.params.token,
+          buildFeedbackUpdateObject(),
+          props.route.params.token,
       );
-    } else {
-      console.log('Please enter comment to update the ticket.');
     }
   };
 
   const renderTextInput = () => {
     return (
-      <View>
-        <TextInput
-          multiline
-          maxLength={500}
-          underlineAndroidColor={'transparent'}
-          autoFocus={true}
-          autoCorrect={false}
-          style={{
-            padding: 6,
-            fontSize: TextSizes.semiMediumText,
-            height: 150,
-            borderWidth: 1,
-            textAlignVertical: 'top',
-          }}
-          value={comment}
-          placeholder={'Enter Comment...'}
-          onChangeText={text => {
-            setComment(text);
-          }}
-        />
-      </View>
+        <View>
+          <TextInput
+              multiline
+              maxLength={500}
+              underlineAndroidColor={'transparent'}
+              autoFocus={true}
+              autoCorrect={false}
+              style={{
+                padding: 6,
+                fontSize: TextSizes.semiMediumText,
+                height: 150,
+                borderWidth: 1,
+                textAlignVertical: 'top',
+              }}
+              value={comment}
+              placeholder={'Enter Comment...'}
+              onChangeText={text => {
+                setComment(text);
+              }}
+          />
+        </View>
     );
   };
 
@@ -151,18 +147,18 @@ const FeedbackUpdate = props => {
       let text = item.text;
       let style = getStatusTextStyle(index);
       contents.push(
-        <View key={'status_' + id}>
-          <Text
-            onPress={() => {
-              _onSliderChange(id);
-            }}
-            style={[{fontWeight: value === id ? 'bold' : 'normal'}, style]}>
-            {text}
-          </Text>
-          {value === index && (
-            <View style={{height: 2, backgroundColor: 'rgb(29, 119, 186)'}} />
-          )}
-        </View>,
+          <View key={'status_' + id}>
+            <Text
+                onPress={() => {
+                  _onSliderChange(id);
+                }}
+                style={[{fontWeight: value === id ? 'bold' : 'normal'}, style]}>
+              {text}
+            </Text>
+            {value === index && (
+                <View style={{height: 2, backgroundColor: 'rgb(29, 119, 186)'}} />
+            )}
+          </View>,
       );
     });
     return contents;
@@ -170,137 +166,137 @@ const FeedbackUpdate = props => {
 
   const getSliderContainer = () => {
     return (
-      <View style={{padding: 10}}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          {getSliderContent()}
+        <View style={{padding: 10}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            {getSliderContent()}
+          </View>
+          <View>
+            <Slider
+                step={1}
+                minimumValue={0}
+                maximumValue={3}
+                value={value}
+                minimumTrackTintColor="#eeeeee"
+                maximumTrackTintColor="#eeeeee"
+                thumbStyle={{
+                  width: 10,
+                  height: 20,
+                  borderRadius: 5,
+                  backgroundColor: '#CCCCCC',
+                }}
+                onValueChange={value => _onSliderChange(value)}
+            />
+          </View>
+          {value !== 0 && (
+              <TouchableWithoutFeedback onPress={() => _onSliderChange(0)}>
+                <View
+                    style={[
+                      {
+                        top: 0,
+                        height: 60,
+                        position: 'absolute',
+                        width: sliderItemWidth,
+                      },
+                      {left: 0},
+                    ]}
+                />
+              </TouchableWithoutFeedback>
+          )}
+          {value !== 1 && (
+              <TouchableWithoutFeedback onPress={() => _onSliderChange(1)}>
+                <View
+                    style={[
+                      {
+                        top: 0,
+                        height: 60,
+                        position: 'absolute',
+                        width: sliderItemWidth,
+                      },
+                      {left: sliderItemWidth},
+                    ]}
+                />
+              </TouchableWithoutFeedback>
+          )}
+          {value !== 2 && (
+              <TouchableWithoutFeedback onPress={() => _onSliderChange(2)}>
+                <View
+                    style={[
+                      {
+                        top: 0,
+                        height: 60,
+                        position: 'absolute',
+                        width: sliderItemWidth,
+                      },
+                      {left: sliderItemWidth * 2},
+                    ]}
+                />
+              </TouchableWithoutFeedback>
+          )}
+          {value !== 3 && (
+              <TouchableWithoutFeedback onPress={() => _onSliderChange(5)}>
+                <View
+                    style={[
+                      {
+                        top: 0,
+                        height: 60,
+                        position: 'absolute',
+                        width: sliderItemWidth,
+                      },
+                      {left: sliderItemWidth * 3},
+                    ]}
+                />
+              </TouchableWithoutFeedback>
+          )}
         </View>
-        <View>
-          <Slider
-            step={1}
-            minimumValue={0}
-            maximumValue={3}
-            value={value}
-            minimumTrackTintColor="#eeeeee"
-            maximumTrackTintColor="#eeeeee"
-            thumbStyle={{
-              width: 10,
-              height: 20,
-              borderRadius: 5,
-              backgroundColor: '#CCCCCC',
-            }}
-            onValueChange={value => _onSliderChange(value)}
-          />
-        </View>
-        {value !== 0 && (
-          <TouchableWithoutFeedback onPress={() => _onSliderChange(0)}>
-            <View
-              style={[
-                {
-                  top: 0,
-                  height: 60,
-                  position: 'absolute',
-                  width: sliderItemWidth,
-                },
-                {left: 0},
-              ]}
-            />
-          </TouchableWithoutFeedback>
-        )}
-        {value !== 1 && (
-          <TouchableWithoutFeedback onPress={() => _onSliderChange(1)}>
-            <View
-              style={[
-                {
-                  top: 0,
-                  height: 60,
-                  position: 'absolute',
-                  width: sliderItemWidth,
-                },
-                {left: sliderItemWidth},
-              ]}
-            />
-          </TouchableWithoutFeedback>
-        )}
-        {value !== 2 && (
-          <TouchableWithoutFeedback onPress={() => _onSliderChange(2)}>
-            <View
-              style={[
-                {
-                  top: 0,
-                  height: 60,
-                  position: 'absolute',
-                  width: sliderItemWidth,
-                },
-                {left: sliderItemWidth * 2},
-              ]}
-            />
-          </TouchableWithoutFeedback>
-        )}
-        {value !== 3 && (
-          <TouchableWithoutFeedback onPress={() => _onSliderChange(5)}>
-            <View
-              style={[
-                {
-                  top: 0,
-                  height: 60,
-                  position: 'absolute',
-                  width: sliderItemWidth,
-                },
-                {left: sliderItemWidth * 3},
-              ]}
-            />
-          </TouchableWithoutFeedback>
-        )}
-      </View>
     );
   };
 
   const renderSubmitButton = () => {
     return (
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: MarginConstants.tab3,
-        }}>
-        <TouchableHighlight
-          style={{
-            backgroundColor: 'rgba(28,118,185,1)',
-            paddingHorizontal: MarginConstants.tab3,
-            paddingVertical: MarginConstants.tab1,
-          }}
-          onPress={() => {
-            _press();
-          }}>
-          <View>
-            <Text style={{color: 'white'}}>Submit</Text>
-          </View>
-        </TouchableHighlight>
-      </View>
+        <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: MarginConstants.tab3,
+            }}>
+          <TouchableHighlight
+              style={{
+                backgroundColor: 'rgba(28,118,185,1)',
+                paddingHorizontal: MarginConstants.tab3,
+                paddingVertical: MarginConstants.tab1,
+              }}
+              onPress={() => {
+                _press();
+              }}>
+            <View>
+              <Text style={{color: 'white'}}>Submit</Text>
+            </View>
+          </TouchableHighlight>
+        </View>
     );
   };
 
   return (
-    <View style={{flex: 1}}>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          Keyboard.dismiss();
-        }}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'flex-start',
-            margin: MarginConstants.tab1,
-          }}>
-          {renderTextInput()}
-          {getSliderContainer()}
-          {StringUtils.isNotEmpty(comment) && renderSubmitButton()}
-          {props.isLoading && (
-            <DotIndicator color="#2589E3" count={3} size={10} />
-          )}
-        </View>
-      </TouchableWithoutFeedback>
-    </View>
+      <View style={{flex: 1}}>
+        <TouchableWithoutFeedback
+            onPress={() => {
+              Keyboard.dismiss();
+            }}>
+          <View
+              style={{
+                flex: 1,
+                justifyContent: 'flex-start',
+                margin: MarginConstants.tab1,
+              }}>
+            {renderTextInput()}
+            {getSliderContainer()}
+            {StringUtils.isNotEmpty(comment) && renderSubmitButton()}
+            {props.isLoading && (
+                <DotIndicator color="#2589E3" count={3} size={10} />
+            )}
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
   );
 };
 
@@ -328,7 +324,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(FeedbackUpdate);
+export default connect(mapStateToProps, mapDispatchToProps)(FeedbackUpdate);

@@ -11,20 +11,18 @@ import {StackActions} from '@react-navigation/native';
 import CXTrendItemWidget from './CXTrendItemWidget';
 import {clearError} from '../../../redux/actions/index';
 import {connect} from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN} from '../../../api/Constant';
 import {dashboardStyles} from '../dashboard.style';
-import {DotIndicator} from 'react-native-indicators';
 import {Colors} from '../../../styles/color.constants';
 import Pie from 'react-native-pie';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {apiHandler} from '../../../api/ApiHandler';
 import {showMessage} from 'react-native-flash-message';
+import QPSpinner from '../../../widgets/QPSpinner';
+
 class DashBoardStoreDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      authToken: '',
       callApi: true,
       isLoading: false,
       isError: false,
@@ -32,17 +30,13 @@ class DashBoardStoreDetails extends Component {
     this.apiCall();
     this.storeData = '';
   }
+
   apiCall = () => {
-    async function getAuthToken() {
-      return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
-    }
 
     if (this.state.callApi) {
       this.setState({isLoading: true});
-      getAuthToken().then(token => {
-        this.setState({authToken: token});
-        apiHandler.getCXDashBoard(
-          token,
+      apiHandler.getCXDashBoard(
+          this.props.authToken,
           this.props.route.params.data,
           response => {
             this.storeData = response;
@@ -55,8 +49,7 @@ class DashBoardStoreDetails extends Component {
             this.setState({isLoading: false});
             this.setState({isError: true});
           },
-        );
-      });
+      );
     }
   };
 
@@ -82,34 +75,34 @@ class DashBoardStoreDetails extends Component {
     let numberOfResponsesNumber = 0;
     if (this.storeData.body.primaryStoreNPS.totalResponses) {
       numberOfResponsesNumber = this.storeData.body.primaryStoreNPS
-        .totalResponses;
+          .totalResponses;
     }
     let numberOfResponses = numberOfResponsesNumber + '';
 
     if (numberOfResponsesNumber >= 10000) {
       numberOfResponses =
-        Math.round(numberOfResponsesNumber / 1000).toFixed(
-          numberOfResponsesNumber > 10000 ? 0 : 1,
-        ) + 'K';
+          Math.round(numberOfResponsesNumber / 1000).toFixed(
+              numberOfResponsesNumber > 10000 ? 0 : 1,
+          ) + 'K';
     } else if (numberOfResponsesNumber >= 1000) {
       numberOfResponses = (numberOfResponsesNumber / 1000).toFixed(1) + 'K';
     }
     let responseText = numberOfResponses > 1 ? 'Responses' : 'Response';
     let textView = (
-      <View style={dashboardStyles.responseView}>
-        <Text
-          numberOfLines={1}
-          ellipsizeMode={'tail'}
-          style={dashboardStyles.responseText}>
-          {numberOfResponses}
-        </Text>
-        <Text
-          numberOfLines={1}
-          ellipsizeMode={'tail'}
-          style={dashboardStyles.response}>
-          {responseText}
-        </Text>
-      </View>
+        <View style={dashboardStyles.responseView}>
+          <Text
+              numberOfLines={1}
+              ellipsizeMode={'tail'}
+              style={dashboardStyles.responseText}>
+            {numberOfResponses}
+          </Text>
+          <Text
+              numberOfLines={1}
+              ellipsizeMode={'tail'}
+              style={dashboardStyles.response}>
+            {responseText}
+          </Text>
+        </View>
     );
 
     return textView;
@@ -121,7 +114,7 @@ class DashBoardStoreDetails extends Component {
     let newCount = this.storeData.body.DetractorTicketsCount.new;
     if (pendingCount > 0) {
       ticketText =
-        pendingCount + ' Pending ' + (pendingCount > 1 ? 'tickets' : 'ticket');
+          pendingCount + ' Pending ' + (pendingCount > 1 ? 'tickets' : 'ticket');
     }
     if (newCount > 0) {
       if (pendingCount > 0) {
@@ -130,7 +123,7 @@ class DashBoardStoreDetails extends Component {
         ticketText = newCount + ' New ' + (newCount > 1 ? 'tickets' : 'ticket');
       }
     }
-    if (newCount == 0 && pendingCount == 0) {
+    if (newCount === 0 && pendingCount === 0) {
       ticketText = 'No Pending tickets';
     }
     return ticketText;
@@ -138,28 +131,28 @@ class DashBoardStoreDetails extends Component {
 
   getTicketsButton = () => {
     return (
-      <TouchableHighlight
-        style={dashboardStyles.ticketButton}
-        onPress={() => {
-          let data = {
-            storeId: '' + this.storeData.body.primaryStoreId,
-            title: this.storeData.body.primaryStoreName + ' - Tickets',
-            token: this.state.authToken,
-          };
-          const pushAction = StackActions.push('DetractorTickets', {
-            data: data,
-          });
-          this.props.navigation.dispatch(pushAction);
-        }}>
-        <View>
-          <Text
-            numberOfLines={1}
-            ellipsizeMode={'tail'}
-            style={dashboardStyles.ticketText}>
-            {this.getTicketText()}
-          </Text>
-        </View>
-      </TouchableHighlight>
+        <TouchableHighlight
+            style={dashboardStyles.ticketButton}
+            onPress={() => {
+              let data = {
+                storeId: '' + this.storeData.body.primaryStoreId,
+                title: this.storeData.body.primaryStoreName + ' - Tickets',
+                token: this.props.authToken,
+              };
+              const pushAction = StackActions.push('DetractorTickets', {
+                data: data,
+              });
+              this.props.navigation.dispatch(pushAction);
+            }}>
+          <View>
+            <Text
+                numberOfLines={1}
+                ellipsizeMode={'tail'}
+                style={dashboardStyles.ticketText}>
+              {this.getTicketText()}
+            </Text>
+          </View>
+        </TouchableHighlight>
     );
   };
 
@@ -167,30 +160,30 @@ class DashBoardStoreDetails extends Component {
     let percent = this.storeData.body.primaryStoreNPS.npsPercentage;
     let color = percent < 0 ? Colors.negativePassive : Colors.positivePassive;
     let roundColor =
-      percent < 0 ? Colors.negativePromter : Colors.positivePromter;
+        percent < 0 ? Colors.negativePromter : Colors.positivePromter;
     return (
-      <View style={dashboardStyles.chartContainer}>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{flex: 0.5}}>
-            <Pie
-              radius={80}
-              innerRadius={60}
-              sections={[
-                {
-                  percentage: percent,
-                  color: roundColor,
-                },
-              ]}
-              backgroundColor={color}
-            />
-            <View style={dashboardStyles.gauge}>
-              <Text style={dashboardStyles.gaugeText}>{percent + ''}</Text>
-              <Text style={dashboardStyles.npmGaugeText}>NPS</Text>
+        <View style={dashboardStyles.chartContainer}>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{flex: 0.5}}>
+              <Pie
+                  radius={80}
+                  innerRadius={60}
+                  sections={[
+                    {
+                      percentage: percent,
+                      color: roundColor,
+                    },
+                  ]}
+                  backgroundColor={color}
+              />
+              <View style={dashboardStyles.gauge}>
+                <Text style={dashboardStyles.gaugeText}>{percent + ''}</Text>
+                <Text style={dashboardStyles.npmGaugeText}>NPS</Text>
+              </View>
             </View>
+            {this.getTrimmedNoOfResponses()}
           </View>
-          {this.getTrimmedNoOfResponses()}
         </View>
-      </View>
     );
   };
 
@@ -199,8 +192,8 @@ class DashBoardStoreDetails extends Component {
       let list = this.storeData.body.storeNPSList;
       let data = list.slice(0, 5);
       let title = this.storeData.body.systemPreferences.businessUnitName
-        ? this.storeData.body.systemPreferences.businessUnitName
-        : 'Business';
+          ? this.storeData.body.systemPreferences.businessUnitName
+          : 'Business';
       return this.renderLists(data, title);
     }
   };
@@ -215,81 +208,72 @@ class DashBoardStoreDetails extends Component {
 
   renderNoDataFound = () => {
     return (
-      <View
-        style={{
-          flex: 1,
-          marginTop: 20,
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'transparent',
-        }}>
-        <Text style={{color: 'black', fontSize: 16}}>
-          No feedbacks received.
-        </Text>
-      </View>
+        <View style={dashboardStyles.emptyView}>
+          <Text style={dashboardStyles.emptyText}>No feedbacks received.</Text>
+        </View>
     );
   };
 
   renderRow = storeItem => {
     let name = storeItem.item.filterName
-      ? storeItem.item.filterName
-      : storeItem.item.storeName;
-    let clickable = storeItem.item.storeName ? true : false;
+        ? storeItem.item.filterName
+        : storeItem.item.storeName;
+    let clickable =  storeItem.item.hasOwnProperty('storeName');
     return (
-      <CXTrendItemWidget
-        storeName={name}
-        nps={storeItem.item.NPSScore.npsPercentage}
-        promoter={storeItem.item.NPSScore.promoters}
-        passive={storeItem.item.NPSScore.passive}
-        detractor={storeItem.item.NPSScore.detractors}
-        isClickable={clickable}
-        onPress={() => {
-          let data = {storeId: storeItem.item.storeId + ''};
-          const pushAction = StackActions.push('DashBoardStoreDetails', {
-            name: this.storeData.body.primaryStoreName,
-            data: data,
-          });
-          this.props.navigation.dispatch(pushAction);
-        }}
-      />
+        <CXTrendItemWidget
+            storeName={name}
+            nps={storeItem.item.NPSScore.npsPercentage}
+            promoter={storeItem.item.NPSScore.promoters}
+            passive={storeItem.item.NPSScore.passive}
+            detractor={storeItem.item.NPSScore.detractors}
+            isClickable={clickable}
+            onPress={() => {
+              let data = {storeId: storeItem.item.storeId + ''};
+              const pushAction = StackActions.push('DashBoardStoreDetails', {
+                name: this.storeData.body.primaryStoreName,
+                data: data,
+              });
+              this.props.navigation.dispatch(pushAction);
+            }}
+        />
     );
   };
 
   renderLists = (list, title) => {
     return (
-      <View
-        style={[
-          dashboardStyles.listViewContainer,
-          {
-            height:
-              MarginConstants.tab4 * 2 +
-              MarginConstants.tab4 * 1.5 * list.length,
-          },
-        ]}>
-        <View style={dashboardStyles.textView}>
-          <Text style={dashboardStyles.listTitle}>{title}</Text>
+        <View
+            style={[
+              dashboardStyles.listViewContainer,
+              {
+                height:
+                    MarginConstants.tab4 * 2 +
+                    MarginConstants.tab4 * 1.5 * list.length,
+              },
+            ]}>
+          <View style={dashboardStyles.textView}>
+            <Text style={dashboardStyles.listTitle}>{title}</Text>
+          </View>
+          <FlatList
+              data={list}
+              keyExtractor={item => item.filterName}
+              renderItem={this.renderRow}
+              onEndReachedThreshold={0.01}
+              refreshing={false}
+              ListEmptyComponent={this.renderNoDataFound}
+          />
         </View>
-        <FlatList
-          data={list}
-          keyExtractor={item => item.filterName}
-          renderItem={this.renderRow}
-          onEndReachedThreshold={0.01}
-          refreshing={false}
-          ListEmptyComponent={this.renderNoDataFound}
-        />
-      </View>
     );
   };
 
   renderDashboardContent = () => {
     if (!this.state.isLoading) {
       return (
-        <View style={dashboardStyles.center}>
-          {this.renderDonutChart()}
-          {this.getTicketsButton()}
-          {this.renderStoreNPSList()}
-          {this.renderProductNPSList()}
-        </View>
+          <View style={dashboardStyles.center}>
+            {this.renderDonutChart()}
+            {this.getTicketsButton()}
+            {this.renderStoreNPSList()}
+            {this.renderProductNPSList()}
+          </View>
       );
     }
     return <View style={{flex: 1}} />;
@@ -297,31 +281,31 @@ class DashBoardStoreDetails extends Component {
 
   renderDashboard = () => {
     return (
-      <ImageBackground
-        resizeMode={'stretch'}
-        source={require('../../../config/images/background.png')}
-        style={dashboardStyles.imageBackgroundContainer}>
-        {this.storeData === '' || this.state.isLoading
-          ? this.renderIndicator()
-          : this.renderScreen()}
-      </ImageBackground>
+        <ImageBackground
+            resizeMode={'cover'}
+            source={require('../../../config/images/background.png')}
+            style={dashboardStyles.imageBackgroundContainer}>
+          {this.storeData === '' || this.state.isLoading
+              ? this.renderIndicator()
+              : this.renderScreen()}
+        </ImageBackground>
     );
   };
 
   renderScreen = () => {
     return (
-      <ScrollView contentContainerStyle={dashboardStyles.cxContainer}>
-        <View style={dashboardStyles.cxContainer}>
-          {this.renderDashboardContent()}
-          {this.renderIndicator()}
-        </View>
-      </ScrollView>
+        <ScrollView contentContainerStyle={dashboardStyles.cxContainer}>
+          <View style={dashboardStyles.cxContainer}>
+            {this.renderDashboardContent()}
+            {this.renderIndicator()}
+          </View>
+        </ScrollView>
     );
   };
 
   renderIndicator = () => {
     if (this.state.isLoading) {
-      return <DotIndicator color={Colors.white} count={3} size={10} />;
+      return <QPSpinner spinnerColor={Colors.white}/>;
     }
   };
 
@@ -333,6 +317,7 @@ class DashBoardStoreDetails extends Component {
 const mapStateToProps = state => {
   return {
     userInfo: state.global.userInfo,
+    authToken: state.global.authToken
   };
 };
 
@@ -342,7 +327,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DashBoardStoreDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(DashBoardStoreDetails);

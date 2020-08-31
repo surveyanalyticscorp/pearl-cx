@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {createStackNavigator} from '@react-navigation/stack';
 import Login from '../components/login/Login';
 import CompanyCode from '../components/login/CompanyCode';
@@ -12,10 +11,13 @@ import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import { CommonActions } from '@react-navigation/native';
 import {Colors} from '../styles/color.constants';
+import {View} from 'react-native-animatable';
+
 const RootStack = createStackNavigator();
 
 const stackHeaderProps = (route, navigation) => {
     return (
+        <View style={styles.headerButtonStyle}>
         <TouchableOpacity
             buttonStyle={styles.headerButtonStyle}
             onPress={() => {
@@ -24,6 +26,7 @@ const stackHeaderProps = (route, navigation) => {
             }}>
             <Icon name="arrow-left" size={20} color= {Colors.white}/>
         </TouchableOpacity>
+        </View>
     )
 };
 
@@ -76,9 +79,8 @@ export default SignInStack;
 
 const styles = StyleSheet.create({
     headerButtonStyle:{
-        marginLeft: MarginConstants.tab2,
+        marginLeft: MarginConstants.tab1,
         flexDirection: 'row',
-        paddingLeft:PaddingConstants.tab2,
         paddingVertical:PaddingConstants.tab1,
     },
     transparentHeader: {

@@ -5,8 +5,6 @@ import CXTrendItemWidget from './components/CXTrendItemWidget';
 import {showLoading} from '../../redux/actions/index';
 import {getDashboardContent, setDashboardRangeFilter} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_AUTH_TOKEN} from '../../api/Constant';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
 import Pie from 'react-native-pie';
@@ -14,6 +12,7 @@ import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
 import {EventRegister} from "react-native-event-listeners";
 import RangeCalendar from '../../widgets/RangeCalendar';
+import ArrayUtils from '../../Utils/ArrayUtils';
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -21,7 +20,6 @@ const wait = timeout => {
     });
 };
 const CxDashboard = props => {
-    let [authToken, setAuthToken] = useState('');
     let [callApi, setCallAPI] = useState(true);
     let [refreshing, setRefreshing] = useState(false);
     let [calendar, setCalendar] = useState(false);
@@ -35,6 +33,7 @@ const CxDashboard = props => {
     let listener = useRef(null);
 
     useEffect(() => {
+        props.getDashboardContent(props.authToken);
         listener = EventRegister.addEventListener('openDashboardCalendar', data => {
             setCalendar(true);
         });
@@ -44,26 +43,21 @@ const CxDashboard = props => {
     }, []);
 
     useEffect(() => {
-        if(!isObjectEmpty(props.dashboardData)){
+        if(props.dashboardData.DetractorTicketsCount){
             props.showLoading(false);
         }
-    },[props.dashboardData]);
+    },[props.dashboardData.DetractorTicketsCount]);
 
     useEffect(() => {
-        async function getAuthToken() {
-            return await AsyncStorage.getItem(ASYNC_AUTH_TOKEN);
-        }
+
         if (callApi) {
-            getAuthToken().then(token => {
-                setAuthToken(token);
-                props.getDashboardContent(token);
-                setCallAPI(false);
-            });
+            props.getDashboardContent(props.authToken);
+            setCallAPI(false);
         }
     }, [callApi]);
 
     const renderCalendarView = () => {
-        return (<RangeCalendar
+        return <RangeCalendar
             showCalendar={calendar}
             closeCalendar={() => {
                 setCalendar(false);
@@ -76,17 +70,17 @@ const CxDashboard = props => {
                 setCalendar(false);
                 props.setRange(range)
             }}
-        />);
+        />;
     };
 
     const getTrimmedNoOfResponses = () => {
         let responseText = "";
         let numberOfResponses = "";
-        if (props.dashboardData.body) {
+        if (!isObjectEmpty(props.dashboardData)) {
             let numberOfResponsesNumber = 0;
-            if (props.dashboardData.body.primaryStoreNPS.totalResponses) {
+            if (props.dashboardData.primaryStoreNPS.totalResponses) {
                 numberOfResponsesNumber =
-                    props.dashboardData.body.primaryStoreNPS.totalResponses;
+                    props.dashboardData.primaryStoreNPS.totalResponses;
             }
             let numberOfResponses = numberOfResponsesNumber + '';
 
@@ -121,9 +115,9 @@ const CxDashboard = props => {
 
     const getTicketText = () => {
         let ticketText = '';
-        if(props.dashboardData && props.dashboardData.body && props.dashboardData.body.DetractorTicketsCount) {
-            let pendingCount = props.dashboardData.body.DetractorTicketsCount.pending;
-            let newCount = props.dashboardData.body.DetractorTicketsCount.new;
+        if(!isObjectEmpty(props.dashboardData) && !isObjectEmpty(props.dashboardData.DetractorTicketsCount)) {
+            let pendingCount = props.dashboardData.DetractorTicketsCount.pending;
+            let newCount = props.dashboardData.DetractorTicketsCount.new;
             if (pendingCount > 0) {
                 ticketText =
                     pendingCount + ' Pending ' + (pendingCount > 1 ? 'tickets' : 'ticket');
@@ -148,9 +142,9 @@ const CxDashboard = props => {
                 style={dashboardStyles.ticketButton}
                 onPress={() => {
                     let data = {
-                        storeId: '' + props.dashboardData.body.primaryStoreId,
-                        title: props.dashboardData.body.primaryStoreName + ' - Tickets',
-                        token: authToken,
+                        storeId: '' + props.dashboardData.primaryStoreId,
+                        title: props.dashboardData.primaryStoreName + ' - Tickets',
+                        token: props.authToken,
                     };
                     const pushAction = StackActions.push('DetractorTickets', {
                         data: data,
@@ -171,8 +165,8 @@ const CxDashboard = props => {
 
     const renderDonutChart = () => {
         let percent = 0;
-        if (props.dashboardData.body) {
-            percent = props.dashboardData.body.primaryStoreNPS.npsPercentage;
+        if (!isObjectEmpty(props.dashboardData)) {
+            percent = props.dashboardData.primaryStoreNPS.npsPercentage;
         }
         let color = percent < 0 ? Colors.negativePassive : Colors.positivePassive;
         let roundColor =
@@ -204,19 +198,19 @@ const CxDashboard = props => {
     };
 
     const renderStoreNPSList = () => {
-        if (props.dashboardData && props.dashboardData.body && props.dashboardData.body.storeNPSList && props.dashboardData.body.storeNPSList.length > 0) {
-            let list = props.dashboardData.body.storeNPSList;
+        if (!isObjectEmpty(props.dashboardData) && ArrayUtils.isNotEmpty(props.dashboardData.storeNPSList)) {
+            let list = props.dashboardData.storeNPSList;
             let data = list.slice(0, 5);
-            let title = props.dashboardData.body.systemPreferences.businessUnitName
-                ? props.dashboardData.body.systemPreferences.businessUnitName
+            let title = props.dashboardData.systemPreferences.businessUnitName
+                ? props.dashboardData.systemPreferences.businessUnitName
                 : 'Business';
             return renderLists(data, title);
         }
     };
 
     const renderProductNPSList = () => {
-        if (props.dashboardData && props.dashboardData.body && props.dashboardData.body.productNPSList && props.dashboardData.body.productNPSList.length > 0) {
-            let list = props.dashboardData.body.productNPSList;
+        if (!isObjectEmpty(props.dashboardData) && ArrayUtils.isNotEmpty(props.dashboardData.productNPSList)) {
+            let list = props.dashboardData.productNPSList;
             let title = 'Products';
             return renderLists(list, title);
         }
@@ -225,16 +219,8 @@ const CxDashboard = props => {
     const renderNoDataFound = () => {
         return (
             <View
-                style={{
-                    flex: 1,
-                    marginTop: 20,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: 'transparent',
-                }}>
-                <Text style={{color: 'black', fontSize: 16}}>
-                    No feedbacks received.
-                </Text>
+                style={dashboardStyles.emptyView}>
+                <Text style={dashboardStyles.emptyText}>No feedbacks received.</Text>
             </View>
         );
     };
@@ -243,7 +229,7 @@ const CxDashboard = props => {
         let name = storeItem.item.filterName
             ? storeItem.item.filterName
             : storeItem.item.storeName;
-        let clickable = storeItem.item.storeName ? true : false;
+        let clickable = storeItem.item.hasOwnProperty('storeName');
         return (
             <CXTrendItemWidget
                 storeName={name}
@@ -255,7 +241,7 @@ const CxDashboard = props => {
                 onPress={() => {
                     let data = {storeId: storeItem.item.storeId + ''};
                     const pushAction = StackActions.push('DashBoardStoreDetails', {
-                        name: props.dashboardData.body.primaryStoreName,
+                        name: props.dashboardData.primaryStoreName,
                         data: data,
                     });
                     props.navigation.dispatch(pushAction);
@@ -298,7 +284,7 @@ const CxDashboard = props => {
     const renderDashboard = () => {
         return (
             <ImageBackground
-                resizeMode={'stretch'}
+                resizeMode={'cover'}
                 source={require('../../config/images/background.png')}
                 style={dashboardStyles.imageBackgroundContainer}>
                 {renderScreen()}
@@ -314,10 +300,10 @@ const CxDashboard = props => {
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }>
                 <View style={dashboardStyles.container}>
-                <View style={dashboardStyles.cxContainer}>
-                    {renderDashboardContent()}
-                </View>
-                {renderSpinner()}
+                    <View style={dashboardStyles.cxContainer}>
+                        {renderDashboardContent()}
+                    </View>
+                    {renderSpinner()}
                 </View>
             </ScrollView>
         );
@@ -348,6 +334,7 @@ const mapStateToProps = state => {
         isLoading: state.global.isLoading,
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
+        authToken: state.global.authToken
     };
 };
 
@@ -364,7 +351,4 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(CxDashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(CxDashboard);

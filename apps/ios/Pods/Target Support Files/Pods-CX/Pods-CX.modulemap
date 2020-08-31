@@ -1,6 +1,0 @@
-framework module Pods_CX {
-  umbrella header "Pods-CX-umbrella.h"
-
-  export *
-  module * { export * }
-}
