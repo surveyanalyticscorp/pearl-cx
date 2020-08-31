@@ -20,7 +20,6 @@ import FeedbackDetails from '../components/feedback/FeedbackDetails'
 import {EventRegister} from 'react-native-event-listeners';
 import FeedbackUpdate from '../components/feedback/FeedbackUpdate'
 import { CommonActions } from '@react-navigation/native';
-import DetractorTickets from '../components/dashboard/components/DetractorTickets';
 import DashBoardStoreDetails from '../components/dashboard/components/DashBoardStoreDetails'
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';

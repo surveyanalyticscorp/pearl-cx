@@ -10,6 +10,7 @@ const Colors = {
   accentGradient: 'rgba(25, 63, 139, 0.2)',
   gradientColor: '#8AC0EA',
   grey: '#f9f9f9',
+  lightBlack:'#404A5B',
   darkerGrey: '#eeeeee',
   darkGrey: '#d8d8d8',
   overlay: '#edf6fd',

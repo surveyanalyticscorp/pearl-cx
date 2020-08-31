@@ -1,12 +1,14 @@
 import React from 'react';
-import {StyleSheet, View, TouchableHighlight, Text} from 'react-native';
+import {StyleSheet, View, TouchableWithoutFeedback, Text} from 'react-native';
 import TimeAgo from '../../../widgets/TimeAgo';
 import ReadMore from 'react-native-read-more-text';
+import {Colors} from '../../../styles/color.constants';
+
 const TicketWidget = props => {
   const _renderTruncatedFooter = handlePress => {
     return (
       <Text
-        style={{color: 'blue', marginTop: 5, fontSize: 12}}
+        style={styles.truncatedFooter}
         onPress={handlePress}>
         Read more
       </Text>
@@ -16,17 +18,21 @@ const TicketWidget = props => {
   const _renderRevealedFooter = handlePress => {
     return (
       <Text
-        style={{color: 'blue', marginTop: 5, fontSize: 12}}
+        style={styles.truncatedFooter}
         onPress={handlePress}>
         Show less
       </Text>
     );
   };
+
+  let onPress = () => {
+
+};
+
   return (
-    <TouchableHighlight
-      onPress={props.onPress}
-      activeOpacity={0.6}
-      underlayColor={'#CCCCCC'}>
+    <TouchableWithoutFeedback
+      onPress={onPress}
+    >
       <View style={styles.mainContainer}>
         <Text style={styles.title} numberOfLines={1} ellipsizeMode={'tail'}>
           {props.name}
@@ -43,7 +49,7 @@ const TicketWidget = props => {
           </ReadMore>
         </View>
       </View>
-    </TouchableHighlight>
+    </TouchableWithoutFeedback>
   );
 };
 TicketWidget.defaultProps = {
@@ -54,7 +60,7 @@ TicketWidget.defaultProps = {
 };
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: Colors.white,
     marginTop: 10,
     flex: 1,
     alignItems: 'flex-start',
@@ -79,6 +85,10 @@ const styles = StyleSheet.create({
     color: '#393939',
     textAlign: 'left',
   },
+  truncatedFooter: {
+    color: Colors.accent,
+    marginTop: 5,
+    fontSize: 12}
 });
 
 export default TicketWidget;
