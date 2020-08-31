@@ -3,6 +3,7 @@ import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {TextField} from 'react-native-material-textfield';
 import {Colors} from '../styles/color.constants';
+import StringUtils from '../Utils/StringUtils';
 
 const QPTextField = props => {
   const fieldRef = React.createRef();
@@ -33,12 +34,12 @@ const QPTextField = props => {
   let icon = secureText ? 'visibility-off' : 'visibility';
 
   let renderVisibility = () => {
-    return (
+    return StringUtils.isNotEmpty(props.value) && (
       <Icon
         style={{
           position: 'absolute',
           top: 33,
-          right: 0,
+          right: 40,
         }}
         name={icon}
         size={25}
@@ -64,7 +65,7 @@ const QPTextField = props => {
         onSubmitEditing={onSubmit}
         onChangeText={onChange}
         ref={fieldRef}
-        clearButtonMode={'while-editing'}
+        clearButtonMode={'always'}
       />
       {props.secureText && renderVisibility()}
     </View>

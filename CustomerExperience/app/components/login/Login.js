@@ -187,6 +187,7 @@ const Login = props => {
                                 }, 5);
                             }}
                             clearButtonMode={'while-editing'}
+                            value={userData.password}
                         />
                         {renderSpinnerLoginButton()}
                         <QPButton
