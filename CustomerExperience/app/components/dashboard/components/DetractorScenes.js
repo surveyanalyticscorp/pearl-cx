@@ -3,7 +3,6 @@ import {View, Text, ImageBackground, FlatList} from 'react-native';
 import TicketWidget from './TicketWidget';
 import {dashboardStyles} from '../dashboard.style';
 import {apiHandler} from '../../../api/ApiHandler';
-import QPSpinner from '../../../widgets/QPSpinner';
 import {connect} from 'react-redux';
 
 const DetractorScenes = props => {
@@ -63,7 +62,11 @@ const DetractorScenes = props => {
         let commentText = rowItem.item.comment.replace(/\n/g, " ");
         return (
             <View style={{ margin: 5 }}>
-                <TicketWidget name={rowItem.item.emailAddress} comment={commentText} time={rowItem.item.timestamp}
+                <TicketWidget
+                    name={rowItem.item.emailAddress}
+                    comment={commentText}
+                    time={rowItem.item.timestamp}
+                    {...props}
                 />
             </View>
         );
