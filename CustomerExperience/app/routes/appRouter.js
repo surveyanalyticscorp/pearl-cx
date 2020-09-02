@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, Dimensions, Text} from 'react-native';
 import {
     NavigationContainer,
     useNavigation,
@@ -9,6 +9,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../styles/color.constants';
+import {fontFamily} from '../styles/font.constants';
 import DrawerContent from '../routes/DrawerContent';
 import CxDashboard from '../components/dashboard/CxDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -28,11 +29,14 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import DetractorScenes from '../components/dashboard/components/DetractorScenes';
+import TicketOverview from '../components/dashboard/ticketManagement/TicketOverview';
+import {MarginConstants} from '../styles/margin.constants';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
 const FeedbackTab = createMaterialTopTabNavigator();
 const DetractorTicketsTab = createMaterialTopTabNavigator();
+const TicketLogTab = createMaterialTopTabNavigator();
 
 let { width } = Dimensions.get('window');
 
@@ -102,6 +106,36 @@ const AppRouter = props => {
         );
     };
 
+    const EditTicket = () => {
+        return (
+            <View style={[styles.rightHeaderButton,{marginHorizontal: MarginConstants.tab1}]}>
+                <TouchableOpacity
+                    onPress={() => {
+
+                    }}>
+                    <Text style={styles.editText}> Edit </Text>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    const TicketLogTabStack = props => (
+        <TicketLogTab.Navigator tabBarOptions={{
+            labelStyle: {color: Colors.primary, width: width/3, fontSize: TextSizes.secondary},
+            indicatorStyle: {backgroundColor: Colors.accent},
+            style:{backgroundColor: Colors.white, width: '100%'},
+            initialLayout: {width: Dimensions.get('window').width},
+            tabStyle:{height: 1.5*PaddingConstants.tab4}
+        }}
+                                lazy
+                                keyboardDismissMode={'auto'}
+        >
+            <TicketLogTab.Screen name="Overview" component={TicketOverview} />
+            <TicketLogTab.Screen name="Comments" component={TicketOverview} />
+            <TicketLogTab.Screen name="Logs" component={TicketOverview} />
+        </TicketLogTab.Navigator>
+    );
+
     const FeedbackTabStack = props => (
         <FeedbackTab.Navigator tabBarOptions={{
             labelStyle: {color: Colors.primary, width: width/4, fontSize: TextSizes.secondary},
@@ -128,7 +162,7 @@ const AppRouter = props => {
             tabStyle:{height: 1.5*PaddingConstants.tab4}
         }}
                                        lazy
-                               keyboardDismissMode={'auto'}
+                                       keyboardDismissMode={'auto'}
         >
             <DetractorTicketsTab.Screen name="New" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:0}}/>
             <DetractorTicketsTab.Screen name="Pending" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:1}}/>
@@ -189,6 +223,14 @@ const AppRouter = props => {
                     headerLeft: props => <HeaderBackLeft />,
                 }}
             />
+            <RootStack.Screen
+                name="Ticket Details"
+                component={TicketLogTabStack}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft />,
+                    headerRight: props => route.state && route.state.index !== 0 ? <View/> : <EditTicket />,
+                })}
+            />
         </RootStack.Navigator>
     );
 
@@ -223,6 +265,14 @@ const styles = StyleSheet.create({
     rightHeaderButton: {
         flexDirection: 'row',
         marginLeft: 20
+    },
+    editText: {
+        color: Colors.white,
+        textAlignVertical:'center',
+        fontSize: TextSizes.largeText,
+        fontFamily: fontFamily.Regular,
+        paddingTop:5,
+        paddingLeft:5,
     }
 
 });

@@ -26,8 +26,8 @@ const TicketWidget = props => {
   };
 
   let onPress = () => {
-
-};
+    props.navigation.navigate('Ticket Details');
+  };
 
   return (
     <TouchableWithoutFeedback
@@ -52,6 +52,7 @@ const TicketWidget = props => {
     </TouchableWithoutFeedback>
   );
 };
+
 TicketWidget.defaultProps = {
   name: 'Customer Experience',
   time: '2016-10-17 00:46:17.0',
