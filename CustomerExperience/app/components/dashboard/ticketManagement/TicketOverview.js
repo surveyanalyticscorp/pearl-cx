@@ -10,8 +10,11 @@ import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
+import moment from 'moment';
 
 export default function TicketOverview(props) {
+
+    let ticket = props.route.params.data;
 
     let renderRowHeader = (header) => {
         return (
@@ -32,11 +35,12 @@ export default function TicketOverview(props) {
     };
 
     let renderTicketDetails = () => {
+        let date = moment(ticket.timestamp).format('MMM DD, YYYY');
       return (
           <View style={styles.container}>
               {renderRowHeader('Ticket Info')}
-              {renderRow('Response Id', '1234567')}
-              {renderRow('Created On', 'Aug 24, 2020')}
+              {renderRow('Response Id', ticket.ticketID)}
+              {renderRow('Created On', date)}
               {renderRow('Current Segment', 'North Segment')}
               {renderRow('Origin Segment', 'Main Segment')}
               {renderRow('Ticket Owner', 'nehal.sanklecha')}
@@ -49,7 +53,7 @@ export default function TicketOverview(props) {
         return (
             <View style={styles.commentContainer}>
                 {renderRowHeader('Customer Email')}
-                <Text style={styles.rowBody}>nehal.sanklecha+9676@questionpro.com</Text>
+                <Text style={styles.rowBody}>{ticket.emailAddress}</Text>
             </View>
         )
     };
@@ -58,7 +62,7 @@ export default function TicketOverview(props) {
         return (
             <View style={styles.commentContainer}>
                 {renderRowHeader('Customer Comment')}
-                <Text style={styles.rowBody}>The manager completely botched our loan application! We were there for more than four hours trying to resolve the situation. Beyond that, he was rude to us, practically ignoring us while we were waiting for him. If you can't provide better service, then I'm taking my business elsewhere. | The manager completely botched our loan application! We were there for more than four hours trying to resolve the situation. Beyond that, he was rude to us, practically ignoring us while we were waiting for him. If you can't provide better service, then I'm taking my business elsewhere.</Text>
+                <Text style={styles.rowBody}>{ticket.comment}</Text>
                 </View>
         )
     };
@@ -92,7 +96,7 @@ const styles = StyleSheet.create({
     },
     row: {
         backgroundColor: Colors.white,
-        height: 1.7*PaddingConstants.tab3,
+        height: 1.5*PaddingConstants.tab3,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

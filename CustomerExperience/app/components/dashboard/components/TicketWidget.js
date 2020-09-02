@@ -26,7 +26,7 @@ const TicketWidget = props => {
   };
 
   let onPress = () => {
-    props.navigation.navigate('Ticket Details');
+    props.navigation.navigate('Ticket Details',{item:props.item});
   };
 
   return (
@@ -35,9 +35,9 @@ const TicketWidget = props => {
     >
       <View style={styles.mainContainer}>
         <Text style={styles.title} numberOfLines={1} ellipsizeMode={'tail'}>
-          {props.name}
+          {props.item.emailAddress}
         </Text>
-        <TimeAgo style={styles.subtitle} time={props.time} />
+        <TimeAgo style={styles.subtitle} time={props.item.timestamp} />
         <View style={{marginTop: 10}}>
           <ReadMore
             numberOfLines={3}

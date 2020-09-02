@@ -63,9 +63,8 @@ const DetractorScenes = props => {
         return (
             <View style={{ margin: 5 }}>
                 <TicketWidget
-                    name={rowItem.item.emailAddress}
                     comment={commentText}
-                    time={rowItem.item.timestamp}
+                    item={rowItem.item}
                     {...props}
                 />
             </View>
