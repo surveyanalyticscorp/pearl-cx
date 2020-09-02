@@ -31,6 +31,8 @@ import {TextSizes} from '../styles/textsize.constants';
 import DetractorScenes from '../components/dashboard/components/DetractorScenes';
 import TicketOverview from '../components/dashboard/ticketManagement/TicketOverview';
 import {MarginConstants} from '../styles/margin.constants';
+import TicketComments from '../components/dashboard/ticketManagement/TicketComments';
+import UpdateTicket from '../components/dashboard/ticketManagement/UpdateTicket';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -53,7 +55,7 @@ const AppRouter = props => {
     }, [authToken]);
 
     const MenuIcon = () => {
-        const navigation = useNavigation();
+        let navigation = useNavigation();
         return (
             <View style={styles.rightHeaderButton}>
                 <TouchableOpacity
@@ -107,11 +109,12 @@ const AppRouter = props => {
     };
 
     const EditTicket = () => {
+        let navigation = useNavigation();
         return (
             <View style={[styles.rightHeaderButton,{marginHorizontal: MarginConstants.tab1}]}>
                 <TouchableOpacity
                     onPress={() => {
-
+                        navigation.navigate("Update Ticket");
                     }}>
                     <Text style={styles.editText}> Edit </Text>
                 </TouchableOpacity>
@@ -131,8 +134,8 @@ const AppRouter = props => {
                                 keyboardDismissMode={'auto'}
         >
             <TicketLogTab.Screen name="Overview" component={TicketOverview} initialParams={{data: props.route.params.item}}/>
-            <TicketLogTab.Screen name="Comments" component={TicketOverview} />
-            <TicketLogTab.Screen name="Logs" component={TicketOverview} />
+            <TicketLogTab.Screen name="Comments" component={TicketComments} />
+            <TicketLogTab.Screen name="Logs" component={TicketComments} />
         </TicketLogTab.Navigator>
     );
 
@@ -229,6 +232,13 @@ const AppRouter = props => {
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft />,
                     headerRight: props => route.state && route.state.index !== 0 ? <View/> : <EditTicket />,
+                })}
+            />
+            <RootStack.Screen
+                name="Update Ticket"
+                component={UpdateTicket}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft />,
                 })}
             />
         </RootStack.Navigator>
