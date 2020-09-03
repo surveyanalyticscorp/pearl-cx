@@ -3,11 +3,10 @@ import {
   Dimensions,
   StyleSheet,
   View,
-  Button,
   TouchableHighlight,
   Text,
 } from 'react-native';
-import {fontFamily} from '../styles/font.constants';
+import {FontFamily} from '../styles/font.constants';
 import Picker from '@gregfrench/react-native-wheel-picker';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -199,7 +198,7 @@ export default class MonthYearSelector extends Component {
           color: this.props.primaryColor,
           marginTop: 20,
           fontSize: 18,
-          fontFamily: fontFamily.Bold,
+          fontFamily: FontFamily.Bold,
         }}
         onValueChange={value => {
           this.validateAndSetMonth(value, this.state.selectedYear);
@@ -233,7 +232,7 @@ export default class MonthYearSelector extends Component {
           color: this.props.primaryColor,
           marginTop: 20,
           fontSize: 18,
-          fontFamily: fontFamily.Bold,
+          fontFamily: FontFamily.Bold,
         }}
         onValueChange={value => {
           this.setState({selectedYear: value}, () => {

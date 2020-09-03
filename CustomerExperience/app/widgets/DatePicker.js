@@ -6,7 +6,7 @@ import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import StringUtils from '../Utils/StringUtils';
-import {fontFamily} from '../styles/font.constants';
+import {FontFamily} from '../styles/font.constants';
 let PickerItem = Picker.Item;
 
 export default function DatePicker(props) {
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     pickerHeader: {
         color: Colors.secondary,
         paddingVertical:PaddingConstants.tab1,
-        fontFamily: fontFamily.Regular,
+        fontFamily: FontFamily.Regular,
         fontSize: TextSizes.secondary,
         justifyContent: 'center',
         alignItems:'center',

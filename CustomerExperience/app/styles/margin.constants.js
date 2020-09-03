@@ -1,13 +1,13 @@
 import {Platform} from 'react-native';
+import {$rem} from './globalStyleVariables';
 const factor = 0.5;
-export let rem = Platform.OS === 'ios' ? 15 : 14;
 
 export const MarginConstants = {
-  tab1: factor * rem,
-  tab2: factor * rem + 10,
-  tab3: factor * rem + 20,
-  tab4: factor * rem + 30,
-  halfTab: (factor * rem) / 2,
+  tab1: factor * $rem,
+  tab2: factor * $rem + 10,
+  tab3: factor * $rem + 20,
+  tab4: factor * $rem + 30,
+  halfTab: (factor * $rem) / 2,
 };
 
 export const SafeAreaConstants = {

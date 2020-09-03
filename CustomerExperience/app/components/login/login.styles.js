@@ -2,7 +2,7 @@ import {Platform, StyleSheet, Dimensions} from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';
 import {buttonColors, Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {fontFamily} from '../../styles/font.constants';
+import {FontFamily} from '../../styles/font.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 const screen = Dimensions.get('screen');
 let { height, width }= Dimensions.get('window');
@@ -52,7 +52,7 @@ export const loginStyles = StyleSheet.create({
   nextText: {
     alignSelf: 'flex-end',
     color: textColors.primary,
-    fontFamily: fontFamily.SemiBold,
+    fontFamily: FontFamily.SemiBold,
     fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
   },
   forgotPswdButton: {

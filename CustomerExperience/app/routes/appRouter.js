@@ -13,7 +13,6 @@ import DrawerContent from '../routes/DrawerContent';
 import CxDashboard from '../components/dashboard/CxDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import SignInStack from './signInStack';
-import {MyTheme} from '../styles/styles';
 import {isStringNullOrEmpty} from '../Utils/Utility';
 import Feedback from '../components/feedback/Feedback';
 import FeedbackDetails from '../components/feedback/FeedbackDetails'
@@ -226,3 +225,14 @@ const styles = StyleSheet.create({
     }
 
 });
+
+const MyTheme = {
+    dark: false,
+    colors: {
+        background: Colors.darkerGrey,
+        card: Colors.accent,
+        text: Colors.white,
+        notification: Colors.accent,
+        primary: Colors.secondary
+    },
+};

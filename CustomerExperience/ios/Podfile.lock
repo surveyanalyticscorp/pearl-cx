@@ -237,6 +237,8 @@ PODS:
     - React
   - react-native-netinfo (4.0.0):
     - React
+  - react-native-orientation-locker (1.2.0):
+    - React
   - react-native-safe-area-context (0.6.4):
     - React
   - react-native-slider (3.0.3):
@@ -360,6 +362,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-appearance (from `../node_modules/react-native-appearance`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-orientation-locker (from `../node_modules/react-native-orientation-locker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -432,6 +435,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-appearance"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-orientation-locker:
+    :path: "../node_modules/react-native-orientation-locker"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -505,6 +510,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
   react-native-appearance: fc2014516054585d531e07aa0b40ab0de1d2be85
   react-native-netinfo: 1f944066b88481f1170bebf3196f1ed95620fb84
+  react-native-orientation-locker: 47aaa55d59bfc1613804dc22f159e6bb1cca5f30
   react-native-safe-area-context: 042dfc9d4db17196841df962ba9497f6e7a5bd02
   react-native-slider: b733e17fdd31186707146debf1f04b5d94aa1a93
   react-native-webview: e2c0bce9a1a7c7edd4eb30f0c3016fce216245ce

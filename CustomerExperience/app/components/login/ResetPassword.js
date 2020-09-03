@@ -7,7 +7,7 @@ import {
     View,
 } from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';
-import {fontFamily} from '../../styles/font.constants';
+import {FontFamily} from '../../styles/font.constants';
 import {buttonColors, Colors, textColors} from '../../styles/color.constants';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
@@ -136,7 +136,7 @@ const ResetPassword = props => {
                                 fontSize: 15,
                                 width: '90%',
                                 textAlign: 'center',
-                                fontFamily: fontFamily.Medium,
+                                fontFamily: FontFamily.Medium,
                                 color: textColors.primary,
                                 alignSelf: 'center',
                                 marginTop: MarginConstants.halfTab,

@@ -11,6 +11,7 @@ import ThreeDot from '../../Utils/ThreeDots';
 import StringUtils from '../../Utils/StringUtils';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Colors} from '../../styles/color.constants';
 
 const ProgressColor = {
   5: '#ff0101',
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(205, 205, 205, 0.2)',
+    backgroundColor: Colors.grey,
   },
   status: {
     flexDirection: 'row',
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(205, 205, 205, 0.4)',
+    backgroundColor: Colors.white,
   },
   rightIcon: {
     width: 32,
@@ -199,13 +200,13 @@ const styles = StyleSheet.create({
     color: '#9b9b9b',
   },
   whiteText: {
-    color: 'white',
+    color: Colors.white,
   },
   boldText: {
     fontWeight: 'bold',
   },
   blueText: {
-    color: 'rgb(29, 119, 186)',
+    color: Colors.primary,
   },
 });
 export default FeedbackCell;

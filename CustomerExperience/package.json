@@ -43,6 +43,7 @@
     "react-native-material-textfield": "git+https://github.com/javarahulsharma/react-native-material-textfield.git",
     "react-native-material-textfield-axel": "^0.14.0",
     "react-native-modal": "^11.5.6",
+    "react-native-orientation-locker": "^1.2.0",
     "react-native-paper": "^3.10.1",
     "react-native-pie": "^1.1.2",
     "react-native-read-more-text": "^1.1.2",

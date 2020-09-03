@@ -8,7 +8,7 @@ import DatePicker from './DatePicker';
 import {MonthYearFormat} from '../Utils/AppConstants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
-import {fontFamily} from '../styles/font.constants';
+import {FontFamily} from '../styles/font.constants';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
         color: Colors.primary,
         textAlign: 'center',
         fontSize: TextSizes.primary,
-        fontFamily: fontFamily.Regular
+        fontFamily: FontFamily.Regular
     },
     dateContainer: {
         minHeight: PaddingConstants.tab4,
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: Colors.secondary,
-        fontFamily: fontFamily.Regular,
+        fontFamily: FontFamily.Regular,
         fontSize: TextSizes.secondary,
         justifyContent: 'center',
         alignItems:'center',

@@ -3,7 +3,7 @@ import {View, Text, Dimensions, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {Colors} from '../../../styles/color.constants';
 import {TabBar, TabView} from 'react-native-tab-view';
-import {fontFamily} from '../../../styles/font.constants';
+import {FontFamily} from '../../../styles/font.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {apiHandler} from '../../../api/ApiHandler';
@@ -130,7 +130,7 @@ const DetractorTickets = props => {
                             <Text
                                 style={{
                                     color: Colors.primary,
-                                    fontFamily: fontFamily.Light,
+                                    fontFamily: FontFamily.Light,
                                     fontSize: TextSizes.secondary,
                                     marginVertical: MarginConstants.halfTab,
                                 }}>

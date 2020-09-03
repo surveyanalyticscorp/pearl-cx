@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     emptyText: {
-        color: Colors.black,
+        color: Colors.primary,
         fontSize: 16
     },
     counterContainer: {
