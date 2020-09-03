@@ -2,7 +2,7 @@ import React, {useState, useRef} from 'react';
 import SafeAreaView from "react-native-safe-area-view";
 import {View, Text, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableWithoutFeedback} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
-import {fontFamily} from '../../../styles/font.constants';
+import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
@@ -239,6 +239,6 @@ const styles = StyleSheet.create({
         fontSize: TextSizes.primary,
         textAlign: 'center',
         paddingHorizontal: PaddingConstants.tab3,
-        fontFamily: fontFamily.SemiBold,
+        fontFamily: FontFamily.SemiBold,
     },
 });

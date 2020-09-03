@@ -71,8 +71,8 @@ export default function TicketOverview(props) {
         <SafeAreaView forceInset={{bottom: 'never'}} style={styles.safeArea}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.safeArea}>
-                {renderTicketDetails()}
                 {renderCustomerEmail()}
+                {renderTicketDetails()}
                 {renderCustomerComment()}
             </View>
             </ScrollView>

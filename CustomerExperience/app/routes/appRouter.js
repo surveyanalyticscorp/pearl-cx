@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../styles/color.constants';
-import {fontFamily} from '../styles/font.constants';
+import {FontFamily} from '../styles/font.constants';
 import DrawerContent from '../routes/DrawerContent';
 import CxDashboard from '../components/dashboard/CxDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
         color: Colors.white,
         textAlignVertical:'center',
         fontSize: TextSizes.largeText,
-        fontFamily: fontFamily.Regular,
+        fontFamily: FontFamily.Regular,
         paddingTop:5,
         paddingLeft:5,
     }

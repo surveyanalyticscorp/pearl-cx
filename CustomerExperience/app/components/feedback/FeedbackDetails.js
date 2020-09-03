@@ -12,7 +12,6 @@ import {StackActions} from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-
 let { width } = Dimensions.get('window');
 
 export default function FeedbackDetails(props){
