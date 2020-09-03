@@ -1,9 +1,8 @@
 import React from 'react';
-import {StyleSheet, View, TouchableHighlight, Text} from 'react-native';
+import {StyleSheet, View, TouchableWithoutFeedback, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {TextSizes} from '../../../styles/textsize.constants';
-import {Colors} from '../../../styles/color.constants';
-import {MarginConstants} from '../../../styles/margin.constants';
+
 const CXTrendItemWidget = props => {
   let total = props.promoter + props.detractor + props.passive;
   let promoterPercent = (props.promoter / total) * 100;
@@ -16,14 +15,10 @@ const CXTrendItemWidget = props => {
   };
 
   return (
-    <TouchableHighlight
+    <TouchableWithoutFeedback
       onPress={() => {
-        if (props.isClickable) {
-          props.onPress();
-        }
-      }}
-      activeOpacity={0.6}
-      underlayColor={'#CCCCCC'}>
+          props.isClickable && props.onPress();
+      }}>
       <View style={styles.mainContainer}>
         <View style={styles.titleContainer}>
           <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
@@ -70,7 +65,7 @@ const CXTrendItemWidget = props => {
           </View>
         )}
       </View>
-    </TouchableHighlight>
+    </TouchableWithoutFeedback>
   );
 };
 

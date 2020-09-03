@@ -51,29 +51,30 @@ export const dashboardStyles = StyleSheet.create({
     fontSize: TextSizes.secondary,
   },
   responseText: {
-    color: '#00508E',
+    color: Colors.accent,
     fontFamily: FontFamily.Bold,
     fontSize: 30,
   },
   response: {
-    color: '#00508E',
+    color: Colors.accent,
     fontFamily: FontFamily.Light,
     fontSize: TextSizes.largeText,
   },
   ticketButton: {
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#404A5B',
+    flexDirection:'row',
+    backgroundColor: Colors.lightBlack,
     marginVertical: MarginConstants.tab4,
     paddingVertical: PaddingConstants.tab2,
   },
   ticketText: {
-    color: 'white',
+    color: Colors.white,
     fontFamily: FontFamily.Regular,
     fontSize: TextSizes.largeText,
   },
   listViewContainer: {
-    backgroundColor: 'white',
+    backgroundColor: Colors.white,
     height: MarginConstants.tab4 * 5,
   },
   textView:{

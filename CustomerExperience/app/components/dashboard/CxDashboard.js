@@ -1,5 +1,14 @@
 import React, {useCallback, useEffect, useState, useRef} from 'react';
-import {FlatList, ImageBackground, RefreshControl, ScrollView, Text, TouchableHighlight, View} from 'react-native';
+import {
+    FlatList,
+    ImageBackground,
+    RefreshControl,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View,
+} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import CXTrendItemWidget from './components/CXTrendItemWidget';
 import {showLoading} from '../../redux/actions/index';
@@ -13,6 +22,7 @@ import QPSpinner from '../../widgets/QPSpinner';
 import {EventRegister} from "react-native-event-listeners";
 import RangeCalendar from '../../widgets/RangeCalendar';
 import ArrayUtils from '../../Utils/ArrayUtils';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -138,8 +148,7 @@ const CxDashboard = props => {
 
     const getTicketsButton = () => {
         return (
-            <TouchableHighlight
-                style={dashboardStyles.ticketButton}
+            <TouchableWithoutFeedback
                 onPress={() => {
                     let data = {
                         storeId: '' + props.dashboardData.primaryStoreId,
@@ -151,15 +160,16 @@ const CxDashboard = props => {
                     });
                     props.navigation.dispatch(pushAction);
                 }}>
-                <View>
+                <View style={dashboardStyles.ticketButton}>
                     <Text
                         numberOfLines={1}
                         ellipsizeMode={'tail'}
                         style={dashboardStyles.ticketText}>
                         {getTicketText()}
                     </Text>
+                <Icon name="arrow-right" size={20} color= {Colors.white}/>
                 </View>
-            </TouchableHighlight>
+            </TouchableWithoutFeedback>
         );
     };
 
