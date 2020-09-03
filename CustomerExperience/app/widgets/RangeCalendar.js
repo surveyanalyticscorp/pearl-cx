@@ -110,7 +110,6 @@ export default function RangeCalendar(props) {
     };
 
     return (
-
         <Modal animationType={'fade'}
                transparent={true}
                onRequestClose={() => {
@@ -125,7 +124,9 @@ export default function RangeCalendar(props) {
                         {renderCloseButton()}
                         <View style={styles.modalDOBView}>
                             {renderHeaderText()}
+                            <Text style={styles.text}>Start date</Text>
                             {renderStartDateCell()}
+                            <Text style={styles.text}>End date</Text>
                             {renderEndDateCell()}
                         </View>
                         {renderDatePicker()}
@@ -238,7 +239,8 @@ const styles = StyleSheet.create({
         fontSize: TextSizes.secondary,
         justifyContent: 'center',
         alignItems:'center',
-        paddingLeft: PaddingConstants.tab1
+        paddingLeft: PaddingConstants.tab1,
+        paddingBottom: PaddingConstants.halfTab
     },
     textDateContainer: {
         flex:1,
