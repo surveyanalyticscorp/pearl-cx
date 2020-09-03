@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {fontFamily} from '../../styles/font.constants';
+import {FontFamily} from '../../styles/font.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 export const dashboardStyles = StyleSheet.create({
   container: {
@@ -41,23 +41,23 @@ export const dashboardStyles = StyleSheet.create({
   gaugeText: {
     backgroundColor: 'transparent',
     color: textColors.accent,
-    fontFamily: fontFamily.SemiBold,
+    fontFamily: FontFamily.SemiBold,
     fontSize: TextSizes.donutPercentText,
   },
   npmGaugeText: {
     backgroundColor: 'transparent',
     color: textColors.accent,
-    fontFamily: fontFamily.Light,
+    fontFamily: FontFamily.Light,
     fontSize: TextSizes.secondary,
   },
   responseText: {
     color: Colors.accent,
-    fontFamily: fontFamily.Bold,
+    fontFamily: FontFamily.Bold,
     fontSize: 30,
   },
   response: {
     color: Colors.accent,
-    fontFamily: fontFamily.Light,
+    fontFamily: FontFamily.Light,
     fontSize: TextSizes.largeText,
   },
   ticketButton: {
@@ -70,7 +70,7 @@ export const dashboardStyles = StyleSheet.create({
   },
   ticketText: {
     color: Colors.white,
-    fontFamily: fontFamily.Regular,
+    fontFamily: FontFamily.Regular,
     fontSize: TextSizes.largeText,
   },
   listViewContainer: {
@@ -86,7 +86,7 @@ export const dashboardStyles = StyleSheet.create({
   },
   listTitle: {
     color: textColors.accent,
-    fontFamily: fontFamily.Regular,
+    fontFamily: FontFamily.Regular,
     fontSize: TextSizes.secondary,
   },
   responseView: {
@@ -116,7 +116,7 @@ export const dashboardStyles = StyleSheet.create({
   },
   detractorEmptyText: {
     color: Colors.white,
-    fontFamily: fontFamily.Bold ,
+    fontFamily: FontFamily.Bold ,
     fontSize: TextSizes.largeText
   }
 });

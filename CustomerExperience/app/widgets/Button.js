@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
-import {fontFamily} from '../styles/font.constants';
+import {FontFamily} from '../styles/font.constants';
 const screen = Dimensions.get('screen');
 const QPButton = props => {
   let style = props.style ? props.style : styles.button;
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   text: {
     alignSelf: 'center',
     color: textColors.primary,
-    fontFamily: fontFamily.SemiBold,
+    fontFamily: FontFamily.SemiBold,
     fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
   },
 });

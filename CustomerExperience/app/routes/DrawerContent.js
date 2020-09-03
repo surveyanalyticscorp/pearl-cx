@@ -11,7 +11,7 @@ import {Caption} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Colors, textColors} from '../styles/color.constants';
 import AsyncStorage from '@react-native-community/async-storage';
-import {fontFamily} from '../styles/font.constants';
+import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {clearUserInfo} from '../redux/actions';
@@ -200,15 +200,15 @@ const styles = StyleSheet.create({
   },
   labelStyle: {
     marginLeft: MarginConstants.tab3,
-    fontFamily: fontFamily.Light,
+    fontFamily: FontFamily.Light,
     fontSize: TextSizes.primary,
   },
   emailCaption: {
-    fontFamily: fontFamily.Light,
+    fontFamily: FontFamily.Light,
     fontSize: TextSizes.secondary,
   },
   companyCaptions: {
-    fontFamily: fontFamily.Light,
+    fontFamily: FontFamily.Light,
     fontSize: TextSizes.secondary,
   },
   drawerSection: {
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.transparent,
   },
   dropperText: {
-    fontFamily: fontFamily.Regular,
+    fontFamily: FontFamily.Regular,
     fontSize: TextSizes.secondary,
     color: textColors.secondary,
   },
