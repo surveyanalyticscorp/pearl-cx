@@ -8,6 +8,7 @@ import {
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import FontIcon from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../styles/color.constants';
 import {fontFamily} from '../styles/font.constants';
 import DrawerContent from '../routes/DrawerContent';
@@ -102,7 +103,7 @@ const AppRouter = props => {
                     onPress={() => {
                         EventRegister.emit('openDashboardCalendar', true);
                     }}>
-                    <MaterialIcon name="more-vert" size={30} color="white"/>
+                    <MaterialIcon name="more-vert" size={30} color={Colors.white}/>
                 </TouchableOpacity>
             </View>
         );
@@ -111,12 +112,12 @@ const AppRouter = props => {
     const EditTicket = () => {
         let navigation = useNavigation();
         return (
-            <View style={[styles.rightHeaderButton,{marginHorizontal: MarginConstants.tab1}]}>
+            <View style={[styles.rightHeaderButton,{marginHorizontal: 1.5*MarginConstants.tab1}]}>
                 <TouchableOpacity
                     onPress={() => {
                         navigation.navigate("Update Ticket");
                     }}>
-                    <Text style={styles.editText}> Edit </Text>
+                    <FontIcon name={'edit'} size={25} color={Colors.white}/>
                 </TouchableOpacity>
             </View>
         );
