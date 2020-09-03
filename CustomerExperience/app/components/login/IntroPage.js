@@ -11,7 +11,7 @@ import {
 import {MarginConstants} from '../../styles/margin.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {textColors} from '../../styles/color.constants';
-import {fontFamily} from '../../styles/font.constants';
+import {FontFamily} from '../../styles/font.constants';
 export default function IntroPage(props) {
   const {marketingComponent} = props;
   return (
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     height: '50%',
   },
   introTextHeader: {
-    fontFamily: fontFamily.Bold,
+    fontFamily: FontFamily.Bold,
     width: '100%',
     fontSize: Platform.isPad ? TextSizes.extraLargeText : TextSizes.largeText,
     color: textColors.primary,
@@ -63,9 +63,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: MarginConstants.tab3,
     paddingHorizontal: MarginConstants.tab3,
-    fontFamily: fontFamily.Light,
+    fontFamily: FontFamily.Light,
     fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
-    //fontFamily: FontFamily.Light,
   },
 
   logoImageView: {

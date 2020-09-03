@@ -11,7 +11,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {MarginConstants} from '../../styles/margin.constants';
 import {buttonColors, Colors, textColors} from '../../styles/color.constants';
 import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
-import {fontFamily} from '../../styles/font.constants';
+import {FontFamily} from '../../styles/font.constants';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import {clearError} from '../../redux/actions/index';
@@ -25,7 +25,6 @@ import DialogInput from '../../widgets/dialog/Input';
 import DialogButton from '../../widgets/dialog/Button';
 import QPSpinner from '../../widgets/QPSpinner';
 import {PaddingConstants} from '../../styles/padding.constants';
-import {loginStyles} from './login.styles';
 import {TextSizes} from '../../styles/textsize.constants';
 let { height, width }= Dimensions.get('window');
 
@@ -346,13 +345,13 @@ const styles = StyleSheet.create({
     nextText: {
         alignSelf: 'flex-end',
         color: textColors.primary,
-        fontFamily: fontFamily.SemiBold,
+        fontFamily: FontFamily.SemiBold,
         fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
     },
     forgotPasswordMessage: {
         fontSize: 15,
         textAlign: 'center',
-        fontFamily: fontFamily.Light,
+        fontFamily: FontFamily.Light,
         color: textColors.primary,
         alignSelf: 'center',
         marginTop: MarginConstants.halfTab,

@@ -2,7 +2,7 @@ import React from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import FeedbackCell from '../view/FeedbackCells';
 import {Colors} from '../../styles/color.constants';
-import {fontFamily} from '../../styles/font.constants';
+import {FontFamily} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import QPWebView from '../../widgets/QPWebView';
@@ -35,9 +35,9 @@ export default function FeedbackDetails(props){
             <FeedbackDetailsTabStack {...props}/>
             <ActionButton
                 elevation={8}
-                buttonColor="rgba(28,118,185,1)"
+                buttonColor= {Colors.accent}
                 onPress={onActionButtonPress}
-                icon={<Icon size={30} name="comment" color={'white'} />}
+                icon={<Icon size={30} name="comment" color={Colors.white} />}
             />
         </View>
     );
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     },
     routeTitle: {
         color: Colors.primary,
-        fontFamily: fontFamily.Light,
+        fontFamily: FontFamily.Light,
         fontSize: TextSizes.secondary,
         marginVertical: MarginConstants.halfTab,
     }

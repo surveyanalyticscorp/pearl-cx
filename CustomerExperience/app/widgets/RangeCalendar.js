@@ -8,7 +8,7 @@ import DatePicker from './DatePicker';
 import {MonthYearFormat} from '../Utils/AppConstants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
-import {fontFamily} from '../styles/font.constants';
+import {FontFamily} from '../styles/font.constants';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 
@@ -110,7 +110,6 @@ export default function RangeCalendar(props) {
     };
 
     return (
-
         <Modal animationType={'fade'}
                transparent={true}
                onRequestClose={() => {
@@ -125,7 +124,9 @@ export default function RangeCalendar(props) {
                         {renderCloseButton()}
                         <View style={styles.modalDOBView}>
                             {renderHeaderText()}
+                            <Text style={styles.text}>Start date</Text>
                             {renderStartDateCell()}
+                            <Text style={styles.text}>End date</Text>
                             {renderEndDateCell()}
                         </View>
                         {renderDatePicker()}
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
         color: Colors.primary,
         textAlign: 'center',
         fontSize: TextSizes.primary,
-        fontFamily: fontFamily.Regular
+        fontFamily: FontFamily.Regular
     },
     dateContainer: {
         minHeight: PaddingConstants.tab4,
@@ -234,11 +235,12 @@ const styles = StyleSheet.create({
     },
     text: {
         color: Colors.secondary,
-        fontFamily: fontFamily.Regular,
+        fontFamily: FontFamily.Regular,
         fontSize: TextSizes.secondary,
         justifyContent: 'center',
         alignItems:'center',
-        paddingLeft: PaddingConstants.tab1
+        paddingLeft: PaddingConstants.tab1,
+        paddingBottom: PaddingConstants.halfTab
     },
     textDateContainer: {
         flex:1,
