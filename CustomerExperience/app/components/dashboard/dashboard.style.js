@@ -115,8 +115,8 @@ export const dashboardStyles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   detractorEmptyText: {
-    color: Colors.white,
-    fontFamily: FontFamily.Bold ,
+    color: Colors.secondary,
+    fontFamily: FontFamily.Regular ,
     fontSize: TextSizes.largeText
   }
 });

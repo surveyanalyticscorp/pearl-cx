@@ -29,7 +29,7 @@ export default function TicketOverview(props) {
         return (
             <View style={[styles.row,{ marginBottom: 1}]}>
                 <Text style={styles.rowText}> {header} </Text>
-                <Text style={styles.rowText} numberOfLines={2}>{value}</Text>
+                <Text style={styles.rowValue} numberOfLines={2}>{value}</Text>
             </View>
         )
     };
@@ -106,6 +106,10 @@ const styles = StyleSheet.create({
         color: Colors.primary,
         fontSize: TextSizes.secondary,
     },
+    rowValue: {
+        color: Colors.secondary,
+        fontSize: TextSizes.secondary,
+    },
     rowHeader: {
         backgroundColor: Colors.white,
         height: 1.5*PaddingConstants.tab3,
@@ -118,7 +122,7 @@ const styles = StyleSheet.create({
         paddingLeft:3
     },
     rowBody: {
-        color: Colors.primary,
+        color: Colors.secondary,
         fontSize: TextSizes.secondary,
         paddingHorizontal: PaddingConstants.tab2
     },

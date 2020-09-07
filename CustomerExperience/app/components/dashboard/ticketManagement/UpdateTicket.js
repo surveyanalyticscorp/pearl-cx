@@ -231,7 +231,6 @@ const styles = StyleSheet.create({
         marginHorizontal: MarginConstants.tab4,
         justifyContent:'center',
         alignItems:'center',
-        borderRadius:20,
         backgroundColor: Colors.accent
     },
     updateText: {

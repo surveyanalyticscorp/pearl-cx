@@ -3,6 +3,10 @@ import {StyleSheet, View, TouchableWithoutFeedback, Text} from 'react-native';
 import TimeAgo from '../../../widgets/TimeAgo';
 import ReadMore from 'react-native-read-more-text';
 import {Colors} from '../../../styles/color.constants';
+import {MarginConstants} from '../../../styles/margin.constants';
+import {PaddingConstants} from '../../../styles/padding.constants';
+import {TextSizes} from '../../../styles/textsize.constants';
+import StringUtils from '../../../Utils/StringUtils';
 
 const TicketWidget = props => {
   const _renderTruncatedFooter = handlePress => {
@@ -29,6 +33,19 @@ const TicketWidget = props => {
     props.navigation.navigate('Ticket Details',{item:props.item});
   };
 
+  let renderReadMoreView = () => {
+    if (StringUtils.isNotEmpty(props.comment)) {
+      return <ReadMore
+          numberOfLines={3}
+          renderTruncatedFooter={_renderTruncatedFooter}
+          renderRevealedFooter={_renderRevealedFooter}>
+        <Text style={styles.comment}>{ props.comment }</Text>
+      </ReadMore>
+    }
+    return <Text style={styles.comment}>No comments</Text>
+  };
+
+
   return (
     <TouchableWithoutFeedback
       onPress={onPress}
@@ -38,58 +55,44 @@ const TicketWidget = props => {
           {props.item.emailAddress}
         </Text>
         <TimeAgo style={styles.subtitle} time={props.item.timestamp} />
-        <View style={{marginTop: 10}}>
-          <ReadMore
-            numberOfLines={3}
-            renderTruncatedFooter={_renderTruncatedFooter}
-            renderRevealedFooter={_renderRevealedFooter}>
-            <Text style={styles.comment}>
-              {props.comment ? props.comment : 'No comments.'}
-            </Text>
-          </ReadMore>
+        <View style={{marginTop: MarginConstants.halfTab}}>
+          {renderReadMoreView()}
         </View>
       </View>
     </TouchableWithoutFeedback>
   );
 };
 
-TicketWidget.defaultProps = {
-  name: 'Customer Experience',
-  time: '2016-10-17 00:46:17.0',
-  comment:
-    'I am not able to login to my account. It keeps saying invalid login credentials. Can someone please give me a call at my below mentioned number.',
-};
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: Colors.white,
-    marginTop: 10,
+    marginTop: MarginConstants.tab1,
     flex: 1,
     alignItems: 'flex-start',
-    marginLeft: 10,
-    marginRight: 10,
-    minHeight: 120,
-    padding: 10,
+    marginHorizontal: MarginConstants.tab1,
+    padding: PaddingConstants.tab1,
   },
   title: {
-    color: '#393939',
-    fontSize: 16,
+    color: Colors.primary,
+    fontSize: TextSizes.secondary,
     textAlign: 'left',
   },
   subtitle: {
-    fontSize: 12,
+    fontSize: TextSizes.mediumText,
     marginTop: 2,
-    color: '#393939',
+    color: Colors.secondary,
     textAlign: 'left',
   },
   comment: {
-    fontSize: 12,
-    color: '#393939',
+    fontSize: TextSizes.semiMediumText,
+    color: Colors.secondary,
     textAlign: 'left',
   },
   truncatedFooter: {
     color: Colors.accent,
     marginTop: 5,
-    fontSize: 12}
+    fontSize: TextSizes.mediumText
+  }
 });
 
 export default TicketWidget;

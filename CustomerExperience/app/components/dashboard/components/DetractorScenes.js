@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from 'react';
-import {View, Text, ImageBackground, FlatList} from 'react-native';
+import {View, Text, FlatList} from 'react-native';
 import TicketWidget from './TicketWidget';
 import {dashboardStyles} from '../dashboard.style';
 import {apiHandler} from '../../../api/ApiHandler';
@@ -99,10 +99,6 @@ const DetractorScenes = props => {
         let dataCount = props.route.params.dataCount;
         let tickets = responseData[dataCount].data["tickets"];
         return (
-            <ImageBackground
-                resizeMode={'cover'}
-                source={require('../../../config/images/background.png')}
-                style={dashboardStyles.imageBackgroundContainer}>
                 <View style={dashboardStyles.container}>
                     <FlatList
                         contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}
@@ -115,7 +111,6 @@ const DetractorScenes = props => {
                         ListEmptyComponent={renderNoDataFound}
                     />
                 </View>
-            </ImageBackground>
         );
     };
 
