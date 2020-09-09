@@ -76,9 +76,13 @@ export default function RangeCalendar(props) {
                 <TouchableOpacity style={styles.okButton}
                                          onPress={() => {
                                             if(startDate !== MonthYearFormat && endDate !== MonthYearFormat) {
-                                                props.onSubmit(startDate, endDate)
+                                                if(moment(endDate).isAfter(startDate)) {
+                                                    props.onSubmit(startDate, endDate)
+                                                } else {
+                                                    setValidationError('start date should be less than end date')
+                                                }
                                             } else {
-                                                setValidationError('Please select date')
+                                                setValidationError('Please select a date')
                                             }
 
                                          }}
