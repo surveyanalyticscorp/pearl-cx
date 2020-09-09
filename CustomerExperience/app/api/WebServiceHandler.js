@@ -114,7 +114,7 @@ export default class WebServiceHandler {
       fetch(url, {
         method: 'post',
         headers: WebServiceHandler.header(headerParam),
-        body: JSON.stringify(parameter),
+          body: JSON.stringify(parameter),
       })
         .then(response => response.json())
         .then(response => {

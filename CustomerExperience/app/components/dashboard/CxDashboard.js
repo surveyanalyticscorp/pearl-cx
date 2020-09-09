@@ -5,7 +5,6 @@ import {
     RefreshControl,
     ScrollView,
     Text,
-    TouchableOpacity,
     TouchableWithoutFeedback,
     View,
 } from 'react-native';
@@ -19,10 +18,11 @@ import {Colors} from '../../styles/color.constants';
 import Pie from 'react-native-pie';
 import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
-import {EventRegister} from "react-native-event-listeners";
 import RangeCalendar from '../../widgets/RangeCalendar';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import moment from 'moment';
+import {DMYFORMAT, MonthYearFormat, YMDFORMAT} from '../../Utils/AppConstants';
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -40,16 +40,12 @@ const CxDashboard = props => {
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
-    let listener = useRef(null);
+    let openDashboardCalendar = () => {
+        setCalendar(true)
+    };
 
     useEffect(() => {
-        props.getDashboardContent(props.authToken);
-        listener = EventRegister.addEventListener('openDashboardCalendar', data => {
-            setCalendar(true);
-        });
-        return () => {
-            EventRegister.removeEventListener(listener);
-        };
+        props.navigation.setParams({'openCalendar': openDashboardCalendar});
     }, []);
 
     useEffect(() => {
@@ -61,24 +57,47 @@ const CxDashboard = props => {
     useEffect(() => {
 
         if (callApi) {
-            props.getDashboardContent(props.authToken);
+
+            let data = {
+                startDate: moment().subtract(1, "month").format(YMDFORMAT),
+                endDate: moment().format(YMDFORMAT)
+            };
+
+            if(!isObjectEmpty(props.range)) {
+                data = {
+                    startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+                    endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+                };
+            }
+            props.getDashboardContent(props.authToken, data);
             setCallAPI(false);
         }
     }, [callApi]);
 
     const renderCalendarView = () => {
+
+        let startDate = MonthYearFormat;
+        let endDate = MonthYearFormat;
+
+        if(!isObjectEmpty(props.range)) {
+            startDate = props.range.startDate;
+            endDate = props.range.endDate;
+        }
         return <RangeCalendar
             showCalendar={calendar}
             closeCalendar={() => {
                 setCalendar(false);
             }}
+            startDate={startDate}
+            endDate={endDate}
             onSubmit={(startDate, endDate) => {
                 let range = {
                     startDate: startDate,
                     endDate: endDate
                 };
                 setCalendar(false);
-                props.setRange(range)
+                props.setRange(range);
+                setCallAPI(true);
             }}
         />;
     };
@@ -167,7 +186,7 @@ const CxDashboard = props => {
                         style={dashboardStyles.ticketText}>
                         {getTicketText()}
                     </Text>
-                <Icon name="arrow-right" size={20} color= {Colors.white}/>
+                    <Icon name="arrow-right" size={20} color= {Colors.white}/>
                 </View>
             </TouchableWithoutFeedback>
         );
@@ -344,14 +363,15 @@ const mapStateToProps = state => {
         isLoading: state.global.isLoading,
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
-        authToken: state.global.authToken
+        authToken: state.global.authToken,
+        range: state.dashboard.range
     };
 };
 
 const mapDispatchToProps = dispatch => ({
-    getDashboardContent: token => {
+    getDashboardContent: (token, data) => {
         dispatch(showLoading(true));
-        dispatch(getDashboardContent(token));
+        dispatch(getDashboardContent(token, data));
     },
     showLoading: (flag) => {
         dispatch(showLoading(flag));

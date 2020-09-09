@@ -16,8 +16,9 @@ export default function RangeCalendar(props) {
 
     let [isStartDateSelected, setStartDateSelected] = useState(true);
     let [isEndDateSelected, setEndDateSelected] = useState(false);
-    let [startDate, setStartDate] = useState('MM/YYYY');
-    let [endDate, setEndDate] = useState('MM/YYYY');
+    let [startDate, setStartDate] = useState(props.startDate);
+    let [endDate, setEndDate] = useState(props.endDate);
+    let [validationError, setValidationError] = useState('');
 
     const renderCloseButton = () => {
         return (
@@ -38,6 +39,7 @@ export default function RangeCalendar(props) {
     };
 
     let setSelectedData = (year, month, date) => {
+        setValidationError('');
         if(month.length === 1) {
             month = '0'+month;
         }
@@ -47,7 +49,8 @@ export default function RangeCalendar(props) {
         let tempDate = date+"/"+month+"/"+year;
         if(isStartDateSelected) {
             setStartDate(tempDate)
-        } else {
+        }
+        if(isEndDateSelected) {
             setEndDate(tempDate)
         }
     };
@@ -59,7 +62,7 @@ export default function RangeCalendar(props) {
                 onSubmit = {setSelectedData}
                 dateFormat = {MonthYearFormat}
                 savedDate = {isStartDateSelected ? startDate : endDate}
-                minYear={2000}
+                minYear={1970}
                 maxYear={2050}
             />
                 {renderPickerFooter()}
@@ -72,7 +75,16 @@ export default function RangeCalendar(props) {
             <View style={styles.calendarFooter}>
                 <TouchableOpacity style={styles.okButton}
                                          onPress={() => {
-                                             props.onSubmit(startDate, endDate)
+                                            if(startDate !== MonthYearFormat && endDate !== MonthYearFormat) {
+                                                if(moment(endDate).isAfter(startDate)) {
+                                                    props.onSubmit(startDate, endDate)
+                                                } else {
+                                                    setValidationError('start date should be less than end date')
+                                                }
+                                            } else {
+                                                setValidationError('Please select a date')
+                                            }
+
                                          }}
             >
                     <Text style={styles.text}>OK</Text>
@@ -109,6 +121,10 @@ export default function RangeCalendar(props) {
         />
     };
 
+    let renderValidationError = () => {
+        return <Text style={styles.error}>{ validationError }</Text>
+    };
+
     return (
         <Modal animationType={'fade'}
                transparent={true}
@@ -124,6 +140,7 @@ export default function RangeCalendar(props) {
                         {renderCloseButton()}
                         <View style={styles.modalDOBView}>
                             {renderHeaderText()}
+                            {renderValidationError()}
                             <Text style={styles.text}>Start date</Text>
                             {renderStartDateCell()}
                             <Text style={styles.text}>End date</Text>
@@ -241,6 +258,12 @@ const styles = StyleSheet.create({
         alignItems:'center',
         paddingLeft: PaddingConstants.tab1,
         paddingBottom: PaddingConstants.halfTab
+    },
+    error: {
+        color: Colors.error,
+        textAlign: 'center',
+        fontSize: TextSizes.secondary,
+        fontFamily: FontFamily.Light
     },
     textDateContainer: {
         flex:1,

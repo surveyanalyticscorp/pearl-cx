@@ -4,9 +4,10 @@ export const SET_DASHBOARD_RANGE_FILTER = 'SET_DASHBOARD_RANGE_FILTER';
 export const GET_DETRACTOR_TICKET = 'GET_DETRACTOR_TICKET';
 export const DETRACTOR_TICKET_RECEIVED = 'DETRACTOR_TICKET_RECEIVED';
 
-export const getDashboardContent = token => ({
+export const getDashboardContent = (token, param) => ({
   type: GET_DASHBOARD,
   token,
+  param
 });
 
 export const setDashboardRangeFilter = range => ({
