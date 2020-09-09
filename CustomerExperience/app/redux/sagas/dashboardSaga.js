@@ -17,7 +17,7 @@ export function* fetchDashboard(action) {
     const json = yield WebServiceHandler.postNew(
       CX_HOME,
       {'Auth-Token': action.token},
-      {},
+      action.param,
     );
 
     yield put({

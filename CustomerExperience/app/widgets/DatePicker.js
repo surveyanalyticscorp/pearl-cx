@@ -10,9 +10,10 @@ import {FontFamily} from '../styles/font.constants';
 let PickerItem = Picker.Item;
 
 export default function DatePicker(props) {
-    /* This is done for supporting different languages in future */
+
     let months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
+    let [valueChanged, setValueChanged] = useState(false);
     let getYears = (minYears, maxYears) => {
         let data = [];
         let i = minYears;
@@ -52,8 +53,8 @@ export default function DatePicker(props) {
     let [selectedMonth, setSelectedMonth] = useState(setMonth());
 
     useEffect(() => {
-        saveDate()
-    },[selectedYear,selectedMonth]);
+        valueChanged && saveDate()
+    },[selectedYear, selectedMonth]);
 
 
     let saveDate = () => {
@@ -86,7 +87,7 @@ export default function DatePicker(props) {
                     })}
                     onValueChange={(value) => {
                         setSelectedMonth(value);
-                        // saveDate()
+                        setValueChanged(true)
                     }}>
                 {
                     months.map((value, i) => (
@@ -109,7 +110,7 @@ export default function DatePicker(props) {
                     })}
                     onValueChange={(value) => {
                         setSelectedYear(value);
-                        // saveDate()
+                        setValueChanged(true)
                     }}>
                 {
                     years.map((value, i) => (

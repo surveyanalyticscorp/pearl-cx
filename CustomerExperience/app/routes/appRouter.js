@@ -60,7 +60,7 @@ const AppRouter = props => {
             </View>
         );
     };
-    const FeedbackCalendar = (props) => {
+    const Calendar = (props) => {
         return (
             <View style={styles.rightHeaderButton}>
                 <TouchableOpacity
@@ -83,19 +83,6 @@ const AppRouter = props => {
                         navigation.dispatch(popAction);
                     }}>
                     <Icon name="arrow-left" size={20} color= {Colors.white}/>
-                </TouchableOpacity>
-            </View>
-        );
-    };
-
-    const DashboardCalendar = () => {
-        return (
-            <View style={styles.rightHeaderButton}>
-                <TouchableOpacity
-                    onPress={() => {
-                        EventRegister.emit('openDashboardCalendar', true);
-                    }}>
-                    <MaterialIcon name="more-vert" size={30} color="white"/>
                 </TouchableOpacity>
             </View>
         );
@@ -142,7 +129,7 @@ const AppRouter = props => {
                 component={FeedbackTabStack}
                 options={({ navigation, route }) => ({
             headerLeft: props => <MenuIcon />,
-            headerRight: props => <FeedbackCalendar {...props} route={route}/>,
+            headerRight: props => <Calendar {...props} route={route}/>,
         })}
             />
             <RootStack.Screen
@@ -168,10 +155,10 @@ const AppRouter = props => {
             <RootStack.Screen
                 name="Dashboard"
                 component={CxDashboard}
-                options={{
+                options={({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon/>,
-                    headerRight: props => <DashboardCalendar/>,
-                }}
+                    headerRight: props => <Calendar {...props} route={route}/>,
+                })}
             />
             <RootStack.Screen
                 name="DashBoardStoreDetails"
