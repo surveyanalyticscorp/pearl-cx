@@ -24,7 +24,7 @@ function SplashScreen(props) {
         if (!isStringNullOrEmpty(userInfo)) {
           props.saveUserInfo(JSON.parse(userInfo));
         }
-        if (!isStringNullOrEmpty(userInfo)) {
+        if (!isStringNullOrEmpty(dashboardRange)) {
           props.setRange(JSON.parse(dashboardRange));
         }
         setMoveNext(true)
