@@ -4,7 +4,11 @@ import {DETRACTOR_TICKET_RECEIVED} from '../actions';
 const initialState = {
   dashboardData: {},
   detractorTickets: {},
-  range:{}
+  range:{
+    type: 1,
+    startDate: '',
+    endDate: ''
+  }
 };
 
 const dashboardReducer = (state = initialState, action) => {

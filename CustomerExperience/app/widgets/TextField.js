@@ -56,7 +56,7 @@ const QPTextField = props => {
         autoCapitalize={'none'}
         autoCorrect={false}
         autoFocus={props.autofocus}
-        tintColor={Colors.textTintColor}
+        tintColor={props.tintColor || Colors.textTintColor}
         label={label}
         defaultValue={defaultValue}
         secureTextEntry={secureText}
@@ -66,6 +66,7 @@ const QPTextField = props => {
         onChangeText={onChange}
         ref={fieldRef}
         clearButtonMode={'always'}
+        placeholder={props.placeholder}
       />
       {props.secureText && renderVisibility()}
     </View>
