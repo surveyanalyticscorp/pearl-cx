@@ -61,7 +61,7 @@ export default function RangeCalendar(props) {
             case 3:
                 return 'Last 6 months';
             default:
-                return 'Custom range';
+                return 'Custom';
 
         }
     };
@@ -92,7 +92,7 @@ export default function RangeCalendar(props) {
         let selectedDateString = startDate + ' - ' + endDate;
         return (
             <View style={[styles.preDefinedDateContainer, {flexDirection: 'row'}]}>
-                <Text style={styles.text}>Range Selected</Text>
+                <Text style={styles.text}>Date Selected</Text>
                 <View style={styles.selectedDate}>
                     <Text style={styles.text}>{selectedDateString}</Text>
                 </View>
