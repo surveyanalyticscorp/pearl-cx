@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: 2*PaddingConstants.tab4
+        paddingTop: PaddingConstants.tab4
     },
     scrollContainer: {
         flexGrow: 1,
@@ -304,7 +304,6 @@ const styles = StyleSheet.create({
         height: width * 0.45,
     },
     logo: {
-        justifyContent: 'center',
         alignItems: 'center'
     },
     textFieldContainer: {
@@ -339,7 +338,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: MarginConstants.tab4,
-        borderRadius: 5,
         backgroundColor: buttonColors.backgroundColor,
     },
     nextText: {

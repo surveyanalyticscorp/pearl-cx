@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     android: {
       textAlign: 'center',
       backgroundColor: 'transparent',
-      padding: 8,
+      padding: 4,
       fontSize: 14,
     },
     web: {

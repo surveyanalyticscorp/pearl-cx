@@ -53,6 +53,7 @@ const FeedbackDetailsTabStack = props => (
         initialLayout: {width: Dimensions.get('window').width},
         tabStyle:{height: 1.5*PaddingConstants.tab4}
     }}
+                          lazy
                           keyboardDismissMode={'auto'}
     >
         <DetailsTab.Screen name="Feedback" component={renderScene}   initialParams={{ token: props.route.params.token, url: props.route.params.data.responseDataURL}}/>

@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: MarginConstants.tab4,
-    borderRadius: 10,
     backgroundColor: buttonColors.backgroundColor,
   },
   text: {

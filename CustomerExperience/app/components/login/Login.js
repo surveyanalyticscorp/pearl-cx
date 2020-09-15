@@ -145,7 +145,7 @@ const Login = props => {
                 <KeyboardAvoidingView behavior='position'
                                       style={loginStyles.container}
                                       keyboardVerticalOffset={Platform.select({
-                                          ios: Platform.isPad ? -200 : -150,
+                                          ios: Platform.isPad ? -200 : -100,
                                           android: -200
                                       })}
                                       enabled>
@@ -171,7 +171,6 @@ const Login = props => {
                                     Keyboard.dismiss()
                                 }, 5);
                             }}
-                            clearButtonMode={'while-editing'}
                         />
                         <QPTextField
                             testID='passwordTextField'
@@ -186,7 +185,6 @@ const Login = props => {
                                     Keyboard.dismiss()
                                 }, 5);
                             }}
-                            clearButtonMode={'while-editing'}
                             value={userData.password}
                         />
                         {renderSpinnerLoginButton()}

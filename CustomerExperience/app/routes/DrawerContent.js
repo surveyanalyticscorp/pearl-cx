@@ -5,7 +5,7 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableWithoutFeedback,
-  Text,
+  Text, Alert
 } from 'react-native';
 import {Caption} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -94,13 +94,32 @@ const DrawerContent = props => {
   };
 
   const renderDialog = () => {
-    return (
-        <DialogContainer visible={logoutAlert}>
-          <DialogTitle>Are you sure you want to logout?</DialogTitle>
-          <DialogButton label={'No'} onPress={handleDialogCancel} />
-          <DialogButton label={'Yes'} onPress={handleDialogDone} />
-        </DialogContainer>
-    );
+    if(logoutAlert) {
+      return (
+          Alert.alert(
+              'Are you sure you want to logout?',
+              '',
+              [
+                {
+                  text: 'Yes',
+                  onPress: () => {
+                    AsyncStorage.clear().then(() => {
+                      props.logoutUser();
+                      setLogoutAlert(false);
+                    });
+                  }
+                },
+                {   text: 'No',
+                  onPress: () => {
+                  setLogoutAlert(false)
+                }
+                }
+              ],
+              { cancelable: false }
+          )
+      );
+    }
+    return <View/>
   };
 
   const renderDropperView = () => {

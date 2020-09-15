@@ -52,6 +52,7 @@ const AppRouter = props => {
         return (
             <View style={styles.rightHeaderButton}>
                 <TouchableOpacity
+                    hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                     onPress={() => {
                         navigation.dispatch(DrawerActions.toggleDrawer());
                     }}>
@@ -64,6 +65,7 @@ const AppRouter = props => {
         return (
             <View style={styles.rightHeaderButton}>
                 <TouchableOpacity
+                    hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                     onPress={() => {
                         props.route.params.openCalendar()
                     }}>
@@ -78,6 +80,7 @@ const AppRouter = props => {
         return (
             <View style={styles.leftHeaderButton}>
                 <TouchableOpacity
+                    hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                     onPress={() => {
                         const popAction = CommonActions.goBack();
                         navigation.dispatch(popAction);
