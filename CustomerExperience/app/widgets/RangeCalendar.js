@@ -20,7 +20,6 @@ import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
 import moment from 'moment';
-
 import QPTextField from './TextField';
 import StringUtils from '../Utils/StringUtils';
 

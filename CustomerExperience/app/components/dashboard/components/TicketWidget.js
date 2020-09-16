@@ -1,15 +1,18 @@
 import React from 'react';
 import {StyleSheet, View, TouchableWithoutFeedback, Text} from 'react-native';
-import TimeAgo from '../../../widgets/TimeAgo';
 import ReadMore from 'react-native-read-more-text';
 import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import StringUtils from '../../../Utils/StringUtils';
+import {FontFamily} from '../../../styles/font.constants';
+import moment from 'moment';
+import {LONGMONTHFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
 
 const TicketWidget = props => {
-  const _renderTruncatedFooter = handlePress => {
+  let time = moment(props.item.timestamp, YMDFORMAT).format(LONGMONTHFORMAT);
+  let _renderTruncatedFooter = handlePress => {
     return (
       <Text
         style={styles.truncatedFooter}
@@ -19,7 +22,7 @@ const TicketWidget = props => {
     );
   };
 
-  const _renderRevealedFooter = handlePress => {
+  let _renderRevealedFooter = handlePress => {
     return (
       <Text
         style={styles.truncatedFooter}
@@ -51,10 +54,10 @@ const TicketWidget = props => {
       onPress={onPress}
     >
       <View style={styles.mainContainer}>
-        <Text style={styles.title} numberOfLines={1} ellipsizeMode={'tail'}>
+        <Text style={styles.title} numberOfLines={2} ellipsizeMode={'tail'}>
           {props.item.emailAddress}
         </Text>
-        <TimeAgo style={styles.subtitle} time={props.item.timestamp} />
+        <Text style={styles.subtitle}>{time}</Text>
         <View style={{marginTop: MarginConstants.halfTab}}>
           {renderReadMoreView()}
         </View>
@@ -76,22 +79,24 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontSize: TextSizes.secondary,
     textAlign: 'left',
+    fontFamily: FontFamily.SemiBold,
   },
   subtitle: {
-    fontSize: TextSizes.mediumText,
-    marginTop: 2,
+    fontSize: TextSizes.semiMediumText,
+    marginVertical: 5,
     color: Colors.secondary,
     textAlign: 'left',
   },
   comment: {
-    fontSize: TextSizes.semiMediumText,
-    color: Colors.secondary,
+    fontSize: TextSizes.semiSecondary,
+    color: Colors.primary,
     textAlign: 'left',
+    marginTop: PaddingConstants.tab1
   },
   truncatedFooter: {
     color: Colors.accent,
-    marginTop: 5,
-    fontSize: TextSizes.mediumText
+    marginTop: 2*MarginConstants.tab1,
+    fontSize: TextSizes.semiSecondary
   }
 });
 

@@ -86,7 +86,6 @@ export default function UpdateTicket(props) {
     let renderComment = () => {
         return (
             <View style={styles.commentContainer}>
-                <Text style={styles.rowText}> Comment </Text>
                 <TextInput
                     multiline
                     maxLength={500}
@@ -95,7 +94,7 @@ export default function UpdateTicket(props) {
                     autoCorrect={false}
                     style={styles.commentText}
                     value={comment}
-                    placeholder={'Enter Comment...'}
+                    placeholder={'Additional Comment'}
                     onChangeText={text => {
                         setComment(text);
                     }}

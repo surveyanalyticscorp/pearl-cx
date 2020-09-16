@@ -18,7 +18,6 @@ import SignInStack from './signInStack';
 import {isStringNullOrEmpty} from '../Utils/Utility';
 import Feedback from '../components/feedback/Feedback';
 import FeedbackDetails from '../components/feedback/FeedbackDetails'
-import {EventRegister} from 'react-native-event-listeners';
 import FeedbackUpdate from '../components/feedback/FeedbackUpdate'
 import { CommonActions } from '@react-navigation/native';
 import DashBoardStoreDetails from '../components/dashboard/components/DashBoardStoreDetails'
@@ -158,8 +157,8 @@ const AppRouter = props => {
                                        keyboardDismissMode={'auto'}
         >
             <DetractorTicketsTab.Screen name="New" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:0}}/>
-            <DetractorTicketsTab.Screen name="Pending" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:1}}/>
-            <DetractorTicketsTab.Screen name="Resolved" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:2}}/>
+            <DetractorTicketsTab.Screen name="Started" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:1}}/>
+            <DetractorTicketsTab.Screen name="Finished" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:2}}/>
         </DetractorTicketsTab.Navigator>
     );
 
