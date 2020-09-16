@@ -78,7 +78,6 @@ const CompanyCode = props => {
                   label={stringConst.companyCode}
                   style={styles.companyCodeInput}
                   underlineColorAndroid= "transparent"
-                  placeholder= "Company Code"
                   placeholderTextColor= "#9a73ef"
                   autoCapitalize= "none"
                   onChange={handleAccessCode}
@@ -124,7 +123,7 @@ const styles = StyleSheet.create({
     width: screen.width / 1.1,
     height: MarginConstants.tab3,
     marginTop: MarginConstants.tab4,
-    marginBottom: MarginConstants.tab2,
+    marginBottom: MarginConstants.tab3,
     paddingHorizontal: MarginConstants.halfTab,
   },
   nextButton: {
@@ -133,7 +132,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: MarginConstants.tab3,
-    borderRadius: 10,
     backgroundColor: '#FFFFFF',
   },
   nextText: {
@@ -142,7 +140,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     flex: 1,
-    marginVertical: MarginConstants.tab4 * 3,
+    marginVertical: MarginConstants.tab4 * 2.5,
     alignItems: 'center',
     width: '100%',
   }

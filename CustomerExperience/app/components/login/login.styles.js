@@ -13,7 +13,7 @@ export const loginStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: 2*PaddingConstants.tab4
+    paddingTop: PaddingConstants.tab4
   },
   scrollContainer: {
     flexGrow: 1,
@@ -23,8 +23,7 @@ export const loginStyles = StyleSheet.create({
     height: width * 0.45,
   },
   logo: {
-    justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   emailInput: {
     width: screen.width / 1.1,
@@ -46,7 +45,6 @@ export const loginStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: MarginConstants.tab4,
-    borderRadius: 5,
     backgroundColor: buttonColors.backgroundColor,
   },
   nextText: {
@@ -61,7 +59,6 @@ export const loginStyles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
     marginTop: MarginConstants.tab1,
-    borderRadius: 5,
     backgroundColor: Colors.fullTransparent,
   },
   errorMessageContainer: {
@@ -76,6 +73,5 @@ export const loginStyles = StyleSheet.create({
   },
   textFieldContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
   }
 });

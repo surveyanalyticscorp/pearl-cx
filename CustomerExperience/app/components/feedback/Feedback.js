@@ -139,16 +139,14 @@ function Feedback(props){
     };
 
     let renderSpinner = () => {
-        if(props.isLoading) {
             return (
                 <View style={styles.loading}>
                     <QPSpinner/>
                 </View>
             )
-        }
     };
 
-    const renderFeedbackStatus = () => {
+    let renderFeedbackList = () => {
         if (!isObjectEmpty(props.feedback)) {
             return (
                 <SafeAreaView style={styles.container}>
@@ -165,9 +163,12 @@ function Feedback(props){
                 </SafeAreaView>
             );
         }
-        return <View style={{flex: 1}}>
-            {renderSpinner()}
-        </View>
+        return <View/>
+    };
+
+    const renderFeedbackStatus = () => {
+
+        return props.isLoading ? renderSpinner() : renderFeedbackList()
     };
 
     return calendar ? renderCalendarView() : renderFeedbackStatus();

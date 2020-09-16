@@ -11,5 +11,5 @@ export const validateEmail = email => {
 };
 
 export const isObjectEmpty = object => {
-  return Object.keys(object).length === 0
-}
+  return object && Object.keys(object).length === 0
+};

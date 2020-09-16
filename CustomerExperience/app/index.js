@@ -17,7 +17,7 @@ export default class CxApp extends Component {
     constructor(){
         super();
         this.networkMonitor = new NetworkMonitor(store);
-        enableScreens();
+        Platform.OS === 'ios' && enableScreens();
         this.state = {
             styleBuilt : false,
         };

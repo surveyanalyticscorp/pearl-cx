@@ -11,7 +11,7 @@ import {
 import {StackActions} from '@react-navigation/native';
 import CXTrendItemWidget from './components/CXTrendItemWidget';
 import {showLoading} from '../../redux/actions/index';
-import {getDashboardContent, setDashboardRangeFilter} from '../../redux/actions/dashboard.actions';
+import {DASHBOARD_RANGE, getDashboardContent, setDashboardRangeFilter} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
@@ -22,7 +22,8 @@ import RangeCalendar from '../../widgets/RangeCalendar';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import moment from 'moment';
-import {DMYFORMAT, MonthYearFormat, YMDFORMAT} from '../../Utils/AppConstants';
+import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -58,31 +59,46 @@ const CxDashboard = props => {
 
         if (callApi) {
 
-            let data = {
-                startDate: moment().subtract(1, "month").format(YMDFORMAT),
-                endDate: moment().format(YMDFORMAT)
-            };
-
             if(!isObjectEmpty(props.range)) {
-                data = {
-                    startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-                    endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+                let selectedRange = setSelectedRange(props.range.type);
+                let startDate = props.range.type !== 4 ? selectedRange.startDate : props.range.startDate;
+                let endDate = props.range.type !== 4 ? selectedRange.endDate : props.range.endDate;
+                let data = {
+                    startDate: moment(startDate, DMYFORMAT).format(YMDFORMAT),
+                    endDate: moment(endDate, DMYFORMAT).format(YMDFORMAT)
                 };
+                props.getDashboardContent(props.authToken, data);
+                setCallAPI(false);
             }
-            props.getDashboardContent(props.authToken, data);
-            setCallAPI(false);
         }
     }, [callApi]);
 
+    let setSelectedRange = (type) => {
+        let today = new Date();
+        let month = today.getMonth() + 1;
+        let tempEndDate = today.getDate()+"/"+month+"/"+today.getFullYear();
+        switch (type) {
+            case 1:
+                let tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(30,'days').format(DMYFORMAT);
+                return {'startDate': tempStartDate, 'endDate': tempEndDate};
+            case 2:
+                tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(3,'months').format(DMYFORMAT);
+                return {'startDate': tempStartDate, 'endDate': tempEndDate};
+            case 3:
+                tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(6,'months').format(DMYFORMAT);
+                return {'startDate': tempStartDate, 'endDate': tempEndDate};
+            default:
+                break;
+
+        }
+    };
+
     const renderCalendarView = () => {
 
-        let startDate = MonthYearFormat;
-        let endDate = MonthYearFormat;
+        let selectedRange = setSelectedRange(props.range.type);
+        let startDate = props.range.type !== 4 ? selectedRange.startDate : props.range.startDate;
+        let endDate = props.range.type !== 4 ? selectedRange.endDate : props.range.endDate;
 
-        if(!isObjectEmpty(props.range)) {
-            startDate = props.range.startDate;
-            endDate = props.range.endDate;
-        }
         return <RangeCalendar
             showCalendar={calendar}
             closeCalendar={() => {
@@ -90,14 +106,18 @@ const CxDashboard = props => {
             }}
             startDate={startDate}
             endDate={endDate}
-            onSubmit={(startDate, endDate) => {
+            selectedType={props.range.type}
+
+            onSubmit={(type, startDate, endDate) => {
                 let range = {
+                    type: type,
                     startDate: startDate,
                     endDate: endDate
                 };
                 setCalendar(false);
                 props.setRange(range);
                 setCallAPI(true);
+                AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(range))
             }}
         />;
     };

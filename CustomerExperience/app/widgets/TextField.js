@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {Platform, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {TextField} from 'react-native-material-textfield';
 import {Colors} from '../styles/color.constants';
@@ -39,7 +39,10 @@ const QPTextField = props => {
         style={{
           position: 'absolute',
           top: 33,
-          right: 40,
+          right: Platform.select({
+            ios: 40,
+            android: 10
+          })
         }}
         name={icon}
         size={25}
@@ -56,7 +59,7 @@ const QPTextField = props => {
         autoCapitalize={'none'}
         autoCorrect={false}
         autoFocus={props.autofocus}
-        tintColor={Colors.textTintColor}
+        tintColor={props.tintColor || Colors.textTintColor}
         label={label}
         defaultValue={defaultValue}
         secureTextEntry={secureText}
@@ -66,6 +69,7 @@ const QPTextField = props => {
         onChangeText={onChange}
         ref={fieldRef}
         clearButtonMode={'always'}
+        placeholder={props.placeholder}
       />
       {props.secureText && renderVisibility()}
     </View>
