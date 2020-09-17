@@ -219,15 +219,15 @@ const styles = StyleSheet.create({
   },
   labelStyle: {
     marginLeft: MarginConstants.tab3,
-    fontFamily: FontFamily.Light,
+    fontFamily: FontFamily.light,
     fontSize: TextSizes.primary,
   },
   emailCaption: {
-    fontFamily: FontFamily.Light,
+    fontFamily: FontFamily.light,
     fontSize: TextSizes.secondary,
   },
   companyCaptions: {
-    fontFamily: FontFamily.Light,
+    fontFamily: FontFamily.light,
     fontSize: TextSizes.secondary,
   },
   drawerSection: {
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.transparent,
   },
   dropperText: {
-    fontFamily: FontFamily.Regular,
+    fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     color: textColors.secondary,
   },

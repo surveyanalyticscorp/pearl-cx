@@ -4,6 +4,8 @@ import TicketWidget from './TicketWidget';
 import {dashboardStyles} from '../dashboard.style';
 import {apiHandler} from '../../../api/ApiHandler';
 import {connect} from 'react-redux';
+import {showLoading} from '../../../redux/actions';
+import QPSpinner from '../../../widgets/QPSpinner';
 
 const DetractorScenes = props => {
 
@@ -35,16 +37,19 @@ const DetractorScenes = props => {
     useEffect(() => {
         for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
             let params = responseData[responseCount];
+            props.showLoading(true);
             apiHandler.getCXDetractorTicket(
                 props.authToken,
                 params,
                 response => {
                     let data = [...responseData];
                     data[responseCount].data = response.body;
-                    setResponseData(data)
+                    setResponseData(data);
+                    props.showLoading(false);
                 },
                 error => {
                     // console.log(error);
+                    props.showLoading(false);
                 },
             );
         }
@@ -114,7 +119,15 @@ const DetractorScenes = props => {
         );
     };
 
-    return renderDetractorTickets()
+    let renderSpinner = () => {
+            return (
+                <View style={dashboardStyles.loading}>
+                    <QPSpinner />
+                </View>
+            )
+    };
+
+    return props.isLoading ? renderSpinner() : renderDetractorTickets()
 };
 
 const mapStateToProps = state => {
@@ -128,6 +141,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
+    showLoading: (flag) => {
+        dispatch(showLoading(flag));
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetractorScenes);

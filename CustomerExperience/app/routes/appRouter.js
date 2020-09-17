@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
         color: Colors.white,
         textAlignVertical:'center',
         fontSize: TextSizes.largeText,
-        fontFamily: FontFamily.Regular,
+        fontFamily: FontFamily.regular,
         paddingTop:5,
         paddingLeft:5,
     }

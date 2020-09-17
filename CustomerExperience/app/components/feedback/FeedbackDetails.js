@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     },
     routeTitle: {
         color: Colors.primary,
-        fontFamily: FontFamily.Light,
+        fontFamily: FontFamily.light,
         fontSize: TextSizes.secondary,
         marginVertical: MarginConstants.halfTab,
     }

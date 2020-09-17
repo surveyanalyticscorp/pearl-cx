@@ -237,6 +237,6 @@ const styles = StyleSheet.create({
         fontSize: TextSizes.primary,
         textAlign: 'center',
         paddingHorizontal: PaddingConstants.tab3,
-        fontFamily: FontFamily.SemiBold,
+        fontFamily: FontFamily.semiBold,
     },
 });

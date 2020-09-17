@@ -175,7 +175,7 @@
 //     pickerHeader: {
 //         color: Colors.secondary,
 //         paddingVertical:PaddingConstants.tab1,
-//         fontFamily: FontFamily.Regular,
+//         fontFamily: FontFamily.regular,
 //         fontSize: TextSizes.secondary,
 //         justifyContent: 'center',
 //         alignItems:'center',

@@ -91,5 +91,10 @@
     "setupFiles": [
       "./setupTests.js"
     ]
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts/"
+    ]
   }
 }

@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     height: '50%',
   },
   introTextHeader: {
-    fontFamily: FontFamily.Bold,
+    fontFamily: FontFamily.bold,
     width: '100%',
     fontSize: Platform.isPad ? TextSizes.extraLargeText : TextSizes.largeText,
     color: textColors.primary,
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: MarginConstants.tab3,
     paddingHorizontal: MarginConstants.tab3,
-    fontFamily: FontFamily.Light,
+    fontFamily: FontFamily.light,
     fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
   },
 

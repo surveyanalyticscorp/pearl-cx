@@ -18,6 +18,7 @@
 		184A469524BC608A0048FF84 /* FiraSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 184A469024BC60890048FF84 /* FiraSans-Bold.otf */; };
 		184A469624BC608A0048FF84 /* FiraSans-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 184A469124BC60890048FF84 /* FiraSans-SemiBold.otf */; };
 		184A469724BC608A0048FF84 /* FiraSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 184A469224BC608A0048FF84 /* FiraSans-Light.otf */; };
+		219DCE1E25124CAA00236FA1 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 219DCE1D25124CAA00236FA1 /* icomoon.ttf */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -66,6 +67,7 @@
 		184A469024BC60890048FF84 /* FiraSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.otf"; sourceTree = "<group>"; };
 		184A469124BC60890048FF84 /* FiraSans-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-SemiBold.otf"; sourceTree = "<group>"; };
 		184A469224BC608A0048FF84 /* FiraSans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Light.otf"; sourceTree = "<group>"; };
+		219DCE1D25124CAA00236FA1 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* CustomerExperience-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CustomerExperience-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* CustomerExperience-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CustomerExperience-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		32E58DAC546A89E5DD985BE5 /* Pods-CustomerExperience.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CustomerExperience.release.xcconfig"; path = "Target Support Files/Pods-CustomerExperience/Pods-CustomerExperience.release.xcconfig"; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				184A469024BC60890048FF84 /* FiraSans-Bold.otf */,
+				219DCE1D25124CAA00236FA1 /* icomoon.ttf */,
 				184A469224BC608A0048FF84 /* FiraSans-Light.otf */,
 				184A468E24BC60890048FF84 /* FiraSans-Medium.otf */,
 				184A468F24BC60890048FF84 /* FiraSans-Regular.otf */,
@@ -387,6 +390,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				184A469424BC608A0048FF84 /* FiraSans-Regular.otf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				219DCE1E25124CAA00236FA1 /* icomoon.ttf in Resources */,
 				184A469524BC608A0048FF84 /* FiraSans-Bold.otf in Resources */,
 				184A469324BC608A0048FF84 /* FiraSans-Medium.otf in Resources */,
 				184A469624BC608A0048FF84 /* FiraSans-SemiBold.otf in Resources */,

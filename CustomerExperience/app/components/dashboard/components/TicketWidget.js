@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontSize: TextSizes.secondary,
     textAlign: 'left',
-    fontFamily: FontFamily.SemiBold,
+    fontFamily: FontFamily.semiBold,
   },
   subtitle: {
     fontSize: TextSizes.semiMediumText,
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   comment: {
-    fontSize: TextSizes.semiSecondary,
+    fontSize: TextSizes.semiSecondary+1,
     color: Colors.primary,
     textAlign: 'left',
     marginTop: PaddingConstants.tab1

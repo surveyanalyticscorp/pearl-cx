@@ -24,6 +24,11 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import AsyncStorage from '@react-native-community/async-storage';
+import {MarginConstants} from '../../styles/margin.constants';
+import Icomoon from '../../config/Icons/icon-native'
+import {PaddingConstants} from '../../styles/padding.constants';
+import {FontFamily} from '../../styles/font.constants';
+import {TextSizes} from '../../styles/textsize.constants';
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -122,10 +127,44 @@ const CxDashboard = props => {
         />;
     };
 
+    let renderTicketView = (ticketCount, icon, title) => {
+        return (
+            <TouchableWithoutFeedback
+                onPress={() => {
+                    let data = {
+                        storeId: '' + props.dashboardData.primaryStoreId,
+                        title: props.dashboardData.primaryStoreName + ' - Tickets',
+                        token: props.authToken,
+                    };
+                    const pushAction = StackActions.push('DetractorTickets', {
+                        data: data,
+                        screen: icon === 'new' ? "New" : (icon === 'open' ? "Started" : "Finished")
+                    });
+                    props.navigation.dispatch(pushAction);
+                }}>
+            <View style={[dashboardStyles.ticketContainer,{marginHorizontal: icon === 'open' ? MarginConstants.tab2 : 0}]}>
+            <Text  style={dashboardStyles.ticketText}>{ticketCount}</Text>
+            <View style={dashboardStyles.separator}/>
+            <View style={dashboardStyles.ticketTypeContainer}>
+                <Icomoon name={icon} size={20} color= {Colors.borderColor}/>
+                <Text style={dashboardStyles.ticketType}>{title}</Text>
+            </View>
+        </View>
+            </TouchableWithoutFeedback>
+        )
+    };
+
+    let getClosedLoopView = () => {
+        return(
+            <View style={dashboardStyles.closedLoopView}>
+                {renderTicketView(props.dashboardData.DetractorTicketsCount.new,"new", "New")}
+                {renderTicketView(props.dashboardData.DetractorTicketsCount.pending,"open", "Pending")}
+                {renderTicketView(props.dashboardData.DetractorTicketsCount.resolved,"resolved", "Resolved")}
+            </View>
+        )
+    };
+
     const getTrimmedNoOfResponses = () => {
-        let responseText = "";
-        let numberOfResponses = "";
-        if (!isObjectEmpty(props.dashboardData)) {
             let numberOfResponsesNumber = 0;
             if (props.dashboardData.primaryStoreNPS.totalResponses) {
                 numberOfResponsesNumber =
@@ -141,8 +180,7 @@ const CxDashboard = props => {
             } else if (numberOfResponsesNumber >= 1000) {
                 numberOfResponses = (numberOfResponsesNumber / 1000).toFixed(1) + 'K';
             }
-            responseText = numberOfResponses > 1 ? 'Responses' : 'Response';
-        }
+            let responseText = numberOfResponses > 1 ? 'Responses' : 'Response';
 
         return (
             <View style={dashboardStyles.responseView}>
@@ -214,9 +252,7 @@ const CxDashboard = props => {
 
     const renderDonutChart = () => {
         let percent = 0;
-        if (!isObjectEmpty(props.dashboardData)) {
             percent = props.dashboardData.primaryStoreNPS.npsPercentage;
-        }
         let color = percent < 0 ? Colors.negativePassive : Colors.positivePassive;
         let roundColor =
             percent < 0 ? Colors.negativePromter : Colors.positivePromter;
@@ -247,7 +283,7 @@ const CxDashboard = props => {
     };
 
     const renderStoreNPSList = () => {
-        if (!isObjectEmpty(props.dashboardData) && ArrayUtils.isNotEmpty(props.dashboardData.storeNPSList)) {
+        if (ArrayUtils.isNotEmpty(props.dashboardData.storeNPSList)) {
             let list = props.dashboardData.storeNPSList;
             let data = list.slice(0, 5);
             let title = props.dashboardData.systemPreferences.businessUnitName
@@ -258,7 +294,7 @@ const CxDashboard = props => {
     };
 
     const renderProductNPSList = () => {
-        if (!isObjectEmpty(props.dashboardData) && ArrayUtils.isNotEmpty(props.dashboardData.productNPSList)) {
+        if (ArrayUtils.isNotEmpty(props.dashboardData.productNPSList)) {
             let list = props.dashboardData.productNPSList;
             let title = 'Products';
             return renderLists(list, title);
@@ -301,9 +337,11 @@ const CxDashboard = props => {
     const renderLists = (list, title) => {
         return (
             <View style={dashboardStyles.listViewContainer}>
-                <View style={dashboardStyles.textView}>
+                <View style={dashboardStyles.productHeaderView}>
                     <Text style={dashboardStyles.listTitle}>{title}</Text>
+                    <Text style={dashboardStyles.listTitle}>NPS</Text>
                 </View>
+                <View style={dashboardStyles.list}>
                 <FlatList
                     data={list}
                     keyExtractor={item => item.filterName}
@@ -312,46 +350,43 @@ const CxDashboard = props => {
                     refreshing={false}
                     ListEmptyComponent={renderNoDataFound}
                 />
+                </View>
             </View>
         );
     };
 
-    const renderDashboardContent = () => {
-        if (!props.isError && !props.isLoading) {
+    let renderSegmentTitle = (text) => {
+      return(
+          <Text style={dashboardStyles.dashboardTitle}>{text}</Text>
+      )
+    };
+
+    let renderDashboardContent = () => {
+        if (!props.isError && !props.isLoading && !isObjectEmpty(props.dashboardData)) {
             return (
-                <View style={dashboardStyles.center}>
+                <View>
+                    {renderSegmentTitle(props.dashboardData.primaryStoreName)}
                     {renderDonutChart()}
-                    {getTicketsButton()}
+                    {renderSegmentTitle('Closed Loop')}
+                    {getClosedLoopView()}
+                    {renderSegmentTitle("Segment Comparison")}
                     {renderStoreNPSList()}
                     {renderProductNPSList()}
                 </View>
             );
         }
-        return <View style={{flex: 1}} />;
+        return <View style={dashboardStyles.container} />;
     };
 
-    const renderDashboard = () => {
-        return (
-            <ImageBackground
-                resizeMode={'cover'}
-                source={require('../../config/images/background.png')}
-                style={dashboardStyles.imageBackgroundContainer}>
-                {renderScreen()}
-            </ImageBackground>
-        );
-    };
-
-    const renderScreen = () => {
+    let renderDashboard = () => {
         return (
             <ScrollView
-                contentContainerStyle={dashboardStyles.cxContainer}
+                contentContainerStyle={dashboardStyles.container}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }>
                 <View style={dashboardStyles.container}>
-                    <View style={dashboardStyles.cxContainer}>
-                        {renderDashboardContent()}
-                    </View>
+                    {renderDashboardContent()}
                     {renderSpinner()}
                 </View>
             </ScrollView>
@@ -362,18 +397,13 @@ const CxDashboard = props => {
         if(props.isLoading) {
             return (
                 <View style={dashboardStyles.loading}>
-                    <QPSpinner spinnerColor={Colors.white}/>
+                    <QPSpinner />
                 </View>
             )
         }
     };
 
-    return (
-        <View style={dashboardStyles.container}>
-            {calendar ? renderCalendarView() : renderDashboard()}
-        </View>
-
-    )
+    return calendar ? renderCalendarView() : renderDashboard()
 };
 
 const mapStateToProps = state => {
