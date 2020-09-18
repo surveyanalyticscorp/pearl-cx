@@ -36,6 +36,11 @@ const Colors = {
   smileyFourColor: '#7cca53',
   smileyFiveColor: '#4cb714',
   selectionGreyColor: '#F7F8F9',
+
+  promoter: '#63A523',
+  detractor:'#ff0047',
+  passive:'rgb(250, 225, 90)',
+
   negativePromter: '#E8E8E8',
   positivePromter: '#90BA5B',
   negativePassive: '#CE3E3E',

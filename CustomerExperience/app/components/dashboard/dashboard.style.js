@@ -9,12 +9,11 @@ export const dashboardStyles = StyleSheet.create({
     flex: 1,
   },
   chartContainer: {
-    padding: MarginConstants.tab1,
+    paddingRight: PaddingConstants.tab1,
     backgroundColor: Colors.white,
     height: MarginConstants.tab4 * 5,
-    justifyContent: 'center',
-    marginHorizontal: MarginConstants.tab2
-
+    marginHorizontal: MarginConstants.tab2,
+    flexDirection: 'row'
   },
   imageBackgroundContainer: {
     flex: 1,
@@ -42,14 +41,17 @@ export const dashboardStyles = StyleSheet.create({
     fontSize: TextSizes.secondary,
   },
   responseText: {
-    color: Colors.accent,
+    color: Colors.primary,
     fontFamily: FontFamily.bold,
-    fontSize: 30,
+    fontSize: TextSizes.largeText,
+    textAlign: 'center',
   },
   response: {
-    color: Colors.accent,
+    fontSize: TextSizes.secondary,
+    color: Colors.secondary,
     fontFamily: FontFamily.light,
-    fontSize: TextSizes.largeText,
+    textAlign: 'center',
+    paddingHorizontal: PaddingConstants.tab1
   },
   ticketButton: {
     justifyContent: 'space-around',
@@ -87,9 +89,9 @@ export const dashboardStyles = StyleSheet.create({
     fontSize: TextSizes.secondary,
   },
   responseView: {
-    flex: 0.5,
     justifyContent: 'center',
-    alignItems: 'center'
+    paddingLeft: PaddingConstants.tab2,
+    paddingVertical: PaddingConstants.halfTab
   },
   loading: {
     position: 'absolute',
@@ -153,10 +155,23 @@ export const dashboardStyles = StyleSheet.create({
     flexDirection: 'row',
     margin: MarginConstants.tab1,
     justifyContent:'center',
+    alignItems:'center',
   },
   ticketType:{
     paddingLeft: PaddingConstants.tab1,
     color: Colors.primary,
     fontFamily: FontFamily.light
+  },
+  npsText: {
+    position: 'absolute',
+    top: '50%',
+    left:'15%',
+    color: Colors.primary,
+    fontSize: TextSizes.extraLargeText,
+    fontFamily: FontFamily.semiBold
+  },
+  donutInfoContainer: {
+    flex:1,
+    marginVertical: MarginConstants.tab1
   }
 });

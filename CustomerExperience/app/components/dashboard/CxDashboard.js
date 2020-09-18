@@ -1,7 +1,6 @@
-import React, {useCallback, useEffect, useState, useRef} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
     FlatList,
-    ImageBackground,
     RefreshControl,
     ScrollView,
     Text,
@@ -15,20 +14,17 @@ import {DASHBOARD_RANGE, getDashboardContent, setDashboardRangeFilter} from '../
 import {connect} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
-import Pie from 'react-native-pie';
 import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
 import RangeCalendar from '../../widgets/RangeCalendar';
 import ArrayUtils from '../../Utils/ArrayUtils';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import AsyncStorage from '@react-native-community/async-storage';
 import {MarginConstants} from '../../styles/margin.constants';
 import Icomoon from '../../config/Icons/icon-native'
-import {PaddingConstants} from '../../styles/padding.constants';
-import {FontFamily} from '../../styles/font.constants';
-import {TextSizes} from '../../styles/textsize.constants';
+import {VictoryPie} from 'victory-native'
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -127,6 +123,53 @@ const CxDashboard = props => {
         />;
     };
 
+    const renderDonutChart = () => {
+        let data = props.dashboardData.primaryStoreNPS;
+        let responseCount = getTrimmedNoOfResponses();
+        return (
+            <View style={dashboardStyles.chartContainer}>
+                <VictoryPie
+                    data={[
+                        { y: data.promoterFormattedPercent, x: ''},
+                        { y: data.passiveFormattedPercent, x: ''},
+                        { y: data.detractorFormattedPercent, x: ''}
+                    ]}
+                    width={210}
+                    height={250}
+                    innerRadius={78}
+                    radius={90}
+                    style={{
+                        labels: {
+                            fill: 'transparent'
+                        },
+                    }}
+                    colorScale={[Colors.promoter, Colors.passive, Colors.detractor]}
+                    endAngle={-90}
+                    startAngle={90}
+                />
+                <Text style={dashboardStyles.npsText}> {data.npsPercentage} NPS</Text>
+                <View style={dashboardStyles.donutInfoContainer}>
+                    {renderDonutInformation('check-square', 'Surveys',124)}
+                    {renderDonutInformation('th-large', 'Responses', responseCount)}
+                </View>
+            </View>
+        );
+    };
+
+    let renderDonutInformation = (icon, title, count) => {
+      return (
+          <View style={dashboardStyles.responseView}>
+              <Text style={dashboardStyles.responseText}>{count}</Text>
+              <View style={dashboardStyles.separator}/>
+              <View style={dashboardStyles.ticketTypeContainer}>
+                  <Icon name={icon} size={15} color= {Colors.borderColor}/>
+                  <Text style={dashboardStyles.response}>{title}</Text>
+              </View>
+          </View>
+      )
+    };
+
+
     let renderTicketView = (ticketCount, icon, title) => {
         return (
             <TouchableWithoutFeedback
@@ -142,14 +185,14 @@ const CxDashboard = props => {
                     });
                     props.navigation.dispatch(pushAction);
                 }}>
-            <View style={[dashboardStyles.ticketContainer,{marginHorizontal: icon === 'open' ? MarginConstants.tab2 : 0}]}>
-            <Text  style={dashboardStyles.ticketText}>{ticketCount}</Text>
-            <View style={dashboardStyles.separator}/>
-            <View style={dashboardStyles.ticketTypeContainer}>
-                <Icomoon name={icon} size={20} color= {Colors.borderColor}/>
-                <Text style={dashboardStyles.ticketType}>{title}</Text>
-            </View>
-        </View>
+                <View style={[dashboardStyles.ticketContainer,{marginHorizontal: icon === 'open' ? MarginConstants.tab2 : 0}]}>
+                    <Text  style={dashboardStyles.ticketText}>{ticketCount}</Text>
+                    <View style={dashboardStyles.separator}/>
+                    <View style={dashboardStyles.ticketTypeContainer}>
+                        <Icomoon name={icon} size={20} color= {Colors.borderColor}/>
+                        <Text style={dashboardStyles.ticketType}>{title}</Text>
+                    </View>
+                </View>
             </TouchableWithoutFeedback>
         )
     };
@@ -165,122 +208,69 @@ const CxDashboard = props => {
     };
 
     const getTrimmedNoOfResponses = () => {
-            let numberOfResponsesNumber = 0;
-            if (props.dashboardData.primaryStoreNPS.totalResponses) {
-                numberOfResponsesNumber =
-                    props.dashboardData.primaryStoreNPS.totalResponses;
-            }
-            let numberOfResponses = numberOfResponsesNumber + '';
 
-            if (numberOfResponsesNumber >= 10000) {
-                numberOfResponses =
-                    Math.round(numberOfResponsesNumber / 1000).toFixed(
-                        numberOfResponsesNumber > 10000 ? 0 : 1,
-                    ) + 'K';
-            } else if (numberOfResponsesNumber >= 1000) {
-                numberOfResponses = (numberOfResponsesNumber / 1000).toFixed(1) + 'K';
-            }
-            let responseText = numberOfResponses > 1 ? 'Responses' : 'Response';
+        let numberOfResponses = props.dashboardData.primaryStoreNPS.totalResponses ? props.dashboardData.primaryStoreNPS.totalResponses : 0;
 
-        return (
-            <View style={dashboardStyles.responseView}>
-                <Text
-                    numberOfLines={1}
-                    ellipsizeMode={'tail'}
-                    style={dashboardStyles.responseText}>
-                    {numberOfResponses}
-                </Text>
-                <Text
-                    numberOfLines={1}
-                    ellipsizeMode={'tail'}
-                    style={dashboardStyles.response}>
-                    {responseText}
-                </Text>
-            </View>
-        );
-    };
-
-    const getTicketText = () => {
-        let ticketText = '';
-        if(!isObjectEmpty(props.dashboardData) && !isObjectEmpty(props.dashboardData.DetractorTicketsCount)) {
-            let pendingCount = props.dashboardData.DetractorTicketsCount.pending;
-            let newCount = props.dashboardData.DetractorTicketsCount.new;
-            if (pendingCount > 0) {
-                ticketText =
-                    pendingCount + ' Pending ' + (pendingCount > 1 ? 'tickets' : 'ticket');
-            }
-            if (newCount > 0) {
-                if (pendingCount > 0) {
-                    ticketText = newCount + ' New, ' + ticketText;
-                } else {
-                    ticketText = newCount + ' New ' + (newCount > 1 ? 'tickets' : 'ticket');
-                }
-            }
-            if (newCount === 0 && pendingCount === 0) {
-                ticketText = 'No Pending tickets';
-            }
+        if (numberOfResponses >= 10000) {
+            numberOfResponses =
+                Math.round(numberOfResponses / 1000).toFixed(
+                    numberOfResponses > 10000 ? 0 : 1,
+                ) + 'K';
+        } else if (numberOfResponses >= 1000) {
+            numberOfResponses = (numberOfResponses / 1000).toFixed(1) + 'K';
         }
-        return ticketText;
+        return numberOfResponses
     };
 
-    const getTicketsButton = () => {
-        return (
-            <TouchableWithoutFeedback
-                onPress={() => {
-                    let data = {
-                        storeId: '' + props.dashboardData.primaryStoreId,
-                        title: props.dashboardData.primaryStoreName + ' - Tickets',
-                        token: props.authToken,
-                    };
-                    const pushAction = StackActions.push('DetractorTickets', {
-                        data: data,
-                    });
-                    props.navigation.dispatch(pushAction);
-                }}>
-                <View style={dashboardStyles.ticketButton}>
-                    <Text
-                        numberOfLines={1}
-                        ellipsizeMode={'tail'}
-                        style={dashboardStyles.ticketText}>
-                        {getTicketText()}
-                    </Text>
-                    <Icon name="arrow-right" size={20} color= {Colors.white}/>
-                </View>
-            </TouchableWithoutFeedback>
-        );
-    };
-
-    const renderDonutChart = () => {
-        let percent = 0;
-            percent = props.dashboardData.primaryStoreNPS.npsPercentage;
-        let color = percent < 0 ? Colors.negativePassive : Colors.positivePassive;
-        let roundColor =
-            percent < 0 ? Colors.negativePromter : Colors.positivePromter;
-        return (
-            <View style={dashboardStyles.chartContainer}>
-                <View style={{flexDirection: 'row'}}>
-                    <View style={{flex: 0.5}}>
-                        <Pie
-                            radius={80}
-                            innerRadius={60}
-                            sections={[
-                                {
-                                    percentage: percent,
-                                    color: roundColor,
-                                },
-                            ]}
-                            backgroundColor={color}
-                        />
-                        <View style={dashboardStyles.gauge}>
-                            <Text style={dashboardStyles.gaugeText}>{percent + ''}</Text>
-                            <Text style={dashboardStyles.npmGaugeText}>NPS</Text>
-                        </View>
-                    </View>
-                    {getTrimmedNoOfResponses()}
-                </View>
-            </View>
-        );
-    };
+    // const getTicketText = () => {
+    //     let ticketText = '';
+    //     if(!isObjectEmpty(props.dashboardData) && !isObjectEmpty(props.dashboardData.DetractorTicketsCount)) {
+    //         let pendingCount = props.dashboardData.DetractorTicketsCount.pending;
+    //         let newCount = props.dashboardData.DetractorTicketsCount.new;
+    //         if (pendingCount > 0) {
+    //             ticketText =
+    //                 pendingCount + ' Pending ' + (pendingCount > 1 ? 'tickets' : 'ticket');
+    //         }
+    //         if (newCount > 0) {
+    //             if (pendingCount > 0) {
+    //                 ticketText = newCount + ' New, ' + ticketText;
+    //             } else {
+    //                 ticketText = newCount + ' New ' + (newCount > 1 ? 'tickets' : 'ticket');
+    //             }
+    //         }
+    //         if (newCount === 0 && pendingCount === 0) {
+    //             ticketText = 'No Pending tickets';
+    //         }
+    //     }
+    //     return ticketText;
+    // };
+    //
+    // const getTicketsButton = () => {
+    //     return (
+    //         <TouchableWithoutFeedback
+    //             onPress={() => {
+    //                 let data = {
+    //                     storeId: '' + props.dashboardData.primaryStoreId,
+    //                     title: props.dashboardData.primaryStoreName + ' - Tickets',
+    //                     token: props.authToken,
+    //                 };
+    //                 const pushAction = StackActions.push('DetractorTickets', {
+    //                     data: data,
+    //                 });
+    //                 props.navigation.dispatch(pushAction);
+    //             }}>
+    //             <View style={dashboardStyles.ticketButton}>
+    //                 <Text
+    //                     numberOfLines={1}
+    //                     ellipsizeMode={'tail'}
+    //                     style={dashboardStyles.ticketText}>
+    //                     {getTicketText()}
+    //                 </Text>
+    //                 <Icon name="arrow-right" size={20} color= {Colors.white}/>
+    //             </View>
+    //         </TouchableWithoutFeedback>
+    //     );
+    // };
 
     const renderStoreNPSList = () => {
         if (ArrayUtils.isNotEmpty(props.dashboardData.storeNPSList)) {
@@ -342,23 +332,23 @@ const CxDashboard = props => {
                     <Text style={dashboardStyles.listTitle}>NPS</Text>
                 </View>
                 <View style={dashboardStyles.list}>
-                <FlatList
-                    data={list}
-                    keyExtractor={item => item.filterName}
-                    renderItem={renderRow}
-                    onEndReachedThreshold={0.01}
-                    refreshing={false}
-                    ListEmptyComponent={renderNoDataFound}
-                />
+                    <FlatList
+                        data={list}
+                        keyExtractor={item => item.filterName}
+                        renderItem={renderRow}
+                        onEndReachedThreshold={0.01}
+                        refreshing={false}
+                        ListEmptyComponent={renderNoDataFound}
+                    />
                 </View>
             </View>
         );
     };
 
     let renderSegmentTitle = (text) => {
-      return(
-          <Text style={dashboardStyles.dashboardTitle}>{text}</Text>
-      )
+        return(
+            <Text style={dashboardStyles.dashboardTitle}>{text}</Text>
+        )
     };
 
     let renderDashboardContent = () => {
