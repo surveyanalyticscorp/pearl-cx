@@ -25,6 +25,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {MarginConstants} from '../../styles/margin.constants';
 import Icomoon from '../../config/Icons/icon-native'
 import {VictoryPie} from 'victory-native'
+import SafeAreaView from 'react-native-safe-area-view';
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -125,12 +126,40 @@ const CxDashboard = props => {
 
     const renderDonutChart = () => {
         let data = props.dashboardData.primaryStoreNPS;
-        let responseCount = getTrimmedNoOfResponses();
+        let responses = props.dashboardData.primaryStoreNPS.totalResponses;
+        let responseCount = getTrimmedNoOfResponses(responses);
+        if(responseCount !== 0) {
+            return (
+                <View style={dashboardStyles.chartContainer}>
+                    <VictoryPie
+                        data={[
+                            { y: data.promoterFormattedPercent, x: ''},
+                            { y: data.passiveFormattedPercent, x: ''},
+                            { y: data.detractorFormattedPercent, x: ''}
+                        ]}
+                        width={210}
+                        height={250}
+                        innerRadius={78}
+                        radius={90}
+                        style={{
+                            labels: {
+                                fill: 'transparent'
+                            }
+                        }}
+                        colorScale={[Colors.promoter, Colors.passive, Colors.detractor]}
+                        endAngle={-90}
+                        startAngle={90}
+                    />
+                    <Text style={dashboardStyles.npsText}> {data.npsPercentage} NPS</Text>
+                    {renderDonutInfoContainer(responseCount)}
+                </View>
+            );
+        }
         return (
             <View style={dashboardStyles.chartContainer}>
                 <VictoryPie
                     data={[
-                        { y: data.promoterFormattedPercent, x: ''},
+                        { y: 100, x: ''}, //for empty nps chart
                         { y: data.passiveFormattedPercent, x: ''},
                         { y: data.detractorFormattedPercent, x: ''}
                     ]}
@@ -141,19 +170,23 @@ const CxDashboard = props => {
                     style={{
                         labels: {
                             fill: 'transparent'
-                        },
+                        }
                     }}
-                    colorScale={[Colors.promoter, Colors.passive, Colors.detractor]}
+                    colorScale={[Colors.primary]}
                     endAngle={-90}
                     startAngle={90}
                 />
                 <Text style={dashboardStyles.npsText}> {data.npsPercentage} NPS</Text>
-                <View style={dashboardStyles.donutInfoContainer}>
-                    {renderDonutInformation('check-square', 'Surveys',124)}
-                    {renderDonutInformation('th-large', 'Responses', responseCount)}
-                </View>
+                {renderDonutInfoContainer(responseCount)}
             </View>
         );
+    };
+
+    let renderDonutInfoContainer = (responseCount) => {
+        return <View style={dashboardStyles.donutInfoContainer}>
+            {renderDonutInformation('check-square', 'Surveys',124)}
+            {renderDonutInformation('th-large', 'Responses', responseCount)}
+        </View>
     };
 
     let renderDonutInformation = (icon, title, count) => {
@@ -162,7 +195,7 @@ const CxDashboard = props => {
               <Text style={dashboardStyles.responseText}>{count}</Text>
               <View style={dashboardStyles.separator}/>
               <View style={dashboardStyles.ticketTypeContainer}>
-                  <Icon name={icon} size={15} color= {Colors.borderColor}/>
+                  <Icon name={icon} size={15} color={Colors.borderColor}/>
                   <Text style={dashboardStyles.response}>{title}</Text>
               </View>
           </View>
@@ -207,9 +240,9 @@ const CxDashboard = props => {
         )
     };
 
-    const getTrimmedNoOfResponses = () => {
+    const getTrimmedNoOfResponses = (responseCount) => {
 
-        let numberOfResponses = props.dashboardData.primaryStoreNPS.totalResponses ? props.dashboardData.primaryStoreNPS.totalResponses : 0;
+        let numberOfResponses = responseCount ? responseCount : 0;
 
         if (numberOfResponses >= 10000) {
             numberOfResponses =
@@ -370,8 +403,9 @@ const CxDashboard = props => {
 
     let renderDashboard = () => {
         return (
+            <SafeAreaView forceInset={{bottom: 'never'}} style={dashboardStyles.container}>
             <ScrollView
-                contentContainerStyle={dashboardStyles.container}
+                contentContainerStyle={dashboardStyles.scrollView}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }>
@@ -380,6 +414,7 @@ const CxDashboard = props => {
                     {renderSpinner()}
                 </View>
             </ScrollView>
+            </SafeAreaView>
         );
     };
 
