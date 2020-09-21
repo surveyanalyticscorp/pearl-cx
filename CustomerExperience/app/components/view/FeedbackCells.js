@@ -12,6 +12,7 @@ import StringUtils from '../../Utils/StringUtils';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../../styles/color.constants';
+import {MarginConstants} from '../../styles/margin.constants';
 
 const ProgressColor = {
   5: '#ff0101',
@@ -61,7 +62,7 @@ class FeedbackCell extends Component {
           </View>
           <View style={styles.rightContent}>
             <View style={styles.upperContent}>
-              <View style={{flex: 0.6}}>
+              <View style={{flex: 1}}>
                 <Text style={[styles.textLarge, styles.grayText]}>
                   {item.businessUnitName}
                 </Text>
@@ -69,12 +70,12 @@ class FeedbackCell extends Component {
               {this.getTicketStatusView(item)}
             </View>
             <View style={styles.lowerContent}>
-              <View style={{flex: 0.6}}>
+              <View style={{flex: 1,marginRight:MarginConstants.tab1}}>
                 <Text style={[styles.textLarge, styles.blueText]}>
                   {userName}
                 </Text>
                 {!disable && (
-                  <Text style={[styles.textMedium, styles.grayText]}>
+                  <Text style={[styles.textMedium, styles.grayText,{marginVertical:MarginConstants.halfTab}]}>
                     {textResult}
                   </Text>
                 )}

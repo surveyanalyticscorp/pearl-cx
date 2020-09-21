@@ -2,7 +2,6 @@ platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'CustomerExperience' do
-  # Pods for CustomerExperience
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -43,28 +42,3 @@ target 'CustomerExperience' do
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
   use_native_modules!
 end
-#  target 'CustomerExperienceTests' do
-#    inherit! :complete
-#    # Pods for testing
-#  end
-#
-#  use_native_modules!
-
-  # Enables Flipper.
-  #
-  # Note that if you have use_frameworks! enabled, Flipper will not work and
-  # you should disable these next few lines.
-#  add_flipper_pods!
-#  post_install do |installer|
-#    flipper_post_install(installer)
-#  end
-#end
-#
-#target 'CustomerExperience-tvOS' do
-#  # Pods for CustomerExperience-tvOS
-#
-#  target 'CustomerExperience-tvOSTests' do
-#    inherit! :search_paths
-#    # Pods for testing
-#  end
-#end

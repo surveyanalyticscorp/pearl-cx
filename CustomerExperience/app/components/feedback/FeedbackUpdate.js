@@ -20,6 +20,7 @@ import {CommonActions} from '@react-navigation/native';
 import {DotIndicator} from 'react-native-indicators';
 import {clearError} from '../../redux/actions/index';
 import {cleanUpdateFeedBack, updateFeedback} from '../../redux/actions/feedback.actions';
+import {Colors} from '../../styles/color.constants';
 
 const {width} = Dimensions.get('window');
 const sliderItemWidth = width / 3;
@@ -176,8 +177,8 @@ const FeedbackUpdate = props => {
                 minimumValue={0}
                 maximumValue={3}
                 value={value}
-                minimumTrackTintColor="#eeeeee"
-                maximumTrackTintColor="#eeeeee"
+                minimumTrackTintColor= {Colors.accent}
+                maximumTrackTintColor= {Colors.primary}
                 thumbStyle={{
                   width: 10,
                   height: 20,
