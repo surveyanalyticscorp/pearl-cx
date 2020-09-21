@@ -71,9 +71,9 @@ class FeedbackCell extends Component {
             </View>
             <View style={styles.lowerContent}>
               <View style={{flex: 1,marginRight:MarginConstants.tab1}}>
-                <Text style={[styles.textLarge, styles.blueText]}>
+                {StringUtils.isNotEmpty(userName) && <Text style={[styles.textLarge, styles.blueText]}>
                   {userName}
-                </Text>
+                </Text>}
                 {!disable && (
                   <Text style={[styles.textMedium, styles.grayText,{marginVertical:MarginConstants.halfTab}]}>
                     {textResult}
