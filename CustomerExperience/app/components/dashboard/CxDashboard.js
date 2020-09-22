@@ -26,6 +26,7 @@ import {MarginConstants} from '../../styles/margin.constants';
 import Icomoon from '../../config/Icons/icon-native'
 import {VictoryPie} from 'victory-native'
 import SafeAreaView from 'react-native-safe-area-view';
+import {Sizes} from '../../styles/Size.constant';
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -131,42 +132,50 @@ const CxDashboard = props => {
         if(responseCount !== 0) {
             return (
                 <View style={dashboardStyles.chartContainer}>
+                    <View style={dashboardStyles.donut}>
                     <VictoryPie
                         data={[
                             { y: data.promoterFormattedPercent, x: ''},
                             { y: data.passiveFormattedPercent, x: ''},
                             { y: data.detractorFormattedPercent, x: ''}
                         ]}
-                        width={210}
-                        height={250}
-                        innerRadius={78}
-                        radius={90}
+                        width={5*MarginConstants.tab4}
+                        height={6*MarginConstants.tab4}
+                        innerRadius={2.5*MarginConstants.tab4}
+                        radius={2.2*MarginConstants.tab4}
                         style={{
                             labels: {
                                 fill: 'transparent'
-                            }
+                            },
+                            data: {
+                                fill: 'red'
+                            },
+                            backgroundColor:'red'
                         }}
                         colorScale={[Colors.promoter, Colors.passive, Colors.detractor]}
                         endAngle={-90}
                         startAngle={90}
                     />
-                    <Text style={dashboardStyles.npsText}> {data.npsPercentage} NPS</Text>
+                    </View>
+                    <View style={dashboardStyles.npsView}>
+                        <Text style={dashboardStyles.npsPercentText}>{data.npsPercentage}</Text>
+                        <Text style={dashboardStyles.npsText}>NPS</Text>
+                    </View>
                     {renderDonutInfoContainer(responseCount)}
                 </View>
             );
         }
         return (
             <View style={dashboardStyles.chartContainer}>
+                <View style={dashboardStyles.donut}>
                 <VictoryPie
                     data={[
                         { y: 100, x: ''}, //for empty nps chart
-                        { y: data.passiveFormattedPercent, x: ''},
-                        { y: data.detractorFormattedPercent, x: ''}
                     ]}
-                    width={210}
-                    height={250}
-                    innerRadius={78}
-                    radius={90}
+                    width={5*MarginConstants.tab4}
+                    height={6*MarginConstants.tab4}
+                    innerRadius={2*MarginConstants.tab4}
+                    radius={3*MarginConstants.tab3}
                     style={{
                         labels: {
                             fill: 'transparent'
@@ -176,7 +185,11 @@ const CxDashboard = props => {
                     endAngle={-90}
                     startAngle={90}
                 />
-                <Text style={dashboardStyles.npsText}> {data.npsPercentage} NPS</Text>
+                </View>
+                <View style={dashboardStyles.npsView}>
+                <Text style={dashboardStyles.npsPercentText}> {data.npsPercentage}</Text>
+                <Text style={dashboardStyles.npsText}> NPS </Text>
+                </View>
                 {renderDonutInfoContainer(responseCount)}
             </View>
         );
@@ -222,7 +235,7 @@ const CxDashboard = props => {
                     <Text  style={dashboardStyles.ticketText}>{ticketCount}</Text>
                     <View style={dashboardStyles.separator}/>
                     <View style={dashboardStyles.ticketTypeContainer}>
-                        <Icomoon name={icon} size={20} color= {Colors.borderColor}/>
+                        <Icomoon name={icon} size={Sizes.icons} color= {Colors.borderColor}/>
                         <Text style={dashboardStyles.ticketType}>{title}</Text>
                     </View>
                 </View>
@@ -234,7 +247,7 @@ const CxDashboard = props => {
         return(
             <View style={dashboardStyles.closedLoopView}>
                 {renderTicketView(props.dashboardData.DetractorTicketsCount.new,"new", "New")}
-                {renderTicketView(props.dashboardData.DetractorTicketsCount.pending,"open", "Pending")}
+                {renderTicketView(props.dashboardData.DetractorTicketsCount.pending,"open", "Open")}
                 {renderTicketView(props.dashboardData.DetractorTicketsCount.resolved,"resolved", "Resolved")}
             </View>
         )
@@ -255,127 +268,51 @@ const CxDashboard = props => {
         return numberOfResponses
     };
 
-    // const getTicketText = () => {
-    //     let ticketText = '';
-    //     if(!isObjectEmpty(props.dashboardData) && !isObjectEmpty(props.dashboardData.DetractorTicketsCount)) {
-    //         let pendingCount = props.dashboardData.DetractorTicketsCount.pending;
-    //         let newCount = props.dashboardData.DetractorTicketsCount.new;
-    //         if (pendingCount > 0) {
-    //             ticketText =
-    //                 pendingCount + ' Pending ' + (pendingCount > 1 ? 'tickets' : 'ticket');
-    //         }
-    //         if (newCount > 0) {
-    //             if (pendingCount > 0) {
-    //                 ticketText = newCount + ' New, ' + ticketText;
-    //             } else {
-    //                 ticketText = newCount + ' New ' + (newCount > 1 ? 'tickets' : 'ticket');
-    //             }
-    //         }
-    //         if (newCount === 0 && pendingCount === 0) {
-    //             ticketText = 'No Pending tickets';
-    //         }
-    //     }
-    //     return ticketText;
-    // };
-    //
-    // const getTicketsButton = () => {
-    //     return (
-    //         <TouchableWithoutFeedback
-    //             onPress={() => {
-    //                 let data = {
-    //                     storeId: '' + props.dashboardData.primaryStoreId,
-    //                     title: props.dashboardData.primaryStoreName + ' - Tickets',
-    //                     token: props.authToken,
-    //                 };
-    //                 const pushAction = StackActions.push('DetractorTickets', {
-    //                     data: data,
-    //                 });
-    //                 props.navigation.dispatch(pushAction);
-    //             }}>
-    //             <View style={dashboardStyles.ticketButton}>
-    //                 <Text
-    //                     numberOfLines={1}
-    //                     ellipsizeMode={'tail'}
-    //                     style={dashboardStyles.ticketText}>
-    //                     {getTicketText()}
-    //                 </Text>
-    //                 <Icon name="arrow-right" size={20} color= {Colors.white}/>
-    //             </View>
-    //         </TouchableWithoutFeedback>
-    //     );
-    // };
-
-    const renderStoreNPSList = () => {
-        if (ArrayUtils.isNotEmpty(props.dashboardData.storeNPSList)) {
-            let list = props.dashboardData.storeNPSList;
-            let data = list.slice(0, 5);
-            let title = props.dashboardData.systemPreferences.businessUnitName
-                ? props.dashboardData.systemPreferences.businessUnitName
-                : 'Business';
-            return renderLists(data, title);
-        }
-    };
-
-    const renderProductNPSList = () => {
-        if (ArrayUtils.isNotEmpty(props.dashboardData.productNPSList)) {
-            let list = props.dashboardData.productNPSList;
-            let title = 'Products';
-            return renderLists(list, title);
-        }
-    };
-
-    const renderNoDataFound = () => {
+    let renderNoDataFound = () => {
         return (
             <View
                 style={dashboardStyles.emptyView}>
-                <Text style={dashboardStyles.emptyText}>No feedbacks received.</Text>
+                <Text style={dashboardStyles.emptyText}>No segment found</Text>
             </View>
         );
     };
 
-    const renderRow = storeItem => {
-        let name = storeItem.item.filterName
-            ? storeItem.item.filterName
-            : storeItem.item.storeName;
-        let clickable = storeItem.item.hasOwnProperty('storeName');
+    let renderRow = storeItem => {
         return (
-            <CXTrendItemWidget
-                storeName={name}
-                nps={storeItem.item.NPSScore.npsPercentage}
-                promoter={storeItem.item.NPSScore.promoters}
-                passive={storeItem.item.NPSScore.passive}
-                detractor={storeItem.item.NPSScore.detractors}
-                isClickable={clickable}
-                onPress={() => {
-                    let data = {storeId: storeItem.item.storeId + ''};
-                    const pushAction = StackActions.push('DashBoardStoreDetails', {
-                        name: props.dashboardData.primaryStoreName,
-                        data: data,
-                    });
-                    props.navigation.dispatch(pushAction);
-                }}
-            />
-        );
-    };
-    const renderLists = (list, title) => {
-        return (
-            <View style={dashboardStyles.listViewContainer}>
-                <View style={dashboardStyles.productHeaderView}>
-                    <Text style={dashboardStyles.listTitle}>{title}</Text>
-                    <Text style={dashboardStyles.listTitle}>NPS</Text>
-                </View>
-                <View style={dashboardStyles.list}>
-                    <FlatList
-                        data={list}
-                        keyExtractor={item => item.filterName}
-                        renderItem={renderRow}
-                        onEndReachedThreshold={0.01}
-                        refreshing={false}
-                        ListEmptyComponent={renderNoDataFound}
-                    />
-                </View>
+            <View style={dashboardStyles.row}>
+                <Text style={dashboardStyles.productText}>{storeItem.item.storeName}</Text>
+                <Text style={dashboardStyles.productText}>{storeItem.item.NPSScore.npsPercentage}</Text>
             </View>
         );
+    };
+
+    let renderListHeader = () => {
+        return (
+            <View style={dashboardStyles.productHeaderView}>
+                <Text style={dashboardStyles.listTitle}>Segment</Text>
+                <Text style={dashboardStyles.listTitle}>NPS</Text>
+            </View>
+        )
+    };
+
+    let renderStoreNPSList = () => {
+        let list = props.dashboardData.storeNPSList;
+            return (
+                <View style={dashboardStyles.listViewContainer}>
+                    <View style={dashboardStyles.list}>
+                        <FlatList
+                            data={list.sort((a, b) => b.NPSScore.npsPercentage - a.NPSScore.npsPercentage)}
+                            keyExtractor={item => item.filterName}
+                            renderItem={renderRow}
+                            onEndReachedThreshold={0.01}
+                            refreshing={false}
+                            ListEmptyComponent={renderNoDataFound}
+                            showsVerticalScrollIndicator={false}
+                            ListHeaderComponent={renderListHeader}
+                        />
+                    </View>
+                </View>
+            );
     };
 
     let renderSegmentTitle = (text) => {
@@ -392,9 +329,8 @@ const CxDashboard = props => {
                     {renderDonutChart()}
                     {renderSegmentTitle('Closed Loop')}
                     {getClosedLoopView()}
-                    {renderSegmentTitle("Segment Comparison")}
+                    {renderSegmentTitle('Comparison')}
                     {renderStoreNPSList()}
-                    {renderProductNPSList()}
                 </View>
             );
         }

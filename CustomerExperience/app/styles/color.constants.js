@@ -8,6 +8,7 @@ const Colors = {
   black: '#000000',
   accent: '#193F8B',
   accentGradient: 'rgba(25, 63, 139, 0.2)',
+  secondaryAccent: "#2589E3",
   gradientColor: '#8AC0EA',
   grey: '#f9f9f9',
   lightBlack:'#404A5B',
@@ -37,9 +38,9 @@ const Colors = {
   smileyFiveColor: '#4cb714',
   selectionGreyColor: '#F7F8F9',
 
-  promoter: '#63A523',
-  detractor:'#ff0047',
-  passive:'rgb(250, 225, 90)',
+  promoter: '#3FCA5A',
+  detractor:'#CE002A',
+  passive:'#FFE300',
 
   negativePromter: '#E8E8E8',
   positivePromter: '#90BA5B',

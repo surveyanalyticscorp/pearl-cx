@@ -11,13 +11,6 @@ export const dashboardStyles = StyleSheet.create({
   scrollView: {
     flexGrow: 1
   },
-  chartContainer: {
-    paddingRight: PaddingConstants.tab1,
-    backgroundColor: Colors.white,
-    height: MarginConstants.tab4 * 5,
-    marginHorizontal: MarginConstants.tab2,
-    flexDirection: 'row'
-  },
   imageBackgroundContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -79,7 +72,7 @@ export const dashboardStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems:'center',
     paddingHorizontal: PaddingConstants.tab2,
-    marginVertical: PaddingConstants.tab2,
+    marginVertical: PaddingConstants.tab1,
     backgroundColor: Colors.darkerGrey,
     marginHorizontal: MarginConstants.tab1,
     flexDirection: 'row',
@@ -90,7 +83,7 @@ export const dashboardStyles = StyleSheet.create({
   listTitle: {
     color: Colors.primary,
     fontFamily: FontFamily.semiBold,
-    fontSize: TextSizes.secondary,
+    fontSize: TextSizes.primary,
   },
   responseView: {
     justifyContent: 'center',
@@ -107,15 +100,15 @@ export const dashboardStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   emptyText: {
-    color: Colors.black,
-    fontSize: 16
+    color: Colors.secondary,
+    fontSize: TextSizes.secondary,
+    fontFamily: FontFamily.regular,
   },
   emptyView: {
     flex: 1,
-    marginTop: 20,
+    marginVertical: MarginConstants.tab2,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
   },
   detractorEmptyText: {
     color: Colors.secondary,
@@ -143,7 +136,7 @@ export const dashboardStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   ticketText: {
-    color: Colors.accent,
+    color: Colors.secondaryAccent,
     fontFamily: FontFamily.semiBold,
     fontSize: TextSizes.primary,
     marginBottom:5,
@@ -162,20 +155,56 @@ export const dashboardStyles = StyleSheet.create({
     alignItems:'center',
   },
   ticketType:{
-    paddingLeft: PaddingConstants.tab1,
+    paddingLeft: PaddingConstants.halfTab,
     color: Colors.primary,
     fontFamily: FontFamily.light
   },
-  npsText: {
+  npsView: {
     position: 'absolute',
-    top: '50%',
-    left:'15%',
+    top: '38%',
+  },
+  npsPercentText: {
     color: Colors.primary,
-    fontSize: TextSizes.extraLargeText,
-    fontFamily: FontFamily.semiBold
+    fontSize: TextSizes.donutPercentText,
+    fontFamily: FontFamily.semiBold,
+    textAlign:'center',
+    left:'80%',
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  npsText: {
+    color: Colors.primary,
+    fontSize: TextSizes.primary,
+    fontFamily: FontFamily.semiBold,
+    paddingLeft: PaddingConstants.tab3,
+    textAlign:'center',
+    left:'75%',
+  },
+  chartContainer: {
+    backgroundColor: Colors.white,
+    height: MarginConstants.tab4 * 5,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  donut: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 3*MarginConstants.tab4,
   },
   donutInfoContainer: {
-    flex:1,
-    marginVertical: MarginConstants.tab1
+    marginVertical: MarginConstants.tab1,
+  },
+  row: {
+    height: 1.2*PaddingConstants.tab4,
+    paddingHorizontal: PaddingConstants.tab2,
+    alignItems: 'center',
+    flexDirection:'row',
+    justifyContent: 'space-between',
+  },
+  productText: {
+    color: Colors.primary,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.primary,
   }
 });

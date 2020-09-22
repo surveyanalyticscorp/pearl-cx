@@ -113,7 +113,7 @@ const AppRouter = props => {
 
     const TicketLogTabStack = props => (
         <TicketLogTab.Navigator tabBarOptions={{
-            labelStyle: {color: Colors.primary, width: width/3, fontSize: TextSizes.secondary},
+            labelStyle: {color: Colors.primary, width: width/3, fontSize: TextSizes.semiSecondary},
             indicatorStyle: {backgroundColor: Colors.accent},
             style:{backgroundColor: Colors.white, width: '100%'},
             initialLayout: {width: Dimensions.get('window').width},
@@ -157,8 +157,8 @@ const AppRouter = props => {
                                        keyboardDismissMode={'auto'}
         >
             <DetractorTicketsTab.Screen name="New" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:0}}/>
-            <DetractorTicketsTab.Screen name="Started" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:1}}/>
-            <DetractorTicketsTab.Screen name="Finished" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:2}}/>
+            <DetractorTicketsTab.Screen name="Open" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:1}}/>
+            <DetractorTicketsTab.Screen name="Resolved" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:2}}/>
         </DetractorTicketsTab.Navigator>
     );
 
