@@ -1,28 +1,24 @@
-import React, {useState,useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Modal,
+    Platform,
     ScrollView,
-    TouchableOpacity,
-    View,
-    Text,
-    TouchableWithoutFeedback,
     StyleSheet,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform
+    Text,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SafeAreaView from 'react-native-safe-area-view';
 import {MarginConstants} from '../styles/margin.constants';
 import {Colors} from '../styles/color.constants';
-import {DMYFORMAT, YMDFORMAT} from '../Utils/AppConstants';
+import {DMYFORMAT, FullMonthDateYearFormat, YMDFORMAT, HalfMonthDateYearFormat} from '../Utils/AppConstants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
 import moment from 'moment';
-
-import QPTextField from './TextField';
-import StringUtils from '../Utils/StringUtils';
+import DatePicker from './DatePicker';
 
 export default function RangeCalendar(props) {
 
@@ -31,8 +27,7 @@ export default function RangeCalendar(props) {
     let [showCustom, setShowCustom] = useState(props.selectedType === 4);
     let [validationError, setValidationError] = useState('');
     let [selectedType, setSelectedType] = useState(props.selectedType);
-
-    let textFieldTimer = useRef(null);
+    let [startDateSelected, setStartDateSelected] = useState(false);
 
     const renderCloseButton = () => {
         return (
@@ -62,7 +57,6 @@ export default function RangeCalendar(props) {
                 return 'Last 6 months';
             default:
                 return 'Custom';
-
         }
     };
 
@@ -77,8 +71,7 @@ export default function RangeCalendar(props) {
                     } else {
                         setSelectedType(type);
                         setShowCustom(true);
-                        setStartDate(DMYFORMAT);
-                        setEndDate(DMYFORMAT);
+                        setStartDateSelected(true);
                     }
 
                 }}>
@@ -89,7 +82,9 @@ export default function RangeCalendar(props) {
     };
 
     let showSelectedDate = () => {
-        let selectedDateString = startDate + ' - ' + endDate;
+        let sDate = moment(startDate, DMYFORMAT).format(HalfMonthDateYearFormat);
+        let eDate = moment(endDate, DMYFORMAT).format(HalfMonthDateYearFormat);
+        let selectedDateString = sDate + ' - ' + eDate;
         return (
             <View style={[styles.preDefinedDateContainer, {flexDirection: 'row'}]}>
                 <Text style={styles.text}>Date Selected</Text>
@@ -128,70 +123,64 @@ export default function RangeCalendar(props) {
                 <TouchableOpacity style={styles.okButton}
                                   onPress={saveDate}
                 >
-                    <Text style={styles.text}>OK</Text>
+                    <Text style={[styles.text,{color: Colors.white}]}>OK</Text>
                 </TouchableOpacity>
             </View>
         );
     };
 
-    let showCustomDateContainer = () => {
-        return (
-            <View style={styles.customDateContainer}>
-                {StringUtils.isNotEmpty(validationError) && renderValidationError()}
-                <View style={styles.startTextFieldContainer}>
-                    <QPTextField
-                        autofocus={false}
-                        label={'Start Date'}
-                        tintColor={Colors.primary}
-                        keyboardType={Platform.select({
-                            ios: 'numbers-and-punctuation',
-                            android: 'phone-pad'
-                        })}
-                        placeholder={DMYFORMAT}
-                        style={styles.dateInput}
-                        onSubmit={() => {
-                            if(moment(startDate, DMYFORMAT).isValid()) {
-                                textFieldTimer = setTimeout(() => {
-                                    Keyboard.dismiss()
-                                }, 5);
-                            } else {
-                                setValidationError('Invalid start date entered')
-                            }
-                        }}
-                        onChange={(text) => {
-                            StringUtils.isNotEmpty(validationError) && setValidationError('');
-                            setStartDate(text)
-                        }}
-                    />
-                </View>
-                <View style={styles.endTextFieldContainer}>
-                    <QPTextField
-                        autofocus={false}
-                        label={'End Date'}
-                        tintColor={Colors.primary}
-                        style={styles.dateInput}
-                        placeholder={DMYFORMAT}
-                        keyboardType={Platform.select({
-                            ios: 'numbers-and-punctuation',
-                            android: 'phone-pad'
-                        })}
-                        onSubmit={() => {
-                            if(moment(endDate, DMYFORMAT).isValid()) {
-                                textFieldTimer = setTimeout(() => {
-                                    Keyboard.dismiss()
-                                }, 5);
-                            } else {
-                                setValidationError('Invalid end date entered')
-                            }
-                        }}
-                        onChange={(text) => {
-                            StringUtils.isNotEmpty(validationError) && setValidationError('');
-                            setEndDate(text)
-                        }}
-                    />
-                </View>
+    let setSelectedData = (year, month, date) => {
+        setValidationError('');
+        if(month.length === 1) {
+            month = '0'+month;
+        }
+        if(date.length === 1) {
+            date = '0'+date;
+        }
+        let tempDate = date+"/"+month+"/"+year;
+        if(startDateSelected) {
+            setStartDate(tempDate)
+        } else {
+            setEndDate(tempDate)
+        }
+    };
+
+    let renderDatePicker = () => {
+        return(
+            <View style={styles.datePicker}>
+                <DatePicker
+                    onSubmit = {setSelectedData}
+                    dateFormat = {DMYFORMAT}
+                    savedDate = {startDateSelected ? startDate : endDate}
+                    minYear={1970}
+                    maxYear={2050}
+                />
             </View>
         )
+    };
+
+    let renderStartDateCell = () => {
+        return <DateCell isSelected={startDateSelected}
+                         selectedText={startDate}
+                         prefix={'From'}
+                         selectionAction={() => {
+                             setStartDateSelected(true);
+                         }}
+        />
+    };
+
+    let renderEndDateCell = () => {
+        return <DateCell isSelected={!startDateSelected}
+                         selectedText={endDate}
+                         prefix={'Until'}
+                         selectionAction={() => {
+                             setStartDateSelected(false);
+                         }}
+        />
+    };
+
+    let showCustomDateContainer = () => {
+        return renderDatePicker()
     };
 
     let renderValidationError = () => {
@@ -211,27 +200,45 @@ export default function RangeCalendar(props) {
                 <SafeAreaView style={{flex: 1}}>
                     <ScrollView style={styles.scrollContainer}>
                         {renderCloseButton()}
-                        <KeyboardAvoidingView behavior='position'
-                                              style={styles.keyboardContainer}
-                                              keyboardVerticalOffset={Platform.select({
-                                                  ios: Platform.isPad ? -200 : -150,
-                                                  android: -200
-                                              })}
-                                              enabled>
+                        <View>
                             <View style={styles.modalDOBView}>
-                                {showSelectedDate()}
+                                {!showCustom && showSelectedDate()}
                                 {renderPredefinedDateSelection(1)}
                                 {renderPredefinedDateSelection(2)}
                                 {renderPredefinedDateSelection(3)}
                                 {renderPredefinedDateSelection(4)}
-                                {showCustom && showCustomDateContainer()}
-                                {showCustom && renderPickerFooter()}
                             </View>
-                        </KeyboardAvoidingView>
+                            {showCustom && <View style={styles.modalDOBView}>
+                                {renderValidationError()}
+                                {renderStartDateCell()}
+                                {renderEndDateCell()}
+                                {showCustomDateContainer()}
+                                {renderPickerFooter()}
+                            </View>}
+                        </View>
                     </ScrollView>
                 </SafeAreaView>
             </View>
         </Modal>
+    );
+}
+
+function DateCell(props) {
+    let displayDate = moment(props.selectedText, 'DD-MM-YYYY').format(FullMonthDateYearFormat);
+    return (
+        <TouchableWithoutFeedback
+            onPress={props.selectionAction}
+        >
+            <View style={styles.dateContainer}>
+                <Text style={styles.text}>{props.prefix}</Text>
+                <View style={styles.textDateContainer}>
+                    <View style={styles.textContainer}>
+                        <Text style={[styles.text,{color: props.isSelected ? Colors.secondaryAccent : Colors.secondary}]}>{displayDate}</Text>
+                    </View>
+                </View>
+
+            </View>
+        </TouchableWithoutFeedback>
     );
 }
 
@@ -242,7 +249,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        backgroundColor: 'rgba(0,0,0,0.8)',
+        backgroundColor: 'rgba(0,0,0,0.7)',
     },
     closeIconContainer: {
         marginRight: MarginConstants.tab2,
@@ -260,7 +267,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        borderColor: Colors.accent
+        backgroundColor: Colors.accent,
+        marginBottom: MarginConstants.tab1
     },
     modalDOBView: {
         marginBottom:MarginConstants.halfTab,
@@ -288,7 +296,7 @@ const styles = StyleSheet.create({
         fontSize: TextSizes.secondary,
         justifyContent: 'center',
         alignItems:'center',
-        paddingLeft: PaddingConstants.tab1,
+        paddingHorizontal: PaddingConstants.tab1,
         paddingBottom: PaddingConstants.halfTab
     },
     error: {
@@ -312,7 +320,6 @@ const styles = StyleSheet.create({
     },
     preDefinedDateContainer: {
         padding: PaddingConstants.tab1,
-        paddingLeft: PaddingConstants.tab2,
         margin: MarginConstants.tab1,
         backgroundColor: Colors.white,
         height: PaddingConstants.tab4,
@@ -340,6 +347,16 @@ const styles = StyleSheet.create({
     },
     endTextFieldContainer: {
         marginTop: MarginConstants.tab2
-    }
+    },
+    datePicker:{
+        margin: MarginConstants.tab1
+    },
+    textDateContainer: {
+        flex:1,
+        paddingLeft: PaddingConstants.tab1,
+        marginRight: MarginConstants.tab1,
+        paddingVertical: PaddingConstants.tab1,
+        backgroundColor: Colors.grey
+    },
 
 });
