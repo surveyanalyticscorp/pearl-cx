@@ -147,10 +147,6 @@ const CxDashboard = props => {
                             labels: {
                                 fill: 'transparent'
                             },
-                            data: {
-                                fill: 'red'
-                            },
-                            backgroundColor:'red'
                         }}
                         colorScale={[Colors.promoter, Colors.passive, Colors.detractor]}
                         endAngle={-90}
@@ -227,7 +223,7 @@ const CxDashboard = props => {
                     };
                     const pushAction = StackActions.push('DetractorTickets', {
                         data: data,
-                        screen: icon === 'new' ? "New" : (icon === 'open' ? "Started" : "Finished")
+                        screen: icon === 'new' ? "New" : (icon === 'open' ? "Open" : "Resolved")
                     });
                     props.navigation.dispatch(pushAction);
                 }}>
