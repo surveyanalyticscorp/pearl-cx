@@ -1,0 +1,6 @@
+framework module InAppSurvey_CX {
+  umbrella header "InAppSurvey_CX.h"
+
+  export *
+  module * { export * }
+}

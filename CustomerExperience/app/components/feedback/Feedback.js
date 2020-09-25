@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import {Text, View, SafeAreaView, StyleSheet, FlatList, requireNativeComponent, NativeModules} from 'react-native';
 import FeedbackCell from '../view/FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {StackActions} from '@react-navigation/native';
@@ -13,6 +13,17 @@ import {showMessage} from 'react-native-flash-message';
 import CalendarScreen from '../view/calendarScreen';
 import {isObjectEmpty} from '../../Utils/Utility';
 import ArrayUtils from '../../Utils/ArrayUtils';
+
+// const MODULE_NAME = 'InAppSurveyView';
+// const InAppSurvey = requireNativeComponent(MODULE_NAME, null);
+
+let InAppSurveyViewManager = NativeModules.InAppSurveyViewManager;
+
+
+// type PropsType = {|
+//     +surveyId: string,
+//     +apiKey: string,
+// |};
 
 function Feedback(props){
 
@@ -77,12 +88,13 @@ function Feedback(props){
     },[props.feedback.allResponses]);
 
     const _onPressRow = (data) => {
-        const pushAction = StackActions.push('Feedback Details', {
-            data: data,
-            ticketStatus: props.feedback.cxTicketStatusValues,
-            token: props.authToken
-        });
-        props.navigation.dispatch(pushAction);
+        // const pushAction = StackActions.push('Feedback Details', {
+        //     data: data,
+        //     ticketStatus: props.feedback.cxTicketStatusValues,
+        //     token: props.authToken
+        // });
+        // props.navigation.dispatch(pushAction);
+        InAppSurveyViewManager.showSurvey('7657393', 'c6f64e3c-aa07-4f2a-bb6e-0794defbed39')
     };
 
     const _renderRow = ({item}) => {
@@ -123,6 +135,13 @@ function Feedback(props){
     };
 
     let renderCalendarView = () => {
+        //  return (
+        //     <InAppSurvey
+        //         surveyId={'7657393'}
+        //         apiKey={'c6f64e3c-aa07-4f2a-bb6e-0794defbed39'}
+        //         style={{ flex: 1 }}
+        //     />
+        // );
         return <CalendarScreen
             showCalendar={calendar}
             closeCalendar={() => {
