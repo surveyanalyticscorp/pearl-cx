@@ -8,7 +8,6 @@ import {
     View,
 } from 'react-native';
 import {StackActions} from '@react-navigation/native';
-import CXTrendItemWidget from './components/CXTrendItemWidget';
 import {showLoading} from '../../redux/actions/index';
 import {DASHBOARD_RANGE, getDashboardContent, setDashboardRangeFilter} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
@@ -17,7 +16,6 @@ import {Colors} from '../../styles/color.constants';
 import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
 import RangeCalendar from '../../widgets/RangeCalendar';
-import ArrayUtils from '../../Utils/ArrayUtils';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';

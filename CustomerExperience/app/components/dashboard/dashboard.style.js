@@ -168,7 +168,7 @@ export const dashboardStyles = StyleSheet.create({
     fontSize: TextSizes.donutPercentText,
     fontFamily: FontFamily.semiBold,
     textAlign:'center',
-    left:'80%',
+    left:'100%',
     justifyContent:'center',
     alignItems:'center',
   },
