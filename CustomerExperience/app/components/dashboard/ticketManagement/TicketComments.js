@@ -5,17 +5,30 @@ import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
+import ArrayUtils from '../../../Utils/ArrayUtils';
+import moment from 'moment';
+import {MDYFORMAT} from '../../../Utils/AppConstants';
 
 export default function TicketComments(props) {
 
+    let routeName = props.route.name;
+    let ticketLogs = props.route.params.data.ticketLogs;
+
     let renderCommentRow = () => {
-      return(
-          <View style={styles.commentRow}>
-              <Text style={styles.authorText}>Author: System</Text>
-              <Text style={styles.dateText}>Mar 06, 2020</Text>
-              <Text style={styles.commentText}>New Ticket Added</Text>
-          </View>
-      )
+        if(ticketLogs && ArrayUtils.isNotEmpty(ticketLogs)) {
+            return ticketLogs.map(item => {
+                let date = moment(item.logDate, MDYFORMAT).format('MMM DD, YYYY');
+                let text = routeName === 'Comments' ? item.comment : item.logType;
+                return(
+                    <View style={styles.commentRow}>
+                        <Text style={styles.authorText}>Author: {item.author}</Text>
+                        <Text style={styles.dateText}>{date}</Text>
+                        <Text style={styles.commentText}>{text}</Text>
+                    </View>
+                )
+            })
+        }
+        return <View/>
     };
 
     return (

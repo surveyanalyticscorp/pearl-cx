@@ -123,8 +123,8 @@ const AppRouter = props => {
                                 keyboardDismissMode={'auto'}
         >
             <TicketLogTab.Screen name="Overview" component={TicketOverview} initialParams={{data: props.route.params.item}}/>
-            <TicketLogTab.Screen name="Comments" component={TicketComments} />
-            <TicketLogTab.Screen name="Logs" component={TicketComments} />
+            <TicketLogTab.Screen name="Comments" component={TicketComments} initialParams={{data: props.route.params.item}}/>
+            <TicketLogTab.Screen name="Logs" component={TicketComments} initialParams={{data: props.route.params.item}}/>
         </TicketLogTab.Navigator>
     );
 

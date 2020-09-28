@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {StyleSheet, View, TouchableWithoutFeedback, Text} from 'react-native';
 import ReadMore from 'react-native-read-more-text';
 import {Colors} from '../../../styles/color.constants';
@@ -9,9 +9,14 @@ import StringUtils from '../../../Utils/StringUtils';
 import {FontFamily} from '../../../styles/font.constants';
 import moment from 'moment';
 import {HalfMonthDateYearFormat, YMDFORMAT} from '../../../Utils/AppConstants';
+import {getDetractorTicketDetails} from '../../../redux/actions/dashboard.actions';
+import {connect} from 'react-redux';
+import {isObjectEmpty} from '../../../Utils/Utility';
 
 const TicketWidget = props => {
+
   let time = moment(props.item.timestamp, YMDFORMAT).format(HalfMonthDateYearFormat);
+
   let _renderTruncatedFooter = handlePress => {
     return (
       <Text
@@ -32,8 +37,17 @@ const TicketWidget = props => {
     );
   };
 
+  useEffect(() => {
+    if(!isObjectEmpty(props.ticketDetails)) {
+      props.navigation.navigate('Ticket Details',{item:props.ticketDetails});
+    }
+  },[props.ticketDetails]);
+
   let onPress = () => {
-    props.navigation.navigate('Ticket Details',{item:props.item});
+    let params = {
+      'ticketID': props.item.ticketID
+    };
+    props.getTicketDetails(params)
   };
 
   let renderReadMoreView = () => {
@@ -65,6 +79,20 @@ const TicketWidget = props => {
     </TouchableWithoutFeedback>
   );
 };
+
+const mapStateToProps = state => {
+  return {
+    ticketDetails: state.dashboard.ticketDetails
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  getTicketDetails: (params) => {
+    dispatch(getDetractorTicketDetails(params))
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TicketWidget);
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -99,5 +127,3 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.semiSecondary
   }
 });
-
-export default TicketWidget;

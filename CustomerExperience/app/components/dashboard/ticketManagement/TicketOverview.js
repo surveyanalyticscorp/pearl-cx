@@ -39,11 +39,11 @@ export default function TicketOverview(props) {
       return (
           <View style={styles.container}>
               {renderRowHeader('Ticket Info')}
-              {renderRow('Response Id', ticket.ticketID)}
+              {renderRow('Response Id', ticket.responseID)}
               {renderRow('Created On', date)}
-              {renderRow('Current Segment', 'North Segment')}
-              {renderRow('Origin Segment', 'Main Segment')}
-              {renderRow('Ticket Owner', 'nehal.sanklecha')}
+              {renderRow('Current Segment', ticket.currentSegment)}
+              {renderRow('Origin Segment', ticket.originSegment)}
+              {renderRow('Ticket Owner', ticket.ticketOwner)}
 
           </View>
       )

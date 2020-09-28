@@ -127,16 +127,19 @@ const CxDashboard = props => {
         let data = props.dashboardData.primaryStoreNPS;
         let responses = props.dashboardData.primaryStoreNPS.totalResponses;
         let responseCount = getTrimmedNoOfResponses(responses);
-        if(responseCount !== 0) {
+        let victoryPieData = responseCount !== 0 ? [
+            { y: data.promoterFormattedPercent, x: ''},
+            { y: data.passiveFormattedPercent, x: ''},
+            { y: data.detractorFormattedPercent, x: ''}
+        ] : [
+            { y: 100, x: ''}, //for empty nps chart
+        ];
+        let victoryPieColorScale = responseCount !== 0 ? [Colors.promoter, Colors.passive, Colors.detractor] : [Colors.primary];
             return (
                 <View style={dashboardStyles.chartContainer}>
                     <View style={dashboardStyles.donut}>
                     <VictoryPie
-                        data={[
-                            { y: data.promoterFormattedPercent, x: ''},
-                            { y: data.passiveFormattedPercent, x: ''},
-                            { y: data.detractorFormattedPercent, x: ''}
-                        ]}
+                        data={victoryPieData}
                         width={5*MarginConstants.tab4}
                         height={6*MarginConstants.tab4}
                         innerRadius={2.5*MarginConstants.tab4}
@@ -146,7 +149,7 @@ const CxDashboard = props => {
                                 fill: 'transparent'
                             },
                         }}
-                        colorScale={[Colors.promoter, Colors.passive, Colors.detractor]}
+                        colorScale={victoryPieColorScale}
                         endAngle={-90}
                         startAngle={90}
                     />
@@ -158,35 +161,6 @@ const CxDashboard = props => {
                     {renderDonutInfoContainer(responseCount)}
                 </View>
             );
-        }
-        return (
-            <View style={dashboardStyles.chartContainer}>
-                <View style={dashboardStyles.donut}>
-                <VictoryPie
-                    data={[
-                        { y: 100, x: ''}, //for empty nps chart
-                    ]}
-                    width={5*MarginConstants.tab4}
-                    height={6*MarginConstants.tab4}
-                    innerRadius={2*MarginConstants.tab4}
-                    radius={3*MarginConstants.tab3}
-                    style={{
-                        labels: {
-                            fill: 'transparent'
-                        }
-                    }}
-                    colorScale={[Colors.primary]}
-                    endAngle={-90}
-                    startAngle={90}
-                />
-                </View>
-                <View style={dashboardStyles.npsView}>
-                <Text style={dashboardStyles.npsPercentText}> {data.npsPercentage}</Text>
-                <Text style={dashboardStyles.npsText}> NPS </Text>
-                </View>
-                {renderDonutInfoContainer(responseCount)}
-            </View>
-        );
     };
 
     let renderDonutInfoContainer = (responseCount) => {

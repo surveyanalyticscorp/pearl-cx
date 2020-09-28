@@ -17,9 +17,6 @@ import {MarginConstants} from '../styles/margin.constants';
 import {clearUserInfo} from '../redux/actions';
 import {connect} from 'react-redux';
 import {ASYNC_USER_CREDENTIALS} from '../api/Constant';
-import DialogContainer from '../widgets/dialog/Container';
-import DialogTitle from '../widgets/dialog/Title';
-import DialogButton from '../widgets/dialog/Button';
 
 const DrawerContent = props => {
   const [openDropper, setOpenDropper] = useState(false);
@@ -80,17 +77,6 @@ const DrawerContent = props => {
 
   let getExpandIcon = () => {
     return openDropper ? 'expand-less' : 'expand-more';
-  };
-
-  const handleDialogCancel = () => {
-    setLogoutAlert(false);
-  };
-
-  const handleDialogDone = () => {
-    AsyncStorage.clear().then(() => {
-      props.logoutUser();
-      setLogoutAlert(false);
-    });
   };
 
   const renderDialog = () => {

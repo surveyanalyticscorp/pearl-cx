@@ -132,10 +132,7 @@ const DetractorScenes = props => {
 
 const mapStateToProps = state => {
     return {
-        userInfo: state.global.userInfo,
         isLoading: state.global.isLoading,
-        isError: state.global.isError,
-        errorMessage: state.global.errorMessage,
         authToken: state.global.authToken
     };
 };
@@ -143,7 +140,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     showLoading: (flag) => {
         dispatch(showLoading(flag));
-    },
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetractorScenes);
