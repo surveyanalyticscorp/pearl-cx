@@ -8,10 +8,10 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import StringUtils from '../../../Utils/StringUtils';
 import {FontFamily} from '../../../styles/font.constants';
 import moment from 'moment';
-import {LONGMONTHFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
+import {HalfMonthDateYearFormat, YMDFORMAT} from '../../../Utils/AppConstants';
 
 const TicketWidget = props => {
-  let time = moment(props.item.timestamp, YMDFORMAT).format(LONGMONTHFORMAT);
+  let time = moment(props.item.timestamp, YMDFORMAT).format(HalfMonthDateYearFormat);
   let _renderTruncatedFooter = handlePress => {
     return (
       <Text

@@ -225,9 +225,9 @@ export default class ModalDropdown extends Component {
                        transparent={true}
                        onRequestClose={this._onRequestClose}
                        supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}>
-                     <TouchableWithoutFeedback accessible={accessible}
-                                               disabled={!showDropdown}
-                                               onPress={this._onModalPress}>
+                    <TouchableWithoutFeedback accessible={accessible}
+                                              disabled={!showDropdown}
+                                              onPress={this._onModalPress}>
                         <View style={styles.modal}>
                             <View style={[styles.dropdown,{width:dropDownWidth, borderColor: Colors.darkGrey,backgroundColor: Colors.white},dropdownStyle, frameStyle]}>
                                 {loading ? this._renderLoading() : this._renderDropdown()}
@@ -425,7 +425,3 @@ export default class ModalDropdown extends Component {
         );
     };
 }
-
-
-
-

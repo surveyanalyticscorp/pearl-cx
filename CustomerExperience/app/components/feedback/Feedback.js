@@ -158,7 +158,9 @@ function Feedback(props){
                         onEndReachedThreshold={0.01}
                         refreshing={false}
                         ListEmptyComponent={renderNoDataFound}
-                        onRefresh={() => {getFeedbackData()}}
+                        onRefresh={() => {
+                            setSelectedYear(props.feedbackRange)
+                        }}
                     />
                 </SafeAreaView>
             );
