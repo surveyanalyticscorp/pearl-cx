@@ -32,6 +32,7 @@ import TicketOverview from '../components/dashboard/ticketManagement/TicketOverv
 import {MarginConstants} from '../styles/margin.constants';
 import TicketComments from '../components/dashboard/ticketManagement/TicketComments';
 import UpdateTicket from '../components/dashboard/ticketManagement/UpdateTicket';
+import DashboardDateFilter from '../components/dashboard/components/DashboardDateFilter';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -110,6 +111,37 @@ const AppRouter = props => {
             </View>
         );
     };
+
+    const SaveDashboardDate = (props) => {
+        return (
+            <View style={[styles.rightHeaderButton,{marginHorizontal: 1.5*MarginConstants.tab1}]}>
+                <TouchableOpacity
+                    onPress={() => {
+                        props.route.params.saveRange();
+                    }}>
+                    <Text style={styles.saveText}> Save </Text>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    const DateRangeTab = createMaterialTopTabNavigator();
+
+    const DateRangeTabStack = props => (
+        <DateRangeTab.Navigator tabBarOptions={{
+            labelStyle: {color: Colors.primary, width: width/2, fontSize: TextSizes.secondary},
+            indicatorStyle: {backgroundColor: Colors.accent},
+            style:{backgroundColor: Colors.white, width: '100%'},
+            initialLayout: {width: Dimensions.get('window').width},
+            tabStyle:{height: 1.3*PaddingConstants.tab4}
+        }}
+                                lazy
+                                keyboardDismissMode={'auto'}
+        >
+            <DateRangeTab.Screen name="Month" component={DashboardDateFilter} initialParams={{range: props.route.params.range, setRange: props.route.params.setRange}}/>
+            <DateRangeTab.Screen name="Custom" component={DashboardDateFilter} initialParams={{range: props.route.params.range, setRange: props.route.params.setRange}}/>
+        </DateRangeTab.Navigator>
+    );
 
     const TicketLogTabStack = props => (
         <TicketLogTab.Navigator tabBarOptions={{
@@ -197,7 +229,6 @@ const AppRouter = props => {
                 component={CxDashboard}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon/>,
-                    headerRight: props => <Calendar {...props} route={route}/>,
                 })}
             />
             <RootStack.Screen
@@ -228,6 +259,14 @@ const AppRouter = props => {
                 component={UpdateTicket}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft />,
+                })}
+            />
+            <RootStack.Screen
+                name="Date Range"
+                component={DateRangeTabStack}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft />,
+                    headerRight: props => <SaveDashboardDate {...props} route={route}/>
                 })}
             />
         </RootStack.Navigator>
@@ -265,10 +304,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginLeft: 20
     },
-    editText: {
+    saveText: {
         color: Colors.white,
         textAlignVertical:'center',
-        fontSize: TextSizes.largeText,
+        fontSize: TextSizes.primary,
         fontFamily: FontFamily.regular,
         paddingTop:5,
         paddingLeft:5,

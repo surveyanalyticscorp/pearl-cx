@@ -15,21 +15,6 @@ export const dashboardStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  gauge: {
-    position: 'absolute',
-    width: 100,
-    height: MarginConstants.tab3 * 1.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    left: MarginConstants.tab3,
-    top: MarginConstants.tab4 * 1.5,
-  },
-  gaugeText: {
-    backgroundColor: 'transparent',
-    color: textColors.accent,
-    fontFamily: FontFamily.semiBold,
-    fontSize: TextSizes.donutPercentText,
-  },
   npmGaugeText: {
     backgroundColor: 'transparent',
     color: textColors.accent,
@@ -57,11 +42,6 @@ export const dashboardStyles = StyleSheet.create({
     marginVertical: MarginConstants.tab4,
     paddingVertical: PaddingConstants.tab2,
   },
-  // ticketText: {
-  //   color: Colors.white,
-  //   fontFamily: FontFamily.regular,
-  //   fontSize: TextSizes.largeText,
-  // },
   listViewContainer: {
     backgroundColor: Colors.white,
     marginHorizontal: MarginConstants.tab2,
@@ -72,7 +52,8 @@ export const dashboardStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems:'center',
     paddingHorizontal: PaddingConstants.tab2,
-    marginVertical: PaddingConstants.tab1,
+    marginTop:MarginConstants.tab2,
+    marginBottom: MarginConstants.tab1,
     backgroundColor: Colors.darkerGrey,
     marginHorizontal: MarginConstants.tab1,
     flexDirection: 'row',
@@ -118,8 +99,8 @@ export const dashboardStyles = StyleSheet.create({
 
   dashboardTitle: {
     color: Colors.primary,
-    fontFamily: FontFamily.medium ,
-    fontSize: TextSizes.largeText,
+    fontFamily: FontFamily.regular ,
+    fontSize: TextSizes.largeText + 1,
     marginVertical: MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab2
   },
@@ -132,13 +113,13 @@ export const dashboardStyles = StyleSheet.create({
   ticketContainer: {
     flex: 3,
     backgroundColor: Colors.white,
-    height: 3*MarginConstants.tab4,
+    height: 4*MarginConstants.tab4,
     justifyContent: 'center',
   },
   ticketText: {
     color: Colors.secondaryAccent,
     fontFamily: FontFamily.semiBold,
-    fontSize: TextSizes.primary,
+    fontSize: TextSizes.largeText,
     marginBottom:5,
     textAlign: 'center',
   },
@@ -157,16 +138,17 @@ export const dashboardStyles = StyleSheet.create({
   ticketType:{
     paddingLeft: PaddingConstants.halfTab,
     color: Colors.primary,
-    fontFamily: FontFamily.light
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.secondary,
   },
   npsView: {
     position: 'absolute',
-    top: '38%',
+    top: '28%',
   },
   npsPercentText: {
     color: Colors.primary,
-    fontSize: TextSizes.donutPercentText,
-    fontFamily: FontFamily.semiBold,
+    fontSize: 1.2*TextSizes.donutPercentText,
+    fontFamily: FontFamily.bold,
     textAlign:'center',
     left:'100%',
     justifyContent:'center',
@@ -186,6 +168,7 @@ export const dashboardStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    marginHorizontal: MarginConstants.tab2,
   },
   donut: {
     justifyContent: 'center',
@@ -201,10 +184,37 @@ export const dashboardStyles = StyleSheet.create({
     alignItems: 'center',
     flexDirection:'row',
     justifyContent: 'space-between',
+    marginHorizontal: MarginConstants.tab1,
   },
   productText: {
     color: Colors.primary,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.primary,
+  },
+  filterHeader: {
+    flexDirection:'row',
+    height: 1.3*MarginConstants.tab4,
+    paddingLeft: 1.4*PaddingConstants.tab2,
+    alignItems:'center',
+    backgroundColor: Colors.accent
+  },
+  filterCalendarView: {
+    flexDirection:'row',
+    marginHorizontal: MarginConstants.tab2
+  },
+  filterLeftView: {
+    flexDirection:'row',
+    flex:1,
+    marginRight: MarginConstants.tab1,
+  },
+  filterArrowIconView: {
+    flexDirection:'row',
+    marginRight: MarginConstants.tab2,
+    alignItems:'center'
+  },
+  dateText: {
+    color: Colors.white,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
   }
 });

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Text, View, SafeAreaView, StyleSheet, FlatList} from 'react-native';
-import FeedbackCell from '../view/FeedbackCells';
+import FeedbackCell from './FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {StackActions} from '@react-navigation/native';
 import {Colors} from '../../styles/color.constants';
