@@ -1,29 +1,30 @@
 import React, {useEffect, useState} from 'react';
 import {Colors} from '../../../styles/color.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import {StyleSheet, View, Text, ScrollView, TouchableWithoutFeedback} from 'react-native';
+import {StyleSheet, View, Text, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Modal, Dimensions} from 'react-native';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import moment from 'moment';
-import {DMYFORMAT, HalfMonthDateYearFormat} from '../../../Utils/AppConstants';
+import {DMYFORMAT, HalfMonthDateYearFormat, YMDFORMAT} from '../../../Utils/AppConstants';
 import SafeAreaView from 'react-native-safe-area-view';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {DASHBOARD_RANGE} from '../../../redux/actions/dashboard.actions';
 import AsyncStorage from '@react-native-community/async-storage';
+import QPCalendar from '../../../widgets/QPCalendar';
 
 export default function DashboardDateFilter(props){
 
     let routeName = props.route.name;
-    let [selectedRange, setSelectedRange] = useState({startDate:'',endDate:''});
+    let [selectedRange, setSelectedRange] = useState(props.route.params.range);
     let [selectedType, setSelectedType] = useState(props.route.params.range.type || 1);
     let [startDateSelected, setStartDateSelected] = useState(false);
+    let [showCalendar, setShowCalendar] = useState(false);
+    let [customDate, setCustomDate] = useState('');
 
     let saveRange = () => {
-
-        let dashboardRange = {type: selectedType, ...selectedRange};
-        props.route.params.setRange(dashboardRange);
-        AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(dashboardRange));
+        props.route.params.setRange(selectedRange);
+        AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(selectedRange));
         props.navigation.navigate("Dashboard");
     };
 
@@ -107,7 +108,8 @@ export default function DashboardDateFilter(props){
                 <TouchableWithoutFeedback onPress={() => {
                     let rangeSelected = getSelectedRange(type);
                     setSelectedType(type);
-                    setSelectedRange(rangeSelected)
+                    let dashboardRange = {type: selectedType, ...rangeSelected};
+                    setSelectedRange(dashboardRange)
                 }}>
                     <View style={styles.monthRow}>
                         <View>
@@ -139,13 +141,94 @@ export default function DashboardDateFilter(props){
         )
     };
 
+    let renderCancelButton = () => {
+        return <TouchableOpacity style={styles.cancelButton}
+                                 onPress={() => {
+           setShowCalendar(false)
+        }}>
+            <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+    };
+
+    let renderOkButton = () => {
+        return <TouchableOpacity style={styles.cancelButton}
+                                 onPress={() => {
+                                     //save date
+                                     if(startDateSelected) {
+                                         setSelectedRange({...selectedRange, startDate: customDate})
+                                     } else {
+                                         setSelectedRange({...selectedRange, endDate: customDate})
+                                     }
+                                     setShowCalendar(false)
+                                 }}>
+            <Text style={styles.buttonText}>Ok</Text>
+        </TouchableOpacity>
+    };
+
+    let renderCalendarFooter = () => {
+        return (
+            <View style={styles.calendarFooter}>
+                    {renderCancelButton()}
+                    {renderOkButton()}
+            </View>
+        );
+    };
+
+    let setCalendarDate = (date) => {
+        let tempDate = moment(date, 'YYYY-MM-DD').format(DMYFORMAT);
+        setCustomDate(tempDate);
+    };
+
+    let renderCalendar = () => {
+        let date = startDateSelected ? selectedRange.startDate : selectedRange.endDate;
+        let selectedDate = moment(date, DMYFORMAT).format('YYYY-MM-DD');
+        return (
+            <View style={styles.calendarContainer}>
+                <View style={styles.calendarBox}>
+                    <QPCalendar {...props}
+                                selectDate = {setCalendarDate}
+                                selectedDate = {selectedDate}
+                                minimumDate = {'1970-01-01'}
+                                maximumDate = {'2050-12-31'}
+                                minYear = {1970}
+                                maxYear = {2050}
+                    />
+                </View>
+                {renderCalendarFooter()}
+            </View>
+
+        );
+    };
+
+    let renderCalendarViewOnModal = () => {
+        return (
+            <Modal animationType={"fade"}
+                   transparent={true}
+                   onRequestClose={() => {
+                   }}
+                   visible={showCalendar}
+                   supportedOrientations={['portrait']}
+            >
+                <View style={styles.modalContainer}>
+                    <SafeAreaView style={{flex: 1}}>
+                        <ScrollView style={styles.scrollContainer}>
+                            {renderCalendar()}
+                        </ScrollView>
+                    </SafeAreaView>
+                </View>
+            </Modal>
+        );
+    };
+
     let renderStartDateRow = (isStartDate, displayDate) => {
         let title = isStartDate ? 'Start date' : 'End date';
         let date = moment(displayDate, 'DD-MM-YYYY').format(HalfMonthDateYearFormat);
       return (
           <View style={{marginBottom: .5}}>
               <TouchableWithoutFeedback onPress={() => {
-
+                  setShowCalendar(true);
+                  setStartDateSelected(isStartDate);
+                  setCustomDate(displayDate);
               }}>
                   <View style={styles.customRow}>
                           <Text style={styles.dateTitle}>{title}</Text>
@@ -160,8 +243,9 @@ export default function DashboardDateFilter(props){
     let renderCustomView = () => {
         return (
             <View style={styles.container}>
-                        {renderStartDateRow(true, props.route.params.range.startDate)}
-                        {renderStartDateRow(false, props.route.params.range.endDate)}
+                        {renderStartDateRow(true, selectedRange.startDate)}
+                        {renderStartDateRow(false, selectedRange.endDate)}
+                        {showCalendar && renderCalendarViewOnModal()}
             </View>
         );
     };
@@ -183,7 +267,6 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         flexGrow: 1,
-        backgroundColor: Colors.white
     },
     container: {
         flex: 1,
@@ -220,6 +303,48 @@ const styles = StyleSheet.create({
     customRow: {
         marginHorizontal: MarginConstants.tab2,
         marginVertical: 1.5*MarginConstants.tab1,
-    }
-
+    },
+    calendarContainer: {
+        flex:1,
+        marginHorizontal: MarginConstants.tab1,
+        marginTop: 6*MarginConstants.tab4,
+    },
+    calendarBox: {
+        backgroundColor: Colors.white
+    },
+    modalContainer: {
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: 'rgba(0,0,0,0.4)',
+    },
+    calendarFooter: {
+        justifyContent: 'flex-end',
+        backgroundColor: Colors.white,
+        flexDirection: 'row'
+    },
+    cancelButton: {
+        minWidth: PaddingConstants.tab4,
+        height:PaddingConstants.tab3,
+        justifyContent: 'center',
+        alignItems:'center',
+        margin: MarginConstants.tab1,
+        paddingHorizontal: PaddingConstants.tab1,
+    },
+    okButton: {
+        minWidth: PaddingConstants.tab4 + PaddingConstants.tab1,
+        height:PaddingConstants.tab3,
+        borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: MarginConstants.tab1,
+    },
+    buttonText: {
+        color: Colors.secondaryAccent,
+        fontFamily: FontFamily.regular,
+        fontSize: TextSizes.secondary,
+        textAlign: 'center'
+    },
 });

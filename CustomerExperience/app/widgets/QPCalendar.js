@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {View, Text, Dimensions, StyleSheet, TouchableOpacity} from 'react-native';
-import {CalendarList} from 'react-native-calendars';
+import React, {useState,useRef, useEffect} from 'react';
+import {View, Text, Dimensions, StyleSheet, TouchableOpacity, Platform} from 'react-native';
+import {Calendar} from 'react-native-calendars';
 import {MarginConstants} from '../styles/margin.constants';
 import {Colors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
@@ -8,55 +8,49 @@ import {FontFamily} from '../styles/font.constants';
 import {FullMonthYearFormat} from '../Utils/AppConstants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import StringUtils from '../Utils/StringUtils';
+import {PaddingConstants} from '../styles/padding.constants';
+import ModalDropdown from './drop-down/ModalDropdown';
+import moment from 'moment';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-/* Not completed */
-const QPHorizontalCalendar = (props) => {
+const QPCalendar = (props) => {
+    let ref = useRef(null);
+    let [selectedYear, setSelectedYear] = useState('');
+    let [selectedDate, setSelectedDate] = useState(props.selectedDate);
+    const [, updateState] = React.useState();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
 
-    let months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-    let getYears = (minYears, maxYears) => {
-        let data = [];
-        let i = minYears;
-        while(i <= maxYears){
-            data.push(StringUtils.getStringFromNumber(i));
-            i = i+1;
-        }
-        return data;
-    };
-
-    let years = getYears(1990, 2050);
-
-    const [selectedDate, setSelectedDate] = React.useState('2020-05-16');
-    const [markedDates, setMarkedDates] = React.useState({});
-
-    const setNewDaySelected = (date) => {
-        const markedDate = Object.assign({});
-        markedDate[date] = {
-            selected: true,
-            selectedColor: '#DFA460'
-        };
-        setSelectedDate(date);
-        setMarkedDates(markedDate);
-    };
+    // let getMarkedDates = () => {
+    //     let dates = {[selectedDate]: {selected: true, disableTouchEvent: true, selectedDotColor: Colors.accent}};
+    //     let markedDates = JSON.parse(JSON.stringify(dates));
+    //     return {...markedDates}
+    // };
+    // let [markedState, setMarkedState] = useState(getMarkedDates());
+    //
+    //
+    // useEffect(() => {
+    //     setMarkedState(getMarkedDates())
+    // },[selectedDate]);
 
     let getTheme = () => {
         return(
             {
                 selectedDayTextColor: Colors.white,
-                selectedDayBackgroundColor: props.selectedBackgroundColor || Colors.accent ,
+                selectedDayBackgroundColor: Colors.secondaryAccent  ,
                 backgroundColor: Colors.white,
                 calendarBackground:  Colors.white,
                 textSectionTitleColor: Colors.borderColor,
-                todayTextColor: props.currentDayTextColor || Colors.accent,
-                dayTextColor: props.dayTextColor || Colors.primary,
+                todayTextColor: Colors.secondaryAccent,
+                dayTextColor:  Colors.primary,
                 textDisabledColor: Colors.darkGrey,
-                dotColor: props.dotColor || Colors.accent ,
-                selectedDotColor:  Colors.white,
+                dotColor: Colors.secondaryAccent ,
+                selectedDotColor:  Colors.secondaryAccent,
                 arrowColor:  Colors.secondary,
                 monthTextColor: Colors.borderColor,
-                textDayFontFamily: FontFamily.Regular,
-                textMonthFontFamily: FontFamily.Regular,
-                textDayHeaderFontFamily: FontFamily.Regular,
+                textDayFontFamily: FontFamily.regular,
+                textMonthFontFamily: FontFamily.regular,
+                textDayHeaderFontFamily: FontFamily.regular,
                 textMonthFontWeight: 'bold',
                 textDayFontSize: TextSizes.secondary,
                 textMonthFontSize: TextSizes.secondary,
@@ -65,33 +59,40 @@ const QPHorizontalCalendar = (props) => {
         );
     };
 
-    let leftArrow = (onPressLeft) => {
-        return <TouchableOpacity
-            onPress={onPressLeft}
-            style={styles.arrow}
-            hitSlop={{left: 5, right: 5, top: 5, bottom: 5}}
-        >
-            <Icon name='chevron-left' size={30} color= {Colors.accent}/>
-        </TouchableOpacity>
+    let getYears = () => {
+        let data = [];
+        let i = props.minYear;
+        while(i <= props.maxYear){
+            data.push(StringUtils.getStringFromNumber(i));
+            i = i+1;
+        }
+        return data;
     };
 
-    let rightArrow = (onPressRight) => {
-        return <TouchableOpacity
-            onPress={onPressRight}
-            style={styles.arrow}
-            hitSlop={{left: 5, right: 5, top: 5, bottom: 5}}
-        >
-            <Icon name='chevron-right' size={30} color= {Colors.accent}/>
-        </TouchableOpacity>
-    };
+    let years = getYears();
 
-    let renderCalendarHeaderSubView = (title, leftAction, rightAction) => {
+    let renderDropDown = (selectedValue) => {
         return (
-                <View style={styles.header}>
-                    {leftArrow(leftAction)}
-                        <Text  allowFontScaling={false} style={styles.calendarHeaderText}>{title}</Text>
-                    {rightArrow(rightAction)}
-                </View>
+            <View>
+                <ModalDropdown
+                    ref={ref}
+                    style={styles.modelDropdown}
+                    textStyle={styles.dropdownText}
+                    dropdownTextStyle={styles.dropdownText}
+                    arrowIconColor={Colors.secondary}
+                    options={years}
+                    defaultValue={selectedValue}
+                    renderRow={dropdownRenderRow}
+                    onSelect={(i) => {
+                        // setSelectedYear(years[i]);
+                        let components = selectedDate.split('-');
+                        let tempDate = years[i]+'-'+components[1]+'-'+components[2];
+                        setSelectedDate(tempDate);
+                        forceUpdate()
+                    }}
+                    showArrowIcon={false}
+                />
+            </View>
         )
     };
 
@@ -100,63 +101,88 @@ const QPHorizontalCalendar = (props) => {
         const [month, year] = header.split(' ');
 
         return (
-            <View style={styles.calendarHeader}>
-                {renderCalendarHeaderSubView(month)}
-                {renderCalendarHeaderSubView(year)}
+            <View style={{flexDirection:'row'}}>
+                <View style={styles.calendarHeader}>
+                    <Text style={styles.dateTitle}>{month}</Text>
+                </View>
+                <View style={styles.dropdownButton}>
+                    {renderDropDown(year+'')}
+                </View>
             </View>
         )
     };
 
+    return(
 
-    return (
-        <CalendarList
-            markedDates={markedDates}
-            current={selectedDate}
-            pastScrollRange={12}
-            futureScrollRange={12}
-            horizontal
-            pagingEnabled
-            onDayPress={(day) => {
-                setNewDaySelected(day.dateString);
-            }}
-            calendarWidth={Dimensions.get('window').width - MarginConstants.tab4}
-            theme={getTheme()}
-            renderHeader={renderCalendarHeader}
-        />
+        <View>
+            <Calendar
+                minDate={props.minimumDate}
+                maxDate={props.maximumDate}
+                onDayPress={({dateString}) => {
+                    props.selectDate(dateString);
+                }}
+                monthFormat={FullMonthYearFormat}
+                disableMonthChange={false}
+                firstDay={1}
+                current={{...selectedDate}} // Initially visible month
+                markedDates={JSON.parse(JSON.stringify({[selectedDate]: {selected: true, disableTouchEvent: true, selectedDotColor: Colors.accent}}))}
+                theme={getTheme()}
+                renderHeader={renderCalendarHeader}
+
+            />
+        </View>
     );
+
 };
 
-export default QPHorizontalCalendar;
+function dropdownRenderRow (rowData, rowID, highlighted){
+    return (
+        <View style={[styles.dropdownRow, {backgroundColor: highlighted ? Colors.overlay : Colors.white}]}>
+            <Text style={styles.dropdownText}>{rowData}</Text>
+        </View>
+    );
+}
+
+
+export default QPCalendar;
 
 const styles = StyleSheet.create({
-
     calendarHeader: {
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        marginTop: 10,
-        marginBottom: 10,
-        height: 1.2*MarginConstants.tab4,
+        height: 1.5*MarginConstants.tab4,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'flex-start'
     },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginHorizontal: MarginConstants.tab1,
-    },
-    calendarHeaderText: {
+    dateTitle: {
+        color: Colors.primary,
+        fontFamily: FontFamily.regular,
         fontSize: TextSizes.secondary,
-        fontFamily: FontFamily.SemiBold,
-        paddingTop: 10,
-        paddingBottom: 10,
-        color: Colors.secondary,
-        paddingRight: 5
+        textAlignVertical: 'center',
     },
-    arrow: {
-        padding: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
+    modelDropdown: {
+        minHeight: MarginConstants.tab3,
+        marginRight: MarginConstants.tab1,
+        width: '50%',
     },
+    dropdownText: {
+        flex:1,
+        color: Colors.primary,
+        marginVertical: MarginConstants.tab1,
+        marginHorizontal: MarginConstants.halfTab,
+        fontSize: Platform.isPad ? TextSizes.primary : Platform.OS === 'android' ? TextSizes.primary : TextSizes.secondary,
+        textAlign: 'left',
+        textAlignVertical: 'center',
+        borderColor: Colors.darkerGrey,
+    },
+    dropdownRow: {
+        flexDirection: 'row',
+        minHeight: MarginConstants.tab4,
+        paddingHorizontal: PaddingConstants.halfTab,
+    },
+    dropdownButton: {
+        position:'absolute',
+        left: 80,
+        top:12
 
+    }
 });
