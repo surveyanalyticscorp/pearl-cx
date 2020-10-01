@@ -113,6 +113,12 @@ export default class ModalDropdown extends Component {
                 selectedIndex
             });
         }
+
+        if (prevProps.defaultValue !== defaultValue) {
+            this.setState({
+                buttonText: defaultValue
+            });
+        }
     }
 
     render() {

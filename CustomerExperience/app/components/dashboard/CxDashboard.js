@@ -36,20 +36,11 @@ const wait = timeout => {
 const CxDashboard = props => {
     let [callApi, setCallAPI] = useState(true);
     let [refreshing, setRefreshing] = useState(false);
-    let [calendar, setCalendar] = useState(false);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         setCallAPI(true);
         wait(2000).then(() => setRefreshing(false));
-    }, []);
-
-    let openDashboardCalendar = () => {
-        setCalendar(true)
-    };
-
-    useEffect(() => {
-        props.navigation.setParams({'openCalendar': openDashboardCalendar});
     }, []);
 
     useEffect(() => {
@@ -110,35 +101,6 @@ const CxDashboard = props => {
             default:
                 break;
         }
-    };
-
-    const renderCalendarView = () => {
-        //
-        // let selectedRange = setSelectedRange(props.range.type);
-        // let startDate = props.range.type !== 4 ? selectedRange.startDate : props.range.startDate;
-        // let endDate = props.range.type !== 4 ? selectedRange.endDate : props.range.endDate;
-        //
-        // return <RangeCalendar
-        //     showCalendar={calendar}
-        //     closeCalendar={() => {
-        //         setCalendar(false);
-        //     }}
-        //     startDate={startDate}
-        //     endDate={endDate}
-        //     selectedType={props.range.type}
-        //
-        //     onSubmit={(type, startDate, endDate) => {
-        //         let range = {
-        //             type: type,
-        //             startDate: startDate,
-        //             endDate: endDate
-        //         };
-        //         setCalendar(false);
-        //         props.setRange(range);
-        //         setCallAPI(true);
-        //         AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(range))
-        //     }}
-        // />;
     };
 
     const renderDonutChart = () => {
@@ -336,6 +298,38 @@ const CxDashboard = props => {
         props.navigation.dispatch(pushAction);
     };
 
+    let addRange = () => {
+        let startDate = props.range.startDate;
+        let endDate = props.range.endDate;
+        let startComponents = startDate.split('/');
+        let endComponents = endDate.split('/');
+        let startMonth = parseInt(startComponents[1]) - 1;
+        let tempStart = moment([startComponents[2], startMonth+'', startComponents[0]]);
+        let endMonth = parseInt(endComponents[1]) - 1;
+        let tempEnd = moment([endComponents[2], endMonth+'', endComponents[0]]);
+        let days = tempEnd.diff(tempStart,'days');
+        let nextDay = moment(endDate, DMYFORMAT).add(1,'days').format(DMYFORMAT);
+        let endDay = moment(nextDay, DMYFORMAT).add(days,'days').format(DMYFORMAT);
+        let tempRange = {...props.range, startDate: nextDay, endDate: endDay};
+        props.setRange(tempRange)
+    };
+
+    let reduceRange = () => {
+        let startDate = props.range.startDate;
+        let endDate = props.range.endDate;
+        let startComponents = startDate.split('/');
+        let endComponents = endDate.split('/');
+        let startMonth = parseInt(startComponents[1]) - 1;
+        let tempStart = moment([startComponents[2], startMonth+'', startComponents[0]]);
+        let endMonth = parseInt(endComponents[1]) - 1;
+        let tempEnd = moment([endComponents[2], endMonth+'', endComponents[0]]);
+        let days = tempEnd.diff(tempStart,'days');
+        let endDay = moment(startDate, DMYFORMAT).subtract(1,'days').format(DMYFORMAT);
+        let startDay = moment(endDay, DMYFORMAT).subtract(days,'days').format(DMYFORMAT);
+        let tempRange = {...props.range, startDate: startDay, endDate: endDay};
+        props.setRange(tempRange)
+    };
+
     let renderFilterHeader = () => {
         let startDate = moment(props.range.startDate, DMYFORMAT).format(HalfMonthDateYearFormat);
         let endDate = moment(props.range.endDate, DMYFORMAT).format(HalfMonthDateYearFormat);
@@ -352,10 +346,10 @@ const CxDashboard = props => {
                 </View>
             </TouchableWithoutFeedback>
         <View style={dashboardStyles.filterArrowIconView}>
-            <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
+            <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={reduceRange}>
                 <LineIcon name='arrow-left' size={15} color= {Colors.white} style={{marginRight: MarginConstants.tab2}}/>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
+            <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={addRange}>
                 <LineIcon name='arrow-right' size={15} color= {Colors.white}/>
             </TouchableWithoutFeedback>
         </View>

@@ -1,37 +1,20 @@
 import React, {useState,useRef, useEffect} from 'react';
 import {View, Text, Dimensions, StyleSheet, TouchableOpacity, Platform} from 'react-native';
-import {Calendar} from 'react-native-calendars';
 import {MarginConstants} from '../styles/margin.constants';
 import {Colors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
 import {FullMonthYearFormat} from '../Utils/AppConstants';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import StringUtils from '../Utils/StringUtils';
 import {PaddingConstants} from '../styles/padding.constants';
 import ModalDropdown from './drop-down/ModalDropdown';
 import moment from 'moment';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Calendar from './qp-calendar/calendar';
 
 const QPCalendar = (props) => {
     let ref = useRef(null);
-    let [selectedYear, setSelectedYear] = useState('');
     let [selectedDate, setSelectedDate] = useState(props.selectedDate);
-    const [, updateState] = React.useState();
-    const forceUpdate = React.useCallback(() => updateState({}), []);
-
-
-    // let getMarkedDates = () => {
-    //     let dates = {[selectedDate]: {selected: true, disableTouchEvent: true, selectedDotColor: Colors.accent}};
-    //     let markedDates = JSON.parse(JSON.stringify(dates));
-    //     return {...markedDates}
-    // };
-    // let [markedState, setMarkedState] = useState(getMarkedDates());
-    //
-    //
-    // useEffect(() => {
-    //     setMarkedState(getMarkedDates())
-    // },[selectedDate]);
 
     let getTheme = () => {
         return(
@@ -84,29 +67,49 @@ const QPCalendar = (props) => {
                     defaultValue={selectedValue}
                     renderRow={dropdownRenderRow}
                     onSelect={(i) => {
-                        // setSelectedYear(years[i]);
                         let components = selectedDate.split('-');
                         let tempDate = years[i]+'-'+components[1]+'-'+components[2];
                         setSelectedDate(tempDate);
-                        forceUpdate()
                     }}
-                    showArrowIcon={false}
                 />
             </View>
         )
     };
 
-    let renderCalendarHeader = (date) => {
-        const header = date.toString(FullMonthYearFormat);
-        const [month, year] = header.split(' ');
+    let actionOnLeftArrow = () => {
+        let tempDate = moment(selectedDate, 'YYYY-MM-DD').subtract(1, 'M').format('YYYY-MM-DD');
+        setSelectedDate(tempDate);
+        props.selectDate(tempDate);
+    };
 
+    let actionOnRightArrow = () => {
+
+        let tempDate = moment(selectedDate, 'YYYY-MM-DD').add(1, 'M').format('YYYY-MM-DD');
+        setSelectedDate(tempDate);
+        props.selectDate(tempDate);
+    };
+
+    let renderCalendarHeader = (date) => {
+        // const header = date.toString(FullMonthYearFormat);
+        // const [month, year] = header.split(' ');
+        let tempDate = moment(selectedDate, 'YYYY-MM-DD').format('YYYY-MMMM-DD');
+        let components = tempDate.split('-');
+        console.log(components);
         return (
-            <View style={{flexDirection:'row'}}>
+            <View style={{flexDirection:'row', flex:1}}>
                 <View style={styles.calendarHeader}>
-                    <Text style={styles.dateTitle}>{month}</Text>
+                    <Text style={styles.dateTitle}>{components[1]}</Text>
                 </View>
                 <View style={styles.dropdownButton}>
-                    {renderDropDown(year+'')}
+                    {renderDropDown(components[0]+'')}
+                </View>
+                <View style={{marginRight: MarginConstants.tab2, flexDirection:'row', alignItems: 'center'}}>
+                    <TouchableOpacity onPress={actionOnLeftArrow} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
+                    <Icon name={'arrow-left'} size={15} color={Colors.secondary} style={{paddingHorizontal: PaddingConstants.tab1}}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={actionOnRightArrow} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
+                    <Icon name={'arrow-right'} size={15} color={Colors.secondary}  style={{paddingHorizontal: PaddingConstants.tab1}}/>
+                    </TouchableOpacity>
                 </View>
             </View>
         )
@@ -119,12 +122,15 @@ const QPCalendar = (props) => {
                 minDate={props.minimumDate}
                 maxDate={props.maximumDate}
                 onDayPress={({dateString}) => {
+                    setSelectedDate(dateString);
                     props.selectDate(dateString);
                 }}
                 monthFormat={FullMonthYearFormat}
                 disableMonthChange={false}
                 firstDay={1}
-                current={{...selectedDate}} // Initially visible month
+                hideArrows={true}
+                headerStyle={styles.calendarHeader}
+                current={selectedDate} // Initially visible month
                 markedDates={JSON.parse(JSON.stringify({[selectedDate]: {selected: true, disableTouchEvent: true, selectedDotColor: Colors.accent}}))}
                 theme={getTheme()}
                 renderHeader={renderCalendarHeader}
@@ -148,10 +154,11 @@ export default QPCalendar;
 
 const styles = StyleSheet.create({
     calendarHeader: {
+        flex:1,
         height: 1.5*MarginConstants.tab4,
         flexDirection:'row',
         alignItems:'center',
-        justifyContent:'flex-start'
+        justifyContent:'flex-start',
     },
     dateTitle: {
         color: Colors.primary,
@@ -162,10 +169,9 @@ const styles = StyleSheet.create({
     modelDropdown: {
         minHeight: MarginConstants.tab3,
         marginRight: MarginConstants.tab1,
-        width: '50%',
+        width: '100%',
     },
     dropdownText: {
-        flex:1,
         color: Colors.primary,
         marginVertical: MarginConstants.tab1,
         marginHorizontal: MarginConstants.halfTab,
@@ -177,7 +183,7 @@ const styles = StyleSheet.create({
     dropdownRow: {
         flexDirection: 'row',
         minHeight: MarginConstants.tab4,
-        paddingHorizontal: PaddingConstants.halfTab,
+        paddingHorizontal: PaddingConstants.tab1,
     },
     dropdownButton: {
         position:'absolute',
