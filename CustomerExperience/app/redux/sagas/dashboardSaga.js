@@ -66,7 +66,7 @@ function* fetchDetractorTicketDetails(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
     const json = yield WebServiceHandler.postV2API(
-        'https://cxlabs.questionpro.com/a/api/v2/cx/tickets/getDetails?apiKey=c6f64e3c-aa07-4f2a-bb6e-0794defbed39',
+        'https://cxlabs1.questionpro.com/a/api/v2/cx/tickets/details?apiKey=c6f64e3c-aa07-4f2a-bb6e-0794defbed39',
         {'Content-Type': 'application/json'},
         action.param,
     );
