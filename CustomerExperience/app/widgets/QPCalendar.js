@@ -55,6 +55,7 @@ const QPCalendar = (props) => {
     let years = getYears();
 
     let renderDropDown = (selectedValue) => {
+        let index = years.findIndex(item => item === selectedValue);
         return (
             <View>
                 <ModalDropdown
@@ -66,10 +67,12 @@ const QPCalendar = (props) => {
                     options={years}
                     defaultValue={selectedValue}
                     renderRow={dropdownRenderRow}
+                    defaultIndex={index}
                     onSelect={(i) => {
                         let components = selectedDate.split('-');
                         let tempDate = years[i]+'-'+components[1]+'-'+components[2];
                         setSelectedDate(tempDate);
+                        props.selectDate(tempDate);
                     }}
                 />
             </View>
@@ -90,11 +93,8 @@ const QPCalendar = (props) => {
     };
 
     let renderCalendarHeader = (date) => {
-        // const header = date.toString(FullMonthYearFormat);
-        // const [month, year] = header.split(' ');
         let tempDate = moment(selectedDate, 'YYYY-MM-DD').format('YYYY-MMMM-DD');
         let components = tempDate.split('-');
-        console.log(components);
         return (
             <View style={{flexDirection:'row', flex:1}}>
                 <View style={styles.calendarHeader}>
@@ -104,10 +104,10 @@ const QPCalendar = (props) => {
                     {renderDropDown(components[0]+'')}
                 </View>
                 <View style={{marginRight: MarginConstants.tab2, flexDirection:'row', alignItems: 'center'}}>
-                    <TouchableOpacity onPress={actionOnLeftArrow} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
+                    <TouchableOpacity onPress={actionOnLeftArrow} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
                     <Icon name={'arrow-left'} size={15} color={Colors.secondary} style={{paddingHorizontal: PaddingConstants.tab1}}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={actionOnRightArrow} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
+                    <TouchableOpacity onPress={actionOnRightArrow} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
                     <Icon name={'arrow-right'} size={15} color={Colors.secondary}  style={{paddingHorizontal: PaddingConstants.tab1}}/>
                     </TouchableOpacity>
                 </View>
@@ -148,7 +148,6 @@ function dropdownRenderRow (rowData, rowID, highlighted){
         </View>
     );
 }
-
 
 export default QPCalendar;
 

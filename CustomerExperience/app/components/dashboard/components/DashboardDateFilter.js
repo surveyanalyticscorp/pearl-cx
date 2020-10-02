@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Colors} from '../../../styles/color.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import {StyleSheet, View, Text, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Modal, Dimensions} from 'react-native';
+import {StyleSheet, View, Text, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Modal} from 'react-native';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import moment from 'moment';
@@ -12,6 +12,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {DASHBOARD_RANGE} from '../../../redux/actions/dashboard.actions';
 import AsyncStorage from '@react-native-community/async-storage';
 import QPCalendar from '../../../widgets/QPCalendar';
+import StringUtils from '../../../Utils/StringUtils';
 
 export default function DashboardDateFilter(props){
 
@@ -21,16 +22,25 @@ export default function DashboardDateFilter(props){
     let [startDateSelected, setStartDateSelected] = useState(false);
     let [showCalendar, setShowCalendar] = useState(false);
     let [customDate, setCustomDate] = useState('');
+    let [validationError, setValidationError] = useState('');
+
 
     let saveRange = () => {
-        props.route.params.setRange(selectedRange);
-        AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(selectedRange));
-        props.navigation.navigate("Dashboard");
+
+        let tempEnd = moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT);
+        let tempStart = moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT);
+        if(moment(tempEnd).isAfter(tempStart)) {
+            props.route.params.setRange(selectedRange);
+            AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(selectedRange));
+            props.navigation.navigate("Dashboard");
+        } else {
+            setValidationError('Start date should be less than End date')
+        }
     };
 
     useEffect(() => {
         props.navigation.dangerouslyGetParent().setParams({'saveRange': saveRange});
-    }, [selectedType]);
+    }, [selectedRange]);
 
     let getFilterText = (type) => {
         switch (type) {
@@ -63,10 +73,10 @@ export default function DashboardDateFilter(props){
                 return {'startDate': tempStartDate, 'endDate': tempEndDate};
             case 3:
                 /** Last month*/
-                 firstDate = 1+"/"+today.getMonth()+"/"+today.getFullYear();
+                firstDate = 1+"/"+today.getMonth()+"/"+today.getFullYear();
                 tempStartDate = moment(firstDate, DMYFORMAT).format(DMYFORMAT);
                 let lastDate = new Date(today.getFullYear(), today.getMonth(), 0);
-                 month = lastDate.getMonth() + 1;
+                month = lastDate.getMonth() + 1;
                 tempEndDate = lastDate.getDate()+"/"+month+"/"+lastDate.getFullYear();
                 tempEndDate = moment(tempEndDate, DMYFORMAT).format(DMYFORMAT);
                 return {'startDate': tempStartDate, 'endDate': tempEndDate};
@@ -100,6 +110,10 @@ export default function DashboardDateFilter(props){
         }
     };
 
+    let renderValidationError = () => {
+        return <Text style={styles.error}>{ validationError }</Text>
+    };
+
     let renderMonthRow = (type) => {
         let title = getFilterText(type);
         let range = getRange(type);
@@ -117,7 +131,7 @@ export default function DashboardDateFilter(props){
                             <Text style={styles.rangeTitle}>{range}</Text>
                         </View>
                         { selectedType === type && <View  style={styles.checkIcon}>
-                        <MaterialIcon name={'check'} size={25} color={Colors.secondaryAccent}/>
+                            <MaterialIcon name={'check'} size={25} color={Colors.secondaryAccent}/>
                         </View>
                         }
                     </View>
@@ -129,23 +143,23 @@ export default function DashboardDateFilter(props){
 
     let renderMonthView = () => {
         return (
-                <ScrollView style={styles.scrollContainer}>
-                    <View style={styles.container}>
-                        {renderMonthRow(1)}
-                        {renderMonthRow(2)}
-                        {renderMonthRow(3)}
-                        {renderMonthRow(4)}
-                        {renderMonthRow(5)}
-                    </View>
-                </ScrollView>
+            <ScrollView style={styles.scrollContainer}>
+                <View style={styles.container}>
+                    {renderMonthRow(1)}
+                    {renderMonthRow(2)}
+                    {renderMonthRow(3)}
+                    {renderMonthRow(4)}
+                    {renderMonthRow(5)}
+                </View>
+            </ScrollView>
         )
     };
 
     let renderCancelButton = () => {
         return <TouchableOpacity style={styles.cancelButton}
                                  onPress={() => {
-           setShowCalendar(false)
-        }}>
+                                     setShowCalendar(false)
+                                 }}>
             <Text style={styles.buttonText}>Cancel</Text>
         </TouchableOpacity>
     };
@@ -155,9 +169,9 @@ export default function DashboardDateFilter(props){
                                  onPress={() => {
                                      //save date
                                      if(startDateSelected) {
-                                         setSelectedRange({...selectedRange, startDate: customDate})
+                                         setSelectedRange({...selectedRange, type: 6, startDate: customDate})
                                      } else {
-                                         setSelectedRange({...selectedRange, endDate: customDate})
+                                         setSelectedRange({...selectedRange, type: 6, endDate: customDate})
                                      }
                                      setShowCalendar(false)
                                  }}>
@@ -168,8 +182,8 @@ export default function DashboardDateFilter(props){
     let renderCalendarFooter = () => {
         return (
             <View style={styles.calendarFooter}>
-                    {renderCancelButton()}
-                    {renderOkButton()}
+                {renderCancelButton()}
+                {renderOkButton()}
             </View>
         );
     };
@@ -223,29 +237,31 @@ export default function DashboardDateFilter(props){
     let renderStartDateRow = (isStartDate, displayDate) => {
         let title = isStartDate ? 'Start date' : 'End date';
         let date = moment(displayDate, 'DD-MM-YYYY').format(HalfMonthDateYearFormat);
-      return (
-          <View style={{marginBottom: .5}}>
-              <TouchableWithoutFeedback onPress={() => {
-                  setShowCalendar(true);
-                  setStartDateSelected(isStartDate);
-                  setCustomDate(displayDate);
-              }}>
-                  <View style={styles.customRow}>
-                          <Text style={styles.dateTitle}>{title}</Text>
-                           <Text style={styles.rangeTitle}>{date}</Text>
-                  </View>
-              </TouchableWithoutFeedback>
-              { isStartDate && <View style={styles.separator}/>}
-          </View>
-      )
+        return (
+            <View style={{marginBottom: .5}}>
+                <TouchableWithoutFeedback onPress={() => {
+                    setShowCalendar(true);
+                    StringUtils.isNotEmpty(validationError) && setValidationError('');
+                    setStartDateSelected(isStartDate);
+                    setCustomDate(displayDate);
+                }}>
+                    <View style={styles.customRow}>
+                        <Text style={styles.dateTitle}>{title}</Text>
+                        <Text style={styles.rangeTitle}>{date}</Text>
+                    </View>
+                </TouchableWithoutFeedback>
+                { isStartDate && <View style={styles.separator}/>}
+            </View>
+        )
     };
 
     let renderCustomView = () => {
         return (
             <View style={styles.container}>
-                        {renderStartDateRow(true, selectedRange.startDate)}
-                        {renderStartDateRow(false, selectedRange.endDate)}
-                        {showCalendar && renderCalendarViewOnModal()}
+                {StringUtils.isNotEmpty(validationError) && renderValidationError()}
+                {renderStartDateRow(true, selectedRange.startDate)}
+                {renderStartDateRow(false, selectedRange.endDate)}
+                {showCalendar && renderCalendarViewOnModal()}
             </View>
         );
     };
@@ -346,5 +362,11 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.regular,
         fontSize: TextSizes.secondary,
         textAlign: 'center'
+    },
+    error: {
+        color: Colors.error,
+        textAlign: 'center',
+        fontSize: TextSizes.secondary,
+        fontFamily: FontFamily.light,
     },
 });
