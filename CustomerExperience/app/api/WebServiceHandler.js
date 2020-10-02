@@ -183,14 +183,13 @@ export default class WebServiceHandler {
     });
   }
 
-  static postV2API(url, headerParam, parameter) {
+  static getV2API(url, headerParam) {
     // console.log('WebServiceHandler:Initiating POST request');
 
     return new Promise(function(success, failed) {
       fetch(url, {
-        method: 'post',
+        method: 'GET',
         headers: WebServiceHandler.header(headerParam),
-        body: JSON.stringify(parameter),
       })
           .then(response => response.json())
           .then(response => {

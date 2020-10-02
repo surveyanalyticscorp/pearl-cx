@@ -165,7 +165,7 @@ const CxDashboard = props => {
 
     let renderDonutInfoContainer = (responseCount) => {
         return <View style={dashboardStyles.donutInfoContainer}>
-            {renderDonutInformation('check-square', 'Surveys',124)}
+            {renderDonutInformation('check-square', 'Surveys',props.dashboardData.surveyCount)}
             {renderDonutInformation('th-large', 'Responses', responseCount)}
         </View>
     };
