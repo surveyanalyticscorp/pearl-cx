@@ -9,13 +9,12 @@ import {
 } from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import {showLoading} from '../../redux/actions/index';
-import {DASHBOARD_RANGE, getDashboardContent, setDashboardRangeFilter} from '../../redux/actions/dashboard.actions';
+import {getDashboardContent, setDashboardRangeFilter} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
 import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
-import RangeCalendar from '../../widgets/RangeCalendar';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {DMYFORMAT, HalfMonthDateYearFormat, YMDFORMAT} from '../../Utils/AppConstants';
@@ -25,14 +24,14 @@ import {VictoryPie} from 'victory-native'
 import SafeAreaView from 'react-native-safe-area-view';
 import {Sizes} from '../../styles/Size.constant';
 import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-
+import StringUtils from '../../Utils/StringUtils';
 
 const wait = timeout => {
     return new Promise(resolve => {
         setTimeout(resolve, timeout);
     });
 };
+
 const CxDashboard = props => {
     let [callApi, setCallAPI] = useState(true);
     let [refreshing, setRefreshing] = useState(false);
@@ -57,6 +56,13 @@ const CxDashboard = props => {
                 let selectedRange = getSelectedRange(props.range.type);
                 let startDate = props.range.type !== 6 ? selectedRange.startDate : props.range.startDate;
                 let endDate = props.range.type !== 6 ? selectedRange.endDate : props.range.endDate;
+                if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate)) {
+                    props.setRange({
+                        type: 1,
+                        startDate: selectedRange.startDate,
+                        endDate: selectedRange.endDate
+                    })
+                }
                 let data = {
                     startDate: moment(startDate, DMYFORMAT).format(YMDFORMAT),
                     endDate: moment(endDate, DMYFORMAT).format(YMDFORMAT)

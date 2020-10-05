@@ -122,7 +122,7 @@ export default function DashboardDateFilter(props){
                 <TouchableWithoutFeedback onPress={() => {
                     let rangeSelected = getSelectedRange(type);
                     setSelectedType(type);
-                    let dashboardRange = {type: selectedType, ...rangeSelected};
+                    let dashboardRange = {type: type, ...rangeSelected};
                     setSelectedRange(dashboardRange)
                 }}>
                     <View style={styles.monthRow}>
