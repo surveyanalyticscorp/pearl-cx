@@ -81,15 +81,22 @@ const AppRouter = props => {
         );
     };
 
-    const HeaderBackLeft = () => {
+    let onBackPressAction = (props) => {
+        const navigation = useNavigation();
+        props.route.params.onBackPress();
+        const popAction = CommonActions.goBack();
+        navigation.dispatch(popAction);
+    };
+
+    const HeaderBackLeft = (props) => {
         const navigation = useNavigation();
         return (
             <View style={styles.leftHeaderButton}>
                 <TouchableOpacity
                     hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                     onPress={() => {
-                        const popAction = CommonActions.goBack();
-                        navigation.dispatch(popAction);
+                        props.route.params.onBackPress ? onBackPressAction(props) :
+                            navigation.dispatch(CommonActions.goBack())
                     }}>
                     <Icon name="arrow-left" size={20} color= {Colors.white}/>
                 </TouchableOpacity>
@@ -175,16 +182,16 @@ const AppRouter = props => {
             <RootStack.Screen
                 name="Feedback Details"
                 component={FeedbackDetails}
-                options={{
-                    headerLeft: props => <HeaderBackLeft />,
-                }}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                })}
             />
             <RootStack.Screen
                 name="Change Status"
                 component={FeedbackUpdate}
-                options={{
-                    headerLeft: props => <HeaderBackLeft />,
-                }}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                })}
             />
 
         </RootStack.Navigator>
@@ -203,23 +210,23 @@ const AppRouter = props => {
             <RootStack.Screen
                 name="DashBoardStoreDetails"
                 component={DashBoardStoreDetails}
-                options={({ route }) => ({
+                options={({ navigation, route }) => ({
                     title: route.params.name ? route.params.name : 'DashBoardStore',
-                    headerLeft: props => <HeaderBackLeft />,
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                 })}
             />
             <RootStack.Screen
                 name="DetractorTickets"
                 component={DetractorTicketsTabStack}
-                options={{
-                    headerLeft: props => <HeaderBackLeft />,
-                }}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                })}
             />
             <RootStack.Screen
                 name="Ticket Details"
                 component={TicketLogTabStack}
                 options={({ navigation, route }) => ({
-                    headerLeft: props => <HeaderBackLeft />,
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                     headerRight: props => route.state && route.state.index !== 0 ? <View/> : <EditTicket />,
                 })}
             />
@@ -227,7 +234,7 @@ const AppRouter = props => {
                 name="Update Ticket"
                 component={UpdateTicket}
                 options={({ navigation, route }) => ({
-                    headerLeft: props => <HeaderBackLeft />,
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                 })}
             />
         </RootStack.Navigator>

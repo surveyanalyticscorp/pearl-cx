@@ -5,6 +5,7 @@ export const GET_DETRACTOR_TICKET = 'GET_DETRACTOR_TICKET';
 export const DETRACTOR_TICKET_RECEIVED = 'DETRACTOR_TICKET_RECEIVED';
 export const GET_DETRACTOR_TICKET_DETAILS = 'GET_DETRACTOR_TICKET_DETAILS';
 export const DETRACTOR_TICKET_DETAILS_RECEIVED = 'DETRACTOR_TICKET_DETAILS_RECEIVED';
+export const CLEAR_DETRACTOR_TICKET_DETAILS = 'CLEAR_DETRACTOR_TICKET_DETAILS';
 
 export const DASHBOARD_RANGE = 'DASHBOARD_RANGE';
 
@@ -29,4 +30,8 @@ export const getDetractorContent = (param, token) => ({
 export const getDetractorTicketDetails = (param) => ({
   type: GET_DETRACTOR_TICKET_DETAILS,
   param,
+});
+
+export const clearDetractorTicketDetails = () => ({
+  type: CLEAR_DETRACTOR_TICKET_DETAILS,
 });

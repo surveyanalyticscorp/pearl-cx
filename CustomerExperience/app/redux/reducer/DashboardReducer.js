@@ -1,4 +1,5 @@
 import {
+  CLEAR_DETRACTOR_TICKET_DETAILS,
   DASHBOARD_RECEIVED,
   DETRACTOR_TICKET_DETAILS_RECEIVED,
   DETRACTOR_TICKET_RECEIVED,
@@ -42,6 +43,13 @@ const dashboardReducer = (state = initialState, action) => {
         ticketDetails: action.response.response,
       };
     }
+    case CLEAR_DETRACTOR_TICKET_DETAILS: {
+      return {
+        ...state,
+        ticketDetails: {}
+      }
+    }
+
     default: {
       return state;
     }
