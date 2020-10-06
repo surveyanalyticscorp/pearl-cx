@@ -233,7 +233,7 @@ const CxDashboard = props => {
 
     let renderRow = storeItem => {
         return (
-            <View style={dashboardStyles.row}>
+            <View style={[dashboardStyles.row, {backgroundColor: storeItem.item.storeName === props.dashboardData.primaryStoreName ? Colors.accentGradient : Colors.white}]}>
                 <Text style={dashboardStyles.productText}>{storeItem.item.storeName}</Text>
                 <Text style={dashboardStyles.productText}>{storeItem.item.NPSScore.npsPercentage}</Text>
             </View>

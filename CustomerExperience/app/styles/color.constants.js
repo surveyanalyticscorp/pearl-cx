@@ -8,7 +8,7 @@ const Colors = {
   black: '#000000',
   accent: '#193F8B',
   secondaryAccent: "#2589E3",
-  accentGradient: 'rgba(25, 63, 139, 0.7)',
+  accentGradient: 'rgba(239, 246, 252, 1)',
   gradientColor: '#8AC0EA',
   grey: '#f9f9f9',
   lightBlack:'#404A5B',

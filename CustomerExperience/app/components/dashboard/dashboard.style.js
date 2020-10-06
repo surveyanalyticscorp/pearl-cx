@@ -59,7 +59,8 @@ export const dashboardStyles = StyleSheet.create({
     flexDirection: 'row',
   },
   list:{
-    marginHorizontal: MarginConstants.tab1
+    marginHorizontal: MarginConstants.tab1,
+    marginBottom: MarginConstants.tab2
   },
   listTitle: {
     color: Colors.primary,
