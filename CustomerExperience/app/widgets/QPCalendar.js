@@ -1,5 +1,5 @@
-import React, {useState,useRef, useEffect} from 'react';
-import {View, Text, Dimensions, StyleSheet, TouchableOpacity, Platform} from 'react-native';
+import React, {useState,useRef} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native';
 import {MarginConstants} from '../styles/margin.constants';
 import {Colors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';

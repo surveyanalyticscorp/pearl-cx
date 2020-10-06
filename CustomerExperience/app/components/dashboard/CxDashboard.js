@@ -141,8 +141,8 @@ const CxDashboard = props => {
                     />
                 </View>
                 <View style={dashboardStyles.npsView}>
-                    <Text style={dashboardStyles.npsPercentText}>{data.npsPercentage}</Text>
-                    <Text style={dashboardStyles.npsText}>NPS</Text>
+                    <Text style={[dashboardStyles.npsPercentText,{left: data.npsPercentage > 0 ? '100%' : '80%'}]}>{data.npsPercentage}</Text>
+                    <Text style={[dashboardStyles.npsText,{left: data.npsPercentage > 0 ? '75%' : '65%'}]}>NPS</Text>
                 </View>
                 {renderDonutInfoContainer(responseCount)}
             </View>

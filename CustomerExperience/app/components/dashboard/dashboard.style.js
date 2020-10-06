@@ -150,7 +150,6 @@ export const dashboardStyles = StyleSheet.create({
     fontSize: 1.2*TextSizes.donutPercentText,
     fontFamily: FontFamily.bold,
     textAlign:'center',
-    left:'100%',
     justifyContent:'center',
     alignItems:'center',
   },
