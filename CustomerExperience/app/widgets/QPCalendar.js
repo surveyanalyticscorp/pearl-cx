@@ -81,15 +81,21 @@ const QPCalendar = (props) => {
 
     let actionOnLeftArrow = () => {
         let tempDate = moment(selectedDate, 'YYYY-MM-DD').subtract(1, 'M').format('YYYY-MM-DD');
-        setSelectedDate(tempDate);
-        props.selectDate(tempDate);
+        let year = moment(tempDate).year();
+        if(year >= props.minYear) {
+            setSelectedDate(tempDate);
+            props.selectDate(tempDate);
+        }
     };
 
     let actionOnRightArrow = () => {
 
         let tempDate = moment(selectedDate, 'YYYY-MM-DD').add(1, 'M').format('YYYY-MM-DD');
-        setSelectedDate(tempDate);
-        props.selectDate(tempDate);
+        let year = moment(tempDate).year();
+        if(year <= props.maxYear) {
+            setSelectedDate(tempDate);
+            props.selectDate(tempDate);
+        }
     };
 
     let renderCalendarHeader = (date) => {

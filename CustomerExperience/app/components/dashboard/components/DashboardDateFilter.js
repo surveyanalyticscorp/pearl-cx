@@ -24,17 +24,17 @@ export default function DashboardDateFilter(props){
     let [customDate, setCustomDate] = useState('');
     let [validationError, setValidationError] = useState('');
 
-
     let saveRange = () => {
 
         let tempEnd = moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT);
         let tempStart = moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT);
-        if(moment(tempEnd).isAfter(tempStart)) {
+
+        if (moment(tempEnd).isAfter(tempStart)) {
             props.route.params.setRange(selectedRange);
             AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(selectedRange));
-            props.navigation.navigate("Dashboard");
+            props.navigation.navigate('Dashboard');
         } else {
-            setValidationError('Start date should be less than End date')
+            setValidationError('Start date should be less than End date');
         }
     };
 
@@ -60,33 +60,33 @@ export default function DashboardDateFilter(props){
     let getSelectedRange = (type) => {
         let today = new Date();
         let month = today.getMonth() + 1;
-        let tempEndDate = today.getDate()+"/"+month+"/"+today.getFullYear();
+        let tempEndDate = today.getDate() + '/' + month + '/' + today.getFullYear();
         switch (type) {
             case 1:
                 /** Last 30 days*/
-                let tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(30,'days').format(DMYFORMAT);
+                let tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(30, 'days').format(DMYFORMAT);
                 return {'startDate': tempStartDate, 'endDate': tempEndDate};
             case 2:
                 /** This month*/
-                let firstDate = 1+"/"+month+"/"+today.getFullYear();
+                let firstDate = 1 + '/' + month + '/' + today.getFullYear();
                 tempStartDate = moment(firstDate, DMYFORMAT).format(DMYFORMAT);
                 return {'startDate': tempStartDate, 'endDate': tempEndDate};
             case 3:
                 /** Last month*/
-                firstDate = 1+"/"+today.getMonth()+"/"+today.getFullYear();
+                firstDate = 1 + '/' + today.getMonth() + '/' + today.getFullYear();
                 tempStartDate = moment(firstDate, DMYFORMAT).format(DMYFORMAT);
                 let lastDate = new Date(today.getFullYear(), today.getMonth(), 0);
                 month = lastDate.getMonth() + 1;
-                tempEndDate = lastDate.getDate()+"/"+month+"/"+lastDate.getFullYear();
+                tempEndDate = lastDate.getDate() + '/' + month + '/' + lastDate.getFullYear();
                 tempEndDate = moment(tempEndDate, DMYFORMAT).format(DMYFORMAT);
                 return {'startDate': tempStartDate, 'endDate': tempEndDate};
             case 4:
                 /** Last 3 months*/
-                tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(3,'months').format(DMYFORMAT);
+                tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(3, 'months').format(DMYFORMAT);
                 return {'startDate': tempStartDate, 'endDate': tempEndDate};
             case 5:
                 /** Last 6 months */
-                tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(6,'months').format(DMYFORMAT);
+                tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(6, 'months').format(DMYFORMAT);
                 return {'startDate': tempStartDate, 'endDate': tempEndDate};
             default:
                 break;
@@ -99,19 +99,19 @@ export default function DashboardDateFilter(props){
             case 4:
             case 5:
                 let range = getSelectedRange(type);
-                return range.startDate+ ' - ' +range.endDate;
+                return range.startDate + ' - ' + range.endDate;
             case 2:
                 let date1 = new Date();
-                return date1.toLocaleString('default', { month: 'long' });
+                return date1.toLocaleString('default', {month: 'long'});
             case 3:
                 let date2 = new Date();
                 let date = new Date(date2.getFullYear(), date2.getMonth() - 1, date2.getDate()); //last month date
-                return date.toLocaleString('default', { month: 'long' });
+                return date.toLocaleString('default', {month: 'long'});
         }
     };
 
     let renderValidationError = () => {
-        return <Text style={styles.error}>{ validationError }</Text>
+        return <Text style={styles.error}>{validationError}</Text>;
     };
 
     let renderMonthRow = (type) => {
@@ -123,22 +123,22 @@ export default function DashboardDateFilter(props){
                     let rangeSelected = getSelectedRange(type);
                     setSelectedType(type);
                     let dashboardRange = {type: type, ...rangeSelected};
-                    setSelectedRange(dashboardRange)
+                    setSelectedRange(dashboardRange);
                 }}>
                     <View style={styles.monthRow}>
                         <View>
                             <Text style={styles.dateTitle}>{title}</Text>
                             <Text style={styles.rangeTitle}>{range}</Text>
                         </View>
-                        { selectedType === type && <View  style={styles.checkIcon}>
+                        {selectedType === type && <View style={styles.checkIcon}>
                             <MaterialIcon name={'check'} size={25} color={Colors.secondaryAccent}/>
                         </View>
                         }
                     </View>
                 </TouchableWithoutFeedback>
-                { type !== 5 && <View style={styles.separator}/>}
+                {type !== 5 && <View style={styles.separator}/>}
             </View>
-        )
+        );
     };
 
     let renderMonthView = () => {
@@ -152,31 +152,31 @@ export default function DashboardDateFilter(props){
                     {renderMonthRow(5)}
                 </View>
             </ScrollView>
-        )
+        );
     };
 
     let renderCancelButton = () => {
         return <TouchableOpacity style={styles.cancelButton}
                                  onPress={() => {
-                                     setShowCalendar(false)
+                                     setShowCalendar(false);
                                  }}>
             <Text style={styles.buttonText}>Cancel</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>;
     };
 
     let renderOkButton = () => {
         return <TouchableOpacity style={styles.cancelButton}
                                  onPress={() => {
                                      //save date
-                                     if(startDateSelected) {
-                                         setSelectedRange({...selectedRange, type: 6, startDate: customDate})
+                                     if (startDateSelected) {
+                                         setSelectedRange({...selectedRange, type: 6, startDate: customDate});
                                      } else {
-                                         setSelectedRange({...selectedRange, type: 6, endDate: customDate})
+                                         setSelectedRange({...selectedRange, type: 6, endDate: customDate});
                                      }
-                                     setShowCalendar(false)
+                                     setShowCalendar(false);
                                  }}>
             <Text style={styles.buttonText}>Ok</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>;
     };
 
     let renderCalendarFooter = () => {
@@ -196,16 +196,18 @@ export default function DashboardDateFilter(props){
     let renderCalendar = () => {
         let date = startDateSelected ? selectedRange.startDate : selectedRange.endDate;
         let selectedDate = moment(date, DMYFORMAT).format('YYYY-MM-DD');
+        let currentYear = moment().year();
+        let minYear = parseInt(currentYear) - 4;
         return (
             <View style={styles.calendarContainer}>
                 <View style={styles.calendarBox}>
                     <QPCalendar {...props}
-                                selectDate = {setCalendarDate}
-                                selectedDate = {selectedDate}
-                                minimumDate = {'1970-01-01'}
-                                maximumDate = {'2050-12-31'}
-                                minYear = {1970}
-                                maxYear = {2050}
+                                selectDate={setCalendarDate}
+                                selectedDate={selectedDate}
+                                minimumDate={minYear + '-01-01'}
+                                maximumDate={currentYear + '-12-31'}
+                                minYear={minYear}
+                                maxYear={currentYear}
                     />
                 </View>
                 {renderCalendarFooter()}
