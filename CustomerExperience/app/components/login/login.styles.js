@@ -50,7 +50,7 @@ export const loginStyles = StyleSheet.create({
   nextText: {
     alignSelf: 'flex-end',
     color: textColors.primary,
-    fontFamily: FontFamily.SemiBold,
+    fontFamily: FontFamily.semiBold,
     fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
   },
   forgotPswdButton: {

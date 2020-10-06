@@ -5,7 +5,7 @@ import {all, fork} from 'redux-saga/effects';
 import {watchGetFeedback, watchUpdateFeedback} from './feedbackSaga';
 import {
   watchGetDashboard,
-  watchGetDetractorTicket,
+  watchGetDetractorTicket, watchGetDetractorTicketDetail,
 } from './dashboardSaga';
 import {
   watchDoLogin,
@@ -25,5 +25,6 @@ export function* rootSaga() {
     fork(watchUpdatePassword),
     fork(watchUpdateFeedback),
     fork(watchGetDetractorTicket),
+    fork(watchGetDetractorTicketDetail)
   ]);
 }

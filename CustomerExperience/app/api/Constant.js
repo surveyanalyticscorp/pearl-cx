@@ -2,7 +2,7 @@ export const ASYNC_AUTH_TOKEN = 'authToken';
 export const ASYNC_USER_INFO = 'userInfo';
 export const ASYNC_USER_CREDENTIALS = 'userCredentials';
 
-export const BASE_URL = 'https://qa.questionpro.com/';
+export const BASE_URL = 'https://cxlabs1.questionpro.com/';
 export const AUTH_LOGIN = BASE_URL + '/a/nativehtml/cx.auth.CXLogin';
 export const AUTH_REQUEST_OTP = BASE_URL + 'a/nativehtml/cx.auth.CXForgotPasswordOTP';
 export const AUTH_VALIDATE_OTP = BASE_URL + 'a/nativehtml/cx.auth.ValidateCXUserOTP';

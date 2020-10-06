@@ -120,11 +120,11 @@ class FeedbackCell extends Component {
 
   getScoreColor = sentiment => {
     if (sentiment === 'Detractor') {
-      return '#ff0047';
+      return Colors.detractor;
     } else if (sentiment === 'Passive') {
-      return '#E3CA14';
+      return Colors.passive;
     } else {
-      return '#63A523';
+      return Colors.promoter;
     }
   };
 }
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
   },
   grayText: {
-    color: '#9b9b9b',
+    color: Colors.secondary,
   },
   whiteText: {
     color: Colors.white,

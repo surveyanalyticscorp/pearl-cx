@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     rangeText:{
         color: Colors.primary,
         fontSize: TextSizes.primary,
-        fontFamily: FontFamily.Regular,
+        fontFamily: FontFamily.regular,
         flex: 1
     },
     dateContainer: {
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: Colors.secondary,
-        fontFamily: FontFamily.Regular,
+        fontFamily: FontFamily.regular,
         fontSize: TextSizes.secondary,
         justifyContent: 'center',
         alignItems:'center',
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
         color: Colors.error,
         textAlign: 'center',
         fontSize: TextSizes.secondary,
-        fontFamily: FontFamily.Light,
+        fontFamily: FontFamily.light,
     },
     selectedStateView: {
         width: 5,

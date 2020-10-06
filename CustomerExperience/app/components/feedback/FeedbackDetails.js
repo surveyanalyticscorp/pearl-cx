@@ -1,6 +1,6 @@
 import React from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
-import FeedbackCell from '../view/FeedbackCells';
+import FeedbackCell from './FeedbackCells';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
@@ -11,7 +11,6 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {StackActions} from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
 
 let { width } = Dimensions.get('window');
 
@@ -78,7 +77,7 @@ const styles = StyleSheet.create({
     },
     routeTitle: {
         color: Colors.primary,
-        fontFamily: FontFamily.Light,
+        fontFamily: FontFamily.light,
         fontSize: TextSizes.secondary,
         marginVertical: MarginConstants.halfTab,
     }

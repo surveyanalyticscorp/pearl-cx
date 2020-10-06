@@ -198,7 +198,7 @@ export default class MonthYearSelector extends Component {
           color: this.props.primaryColor,
           marginTop: 20,
           fontSize: 18,
-          fontFamily: FontFamily.Bold,
+          fontFamily: FontFamily.bold,
         }}
         onValueChange={value => {
           this.validateAndSetMonth(value, this.state.selectedYear);
@@ -232,7 +232,7 @@ export default class MonthYearSelector extends Component {
           color: this.props.primaryColor,
           marginTop: 20,
           fontSize: 18,
-          fontFamily: FontFamily.Bold,
+          fontFamily: FontFamily.bold,
         }}
         onValueChange={value => {
           this.setState({selectedYear: value}, () => {

@@ -1,9 +1,11 @@
 import React,{useEffect, useState} from 'react';
-import {View, Text, ImageBackground, FlatList} from 'react-native';
+import {View, Text, FlatList} from 'react-native';
 import TicketWidget from './TicketWidget';
 import {dashboardStyles} from '../dashboard.style';
 import {apiHandler} from '../../../api/ApiHandler';
 import {connect} from 'react-redux';
+import {showLoading} from '../../../redux/actions';
+import QPSpinner from '../../../widgets/QPSpinner';
 
 const DetractorScenes = props => {
 
@@ -35,16 +37,19 @@ const DetractorScenes = props => {
     useEffect(() => {
         for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
             let params = responseData[responseCount];
+            props.showLoading(true);
             apiHandler.getCXDetractorTicket(
                 props.authToken,
                 params,
                 response => {
                     let data = [...responseData];
                     data[responseCount].data = response.body;
-                    setResponseData(data)
+                    setResponseData(data);
+                    props.showLoading(false);
                 },
                 error => {
                     // console.log(error);
+                    props.showLoading(false);
                 },
             );
         }
@@ -63,9 +68,8 @@ const DetractorScenes = props => {
         return (
             <View style={{ margin: 5 }}>
                 <TicketWidget
-                    name={rowItem.item.emailAddress}
                     comment={commentText}
-                    time={rowItem.item.timestamp}
+                    item={rowItem.item}
                     {...props}
                 />
             </View>
@@ -100,10 +104,6 @@ const DetractorScenes = props => {
         let dataCount = props.route.params.dataCount;
         let tickets = responseData[dataCount].data["tickets"];
         return (
-            <ImageBackground
-                resizeMode={'cover'}
-                source={require('../../../config/images/background.png')}
-                style={dashboardStyles.imageBackgroundContainer}>
                 <View style={dashboardStyles.container}>
                     <FlatList
                         contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}
@@ -116,24 +116,31 @@ const DetractorScenes = props => {
                         ListEmptyComponent={renderNoDataFound}
                     />
                 </View>
-            </ImageBackground>
         );
     };
 
-    return renderDetractorTickets()
+    let renderSpinner = () => {
+            return (
+                <View style={dashboardStyles.loading}>
+                    <QPSpinner />
+                </View>
+            )
+    };
+
+    return props.isLoading ? renderSpinner() : renderDetractorTickets()
 };
 
 const mapStateToProps = state => {
     return {
-        userInfo: state.global.userInfo,
         isLoading: state.global.isLoading,
-        isError: state.global.isError,
-        errorMessage: state.global.errorMessage,
         authToken: state.global.authToken
     };
 };
 
 const mapDispatchToProps = dispatch => ({
+    showLoading: (flag) => {
+        dispatch(showLoading(flag));
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetractorScenes);

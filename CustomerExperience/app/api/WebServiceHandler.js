@@ -182,4 +182,35 @@ export default class WebServiceHandler {
         });
     });
   }
+
+  static postV2API(url, headerParam, parameter) {
+    // console.log('WebServiceHandler:Initiating POST request');
+
+    return new Promise(function(success, failed) {
+      fetch(url, {
+        method: 'post',
+        headers: WebServiceHandler.header(headerParam),
+        body: JSON.stringify(parameter),
+      })
+          .then(response => response.json())
+          .then(response => {
+            // console.log(
+            //   '************************ HTTP POST Success ************************ ',
+            // );
+            if (response.statusCode && response.statusCode !== 200) {
+              failed(response);
+            } else {
+              success(response);
+            }
+          })
+          .catch(function(err) {
+            // console.log('Failure Response- ' + JSON.stringify(err));
+            // console.log(
+            //   '************************ HTTP POST Failed **************************',
+            // );
+            failed(err);
+          });
+    });
+  }
 }
+

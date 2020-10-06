@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, Dimensions, Text} from 'react-native';
 import {
     NavigationContainer,
     useNavigation,
@@ -8,7 +8,9 @@ import {
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import FontIcon from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../styles/color.constants';
+import {FontFamily} from '../styles/font.constants';
 import DrawerContent from '../routes/DrawerContent';
 import CxDashboard from '../components/dashboard/CxDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -16,7 +18,6 @@ import SignInStack from './signInStack';
 import {isStringNullOrEmpty} from '../Utils/Utility';
 import Feedback from '../components/feedback/Feedback';
 import FeedbackDetails from '../components/feedback/FeedbackDetails'
-import {EventRegister} from 'react-native-event-listeners';
 import FeedbackUpdate from '../components/feedback/FeedbackUpdate'
 import { CommonActions } from '@react-navigation/native';
 import DashBoardStoreDetails from '../components/dashboard/components/DashBoardStoreDetails'
@@ -27,11 +28,17 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import DetractorScenes from '../components/dashboard/components/DetractorScenes';
+import TicketOverview from '../components/dashboard/ticketManagement/TicketOverview';
+import {MarginConstants} from '../styles/margin.constants';
+import TicketComments from '../components/dashboard/ticketManagement/TicketComments';
+import UpdateTicket from '../components/dashboard/ticketManagement/UpdateTicket';
+import DashboardDateFilter from '../components/dashboard/components/DashboardDateFilter';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
 const FeedbackTab = createMaterialTopTabNavigator();
 const DetractorTicketsTab = createMaterialTopTabNavigator();
+const TicketLogTab = createMaterialTopTabNavigator();
 
 let { width } = Dimensions.get('window');
 
@@ -48,7 +55,7 @@ const AppRouter = props => {
     }, [authToken]);
 
     const MenuIcon = () => {
-        const navigation = useNavigation();
+        let navigation = useNavigation();
         return (
             <View style={styles.rightHeaderButton}>
                 <TouchableOpacity
@@ -91,6 +98,68 @@ const AppRouter = props => {
         );
     };
 
+    const EditTicket = () => {
+        let navigation = useNavigation();
+        return (
+            <View style={[styles.rightHeaderButton,{marginHorizontal: 1.5*MarginConstants.tab1}]}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate("Update Ticket");
+                    }}>
+                    <FontIcon name={'edit'} size={25} color={Colors.white}/>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    const SaveDashboardDate = (props) => {
+        return (
+            <View style={[styles.rightHeaderButton,{marginHorizontal: 1.5*MarginConstants.tab1}]}>
+                <TouchableOpacity
+                    onPress={() => {
+                        props.route.params.saveRange();
+                    }}>
+                    <Text style={styles.saveText}> Save </Text>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    const DateRangeTab = createMaterialTopTabNavigator();
+
+    const DateRangeTabStack = props => (
+        <DateRangeTab.Navigator tabBarOptions={{
+            labelStyle: {color: Colors.primary, width: width/2, fontSize: TextSizes.secondary},
+            indicatorStyle: {backgroundColor: Colors.accent},
+            style:{backgroundColor: Colors.white, width: '100%'},
+            initialLayout: {width: Dimensions.get('window').width},
+            tabStyle:{height: 1.3*PaddingConstants.tab4}
+        }}
+                                lazy
+                                keyboardDismissMode={'auto'}
+        >
+            <DateRangeTab.Screen name="Month" component={DashboardDateFilter} initialParams={{range: props.route.params.range, setRange: props.route.params.setRange}}/>
+            <DateRangeTab.Screen name="Custom" component={DashboardDateFilter} initialParams={{range: props.route.params.range, setRange: props.route.params.setRange}}/>
+        </DateRangeTab.Navigator>
+    );
+
+    const TicketLogTabStack = props => (
+        <TicketLogTab.Navigator tabBarOptions={{
+            labelStyle: {color: Colors.primary, width: width/3, fontSize: TextSizes.semiSecondary},
+            indicatorStyle: {backgroundColor: Colors.accent},
+            style:{backgroundColor: Colors.white, width: '100%'},
+            initialLayout: {width: Dimensions.get('window').width},
+            tabStyle:{height: 1.5*PaddingConstants.tab4}
+        }}
+                                lazy
+                                keyboardDismissMode={'auto'}
+        >
+            <TicketLogTab.Screen name="Overview" component={TicketOverview} initialParams={{data: props.route.params.item}}/>
+            <TicketLogTab.Screen name="Comments" component={TicketComments} initialParams={{data: props.route.params.item}}/>
+            <TicketLogTab.Screen name="Logs" component={TicketComments} initialParams={{data: props.route.params.item}}/>
+        </TicketLogTab.Navigator>
+    );
+
     const FeedbackTabStack = props => (
         <FeedbackTab.Navigator tabBarOptions={{
             labelStyle: {color: Colors.primary, width: width/4, fontSize: TextSizes.secondary},
@@ -117,10 +186,10 @@ const AppRouter = props => {
             tabStyle:{height: 1.5*PaddingConstants.tab4}
         }}
                                        lazy
-                               keyboardDismissMode={'auto'}
+                                       keyboardDismissMode={'auto'}
         >
             <DetractorTicketsTab.Screen name="New" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:0}}/>
-            <DetractorTicketsTab.Screen name="Pending" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:1}}/>
+            <DetractorTicketsTab.Screen name="Open" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:1}}/>
             <DetractorTicketsTab.Screen name="Resolved" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:2}}/>
         </DetractorTicketsTab.Navigator>
     );
@@ -160,7 +229,6 @@ const AppRouter = props => {
                 component={CxDashboard}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon/>,
-                    headerRight: props => <Calendar {...props} route={route}/>,
                 })}
             />
             <RootStack.Screen
@@ -177,6 +245,29 @@ const AppRouter = props => {
                 options={{
                     headerLeft: props => <HeaderBackLeft />,
                 }}
+            />
+            <RootStack.Screen
+                name="Ticket Details"
+                component={TicketLogTabStack}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft />,
+                    headerRight: props => route.state && route.state.index !== 0 ? <View/> : <EditTicket />,
+                })}
+            />
+            <RootStack.Screen
+                name="Update Ticket"
+                component={UpdateTicket}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft />,
+                })}
+            />
+            <RootStack.Screen
+                name="Date Range"
+                component={DateRangeTabStack}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft />,
+                    headerRight: props => <SaveDashboardDate {...props} route={route}/>
+                })}
             />
         </RootStack.Navigator>
     );
@@ -212,6 +303,14 @@ const styles = StyleSheet.create({
     rightHeaderButton: {
         flexDirection: 'row',
         marginLeft: 20
+    },
+    saveText: {
+        color: Colors.white,
+        textAlignVertical:'center',
+        fontSize: TextSizes.primary,
+        fontFamily: FontFamily.regular,
+        paddingTop:5,
+        paddingLeft:5,
     }
 
 });

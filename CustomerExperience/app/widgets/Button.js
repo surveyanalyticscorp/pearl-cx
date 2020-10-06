@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   text: {
     alignSelf: 'center',
     color: textColors.primary,
-    fontFamily: FontFamily.SemiBold,
+    fontFamily: FontFamily.semiBold,
     fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
   },
 });

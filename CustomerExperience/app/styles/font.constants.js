@@ -1,7 +1,7 @@
 export const FontFamily = {
-  Light: 'FiraSans-Light',
-  Regular: 'FiraSans-Regular',
-  Medium: 'FiraSans-Medium',
-  SemiBold: 'FiraSans-SemiBold',
-  Bold: 'FiraSans-Bold',
+  light: 'FiraSans-Light',
+  regular: 'FiraSans-Regular',
+  medium: 'FiraSans-Medium',
+  semiBold: 'FiraSans-SemiBold',
+  bold: 'FiraSans-Bold',
 };

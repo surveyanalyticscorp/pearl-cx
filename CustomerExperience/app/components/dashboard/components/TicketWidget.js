@@ -1,11 +1,23 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {StyleSheet, View, TouchableWithoutFeedback, Text} from 'react-native';
-import TimeAgo from '../../../widgets/TimeAgo';
 import ReadMore from 'react-native-read-more-text';
 import {Colors} from '../../../styles/color.constants';
+import {MarginConstants} from '../../../styles/margin.constants';
+import {PaddingConstants} from '../../../styles/padding.constants';
+import {TextSizes} from '../../../styles/textsize.constants';
+import StringUtils from '../../../Utils/StringUtils';
+import {FontFamily} from '../../../styles/font.constants';
+import moment from 'moment';
+import {HalfMonthDateYearFormat, YMDFORMAT} from '../../../Utils/AppConstants';
+import {getDetractorTicketDetails} from '../../../redux/actions/dashboard.actions';
+import {connect} from 'react-redux';
+import {isObjectEmpty} from '../../../Utils/Utility';
 
 const TicketWidget = props => {
-  const _renderTruncatedFooter = handlePress => {
+
+  let time = moment(props.item.timestamp, YMDFORMAT).format(HalfMonthDateYearFormat);
+
+  let _renderTruncatedFooter = handlePress => {
     return (
       <Text
         style={styles.truncatedFooter}
@@ -15,7 +27,7 @@ const TicketWidget = props => {
     );
   };
 
-  const _renderRevealedFooter = handlePress => {
+  let _renderRevealedFooter = handlePress => {
     return (
       <Text
         style={styles.truncatedFooter}
@@ -25,70 +37,93 @@ const TicketWidget = props => {
     );
   };
 
-  let onPress = () => {
+  useEffect(() => {
+    if(!isObjectEmpty(props.ticketDetails)) {
+      props.navigation.navigate('Ticket Details',{item:props.ticketDetails});
+    }
+  },[props.ticketDetails]);
 
-};
+  let onPress = () => {
+    // let params = {
+    //   'ticketID': props.item.ticketID
+    // };
+    // props.getTicketDetails(params)
+  };
+
+  let renderReadMoreView = () => {
+    if (StringUtils.isNotEmpty(props.comment)) {
+      return <ReadMore
+          numberOfLines={3}
+          renderTruncatedFooter={_renderTruncatedFooter}
+          renderRevealedFooter={_renderRevealedFooter}>
+        <Text style={styles.comment}>{ props.comment }</Text>
+      </ReadMore>
+    }
+    return <Text style={styles.comment}>No comments</Text>
+  };
+
 
   return (
     <TouchableWithoutFeedback
       onPress={onPress}
     >
       <View style={styles.mainContainer}>
-        <Text style={styles.title} numberOfLines={1} ellipsizeMode={'tail'}>
-          {props.name}
+        <Text style={styles.title} numberOfLines={2} ellipsizeMode={'tail'}>
+          {props.item.emailAddress}
         </Text>
-        <TimeAgo style={styles.subtitle} time={props.time} />
-        <View style={{marginTop: 10}}>
-          <ReadMore
-            numberOfLines={3}
-            renderTruncatedFooter={_renderTruncatedFooter}
-            renderRevealedFooter={_renderRevealedFooter}>
-            <Text style={styles.comment}>
-              {props.comment ? props.comment : 'No comments.'}
-            </Text>
-          </ReadMore>
+        <Text style={styles.subtitle}>{time}</Text>
+        <View style={{marginTop: MarginConstants.halfTab}}>
+          {renderReadMoreView()}
         </View>
       </View>
     </TouchableWithoutFeedback>
   );
 };
-TicketWidget.defaultProps = {
-  name: 'Customer Experience',
-  time: '2016-10-17 00:46:17.0',
-  comment:
-    'I am not able to login to my account. It keeps saying invalid login credentials. Can someone please give me a call at my below mentioned number.',
+
+const mapStateToProps = state => {
+  return {
+    ticketDetails: state.dashboard.ticketDetails
+  };
 };
+
+const mapDispatchToProps = dispatch => ({
+  getTicketDetails: (params) => {
+    dispatch(getDetractorTicketDetails(params))
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TicketWidget);
+
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: Colors.white,
-    marginTop: 10,
+    marginTop: MarginConstants.tab1,
     flex: 1,
     alignItems: 'flex-start',
-    marginLeft: 10,
-    marginRight: 10,
-    minHeight: 120,
-    padding: 10,
+    marginHorizontal: MarginConstants.tab1,
+    padding: PaddingConstants.tab1,
   },
   title: {
-    color: '#393939',
-    fontSize: 16,
+    color: Colors.primary,
+    fontSize: TextSizes.secondary,
     textAlign: 'left',
+    fontFamily: FontFamily.semiBold,
   },
   subtitle: {
-    fontSize: 12,
-    marginTop: 2,
-    color: '#393939',
+    fontSize: TextSizes.semiMediumText,
+    marginVertical: 5,
+    color: Colors.secondary,
     textAlign: 'left',
   },
   comment: {
-    fontSize: 12,
-    color: '#393939',
+    fontSize: TextSizes.semiSecondary+1,
+    color: Colors.primary,
     textAlign: 'left',
+    marginTop: PaddingConstants.tab1
   },
   truncatedFooter: {
     color: Colors.accent,
-    marginTop: 5,
-    fontSize: 12}
+    marginTop: 2*MarginConstants.tab1,
+    fontSize: TextSizes.semiSecondary
+  }
 });
-
-export default TicketWidget;

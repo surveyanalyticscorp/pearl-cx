@@ -343,13 +343,13 @@ const styles = StyleSheet.create({
     nextText: {
         alignSelf: 'flex-end',
         color: textColors.primary,
-        fontFamily: FontFamily.SemiBold,
+        fontFamily: FontFamily.semiBold,
         fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
     },
     forgotPasswordMessage: {
         fontSize: 15,
         textAlign: 'center',
-        fontFamily: FontFamily.Light,
+        fontFamily: FontFamily.light,
         color: textColors.primary,
         alignSelf: 'center',
         marginTop: MarginConstants.halfTab,

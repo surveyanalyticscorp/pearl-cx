@@ -136,7 +136,7 @@ const ResetPassword = props => {
                                 fontSize: 15,
                                 width: '90%',
                                 textAlign: 'center',
-                                fontFamily: FontFamily.Medium,
+                                fontFamily: FontFamily.medium,
                                 color: textColors.primary,
                                 alignSelf: 'center',
                                 marginTop: MarginConstants.halfTab,
