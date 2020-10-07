@@ -35,6 +35,7 @@ const wait = timeout => {
 const CxDashboard = props => {
     let [callApi, setCallAPI] = useState(true);
     let [refreshing, setRefreshing] = useState(false);
+    let [comparision, setComparision] = useState(false);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -72,6 +73,17 @@ const CxDashboard = props => {
             }
         }
     }, [callApi]);
+
+    useEffect(() => {
+        if(comparision) {
+            let data = {
+                startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+            };
+            props.getDashboardContent(props.authToken, data);
+            setComparision(false)
+        }
+    },[comparision]);
 
     let getSelectedRange = (type) => {
         let today = new Date();
@@ -318,7 +330,7 @@ const CxDashboard = props => {
         let endDay = moment(nextDay, DMYFORMAT).add(days,'days').format(DMYFORMAT);
         let tempRange = {...props.range, startDate: nextDay, endDate: endDay};
         props.setRange(tempRange);
-        setCallAPI(true)
+        setComparision(true)
     };
 
     let reduceRange = () => {
@@ -335,7 +347,7 @@ const CxDashboard = props => {
         let startDay = moment(endDay, DMYFORMAT).subtract(days,'days').format(DMYFORMAT);
         let tempRange = {...props.range, startDate: startDay, endDate: endDay};
         props.setRange(tempRange);
-        setCallAPI(true)
+        setComparision(true)
     };
 
     let renderFilterHeader = () => {
