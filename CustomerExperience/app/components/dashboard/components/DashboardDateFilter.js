@@ -196,6 +196,7 @@ export default function DashboardDateFilter(props){
     let renderCalendar = () => {
         let date = startDateSelected ? selectedRange.startDate : selectedRange.endDate;
         let selectedDate = moment(date, DMYFORMAT).format('YYYY-MM-DD');
+        let currentDate = moment().format('YYYY-MM-DD');
         let currentYear = moment().year();
         let minYear = parseInt(currentYear) - 4;
         return (
@@ -205,7 +206,7 @@ export default function DashboardDateFilter(props){
                                 selectDate={setCalendarDate}
                                 selectedDate={selectedDate}
                                 minimumDate={minYear + '-01-01'}
-                                maximumDate={currentYear + '-12-31'}
+                                maximumDate={currentDate}
                                 minYear={minYear}
                                 maxYear={currentYear}
                     />

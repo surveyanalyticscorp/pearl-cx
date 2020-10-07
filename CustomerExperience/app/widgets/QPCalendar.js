@@ -92,9 +92,22 @@ const QPCalendar = (props) => {
 
         let tempDate = moment(selectedDate, 'YYYY-MM-DD').add(1, 'M').format('YYYY-MM-DD');
         let year = moment(tempDate).year();
+        let month = moment(tempDate).month();
+        let currentMonth = moment().month();
         if(year <= props.maxYear) {
-            setSelectedDate(tempDate);
-            props.selectDate(tempDate);
+            if(month  < currentMonth) {
+                setSelectedDate(tempDate);
+                props.selectDate(tempDate);
+            } else if (month === currentMonth) {
+                if(tempDate <= props.maximumDate) {
+                    setSelectedDate(tempDate);
+                    props.selectDate(tempDate);
+                } else {
+                    setSelectedDate(props.maximumDate);
+                    props.selectDate(props.maximumDate);
+                }
+            }
+
         }
     };
 
