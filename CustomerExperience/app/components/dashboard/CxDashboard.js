@@ -317,7 +317,8 @@ const CxDashboard = props => {
         let nextDay = moment(endDate, DMYFORMAT).add(1,'days').format(DMYFORMAT);
         let endDay = moment(nextDay, DMYFORMAT).add(days,'days').format(DMYFORMAT);
         let tempRange = {...props.range, startDate: nextDay, endDate: endDay};
-        props.setRange(tempRange)
+        props.setRange(tempRange);
+        setCallAPI(true)
     };
 
     let reduceRange = () => {
@@ -333,7 +334,8 @@ const CxDashboard = props => {
         let endDay = moment(startDate, DMYFORMAT).subtract(1,'days').format(DMYFORMAT);
         let startDay = moment(endDay, DMYFORMAT).subtract(days,'days').format(DMYFORMAT);
         let tempRange = {...props.range, startDate: startDay, endDate: endDay};
-        props.setRange(tempRange)
+        props.setRange(tempRange);
+        setCallAPI(true)
     };
 
     let renderFilterHeader = () => {
