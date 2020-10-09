@@ -33,6 +33,8 @@ import {MarginConstants} from '../styles/margin.constants';
 import TicketComments from '../components/dashboard/ticketManagement/TicketComments';
 import UpdateTicket from '../components/dashboard/ticketManagement/UpdateTicket';
 import DashboardDateFilter from '../components/dashboard/components/DashboardDateFilter';
+import AppSettings from '../components/settings/AppSettings';
+import AccountDetails from '../components/settings/AccountDetails';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -272,13 +274,33 @@ const AppRouter = props => {
         </RootStack.Navigator>
     );
 
+    const settingStack = (props) => (
+        <RootStack.Navigator>
+            <RootStack.Screen
+                name="Settings"
+                component={AppSettings}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <MenuIcon/>,
+                })}
+            />
+            <RootStack.Screen
+                name="Account Details"
+                component={AccountDetails}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft />,
+                })}
+            />
+        </RootStack.Navigator>
+    );
+
     return (
         <NavigationContainer theme={MyTheme}>
             {authToken ? <Drawer.Navigator
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
-                    <Drawer.Screen name="Feedback" children={feedbackStack}/>
+                    <Drawer.Screen name="Feedback" component={feedbackStack}/>
                     <Drawer.Screen name="Dashboard" component={dashboardStack}/>
+                    <Drawer.Screen name="Settings" component={settingStack}/>
                 </Drawer.Navigator>
                 :
                 <SignInStack/>
