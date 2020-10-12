@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, StyleSheet, FlatList} from 'react-native';
-import SafeAreaView from "react-native-safe-area-view";
+import {Text, View, StyleSheet, FlatList, SafeAreaView} from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {StackActions} from '@react-navigation/native';
@@ -150,7 +149,8 @@ function Feedback(props){
     let renderFeedbackList = () => {
         if (!isObjectEmpty(props.feedback)) {
             return (
-                <SafeAreaView style={styles.container}>
+                <SafeAreaView style={styles.safeAreaView}>
+                    <View style={styles.container}>
                     <FlatList
                         data={feedbackData}
                         keyExtractor={item => item.responseSetID+''}
@@ -162,7 +162,9 @@ function Feedback(props){
                         onRefresh={() => {
                             setSelectedYear(props.feedbackRange)
                         }}
+                        initialNumToRender={10}
                     />
+                    </View>
                 </SafeAreaView>
             );
         }
@@ -207,9 +209,12 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Feedback);
 
 const styles = StyleSheet.create({
+    safeAreaView: {
+        flex: 1,
+    },
     container: {
         flex: 1,
-        margin: MarginConstants.tab1,
+        marginTop: MarginConstants.tab1
     },
     emptyView: {
         flex: 1,

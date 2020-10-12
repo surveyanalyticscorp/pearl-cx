@@ -36,7 +36,7 @@ function AppSettings(props) {
 
     return (
         <SafeAreaView forceInset={{bottom: 'never'}} style={styles.safeArea}>
-            <View style={styles.safeArea}>
+            <View style={styles.container}>
                 {renderRow('account', 'Account details', '', pushToAccountDetails)}
                 {renderRow('segment', 'Segment', 'Selected segment')}
             </View>
@@ -61,9 +61,13 @@ const styles = StyleSheet.create({
     safeArea: {
         flex:1,
     },
+    container: {
+        flex:1,
+        marginTop: MarginConstants.tab1,
+    },
     rowContainer: {
         flexDirection:'row',
-        marginTop: MarginConstants.tab2,
+        marginTop: MarginConstants.tab1,
         marginHorizontal: 1.2*MarginConstants.tab1,
         backgroundColor: Colors.white,
         padding: 1.5*PaddingConstants.tab1,
