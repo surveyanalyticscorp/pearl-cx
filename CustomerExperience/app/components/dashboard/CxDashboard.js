@@ -111,8 +111,8 @@ const CxDashboard = props => {
                         data={victoryPieData}
                         width={5*MarginConstants.tab4}
                         height={6*MarginConstants.tab4}
-                        innerRadius={2.5*MarginConstants.tab4}
-                        radius={2.2*MarginConstants.tab4}
+                        innerRadius={2.3*MarginConstants.tab4}
+                        radius={2.1*MarginConstants.tab4}
                         style={{
                             labels: {
                                 fill: 'transparent'
@@ -122,10 +122,10 @@ const CxDashboard = props => {
                         endAngle={-90}
                         startAngle={90}
                     />
-                </View>
-                <View style={dashboardStyles.npsView}>
-                    <Text style={[dashboardStyles.npsPercentText,{left: data.npsPercentage > 0 ? '100%' : '80%'}]}>{data.npsPercentage}</Text>
-                    <Text style={[dashboardStyles.npsText,{left: data.npsPercentage > 0 ? '75%' : '65%'}]}>NPS</Text>
+                    <View style={dashboardStyles.npsView}>
+                        <Text style={[dashboardStyles.npsPercentText]}>{data.npsPercentage}</Text>
+                        <Text style={[dashboardStyles.npsText]}>NPS</Text>
+                    </View>
                 </View>
                 {renderDonutInfoContainer(responseCount)}
             </View>
@@ -145,7 +145,7 @@ const CxDashboard = props => {
                 <Text style={dashboardStyles.responseText}>{count}</Text>
                 <View style={dashboardStyles.separator}/>
                 <View style={dashboardStyles.ticketTypeContainer}>
-                    <Icon name={icon} size={15} color={Colors.borderColor}/>
+                    <Icon name={icon} size={Sizes.inlineIcons} color={Colors.borderColor}/>
                     <Text style={dashboardStyles.response}>{title}</Text>
                 </View>
             </View>
@@ -171,7 +171,7 @@ const CxDashboard = props => {
                     <Text  style={dashboardStyles.ticketText}>{ticketCount}</Text>
                     <View style={dashboardStyles.separator}/>
                     <View style={dashboardStyles.ticketTypeContainer}>
-                        <Icomoon name={icon} size={Sizes.icons} color= {Colors.borderColor}/>
+                        <Icomoon name={icon} size={Sizes.inlineIcons} color= {Colors.borderColor}/>
                         <Text style={dashboardStyles.ticketType}>{title}</Text>
                     </View>
                 </View>

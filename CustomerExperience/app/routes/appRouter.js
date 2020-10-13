@@ -35,6 +35,7 @@ import UpdateTicket from '../components/dashboard/ticketManagement/UpdateTicket'
 import DashboardDateFilter from '../components/dashboard/components/DashboardDateFilter';
 import AppSettings from '../components/settings/AppSettings';
 import AccountDetails from '../components/settings/AccountDetails';
+import {Sizes} from '../styles/Size.constant';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -64,7 +65,7 @@ const AppRouter = props => {
                     onPress={() => {
                         navigation.dispatch(DrawerActions.toggleDrawer());
                     }}>
-                    <Icon name="menu" size={20} color="white"/>
+                    <Icon name="menu" size={Sizes.icons} color="white"/>
                 </TouchableOpacity>
             </View>
         );

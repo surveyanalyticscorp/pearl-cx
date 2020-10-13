@@ -4,6 +4,7 @@ import {Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
+import DeviceInfo from 'react-native-device-info';
 
 export const dashboardStyles = StyleSheet.create({
   container: {
@@ -145,36 +146,34 @@ export const dashboardStyles = StyleSheet.create({
   },
   npsView: {
     position: 'absolute',
-    top: '28%',
+    left: '30%',
+    top: DeviceInfo.isTablet() ? '30%' : '35%',
+    width: 3*MarginConstants.tab4,
+    paddingHorizontal: PaddingConstants.halfTab
   },
   npsPercentText: {
     color: Colors.primary,
     fontSize: 1.2*TextSizes.donutPercentText,
     fontFamily: FontFamily.bold,
     textAlign:'center',
-    justifyContent:'center',
-    alignItems:'center',
   },
   npsText: {
     color: Colors.primary,
     fontSize: TextSizes.primary,
     fontFamily: FontFamily.semiBold,
-    paddingLeft: PaddingConstants.tab3,
     textAlign:'center',
-    left:'75%',
   },
   chartContainer: {
     backgroundColor: Colors.white,
-    height: MarginConstants.tab4 * 5,
+    height: DeviceInfo.isTablet() ? MarginConstants.tab4 * 6 : MarginConstants.tab4 * 5,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     marginHorizontal: MarginConstants.tab2,
   },
   donut: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 3*MarginConstants.tab4,
+    marginTop: MarginConstants.tab4,
+    paddingHorizontal: PaddingConstants.tab2,
   },
   donutInfoContainer: {
     marginVertical: MarginConstants.tab1,

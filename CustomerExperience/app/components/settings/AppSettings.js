@@ -8,7 +8,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Sizes} from '../../styles/Size.constant';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
-import {clearUserInfo} from '../../redux/actions';
 import {connect} from 'react-redux';
 
 function AppSettings(props) {

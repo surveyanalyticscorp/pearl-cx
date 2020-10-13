@@ -11,6 +11,8 @@ import {PaddingConstants} from '../styles/padding.constants';
 import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {setRangeFilter} from '../redux/actions';
+import {Sizes} from '../styles/Size.constant';
+import DeviceInfo from 'react-native-device-info';
 
 const FilterHeader = (props) => {
     let startDate = moment(props.range.startDate, DMYFORMAT).format(HalfMonthDateYearFormat);
@@ -67,7 +69,7 @@ const FilterHeader = (props) => {
         <View style={styles.filterHeader}>
             <TouchableWithoutFeedback onPress={filterAction}>
                 <View style={styles.filterLeftView}>
-                    <LineIcon name={'calendar'} size={15} color={Colors.white}/>
+                    <LineIcon name={'calendar'} size={Sizes.icons} color={Colors.white}/>
                     <View style={styles.filterCalendarView}>
                         <Text style={styles.dateText}>{startDate} - </Text>
                         <Text style={styles.dateText}>{endDate}</Text>
@@ -76,10 +78,10 @@ const FilterHeader = (props) => {
             </TouchableWithoutFeedback>
             <View style={styles.filterArrowIconView}>
                 <TouchableWithoutFeedback hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} onPress={reduceRange}>
-                    <LineIcon name='arrow-left' size={15} color= {Colors.white} style={{marginRight: MarginConstants.tab2}}/>
+                    <LineIcon name='arrow-left' size={Sizes.inlineIcons} color= {Colors.white} style={{marginRight: MarginConstants.tab2}}/>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} onPress={addRange}>
-                    <LineIcon name='arrow-right' size={15} color= {Colors.white}/>
+                    <LineIcon name='arrow-right' size={Sizes.inlineIcons} color= {Colors.white}/>
                 </TouchableWithoutFeedback>
             </View>
         </View>
@@ -104,7 +106,7 @@ export const styles = StyleSheet.create({
     filterHeader: {
         flexDirection:'row',
         height: 1.3*MarginConstants.tab4,
-        paddingLeft: 1.4*PaddingConstants.tab2,
+        paddingLeft: DeviceInfo.isTablet() ? 1.6 * PaddingConstants.tab1 : 1.1 * PaddingConstants.tab2,
         alignItems:'center',
         backgroundColor: Colors.accent,
         justifyContent: 'space-between'
@@ -112,6 +114,7 @@ export const styles = StyleSheet.create({
     filterCalendarView: {
         flexDirection:'row',
         marginHorizontal: MarginConstants.tab2,
+        alignItems:'center',
     },
     filterLeftView: {
         flexDirection:'row',
