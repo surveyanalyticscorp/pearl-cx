@@ -6,7 +6,8 @@ import AppRouter from '../../routes/appRouter';
 import {connect} from 'react-redux';
 import {fillUserInfo, setAuthToken} from '../../redux/actions/index';
 import {isStringNullOrEmpty} from '../../Utils/Utility';
-import {DASHBOARD_RANGE, setDashboardRangeFilter} from '../../redux/actions/dashboard.actions';
+import {DASHBOARD_RANGE} from '../../redux/actions/dashboard.actions';
+import {setRangeFilter} from '../../redux/actions';
 
 function SplashScreen(props) {
   let [moveNext, setMoveNext] = useState(false);
@@ -66,7 +67,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setAuthToken(token))
   },
   setRange: (range) => {
-    dispatch(setDashboardRangeFilter(range))
+    dispatch(setRangeFilter(range))
   }
 });
 

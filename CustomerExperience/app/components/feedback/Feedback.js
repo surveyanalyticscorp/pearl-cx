@@ -190,7 +190,7 @@ const mapStateToProps = state => {
         errorMessage: state.global.errorMessage,
         authToken: state.global.authToken,
         feedbackRange: state.feedback.range,
-        range: state.dashboard.range //nehal temp
+        range: state.global.range
     };
 };
 

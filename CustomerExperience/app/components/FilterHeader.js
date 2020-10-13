@@ -6,11 +6,11 @@ import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import moment from 'moment';
 import {connect} from 'react-redux';
 import React from 'react';
-import {setDashboardRangeFilter} from '../redux/actions/dashboard.actions';
 import {StackActions} from '@react-navigation/native';
 import {PaddingConstants} from '../styles/padding.constants';
 import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
+import {setRangeFilter} from '../redux/actions';
 
 const FilterHeader = (props) => {
     let startDate = moment(props.range.startDate, DMYFORMAT).format(HalfMonthDateYearFormat);
@@ -88,13 +88,13 @@ const FilterHeader = (props) => {
 
 const mapStateToProps = state => {
     return {
-        range: state.dashboard.range
+        range: state.global.range
     };
 };
 
 const mapDispatchToProps = dispatch => ({
     setRange: (range) => {
-        dispatch(setDashboardRangeFilter(range))
+        dispatch(setRangeFilter(range))
     }
 });
 

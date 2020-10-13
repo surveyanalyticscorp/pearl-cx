@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {FlatList, RefreshControl, ScrollView, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import {showLoading} from '../../redux/actions/index';
-import {getDashboardContent, setDashboardRangeFilter} from '../../redux/actions/dashboard.actions';
+import {getDashboardContent} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
@@ -19,6 +19,7 @@ import {Sizes} from '../../styles/Size.constant';
 import StringUtils from '../../Utils/StringUtils';
 import FilterHeader from '../FilterHeader';
 import {getSelectedRange} from '../../Utils/DateFilterUtility';
+import {setRangeFilter} from '../../redux/actions';
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -318,7 +319,7 @@ const mapStateToProps = state => {
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
         authToken: state.global.authToken,
-        range: state.dashboard.range
+        range: state.global.range
     };
 };
 
@@ -331,7 +332,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(showLoading(flag));
     },
     setRange: (range) => {
-        dispatch(setDashboardRangeFilter(range))
+        dispatch(setRangeFilter(range))
     }
 });
 

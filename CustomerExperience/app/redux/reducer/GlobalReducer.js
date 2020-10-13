@@ -7,14 +7,19 @@ import {
     FORGOT_PSWD_OTP_RESPONSE,
     VALIDATE_USER_OTP_RESPONSE,
     UPDATE_PASSWORD_RESPONSE,
-    CLEAR_USER_INFO, SET_AUTH_TOKEN,
+    CLEAR_USER_INFO, SET_AUTH_TOKEN, SET_RANGE_FILTER,
 } from '../actions/index';
 
 const initialState = {
-    authToken:'',
-    userInfo: {},
+    range:{
+        type: 1,
+        startDate: '',
+        endDate: ''
+    },
     isLoading: false,
     isError: false,
+    userInfo: {},
+    authToken:'',
     errorMessage: '',
     forgotPasswordResponse: {},
     validateOtpResponse: {},
@@ -91,6 +96,12 @@ const globalReducer = (state = initialState, action) => {
             return {
                 ...state,
                 authToken: action.payload.authToken
+            };
+        }
+        case SET_RANGE_FILTER: {
+            return {
+                ...state,
+                range: action.range,
             };
         }
         default: {
