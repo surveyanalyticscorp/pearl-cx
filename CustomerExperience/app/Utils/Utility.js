@@ -1,3 +1,5 @@
+import React, {useEffect, useRef} from 'react';
+
 export const isStringNullOrEmpty = string => {
   if (string) {
     return string.trim() === '' || string.trim().length === 0;
@@ -13,3 +15,11 @@ export const validateEmail = email => {
 export const isObjectEmpty = object => {
   return object && Object.keys(object).length === 0
 };
+
+export function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}

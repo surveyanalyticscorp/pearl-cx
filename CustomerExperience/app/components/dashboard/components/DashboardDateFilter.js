@@ -13,6 +13,7 @@ import {DASHBOARD_RANGE} from '../../../redux/actions/dashboard.actions';
 import AsyncStorage from '@react-native-community/async-storage';
 import QPCalendar from '../../../widgets/QPCalendar';
 import StringUtils from '../../../Utils/StringUtils';
+import {StackActions} from '@react-navigation/native';
 
 export default function DashboardDateFilter(props){
 
@@ -32,7 +33,7 @@ export default function DashboardDateFilter(props){
         if (moment(tempEnd).isAfter(tempStart)) {
             props.route.params.setRange(selectedRange);
             AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(selectedRange));
-            props.navigation.navigate('Dashboard');
+            props.navigation.dispatch(StackActions.popToTop())
         } else {
             setValidationError('Start date should be less than End date');
         }

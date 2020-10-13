@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Text, View, StyleSheet, FlatList, SafeAreaView} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {FlatList, SafeAreaView, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {StackActions} from '@react-navigation/native';
@@ -7,34 +7,67 @@ import {Colors} from '../../styles/color.constants';
 import {clearError, showLoading} from '../../redux/actions';
 import {getFeedbackList, setFeedbackRangeFilter} from '../../redux/actions/feedback.actions';
 import {connect} from 'react-redux';
-import moment from 'moment';
 import QPSpinner from '../../widgets/QPSpinner';
 import {showMessage} from 'react-native-flash-message';
-import CalendarScreen from '../view/calendarScreen';
 import {isObjectEmpty} from '../../Utils/Utility';
 import ArrayUtils from '../../Utils/ArrayUtils';
+import {TextSizes} from '../../styles/textsize.constants';
+import {PaddingConstants} from '../../styles/padding.constants';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import FilterHeader from '../FilterHeader';
 
-function Feedback(props){
+const FeedbackTab = createMaterialTopTabNavigator();
 
-    let month = props.feedbackRange.month ? props.feedbackRange.month : moment().month() + 1; //Need to check as it returns month number starting 0
-    let year = props.feedbackRange.year ? props.feedbackRange.year : moment().year();
+export default function Feedback(props){
 
-    const [selectedRowID, setSelectedRowID] = useState(0);
-    const [calendar, setCalendar] = useState(false);
-    const [selectedYear, setSelectedYear] = useState({month: month, year: year});
+    const renderFeedbackView = () => {
+        return(
+            <SafeAreaView style={styles.safeAreaView}>
+                <FilterHeader actionOnArrowClick = {() => {}}
+                              callDataAPI = {() => {}}
+                              {...props}
+                />
+                <FeedbackTabStack />
+            </SafeAreaView>
+        )
+    };
+    return renderFeedbackView();
+}
+
+const FeedbackTabStack = props => (
+    <FeedbackTab.Navigator tabBarOptions={{
+        labelStyle: {color: Colors.primary, width: useWindowDimensions().width/4, fontSize: TextSizes.secondary},
+        indicatorStyle: {backgroundColor: Colors.accent},
+        style:{backgroundColor: Colors.white, width: '100%'},
+        initialLayout: {width: useWindowDimensions().width},
+        tabStyle:{height: 1.7*PaddingConstants.tab4}
+    }}
+                           keyboardDismissMode={'auto'}
+    >
+        <FeedbackTab.Screen name="All" component={FeedbackTabScreen} />
+        <FeedbackTab.Screen name="Detractor" component={FeedbackTabScreen} />
+        <FeedbackTab.Screen name="Passive" component={FeedbackTabScreen} />
+        <FeedbackTab.Screen name="Promoter" component={FeedbackTabScreen} />
+    </FeedbackTab.Navigator>
+);
+
+const renderFeedbackScene = (props) => {
+    // let month = props.feedbackRange.month ? props.feedbackRange.month : moment().month() + 1; //Need to check as it returns month number starting 0
+    // let year = props.feedbackRange.year ? props.feedbackRange.year : moment().year();
     let [feedbackData, setFeedbackData] = useState([]);
+    const [selectedYear, setSelectedYear] = useState({month: '10', year: '2020'});
 
     let getFeedbackData = () => {
-            const data = {
-                pageOffset: 0,
-                sentiment: 'All',
-                month: selectedYear.month + '',
-                year: selectedYear.year + '',
-            };
-            props.getFeedbackList(
-                data,
-                props.authToken,
-            );
+        const data = {
+            pageOffset: 0,
+            sentiment: 'All',
+            month: selectedYear.month + '',
+            year: selectedYear.year + '',
+        };
+        props.getFeedbackList(
+            data,
+            props.authToken,
+        );
     };
 
     useEffect(() => {
@@ -45,14 +78,6 @@ function Feedback(props){
     useEffect(() => {
         getItems()
     },[props.feedback]);
-
-    let openFeedbackCalendar = () => {
-        setCalendar(true)
-    };
-
-    useEffect(() => {
-        props.navigation.dangerouslyGetParent().setParams({'openCalendar': openFeedbackCalendar});
-    }, []);
 
     useEffect(() => {
         if (props.isError) {
@@ -76,36 +101,6 @@ function Feedback(props){
         }
     },[props.feedback.allResponses]);
 
-    const _onPressRow = (data) => {
-        const pushAction = StackActions.push('Feedback Details', {
-            data: data,
-            ticketStatus: props.feedback.cxTicketStatusValues,
-            token: props.authToken
-        });
-        props.navigation.dispatch(pushAction);
-    };
-
-    const _renderRow = ({item}) => {
-        const selected = selectedRowID === item.responseSetID;
-        let ticketStatuses = props.feedback.cxTicketStatusValues;
-        return (
-            <FeedbackCell
-                item={item}
-                onSelect={() => _onPressRow(item)}
-                origin="List"
-                ticketStatuses={ticketStatuses}
-                selected={selected}
-            />
-        );
-    };
-
-    const renderNoDataFound = () => {
-        return (
-            <View style={styles.emptyView}>
-                <Text style={styles.emptyText}>No feedbacks received.</Text>
-            </View>
-        );
-    };
 
     const getItems = () => {
         if(props.route) {
@@ -122,35 +117,47 @@ function Feedback(props){
         }
     };
 
-    let renderCalendarView = () => {
-        return <CalendarScreen
-            showCalendar={calendar}
-            closeCalendar={() => {
-                setCalendar(false);
-            }}
-            selectedDate={selectedYear}
-            onSubmit={(selectedYear) => {
-                // setFeedbackAPI(true);
-                setSelectedYear(selectedYear);
-                setCalendar(false);
-                props.setRange(selectedYear);
-            }}
-        />
+    const _onPressRow = (data) => {
+        const pushAction = StackActions.push('Feedback Details', {
+            data: data,
+            ticketStatus: props.feedback.cxTicketStatusValues,
+            token: props.authToken
+        });
+        props.navigation.dispatch(pushAction);
+    };
+
+    const _renderRow = ({item}) => {
+        let ticketStatuses = props.feedback.cxTicketStatusValues;
+        return (
+            <FeedbackCell
+                item={item}
+                onSelect={() => _onPressRow(item)}
+                origin="List"
+                ticketStatuses={ticketStatuses}
+            />
+        );
+    };
+
+    const renderNoDataFound = () => {
+        return (
+            <View style={styles.emptyView}>
+                <Text style={styles.emptyText}>No feedbacks received.</Text>
+            </View>
+        );
     };
 
     let renderSpinner = () => {
-            return (
-                <View style={styles.loading}>
-                    <QPSpinner/>
-                </View>
-            )
+        return (
+            <View style={styles.loading}>
+                <QPSpinner/>
+            </View>
+        )
     };
 
     let renderFeedbackList = () => {
         if (!isObjectEmpty(props.feedback)) {
             return (
-                <SafeAreaView style={styles.safeAreaView}>
-                    <View style={styles.container}>
+                <View style={styles.container}>
                     <FlatList
                         data={feedbackData}
                         keyExtractor={item => item.responseSetID+''}
@@ -164,20 +171,16 @@ function Feedback(props){
                         }}
                         initialNumToRender={10}
                     />
-                    </View>
-                </SafeAreaView>
+                </View>
             );
         }
         return <View/>
     };
 
-    const renderFeedbackStatus = () => {
+    return props.isLoading ? renderSpinner() : renderFeedbackList()
 
-        return props.isLoading ? renderSpinner() : renderFeedbackList()
-    };
+};
 
-    return calendar ? renderCalendarView() : renderFeedbackStatus();
-}
 
 const mapStateToProps = state => {
     return {
@@ -186,7 +189,8 @@ const mapStateToProps = state => {
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
         authToken: state.global.authToken,
-        feedbackRange: state.feedback.range
+        feedbackRange: state.feedback.range,
+        range: state.dashboard.range //nehal temp
     };
 };
 
@@ -206,7 +210,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Feedback);
+const FeedbackTabScreen = connect(mapStateToProps, mapDispatchToProps)(renderFeedbackScene);
 
 const styles = StyleSheet.create({
     safeAreaView: {

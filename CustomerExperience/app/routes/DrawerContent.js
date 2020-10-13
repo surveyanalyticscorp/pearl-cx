@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome5';
-import {Colors, textColors} from '../styles/color.constants';
+import {Colors} from '../styles/color.constants';
 import AsyncStorage from '@react-native-community/async-storage';
 import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
@@ -19,6 +19,7 @@ import {connect} from 'react-redux';
 import {ASYNC_USER_CREDENTIALS} from '../api/Constant';
 import {Sizes} from '../styles/Size.constant';
 import {PaddingConstants} from '../styles/padding.constants';
+import StringUtils from '../Utils/StringUtils';
 
 const DrawerContent = props => {
   const [userCredentials, setUserCredentials] = useState('');
@@ -33,6 +34,15 @@ const DrawerContent = props => {
   const renderDrawerButtons = () => {
     return (
         <View>
+            <TouchableWithoutFeedback
+                onPress={() => {
+                    props.navigation.navigate('Dashboard');
+                }}>
+                <View style={styles.drawerRow}>
+                    <Icon size={1.3*Sizes.icons} color={Colors.accent} name={'dashboard'} style={styles.rowIcon}/>
+                    <Text style={styles.labelStyle}>Dashboard</Text>
+                </View>
+            </TouchableWithoutFeedback>
           <TouchableWithoutFeedback
               onPress={() => {
                 props.navigation.navigate('Feedback');
@@ -40,15 +50,6 @@ const DrawerContent = props => {
             <View style={styles.drawerRow}>
               <Icon size={1.3*Sizes.icons} color={Colors.accent} name={'feedback'} style={styles.rowIcon}/>
               <Text style={styles.labelStyle}>Feedback</Text>
-            </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback
-              onPress={() => {
-                props.navigation.navigate('Dashboard');
-              }}>
-            <View style={styles.drawerRow}>
-              <Icon size={1.3*Sizes.icons} color={Colors.accent} name={'dashboard'} style={styles.rowIcon}/>
-              <Text style={styles.labelStyle}>Dashboard</Text>
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback
@@ -101,7 +102,8 @@ const DrawerContent = props => {
     }
     return <View/>
   };
-
+    let username = props.userInfo.firstName + ' '+ props.userInfo.lastName;
+    let titleText = StringUtils.isNotEmpty(username) ? username : userCredentials ? userCredentials.email : '';
   return (
       <View style={styles.container}>
         <ImageBackground
@@ -115,9 +117,7 @@ const DrawerContent = props => {
                 resizeMode='contain'
             />
             <View style={{marginTop: MarginConstants.halfTab}}>
-              <Text style={styles.emailCaption}>
-                {userCredentials ? userCredentials.email : ''}
-              </Text>
+              <Text style={styles.emailCaption}>{titleText}</Text>
             </View>
             {renderDrawerButtons()}
           </View>
@@ -168,7 +168,8 @@ const styles = StyleSheet.create({
   emailCaption: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
-    color: Colors.primary
+    color: Colors.primary,
+      textAlign: 'center'
   },
   drawerRow: {
     flexDirection: 'row',

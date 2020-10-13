@@ -38,7 +38,6 @@ import AccountDetails from '../components/settings/AccountDetails';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
-const FeedbackTab = createMaterialTopTabNavigator();
 const DetractorTicketsTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
 
@@ -162,23 +161,6 @@ const AppRouter = props => {
         </TicketLogTab.Navigator>
     );
 
-    const FeedbackTabStack = props => (
-        <FeedbackTab.Navigator tabBarOptions={{
-            labelStyle: {color: Colors.primary, width: width/4, fontSize: TextSizes.secondary},
-            indicatorStyle: {backgroundColor: Colors.accent},
-            style:{backgroundColor: Colors.white, width: '100%'},
-            initialLayout: {width: Dimensions.get('window').width},
-            tabStyle:{height: 1.7*PaddingConstants.tab4}
-        }}
-                       keyboardDismissMode={'auto'}
-        >
-            <FeedbackTab.Screen name="All" component={Feedback} />
-            <FeedbackTab.Screen name="Detractor" component={Feedback} />
-            <FeedbackTab.Screen name="Passive" component={Feedback} />
-            <FeedbackTab.Screen name="Promoter" component={Feedback} />
-        </FeedbackTab.Navigator>
-    );
-
     const DetractorTicketsTabStack = props => (
         <DetractorTicketsTab.Navigator tabBarOptions={{
             labelStyle: {color: Colors.primary, width: width/3, fontSize: TextSizes.secondary},
@@ -200,11 +182,10 @@ const AppRouter = props => {
         <RootStack.Navigator>
             <RootStack.Screen
                 name="Feedback"
-                component={FeedbackTabStack}
+                component={Feedback}
                 options={({ navigation, route }) => ({
-            headerLeft: props => <MenuIcon />,
-            headerRight: props => <Calendar {...props} route={route}/>,
-        })}
+                    headerLeft: props => <MenuIcon />,
+                })}
             />
             <RootStack.Screen
                 name="Feedback Details"
@@ -219,6 +200,14 @@ const AppRouter = props => {
                 options={{
                     headerLeft: props => <HeaderBackLeft />,
                 }}
+            />
+            <RootStack.Screen
+                name="Date Range"
+                component={DateRangeTabStack}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft />,
+                    headerRight: props => <SaveDashboardDate {...props} route={route}/>
+                })}
             />
 
         </RootStack.Navigator>
@@ -298,8 +287,8 @@ const AppRouter = props => {
             {authToken ? <Drawer.Navigator
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
-                    <Drawer.Screen name="Feedback" component={feedbackStack}/>
                     <Drawer.Screen name="Dashboard" component={dashboardStack}/>
+                    <Drawer.Screen name="Feedback" component={feedbackStack}/>
                     <Drawer.Screen name="Settings" component={settingStack}/>
                 </Drawer.Navigator>
                 :

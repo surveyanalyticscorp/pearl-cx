@@ -31,7 +31,6 @@ class FeedbackCell extends Component {
     const index = this.props.index;
     const disable = this.props.origin === 'Detail';
     const bgColor = this.getScoreColor(item.sentiment);
-    const selected = this.props.selected;
     const textResult = StringUtils.isNotEmpty(item.textResultValue)
       ? item.textResultValue
       : item.emailAddress;
@@ -47,8 +46,7 @@ class FeedbackCell extends Component {
         <View
           style={[
             styles.cell,
-            {backgroundColor: selected ? 'rgba(0, 0, 0, 0.18)' : 'transparent'},
-            index === 0 ? {marginTop: 10} : {},
+            {marginTop: index === 0 ? MarginConstants.halfTab : 0},
           ]}>
           <View style={[styles.score, {backgroundColor: bgColor}]}>
             <Text
@@ -128,14 +126,6 @@ class FeedbackCell extends Component {
     }
   };
 }
-
-const _getImageUri = src => {
-  if (Platform.OS === 'android') {
-    return {uri: `asset:/${src}`};
-  }
-
-  return {uri: src};
-};
 
 const styles = StyleSheet.create({
   cell: {

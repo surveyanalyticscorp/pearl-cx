@@ -4,6 +4,7 @@ import {Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
+
 export const dashboardStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -190,31 +191,5 @@ export const dashboardStyles = StyleSheet.create({
     color: Colors.primary,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.primary,
-  },
-  filterHeader: {
-    flexDirection:'row',
-    height: 1.3*MarginConstants.tab4,
-    paddingLeft: 1.4*PaddingConstants.tab2,
-    alignItems:'center',
-    backgroundColor: Colors.accent
-  },
-  filterCalendarView: {
-    flexDirection:'row',
-    marginHorizontal: MarginConstants.tab2
-  },
-  filterLeftView: {
-    flexDirection:'row',
-    flex:1,
-    marginRight: MarginConstants.tab1,
-  },
-  filterArrowIconView: {
-    flexDirection:'row',
-    marginRight: MarginConstants.tab2,
-    alignItems:'center'
-  },
-  dateText: {
-    color: Colors.white,
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.secondary,
   }
 });
