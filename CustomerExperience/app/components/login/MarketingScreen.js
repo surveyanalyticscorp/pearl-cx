@@ -1,19 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {isLandscape} from '../../Utils/DeviceUtil';
-import {ImageBackground, StyleSheet} from 'react-native';
+import React from 'react';
+import {ImageBackground, StyleSheet, Image, Platform} from 'react-native';
 import {TouchableOpacity, View, Text} from 'react-native';
 import {Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {MarginConstants} from '../../styles/margin.constants';
-import IntroPage from './IntroPage';
-import Swiper from 'react-native-swiper'; //https://www.npmjs.com/package/react-native-swiper
+import Swiper from 'react-native-swiper';
+import SafeAreaView from "react-native-safe-area-view";
+import {PaddingConstants} from '../../styles/padding.constants';
+import {FontFamily} from '../../styles/font.constants';
 
 const stringConst = require('../../config/locales/en');
 
 const MarketingScreen = props => {
-  const [orientation, setOrientation] = useState(isLandscape());
-
-  const [index, setIndex] = useState(0);
 
   let content = getMarketingScreenContent();
 
@@ -21,7 +19,7 @@ const MarketingScreen = props => {
   for (let i = 0; i < content.length; i++) {
     introPages.push(
       <View key={i}>
-        <IntroPage orientation={orientation} marketingComponent={content[i]} />
+        <IntroPage marketingComponent={content[i]} />
       </View>,
     );
   }
@@ -31,27 +29,24 @@ const MarketingScreen = props => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <SafeAreaView forceInset={{vertical: 'never'}} style={styles.safeAreaView}>
       <ImageBackground
         resizeMode={'cover'}
-        source={require('../../config/images/background.png')}
+        source={require('../../config/images/background1.png')}
         style={styles.imageBackgroundContainer}>
         <Swiper
           loop={false}
-          style={styles.wrapper}
           showsButtons={false}
           dotColor={textColors.secondary}
-          activeDotColor={textColors.primary}
-          onIndexChanged={index => {
-            setIndex(index);
-          }}>
+          activeDotColor={Colors.secondaryAccent}
+          >
           {introPages}
         </Swiper>
+        <TouchableOpacity style={styles.getStartedButton} onPress={onPress}>
+          <Text style={styles.buttonTextColor}>{stringConst.getStarted}</Text>
+        </TouchableOpacity>
       </ImageBackground>
-      <TouchableOpacity style={styles.getStartedButton} onPress={onPress}>
-        <Text style={styles.buttonTextColor}>{stringConst.getStarted}</Text>
-      </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -59,7 +54,6 @@ function getMarketingScreenContent() {
   return [
     {
       introImage: require('../../config/images/ms_connect_engage.png'),
-      isLogoRequired: true,
       introTitle: 'Connect and engage with your customers. Anytime, anywhere',
       description:
         'Communicate with customers or prospects through a wide selection of feedback channels at every touchpoint anywhere, no matter the device.',
@@ -67,28 +61,24 @@ function getMarketingScreenContent() {
     {
       introImage: require('../../config/images/ms_take_control.png'),
       introTitle: 'Take full control of your customer’s journey',
-      isLogoRequired: true,
       description:
         'Analyze your customer’s 360 experience and quickly identify actionable insights and trends.',
     },
     {
       introImage: require('../../config/images/ms_mobile_dashboard.png'),
       introTitle: 'Manage real-time analytics in one dashboard',
-      isLogoRequired: true,
       description:
         'Easily monitor your business with the role-based, customizable dashboard from anywhere.',
     },
     {
       introImage: require('../../config/images/ms_drive_business_decisions.png'),
       introTitle: 'Make immediate business decisions',
-      isLogoRequired: true,
       description:
         'Prioritize actions quickly based on customer data to excel their expectations with our closed-loop feedback system with real-time alerts.',
     },
     {
       introImage: require('../../config/images/ms_full_growth.png'),
       introTitle: 'Fuel growth organically',
-      isLogoRequired: true,
       description:
         'Identify your best customers and help them become your brand ambassadors through social referrals with our unique Promoter Amplification system.',
     },
@@ -97,48 +87,80 @@ function getMarketingScreenContent() {
 
 export default MarketingScreen;
 
+function IntroPage(props) {
+  const {marketingComponent} = props;
+  return (
+      <View style={styles.container}>
+        <View style={styles.logoImageView}>
+          <Image
+              style={styles.logoImage}
+              resizeMode="contain"
+              source={marketingComponent.introImage}
+          />
+        </View>
+        <View style={styles.introView}>
+          <Text style={styles.introTextHeader}>{marketingComponent.introTitle}</Text>
+          <Text style={styles.introText}>{marketingComponent.description}</Text>
+        </View>
+      </View>
+  );
+}
+
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
-    backgroundColor: Colors.darkerGrey,
   },
   imageBackgroundContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  marketingContainer: {
-    flex: 1,
-    backgroundColor: Colors.darkerGrey,
-  },
-  dot: {
-    width: TextSizes.smallText,
-    height: TextSizes.smallText,
-    borderRadius: TextSizes.smallText / 2,
-    backgroundColor: Colors.dotColor,
-    marginLeft: MarginConstants.halfTab,
-    marginRight: MarginConstants.halfTab,
-  },
-  selectedDot: {
-    backgroundColor: Colors.dotSelectedColor,
-  },
   buttonTextColor: {
     color: Colors.white,
-  },
-  wrapper: {
-    marginBottom: 20,
+    fontSize: TextSizes.primary,
+    textAlign: 'center',
   },
   getStartedButton: {
-    color: Colors.white,
+    backgroundColor: Colors.secondaryAccent,
     alignItems: 'center',
-    borderColor: Colors.white,
-    borderRadius: 1,
-    borderWidth: 1,
-    padding: 10,
-    position: 'absolute',
-    bottom: 20,
-    right: 10,
-    width: 100,
-    height: 40,
+    marginHorizontal: MarginConstants.tab1,
+    width:'90%',
+    paddingVertical: PaddingConstants.tab1,
+    marginBottom: MarginConstants.tab3
+  },
+  container: {
+    alignItems: 'center',
+  },
+  logoImage: {
+    height: '100%',
+    width: '100%',
+    marginTop: 2*MarginConstants.tab3
+  },
+  introView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: MarginConstants.tab1,
+    height:'50%'
+  },
+  logoImageView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '50%',
+    width: '50%',
+  },
+  introTextHeader: {
+    fontFamily: FontFamily.regular,
+    fontSize: Platform.isPad ? TextSizes.extraLargeText : TextSizes.largeText,
+    color: Colors.primary,
+    textAlign: 'center',
+    paddingHorizontal: MarginConstants.tab1,
+  },
+  introText: {
+    color: Colors.secondary,
+    textAlign: 'center',
+    marginTop: MarginConstants.tab2,
+    paddingHorizontal: MarginConstants.tab2,
+    fontFamily: FontFamily.regular,
+    fontSize: Platform.isPad ? TextSizes.largeText : TextSizes.primary,
   },
 });
