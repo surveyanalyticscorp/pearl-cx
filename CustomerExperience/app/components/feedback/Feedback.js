@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
+import {FlatList, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {StackActions} from '@react-navigation/native';
@@ -9,32 +9,43 @@ import {getFeedbackList, setFeedbackRangeFilter} from '../../redux/actions/feedb
 import {connect} from 'react-redux';
 import QPSpinner from '../../widgets/QPSpinner';
 import {showMessage} from 'react-native-flash-message';
-import {isObjectEmpty} from '../../Utils/Utility';
+import {isObjectEmpty, usePrevious} from '../../Utils/Utility';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import {TextSizes} from '../../styles/textsize.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import FilterHeader from '../FilterHeader';
+import moment from 'moment';
+import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
+import StringUtils from '../../Utils/StringUtils';
+import {getSelectedRange} from '../../Utils/DateFilterUtility';
+import SafeAreaView from 'react-native-safe-area-view';
 
 const FeedbackTab = createMaterialTopTabNavigator();
 
 export default function Feedback(props){
+    let [callApi, setCallAPI] = useState(false);
+    let [comparision, setComparision] = useState(false);
 
     const renderFeedbackView = () => {
         return(
-            <SafeAreaView style={styles.safeAreaView}>
-                <FilterHeader actionOnArrowClick = {() => {}}
-                              callDataAPI = {() => {}}
+            <SafeAreaView forceInset={{top: 'never',bottom:'never'}} style={styles.safeAreaView}>
+                <FilterHeader actionOnArrowClick = {() => {
+                    setComparision(true)
+                }}
+                              callDataAPI = {() => {
+                                  setCallAPI(true)
+                              }}
                               {...props}
                 />
-                <FeedbackTabStack />
+                <FeedbackTabStack comparisionProp={comparision} apiProp ={callApi}/>
             </SafeAreaView>
         )
     };
     return renderFeedbackView();
 }
 
-const FeedbackTabStack = props => (
+const FeedbackTabStack = () => (
     <FeedbackTab.Navigator tabBarOptions={{
         labelStyle: {color: Colors.primary, width: useWindowDimensions().width/4, fontSize: TextSizes.secondary},
         indicatorStyle: {backgroundColor: Colors.accent},
@@ -52,28 +63,70 @@ const FeedbackTabStack = props => (
 );
 
 const renderFeedbackScene = (props) => {
-    // let month = props.feedbackRange.month ? props.feedbackRange.month : moment().month() + 1; //Need to check as it returns month number starting 0
-    // let year = props.feedbackRange.year ? props.feedbackRange.year : moment().year();
+
     let [feedbackData, setFeedbackData] = useState([]);
-    const [selectedYear, setSelectedYear] = useState({month: '10', year: '2020'});
+    let [callApi, setCallAPI] = useState(props.apiProp || false);
+    let [comparision, setComparision] = useState(props.comparisionProp || false);
+
+    let prevRangeRef = usePrevious(props.range);
 
     let getFeedbackData = () => {
-        const data = {
-            pageOffset: 0,
-            sentiment: 'All',
-            month: selectedYear.month + '',
-            year: selectedYear.year + '',
-        };
-        props.getFeedbackList(
-            data,
-            props.authToken,
-        );
+        /**
+         * To avoid multiple API calls for each tab
+         * */
+        if(!props.isLoading) {
+            const data = {
+                pageOffset: 0,
+                sentiment: 'All',
+                startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+            };
+            props.getFeedbackList(
+                data,
+                props.authToken,
+            );
+        }
     };
 
     useEffect(() => {
-        getFeedbackData()
-    }, [selectedYear]);
+        if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate) && !props.isLoading) {
+            let selectedRange = getSelectedRange({type:1});
+            props.setRange({
+                type: 1,
+                startDate: selectedRange.startDate,
+                endDate: selectedRange.endDate
+            });
+            let data = {
+                pageOffset: 0,
+                sentiment: 'All',
+                startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
+                endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT)
+            };
+            props.getFeedbackList(data, props.authToken);
+        } else {
+            getFeedbackData()
+        }
+    }, []);
 
+    useEffect(() => {
+        if(prevRangeRef && prevRangeRef !== props.range) {
+            getFeedbackData();
+        }
+    },[props.range]);
+
+    useEffect(() => {
+        if (callApi && StringUtils.isNotEmpty(props.range.startDate)) {
+            getFeedbackData();
+            setCallAPI(false);
+        }
+    }, [callApi]);
+
+    useEffect(() => {
+        if(comparision) {
+            getFeedbackData();
+            setComparision(false)
+        }
+    },[comparision]);
 
     useEffect(() => {
         getItems()
@@ -100,7 +153,6 @@ const renderFeedbackScene = (props) => {
             props.showLoading(false);
         }
     },[props.feedback.allResponses]);
-
 
     const getItems = () => {
         if(props.route) {
@@ -141,7 +193,7 @@ const renderFeedbackScene = (props) => {
     const renderNoDataFound = () => {
         return (
             <View style={styles.emptyView}>
-                <Text style={styles.emptyText}>No feedbacks received.</Text>
+                <Text style={styles.emptyText}>No feedbacks received</Text>
             </View>
         );
     };
@@ -167,7 +219,7 @@ const renderFeedbackScene = (props) => {
                         refreshing={false}
                         ListEmptyComponent={renderNoDataFound}
                         onRefresh={() => {
-                            setSelectedYear(props.feedbackRange)
+                            setCallAPI(true);
                         }}
                         initialNumToRender={10}
                     />
@@ -178,7 +230,6 @@ const renderFeedbackScene = (props) => {
     };
 
     return props.isLoading ? renderSpinner() : renderFeedbackList()
-
 };
 
 
@@ -222,40 +273,14 @@ const styles = StyleSheet.create({
     },
     emptyView: {
         flex: 1,
-        marginTop: 20,
+        marginTop: MarginConstants.tab3,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'transparent',
     },
     emptyText: {
         color: Colors.primary,
-        fontSize: 16
-    },
-    counterContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    counterTitle: {
-        fontFamily: 'System',
-        fontSize: 32,
-        fontWeight: '700',
-        color: '#000',
-    },
-    counterText: {
-        fontFamily: 'System',
-        fontSize: 36,
-        fontWeight: '400',
-        color: '#000',
-    },
-    buttonText: {
-        fontFamily: 'System',
-        fontSize: 50,
-        fontWeight: '300',
-        color: '#007AFF',
-        marginLeft: 40,
-        marginRight: 40,
+        fontSize: TextSizes.primary
     },
     loading: {
         position: 'absolute',

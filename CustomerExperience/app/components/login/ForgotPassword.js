@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.light,
         color: Colors.primary,
         alignSelf: 'center',
-        marginTop: MarginConstants.halfTab,
+        marginVertical: MarginConstants.tab1,
         marginHorizontal: MarginConstants.tab2
     }
 
