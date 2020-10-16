@@ -37,7 +37,7 @@ function AppSettings(props) {
         <SafeAreaView forceInset={{bottom: 'never'}} style={styles.safeArea}>
             <View style={styles.container}>
                 {renderRow('account', 'Account details', '', pushToAccountDetails)}
-                {renderRow('segment', 'Segment', 'Selected segment')}
+                {/*{renderRow('segment', 'Segment', 'Selected segment')}*/}
             </View>
         </SafeAreaView>
     )
