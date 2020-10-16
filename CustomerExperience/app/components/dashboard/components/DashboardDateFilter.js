@@ -132,7 +132,7 @@ export default function DashboardDateFilter(props){
                             <Text style={styles.rangeTitle}>{range}</Text>
                         </View>
                         {selectedType === type && <View style={styles.checkIcon}>
-                            <MaterialIcon name={'check'} size={25} color={Colors.secondaryAccent}/>
+                            <MaterialIcon name={'check'} size={25} color={Colors.accent}/>
                         </View>
                         }
                     </View>
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
         margin: MarginConstants.tab1,
     },
     buttonText: {
-        color: Colors.secondaryAccent,
+        color: Colors.accent,
         fontFamily: FontFamily.regular,
         fontSize: TextSizes.secondary,
         textAlign: 'center'

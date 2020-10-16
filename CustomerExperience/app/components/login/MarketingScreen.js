@@ -37,7 +37,7 @@ const MarketingScreen = props => {
               loop={false}
               showsButtons={false}
               dotColor={textColors.secondary}
-              activeDotColor={Colors.secondaryAccent}
+              activeDotColor={Colors.accent}
           >
             {introPages}
           </Swiper>
@@ -116,11 +116,11 @@ const styles = StyleSheet.create({
   },
   buttonTextColor: {
     color: Colors.white,
-    fontSize: TextSizes.primary,
-    textAlign: 'center',
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.largeText
   },
   getStartedButton: {
-    backgroundColor: Colors.secondaryAccent,
+    backgroundColor: Colors.accent,
     alignItems: 'center',
     marginHorizontal: MarginConstants.tab1,
     paddingVertical: PaddingConstants.tab1,

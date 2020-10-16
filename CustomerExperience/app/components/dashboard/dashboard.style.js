@@ -120,7 +120,7 @@ export const dashboardStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   ticketText: {
-    color: Colors.secondaryAccent,
+    color: Colors.accent,
     fontFamily: FontFamily.semiBold,
     fontSize: TextSizes.largeText,
     marginBottom:5,
