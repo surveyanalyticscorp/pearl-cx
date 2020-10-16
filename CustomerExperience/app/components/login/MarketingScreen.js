@@ -25,15 +25,15 @@ const MarketingScreen = props => {
   }
 
   const onPress = () => {
-    props.navigation.navigate('CompanyCode');
+    props.navigation.navigate('Login');
   };
 
   return (
-    <SafeAreaView forceInset={{vertical: 'never'}} style={styles.safeAreaView}>
       <ImageBackground
         resizeMode={'cover'}
         source={require('../../config/images/background1.png')}
         style={styles.imageBackgroundContainer}>
+        <SafeAreaView forceInset={{vertical: 'never'}} style={styles.safeAreaView}>
         <Swiper
           loop={false}
           showsButtons={false}
@@ -45,8 +45,8 @@ const MarketingScreen = props => {
         <TouchableOpacity style={styles.getStartedButton} onPress={onPress}>
           <Text style={styles.buttonTextColor}>{stringConst.getStarted}</Text>
         </TouchableOpacity>
+        </SafeAreaView>
       </ImageBackground>
-    </SafeAreaView>
   );
 };
 
@@ -124,7 +124,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondaryAccent,
     alignItems: 'center',
     marginHorizontal: MarginConstants.tab1,
-    width:'90%',
     paddingVertical: PaddingConstants.tab1,
     marginBottom: MarginConstants.tab3
   },

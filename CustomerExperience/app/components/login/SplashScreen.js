@@ -41,12 +41,12 @@ function SplashScreen(props) {
     return (
         <ImageBackground
             resizeMode={'cover'}
-            source={require('../../config/images/background_inverted.png')}
+            source={require('../../config/images/background1.png')}
             style={styles.backgroundContainer}>
           <Image
               style={{width:'70%'}}
               resizeMode={'contain'}
-              source={require('../../config/images/whiteCXLogo.png')}
+              source={require('../../config/images/cx-logo.png')}
           />
         </ImageBackground>
     );

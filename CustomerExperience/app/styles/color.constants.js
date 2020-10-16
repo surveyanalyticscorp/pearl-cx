@@ -6,7 +6,7 @@ const Colors = {
   lightRed: '#FC1154',
   white: '#ffffff',
   black: '#000000',
-  accent: '#193F8B',
+  accent: '#2589E3',//'#193F8B',
   secondaryAccent: "#2589E3",
   accentGradient: 'rgba(239, 246, 252, 1)',
   gradientColor: '#8AC0EA',

@@ -37,14 +37,6 @@ const SignInStack = ({navigation}) => (
                               headerShown:false
                           })}
         />
-        <RootStack.Screen name="CompanyCode" component={CompanyCode}
-                          options={({ navigation, route }) => ({
-                              headerTransparent: true,
-                              title:'',
-                              headerLeft: (props) => {
-                                  return stackHeaderProps(route, navigation)
-                              },
-                          })}/>
         <RootStack.Screen name="Login" component={Login}
                           options={({ navigation, route }) => ({
                               headerTransparent: true,
