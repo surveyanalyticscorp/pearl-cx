@@ -2,31 +2,39 @@ import {
     Dimensions,
     Image,
     ImageBackground,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
     StyleSheet,
     Text,
     View,
 } from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';
 import {FontFamily} from '../../styles/font.constants';
-import {buttonColors, Colors, textColors} from '../../styles/color.constants';
+import {Colors} from '../../styles/color.constants';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {clearError} from '../../redux/actions/index';
 import {updatePassword} from '../../redux/actions/login.actions';
 import {connect} from 'react-redux';
 import {isStringNullOrEmpty} from '../../Utils/Utility';
 import StringUtils from '../../Utils/StringUtils';
 import {showMessage} from 'react-native-flash-message';
-import {DotIndicator} from 'react-native-indicators';
+import {PaddingConstants} from '../../styles/padding.constants';
+import SafeAreaView from 'react-native-safe-area-view';
+import QPSpinner from '../../widgets/QPSpinner';
+import {TextSizes} from '../../styles/textsize.constants';
 
-const screen = Dimensions.get('screen');
+let { width }= Dimensions.get('window');
 const stringConst = require('../../config/locales/en');
 
 const ResetPassword = props => {
     const [password, setPassword] = useState('');
     const [confirmPswd, setConfirmPswd] = useState('');
     const [validation, setValidation] = useState('');
+    let textFieldTimer = useRef(null);
 
     useEffect(() => {
         if (props.updatePasswordResponse.body) {
@@ -113,62 +121,89 @@ const ResetPassword = props => {
         setValidation('');
     };
 
-    return (
-        <View style={{flex: 1}}>
-            <ImageBackground
-                resizeMode={'stretch'}
-                source={require('../../config/images/background_inverted.png')}
-                style={{flex: 1}}>
-                <View style={styles.forgotPswdContainer}>
-                    <View
-                        style={{
-                            marginVertical: MarginConstants.tab4 * 3,
-                            alignItems: 'center',
-                            width: '100%',
-                        }}>
+    let renderSpinnerResetButton = () => {
+        return props.isLoading ?
+            <View style={styles.nextButton}>
+                <QPSpinner spinnerColor={Colors.white}/>
+            </View>
+            :
+            <QPButton
+                testID='SignInButton'
+                style={styles.nextButton}
+                onPress={onUpdatePasswordClick}
+                buttonText={'Update Password'}
+                textStyle={styles.nextText}
+            />
+    };
+
+    let renderContainer = () => {
+        return (
+            <ScrollView contentContainerStyle={styles.scrollContainer}
+                        keyboardDismissMode='on-drag'
+                        keyboardShouldPersistTaps={'handled'}
+            >
+                <KeyboardAvoidingView behavior='position'
+                                      style={styles.container}
+                                      keyboardVerticalOffset={Platform.select({
+                                          ios: Platform.isPad ? -200 : -150,
+                                          android: -200
+                                      })}
+                                      enabled>
+                    <View style={styles.logo}>
                         <Image
                             style={styles.logoImage}
                             resizeMode="contain"
-                            source={require('../../config/images/whiteCXLogo.png')}
+                            source={require('../../config/images/cx-logo.png')}
                         />
+                    </View>
+                    <View style={styles.textFieldContainer}>
                         <Text
-                            style={{
-                                fontSize: 15,
-                                width: '90%',
-                                textAlign: 'center',
-                                fontFamily: FontFamily.medium,
-                                color: textColors.primary,
-                                alignSelf: 'center',
-                                marginTop: MarginConstants.halfTab,
-                                paddingHorizontal: MarginConstants.tab2,
-                            }}>
+                            style={styles.resetPasswordMessage}>
                             {stringConst.resetPasswordMessage}
                         </Text>
                         <QPTextField
+                            autofocus={false}
                             label={'Password'}
-                            style={styles.emailInput}
+                            secureText={true}
+                            defaultValue={''}
+                            style={styles.textInput}
                             onEndEdit={handlePassword}
+                            onSubmitEditing={() => {
+                                textFieldTimer = setTimeout(() => {
+                                    Keyboard.dismiss()
+                                }, 5);
+                            }}
+                            clearButtonMode={'while-editing'}
                         />
                         <QPTextField
+                            defaultValue={''}
+                            secureText={true}
                             label={'Confirm Password'}
-                            style={styles.passwordInput}
+                            style={styles.textInput}
                             onEndEdit={handleConfirmPassword}
+                            onSubmitEditing={() => {
+                                textFieldTimer = setTimeout(() => {
+                                    Keyboard.dismiss()
+                                }, 5);
+                            }}
+                            clearButtonMode={'while-editing'}
                         />
-                        {props.isLoading ? (
-                            <View style={styles.nextButton}>
-                                <DotIndicator color={Colors.white} count={3} size={10}/>
-                            </View>
-                        ) : (
-                            <QPButton
-                                style={styles.nextButton}
-                                onPress={onUpdatePasswordClick}
-                                buttonText={'Update Password'}
-                            />
-                        )}
                     </View>
-                </View>
-            </ImageBackground>
-        </View>
+                </KeyboardAvoidingView>
+                {renderSpinnerResetButton()}
+            </ScrollView>
+        )
+    };
+
+    return (
+        <ImageBackground
+            resizeMode={'cover'}
+            source={require('../../config/images/background1.png')}
+            style={styles.container}>
+            <SafeAreaView forceInset={{top: 'always',bottom:'never'}} style={styles.safeArea}>
+                {renderContainer()}
+            </SafeAreaView>
+        </ImageBackground>
     );
 };
 
@@ -195,48 +230,54 @@ export default connect(
 )(ResetPassword);
 
 const styles = StyleSheet.create({
-    logoImage: {
-        width: '70%',
-        marginTop: MarginConstants.tab4,
+    safeArea:{
+        flex:1
     },
-    forgotPswdContainer: {
+    container:{
         flex: 1,
-        marginVertical: MarginConstants.tab3,
+        paddingTop: PaddingConstants.tab2
+    },
+    scrollContainer: {
+        flexGrow: 1,
+    },
+    logoImage: {
+        width: width * 0.75 ,
+        height: width * 0.45,
+    },
+    logo: {
+        alignItems: 'center'
+    },
+    textFieldContainer: {
         alignItems: 'center',
-        width: '100%',
+        justifyContent: 'center',
     },
-    navigationBar: {
-        width: '100%',
-        height: 50,
-        flexDirection: 'row',
-        backgroundColor: Colors.accent,
-        alignItems: 'flex-start',
-    },
-    emailInput: {
-        width: screen.width / 1.1,
-        height: MarginConstants.tab3,
-        marginTop: MarginConstants.tab4,
-        marginBottom: MarginConstants.tab2,
-        paddingHorizontal: MarginConstants.halfTab,
-    },
-    passwordInput: {
-        width: screen.width / 1.1,
-        height: MarginConstants.tab3,
-        marginTop: MarginConstants.tab1,
+    textInput: {
+        width: width / 1.05,
+        height: MarginConstants.tab4,
         marginBottom: MarginConstants.tab3,
-        paddingHorizontal: MarginConstants.halfTab,
+        paddingHorizontal: MarginConstants.tab1,
     },
     nextButton: {
-        width: '90%',
         height: MarginConstants.tab4,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: MarginConstants.tab4,
-        borderRadius: 5,
-        backgroundColor: buttonColors.backgroundColor,
+        backgroundColor: Colors.accent,
+        marginBottom: MarginConstants.tab3,
+        marginHorizontal: MarginConstants.tab1
     },
     nextText: {
-        alignSelf: 'center',
-        color: textColors.primary,
+        color: Colors.white,
+        fontFamily: FontFamily.regular,
+        fontSize: TextSizes.largeText
     },
+    resetPasswordMessage: {
+        fontSize: TextSizes.secondary,
+        textAlign: 'center',
+        fontFamily: FontFamily.light,
+        color: Colors.primary,
+        alignSelf: 'center',
+        marginTop: MarginConstants.halfTab,
+        marginHorizontal: MarginConstants.tab2
+    }
+
 });

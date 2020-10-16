@@ -1,15 +1,18 @@
 import {
     Dimensions,
     Image,
-    ImageBackground, Keyboard, KeyboardAvoidingView, Platform,
-    SafeAreaView, ScrollView,
+    ImageBackground,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
     StyleSheet,
     Text,
     View,
 } from 'react-native';
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {MarginConstants} from '../../styles/margin.constants';
-import {buttonColors, Colors, textColors} from '../../styles/color.constants';
+import {Colors} from '../../styles/color.constants';
 import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
 import {FontFamily} from '../../styles/font.constants';
 import QPTextField from '../../widgets/TextField';
@@ -26,14 +29,14 @@ import DialogButton from '../../widgets/dialog/Button';
 import QPSpinner from '../../widgets/QPSpinner';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-let { height, width }= Dimensions.get('window');
+import SafeAreaView from 'react-native-safe-area-view';
 
+let { width }= Dimensions.get('window');
 const stringConst = require('../../config/locales/en');
-const screen = Dimensions.get('screen');
 
 const ForgotPassword = props => {
-    const [email, setEmail] = useState('');
-    const [accessCode, setAccessCode] = useState('');
+    const [email, setEmail] = useState(props.route.params.email);
+    const [accessCode, setAccessCode] = useState(props.route.params.accessCode);
     const [validation, setValidation] = useState('');
     const [otp, setOtp] = useState('');
     const [otpAlert, setOtpAlert] = useState(false);
@@ -66,13 +69,13 @@ const ForgotPassword = props => {
 
 
     useEffect(() => {
-        if (StringUtils.isNotEmpty(validation)) {
+        if (StringUtils.isNotEmpty(validation) || props.isError) {
             showMessage({
                 message: validation,
                 type: 'danger',
                 icon: 'auto',
                 backgroundColor: Colors.red,
-                color: Colors.white, // text color
+                color: Colors.white,
             });
             let timer = setTimeout(() => {
                 setValidation('')
@@ -81,25 +84,7 @@ const ForgotPassword = props => {
                 clearTimeout(timer);
             };
         }
-    }, [validation]);
-
-    useEffect(() => {
-        if (props.isError) {
-            showMessage({
-                message: props.errorMessage.errorAlert,
-                type: 'danger',
-                icon: 'auto',
-                backgroundColor: Colors.red,
-                color: Colors.white, // text color
-            });
-            let timer = setTimeout(() => {
-                props.clearError();
-            }, 1000);
-            return () => {
-                clearTimeout(timer);
-            };
-        }
-    }, [props.isError]);
+    }, [validation, props.isError]);
 
     const onResetPasswordClick = () => {
         if (isValidateInput()) {
@@ -192,6 +177,7 @@ const ForgotPassword = props => {
                 style={styles.nextButton}
                 onPress={onResetPasswordClick}
                 buttonText={stringConst.resetPassword}
+                textStyle={styles.nextText}
             />
     };
 
@@ -212,42 +198,42 @@ const ForgotPassword = props => {
                         <Image
                             style={styles.logoImage}
                             resizeMode="contain"
-                            source={require('../../config/images/whiteCXLogo.png')}
+                            source={require('../../config/images/cx-logo.png')}
                         />
                     </View>
-            <View style={styles.textFieldContainer}>
-                <Text
-                    style={styles.forgotPasswordMessage}>
-                    {stringConst.forgotPasswordMessage}
-                </Text>
-                <QPTextField
-                    autofocus={false}
-                    label={stringConst.email}
-                    defaultValue={''}
-                    style={styles.emailInput}
-                    onEndEdit={handleEmail}
-                    onSubmitEditing={() => {
-                        textFieldTimer = setTimeout(() => {
-                            Keyboard.dismiss()
-                        }, 5);
-                    }}
-                    clearButtonMode={'while-editing'}
-                />
-                <QPTextField
-                    defaultValue={''}
-                    label={stringConst.companyCode}
-                    style={styles.companyCode}
-                    onEndEdit={handleAccessCode}
-                    onSubmitEditing={() => {
-                        textFieldTimer = setTimeout(() => {
-                            Keyboard.dismiss()
-                        }, 5);
-                    }}
-                    clearButtonMode={'while-editing'}
-                />
-                {renderSpinnerResetButton()}
-            </View>
+                    <View style={styles.textFieldContainer}>
+                        <Text
+                            style={styles.forgotPasswordMessage}>
+                            {stringConst.forgotPasswordMessage}
+                        </Text>
+                        <QPTextField
+                            autofocus={false}
+                            label={stringConst.email}
+                            defaultValue={email}
+                            style={styles.textInput}
+                            onEndEdit={handleEmail}
+                            onSubmitEditing={() => {
+                                textFieldTimer = setTimeout(() => {
+                                    Keyboard.dismiss()
+                                }, 5);
+                            }}
+                            clearButtonMode={'while-editing'}
+                        />
+                        <QPTextField
+                            defaultValue={accessCode}
+                            label={stringConst.companyCode}
+                            style={styles.textInput}
+                            onEndEdit={handleAccessCode}
+                            onSubmitEditing={() => {
+                                textFieldTimer = setTimeout(() => {
+                                    Keyboard.dismiss()
+                                }, 5);
+                            }}
+                            clearButtonMode={'while-editing'}
+                        />
+                    </View>
                 </KeyboardAvoidingView>
+                {renderSpinnerResetButton()}
             </ScrollView>
         )
     };
@@ -255,9 +241,9 @@ const ForgotPassword = props => {
     return (
         <ImageBackground
             resizeMode={'cover'}
-            source={require('../../config/images/background_inverted.png')}
+            source={require('../../config/images/background1.png')}
             style={styles.container}>
-            <SafeAreaView>
+            <SafeAreaView forceInset={{top: 'always',bottom:'never'}} style={styles.safeArea}>
                 {renderContainer()}
             </SafeAreaView>
             {renderDialog()}
@@ -290,11 +276,14 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);
 
 const styles = StyleSheet.create({
+    safeArea:{
+        flex:1
+    },
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: PaddingConstants.tab4
+        paddingTop: PaddingConstants.tab2
     },
     scrollContainer: {
         flexGrow: 1,
@@ -309,50 +298,33 @@ const styles = StyleSheet.create({
     textFieldContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: MarginConstants.tab3
     },
-    navigationBar: {
-        width: '100%',
-        height: 50,
-        flexDirection: 'row',
-        backgroundColor: Colors.accent,
-        alignItems: 'flex-start',
-    },
-    emailInput: {
-        width: screen.width / 1.1,
-        height: MarginConstants.tab3,
-        marginTop: MarginConstants.tab2,
-        marginBottom: MarginConstants.tab2,
-        paddingHorizontal: MarginConstants.halfTab,
-    },
-    companyCode: {
-        width: screen.width / 1.1,
-        height: MarginConstants.tab3,
-        marginTop: MarginConstants.tab2,
+    textInput: {
+        width: width / 1.05,
+        height: MarginConstants.tab4,
         marginBottom: MarginConstants.tab3,
-        paddingHorizontal: MarginConstants.halfTab,
+        paddingHorizontal: MarginConstants.tab1,
     },
     nextButton: {
-        width: '90%',
         height: MarginConstants.tab4,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: MarginConstants.tab4,
-        backgroundColor: buttonColors.backgroundColor,
+        backgroundColor: Colors.accent,
+        marginBottom: MarginConstants.tab3
     },
     nextText: {
-        alignSelf: 'flex-end',
-        color: textColors.primary,
-        fontFamily: FontFamily.semiBold,
-        fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
+        color: Colors.white,
+        fontFamily: FontFamily.regular,
+        fontSize: TextSizes.largeText
     },
     forgotPasswordMessage: {
-        fontSize: 15,
+        fontSize: TextSizes.secondary,
         textAlign: 'center',
         fontFamily: FontFamily.light,
-        color: textColors.primary,
+        color: Colors.primary,
         alignSelf: 'center',
         marginTop: MarginConstants.halfTab,
+        marginHorizontal: MarginConstants.tab2
     }
 
 });

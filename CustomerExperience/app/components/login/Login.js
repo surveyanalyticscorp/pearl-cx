@@ -1,17 +1,11 @@
-import {
-    Image,
-    ImageBackground,
-    Platform,
-    View,
-     Keyboard, KeyboardAvoidingView, ScrollView
-} from 'react-native';
-import React, {useState, useEffect, useRef} from 'react';
+import {Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, ScrollView, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import DeviceInfo from 'react-native-device-info';
 import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import {connect} from 'react-redux';
-import {showLoading, clearError} from '../../redux/actions/index';
+import {clearError, showLoading} from '../../redux/actions/index';
 import {doLogin} from '../../redux/actions/login.actions';
 import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
@@ -103,7 +97,10 @@ const Login = props => {
 
     const onForgotPasswordPress = () => {
         Keyboard.dismiss();
-        props.navigation.navigate('ForgotPassword');
+        props.navigation.navigate('ForgotPassword', {
+            email: userData.email,
+            accessCode: userData.accessCode,
+        });
     };
 
     const handleEmail = text => {
@@ -134,7 +131,7 @@ const Login = props => {
     };
 
     let renderSpinnerLoginButton = () => {
-            return props.isLoading ?
+        return props.isLoading ?
             <View style={loginStyles.signInButton}>
                 <QPSpinner spinnerColor={Colors.white}/>
             </View>
@@ -162,13 +159,13 @@ const Login = props => {
                                       })}
                                       enabled>
                     <View style={{flex:1}}>
-                    <View style={loginStyles.logo}>
-                        <Image
-                            style={loginStyles.logoImage}
-                            resizeMode="contain"
-                            source={require('../../config/images/cx-logo.png')}
-                        />
-                    </View>
+                        <View style={loginStyles.logo}>
+                            <Image
+                                style={loginStyles.logoImage}
+                                resizeMode="contain"
+                                source={require('../../config/images/cx-logo.png')}
+                            />
+                        </View>
                         <QPTextField
                             testID='emailTextField'
                             autofocus={false}

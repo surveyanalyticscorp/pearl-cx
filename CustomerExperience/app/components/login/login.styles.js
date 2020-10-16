@@ -1,12 +1,11 @@
-import {Platform, StyleSheet, Dimensions} from 'react-native';
+import {Dimensions, Platform, StyleSheet} from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';
-import {buttonColors, Colors, textColors} from '../../styles/color.constants';
+import {Colors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
-const screen = Dimensions.get('screen');
-let { height, width }= Dimensions.get('window');
 
+let { width }= Dimensions.get('window');
 
 export const loginStyles = StyleSheet.create({
   safeArea:{
@@ -29,17 +28,10 @@ export const loginStyles = StyleSheet.create({
     alignItems: 'center',
   },
   emailInput: {
-    width: screen.width / 1.1,
+    width: width / 1.05,
     height: MarginConstants.tab4,
     marginBottom: MarginConstants.tab3,
     paddingHorizontal: MarginConstants.tab1,
-  },
-  passwordInput: {
-    width: screen.width / 1.1,
-    height: MarginConstants.tab3,
-    marginTop: MarginConstants.tab1,
-    marginBottom: MarginConstants.tab3,
-    paddingHorizontal: MarginConstants.halfTab,
   },
   signInButton: {
     height: MarginConstants.tab4,

@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {TextField} from 'react-native-material-textfield';
 import {Colors} from '../styles/color.constants';
 import StringUtils from '../Utils/StringUtils';
+import {TextSizes} from '../styles/textsize.constants';
 
 const QPTextField = props => {
   const fieldRef = React.createRef();
@@ -60,7 +61,7 @@ const QPTextField = props => {
         autoCorrect={false}
         autoFocus={props.autofocus}
         tintColor={props.tintColor || Colors.accent}
-        textColor={props.textColor || Colors.secondary}
+        textColor={props.textColor || Colors.primary}
         baseColor={props.baseColor || Colors.primary}
         label={label}
         defaultValue={defaultValue}
@@ -72,6 +73,8 @@ const QPTextField = props => {
         ref={fieldRef}
         clearButtonMode={'always'}
         placeholder={props.placeholder}
+        fontSize={TextSizes.primary}
+        labelFontSize={TextSizes.secondary}
       />
       {props.secureText && renderVisibility()}
     </View>

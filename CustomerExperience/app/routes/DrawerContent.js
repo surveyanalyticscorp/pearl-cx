@@ -113,7 +113,7 @@ const DrawerContent = props => {
           <View style={{flex: 1}}>
             <Image
                 style={styles.image}
-                source={require('../config/images/login_logo.png')}
+                source={require('../config/images/cx-logo.png')}
                 resizeMode='contain'
             />
             <View style={{marginTop: MarginConstants.halfTab}}>
