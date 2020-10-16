@@ -115,14 +115,14 @@ const QPCalendar = (props) => {
         let tempDate = moment(selectedDate, 'YYYY-MM-DD').format('YYYY-MMMM-DD');
         let components = tempDate.split('-');
         return (
-            <View style={{flexDirection:'row', flex:1}}>
+            <View style={styles.calendarHeaderContainer}>
                 <View style={styles.calendarHeader}>
                     <Text style={styles.dateTitle}>{components[1]}</Text>
                 </View>
                 <View style={styles.dropdownButton}>
                     {renderDropDown(components[0]+'')}
                 </View>
-                <View style={{marginRight: MarginConstants.tab2, flexDirection:'row', alignItems: 'center'}}>
+                <View style={styles.calendarArrowView}>
                     <TouchableOpacity onPress={actionOnLeftArrow} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
                     <Icon name={'arrow-left'} size={15} color={Colors.secondary} style={{paddingHorizontal: PaddingConstants.tab1}}/>
                     </TouchableOpacity>
@@ -153,7 +153,7 @@ const QPCalendar = (props) => {
                 markedDates={JSON.parse(JSON.stringify({[selectedDate]: {selected: true, disableTouchEvent: true, selectedDotColor: Colors.accent}}))}
                 theme={getTheme()}
                 renderHeader={renderCalendarHeader}
-
+                hideDayNames={true}
             />
         </View>
     );
@@ -171,18 +171,29 @@ function dropdownRenderRow (rowData, rowID, highlighted){
 export default QPCalendar;
 
 const styles = StyleSheet.create({
+    calendarHeaderContainer: {
+        flexDirection:'row',
+        flex:1
+    },
     calendarHeader: {
         flex:1,
         height: 1.5*MarginConstants.tab4,
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'flex-start',
+        paddingLeft: PaddingConstants.halfTab
+    },
+    calendarArrowView: {
+        marginRight: MarginConstants.tab2,
+        flexDirection:'row',
+        alignItems: 'center'
     },
     dateTitle: {
         color: Colors.primary,
         fontFamily: FontFamily.regular,
         fontSize: TextSizes.secondary,
         textAlignVertical: 'center',
+        textAlign: 'right',
     },
     modelDropdown: {
         minHeight: MarginConstants.tab3,
@@ -207,6 +218,5 @@ const styles = StyleSheet.create({
         position:'absolute',
         left: 80,
         top:12
-
     }
 });
