@@ -1,23 +1,18 @@
-import {
-    Image,
-    ImageBackground,
-    Platform,
-    View,
-    SafeAreaView, Keyboard, KeyboardAvoidingView, ScrollView
-} from 'react-native';
-import React, {useState, useEffect, useRef} from 'react';
+import {Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, ScrollView, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import DeviceInfo from 'react-native-device-info';
 import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import {connect} from 'react-redux';
-import {showLoading, clearError} from '../../redux/actions/index';
+import {clearError, showLoading} from '../../redux/actions/index';
 import {doLogin} from '../../redux/actions/login.actions';
 import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
 import {Colors} from '../../styles/color.constants';
 import {showMessage} from 'react-native-flash-message';
 import QPSpinner from '../../widgets/QPSpinner';
+import SafeAreaView from 'react-native-safe-area-view';
 
 const stringConst = require('../../config/locales/en');
 
@@ -28,6 +23,7 @@ const Login = props => {
     const [userData, setUserData] = useState({
         email: '',
         password: '',
+        accessCode:''
     });
 
     const [validation, setValidation] = useState('');
@@ -74,7 +70,7 @@ const Login = props => {
         Keyboard.dismiss();
         if (checkValidation()) {
             let data = {
-                accessCode: props.route.params.accessCode,
+                accessCode: userData.accessCode,
                 emailAddress: userData.email,
                 password: userData.password,
                 platform: Platform.OS,
@@ -101,7 +97,10 @@ const Login = props => {
 
     const onForgotPasswordPress = () => {
         Keyboard.dismiss();
-        props.navigation.navigate('ForgotPassword');
+        props.navigation.navigate('ForgotPassword', {
+            email: userData.email,
+            accessCode: userData.accessCode,
+        });
     };
 
     const handleEmail = text => {
@@ -122,17 +121,27 @@ const Login = props => {
         }
     };
 
+    const handleAccessCode = text => {
+        if (userData.accessCode !== text) {
+            setUserData({
+                ...userData,
+                accessCode: text,
+            });
+        }
+    };
+
     let renderSpinnerLoginButton = () => {
         return props.isLoading ?
-            <View style={loginStyles.nextButton}>
+            <View style={loginStyles.signInButton}>
                 <QPSpinner spinnerColor={Colors.white}/>
             </View>
             :
             <QPButton
                 testID='SignInButton'
-                style={loginStyles.nextButton}
+                style={loginStyles.signInButton}
                 onPress={onSignInPress}
                 buttonText={stringConst.signIn}
+                textStyle={loginStyles.signInText}
             />
     };
 
@@ -149,15 +158,14 @@ const Login = props => {
                                           android: -200
                                       })}
                                       enabled>
-                    <View style={loginStyles.logo}>
-                        <Image
-                            style={loginStyles.logoImage}
-                            resizeMode="contain"
-                            source={require('../../config/images/whiteCXLogo.png')}
-                        />
-                    </View>
-                    <View style={loginStyles.textFieldContainer}>
-
+                    <View style={{flex:1}}>
+                        <View style={loginStyles.logo}>
+                            <Image
+                                style={loginStyles.logoImage}
+                                resizeMode="contain"
+                                source={require('../../config/images/cx-logo.png')}
+                            />
+                        </View>
                         <QPTextField
                             testID='emailTextField'
                             autofocus={false}
@@ -177,7 +185,7 @@ const Login = props => {
                             secureText={true}
                             label={stringConst.password}
                             defaultValue={''}
-                            style={loginStyles.passwordInput}
+                            style={loginStyles.emailInput}
                             onEndEdit={handlePassword}
                             onChange={handlePassword}
                             onSubmitEditing={() => {
@@ -187,15 +195,29 @@ const Login = props => {
                             }}
                             value={userData.password}
                         />
-                        {renderSpinnerLoginButton()}
+                        <QPTextField
+                            testID='companyCodeTextField'
+                            defaultValue={''}
+                            label={stringConst.companyCode}
+                            style={loginStyles.emailInput}
+                            onChange={handleAccessCode}
+                            onEndEdit={handleAccessCode}
+                            onSubmitEditing={() => {
+                                textFieldTimer = setTimeout(() => {
+                                    Keyboard.dismiss()
+                                }, 5);
+                            }}
+                            value={userData.accessCode}
+                        />
                         <QPButton
                             style={loginStyles.forgotPswdButton}
                             onPress={onForgotPasswordPress}
-                            textStyle={loginStyles.nextText}
+                            textStyle={loginStyles.forgotPasswordText}
                             buttonText={stringConst.forgotPassword}
                         />
                     </View>
                 </KeyboardAvoidingView>
+                {renderSpinnerLoginButton()}
             </ScrollView>
         );
     };
@@ -203,9 +225,9 @@ const Login = props => {
     return (
         <ImageBackground
             resizeMode={'cover'}
-            source={require('../../config/images/background_inverted.png')}
+            source={require('../../config/images/background1.png')}
             style={loginStyles.container}>
-            <SafeAreaView>
+            <SafeAreaView forceInset={{top: 'always',bottom:'never'}} style={loginStyles.safeArea}>
                 {renderSignTextFieldAndButton()}
             </SafeAreaView>
         </ImageBackground>

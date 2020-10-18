@@ -44,10 +44,10 @@ const TicketWidget = props => {
   },[props.ticketDetails]);
 
   let onPress = () => {
-    let params = {
-      'ticketID': props.item.ticketID
-    };
-    props.getTicketDetails(params)
+    // let params = {
+    //   'ticketID': props.item.ticketID
+    // };
+    // props.getTicketDetails(params)
   };
 
   let renderReadMoreView = () => {

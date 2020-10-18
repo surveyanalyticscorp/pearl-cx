@@ -1,19 +1,21 @@
-import {Platform, StyleSheet, Dimensions} from 'react-native';
+import {Dimensions, Platform, StyleSheet} from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';
-import {buttonColors, Colors, textColors} from '../../styles/color.constants';
+import {Colors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
-const screen = Dimensions.get('screen');
-let { height, width }= Dimensions.get('window');
 
+let { width }= Dimensions.get('window');
 
 export const loginStyles = StyleSheet.create({
+  safeArea:{
+    flex:1
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: PaddingConstants.tab4
+    paddingTop: PaddingConstants.tab2
   },
   scrollContainer: {
     flexGrow: 1,
@@ -26,52 +28,32 @@ export const loginStyles = StyleSheet.create({
     alignItems: 'center',
   },
   emailInput: {
-    width: screen.width / 1.1,
-    height: MarginConstants.tab3,
-    marginTop: MarginConstants.tab2,
-    marginBottom: MarginConstants.tab2,
-    paddingHorizontal: MarginConstants.halfTab,
-  },
-  passwordInput: {
-    width: screen.width / 1.1,
-    height: MarginConstants.tab3,
-    marginTop: MarginConstants.tab1,
+    width: width / 1.05,
+    height: MarginConstants.tab4,
     marginBottom: MarginConstants.tab3,
-    paddingHorizontal: MarginConstants.halfTab,
+    paddingHorizontal: MarginConstants.tab1,
   },
-  nextButton: {
-    width: '90%',
+  signInButton: {
     height: MarginConstants.tab4,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: MarginConstants.tab4,
-    backgroundColor: buttonColors.backgroundColor,
+    backgroundColor: Colors.accent,
+    marginBottom: MarginConstants.tab3
   },
-  nextText: {
-    alignSelf: 'flex-end',
-    color: textColors.primary,
-    fontFamily: FontFamily.semiBold,
-    fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
+  signInText: {
+    color: Colors.white,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.largeText
+  },
+  forgotPasswordText: {
+    alignSelf: 'center',
+    color: Colors.accent,
+    fontFamily: FontFamily.regular,
+    fontSize: Platform.isPad ? TextSizes.largeText : TextSizes.primary,
   },
   forgotPswdButton: {
-    width: '90%',
-    height: 40,
-    alignItems: 'flex-end',
+    height: MarginConstants.tab4,
     justifyContent: 'center',
-    marginTop: MarginConstants.tab1,
-    backgroundColor: Colors.fullTransparent,
-  },
-  errorMessageContainer: {
-    flex: 1,
-    alignItems: 'center',
     marginTop: MarginConstants.tab2,
   },
-  errorMessage: {
-    fontSize: TextSizes.secondary,
-    marginHorizontal: MarginConstants.tab2,
-    color: 'red',
-  },
-  textFieldContainer: {
-    alignItems: 'center',
-  }
 });

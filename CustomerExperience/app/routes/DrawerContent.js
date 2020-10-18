@@ -7,9 +7,9 @@ import {
   TouchableWithoutFeedback,
   Text, Alert
 } from 'react-native';
-import {Caption} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Colors, textColors} from '../styles/color.constants';
+import FontIcon from 'react-native-vector-icons/FontAwesome5';
+import {Colors} from '../styles/color.constants';
 import AsyncStorage from '@react-native-community/async-storage';
 import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
@@ -17,9 +17,11 @@ import {MarginConstants} from '../styles/margin.constants';
 import {clearUserInfo} from '../redux/actions';
 import {connect} from 'react-redux';
 import {ASYNC_USER_CREDENTIALS} from '../api/Constant';
+import {Sizes} from '../styles/Size.constant';
+import {PaddingConstants} from '../styles/padding.constants';
+import StringUtils from '../Utils/StringUtils';
 
 const DrawerContent = props => {
-  const [openDropper, setOpenDropper] = useState(false);
   const [userCredentials, setUserCredentials] = useState('');
   const [logoutAlert, setLogoutAlert] = useState(false);
 
@@ -32,51 +34,44 @@ const DrawerContent = props => {
   const renderDrawerButtons = () => {
     return (
         <View>
+            <TouchableWithoutFeedback
+                onPress={() => {
+                    props.navigation.navigate('Dashboard');
+                }}>
+                <View style={styles.drawerRow}>
+                    <Icon size={1.3*Sizes.icons} color={Colors.accent} name={'dashboard'} style={styles.rowIcon}/>
+                    <Text style={styles.labelStyle}>Dashboard</Text>
+                </View>
+            </TouchableWithoutFeedback>
           <TouchableWithoutFeedback
               onPress={() => {
                 props.navigation.navigate('Feedback');
               }}>
             <View style={styles.drawerRow}>
-              <Image
-                  source={require('../config/images/feedback_icon.png')}
-                  resizeMode='contain'
-                  style={styles.rowIcon}
-              />
-              <Caption style={styles.labelStyle}>Feedback</Caption>
+              <Icon size={1.3*Sizes.icons} color={Colors.accent} name={'feedback'} style={styles.rowIcon}/>
+              <Text style={styles.labelStyle}>Feedback</Text>
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback
               onPress={() => {
-                props.navigation.navigate('Dashboard');
+                props.navigation.navigate('Settings');
               }}>
             <View style={styles.drawerRow}>
-              <Image
-                  source={require('../config/images/dashboard_icon.png')}
-                  resizeMode='contain'
-                  style={styles.rowIcon}
-              />
-              <Caption style={styles.labelStyle}>Dashboard</Caption>
+              <Icon size={1.3*Sizes.icons} color={Colors.accent} name={'settings'} style={styles.rowIcon}/>
+              <Text style={styles.labelStyle}>Settings</Text>
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback
-              onPress={async () => {
+              onPress={() => {
                 setLogoutAlert(true);
               }}>
             <View style={styles.drawerRow}>
-              <Image
-                  source={require('../config/images/logout.png')}
-                  resizeMode='contain'
-                  style={styles.rowIcon}
-              />
-              <Caption style={styles.labelStyle}>Logout</Caption>
+              <FontIcon size={1.3*Sizes.icons} color={Colors.accent} name={'sign-out-alt'} style={styles.rowIcon}/>
+              <Text style={styles.labelStyle}>Logout</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>
     );
-  };
-
-  let getExpandIcon = () => {
-    return openDropper ? 'expand-less' : 'expand-more';
   };
 
   const renderDialog = () => {
@@ -97,8 +92,8 @@ const DrawerContent = props => {
                 },
                 {   text: 'No',
                   onPress: () => {
-                  setLogoutAlert(false)
-                }
+                    setLogoutAlert(false)
+                  }
                 }
               ],
               { cancelable: false }
@@ -107,32 +102,10 @@ const DrawerContent = props => {
     }
     return <View/>
   };
-
-  const renderDropperView = () => {
-    let firstName = props.userInfo.firstName;
-    let lastName = props.userInfo.lastName;
-    let organizationName = props.userInfo.organizationName;
-    return (
-        <View style={{marginTop: MarginConstants.tab1}}>
-          {getDropperView('person', ' ' + firstName + ' ' + lastName)}
-          {getDropperView('business', organizationName)}
-          {getDropperView('email', userCredentials ? userCredentials.email : '')}
-        </View>
-    );
-  };
-
-  let getDropperView = (icon, text) => {
-    return (
-        <View style={styles.dropperView}>
-          <Icon name={icon} size={20} color={Colors.black} />
-          <Text style={styles.dropperText}>{' ' + text}</Text>
-        </View>
-    );
-  };
-
+    let username = props.userInfo.firstName + ' '+ props.userInfo.lastName;
+    let titleText = StringUtils.isNotEmpty(username) ? username : userCredentials ? userCredentials.email : '';
   return (
-      <View
-          style={styles.container}>
+      <View style={styles.container}>
         <ImageBackground
             resizeMode={'cover'}
             source={require('../config/images/drawerBanner.png')}
@@ -140,30 +113,13 @@ const DrawerContent = props => {
           <View style={{flex: 1}}>
             <Image
                 style={styles.image}
-                source={require('../config/images/login_logo.png')}
+                source={require('../config/images/cx-logo.png')}
                 resizeMode='contain'
             />
             <View style={{marginTop: MarginConstants.halfTab}}>
-              <Caption style={styles.emailCaption}>
-                {userCredentials ? userCredentials.email : ''}
-              </Caption>
-              <Caption style={styles.companyCaptions}>
-                {props.userInfo ? props.userInfo.organizationName : ''}
-              </Caption>
-              <TouchableWithoutFeedback
-                  onPress={() => {
-                    setOpenDropper(!openDropper);
-                  }}>
-                <View style={styles.expandIcon}>
-                  <Icon
-                      name={getExpandIcon()}
-                      size={30}
-                      color={Colors.secondary}
-                  />
-                </View>
-              </TouchableWithoutFeedback>
+              <Text style={styles.emailCaption}>{titleText}</Text>
             </View>
-            {openDropper ? renderDropperView() : renderDrawerButtons()}
+            {renderDrawerButtons()}
           </View>
           {renderDialog()}
         </ImageBackground>
@@ -204,43 +160,24 @@ const styles = StyleSheet.create({
     height: MarginConstants.tab4 * 4,
   },
   labelStyle: {
-    marginLeft: MarginConstants.tab3,
-    fontFamily: FontFamily.light,
+    fontFamily: FontFamily.regular,
     fontSize: TextSizes.primary,
+    color: Colors.primary,
+    paddingLeft: PaddingConstants.tab1
   },
   emailCaption: {
-    fontFamily: FontFamily.light,
-    fontSize: TextSizes.secondary,
-  },
-  companyCaptions: {
-    fontFamily: FontFamily.light,
-    fontSize: TextSizes.secondary,
-  },
-  drawerSection: {
-    marginTop: 15,
-    backgroundColor: Colors.transparent,
-  },
-  dropperText: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
-    color: textColors.secondary,
-  },
-  dropperView: {
-    flexDirection: 'row',
-    height: MarginConstants.tab4,
+    color: Colors.primary,
+      textAlign: 'center'
   },
   drawerRow: {
     flexDirection: 'row',
-    marginTop: MarginConstants.tab2
+    marginTop: MarginConstants.tab2,
+    justifyContent: 'flex-start',
+    alignItems: 'center'
   },
   rowIcon: {
-    width: 20,
-    height: 30,
-    tintColor: Colors.black
-  },
-  expandIcon: {
-    position: 'absolute',
-    right: 0,
-    top: 20
+    margin: MarginConstants.tab1
   }
 });

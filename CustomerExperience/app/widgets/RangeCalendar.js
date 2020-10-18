@@ -233,7 +233,7 @@ function DateCell(props) {
                 <Text style={styles.text}>{props.prefix}</Text>
                 <View style={styles.textDateContainer}>
                     <View style={styles.textContainer}>
-                        <Text style={[styles.text,{color: props.isSelected ? Colors.secondaryAccent : Colors.secondary}]}>{displayDate}</Text>
+                        <Text style={[styles.text,{color: props.isSelected ? Colors.accent : Colors.secondary}]}>{displayDate}</Text>
                     </View>
                 </View>
 

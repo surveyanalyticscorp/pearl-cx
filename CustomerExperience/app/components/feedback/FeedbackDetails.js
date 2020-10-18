@@ -1,6 +1,6 @@
 import React from 'react';
 import {Dimensions, StyleSheet, View} from 'react-native';
-import FeedbackCell from '../view/FeedbackCells';
+import FeedbackCell from './FeedbackCells';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';

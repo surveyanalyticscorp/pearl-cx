@@ -4,6 +4,8 @@ import {Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
+import DeviceInfo from 'react-native-device-info';
+
 export const dashboardStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -14,21 +16,6 @@ export const dashboardStyles = StyleSheet.create({
   imageBackgroundContainer: {
     flex: 1,
     justifyContent: 'center',
-  },
-  gauge: {
-    position: 'absolute',
-    width: 100,
-    height: MarginConstants.tab3 * 1.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    left: MarginConstants.tab3,
-    top: MarginConstants.tab4 * 1.5,
-  },
-  gaugeText: {
-    backgroundColor: 'transparent',
-    color: textColors.accent,
-    fontFamily: FontFamily.semiBold,
-    fontSize: TextSizes.donutPercentText,
   },
   npmGaugeText: {
     backgroundColor: 'transparent',
@@ -57,11 +44,6 @@ export const dashboardStyles = StyleSheet.create({
     marginVertical: MarginConstants.tab4,
     paddingVertical: PaddingConstants.tab2,
   },
-  // ticketText: {
-  //   color: Colors.white,
-  //   fontFamily: FontFamily.regular,
-  //   fontSize: TextSizes.largeText,
-  // },
   listViewContainer: {
     backgroundColor: Colors.white,
     marginHorizontal: MarginConstants.tab2,
@@ -72,13 +54,15 @@ export const dashboardStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems:'center',
     paddingHorizontal: PaddingConstants.tab2,
-    marginVertical: PaddingConstants.tab1,
+    marginTop:MarginConstants.tab2,
+    marginBottom: MarginConstants.tab1,
     backgroundColor: Colors.darkerGrey,
     marginHorizontal: MarginConstants.tab1,
     flexDirection: 'row',
   },
   list:{
-    marginHorizontal: MarginConstants.tab1
+    marginHorizontal: MarginConstants.tab1,
+    marginBottom: MarginConstants.tab2
   },
   listTitle: {
     color: Colors.primary,
@@ -118,8 +102,8 @@ export const dashboardStyles = StyleSheet.create({
 
   dashboardTitle: {
     color: Colors.primary,
-    fontFamily: FontFamily.medium ,
-    fontSize: TextSizes.largeText,
+    fontFamily: FontFamily.regular ,
+    fontSize: TextSizes.largeText + 1,
     marginVertical: MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab2
   },
@@ -132,13 +116,13 @@ export const dashboardStyles = StyleSheet.create({
   ticketContainer: {
     flex: 3,
     backgroundColor: Colors.white,
-    height: 3*MarginConstants.tab4,
+    height: 4*MarginConstants.tab4,
     justifyContent: 'center',
   },
   ticketText: {
-    color: Colors.secondaryAccent,
+    color: Colors.accent,
     fontFamily: FontFamily.semiBold,
-    fontSize: TextSizes.primary,
+    fontSize: TextSizes.largeText,
     marginBottom:5,
     textAlign: 'center',
   },
@@ -157,40 +141,39 @@ export const dashboardStyles = StyleSheet.create({
   ticketType:{
     paddingLeft: PaddingConstants.halfTab,
     color: Colors.primary,
-    fontFamily: FontFamily.light
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.secondary,
   },
   npsView: {
     position: 'absolute',
-    top: '38%',
+    left: '30%',
+    top: DeviceInfo.isTablet() ? '30%' : '35%',
+    width: 3*MarginConstants.tab4,
+    paddingHorizontal: PaddingConstants.halfTab
   },
   npsPercentText: {
     color: Colors.primary,
-    fontSize: TextSizes.donutPercentText,
-    fontFamily: FontFamily.semiBold,
+    fontSize: 1.2*TextSizes.donutPercentText,
+    fontFamily: FontFamily.bold,
     textAlign:'center',
-    left:'100%',
-    justifyContent:'center',
-    alignItems:'center',
   },
   npsText: {
     color: Colors.primary,
     fontSize: TextSizes.primary,
     fontFamily: FontFamily.semiBold,
-    paddingLeft: PaddingConstants.tab3,
     textAlign:'center',
-    left:'75%',
   },
   chartContainer: {
     backgroundColor: Colors.white,
-    height: MarginConstants.tab4 * 5,
+    height: DeviceInfo.isTablet() ? MarginConstants.tab4 * 6 : MarginConstants.tab4 * 5,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    marginHorizontal: MarginConstants.tab2,
   },
   donut: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 3*MarginConstants.tab4,
+    marginTop: MarginConstants.tab4,
+    paddingHorizontal: PaddingConstants.tab2,
   },
   donutInfoContainer: {
     marginVertical: MarginConstants.tab1,
@@ -201,6 +184,7 @@ export const dashboardStyles = StyleSheet.create({
     alignItems: 'center',
     flexDirection:'row',
     justifyContent: 'space-between',
+    marginHorizontal: MarginConstants.tab1,
   },
   productText: {
     color: Colors.primary,

@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {TextField} from 'react-native-material-textfield';
 import {Colors} from '../styles/color.constants';
 import StringUtils from '../Utils/StringUtils';
+import {TextSizes} from '../styles/textsize.constants';
 
 const QPTextField = props => {
   const fieldRef = React.createRef();
@@ -46,7 +47,7 @@ const QPTextField = props => {
         }}
         name={icon}
         size={25}
-        color={Colors.white}
+        color={Colors.textTintColor}
         onPress={changePwdType}
       />
     );
@@ -59,7 +60,9 @@ const QPTextField = props => {
         autoCapitalize={'none'}
         autoCorrect={false}
         autoFocus={props.autofocus}
-        tintColor={props.tintColor || Colors.textTintColor}
+        tintColor={props.tintColor || Colors.accent}
+        textColor={props.textColor || Colors.primary}
+        baseColor={props.baseColor || Colors.primary}
         label={label}
         defaultValue={defaultValue}
         secureTextEntry={secureText}
@@ -70,6 +73,8 @@ const QPTextField = props => {
         ref={fieldRef}
         clearButtonMode={'always'}
         placeholder={props.placeholder}
+        fontSize={TextSizes.primary}
+        labelFontSize={TextSizes.secondary}
       />
       {props.secureText && renderVisibility()}
     </View>

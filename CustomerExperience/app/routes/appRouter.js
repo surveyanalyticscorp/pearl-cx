@@ -32,10 +32,13 @@ import TicketOverview from '../components/dashboard/ticketManagement/TicketOverv
 import {MarginConstants} from '../styles/margin.constants';
 import TicketComments from '../components/dashboard/ticketManagement/TicketComments';
 import UpdateTicket from '../components/dashboard/ticketManagement/UpdateTicket';
+import DashboardDateFilter from '../components/dashboard/components/DashboardDateFilter';
+import AppSettings from '../components/settings/AppSettings';
+import AccountDetails from '../components/settings/AccountDetails';
+import {Sizes} from '../styles/Size.constant';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
-const FeedbackTab = createMaterialTopTabNavigator();
 const DetractorTicketsTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
 
@@ -62,7 +65,7 @@ const AppRouter = props => {
                     onPress={() => {
                         navigation.dispatch(DrawerActions.toggleDrawer());
                     }}>
-                    <Icon name="menu" size={20} color="white"/>
+                    <Icon name="menu" size={Sizes.icons} color="white"/>
                 </TouchableOpacity>
             </View>
         );
@@ -118,6 +121,37 @@ const AppRouter = props => {
         );
     };
 
+    const SaveDashboardDate = (props) => {
+        return (
+            <View style={[styles.rightHeaderButton,{marginHorizontal: 1.5*MarginConstants.tab1}]}>
+                <TouchableOpacity
+                    onPress={() => {
+                        props.route.params.saveRange();
+                    }}>
+                    <Text style={styles.saveText}> Save </Text>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    const DateRangeTab = createMaterialTopTabNavigator();
+
+    const DateRangeTabStack = props => (
+        <DateRangeTab.Navigator tabBarOptions={{
+            labelStyle: {color: Colors.primary, width: width/2, fontSize: TextSizes.secondary},
+            indicatorStyle: {backgroundColor: Colors.accent},
+            style:{backgroundColor: Colors.white, width: '100%'},
+            initialLayout: {width: Dimensions.get('window').width},
+            tabStyle:{height: 1.3*PaddingConstants.tab4}
+        }}
+                                lazy
+                                keyboardDismissMode={'auto'}
+        >
+            <DateRangeTab.Screen name="Month" component={DashboardDateFilter} initialParams={{range: props.route.params.range, setRange: props.route.params.setRange}}/>
+            <DateRangeTab.Screen name="Custom" component={DashboardDateFilter} initialParams={{range: props.route.params.range, setRange: props.route.params.setRange}}/>
+        </DateRangeTab.Navigator>
+    );
+
     const TicketLogTabStack = props => (
         <TicketLogTab.Navigator tabBarOptions={{
             labelStyle: {color: Colors.primary, width: width/3, fontSize: TextSizes.semiSecondary},
@@ -133,23 +167,6 @@ const AppRouter = props => {
             <TicketLogTab.Screen name="Comments" component={TicketComments} initialParams={{data: props.route.params.item}}/>
             <TicketLogTab.Screen name="Logs" component={TicketComments} initialParams={{data: props.route.params.item}}/>
         </TicketLogTab.Navigator>
-    );
-
-    const FeedbackTabStack = props => (
-        <FeedbackTab.Navigator tabBarOptions={{
-            labelStyle: {color: Colors.primary, width: width/4, fontSize: TextSizes.secondary},
-            indicatorStyle: {backgroundColor: Colors.accent},
-            style:{backgroundColor: Colors.white, width: '100%'},
-            initialLayout: {width: Dimensions.get('window').width},
-            tabStyle:{height: 1.7*PaddingConstants.tab4}
-        }}
-                       keyboardDismissMode={'auto'}
-        >
-            <FeedbackTab.Screen name="All" component={Feedback} />
-            <FeedbackTab.Screen name="Detractor" component={Feedback} />
-            <FeedbackTab.Screen name="Passive" component={Feedback} />
-            <FeedbackTab.Screen name="Promoter" component={Feedback} />
-        </FeedbackTab.Navigator>
     );
 
     const DetractorTicketsTabStack = props => (
@@ -173,11 +190,10 @@ const AppRouter = props => {
         <RootStack.Navigator>
             <RootStack.Screen
                 name="Feedback"
-                component={FeedbackTabStack}
+                component={Feedback}
                 options={({ navigation, route }) => ({
-            headerLeft: props => <MenuIcon />,
-            headerRight: props => <Calendar {...props} route={route}/>,
-        })}
+                    headerLeft: props => <MenuIcon />,
+                })}
             />
             <RootStack.Screen
                 name="Feedback Details"
@@ -193,6 +209,14 @@ const AppRouter = props => {
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                 })}
             />
+            <RootStack.Screen
+                name="Date Range"
+                component={DateRangeTabStack}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft />,
+                    headerRight: props => <SaveDashboardDate {...props} route={route}/>
+                })}
+            />
 
         </RootStack.Navigator>
     );
@@ -204,7 +228,6 @@ const AppRouter = props => {
                 component={CxDashboard}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon/>,
-                    headerRight: props => <Calendar {...props} route={route}/>,
                 })}
             />
             <RootStack.Screen
@@ -237,6 +260,33 @@ const AppRouter = props => {
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                 })}
             />
+            <RootStack.Screen
+                name="Date Range"
+                component={DateRangeTabStack}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft />,
+                    headerRight: props => <SaveDashboardDate {...props} route={route}/>
+                })}
+            />
+        </RootStack.Navigator>
+    );
+
+    const settingStack = (props) => (
+        <RootStack.Navigator>
+            <RootStack.Screen
+                name="Settings"
+                component={AppSettings}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <MenuIcon/>,
+                })}
+            />
+            <RootStack.Screen
+                name="Account Details"
+                component={AccountDetails}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft />,
+                })}
+            />
         </RootStack.Navigator>
     );
 
@@ -245,8 +295,9 @@ const AppRouter = props => {
             {authToken ? <Drawer.Navigator
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
-                    <Drawer.Screen name="Feedback" children={feedbackStack}/>
                     <Drawer.Screen name="Dashboard" component={dashboardStack}/>
+                    <Drawer.Screen name="Feedback" component={feedbackStack}/>
+                    <Drawer.Screen name="Settings" component={settingStack}/>
                 </Drawer.Navigator>
                 :
                 <SignInStack/>
@@ -272,10 +323,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginLeft: 20
     },
-    editText: {
+    saveText: {
         color: Colors.white,
         textAlignVertical:'center',
-        fontSize: TextSizes.largeText,
+        fontSize: TextSizes.primary,
         fontFamily: FontFamily.regular,
         paddingTop:5,
         paddingLeft:5,

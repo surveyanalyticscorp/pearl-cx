@@ -1,40 +1,38 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {
-    FlatList,
-    RefreshControl,
-    ScrollView,
-    Text,
-    TouchableWithoutFeedback,
-    View,
-} from 'react-native';
+import {FlatList, RefreshControl, ScrollView, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import {showLoading} from '../../redux/actions/index';
-import {DASHBOARD_RANGE, getDashboardContent, setDashboardRangeFilter} from '../../redux/actions/dashboard.actions';
+import {getDashboardContent} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
-import {isObjectEmpty} from '../../Utils/Utility';
+import {isObjectEmpty, usePrevious} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
-import RangeCalendar from '../../widgets/RangeCalendar';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
-import AsyncStorage from '@react-native-community/async-storage';
 import {MarginConstants} from '../../styles/margin.constants';
-import Icomoon from '../../config/Icons/icon-native'
-import {VictoryPie} from 'victory-native'
+import Icomoon from '../../config/Icons/icon-native';
+import {VictoryPie} from 'victory-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import {Sizes} from '../../styles/Size.constant';
+import StringUtils from '../../Utils/StringUtils';
+import FilterHeader from '../FilterHeader';
+import {getSelectedRange} from '../../Utils/DateFilterUtility';
+import {setRangeFilter} from '../../redux/actions';
 
 const wait = timeout => {
     return new Promise(resolve => {
         setTimeout(resolve, timeout);
     });
 };
+
 const CxDashboard = props => {
-    let [callApi, setCallAPI] = useState(true);
+    let [callApi, setCallAPI] = useState(false);
     let [refreshing, setRefreshing] = useState(false);
-    let [calendar, setCalendar] = useState(false);
+    let [comparision, setComparision] = useState(false);
+
+    let prevRangeRef = usePrevious(props.range);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -42,13 +40,43 @@ const CxDashboard = props => {
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
-    let openDashboardCalendar = () => {
-        setCalendar(true)
-    };
+    useEffect(() => {
+        if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate)) {
+            let selectedRange = getSelectedRange({type:1});
+            props.setRange({
+                type: 1,
+                startDate: selectedRange.startDate,
+                endDate: selectedRange.endDate
+            });
+            let data = {
+                startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
+                endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT)
+            };
+            props.getDashboardContent(props.authToken, data);
+        } else {
+            getDashboardData();
+        }
+    },[]);
 
     useEffect(() => {
-        props.navigation.setParams({'openCalendar': openDashboardCalendar});
-    }, []);
+        if(prevRangeRef && prevRangeRef !== props.range) {
+            getDashboardData();
+        }
+    },[props.range]);
+
+    useEffect(() => {
+        if (callApi && StringUtils.isNotEmpty(props.range.startDate)) {
+            getDashboardData();
+            setCallAPI(false);
+        }
+    }, [callApi]);
+
+    useEffect(() => {
+        if(comparision) {
+            getDashboardData();
+            setComparision(false)
+        }
+    },[comparision]);
 
     useEffect(() => {
         if(props.dashboardData.DetractorTicketsCount){
@@ -56,71 +84,12 @@ const CxDashboard = props => {
         }
     },[props.dashboardData.DetractorTicketsCount]);
 
-    useEffect(() => {
-
-        if (callApi) {
-
-            if(!isObjectEmpty(props.range)) {
-                let selectedRange = setSelectedRange(props.range.type);
-                let startDate = props.range.type !== 4 ? selectedRange.startDate : props.range.startDate;
-                let endDate = props.range.type !== 4 ? selectedRange.endDate : props.range.endDate;
-                let data = {
-                    startDate: moment(startDate, DMYFORMAT).format(YMDFORMAT),
-                    endDate: moment(endDate, DMYFORMAT).format(YMDFORMAT)
-                };
-                props.getDashboardContent(props.authToken, data);
-                setCallAPI(false);
-            }
-        }
-    }, [callApi]);
-
-    let setSelectedRange = (type) => {
-        let today = new Date();
-        let month = today.getMonth() + 1;
-        let tempEndDate = today.getDate()+"/"+month+"/"+today.getFullYear();
-        switch (type) {
-            case 1:
-                let tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(30,'days').format(DMYFORMAT);
-                return {'startDate': tempStartDate, 'endDate': tempEndDate};
-            case 2:
-                tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(3,'months').format(DMYFORMAT);
-                return {'startDate': tempStartDate, 'endDate': tempEndDate};
-            case 3:
-                tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(6,'months').format(DMYFORMAT);
-                return {'startDate': tempStartDate, 'endDate': tempEndDate};
-            default:
-                break;
-
-        }
-    };
-
-    const renderCalendarView = () => {
-
-        let selectedRange = setSelectedRange(props.range.type);
-        let startDate = props.range.type !== 4 ? selectedRange.startDate : props.range.startDate;
-        let endDate = props.range.type !== 4 ? selectedRange.endDate : props.range.endDate;
-
-        return <RangeCalendar
-            showCalendar={calendar}
-            closeCalendar={() => {
-                setCalendar(false);
-            }}
-            startDate={startDate}
-            endDate={endDate}
-            selectedType={props.range.type}
-
-            onSubmit={(type, startDate, endDate) => {
-                let range = {
-                    type: type,
-                    startDate: startDate,
-                    endDate: endDate
-                };
-                setCalendar(false);
-                props.setRange(range);
-                setCallAPI(true);
-                AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(range))
-            }}
-        />;
+    let getDashboardData = () => {
+        let data = {
+            startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+            endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+        };
+        props.getDashboardContent(props.authToken, data);
     };
 
     const renderDonutChart = () => {
@@ -135,15 +104,15 @@ const CxDashboard = props => {
             { y: 100, x: ''}, //for empty nps chart
         ];
         let victoryPieColorScale = responseCount !== 0 ? [Colors.promoter, Colors.passive, Colors.detractor] : [Colors.primary];
-            return (
-                <View style={dashboardStyles.chartContainer}>
-                    <View style={dashboardStyles.donut}>
+        return (
+            <View style={dashboardStyles.chartContainer}>
+                <View style={dashboardStyles.donut}>
                     <VictoryPie
                         data={victoryPieData}
                         width={5*MarginConstants.tab4}
                         height={6*MarginConstants.tab4}
-                        innerRadius={2.5*MarginConstants.tab4}
-                        radius={2.2*MarginConstants.tab4}
+                        innerRadius={2.3*MarginConstants.tab4}
+                        radius={2.1*MarginConstants.tab4}
                         style={{
                             labels: {
                                 fill: 'transparent'
@@ -153,14 +122,14 @@ const CxDashboard = props => {
                         endAngle={-90}
                         startAngle={90}
                     />
-                    </View>
                     <View style={dashboardStyles.npsView}>
-                        <Text style={dashboardStyles.npsPercentText}>{data.npsPercentage}</Text>
-                        <Text style={dashboardStyles.npsText}>NPS</Text>
+                        <Text style={[dashboardStyles.npsPercentText]}>{data.npsPercentage}</Text>
+                        <Text style={[dashboardStyles.npsText]}>NPS</Text>
                     </View>
-                    {renderDonutInfoContainer(responseCount)}
                 </View>
-            );
+                {renderDonutInfoContainer(responseCount)}
+            </View>
+        );
     };
 
     let renderDonutInfoContainer = (responseCount) => {
@@ -171,18 +140,17 @@ const CxDashboard = props => {
     };
 
     let renderDonutInformation = (icon, title, count) => {
-      return (
-          <View style={dashboardStyles.responseView}>
-              <Text style={dashboardStyles.responseText}>{count}</Text>
-              <View style={dashboardStyles.separator}/>
-              <View style={dashboardStyles.ticketTypeContainer}>
-                  <Icon name={icon} size={15} color={Colors.borderColor}/>
-                  <Text style={dashboardStyles.response}>{title}</Text>
-              </View>
-          </View>
-      )
+        return (
+            <View style={dashboardStyles.responseView}>
+                <Text style={dashboardStyles.responseText}>{count}</Text>
+                <View style={dashboardStyles.separator}/>
+                <View style={dashboardStyles.ticketTypeContainer}>
+                    <Icon name={icon} size={Sizes.inlineIcons} color={Colors.borderColor}/>
+                    <Text style={dashboardStyles.response}>{title}</Text>
+                </View>
+            </View>
+        )
     };
-
 
     let renderTicketView = (ticketCount, icon, title) => {
         return (
@@ -199,11 +167,11 @@ const CxDashboard = props => {
                     });
                     props.navigation.dispatch(pushAction);
                 }}>
-                <View style={[dashboardStyles.ticketContainer,{marginHorizontal: icon === 'open' ? MarginConstants.tab2 : 0}]}>
+                <View style={[dashboardStyles.ticketContainer,{marginHorizontal: icon === 'open' ? MarginConstants.tab1 : 0}]}>
                     <Text  style={dashboardStyles.ticketText}>{ticketCount}</Text>
                     <View style={dashboardStyles.separator}/>
                     <View style={dashboardStyles.ticketTypeContainer}>
-                        <Icomoon name={icon} size={Sizes.icons} color= {Colors.borderColor}/>
+                        <Icomoon name={icon} size={Sizes.inlineIcons} color= {Colors.borderColor}/>
                         <Text style={dashboardStyles.ticketType}>{title}</Text>
                     </View>
                 </View>
@@ -247,7 +215,7 @@ const CxDashboard = props => {
 
     let renderRow = storeItem => {
         return (
-            <View style={dashboardStyles.row}>
+            <View style={[dashboardStyles.row, {backgroundColor: storeItem.item.storeName === props.dashboardData.primaryStoreName ? Colors.accentGradient : Colors.white}]}>
                 <Text style={dashboardStyles.productText}>{storeItem.item.storeName}</Text>
                 <Text style={dashboardStyles.productText}>{storeItem.item.NPSScore.npsPercentage}</Text>
             </View>
@@ -265,22 +233,22 @@ const CxDashboard = props => {
 
     let renderStoreNPSList = () => {
         let list = props.dashboardData.storeNPSList;
-            return (
-                <View style={dashboardStyles.listViewContainer}>
-                    <View style={dashboardStyles.list}>
-                        <FlatList
-                            data={list.sort((a, b) => b.NPSScore.npsPercentage - a.NPSScore.npsPercentage)}
-                            keyExtractor={item => item.filterName}
-                            renderItem={renderRow}
-                            onEndReachedThreshold={0.01}
-                            refreshing={false}
-                            ListEmptyComponent={renderNoDataFound}
-                            showsVerticalScrollIndicator={false}
-                            ListHeaderComponent={renderListHeader}
-                        />
-                    </View>
+        return (
+            <View style={dashboardStyles.listViewContainer}>
+                <View style={dashboardStyles.list}>
+                    <FlatList
+                        data={list.sort((a, b) => b.NPSScore.npsPercentage - a.NPSScore.npsPercentage)}
+                        keyExtractor={item => item.filterName}
+                        renderItem={renderRow}
+                        onEndReachedThreshold={0.01}
+                        refreshing={false}
+                        ListEmptyComponent={renderNoDataFound}
+                        showsVerticalScrollIndicator={false}
+                        ListHeaderComponent={renderListHeader}
+                    />
                 </View>
-            );
+            </View>
+        );
     };
 
     let renderSegmentTitle = (text) => {
@@ -308,16 +276,24 @@ const CxDashboard = props => {
     let renderDashboard = () => {
         return (
             <SafeAreaView forceInset={{bottom: 'never'}} style={dashboardStyles.container}>
-            <ScrollView
-                contentContainerStyle={dashboardStyles.scrollView}
-                refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                }>
-                <View style={dashboardStyles.container}>
-                    {renderDashboardContent()}
-                    {renderSpinner()}
-                </View>
-            </ScrollView>
+                <FilterHeader actionOnArrowClick = {() => {
+                    setComparision(true)
+                }}
+                              callDataAPI = {() => {
+                                  setCallAPI(true)
+                              }}
+                              {...props}
+                />
+                <ScrollView
+                    contentContainerStyle={dashboardStyles.scrollView}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }>
+                    <View style={dashboardStyles.container}>
+                        {renderDashboardContent()}
+                        {renderSpinner()}
+                    </View>
+                </ScrollView>
             </SafeAreaView>
         );
     };
@@ -332,7 +308,7 @@ const CxDashboard = props => {
         }
     };
 
-    return calendar ? renderCalendarView() : renderDashboard()
+    return renderDashboard()
 };
 
 const mapStateToProps = state => {
@@ -343,7 +319,7 @@ const mapStateToProps = state => {
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
         authToken: state.global.authToken,
-        range: state.dashboard.range
+        range: state.global.range
     };
 };
 
@@ -356,7 +332,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(showLoading(flag));
     },
     setRange: (range) => {
-        dispatch(setDashboardRangeFilter(range))
+        dispatch(setRangeFilter(range))
     }
 });
 
