@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import SafeAreaView from "react-native-safe-area-view";
 import {View, Text, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableWithoutFeedback} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
@@ -8,9 +8,15 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import ModalDropdown from '../../../widgets/drop-down/ModalDropdown';
 import {connect} from 'react-redux';
-import {getClosedLoopOwnerDetails, getClosedLoopSegmentDetails} from '../../../redux/actions/dashboard.actions';
+import {
+    getClosedLoopOwnerDetails,
+    getClosedLoopSegmentDetails,
+} from '../../../redux/actions/dashboard.actions';
 import ArrayUtils from '../../../Utils/ArrayUtils';
 import StringUtils from '../../../Utils/StringUtils';
+import {updateClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
+import {showLoading} from '../../../redux/actions';
+import QPSpinner from '../../../widgets/QPSpinner';
 
 function UpdateTicket(props) {
     let priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
@@ -18,13 +24,11 @@ function UpdateTicket(props) {
 
     let [comment, setComment] = useState('');
     let [priority, setPriority] = useState('');
-    let [status, setStatus] = useState(props.ticket.status);
+    let [status, setStatus] = useState('');
     let [segmentOptions, setSegmentOptions] = useState([]);
-    let [segment, setSegment] = useState('');
+    let [segment, setSegment] = useState(props.ticket.currentSegment);
     let [ownerOptions, setOwnerOptions] = useState([]);
-    let [owner, setOwner] = useState('');
-
-    let ref = useRef(null);
+    let [owner, setOwner] = useState(props.ticket.ticketOwner);
 
     let fetchClosedLoopSegments = () => {
         let params = {
@@ -35,13 +39,15 @@ function UpdateTicket(props) {
     };
 
     let fetchTicketOwners = () => {
-        if (StringUtils.isNotEmpty(segment)) {
+        let selectedSegmentId = props.ticket.originSegmentID;
+        if (StringUtils.isNotEmpty(segment) && ArrayUtils.isNotEmpty(segmentOptions)) {
             let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
-            let params = {
-                "segmentID": selectedSegment.segmentID
-            };
-            props.getClosedLoopOwners(props.authToken, params)
+            selectedSegmentId = selectedSegment.segmentID
         }
+        let params = {
+            "segmentID": selectedSegmentId
+        };
+        props.getClosedLoopOwners(props.authToken, params)
     };
 
     useEffect(() => {
@@ -50,10 +56,16 @@ function UpdateTicket(props) {
 
     useEffect(() => {
         setSegmentOptions(props.segments);
+        fetchTicketOwners();
     },[props.segments]);
 
     useEffect(() => {
-        fetchTicketOwners()
+        if(segment === props.ticket.currentSegment) {
+            setOwner(props.ticket.ticketOwner)
+        } else {
+            setOwner('')
+        }
+        fetchTicketOwners();
     },[segment]);
 
     useEffect(() => {
@@ -78,18 +90,17 @@ function UpdateTicket(props) {
         }
     };
 
-    let renderDropDown = (header, options) => {
+    let renderDropDown = (header, options, defaultText) => {
         return (
             <View>
                 <ModalDropdown
-                    ref={ref}
                     style={styles.modelDropdown}
                     textStyle={styles.dropdownText}
                     dropdownStyle={styles.dropdownStyle}
                     dropdownTextStyle={styles.dropdownText}
                     arrowIconColor={Colors.secondary}
                     options={options}
-                    defaultValue={'Select'}
+                    defaultValue={defaultText}
                     renderRow={dropdownRenderRow}
                     onSelect={(i) => {
                         setDataOnSelection(header, options, i)
@@ -99,12 +110,12 @@ function UpdateTicket(props) {
         )
     };
 
-    let renderField = (header, options) => {
+    let renderField = (header, options, defaultText) => {
         return (
             <View style={styles.row}>
                 <Text style={styles.rowText}> {header} </Text>
                 <View style={{position:'absolute', justifyContent: 'center', alignItems: 'center', right:10}}>
-                    {renderDropDown(header, options)}
+                    {renderDropDown(header, options, defaultText)}
                 </View>
             </View>
         )
@@ -122,15 +133,17 @@ function UpdateTicket(props) {
             return ownerOptions.map(item => item.ownerName)
         }
         return []
-    }
+    };
 
     let renderContainer = () => {
+        let ownerDefaultText = StringUtils.isEmpty(owner) ? 'Select' : owner;
+        let segmentDefaultText = StringUtils.isEmpty(segment) ? (StringUtils.isNotEmpty(props.ticket.currentSegment) ? props.ticket.currentSegment : 'Select') : segment;
         return (
             <View style={styles.fieldContainer}>
-                {renderField('Priority', priorityOptions)}
-                {renderField('Status', statusOptions)}
-                {renderField('Segment', getSegmentArray())}
-                {renderField('Owner', getOwners())}
+                {renderField('Priority', priorityOptions, priorityOptions[props.ticket.priority])}
+                {renderField('Status', statusOptions, statusOptions[props.ticket.status])}
+                {renderField('Segment', getSegmentArray(), segmentDefaultText)}
+                {renderField('Owner', getOwners(), ownerDefaultText)}
             </View>
         )
     };
@@ -155,17 +168,52 @@ function UpdateTicket(props) {
         )
     };
 
+    let updateAction = () => {
+        let statusId = 0;
+        if (status === 'Escalated') {
+            statusId = 5 //To match web app
+        } else if(StringUtils.isNotEmpty(status)) {
+            statusId = statusOptions.findIndex(item => item === status)
+        }
+        let priorityId = priorityOptions.findIndex(item => item === priority);
+        priorityId = priorityId === -1 ? 0 : priorityId;
+        let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
+        let selectedOwner = ownerOptions.find(item => item.ownerName === owner);
+
+        let body = {
+            "priorityID": priorityId,
+            "statusID": statusId,
+            "managerComment": comment,
+            "ticketID": props.ticket.ticketID,
+            "ownerID": selectedOwner.ownerID,
+            "segmentID":selectedSegment.segmentID
+        };
+        updateClosedLoopTicket(props.authToken, body, () => {
+            props.navigation.navigate('DetractorTickets');
+        }, () => {
+        })
+    };
+
     let renderUpdateButton = () => {
         return (
             <View style={styles.updateButton}>
-                <TouchableWithoutFeedback onPress={() => {
-
-                }}>
+                <TouchableWithoutFeedback onPress={updateAction}>
                     <Text style={styles.updateText}> Update </Text>
                 </TouchableWithoutFeedback>
             </View>
         )
     };
+
+    let renderSpinner = () => {
+        if(props.isLoading) {
+            return (
+                <View style={styles.loading}>
+                    <QPSpinner />
+                </View>
+            )
+        }
+    };
+
 
     return (
         <SafeAreaView forceInset={{bottom: 'never'}} style={styles.safeArea}>
@@ -188,6 +236,7 @@ function UpdateTicket(props) {
                 <View style={styles.bottomContainer}>
                     {renderUpdateButton()}
                 </View>
+                {renderSpinner()}
             </ScrollView>
         </SafeAreaView>
     )
@@ -206,7 +255,8 @@ const mapStateToProps = state => {
         authToken: state.global.authToken,
         ticket: state.dashboard.ticketDetails,
         segments: state.dashboard.segmentDetails.segments,
-        owners:  state.dashboard.ownerDetails.owners
+        owners:  state.dashboard.ownerDetails.owners,
+        isLoading: state.global.isLoading,
     };
 };
 
@@ -216,6 +266,9 @@ const mapDispatchToProps = dispatch => ({
     },
     getClosedLoopOwners: (token,params) => {
         dispatch(getClosedLoopOwnerDetails(token,params))
+    },
+    showLoading: (flag) => {
+        dispatch(showLoading(flag));
     }
 });
 
@@ -309,5 +362,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingHorizontal: PaddingConstants.tab3,
         fontFamily: FontFamily.semiBold,
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });

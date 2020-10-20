@@ -12,7 +12,7 @@ import {
 import {
     CX_GET_CLOSED_LOOP_OWNER_DETAILS,
     CX_GET_CLOSED_LOOP_SEGMENT_DETAILS,
-    CX_GET_CLOSED_LOOP_TICKET_DETAILS,
+    CX_GET_CLOSED_LOOP_TICKET_DETAILS, CX_UPDATE_CLOSED_LOOP_TICKET,
 } from '../../api/Constant';
 
 function* fetchDetractorTicketDetails(action) {
@@ -89,3 +89,20 @@ export function* watchGetClosedLoopOwnerDetails() {
     yield takeLatest(GET_CLOSED_LOOP_OWNER_DETAILS, fetchClosedLoopOwnerDetails);
 }
 
+export function updateClosedLoopTicket(token, body, successCallback, errorCallback) {
+    return WebServiceHandler.postNew(CX_UPDATE_CLOSED_LOOP_TICKET,
+        {'Auth-Token': token},
+        body)
+        .then(response => {
+
+            if(response.statusCode === 200) {
+                successCallback(response.body);
+            } else {
+                errorCallback(response);
+            }
+
+        })
+        .catch(error => {
+            errorCallback(error);
+        });
+}

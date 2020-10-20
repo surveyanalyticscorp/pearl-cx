@@ -17,7 +17,7 @@ export const CX_ADD_UPDATE_TICKET = BASE_URL + 'a/nativehtml/cx.CXAddOrUpdateTic
 export const CX_GET_CLOSED_LOOP_TICKET_DETAILS = BASE_URL + 'a/nativehtml/cx.closedloop.CXGetTicketDetails';
 export const CX_GET_CLOSED_LOOP_SEGMENT_DETAILS = BASE_URL + 'a/nativehtml/cx.closedloop.CXGetSegmentByStatus';
 export const CX_GET_CLOSED_LOOP_OWNER_DETAILS = BASE_URL + 'a/nativehtml/cx.closedloop.CXGetOwnerBySegment';
-export const CX_UPDATE_CLOSED_LOOP_TICKET = BASE_URL + '';
+export const CX_UPDATE_CLOSED_LOOP_TICKET = BASE_URL + 'a/nativehtml/cx.closedloop.CXUpdateTicket';
 
 
 export const CX_DASHBOARD = 'CX_DASHBOARD';
