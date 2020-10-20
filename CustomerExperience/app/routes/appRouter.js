@@ -7,7 +7,6 @@ import {
 } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
@@ -70,19 +69,6 @@ const AppRouter = props => {
             </View>
         );
     };
-    const Calendar = (props) => {
-        return (
-            <View style={styles.rightHeaderButton}>
-                <TouchableOpacity
-                    hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
-                    onPress={() => {
-                        props.route.params.openCalendar()
-                    }}>
-                    <MaterialIcon name="more-vert" size={30} color="white"/>
-                </TouchableOpacity>
-            </View>
-        );
-    };
 
     let onBackPressAction = (props) => {
         const navigation = useNavigation();
@@ -98,7 +84,7 @@ const AppRouter = props => {
                 <TouchableOpacity
                     hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                     onPress={() => {
-                        props.route.params.onBackPress ? onBackPressAction(props) :
+                        props.route.params && props.route.params.onBackPress ? onBackPressAction(props) :
                             navigation.dispatch(CommonActions.goBack())
                     }}>
                     <Icon name="arrow-left" size={20} color= {Colors.white}/>

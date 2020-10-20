@@ -1,14 +1,16 @@
 import {
-  CLEAR_DETRACTOR_TICKET_DETAILS,
+  CLEAR_CLOSED_LOOP_TICKET_DETAILS,
+  CLOSED_LOOP_OWNER_DETAILS_RECEIVED,
+  CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
+  CLOSED_LOOP_TICKET_DETAILS_RECEIVED,
   DASHBOARD_RECEIVED,
-  DETRACTOR_TICKET_DETAILS_RECEIVED,
-  DETRACTOR_TICKET_RECEIVED,
 } from '../actions/dashboard.actions';
 
 const initialState = {
   dashboardData: {},
-  detractorTickets: {},
-  ticketDetails: {}
+  ticketDetails: {},
+  segmentDetails: {},
+  ownerDetails: {}
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -19,22 +21,30 @@ const dashboardReducer = (state = initialState, action) => {
         dashboardData: action.response.body,
       };
     }
-    case DETRACTOR_TICKET_RECEIVED: {
+    case CLOSED_LOOP_TICKET_DETAILS_RECEIVED: {
       return {
         ...state,
-        detractorTickets: action.response,
+        ticketDetails: action.response.body,
       };
     }
-    case DETRACTOR_TICKET_DETAILS_RECEIVED: {
+    case CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED: {
       return {
         ...state,
-        ticketDetails: action.response.response,
+        segmentDetails: action.response.body,
       };
     }
-    case CLEAR_DETRACTOR_TICKET_DETAILS: {
+    case CLOSED_LOOP_OWNER_DETAILS_RECEIVED: {
       return {
         ...state,
-        ticketDetails: {}
+        ownerDetails: action.response.body,
+      };
+    }
+    case CLEAR_CLOSED_LOOP_TICKET_DETAILS: {
+      return {
+        ...state,
+        ticketDetails: {},
+        segmentDetails: {},
+        ownerDetails: {}
       }
     }
 

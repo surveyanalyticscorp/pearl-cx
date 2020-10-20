@@ -44,10 +44,10 @@ const TicketWidget = props => {
   },[props.ticketDetails]);
 
   let onPress = () => {
-    // let params = {
-    //   'ticketID': props.item.ticketID
-    // };
-    // props.getTicketDetails(params)
+    let params = {
+      'ticketID': props.item.ticketID
+    };
+    props.getTicketDetails(props.authToken, params)
   };
 
   let renderReadMoreView = () => {
@@ -82,13 +82,14 @@ const TicketWidget = props => {
 
 const mapStateToProps = state => {
   return {
-    ticketDetails: state.dashboard.ticketDetails
+    ticketDetails: state.dashboard.ticketDetails,
+    authToken: state.global.authToken,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  getTicketDetails: (params) => {
-    dispatch(getDetractorTicketDetails(params))
+  getTicketDetails: (token,params) => {
+    dispatch(getDetractorTicketDetails(token,params))
   }
 });
 

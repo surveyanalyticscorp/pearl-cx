@@ -37,7 +37,6 @@ const DetractorScenes = props => {
     useEffect(() => {
         for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
             let params = responseData[responseCount];
-            props.showLoading(true);
             apiHandler.getCXDetractorTicket(
                 props.authToken,
                 params,
@@ -45,11 +44,9 @@ const DetractorScenes = props => {
                     let data = [...responseData];
                     data[responseCount].data = response.body;
                     setResponseData(data);
-                    props.showLoading(false);
                 },
                 error => {
                     // console.log(error);
-                    props.showLoading(false);
                 },
             );
         }
@@ -138,9 +135,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    showLoading: (flag) => {
-        dispatch(showLoading(flag));
-    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetractorScenes);

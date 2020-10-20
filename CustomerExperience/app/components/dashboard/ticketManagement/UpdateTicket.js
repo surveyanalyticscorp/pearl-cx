@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import SafeAreaView from "react-native-safe-area-view";
 import {View, Text, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableWithoutFeedback} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
@@ -7,20 +7,58 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import ModalDropdown from '../../../widgets/drop-down/ModalDropdown';
+import {connect} from 'react-redux';
+import {getClosedLoopOwnerDetails, getClosedLoopSegmentDetails} from '../../../redux/actions/dashboard.actions';
+import ArrayUtils from '../../../Utils/ArrayUtils';
+import StringUtils from '../../../Utils/StringUtils';
 
-export default function UpdateTicket(props) {
+function UpdateTicket(props) {
     let priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
     let statusOptions = ['New', 'Open', 'Resolved', 'Escalated'];
-    let segmentOptions = ['North', 'South', 'East', 'West', 'Main'];
-    let OwnerOptions = ['A', 'B', 'C', 'D', 'E'];
 
     let [comment, setComment] = useState('');
     let [priority, setPriority] = useState('');
-    let [status, setStatus] = useState('');
+    let [status, setStatus] = useState(props.ticket.status);
+    let [segmentOptions, setSegmentOptions] = useState([]);
     let [segment, setSegment] = useState('');
+    let [ownerOptions, setOwnerOptions] = useState([]);
     let [owner, setOwner] = useState('');
 
     let ref = useRef(null);
+
+    let fetchClosedLoopSegments = () => {
+        let params = {
+            "statusID": 0,
+            "originSegmentID": props.ticket.originSegmentID
+        };
+        props.getClosedLoopSegments(props.authToken, params)
+    };
+
+    let fetchTicketOwners = () => {
+        if (StringUtils.isNotEmpty(segment)) {
+            let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
+            let params = {
+                "segmentID": selectedSegment.segmentID
+            };
+            props.getClosedLoopOwners(props.authToken, params)
+        }
+    };
+
+    useEffect(() => {
+        fetchClosedLoopSegments();
+    }, []);
+
+    useEffect(() => {
+        setSegmentOptions(props.segments);
+    },[props.segments]);
+
+    useEffect(() => {
+        fetchTicketOwners()
+    },[segment]);
+
+    useEffect(() => {
+        setOwnerOptions(props.owners);
+    },[props.owners]);
 
     let setDataOnSelection = (header, options, selectedIndex) => {
 
@@ -51,7 +89,7 @@ export default function UpdateTicket(props) {
                     dropdownTextStyle={styles.dropdownText}
                     arrowIconColor={Colors.secondary}
                     options={options}
-                    defaultValue={options[0]}
+                    defaultValue={'Select'}
                     renderRow={dropdownRenderRow}
                     onSelect={(i) => {
                         setDataOnSelection(header, options, i)
@@ -65,20 +103,34 @@ export default function UpdateTicket(props) {
         return (
             <View style={styles.row}>
                 <Text style={styles.rowText}> {header} </Text>
-                <View style={{position:'absolute', justifyContent: 'center', alignItems: 'center', right:10,}}>
+                <View style={{position:'absolute', justifyContent: 'center', alignItems: 'center', right:10}}>
                     {renderDropDown(header, options)}
                 </View>
             </View>
         )
     };
 
+    let getSegmentArray = () => {
+        if(ArrayUtils.isNotEmpty(segmentOptions)) {
+            return segmentOptions.map(item => item.segmentName)
+        }
+        return []
+    };
+
+    let getOwners = () => {
+        if(ArrayUtils.isNotEmpty(ownerOptions)) {
+            return ownerOptions.map(item => item.ownerName)
+        }
+        return []
+    }
+
     let renderContainer = () => {
         return (
             <View style={styles.fieldContainer}>
                 {renderField('Priority', priorityOptions)}
                 {renderField('Status', statusOptions)}
-                {renderField('Segment', segmentOptions)}
-                {renderField('Owner', OwnerOptions)}
+                {renderField('Segment', getSegmentArray())}
+                {renderField('Owner', getOwners())}
             </View>
         )
     };
@@ -129,8 +181,8 @@ export default function UpdateTicket(props) {
                                       })}
                                       enabled>
                     <View style={styles.container}>
-                            {renderContainer()}
-                            {renderComment()}
+                        {renderContainer()}
+                        {renderComment()}
                     </View>
                 </KeyboardAvoidingView>
                 <View style={styles.bottomContainer}>
@@ -149,6 +201,25 @@ function dropdownRenderRow (rowData, rowID, highlighted){
     );
 }
 
+const mapStateToProps = state => {
+    return {
+        authToken: state.global.authToken,
+        ticket: state.dashboard.ticketDetails,
+        segments: state.dashboard.segmentDetails.segments,
+        owners:  state.dashboard.ownerDetails.owners
+    };
+};
+
+const mapDispatchToProps = dispatch => ({
+    getClosedLoopSegments: (token,params) => {
+        dispatch(getClosedLoopSegmentDetails(token,params))
+    },
+    getClosedLoopOwners: (token,params) => {
+        dispatch(getClosedLoopOwnerDetails(token,params))
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateTicket);
 
 const styles = StyleSheet.create({
     safeArea: {
@@ -227,7 +298,7 @@ const styles = StyleSheet.create({
     },
     updateButton: {
         height: PaddingConstants.tab4,
-        marginHorizontal: MarginConstants.tab4,
+        marginHorizontal: MarginConstants.tab2,
         justifyContent:'center',
         alignItems:'center',
         backgroundColor: Colors.accent
