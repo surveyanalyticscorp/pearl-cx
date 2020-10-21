@@ -1,6 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import SafeAreaView from "react-native-safe-area-view";
-import {View, Text, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableWithoutFeedback} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import SafeAreaView from 'react-native-safe-area-view';
+import {
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableWithoutFeedback,
+    View,
+} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -11,12 +20,14 @@ import {connect} from 'react-redux';
 import {
     getClosedLoopOwnerDetails,
     getClosedLoopSegmentDetails,
+    getDashboardContent,
 } from '../../../redux/actions/dashboard.actions';
 import ArrayUtils from '../../../Utils/ArrayUtils';
 import StringUtils from '../../../Utils/StringUtils';
 import {updateClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
-import {showLoading} from '../../../redux/actions';
 import QPSpinner from '../../../widgets/QPSpinner';
+import moment from 'moment';
+import {DMYFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
 
 function UpdateTicket(props) {
     let priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
@@ -29,6 +40,8 @@ function UpdateTicket(props) {
     let [segment, setSegment] = useState(props.ticket.currentSegment);
     let [ownerOptions, setOwnerOptions] = useState([]);
     let [owner, setOwner] = useState(props.ticket.ticketOwner);
+    let [validationError, setValidationError] = useState('');
+    let [isLoading, setLoading] = useState(false);
 
     let fetchClosedLoopSegments = () => {
         let params = {
@@ -39,7 +52,7 @@ function UpdateTicket(props) {
     };
 
     let fetchTicketOwners = () => {
-        let selectedSegmentId = props.ticket.originSegmentID;
+        let selectedSegmentId = props.ticket.currentSegmentID;
         if (StringUtils.isNotEmpty(segment) && ArrayUtils.isNotEmpty(segmentOptions)) {
             let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
             selectedSegmentId = selectedSegment.segmentID
@@ -48,6 +61,14 @@ function UpdateTicket(props) {
             "segmentID": selectedSegmentId
         };
         props.getClosedLoopOwners(props.authToken, params)
+    };
+
+    let getDashboardData = () => {
+        let data = {
+            startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+            endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+        };
+        props.getDashboardContent(props.authToken, data);
     };
 
     useEffect(() => {
@@ -73,7 +94,7 @@ function UpdateTicket(props) {
     },[props.owners]);
 
     let setDataOnSelection = (header, options, selectedIndex) => {
-
+        StringUtils.isNotEmpty(validationError) && setValidationError('');
         switch (header) {
             case 'Priority':
                 setPriority(options[selectedIndex]);
@@ -161,11 +182,22 @@ function UpdateTicket(props) {
                     value={comment}
                     placeholder={'Additional Comment'}
                     onChangeText={text => {
+                        StringUtils.isNotEmpty(validationError) && setValidationError('');
                         setComment(text);
                     }}
                 />
             </View>
         )
+    };
+
+    let validationAction = (body) => {
+        for (const [key, value] of Object.entries(body)) {
+            if(key === 'managerComment' && StringUtils.isEmpty(value)) {
+                setValidationError('Please add comment');
+                return false
+            }
+        }
+        return true
     };
 
     let updateAction = () => {
@@ -178,42 +210,48 @@ function UpdateTicket(props) {
         let priorityId = priorityOptions.findIndex(item => item === priority);
         priorityId = priorityId === -1 ? 0 : priorityId;
         let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
-        let selectedOwner = ownerOptions.find(item => item.ownerName === owner);
+        if(StringUtils.isEmpty(owner) || owner === 'Not Assigned') {
+            setValidationError('Please select the owner')
+        } else {
+            let selectedOwner = ownerOptions.find(item => item.ownerName === owner);
 
-        let body = {
-            "priorityID": priorityId,
-            "statusID": statusId,
-            "managerComment": comment,
-            "ticketID": props.ticket.ticketID,
-            "ownerID": selectedOwner.ownerID,
-            "segmentID":selectedSegment.segmentID
-        };
-        updateClosedLoopTicket(props.authToken, body, () => {
-            props.navigation.navigate('DetractorTickets');
-        }, () => {
-        })
+            let body = {
+                "priorityID": priorityId,
+                "statusID": statusId,
+                "managerComment": comment,
+                "ticketID": props.ticket.ticketID,
+                "ownerID": selectedOwner.ownerID,
+                "segmentID":selectedSegment.segmentID
+            };
+            if (validationAction(body)) {
+                setLoading(true);
+                updateClosedLoopTicket(props.authToken, body, () => {
+                    setLoading(false);
+                    props.navigation.navigate('DetractorTickets');
+                    getDashboardData()
+                }, () => {
+                    setLoading(false)
+                })
+            }
+        }
     };
 
     let renderUpdateButton = () => {
-        return (
+        return isLoading ?
+            <View style={styles.updateButton}>
+                <QPSpinner spinnerColor={Colors.white}/>
+            </View>
+            :
             <View style={styles.updateButton}>
                 <TouchableWithoutFeedback onPress={updateAction}>
                     <Text style={styles.updateText}> Update </Text>
                 </TouchableWithoutFeedback>
             </View>
-        )
     };
 
-    let renderSpinner = () => {
-        if(props.isLoading) {
-            return (
-                <View style={styles.loading}>
-                    <QPSpinner />
-                </View>
-            )
-        }
+    let renderValidationError = () => {
+        return <Text style={styles.error}>{validationError}</Text>;
     };
-
 
     return (
         <SafeAreaView forceInset={{bottom: 'never'}} style={styles.safeArea}>
@@ -221,6 +259,7 @@ function UpdateTicket(props) {
                         keyboardDismissMode='on-drag'
                         keyboardShouldPersistTaps={'handled'}
             >
+                {StringUtils.isNotEmpty(validationError) && renderValidationError()}
                 <KeyboardAvoidingView behavior='position'
                                       style={styles.safeArea}
                                       keyboardVerticalOffset={Platform.select({
@@ -236,7 +275,6 @@ function UpdateTicket(props) {
                 <View style={styles.bottomContainer}>
                     {renderUpdateButton()}
                 </View>
-                {renderSpinner()}
             </ScrollView>
         </SafeAreaView>
     )
@@ -256,7 +294,7 @@ const mapStateToProps = state => {
         ticket: state.dashboard.ticketDetails,
         segments: state.dashboard.segmentDetails.segments,
         owners:  state.dashboard.ownerDetails.owners,
-        isLoading: state.global.isLoading,
+        range: state.global.range
     };
 };
 
@@ -267,9 +305,9 @@ const mapDispatchToProps = dispatch => ({
     getClosedLoopOwners: (token,params) => {
         dispatch(getClosedLoopOwnerDetails(token,params))
     },
-    showLoading: (flag) => {
-        dispatch(showLoading(flag));
-    }
+    getDashboardContent: (token, data) => {
+        dispatch(getDashboardContent(token, data));
+    },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateTicket);
@@ -294,7 +332,7 @@ const styles = StyleSheet.create({
     },
     fieldContainer: {
         margin: MarginConstants.tab1,
-        marginTop: MarginConstants.tab2,
+        marginTop: MarginConstants.tab1,
         backgroundColor: Colors.darkerGrey,
     },
     row: {
@@ -363,13 +401,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: PaddingConstants.tab3,
         fontFamily: FontFamily.semiBold,
     },
-    loading: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        alignItems: 'center',
-        justifyContent: 'center',
+    error: {
+        color: Colors.error,
+        textAlign: 'center',
+        fontSize: TextSizes.secondary,
+        fontFamily: FontFamily.light,
+        marginTop: MarginConstants.tab1
     },
 });
