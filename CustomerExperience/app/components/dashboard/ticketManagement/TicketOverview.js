@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import SafeAreaView from "react-native-safe-area-view";
 import {
     View,
@@ -11,20 +11,10 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import moment from 'moment';
-import {clearDetractorTicketDetails} from '../../../redux/actions/dashboard.actions';
-import {connect} from 'react-redux';
 
-function TicketOverview(props) {
+export default function TicketOverview(props) {
 
     let ticket = props.route.params.data;
-
-    let onBackPress = () => {
-        props.clearTicketDetails();
-    };
-
-    useEffect(() => {
-        props.navigation.setParams({'onBackPress': onBackPress});
-    }, []);
 
     let renderRowHeader = (header) => {
         return (
@@ -89,20 +79,6 @@ function TicketOverview(props) {
         </SafeAreaView>
     )
 }
-
-const mapStateToProps = state => {
-    return {
-    };
-};
-
-const mapDispatchToProps = dispatch => ({
-    clearTicketDetails: () => {
-        dispatch(clearDetractorTicketDetails())
-    }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(TicketOverview);
-
 
 const styles = StyleSheet.create({
     safeArea: {

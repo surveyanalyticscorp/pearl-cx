@@ -18,6 +18,7 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import ModalDropdown from '../../../widgets/drop-down/ModalDropdown';
 import {connect} from 'react-redux';
 import {
+    clearDetractorTicketDetails,
     getClosedLoopOwnerDetails,
     getClosedLoopSegmentDetails,
     getDashboardContent,
@@ -34,19 +35,19 @@ function UpdateTicket(props) {
     let statusOptions = ['New', 'Open', 'Resolved', 'Escalated'];
 
     let [comment, setComment] = useState('');
-    let [priority, setPriority] = useState('');
-    let [status, setStatus] = useState('');
+    let [priority, setPriority] = useState(priorityOptions[props.ticket.priority]);
+    let [status, setStatus] = useState(statusOptions[props.ticket.status]);
     let [segmentOptions, setSegmentOptions] = useState([]);
     let [segment, setSegment] = useState(props.ticket.currentSegment);
     let [ownerOptions, setOwnerOptions] = useState([]);
     let [owner, setOwner] = useState(props.ticket.ticketOwner);
     let [validationError, setValidationError] = useState('');
     let [isLoading, setLoading] = useState(false);
+    let [callOwnerAPI, setCallOwnerAPI] = useState(false);
 
     let fetchClosedLoopSegments = () => {
         let params = {
-            "statusID": 0,
-            "originSegmentID": props.ticket.originSegmentID
+            "statusID": props.ticket.status,
         };
         props.getClosedLoopSegments(props.authToken, params)
     };
@@ -63,6 +64,26 @@ function UpdateTicket(props) {
         props.getClosedLoopOwners(props.authToken, params)
     };
 
+    useEffect(() => {
+        fetchClosedLoopSegments();
+    }, []);
+
+    useEffect(() => {
+        if(props.segments) {
+            setSegmentOptions(props.segments);
+            fetchTicketOwners();
+        }
+    },[props.segments]);
+
+    useEffect(() => {
+        callOwnerAPI && fetchTicketOwners();
+        setCallOwnerAPI(false)
+    },[segment]);
+
+    useEffect(() => {
+        setOwnerOptions(props.owners);
+    },[props.owners]);
+
     let getDashboardData = () => {
         let data = {
             startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
@@ -70,28 +91,6 @@ function UpdateTicket(props) {
         };
         props.getDashboardContent(props.authToken, data);
     };
-
-    useEffect(() => {
-        fetchClosedLoopSegments();
-    }, []);
-
-    useEffect(() => {
-        setSegmentOptions(props.segments);
-        fetchTicketOwners();
-    },[props.segments]);
-
-    useEffect(() => {
-        if(segment === props.ticket.currentSegment) {
-            setOwner(props.ticket.ticketOwner)
-        } else {
-            setOwner('')
-        }
-        fetchTicketOwners();
-    },[segment]);
-
-    useEffect(() => {
-        setOwnerOptions(props.owners);
-    },[props.owners]);
 
     let setDataOnSelection = (header, options, selectedIndex) => {
         StringUtils.isNotEmpty(validationError) && setValidationError('');
@@ -103,7 +102,9 @@ function UpdateTicket(props) {
                 setStatus(options[selectedIndex]);
                 break;
             case 'Segment':
+                setCallOwnerAPI(true);
                 setSegment(options[selectedIndex]);
+                setOwner('');
                 break;
             case 'Owner':
                 setOwner(options[selectedIndex]);
@@ -161,8 +162,8 @@ function UpdateTicket(props) {
         let segmentDefaultText = StringUtils.isEmpty(segment) ? (StringUtils.isNotEmpty(props.ticket.currentSegment) ? props.ticket.currentSegment : 'Select') : segment;
         return (
             <View style={styles.fieldContainer}>
-                {renderField('Priority', priorityOptions, priorityOptions[props.ticket.priority])}
-                {renderField('Status', statusOptions, statusOptions[props.ticket.status])}
+                {renderField('Priority', priorityOptions, priority || 0)}
+                {renderField('Status', statusOptions, status || 0)}
                 {renderField('Segment', getSegmentArray(), segmentDefaultText)}
                 {renderField('Owner', getOwners(), ownerDefaultText)}
             </View>
@@ -227,8 +228,10 @@ function UpdateTicket(props) {
                 setLoading(true);
                 updateClosedLoopTicket(props.authToken, body, () => {
                     setLoading(false);
-                    props.navigation.navigate('DetractorTickets');
-                    getDashboardData()
+                    props.navigation.navigate('Dashboard');
+                    props.navigation.push('DetractorTickets');
+                    getDashboardData();
+                    props.clearTicketDetails();
                 }, () => {
                     setLoading(false)
                 })
@@ -308,6 +311,9 @@ const mapDispatchToProps = dispatch => ({
     getDashboardContent: (token, data) => {
         dispatch(getDashboardContent(token, data));
     },
+    clearTicketDetails: () => {
+        dispatch(clearDetractorTicketDetails())
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateTicket);
@@ -328,7 +334,7 @@ const styles = StyleSheet.create({
     bottomContainer: {
         flex: 1,
         justifyContent: 'flex-end',
-        marginBottom: 36
+        marginBottom: MarginConstants.tab2
     },
     fieldContainer: {
         margin: MarginConstants.tab1,
@@ -380,12 +386,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: PaddingConstants.tab1,
     },
     commentText: {
-        fontSize: TextSizes.semiMediumText,
+        fontSize: TextSizes.secondary,
         height: 150,
         textAlignVertical: 'top',
         backgroundColor: Colors.grey,
         padding: PaddingConstants.tab1,
-        margin: MarginConstants.tab1
+        margin: MarginConstants.tab1,
+        color: Colors.primary,
+        fontFamily: FontFamily.regular
     },
     updateButton: {
         height: PaddingConstants.tab4,
@@ -398,8 +406,10 @@ const styles = StyleSheet.create({
         color: Colors.white,
         fontSize: TextSizes.primary,
         textAlign: 'center',
-        paddingHorizontal: PaddingConstants.tab3,
+        paddingHorizontal: PaddingConstants.tab1,
         fontFamily: FontFamily.semiBold,
+        // backgroundColor:'red',
+        width:'90%',
     },
     error: {
         color: Colors.error,

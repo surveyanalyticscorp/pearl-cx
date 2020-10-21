@@ -1,10 +1,6 @@
 import React, {useEffect} from 'react';
-import {View, TouchableOpacity, StyleSheet, Dimensions, Text} from 'react-native';
-import {
-    NavigationContainer,
-    useNavigation,
-    DrawerActions,
-} from '@react-navigation/native';
+import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {DrawerActions, NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
@@ -16,13 +12,12 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import SignInStack from './signInStack';
 import {isStringNullOrEmpty} from '../Utils/Utility';
 import Feedback from '../components/feedback/Feedback';
-import FeedbackDetails from '../components/feedback/FeedbackDetails'
-import FeedbackUpdate from '../components/feedback/FeedbackUpdate'
-import { CommonActions } from '@react-navigation/native';
-import DashBoardStoreDetails from '../components/dashboard/components/DashBoardStoreDetails'
+import FeedbackDetails from '../components/feedback/FeedbackDetails';
+import FeedbackUpdate from '../components/feedback/FeedbackUpdate';
+import DashBoardStoreDetails from '../components/dashboard/components/DashBoardStoreDetails';
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
-import {useSelector} from "react-redux";
+import {useSelector} from 'react-redux';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
@@ -70,13 +65,6 @@ const AppRouter = props => {
         );
     };
 
-    let onBackPressAction = (props) => {
-        const navigation = useNavigation();
-        props.route.params.onBackPress();
-        const popAction = CommonActions.goBack();
-        navigation.dispatch(popAction);
-    };
-
     const HeaderBackLeft = (props) => {
         const navigation = useNavigation();
         return (
@@ -84,8 +72,12 @@ const AppRouter = props => {
                 <TouchableOpacity
                     hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                     onPress={() => {
-                        props.route.params && props.route.params.onBackPress ? onBackPressAction(props) :
-                            navigation.dispatch(CommonActions.goBack())
+                        if(props.route.params && props.route.params.onBackPress) {
+                            props.route.params.onBackPress();
+                            navigation.goBack()
+                        } else {
+                            navigation.goBack()
+                        }
                     }}>
                     <Icon name="arrow-left" size={20} color= {Colors.white}/>
                 </TouchableOpacity>
@@ -166,9 +158,9 @@ const AppRouter = props => {
                                        lazy
                                        keyboardDismissMode={'auto'}
         >
-            <DetractorTicketsTab.Screen name="New" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:0}}/>
-            <DetractorTicketsTab.Screen name="Open" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:1}}/>
-            <DetractorTicketsTab.Screen name="Resolved" component={DetractorScenes} initialParams={{data: props.route.params.data, dataCount:2}}/>
+            <DetractorTicketsTab.Screen name="New" component={DetractorScenes} initialParams={{ dataCount:0}}/>
+            <DetractorTicketsTab.Screen name="Open" component={DetractorScenes} initialParams={{ dataCount:1}}/>
+            <DetractorTicketsTab.Screen name="Resolved" component={DetractorScenes} initialParams={{ dataCount:2}}/>
         </DetractorTicketsTab.Navigator>
     );
 

@@ -156,13 +156,7 @@ const CxDashboard = props => {
         return (
             <TouchableWithoutFeedback
                 onPress={() => {
-                    let data = {
-                        storeId: '' + props.dashboardData.primaryStoreId,
-                        title: props.dashboardData.primaryStoreName + ' - Tickets',
-                        token: props.authToken,
-                    };
                     const pushAction = StackActions.push('DetractorTickets', {
-                        data: data,
                         screen: icon === 'new' ? "New" : (icon === 'open' ? "Open" : "Resolved")
                     });
                     props.navigation.dispatch(pushAction);
@@ -238,7 +232,7 @@ const CxDashboard = props => {
                 <View style={dashboardStyles.list}>
                     <FlatList
                         data={list.sort((a, b) => b.NPSScore.npsPercentage - a.NPSScore.npsPercentage)}
-                        keyExtractor={item => item.filterName}
+                        keyExtractor={(item, index) => index+''}
                         renderItem={renderRow}
                         onEndReachedThreshold={0.01}
                         refreshing={false}

@@ -1,10 +1,9 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useState, useCallback} from 'react';
 import {View, Text, FlatList} from 'react-native';
 import TicketWidget from './TicketWidget';
 import {dashboardStyles} from '../dashboard.style';
 import {apiHandler} from '../../../api/ApiHandler';
 import {connect} from 'react-redux';
-import {showLoading} from '../../../redux/actions';
 import QPSpinner from '../../../widgets/QPSpinner';
 
 const DetractorScenes = props => {
@@ -16,21 +15,21 @@ const DetractorScenes = props => {
             pageOffset: '0',
             status: '0',
             index: 0,
-            storeId: props.route.params.data.storeId,
+            storeId: props.storeId+'',
         }, {
             key: 'pending',
             data: {tickets: []},
             pageOffset: '0',
             status: '1',
             index: 1,
-            storeId: props.route.params.data.storeId,
+            storeId: props.storeId+'',
         }, {
             key: 'resolved',
             data: {tickets: []},
             pageOffset: '0',
             status: '2',
             index: 2,
-            storeId: props.route.params.data.storeId,
+            storeId: props.storeId+'',
         }
     ]);
 
@@ -105,7 +104,7 @@ const DetractorScenes = props => {
                     <FlatList
                         contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}
                         data={tickets}
-                        // keyExtractor={item => item.filterName}
+                        keyExtractor={(item, index) => index+''}
                         renderItem={renderRow}
                         onEndReachedThreshold={0.01}
                         refreshing={false}
@@ -130,7 +129,8 @@ const DetractorScenes = props => {
 const mapStateToProps = state => {
     return {
         isLoading: state.global.isLoading,
-        authToken: state.global.authToken
+        authToken: state.global.authToken,
+        storeId: state.dashboard.dashboardData.primaryStoreId,
     };
 };
 
