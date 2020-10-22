@@ -242,7 +242,7 @@ const AppRouter = props => {
                 name="Date Range"
                 component={DateRangeTabStack}
                 options={({ navigation, route }) => ({
-                    headerLeft: props => <HeaderBackLeft />,
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                     headerRight: props => <SaveDashboardDate {...props} route={route}/>
                 })}
             />
@@ -262,7 +262,7 @@ const AppRouter = props => {
                 name="Account Details"
                 component={AccountDetails}
                 options={({ navigation, route }) => ({
-                    headerLeft: props => <HeaderBackLeft />,
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                 })}
             />
         </RootStack.Navigator>
