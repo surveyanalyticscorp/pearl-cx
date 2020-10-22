@@ -72,7 +72,7 @@ const AppRouter = props => {
                 <TouchableOpacity
                     hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                     onPress={() => {
-                        if(props.route.params && props.route.params.onBackPress) {
+                        if(props && props.route && props.route.params && props.route.params.onBackPress) {
                             props.route.params.onBackPress();
                             navigation.goBack()
                         } else {
