@@ -1,19 +1,16 @@
 import {
+  CLEAR_CLOSED_LOOP_TICKET_DETAILS,
+  CLOSED_LOOP_OWNER_DETAILS_RECEIVED,
+  CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
+  CLOSED_LOOP_TICKET_DETAILS_RECEIVED,
   DASHBOARD_RECEIVED,
-  DETRACTOR_TICKET_DETAILS_RECEIVED,
-  DETRACTOR_TICKET_RECEIVED,
-  SET_DASHBOARD_RANGE_FILTER,
 } from '../actions/dashboard.actions';
 
 const initialState = {
   dashboardData: {},
-  detractorTickets: {},
-  range:{
-    type: 1,
-    startDate: '',
-    endDate: ''
-  },
-  ticketDetails: {}
+  ticketDetails: {},
+  segmentDetails: {},
+  ownerDetails: {}
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -24,24 +21,33 @@ const dashboardReducer = (state = initialState, action) => {
         dashboardData: action.response.body,
       };
     }
-    case DETRACTOR_TICKET_RECEIVED: {
+    case CLOSED_LOOP_TICKET_DETAILS_RECEIVED: {
       return {
         ...state,
-        detractorTickets: action.response,
+        ticketDetails: action.response.body,
       };
     }
-    case SET_DASHBOARD_RANGE_FILTER: {
+    case CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED: {
       return {
         ...state,
-        range: action.range,
+        segmentDetails: action.response.body,
       };
     }
-    case DETRACTOR_TICKET_DETAILS_RECEIVED: {
+    case CLOSED_LOOP_OWNER_DETAILS_RECEIVED: {
       return {
         ...state,
-        ticketDetails: action.response.response,
+        ownerDetails: action.response.body,
       };
     }
+    case CLEAR_CLOSED_LOOP_TICKET_DETAILS: {
+      return {
+        ...state,
+        ticketDetails: {},
+        segmentDetails: {},
+        ownerDetails: {}
+      }
+    }
+
     default: {
       return state;
     }

@@ -13,6 +13,7 @@ import {DASHBOARD_RANGE} from '../../../redux/actions/dashboard.actions';
 import AsyncStorage from '@react-native-community/async-storage';
 import QPCalendar from '../../../widgets/QPCalendar';
 import StringUtils from '../../../Utils/StringUtils';
+import {StackActions} from '@react-navigation/native';
 
 export default function DashboardDateFilter(props){
 
@@ -32,7 +33,7 @@ export default function DashboardDateFilter(props){
         if (moment(tempEnd).isAfter(tempStart)) {
             props.route.params.setRange(selectedRange);
             AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(selectedRange));
-            props.navigation.navigate('Dashboard');
+            props.navigation.dispatch(StackActions.popToTop())
         } else {
             setValidationError('Start date should be less than End date');
         }
@@ -131,7 +132,7 @@ export default function DashboardDateFilter(props){
                             <Text style={styles.rangeTitle}>{range}</Text>
                         </View>
                         {selectedType === type && <View style={styles.checkIcon}>
-                            <MaterialIcon name={'check'} size={25} color={Colors.secondaryAccent}/>
+                            <MaterialIcon name={'check'} size={25} color={Colors.accent}/>
                         </View>
                         }
                     </View>
@@ -361,7 +362,7 @@ const styles = StyleSheet.create({
         margin: MarginConstants.tab1,
     },
     buttonText: {
-        color: Colors.secondaryAccent,
+        color: Colors.accent,
         fontFamily: FontFamily.regular,
         fontSize: TextSizes.secondary,
         textAlign: 'center'

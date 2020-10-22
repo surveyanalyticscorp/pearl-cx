@@ -16,11 +16,11 @@ export default function TicketComments(props) {
 
     let renderCommentRow = () => {
         if(ticketLogs && ArrayUtils.isNotEmpty(ticketLogs)) {
-            return ticketLogs.map(item => {
+            return ticketLogs.map((item,index )=> {
                 let date = moment(item.logDate, MDYFORMAT).format('MMM DD, YYYY');
                 let text = routeName === 'Comments' ? item.comment : item.logType;
                 return(
-                    <View style={styles.commentRow}>
+                    <View key={index} style={styles.commentRow}>
                         <Text style={styles.authorText}>Author: {item.author}</Text>
                         <Text style={styles.dateText}>{date}</Text>
                         <Text style={styles.commentText}>{text}</Text>

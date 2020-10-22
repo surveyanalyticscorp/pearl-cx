@@ -32,12 +32,12 @@ export default function FeedbackDetails(props){
                 ticketStatuses={props.route.params.ticketStatus}
             />
             <FeedbackDetailsTabStack {...props}/>
-            <ActionButton
-                elevation={8}
-                buttonColor= {Colors.accent}
-                onPress={onActionButtonPress}
-                icon={<Icon size={30} name="comment" color={Colors.white} />}
-            />
+            {/*<ActionButton*/}
+                {/*elevation={8}*/}
+                {/*buttonColor= {Colors.accent}*/}
+                {/*onPress={onActionButtonPress}*/}
+                {/*icon={<Icon size={30} name="comment" color={Colors.white} />}*/}
+            {/*/>*/}
         </View>
     );
 };

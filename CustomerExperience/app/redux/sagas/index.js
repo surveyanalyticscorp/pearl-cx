@@ -1,11 +1,7 @@
-// Imports: Dependencies
 import {all, fork} from 'redux-saga/effects';
-// Imports: Redux Sagas
-
 import {watchGetFeedback, watchUpdateFeedback} from './feedbackSaga';
 import {
   watchGetDashboard,
-  watchGetDetractorTicket, watchGetDetractorTicketDetail,
 } from './dashboardSaga';
 import {
   watchDoLogin,
@@ -13,6 +9,11 @@ import {
   watchValidateUserOtp,
   watchUpdatePassword,
 } from './loginInSaga';
+import {
+  watchGetClosedLoopOwnerDetails,
+  watchGetClosedLoopSegmentDetails,
+  watchGetDetractorTicketDetail,
+} from './ClosedLoopSaga';
 
 // Redux Saga: Root Saga
 export function* rootSaga() {
@@ -24,7 +25,8 @@ export function* rootSaga() {
     fork(watchValidateUserOtp),
     fork(watchUpdatePassword),
     fork(watchUpdateFeedback),
-    fork(watchGetDetractorTicket),
-    fork(watchGetDetractorTicketDetail)
+    fork(watchGetDetractorTicketDetail),
+    fork(watchGetClosedLoopSegmentDetails),
+    fork(watchGetClosedLoopOwnerDetails)
   ]);
 }

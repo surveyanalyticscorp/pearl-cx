@@ -17,6 +17,7 @@ export const CLEAR_USER_INFO = 'CLEAR_USER_INFO';
 export const API_ERROR = 'API_ERROR';
 export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
+export const SET_RANGE_FILTER = 'SET_RANGE_FILTER';
 
 
 export const showLoading = (isLoading = true) => ({
@@ -41,4 +42,9 @@ export const clearError = (isLoading = true) => ({
 export const setAuthToken = (token) => ({
   type: SET_AUTH_TOKEN,
   payload: {authToken: token},
+});
+
+export const setRangeFilter = range => ({
+  type: SET_RANGE_FILTER,
+  range,
 });

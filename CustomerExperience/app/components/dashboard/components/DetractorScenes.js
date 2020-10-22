@@ -1,10 +1,9 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useState, useCallback} from 'react';
 import {View, Text, FlatList} from 'react-native';
 import TicketWidget from './TicketWidget';
 import {dashboardStyles} from '../dashboard.style';
 import {apiHandler} from '../../../api/ApiHandler';
 import {connect} from 'react-redux';
-import {showLoading} from '../../../redux/actions';
 import QPSpinner from '../../../widgets/QPSpinner';
 
 const DetractorScenes = props => {
@@ -16,28 +15,27 @@ const DetractorScenes = props => {
             pageOffset: '0',
             status: '0',
             index: 0,
-            storeId: props.route.params.data.storeId,
+            storeId: props.storeId+'',
         }, {
             key: 'pending',
             data: {tickets: []},
             pageOffset: '0',
             status: '1',
             index: 1,
-            storeId: props.route.params.data.storeId,
+            storeId: props.storeId+'',
         }, {
             key: 'resolved',
             data: {tickets: []},
             pageOffset: '0',
             status: '2',
             index: 2,
-            storeId: props.route.params.data.storeId,
+            storeId: props.storeId+'',
         }
     ]);
 
     useEffect(() => {
         for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
             let params = responseData[responseCount];
-            props.showLoading(true);
             apiHandler.getCXDetractorTicket(
                 props.authToken,
                 params,
@@ -45,11 +43,9 @@ const DetractorScenes = props => {
                     let data = [...responseData];
                     data[responseCount].data = response.body;
                     setResponseData(data);
-                    props.showLoading(false);
                 },
                 error => {
                     // console.log(error);
-                    props.showLoading(false);
                 },
             );
         }
@@ -58,7 +54,7 @@ const DetractorScenes = props => {
     const renderNoDataFound = () => {
         return (
             <View style={dashboardStyles.emptyView}>
-                <Text style={dashboardStyles.detractorEmptyText}>There are no Pending tickets.</Text>
+                <Text style={dashboardStyles.detractorEmptyText}> No tickets</Text>
             </View>
         );
     };
@@ -108,7 +104,7 @@ const DetractorScenes = props => {
                     <FlatList
                         contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}
                         data={tickets}
-                        // keyExtractor={item => item.filterName}
+                        keyExtractor={(item, index) => index+''}
                         renderItem={renderRow}
                         onEndReachedThreshold={0.01}
                         refreshing={false}
@@ -133,14 +129,12 @@ const DetractorScenes = props => {
 const mapStateToProps = state => {
     return {
         isLoading: state.global.isLoading,
-        authToken: state.global.authToken
+        authToken: state.global.authToken,
+        storeId: state.dashboard.dashboardData.primaryStoreId,
     };
 };
 
 const mapDispatchToProps = dispatch => ({
-    showLoading: (flag) => {
-        dispatch(showLoading(flag));
-    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetractorScenes);

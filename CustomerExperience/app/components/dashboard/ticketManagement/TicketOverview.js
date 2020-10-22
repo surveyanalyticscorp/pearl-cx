@@ -80,7 +80,6 @@ export default function TicketOverview(props) {
     )
 }
 
-
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,

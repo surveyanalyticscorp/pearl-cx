@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React,{useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableWithoutFeedback, Text} from 'react-native';
 import ReadMore from 'react-native-read-more-text';
 import {Colors} from '../../../styles/color.constants';
@@ -9,7 +9,7 @@ import StringUtils from '../../../Utils/StringUtils';
 import {FontFamily} from '../../../styles/font.constants';
 import moment from 'moment';
 import {HalfMonthDateYearFormat, YMDFORMAT} from '../../../Utils/AppConstants';
-import {getDetractorTicketDetails} from '../../../redux/actions/dashboard.actions';
+import {clearDetractorTicketDetails, getDetractorTicketDetails} from '../../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import {isObjectEmpty} from '../../../Utils/Utility';
 
@@ -37,17 +37,21 @@ const TicketWidget = props => {
     );
   };
 
+  let onBackPress = () => {
+    props.clearTicketDetails();
+  };
+
   useEffect(() => {
     if(!isObjectEmpty(props.ticketDetails)) {
-      props.navigation.navigate('Ticket Details',{item:props.ticketDetails});
+      props.navigation.navigate('Ticket Details',{item:props.ticketDetails, onBackPress: onBackPress});
     }
   },[props.ticketDetails]);
 
   let onPress = () => {
-    // let params = {
-    //   'ticketID': props.item.ticketID
-    // };
-    // props.getTicketDetails(params)
+    let params = {
+      'ticketID': props.item.ticketID
+    };
+    props.getTicketDetails(props.authToken, params)
   };
 
   let renderReadMoreView = () => {
@@ -82,13 +86,17 @@ const TicketWidget = props => {
 
 const mapStateToProps = state => {
   return {
-    ticketDetails: state.dashboard.ticketDetails
+    ticketDetails: state.dashboard.ticketDetails,
+    authToken: state.global.authToken,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  getTicketDetails: (params) => {
-    dispatch(getDetractorTicketDetails(params))
+  getTicketDetails: (token,params) => {
+    dispatch(getDetractorTicketDetails(token,params))
+  },
+  clearTicketDetails: () => {
+    dispatch(clearDetractorTicketDetails())
   }
 });
 

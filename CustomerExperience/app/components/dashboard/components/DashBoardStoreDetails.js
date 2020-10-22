@@ -283,7 +283,7 @@ class DashBoardStoreDetails extends Component {
     return (
         <ImageBackground
             resizeMode={'cover'}
-            source={require('../../../config/images/background.png')}
+            source={require('../../../config/images/background1.png')}
             style={dashboardStyles.imageBackgroundContainer}>
           {this.storeData === '' || this.state.isLoading
               ? this.renderIndicator()

@@ -1,29 +1,99 @@
-import React, {useState, useRef} from 'react';
-import SafeAreaView from "react-native-safe-area-view";
-import {View, Text, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableWithoutFeedback} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import SafeAreaView from 'react-native-safe-area-view';
+import {
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableWithoutFeedback,
+    View,
+} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import ModalDropdown from '../../../widgets/drop-down/ModalDropdown';
+import {connect} from 'react-redux';
+import {
+    clearDetractorTicketDetails,
+    getClosedLoopOwnerDetails,
+    getClosedLoopSegmentDetails,
+    getDashboardContent,
+} from '../../../redux/actions/dashboard.actions';
+import ArrayUtils from '../../../Utils/ArrayUtils';
+import StringUtils from '../../../Utils/StringUtils';
+import {updateClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
+import QPSpinner from '../../../widgets/QPSpinner';
+import moment from 'moment';
+import {DMYFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
 
-export default function UpdateTicket(props) {
+function UpdateTicket(props) {
     let priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
     let statusOptions = ['New', 'Open', 'Resolved', 'Escalated'];
-    let segmentOptions = ['North', 'South', 'East', 'West', 'Main'];
-    let OwnerOptions = ['A', 'B', 'C', 'D', 'E'];
 
     let [comment, setComment] = useState('');
-    let [priority, setPriority] = useState('');
-    let [status, setStatus] = useState('');
-    let [segment, setSegment] = useState('');
-    let [owner, setOwner] = useState('');
+    let [priority, setPriority] = useState(priorityOptions[props.ticket.priority]);
+    let [status, setStatus] = useState(statusOptions[props.ticket.status]);
+    let [segmentOptions, setSegmentOptions] = useState([]);
+    let [segment, setSegment] = useState(props.ticket.currentSegment);
+    let [ownerOptions, setOwnerOptions] = useState([]);
+    let [owner, setOwner] = useState(props.ticket.ticketOwner);
+    let [validationError, setValidationError] = useState('');
+    let [isLoading, setLoading] = useState(false);
+    let [callOwnerAPI, setCallOwnerAPI] = useState(false);
 
-    let ref = useRef(null);
+    let fetchClosedLoopSegments = () => {
+        let params = {
+            "statusID": props.ticket.status,
+        };
+        props.getClosedLoopSegments(props.authToken, params)
+    };
+
+    let fetchTicketOwners = () => {
+        let selectedSegmentId = props.ticket.currentSegmentID;
+        if (StringUtils.isNotEmpty(segment) && ArrayUtils.isNotEmpty(segmentOptions)) {
+            let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
+            selectedSegmentId = selectedSegment.segmentID
+        }
+        let params = {
+            "segmentID": selectedSegmentId
+        };
+        props.getClosedLoopOwners(props.authToken, params)
+    };
+
+    useEffect(() => {
+        fetchClosedLoopSegments();
+    }, []);
+
+    useEffect(() => {
+        if(props.segments) {
+            setSegmentOptions(props.segments);
+            fetchTicketOwners();
+        }
+    },[props.segments]);
+
+    useEffect(() => {
+        callOwnerAPI && fetchTicketOwners();
+        setCallOwnerAPI(false)
+    },[segment]);
+
+    useEffect(() => {
+        setOwnerOptions(props.owners);
+    },[props.owners]);
+
+    let getDashboardData = () => {
+        let data = {
+            startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+            endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+        };
+        props.getDashboardContent(props.authToken, data);
+    };
 
     let setDataOnSelection = (header, options, selectedIndex) => {
-
+        StringUtils.isNotEmpty(validationError) && setValidationError('');
         switch (header) {
             case 'Priority':
                 setPriority(options[selectedIndex]);
@@ -32,7 +102,9 @@ export default function UpdateTicket(props) {
                 setStatus(options[selectedIndex]);
                 break;
             case 'Segment':
+                setCallOwnerAPI(true);
                 setSegment(options[selectedIndex]);
+                setOwner('');
                 break;
             case 'Owner':
                 setOwner(options[selectedIndex]);
@@ -40,18 +112,17 @@ export default function UpdateTicket(props) {
         }
     };
 
-    let renderDropDown = (header, options) => {
+    let renderDropDown = (header, options, defaultText) => {
         return (
             <View>
                 <ModalDropdown
-                    ref={ref}
                     style={styles.modelDropdown}
                     textStyle={styles.dropdownText}
                     dropdownStyle={styles.dropdownStyle}
                     dropdownTextStyle={styles.dropdownText}
                     arrowIconColor={Colors.secondary}
                     options={options}
-                    defaultValue={options[0]}
+                    defaultValue={defaultText}
                     renderRow={dropdownRenderRow}
                     onSelect={(i) => {
                         setDataOnSelection(header, options, i)
@@ -61,24 +132,40 @@ export default function UpdateTicket(props) {
         )
     };
 
-    let renderField = (header, options) => {
+    let renderField = (header, options, defaultText) => {
         return (
             <View style={styles.row}>
                 <Text style={styles.rowText}> {header} </Text>
-                <View style={{position:'absolute', justifyContent: 'center', alignItems: 'center', right:10,}}>
-                    {renderDropDown(header, options)}
+                <View style={{position:'absolute', justifyContent: 'center', alignItems: 'center', right:10}}>
+                    {renderDropDown(header, options, defaultText)}
                 </View>
             </View>
         )
     };
 
+    let getSegmentArray = () => {
+        if(ArrayUtils.isNotEmpty(segmentOptions)) {
+            return segmentOptions.map(item => item.segmentName)
+        }
+        return []
+    };
+
+    let getOwners = () => {
+        if(ArrayUtils.isNotEmpty(ownerOptions)) {
+            return ownerOptions.map(item => item.ownerName)
+        }
+        return []
+    };
+
     let renderContainer = () => {
+        let ownerDefaultText = StringUtils.isEmpty(owner) ? 'Select' : owner;
+        let segmentDefaultText = StringUtils.isEmpty(segment) ? (StringUtils.isNotEmpty(props.ticket.currentSegment) ? props.ticket.currentSegment : 'Select') : segment;
         return (
             <View style={styles.fieldContainer}>
-                {renderField('Priority', priorityOptions)}
-                {renderField('Status', statusOptions)}
-                {renderField('Segment', segmentOptions)}
-                {renderField('Owner', OwnerOptions)}
+                {renderField('Priority', priorityOptions, priority || 0)}
+                {renderField('Status', statusOptions, status || 0)}
+                {renderField('Segment', getSegmentArray(), segmentDefaultText)}
+                {renderField('Owner', getOwners(), ownerDefaultText)}
             </View>
         )
     };
@@ -96,6 +183,7 @@ export default function UpdateTicket(props) {
                     value={comment}
                     placeholder={'Additional Comment'}
                     onChangeText={text => {
+                        StringUtils.isNotEmpty(validationError) && setValidationError('');
                         setComment(text);
                     }}
                 />
@@ -103,16 +191,69 @@ export default function UpdateTicket(props) {
         )
     };
 
-    let renderUpdateButton = () => {
-        return (
-            <View style={styles.updateButton}>
-                <TouchableWithoutFeedback onPress={() => {
+    let validationAction = (body) => {
+        for (const [key, value] of Object.entries(body)) {
+            if(key === 'managerComment' && StringUtils.isEmpty(value)) {
+                setValidationError('Please add comment');
+                return false
+            }
+        }
+        return true
+    };
 
-                }}>
+    let updateAction = () => {
+        let statusId = 0;
+        if (status === 'Escalated') {
+            statusId = 5 //To match web app
+        } else if(StringUtils.isNotEmpty(status)) {
+            statusId = statusOptions.findIndex(item => item === status)
+        }
+        let priorityId = priorityOptions.findIndex(item => item === priority);
+        priorityId = priorityId === -1 ? 0 : priorityId;
+        let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
+        if(StringUtils.isEmpty(owner) || owner === 'Not Assigned') {
+            setValidationError('Please select the owner')
+        } else {
+            let selectedOwner = ownerOptions.find(item => item.ownerName === owner);
+
+            let body = {
+                "priorityID": priorityId,
+                "statusID": statusId,
+                "managerComment": comment,
+                "ticketID": props.ticket.ticketID,
+                "ownerID": selectedOwner.ownerID,
+                "segmentID":selectedSegment.segmentID
+            };
+            if (validationAction(body)) {
+                setLoading(true);
+                updateClosedLoopTicket(props.authToken, body, () => {
+                    setLoading(false);
+                    props.navigation.navigate('Dashboard');
+                    props.navigation.push('DetractorTickets');
+                    getDashboardData();
+                    props.clearTicketDetails();
+                }, () => {
+                    setLoading(false)
+                })
+            }
+        }
+    };
+
+    let renderUpdateButton = () => {
+        return isLoading ?
+            <View style={styles.updateButton}>
+                <QPSpinner spinnerColor={Colors.white}/>
+            </View>
+            :
+            <View style={styles.updateButton}>
+                <TouchableWithoutFeedback onPress={updateAction}>
                     <Text style={styles.updateText}> Update </Text>
                 </TouchableWithoutFeedback>
             </View>
-        )
+    };
+
+    let renderValidationError = () => {
+        return <Text style={styles.error}>{validationError}</Text>;
     };
 
     return (
@@ -121,6 +262,7 @@ export default function UpdateTicket(props) {
                         keyboardDismissMode='on-drag'
                         keyboardShouldPersistTaps={'handled'}
             >
+                {StringUtils.isNotEmpty(validationError) && renderValidationError()}
                 <KeyboardAvoidingView behavior='position'
                                       style={styles.safeArea}
                                       keyboardVerticalOffset={Platform.select({
@@ -129,8 +271,8 @@ export default function UpdateTicket(props) {
                                       })}
                                       enabled>
                     <View style={styles.container}>
-                            {renderContainer()}
-                            {renderComment()}
+                        {renderContainer()}
+                        {renderComment()}
                     </View>
                 </KeyboardAvoidingView>
                 <View style={styles.bottomContainer}>
@@ -149,6 +291,32 @@ function dropdownRenderRow (rowData, rowID, highlighted){
     );
 }
 
+const mapStateToProps = state => {
+    return {
+        authToken: state.global.authToken,
+        ticket: state.dashboard.ticketDetails,
+        segments: state.dashboard.segmentDetails.segments,
+        owners:  state.dashboard.ownerDetails.owners,
+        range: state.global.range
+    };
+};
+
+const mapDispatchToProps = dispatch => ({
+    getClosedLoopSegments: (token,params) => {
+        dispatch(getClosedLoopSegmentDetails(token,params))
+    },
+    getClosedLoopOwners: (token,params) => {
+        dispatch(getClosedLoopOwnerDetails(token,params))
+    },
+    getDashboardContent: (token, data) => {
+        dispatch(getDashboardContent(token, data));
+    },
+    clearTicketDetails: () => {
+        dispatch(clearDetractorTicketDetails())
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateTicket);
 
 const styles = StyleSheet.create({
     safeArea: {
@@ -166,11 +334,11 @@ const styles = StyleSheet.create({
     bottomContainer: {
         flex: 1,
         justifyContent: 'flex-end',
-        marginBottom: 36
+        marginBottom: MarginConstants.tab2
     },
     fieldContainer: {
         margin: MarginConstants.tab1,
-        marginTop: MarginConstants.tab2,
+        marginTop: MarginConstants.tab1,
         backgroundColor: Colors.darkerGrey,
     },
     row: {
@@ -218,16 +386,18 @@ const styles = StyleSheet.create({
         paddingHorizontal: PaddingConstants.tab1,
     },
     commentText: {
-        fontSize: TextSizes.semiMediumText,
+        fontSize: TextSizes.secondary,
         height: 150,
         textAlignVertical: 'top',
         backgroundColor: Colors.grey,
         padding: PaddingConstants.tab1,
-        margin: MarginConstants.tab1
+        margin: MarginConstants.tab1,
+        color: Colors.primary,
+        fontFamily: FontFamily.regular
     },
     updateButton: {
         height: PaddingConstants.tab4,
-        marginHorizontal: MarginConstants.tab4,
+        marginHorizontal: MarginConstants.tab2,
         justifyContent:'center',
         alignItems:'center',
         backgroundColor: Colors.accent
@@ -236,7 +406,16 @@ const styles = StyleSheet.create({
         color: Colors.white,
         fontSize: TextSizes.primary,
         textAlign: 'center',
-        paddingHorizontal: PaddingConstants.tab3,
+        paddingHorizontal: PaddingConstants.tab1,
         fontFamily: FontFamily.semiBold,
+        // backgroundColor:'red',
+        width:'90%',
+    },
+    error: {
+        color: Colors.error,
+        textAlign: 'center',
+        fontSize: TextSizes.secondary,
+        fontFamily: FontFamily.light,
+        marginTop: MarginConstants.tab1
     },
 });

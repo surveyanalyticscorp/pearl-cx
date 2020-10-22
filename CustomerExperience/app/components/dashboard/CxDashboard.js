@@ -1,30 +1,25 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {
-    FlatList,
-    RefreshControl,
-    ScrollView,
-    Text,
-    TouchableWithoutFeedback,
-    View,
-} from 'react-native';
+import {FlatList, RefreshControl, ScrollView, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import {showLoading} from '../../redux/actions/index';
-import {getDashboardContent, setDashboardRangeFilter} from '../../redux/actions/dashboard.actions';
+import {getDashboardContent} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
-import {isObjectEmpty} from '../../Utils/Utility';
+import {isObjectEmpty, usePrevious} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
-import {DMYFORMAT, HalfMonthDateYearFormat, YMDFORMAT} from '../../Utils/AppConstants';
+import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {MarginConstants} from '../../styles/margin.constants';
-import Icomoon from '../../config/Icons/icon-native'
-import {VictoryPie} from 'victory-native'
+import Icomoon from '../../config/Icons/icon-native';
+import {VictoryPie} from 'victory-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import {Sizes} from '../../styles/Size.constant';
-import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import StringUtils from '../../Utils/StringUtils';
+import FilterHeader from '../FilterHeader';
+import {getSelectedRange} from '../../Utils/DateFilterUtility';
+import {setRangeFilter} from '../../redux/actions';
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -33,9 +28,11 @@ const wait = timeout => {
 };
 
 const CxDashboard = props => {
-    let [callApi, setCallAPI] = useState(true);
+    let [callApi, setCallAPI] = useState(false);
     let [refreshing, setRefreshing] = useState(false);
     let [comparision, setComparision] = useState(false);
+
+    let prevRangeRef = usePrevious(props.range);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -44,81 +41,55 @@ const CxDashboard = props => {
     }, []);
 
     useEffect(() => {
-        if(props.dashboardData.DetractorTicketsCount){
-            props.showLoading(false);
+        if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate)) {
+            let selectedRange = getSelectedRange({type:1});
+            props.setRange({
+                type: 1,
+                startDate: selectedRange.startDate,
+                endDate: selectedRange.endDate
+            });
+            let data = {
+                startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
+                endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT)
+            };
+            props.getDashboardContent(props.authToken, data);
+        } else {
+            getDashboardData();
         }
-    },[props.dashboardData.DetractorTicketsCount]);
+    },[]);
 
     useEffect(() => {
+        if(prevRangeRef && prevRangeRef !== props.range) {
+            getDashboardData();
+        }
+    },[props.range]);
 
-        if (callApi) {
-
-            if(!isObjectEmpty(props.range)) {
-                let selectedRange = getSelectedRange(props.range.type);
-                let startDate = props.range.type !== 6 ? selectedRange.startDate : props.range.startDate;
-                let endDate = props.range.type !== 6 ? selectedRange.endDate : props.range.endDate;
-                if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate)) {
-                    props.setRange({
-                        type: 1,
-                        startDate: selectedRange.startDate,
-                        endDate: selectedRange.endDate
-                    })
-                }
-                let data = {
-                    startDate: moment(startDate, DMYFORMAT).format(YMDFORMAT),
-                    endDate: moment(endDate, DMYFORMAT).format(YMDFORMAT)
-                };
-                props.getDashboardContent(props.authToken, data);
-                setCallAPI(false);
-            }
+    useEffect(() => {
+        if (callApi && StringUtils.isNotEmpty(props.range.startDate)) {
+            getDashboardData();
+            setCallAPI(false);
         }
     }, [callApi]);
 
     useEffect(() => {
         if(comparision) {
-            let data = {
-                startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
-            };
-            props.getDashboardContent(props.authToken, data);
+            getDashboardData();
             setComparision(false)
         }
     },[comparision]);
 
-    let getSelectedRange = (type) => {
-        let today = new Date();
-        let month = today.getMonth() + 1;
-        let tempEndDate = today.getDate()+"/"+month+"/"+today.getFullYear();
-        switch (type) {
-            case 1:
-                /** Last 30 days*/
-                let tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(30,'days').format(DMYFORMAT);
-                return {'startDate': tempStartDate, 'endDate': tempEndDate};
-            case 2:
-                /** This month*/
-                let firstDate = 1+"/"+month+"/"+today.getFullYear();
-                tempStartDate = moment(firstDate, DMYFORMAT).format(DMYFORMAT);
-                return {'startDate': tempStartDate, 'endDate': tempEndDate};
-            case 3:
-                /** Last month*/
-                firstDate = 1+"/"+today.getMonth()+"/"+today.getFullYear();
-                tempStartDate = moment(firstDate, DMYFORMAT).format(DMYFORMAT);
-                let lastDate = new Date(today.getFullYear(), today.getMonth(), 0);
-                month = lastDate.getMonth() + 1;
-                tempEndDate = lastDate.getDate()+"/"+month+"/"+lastDate.getFullYear();
-                tempEndDate = moment(tempEndDate, DMYFORMAT).format(DMYFORMAT);
-                return {'startDate': tempStartDate, 'endDate': tempEndDate};
-            case 4:
-                /** Last 3 months*/
-                tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(3,'months').format(DMYFORMAT);
-                return {'startDate': tempStartDate, 'endDate': tempEndDate};
-            case 5:
-                /** Last 6 months */
-                tempStartDate = moment(tempEndDate, DMYFORMAT).subtract(6,'months').format(DMYFORMAT);
-                return {'startDate': tempStartDate, 'endDate': tempEndDate};
-            default:
-                break;
+    useEffect(() => {
+        if(props.dashboardData.DetractorTicketsCount){
+            props.showLoading(false);
         }
+    },[props.dashboardData.DetractorTicketsCount]);
+
+    let getDashboardData = () => {
+        let data = {
+            startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+            endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+        };
+        props.getDashboardContent(props.authToken, data);
     };
 
     const renderDonutChart = () => {
@@ -140,8 +111,8 @@ const CxDashboard = props => {
                         data={victoryPieData}
                         width={5*MarginConstants.tab4}
                         height={6*MarginConstants.tab4}
-                        innerRadius={2.5*MarginConstants.tab4}
-                        radius={2.2*MarginConstants.tab4}
+                        innerRadius={2.3*MarginConstants.tab4}
+                        radius={2.1*MarginConstants.tab4}
                         style={{
                             labels: {
                                 fill: 'transparent'
@@ -151,10 +122,10 @@ const CxDashboard = props => {
                         endAngle={-90}
                         startAngle={90}
                     />
-                </View>
-                <View style={dashboardStyles.npsView}>
-                    <Text style={[dashboardStyles.npsPercentText,{left: data.npsPercentage > 0 ? '100%' : '80%'}]}>{data.npsPercentage}</Text>
-                    <Text style={[dashboardStyles.npsText,{left: data.npsPercentage > 0 ? '75%' : '65%'}]}>NPS</Text>
+                    <View style={dashboardStyles.npsView}>
+                        <Text style={[dashboardStyles.npsPercentText]}>{data.npsPercentage}</Text>
+                        <Text style={[dashboardStyles.npsText]}>NPS</Text>
+                    </View>
                 </View>
                 {renderDonutInfoContainer(responseCount)}
             </View>
@@ -174,25 +145,18 @@ const CxDashboard = props => {
                 <Text style={dashboardStyles.responseText}>{count}</Text>
                 <View style={dashboardStyles.separator}/>
                 <View style={dashboardStyles.ticketTypeContainer}>
-                    <Icon name={icon} size={15} color={Colors.borderColor}/>
+                    <Icon name={icon} size={Sizes.inlineIcons} color={Colors.borderColor}/>
                     <Text style={dashboardStyles.response}>{title}</Text>
                 </View>
             </View>
         )
     };
 
-
     let renderTicketView = (ticketCount, icon, title) => {
         return (
             <TouchableWithoutFeedback
                 onPress={() => {
-                    let data = {
-                        storeId: '' + props.dashboardData.primaryStoreId,
-                        title: props.dashboardData.primaryStoreName + ' - Tickets',
-                        token: props.authToken,
-                    };
                     const pushAction = StackActions.push('DetractorTickets', {
-                        data: data,
                         screen: icon === 'new' ? "New" : (icon === 'open' ? "Open" : "Resolved")
                     });
                     props.navigation.dispatch(pushAction);
@@ -201,7 +165,7 @@ const CxDashboard = props => {
                     <Text  style={dashboardStyles.ticketText}>{ticketCount}</Text>
                     <View style={dashboardStyles.separator}/>
                     <View style={dashboardStyles.ticketTypeContainer}>
-                        <Icomoon name={icon} size={Sizes.icons} color= {Colors.borderColor}/>
+                        <Icomoon name={icon} size={Sizes.inlineIcons} color= {Colors.borderColor}/>
                         <Text style={dashboardStyles.ticketType}>{title}</Text>
                     </View>
                 </View>
@@ -268,7 +232,7 @@ const CxDashboard = props => {
                 <View style={dashboardStyles.list}>
                     <FlatList
                         data={list.sort((a, b) => b.NPSScore.npsPercentage - a.NPSScore.npsPercentage)}
-                        keyExtractor={item => item.filterName}
+                        keyExtractor={(item, index) => index+''}
                         renderItem={renderRow}
                         onEndReachedThreshold={0.01}
                         refreshing={false}
@@ -303,84 +267,17 @@ const CxDashboard = props => {
         return <View style={dashboardStyles.container} />;
     };
 
-    let getDashBoardDataOnNewRange = (range) => {
-        props.setRange(range);
-        setCallAPI(true)
-    };
-
-    let filterAction = () => {
-        const pushAction = StackActions.push('Date Range', {
-            range: props.range,
-            setRange: getDashBoardDataOnNewRange
-        });
-        props.navigation.dispatch(pushAction);
-    };
-
-    let addRange = () => {
-        let startDate = props.range.startDate;
-        let endDate = props.range.endDate;
-        let startComponents = startDate.split('/');
-        let endComponents = endDate.split('/');
-        let startMonth = parseInt(startComponents[1]) - 1;
-        let tempStart = moment([startComponents[2], startMonth+'', startComponents[0]]);
-        let endMonth = parseInt(endComponents[1]) - 1;
-        let tempEnd = moment([endComponents[2], endMonth+'', endComponents[0]]);
-        let days = tempEnd.diff(tempStart,'days');
-        let nextDay = moment(endDate, DMYFORMAT).add(1,'days').format(DMYFORMAT);
-        let endDay = moment(nextDay, DMYFORMAT).add(days,'days').format(DMYFORMAT);
-        let tempRange = {...props.range, startDate: nextDay, endDate: endDay};
-        props.setRange(tempRange);
-        setComparision(true)
-    };
-
-    let reduceRange = () => {
-        let startDate = props.range.startDate;
-        let endDate = props.range.endDate;
-        let startComponents = startDate.split('/');
-        let endComponents = endDate.split('/');
-        let startMonth = parseInt(startComponents[1]) - 1;
-        let tempStart = moment([startComponents[2], startMonth+'', startComponents[0]]);
-        let endMonth = parseInt(endComponents[1]) - 1;
-        let tempEnd = moment([endComponents[2], endMonth+'', endComponents[0]]);
-        let days = tempEnd.diff(tempStart,'days');
-        let endDay = moment(startDate, DMYFORMAT).subtract(1,'days').format(DMYFORMAT);
-        let startDay = moment(endDay, DMYFORMAT).subtract(days,'days').format(DMYFORMAT);
-        let tempRange = {...props.range, startDate: startDay, endDate: endDay};
-        props.setRange(tempRange);
-        setComparision(true)
-    };
-
-    let renderFilterHeader = () => {
-        let startDate = moment(props.range.startDate, DMYFORMAT).format(HalfMonthDateYearFormat);
-        let endDate = moment(props.range.endDate, DMYFORMAT).format(HalfMonthDateYearFormat);
-
-        return (
-            <View style={dashboardStyles.filterHeader}>
-                <TouchableWithoutFeedback onPress={filterAction} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
-                <View style={dashboardStyles.filterLeftView}>
-                        <LineIcon name={'calendar'} size={15} color={Colors.white}/>
-                        <View style={dashboardStyles.filterCalendarView}>
-                            <Text style={dashboardStyles.dateText}>{startDate} - </Text>
-                            <Text style={dashboardStyles.dateText}>{endDate}</Text>
-                        </View>
-                </View>
-            </TouchableWithoutFeedback>
-        <View style={dashboardStyles.filterArrowIconView}>
-            <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={reduceRange}>
-                <LineIcon name='arrow-left' size={15} color= {Colors.white} style={{marginRight: MarginConstants.tab2}}/>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={addRange}>
-                <LineIcon name='arrow-right' size={15} color= {Colors.white}/>
-            </TouchableWithoutFeedback>
-        </View>
-    </View>
-    )
-    };
-
     let renderDashboard = () => {
         return (
             <SafeAreaView forceInset={{bottom: 'never'}} style={dashboardStyles.container}>
-                {renderFilterHeader()}
+                <FilterHeader actionOnArrowClick = {() => {
+                    setComparision(true)
+                }}
+                              callDataAPI = {() => {
+                                  setCallAPI(true)
+                              }}
+                              {...props}
+                />
                 <ScrollView
                     contentContainerStyle={dashboardStyles.scrollView}
                     refreshControl={
@@ -416,7 +313,7 @@ const mapStateToProps = state => {
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
         authToken: state.global.authToken,
-        range: state.dashboard.range
+        range: state.global.range
     };
 };
 
@@ -429,7 +326,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(showLoading(flag));
     },
     setRange: (range) => {
-        dispatch(setDashboardRangeFilter(range))
+        dispatch(setRangeFilter(range))
     }
 });
 
