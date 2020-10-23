@@ -180,13 +180,6 @@ const AppRouter = props => {
                 })}
             />
             <RootStack.Screen
-                name="Change Status"
-                component={FeedbackUpdate}
-                options={({ navigation, route }) => ({
-                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                })}
-            />
-            <RootStack.Screen
                 name="Date Range"
                 component={DateRangeTabStack}
                 options={({ navigation, route }) => ({

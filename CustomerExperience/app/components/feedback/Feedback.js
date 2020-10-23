@@ -4,8 +4,7 @@ import FeedbackCell from './FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {StackActions} from '@react-navigation/native';
 import {Colors} from '../../styles/color.constants';
-import {clearError, setRangeFilter, showLoading} from '../../redux/actions';
-import {getFeedbackList} from '../../redux/actions/feedback.actions';
+import {clearError, setError, setRangeFilter} from '../../redux/actions';
 import {connect} from 'react-redux';
 import QPSpinner from '../../widgets/QPSpinner';
 import {usePrevious} from '../../Utils/Utility';
@@ -21,7 +20,6 @@ import {apiHandler} from '../../api/ApiHandler';
 
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
-
 
 function Feedback(props){
     let [feedbackData, setFeedbackData] = useState([]);
@@ -48,8 +46,9 @@ function Feedback(props){
                 setTicketStatus(response.body.cxTicketStatusValues);
                 setFeedbackData(data);
                 setLoading(true);
-            }, () => {
-                setLoading(true)
+            }, (error) => {
+                setLoading(true);
+                props.setError(error)
             });
         }
     };
@@ -91,12 +90,14 @@ function Feedback(props){
                               }}
                               {...props}
                 />
-                <FormContext.Provider value={{ticketStatus: ticketStatus,
+                <FormContext.Provider value={{
+                    ticketStatus: ticketStatus,
                     feedbackData: feedbackData,
                     onFeedbackEndReached: onEndReached,
                     loading: loading,
                     onRefresh: onRefresh,
-                    range: props.range
+                    range: props.range,
+                    token: props.authToken
                 }}>
                     <FeedbackTabStack />
                 </FormContext.Provider>
@@ -138,7 +139,11 @@ const renderFeedbackScene = (props) => {
     },[feedbackForm.feedbackData]);
 
     const _onPressRow = (data) => {
-        const pushAction = StackActions.push('Feedback Details');
+        const pushAction = StackActions.push('Feedback Details', {
+            data: data,
+            ticketStatus: feedbackForm.ticketStatus,
+            token: feedbackForm.token
+        });
         props.navigation.dispatch(pushAction);
     };
 
@@ -201,26 +206,19 @@ const renderFeedbackScene = (props) => {
 
 const mapStateToProps = state => {
     return {
-        feedback: state.feedback.response,
-        isLoading: state.global.isLoading,
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
         authToken: state.global.authToken,
-        feedbackRange: state.feedback.range,
         range: state.global.range
     };
 };
 
 const mapDispatchToProps = dispatch => ({
+    setError: (error) => {
+      dispatch(setError(error))
+    },
     clearError: () => {
         dispatch(clearError(false));
-    },
-    getFeedbackList: (data, token) => {
-        // dispatch(showLoading(true));
-        dispatch(getFeedbackList(data, token));
-    },
-    showLoading: (flag) => {
-        dispatch(showLoading(flag));
     },
     setRange: (range) => {
         dispatch(setRangeFilter(range))

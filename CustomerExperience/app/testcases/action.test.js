@@ -41,25 +41,25 @@ describe('ACTIONS', () => {
     expect(actions.validateUserOtp()).toEqual(expectedAction);
   });
 
-  it('should create an action with correct type getFeedbackList', () => {
-    const expectedAction = {
-      type: GET_FEEDBACK,
-    };
-    expect(feedbackActions.getFeedbackList()).toEqual(expectedAction);
-  });
-  it('should create an action with correct type cleanUpdateFeedBack', () => {
-    const expectedAction = {
-      type: FEEDBACK_UPDATED,
-      response: {},
-    };
-    expect(feedbackActions.cleanUpdateFeedBack()).toEqual(expectedAction);
-  });
-  it('should create an action with correct type updateFeedback', () => {
-    const expectedAction = {
-      type: UPDATE_FEEDBACK,
-    };
-    expect(feedbackActions.updateFeedback()).toEqual(expectedAction);
-  });
+  // it('should create an action with correct type getFeedbackList', () => {
+  //   const expectedAction = {
+  //     type: GET_FEEDBACK,
+  //   };
+  //   expect(feedbackActions.getFeedbackList()).toEqual(expectedAction);
+  // });
+  // it('should create an action with correct type cleanUpdateFeedBack', () => {
+  //   const expectedAction = {
+  //     type: FEEDBACK_UPDATED,
+  //     response: {},
+  //   };
+  //   expect(feedbackActions.cleanUpdateFeedBack()).toEqual(expectedAction);
+  // });
+  // it('should create an action with correct type updateFeedback', () => {
+  //   const expectedAction = {
+  //     type: UPDATE_FEEDBACK,
+  //   };
+  //   expect(feedbackActions.updateFeedback()).toEqual(expectedAction);
+  // });
   it('should create an action with correct type dashboardActions', () => {
     const expectedAction = {
       type: GET_DASHBOARD,

@@ -48,3 +48,8 @@ export const setRangeFilter = range => ({
   type: SET_RANGE_FILTER,
   range,
 });
+
+export const setError = (error) => ({
+  type: API_ERROR,
+  error
+});

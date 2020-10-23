@@ -7,26 +7,26 @@ import {
 } from '../actions/index';
 import {FEEDBACK_RECEIVED, FEEDBACK_UPDATED, GET_FEEDBACK, UPDATE_FEEDBACK} from '../actions/feedback.actions';
 
-export function* fetchFeedback(action) {
-  try {
-    const json = yield WebServiceHandler.postNew(
-        CX_GET_ALL_RESPONSE,
-        {'Auth-Token': action.token},
-        action.param,
-    );
+// export function* fetchFeedback(action) {
+//   try {
+//     const json = yield WebServiceHandler.postNew(
+//         CX_GET_ALL_RESPONSE,
+//         {'Auth-Token': action.token},
+//         action.param,
+//     );
+//
+//     yield put({type: FEEDBACK_RECEIVED, response: json});
+//     // yield put({type: IS_LOADING, payload: {isLoading: false}});
+//
+//   } catch (error) {
+//     yield put({type: IS_LOADING, payload: {isLoading: false}});
+//     yield put({type: API_ERROR, error: error});
+//   }
+// }
 
-    yield put({type: FEEDBACK_RECEIVED, response: json});
-    // yield put({type: IS_LOADING, payload: {isLoading: false}});
-
-  } catch (error) {
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
-    yield put({type: API_ERROR, error: error});
-  }
-}
-
-export function* watchGetFeedback() {
-  yield takeLatest(GET_FEEDBACK, fetchFeedback);
-}
+// export function* watchGetFeedback() {
+//   yield takeLatest(GET_FEEDBACK, fetchFeedback);
+// }
 
 export function* updateFetchFeedback(action) {
   try {

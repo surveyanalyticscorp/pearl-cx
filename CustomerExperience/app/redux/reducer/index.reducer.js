@@ -15,7 +15,6 @@ const rootReducer = (state, action) => {
 
 const appReducer = combineReducers({
   network: NetworkReducer,
-  feedback: feedbackReducer,
   dashboard: dashboardReducer,
   global: globalReducer,
 });
