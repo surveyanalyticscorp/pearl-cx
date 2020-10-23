@@ -104,7 +104,7 @@ const DetractorScenes = props => {
                     <FlatList
                         contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}
                         data={tickets}
-                        keyExtractor={(item, index) => index+''}
+                        keyExtractor={item => item.ticketID+''}
                         renderItem={renderRow}
                         onEndReachedThreshold={0.01}
                         refreshing={false}

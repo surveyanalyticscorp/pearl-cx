@@ -14,7 +14,6 @@ import {isStringNullOrEmpty} from '../Utils/Utility';
 import Feedback from '../components/feedback/Feedback';
 import FeedbackDetails from '../components/feedback/FeedbackDetails';
 import FeedbackUpdate from '../components/feedback/FeedbackUpdate';
-import DashBoardStoreDetails from '../components/dashboard/components/DashBoardStoreDetails';
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useSelector} from 'react-redux';
@@ -206,14 +205,6 @@ const AppRouter = props => {
                 component={CxDashboard}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon/>,
-                })}
-            />
-            <RootStack.Screen
-                name="DashBoardStoreDetails"
-                component={DashBoardStoreDetails}
-                options={({ navigation, route }) => ({
-                    title: route.params.name ? route.params.name : 'DashBoardStore',
-                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                 })}
             />
             <RootStack.Screen

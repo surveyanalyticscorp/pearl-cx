@@ -211,7 +211,7 @@ const ForgotPassword = props => {
                             label={stringConst.email}
                             defaultValue={email}
                             style={styles.textInput}
-                            onEndEdit={handleEmail}
+                            onChange={handleEmail}
                             onSubmitEditing={() => {
                                 textFieldTimer = setTimeout(() => {
                                     Keyboard.dismiss()
@@ -223,7 +223,7 @@ const ForgotPassword = props => {
                             defaultValue={accessCode}
                             label={stringConst.companyCode}
                             style={styles.textInput}
-                            onEndEdit={handleAccessCode}
+                            onChange={handleAccessCode}
                             onSubmitEditing={() => {
                                 textFieldTimer = setTimeout(() => {
                                     Keyboard.dismiss()

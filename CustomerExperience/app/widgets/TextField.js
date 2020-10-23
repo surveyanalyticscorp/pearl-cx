@@ -39,7 +39,7 @@ const QPTextField = props => {
       <Icon
         style={{
           position: 'absolute',
-          top: 33,
+          top: 38,
           right: Platform.select({
             ios: 40,
             android: 10

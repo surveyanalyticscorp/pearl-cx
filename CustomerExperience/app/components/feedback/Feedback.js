@@ -1,15 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {StackActions} from '@react-navigation/native';
 import {Colors} from '../../styles/color.constants';
-import {clearError, showLoading} from '../../redux/actions';
-import {getFeedbackList, setFeedbackRangeFilter} from '../../redux/actions/feedback.actions';
+import {clearError, setRangeFilter, showLoading} from '../../redux/actions';
+import {getFeedbackList} from '../../redux/actions/feedback.actions';
 import {connect} from 'react-redux';
 import QPSpinner from '../../widgets/QPSpinner';
-import {showMessage} from 'react-native-flash-message';
-import {isObjectEmpty, usePrevious} from '../../Utils/Utility';
+import {usePrevious} from '../../Utils/Utility';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import {TextSizes} from '../../styles/textsize.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
@@ -17,28 +16,90 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import FilterHeader from '../FilterHeader';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
-import StringUtils from '../../Utils/StringUtils';
-import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import SafeAreaView from 'react-native-safe-area-view';
+import {apiHandler} from '../../api/ApiHandler';
 
 const FeedbackTab = createMaterialTopTabNavigator();
+const FormContext = React.createContext();
 
-export default function Feedback(props){
-    let [callApi, setCallAPI] = useState(false);
-    let [comparision, setComparision] = useState(false);
+
+function Feedback(props){
+    let [feedbackData, setFeedbackData] = useState([]);
+    let [ticketStatus, setTicketStatus] = useState([]);
+    let [pageOffset, setPageOffset] = useState(0);
+    let [loading, setLoading] = useState(false);
+    let prevRangeRef = usePrevious(props.range);
+
+    let getFeedbackData = () => {
+        /**
+         * To avoid multiple API calls for each tab
+         * */
+        if(!loading || ArrayUtils.isNotEmpty(feedbackData)) {
+            const data = {
+                pageOffset: pageOffset,
+                sentiment: 'All',
+                startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+            };
+            apiHandler.getFeedbackResponseList(props.authToken, data, (response) => {
+                let data = pageOffset === 0 ? [] : [...feedbackData];
+                data = [...data, ...response.body.allResponses];
+                data = [...new Set(data)];
+                setTicketStatus(response.body.cxTicketStatusValues);
+                setFeedbackData(data);
+                setLoading(true);
+            }, () => {
+                setLoading(true)
+            });
+        }
+    };
+
+    useEffect(() => {
+        getFeedbackData();
+    }, []);
+
+    useEffect(() => {
+        if(pageOffset === 0 && ArrayUtils.isNotEmpty(feedbackData)) {
+            setLoading(false);
+            setFeedbackData([]);
+        }
+        getFeedbackData()
+    },[pageOffset]);
+
+    useEffect(() => {
+        if(prevRangeRef && prevRangeRef !== props.range) {
+            setPageOffset(0)
+        }
+    },[props.range]);
+
+    let onEndReached = () => {
+        setPageOffset(pageOffset + 1)
+    };
+
+    let onRefresh = () => {
+        setPageOffset(0)
+    };
 
     const renderFeedbackView = () => {
         return(
             <SafeAreaView forceInset={{top: 'never',bottom:'never'}} style={styles.safeAreaView}>
                 <FilterHeader actionOnArrowClick = {() => {
-                    setComparision(true)
+                    setPageOffset(0)
                 }}
                               callDataAPI = {() => {
-                                  setCallAPI(true)
+                                  setPageOffset(0)
                               }}
                               {...props}
                 />
-                <FeedbackTabStack comparisionProp={comparision} apiProp ={callApi}/>
+                <FormContext.Provider value={{ticketStatus: ticketStatus,
+                    feedbackData: feedbackData,
+                    onFeedbackEndReached: onEndReached,
+                    loading: loading,
+                    onRefresh: onRefresh,
+                    range: props.range
+                }}>
+                    <FeedbackTabStack />
+                </FormContext.Provider>
             </SafeAreaView>
         )
     };
@@ -55,137 +116,39 @@ const FeedbackTabStack = () => (
     }}
                            keyboardDismissMode={'auto'}
     >
-        <FeedbackTab.Screen name="All" component={FeedbackTabScreen} />
-        <FeedbackTab.Screen name="Detractor" component={FeedbackTabScreen} />
-        <FeedbackTab.Screen name="Passive" component={FeedbackTabScreen} />
-        <FeedbackTab.Screen name="Promoter" component={FeedbackTabScreen} />
+        <FeedbackTab.Screen name="All" component={renderFeedbackScene} initialParams={{screenName: 'All'}}/>
+        <FeedbackTab.Screen name="Detractor" component={renderFeedbackScene} initialParams={{screenName: 'Detractor'}}/>
+        <FeedbackTab.Screen name="Passive" component={renderFeedbackScene} initialParams={{screenName: 'Passive'}}/>
+        <FeedbackTab.Screen name="Promoter" component={renderFeedbackScene} initialParams={{screenName: 'Promoter'}}/>
     </FeedbackTab.Navigator>
 );
 
+
+
 const renderFeedbackScene = (props) => {
 
-    let [feedbackData, setFeedbackData] = useState([]);
-    let [callApi, setCallAPI] = useState(props.apiProp || false);
-    let [comparision, setComparision] = useState(props.comparisionProp || false);
-
-    let prevRangeRef = usePrevious(props.range);
-
-    let getFeedbackData = () => {
-        /**
-         * To avoid multiple API calls for each tab
-         * */
-        if(!props.isLoading) {
-            const data = {
-                pageOffset: 0,
-                sentiment: 'All',
-                startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
-            };
-            props.getFeedbackList(
-                data,
-                props.authToken,
-            );
-        }
-    };
+    const feedbackForm = useContext(FormContext);
+    let [list, setList] = useState(feedbackForm.feedbackData);
+    let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);
 
     useEffect(() => {
-        if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate) && !props.isLoading) {
-            let selectedRange = getSelectedRange({type:1});
-            props.setRange({
-                type: 1,
-                startDate: selectedRange.startDate,
-                endDate: selectedRange.endDate
-            });
-            let data = {
-                pageOffset: 0,
-                sentiment: 'All',
-                startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
-                endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT)
-            };
-            props.getFeedbackList(data, props.authToken);
-        } else {
-            getFeedbackData()
+        if(prevFeedbackRef !== feedbackForm.feedbackData) {
+            getData()
         }
-    }, []);
-
-    useEffect(() => {
-        if(prevRangeRef && prevRangeRef !== props.range) {
-            getFeedbackData();
-        }
-    },[props.range]);
-
-    useEffect(() => {
-        if (callApi && StringUtils.isNotEmpty(props.range.startDate)) {
-            getFeedbackData();
-            setCallAPI(false);
-        }
-    }, [callApi]);
-
-    useEffect(() => {
-        if(comparision) {
-            getFeedbackData();
-            setComparision(false)
-        }
-    },[comparision]);
-
-    useEffect(() => {
-        getItems()
-    },[props.feedback]);
-
-    useEffect(() => {
-        if (props.isError) {
-            showMessage({
-                message: props.errorMessage.message,
-                type: 'error',
-                icon: 'auto',
-            });
-            let timer = setTimeout(() => {
-                props.clearError();
-            }, 1000);
-            return () => {
-                clearTimeout(timer);
-            };
-        }
-    }, [props.isError]);
-
-    useEffect(() => {
-        if(props.feedback.allResponses){
-            props.showLoading(false);
-        }
-    },[props.feedback.allResponses]);
-
-    const getItems = () => {
-        if(props.route) {
-            if (props.route.name === 'All') {
-                setFeedbackData(props.feedback.allResponses);
-            } else {
-                let responses = props.feedback.allResponses;
-                if(ArrayUtils.isNotEmpty(responses)) {
-                    setFeedbackData(responses.filter(res => res.sentiment === props.route.name));
-                } else {
-                    setFeedbackData([])
-                }
-            }
-        }
-    };
+    },[feedbackForm.feedbackData]);
 
     const _onPressRow = (data) => {
-        const pushAction = StackActions.push('Feedback Details', {
-            data: data,
-            ticketStatus: props.feedback.cxTicketStatusValues,
-            token: props.authToken
-        });
+        const pushAction = StackActions.push('Feedback Details');
         props.navigation.dispatch(pushAction);
     };
 
     const _renderRow = ({item}) => {
-        let ticketStatuses = props.feedback.cxTicketStatusValues;
         return (
             <FeedbackCell
                 item={item}
                 onSelect={() => _onPressRow(item)}
                 origin="List"
-                ticketStatuses={ticketStatuses}
+                ticketStatuses={feedbackForm.ticketStatus}
             />
         );
     };
@@ -206,30 +169,33 @@ const renderFeedbackScene = (props) => {
         )
     };
 
-    let renderFeedbackList = () => {
-        if (!isObjectEmpty(props.feedback)) {
-            return (
-                <View style={styles.container}>
-                    <FlatList
-                        data={feedbackData}
-                        keyExtractor={item => item.responseSetID+''}
-                        renderItem={_renderRow}
-                        // onEndReached={onEndReached}
-                        onEndReachedThreshold={0.01}
-                        refreshing={false}
-                        ListEmptyComponent={renderNoDataFound}
-                        onRefresh={() => {
-                            setCallAPI(true);
-                        }}
-                        initialNumToRender={10}
-                    />
-                </View>
-            );
+    let getData = () => {
+        if(props.route.params.screenName === 'All') {
+            setList([...feedbackForm.feedbackData])
+        } else {
+            setList([...feedbackForm.feedbackData.filter(res => res.sentiment === props.route.params.screenName)])
         }
-        return <View/>
     };
 
-    return props.isLoading ? renderSpinner() : renderFeedbackList()
+    let renderFeedbackList = () => {
+        return (
+            <View style={styles.container}>
+                <FlatList
+                    data={list}
+                    renderItem={_renderRow}
+                    keyExtractor={item => item.responseSetID+''}
+                    onEndReachedThreshold={0.01}
+                    onEndReached={feedbackForm.onFeedbackEndReached}
+                    refreshing={false}
+                    ListEmptyComponent={renderNoDataFound}
+                    onRefresh={feedbackForm.onRefresh}
+                    extraData={[list]}
+                />
+            </View>
+        );
+    };
+
+    return !feedbackForm.loading ? renderSpinner() : renderFeedbackList()
 };
 
 
@@ -250,18 +216,18 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearError(false));
     },
     getFeedbackList: (data, token) => {
-        dispatch(showLoading(true));
+        // dispatch(showLoading(true));
         dispatch(getFeedbackList(data, token));
     },
     showLoading: (flag) => {
         dispatch(showLoading(flag));
     },
     setRange: (range) => {
-        dispatch(setFeedbackRangeFilter(range))
+        dispatch(setRangeFilter(range))
     }
 });
 
-const FeedbackTabScreen = connect(mapStateToProps, mapDispatchToProps)(renderFeedbackScene);
+export default connect(mapStateToProps, mapDispatchToProps)(Feedback);
 
 const styles = StyleSheet.create({
     safeAreaView: {
@@ -292,14 +258,3 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     }
 });
-
-
-// const onEndReached = () => {
-//     // Checking if the list has responses in multiples of 10
-//     // if((props.feedbacks.lastAddedCount > 0 && this.props.feedbacks.lastAddedCount % 10 === 0   ) && !this.state.isLoadingTail)
-//     //   this.setState({
-//     //     isLoadingTail: true
-//     //   }, ()=>{
-//     //     this.getFeedbackList(false);
-//     //   })
-// };
