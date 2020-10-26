@@ -1,5 +1,14 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {FlatList, RefreshControl, ScrollView, Text, TouchableWithoutFeedback, View} from 'react-native';
+import {
+    FlatList,
+    RefreshControl,
+    ScrollView,
+    Text,
+    TouchableWithoutFeedback,
+    View,
+    BackHandler,
+    Alert,
+} from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import {showLoading} from '../../redux/actions/index';
 import {getDashboardContent} from '../../redux/actions/dashboard.actions';
@@ -31,6 +40,7 @@ const CxDashboard = props => {
     let [callApi, setCallAPI] = useState(false);
     let [refreshing, setRefreshing] = useState(false);
     let [comparision, setComparision] = useState(false);
+    let [exitAlert, showExitAlert] = useState(false);
 
     let prevRangeRef = usePrevious(props.range);
 
@@ -41,6 +51,9 @@ const CxDashboard = props => {
     }, []);
 
     useEffect(() => {
+
+        BackHandler.addEventListener("hardwareBackPress", handleBackPress);
+
         if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate)) {
             let selectedRange = getSelectedRange({type:1});
             props.setRange({
@@ -56,6 +69,9 @@ const CxDashboard = props => {
         } else {
             getDashboardData();
         }
+        return function cleanup() {
+            BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
+        };
     },[]);
 
     useEffect(() => {
@@ -83,6 +99,35 @@ const CxDashboard = props => {
             props.showLoading(false);
         }
     },[props.dashboardData.DetractorTicketsCount]);
+
+    let handleBackPress = () => {
+        showExitAlert(true);
+        return true
+    };
+
+    let renderExitAlert = () => {
+            return (
+                Alert.alert(
+                    'Exit App',
+                    'Are you sure?',
+                    [
+                        {
+                            text: 'Yes',
+                            onPress: () => {
+                                showExitAlert(false);
+                                BackHandler.exitApp()
+                            }
+                        },
+                        {   text: 'No',
+                            onPress: () => {
+                                showExitAlert(false)
+                            }
+                        }
+                    ],
+                    { cancelable: false }
+                )
+            );
+    };
 
     let getDashboardData = () => {
         let data = {
@@ -286,6 +331,7 @@ const CxDashboard = props => {
                     <View style={dashboardStyles.container}>
                         {renderDashboardContent()}
                         {renderSpinner()}
+                        {exitAlert && renderExitAlert()}
                     </View>
                 </ScrollView>
             </SafeAreaView>
