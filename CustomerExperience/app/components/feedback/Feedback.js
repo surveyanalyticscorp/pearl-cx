@@ -58,16 +58,25 @@ function Feedback(props){
     }, []);
 
     useEffect(() => {
-        if(pageOffset === 0 && ArrayUtils.isNotEmpty(feedbackData)) {
+        if(pageOffset === 0) {
             setLoading(false);
-            setFeedbackData([]);
+            ArrayUtils.isNotEmpty(feedbackData) && setFeedbackData([]);
+        } else {
+            getFeedbackData()
         }
-        getFeedbackData()
     },[pageOffset]);
+
+    useEffect( () => {
+        !loading && getFeedbackData()
+    },[loading]);
 
     useEffect(() => {
         if(prevRangeRef && prevRangeRef !== props.range) {
-            setPageOffset(0)
+            if(pageOffset === 0) {
+                setLoading(false)
+            } else {
+                setPageOffset(0)
+            }
         }
     },[props.range]);
 
@@ -76,17 +85,23 @@ function Feedback(props){
     };
 
     let onRefresh = () => {
-        setPageOffset(0)
+        if(pageOffset === 0) {
+            setLoading(false)
+        } else {
+            setPageOffset(0)
+        }
     };
 
     const renderFeedbackView = () => {
         return(
             <SafeAreaView forceInset={{top: 'never',bottom:'never'}} style={styles.safeAreaView}>
                 <FilterHeader actionOnArrowClick = {() => {
-                    setPageOffset(0)
+                    setLoading(false);
+                    setPageOffset(0);
                 }}
                               callDataAPI = {() => {
-                                  setPageOffset(0)
+                                  setLoading(false);
+                                  setPageOffset(0);
                               }}
                               {...props}
                 />
