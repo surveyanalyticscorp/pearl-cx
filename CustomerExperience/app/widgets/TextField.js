@@ -40,10 +40,7 @@ const QPTextField = props => {
         style={{
           position: 'absolute',
           top: 38,
-          right: Platform.select({
-            ios: 40,
-            android: 10
-          })
+          right: 10
         }}
         name={icon}
         size={25}
@@ -71,7 +68,6 @@ const QPTextField = props => {
         onSubmitEditing={onSubmit}
         onChangeText={onChange}
         ref={fieldRef}
-        clearButtonMode={'always'}
         placeholder={props.placeholder}
         fontSize={TextSizes.primary}
         labelFontSize={TextSizes.secondary}

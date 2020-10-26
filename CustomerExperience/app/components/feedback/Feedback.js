@@ -7,7 +7,7 @@ import {Colors} from '../../styles/color.constants';
 import {clearError, setError, setRangeFilter} from '../../redux/actions';
 import {connect} from 'react-redux';
 import QPSpinner from '../../widgets/QPSpinner';
-import {usePrevious} from '../../Utils/Utility';
+import {showErrorFlashMessage, usePrevious} from '../../Utils/Utility';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import {TextSizes} from '../../styles/textsize.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
@@ -25,14 +25,15 @@ function Feedback(props){
     let [feedbackData, setFeedbackData] = useState([]);
     let [ticketStatus, setTicketStatus] = useState([]);
     let [pageOffset, setPageOffset] = useState(0);
-    let [loading, setLoading] = useState(false);
+    let [pagination, setPagination] = useState(false);
+    let [showLoader, setShowLoader] = useState(false);
     let prevRangeRef = usePrevious(props.range);
 
     let getFeedbackData = () => {
         /**
          * To avoid multiple API calls for each tab
          * */
-        if(!loading || ArrayUtils.isNotEmpty(feedbackData)) {
+        if (showLoader || pagination) {
             const data = {
                 pageOffset: pageOffset,
                 sentiment: 'All',
@@ -45,21 +46,23 @@ function Feedback(props){
                 data = [...new Set(data)];
                 setTicketStatus(response.body.cxTicketStatusValues);
                 setFeedbackData(data);
-                setLoading(true);
+                console.log("pageOffset data count " + data.length);
+                showLoader && setShowLoader(false);
+                pagination && setPagination(false)
             }, (error) => {
-                setLoading(true);
-                props.setError(error)
+                setShowLoader(false);
+                props.setError(error);
+                showErrorFlashMessage(error)
             });
         }
     };
 
     useEffect(() => {
-        getFeedbackData();
+        setShowLoader(true);
     }, []);
 
     useEffect(() => {
         if(pageOffset === 0) {
-            setLoading(false);
             ArrayUtils.isNotEmpty(feedbackData) && setFeedbackData([]);
         } else {
             getFeedbackData()
@@ -67,41 +70,58 @@ function Feedback(props){
     },[pageOffset]);
 
     useEffect( () => {
-        !loading && getFeedbackData()
-    },[loading]);
+        showLoader && getFeedbackData()
+    },[showLoader]);
 
     useEffect(() => {
         if(prevRangeRef && prevRangeRef !== props.range) {
             if(pageOffset === 0) {
-                setLoading(false)
+                setFeedbackData([]);
+                setShowLoader(true);
             } else {
-                setPageOffset(0)
+                setPageOffset(0);
+                setShowLoader(true);
             }
         }
     },[props.range]);
 
+    useEffect(() => {
+        pagination && setPageOffset(pageOffset + 1)
+    },[pagination]);
+
     let onEndReached = () => {
-        setPageOffset(pageOffset + 1)
+        !pagination && setPagination(true);
     };
 
     let onRefresh = () => {
         if(pageOffset === 0) {
-            setLoading(false)
+            setFeedbackData([]);
+            setShowLoader(true);
         } else {
             setPageOffset(0)
         }
+    };
+
+    let renderSpinner = () => {
+        return (
+            <View style={styles.loading}>
+                <QPSpinner/>
+            </View>
+        )
     };
 
     const renderFeedbackView = () => {
         return(
             <SafeAreaView forceInset={{top: 'never',bottom:'never'}} style={styles.safeAreaView}>
                 <FilterHeader actionOnArrowClick = {() => {
-                    setLoading(false);
+                    setFeedbackData([]);
                     setPageOffset(0);
+                    setShowLoader(true);
                 }}
                               callDataAPI = {() => {
-                                  setLoading(false);
+                                  setFeedbackData([]);
                                   setPageOffset(0);
+                                  setShowLoader(true);
                               }}
                               {...props}
                 />
@@ -109,13 +129,13 @@ function Feedback(props){
                     ticketStatus: ticketStatus,
                     feedbackData: feedbackData,
                     onFeedbackEndReached: onEndReached,
-                    loading: loading,
                     onRefresh: onRefresh,
                     range: props.range,
                     token: props.authToken
                 }}>
                     <FeedbackTabStack />
                 </FormContext.Provider>
+                {showLoader && renderSpinner()}
             </SafeAreaView>
         )
     };
@@ -132,10 +152,10 @@ const FeedbackTabStack = () => (
     }}
                            keyboardDismissMode={'auto'}
     >
-        <FeedbackTab.Screen name="All" component={renderFeedbackScene} initialParams={{screenName: 'All'}}/>
-        <FeedbackTab.Screen name="Detractor" component={renderFeedbackScene} initialParams={{screenName: 'Detractor'}}/>
-        <FeedbackTab.Screen name="Passive" component={renderFeedbackScene} initialParams={{screenName: 'Passive'}}/>
-        <FeedbackTab.Screen name="Promoter" component={renderFeedbackScene} initialParams={{screenName: 'Promoter'}}/>
+        <FeedbackTab.Screen name="All" component={renderFeedbackScene} initialParams={{screenName: 'All'}} />
+        <FeedbackTab.Screen name="Detractor" component={renderFeedbackScene} initialParams={{screenName: 'Detractor'}} />
+        <FeedbackTab.Screen name="Passive" component={renderFeedbackScene} initialParams={{screenName: 'Passive'}} />
+        <FeedbackTab.Screen name="Promoter" component={renderFeedbackScene} initialParams={{screenName: 'Promoter'}} />
     </FeedbackTab.Navigator>
 );
 
@@ -181,14 +201,6 @@ const renderFeedbackScene = (props) => {
         );
     };
 
-    let renderSpinner = () => {
-        return (
-            <View style={styles.loading}>
-                <QPSpinner/>
-            </View>
-        )
-    };
-
     let getData = () => {
         if(props.route.params.screenName === 'All') {
             setList([...feedbackForm.feedbackData])
@@ -204,7 +216,7 @@ const renderFeedbackScene = (props) => {
                     data={list}
                     renderItem={_renderRow}
                     keyExtractor={item => item.responseSetID+''}
-                    onEndReachedThreshold={0.01}
+                    onEndReachedThreshold={0}
                     onEndReached={feedbackForm.onFeedbackEndReached}
                     refreshing={false}
                     ListEmptyComponent={renderNoDataFound}
@@ -215,7 +227,7 @@ const renderFeedbackScene = (props) => {
         );
     };
 
-    return !feedbackForm.loading ? renderSpinner() : renderFeedbackList()
+    return renderFeedbackList()
 };
 
 
