@@ -36,17 +36,17 @@ export default function TicketOverview(props) {
 
     let renderTicketDetails = () => {
         let date = moment(ticket.timestamp).format('MMM DD, YYYY');
-      return (
-          <View style={styles.container}>
-              {renderRowHeader('Ticket Info')}
-              {renderRow('Response Id', ticket.responseID)}
-              {renderRow('Created On', date)}
-              {renderRow('Current Segment', ticket.currentSegment)}
-              {renderRow('Origin Segment', ticket.originSegment)}
-              {renderRow('Ticket Owner', ticket.ticketOwner)}
+        return (
+            <View style={styles.container}>
+                {renderRowHeader('Ticket Info')}
+                {renderRow('Response Id', ticket.responseID)}
+                {renderRow('Created On', date)}
+                {renderRow('Current Segment', ticket.currentSegment.name)}
+                {renderRow('Origin Segment', ticket.originSegment.name)}
+                {renderRow('Ticket Owner', ticket.ticketOwner)}
 
-          </View>
-      )
+            </View>
+        )
     };
 
     let renderCustomerEmail = () => {
@@ -63,18 +63,18 @@ export default function TicketOverview(props) {
             <View style={styles.commentContainer}>
                 {renderRowHeader('Customer Comment')}
                 <Text style={styles.rowBody}>{ticket.comment}</Text>
-                </View>
+            </View>
         )
     };
 
     return (
         <SafeAreaView forceInset={{bottom: 'never'}} style={styles.safeArea}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <View style={styles.safeArea}>
-                {renderCustomerEmail()}
-                {renderTicketDetails()}
-                {renderCustomerComment()}
-            </View>
+                <View style={styles.safeArea}>
+                    {renderCustomerEmail()}
+                    {renderTicketDetails()}
+                    {renderCustomerComment()}
+                </View>
             </ScrollView>
         </SafeAreaView>
     )

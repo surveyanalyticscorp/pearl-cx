@@ -13,7 +13,6 @@ import SignInStack from './signInStack';
 import {isStringNullOrEmpty} from '../Utils/Utility';
 import Feedback from '../components/feedback/Feedback';
 import FeedbackDetails from '../components/feedback/FeedbackDetails';
-import FeedbackUpdate from '../components/feedback/FeedbackUpdate';
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useSelector} from 'react-redux';

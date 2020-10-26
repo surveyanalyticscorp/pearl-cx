@@ -14,6 +14,7 @@ import {
     CX_GET_CLOSED_LOOP_SEGMENT_DETAILS,
     CX_GET_CLOSED_LOOP_TICKET_DETAILS, CX_UPDATE_CLOSED_LOOP_TICKET,
 } from '../../api/Constant';
+import StringUtils from '../../Utils/StringUtils';
 
 function* fetchDetractorTicketDetails(action) {
     try {
@@ -95,10 +96,10 @@ export function updateClosedLoopTicket(token, body, successCallback, errorCallba
         body)
         .then(response => {
 
-            if(response.statusCode === 200) {
-                successCallback(response.body);
+            if(StringUtils.isNotEmpty(response.body.Error)) {
+                errorCallback(response.body.Error)
             } else {
-                errorCallback(response);
+                successCallback(response.body)
             }
 
         })

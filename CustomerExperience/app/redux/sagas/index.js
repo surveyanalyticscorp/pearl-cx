@@ -1,5 +1,4 @@
 import {all, fork} from 'redux-saga/effects';
-import {watchUpdateFeedback} from './feedbackSaga';
 import {
   watchGetDashboard,
 } from './dashboardSaga';

@@ -15,6 +15,7 @@ import {isObjectEmpty} from '../../../Utils/Utility';
 
 const TicketWidget = props => {
 
+  let [viewDetails, setViewDetails] = useState(false);
   let time = moment(props.item.timestamp, YMDFORMAT).format(HalfMonthDateYearFormat);
 
   let _renderTruncatedFooter = handlePress => {
@@ -54,6 +55,13 @@ const TicketWidget = props => {
     props.getTicketDetails(props.authToken, params)
   };
 
+  useEffect(() => {
+    if(viewDetails) {
+      onPress();
+      setViewDetails(false)
+    }
+  },[viewDetails]);
+
   let renderReadMoreView = () => {
     if (StringUtils.isNotEmpty(props.comment)) {
       return <ReadMore
@@ -69,7 +77,9 @@ const TicketWidget = props => {
 
   return (
     <TouchableWithoutFeedback
-      onPress={onPress}
+      onPress={() => {
+        setViewDetails(true)
+      }}
     >
       <View style={styles.mainContainer}>
         <Text style={styles.title} numberOfLines={2} ellipsizeMode={'tail'}>

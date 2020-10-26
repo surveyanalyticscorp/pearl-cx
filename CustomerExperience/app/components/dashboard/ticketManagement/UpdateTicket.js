@@ -29,6 +29,7 @@ import {updateClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
 import QPSpinner from '../../../widgets/QPSpinner';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
+import {showErrorFlashMessage} from '../../../Utils/Utility';
 
 function UpdateTicket(props) {
     let priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
@@ -38,7 +39,7 @@ function UpdateTicket(props) {
     let [priority, setPriority] = useState(priorityOptions[props.ticket.priority]);
     let [status, setStatus] = useState(statusOptions[props.ticket.status]);
     let [segmentOptions, setSegmentOptions] = useState([]);
-    let [segment, setSegment] = useState(props.ticket.currentSegment);
+    let [segment, setSegment] = useState(props.ticket.currentSegment.name);
     let [ownerOptions, setOwnerOptions] = useState([]);
     let [owner, setOwner] = useState(props.ticket.ticketOwner);
     let [validationError, setValidationError] = useState('');
@@ -46,43 +47,56 @@ function UpdateTicket(props) {
     let [callOwnerAPI, setCallOwnerAPI] = useState(false);
 
     let fetchClosedLoopSegments = () => {
+        let statusId = status === 'Escalated' ? 5 : statusOptions.findIndex(item => item === status);
         let params = {
-            "statusID": props.ticket.status,
+            "statusID": statusId,
         };
         props.getClosedLoopSegments(props.authToken, params)
     };
 
     let fetchTicketOwners = () => {
-        let selectedSegmentId = props.ticket.currentSegmentID;
         if (StringUtils.isNotEmpty(segment) && ArrayUtils.isNotEmpty(segmentOptions)) {
             let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
-            selectedSegmentId = selectedSegment.segmentID
+            let selectedSegmentId = selectedSegment.segmentID;
+            let params = {
+                "segmentID": selectedSegmentId
+            };
+            props.getClosedLoopOwners(props.authToken, params)
+        } else if (status === 'Escalated' && ArrayUtils.isEmpty(segmentOptions)) {
+            setOwnerOptions([])
         }
-        let params = {
-            "segmentID": selectedSegmentId
-        };
-        props.getClosedLoopOwners(props.authToken, params)
     };
 
     useEffect(() => {
-        fetchClosedLoopSegments();
-    }, []);
+        fetchClosedLoopSegments()
+    },[]);
 
     useEffect(() => {
         if(props.segments) {
             setSegmentOptions(props.segments);
-            fetchTicketOwners();
         }
     },[props.segments]);
 
-    useEffect(() => {
-        callOwnerAPI && fetchTicketOwners();
-        setCallOwnerAPI(false)
-    },[segment]);
+    useEffect( () => {
+        fetchTicketOwners();
+    }, [segmentOptions]);
 
     useEffect(() => {
-        setOwnerOptions(props.owners);
+        if(props.owners) {
+            setOwnerOptions(props.owners);
+        }
     },[props.owners]);
+
+    useEffect(() => {
+        fetchClosedLoopSegments()
+    },[status]);
+
+    useEffect(() => {
+        if(callOwnerAPI) {
+            fetchTicketOwners();
+            setCallOwnerAPI(false)
+        }
+    },[segment]);
 
     let getDashboardData = () => {
         let data = {
@@ -99,6 +113,8 @@ function UpdateTicket(props) {
                 setPriority(options[selectedIndex]);
                 break;
             case 'Status':
+                setSegment('');
+                setOwner('');
                 setStatus(options[selectedIndex]);
                 break;
             case 'Segment':
@@ -159,7 +175,7 @@ function UpdateTicket(props) {
 
     let renderContainer = () => {
         let ownerDefaultText = StringUtils.isEmpty(owner) ? 'Select' : owner;
-        let segmentDefaultText = StringUtils.isEmpty(segment) ? (StringUtils.isNotEmpty(props.ticket.currentSegment) ? props.ticket.currentSegment : 'Select') : segment;
+        let segmentDefaultText = StringUtils.isEmpty(segment) ? 'Select' : segment;
         return (
             <View style={styles.fieldContainer}>
                 {renderField('Priority', priorityOptions, priority || 0)}
@@ -208,36 +224,56 @@ function UpdateTicket(props) {
         } else if(StringUtils.isNotEmpty(status)) {
             statusId = statusOptions.findIndex(item => item === status)
         }
+
         let priorityId = priorityOptions.findIndex(item => item === priority);
         priorityId = priorityId === -1 ? 0 : priorityId;
-        let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
-        if(StringUtils.isEmpty(owner) || owner === 'Not Assigned') {
-            setValidationError('Please select the owner')
-        } else {
-            let selectedOwner = ownerOptions.find(item => item.ownerName === owner);
 
+        if(status === 'Escalated' && ArrayUtils.isEmpty(segmentOptions)) {
             let body = {
                 "priorityID": priorityId,
                 "statusID": statusId,
                 "managerComment": comment,
                 "ticketID": props.ticket.ticketID,
-                "ownerID": selectedOwner.ownerID,
-                "segmentID":selectedSegment.segmentID
             };
-            if (validationAction(body)) {
-                setLoading(true);
-                updateClosedLoopTicket(props.authToken, body, () => {
-                    setLoading(false);
-                    props.navigation.navigate('Dashboard');
-                    props.navigation.push('DetractorTickets');
-                    getDashboardData();
-                    props.clearTicketDetails();
-                }, () => {
-                    setLoading(false)
-                })
+            updateTicketAPIAction(body)
+        } else {
+            if(StringUtils.isEmpty(segment)) {
+                setValidationError('Please select the segment')
+            } else if(StringUtils.isEmpty(owner) || owner === 'Not Assigned') {
+                setValidationError('Please select the owner')
+            } else {
+                let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
+                let selectedOwner = ownerOptions.find(item => item.ownerName === owner);
+
+                let body = {
+                    "priorityID": priorityId,
+                    "statusID": statusId,
+                    "managerComment": comment,
+                    "ticketID": props.ticket.ticketID,
+                    "segmentID": selectedSegment.segmentID,
+                    "ownerID": selectedOwner.ownerID
+                };
+                updateTicketAPIAction(body)
             }
         }
     };
+
+    let updateTicketAPIAction = (body) => {
+        if (validationAction(body)) {
+            setLoading(true);
+            updateClosedLoopTicket(props.authToken, body, () => {
+                setLoading(false);
+                props.navigation.navigate('Dashboard');
+                props.navigation.push('DetractorTickets');
+                getDashboardData();
+                props.clearTicketDetails();
+            }, (error) => {
+                setLoading(false);
+                showErrorFlashMessage(error)
+            })
+        }
+    };
+
 
     let renderUpdateButton = () => {
         return isLoading ?

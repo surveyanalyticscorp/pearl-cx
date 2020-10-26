@@ -1,4 +1,6 @@
 import React, {useEffect, useRef} from 'react';
+import {showMessage} from 'react-native-flash-message';
+import {Colors} from '../styles/color.constants';
 
 export const isStringNullOrEmpty = string => {
   if (string) {
@@ -22,4 +24,13 @@ export function usePrevious(value) {
     ref.current = value;
   });
   return ref.current;
+}
+
+export const showErrorFlashMessage = (error) => {
+  return showMessage({
+    message: error,
+    type: 'danger',
+    backgroundColor: Colors.red,
+    color: Colors.white
+  });
 }
