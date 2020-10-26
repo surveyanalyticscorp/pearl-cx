@@ -211,7 +211,6 @@ const renderFeedbackScene = (props) => {
 
     let renderFeedbackList = () => {
         return (
-            <View style={styles.container}>
                 <FlatList
                     data={list}
                     renderItem={_renderRow}
@@ -222,8 +221,8 @@ const renderFeedbackScene = (props) => {
                     ListEmptyComponent={renderNoDataFound}
                     onRefresh={feedbackForm.onRefresh}
                     extraData={[list]}
+                    contentContainerStyle={styles.container}
                 />
-            </View>
         );
     };
 
@@ -259,7 +258,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     container: {
-        flex: 1,
         marginTop: MarginConstants.tab1
     },
     emptyView: {
