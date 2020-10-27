@@ -99,6 +99,7 @@ function Feedback(props){
             setShowLoader(true);
         } else {
             setPageOffset(0)
+            setShowLoader(true);
         }
     };
 
