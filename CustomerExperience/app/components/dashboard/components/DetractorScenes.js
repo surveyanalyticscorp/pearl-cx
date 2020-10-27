@@ -1,10 +1,12 @@
-import React,{useEffect, useState, useCallback} from 'react';
+import React,{useEffect, useState} from 'react';
 import {View, Text, FlatList} from 'react-native';
 import TicketWidget from './TicketWidget';
 import {dashboardStyles} from '../dashboard.style';
 import {apiHandler} from '../../../api/ApiHandler';
 import {connect} from 'react-redux';
 import QPSpinner from '../../../widgets/QPSpinner';
+import moment from 'moment';
+import {DMYFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
 
 const DetractorScenes = props => {
 
@@ -36,6 +38,10 @@ const DetractorScenes = props => {
     useEffect(() => {
         for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
             let params = responseData[responseCount];
+            params = {...params,
+                startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+            };
             apiHandler.getCXDetractorTicket(
                 props.authToken,
                 params,
@@ -81,6 +87,10 @@ const DetractorScenes = props => {
         let params = responseData[dataCount];
         let pageCount = parseInt(params.pageOffset) + 1;
         params.pageOffset = pageCount + '';
+        params = {...params,
+            startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+            endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+        };
         apiHandler.getCXDetractorTicket(
             props.authToken,
             params,
@@ -131,6 +141,7 @@ const mapStateToProps = state => {
         isLoading: state.global.isLoading,
         authToken: state.global.authToken,
         storeId: state.dashboard.dashboardData.primaryStoreId,
+        range: state.global.range
     };
 };
 
