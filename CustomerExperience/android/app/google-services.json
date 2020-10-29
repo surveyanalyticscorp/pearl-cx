@@ -1,0 +1,154 @@
+{
+  "project_info": {
+    "project_number": "163493809530",
+    "firebase_url": "https://questionpro-offline-surveys.firebaseio.com",
+    "project_id": "questionpro-offline-surveys",
+    "storage_bucket": "questionpro-offline-surveys.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163493809530:android:e7e9c2b249865d34",
+        "android_client_info": {
+          "package_name": "com.questionpro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163493809530-0r5u82e9g1iufun8fs0kcj0t1pblgaaq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.questionpro",
+            "certificate_hash": "3366a78166555bef8a846f1419349b7bc42340bf"
+          }
+        },
+        {
+          "client_id": "163493809530-kuql0b3rtgkcsh1f6nevtp3lkvtfg89r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.questionpro",
+            "certificate_hash": "5188fb8b7340e83dd957e0b44ed946b502c12b61"
+          }
+        },
+        {
+          "client_id": "163493809530-gjvkm9v9jjh8i0llq2k94hcden7gg5k4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi_yMFMGP1BhCJ98ufQVx0loCVl7qHVBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "163493809530-gjvkm9v9jjh8i0llq2k94hcden7gg5k4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "163493809530-l84bi465vdokfl5ct5k8oigh3t06f9qq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.questionpro.cx",
+                "app_store_id": "1191432312"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163493809530:android:64b8365a86951ac503dac3",
+        "android_client_info": {
+          "package_name": "com.questionpro.cx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163493809530-tqlm49ndb74g7kkrqct5v0q7p2270naq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.questionpro.cx",
+            "certificate_hash": "d346eb4d5e4cd5e9287de1ebd6adbae420e34bb1"
+          }
+        },
+        {
+          "client_id": "163493809530-gjvkm9v9jjh8i0llq2k94hcden7gg5k4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi_yMFMGP1BhCJ98ufQVx0loCVl7qHVBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "163493809530-gjvkm9v9jjh8i0llq2k94hcden7gg5k4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "163493809530-l84bi465vdokfl5ct5k8oigh3t06f9qq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.questionpro.cx",
+                "app_store_id": "1191432312"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163493809530:android:90609389a6b31c6203dac3",
+        "android_client_info": {
+          "package_name": "com.surveypocket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163493809530-pbrvkrjpgsvf33mipj52qgdvkgin79rr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.surveypocket",
+            "certificate_hash": "3366a78166555bef8a846f1419349b7bc42340bf"
+          }
+        },
+        {
+          "client_id": "163493809530-gjvkm9v9jjh8i0llq2k94hcden7gg5k4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi_yMFMGP1BhCJ98ufQVx0loCVl7qHVBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "163493809530-gjvkm9v9jjh8i0llq2k94hcden7gg5k4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "163493809530-l84bi465vdokfl5ct5k8oigh3t06f9qq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.questionpro.cx",
+                "app_store_id": "1191432312"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

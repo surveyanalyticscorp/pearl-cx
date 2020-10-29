@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {DrawerActions, NavigationContainer, useNavigation} from '@react-navigation/native';
+import {DrawerActions, NavigationContainer, useNavigation } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
@@ -28,6 +28,7 @@ import DashboardDateFilter from '../components/dashboard/components/DashboardDat
 import AppSettings from '../components/settings/AppSettings';
 import AccountDetails from '../components/settings/AccountDetails';
 import {Sizes} from '../styles/Size.constant';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -40,6 +41,32 @@ const AppRouter = props => {
 
     const authToken = useSelector(state => state.global.authToken);
     const userInfo = useSelector(state => state.global.userInfo);
+
+    const ref = useRef();
+
+    const linking = {
+        prefixes: ['https://mobileapps.questionpro.com/cx','https://questionpro.offline.link'],
+    };
+
+    useEffect(() => {
+        const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+        dynamicLinks()
+            .getInitialLink()
+            .then(link => {
+                if (link.url.includes('resetpassword')) {
+                    alert('nehal 1')
+                    // ...set initial route as offers screen
+                }
+            });
+        return () => unsubscribe();
+    },[]);
+
+    const handleDynamicLink = link => {
+        if (link.url.includes('resetPassword')) {
+            // ...navigate to your offers screen
+            alert('nehal')
+        }
+    };
 
     useEffect(() => {
         if (!isStringNullOrEmpty(authToken)) {
@@ -252,7 +279,7 @@ const AppRouter = props => {
     );
 
     return (
-        <NavigationContainer theme={MyTheme}>
+        <NavigationContainer theme={MyTheme} ref={ref} fallback={<Text>Loading...</Text>} linking={linking}>
             {authToken ? <Drawer.Navigator
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
