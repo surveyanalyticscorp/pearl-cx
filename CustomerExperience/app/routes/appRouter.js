@@ -15,7 +15,7 @@ import Feedback from '../components/feedback/Feedback';
 import FeedbackDetails from '../components/feedback/FeedbackDetails';
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
-import {useSelector} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
@@ -29,7 +29,9 @@ import AppSettings from '../components/settings/AppSettings';
 import AccountDetails from '../components/settings/AccountDetails';
 import {Sizes} from '../styles/Size.constant';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import {navigateToUpdatePasswordScreen} from '../Utils/DeepLinkingUtils';
+import { getResetPasswordURLComponents } from '../Utils/DeepLinkingUtils';
+import {setDynamicLink} from '../redux/actions';
+import StringUtils from '../Utils/StringUtils';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -42,7 +44,7 @@ const AppRouter = props => {
 
     const authToken = useSelector(state => state.global.authToken);
     const userInfo = useSelector(state => state.global.userInfo);
-
+    const dynamicLink = useSelector(state => state.global.dynamicLink);
     const ref = useRef();
 
     const linking = {
@@ -54,16 +56,26 @@ const AppRouter = props => {
         dynamicLinks()
             .getInitialLink()
             .then(link => {
-                if (link && link.url.includes('resetpassword')) {
-                    navigateToUpdatePasswordScreen(link)
-                }
+                    handleDynamicLink(link)
             });
         return () => unsubscribe();
     },[]);
 
+    useEffect(() => {
+        if(StringUtils.isNotEmpty(dynamicLink)) {
+            if(dynamicLink.includes('resetpassword')) {
+                let components = getResetPasswordURLComponents(dynamicLink);
+                ref.current?.navigate('ResetPassword', {
+                    email: components.email,
+                    accessCode: components.accessCode
+                })
+            }
+        }
+    },[dynamicLink]);
+
     const handleDynamicLink = link => {
-        if (link && link.url.includes('resetPassword')) {
-            navigateToUpdatePasswordScreen(link)
+        if (link && link.url) {
+            props.dispatch(setDynamicLink(link.url))
         }
     };
 
@@ -293,8 +305,11 @@ const AppRouter = props => {
     );
 };
 
-export default AppRouter;
+const mapDispatchToProps = dispatch => ({
+    dispatch
+});
 
+export default connect(null, mapDispatchToProps)(AppRouter);
 
 const styles = StyleSheet.create({
     drawerStyle: {
