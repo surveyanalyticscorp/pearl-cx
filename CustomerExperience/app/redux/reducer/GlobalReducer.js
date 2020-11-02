@@ -4,11 +4,14 @@ import {
     LOGIN_RESPONSE,
     API_ERROR,
     CLEAR_API_ERROR,
-    FORGOT_PSWD_OTP_RESPONSE,
-    VALIDATE_USER_OTP_RESPONSE,
     UPDATE_PASSWORD_RESPONSE,
-    CLEAR_USER_INFO, SET_AUTH_TOKEN, SET_RANGE_FILTER,
-} from '../actions/index';
+    CLEAR_USER_INFO,
+    SET_AUTH_TOKEN,
+    SET_RANGE_FILTER,
+    SET_USER_DETAILS_FOR_RESET_PASSWORD,
+    SET_DYNAMIC_LINK,
+    VALIDATE_RESET_PASSWORD_LINK_RESPONSE
+} from '../actions';
 
 const initialState = {
     range:{
@@ -21,8 +24,9 @@ const initialState = {
     userInfo: {},
     authToken:'',
     errorMessage: '',
-    forgotPasswordResponse: {},
-    validateOtpResponse: {},
+    dynamicLink:'',
+    userDetailsForResetPassword:{},
+    validatePasswordLinkResponse:{},
     updatePasswordResponse: {},
 };
 
@@ -36,29 +40,33 @@ const globalReducer = (state = initialState, action) => {
                 isLoading: false,
             };
         }
-        case FORGOT_PSWD_OTP_RESPONSE: {
+        case SET_DYNAMIC_LINK: {
             return {
                 ...state,
-                forgotPasswordResponse: action.response,
+                dynamicLink: action.payload
+            }
+        }
+        case SET_USER_DETAILS_FOR_RESET_PASSWORD: {
+            return {
+                ...state,
+                userDetailsForResetPassword: action.payload,
+            };
+        }
+        case VALIDATE_RESET_PASSWORD_LINK_RESPONSE: {
+            return {
+                ...state,
+                validatePasswordLinkResponse: action.response,
                 isLoading: false,
-            };
+            }
         }
-
-        case VALIDATE_USER_OTP_RESPONSE: {
-            return {
-                ...state,
-                validateOtpResponse: action.response,
-            };
-        }
-
         case UPDATE_PASSWORD_RESPONSE: {
             return {
                 ...state,
+                userDetailsForResetPassword: {},
                 updatePasswordResponse: action.response,
                 isLoading: false,
             };
         }
-
         case IS_LOADING: {
             return {...state, isLoading: action.payload.isLoading};
         }
@@ -68,14 +76,12 @@ const globalReducer = (state = initialState, action) => {
                 userInfo: action.payload.userInfo,
             };
         }
-
         case CLEAR_USER_INFO: {
             return {
                 ...state,
                 userInfo: {},
             };
         }
-
         case API_ERROR: {
             return {
                 ...state,

@@ -33,4 +33,13 @@ export const showErrorFlashMessage = (error) => {
     backgroundColor: Colors.red,
     color: Colors.white
   });
-}
+};
+
+export const showSuccessFlashMessage = (message) => {
+  return showMessage({
+    message: message,
+    type: 'success',
+    backgroundColor: Colors.success,
+    color: Colors.white
+  });
+};

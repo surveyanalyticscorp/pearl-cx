@@ -26,6 +26,8 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import SafeAreaView from 'react-native-safe-area-view';
 import QPSpinner from '../../widgets/QPSpinner';
 import {TextSizes} from '../../styles/textsize.constants';
+import AsyncStorage from '@react-native-community/async-storage';
+import {ASYNC_RESET_CREDENTIALS} from '../../api/Constant';
 
 let { width }= Dimensions.get('window');
 const stringConst = require('../../config/locales/en');
@@ -90,6 +92,7 @@ const ResetPassword = props => {
                 accessCode: props.route.params.accessCode,
                 password: password,
             };
+            AsyncStorage.setItem(ASYNC_RESET_CREDENTIALS, '');
             props.updatePassword(data);
         }
     };

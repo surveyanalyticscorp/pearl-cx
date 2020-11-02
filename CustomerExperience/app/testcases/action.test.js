@@ -20,12 +20,12 @@ describe('ACTIONS', () => {
     expect(actions.doLogin()).toEqual(expectedAction);
   });
 
-  it('should create an action with correct type GET_FORGOT_PSWD_OTP', () => {
-    const expectedAction = {
-      type: GET_FORGOT_PSWD_OTP,
-    };
-    expect(actions.requestOtp()).toEqual(expectedAction);
-  });
+  // it('should create an action with correct type GET_FORGOT_PSWD_OTP', () => {
+  //   const expectedAction = {
+  //     type: GET_FORGOT_PSWD_OTP,
+  //   };
+  //   expect(actions.requestOtp()).toEqual(expectedAction);
+  // });
 
   it('should create an action with correct type UPDATE_PASSWORD', () => {
     const expectedAction = {
@@ -34,12 +34,12 @@ describe('ACTIONS', () => {
     expect(actions.updatePassword()).toEqual(expectedAction);
   });
 
-  it('should create an action with correct type validateUserOtp', () => {
-    const expectedAction = {
-      type: VALIDATE_USER_OTP,
-    };
-    expect(actions.validateUserOtp()).toEqual(expectedAction);
-  });
+  // it('should create an action with correct type validateUserOtp', () => {
+  //   const expectedAction = {
+  //     type: VALIDATE_USER_OTP,
+  //   };
+  //   expect(actions.validateUserOtp()).toEqual(expectedAction);
+  // });
 
   // it('should create an action with correct type getFeedbackList', () => {
   //   const expectedAction = {

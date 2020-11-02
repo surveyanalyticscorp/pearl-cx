@@ -96,7 +96,7 @@
 	</array>
 	<key>FirebaseDynamicLinksCustomDomains</key>
 	<array>
-		<string>https://mobileapps.questionpro.com/cx</string>
+		<string>https://mobileapps.questionpro.com</string>
 	</array>
 </dict>
 </plist>

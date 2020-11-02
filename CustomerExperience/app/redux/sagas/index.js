@@ -4,9 +4,9 @@ import {
 } from './dashboardSaga';
 import {
   watchDoLogin,
-  watchForgotPasswordOtp,
-  watchValidateUserOtp,
+  watchForgotPasswordLink,
   watchUpdatePassword,
+  watchValidatePasswordLink,
 } from './loginInSaga';
 import {
   watchGetClosedLoopOwnerDetails,
@@ -17,15 +17,13 @@ import {
 // Redux Saga: Root Saga
 export function* rootSaga() {
   yield all([
-    // fork(watchGetFeedback),
     fork(watchGetDashboard),
     fork(watchDoLogin),
-    fork(watchForgotPasswordOtp),
-    fork(watchValidateUserOtp),
+    fork(watchValidatePasswordLink),
     fork(watchUpdatePassword),
-    // fork(watchUpdateFeedback),
     fork(watchGetDetractorTicketDetail),
     fork(watchGetClosedLoopSegmentDetails),
-    fork(watchGetClosedLoopOwnerDetails)
+    fork(watchGetClosedLoopOwnerDetails),
+    fork(watchForgotPasswordLink)
   ]);
 }

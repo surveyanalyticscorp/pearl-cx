@@ -1,8 +1,8 @@
 import {
-  GET_FORGOT_PSWD_OTP,
   GET_LOGIN,
+  GET_RESET_PASSWORD_LINK,
   UPDATE_PASSWORD,
-  VALIDATE_USER_OTP,
+  VALIDATE_RESET_PASSWORD_LINK,
 } from './index';
 
 export const doLogin = param => ({
@@ -10,8 +10,8 @@ export const doLogin = param => ({
   param,
 });
 
-export const requestOtp = param => ({
-  type: GET_FORGOT_PSWD_OTP,
+export const requestPasswordLink = param => ({
+  type: GET_RESET_PASSWORD_LINK,
   param,
 });
 
@@ -20,7 +20,7 @@ export const updatePassword = param => ({
   param,
 });
 
-export const validateUserOtp = param => ({
-  type: VALIDATE_USER_OTP,
+export const validateResetPasswordLink = param => ({
+  type: VALIDATE_RESET_PASSWORD_LINK,
   param,
 });

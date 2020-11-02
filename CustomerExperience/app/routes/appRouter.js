@@ -29,6 +29,7 @@ import AppSettings from '../components/settings/AppSettings';
 import AccountDetails from '../components/settings/AccountDetails';
 import {Sizes} from '../styles/Size.constant';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {navigateToUpdatePasswordScreen} from '../Utils/DeepLinkingUtils';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -53,18 +54,16 @@ const AppRouter = props => {
         dynamicLinks()
             .getInitialLink()
             .then(link => {
-                if (link.url.includes('resetpassword')) {
-                    alert('nehal 1')
-                    // ...set initial route as offers screen
+                if (link && link.url.includes('resetpassword')) {
+                    navigateToUpdatePasswordScreen(link)
                 }
             });
         return () => unsubscribe();
     },[]);
 
     const handleDynamicLink = link => {
-        if (link.url.includes('resetPassword')) {
-            // ...navigate to your offers screen
-            alert('nehal')
+        if (link && link.url.includes('resetPassword')) {
+            navigateToUpdatePasswordScreen(link)
         }
     };
 
