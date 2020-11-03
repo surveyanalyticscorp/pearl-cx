@@ -65,9 +65,10 @@ const AppRouter = props => {
         if(StringUtils.isNotEmpty(dynamicLink)) {
             if(dynamicLink.includes('resetpassword')) {
                 let components = getResetPasswordURLComponents(dynamicLink);
-                ref.current?.navigate('ResetPassword', {
+                ref.current?.navigate('ForgotPassword', {
                     email: components.email,
-                    accessCode: components.accessCode
+                    accessCode: components.accessCode,
+                    timestamp: components.timestamp
                 })
             }
         }

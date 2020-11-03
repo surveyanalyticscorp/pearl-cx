@@ -6,5 +6,6 @@ export const getResetPasswordURLComponents = (link) => {
     let components = path.replace("resetpassword?", '').split("&");
     let accessCode = components[0].split("=")[1];
     let email = components[1].split("=")[1];
-    return {email: email, accessCode: accessCode}
+    let timestamp = components[2].split("=")[1];
+    return {email: email, accessCode: accessCode, timestamp: timestamp}
 };

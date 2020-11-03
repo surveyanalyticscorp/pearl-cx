@@ -17,7 +17,7 @@ import {isObjectEmpty, isStringNullOrEmpty, showErrorFlashMessage, validateEmail
 import {FontFamily} from '../../styles/font.constants';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
-import {clearError, setUserDetailsForResetPassword} from '../../redux/actions/index';
+import {clearError, setDynamicLink, setUserDetailsForResetPassword} from '../../redux/actions/index';
 import {connect} from 'react-redux';
 import StringUtils from '../../Utils/StringUtils';
 import QPSpinner from '../../widgets/QPSpinner';
@@ -27,8 +27,6 @@ import SafeAreaView from 'react-native-safe-area-view';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_RESET_CREDENTIALS} from '../../api/Constant';
 import {requestPasswordLink, validateResetPasswordLink} from '../../redux/actions/login.actions';
-import moment from "moment-timezone";
-import DeviceInfo from "react-native-device-info";
 
 let { width }= Dimensions.get('window');
 const stringConst = require('../../config/locales/en');
@@ -41,9 +39,8 @@ const ForgotPassword = props => {
     let textFieldTimer = useRef(null);
 
     useEffect(() => {
+        let time = props.route.params.timestamp.replace("+", " ");
         if(StringUtils.isNotEmpty(props.dynamicLink)) {
-            let deviceTimeZone = DeviceInfo.getTimezone();
-            let time = moment().tz(deviceTimeZone).format("MMM DD, YYYY hh:mm a") + '';
             let data = {
                 emailAddress: email,
                 accessCode: accessCode,
@@ -55,13 +52,19 @@ const ForgotPassword = props => {
 
     useEffect(() => {
         if(!isObjectEmpty(props.validatePasswordLinkResponse)) {
-            if(!props.validatePasswordLinkResponse.isExpired) {
-                props.navigation.navigate('ResetPassword', {
-                    email: email,
-                    accessCode: accessCode,
-                })
+            if(props.validatePasswordLinkResponse && props.validatePasswordLinkResponse.Error) {
+                props.setDynamicLink();
+                showErrorFlashMessage(props.validatePasswordLinkResponse.Error)
             } else {
-                showErrorFlashMessage(props.validatePasswordLinkResponse.message)
+                if(!props.validatePasswordLinkResponse.isExpired) {
+                    props.navigation.navigate('ResetPassword', {
+                        email: email,
+                        accessCode: accessCode,
+                    })
+                } else {
+                    props.setDynamicLink();
+                    showErrorFlashMessage(props.validatePasswordLinkResponse.message)
+                }
             }
         }
 
@@ -219,6 +222,9 @@ const mapDispatchToProps = dispatch => ({
     },
     validatePasswordLink: (param) => {
         dispatch(validateResetPasswordLink(param))
+    },
+    setDynamicLink: () => {
+        dispatch(setDynamicLink(''))
     }
 });
 

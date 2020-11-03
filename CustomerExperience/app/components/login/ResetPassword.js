@@ -19,45 +19,36 @@ import React, {useEffect, useRef, useState} from 'react';
 import {clearError} from '../../redux/actions/index';
 import {updatePassword} from '../../redux/actions/login.actions';
 import {connect} from 'react-redux';
-import {isStringNullOrEmpty} from '../../Utils/Utility';
+import {isStringNullOrEmpty, showErrorFlashMessage, showSuccessFlashMessage} from '../../Utils/Utility';
 import StringUtils from '../../Utils/StringUtils';
-import {showMessage} from 'react-native-flash-message';
 import {PaddingConstants} from '../../styles/padding.constants';
 import SafeAreaView from 'react-native-safe-area-view';
 import QPSpinner from '../../widgets/QPSpinner';
 import {TextSizes} from '../../styles/textsize.constants';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_RESET_CREDENTIALS} from '../../api/Constant';
+import {setDynamicLink} from '../../redux/actions';
 
 let { width }= Dimensions.get('window');
 const stringConst = require('../../config/locales/en');
 
 const ResetPassword = props => {
     const [password, setPassword] = useState('');
-    const [confirmPswd, setConfirmPswd] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [validation, setValidation] = useState('');
     let textFieldTimer = useRef(null);
 
     useEffect(() => {
         if (props.updatePasswordResponse.body) {
-            showMessage({
-                message: props.updatePasswordResponse.body.message,
-                type: 'info',
-                icon: 'auto',
-            });
-            props.navigation.pop();
+            showSuccessFlashMessage(props.updatePasswordResponse.body.message);
+            props.setDynamicLink();
+            props.navigation.navigate('Login');
         }
     }, [props.updatePasswordResponse]);
 
     useEffect(() => {
-        if (StringUtils.isNotEmpty(validation)) {
-            showMessage({
-                message: validation,
-                type: 'danger',
-                icon: 'auto',
-                backgroundColor: Colors.red,
-                color: Colors.white, // text color
-            });
+        if (StringUtils.isNotEmpty(validation) || props.isError) {
+            showErrorFlashMessage(validation);
             let timer = setTimeout(() => {
                 setValidation('');
             }, 1000);
@@ -65,25 +56,7 @@ const ResetPassword = props => {
                 clearTimeout(timer);
             };
         }
-    }, [validation]);
-
-    useEffect(() => {
-        if (props.isError) {
-            showMessage({
-                message: props.errorMessage.errorAlert,
-                type: 'danger',
-                icon: 'auto',
-                backgroundColor: Colors.red,
-                color: Colors.white, // text color
-            });
-            let timer = setTimeout(() => {
-                props.clearError();
-            }, 1000);
-            return () => {
-                clearTimeout(timer);
-            };
-        }
-    }, [props.isError]);
+    }, [validation, props.isError]);
 
     const onUpdatePasswordClick = () => {
         if (isValidateInput()) {
@@ -102,11 +75,11 @@ const ResetPassword = props => {
             setValidation(stringConst.invalidPassword);
             return false;
         }
-        if (isStringNullOrEmpty(confirmPswd)) {
+        if (isStringNullOrEmpty(confirmPassword)) {
             setValidation(stringConst.invalidPassword);
             return false;
         }
-        if (password !== confirmPswd) {
+        if (password !== confirmPassword) {
             setValidation(stringConst.passwordNotMatching);
             return false;
         }
@@ -120,7 +93,7 @@ const ResetPassword = props => {
     };
 
     const handleConfirmPassword = text => {
-        setConfirmPswd(text);
+        setConfirmPassword(text);
         setValidation('');
     };
 
@@ -176,7 +149,6 @@ const ResetPassword = props => {
                                     Keyboard.dismiss()
                                 }, 5);
                             }}
-                            clearButtonMode={'while-editing'}
                         />
                         <QPTextField
                             defaultValue={''}
@@ -189,7 +161,6 @@ const ResetPassword = props => {
                                     Keyboard.dismiss()
                                 }, 5);
                             }}
-                            clearButtonMode={'while-editing'}
                         />
                     </View>
                 </KeyboardAvoidingView>
@@ -225,6 +196,9 @@ const mapDispatchToProps = dispatch => ({
     updatePassword: data => {
         dispatch(updatePassword(data));
     },
+    setDynamicLink: () => {
+        dispatch(setDynamicLink(''))
+    }
 });
 
 export default connect(
