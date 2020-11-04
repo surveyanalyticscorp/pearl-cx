@@ -13,7 +13,6 @@ import {
 import {MarginConstants} from '../../styles/margin.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {Colors} from '../../styles/color.constants';
-import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import React, {useEffect, useRef, useState} from 'react';
 import {clearError} from '../../redux/actions/index';
@@ -28,6 +27,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_RESET_CREDENTIALS} from '../../api/Constant';
 import {setDynamicLink} from '../../redux/actions';
+import QPTextField from '../../widgets/TextField';
 
 let { width }= Dimensions.get('window');
 const stringConst = require('../../config/locales/en');
@@ -140,10 +140,12 @@ const ResetPassword = props => {
                         <QPTextField
                             autofocus={false}
                             label={'Password'}
+                            value={password}
                             secureText={true}
                             defaultValue={''}
                             style={styles.textInput}
                             onEndEdit={handlePassword}
+                            onChange={handlePassword}
                             onSubmitEditing={() => {
                                 textFieldTimer = setTimeout(() => {
                                     Keyboard.dismiss()
@@ -152,10 +154,12 @@ const ResetPassword = props => {
                         />
                         <QPTextField
                             defaultValue={''}
+                            value={confirmPassword}
                             secureText={true}
                             label={'Confirm Password'}
                             style={styles.textInput}
                             onEndEdit={handleConfirmPassword}
+                            onChange={handleConfirmPassword}
                             onSubmitEditing={() => {
                                 textFieldTimer = setTimeout(() => {
                                     Keyboard.dismiss()
