@@ -58,7 +58,9 @@ const AppRouter = props => {
         dynamicLinks()
             .getInitialLink()
             .then(link => {
-                handleDynamicLink(link)
+                if (link && link.url) {
+                    props.dispatch(setDynamicLink(link.url))
+                }
             });
 
         return () => unsubscribe();
@@ -67,7 +69,7 @@ const AppRouter = props => {
 
     useEffect(() => {
         if(StringUtils.isNotEmpty(dynamicLink)) {
-            if(dynamicLink.includes('resetpassword')) {
+            if(dynamicLink.includes('resetpassword') && isStringNullOrEmpty(authToken)) {
                 let components = getResetPasswordURLComponents(dynamicLink);
                 ref.current?.navigate('ForgotPassword', {
                     email: components.email,
@@ -80,7 +82,15 @@ const AppRouter = props => {
 
     const handleDynamicLink = link => {
         if (link && link.url) {
-            props.dispatch(setDynamicLink(link.url))
+            props.dispatch(setDynamicLink(link.url));
+            if(link.url.includes('resetpassword') && isStringNullOrEmpty(authToken)) {
+                let components = getResetPasswordURLComponents(dynamicLink);
+                ref.current?.navigate('ForgotPassword', {
+                    email: components.email,
+                    accessCode: components.accessCode,
+                    timestamp: components.timestamp
+                })
+            }
         }
     };
 
@@ -243,7 +253,7 @@ const AppRouter = props => {
                 })}
             />
             <RootStack.Screen
-                name="DetractorTickets"
+                name="Tickets"
                 component={DetractorTicketsTabStack}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,

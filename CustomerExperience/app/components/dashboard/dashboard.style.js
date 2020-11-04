@@ -47,7 +47,7 @@ export const dashboardStyles = StyleSheet.create({
   listViewContainer: {
     backgroundColor: Colors.white,
     marginHorizontal: MarginConstants.tab2,
-    marginBottom: MarginConstants.tab2
+    //marginBottom: MarginConstants.tab2
   },
   productHeaderView:{
     height: MarginConstants.tab4 * 1.3,

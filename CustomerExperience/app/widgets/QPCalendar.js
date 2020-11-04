@@ -124,7 +124,7 @@ const QPCalendar = (props) => {
                 </View>
                 <View style={styles.calendarArrowView}>
                     <TouchableOpacity onPress={actionOnLeftArrow} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-                    <Icon name={'arrow-left'} size={15} color={Colors.secondary} style={{paddingHorizontal: PaddingConstants.tab1}}/>
+                    <Icon name={'arrow-left'} size={15} color={Colors.secondary} style={{paddingHorizontal: PaddingConstants.tab1, marginRight:MarginConstants.tab2}}/>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={actionOnRightArrow} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
                     <Icon name={'arrow-right'} size={15} color={Colors.secondary}  style={{paddingHorizontal: PaddingConstants.tab1}}/>

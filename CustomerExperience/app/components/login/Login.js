@@ -13,6 +13,7 @@ import {Colors} from '../../styles/color.constants';
 import {showMessage} from 'react-native-flash-message';
 import QPSpinner from '../../widgets/QPSpinner';
 import SafeAreaView from 'react-native-safe-area-view';
+import {setDynamicLink} from '../../redux/actions';
 
 const stringConst = require('../../config/locales/en');
 
@@ -77,6 +78,10 @@ const Login = props => {
                 sourceMode: 'email',
                 udId: DeviceInfo.getUniqueId(),
             };
+
+            if(StringUtils.isNotEmpty(props.dynamicLink) && props.dynamicLink.includes('resetpassword')) {
+                props.resetPasswordLink()
+            }
 
             props.loginClick(data);
         }
@@ -239,6 +244,7 @@ const mapStateToProps = state => {
         isLoading: state.global.isLoading,
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
+        dynamicLink: state.global.dynamicLink,
     };
 };
 
@@ -250,6 +256,9 @@ const mapDispatchToProps = dispatch => ({
     },
     clearError: () => {
         dispatch(clearError(false));
+    },
+    resetPasswordLink: () => {
+        dispatch(setDynamicLink(''))
     }
 });
 
