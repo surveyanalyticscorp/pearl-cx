@@ -5,7 +5,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:questionprooffline.page.link</string>
-		<string>mobileapps.questionpro.com</string>
+		<string>applinks:mobileapps.questionpro.com</string>
 	</array>
 </dict>
 </plist>

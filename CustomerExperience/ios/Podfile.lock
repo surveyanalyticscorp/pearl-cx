@@ -301,10 +301,10 @@ PODS:
   - RNDeviceInfo (5.6.1):
     - React
   - RNFBApp (8.4.6):
-    - Firebase/CoreOnly (~> 6.34.0)
+    - Firebase/CoreOnly (= 6.34.0)
     - React-Core
   - RNFBDynamicLinks (7.5.10):
-    - Firebase/DynamicLinks (~> 6.34.0)
+    - Firebase/DynamicLinks (= 6.34.0)
     - GoogleUtilities/AppDelegateSwizzler
     - React-Core
     - RNFBApp
@@ -509,8 +509,8 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
   RNDeviceInfo: ab2ab4ca9e7f2bc4f35d62ab6ce2b66f2cbf1e7a
-  RNFBApp: 7eacc7da7ab19f96c05e434017d44a9f09410da8
-  RNFBDynamicLinks: 7f3f45be7ece5a0e7effcd32e4f93a5f94298d10
+  RNFBApp: 9dbc9e3440bbbd5ec6c3cecb03e364274cdcafb3
+  RNFBDynamicLinks: 4c0bbaa12420d87a42c09f4520948e598db9338a
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
@@ -518,6 +518,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: da6fe858f5a65d7bbc3379540a889b0b12aa5976
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
 
-PODFILE CHECKSUM: 5582c687fa3117bac08673612fdb7b256a293002
+PODFILE CHECKSUM: 92be5659a0a7e887d2d7433af60a8b6b85aac33c
 
 COCOAPODS: 1.9.0

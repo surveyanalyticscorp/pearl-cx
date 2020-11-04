@@ -32,6 +32,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import { getResetPasswordURLComponents } from '../Utils/DeepLinkingUtils';
 import {setDynamicLink} from '../redux/actions';
 import StringUtils from '../Utils/StringUtils';
+import QPSpinner from '../widgets/QPSpinner';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -53,12 +54,15 @@ const AppRouter = props => {
 
     useEffect(() => {
         const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+
         dynamicLinks()
             .getInitialLink()
             .then(link => {
-                    handleDynamicLink(link)
+                handleDynamicLink(link)
             });
+
         return () => unsubscribe();
+
     },[]);
 
     useEffect(() => {
@@ -290,8 +294,16 @@ const AppRouter = props => {
         </RootStack.Navigator>
     );
 
+    let renderSpinner = () => {
+        return (
+            <View style={styles.loading}>
+                <QPSpinner />
+            </View>
+        )
+    };
+
     return (
-        <NavigationContainer theme={MyTheme} ref={ref} fallback={<Text>Loading...</Text>} linking={linking}>
+        <NavigationContainer theme={MyTheme} ref={ref} fallback={renderSpinner()} linking={linking}>
             {authToken ? <Drawer.Navigator
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
@@ -333,7 +345,16 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.regular,
         paddingTop:5,
         paddingLeft:5,
-    }
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 
 });
 
