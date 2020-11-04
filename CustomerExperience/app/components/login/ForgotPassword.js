@@ -39,15 +39,18 @@ const ForgotPassword = props => {
     let textFieldTimer = useRef(null);
 
     useEffect(() => {
-        let time = props.route.params.timestamp.replace("+", " ");
-        if(StringUtils.isNotEmpty(props.dynamicLink)) {
-            let data = {
-                emailAddress: email,
-                accessCode: accessCode,
-                timestamp: time
-            };
-            props.validatePasswordLink(data)
+        if(props.route && props.route.params && props.route.params.timestamp && StringUtils.isNotEmpty(props.dynamicLink)) {
+            let time = props.route.params.timestamp.replace("+", " ");
+            if(StringUtils.isNotEmpty(props.dynamicLink)) {
+                let data = {
+                    emailAddress: email,
+                    accessCode: accessCode,
+                    timestamp: time
+                };
+                props.validatePasswordLink(data)
+            }
         }
+
     },[]);
 
     useEffect(() => {
