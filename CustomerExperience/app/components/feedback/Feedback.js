@@ -151,6 +151,7 @@ const FeedbackTabStack = () => (
         initialLayout: {width: useWindowDimensions().width},
         tabStyle:{height: 1.7*PaddingConstants.tab4}
     }}
+                           lazy
                            keyboardDismissMode={'auto'}
     >
         <FeedbackTab.Screen name="All" component={renderFeedbackScene} initialParams={{screenName: 'All'}} />

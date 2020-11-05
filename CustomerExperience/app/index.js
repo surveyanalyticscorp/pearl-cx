@@ -8,9 +8,16 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import { enableScreens } from 'react-native-screens';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as globalVariables from '../app/styles/globalStyleVariables';
-import {View} from 'react-native-animatable';
+import {View} from 'react-native';
+import Siren from 'react-native-siren'
 
 EStyleSheet.build(globalVariables);
+
+const defaultOptions = {
+    title: 'Questionpro CX has a new update!',
+    forceUpgrade: false,
+    message: 'Do you want to update the app?',
+};
 
 export default class CxApp extends Component {
 
@@ -21,6 +28,7 @@ export default class CxApp extends Component {
         this.state = {
             styleBuilt : false,
         };
+        Siren.promptUser(defaultOptions)
     }
 
     componentDidMount() {
