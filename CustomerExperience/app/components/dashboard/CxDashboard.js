@@ -8,6 +8,7 @@ import {
     View,
     BackHandler,
     Alert,
+    SafeAreaView
 } from 'react-native';
 import {StackActions} from '@react-navigation/native';
 import {showLoading} from '../../redux/actions/index';
@@ -23,7 +24,6 @@ import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {MarginConstants} from '../../styles/margin.constants';
 import Icomoon from '../../config/Icons/icon-native';
 import {VictoryPie} from 'victory-native';
-import SafeAreaView from 'react-native-safe-area-view';
 import {Sizes} from '../../styles/Size.constant';
 import StringUtils from '../../Utils/StringUtils';
 import FilterHeader from '../FilterHeader';
@@ -201,7 +201,7 @@ const CxDashboard = props => {
         return (
             <TouchableWithoutFeedback
                 onPress={() => {
-                    const pushAction = StackActions.push('DetractorTickets', {
+                    const pushAction = StackActions.push('Tickets', {
                         screen: icon === 'new' ? "New" : (icon === 'open' ? "Open" : "Resolved")
                     });
                     props.navigation.dispatch(pushAction);
@@ -314,7 +314,7 @@ const CxDashboard = props => {
 
     let renderDashboard = () => {
         return (
-            <SafeAreaView forceInset={{bottom: 'never'}} style={dashboardStyles.container}>
+            <SafeAreaView forceInset={{bottom: 'never', top:'never'}} style={dashboardStyles.container}>
                 <FilterHeader actionOnArrowClick = {() => {
                     setComparision(true)
                 }}

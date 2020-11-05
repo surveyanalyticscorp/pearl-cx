@@ -13,23 +13,20 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
-import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
+import {isObjectEmpty, isStringNullOrEmpty, showErrorFlashMessage, validateEmail} from '../../Utils/Utility';
 import {FontFamily} from '../../styles/font.constants';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
-import {clearError} from '../../redux/actions/index';
-import {requestOtp, validateUserOtp} from '../../redux/actions/login.actions';
+import {clearError, setDynamicLink, setUserDetailsForResetPassword} from '../../redux/actions/index';
 import {connect} from 'react-redux';
 import StringUtils from '../../Utils/StringUtils';
-import {showMessage} from 'react-native-flash-message';
-import DialogContainer from '../../widgets/dialog/Container';
-import DialogTitle from '../../widgets/dialog/Title';
-import DialogInput from '../../widgets/dialog/Input';
-import DialogButton from '../../widgets/dialog/Button';
 import QPSpinner from '../../widgets/QPSpinner';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import SafeAreaView from 'react-native-safe-area-view';
+import AsyncStorage from '@react-native-community/async-storage';
+import {ASYNC_RESET_CREDENTIALS} from '../../api/Constant';
+import {requestPasswordLink, validateResetPasswordLink} from '../../redux/actions/login.actions';
 
 let { width }= Dimensions.get('window');
 const stringConst = require('../../config/locales/en');
@@ -38,45 +35,48 @@ const ForgotPassword = props => {
     const [email, setEmail] = useState(props.route.params.email);
     const [accessCode, setAccessCode] = useState(props.route.params.accessCode);
     const [validation, setValidation] = useState('');
-    const [otp, setOtp] = useState('');
-    const [otpAlert, setOtpAlert] = useState(false);
 
     let textFieldTimer = useRef(null);
 
     useEffect(() => {
-        if (props.forgotPasswordResponse.body) {
-            showMessage({
-                message: props.forgotPasswordResponse.body.message,
-                type: 'info',
-                icon: 'auto',
-            });
-            setOtpAlert(true);
-        }
-    }, [props.forgotPasswordResponse]);
-
-    useEffect(() => {
-        if (props.validateOtpResponse.body) {
-            if (props.validateOtpResponse.body.success) {
-                props.clearError();
-                setOtpAlert(false);
-                props.navigation.replace('ResetPassword', {
-                    email: email,
+        if(props.route && props.route.params && props.route.params.timestamp && StringUtils.isNotEmpty(props.dynamicLink)) {
+            let time = props.route.params.timestamp.replace("+", " ");
+            if(StringUtils.isNotEmpty(props.dynamicLink)) {
+                let data = {
+                    emailAddress: email,
                     accessCode: accessCode,
-                });
+                    timestamp: time
+                };
+                props.validatePasswordLink(data)
             }
         }
-    }, [props.validateOtpResponse]);
 
+    },[]);
+
+    useEffect(() => {
+        if(!isObjectEmpty(props.validatePasswordLinkResponse)) {
+            if(props.validatePasswordLinkResponse && props.validatePasswordLinkResponse.Error) {
+                props.setDynamicLink();
+                showErrorFlashMessage(props.validatePasswordLinkResponse.Error)
+            } else {
+                if(!props.validatePasswordLinkResponse.isExpired) {
+                    props.navigation.navigate('ResetPassword', {
+                        email: email,
+                        accessCode: accessCode,
+                    })
+                } else {
+                    props.setDynamicLink();
+                    showErrorFlashMessage(props.validatePasswordLinkResponse.message)
+                }
+            }
+        }
+
+    },[props.validatePasswordLinkResponse]);
 
     useEffect(() => {
         if (StringUtils.isNotEmpty(validation) || props.isError) {
-            showMessage({
-                message: validation,
-                type: 'danger',
-                icon: 'auto',
-                backgroundColor: Colors.red,
-                color: Colors.white,
-            });
+            let message = props.isError ? props.errorMessage.errorAlert : validation;
+            showErrorFlashMessage(message);
             let timer = setTimeout(() => {
                 setValidation('')
             }, 1000);
@@ -92,7 +92,9 @@ const ForgotPassword = props => {
                 emailAddress: email,
                 accessCode: accessCode,
             };
-            props.requestOtp(data);
+            props.setUserDetails(data);
+            AsyncStorage.setItem(ASYNC_RESET_CREDENTIALS, JSON.stringify(data));
+            props.requestPasswordLink(data);
         }
     };
 
@@ -116,54 +118,6 @@ const ForgotPassword = props => {
     const handleAccessCode = text => {
         setAccessCode(text);
         setValidation('');
-    };
-
-    const handleDialogCancel = () => {
-        setOtpAlert(false);
-    };
-
-    const handleDialogDone = () => {
-        if (!isStringNullOrEmpty(otp)) {
-            let data = {
-                emailAddress: email,
-                accessCode: accessCode,
-                otp: otp,
-            };
-            props.validateUserOtp(data);
-        } else {
-            setValidation(stringConst.otpRequired);
-        }
-    };
-
-    const handleOnTextChange = text => {
-        setOtp(text);
-    };
-
-    const renderDialog = () => {
-        let errorMessage = 'One Time password(OTP)';
-        let messageColor = Colors.white;
-        if (props.isError) {
-            errorMessage = props.errorMessage.errorAlert
-                ? props.errorMessage.errorAlert
-                : props.errorMessage.message;
-
-            messageColor = Colors.red;
-        }
-        return (
-            <DialogContainer visible={otpAlert}>
-                <DialogTitle>
-                    {stringConst.enterOtp}
-                </DialogTitle>
-                <DialogInput
-                    labelStyle={{color: messageColor}}
-                    label={errorMessage}
-                    keyboardType={'numeric'}
-                    onChangeText={handleOnTextChange}
-                />
-                <DialogButton label={stringConst.cancel} onPress={handleDialogCancel}/>
-                <DialogButton label={stringConst.done} onPress={handleDialogDone}/>
-            </DialogContainer>
-        );
     };
 
     let renderSpinnerResetButton = () => {
@@ -246,7 +200,6 @@ const ForgotPassword = props => {
             <SafeAreaView forceInset={{top: 'always',bottom:'never'}} style={styles.safeArea}>
                 {renderContainer()}
             </SafeAreaView>
-            {renderDialog()}
         </ImageBackground>
 
     );
@@ -257,20 +210,26 @@ const mapStateToProps = state => {
         isLoading: state.global.isLoading,
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
-        forgotPasswordResponse: state.global.forgotPasswordResponse,
-        validateOtpResponse: state.global.validateOtpResponse,
+        dynamicLink: state.global.dynamicLink,
+        validatePasswordLinkResponse: state.global.validatePasswordLinkResponse
     };
 };
 const mapDispatchToProps = dispatch => ({
-    requestOtp: data => {
-        dispatch(requestOtp(data));
-    },
-    validateUserOtp: data => {
-        dispatch(validateUserOtp(data));
+    setUserDetails: (data) => {
+        dispatch(setUserDetailsForResetPassword(data))
     },
     clearError: () => {
         dispatch(clearError(false));
     },
+    requestPasswordLink: (param) => {
+        dispatch(requestPasswordLink(param))
+    },
+    validatePasswordLink: (param) => {
+        dispatch(validateResetPasswordLink(param))
+    },
+    setDynamicLink: () => {
+        dispatch(setDynamicLink(''))
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);

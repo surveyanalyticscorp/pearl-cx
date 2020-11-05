@@ -1,11 +1,9 @@
 export const GET_LOGIN = 'GET_LOGIN';
 export const LOGIN_RESPONSE = 'LOGIN_RESPONSE';
 
-export const GET_FORGOT_PSWD_OTP = 'GET_FORGOT_PSWD_OTP';
-export const FORGOT_PSWD_OTP_RESPONSE = 'FORGOT_PSWD_OTP_RESPONSE';
-
-export const VALIDATE_USER_OTP = 'VALIDATE_USER_OTP';
-export const VALIDATE_USER_OTP_RESPONSE = 'VALIDATE_USER_OTP_RESPONSE';
+export const GET_RESET_PASSWORD_LINK = 'GET_RESET_PASSWORD_LINK';
+export const VALIDATE_RESET_PASSWORD_LINK = 'VALIDATE_RESET_PASSWORD_LINK';
+export const VALIDATE_RESET_PASSWORD_LINK_RESPONSE = 'VALIDATE_RESET_PASSWORD_LINK_RESPONSE';
 
 export const UPDATE_PASSWORD = 'UPDATE_PASSWORD';
 export const UPDATE_PASSWORD_RESPONSE = 'UPDATE_PASSWORD_RESPONSE';
@@ -18,6 +16,8 @@ export const API_ERROR = 'API_ERROR';
 export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const SET_RANGE_FILTER = 'SET_RANGE_FILTER';
+export const SET_USER_DETAILS_FOR_RESET_PASSWORD = 'SET_USER_DETAILS_FOR_RESET_PASSWORD';
+export const SET_DYNAMIC_LINK = 'SET_DYNAMIC_LINK';
 
 
 export const showLoading = (isLoading = true) => ({
@@ -52,4 +52,14 @@ export const setRangeFilter = range => ({
 export const setError = (error) => ({
   type: API_ERROR,
   error
+});
+
+export const setUserDetailsForResetPassword = (body) => ({
+  type: SET_USER_DETAILS_FOR_RESET_PASSWORD,
+  payload: body,
+});
+
+export const setDynamicLink = (link) => ({
+  type: SET_DYNAMIC_LINK,
+  payload: link
 });

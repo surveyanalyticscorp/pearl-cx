@@ -1,5 +1,4 @@
 import {combineReducers} from 'redux';
-import feedbackReducer from './FeedbackListReducer';
 import dashboardReducer from './DashboardReducer';
 import globalReducer from './GlobalReducer';
 import {CLEAR_USER_INFO} from '../actions';
@@ -18,5 +17,6 @@ const appReducer = combineReducers({
   dashboard: dashboardReducer,
   global: globalReducer,
 });
+
 
 export default rootReducer;

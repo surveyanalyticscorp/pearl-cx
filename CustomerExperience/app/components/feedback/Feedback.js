@@ -98,7 +98,7 @@ function Feedback(props){
             setFeedbackData([]);
             setShowLoader(true);
         } else {
-            setPageOffset(0)
+            setPageOffset(0);
             setShowLoader(true);
         }
     };
@@ -212,7 +212,7 @@ const renderFeedbackScene = (props) => {
 
     let renderFeedbackList = () => {
         return (
-                <FlatList
+             <FlatList
                     data={list}
                     renderItem={_renderRow}
                     keyExtractor={item => item.responseSetID+''}
@@ -223,6 +223,7 @@ const renderFeedbackScene = (props) => {
                     onRefresh={feedbackForm.onRefresh}
                     extraData={[list]}
                     contentContainerStyle={styles.container}
+                    ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
                 />
         );
     };
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     container: {
-        marginTop: MarginConstants.tab1
+        marginTop: MarginConstants.tab1,
     },
     emptyView: {
         flex: 1,

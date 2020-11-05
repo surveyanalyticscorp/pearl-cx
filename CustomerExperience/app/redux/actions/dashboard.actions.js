@@ -9,8 +9,6 @@ export const GET_CLOSED_LOOP_SEGMENT_DETAILS = 'GET_CLOSED_LOOP_SEGMENT_DETAILS'
 export const GET_CLOSED_LOOP_OWNER_DETAILS = 'GET_CLOSED_LOOP_OWNER_DETAILS';
 export const CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED = 'CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED';
 export const CLOSED_LOOP_OWNER_DETAILS_RECEIVED = 'CLOSED_LOOP_OWNER_DETAILS_RECEIVED';
-export const UPDATE_CLOSED_LOOP_TICKET = 'UPDATE_CLOSED_LOOP_TICKET';
-
 
 export const DASHBOARD_RANGE = 'DASHBOARD_RANGE';
 
@@ -38,12 +36,6 @@ export const getClosedLoopSegmentDetails = (token, param) => ({
 
 export const getClosedLoopOwnerDetails = (token, param) => ({
   type: GET_CLOSED_LOOP_OWNER_DETAILS,
-  token,
-  param
-});
-
-export const updateClosedLoopTicket = (token, param) => ({
-  type: UPDATE_CLOSED_LOOP_TICKET,
   token,
   param
 });

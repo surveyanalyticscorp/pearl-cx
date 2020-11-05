@@ -2,8 +2,8 @@ import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {
     AUTH_LOGIN,
-    AUTH_REQUEST_OTP,
-    AUTH_VALIDATE_OTP,
+    CX_GET_RESET_PASSWORD_LINK,
+    CX_VALIDATE_PASSWORD_LINK,
     AUTH_UPDATE_PASSWORD,
     ASYNC_USER_CREDENTIALS,
 } from '../../api/Constant';
@@ -11,14 +11,16 @@ import {
     LOGIN_RESPONSE,
     GET_LOGIN,
     API_ERROR,
-    GET_FORGOT_PSWD_OTP,
-    FORGOT_PSWD_OTP_RESPONSE,
-    VALIDATE_USER_OTP,
-    VALIDATE_USER_OTP_RESPONSE,
+    VALIDATE_RESET_PASSWORD_LINK,
     UPDATE_PASSWORD,
-    UPDATE_PASSWORD_RESPONSE, CLEAR_API_ERROR,
-} from '../actions/index';
+    UPDATE_PASSWORD_RESPONSE,
+    CLEAR_API_ERROR,
+    GET_RESET_PASSWORD_LINK,
+    VALIDATE_RESET_PASSWORD_LINK_RESPONSE,
+    IS_LOADING,
+} from '../actions';
 import AsyncStorage from '@react-native-community/async-storage';
+import {showSuccessFlashMessage} from '../../Utils/Utility';
 
 
 export function* doLoginApiCall(action) {
@@ -43,19 +45,15 @@ export function* watchDoLogin() {
     yield takeLatest(GET_LOGIN, doLoginApiCall);
 }
 
-function* doForgotPasswordOtpApiCall(action) {
+function* getResetPasswordLink(action) {
     try {
-        yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
         const response = yield WebServiceHandler.postNew(
-            AUTH_REQUEST_OTP,
+            CX_GET_RESET_PASSWORD_LINK,
             {},
             action.param,
         );
+        yield showSuccessFlashMessage(response.body.message)
 
-        yield put({
-            type: FORGOT_PSWD_OTP_RESPONSE,
-            response: response,
-        });
     } catch (error) {
         yield put({
             type: API_ERROR,
@@ -64,23 +62,24 @@ function* doForgotPasswordOtpApiCall(action) {
     }
 }
 
-export function* watchForgotPasswordOtp() {
-    yield takeLatest(GET_FORGOT_PSWD_OTP, doForgotPasswordOtpApiCall);
+export function* watchForgotPasswordLink() {
+    yield takeLatest(GET_RESET_PASSWORD_LINK, getResetPasswordLink);
 }
 
-function* validateUserOtpApiCall(action) {
+function* validateResetPasswordLink(action) {
     try {
-        yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
+        yield put({type: IS_LOADING, payload: {isLoading: true}});
         const response = yield WebServiceHandler.postNew(
-            AUTH_VALIDATE_OTP,
+            CX_VALIDATE_PASSWORD_LINK,
             {},
             action.param,
         );
 
         yield put({
-            type: VALIDATE_USER_OTP_RESPONSE,
-            response: response,
+            type: VALIDATE_RESET_PASSWORD_LINK_RESPONSE,
+            response: response.body,
         });
+
     } catch (error) {
         yield put({
             type: API_ERROR,
@@ -89,8 +88,8 @@ function* validateUserOtpApiCall(action) {
     }
 }
 
-export function* watchValidateUserOtp() {
-    yield takeLatest(VALIDATE_USER_OTP, validateUserOtpApiCall);
+export function* watchValidatePasswordLink() {
+    yield takeLatest(VALIDATE_RESET_PASSWORD_LINK, validateResetPasswordLink);
 }
 
 function* updatePasswordApiCall(action) {

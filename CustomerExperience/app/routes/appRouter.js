@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {DrawerActions, NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -15,7 +15,7 @@ import Feedback from '../components/feedback/Feedback';
 import FeedbackDetails from '../components/feedback/FeedbackDetails';
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
-import {useSelector} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
@@ -28,6 +28,10 @@ import DashboardDateFilter from '../components/dashboard/components/DashboardDat
 import AppSettings from '../components/settings/AppSettings';
 import AccountDetails from '../components/settings/AccountDetails';
 import {Sizes} from '../styles/Size.constant';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {handleResetPasswordLink} from '../Utils/DeepLinkingUtils';
+import {setDynamicLink} from '../redux/actions';
+import QPSpinner from '../widgets/QPSpinner';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -40,6 +44,47 @@ const AppRouter = props => {
 
     const authToken = useSelector(state => state.global.authToken);
     const userInfo = useSelector(state => state.global.userInfo);
+    const dynamicLink = useSelector(state => state.global.dynamicLink);
+
+    let [isAppActive, setAppActiveState] = useState(false);
+    let ref = useRef();
+
+    const linking = {
+        prefixes: ['https://mobileapps.questionpro.com/cx','https://questionpro.offline.link'],
+    };
+
+    useEffect(() => {
+        const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+
+        dynamicLinks()
+            .getInitialLink()
+            .then(link => {
+                if (link && link.url) {
+                    handleDynamicLink(link)
+                }
+            });
+
+        return () => unsubscribe();
+
+    },[]);
+
+    useEffect(() => {
+        handleResetPasswordLink(dynamicLink, ref, authToken, props.dispatch);
+    },[dynamicLink]);
+
+    useEffect(() => {
+        if(isAppActive) {
+            handleResetPasswordLink(dynamicLink, ref, authToken, props.dispatch);
+            setAppActiveState(false);
+        }
+    },[isAppActive]);
+
+    const handleDynamicLink = link => {
+        if (link && link.url) {
+            props.dispatch(setDynamicLink(link.url));
+            setAppActiveState(true)
+        }
+    };
 
     useEffect(() => {
         if (!isStringNullOrEmpty(authToken)) {
@@ -200,7 +245,7 @@ const AppRouter = props => {
                 })}
             />
             <RootStack.Screen
-                name="DetractorTickets"
+                name="Tickets"
                 component={DetractorTicketsTabStack}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
@@ -251,8 +296,16 @@ const AppRouter = props => {
         </RootStack.Navigator>
     );
 
+    let renderSpinner = () => {
+        return (
+            <View style={styles.loading}>
+                <QPSpinner />
+            </View>
+        )
+    };
+
     return (
-        <NavigationContainer theme={MyTheme}>
+        <NavigationContainer theme={MyTheme} ref={ref} fallback={renderSpinner()} linking={linking} >
             {authToken ? <Drawer.Navigator
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
@@ -267,8 +320,11 @@ const AppRouter = props => {
     );
 };
 
-export default AppRouter;
+const mapDispatchToProps = dispatch => ({
+    dispatch
+});
 
+export default connect(null, mapDispatchToProps)(AppRouter);
 
 const styles = StyleSheet.create({
     drawerStyle: {
@@ -291,7 +347,16 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.regular,
         paddingTop:5,
         paddingLeft:5,
-    }
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 
 });
 

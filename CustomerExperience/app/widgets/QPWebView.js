@@ -18,6 +18,7 @@ const QPWebView = props => {
         renderLoading={() => {
           return <QPSpinner/>
         }}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
