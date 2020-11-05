@@ -29,11 +29,9 @@ import AppSettings from '../components/settings/AppSettings';
 import AccountDetails from '../components/settings/AccountDetails';
 import {Sizes} from '../styles/Size.constant';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import {getResetPasswordURLComponents} from '../Utils/DeepLinkingUtils';
+import {handleResetPasswordLink} from '../Utils/DeepLinkingUtils';
 import {setDynamicLink} from '../redux/actions';
-import StringUtils from '../Utils/StringUtils';
 import QPSpinner from '../widgets/QPSpinner';
-import {validateResetPasswordLink} from '../redux/actions/login.actions';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -71,12 +69,12 @@ const AppRouter = props => {
     },[]);
 
     useEffect(() => {
-        handleResetPasswordLink();
+        handleResetPasswordLink(dynamicLink, ref, authToken, props.dispatch);
     },[dynamicLink]);
 
     useEffect(() => {
         if(isAppActive) {
-            handleResetPasswordLink();
+            handleResetPasswordLink(dynamicLink, ref, authToken, props.dispatch);
             setAppActiveState(false);
         }
     },[isAppActive]);
@@ -85,28 +83,6 @@ const AppRouter = props => {
         if (link && link.url) {
             props.dispatch(setDynamicLink(link.url));
             setAppActiveState(true)
-        }
-    };
-
-    let handleResetPasswordLink = () => {
-        if(StringUtils.isNotEmpty(dynamicLink)) {
-            if(dynamicLink.includes('resetpassword') && isStringNullOrEmpty(authToken)) {
-                let components = getResetPasswordURLComponents(dynamicLink);
-                if(ref.current?.getCurrentRoute().name === 'ForgotPassword') {
-                    let data = {
-                        emailAddress: components.email,
-                        accessCode: components.accessCode,
-                        timestamp: components.timestamp.replace("+", " ")
-                    };
-                    props.dispatch(validateResetPasswordLink(data))
-                } else {
-                    ref.current?.navigate('ForgotPassword', {
-                        email: components.email,
-                        accessCode: components.accessCode,
-                        timestamp: components.timestamp
-                    })
-                }
-            }
         }
     };
 
