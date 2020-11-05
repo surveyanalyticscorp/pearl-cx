@@ -48,7 +48,8 @@ const ResetPassword = props => {
 
     useEffect(() => {
         if (StringUtils.isNotEmpty(validation) || props.isError) {
-            showErrorFlashMessage(validation);
+            let message = props.isError ? props.errorMessage.errorAlert : validation;
+            showErrorFlashMessage(message);
             let timer = setTimeout(() => {
                 setValidation('');
             }, 1000);

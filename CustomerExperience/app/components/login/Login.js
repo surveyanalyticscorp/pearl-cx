@@ -82,7 +82,6 @@ const Login = props => {
             if(StringUtils.isNotEmpty(props.dynamicLink) && props.dynamicLink.includes('resetpassword')) {
                 props.resetPasswordLink()
             }
-
             props.loginClick(data);
         }
     };

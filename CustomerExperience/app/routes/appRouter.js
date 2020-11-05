@@ -1,6 +1,6 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {DrawerActions, NavigationContainer, useNavigation } from '@react-navigation/native';
+import {DrawerActions, NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
@@ -29,10 +29,11 @@ import AppSettings from '../components/settings/AppSettings';
 import AccountDetails from '../components/settings/AccountDetails';
 import {Sizes} from '../styles/Size.constant';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import { getResetPasswordURLComponents } from '../Utils/DeepLinkingUtils';
+import {getResetPasswordURLComponents} from '../Utils/DeepLinkingUtils';
 import {setDynamicLink} from '../redux/actions';
 import StringUtils from '../Utils/StringUtils';
 import QPSpinner from '../widgets/QPSpinner';
+import {validateResetPasswordLink} from '../redux/actions/login.actions';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -46,7 +47,9 @@ const AppRouter = props => {
     const authToken = useSelector(state => state.global.authToken);
     const userInfo = useSelector(state => state.global.userInfo);
     const dynamicLink = useSelector(state => state.global.dynamicLink);
-    const ref = useRef();
+
+    let [isAppActive, setAppActiveState] = useState(false);
+    let ref = useRef();
 
     const linking = {
         prefixes: ['https://mobileapps.questionpro.com/cx','https://questionpro.offline.link'],
@@ -59,7 +62,7 @@ const AppRouter = props => {
             .getInitialLink()
             .then(link => {
                 if (link && link.url) {
-                    props.dispatch(setDynamicLink(link.url))
+                    handleDynamicLink(link)
                 }
             });
 
@@ -68,28 +71,41 @@ const AppRouter = props => {
     },[]);
 
     useEffect(() => {
-        if(StringUtils.isNotEmpty(dynamicLink)) {
-            if(dynamicLink.includes('resetpassword') && isStringNullOrEmpty(authToken)) {
-                let components = getResetPasswordURLComponents(dynamicLink);
-                ref.current?.navigate('ForgotPassword', {
-                    email: components.email,
-                    accessCode: components.accessCode,
-                    timestamp: components.timestamp
-                })
-            }
-        }
+        handleResetPasswordLink();
     },[dynamicLink]);
+
+    useEffect(() => {
+        if(isAppActive) {
+            handleResetPasswordLink();
+            setAppActiveState(false);
+        }
+    },[isAppActive]);
 
     const handleDynamicLink = link => {
         if (link && link.url) {
             props.dispatch(setDynamicLink(link.url));
-            if(link.url.includes('resetpassword') && isStringNullOrEmpty(authToken)) {
+            setAppActiveState(true)
+        }
+    };
+
+    let handleResetPasswordLink = () => {
+        if(StringUtils.isNotEmpty(dynamicLink)) {
+            if(dynamicLink.includes('resetpassword') && isStringNullOrEmpty(authToken)) {
                 let components = getResetPasswordURLComponents(dynamicLink);
-                ref.current?.navigate('ForgotPassword', {
-                    email: components.email,
-                    accessCode: components.accessCode,
-                    timestamp: components.timestamp
-                })
+                if(ref.current?.getCurrentRoute().name === 'ForgotPassword') {
+                    let data = {
+                        emailAddress: components.email,
+                        accessCode: components.accessCode,
+                        timestamp: components.timestamp.replace("+", " ")
+                    };
+                    props.dispatch(validateResetPasswordLink(data))
+                } else {
+                    ref.current?.navigate('ForgotPassword', {
+                        email: components.email,
+                        accessCode: components.accessCode,
+                        timestamp: components.timestamp
+                    })
+                }
             }
         }
     };
@@ -313,7 +329,7 @@ const AppRouter = props => {
     };
 
     return (
-        <NavigationContainer theme={MyTheme} ref={ref} fallback={renderSpinner()} linking={linking}>
+        <NavigationContainer theme={MyTheme} ref={ref} fallback={renderSpinner()} linking={linking} >
             {authToken ? <Drawer.Navigator
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
