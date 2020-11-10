@@ -264,7 +264,7 @@ function UpdateTicket(props) {
             updateClosedLoopTicket(props.authToken, body, () => {
                 setLoading(false);
                 props.navigation.navigate('Dashboard');
-                props.navigation.push('DetractorTickets');
+                props.navigation.push('Tickets');
                 getDashboardData();
                 props.clearTicketDetails();
             }, (error) => {
