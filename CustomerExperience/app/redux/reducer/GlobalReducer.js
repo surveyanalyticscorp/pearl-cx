@@ -1,17 +1,20 @@
 import {
     FILL_USER_INFO,
     IS_LOADING,
-    LOGIN_RESPONSE,
     API_ERROR,
     CLEAR_API_ERROR,
-    UPDATE_PASSWORD_RESPONSE,
     CLEAR_USER_INFO,
     SET_AUTH_TOKEN,
     SET_RANGE_FILTER,
     SET_USER_DETAILS_FOR_RESET_PASSWORD,
     SET_DYNAMIC_LINK,
-    VALIDATE_RESET_PASSWORD_LINK_RESPONSE
 } from '../actions';
+import {
+    LOGIN_RESPONSE,
+    LOGOUT_RESPONSE,
+    UPDATE_PASSWORD_RESPONSE,
+    VALIDATE_RESET_PASSWORD_LINK_RESPONSE,
+} from '../actions/login.actions';
 
 const initialState = {
     range:{
@@ -28,6 +31,8 @@ const initialState = {
     userDetailsForResetPassword:{},
     validatePasswordLinkResponse:{},
     updatePasswordResponse: {},
+    pushToken:'',
+    logoutResponse:{}
 };
 
 const globalReducer = (state = initialState, action) => {
@@ -108,6 +113,12 @@ const globalReducer = (state = initialState, action) => {
             return {
                 ...state,
                 range: action.range,
+            };
+        }
+        case LOGOUT_RESPONSE: {
+            return {
+                ...state,
+                logoutResponse: action.response,
             };
         }
         default: {

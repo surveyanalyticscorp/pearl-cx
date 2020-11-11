@@ -5,23 +5,25 @@ import {
     CX_GET_RESET_PASSWORD_LINK,
     CX_VALIDATE_PASSWORD_LINK,
     AUTH_UPDATE_PASSWORD,
-    ASYNC_USER_CREDENTIALS,
+    ASYNC_USER_CREDENTIALS, CX_LOGOUT,
 } from '../../api/Constant';
 import {
-    LOGIN_RESPONSE,
-    GET_LOGIN,
     API_ERROR,
-    VALIDATE_RESET_PASSWORD_LINK,
-    UPDATE_PASSWORD,
-    UPDATE_PASSWORD_RESPONSE,
     CLEAR_API_ERROR,
-    GET_RESET_PASSWORD_LINK,
-    VALIDATE_RESET_PASSWORD_LINK_RESPONSE,
     IS_LOADING,
 } from '../actions';
 import AsyncStorage from '@react-native-community/async-storage';
 import {showSuccessFlashMessage} from '../../Utils/Utility';
-
+import {LOGIN_RESPONSE,
+    GET_LOGIN,
+    VALIDATE_RESET_PASSWORD_LINK,
+    UPDATE_PASSWORD,
+    UPDATE_PASSWORD_RESPONSE,
+    GET_RESET_PASSWORD_LINK,
+    VALIDATE_RESET_PASSWORD_LINK_RESPONSE,
+    LOGOUT,
+    LOGOUT_RESPONSE,
+} from '../actions/login.actions';
 
 export function* doLoginApiCall(action) {
     try {
@@ -33,7 +35,8 @@ export function* doLoginApiCall(action) {
         yield put({type: LOGIN_RESPONSE, response: response});
         let userData = {
             email: action.param.emailAddress,
-            password: action.param.password
+            password: action.param.password,
+            accessCode: action.param.accessCode
         };
         AsyncStorage.setItem(ASYNC_USER_CREDENTIALS, JSON.stringify(userData))
     } catch (error) {
@@ -115,4 +118,21 @@ function* updatePasswordApiCall(action) {
 
 export function* watchUpdatePassword() {
     yield takeLatest(UPDATE_PASSWORD, updatePasswordApiCall);
+}
+
+function* doLogout(action) {
+    try {
+        const response = yield WebServiceHandler.postNew(
+            CX_LOGOUT,
+            {},
+            action.param,
+        );
+        yield put({type: LOGOUT_RESPONSE, response: response});
+    } catch (error) {
+        yield put({type: API_ERROR, error: error});
+    }
+}
+
+export function* watchLogout() {
+    yield takeLatest(LOGOUT, doLogout)
 }

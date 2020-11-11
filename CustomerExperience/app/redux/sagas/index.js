@@ -4,7 +4,7 @@ import {
 } from './dashboardSaga';
 import {
   watchDoLogin,
-  watchForgotPasswordLink,
+  watchForgotPasswordLink, watchLogout,
   watchUpdatePassword,
   watchValidatePasswordLink,
 } from './loginInSaga';
@@ -24,6 +24,7 @@ export function* rootSaga() {
     fork(watchGetDetractorTicketDetail),
     fork(watchGetClosedLoopSegmentDetails),
     fork(watchGetClosedLoopOwnerDetails),
-    fork(watchForgotPasswordLink)
+    fork(watchForgotPasswordLink),
+    fork(watchLogout)
   ]);
 }

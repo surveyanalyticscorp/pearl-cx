@@ -14,13 +14,16 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
-import {clearUserInfo} from '../redux/actions';
+import {clearUserInfo, showLoading} from '../redux/actions';
+import {doLogout} from '../redux/actions/login.actions';
 import {connect} from 'react-redux';
-import {ASYNC_USER_CREDENTIALS} from '../api/Constant';
+import {ASYNC_PUSH_TOKEN, ASYNC_USER_CREDENTIALS} from '../api/Constant';
 import {Sizes} from '../styles/Size.constant';
 import {PaddingConstants} from '../styles/padding.constants';
 import StringUtils from '../Utils/StringUtils';
 import DeviceInfo from 'react-native-device-info';
+import {isObjectEmpty, isStringNullOrEmpty} from '../Utils/Utility';
+import messaging from '@react-native-firebase/messaging';
 
 const DrawerContent = props => {
     const [userCredentials, setUserCredentials] = useState('');
@@ -31,6 +34,17 @@ const DrawerContent = props => {
             setUserCredentials(JSON.parse(value));
         })
     }, []);
+
+    useEffect(() => {
+        if(!isObjectEmpty(props.logoutResponse)) {
+            AsyncStorage.clear().then(() => {
+                props.clearUserData();
+                props.showLoading(false);
+                setLogoutAlert(false);
+            });
+        }
+
+    },[props.logoutResponse]);
 
     const renderDrawerButtons = () => {
         return (
@@ -85,10 +99,17 @@ const DrawerContent = props => {
                         {
                             text: 'Yes',
                             onPress: () => {
-                                AsyncStorage.clear().then(() => {
-                                    props.logoutUser();
-                                    setLogoutAlert(false);
-                                });
+                                AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then((token) => {
+                                    if(!isStringNullOrEmpty(token)) {
+                                        logoutAction(token)
+                                    } else {
+                                        messaging()
+                                            .getToken()
+                                            .then(token => {
+                                                logoutAction(token)
+                                            });
+                                    }
+                                })
                             }
                         },
                         {   text: 'No',
@@ -102,6 +123,20 @@ const DrawerContent = props => {
             );
         }
         return <View/>
+    };
+
+    let logoutAction = (token) => {
+        AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then((value) => {
+            let userDetails = JSON.parse(value);
+            let params = {
+                "accessCode": userDetails.accessCode,
+                "emailAddress": userDetails.email,
+                "pushToken": token,
+                "udid": DeviceInfo.getUniqueId(),
+            };
+            props.logoutUser(params);
+        });
+
     };
 
     let renderAppVersion = () => {
@@ -142,14 +177,20 @@ const DrawerContent = props => {
 const mapStateToProps = state => {
     return {
         userInfo: state.global.userInfo,
-        isLoading: state.global.isLoading,
+        logoutResponse: state.global.logoutResponse
     };
 };
 
 const mapDispatchToProps = dispatch => ({
-    logoutUser: data => {
+    logoutUser: (params) => {
+        dispatch(doLogout(params))
+    },
+    clearUserData: () => {
         dispatch(clearUserInfo());
     },
+    showLoading: (flag) => {
+        dispatch(showLoading(flag))
+    }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent);
