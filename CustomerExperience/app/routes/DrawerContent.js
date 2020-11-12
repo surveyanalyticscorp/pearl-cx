@@ -24,10 +24,13 @@ import StringUtils from '../Utils/StringUtils';
 import DeviceInfo from 'react-native-device-info';
 import {isObjectEmpty, isStringNullOrEmpty} from '../Utils/Utility';
 import messaging from '@react-native-firebase/messaging';
+import {DrawerActions} from '@react-navigation/native';
+import QPSpinner from '../widgets/QPSpinner';
 
 const DrawerContent = props => {
     const [userCredentials, setUserCredentials] = useState('');
     const [logoutAlert, setLogoutAlert] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then((value) => {
@@ -41,11 +44,12 @@ const DrawerContent = props => {
                 AsyncStorage.clear().then(() => {
                     props.clearUserData();
                     setLogoutAlert(false);
+                    setLoading(false);
                 });
             }
         }
-
     },[props.logoutResponse]);
+
 
     const renderDrawerButtons = () => {
         return (
@@ -79,7 +83,8 @@ const DrawerContent = props => {
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
                     onPress={() => {
-                        setLogoutAlert(true);
+                        props.navigation.dispatch(DrawerActions.toggleDrawer());
+                        !logoutAlert && setLogoutAlert(true);
                     }}>
                     <View style={styles.drawerRow}>
                         <FontIcon size={1.3*Sizes.icons} color={Colors.accent} name={'sign-out-alt'} style={styles.rowIcon}/>
@@ -91,53 +96,63 @@ const DrawerContent = props => {
     };
 
     const renderDialog = () => {
-        if(logoutAlert) {
-            return (
-                Alert.alert(
-                    'Are you sure you want to logout?',
-                    '',
-                    [
-                        {
-                            text: 'Yes',
-                            onPress: () => {
-                                AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then((token) => {
-                                    if(!isStringNullOrEmpty(token)) {
-                                        logoutAction(token)
-                                    } else {
-                                        messaging()
-                                            .getToken()
-                                            .then(token => {
-                                                logoutAction(token)
-                                            });
-                                    }
-                                })
-                            }
-                        },
-                        {   text: 'No',
-                            onPress: () => {
-                                setLogoutAlert(false)
-                            }
+        return (
+            Alert.alert(
+                'Are you sure you want to logout?',
+                '',
+                [
+                    {
+                        text: 'Yes',
+                        onPress: logoutAction
+                    },
+                    {   text: 'No',
+                        onPress: () => {
+                            setLogoutAlert(false)
                         }
-                    ],
-                    { cancelable: false }
-                )
-            );
-        }
-        return <View/>
+                    }
+                ],
+                { cancelable: false }
+            )
+        );
     };
 
-    let logoutAction = (token) => {
-        AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then((value) => {
-            let userDetails = JSON.parse(value);
-            let params = {
-                "accessCode": userDetails.accessCode,
-                "emailAddress": userDetails.email,
-                "pushToken": token,
-                "udid": DeviceInfo.getUniqueId(),
-            };
-            props.logoutUser(props.authToken, params);
-        });
+    let renderSpinner = () => {
+        if(loading) {
+            return (
+                <View style={styles.loading}>
+                    <QPSpinner />
+                </View>
+            )
+        }
+    };
 
+    let logoutAction = () => {
+
+        AsyncStorage.multiGet([ASYNC_PUSH_TOKEN, ASYNC_USER_CREDENTIALS]).then(response => {
+            let token = response[0][1];
+            let userDetails = response[1][1];
+            if(!isStringNullOrEmpty(token)) {
+                callLogoutAPI(userDetails, token)
+            } else {
+                messaging()
+                    .getToken()
+                    .then(token => {
+                        callLogoutAPI(userDetails, token)
+                    });
+            }
+        });
+    };
+
+    let callLogoutAPI = (user, token) => {
+        let userDetails = JSON.parse(user);
+        let params = {
+            "accessCode": userDetails.accessCode,
+            "emailAddress": userDetails.email,
+            "pushToken": token,
+            "udid": DeviceInfo.getUniqueId(),
+        };
+        props.logoutUser(props.authToken, params);
+        setLoading(true);
     };
 
     let renderAppVersion = () => {
@@ -169,7 +184,8 @@ const DrawerContent = props => {
                     {renderDrawerButtons()}
                     {renderAppVersion()}
                 </View>
-                {renderDialog()}
+                {!loading && logoutAlert && renderDialog()}
+                {loading && renderSpinner()}
             </ImageBackground>
         </View>
     );
@@ -241,5 +257,14 @@ const styles = StyleSheet.create({
         color: Colors.primary,
         fontSize: TextSizes.primary,
         textAlign: 'left'
-    }
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });

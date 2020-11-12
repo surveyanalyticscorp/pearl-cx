@@ -71,7 +71,6 @@ const Login = props => {
                 udId: DeviceInfo.getUniqueId(),
                 pushToken: token
             };
-
             if(StringUtils.isNotEmpty(props.dynamicLink) && props.dynamicLink.includes('resetpassword')) {
                 props.resetPasswordLink()
             }
