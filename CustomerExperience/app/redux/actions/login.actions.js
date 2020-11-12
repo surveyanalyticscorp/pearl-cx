@@ -9,26 +9,27 @@ export const UPDATE_PASSWORD = 'UPDATE_PASSWORD';
 export const UPDATE_PASSWORD_RESPONSE = 'UPDATE_PASSWORD_RESPONSE';
 
 export const doLogin = param => ({
-  type: GET_LOGIN,
-  param,
+    type: GET_LOGIN,
+    param,
 });
 
 export const requestPasswordLink = param => ({
-  type: GET_RESET_PASSWORD_LINK,
-  param,
+    type: GET_RESET_PASSWORD_LINK,
+    param,
 });
 
 export const updatePassword = param => ({
-  type: UPDATE_PASSWORD,
-  param,
+    type: UPDATE_PASSWORD,
+    param,
 });
 
 export const validateResetPasswordLink = param => ({
-  type: VALIDATE_RESET_PASSWORD_LINK,
-  param,
+    type: VALIDATE_RESET_PASSWORD_LINK,
+    param,
 });
 
-export const doLogout = param => ({
-  type: LOGOUT,
-  param,
+export const doLogout = (token, param) => ({
+    type: LOGOUT,
+    token,
+    param,
 });

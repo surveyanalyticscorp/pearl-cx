@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
-import {clearUserInfo, showLoading} from '../redux/actions';
+import {clearUserInfo} from '../redux/actions';
 import {doLogout} from '../redux/actions/login.actions';
 import {connect} from 'react-redux';
 import {ASYNC_PUSH_TOKEN, ASYNC_USER_CREDENTIALS} from '../api/Constant';
@@ -37,11 +37,12 @@ const DrawerContent = props => {
 
     useEffect(() => {
         if(!isObjectEmpty(props.logoutResponse)) {
-            AsyncStorage.clear().then(() => {
-                props.clearUserData();
-                props.showLoading(false);
-                setLogoutAlert(false);
-            });
+            if(props.logoutResponse.statusCode === 200) {
+                AsyncStorage.clear().then(() => {
+                    props.clearUserData();
+                    setLogoutAlert(false);
+                });
+            }
         }
 
     },[props.logoutResponse]);
@@ -134,7 +135,7 @@ const DrawerContent = props => {
                 "pushToken": token,
                 "udid": DeviceInfo.getUniqueId(),
             };
-            props.logoutUser(params);
+            props.logoutUser(props.authToken, params);
         });
 
     };
@@ -177,19 +178,17 @@ const DrawerContent = props => {
 const mapStateToProps = state => {
     return {
         userInfo: state.global.userInfo,
-        logoutResponse: state.global.logoutResponse
+        logoutResponse: state.global.logoutResponse,
+        authToken: state.global.authToken,
     };
 };
 
 const mapDispatchToProps = dispatch => ({
-    logoutUser: (params) => {
-        dispatch(doLogout(params))
+    logoutUser: (token, params) => {
+        dispatch(doLogout(token, params))
     },
     clearUserData: () => {
         dispatch(clearUserInfo());
-    },
-    showLoading: (flag) => {
-        dispatch(showLoading(flag))
     }
 });
 

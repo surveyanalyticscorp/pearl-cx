@@ -120,11 +120,11 @@ export function* watchUpdatePassword() {
     yield takeLatest(UPDATE_PASSWORD, updatePasswordApiCall);
 }
 
-function* doLogout(action) {
+function* doLogoutAction(action) {
     try {
         const response = yield WebServiceHandler.postNew(
             CX_LOGOUT,
-            {},
+            {'Auth-Token': action.token},
             action.param,
         );
         yield put({type: LOGOUT_RESPONSE, response: response});
@@ -134,5 +134,5 @@ function* doLogout(action) {
 }
 
 export function* watchLogout() {
-    yield takeLatest(LOGOUT, doLogout)
+    yield takeLatest(LOGOUT, doLogoutAction)
 }
