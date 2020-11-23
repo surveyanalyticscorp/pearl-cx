@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {AppState, Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {DrawerActions, NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
@@ -35,7 +35,9 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {handleResetPasswordLink} from '../Utils/DeepLinkingUtils';
 import {setDynamicLink} from '../redux/actions';
 import QPSpinner from '../widgets/QPSpinner';
-import {checkNotificationPermission} from '../Utils/NotificationUtils';
+import {addNotificationListeners, checkNotificationPermission} from '../Utils/NotificationUtils';
+import messaging from '@react-native-firebase/messaging';
+import {Notifications} from 'react-native-notifications';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -58,7 +60,8 @@ const AppRouter = props => {
     };
 
     useEffect(() => {
-        const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+        const unsubscribeLinks = dynamicLinks().onLink(handleDynamicLink);
+        Notifications.registerRemoteNotifications();
         checkNotificationPermission().then({});
         dynamicLinks()
             .getInitialLink()
@@ -67,8 +70,19 @@ const AppRouter = props => {
                     handleDynamicLink(link)
                 }
             });
-
-        return () => unsubscribe();
+        const unsubscribeNotifications = messaging().onMessage(async remoteMessage => {
+            console.log("on message"+JSON.stringify(remoteMessage));
+            Notifications.postLocalNotification({
+                body: remoteMessage.notification.body,
+                title: remoteMessage.notification.title,
+                //type: remoteMessage.data.type
+            }, parseInt(remoteMessage.messageId));
+        });
+        addNotificationListeners();
+        return () => {
+            unsubscribeLinks();
+            unsubscribeNotifications()
+        };
 
     },[]);
 

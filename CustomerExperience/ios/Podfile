@@ -44,6 +44,6 @@ target 'CustomerExperience' do
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
   pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
   pod 'RNFBDynamicLinks', :path => '../node_modules/@react-native-firebase/dynamic-links'
-
+  pod 'react-native-notifications', :path => '../node_modules/react-native-notifications'
   use_native_modules!
 end
