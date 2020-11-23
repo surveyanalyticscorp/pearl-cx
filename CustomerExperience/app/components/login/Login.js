@@ -1,7 +1,7 @@
 import {Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, ScrollView, View} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import DeviceInfo from 'react-native-device-info';
-import {isStringNullOrEmpty, validateEmail} from '../../Utils/Utility';
+import {isStringNullOrEmpty, showErrorFlashMessage, validateEmail} from '../../Utils/Utility';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import {connect} from 'react-redux';
@@ -10,10 +10,12 @@ import {doLogin} from '../../redux/actions/login.actions';
 import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
 import {Colors} from '../../styles/color.constants';
-import {showMessage} from 'react-native-flash-message';
 import QPSpinner from '../../widgets/QPSpinner';
 import SafeAreaView from 'react-native-safe-area-view';
 import {setDynamicLink} from '../../redux/actions';
+import AsyncStorage from '@react-native-community/async-storage';
+import {ASYNC_PUSH_TOKEN} from '../../api/Constant';
+import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 
 const stringConst = require('../../config/locales/en');
 
@@ -38,37 +40,27 @@ const Login = props => {
     },[]);
 
     useEffect(() => {
-        if (StringUtils.isNotEmpty(validation)) {
-            showMessage({
-                message: validation,
-                type: 'danger',
-                icon: 'auto',
-                backgroundColor: Colors.red,
-                color: Colors.white,
-            });
+        if (StringUtils.isNotEmpty(validation) || props.isError) {
+            let message = props.isError ? props.errorMessage.errorAlert : validation;
+            showErrorFlashMessage(message);
             timer = setTimeout(() => {
                 setValidation('')
             }, 1000);
         }
-    }, [validation]);
-
-    useEffect(() => {
-        if (props.isError) {
-            showMessage({
-                message: props.errorMessage.errorAlert,
-                type: 'danger',
-                icon: 'auto',
-                backgroundColor: Colors.red,
-                color: Colors.white,
-            });
-            timer = setTimeout(() => {
-                props.clearError();
-            }, 1000);
-        }
-    }, [props.isError]);
+    }, [validation, props.isError]);
 
     const onSignInPress = () => {
         Keyboard.dismiss();
+        AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then((token) => {
+            if(isStringNullOrEmpty(token)) {
+                checkNotificationPermission().then(() => onSignInPress());
+            } else {
+                loginAction(token)
+            }
+        })
+    };
+
+    let loginAction = (token) => {
         if (checkValidation()) {
             let data = {
                 accessCode: userData.accessCode,
@@ -77,8 +69,8 @@ const Login = props => {
                 platform: Platform.OS,
                 sourceMode: 'email',
                 udId: DeviceInfo.getUniqueId(),
+                pushToken: token
             };
-
             if(StringUtils.isNotEmpty(props.dynamicLink) && props.dynamicLink.includes('resetpassword')) {
                 props.resetPasswordLink()
             }

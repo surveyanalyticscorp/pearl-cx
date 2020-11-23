@@ -13,7 +13,10 @@ import SignInStack from './signInStack';
 import {isStringNullOrEmpty} from '../Utils/Utility';
 import Feedback from '../components/feedback/Feedback';
 import FeedbackDetails from '../components/feedback/FeedbackDetails';
-import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../api/Constant';
+import {
+    ASYNC_AUTH_TOKEN,
+    ASYNC_USER_INFO,
+} from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 import {connect, useSelector} from 'react-redux';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -32,6 +35,7 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {handleResetPasswordLink} from '../Utils/DeepLinkingUtils';
 import {setDynamicLink} from '../redux/actions';
 import QPSpinner from '../widgets/QPSpinner';
+import {checkNotificationPermission} from '../Utils/NotificationUtils';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -55,7 +59,7 @@ const AppRouter = props => {
 
     useEffect(() => {
         const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
-
+        checkNotificationPermission().then({});
         dynamicLinks()
             .getInitialLink()
             .then(link => {

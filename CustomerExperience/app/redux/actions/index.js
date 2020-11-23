@@ -1,13 +1,3 @@
-export const GET_LOGIN = 'GET_LOGIN';
-export const LOGIN_RESPONSE = 'LOGIN_RESPONSE';
-
-export const GET_RESET_PASSWORD_LINK = 'GET_RESET_PASSWORD_LINK';
-export const VALIDATE_RESET_PASSWORD_LINK = 'VALIDATE_RESET_PASSWORD_LINK';
-export const VALIDATE_RESET_PASSWORD_LINK_RESPONSE = 'VALIDATE_RESET_PASSWORD_LINK_RESPONSE';
-
-export const UPDATE_PASSWORD = 'UPDATE_PASSWORD';
-export const UPDATE_PASSWORD_RESPONSE = 'UPDATE_PASSWORD_RESPONSE';
-
 export const IS_LOADING = 'IS_LOADING';
 export const IS_LOGIN = 'IS_LOGIN';
 export const FILL_USER_INFO = 'FILL_USER_INFO';
@@ -18,7 +8,6 @@ export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const SET_RANGE_FILTER = 'SET_RANGE_FILTER';
 export const SET_USER_DETAILS_FOR_RESET_PASSWORD = 'SET_USER_DETAILS_FOR_RESET_PASSWORD';
 export const SET_DYNAMIC_LINK = 'SET_DYNAMIC_LINK';
-
 
 export const showLoading = (isLoading = true) => ({
   type: IS_LOADING,
@@ -32,6 +21,7 @@ export const fillUserInfo = userInfo => ({
 
 export const clearUserInfo = () => ({
   type: CLEAR_USER_INFO,
+  payload: {}
 });
 
 export const clearError = (isLoading = true) => ({

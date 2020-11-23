@@ -5,7 +5,7 @@ import {
   API_ERROR,
   IS_LOADING,
 } from '../actions/index';
-import {FEEDBACK_RECEIVED, FEEDBACK_UPDATED, GET_FEEDBACK, UPDATE_FEEDBACK} from '../actions/feedback.actions';
+// import {FEEDBACK_RECEIVED, FEEDBACK_UPDATED, GET_FEEDBACK, UPDATE_FEEDBACK} from '../actions/feedback.actions';
 
 // export function* fetchFeedback(action) {
 //   try {
@@ -28,24 +28,24 @@ import {FEEDBACK_RECEIVED, FEEDBACK_UPDATED, GET_FEEDBACK, UPDATE_FEEDBACK} from
 //   yield takeLatest(GET_FEEDBACK, fetchFeedback);
 // }
 
-export function* updateFetchFeedback(action) {
-  try {
-    yield put({type: IS_LOADING, payload: {isLoading: true}});
-    const json = yield WebServiceHandler.postNew(
-      CX_ADD_UPDATE_TICKET,
-      {'Auth-Token': action.token},
-      action.params,
-    );
-
-    yield put({type: FEEDBACK_UPDATED, response: json});
-
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
-  } catch (error) {
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
-    yield put({type: API_ERROR, error: error});
-  }
-}
-
-export function* watchUpdateFeedback() {
-  yield takeLatest(UPDATE_FEEDBACK, updateFetchFeedback);
-}
+// export function* updateFetchFeedback(action) {
+//   try {
+//     yield put({type: IS_LOADING, payload: {isLoading: true}});
+//     const json = yield WebServiceHandler.postNew(
+//       CX_ADD_UPDATE_TICKET,
+//       {'Auth-Token': action.token},
+//       action.params,
+//     );
+//
+//     yield put({type: FEEDBACK_UPDATED, response: json});
+//
+//     yield put({type: IS_LOADING, payload: {isLoading: false}});
+//   } catch (error) {
+//     yield put({type: IS_LOADING, payload: {isLoading: false}});
+//     yield put({type: API_ERROR, error: error});
+//   }
+// }
+//
+// export function* watchUpdateFeedback() {
+//   yield takeLatest(UPDATE_FEEDBACK, updateFetchFeedback);
+// }
