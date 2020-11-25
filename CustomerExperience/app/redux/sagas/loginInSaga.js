@@ -13,7 +13,7 @@ import {
     IS_LOADING,
 } from '../actions';
 import AsyncStorage from '@react-native-community/async-storage';
-import {showSuccessFlashMessage} from '../../Utils/Utility';
+import {showErrorFlashMessage, showSuccessFlashMessage} from '../../Utils/Utility';
 import {LOGIN_RESPONSE,
     GET_LOGIN,
     VALIDATE_RESET_PASSWORD_LINK,
@@ -129,7 +129,8 @@ function* doLogoutAction(action) {
         );
         yield put({type: LOGOUT_RESPONSE, response: response});
     } catch (error) {
-        yield put({type: API_ERROR, error: error});
+        showErrorFlashMessage(error.message);
+        yield put({type: API_ERROR, error: error.message});
     }
 }
 
