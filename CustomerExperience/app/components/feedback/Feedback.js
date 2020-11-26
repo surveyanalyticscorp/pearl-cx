@@ -145,11 +145,13 @@ function Feedback(props){
 
 const FeedbackTabStack = () => (
     <FeedbackTab.Navigator tabBarOptions={{
-        labelStyle: {color: Colors.primary, width: useWindowDimensions().width/4, fontSize: TextSizes.secondary},
+        labelStyle: {width: useWindowDimensions().width/4, fontSize: TextSizes.secondary},
         indicatorStyle: {backgroundColor: Colors.accent},
         style:{backgroundColor: Colors.white, width: '100%'},
         initialLayout: {width: useWindowDimensions().width},
-        tabStyle:{height: 1.7*PaddingConstants.tab4}
+        tabStyle:{height: 1.7*PaddingConstants.tab4},
+        activeTintColor: Colors.accent,
+        inactiveTintColor: Colors.primary,
     }}
                            lazy
                            keyboardDismissMode={'auto'}

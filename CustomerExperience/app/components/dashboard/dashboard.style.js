@@ -108,9 +108,9 @@ export const dashboardStyles = StyleSheet.create({
     marginHorizontal: MarginConstants.tab2
   },
   closedLoopView: {
-    justifyContent:'center',
-    alignItems:'center',
-    flexDirection: 'row',
+    // justifyContent:'center',
+    // alignItems:'center',
+    // flexDirection: 'row',
     marginHorizontal: MarginConstants.tab2,
   },
   ticketContainer: {

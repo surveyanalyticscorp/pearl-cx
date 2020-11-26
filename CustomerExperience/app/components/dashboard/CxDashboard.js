@@ -29,6 +29,7 @@ import StringUtils from '../../Utils/StringUtils';
 import FilterHeader from '../FilterHeader';
 import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import {setRangeFilter} from '../../redux/actions';
+import {DashboardClosedLoopView} from './DashboardClosedLoopView';
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -221,9 +222,10 @@ const CxDashboard = props => {
     let getClosedLoopView = () => {
         return(
             <View style={dashboardStyles.closedLoopView}>
-                {renderTicketView(props.dashboardData.DetractorTicketsCount.new,"new", "New")}
-                {renderTicketView(props.dashboardData.DetractorTicketsCount.pending,"open", "Open")}
-                {renderTicketView(props.dashboardData.DetractorTicketsCount.resolved,"resolved", "Resolved")}
+                <DashboardClosedLoopView/>
+                {/*{renderTicketView(props.dashboardData.DetractorTicketsCount.new,"new", "New")}*/}
+                {/*{renderTicketView(props.dashboardData.DetractorTicketsCount.pending,"open", "Open")}*/}
+                {/*{renderTicketView(props.dashboardData.DetractorTicketsCount.resolved,"resolved", "Resolved")}*/}
             </View>
         )
     };

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {useWindowDimensions, StyleSheet, View} from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily} from '../../styles/font.constants';
@@ -11,8 +11,6 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {StackActions} from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
-let { width } = Dimensions.get('window');
 
 export default function FeedbackDetails(props){
 
@@ -46,11 +44,13 @@ const DetailsTab = createMaterialTopTabNavigator();
 
 const FeedbackDetailsTabStack = props => (
     <DetailsTab.Navigator tabBarOptions={{
-        labelStyle: {color: Colors.primary, width: width/3, fontSize: TextSizes.secondary},
+        labelStyle: {width: useWindowDimensions().width/3, fontSize: TextSizes.secondary},
         indicatorStyle: {backgroundColor: Colors.accent},
         style:{backgroundColor: Colors.white, width: '100%'},
-        initialLayout: {width: Dimensions.get('window').width},
-        tabStyle:{height: 1.5*PaddingConstants.tab4}
+        initialLayout: {width: useWindowDimensions().width},
+        tabStyle:{height: 1.5*PaddingConstants.tab4},
+        activeTintColor: Colors.accent,
+        inactiveTintColor: Colors.primary,
     }}
                           lazy
                           keyboardDismissMode={'auto'}
@@ -74,12 +74,5 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 5
-    },
-    routeTitle: {
-        color: Colors.primary,
-        fontFamily: FontFamily.light,
-        fontSize: TextSizes.secondary,
-        marginVertical: MarginConstants.halfTab,
     }
-
 });

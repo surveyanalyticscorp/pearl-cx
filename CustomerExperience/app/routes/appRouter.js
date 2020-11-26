@@ -193,11 +193,13 @@ const AppRouter = props => {
 
     const TicketLogTabStack = props => (
         <TicketLogTab.Navigator tabBarOptions={{
-            labelStyle: {color: Colors.primary, width: width/3, fontSize: TextSizes.semiSecondary},
+            labelStyle: {width: width/3, fontSize: TextSizes.semiSecondary},
             indicatorStyle: {backgroundColor: Colors.accent},
             style:{backgroundColor: Colors.white, width: '100%'},
             initialLayout: {width: Dimensions.get('window').width},
-            tabStyle:{height: 1.5*PaddingConstants.tab4}
+            tabStyle:{height: 1.5*PaddingConstants.tab4},
+            activeTintColor: Colors.accent,
+            inactiveTintColor: Colors.primary,
         }}
                                 lazy
                                 keyboardDismissMode={'auto'}
@@ -210,17 +212,20 @@ const AppRouter = props => {
 
     const DetractorTicketsTabStack = props => (
         <DetractorTicketsTab.Navigator tabBarOptions={{
-            labelStyle: {color: Colors.primary, width: width/3, fontSize: TextSizes.secondary},
+            labelStyle: {width: width/3, fontSize: TextSizes.secondary},
             indicatorStyle: {backgroundColor: Colors.accent},
             style:{backgroundColor: Colors.white, width: '100%'},
             initialLayout: {width: Dimensions.get('window').width},
-            tabStyle:{height: 1.5*PaddingConstants.tab4}
+            tabStyle:{height: 1.5*PaddingConstants.tab4},
+            activeTintColor: Colors.accent,
+            inactiveTintColor: Colors.primary,
         }}
                                        lazy
                                        keyboardDismissMode={'auto'}
         >
             <DetractorTicketsTab.Screen name="New" component={DetractorScenes} initialParams={{ dataCount:0}}/>
-            <DetractorTicketsTab.Screen name="Open" component={DetractorScenes} initialParams={{ dataCount:1}}/>
+            <DetractorTicketsTab.Screen name="Pending" component={DetractorScenes} initialParams={{ dataCount:1}}/>
+            <DetractorTicketsTab.Screen name="Escalated" component={DetractorScenes} initialParams={{ dataCount:3}}/>
             <DetractorTicketsTab.Screen name="Resolved" component={DetractorScenes} initialParams={{ dataCount:2}}/>
         </DetractorTicketsTab.Navigator>
     );
@@ -263,7 +268,7 @@ const AppRouter = props => {
                 })}
             />
             <RootStack.Screen
-                name="Tickets"
+                name="Closed Loop"
                 component={DetractorTicketsTabStack}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
