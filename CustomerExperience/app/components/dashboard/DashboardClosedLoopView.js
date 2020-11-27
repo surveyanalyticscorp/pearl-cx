@@ -80,7 +80,6 @@ const renderScene = (props) => {
             }}>
             <View style={styles.viewTicketsContainer}>
                 <Text style={styles.viewTicketsText}>View Tickets</Text>
-                <View style={styles.viewTicketsIndicator}/>
             </View>
             </TouchableWithoutFeedback>
         )
@@ -149,11 +148,6 @@ const styles = StyleSheet.create({
     viewTicketsText: {
         color: Colors.accent,
         padding:2
-    },
-    viewTicketsIndicator: {
-        height: 1,
-        backgroundColor: Colors.accent,
-        width: '50%'
     },
     npsView: {
         position: 'absolute',
