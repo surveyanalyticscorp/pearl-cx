@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, TouchableWithoutFeedback, Text} from 'react-native';
+import {StyleSheet, View, TouchableWithoutFeedback, Text, TouchableOpacity} from 'react-native';
 import ReadMore from 'react-native-read-more-text';
 import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -69,8 +69,9 @@ const TicketWidget = props => {
         return (
             <TouchableWithoutFeedback onPress={() => {
                 setViewDetails(true);
-            }}>
-                <>
+            }} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+            >
+                <View>
                     <View style={styles.emailContainer}>
                         <View style={styles.emailAddressView}>
                             <Text style={styles.emailAddress} numberOfLines={2}
@@ -81,27 +82,22 @@ const TicketWidget = props => {
                     </View>
                     <Text style={styles.subtitle}>{time}</Text>
                     <View style={styles.separator}/>
-                </>
+                </View>
             </TouchableWithoutFeedback>
         );
     };
 
     let getIconName = () => {
-        let iconName = '';
         switch (true) {
             case (props.item.rating <= 6):
-                iconName = 'smiley1';
-                break;
+                return 'smiley1';
             case (props.item.rating < 9):
-                iconName = 'smiley3';
-                break;
+                return 'smiley3';
             case (props.item.rating <= 10):
-                iconName = 'smiley5';
-                break;
+                return'smiley5';
             default:
-                break;
+                return ''
         }
-        return iconName
     };
 
     let npsHeaderView = (status) => {
@@ -109,14 +105,14 @@ const TicketWidget = props => {
          * get props.statusColor, props.status, props.nps, props.responseId,
          * change smiley as per status
          * */
-
+        let iconName = getIconName();
         return (
             <View style={styles.npsHeaderView}>
                 <View style={[styles.ticketStatusView, {backgroundColor: Colors.critical}]}>
                     <Text
                         style={[styles.ticketStatusText, {color: status === 'Medium' ? Colors.primary : Colors.white}]}>{status}</Text>
                 </View>
-                <Icomoon name={getIconName()} size={Sizes.inlineIcons} color={Colors.secondary}/>
+                {StringUtils.isNotEmpty(iconName) && <Icomoon name={iconName} size={Sizes.inlineIcons} color={Colors.secondary}/>}
                 <Text style={styles.npsText}>{props.item.rating}</Text>
                 <View style={styles.responseIdView}>
                     <Text style={styles.responseIdText}>ID: 12345678</Text>
@@ -158,7 +154,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(TicketWidget);
 
 const styles = StyleSheet.create({
     ticketContainer: {
-        marginHorizontal: MarginConstants.tab1,
+        marginHorizontal: 1.3*MarginConstants.tab1,
+        marginVertical: MarginConstants.tab1,
         padding: 1.5 * PaddingConstants.tab1,
         backgroundColor: Colors.white,
     },

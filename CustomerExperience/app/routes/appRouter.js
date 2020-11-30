@@ -4,6 +4,7 @@ import {DrawerActions, NavigationContainer, useNavigation} from '@react-navigati
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
 import DrawerContent from '../routes/DrawerContent';
@@ -154,11 +155,47 @@ const AppRouter = props => {
                     onPress={() => {
                         navigation.navigate("Update Ticket");
                     }}>
-                    <FontIcon name={'edit'} size={25} color={Colors.white}/>
+                    <MaterialIcon name={'edit'} size={25} color={Colors.white}/>
                 </TouchableOpacity>
             </View>
         );
     };
+
+    const SearchIcon = () => {
+        let navigation = useNavigation();
+        return (
+            <View style={[styles.rightHeaderButton,{marginHorizontal: MarginConstants.tab2}]}>
+                <TouchableOpacity
+                    onPress={() => {
+                        alert('navigate to search screen')
+                    }}>
+                    <Icon name={'magnifier'} size={20} color={Colors.white}/>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    const NotificationIcon = () => {
+        let navigation = useNavigation();
+        /**
+         * show badge on the basis of unread notification
+         * */
+        return (
+            <View style={[styles.rightHeaderButton,{marginHorizontal: MarginConstants.tab2}]}>
+                <TouchableOpacity
+                    hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+                    onPress={() => {
+                        alert('open notification screen')
+                    }}>
+                    <FontIcon name={'bell'} size={22} color={Colors.white}/>
+                </TouchableOpacity>
+                <View style={{position: 'absolute', top: -2, right: -2}}>
+                    <FontIcon name={'circle'} size={12} color={Colors.red}/>
+                </View>
+            </View>
+        );
+    };
+
 
     const SaveDashboardDate = (props) => {
         return (
@@ -265,6 +302,7 @@ const AppRouter = props => {
                 component={CxDashboard}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon/>,
+                    headerRight: props => <NotificationIcon />,
                 })}
             />
             <RootStack.Screen
@@ -272,6 +310,8 @@ const AppRouter = props => {
                 component={DetractorTicketsTabStack}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                    headerRight: props => <SearchIcon />,
+
                 })}
             />
             <RootStack.Screen
@@ -361,7 +401,9 @@ const styles = StyleSheet.create({
     },
     rightHeaderButton: {
         flexDirection: 'row',
-        marginLeft: 20
+        marginLeft: 20,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     saveText: {
         color: Colors.white,
