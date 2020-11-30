@@ -156,9 +156,10 @@ const DrawerContent = props => {
     };
 
     let renderAppVersion = () => {
+        let version = Platform.OS === 'ios' ? DeviceInfo.getVersion() : DeviceInfo.getBuildNumber()
         return (
             <View style={styles.drawerVersionContainer}>
-                <Text style={styles.drawerVersionText}> {"v " + DeviceInfo.getVersion()} </Text>
+                <Text style={styles.drawerVersionText}> {"v " + version} </Text>
             </View>
         )
     };
