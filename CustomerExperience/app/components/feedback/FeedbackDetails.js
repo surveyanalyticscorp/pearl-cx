@@ -2,26 +2,15 @@ import React from 'react';
 import {useWindowDimensions, StyleSheet, View} from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {Colors} from '../../styles/color.constants';
-import {FontFamily} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {MarginConstants} from '../../styles/margin.constants';
 import QPWebView from '../../widgets/QPWebView';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {StackActions} from '@react-navigation/native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function FeedbackDetails(props){
 
-    const onActionButtonPress = () => {
-        const pushAction = StackActions.push('Change Status', {
-            data: props.route.params.data,
-            ticketStatus: props.route.params.ticketStatus,
-            token: props.route.params.token,
-        });
-        props.navigation.dispatch(pushAction);
-    };
     return (
         <View style={styles.container}>
             <FeedbackCell
@@ -30,11 +19,12 @@ export default function FeedbackDetails(props){
                 ticketStatuses={props.route.params.ticketStatus}
             />
             <FeedbackDetailsTabStack {...props}/>
+            {/** enable it when email functionality */}
             {/*<ActionButton*/}
-                {/*elevation={8}*/}
                 {/*buttonColor= {Colors.accent}*/}
-                {/*onPress={onActionButtonPress}*/}
-                {/*icon={<Icon size={30} name="comment" color={Colors.white} />}*/}
+                {/*buttonTextStyle={{fontSize: TextSizes.donutPercentText}}*/}
+                {/*onPress={() => { alert("open email screen")}}*/}
+                {/*renderIcon={() => {return <Icon size={30} name="email" color={Colors.white} />}}*/}
             {/*/>*/}
         </View>
     );
