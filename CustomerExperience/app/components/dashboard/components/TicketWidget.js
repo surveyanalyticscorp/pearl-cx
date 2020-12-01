@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     },
     separator: {
         height: .5,
-        backgroundColor: Colors.borderColor,
+        backgroundColor: Colors.darkGrey,
         width: '100%',
         marginVertical: 1.5 * MarginConstants.tab1,
     },

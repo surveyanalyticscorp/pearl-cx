@@ -65,11 +65,11 @@ const DrawerContent = props => {
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
                     onPress={() => {
-                        props.navigation.navigate('Feedback');
+                        props.navigation.navigate('Responses');
                     }}>
                     <View style={styles.drawerRow}>
                         <Icon size={1.3*Sizes.icons} color={Colors.accent} name={'feedback'} style={styles.rowIcon}/>
-                        <Text style={styles.labelStyle}>Feedback</Text>
+                        <Text style={styles.labelStyle}>Responses</Text>
                     </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback

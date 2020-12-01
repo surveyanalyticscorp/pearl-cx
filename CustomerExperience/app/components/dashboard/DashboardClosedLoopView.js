@@ -119,8 +119,6 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.white,
         height: DeviceInfo.isTablet() ? MarginConstants.tab4 * 8 : MarginConstants.tab4 * 7,
-        // flexDirection: 'row',
-        // justifyContent: 'space-around',
         justifyContent: 'center',
     },
     chartContainer: {

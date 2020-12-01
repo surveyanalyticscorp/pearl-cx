@@ -270,7 +270,7 @@ const AppRouter = props => {
     const feedbackStack = props => (
         <RootStack.Navigator>
             <RootStack.Screen
-                name="Feedback"
+                name="Responses"
                 component={Feedback}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon />,
@@ -373,7 +373,7 @@ const AppRouter = props => {
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
                     <Drawer.Screen name="Dashboard" component={dashboardStack}/>
-                    <Drawer.Screen name="Feedback" component={feedbackStack}/>
+                    <Drawer.Screen name="Responses" component={feedbackStack}/>
                     <Drawer.Screen name="Settings" component={settingStack}/>
                 </Drawer.Navigator>
                 :
