@@ -274,6 +274,7 @@ const AppRouter = props => {
                 component={Feedback}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon />,
+                    headerRight: props => <SearchIcon />,
                 })}
             />
             <RootStack.Screen

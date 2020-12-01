@@ -223,9 +223,6 @@ const CxDashboard = props => {
         return(
             <View style={dashboardStyles.closedLoopView}>
                 <DashboardClosedLoopView/>
-                {/*{renderTicketView(props.dashboardData.DetractorTicketsCount.new,"new", "New")}*/}
-                {/*{renderTicketView(props.dashboardData.DetractorTicketsCount.pending,"open", "Open")}*/}
-                {/*{renderTicketView(props.dashboardData.DetractorTicketsCount.resolved,"resolved", "Resolved")}*/}
             </View>
         )
     };

@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableWithoutFeedback, useWindowDimensions, View} from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {StackActions} from '@react-navigation/native';
@@ -17,6 +17,9 @@ import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import SafeAreaView from 'react-native-safe-area-view';
 import {apiHandler} from '../../api/ApiHandler';
+import {FontFamily} from '../../styles/font.constants';
+import {Sizes} from '../../styles/Size.constant';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
@@ -170,6 +173,7 @@ const renderFeedbackScene = (props) => {
     const feedbackForm = useContext(FormContext);
     let [list, setList] = useState(feedbackForm.feedbackData);
     let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);
+    let [filterText, setFilterText] = useState('Date');
 
     useEffect(() => {
         if(prevFeedbackRef !== feedbackForm.feedbackData) {
@@ -184,6 +188,20 @@ const renderFeedbackScene = (props) => {
             token: feedbackForm.token
         });
         props.navigation.dispatch(pushAction);
+    };
+
+    let renderResponseFilterView = () => {
+        return (
+            <TouchableWithoutFeedback onPress={() => {
+                alert('open sorting screen')
+            }} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+            >
+                <View style={styles.filterView}>
+                    <Icon name={'swap-vertical'} size={1.2*Sizes.filterIcon} color={Colors.primary}/>
+                    <Text style={styles.filterText}>{filterText}</Text>
+                </View>
+            </TouchableWithoutFeedback>
+        )
     };
 
     const _renderRow = ({item}) => {
@@ -227,7 +245,8 @@ const renderFeedbackScene = (props) => {
                     extraData={[list]}
                     contentContainerStyle={styles.container}
                     ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
-                />
+                    ListHeaderComponent={renderResponseFilterView}
+             />
         );
     };
 
@@ -284,5 +303,19 @@ const styles = StyleSheet.create({
         bottom: 0,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    filterView: {
+        marginVertical: MarginConstants.halfTab,
+        justifyContent: 'flex-end',
+        alignItems:'center',
+        paddingHorizontal: PaddingConstants.tab1,
+        flexDirection:'row'
+    },
+    filterText: {
+        color: Colors.accent,
+        fontFamily: FontFamily.regular,
+        fontSize: TextSizes.primary,
+        textAlign: 'center',
+        paddingHorizontal: PaddingConstants.halfTab
     }
 });

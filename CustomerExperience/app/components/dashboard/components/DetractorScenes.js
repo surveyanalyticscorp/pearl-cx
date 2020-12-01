@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Colors} from '../../../styles/color.constants';
 import ActionButton from 'react-native-action-button';
 import {TextSizes} from '../../../styles/textsize.constants';
+import {Sizes} from '../../../styles/Size.constant';
 
 const DetractorScenes = props => {
 
@@ -129,7 +130,7 @@ const DetractorScenes = props => {
           }} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
           >
           <View style={dashboardStyles.filterView}>
-              <Icon name={'filter'} size={25} color={Colors.primary}/>
+              <Icon name={'filter'} size={Sizes.filterIcon} color={Colors.primary}/>
               <Text style={dashboardStyles.filterText}>{filterText}</Text>
           </View>
           </TouchableWithoutFeedback>
