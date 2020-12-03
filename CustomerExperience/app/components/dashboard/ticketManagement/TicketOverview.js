@@ -202,9 +202,9 @@ const styles = StyleSheet.create({
         marginHorizontal: MarginConstants.tab1,
     },
     commentContainer: {
-        marginHorizontal: MarginConstants.tab1,
+        margin: MarginConstants.tab1,
         paddingHorizontal: PaddingConstants.halfTab,
-        marginBottom: MarginConstants.tab2
+        marginBottom: MarginConstants.tab2,
     }
 
 });

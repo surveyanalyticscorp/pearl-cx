@@ -39,6 +39,9 @@ import QPSpinner from '../widgets/QPSpinner';
 import {addNotificationListeners, checkNotificationPermission} from '../Utils/NotificationUtils';
 import messaging from '@react-native-firebase/messaging';
 import {Notifications} from 'react-native-notifications';
+import Notification from '../components/Notification';
+import CreateTicket from '../components/dashboard/components/CreateTicket';
+import SearchTicket from '../components/dashboard/components/SearchTicket';
 
 const Drawer = createDrawerNavigator();
 const RootStack = createStackNavigator();
@@ -141,7 +144,7 @@ const AppRouter = props => {
                             navigation.goBack()
                         }
                     }}>
-                    <Icon name="arrow-left" size={20} color= {Colors.white}/>
+                    <Icon name="arrow-left" size={Sizes.icons} color= {Colors.white}/>
                 </TouchableOpacity>
             </View>
         );
@@ -155,7 +158,7 @@ const AppRouter = props => {
                     onPress={() => {
                         navigation.navigate("Update Ticket");
                     }}>
-                    <MaterialIcon name={'edit'} size={25} color={Colors.white}/>
+                    <MaterialIcon name={'edit'} size={Sizes.filterIcon} color={Colors.white}/>
                 </TouchableOpacity>
             </View>
         );
@@ -167,9 +170,9 @@ const AppRouter = props => {
             <View style={[styles.rightHeaderButton,{marginHorizontal: MarginConstants.tab2}]}>
                 <TouchableOpacity
                     onPress={() => {
-                        alert('navigate to search screen')
+                        navigation.navigate("Search Ticket");
                     }}>
-                    <Icon name={'magnifier'} size={20} color={Colors.white}/>
+                    <Icon name={'magnifier'} size={Sizes.icons} color={Colors.white}/>
                 </TouchableOpacity>
             </View>
         );
@@ -177,25 +180,38 @@ const AppRouter = props => {
 
     const NotificationIcon = () => {
         let navigation = useNavigation();
-        /**
-         * show badge on the basis of unread notification
-         * */
         return (
             <View style={[styles.rightHeaderButton,{marginHorizontal: MarginConstants.tab2}]}>
                 <TouchableOpacity
                     hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
                     onPress={() => {
-                        alert('open notification screen')
+                        //alert('open notification screen')
+                        navigation.navigate('Notifications')
                     }}>
-                    <FontIcon name={'bell'} size={22} color={Colors.white}/>
+                    <FontIcon name={'bell'} size={1.1*Sizes.icons} color={Colors.white}/>
                 </TouchableOpacity>
-                <View style={{position: 'absolute', top: -2, right: -2}}>
-                    <FontIcon name={'circle'} size={12} color={Colors.red}/>
-                </View>
+                {/** show unread/badge icon when notification read/unread status comes*/}
+                {/*<View style={{position: 'absolute', top: -2, right: -2}}>*/}
+                    {/*<FontIcon name={'circle'} size={12} color={Colors.red}/>*/}
+                {/*</View>*/}
             </View>
         );
     };
 
+    const CloseButton = () => {
+        let navigation = useNavigation();
+        return (
+            <View style={[styles.rightHeaderButton,{marginHorizontal: MarginConstants.tab2}]}>
+                <TouchableOpacity
+                    hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+                    onPress={() => {
+                        navigation.goBack()
+                    }}>
+                    <MaterialIcon name={'close'} size={1.1*Sizes.filterIcon} color={Colors.white}/>
+                </TouchableOpacity>
+            </View>
+        );
+    }
 
     const SaveDashboardDate = (props) => {
         return (
@@ -338,8 +354,41 @@ const AppRouter = props => {
                     headerRight: props => <SaveDashboardDate {...props} route={route}/>
                 })}
             />
+            <RootStack.Screen
+                name="Search Ticket"
+                component={SearchTicket}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                })}
+            />
         </RootStack.Navigator>
     );
+
+    const dashboardModalStack = props => (
+            <RootStack.Navigator mode="modal">
+                <RootStack.Screen
+                    name="Dashboard"
+                    component={dashboardStack}
+                    options={({ navigation, route }) => ({ headerShown: false })}
+                />
+                <RootStack.Screen
+                    name="Notifications"
+                    component={Notification}
+                    options={({ navigation, route }) => ({
+                        headerLeft: props => <View/>,
+                        headerRight: props => <CloseButton/>
+                    })}
+                />
+                <RootStack.Screen
+                    name="New Ticket"
+                    component={CreateTicket}
+                    options={({ navigation, route }) => ({
+                        headerLeft: props => <View/>,
+                        headerRight: props => <CloseButton/>
+                    })}
+                />
+            </RootStack.Navigator>
+);
 
     const settingStack = (props) => (
         <RootStack.Navigator>
@@ -373,7 +422,7 @@ const AppRouter = props => {
             {authToken ? <Drawer.Navigator
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
-                    <Drawer.Screen name="Dashboard" component={dashboardStack}/>
+                    <Drawer.Screen name="Dashboard" component={dashboardModalStack}/>
                     <Drawer.Screen name="Responses" component={feedbackStack}/>
                     <Drawer.Screen name="Settings" component={settingStack}/>
                 </Drawer.Navigator>

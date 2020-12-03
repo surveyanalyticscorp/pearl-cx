@@ -157,7 +157,9 @@ const DetractorScenes = props => {
                     <ActionButton
                         buttonColor= {Colors.accent}
                         buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
-                        onPress={() => { alert("open new ticket screen")}}
+                        onPress={() => {
+                            props.navigation.navigate('New Ticket');
+                        }}
                     />
                 </View>
         );

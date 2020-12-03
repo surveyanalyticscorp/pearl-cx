@@ -10,6 +10,7 @@ import {
     GET_CLOSED_LOOP_TICKET_DETAILS,
 } from '../actions/dashboard.actions';
 import {
+    CX_ADD_CLOSED_LOOP_TICKET,
     CX_GET_CLOSED_LOOP_OWNER_DETAILS,
     CX_GET_CLOSED_LOOP_SEGMENT_DETAILS,
     CX_GET_CLOSED_LOOP_TICKET_DETAILS, CX_UPDATE_CLOSED_LOOP_TICKET,
@@ -104,6 +105,24 @@ export function updateClosedLoopTicket(token, body, successCallback, errorCallba
 
         })
         .catch(error => {
-            errorCallback(error);
+            errorCallback(error.errorAlert);
+        });
+}
+
+export function addClosedLoopTicket(token, body, successCallback, errorCallback) {
+    return WebServiceHandler.postNew(CX_ADD_CLOSED_LOOP_TICKET,
+        {'Auth-Token': token},
+        body)
+        .then(response => {
+
+            if(StringUtils.isNotEmpty(response.body.Error)) {
+                errorCallback(response.body.Error)
+            } else {
+                successCallback(response.body)
+            }
+
+        })
+        .catch(error => {
+            errorCallback(error.errorAlert);
         });
 }

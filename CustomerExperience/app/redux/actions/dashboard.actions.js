@@ -39,3 +39,11 @@ export const getClosedLoopOwnerDetails = (token, param) => ({
   token,
   param
 });
+
+export const updateTicket = () => ({
+  type: 'UPDATE_TICKET'
+});
+
+export const addTicket = () => ({
+  type: 'ADD_TICKET'
+});
