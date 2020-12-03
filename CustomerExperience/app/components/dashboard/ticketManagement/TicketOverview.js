@@ -61,12 +61,25 @@ export default function TicketOverview(props) {
         }
     };
 
+    let getPriority = () => {
+        switch (ticket.priority) {
+            case 0:
+                return 'Low';
+            case 1:
+                return 'Medium';
+            case 2:
+                return'High';
+            case 3:
+                return'Critical';
+        }
+    };
+
     let renderTicketPriority = () => {
-        let priority = 'Critical';
+        let priority = getPriority();
         return (
             <View style={[styles.responseIdContainer,{paddingHorizontal: PaddingConstants.tab1}]}>
                 <Text style={styles.rowText}> Priority </Text>
-                <View style={[styles.ticketStatusView, {backgroundColor: getPriorityColor('Critical')}]}>
+                <View style={[styles.ticketStatusView, {backgroundColor: getPriorityColor(priority)}]}>
                     <Text style={[styles.ticketStatusText,{color: priority === 'Medium' ? Colors.primary : Colors.white}]}>{priority}</Text>
                 </View>
             </View>

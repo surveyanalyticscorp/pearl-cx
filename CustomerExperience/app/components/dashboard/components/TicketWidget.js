@@ -99,8 +99,33 @@ const TicketWidget = props => {
                 return ''
         }
     };
+    let getPriority = () => {
+        switch (props.item.priority) {
+            case 0:
+                return 'Low';
+            case 1:
+                return 'Medium';
+            case 2:
+                return'High';
+            case 3:
+                return'Critical';
+        }
+    };
+    let getPriorityColor = () => {
+        switch (props.item.priority) {
+            case 0:
+                return Colors.promoter;
+            case 1:
+                return Colors.passive;
+            case 2:
+                return Colors.high;
+            case 3:
+                return Colors.critical;
+        }
+    };
 
-    let npsHeaderView = (status) => {
+    let npsHeaderView = () => {
+        let priority = getPriority();
         /**
          * get props.statusColor, props.status, props.nps, props.responseId,
          * change smiley as per status
@@ -108,9 +133,9 @@ const TicketWidget = props => {
         let iconName = getIconName();
         return (
             <View style={styles.npsHeaderView}>
-                <View style={[styles.ticketStatusView, {backgroundColor: Colors.critical}]}>
+                <View style={[styles.ticketStatusView, {backgroundColor: getPriorityColor()}]}>
                     <Text
-                        style={[styles.ticketStatusText, {color: status === 'Medium' ? Colors.primary : Colors.white}]}>{status}</Text>
+                        style={[styles.ticketStatusText, {color: priority === 'Medium' ? Colors.primary : Colors.white}]}>{priority}</Text>
                 </View>
                 {StringUtils.isNotEmpty(iconName) && <Icomoon name={iconName} size={Sizes.inlineIcons} color={Colors.secondary}/>}
                 <Text style={styles.npsText}>{props.item.rating}</Text>

@@ -358,6 +358,7 @@ const AppRouter = props => {
                 name="Search Ticket"
                 component={SearchTicket}
                 options={({ navigation, route }) => ({
+                    headerShown: false,
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                 })}
             />

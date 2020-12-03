@@ -258,11 +258,11 @@ function CreateTicket(props) {
             let body = {
                 "priorityID": priorityId,
                 "statusID": statusId,
-                "comment": comment,
-                "ticketID": props.ticket.ticketID,
+                "managerComment": comment,
                 "segmentID": selectedSegment.segmentID,
                 "ownerID": selectedOwner,
                 "emailAddress": email,
+                "storeId": props.storeId
             };
             submitTicketAPIAction(body)
         }
@@ -273,8 +273,8 @@ function CreateTicket(props) {
             props.addTicket();
             addClosedLoopTicket(props.authToken, body, () => {
                 setLoading(false);
-                getDashboardData();
                 props.navigation.goBack();
+                // getDashboardData();
             }, (error) => {
                 setLoading(false);
                 showErrorFlashMessage(error)
@@ -336,7 +336,8 @@ const mapStateToProps = state => {
         ticket: state.dashboard.ticketDetails,
         segments: state.dashboard.segmentDetails.segments,
         owners:  state.dashboard.ownerDetails.owners,
-        range: state.global.range
+        range: state.global.range,
+        storeId: state.dashboard.dashboardData.primaryStoreId
     };
 };
 

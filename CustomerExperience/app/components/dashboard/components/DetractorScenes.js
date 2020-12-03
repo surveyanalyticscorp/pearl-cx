@@ -22,6 +22,7 @@ const DetractorScenes = props => {
             data: {tickets: []},
             pageOffset: '0',
             status: '0',
+            priority: 0,
             index: 0,
             storeId: props.storeId+'',
         }, {
@@ -29,6 +30,7 @@ const DetractorScenes = props => {
             data: {tickets: []},
             pageOffset: '0',
             status: '1',
+            priority: 0,
             index: 1,
             storeId: props.storeId+'',
         }, {
@@ -36,6 +38,7 @@ const DetractorScenes = props => {
             data: {tickets: []},
             pageOffset: '0',
             status: '2',
+            priority: 0,
             index: 2,
             storeId: props.storeId+'',
         }, {
@@ -43,6 +46,7 @@ const DetractorScenes = props => {
             data: {tickets: []},
             pageOffset: '0',
             status: '3',
+            priority: 0,
             index: 3,
             storeId: props.storeId+'',
         }
