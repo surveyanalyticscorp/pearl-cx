@@ -222,7 +222,7 @@ const CxDashboard = props => {
     let getClosedLoopView = () => {
         return(
             <View style={dashboardStyles.closedLoopView}>
-                <DashboardClosedLoopView/>
+                <DashboardClosedLoopView ticketCount={props.dashboardData.DetractorTicketsCount}/>
             </View>
         )
     };

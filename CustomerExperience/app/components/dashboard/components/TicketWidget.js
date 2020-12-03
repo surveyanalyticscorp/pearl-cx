@@ -127,8 +127,7 @@ const TicketWidget = props => {
     let npsHeaderView = () => {
         let priority = getPriority();
         /**
-         * get props.statusColor, props.status, props.nps, props.responseId,
-         * change smiley as per status
+         * nehal get  props.responseId,
          * */
         let iconName = getIconName();
         return (
