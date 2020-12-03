@@ -28,7 +28,7 @@ export default class CxApp extends Component {
         this.state = {
             styleBuilt : false,
         };
-        Siren.promptUser(defaultOptions)
+        // Siren.promptUser(defaultOptions)
     }
 
     componentDidMount() {
