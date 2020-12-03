@@ -211,6 +211,7 @@ const renderFeedbackScene = (props) => {
                 onSelect={() => _onPressRow(item)}
                 origin="List"
                 ticketStatuses={feedbackForm.ticketStatus}
+                {...props}
             />
         );
     };

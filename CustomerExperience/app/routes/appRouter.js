@@ -44,7 +44,9 @@ import CreateTicket from '../components/dashboard/components/CreateTicket';
 import SearchTicket from '../components/dashboard/components/SearchTicket';
 
 const Drawer = createDrawerNavigator();
-const RootStack = createStackNavigator();
+const FeedbackStack = createStackNavigator();
+const DetractorStack = createStackNavigator();
+const SettingsStack = createStackNavigator();
 const DetractorTicketsTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
 
@@ -192,7 +194,7 @@ const AppRouter = props => {
                 </TouchableOpacity>
                 {/** show unread/badge icon when notification read/unread status comes*/}
                 {/*<View style={{position: 'absolute', top: -2, right: -2}}>*/}
-                    {/*<FontIcon name={'circle'} size={12} color={Colors.red}/>*/}
+                {/*<FontIcon name={'circle'} size={12} color={Colors.red}/>*/}
                 {/*</View>*/}
             </View>
         );
@@ -283,23 +285,8 @@ const AppRouter = props => {
         </DetractorTicketsTab.Navigator>
     );
 
-    const feedbackStack = props => (
-        <RootStack.Navigator>
-            <RootStack.Screen
-                name="Responses"
-                component={Feedback}
-                options={({ navigation, route }) => ({
-                    headerLeft: props => <MenuIcon />,
-                    headerRight: props => <SearchIcon />,
-                })}
-            />
-            <RootStack.Screen
-                name="Feedback Details"
-                component={FeedbackDetails}
-                options={({ navigation, route }) => ({
-                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                })}
-            />
+    const getCommonScreens = (RootStack) => {
+        return [
             <RootStack.Screen
                 name="Date Range"
                 component={DateRangeTabStack}
@@ -307,30 +294,7 @@ const AppRouter = props => {
                     headerLeft: props => <HeaderBackLeft />,
                     headerRight: props => <SaveDashboardDate {...props} route={route}/>
                 })}
-            />
-
-        </RootStack.Navigator>
-    );
-
-    const dashboardStack = props => (
-        <RootStack.Navigator>
-            <RootStack.Screen
-                name="Dashboard"
-                component={CxDashboard}
-                options={({ navigation, route }) => ({
-                    headerLeft: props => <MenuIcon/>,
-                    headerRight: props => <NotificationIcon />,
-                })}
-            />
-            <RootStack.Screen
-                name="Closed Loop"
-                component={DetractorTicketsTabStack}
-                options={({ navigation, route }) => ({
-                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                    headerRight: props => <SearchIcon />,
-
-                })}
-            />
+            />,
             <RootStack.Screen
                 name="Ticket Details"
                 component={TicketLogTabStack}
@@ -338,7 +302,7 @@ const AppRouter = props => {
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                     headerRight: props => route.state && route.state.index !== 0 ? <View/> : <EditTicket />,
                 })}
-            />
+            />,
             <RootStack.Screen
                 name="Update Ticket"
                 component={UpdateTicket}
@@ -346,68 +310,105 @@ const AppRouter = props => {
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                 })}
             />
-            <RootStack.Screen
-                name="Date Range"
-                component={DateRangeTabStack}
-                options={({ navigation, route }) => ({
-                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                    headerRight: props => <SaveDashboardDate {...props} route={route}/>
-                })}
-            />
-            <RootStack.Screen
-                name="Search Ticket"
-                component={SearchTicket}
-                options={({ navigation, route }) => ({
-                    headerShown: false,
-                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                })}
-            />
-        </RootStack.Navigator>
-    );
 
-    const dashboardModalStack = props => (
-            <RootStack.Navigator mode="modal">
-                <RootStack.Screen
-                    name="Dashboard"
-                    component={dashboardStack}
-                    options={({ navigation, route }) => ({ headerShown: false })}
-                />
-                <RootStack.Screen
-                    name="Notifications"
-                    component={Notification}
-                    options={({ navigation, route }) => ({
-                        headerLeft: props => <View/>,
-                        headerRight: props => <CloseButton/>
-                    })}
-                />
-                <RootStack.Screen
-                    name="New Ticket"
-                    component={CreateTicket}
-                    options={({ navigation, route }) => ({
-                        headerLeft: props => <View/>,
-                        headerRight: props => <CloseButton/>
-                    })}
-                />
-            </RootStack.Navigator>
+        ];
+    };
+
+    const feedbackStack = props => (
+    <FeedbackStack.Navigator>
+        <FeedbackStack.Screen
+            name="Responses"
+            component={Feedback}
+            options={({ navigation, route }) => ({
+                headerLeft: props => <MenuIcon />,
+                headerRight: props => <SearchIcon />,
+            })}
+        />
+        <FeedbackStack.Screen
+            name="Feedback Details"
+            component={FeedbackDetails}
+            options={({ navigation, route }) => ({
+                headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+            })}
+        />
+        {getCommonScreens(FeedbackStack)}
+    </FeedbackStack.Navigator>
 );
 
+    const dashboardStack = props => (
+    <DetractorStack.Navigator>
+        <DetractorStack.Screen
+            name="Dashboard"
+            component={CxDashboard}
+            options={({ navigation, route }) => ({
+                headerLeft: props => <MenuIcon/>,
+                headerRight: props => <NotificationIcon />,
+            })}
+        />
+        <DetractorStack.Screen
+            name="Closed Loop"
+            component={DetractorTicketsTabStack}
+            options={({ navigation, route }) => ({
+                headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                headerRight: props => <SearchIcon />,
+
+            })}
+        />
+        <DetractorStack.Screen
+            name="Search Ticket"
+            component={SearchTicket}
+            options={({ navigation, route }) => ({
+                headerShown: false,
+                headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+            })}
+        />
+        {getCommonScreens(DetractorStack)}
+    </DetractorStack.Navigator>
+);
+
+    const dashboardModalStack = props => (
+        <DetractorStack.Navigator mode="modal">
+            <DetractorStack.Screen
+                name="Dashboard"
+                component={dashboardStack}
+                options={({ navigation, route }) => ({ headerShown: false })}
+            />
+            <DetractorStack.Screen
+                name="Notifications"
+                component={Notification}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <View/>,
+                    headerRight: props => <CloseButton/>
+                })}
+            />
+            <DetractorStack.Screen
+                name="New Ticket"
+                component={CreateTicket}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <View/>,
+                    headerRight: props => <CloseButton/>
+                })}
+            />
+        </DetractorStack.Navigator>
+    );
+
     const settingStack = (props) => (
-        <RootStack.Navigator>
-            <RootStack.Screen
+        <SettingsStack.Navigator>
+            <SettingsStack.Screen
                 name="Settings"
                 component={AppSettings}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon/>,
                 })}
             />
-            <RootStack.Screen
+            <SettingsStack.Screen
                 name="Account Details"
                 component={AccountDetails}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                 })}
             />
-        </RootStack.Navigator>
+        </SettingsStack.Navigator>
     );
 
     let renderSpinner = () => {

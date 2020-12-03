@@ -17,6 +17,7 @@ export default function FeedbackDetails(props){
                 item={props.route.params.data}
                 origin="Detail"
                 ticketStatuses={props.route.params.ticketStatus}
+                {...props}
             />
             <FeedbackDetailsTabStack {...props}/>
             {/** enable it when email functionality */}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect          } from 'react';
 import {
   View,
   TouchableWithoutFeedback,
@@ -14,10 +14,24 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {Sizes} from '../../styles/Size.constant';
+import {clearDetractorTicketDetails, getDetractorTicketDetails} from '../../redux/actions/dashboard.actions';
+import {connect} from 'react-redux';
+import {isObjectEmpty} from '../../Utils/Utility';
+import {useNavigation} from '@react-navigation/native';
 
 
 const FeedbackCell = (props) => {
   let disable = props.origin === 'Detail';
+
+  let onBackPress = () => {
+    props.clearTicketDetails();
+  };
+
+  useEffect(() => {
+    if (!isObjectEmpty(props.ticketDetails)) {
+      props.navigation.navigate('Ticket Details', {item: props.ticketDetails, onBackPress: onBackPress});
+    }
+  }, [props.ticketDetails]);
 
   let getTicketStatus = () => {
     if (props.item.ticketStatus !== -1) {
@@ -83,7 +97,12 @@ const FeedbackCell = (props) => {
           <Text style={styles.viewTicketsText}> Create Ticket</Text>
         </TouchableWithoutFeedback>
         : <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
-                                    onPress={() => {alert('navigate to view ticket')}}
+                                    onPress={() => {
+                                      let params = {
+                                        'ticketID': props.item.ticketID,
+                                      };
+                                      props.getTicketDetails(props.authToken, params);
+                                    }}
         >
           <Text style={styles.viewTicketsText}> View Ticket</Text>
         </TouchableWithoutFeedback>
@@ -111,6 +130,25 @@ const FeedbackCell = (props) => {
       </TouchableWithoutFeedback>
   )
 };
+
+const mapStateToProps = state => {
+  return {
+    ticketDetails: state.dashboard.ticketDetails,
+    authToken: state.global.authToken,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  getTicketDetails: (token, params) => {
+    dispatch(getDetractorTicketDetails(token, params));
+  },
+  clearTicketDetails: () => {
+    dispatch(clearDetractorTicketDetails());
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FeedbackCell);
+
 
 const styles = StyleSheet.create({
   container:{
@@ -175,5 +213,3 @@ const styles = StyleSheet.create({
   },
 
 });
-
-export default FeedbackCell;
