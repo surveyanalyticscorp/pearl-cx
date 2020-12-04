@@ -139,7 +139,7 @@ const TicketWidget = props => {
                 {StringUtils.isNotEmpty(iconName) && <Icomoon name={iconName} size={Sizes.inlineIcons} color={Colors.secondary}/>}
                 <Text style={styles.npsText}>{props.item.rating}</Text>
                 <View style={styles.responseIdView}>
-                    <Text style={styles.responseIdText}>ID: 12345678</Text>
+                    <Text style={styles.responseIdText}>ID: {props.item.responseSetID}</Text>
                 </View>
             </View>
         );

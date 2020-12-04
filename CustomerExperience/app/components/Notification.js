@@ -1,7 +1,5 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import React from 'react';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {Sizes} from '../styles/Size.constant';
 import {Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
@@ -12,7 +10,10 @@ export default function Notification(props) {
 
     let renderRow = () => {
         return <View style={styles.row}>
-            <MaterialIcon name={'chat'} size={Sizes.filterIcon} color= {Colors.accent}/>
+            <Image
+                style={styles.ticketIcon}
+                source={require('../config/images/notification_ticket_blue.png')}
+            />
             <View style={styles.rowTextContainer}>
                 <Text style={styles.titleContainer}>
                     <Text style={styles.regularFont}>New Ticket from</Text>
@@ -59,6 +60,11 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: TextSizes.semiSecondary,
         color: Colors.secondary,
+    },
+    ticketIcon: {
+        width: 1.2*MarginConstants.tab3,
+        height: 1.2*MarginConstants.tab3,
+        color: Colors.accent
     }
 
 });

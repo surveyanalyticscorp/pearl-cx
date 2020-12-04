@@ -17,7 +17,6 @@ import {Sizes} from '../../styles/Size.constant';
 import {clearDetractorTicketDetails, getDetractorTicketDetails} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import {isObjectEmpty} from '../../Utils/Utility';
-import {useNavigation} from '@react-navigation/native';
 
 
 const FeedbackCell = (props) => {

@@ -45,7 +45,7 @@ const DetractorScenes = props => {
             key: 'escalated',
             data: {tickets: []},
             pageOffset: '0',
-            status: '3',
+            status: '5',
             priority: 0,
             index: 3,
             storeId: props.storeId+'',

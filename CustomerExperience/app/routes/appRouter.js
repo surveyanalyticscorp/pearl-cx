@@ -288,6 +288,7 @@ const AppRouter = props => {
     const getCommonScreens = (RootStack) => {
         return [
             <RootStack.Screen
+                key={"Date Range"}
                 name="Date Range"
                 component={DateRangeTabStack}
                 options={({ navigation, route }) => ({
@@ -296,6 +297,7 @@ const AppRouter = props => {
                 })}
             />,
             <RootStack.Screen
+                key={"Ticket Details"}
                 name="Ticket Details"
                 component={TicketLogTabStack}
                 options={({ navigation, route }) => ({
@@ -304,13 +306,13 @@ const AppRouter = props => {
                 })}
             />,
             <RootStack.Screen
+                key={"Update Ticket"}
                 name="Update Ticket"
                 component={UpdateTicket}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                 })}
             />
-
         ];
     };
 

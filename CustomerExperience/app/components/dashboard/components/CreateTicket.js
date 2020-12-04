@@ -115,7 +115,7 @@ function CreateTicket(props) {
                 autoCorrect={false}
                 style={styles.emailText}
                 value={email}
-                placeholder={'Type mail'}
+                placeholder={'Enter email address'}
                 // keyboardType='email-address'
                 onChangeText={text => {
                     StringUtils.isNotEmpty(validationError) && setValidationError('');

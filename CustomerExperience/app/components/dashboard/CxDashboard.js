@@ -96,10 +96,10 @@ const CxDashboard = props => {
     },[comparision]);
 
     useEffect(() => {
-        if(props.dashboardData.DetractorTicketsCount){
+        if(props.dashboardData.detractorTicketsCount){
             props.showLoading(false);
         }
-    },[props.dashboardData.DetractorTicketsCount]);
+    },[props.dashboardData.detractorTicketsCount]);
 
     let handleBackPress = () => {
         showExitAlert(true);
@@ -222,7 +222,7 @@ const CxDashboard = props => {
     let getClosedLoopView = () => {
         return(
             <View style={dashboardStyles.closedLoopView}>
-                <DashboardClosedLoopView ticketCount={props.dashboardData.DetractorTicketsCount}/>
+                <DashboardClosedLoopView ticketCount={props.dashboardData.detractorTicketsCount} priorityCount={props.dashboardData.priorityCount}/>
             </View>
         )
     };

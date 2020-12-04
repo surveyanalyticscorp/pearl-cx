@@ -29,10 +29,10 @@ const TicketTabStack = props => (
                          lazy
                          keyboardDismissMode={'auto'}
     >
-        <TicketTab.Screen name="New" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
-        <TicketTab.Screen name="Pending" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
-        <TicketTab.Screen name="Escalated" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
-        <TicketTab.Screen name="Resolved" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
+        <TicketTab.Screen name="New" component={renderScene} initialParams={{ ticketCount: props.ticketCount, priorityCount: props.priorityCount}}/>
+        <TicketTab.Screen name="Pending" component={renderScene} initialParams={{ ticketCount: props.ticketCount, priorityCount: props.priorityCount}}/>
+        <TicketTab.Screen name="Escalated" component={renderScene} initialParams={{ ticketCount: props.ticketCount, priorityCount: props.priorityCount}}/>
+        <TicketTab.Screen name="Resolved" component={renderScene} initialParams={{ ticketCount: props.ticketCount, priorityCount: props.priorityCount}}/>
     </TicketTab.Navigator>
 );
 
@@ -61,7 +61,7 @@ const renderScene = (props) => {
                         colorScale={victoryPieColorScale}
                     />
                     <View style={styles.npsView}>
-                        <Text style={[styles.npsPercentText]}>{getTicketCount()}</Text>
+                        <Text style={[styles.npsPercentText]}>{getCount(props.route.params.ticketCount)}</Text>
                         <Text style={[styles.npsText]}>Tickets</Text>
                     </View>
                 </View>
@@ -70,18 +70,19 @@ const renderScene = (props) => {
         );
     };
 
-    let getTicketCount = () => {
-        switch (props.route.name) {
-            case 'New':
-                return props.route.params.ticketCount.new;
-            case 'Pending':
-                return props.route.params.ticketCount.pending;
-            case 'Escalated':
-                return props.route.params.ticketCount.escalated;
-            case 'Resolved':
-                return props.route.params.ticketCount.resolved;
+    let getCount = (object) => {
+        let name = props.route.name.toLowerCase();
+        switch (name) {
+            case 'new':
+                return object.new;
+            case 'pending':
+                return object.pending || object.open;
+            case 'escalated':
+                return object.escalated;
+            case 'resolved':
+                return object.resolved;
         }
-    }
+    };
 
     let renderViewTicketsContainer = () => {
         return (
@@ -99,12 +100,14 @@ const renderScene = (props) => {
     };
 
     let renderDonutInfoViewContainer = () => {
+        let routeName = props.route.name.toLowerCase();
+        let priorities = getCount(props.route.params.priorityCount);
       return (
           <View style={{paddingTop: 2*PaddingConstants.tab4,}}>
-              {renderTicketView(1, Colors.critical, 'Critical')}
-              {renderTicketView(1, Colors.high, 'High')}
-              {renderTicketView(1, Colors.passive, 'Medium')}
-              {renderTicketView(1, Colors.promoter, 'Low')}
+              {renderTicketView(priorities.critical, Colors.critical, 'Critical')}
+              {renderTicketView(priorities.high, Colors.high, 'High')}
+              {renderTicketView(priorities.medium, Colors.passive, 'Medium')}
+              {renderTicketView(priorities.low, Colors.promoter, 'Low')}
           </View>
       )
     };

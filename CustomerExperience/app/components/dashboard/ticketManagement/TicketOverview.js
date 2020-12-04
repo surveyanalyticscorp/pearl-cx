@@ -39,13 +39,13 @@ export default function TicketOverview(props) {
          * get rating
          * */
         let iconName = getIconName(4);
-      return (
-          <View style={[styles.responseIdContainer,{paddingHorizontal: PaddingConstants.tab1}]}>
-              <Text style={styles.rowText}> NPS: </Text>
-              {StringUtils.isNotEmpty(iconName) && <Icomoon name={iconName} size={Sizes.inlineIcons} color={Colors.secondary} style={{marginHorizontal: MarginConstants.tab1}}/>}
-              <Text style={styles.npsText}>4</Text>
-          </View>
-      )
+        return (
+            <View style={[styles.responseIdContainer,{paddingHorizontal: PaddingConstants.tab1}]}>
+                <Text style={styles.rowText}> NPS: </Text>
+                {StringUtils.isNotEmpty(iconName) && <Icomoon name={iconName} size={Sizes.inlineIcons} color={Colors.secondary} style={{marginHorizontal: MarginConstants.tab1}}/>}
+                <Text style={styles.npsText}>4</Text>
+            </View>
+        )
     };
 
     let getPriorityColor = (priority) => {
@@ -96,27 +96,28 @@ export default function TicketOverview(props) {
     };
 
     let renderResponseIdView = () => {
+        let flag = ticket.responseID > 0;
         return (
             <View style={styles.responseIdContainer}>
-            {renderRow('Response ID', ticket.responseID)}
-            <TouchableWithoutFeedback onPress={() => {
-                alert('navigate to response')
-            }}>
-            <View style={styles.viewResponseContainer}>
-                <Text style={styles.viewResponseText}>View Response</Text>
-            </View>
-            </TouchableWithoutFeedback>
+                {renderRow('Response ID', ticket.responseID)}
+                {flag && <TouchableWithoutFeedback onPress={() => {
+                    alert('navigate to response')
+                }}>
+                    <View style={styles.viewResponseContainer}>
+                        <Text style={styles.viewResponseText}>View Response</Text>
+                    </View>
+                </TouchableWithoutFeedback> }
             </View>
         )
     };
 
     let renderCustomerComment = () => {
-      return (
-          <Text style={styles.commentContainer}>
-              <Text style={styles.rowText}>Customer Comments:</Text>
-              <Text style={styles.rowValue}> {ticket.comment}</Text>
-          </Text>
-      )
+        return (
+            <Text style={styles.commentContainer}>
+                <Text style={styles.rowText}>Customer Comments:</Text>
+                <Text style={styles.rowValue}> {ticket.comment}</Text>
+            </Text>
+        )
     };
 
     let renderTicketInfoView = () => {
@@ -124,20 +125,20 @@ export default function TicketOverview(props) {
         /**
          * get ticket status
          * */
-      return (
-          <View style={styles.container}>
-              {renderResponseIdView()}
-              {renderTicketPriority()}
-              {renderRow('Status:', 'New')}
-              {renderRow('Customer Email:', ticket.emailAddress)}
-              {renderNPS()}
-              {renderRow('Origin Segment:', ticket.originSegment.name)}
-              {renderRow('Current Segment:', ticket.currentSegment.name)}
-              {renderRow('Ticket Owner:', ticket.ticketOwner)}
-              {renderRow('Created On:', date)}
-              {renderCustomerComment()}
-          </View>
-      )
+        return (
+            <View style={styles.container}>
+                {renderResponseIdView()}
+                {renderTicketPriority()}
+                {renderRow('Status:', 'New')}
+                {renderRow('Customer Email:', ticket.emailAddress)}
+                {renderNPS()}
+                {renderRow('Origin Segment:', ticket.originSegment.name)}
+                {renderRow('Current Segment:', ticket.currentSegment.name)}
+                {renderRow('Ticket Owner:', ticket.ticketOwner)}
+                {renderRow('Created On:', date)}
+                {renderCustomerComment()}
+            </View>
+        )
     };
 
     return (
