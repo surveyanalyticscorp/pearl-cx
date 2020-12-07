@@ -24,8 +24,16 @@ function SearchTicket(props) {
     let pageCount = useRef("-1");
 
     useEffect(() => {
-        showLoader && setShowLoader(false);
+        if(showLoader) {
+            getDetractorAPI()
+        }
     },[responseData]);
+
+    useEffect(() => {
+        if(showLoader) {
+            setResponseData([])
+        }
+    },[showLoader]);
 
     const renderNoDataFound = () => {
         return (
@@ -118,9 +126,7 @@ function SearchTicket(props) {
                 }}
                 onSubmitEditing={() => {
                     pageCount.current = "-1";
-                    ArrayUtils.isNotEmpty(responseData) && setResponseData([]);
                     setShowLoader(true);
-                    getDetractorAPI()
                 }}
                 placeholderTextColor={Colors.white}
                 placeholder={'Search email or response ID'}

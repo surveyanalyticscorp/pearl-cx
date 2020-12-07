@@ -57,6 +57,7 @@
     "react-native-safe-area-context": "^0.6.4",
     "react-native-safe-area-view": "^1.1.1",
     "react-native-screens": "^2.0.0-beta.2",
+    "react-native-simple-radio-button": "^2.7.4",
     "react-native-siren": "0.0.3",
     "react-native-svg": "^12.1.0",
     "react-native-swipe-gestures": "^1.0.5",

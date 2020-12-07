@@ -42,6 +42,7 @@ import {Notifications} from 'react-native-notifications';
 import Notification from '../components/Notification';
 import CreateTicket from '../components/dashboard/components/CreateTicket';
 import SearchTicket from '../components/dashboard/components/SearchTicket';
+import TicketFilter from '../components/dashboard/components/TicketFilter';
 
 const Drawer = createDrawerNavigator();
 const FeedbackStack = createStackNavigator();
@@ -391,6 +392,15 @@ const AppRouter = props => {
                     headerRight: props => <CloseButton/>
                 })}
             />
+            <DetractorStack.Screen
+                name="Filter By"
+                component={TicketFilter}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <View/>,
+                    headerRight: props => <CloseButton/>
+                })}
+            />
+
         </DetractorStack.Navigator>
     );
 

@@ -39,17 +39,18 @@ const TicketTabStack = props => (
 const renderScene = (props) => {
     let renderDonutChart = () => {
         let count = getCount(props.route.params.ticketCount);
-        let victoryPieColorScale = [Colors.promoter, Colors.passive, Colors.high, Colors.critical];
+        let victoryPieColorScale = count.totalTickets > 0 ? [Colors.promoter, Colors.passive, Colors.high, Colors.critical]: [Colors.primary];
+        let dataScale = count.totalTickets > 0 ? [
+            { y: count.low, x: ''},
+            { y: count.medium, x: ''},
+            { y: count.high, x: ''},
+            { y: count.critical, x: ''}
+        ] : [ { y: 100, x: ''}]
         return (
             <View style={styles.chartContainer}>
                 <View style={styles.donut}>
                     <VictoryPie
-                        data={[
-                            { y: count.low, x: ''},
-                            { y: count.medium, x: ''},
-                            { y: count.high, x: ''},
-                            { y: count.critical, x: ''}
-                        ]}
+                        data={dataScale}
                         width={5*MarginConstants.tab4}
                         height={6*MarginConstants.tab4}
                         innerRadius={2.3*MarginConstants.tab4}

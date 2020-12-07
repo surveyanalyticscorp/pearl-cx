@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useState, useRef} from 'react';
 import {View, Text, FlatList, TouchableWithoutFeedback} from 'react-native';
 import TicketWidget from './TicketWidget';
 import {dashboardStyles} from '../dashboard.style';
@@ -13,10 +13,12 @@ import {Colors} from '../../../styles/color.constants';
 import ActionButton from 'react-native-action-button';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {Sizes} from '../../../styles/Size.constant';
+import {usePrevious} from '../../../Utils/Utility';
+import ArrayUtils from '../../../Utils/ArrayUtils';
 
 const DetractorScenes = props => {
 
-    let [responseData, setResponseData] = useState([
+    let initialData = [
         {
             key: 'new',
             data: {tickets: []},
@@ -50,36 +52,58 @@ const DetractorScenes = props => {
             index: 3,
             storeId: props.storeId+'',
         }
-    ]);
+    ];
+
+    let [responseData, setResponseData] = useState(initialData);
     let [showLoader, setShowLoader] = useState(false);
-    let [filterText, setFilterText] = useState(3);
+    let [callAPI, setCallAPI] = useState(false);
+    let [filterObject, setFilterObject] = useState({text:'All', value: -1});
+
+    let prevFilterRef = usePrevious(filterObject);
 
     useEffect(() => {
-        for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
-            setShowLoader(true);
-            let params = responseData[responseCount];
-            params = {...params,
-                startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
-            };
-            apiHandler.getCXDetractorTicket(
-                props.authToken,
-                params,
-                response => {
-                    let data = [...responseData];
-                    data[responseCount].data = response.body;
-                    setResponseData(data);
-                },
-                error => {
-                    setShowLoader(false);
-                },
-            );
-        }
-    }, []);
+        setCallAPI(true)
+    },[]);
 
     useEffect(() => {
         showLoader && setShowLoader(false);
     },[responseData]);
+
+
+    useEffect(() => {
+        if(prevFilterRef && prevFilterRef !== filterObject) {
+            setCallAPI(true);
+        }
+    },[filterObject]);
+
+    useEffect(() => {
+        if(callAPI) {
+            for (let responseCount = 0; responseCount < responseData.length; responseCount++) {
+                setShowLoader(true);
+                let params = responseData[responseCount];
+                params = {
+                    ...params,
+                    startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+                    endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
+                    filterText: filterObject.value
+                };
+                apiHandler.getCXDetractorTicket(
+                    props.authToken,
+                    params,
+                    response => {
+                        setCallAPI(false)
+                        let data = [...responseData];
+                        data[responseCount].data = response.body;
+                        setResponseData(data);
+                    },
+                    error => {
+                        setCallAPI(false)
+                        setShowLoader(false);
+                    },
+                );
+            }
+        }
+    }, [callAPI]);
 
     const renderNoDataFound = () => {
         return (
@@ -112,6 +136,7 @@ const DetractorScenes = props => {
         params = {...params,
             startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
             endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
+            filterText: filterObject.value
         };
         apiHandler.getCXDetractorTicket(
             props.authToken,
@@ -127,20 +152,41 @@ const DetractorScenes = props => {
         );
     };
 
+    let setTicketFiler = (value) => {
+        if(filterObject.value !== value) {
+            setResponseData(initialData);
+        }
+        switch (value) {
+            case 3:
+                setFilterObject({text:'Critical', value: 3});
+                break;
+            case 2:
+                setFilterObject({text:'High', value: 2});
+                break;
+            case 1:
+                setFilterObject({text:'Medium', value: 1});
+                break;
+            case 0:
+                setFilterObject({text:'Low', value: 0});
+                break;
+            default:
+                setFilterObject({text:'All', value: -1})
+        }
+    };
+
     let renderTicketFilterView = () => {
       return (
           <TouchableWithoutFeedback onPress={() => {
-              alert('open filter screen')
+             props.navigation.navigate('Filter By',{setFilter: setTicketFiler, selectedFilter: filterObject.value})
           }} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
           >
           <View style={dashboardStyles.filterView}>
               <Icon name={'filter'} size={Sizes.filterIcon} color={Colors.primary}/>
-              <Text style={dashboardStyles.filterText}>{filterText}</Text>
+              <Text style={dashboardStyles.filterText}>{filterObject.text}</Text>
           </View>
           </TouchableWithoutFeedback>
       )
     };
-    //tickets.filter(item => item.priority === 1)
 
     let renderDetractorTickets = () => {
         let dataCount = props.route.params.dataCount;
