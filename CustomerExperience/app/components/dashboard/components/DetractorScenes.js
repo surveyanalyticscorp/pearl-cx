@@ -52,7 +52,7 @@ const DetractorScenes = props => {
         }
     ]);
     let [showLoader, setShowLoader] = useState(false);
-    let [filterText, setFilterText] = useState('All');
+    let [filterText, setFilterText] = useState(3);
 
     useEffect(() => {
         for (let responseCount = 0; responseCount < responseData.length ; responseCount++) {
@@ -60,7 +60,7 @@ const DetractorScenes = props => {
             let params = responseData[responseCount];
             params = {...params,
                 startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
             };
             apiHandler.getCXDetractorTicket(
                 props.authToken,
@@ -112,8 +112,6 @@ const DetractorScenes = props => {
         params = {...params,
             startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
             endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
-            // filterText: 'critical',
-            // seacrhText:'n@gmail.com'
         };
         apiHandler.getCXDetractorTicket(
             props.authToken,
@@ -142,6 +140,7 @@ const DetractorScenes = props => {
           </TouchableWithoutFeedback>
       )
     };
+    //tickets.filter(item => item.priority === 1)
 
     let renderDetractorTickets = () => {
         let dataCount = props.route.params.dataCount;

@@ -126,9 +126,6 @@ const TicketWidget = props => {
 
     let npsHeaderView = () => {
         let priority = getPriority();
-        /**
-         * nehal get  props.responseId,
-         * */
         let iconName = getIconName();
         return (
             <View style={styles.npsHeaderView}>
