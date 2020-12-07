@@ -1,12 +1,30 @@
 import {View, Text, StyleSheet, Image} from 'react-native';
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import {Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
+import {showErrorFlashMessage} from '../Utils/Utility';
+import {showLoading} from '../redux/actions';
+import {connect} from 'react-redux';
+import {apiHandler} from '../api/ApiHandler';
 
-export default function Notification(props) {
+
+function Notification(props) {
+
+    let [list, setList] = useState([]);
+
+    useEffect(() => {
+        props.showLoading(true);
+        apiHandler.getNotificationData({'Auth-Token': props.authToken}, (response) => {
+            setList(response);
+            props.showLoading(false);
+        }, (error) => {
+            showErrorFlashMessage(error.errorAlert);
+            props.showLoading(false);
+        })
+    },[]);
 
     let renderRow = () => {
         return <View style={styles.row}>
@@ -29,6 +47,22 @@ export default function Notification(props) {
         {renderRow()}
     </View>
 }
+
+const mapStateToProps = state => {
+    return {
+        isLoading: state.global.isLoading,
+        authToken: state.global.authToken,
+    };
+};
+
+const mapDispatchToProps = dispatch => ({
+    showLoading: (flag) => {
+        dispatch(showLoading(flag));
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Notification);
+
 
 const styles = StyleSheet.create({
     container: {

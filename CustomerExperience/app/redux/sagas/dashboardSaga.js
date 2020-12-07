@@ -8,6 +8,7 @@ import {
   DASHBOARD_RECEIVED,
   GET_DASHBOARD,
 } from '../actions/dashboard.actions';
+import {showErrorFlashMessage} from '../../Utils/Utility';
 
 export function* fetchDashboard(action) {
   try {
@@ -22,6 +23,7 @@ export function* fetchDashboard(action) {
       response: json,
     });
   } catch (error) {
+    showErrorFlashMessage(error.errorAlert);
     yield put({
       type: API_ERROR,
       error: error,

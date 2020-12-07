@@ -55,7 +55,7 @@ function Feedback(props){
             }, (error) => {
                 setShowLoader(false);
                 props.setError(error);
-                showErrorFlashMessage(error)
+                showErrorFlashMessage(error.message)
             });
         }
     };

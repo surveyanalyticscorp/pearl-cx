@@ -1,9 +1,9 @@
-import {CX_DETRACTOR_TICKETS, CX_GET_ALL_RESPONSE} from './Constant';
+import {CX_DETRACTOR_TICKETS, CX_GET_ALL_RESPONSE, CX_GET_NOTIFICATION_LIST} from './Constant';
 import WebServiceHandler from './WebServiceHandler';
 
 class ApiHandler {
   callAPIInternal(token, url, data, successCallback, errorCallback) {
-    return WebServiceHandler.post(url, {'Auth-Token': token}, data)
+    return WebServiceHandler.postNew(url, {'Auth-Token': token}, data)
         .then(response => {
           successCallback(response);
         })
@@ -39,6 +39,16 @@ class ApiHandler {
         errorCallback,
     );
   }
+
+  getNotificationData(header,successCallback, errorCallback = () => {}){
+    return WebServiceHandler.get(CX_GET_NOTIFICATION_LIST, header, {}).then(response => {
+      successCallback(response);
+    })
+        .catch(error => {
+          errorCallback(error);
+        });
+  }
+
 }
 
 export let apiHandler = new ApiHandler();

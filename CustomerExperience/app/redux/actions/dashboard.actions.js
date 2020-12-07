@@ -45,5 +45,5 @@ export const updateTicket = () => ({
 });
 
 export const addTicket = () => ({
-  type: 'ADD_TICKET'
+  type: 'ADD_CLOSED_LOOP_TICKET'
 });

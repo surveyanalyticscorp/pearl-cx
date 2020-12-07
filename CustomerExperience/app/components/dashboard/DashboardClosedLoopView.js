@@ -29,25 +29,26 @@ const TicketTabStack = props => (
                          lazy
                          keyboardDismissMode={'auto'}
     >
-        <TicketTab.Screen name="New" component={renderScene} initialParams={{ ticketCount: props.ticketCount, priorityCount: props.priorityCount}}/>
-        <TicketTab.Screen name="Pending" component={renderScene} initialParams={{ ticketCount: props.ticketCount, priorityCount: props.priorityCount}}/>
-        <TicketTab.Screen name="Escalated" component={renderScene} initialParams={{ ticketCount: props.ticketCount, priorityCount: props.priorityCount}}/>
-        <TicketTab.Screen name="Resolved" component={renderScene} initialParams={{ ticketCount: props.ticketCount, priorityCount: props.priorityCount}}/>
+        <TicketTab.Screen name="New" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
+        <TicketTab.Screen name="Pending" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
+        <TicketTab.Screen name="Escalated" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
+        <TicketTab.Screen name="Resolved" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
     </TicketTab.Navigator>
 );
 
 const renderScene = (props) => {
     let renderDonutChart = () => {
+        let count = getCount(props.route.params.ticketCount);
         let victoryPieColorScale = [Colors.promoter, Colors.passive, Colors.high, Colors.critical];
         return (
             <View style={styles.chartContainer}>
                 <View style={styles.donut}>
                     <VictoryPie
                         data={[
-                            { y: '25', x: ''},
-                            { y: '20', x: ''},
-                            { y: '30', x: ''},
-                            { y: '150', x: ''}
+                            { y: count.low, x: ''},
+                            { y: count.medium, x: ''},
+                            { y: count.high, x: ''},
+                            { y: count.critical, x: ''}
                         ]}
                         width={5*MarginConstants.tab4}
                         height={6*MarginConstants.tab4}
@@ -61,7 +62,7 @@ const renderScene = (props) => {
                         colorScale={victoryPieColorScale}
                     />
                     <View style={styles.npsView}>
-                        <Text style={[styles.npsPercentText]}>{getCount(props.route.params.ticketCount)}</Text>
+                        <Text style={[styles.npsPercentText]}>{count.totalTickets}</Text>
                         <Text style={[styles.npsText]}>Tickets</Text>
                     </View>
                 </View>
@@ -76,7 +77,7 @@ const renderScene = (props) => {
             case 'new':
                 return object.new;
             case 'pending':
-                return object.pending || object.open;
+                return object.open;
             case 'escalated':
                 return object.escalated;
             case 'resolved':
@@ -100,8 +101,7 @@ const renderScene = (props) => {
     };
 
     let renderDonutInfoViewContainer = () => {
-        let routeName = props.route.name.toLowerCase();
-        let priorities = getCount(props.route.params.priorityCount);
+        let priorities = getCount(props.route.params.ticketCount);
       return (
           <View style={{paddingTop: 2*PaddingConstants.tab4,}}>
               {renderTicketView(priorities.critical, Colors.critical, 'Critical')}

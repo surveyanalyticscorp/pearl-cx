@@ -44,6 +44,7 @@ const CxDashboard = props => {
     let [exitAlert, showExitAlert] = useState(false);
 
     let prevRangeRef = usePrevious(props.range);
+    let ticketRef = usePrevious(props.dashboardData.detractorTicketsCount);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -96,6 +97,9 @@ const CxDashboard = props => {
     },[comparision]);
 
     useEffect(() => {
+        if(ticketRef && ticketRef !== props.dashboardData.detractorTicketsCount) {
+            setCallAPI(false);
+        }
         if(props.dashboardData.detractorTicketsCount){
             props.showLoading(false);
         }
@@ -222,7 +226,7 @@ const CxDashboard = props => {
     let getClosedLoopView = () => {
         return(
             <View style={dashboardStyles.closedLoopView}>
-                <DashboardClosedLoopView ticketCount={props.dashboardData.detractorTicketsCount} priorityCount={props.dashboardData.priorityCount}/>
+                <DashboardClosedLoopView ticketCount={props.dashboardData.detractorTicketsCount}/>
             </View>
         )
     };

@@ -19,7 +19,7 @@ import ModalDropdown from '../../../widgets/drop-down/ModalDropdown';
 import ArrayUtils from '../../../Utils/ArrayUtils';
 import QPSpinner from '../../../widgets/QPSpinner';
 import {
-    addTicket,
+    addTicket, clearDetractorTicketDetails,
     getClosedLoopOwnerDetails,
     getClosedLoopSegmentDetails,
     getDashboardContent,
@@ -27,9 +27,8 @@ import {
 import {connect} from 'react-redux';
 import {addClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
 import {showErrorFlashMessage, validateEmail} from '../../../Utils/Utility';
-import moment from '../ticketManagement/UpdateTicket';
+import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
-import {Utils} from '@react-native-firebase/app';
 
 function CreateTicket(props) {
 
@@ -156,7 +155,7 @@ function CreateTicket(props) {
         return (
             <View style={styles.row}>
                 <Text style={styles.rowText}> {header} </Text>
-                <View style={{position:'absolute', justifyContent: 'center', alignItems: 'center', right:10}}>
+                <View style={styles.dropdownContainer}>
                     {renderDropDown(header, options, defaultText)}
                 </View>
             </View>
@@ -271,10 +270,13 @@ function CreateTicket(props) {
     let submitTicketAPIAction = (body) => {
             setLoading(true);
             props.addTicket();
+
             addClosedLoopTicket(props.authToken, body, () => {
                 setLoading(false);
-                props.navigation.goBack();
-                // getDashboardData();
+                props.navigation.navigate('Dashboard');
+                props.navigation.push('Closed Loop');
+                getDashboardData();
+                props.clearTicketDetails();
             }, (error) => {
                 setLoading(false);
                 showErrorFlashMessage(error)
@@ -350,6 +352,9 @@ const mapDispatchToProps = dispatch => ({
     },
     getDashboardContent: (token, data) => {
         dispatch(getDashboardContent(token, data));
+    },
+    clearTicketDetails: () => {
+        dispatch(clearDetractorTicketDetails())
     },
     addTicket: () => {
         dispatch(addTicket())
@@ -475,4 +480,10 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.light,
         marginTop: MarginConstants.tab1
     },
+    dropdownContainer: {
+        position:'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        right:10
+    }
 });

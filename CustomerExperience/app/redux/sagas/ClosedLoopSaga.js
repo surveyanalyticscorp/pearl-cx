@@ -123,6 +123,7 @@ export function addClosedLoopTicket(token, body, successCallback, errorCallback)
 
         })
         .catch(error => {
+            console.log(error)
             errorCallback(error.errorAlert);
         });
 }

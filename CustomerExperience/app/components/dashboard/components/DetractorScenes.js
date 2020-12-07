@@ -111,7 +111,9 @@ const DetractorScenes = props => {
         params.pageOffset = pageCount + '';
         params = {...params,
             startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-            endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+            endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
+            // filterText: 'critical',
+            // seacrhText:'n@gmail.com'
         };
         apiHandler.getCXDetractorTicket(
             props.authToken,
