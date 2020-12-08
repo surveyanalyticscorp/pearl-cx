@@ -348,8 +348,8 @@ const AppRouter = props => {
             name="Search Response"
             component={SearchFeedback}
             options={({ navigation, route }) => ({
-                headerLeft: props => <View/>,
-                headerRight: props => <CloseButton/>
+                headerShown: false,
+                headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
             })}
         />
         {getCommonScreens(FeedbackStack)}
