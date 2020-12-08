@@ -29,6 +29,7 @@ import {addClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
 import {showErrorFlashMessage, validateEmail} from '../../../Utils/Utility';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
+import {StackActions} from '@react-navigation/native';
 
 function CreateTicket(props) {
 
@@ -273,10 +274,8 @@ function CreateTicket(props) {
 
             addClosedLoopTicket(props.authToken, body, () => {
                 setLoading(false);
-                props.navigation.navigate('Dashboard');
-                props.navigation.push('Closed Loop');
-                getDashboardData();
-                props.clearTicketDetails();
+                let pushAction = StackActions.replace(props.route.params.parentRoute);
+                props.navigation.dispatch(pushAction);
             }, (error) => {
                 setLoading(false);
                 showErrorFlashMessage(error)

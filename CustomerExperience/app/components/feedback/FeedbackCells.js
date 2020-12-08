@@ -95,7 +95,9 @@ const FeedbackCell = (props) => {
   let renderCreateOrViewTicket = () => {
     let status = getTicketStatus();
     return StringUtils.isEmpty(status) ? <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
-                                                                   onPress={() => {alert('navigate to create ticket')}}
+                                                                   onPress={() => {
+                                                                       props.navigation.navigate('New Ticket',{parentRoute: 'Responses'})
+                                                                   }}
         >
           <Text style={styles.viewTicketsText}> Create Ticket</Text>
         </TouchableWithoutFeedback>

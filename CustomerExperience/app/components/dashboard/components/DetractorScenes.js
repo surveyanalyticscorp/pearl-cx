@@ -209,7 +209,7 @@ const DetractorScenes = props => {
                         buttonColor= {Colors.accent}
                         buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
                         onPress={() => {
-                            props.navigation.navigate('New Ticket');
+                            props.navigation.navigate('New Ticket',{parentRoute: 'Dashboard'});
                         }}
                     />
                 </View>
