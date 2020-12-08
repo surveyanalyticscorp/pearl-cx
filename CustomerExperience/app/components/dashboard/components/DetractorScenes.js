@@ -152,7 +152,7 @@ const DetractorScenes = props => {
         );
     };
 
-    let setTicketFiler = (value) => {
+    let setTicketFilter = (value) => {
         if(filterObject.value !== value) {
             setResponseData(initialData);
         }
@@ -177,7 +177,7 @@ const DetractorScenes = props => {
     let renderTicketFilterView = () => {
       return (
           <TouchableWithoutFeedback onPress={() => {
-             props.navigation.navigate('Filter By',{setFilter: setTicketFiler, selectedFilter: filterObject.value})
+             props.navigation.navigate('Filter By',{setFilter: setTicketFilter, selectedFilter: filterObject.value})
           }} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
           >
           <View style={dashboardStyles.filterView}>

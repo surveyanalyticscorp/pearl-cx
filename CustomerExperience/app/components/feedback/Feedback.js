@@ -172,14 +172,21 @@ const renderFeedbackScene = (props) => {
 
     const feedbackForm = useContext(FormContext);
     let [list, setList] = useState(feedbackForm.feedbackData);
+    let [sortingText, setSortingText] = useState('Date');
     let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);
-    let [filterText, setFilterText] = useState('Date');
+    let prevSortRef = usePrevious(sortingText);
 
     useEffect(() => {
         if(prevFeedbackRef !== feedbackForm.feedbackData) {
             getData()
         }
     },[feedbackForm.feedbackData]);
+
+    useEffect(() => {
+        if(prevSortRef !== sortingText) {
+            feedbackForm.onRefresh()
+        }
+    },[sortingText]);
 
     const _onPressRow = (data) => {
         const pushAction = StackActions.push('Feedback Details', {
@@ -190,15 +197,19 @@ const renderFeedbackScene = (props) => {
         props.navigation.dispatch(pushAction);
     };
 
+    let setResponseSorter = (value) => {
+        setSortingText(value)
+    };
+
     let renderResponseFilterView = () => {
         return (
             <TouchableWithoutFeedback onPress={() => {
-                alert('open sorting screen')
+                props.navigation.navigate('Sort By',{setSorter: setResponseSorter, selectedSorter: sortingText})
             }} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
             >
                 <View style={styles.filterView}>
                     <Icon name={'swap-vertical'} size={1.2*Sizes.filterIcon} color={Colors.primary}/>
-                    <Text style={styles.filterText}>{filterText}</Text>
+                    <Text style={styles.filterText}>{sortingText}</Text>
                 </View>
             </TouchableWithoutFeedback>
         )
@@ -224,11 +235,36 @@ const renderFeedbackScene = (props) => {
         );
     };
 
+    let sortData = (data) => {
+        let tempData = data;
+        switch (sortingText) {
+            case 'Email':
+                tempData = data.sort((prev, next) => prev.emailAddress.localeCompare(next.emailAddress));
+                setList(tempData);
+                break;
+            case 'Score':
+                tempData = data.sort((prev, next) => prev.answerText.localeCompare(next.answerText));
+                setList(tempData);
+                break;
+            case 'Segment':
+                tempData = data.sort((prev, next) => prev.businessUnitName.localeCompare(next.businessUnitName));
+                setList(tempData);
+                break;
+            default:
+                tempData = data.sort(function(prev,next){
+                    return new Date(next.surveyTakenDate) - new Date(prev.surveyTakenDate);
+                });
+                setList(tempData)
+        }
+    };
+
     let getData = () => {
         if(props.route.params.screenName === 'All') {
-            setList([...feedbackForm.feedbackData])
+            let data = [...feedbackForm.feedbackData];
+            sortData(data)
         } else {
-            setList([...feedbackForm.feedbackData.filter(res => res.sentiment === props.route.params.screenName)])
+            let data = [...feedbackForm.feedbackData.filter(res => res.sentiment === props.route.params.screenName)]
+            sortData(data)
         }
     };
 

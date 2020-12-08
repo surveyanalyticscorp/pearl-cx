@@ -43,6 +43,8 @@ import Notification from '../components/Notification';
 import CreateTicket from '../components/dashboard/components/CreateTicket';
 import SearchTicket from '../components/dashboard/components/SearchTicket';
 import TicketFilter from '../components/dashboard/components/TicketFilter';
+import FeedbackSorter from '../components/feedback/FeedbackSorter';
+import SearchFeedback from '../components/feedback/SearchFeedback';
 
 const Drawer = createDrawerNavigator();
 const FeedbackStack = createStackNavigator();
@@ -167,13 +169,13 @@ const AppRouter = props => {
         );
     };
 
-    const SearchIcon = () => {
+    const SearchIcon = (props) => {
         let navigation = useNavigation();
         return (
             <View style={[styles.rightHeaderButton,{marginHorizontal: MarginConstants.tab2}]}>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate("Search Ticket");
+                       props.route === 'Dashboard' ? navigation.navigate("Search Ticket") : navigation.navigate("Search Response");
                     }}>
                     <Icon name={'magnifier'} size={Sizes.icons} color={Colors.white}/>
                 </TouchableOpacity>
@@ -214,7 +216,7 @@ const AppRouter = props => {
                 </TouchableOpacity>
             </View>
         );
-    }
+    };
 
     const SaveDashboardDate = (props) => {
         return (
@@ -324,7 +326,7 @@ const AppRouter = props => {
             component={Feedback}
             options={({ navigation, route }) => ({
                 headerLeft: props => <MenuIcon />,
-                headerRight: props => <SearchIcon />,
+                headerRight: props => <SearchIcon route={'Feedback'}/>,
             })}
         />
         <FeedbackStack.Screen
@@ -332,6 +334,22 @@ const AppRouter = props => {
             component={FeedbackDetails}
             options={({ navigation, route }) => ({
                 headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+            })}
+        />
+        <FeedbackStack.Screen
+            name="Sort By"
+            component={FeedbackSorter}
+            options={({ navigation, route }) => ({
+                headerLeft: props => <View/>,
+                headerRight: props => <CloseButton/>
+            })}
+        />
+        <FeedbackStack.Screen
+            name="Search Response"
+            component={SearchFeedback}
+            options={({ navigation, route }) => ({
+                headerLeft: props => <View/>,
+                headerRight: props => <CloseButton/>
             })}
         />
         {getCommonScreens(FeedbackStack)}
@@ -353,7 +371,7 @@ const AppRouter = props => {
             component={DetractorTicketsTabStack}
             options={({ navigation, route }) => ({
                 headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                headerRight: props => <SearchIcon />,
+                headerRight: props => <SearchIcon route={'Dashboard'}/>,
 
             })}
         />
