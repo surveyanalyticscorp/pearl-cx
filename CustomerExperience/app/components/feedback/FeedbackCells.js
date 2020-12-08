@@ -32,7 +32,7 @@ const FeedbackCell = (props) => {
   useEffect(() => {
     if (!isObjectEmpty(props.ticketDetails) && feedbackTapped) {
       setTapped(false);
-      props.navigation.navigate('Ticket Details', {item: props.ticketDetails, onBackPress: onBackPress});
+      props.navigation.navigate('Ticket Details', {item: props.ticketDetails, onBackPress: onBackPress, parentRoute: 'Responses'});
     }
   }, [props.ticketDetails]);
 
@@ -101,6 +101,7 @@ const FeedbackCell = (props) => {
         </TouchableWithoutFeedback>
         : <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                                     onPress={() => {
+                                        setTapped(true);
                                       let params = {
                                         'ticketID': props.item.ticketID,
                                       };
@@ -124,7 +125,6 @@ const FeedbackCell = (props) => {
 
   return (
       <TouchableWithoutFeedback onPress={() => {
-        setTapped(true);
         props.onSelect()
       }} disabled={disable}>
         <View style={styles.container}>

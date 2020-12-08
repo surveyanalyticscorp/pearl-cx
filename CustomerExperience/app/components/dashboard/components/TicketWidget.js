@@ -27,7 +27,7 @@ const TicketWidget = props => {
 
     useEffect(() => {
         if (!isObjectEmpty(props.ticketDetails)) {
-            props.navigation.navigate('Ticket Details', {item: props.ticketDetails, onBackPress: onBackPress});
+            props.navigation.navigate('Ticket Details', {item: props.ticketDetails, onBackPress: onBackPress, parentRoute: 'Dashboard'});
         }
     }, [props.ticketDetails]);
 

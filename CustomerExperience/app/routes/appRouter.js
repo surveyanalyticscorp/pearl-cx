@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {DrawerActions, NavigationContainer, useNavigation} from '@react-navigation/native';
+import {DrawerActions, NavigationContainer, useNavigation, useNavigationState} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
@@ -157,11 +157,12 @@ const AppRouter = props => {
 
     const EditTicket = () => {
         let navigation = useNavigation();
+        const state = useNavigationState(state => state);
         return (
             <View style={[styles.rightHeaderButton,{marginHorizontal: 1.5*MarginConstants.tab1}]}>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate("Update Ticket");
+                        navigation.navigate("Update Ticket",{parentRoute: state.routeNames[0]});
                     }}>
                     <MaterialIcon name={'edit'} size={Sizes.filterIcon} color={Colors.white}/>
                 </TouchableOpacity>
@@ -262,9 +263,9 @@ const AppRouter = props => {
                                 lazy
                                 keyboardDismissMode={'auto'}
         >
-            <TicketLogTab.Screen name="Overview" component={TicketOverview} initialParams={{data: props.route.params.item}}/>
-            <TicketLogTab.Screen name="Comments" component={TicketComments} initialParams={{data: props.route.params.item}}/>
-            <TicketLogTab.Screen name="Logs" component={TicketComments} initialParams={{data: props.route.params.item}}/>
+            <TicketLogTab.Screen name="Overview" component={TicketOverview} initialParams={{data: props.route.params.item, parentRoute: props.route.params.parentRoute}}/>
+            <TicketLogTab.Screen name="Comments" component={TicketComments} initialParams={{data: props.route.params.item, parentRoute: props.route.params.parentRoute}}/>
+            <TicketLogTab.Screen name="Logs" component={TicketComments} initialParams={{data: props.route.params.item, parentRoute: props.route.params.parentRoute}}/>
         </TicketLogTab.Navigator>
     );
 

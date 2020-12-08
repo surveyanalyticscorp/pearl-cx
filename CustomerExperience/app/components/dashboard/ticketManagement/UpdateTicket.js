@@ -264,10 +264,14 @@ function UpdateTicket(props) {
             props.updateTicket();
             updateClosedLoopTicket(props.authToken, body, () => {
                 setLoading(false);
-                props.navigation.navigate('Dashboard');
-                props.navigation.push('Closed Loop');
-                getDashboardData();
-                props.clearTicketDetails();
+                if(props.route.params.parentRoute === 'Dashboard') {
+                    props.navigation.navigate('Dashboard');
+                    props.navigation.push('Closed Loop');
+                    getDashboardData();
+                    props.clearTicketDetails();
+                } else {
+                    props.navigation.navigate('Responses');
+                }
             }, (error) => {
                 setLoading(false);
                 showErrorFlashMessage(error)

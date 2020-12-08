@@ -107,7 +107,7 @@ export default function TicketOverview(props) {
     };
 
     let renderResponseIdView = () => {
-        let flag = ticket.responseID > 0;
+        let flag = ticket.responseID > 0 && props.route.params.parentRoute !== 'Responses';
         return (
             <View style={styles.responseIdContainer}>
                 {renderRow('Response ID', ticket.responseID)}
