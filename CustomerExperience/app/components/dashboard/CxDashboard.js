@@ -4,13 +4,11 @@ import {
     RefreshControl,
     ScrollView,
     Text,
-    TouchableWithoutFeedback,
     View,
     BackHandler,
     Alert,
     SafeAreaView
 } from 'react-native';
-import {StackActions} from '@react-navigation/native';
 import {showLoading} from '../../redux/actions/index';
 import {getDashboardContent} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
@@ -22,7 +20,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {MarginConstants} from '../../styles/margin.constants';
-import Icomoon from '../../config/Icons/icon-native';
 import {VictoryPie} from 'victory-native';
 import {Sizes} from '../../styles/Size.constant';
 import StringUtils from '../../Utils/StringUtils';
@@ -199,27 +196,6 @@ const CxDashboard = props => {
                     <Text style={dashboardStyles.response}>{title}</Text>
                 </View>
             </View>
-        )
-    };
-
-    let renderTicketView = (ticketCount, icon, title) => {
-        return (
-            <TouchableWithoutFeedback
-                onPress={() => {
-                    const pushAction = StackActions.push('Tickets', {
-                        screen: icon === 'new' ? "New" : (icon === 'open' ? "Open" : "Resolved")
-                    });
-                    props.navigation.dispatch(pushAction);
-                }}>
-                <View style={[dashboardStyles.ticketContainer,{marginHorizontal: icon === 'open' ? MarginConstants.tab1 : 0}]}>
-                    <Text  style={dashboardStyles.ticketText}>{ticketCount}</Text>
-                    <View style={dashboardStyles.separator}/>
-                    <View style={dashboardStyles.ticketTypeContainer}>
-                        <Icomoon name={icon} size={Sizes.inlineIcons} color= {Colors.borderColor}/>
-                        <Text style={dashboardStyles.ticketType}>{title}</Text>
-                    </View>
-                </View>
-            </TouchableWithoutFeedback>
         )
     };
 

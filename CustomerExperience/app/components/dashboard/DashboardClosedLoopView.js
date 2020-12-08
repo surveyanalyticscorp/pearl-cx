@@ -30,7 +30,7 @@ const TicketTabStack = props => (
                          keyboardDismissMode={'auto'}
     >
         <TicketTab.Screen name="New" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
-        <TicketTab.Screen name="Pending" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
+        <TicketTab.Screen name="Open" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
         <TicketTab.Screen name="Escalated" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
         <TicketTab.Screen name="Resolved" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
     </TicketTab.Navigator>
@@ -45,7 +45,7 @@ const renderScene = (props) => {
             { y: count.medium, x: ''},
             { y: count.high, x: ''},
             { y: count.critical, x: ''}
-        ] : [ { y: 100, x: ''}]
+        ] : [ { y: 100, x: ''}];
         return (
             <View style={styles.chartContainer}>
                 <View style={styles.donut}>
@@ -77,7 +77,7 @@ const renderScene = (props) => {
         switch (name) {
             case 'new':
                 return object.new;
-            case 'pending':
+            case 'open':
                 return object.open;
             case 'escalated':
                 return object.escalated;

@@ -34,20 +34,6 @@ export default function TicketOverview(props) {
         }
     };
 
-    let renderNPS = () => {
-        /**
-         * get rating
-         * */
-        let iconName = getIconName(4);
-        return (
-            <View style={[styles.responseIdContainer,{paddingHorizontal: PaddingConstants.tab1}]}>
-                <Text style={styles.rowText}> NPS: </Text>
-                {StringUtils.isNotEmpty(iconName) && <Icomoon name={iconName} size={Sizes.inlineIcons} color={Colors.secondary} style={{marginHorizontal: MarginConstants.tab1}}/>}
-                <Text style={styles.npsText}>4</Text>
-            </View>
-        )
-    };
-
     let getPriorityColor = (priority) => {
         switch(priority.toLowerCase()) {
             case 'low':
@@ -72,6 +58,31 @@ export default function TicketOverview(props) {
             case 3:
                 return'Critical';
         }
+    };
+
+    let getStatus = () => {
+        switch (ticket.status) {
+            case 0:
+                return 'New';
+            case 1:
+                return 'Open';
+            case 2:
+                return'Resolved';
+            case 5:
+                return'Escalated';
+        }
+    };
+
+    let renderNPS = () => {
+        let iconName = getIconName(parseInt(ticket.rating));
+        console.log(props);
+        return (
+            <View style={[styles.responseIdContainer,{paddingHorizontal: PaddingConstants.tab1}]}>
+                <Text style={styles.rowText}> NPS: </Text>
+                {StringUtils.isNotEmpty(iconName) && <Icomoon name={iconName} size={Sizes.inlineIcons} color={Colors.secondary} style={{marginHorizontal: MarginConstants.tab1}}/>}
+                <Text style={styles.npsText}>{ticket.rating}</Text>
+            </View>
+        )
     };
 
     let renderTicketPriority = () => {
@@ -122,14 +133,11 @@ export default function TicketOverview(props) {
 
     let renderTicketInfoView = () => {
         let date = moment(ticket.timestamp).format('MMM DD, YYYY');
-        /**
-         * get ticket status
-         * */
         return (
             <View style={styles.container}>
                 {renderResponseIdView()}
                 {renderTicketPriority()}
-                {renderRow('Status:', 'New')}
+                {renderRow('Status:', getStatus())}
                 {renderRow('Customer Email:', ticket.emailAddress)}
                 {renderNPS()}
                 {renderRow('Origin Segment:', ticket.originSegment.name)}

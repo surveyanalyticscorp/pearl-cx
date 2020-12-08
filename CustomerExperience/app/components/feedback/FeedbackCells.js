@@ -1,4 +1,4 @@
-import React, {useEffect          } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   TouchableWithoutFeedback,
@@ -22,12 +22,16 @@ import {isObjectEmpty} from '../../Utils/Utility';
 const FeedbackCell = (props) => {
   let disable = props.origin === 'Detail';
 
+ let [feedbackTapped, setTapped] = useState(false);
+
+
   let onBackPress = () => {
     props.clearTicketDetails();
   };
 
   useEffect(() => {
-    if (!isObjectEmpty(props.ticketDetails)) {
+    if (!isObjectEmpty(props.ticketDetails) && feedbackTapped) {
+      setTapped(false);
       props.navigation.navigate('Ticket Details', {item: props.ticketDetails, onBackPress: onBackPress});
     }
   }, [props.ticketDetails]);
@@ -108,20 +112,21 @@ const FeedbackCell = (props) => {
   };
 
   let renderResponseContainer = () => {
-    let status = getTicketStatus();
     return (
         <View style={styles.responseContainer}>
           {renderNPSView()}
           {renderRespondentDetails()}
           {!disable && <Icon name= 'arrow-right' size={Sizes.icons} color={Colors.secondary} />}
-
           {disable && renderCreateOrViewTicket()}
         </View>
     )
   };
 
   return (
-      <TouchableWithoutFeedback onPress={props.onSelect} disabled={disable}>
+      <TouchableWithoutFeedback onPress={() => {
+        setTapped(true);
+        props.onSelect()
+      }} disabled={disable}>
         <View style={styles.container}>
           {renderTopSegmentView()}
           {renderResponseContainer()}
@@ -134,6 +139,7 @@ const mapStateToProps = state => {
   return {
     ticketDetails: state.dashboard.ticketDetails,
     authToken: state.global.authToken,
+    isLoading: state.global.isLoading,
   };
 };
 

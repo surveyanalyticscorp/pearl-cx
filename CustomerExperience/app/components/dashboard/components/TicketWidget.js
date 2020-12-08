@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, TouchableWithoutFeedback, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, TouchableWithoutFeedback, Text} from 'react-native';
 import ReadMore from 'react-native-read-more-text';
 import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -159,6 +159,7 @@ const mapStateToProps = state => {
     return {
         ticketDetails: state.dashboard.ticketDetails,
         authToken: state.global.authToken,
+        isLoading: state.global.isLoading,
     };
 };
 
