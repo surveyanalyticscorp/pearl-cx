@@ -22,13 +22,10 @@ import {
     addTicket, clearDetractorTicketDetails,
     getClosedLoopOwnerDetails,
     getClosedLoopSegmentDetails,
-    getDashboardContent,
 } from '../../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import {addClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
 import {showErrorFlashMessage, validateEmail} from '../../../Utils/Utility';
-import moment from 'moment';
-import {DMYFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
 import {StackActions} from '@react-navigation/native';
 
 function CreateTicket(props) {
@@ -97,14 +94,6 @@ function CreateTicket(props) {
             setCallOwnerAPI(false)
         }
     },[segment]);
-
-    let getDashboardData = () => {
-        let data = {
-            startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-            endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
-        };
-        props.getDashboardContent(props.authToken, data);
-    };
 
     let renderCustomerEmail = () => {
         return <View>
@@ -276,6 +265,7 @@ function CreateTicket(props) {
                 setLoading(false);
                 let pushAction = StackActions.replace(props.route.params.parentRoute);
                 props.navigation.dispatch(pushAction);
+                props.clearTicketDetails()
             }, (error) => {
                 setLoading(false);
                 showErrorFlashMessage(error)
@@ -337,7 +327,6 @@ const mapStateToProps = state => {
         ticket: state.dashboard.ticketDetails,
         segments: state.dashboard.segmentDetails.segments,
         owners:  state.dashboard.ownerDetails.owners,
-        range: state.global.range,
         storeId: state.dashboard.dashboardData.primaryStoreId
     };
 };
@@ -348,9 +337,6 @@ const mapDispatchToProps = dispatch => ({
     },
     getClosedLoopOwners: (token,params) => {
         dispatch(getClosedLoopOwnerDetails(token,params))
-    },
-    getDashboardContent: (token, data) => {
-        dispatch(getDashboardContent(token, data));
     },
     clearTicketDetails: () => {
         dispatch(clearDetractorTicketDetails())

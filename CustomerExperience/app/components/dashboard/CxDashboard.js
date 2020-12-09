@@ -35,56 +35,45 @@ const wait = timeout => {
 };
 
 const CxDashboard = props => {
-    let [callApi, setCallAPI] = useState(false);
     let [refreshing, setRefreshing] = useState(false);
     let [comparision, setComparision] = useState(false);
     let [exitAlert, showExitAlert] = useState(false);
 
-    let prevRangeRef = usePrevious(props.range);
-    let ticketRef = usePrevious(props.dashboardData.detractorTicketsCount);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        setCallAPI(true);
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
     useEffect(() => {
+        const unsubscribe = props.navigation.addListener('focus', () => {
+            if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate)) {
+                let selectedRange = getSelectedRange({type:1});
+                props.setRange({
+                    type: 1,
+                    startDate: selectedRange.startDate,
+                    endDate: selectedRange.endDate
+                });
+                let data = {
+                    startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
+                    endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT)
+                };
+                props.getDashboardContent(props.authToken, data);
+            } else {
+                getDashboardData();
+            }
+        });
+
+        return unsubscribe;
+    }, [props.navigation, props.range]);
+
+    useEffect(() => {
 
         BackHandler.addEventListener("hardwareBackPress", handleBackPress);
-
-        if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate)) {
-            let selectedRange = getSelectedRange({type:1});
-            props.setRange({
-                type: 1,
-                startDate: selectedRange.startDate,
-                endDate: selectedRange.endDate
-            });
-            let data = {
-                startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
-                endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT)
-            };
-            props.getDashboardContent(props.authToken, data);
-        } else {
-            getDashboardData();
-        }
         return function cleanup() {
             BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
         };
     },[]);
-
-    useEffect(() => {
-        if(prevRangeRef && prevRangeRef !== props.range) {
-            getDashboardData();
-        }
-    },[props.range]);
-
-    useEffect(() => {
-        if (callApi && StringUtils.isNotEmpty(props.range.startDate)) {
-            getDashboardData();
-            setCallAPI(false);
-        }
-    }, [callApi]);
 
     useEffect(() => {
         if(comparision) {
@@ -94,9 +83,6 @@ const CxDashboard = props => {
     },[comparision]);
 
     useEffect(() => {
-        if(ticketRef && ticketRef !== props.dashboardData.detractorTicketsCount) {
-            setCallAPI(false);
-        }
         if(props.dashboardData.detractorTicketsCount){
             props.showLoading(false);
         }
@@ -297,9 +283,7 @@ const CxDashboard = props => {
                 <FilterHeader actionOnArrowClick = {() => {
                     setComparision(true)
                 }}
-                              callDataAPI = {() => {
-                                  setCallAPI(true)
-                              }}
+                              callDataAPI = {() => {}}
                               {...props}
                 />
                 <ScrollView

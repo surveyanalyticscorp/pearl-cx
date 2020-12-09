@@ -21,14 +21,12 @@ import {
     clearDetractorTicketDetails,
     getClosedLoopOwnerDetails,
     getClosedLoopSegmentDetails,
-    getDashboardContent, updateTicket,
+    updateTicket,
 } from '../../../redux/actions/dashboard.actions';
 import ArrayUtils from '../../../Utils/ArrayUtils';
 import StringUtils from '../../../Utils/StringUtils';
 import {updateClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
 import QPSpinner from '../../../widgets/QPSpinner';
-import moment from 'moment';
-import {DMYFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
 import {showErrorFlashMessage} from '../../../Utils/Utility';
 
 function UpdateTicket(props) {
@@ -97,14 +95,6 @@ function UpdateTicket(props) {
             setCallOwnerAPI(false)
         }
     },[segment]);
-
-    let getDashboardData = () => {
-        let data = {
-            startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-            endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
-        };
-        props.getDashboardContent(props.authToken, data);
-    };
 
     let setDataOnSelection = (header, options, selectedIndex) => {
         StringUtils.isNotEmpty(validationError) && setValidationError('');
@@ -267,7 +257,6 @@ function UpdateTicket(props) {
                 if(props.route.params.parentRoute === 'Dashboard') {
                     props.navigation.navigate('Dashboard');
                     props.navigation.push('Closed Loop');
-                    getDashboardData();
                     props.clearTicketDetails();
                 } else {
                     props.navigation.navigate('Responses');
@@ -338,7 +327,6 @@ const mapStateToProps = state => {
         ticket: state.dashboard.ticketDetails,
         segments: state.dashboard.segmentDetails.segments,
         owners:  state.dashboard.ownerDetails.owners,
-        range: state.global.range
     };
 };
 
@@ -348,9 +336,6 @@ const mapDispatchToProps = dispatch => ({
     },
     getClosedLoopOwners: (token,params) => {
         dispatch(getClosedLoopOwnerDetails(token,params))
-    },
-    getDashboardContent: (token, data) => {
-        dispatch(getDashboardContent(token, data));
     },
     clearTicketDetails: () => {
         dispatch(clearDetractorTicketDetails())
