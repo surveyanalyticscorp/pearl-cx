@@ -59,11 +59,6 @@ function SearchFeedback(props) {
         );
     };
 
-    const onEndReached = () => {
-        // pagination
-    };
-
-
     let renderFeedback = () => {
         return (
             <View style={styles.container}>
@@ -161,7 +156,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.accent,
         alignItems: "center",
         justifyContent: 'space-between',
-        paddingTop: 1.5*PaddingConstants.tab4
+        paddingTop: 1.3*PaddingConstants.tab4
 
     },
     leftHeaderButton: {

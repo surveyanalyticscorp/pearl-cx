@@ -14,7 +14,7 @@ import {getDashboardContent} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
-import {isObjectEmpty, usePrevious} from '../../Utils/Utility';
+import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';

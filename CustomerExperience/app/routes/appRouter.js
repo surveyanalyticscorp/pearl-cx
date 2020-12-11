@@ -60,7 +60,6 @@ const AppRouter = props => {
     const authToken = useSelector(state => state.global.authToken);
     const userInfo = useSelector(state => state.global.userInfo);
     const dynamicLink = useSelector(state => state.global.dynamicLink);
-
     let [isAppActive, setAppActiveState] = useState(false);
     let ref = useRef();
 
@@ -84,10 +83,10 @@ const AppRouter = props => {
             Notifications.postLocalNotification({
                 body: remoteMessage.notification.body,
                 title: remoteMessage.notification.title,
-                //type: remoteMessage.data.type
+                data: remoteMessage.data
             }, parseInt(remoteMessage.messageId));
         });
-        addNotificationListeners(props.dispatch);
+        addNotificationListeners(ref);
         return () => {
             unsubscribeLinks();
             unsubscribeNotifications()

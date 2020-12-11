@@ -5,66 +5,42 @@ import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
-import {isObjectEmpty, showErrorFlashMessage} from '../Utils/Utility';
+import {showErrorFlashMessage} from '../Utils/Utility';
 import {showLoading} from '../redux/actions';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {apiHandler} from '../api/ApiHandler';
-import {clearDetractorTicketDetails, getDetractorTicketDetails} from '../redux/actions/dashboard.actions';
+import moment from 'moment';
+import {HalfMonthDateYearFormat} from '../Utils/AppConstants';
+import QPSpinner from '../widgets/QPSpinner';
 
 
-function Notification(props) {
+export default function Notification(props) {
 
     let [list, setList] = useState([]);
-
-    /**
-     *
-     * {
-        "emailAddress": "a@b.com",
-        "data": "ticketID: 123, responseId: 123",
-        "notificationText": "new ticket is created from :",
-        "responseID": 0,
-        "timestamp":'Nov 3, 2020'
-    },{
-        "emailAddress": "a@b.com",
-        "data": "ticketID: 123, responseId: 123",
-        "notificationText": "new ticket is created from :",
-        "responseID": 0,
-        "timestamp": 'Nov 3, 2020'
-
-    }*/
+    const isLoading = useSelector(state => state.global.isLoading);
+    const authToken = useSelector(state => state.global.authToken);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        props.showLoading(true);
-        apiHandler.getNotificationData({'Auth-Token': props.authToken}, (response) => {
+        dispatch(showLoading(true));
+        apiHandler.getNotificationData({'Auth-Token': authToken}, (response) => {
             setList(response.notificationLogs);
-            props.showLoading(false);
+            dispatch(showLoading(false))
         }, (error) => {
             showErrorFlashMessage(error.errorAlert);
-            props.showLoading(false);
+            dispatch(showLoading(false));
         })
     },[]);
 
-    let onBackPress = () => {
-        props.clearTicketDetails();
-    };
-
-    useEffect(() => {
-        if (!isObjectEmpty(props.ticketDetails)) {
-            props.navigation.navigate('Ticket Details', {item: props.ticketDetails, onBackPress: onBackPress, parentRoute: 'Dashboard'});
-        }
-    }, [props.ticketDetails]);
-
     let viewTicket = (ticketID) => {
-        let params = {
-            'ticketID': ticketID,
-        };
-        props.getTicketDetails(props.authToken, params);
+        props.navigation.navigate('Ticket Details', {ticketID: ticketID, parentRoute: 'Dashboard'});
     };
 
     let renderRow = ({item}) => {
+        let time = moment(item.timestamp).format(HalfMonthDateYearFormat);
         return <TouchableWithoutFeedback onPress={() => {
             let object = JSON.parse(item.data);
-            //viewTicket(object.ticketID)
+            viewTicket(object.CXTicket)
         }}>
             <View style={styles.row}>
                 <Image
@@ -76,47 +52,35 @@ function Notification(props) {
                         <Text style={styles.regularFont}>{item.notificationText}</Text>
                         <Text style={styles.boldFont}> {item.emailAddress}</Text>
                     </Text>
-                    <Text style={styles.subtitle}>{item.timestamp}</Text>
+                    <Text style={styles.subtitle}>{time}</Text>
                 </View>
             </View>
         </TouchableWithoutFeedback>
     };
 
+    let renderSpinner = () => {
+        return (
+            <View style={styles.loading}>
+                <QPSpinner />
+            </View>
+        )
+    };
 
-    return (
+    let renderContainer = () => {
+        return <FlatList
+            data={list}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderRow}
+            ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
+        />
+    };
+
+    return(
         <View style={styles.container}>
-            <FlatList
-                data={list}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={renderRow}
-                ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
-            />
+            {isLoading ? renderSpinner() : renderContainer()}
         </View>
     )
 }
-
-const mapStateToProps = state => {
-    return {
-        ticketDetails: state.dashboard.ticketDetails,
-        authToken: state.global.authToken,
-        isLoading: state.global.isLoading,
-    };
-};
-
-const mapDispatchToProps = dispatch => ({
-    showLoading: (flag) => {
-        dispatch(showLoading(flag));
-    },
-    getTicketDetails: (token, params) => {
-        dispatch(getDetractorTicketDetails(token, params));
-    },
-    clearTicketDetails: () => {
-        dispatch(clearDetractorTicketDetails());
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Notification);
-
 
 const styles = StyleSheet.create({
     container: {
@@ -153,6 +117,14 @@ const styles = StyleSheet.create({
         width: 1.2*MarginConstants.tab3,
         height: 1.2*MarginConstants.tab3,
         color: Colors.accent
-    }
-
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });

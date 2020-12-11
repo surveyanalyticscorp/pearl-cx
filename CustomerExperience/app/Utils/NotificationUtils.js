@@ -4,8 +4,6 @@ import {ASYNC_PUSH_TOKEN} from '../api/Constant';
 import {isStringNullOrEmpty} from './Utility';
 import {Notifications} from 'react-native-notifications';
 import {AppState} from 'react-native';
-import {getDetractorTicketDetails} from '../redux/actions/dashboard.actions';
-import {CommonActions} from '@react-navigation/native';
 
 async function requestUserPermission() {
     try {
@@ -39,7 +37,7 @@ export async function checkNotificationPermission() {
     }
 }
 
-export function addNotificationListeners(dispatch) {
+export function addNotificationListeners(navigation) {
 
     messaging().setBackgroundMessageHandler(async remoteMessage => {
         console.log('Message handled in the background!', remoteMessage);
@@ -47,7 +45,7 @@ export function addNotificationListeners(dispatch) {
 
     messaging().onNotificationOpenedApp(remoteMessage => {
         console.log('Notification caused app to open from background state:', remoteMessage.notification);
-        // Call action type
+        actionOnNotification(remoteMessage.data.CXTicket)
     });
 
     messaging()
@@ -55,7 +53,7 @@ export function addNotificationListeners(dispatch) {
         .then(remoteMessage => {
             if (remoteMessage) {
                 console.log('Notification caused app to open from quit state:', remoteMessage.notification,);
-                // Call action type
+                actionOnNotification(remoteMessage.data.CXTicket, navigation)
             }
         });
 
@@ -67,18 +65,17 @@ export function addNotificationListeners(dispatch) {
     Notifications.events().registerNotificationOpened((notification: Notification, completion) => {
         console.log(`Notification opened here: ${notification.payload}`);
         if(AppState.currentState === "active") {
-            // Call action type
+            actionOnNotification(notification.payload.data.CXTicket, navigation)
         }
         completion();
     });
 }
 
-function actionOnNotification(ticketId, dispatch){
-    dispatch(CommonActions.navigate({
-        name: 'Ticket Details',
-        params: {
-            ticketID: ticketId,
-            parentRoute: 'Dashboard'
-        }
-    }));
+function actionOnNotification(ticketId, navigation){
+    navigation.current?.navigate('Ticket Details', {
+        ticketID: ticketId,
+        parentRoute: 'Dashboard'
+    });
 }
+
+
