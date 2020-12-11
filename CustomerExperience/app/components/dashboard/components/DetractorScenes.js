@@ -194,7 +194,6 @@ const DetractorScenes = props => {
         return (
                 <View style={dashboardStyles.container}>
                     <FlatList
-                        contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}
                         data={tickets}
                         keyExtractor={item => item.ticketID+''}
                         renderItem={renderRow}

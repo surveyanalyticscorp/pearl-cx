@@ -9,38 +9,18 @@ import StringUtils from '../../../Utils/StringUtils';
 import {FontFamily} from '../../../styles/font.constants';
 import moment from 'moment';
 import {HalfMonthDateYearFormat, YMDFORMAT} from '../../../Utils/AppConstants';
-import {clearDetractorTicketDetails, getDetractorTicketDetails} from '../../../redux/actions/dashboard.actions';
-import {connect} from 'react-redux';
-import {isObjectEmpty} from '../../../Utils/Utility';
 import {Sizes} from '../../../styles/Size.constant';
 import Icomoon from '../../../config/Icons/icon-native';
 import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
-const TicketWidget = props => {
+export default function TicketWidget(props){
 
     let [viewDetails, setViewDetails] = useState(false);
     let time = moment(props.item.timestamp, YMDFORMAT).format(HalfMonthDateYearFormat);
 
-    let onBackPress = () => {
-        props.clearTicketDetails();
-    };
-
-    useEffect(() => {
-        if (!isObjectEmpty(props.ticketDetails)) {
-            props.navigation.navigate('Ticket Details', {item: props.ticketDetails, onBackPress: onBackPress, parentRoute: 'Dashboard'});
-        }
-    }, [props.ticketDetails]);
-
-    let onPress = () => {
-        let params = {
-            'ticketID': props.item.ticketID,
-        };
-        props.getTicketDetails(props.authToken, params);
-    };
-
     useEffect(() => {
         if (viewDetails) {
-            onPress();
+            props.navigation.navigate('Ticket Details', {ticketID: props.item.ticketID, parentRoute: 'Dashboard'});
             setViewDetails(false);
         }
     }, [viewDetails]);
@@ -154,25 +134,6 @@ const TicketWidget = props => {
 
     return renderTicketContainer();
 };
-
-const mapStateToProps = state => {
-    return {
-        ticketDetails: state.dashboard.ticketDetails,
-        authToken: state.global.authToken,
-        isLoading: state.global.isLoading,
-    };
-};
-
-const mapDispatchToProps = dispatch => ({
-    getTicketDetails: (token, params) => {
-        dispatch(getDetractorTicketDetails(token, params));
-    },
-    clearTicketDetails: () => {
-        dispatch(clearDetractorTicketDetails());
-    },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(TicketWidget);
 
 const styles = StyleSheet.create({
     ticketContainer: {

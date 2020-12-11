@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import SafeAreaView from "react-native-safe-area-view";
 import {
     View,
@@ -16,10 +16,25 @@ import {FontFamily} from '../../../styles/font.constants';
 import StringUtils from '../../../Utils/StringUtils';
 import {Sizes} from '../../../styles/Size.constant';
 import Icomoon from '../../../config/Icons/icon-native';
+import {clearDetractorTicketDetails, getDetractorTicketDetails} from '../../../redux/actions/dashboard.actions';
+import {connect} from 'react-redux';
+import QPSpinner from '../../../widgets/QPSpinner';
+import {isObjectEmpty} from '../../../Utils/Utility';
 
-export default function TicketOverview(props) {
+function TicketOverview(props) {
 
-    let ticket = props.route.params.data;
+    let onBackPress = () => {
+        props.clearTicketDetails();
+    };
+
+    useEffect(() => {
+        let params = {
+            'ticketID': props.route.params.ticketID,
+        };
+        props.getTicketDetails(props.authToken, params);
+        props.navigation.dangerouslyGetParent().setParams({'onBackPress': onBackPress});
+    },[]);
+
 
     let getIconName = (nps) => {
         switch (true) {
@@ -48,7 +63,7 @@ export default function TicketOverview(props) {
     };
 
     let getPriority = () => {
-        switch (ticket.priority) {
+        switch (props.ticketDetails.priority) {
             case 0:
                 return 'Low';
             case 1:
@@ -61,7 +76,7 @@ export default function TicketOverview(props) {
     };
 
     let getStatus = () => {
-        switch (ticket.status) {
+        switch (props.ticketDetails.status) {
             case 0:
                 return 'New';
             case 1:
@@ -74,27 +89,33 @@ export default function TicketOverview(props) {
     };
 
     let renderNPS = () => {
-        let iconName = getIconName(parseInt(ticket.rating));
-        console.log(props);
-        return (
-            <View style={[styles.responseIdContainer,{paddingHorizontal: PaddingConstants.tab1}]}>
-                <Text style={styles.rowText}> NPS: </Text>
-                {StringUtils.isNotEmpty(iconName) && <Icomoon name={iconName} size={Sizes.inlineIcons} color={Colors.secondary} style={{marginHorizontal: MarginConstants.tab1}}/>}
-                <Text style={styles.npsText}>{ticket.rating}</Text>
-            </View>
-        )
+        let ticket = props.ticketDetails;
+        if(!isObjectEmpty(ticket)) {
+            let iconName = getIconName(parseInt(ticket.rating));
+            return (
+                <View style={[styles.responseIdContainer,{paddingHorizontal: PaddingConstants.tab1}]}>
+                    <Text style={styles.rowText}> NPS: </Text>
+                    {StringUtils.isNotEmpty(iconName) && <Icomoon name={iconName} size={Sizes.inlineIcons} color={Colors.secondary} style={{marginHorizontal: MarginConstants.tab1}}/>}
+                    <Text style={styles.npsText}>{ticket.rating}</Text>
+                </View>
+            )
+        }
+        return null
     };
 
     let renderTicketPriority = () => {
-        let priority = getPriority();
-        return (
-            <View style={[styles.responseIdContainer,{paddingHorizontal: PaddingConstants.tab1}]}>
-                <Text style={styles.rowText}> Priority </Text>
-                <View style={[styles.ticketStatusView, {backgroundColor: getPriorityColor(priority)}]}>
-                    <Text style={[styles.ticketStatusText,{color: priority === 'Medium' ? Colors.primary : Colors.white}]}>{priority}</Text>
+        if(!isObjectEmpty(props.ticketDetails)) {
+            let priority = getPriority();
+            return (
+                <View style={[styles.responseIdContainer, {paddingHorizontal: PaddingConstants.tab1}]}>
+                    <Text style={styles.rowText}> Priority </Text>
+                    <View style={[styles.ticketStatusView, {backgroundColor: getPriorityColor(priority)}]}>
+                        <Text
+                            style={[styles.ticketStatusText, {color: priority === 'Medium' ? Colors.primary : Colors.white}]}>{priority}</Text>
+                    </View>
                 </View>
-            </View>
-        )
+            )
+        }
     };
 
     let renderRow = (header, value) => {
@@ -107,44 +128,61 @@ export default function TicketOverview(props) {
     };
 
     let renderResponseIdView = () => {
-        let flag = ticket.responseID > 0 && props.route.params.parentRoute !== 'Responses';
-        return (
-            <View style={styles.responseIdContainer}>
-                {renderRow('Response ID', ticket.responseID)}
-                {flag && <TouchableWithoutFeedback onPress={() => {
-                    alert('navigate to response')
-                }}>
-                    <View style={styles.viewResponseContainer}>
-                        <Text style={styles.viewResponseText}>View Response</Text>
-                    </View>
-                </TouchableWithoutFeedback> }
-            </View>
-        )
+        if(!isObjectEmpty(props.ticketDetails)){
+            let flag = props.ticketDetails.responseID > 0 && props.route.params.parentRoute !== 'Responses';
+            return (
+                <View style={styles.responseIdContainer}>
+                    {renderRow('Response ID', props.ticketDetails.responseID)}
+                    {flag && <TouchableWithoutFeedback onPress={() => {
+                        alert('navigate to response')
+                    }}>
+                        <View style={styles.viewResponseContainer}>
+                            <Text style={styles.viewResponseText}>View Response</Text>
+                        </View>
+                    </TouchableWithoutFeedback> }
+                </View>
+            )
+        }
+        return null
     };
 
     let renderCustomerComment = () => {
-        return (
-            <Text style={styles.commentContainer}>
-                <Text style={styles.rowText}>Customer Comments:</Text>
-                <Text style={styles.rowValue}> {ticket.comment}</Text>
-            </Text>
-        )
+        if(!isObjectEmpty(props.ticketDetails)) {
+            return (
+                <Text style={styles.commentContainer}>
+                    <Text style={styles.rowText}>Customer Comments:</Text>
+                    <Text style={styles.rowValue}> {props.ticketDetails.comment}</Text>
+                </Text>
+            )
+        }
+        return null
     };
 
     let renderTicketInfoView = () => {
-        let date = moment(ticket.timestamp).format('MMM DD, YYYY');
+        if(!isObjectEmpty(props.ticketDetails)) {
+            let date = moment(props.ticketDetails.timestamp).format('MMM DD, YYYY');
+            return (
+                <View style={styles.container}>
+                    {renderResponseIdView()}
+                    {renderTicketPriority()}
+                    {renderRow('Status:', getStatus())}
+                    {renderRow('Customer Email:', props.ticketDetails.emailAddress)}
+                    {renderNPS()}
+                    {renderRow('Origin Segment:', props.ticketDetails.originSegment.name)}
+                    {renderRow('Current Segment:', props.ticketDetails.currentSegment.name)}
+                    {renderRow('Ticket Owner:', props.ticketDetails.ticketOwner)}
+                    {renderRow('Created On:', date)}
+                    {renderCustomerComment()}
+                </View>
+            )
+        }
+        return null
+    };
+
+    let renderSpinner = () => {
         return (
-            <View style={styles.container}>
-                {renderResponseIdView()}
-                {renderTicketPriority()}
-                {renderRow('Status:', getStatus())}
-                {renderRow('Customer Email:', ticket.emailAddress)}
-                {renderNPS()}
-                {renderRow('Origin Segment:', ticket.originSegment.name)}
-                {renderRow('Current Segment:', ticket.currentSegment.name)}
-                {renderRow('Ticket Owner:', ticket.ticketOwner)}
-                {renderRow('Created On:', date)}
-                {renderCustomerComment()}
+            <View style={styles.loading}>
+                <QPSpinner />
             </View>
         )
     };
@@ -153,12 +191,31 @@ export default function TicketOverview(props) {
         <SafeAreaView forceInset={{bottom: 'never'}} style={styles.safeArea}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.safeArea}>
-                    {renderTicketInfoView()}
+                    {props.isLoading ? renderSpinner() : renderTicketInfoView()}
                 </View>
             </ScrollView>
         </SafeAreaView>
     )
 }
+
+const mapStateToProps = state => {
+    return {
+        ticketDetails: state.dashboard.ticketDetails,
+        authToken: state.global.authToken,
+        isLoading: state.global.isLoading,
+    };
+};
+
+const mapDispatchToProps = dispatch => ({
+    getTicketDetails: (token, params) => {
+        dispatch(getDetractorTicketDetails(token, params));
+    },
+    clearTicketDetails: () => {
+        dispatch(clearDetractorTicketDetails());
+    },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TicketOverview);
 
 const styles = StyleSheet.create({
     safeArea: {
@@ -222,11 +279,21 @@ const styles = StyleSheet.create({
         color: Colors.secondary,
         fontSize: TextSizes.secondary,
         marginHorizontal: MarginConstants.tab1,
+        paddingRight: PaddingConstants.halfTab,
     },
     commentContainer: {
         margin: MarginConstants.tab1,
         paddingHorizontal: PaddingConstants.halfTab,
         marginBottom: MarginConstants.tab2,
-    }
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 
 });

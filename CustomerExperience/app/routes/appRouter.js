@@ -87,7 +87,7 @@ const AppRouter = props => {
                 //type: remoteMessage.data.type
             }, parseInt(remoteMessage.messageId));
         });
-        addNotificationListeners();
+        addNotificationListeners(props.dispatch);
         return () => {
             unsubscribeLinks();
             unsubscribeNotifications()
@@ -263,9 +263,9 @@ const AppRouter = props => {
                                 lazy
                                 keyboardDismissMode={'auto'}
         >
-            <TicketLogTab.Screen name="Overview" component={TicketOverview} initialParams={{data: props.route.params.item, parentRoute: props.route.params.parentRoute}}/>
-            <TicketLogTab.Screen name="Comments" component={TicketComments} initialParams={{data: props.route.params.item, parentRoute: props.route.params.parentRoute}}/>
-            <TicketLogTab.Screen name="Logs" component={TicketComments} initialParams={{data: props.route.params.item, parentRoute: props.route.params.parentRoute}}/>
+            <TicketLogTab.Screen name="Overview" component={TicketOverview} initialParams={{ticketID: props.route.params.ticketID, parentRoute: props.route.params.parentRoute}}/>
+            <TicketLogTab.Screen name="Comments" component={TicketComments} initialParams={{ticketID: props.route.params.ticketID, parentRoute: props.route.params.parentRoute}}/>
+            <TicketLogTab.Screen name="Logs" component={TicketComments} initialParams={{ticketID: props.route.params.ticketID, parentRoute: props.route.params.parentRoute}}/>
         </TicketLogTab.Navigator>
     );
 

@@ -4,6 +4,8 @@ import {ASYNC_PUSH_TOKEN} from '../api/Constant';
 import {isStringNullOrEmpty} from './Utility';
 import {Notifications} from 'react-native-notifications';
 import {AppState} from 'react-native';
+import {getDetractorTicketDetails} from '../redux/actions/dashboard.actions';
+import {CommonActions} from '@react-navigation/native';
 
 async function requestUserPermission() {
     try {
@@ -37,7 +39,7 @@ export async function checkNotificationPermission() {
     }
 }
 
-export function addNotificationListeners() {
+export function addNotificationListeners(dispatch) {
 
     messaging().setBackgroundMessageHandler(async remoteMessage => {
         console.log('Message handled in the background!', remoteMessage);
@@ -69,4 +71,14 @@ export function addNotificationListeners() {
         }
         completion();
     });
+}
+
+function actionOnNotification(ticketId, dispatch){
+    dispatch(CommonActions.navigate({
+        name: 'Ticket Details',
+        params: {
+            ticketID: ticketId,
+            parentRoute: 'Dashboard'
+        }
+    }));
 }

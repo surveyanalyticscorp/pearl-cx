@@ -88,7 +88,6 @@ function SearchTicket(props) {
         return (
             <View style={dashboardStyles.container}>
                 <FlatList
-                    contentContainerStyle={{flexGrow: 1, backgroundColor: 'transparent'}}
                     data={responseData}
                     keyExtractor={item => item.ticketID+''}
                     renderItem={renderRow}
@@ -192,6 +191,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
+        backgroundColor: Colors.white,
     },
     headerContainer: {
         width:'100%',
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.accent,
         alignItems: "center",
         justifyContent: 'space-between',
-        paddingTop: 1.5*PaddingConstants.tab4
+        paddingTop: 1.3*PaddingConstants.tab4
 
     },
     leftHeaderButton: {

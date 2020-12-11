@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, StyleSheet, Text, TouchableWithoutFeedback, useWindowDimensions, View} from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
-import {StackActions} from '@react-navigation/native';
 import {Colors} from '../../styles/color.constants';
 import {clearError, setError, setRangeFilter} from '../../redux/actions';
 import {connect} from 'react-redux';
@@ -189,12 +188,11 @@ const renderFeedbackScene = (props) => {
     },[sortingText]);
 
     const _onPressRow = (data) => {
-        const pushAction = StackActions.push('Feedback Details', {
+        props.navigation.navigate('Feedback Details', {
             data: data,
             ticketStatus: feedbackForm.ticketStatus,
             token: feedbackForm.token
-        });
-        props.navigation.dispatch(pushAction);
+        })
     };
 
     let setResponseSorter = (value) => {
@@ -261,10 +259,12 @@ const renderFeedbackScene = (props) => {
     let getData = () => {
         if(props.route.params.screenName === 'All') {
             let data = [...feedbackForm.feedbackData];
-            sortData(data)
+            //sortData(data)
+            setList(data)
         } else {
             let data = [...feedbackForm.feedbackData.filter(res => res.sentiment === props.route.params.screenName)]
-            sortData(data)
+            //sortData(data)
+            setList(data)
         }
     };
 

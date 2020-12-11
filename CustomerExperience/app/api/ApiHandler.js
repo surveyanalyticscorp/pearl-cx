@@ -42,7 +42,9 @@ class ApiHandler {
 
   getNotificationData(header,successCallback, errorCallback = () => {}){
     return WebServiceHandler.get(CX_GET_NOTIFICATION_LIST, header, {}).then(response => {
-      successCallback(response);
+        if(response && response.statusCode === 200) {
+            successCallback(response.body);
+        }
     })
         .catch(error => {
           errorCallback(error);
