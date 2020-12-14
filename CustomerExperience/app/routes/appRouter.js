@@ -309,6 +309,13 @@ const AppRouter = props => {
                 })}
             />,
             <RootStack.Screen
+                name="Feedback Details"
+                component={FeedbackDetails}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                })}
+            />,
+            <RootStack.Screen
                 key={"Update Ticket"}
                 name="Update Ticket"
                 component={UpdateTicket}
@@ -329,14 +336,6 @@ const AppRouter = props => {
                     headerRight: props => <SearchIcon route={'Feedback'}/>,
                 })}
             />
-            <FeedbackStack.Screen
-                name="Feedback Details"
-                component={FeedbackDetails}
-                options={({ navigation, route }) => ({
-                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                })}
-            />
-
             <FeedbackStack.Screen
                 name="Search Response"
                 component={SearchFeedback}
@@ -376,164 +375,164 @@ const AppRouter = props => {
         </FeedbackStack.Navigator>
     );
 
-        const dashboardStack = props => (
-            <DetractorStack.Navigator>
-                <DetractorStack.Screen
-                    name="Dashboard"
-                    component={CxDashboard}
-                    options={({ navigation, route }) => ({
-                        headerLeft: props => <MenuIcon/>,
-                        headerRight: props => <NotificationIcon />,
-                    })}
-                />
-                <DetractorStack.Screen
-                    name="Closed Loop"
-                    component={DetractorTicketsTabStack}
-                    options={({ navigation, route }) => ({
-                        headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                        headerRight: props => <SearchIcon route={'Dashboard'}/>,
+    const dashboardStack = props => (
+        <DetractorStack.Navigator>
+            <DetractorStack.Screen
+                name="Dashboard"
+                component={CxDashboard}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <MenuIcon/>,
+                    headerRight: props => <NotificationIcon />,
+                })}
+            />
+            <DetractorStack.Screen
+                name="Closed Loop"
+                component={DetractorTicketsTabStack}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                    headerRight: props => <SearchIcon route={'Dashboard'}/>,
 
-                    })}
-                />
-                <DetractorStack.Screen
-                    name="Search Ticket"
-                    component={SearchTicket}
-                    options={({ navigation, route }) => ({
-                        headerShown: false,
-                        headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                    })}
-                />
-                {getCommonScreens(DetractorStack)}
-            </DetractorStack.Navigator>
-        );
+                })}
+            />
+            <DetractorStack.Screen
+                name="Search Ticket"
+                component={SearchTicket}
+                options={({ navigation, route }) => ({
+                    headerShown: false,
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                })}
+            />
+            {getCommonScreens(DetractorStack)}
+        </DetractorStack.Navigator>
+    );
 
-        const dashboardModalStack = props => (
-            <DetractorStack.Navigator mode="modal">
-                <DetractorStack.Screen
-                    name="Dashboard"
-                    component={dashboardStack}
-                    options={({ navigation, route }) => ({ headerShown: false })}
-                />
-                <DetractorStack.Screen
-                    name="Notifications"
-                    component={Notification}
-                    options={({ navigation, route }) => ({
-                        headerLeft: props => <View/>,
-                        headerRight: props => <CloseButton/>
-                    })}
-                />
-                <DetractorStack.Screen
-                    name="New Ticket"
-                    component={CreateTicket}
-                    options={({ navigation, route }) => ({
-                        headerLeft: props => <View/>,
-                        headerRight: props => <CloseButton/>
-                    })}
-                />
-                <DetractorStack.Screen
-                    name="Filter By"
-                    component={TicketFilter}
-                    options={({ navigation, route }) => ({
-                        headerLeft: props => <View/>,
-                        headerRight: props => <CloseButton/>
-                    })}
-                />
+    const dashboardModalStack = props => (
+        <DetractorStack.Navigator mode="modal">
+            <DetractorStack.Screen
+                name="Dashboard"
+                component={dashboardStack}
+                options={({ navigation, route }) => ({ headerShown: false })}
+            />
+            <DetractorStack.Screen
+                name="Notifications"
+                component={Notification}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <View/>,
+                    headerRight: props => <CloseButton/>
+                })}
+            />
+            <DetractorStack.Screen
+                name="New Ticket"
+                component={CreateTicket}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <View/>,
+                    headerRight: props => <CloseButton/>
+                })}
+            />
+            <DetractorStack.Screen
+                name="Filter By"
+                component={TicketFilter}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <View/>,
+                    headerRight: props => <CloseButton/>
+                })}
+            />
 
-            </DetractorStack.Navigator>
-        );
+        </DetractorStack.Navigator>
+    );
 
-        const settingStack = (props) => (
-            <SettingsStack.Navigator>
-                <SettingsStack.Screen
-                    name="Settings"
-                    component={AppSettings}
-                    options={({ navigation, route }) => ({
-                        headerLeft: props => <MenuIcon/>,
-                    })}
-                />
-                <SettingsStack.Screen
-                    name="Account Details"
-                    component={AccountDetails}
-                    options={({ navigation, route }) => ({
-                        headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                    })}
-                />
-            </SettingsStack.Navigator>
-        );
+    const settingStack = (props) => (
+        <SettingsStack.Navigator>
+            <SettingsStack.Screen
+                name="Settings"
+                component={AppSettings}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <MenuIcon/>,
+                })}
+            />
+            <SettingsStack.Screen
+                name="Account Details"
+                component={AccountDetails}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                })}
+            />
+        </SettingsStack.Navigator>
+    );
 
-        let renderSpinner = () => {
-            return (
-                <View style={styles.loading}>
-                    <QPSpinner />
-                </View>
-            )
-        };
-
+    let renderSpinner = () => {
         return (
-            <NavigationContainer theme={MyTheme} ref={ref} fallback={renderSpinner()} linking={linking} >
-                {authToken ? <Drawer.Navigator
-                        drawerStyle={styles.drawerStyle}
-                        drawerContent={props => <DrawerContent {...props} />}>
-                        <Drawer.Screen name="Dashboard" component={dashboardModalStack}/>
-                        <Drawer.Screen name="Responses" component={feedbackModalStack}/>
-                        <Drawer.Screen name="Settings" component={settingStack}/>
-                    </Drawer.Navigator>
-                    :
-                    <SignInStack/>
-                }
-            </NavigationContainer>
-        );
+            <View style={styles.loading}>
+                <QPSpinner />
+            </View>
+        )
     };
 
-    const mapDispatchToProps = dispatch => ({
-        dispatch
-    });
+    return (
+        <NavigationContainer theme={MyTheme} ref={ref} fallback={renderSpinner()} linking={linking} >
+            {authToken ? <Drawer.Navigator
+                    drawerStyle={styles.drawerStyle}
+                    drawerContent={props => <DrawerContent {...props} />}>
+                    <Drawer.Screen name="Dashboard" component={dashboardModalStack}/>
+                    <Drawer.Screen name="Responses" component={feedbackModalStack}/>
+                    <Drawer.Screen name="Settings" component={settingStack}/>
+                </Drawer.Navigator>
+                :
+                <SignInStack/>
+            }
+        </NavigationContainer>
+    );
+};
 
-    export default connect(null, mapDispatchToProps)(AppRouter);
+const mapDispatchToProps = dispatch => ({
+    dispatch
+});
 
-    const styles = StyleSheet.create({
-        drawerStyle: {
-            backgroundColor: Colors.white,
-            elevation: 5,
-            zIndex: 100,
-        },
-        leftHeaderButton: {
-            flexDirection: 'row',
-            marginLeft: 10
-        },
-        rightHeaderButton: {
-            flexDirection: 'row',
-            marginLeft: 20,
-            justifyContent: 'center',
-            alignItems: 'center'
-        },
-        saveText: {
-            color: Colors.white,
-            textAlignVertical:'center',
-            fontSize: TextSizes.primary,
-            fontFamily: FontFamily.regular,
-            paddingTop:5,
-            paddingLeft:5,
-        },
-        loading: {
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
+export default connect(null, mapDispatchToProps)(AppRouter);
 
-    });
+const styles = StyleSheet.create({
+    drawerStyle: {
+        backgroundColor: Colors.white,
+        elevation: 5,
+        zIndex: 100,
+    },
+    leftHeaderButton: {
+        flexDirection: 'row',
+        marginLeft: 10
+    },
+    rightHeaderButton: {
+        flexDirection: 'row',
+        marginLeft: 20,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    saveText: {
+        color: Colors.white,
+        textAlignVertical:'center',
+        fontSize: TextSizes.primary,
+        fontFamily: FontFamily.regular,
+        paddingTop:5,
+        paddingLeft:5,
+    },
+    loading: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 
-    const MyTheme = {
-        dark: false,
-        colors: {
-            background: Colors.darkerGrey,
-            card: Colors.accent,
-            text: Colors.white,
-            notification: Colors.accent,
-            primary: Colors.secondary
-        },
-    };
+});
+
+const MyTheme = {
+    dark: false,
+    colors: {
+        background: Colors.darkerGrey,
+        card: Colors.accent,
+        text: Colors.white,
+        notification: Colors.accent,
+        primary: Colors.secondary
+    },
+};

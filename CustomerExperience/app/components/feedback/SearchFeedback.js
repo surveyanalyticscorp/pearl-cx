@@ -4,23 +4,32 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {Colors} from '../../styles/color.constants';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {Sizes} from '../../styles/Size.constant';
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {MarginConstants} from '../../styles/margin.constants';
 import QPSpinner from '../../widgets/QPSpinner';
 import {StackActions} from '@react-navigation/native';
 import FeedbackCell from './FeedbackCells';
 import {TextSizes} from '../../styles/textsize.constants';
+import moment from 'moment';
+import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
+import {apiHandler} from '../../api/ApiHandler';
+import {showErrorFlashMessage} from '../../Utils/Utility';
+import ArrayUtils from '../../Utils/ArrayUtils';
 
-function SearchFeedback(props) {
+export default function SearchFeedback(props) {
+    const authToken = useSelector(state => state.global.authToken);
+    const range = useSelector(state => state.global.range);
 
     let [searchText, onChangeText] = useState('');
     let [responseData, setResponseData] = useState([]);
     let [showLoader, setShowLoader] = useState(false);
+    let [ticketStatus, setTicketStatus] = useState([]);
+
     let pageCount = useRef("-1");
 
     useEffect(() => {
         if(showLoader) {
-            // call API
+            getFeedbackData()
         }
     },[responseData]);
 
@@ -29,6 +38,33 @@ function SearchFeedback(props) {
             setResponseData([])
         }
     },[showLoader]);
+
+    let getFeedbackData = () => {
+        let count = parseInt(pageCount.current) + 1 + '';
+        pageCount.current = count;
+        const data = {
+            pageOffset: count,
+            sentiment: 'All',
+            startDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
+            endDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
+            searchText: searchText
+        };
+        apiHandler.getFeedbackResponseList(authToken, data, (response) => {
+            showLoader && setShowLoader(false);
+            if(response.body && response.body.allResponses && ArrayUtils.isNotEmpty(response.body.allResponses)) {
+                let data = ArrayUtils.isEmpty(responseData) ? response.body.allResponses : [...responseData, ...response.body.allResponses];
+                setTicketStatus(response.body.cxTicketStatusValues);
+                setResponseData(data);
+            }
+        }, (error) => {
+            showLoader && setShowLoader(false);
+            showErrorFlashMessage(error.message)
+        });
+    };
+
+    const onEndReached = () => {
+        getFeedbackData()
+    };
 
     const renderNoDataFound = () => {
         return (
@@ -41,19 +77,19 @@ function SearchFeedback(props) {
     const _onPressRow = (data) => {
         const pushAction = StackActions.push('Feedback Details', {
             data: data,
-            // ticketStatus: feedbackForm.ticketStatus,
-            // token: feedbackForm.token
+            ticketStatus: ticketStatus,
+            token: authToken
         });
         props.navigation.dispatch(pushAction);
     };
 
-    const renderRow = (rowItem) => {
+    const renderRow = ({item}) => {
         return (
             <FeedbackCell
                 item={item}
                 onSelect={() => _onPressRow(item)}
                 origin="List"
-                // ticketStatuses={feedbackForm.ticketStatus}
+                ticketStatuses={ticketStatus}
                 {...props}
             />
         );
@@ -62,7 +98,16 @@ function SearchFeedback(props) {
     let renderFeedback = () => {
         return (
             <View style={styles.container}>
-
+                <FlatList
+                    data={responseData}
+                    keyExtractor={item => item.responseSetID+''}
+                    renderItem={renderRow}
+                    onEndReachedThreshold={0.01}
+                    refreshing={false}
+                    onEndReached={onEndReached}
+                    ListEmptyComponent={renderNoDataFound}
+                    ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
+                />
             </View>
         );
     };
@@ -127,20 +172,6 @@ function SearchFeedback(props) {
     )
 
 }
-
-const mapStateToProps = state => {
-    return {
-        isLoading: state.global.isLoading,
-        authToken: state.global.authToken,
-        range: state.global.range
-    };
-};
-
-const mapDispatchToProps = dispatch => ({
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchFeedback);
-
 
 const styles = StyleSheet.create({
     safeArea: {

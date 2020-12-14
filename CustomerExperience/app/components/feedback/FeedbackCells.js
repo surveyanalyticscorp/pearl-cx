@@ -102,12 +102,13 @@ export default function FeedbackCell(props){
     };
 
     let renderResponseContainer = () => {
+        let flag = props.parentRoute === 'Responses';
         return (
             <View style={styles.responseContainer}>
                 {renderNPSView()}
                 {renderRespondentDetails()}
                 {!disable && <Icon name= 'arrow-right' size={Sizes.icons} color={Colors.secondary} />}
-                {disable && renderCreateOrViewTicket()}
+                {disable && flag && renderCreateOrViewTicket()}
             </View>
         )
     };

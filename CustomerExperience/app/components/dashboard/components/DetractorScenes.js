@@ -116,11 +116,11 @@ const DetractorScenes = props => {
     const renderRow = (rowItem) => {
         let commentText = rowItem.item.comment.replace(/\n/g, " ");
         return (
-                <TicketWidget
-                    comment={commentText}
-                    item={rowItem.item}
-                    {...props}
-                />
+            <TicketWidget
+                comment={commentText}
+                item={rowItem.item}
+                {...props}
+            />
         );
     };
 
@@ -175,52 +175,52 @@ const DetractorScenes = props => {
     };
 
     let renderTicketFilterView = () => {
-      return (
-          <TouchableWithoutFeedback onPress={() => {
-             props.navigation.navigate('Filter By',{setFilter: setTicketFilter, selectedFilter: filterObject.value})
-          }} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
-          >
-          <View style={dashboardStyles.filterView}>
-              <Icon name={'filter'} size={Sizes.filterIcon} color={Colors.primary}/>
-              <Text style={dashboardStyles.filterText}>{filterObject.text}</Text>
-          </View>
-          </TouchableWithoutFeedback>
-      )
+        return (
+            <TouchableWithoutFeedback onPress={() => {
+                props.navigation.navigate('Filter By',{setFilter: setTicketFilter, selectedFilter: filterObject.value})
+            }} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+            >
+                <View style={dashboardStyles.filterView}>
+                    <Icon name={'filter'} size={Sizes.filterIcon} color={Colors.primary}/>
+                    <Text style={dashboardStyles.filterText}>{filterObject.text}</Text>
+                </View>
+            </TouchableWithoutFeedback>
+        )
     };
 
     let renderDetractorTickets = () => {
         let dataCount = props.route.params.dataCount;
         let tickets = responseData[dataCount].data["tickets"];
         return (
-                <View style={dashboardStyles.container}>
-                    <FlatList
-                        data={tickets}
-                        keyExtractor={item => item.ticketID+''}
-                        renderItem={renderRow}
-                        onEndReachedThreshold={0.01}
-                        refreshing={false}
-                        onEndReached={onEndReached}
-                        ListEmptyComponent={renderNoDataFound}
-                        ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
-                        ListHeaderComponent={renderTicketFilterView}
-                    />
-                    <ActionButton
-                        buttonColor= {Colors.accent}
-                        buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
-                        onPress={() => {
-                            props.navigation.navigate('New Ticket',{parentRoute: 'Dashboard'});
-                        }}
-                    />
-                </View>
+            <View style={dashboardStyles.container}>
+                <FlatList
+                    data={tickets}
+                    keyExtractor={item => item.ticketID+''}
+                    renderItem={renderRow}
+                    onEndReachedThreshold={0.01}
+                    refreshing={false}
+                    onEndReached={onEndReached}
+                    ListEmptyComponent={renderNoDataFound}
+                    ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
+                    ListHeaderComponent={renderTicketFilterView}
+                />
+                <ActionButton
+                    buttonColor= {Colors.accent}
+                    buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
+                    onPress={() => {
+                        props.navigation.navigate('New Ticket',{parentRoute: 'Dashboard'});
+                    }}
+                />
+            </View>
         );
     };
 
     let renderSpinner = () => {
-            return (
-                <View style={dashboardStyles.loading}>
-                    <QPSpinner />
-                </View>
-            )
+        return (
+            <View style={dashboardStyles.loading}>
+                <QPSpinner />
+            </View>
+        )
     };
 
     return showLoader ? renderSpinner() : renderDetractorTickets()

@@ -29,6 +29,7 @@ function Feedback(props){
     let [pageOffset, setPageOffset] = useState(0);
     let [pagination, setPagination] = useState(false);
     let [showLoader, setShowLoader] = useState(false);
+    let [sortingText, setSortingText] = useState('Date');
     let prevRangeRef = usePrevious(props.range);
 
     let getFeedbackData = () => {
@@ -40,7 +41,8 @@ function Feedback(props){
                 pageOffset: pageOffset,
                 sentiment: 'All',
                 startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
+                filterText: sortingText.toLowerCase()
             };
             apiHandler.getFeedbackResponseList(props.authToken, data, (response) => {
                 let data = pageOffset === 0 ? [] : [...feedbackData];
@@ -105,6 +107,10 @@ function Feedback(props){
         }
     };
 
+    let setSortText = (text) => {
+        setSortingText(text)
+    };
+
     let renderSpinner = () => {
         return (
             <View style={styles.loading}>
@@ -134,7 +140,9 @@ function Feedback(props){
                     onFeedbackEndReached: onEndReached,
                     onRefresh: onRefresh,
                     range: props.range,
-                    token: props.authToken
+                    token: props.authToken,
+                    sortingText: sortingText,
+                    setSortingText: setSortText
                 }}>
                     <FeedbackTabStack />
                 </FormContext.Provider>
@@ -171,9 +179,8 @@ const renderFeedbackScene = (props) => {
 
     const feedbackForm = useContext(FormContext);
     let [list, setList] = useState(feedbackForm.feedbackData);
-    let [sortingText, setSortingText] = useState('Date');
     let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);
-    let prevSortRef = usePrevious(sortingText);
+    let prevSortRef = usePrevious(feedbackForm.sortingText);
 
     useEffect(() => {
         if(prevFeedbackRef !== feedbackForm.feedbackData) {
@@ -182,32 +189,33 @@ const renderFeedbackScene = (props) => {
     },[feedbackForm.feedbackData]);
 
     useEffect(() => {
-        if(prevSortRef !== sortingText) {
+        if(prevSortRef !== feedbackForm.sortingText) {
             feedbackForm.onRefresh()
         }
-    },[sortingText]);
+    },[feedbackForm.sortingText]);
 
     const _onPressRow = (data) => {
         props.navigation.navigate('Feedback Details', {
             data: data,
             ticketStatus: feedbackForm.ticketStatus,
-            token: feedbackForm.token
+            token: feedbackForm.token,
+            parentRoute: 'Responses'
         })
     };
 
     let setResponseSorter = (value) => {
-        setSortingText(value)
+        feedbackForm.setSortingText(value)
     };
 
     let renderResponseFilterView = () => {
         return (
             <TouchableWithoutFeedback onPress={() => {
-                props.navigation.navigate('Sort By',{setSorter: setResponseSorter, selectedSorter: sortingText})
+                props.navigation.navigate('Sort By',{setSorter: setResponseSorter, selectedSorter: feedbackForm.sortingText})
             }} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
             >
                 <View style={styles.filterView}>
                     <Icon name={'swap-vertical'} size={1.2*Sizes.filterIcon} color={Colors.primary}/>
-                    <Text style={styles.filterText}>{sortingText}</Text>
+                    <Text style={styles.filterText}>{feedbackForm.sortingText}</Text>
                 </View>
             </TouchableWithoutFeedback>
         )
@@ -233,57 +241,32 @@ const renderFeedbackScene = (props) => {
         );
     };
 
-    let sortData = (data) => {
-        let tempData = data;
-        switch (sortingText) {
-            case 'Email':
-                tempData = data.sort((prev, next) => prev.emailAddress.localeCompare(next.emailAddress));
-                setList(tempData);
-                break;
-            case 'Score':
-                tempData = data.sort((prev, next) => prev.answerText.localeCompare(next.answerText));
-                setList(tempData);
-                break;
-            case 'Segment':
-                tempData = data.sort((prev, next) => prev.businessUnitName.localeCompare(next.businessUnitName));
-                setList(tempData);
-                break;
-            default:
-                tempData = data.sort(function(prev,next){
-                    return new Date(next.surveyTakenDate) - new Date(prev.surveyTakenDate);
-                });
-                setList(tempData)
-        }
-    };
-
     let getData = () => {
         if(props.route.params.screenName === 'All') {
             let data = [...feedbackForm.feedbackData];
-            //sortData(data)
             setList(data)
         } else {
-            let data = [...feedbackForm.feedbackData.filter(res => res.sentiment === props.route.params.screenName)]
-            //sortData(data)
+            let data = [...feedbackForm.feedbackData.filter(res => res.sentiment === props.route.params.screenName)];
             setList(data)
         }
     };
 
     let renderFeedbackList = () => {
         return (
-             <FlatList
-                    data={list}
-                    renderItem={_renderRow}
-                    keyExtractor={item => item.responseSetID+''}
-                    onEndReachedThreshold={0}
-                    onEndReached={feedbackForm.onFeedbackEndReached}
-                    refreshing={false}
-                    ListEmptyComponent={renderNoDataFound}
-                    onRefresh={feedbackForm.onRefresh}
-                    extraData={[list]}
-                    contentContainerStyle={styles.container}
-                    ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
-                    ListHeaderComponent={renderResponseFilterView}
-             />
+            <FlatList
+                data={list}
+                renderItem={_renderRow}
+                keyExtractor={item => item.responseSetID+''}
+                onEndReachedThreshold={0}
+                onEndReached={feedbackForm.onFeedbackEndReached}
+                refreshing={false}
+                ListEmptyComponent={renderNoDataFound}
+                onRefresh={feedbackForm.onRefresh}
+                extraData={[list]}
+                contentContainerStyle={styles.container}
+                ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
+                ListHeaderComponent={renderResponseFilterView}
+            />
         );
     };
 
@@ -302,7 +285,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     setError: (error) => {
-      dispatch(setError(error))
+        dispatch(setError(error))
     },
     clearError: () => {
         dispatch(clearError(false));

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import SafeAreaView from "react-native-safe-area-view";
 import {
     View,
@@ -19,9 +19,16 @@ import Icomoon from '../../../config/Icons/icon-native';
 import {clearDetractorTicketDetails, getDetractorTicketDetails} from '../../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import QPSpinner from '../../../widgets/QPSpinner';
-import {isObjectEmpty} from '../../../Utils/Utility';
+import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
+import {DMYFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
+import {apiHandler} from '../../../api/ApiHandler';
+import ArrayUtils from '../../../Utils/ArrayUtils';
 
 function TicketOverview(props) {
+
+    let [showLoader, setShowLoader] = useState(false);
+    let [responseData, setResponseData] = useState([]);
+    let [ticketStatus, setTicketStatus] = useState([]);
 
     let onBackPress = () => {
         props.clearTicketDetails();
@@ -34,7 +41,6 @@ function TicketOverview(props) {
         props.getTicketDetails(props.authToken, params);
         props.navigation.dangerouslyGetParent().setParams({'onBackPress': onBackPress});
     },[]);
-
 
     let getIconName = (nps) => {
         switch (true) {
@@ -127,6 +133,42 @@ function TicketOverview(props) {
         )
     };
 
+    useEffect(() => {
+        if(ArrayUtils.isNotEmpty(responseData)){
+            moveToResponseViewer()
+        }
+    },[responseData]);
+
+    const moveToResponseViewer = () => {
+        props.navigation.navigate('Feedback Details',{
+            data: responseData[0],
+            ticketStatus: ticketStatus,
+            token: props.authToken,
+            parentRoute: 'Dashboard'
+        })
+    };
+
+    let getFeedbackData = () => {
+        const data = {
+            pageOffset: '0',
+            sentiment: 'All',
+            startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+            endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
+            searchText: props.ticketDetails.responseID + ''
+        };
+        apiHandler.getFeedbackResponseList(props.authToken, data, (response) => {
+            if(response.body && response.body.allResponses && ArrayUtils.isNotEmpty(response.body.allResponses)) {
+                setTicketStatus(response.body.cxTicketStatusValues);
+                setResponseData(response.body.allResponses);
+            }
+            setShowLoader(false);
+        }, (error) => {
+            showLoader && setShowLoader(false);
+            showErrorFlashMessage(error.message)
+        });
+    };
+
+
     let renderResponseIdView = () => {
         if(!isObjectEmpty(props.ticketDetails)){
             let flag = props.ticketDetails.responseID > 0 && props.route.params.parentRoute !== 'Responses';
@@ -134,7 +176,8 @@ function TicketOverview(props) {
                 <View style={styles.responseIdContainer}>
                     {renderRow('Response ID', props.ticketDetails.responseID)}
                     {flag && <TouchableWithoutFeedback onPress={() => {
-                        alert('navigate to response')
+                        setShowLoader(true);
+                        getFeedbackData()
                     }}>
                         <View style={styles.viewResponseContainer}>
                             <Text style={styles.viewResponseText}>View Response</Text>
@@ -173,6 +216,7 @@ function TicketOverview(props) {
                     {renderRow('Ticket Owner:', props.ticketDetails.ticketOwner)}
                     {renderRow('Created On:', date)}
                     {renderCustomerComment()}
+                    {showLoader && renderSpinner()}
                 </View>
             )
         }
@@ -203,6 +247,7 @@ const mapStateToProps = state => {
         ticketDetails: state.dashboard.ticketDetails,
         authToken: state.global.authToken,
         isLoading: state.global.isLoading,
+        range: state.global.range
     };
 };
 
