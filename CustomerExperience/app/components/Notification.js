@@ -37,6 +37,8 @@ export default function Notification(props) {
     };
 
     let renderRow = ({item}) => {
+        let imagePath = item.logType === 'U' ? require('../config/images/notification_comment_blue.png') : require('../config/images/notification_ticket_blue.png')
+        let text = item.notificationText.replace(item.emailAddress, '');
         let time = moment(item.timestamp).format(HalfMonthDateYearFormat);
         return <TouchableWithoutFeedback onPress={() => {
             let object = JSON.parse(item.data);
@@ -45,11 +47,11 @@ export default function Notification(props) {
             <View style={styles.row}>
                 <Image
                     style={styles.ticketIcon}
-                    source={require('../config/images/notification_ticket_blue.png')}
+                    source={imagePath}
                 />
                 <View style={styles.rowTextContainer}>
                     <Text style={styles.titleContainer}>
-                        <Text style={styles.regularFont}>{item.notificationText}</Text>
+                        <Text style={styles.regularFont}>{text}</Text>
                         <Text style={styles.boldFont}> {item.emailAddress}</Text>
                     </Text>
                     <Text style={styles.subtitle}>{time}</Text>
@@ -114,9 +116,8 @@ const styles = StyleSheet.create({
         color: Colors.secondary,
     },
     ticketIcon: {
-        width: 1.2*MarginConstants.tab3,
-        height: 1.2*MarginConstants.tab3,
-        color: Colors.accent
+        width: 1.1*MarginConstants.tab3,
+        height: 1.1*MarginConstants.tab3,
     },
     loading: {
         position: 'absolute',

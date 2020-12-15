@@ -669,7 +669,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CustomerExperience/CX.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 0.1;
 				DEVELOPMENT_TEAM = 32Y3X84598;
@@ -680,7 +680,7 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/CustomerExperoence/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -688,7 +688,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.questionpro.cx;
 				PRODUCT_NAME = CX;
-				PROVISIONING_PROFILE_SPECIFIER = QP_CX_Dev;
+				PROVISIONING_PROFILE_SPECIFIER = QP_CX_Productions;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -703,13 +703,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CustomerExperience/CX.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 0.1;
 				DEVELOPMENT_TEAM = 32Y3X84598;
 				INFOPLIST_FILE = "$(SRCROOT)/CustomerExperoence/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -717,7 +717,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.questionpro.cx;
 				PRODUCT_NAME = CX;
-				PROVISIONING_PROFILE_SPECIFIER = QP_CX_Dev;
+				PROVISIONING_PROFILE_SPECIFIER = QP_CX_Productions;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

@@ -242,7 +242,7 @@ function CreateTicket(props) {
             setValidationError('Please select the segment')
         } else {
             let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
-            let selectedOwner = StringUtils.isNotEmpty(owner) ? ownerOptions.find(item => item.ownerName === owner).ownerID : '';
+            let selectedOwner = StringUtils.isNotEmpty(owner) ? ownerOptions.find(item => item.ownerName === owner).ownerID : 0;
 
             let body = {
                 "priorityID": priorityId,

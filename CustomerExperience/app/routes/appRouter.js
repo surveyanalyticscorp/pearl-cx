@@ -310,6 +310,7 @@ const AppRouter = props => {
             />,
             <RootStack.Screen
                 name="Feedback Details"
+                key={"Feedback Details"}
                 component={FeedbackDetails}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
