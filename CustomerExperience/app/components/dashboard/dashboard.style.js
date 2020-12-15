@@ -108,9 +108,9 @@ export const dashboardStyles = StyleSheet.create({
     marginHorizontal: MarginConstants.tab2
   },
   closedLoopView: {
-    justifyContent:'center',
-    alignItems:'center',
-    flexDirection: 'row',
+    // justifyContent:'center',
+    // alignItems:'center',
+    // flexDirection: 'row',
     marginHorizontal: MarginConstants.tab2,
   },
   ticketContainer: {
@@ -190,5 +190,19 @@ export const dashboardStyles = StyleSheet.create({
     color: Colors.primary,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.primary,
+  },
+  filterView: {
+    marginTop: MarginConstants.tab1,
+    justifyContent: 'flex-end',
+    alignItems:'center',
+    paddingHorizontal: PaddingConstants.tab1,
+    flexDirection:'row'
+  },
+  filterText: {
+    color: Colors.accent,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.primary,
+    textAlign: 'center',
+    paddingHorizontal: PaddingConstants.halfTab
   }
 });

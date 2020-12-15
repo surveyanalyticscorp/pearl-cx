@@ -3,7 +3,7 @@ import {fetchDashboard, watchGetDashboard} from '../redux/sagas/dashboardSaga';
 import {DASHBOARD_RECEIVED, GET_DASHBOARD} from '../redux/actions/dashboard.actions';
 
 const mockResponse = {
-  DetractorTicketsCount: {new: 63, pending: 4, resolved: 4, totalTickets: 71},
+  detractorTicketsCount: {new: 63, pending: 4, resolved: 4, totalTickets: 71},
   primaryStoreId: 40305,
   primaryStoreNPS: {
     benchmarkScore: 0,

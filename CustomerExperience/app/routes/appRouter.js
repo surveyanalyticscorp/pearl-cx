@@ -1,9 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {DrawerActions, NavigationContainer, useNavigation} from '@react-navigation/native';
+import {DrawerActions, NavigationContainer, useNavigation, useNavigationState} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
 import DrawerContent from '../routes/DrawerContent';
@@ -35,10 +36,20 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {handleResetPasswordLink} from '../Utils/DeepLinkingUtils';
 import {setDynamicLink} from '../redux/actions';
 import QPSpinner from '../widgets/QPSpinner';
-import {checkNotificationPermission} from '../Utils/NotificationUtils';
+import {addNotificationListeners, checkNotificationPermission} from '../Utils/NotificationUtils';
+import messaging from '@react-native-firebase/messaging';
+import {Notifications} from 'react-native-notifications';
+import Notification from '../components/Notification';
+import CreateTicket from '../components/dashboard/components/CreateTicket';
+import SearchTicket from '../components/dashboard/components/SearchTicket';
+import TicketFilter from '../components/dashboard/components/TicketFilter';
+import FeedbackSorter from '../components/feedback/FeedbackSorter';
+import SearchFeedback from '../components/feedback/SearchFeedback';
 
 const Drawer = createDrawerNavigator();
-const RootStack = createStackNavigator();
+const FeedbackStack = createStackNavigator();
+const DetractorStack = createStackNavigator();
+const SettingsStack = createStackNavigator();
 const DetractorTicketsTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
 
@@ -49,7 +60,6 @@ const AppRouter = props => {
     const authToken = useSelector(state => state.global.authToken);
     const userInfo = useSelector(state => state.global.userInfo);
     const dynamicLink = useSelector(state => state.global.dynamicLink);
-
     let [isAppActive, setAppActiveState] = useState(false);
     let ref = useRef();
 
@@ -58,7 +68,8 @@ const AppRouter = props => {
     };
 
     useEffect(() => {
-        const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+        const unsubscribeLinks = dynamicLinks().onLink(handleDynamicLink);
+        Notifications.registerRemoteNotifications();
         checkNotificationPermission().then({});
         dynamicLinks()
             .getInitialLink()
@@ -67,8 +78,19 @@ const AppRouter = props => {
                     handleDynamicLink(link)
                 }
             });
-
-        return () => unsubscribe();
+        const unsubscribeNotifications = messaging().onMessage(async remoteMessage => {
+            console.log("on message"+JSON.stringify(remoteMessage));
+            Notifications.postLocalNotification({
+                body: remoteMessage.notification.body,
+                title: remoteMessage.notification.title,
+                data: remoteMessage.data
+            }, parseInt(remoteMessage.messageId));
+        });
+        addNotificationListeners(ref);
+        return () => {
+            unsubscribeLinks();
+            unsubscribeNotifications()
+        };
 
     },[]);
 
@@ -126,7 +148,7 @@ const AppRouter = props => {
                             navigation.goBack()
                         }
                     }}>
-                    <Icon name="arrow-left" size={20} color= {Colors.white}/>
+                    <Icon name="arrow-left" size={Sizes.icons} color= {Colors.white}/>
                 </TouchableOpacity>
             </View>
         );
@@ -134,13 +156,63 @@ const AppRouter = props => {
 
     const EditTicket = () => {
         let navigation = useNavigation();
+        const state = useNavigationState(state => state);
         return (
             <View style={[styles.rightHeaderButton,{marginHorizontal: 1.5*MarginConstants.tab1}]}>
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate("Update Ticket");
+                        navigation.navigate("Update Ticket",{parentRoute: state.routeNames[0]});
                     }}>
-                    <FontIcon name={'edit'} size={25} color={Colors.white}/>
+                    <MaterialIcon name={'edit'} size={Sizes.filterIcon} color={Colors.white}/>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    const SearchIcon = (props) => {
+        let navigation = useNavigation();
+        return (
+            <View style={[styles.rightHeaderButton,{marginHorizontal: MarginConstants.tab2}]}>
+                <TouchableOpacity
+                    onPress={() => {
+                        props.route === 'Dashboard' ? navigation.navigate("Search Ticket") : navigation.navigate("Search Response");
+                    }}>
+                    <Icon name={'magnifier'} size={Sizes.icons} color={Colors.white}/>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    const NotificationIcon = () => {
+        let navigation = useNavigation();
+        return (
+            <View style={[styles.rightHeaderButton,{marginHorizontal: MarginConstants.tab2}]}>
+                <TouchableOpacity
+                    hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+                    onPress={() => {
+                        //alert('open notification screen')
+                        navigation.navigate('Notifications')
+                    }}>
+                    <FontIcon name={'bell'} size={1.1*Sizes.icons} color={Colors.white}/>
+                </TouchableOpacity>
+                {/** show unread/badge icon when notification read/unread status comes*/}
+                {/*<View style={{position: 'absolute', top: -2, right: -2}}>*/}
+                {/*<FontIcon name={'circle'} size={12} color={Colors.red}/>*/}
+                {/*</View>*/}
+            </View>
+        );
+    };
+
+    const CloseButton = () => {
+        let navigation = useNavigation();
+        return (
+            <View style={[styles.rightHeaderButton,{marginHorizontal: MarginConstants.tab2}]}>
+                <TouchableOpacity
+                    hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+                    onPress={() => {
+                        navigation.goBack()
+                    }}>
+                    <MaterialIcon name={'close'} size={1.1*Sizes.filterIcon} color={Colors.white}/>
                 </TouchableOpacity>
             </View>
         );
@@ -179,125 +251,214 @@ const AppRouter = props => {
 
     const TicketLogTabStack = props => (
         <TicketLogTab.Navigator tabBarOptions={{
-            labelStyle: {color: Colors.primary, width: width/3, fontSize: TextSizes.semiSecondary},
+            labelStyle: {width: width/3, fontSize: TextSizes.semiSecondary},
             indicatorStyle: {backgroundColor: Colors.accent},
             style:{backgroundColor: Colors.white, width: '100%'},
             initialLayout: {width: Dimensions.get('window').width},
-            tabStyle:{height: 1.5*PaddingConstants.tab4}
+            tabStyle:{height: 1.5*PaddingConstants.tab4},
+            activeTintColor: Colors.accent,
+            inactiveTintColor: Colors.primary,
         }}
                                 lazy
                                 keyboardDismissMode={'auto'}
         >
-            <TicketLogTab.Screen name="Overview" component={TicketOverview} initialParams={{data: props.route.params.item}}/>
-            <TicketLogTab.Screen name="Comments" component={TicketComments} initialParams={{data: props.route.params.item}}/>
-            <TicketLogTab.Screen name="Logs" component={TicketComments} initialParams={{data: props.route.params.item}}/>
+            <TicketLogTab.Screen name="Overview" component={TicketOverview} initialParams={{ticketID: props.route.params.ticketID, parentRoute: props.route.params.parentRoute}}/>
+            <TicketLogTab.Screen name="Comments" component={TicketComments} initialParams={{ticketID: props.route.params.ticketID, parentRoute: props.route.params.parentRoute}}/>
+            <TicketLogTab.Screen name="Logs" component={TicketComments} initialParams={{ticketID: props.route.params.ticketID, parentRoute: props.route.params.parentRoute}}/>
         </TicketLogTab.Navigator>
     );
 
     const DetractorTicketsTabStack = props => (
         <DetractorTicketsTab.Navigator tabBarOptions={{
-            labelStyle: {color: Colors.primary, width: width/3, fontSize: TextSizes.secondary},
+            labelStyle: {width: width/3, fontSize: TextSizes.secondary},
             indicatorStyle: {backgroundColor: Colors.accent},
             style:{backgroundColor: Colors.white, width: '100%'},
             initialLayout: {width: Dimensions.get('window').width},
-            tabStyle:{height: 1.5*PaddingConstants.tab4}
+            tabStyle:{height: 1.5*PaddingConstants.tab4},
+            activeTintColor: Colors.accent,
+            inactiveTintColor: Colors.primary,
         }}
                                        lazy
                                        keyboardDismissMode={'auto'}
         >
             <DetractorTicketsTab.Screen name="New" component={DetractorScenes} initialParams={{ dataCount:0}}/>
             <DetractorTicketsTab.Screen name="Open" component={DetractorScenes} initialParams={{ dataCount:1}}/>
+            <DetractorTicketsTab.Screen name="Escalated" component={DetractorScenes} initialParams={{ dataCount:3}}/>
             <DetractorTicketsTab.Screen name="Resolved" component={DetractorScenes} initialParams={{ dataCount:2}}/>
         </DetractorTicketsTab.Navigator>
     );
 
-    const feedbackStack = props => (
-        <RootStack.Navigator>
+    const getCommonScreens = (RootStack) => {
+        return [
             <RootStack.Screen
-                name="Feedback"
-                component={Feedback}
-                options={({ navigation, route }) => ({
-                    headerLeft: props => <MenuIcon />,
-                })}
-            />
-            <RootStack.Screen
-                name="Feedback Details"
-                component={FeedbackDetails}
-                options={({ navigation, route }) => ({
-                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                })}
-            />
-            <RootStack.Screen
+                key={"Date Range"}
                 name="Date Range"
                 component={DateRangeTabStack}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft />,
                     headerRight: props => <SaveDashboardDate {...props} route={route}/>
                 })}
-            />
-
-        </RootStack.Navigator>
-    );
-
-    const dashboardStack = props => (
-        <RootStack.Navigator>
+            />,
             <RootStack.Screen
-                name="Dashboard"
-                component={CxDashboard}
-                options={({ navigation, route }) => ({
-                    headerLeft: props => <MenuIcon/>,
-                })}
-            />
-            <RootStack.Screen
-                name="Tickets"
-                component={DetractorTicketsTabStack}
-                options={({ navigation, route }) => ({
-                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                })}
-            />
-            <RootStack.Screen
+                key={"Ticket Details"}
                 name="Ticket Details"
                 component={TicketLogTabStack}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                     headerRight: props => route.state && route.state.index !== 0 ? <View/> : <EditTicket />,
                 })}
-            />
+            />,
             <RootStack.Screen
+                name="Feedback Details"
+                key={"Feedback Details"}
+                component={FeedbackDetails}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                })}
+            />,
+            <RootStack.Screen
+                key={"Update Ticket"}
                 name="Update Ticket"
                 component={UpdateTicket}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                 })}
             />
-            <RootStack.Screen
-                name="Date Range"
-                component={DateRangeTabStack}
+        ];
+    };
+
+    const feedbackStack = props => (
+        <FeedbackStack.Navigator>
+            <FeedbackStack.Screen
+                name="Responses"
+                component={Feedback}
                 options={({ navigation, route }) => ({
-                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
-                    headerRight: props => <SaveDashboardDate {...props} route={route}/>
+                    headerLeft: props => <MenuIcon />,
+                    headerRight: props => <SearchIcon route={'Feedback'}/>,
                 })}
             />
-        </RootStack.Navigator>
+            <FeedbackStack.Screen
+                name="Search Response"
+                component={SearchFeedback}
+                options={({ navigation, route }) => ({
+                    headerShown: false,
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                })}
+            />
+            {getCommonScreens(FeedbackStack)}
+        </FeedbackStack.Navigator>
+    );
+
+    const feedbackModalStack = props => (
+        <FeedbackStack.Navigator mode="modal">
+            <FeedbackStack.Screen
+                name="Responses"
+                component={feedbackStack}
+                options={({ navigation, route }) => ({ headerShown: false })}
+            />
+            <FeedbackStack.Screen
+                name="Sort By"
+                component={FeedbackSorter}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <View/>,
+                    headerRight: props => <CloseButton/>
+                })}
+            />
+            <FeedbackStack.Screen
+                name="New Ticket"
+                component={CreateTicket}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <View/>,
+                    headerRight: props => <CloseButton/>
+                })}
+            />
+
+        </FeedbackStack.Navigator>
+    );
+
+    const dashboardStack = props => (
+        <DetractorStack.Navigator>
+            <DetractorStack.Screen
+                name="Dashboard"
+                component={CxDashboard}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <MenuIcon/>,
+                    headerRight: props => <NotificationIcon />,
+                })}
+            />
+            <DetractorStack.Screen
+                name="Closed Loop"
+                component={DetractorTicketsTabStack}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                    headerRight: props => <SearchIcon route={'Dashboard'}/>,
+
+                })}
+            />
+            <DetractorStack.Screen
+                name="Search Ticket"
+                component={SearchTicket}
+                options={({ navigation, route }) => ({
+                    headerShown: false,
+                    headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
+                })}
+            />
+            {getCommonScreens(DetractorStack)}
+        </DetractorStack.Navigator>
+    );
+
+    const dashboardModalStack = props => (
+        <DetractorStack.Navigator mode="modal">
+            <DetractorStack.Screen
+                name="Dashboard"
+                component={dashboardStack}
+                options={({ navigation, route }) => ({ headerShown: false })}
+            />
+            <DetractorStack.Screen
+                name="Notifications"
+                component={Notification}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <View/>,
+                    headerRight: props => <CloseButton/>
+                })}
+            />
+            <DetractorStack.Screen
+                name="New Ticket"
+                component={CreateTicket}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <View/>,
+                    headerRight: props => <CloseButton/>
+                })}
+            />
+            <DetractorStack.Screen
+                name="Filter By"
+                component={TicketFilter}
+                options={({ navigation, route }) => ({
+                    headerLeft: props => <View/>,
+                    headerRight: props => <CloseButton/>
+                })}
+            />
+
+        </DetractorStack.Navigator>
     );
 
     const settingStack = (props) => (
-        <RootStack.Navigator>
-            <RootStack.Screen
+        <SettingsStack.Navigator>
+            <SettingsStack.Screen
                 name="Settings"
                 component={AppSettings}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon/>,
                 })}
             />
-            <RootStack.Screen
+            <SettingsStack.Screen
                 name="Account Details"
                 component={AccountDetails}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                 })}
             />
-        </RootStack.Navigator>
+        </SettingsStack.Navigator>
     );
 
     let renderSpinner = () => {
@@ -313,8 +474,8 @@ const AppRouter = props => {
             {authToken ? <Drawer.Navigator
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
-                    <Drawer.Screen name="Dashboard" component={dashboardStack}/>
-                    <Drawer.Screen name="Feedback" component={feedbackStack}/>
+                    <Drawer.Screen name="Dashboard" component={dashboardModalStack}/>
+                    <Drawer.Screen name="Responses" component={feedbackModalStack}/>
                     <Drawer.Screen name="Settings" component={settingStack}/>
                 </Drawer.Navigator>
                 :
@@ -342,7 +503,9 @@ const styles = StyleSheet.create({
     },
     rightHeaderButton: {
         flexDirection: 'row',
-        marginLeft: 20
+        marginLeft: 20,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     saveText: {
         color: Colors.white,

@@ -1,51 +1,52 @@
-import React, {useEffect, useState} from 'react';
-import SafeAreaView from 'react-native-safe-area-view';
 import {
-    KeyboardAvoidingView,
-    Platform,
     ScrollView,
     StyleSheet,
-    Text,
-    TextInput,
-    TouchableWithoutFeedback,
     View,
+    SafeAreaView,
+    KeyboardAvoidingView,
+    Platform,
+    Text,
+    TextInput, TouchableWithoutFeedback,
 } from 'react-native';
-import {Colors} from '../../../styles/color.constants';
-import {FontFamily} from '../../../styles/font.constants';
+import React, {useEffect, useState} from 'react';
 import {MarginConstants} from '../../../styles/margin.constants';
-import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
+import {Colors} from '../../../styles/color.constants';
+import {TextSizes} from '../../../styles/textsize.constants';
+import {FontFamily} from '../../../styles/font.constants';
+import StringUtils from '../../../Utils/StringUtils';
 import ModalDropdown from '../../../widgets/drop-down/ModalDropdown';
-import {connect} from 'react-redux';
+import ArrayUtils from '../../../Utils/ArrayUtils';
+import QPSpinner from '../../../widgets/QPSpinner';
 import {
-    clearDetractorTicketDetails,
+    addTicket, clearDetractorTicketDetails,
     getClosedLoopOwnerDetails,
     getClosedLoopSegmentDetails,
-    updateTicket,
 } from '../../../redux/actions/dashboard.actions';
-import ArrayUtils from '../../../Utils/ArrayUtils';
-import StringUtils from '../../../Utils/StringUtils';
-import {updateClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
-import QPSpinner from '../../../widgets/QPSpinner';
-import {showErrorFlashMessage} from '../../../Utils/Utility';
+import {connect} from 'react-redux';
+import {addClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
+import {showErrorFlashMessage, validateEmail} from '../../../Utils/Utility';
+import {StackActions} from '@react-navigation/native';
 
-function UpdateTicket(props) {
+function CreateTicket(props) {
+
     let priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
-    let statusOptions = ['New', 'Open', 'Resolved', 'Escalated'];
+    let statusOptions = ['New', 'Open', 'Resolved'];
 
+    let [email, setEmail] = useState('');
     let [comment, setComment] = useState('');
-    let [priority, setPriority] = useState(priorityOptions[props.ticket.priority]);
-    let [status, setStatus] = useState(statusOptions[props.ticket.status]);
+    let [priority, setPriority] = useState(priorityOptions[0]);
+    let [status, setStatus] = useState(statusOptions[0]);
     let [segmentOptions, setSegmentOptions] = useState([]);
-    let [segment, setSegment] = useState(props.ticket.currentSegment.name);
+    let [segment, setSegment] = useState('');
     let [ownerOptions, setOwnerOptions] = useState([]);
-    let [owner, setOwner] = useState(props.ticket.ticketOwner);
+    let [owner, setOwner] = useState('');
     let [validationError, setValidationError] = useState('');
     let [isLoading, setLoading] = useState(false);
     let [callOwnerAPI, setCallOwnerAPI] = useState(false);
 
     let fetchClosedLoopSegments = () => {
-        let statusId = status === 'Escalated' ? 5 : statusOptions.findIndex(item => item === status);
+        let statusId = statusOptions.findIndex(item => item === status);
         let params = {
             "statusID": statusId,
         };
@@ -60,8 +61,6 @@ function UpdateTicket(props) {
                 "segmentID": selectedSegmentId
             };
             props.getClosedLoopOwners(props.authToken, params)
-        } else if (status === 'Escalated' && ArrayUtils.isEmpty(segmentOptions)) {
-            setOwnerOptions([])
         }
     };
 
@@ -96,6 +95,26 @@ function UpdateTicket(props) {
         }
     },[segment]);
 
+    let renderCustomerEmail = () => {
+        return <View>
+            <Text style={styles.emailHeaderText}> Customer Email </Text>
+            <TextInput
+                underlineAndroidColor={'transparent'}
+                autoFocus={false}
+                autoCorrect={false}
+                style={styles.emailText}
+                value={email}
+                placeholder={'Enter email address'}
+                // keyboardType='email-address'
+                onChangeText={text => {
+                    StringUtils.isNotEmpty(validationError) && setValidationError('');
+                    setEmail(text);
+                }}
+            />
+            <View style={styles.separator}/>
+        </View>
+    };
+
     let setDataOnSelection = (header, options, selectedIndex) => {
         StringUtils.isNotEmpty(validationError) && setValidationError('');
         switch (header) {
@@ -118,31 +137,15 @@ function UpdateTicket(props) {
         }
     };
 
-    let renderDropDown = (header, options, defaultText) => {
-        return (
-            <View>
-                <ModalDropdown
-                    style={styles.modelDropdown}
-                    textStyle={styles.dropdownText}
-                    dropdownStyle={styles.dropdownStyle}
-                    dropdownTextStyle={styles.dropdownText}
-                    arrowIconColor={Colors.secondary}
-                    options={options}
-                    defaultValue={defaultText}
-                    renderRow={dropdownRenderRow}
-                    onSelect={(i) => {
-                        setDataOnSelection(header, options, i)
-                    }}
-                />
-            </View>
-        )
+    let renderValidationError = () => {
+        return <Text style={styles.error}>{validationError}</Text>;
     };
 
     let renderField = (header, options, defaultText) => {
         return (
             <View style={styles.row}>
                 <Text style={styles.rowText}> {header} </Text>
-                <View style={{position:'absolute', justifyContent: 'center', alignItems: 'center', right:10}}>
+                <View style={styles.dropdownContainer}>
                     {renderDropDown(header, options, defaultText)}
                 </View>
             </View>
@@ -163,6 +166,26 @@ function UpdateTicket(props) {
         return []
     };
 
+    let renderDropDown = (header, options, defaultText) => {
+        return (
+            <View>
+                <ModalDropdown
+                    style={styles.modelDropdown}
+                    textStyle={styles.dropdownText}
+                    dropdownStyle={styles.dropdownStyle}
+                    dropdownTextStyle={styles.dropdownText}
+                    arrowIconColor={Colors.secondary}
+                    options={options}
+                    defaultValue={defaultText}
+                    renderRow={dropdownRenderRow}
+                    onSelect={(i) => {
+                        setDataOnSelection(header, options, i)
+                    }}
+                />
+            </View>
+        )
+    };
+
     let renderContainer = () => {
         let ownerDefaultText = StringUtils.isEmpty(owner) ? 'Select' : owner;
         let segmentDefaultText = StringUtils.isEmpty(segment) ? 'Select' : segment;
@@ -179,6 +202,7 @@ function UpdateTicket(props) {
     let renderComment = () => {
         return (
             <View style={styles.commentContainer}>
+                <Text style={styles.emailHeaderText}> Comment </Text>
                 <TextInput
                     multiline
                     maxLength={500}
@@ -187,103 +211,78 @@ function UpdateTicket(props) {
                     autoCorrect={false}
                     style={styles.commentText}
                     value={comment}
-                    placeholder={'Additional Comment'}
+                    placeholder={'Type a comment'}
                     onChangeText={text => {
                         StringUtils.isNotEmpty(validationError) && setValidationError('');
                         setComment(text);
                     }}
                 />
+                <View style={styles.separator}/>
             </View>
         )
     };
 
-    let validationAction = (body) => {
-        for (const [key, value] of Object.entries(body)) {
-            if(key === 'managerComment' && StringUtils.isEmpty(value)) {
-                setValidationError('Please add comment');
-                return false
-            }
-        }
-        return true
-    };
-
-    let updateAction = () => {
+    let submitAction = () => {
         let statusId = 0;
-        if (status === 'Escalated') {
-            statusId = 5 //To match web app
-        } else if(StringUtils.isNotEmpty(status)) {
+
+        if(StringUtils.isNotEmpty(status)) {
             statusId = statusOptions.findIndex(item => item === status)
         }
 
         let priorityId = priorityOptions.findIndex(item => item === priority);
         priorityId = priorityId === -1 ? 0 : priorityId;
 
-        if(status === 'Escalated' && ArrayUtils.isEmpty(segmentOptions)) {
+        if(StringUtils.isEmpty(email)) {
+            setValidationError('Please enter email')
+        } else if(StringUtils.isNotEmpty(email) && !validateEmail(email)) {
+            setValidationError('Please enter a valid email')
+        } else if(StringUtils.isEmpty(comment)) {
+            setValidationError('Please enter a comment')
+        } else if(StringUtils.isEmpty(segment)) {
+            setValidationError('Please select the segment')
+        } else {
+            let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
+            let selectedOwner = StringUtils.isNotEmpty(owner) ? ownerOptions.find(item => item.ownerName === owner).ownerID : 0;
+
             let body = {
                 "priorityID": priorityId,
                 "statusID": statusId,
                 "managerComment": comment,
-                "ticketID": props.ticket.ticketID,
+                "segmentID": selectedSegment.segmentID,
+                "ownerID": selectedOwner,
+                "emailAddress": email,
+                "storeId": props.storeId
             };
-            updateTicketAPIAction(body)
-        } else {
-            if(StringUtils.isEmpty(segment)) {
-                setValidationError('Please select the segment')
-            } else if(StringUtils.isEmpty(owner) || owner === 'Not Assigned') {
-                setValidationError('Please select the owner')
-            } else {
-                let selectedSegment = segmentOptions.find(item => item.segmentName === segment);
-                let selectedOwner = ownerOptions.find(item => item.ownerName === owner);
-
-                let body = {
-                    "priorityID": priorityId,
-                    "statusID": statusId,
-                    "managerComment": comment,
-                    "ticketID": props.ticket.ticketID,
-                    "segmentID": selectedSegment.segmentID,
-                    "ownerID": selectedOwner.ownerID
-                };
-                updateTicketAPIAction(body)
-            }
+            submitTicketAPIAction(body)
         }
     };
 
-    let updateTicketAPIAction = (body) => {
-        if (validationAction(body)) {
+    let submitTicketAPIAction = (body) => {
             setLoading(true);
-            props.updateTicket();
-            updateClosedLoopTicket(props.authToken, body, () => {
+            props.addTicket();
+
+            addClosedLoopTicket(props.authToken, body, () => {
                 setLoading(false);
-                if(props.route.params.parentRoute === 'Dashboard') {
-                    props.navigation.navigate('Dashboard');
-                    props.navigation.push('Closed Loop');
-                    props.clearTicketDetails();
-                } else {
-                    props.navigation.navigate('Responses');
-                }
+                let pushAction = StackActions.replace(props.route.params.parentRoute);
+                props.navigation.dispatch(pushAction);
+                props.clearTicketDetails()
             }, (error) => {
                 setLoading(false);
                 showErrorFlashMessage(error)
             })
-        }
     };
 
-
-    let renderUpdateButton = () => {
+    let renderSubmitButton = () => {
         return isLoading ?
-            <View style={styles.updateButton}>
+            <View style={styles.submitButton}>
                 <QPSpinner spinnerColor={Colors.white}/>
             </View>
             :
-            <View style={styles.updateButton}>
-                <TouchableWithoutFeedback onPress={updateAction}>
-                    <Text style={styles.updateText}> Update </Text>
+            <View style={styles.submitButton}>
+                <TouchableWithoutFeedback onPress={submitAction}>
+                    <Text style={styles.submitText}> Submit </Text>
                 </TouchableWithoutFeedback>
             </View>
-    };
-
-    let renderValidationError = () => {
-        return <Text style={styles.error}>{validationError}</Text>;
     };
 
     return (
@@ -296,17 +295,18 @@ function UpdateTicket(props) {
                 <KeyboardAvoidingView behavior='position'
                                       style={styles.safeArea}
                                       keyboardVerticalOffset={Platform.select({
-                                          ios: Platform.isPad ? -200 : -150,
+                                          ios: -100,
                                           android: -200
                                       })}
                                       enabled>
                     <View style={styles.container}>
+                        {renderCustomerEmail()}
                         {renderContainer()}
                         {renderComment()}
                     </View>
                 </KeyboardAvoidingView>
                 <View style={styles.bottomContainer}>
-                    {renderUpdateButton()}
+                    {renderSubmitButton()}
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -327,6 +327,7 @@ const mapStateToProps = state => {
         ticket: state.dashboard.ticketDetails,
         segments: state.dashboard.segmentDetails.segments,
         owners:  state.dashboard.ownerDetails.owners,
+        storeId: state.dashboard.dashboardData.primaryStoreId
     };
 };
 
@@ -340,34 +341,54 @@ const mapDispatchToProps = dispatch => ({
     clearTicketDetails: () => {
         dispatch(clearDetractorTicketDetails())
     },
-    updateTicket: () => {
-        dispatch(updateTicket())
+    addTicket: () => {
+        dispatch(addTicket())
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateTicket);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateTicket);
 
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: Colors.darkerGrey
+        backgroundColor: Colors.white,
     },
     scrollContainer: {
         flexGrow: 1,
-        backgroundColor: Colors.darkerGrey
+        backgroundColor: Colors.white,
     },
     container:{
         flex:1,
         justifyContent: 'center',
+        margin: MarginConstants.tab2,
+        backgroundColor: Colors.white,
+    },
+    emailHeaderText: {
+        color: Colors.primary,
+        fontSize: TextSizes.secondary,
+        fontFamily: FontFamily.regular,
+        marginTop: MarginConstants.tab1,
+    },
+    emailText: {
+        fontSize: TextSizes.secondary,
+        height: 40,
+        textAlignVertical: 'top',
+        backgroundColor: Colors.darkerGrey,
+        padding: PaddingConstants.tab1,
+        marginTop: 1.2*MarginConstants.tab1,
+        color: Colors.primary,
+        fontFamily: FontFamily.regular,
+    },
+    separator: {
+        height: .5,
+        backgroundColor: Colors.secondary
     },
     bottomContainer: {
         flex: 1,
         justifyContent: 'flex-end',
-        marginBottom: MarginConstants.tab2
     },
     fieldContainer: {
-        margin: MarginConstants.tab1,
-        marginTop: MarginConstants.tab1,
+        marginTop: MarginConstants.tab2,
         backgroundColor: Colors.darkerGrey,
     },
     row: {
@@ -409,10 +430,8 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.accent,
     },
     commentContainer: {
-        margin: MarginConstants.tab1,
         backgroundColor: Colors.white,
         paddingVertical: PaddingConstants.tab2,
-        paddingHorizontal: PaddingConstants.tab1,
     },
     commentText: {
         fontSize: TextSizes.secondary,
@@ -420,18 +439,18 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top',
         backgroundColor: Colors.grey,
         padding: PaddingConstants.tab1,
-        margin: MarginConstants.tab1,
+        marginTop: 1.2*MarginConstants.tab1,
         color: Colors.primary,
         fontFamily: FontFamily.regular
     },
-    updateButton: {
+    submitButton: {
         height: PaddingConstants.tab4,
         marginHorizontal: MarginConstants.tab2,
         justifyContent:'center',
         alignItems:'center',
         backgroundColor: Colors.accent
     },
-    updateText: {
+    submitText: {
         color: Colors.white,
         fontSize: TextSizes.primary,
         textAlign: 'center',
@@ -446,4 +465,10 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.light,
         marginTop: MarginConstants.tab1
     },
+    dropdownContainer: {
+        position:'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        right:10
+    }
 });

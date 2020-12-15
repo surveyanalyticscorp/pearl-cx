@@ -5,7 +5,7 @@
 #import <React/RCTRootView.h>
 #import <Firebase/Firebase.h>
 #import <RNFBDynamicLinks/RNFBDynamicLinksAppDelegateInterceptor.h>
-
+#import "RNNotifications.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -26,6 +26,8 @@
   if ([FIRApp defaultApp] == nil) {
   [FIRApp configure];
   }
+  [RNNotifications startMonitorNotifications];
+
   return YES;
 }
 

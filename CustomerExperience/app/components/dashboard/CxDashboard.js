@@ -4,31 +4,29 @@ import {
     RefreshControl,
     ScrollView,
     Text,
-    TouchableWithoutFeedback,
     View,
     BackHandler,
     Alert,
     SafeAreaView
 } from 'react-native';
-import {StackActions} from '@react-navigation/native';
 import {showLoading} from '../../redux/actions/index';
 import {getDashboardContent} from '../../redux/actions/dashboard.actions';
 import {connect} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
-import {isObjectEmpty, usePrevious} from '../../Utils/Utility';
+import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {MarginConstants} from '../../styles/margin.constants';
-import Icomoon from '../../config/Icons/icon-native';
 import {VictoryPie} from 'victory-native';
 import {Sizes} from '../../styles/Size.constant';
 import StringUtils from '../../Utils/StringUtils';
 import FilterHeader from '../FilterHeader';
 import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import {setRangeFilter} from '../../redux/actions';
+import {DashboardClosedLoopView} from './DashboardClosedLoopView';
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -37,55 +35,45 @@ const wait = timeout => {
 };
 
 const CxDashboard = props => {
-    let [callApi, setCallAPI] = useState(false);
     let [refreshing, setRefreshing] = useState(false);
     let [comparision, setComparision] = useState(false);
     let [exitAlert, showExitAlert] = useState(false);
 
-    let prevRangeRef = usePrevious(props.range);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        setCallAPI(true);
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
     useEffect(() => {
+        const unsubscribe = props.navigation.addListener('focus', () => {
+            if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate)) {
+                let selectedRange = getSelectedRange({type:1});
+                props.setRange({
+                    type: 1,
+                    startDate: selectedRange.startDate,
+                    endDate: selectedRange.endDate
+                });
+                let data = {
+                    startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
+                    endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT)
+                };
+                props.getDashboardContent(props.authToken, data);
+            } else {
+                getDashboardData();
+            }
+        });
+
+        return unsubscribe;
+    }, [props.navigation, props.range]);
+
+    useEffect(() => {
 
         BackHandler.addEventListener("hardwareBackPress", handleBackPress);
-
-        if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate)) {
-            let selectedRange = getSelectedRange({type:1});
-            props.setRange({
-                type: 1,
-                startDate: selectedRange.startDate,
-                endDate: selectedRange.endDate
-            });
-            let data = {
-                startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
-                endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT)
-            };
-            props.getDashboardContent(props.authToken, data);
-        } else {
-            getDashboardData();
-        }
         return function cleanup() {
             BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
         };
     },[]);
-
-    useEffect(() => {
-        if(prevRangeRef && prevRangeRef !== props.range) {
-            getDashboardData();
-        }
-    },[props.range]);
-
-    useEffect(() => {
-        if (callApi && StringUtils.isNotEmpty(props.range.startDate)) {
-            getDashboardData();
-            setCallAPI(false);
-        }
-    }, [callApi]);
 
     useEffect(() => {
         if(comparision) {
@@ -95,10 +83,10 @@ const CxDashboard = props => {
     },[comparision]);
 
     useEffect(() => {
-        if(props.dashboardData.DetractorTicketsCount){
+        if(props.dashboardData.detractorTicketsCount){
             props.showLoading(false);
         }
-    },[props.dashboardData.DetractorTicketsCount]);
+    },[props.dashboardData.detractorTicketsCount]);
 
     let handleBackPress = () => {
         showExitAlert(true);
@@ -197,33 +185,10 @@ const CxDashboard = props => {
         )
     };
 
-    let renderTicketView = (ticketCount, icon, title) => {
-        return (
-            <TouchableWithoutFeedback
-                onPress={() => {
-                    const pushAction = StackActions.push('Tickets', {
-                        screen: icon === 'new' ? "New" : (icon === 'open' ? "Open" : "Resolved")
-                    });
-                    props.navigation.dispatch(pushAction);
-                }}>
-                <View style={[dashboardStyles.ticketContainer,{marginHorizontal: icon === 'open' ? MarginConstants.tab1 : 0}]}>
-                    <Text  style={dashboardStyles.ticketText}>{ticketCount}</Text>
-                    <View style={dashboardStyles.separator}/>
-                    <View style={dashboardStyles.ticketTypeContainer}>
-                        <Icomoon name={icon} size={Sizes.inlineIcons} color= {Colors.borderColor}/>
-                        <Text style={dashboardStyles.ticketType}>{title}</Text>
-                    </View>
-                </View>
-            </TouchableWithoutFeedback>
-        )
-    };
-
     let getClosedLoopView = () => {
         return(
             <View style={dashboardStyles.closedLoopView}>
-                {renderTicketView(props.dashboardData.DetractorTicketsCount.new,"new", "New")}
-                {renderTicketView(props.dashboardData.DetractorTicketsCount.pending,"open", "Open")}
-                {renderTicketView(props.dashboardData.DetractorTicketsCount.resolved,"resolved", "Resolved")}
+                <DashboardClosedLoopView ticketCount={props.dashboardData.detractorTicketsCount}/>
             </View>
         )
     };
@@ -318,9 +283,7 @@ const CxDashboard = props => {
                 <FilterHeader actionOnArrowClick = {() => {
                     setComparision(true)
                 }}
-                              callDataAPI = {() => {
-                                  setCallAPI(true)
-                              }}
+                              callDataAPI = {() => {}}
                               {...props}
                 />
                 <ScrollView

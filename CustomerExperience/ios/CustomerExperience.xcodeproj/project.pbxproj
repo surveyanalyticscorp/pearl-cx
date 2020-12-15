@@ -680,7 +680,7 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/CustomerExperoence/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -709,7 +709,7 @@
 				DEVELOPMENT_TEAM = 32Y3X84598;
 				INFOPLIST_FILE = "$(SRCROOT)/CustomerExperoence/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

@@ -40,6 +40,8 @@ const Colors = {
   promoter: '#3FCA5A',
   detractor:'#CE002A',
   passive:'#FFE300',
+  critical: '#E53251',
+  high: '#FF6103',
 
   negativePromter: '#E8E8E8',
   positivePromter: '#90BA5B',

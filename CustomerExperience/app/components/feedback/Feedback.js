@@ -1,8 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableWithoutFeedback, useWindowDimensions, View} from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
-import {StackActions} from '@react-navigation/native';
 import {Colors} from '../../styles/color.constants';
 import {clearError, setError, setRangeFilter} from '../../redux/actions';
 import {connect} from 'react-redux';
@@ -17,6 +16,9 @@ import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import SafeAreaView from 'react-native-safe-area-view';
 import {apiHandler} from '../../api/ApiHandler';
+import {FontFamily} from '../../styles/font.constants';
+import {Sizes} from '../../styles/Size.constant';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
@@ -27,6 +29,7 @@ function Feedback(props){
     let [pageOffset, setPageOffset] = useState(0);
     let [pagination, setPagination] = useState(false);
     let [showLoader, setShowLoader] = useState(false);
+    let [sortingText, setSortingText] = useState('Date');
     let prevRangeRef = usePrevious(props.range);
 
     let getFeedbackData = () => {
@@ -38,7 +41,8 @@ function Feedback(props){
                 pageOffset: pageOffset,
                 sentiment: 'All',
                 startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT)
+                endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
+                filterText: sortingText.toLowerCase()
             };
             apiHandler.getFeedbackResponseList(props.authToken, data, (response) => {
                 let data = pageOffset === 0 ? [] : [...feedbackData];
@@ -52,7 +56,7 @@ function Feedback(props){
             }, (error) => {
                 setShowLoader(false);
                 props.setError(error);
-                showErrorFlashMessage(error)
+                showErrorFlashMessage(error.message)
             });
         }
     };
@@ -103,6 +107,10 @@ function Feedback(props){
         }
     };
 
+    let setSortText = (text) => {
+        setSortingText(text)
+    };
+
     let renderSpinner = () => {
         return (
             <View style={styles.loading}>
@@ -132,7 +140,9 @@ function Feedback(props){
                     onFeedbackEndReached: onEndReached,
                     onRefresh: onRefresh,
                     range: props.range,
-                    token: props.authToken
+                    token: props.authToken,
+                    sortingText: sortingText,
+                    setSortingText: setSortText
                 }}>
                     <FeedbackTabStack />
                 </FormContext.Provider>
@@ -145,11 +155,13 @@ function Feedback(props){
 
 const FeedbackTabStack = () => (
     <FeedbackTab.Navigator tabBarOptions={{
-        labelStyle: {color: Colors.primary, width: useWindowDimensions().width/4, fontSize: TextSizes.secondary},
+        labelStyle: {width: useWindowDimensions().width/4, fontSize: TextSizes.secondary},
         indicatorStyle: {backgroundColor: Colors.accent},
         style:{backgroundColor: Colors.white, width: '100%'},
         initialLayout: {width: useWindowDimensions().width},
-        tabStyle:{height: 1.7*PaddingConstants.tab4}
+        tabStyle:{height: 1.7*PaddingConstants.tab4},
+        activeTintColor: Colors.accent,
+        inactiveTintColor: Colors.primary,
     }}
                            lazy
                            keyboardDismissMode={'auto'}
@@ -168,6 +180,7 @@ const renderFeedbackScene = (props) => {
     const feedbackForm = useContext(FormContext);
     let [list, setList] = useState(feedbackForm.feedbackData);
     let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);
+    let prevSortRef = usePrevious(feedbackForm.sortingText);
 
     useEffect(() => {
         if(prevFeedbackRef !== feedbackForm.feedbackData) {
@@ -175,13 +188,37 @@ const renderFeedbackScene = (props) => {
         }
     },[feedbackForm.feedbackData]);
 
+    useEffect(() => {
+        if(prevSortRef !== feedbackForm.sortingText) {
+            feedbackForm.onRefresh()
+        }
+    },[feedbackForm.sortingText]);
+
     const _onPressRow = (data) => {
-        const pushAction = StackActions.push('Feedback Details', {
+        props.navigation.navigate('Feedback Details', {
             data: data,
             ticketStatus: feedbackForm.ticketStatus,
-            token: feedbackForm.token
-        });
-        props.navigation.dispatch(pushAction);
+            token: feedbackForm.token,
+            parentRoute: 'Responses'
+        })
+    };
+
+    let setResponseSorter = (value) => {
+        feedbackForm.setSortingText(value)
+    };
+
+    let renderResponseFilterView = () => {
+        return (
+            <TouchableWithoutFeedback onPress={() => {
+                props.navigation.navigate('Sort By',{setSorter: setResponseSorter, selectedSorter: feedbackForm.sortingText})
+            }} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+            >
+                <View style={styles.filterView}>
+                    <Icon name={'swap-vertical'} size={1.2*Sizes.filterIcon} color={Colors.primary}/>
+                    <Text style={styles.filterText}>{feedbackForm.sortingText}</Text>
+                </View>
+            </TouchableWithoutFeedback>
+        )
     };
 
     const _renderRow = ({item}) => {
@@ -191,6 +228,7 @@ const renderFeedbackScene = (props) => {
                 onSelect={() => _onPressRow(item)}
                 origin="List"
                 ticketStatuses={feedbackForm.ticketStatus}
+                {...props}
             />
         );
     };
@@ -205,27 +243,30 @@ const renderFeedbackScene = (props) => {
 
     let getData = () => {
         if(props.route.params.screenName === 'All') {
-            setList([...feedbackForm.feedbackData])
+            let data = [...feedbackForm.feedbackData];
+            setList(data)
         } else {
-            setList([...feedbackForm.feedbackData.filter(res => res.sentiment === props.route.params.screenName)])
+            let data = [...feedbackForm.feedbackData.filter(res => res.sentiment === props.route.params.screenName)];
+            setList(data)
         }
     };
 
     let renderFeedbackList = () => {
         return (
-             <FlatList
-                    data={list}
-                    renderItem={_renderRow}
-                    keyExtractor={item => item.responseSetID+''}
-                    onEndReachedThreshold={0}
-                    onEndReached={feedbackForm.onFeedbackEndReached}
-                    refreshing={false}
-                    ListEmptyComponent={renderNoDataFound}
-                    onRefresh={feedbackForm.onRefresh}
-                    extraData={[list]}
-                    contentContainerStyle={styles.container}
-                    ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
-                />
+            <FlatList
+                data={list}
+                renderItem={_renderRow}
+                keyExtractor={item => item.responseSetID+''}
+                onEndReachedThreshold={0}
+                onEndReached={feedbackForm.onFeedbackEndReached}
+                refreshing={false}
+                ListEmptyComponent={renderNoDataFound}
+                onRefresh={feedbackForm.onRefresh}
+                extraData={[list]}
+                contentContainerStyle={styles.container}
+                ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
+                ListHeaderComponent={renderResponseFilterView}
+            />
         );
     };
 
@@ -244,7 +285,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     setError: (error) => {
-      dispatch(setError(error))
+        dispatch(setError(error))
     },
     clearError: () => {
         dispatch(clearError(false));
@@ -282,5 +323,19 @@ const styles = StyleSheet.create({
         bottom: 0,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    filterView: {
+        marginVertical: MarginConstants.halfTab,
+        justifyContent: 'flex-end',
+        alignItems:'center',
+        paddingHorizontal: PaddingConstants.tab1,
+        flexDirection:'row'
+    },
+    filterText: {
+        color: Colors.accent,
+        fontFamily: FontFamily.regular,
+        fontSize: TextSizes.primary,
+        textAlign: 'center',
+        paddingHorizontal: PaddingConstants.halfTab
     }
 });
