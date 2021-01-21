@@ -67,13 +67,14 @@ const CxDashboard = props => {
         return unsubscribe;
     }, [props.navigation, props.range]);
 
-    useEffect(() => {
 
+    useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", handleBackPress);
         return function cleanup() {
             BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
         };
     },[]);
+
 
     useEffect(() => {
         if(comparision) {
@@ -82,11 +83,13 @@ const CxDashboard = props => {
         }
     },[comparision]);
 
+
     useEffect(() => {
         if(props.dashboardData.detractorTicketsCount){
             props.showLoading(false);
         }
     },[props.dashboardData.detractorTicketsCount]);
+
 
     let handleBackPress = () => {
         showExitAlert(true);

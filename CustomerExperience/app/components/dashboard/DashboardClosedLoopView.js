@@ -104,7 +104,7 @@ const renderScene = (props) => {
     let renderDonutInfoViewContainer = () => {
         let priorities = getCount(props.route.params.ticketCount);
       return (
-          <View style={{paddingTop: 2*PaddingConstants.tab4,}}>
+          <View style={{paddingTop: 2 * PaddingConstants.tab4}}>
               {renderTicketView(priorities.critical, Colors.critical, 'Critical')}
               {renderTicketView(priorities.high, Colors.high, 'High')}
               {renderTicketView(priorities.medium, Colors.passive, 'Medium')}

@@ -147,7 +147,7 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file("/Users/nehal/pearl/questionpro_offline_surveys/android/QuestionProKey")
+            storeFile file("/Users/apple/pearl/questionpro_offline_surveys/android/QuestionProKey")
             storePassword 'questionpro'
             keyAlias 'questionpro_keystore'
             keyPassword 'questionpro'
