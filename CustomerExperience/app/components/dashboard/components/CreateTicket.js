@@ -386,6 +386,7 @@ const styles = StyleSheet.create({
     bottomContainer: {
         flex: 1,
         justifyContent: 'flex-end',
+        marginBottom: 10
     },
     fieldContainer: {
         marginTop: MarginConstants.tab2,
