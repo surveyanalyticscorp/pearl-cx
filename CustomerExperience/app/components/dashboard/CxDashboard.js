@@ -42,7 +42,8 @@ const CxDashboard = props => {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        wait(2000).then(() => setRefreshing(false));
+        getDashboardData();
+        //wait(2000).then(() => setRefreshing(false));
     }, []);
 
     useEffect(() => {
@@ -87,6 +88,7 @@ const CxDashboard = props => {
     useEffect(() => {
         if(props.dashboardData.detractorTicketsCount){
             props.showLoading(false);
+            setRefreshing(false);
         }
     },[props.dashboardData.detractorTicketsCount]);
 
