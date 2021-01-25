@@ -41,10 +41,15 @@ const CxDashboard = props => {
 
 
     const onRefresh = useCallback(() => {
-        setRefreshing(true);
-        getDashboardData();
-        //wait(2000).then(() => setRefreshing(false));
-    }, []);
+        //setRefreshing(true);//No need to show 2 loading
+        let data = {
+            startDate: moment(props.sDate, DMYFORMAT).format(YMDFORMAT),
+            endDate: moment(props.eDate, DMYFORMAT).format(YMDFORMAT)
+        };
+        props.getDashboardContent(props.authToken, data);
+
+        wait(500).then();
+    }, [props.range]);
 
     useEffect(() => {
         const unsubscribe = props.navigation.addListener('focus', () => {
@@ -327,7 +332,9 @@ const mapStateToProps = state => {
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
         authToken: state.global.authToken,
-        range: state.global.range
+        range: state.global.range,
+        sDate: state.global.range.startDate,
+        eDate: state.global.range.endDate
     };
 };
 
