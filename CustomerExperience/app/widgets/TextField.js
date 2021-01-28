@@ -29,6 +29,7 @@ const QPTextField = props => {
   };
 
   let keyboardType = props.keyboardType ? props.keyboardType : 'default';
+  let returnKey = props.returnKey ? props.returnKey : 'next';
   let label = props.label ? props.label : '';
   let defaultValue = props.defaultValue ? props.defaultValue : '';
   let style = [props.style, {paddingVertical: 0}];
@@ -71,6 +72,7 @@ const QPTextField = props => {
         placeholder={props.placeholder}
         fontSize={TextSizes.primary}
         labelFontSize={TextSizes.secondary}
+        returnKeyType={returnKey}
       />
       {props.secureText && renderVisibility()}
     </View>

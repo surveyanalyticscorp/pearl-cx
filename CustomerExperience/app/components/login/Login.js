@@ -87,6 +87,11 @@ const Login = props => {
             setValidation(stringConst.invalidPassword);
             return false;
         }
+
+        if (isStringNullOrEmpty(userData.accessCode)) {
+            setValidation(stringConst.invalidCompanyCode);
+            return false;
+        }
         setValidation('');
         return true;
     };
@@ -124,6 +129,11 @@ const Login = props => {
                 accessCode: text,
             });
         }
+    };
+
+
+    const handleSubmit = text =>{
+        onSignInPress();
     };
 
     let renderSpinnerLoginButton = () => {
@@ -197,13 +207,14 @@ const Login = props => {
                             label={stringConst.companyCode}
                             style={loginStyles.emailInput}
                             onChange={handleAccessCode}
-                            onEndEdit={handleAccessCode}
+                            onEndEdit={handleSubmit}
                             onSubmitEditing={() => {
                                 textFieldTimer = setTimeout(() => {
                                     Keyboard.dismiss()
                                 }, 5);
                             }}
                             value={userData.accessCode}
+                            returnKey = {'done'}
                         />
                         <QPButton
                             style={loginStyles.forgotPswdButton}
