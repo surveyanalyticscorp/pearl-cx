@@ -81,7 +81,6 @@ const CxDashboard = props => {
         };
     },[]);
 
-
     useEffect(() => {
         if(comparision) {
             getDashboardData();
@@ -99,7 +98,11 @@ const CxDashboard = props => {
 
 
     let handleBackPress = () => {
-        showExitAlert(true);
+        if(props.navigation.canGoBack()) {
+            props.navigation.goBack();
+        }else{
+            showExitAlert(true);
+        }
         return true
     };
 
