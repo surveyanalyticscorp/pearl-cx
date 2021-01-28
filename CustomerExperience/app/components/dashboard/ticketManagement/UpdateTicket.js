@@ -103,8 +103,11 @@ function UpdateTicket(props) {
                 setPriority(options[selectedIndex]);
                 break;
             case 'Status':
-                setSegment('');
-                setOwner('');
+                /** if status is escalated i.e 3 then only need to reset segment and owner */
+                if(selectedIndex === 3){
+                    setSegment('');
+                    setOwner('');
+                }
                 setStatus(options[selectedIndex]);
                 break;
             case 'Segment':
