@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     npsText: {
-        fontSize: TextSizes.extraLargeText,
+        fontSize: TextSizes.largeText,
         fontFamily: FontFamily.regular,
         textAlign:'center',
     },
