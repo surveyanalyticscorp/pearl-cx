@@ -16,7 +16,7 @@ import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
 export default function TicketWidget(props){
 
     let [viewDetails, setViewDetails] = useState(false);
-    let time = moment(props.item.timestamp, YMDFORMAT).format(HalfMonthDateYearFormat);
+    let time = moment(props.item.timestamp, YMDFORMAT).fromNow();
 
     useEffect(() => {
         if (viewDetails) {
