@@ -14,12 +14,12 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {Sizes} from '../../styles/Size.constant';
-
+import moment from 'moment';
 export default function FeedbackCell(props){
     let disable = props.origin === 'Detail';
 
     let [feedbackTapped, setTapped] = useState(false);
-
+    let surveyTakenDate = moment(props.item.surveyTakenDate).fromNow();
     useEffect(() => {
         if (feedbackTapped) {
             setTapped(false);
@@ -78,7 +78,7 @@ export default function FeedbackCell(props){
             <View style={styles.respondentContainer}>
                 <Text style={styles.titleText}>{userName}</Text>
                 <Text style={styles.subtitleText} numberOfLines={3}>{email}</Text>
-                <Text style={styles.subtitleText}>{props.item.surveyTakenDate}</Text>
+                <Text style={styles.subtitleText}>{surveyTakenDate}</Text>
             </View>
         )
     };
