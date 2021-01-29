@@ -32,10 +32,11 @@ import {showErrorFlashMessage} from '../../../Utils/Utility';
 function UpdateTicket(props) {
     let priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
     let statusOptions = ['New', 'Open', 'Resolved', 'Escalated'];
+    let selectedStatus = props.ticket.status === 5 ? 'Escalated':statusOptions[props.ticket.status];
 
     let [comment, setComment] = useState('');
     let [priority, setPriority] = useState(priorityOptions[props.ticket.priority]);
-    let [status, setStatus] = useState(statusOptions[props.ticket.status]);
+    let [status, setStatus] = useState(selectedStatus);
     let [segmentOptions, setSegmentOptions] = useState([]);
     let [segment, setSegment] = useState(props.ticket.currentSegment.name);
     let [ownerOptions, setOwnerOptions] = useState([]);
