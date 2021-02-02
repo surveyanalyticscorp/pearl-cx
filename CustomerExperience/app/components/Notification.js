@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Image, FlatList, TouchableWithoutFeedback} from 'react-native';
+import {View, Text, StyleSheet, Image, FlatList, TouchableWithoutFeedback, TouchableOpacity, Animated} from 'react-native';
 import React,{useState, useEffect} from 'react';
 import {Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
@@ -12,6 +12,7 @@ import {apiHandler} from '../api/ApiHandler';
 import moment from 'moment';
 import {HalfMonthDateYearFormat} from '../Utils/AppConstants';
 import QPSpinner from '../widgets/QPSpinner';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 
 export default function Notification(props) {
@@ -32,32 +33,67 @@ export default function Notification(props) {
         })
     },[]);
 
+    let deleteNotification = (notification) => {
+        console.log('Delete item: '+notification.id);
+        dispatch(showLoading(true));
+        apiHandler.clearNotification({'Auth-Token': authToken},({"id": notification.id}),
+            (response) => {
+                dispatch(showLoading(false));
+                let filteredList = list.filter(function (item) {
+                    return item.id !== notification.id
+                });
+                setList(filteredList);
+        }, (error) => {
+            showErrorFlashMessage(error.errorAlert);
+        })
+    };
+
     let viewTicket = (ticketID) => {
         props.navigation.navigate('Ticket Details', {ticketID: ticketID, parentRoute: 'Dashboard'});
+    };
+
+
+    const leftSwipe = (progress, dragX, item) => {
+        const scale = dragX.interpolate({
+            inputRange: [0, 100],
+            outputRange: [0, 1],
+            extrapolate: 'clamp',
+        });
+        return (
+            <TouchableOpacity onPress={() => deleteNotification(item)} activeOpacity={0.6}>
+                <View style={styles.deleteBox}>
+                    <Animated.Text style={{transform: [{scale: scale}]}}>
+                        Delete
+                    </Animated.Text>
+                </View>
+            </TouchableOpacity>
+        );
     };
 
     let renderRow = ({item}) => {
         let imagePath = item.logType === 'U' ? require('../config/images/notification_comment_blue.png') : require('../config/images/notification_ticket_blue.png')
         let text = item.notificationText.replace(item.emailAddress, '');
         let time = moment(item.timestamp).format(HalfMonthDateYearFormat);
-        return <TouchableWithoutFeedback onPress={() => {
-            let object = JSON.parse(item.data);
-            viewTicket(object.CXTicket)
-        }}>
-            <View style={styles.row}>
-                <Image
-                    style={styles.ticketIcon}
-                    source={imagePath}
-                />
-                <View style={styles.rowTextContainer}>
-                    <Text style={styles.titleContainer}>
-                        <Text style={styles.regularFont}>{text}</Text>
-                        <Text style={styles.boldFont}> {item.emailAddress}</Text>
-                    </Text>
-                    <Text style={styles.subtitle}>{time}</Text>
+        return <Swipeable renderLeftActions={(progress, dragX) => leftSwipe(progress, dragX, item)}>
+            <TouchableWithoutFeedback onPress={() => {
+                let object = JSON.parse(item.data);
+                viewTicket(object.CXTicket)
+                }}>
+                <View style={styles.row}>
+                    <Image
+                        style={styles.ticketIcon}
+                        source={imagePath}
+                    />
+                    <View style={styles.rowTextContainer}>
+                        <Text style={styles.titleContainer}>
+                            <Text style={styles.regularFont}>{text}</Text>
+                            <Text style={styles.boldFont}> {item.emailAddress}</Text>
+                        </Text>
+                        <Text style={styles.subtitle}>{time}</Text>
+                    </View>
                 </View>
-            </View>
-        </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+        </Swipeable>
     };
 
     let renderSpinner = () => {
@@ -127,5 +163,12 @@ const styles = StyleSheet.create({
         bottom: 0,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    deleteBox: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: MarginConstants.tab1,
+        width: 80,
+        height: 60,
     },
 });

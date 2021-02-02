@@ -1,4 +1,9 @@
-import {CX_DETRACTOR_TICKETS, CX_GET_ALL_RESPONSE, CX_GET_NOTIFICATION_LIST} from './Constant';
+import {
+    CX_CLEAR_NOTIFICATION_LOGS,
+    CX_DETRACTOR_TICKETS,
+    CX_GET_ALL_RESPONSE,
+    CX_GET_NOTIFICATION_LIST
+} from './Constant';
 import WebServiceHandler from './WebServiceHandler';
 
 class ApiHandler {
@@ -50,6 +55,17 @@ class ApiHandler {
           errorCallback(error);
         });
   }
+
+    clearNotification(header,parameter, successCallback, errorCallback = () => {}){
+        return WebServiceHandler.postNew(CX_CLEAR_NOTIFICATION_LOGS, header, parameter).then(response => {
+            if(response && response.statusCode === 200) {
+                successCallback(response.body);
+            }
+        })
+            .catch(error => {
+                errorCallback(error);
+            });
+    }
 
 }
 
