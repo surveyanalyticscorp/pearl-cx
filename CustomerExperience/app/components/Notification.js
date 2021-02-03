@@ -1,5 +1,14 @@
-import {View, Text, StyleSheet, Image, FlatList, TouchableWithoutFeedback, TouchableOpacity, Animated} from 'react-native';
-import React,{useState, useEffect} from 'react';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    FlatList,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    Animated
+} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
@@ -16,6 +25,8 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 
 export default function Notification(props) {
+    let row: Array<any> = [];
+    let prevOpenedRow;
 
     let [list, setList] = useState([]);
     const isLoading = useSelector(state => state.global.isLoading);
@@ -31,21 +42,22 @@ export default function Notification(props) {
             showErrorFlashMessage(error.errorAlert);
             dispatch(showLoading(false));
         })
-    },[]);
+    }, []);
 
     let deleteNotification = (notification) => {
-        console.log('Delete item: '+notification.id);
-        dispatch(showLoading(true));
-        apiHandler.clearNotification({'Auth-Token': authToken},({"id": notification.id}),
+        console.log('Delete item: ' + notification.id);
+        apiHandler.clearNotification({'Auth-Token': authToken}, ({"id": notification.id}),
             (response) => {
-                dispatch(showLoading(false));
+                if(prevOpenedRow){
+                    prevOpenedRow.close();
+                }
                 let filteredList = list.filter(function (item) {
                     return item.id !== notification.id
                 });
                 setList(filteredList);
-        }, (error) => {
-            showErrorFlashMessage(error.errorAlert);
-        })
+            }, (error) => {
+                showErrorFlashMessage(error.errorAlert);
+            })
     };
 
     let viewTicket = (ticketID) => {
@@ -59,8 +71,9 @@ export default function Notification(props) {
             outputRange: [0, 1],
             extrapolate: 'clamp',
         });
+
         return (
-            <TouchableOpacity onPress={() => deleteNotification(item)} activeOpacity={0.6}>
+            <TouchableOpacity onPress={() => deleteNotification(item)} activeOpacity={0.5}>
                 <View style={styles.deleteBox}>
                     <Animated.Text style={{transform: [{scale: scale}]}}>
                         Delete
@@ -70,15 +83,23 @@ export default function Notification(props) {
         );
     };
 
-    let renderRow = ({item}) => {
-        let imagePath = item.logType === 'U' ? require('../config/images/notification_comment_blue.png') : require('../config/images/notification_ticket_blue.png')
+    let renderRow = ({item, index}) => {
+        let imagePath = item.logType === 'U' ?
+            require('../config/images/notification_comment_blue.png') : require('../config/images/notification_ticket_blue.png');
         let text = item.notificationText.replace(item.emailAddress, '');
         let time = moment(item.timestamp).format(HalfMonthDateYearFormat);
-        return <Swipeable renderLeftActions={(progress, dragX) => leftSwipe(progress, dragX, item)}>
-            <TouchableWithoutFeedback onPress={() => {
+
+        return <Swipeable
+            ref = {ref => row[index] = ref}
+            friction={1}
+            leftThreshold={40}
+            rightThreshold={80}
+            renderLeftActions = {(progress, dragX) => leftSwipe(progress, dragX, item)}
+            onSwipeableWillOpen = {() => closePrevOpenRow(index)}>
+            <TouchableWithoutFeedback
+                onPress={() => {
                 let object = JSON.parse(item.data);
-                viewTicket(object.CXTicket)
-                }}>
+                viewTicket(object.CXTicket)}}>
                 <View style={styles.row}>
                     <Image
                         style={styles.ticketIcon}
@@ -96,10 +117,17 @@ export default function Notification(props) {
         </Swipeable>
     };
 
+    let closePrevOpenRow = (index) =>{
+        if (prevOpenedRow && prevOpenedRow !== row[index]) {
+            prevOpenedRow.close();
+        }
+        prevOpenedRow = row[index];
+    };
+
     let renderSpinner = () => {
         return (
             <View style={styles.loading}>
-                <QPSpinner />
+                <QPSpinner/>
             </View>
         )
     };
@@ -113,7 +141,7 @@ export default function Notification(props) {
         />
     };
 
-    return(
+    return (
         <View style={styles.container}>
             {isLoading ? renderSpinner() : renderContainer()}
         </View>
@@ -122,13 +150,13 @@ export default function Notification(props) {
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
         margin: MarginConstants.tab1
     },
     row: {
-        flexDirection:'row',
-        alignItems:'center',
-        padding: 1.2*PaddingConstants.tab1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 1.2 * PaddingConstants.tab1,
         margin: MarginConstants.tab1,
         backgroundColor: Colors.white
     },
@@ -141,7 +169,7 @@ const styles = StyleSheet.create({
         color: Colors.primary,
         marginVertical: MarginConstants.halfTab
     },
-    regularFont:{
+    regularFont: {
         fontFamily: FontFamily.regular
     },
     boldFont: {
@@ -152,8 +180,8 @@ const styles = StyleSheet.create({
         color: Colors.secondary,
     },
     ticketIcon: {
-        width: 1.1*MarginConstants.tab3,
-        height: 1.1*MarginConstants.tab3,
+        width: 1.1 * MarginConstants.tab3,
+        height: 1.1 * MarginConstants.tab3,
     },
     loading: {
         position: 'absolute',
@@ -167,8 +195,8 @@ const styles = StyleSheet.create({
     deleteBox: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: MarginConstants.tab1,
+        margin: MarginConstants.tab1,
         width: 80,
-        height: 60,
+        height: 70
     },
 });
