@@ -44,7 +44,20 @@ export default function Notification(props) {
         })
     }, []);
 
-    let deleteNotification = (notification) => {
+    useEffect(() => {
+        props.navigation.setParams({'clearAllNotifications': clearAllNotifications});
+    }, []);
+
+    let clearAllNotifications = () =>{
+        apiHandler.clearNotification({'Auth-Token': authToken}, ({}),
+            (response) => {
+                setList([]);
+            },(error) =>{
+
+            })
+    };
+
+    let clearNotification = (notification) => {
         console.log('Delete item: ' + notification.id);
         apiHandler.clearNotification({'Auth-Token': authToken}, ({"id": notification.id}),
             (response) => {
@@ -73,7 +86,7 @@ export default function Notification(props) {
         });
 
         return (
-            <TouchableOpacity onPress={() => deleteNotification(item)} activeOpacity={0.5}>
+            <TouchableOpacity onPress={() => clearNotification(item)} activeOpacity={0.5}>
                 <View style={styles.deleteBox}>
                     <Animated.Text style={{transform: [{scale: scale}]}}>
                         Delete

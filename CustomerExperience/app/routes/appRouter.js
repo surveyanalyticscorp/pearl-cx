@@ -196,9 +196,22 @@ const AppRouter = props => {
                     <FontIcon name={'bell'} size={1.1*Sizes.icons} color={Colors.white}/>
                 </TouchableOpacity>
                 {/** show unread/badge icon when notification read/unread status comes*/}
-                {/*<View style={{position: 'absolute', top: -2, right: -2}}>*/}
-                {/*<FontIcon name={'circle'} size={12} color={Colors.red}/>*/}
-                {/*</View>*/}
+               {/* <View style={{position: 'absolute', top: -2, right: -2}}>
+                    <FontIcon name={'circle'} size={12} color={Colors.red}/>
+                </View>*/}
+            </View>
+        );
+    };
+
+    const ClearAllButton = (props) =>{
+        return (
+            <View style={[styles.rightHeaderButton,{marginHorizontal: 1.5*MarginConstants.tab1}]}>
+                <TouchableOpacity
+                    onPress={() => {
+                        props.route.params.clearAllNotifications();
+                    }}>
+                    <Text style={styles.saveText}> Clear All </Text>
+                </TouchableOpacity>
             </View>
         );
     };
@@ -415,11 +428,12 @@ const AppRouter = props => {
                 options={({ navigation, route }) => ({ headerShown: false })}
             />
             <DetractorStack.Screen
+                key={"Notifications"}
                 name="Notifications"
                 component={Notification}
                 options={({ navigation, route }) => ({
-                    headerLeft: props => <View/>,
-                    headerRight: props => <CloseButton/>
+                    headerLeft: props => <HeaderBackLeft/>,
+                    headerRight: props => <ClearAllButton {...props} route={route}/>
                 })}
             />
             <DetractorStack.Screen
