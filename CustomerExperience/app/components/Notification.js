@@ -6,7 +6,7 @@ import {
     FlatList,
     TouchableWithoutFeedback,
     TouchableOpacity,
-    Animated
+    Animated, Alert, BackHandler
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {Colors} from '../styles/color.constants';
@@ -22,6 +22,7 @@ import moment from 'moment';
 import {HalfMonthDateYearFormat} from '../Utils/AppConstants';
 import QPSpinner from '../widgets/QPSpinner';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import {Notifications} from 'react-native-notifications';
 
 
 export default function Notification(props) {
@@ -29,6 +30,7 @@ export default function Notification(props) {
     let prevOpenedRow;
 
     let [list, setList] = useState([]);
+    let [clearAllAlert, showClearAllAlert] = useState(false);
     const isLoading = useSelector(state => state.global.isLoading);
     const authToken = useSelector(state => state.global.authToken);
     const dispatch = useDispatch();
@@ -46,15 +48,40 @@ export default function Notification(props) {
 
     useEffect(() => {
         props.navigation.setParams({'clearAllNotifications': clearAllNotifications});
+        Notifications.removeAllDeliveredNotifications();
     }, []);
 
     let clearAllNotifications = () =>{
-        apiHandler.clearNotification({'Auth-Token': authToken}, ({}),
-            (response) => {
-                setList([]);
-            },(error) =>{
+            showClearAllAlert(true);
+    };
 
-            })
+
+    let renderClearAllAlert = () => {
+        return (
+            Alert.alert(
+                'Clear all notification',
+                'Are you sure?',
+                [
+                    {
+                        text: 'Yes',
+                        onPress: () => {
+                            showClearAllAlert(false);
+                            apiHandler.clearNotification({'Auth-Token': authToken}, ({}),
+                                (response) => {
+                                    setList([]);
+                                },(error) =>{}
+                            )
+                        }
+                    },
+                    {   text: 'No',
+                        onPress: () => {
+                            showClearAllAlert(false)
+                        }
+                    }
+                ],
+                { cancelable: false }
+            )
+        );
     };
 
     let clearNotification = (notification) => {
@@ -108,7 +135,7 @@ export default function Notification(props) {
             leftThreshold={40}
             rightThreshold={80}
             renderLeftActions = {(progress, dragX) => leftSwipe(progress, dragX, item)}
-            onSwipeableWillOpen = {() => closePrevOpenRow(index)}>
+            onSwipeableWillOpen = {() => closePreviousOpenRow(index)}>
             <TouchableWithoutFeedback
                 onPress={() => {
                 let object = JSON.parse(item.data);
@@ -130,7 +157,7 @@ export default function Notification(props) {
         </Swipeable>
     };
 
-    let closePrevOpenRow = (index) =>{
+    let closePreviousOpenRow = (index) =>{
         if (prevOpenedRow && prevOpenedRow !== row[index]) {
             prevOpenedRow.close();
         }
@@ -146,17 +173,24 @@ export default function Notification(props) {
     };
 
     let renderContainer = () => {
-        return <FlatList
-            data={list}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderRow}
-            ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
-        />
+        if(list.length === 0){
+            return <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
+                    <Text style={styles.boldFont}>No notifications to display</Text>
+                </View>
+        }else{
+            return <FlatList
+                data={list}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderRow}
+                ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
+            />
+        }
     };
 
     return (
         <View style={styles.container}>
             {isLoading ? renderSpinner() : renderContainer()}
+            {clearAllAlert && renderClearAllAlert()}
         </View>
     )
 }
