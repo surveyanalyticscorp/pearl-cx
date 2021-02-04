@@ -65,7 +65,8 @@ const Notification = props =>{
                             )
                         }
                     },
-                    {   text: 'No',
+                    {
+                        text: 'No',
                         onPress: () => {
                             showClearAllAlert(false)
                         }
@@ -76,11 +77,11 @@ const Notification = props =>{
         );
     };
 
-    let clearNotification = (notification) => {
+    let clearNotification = (notification, index) => {
         console.log('Delete item: ' + notification.id);
         props.clearNotificationAction(notification);
-        if(prevOpenedRow){
-            prevOpenedRow.close();
+        if(row[index]){
+            row[index].close();
         }
 
         apiHandler.clearNotification({'Auth-Token': authToken}, ({"id": notification.id}),
@@ -89,6 +90,7 @@ const Notification = props =>{
                 showErrorFlashMessage(error.errorAlert);
             })
     };
+
 
     let viewTicket = (ticketID) => {
         props.navigation.navigate('Ticket Details', {ticketID: ticketID, parentRoute: 'Dashboard'});
@@ -106,7 +108,7 @@ const Notification = props =>{
             <TouchableOpacity onPress={() => clearNotification(item)} activeOpacity={0.5}>
                 <View style={styles.deleteBox}>
                     <Animated.Text style={{transform: [{scale: scale}]}}>
-                        Delete
+                        Deleting
                     </Animated.Text>
                 </View>
             </TouchableOpacity>
@@ -126,7 +128,7 @@ const Notification = props =>{
             leftThreshold={40}
             rightThreshold={80}
             renderLeftActions = {(progress, dragX) => leftSwipe(progress, dragX, item)}
-            onSwipeableWillOpen = {() => closePreviousOpenRow(index)}>
+            onSwipeableWillOpen = {() => clearNotification(item, index)}>
             <TouchableWithoutFeedback
                 onPress={() => {
                 let object = JSON.parse(item.data);
