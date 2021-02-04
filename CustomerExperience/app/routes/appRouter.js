@@ -63,6 +63,7 @@ const AppRouter = props => {
     const userInfo = useSelector(state => state.global.userInfo);
     const dynamicLink = useSelector(state => state.global.dynamicLink);
     let [isAppActive, setAppActiveState] = useState(false);
+    let [notificationCount, setNotificationCount] = useState(0);
     let ref = useRef();
 
     const linking = {
@@ -107,6 +108,10 @@ const AppRouter = props => {
             setAppActiveState(false);
         }
     },[isAppActive]);
+
+    useEffect(() =>{
+        setNotificationCount(props.notificationLogs.length)
+    },[props.notificationLogs]);
 
     const handleDynamicLink = link => {
         if (link && link.url) {
@@ -200,11 +205,15 @@ const AppRouter = props => {
                     <FontIcon name={'bell'} size={1.1*Sizes.icons} color={Colors.white}/>
                 </TouchableOpacity>
                 {/** show unread/badge icon when notification read/unread status comes*/}
-               {/* <View style={{position: 'absolute', top: -2, right: -2}}>
-                    <FontIcon name={'circle'} size={12} color={Colors.red}/>
-                </View>*/}
+                {notificationCount > 0 ? renderNotificationBadge() : <View/>}
             </View>
         );
+    };
+
+    let renderNotificationBadge = () =>{
+      return <View style={{position: 'absolute', top: -7, right: -7, width: 16, height: 16, borderRadius: 8, backgroundColor:  'red', alignItems:'center'}}>
+          <Text style={{fontSize: 10, color: 'white'}}> {notificationCount} </Text>
+      </View>
     };
 
     const ClearAllButton = (props) =>{
@@ -503,6 +512,13 @@ const AppRouter = props => {
     );
 };
 
+const mapStateToProps = state => {
+    return {
+        notificationLogs: state.notification.notificationLogs
+    };
+};
+
+
 const mapDispatchToProps = dispatch => ({
     dispatch,
     getNotification: (token) => {
@@ -510,7 +526,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(null, mapDispatchToProps)(AppRouter);
+export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);
 
 const styles = StyleSheet.create({
     drawerStyle: {
