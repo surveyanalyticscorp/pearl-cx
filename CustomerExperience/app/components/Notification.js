@@ -6,7 +6,7 @@ import {
     FlatList,
     TouchableWithoutFeedback,
     TouchableOpacity,
-    Animated, Alert, BackHandler
+    Animated, Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {Colors} from '../styles/color.constants';
@@ -15,7 +15,6 @@ import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
 import {showErrorFlashMessage} from '../Utils/Utility';
-import {showLoading} from '../redux/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {apiHandler} from '../api/ApiHandler';
 import moment from 'moment';
@@ -23,28 +22,19 @@ import {HalfMonthDateYearFormat} from '../Utils/AppConstants';
 import QPSpinner from '../widgets/QPSpinner';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {Notifications} from 'react-native-notifications';
+import {connect} from 'react-redux';
+import {clearNotification} from "../redux/actions/notification.actions";
 
 
-export default function Notification(props) {
+const Notification = props =>{
     let row: Array<any> = [];
     let prevOpenedRow;
 
-    let [list, setList] = useState([]);
     let [clearAllAlert, showClearAllAlert] = useState(false);
     const isLoading = useSelector(state => state.global.isLoading);
     const authToken = useSelector(state => state.global.authToken);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(showLoading(true));
-        apiHandler.getNotificationData({'Auth-Token': authToken}, (response) => {
-            setList(response.notificationLogs);
-            dispatch(showLoading(false))
-        }, (error) => {
-            showErrorFlashMessage(error.errorAlert);
-            dispatch(showLoading(false));
-        })
-    }, []);
 
     useEffect(() => {
         props.navigation.setParams({'clearAllNotifications': clearAllNotifications});
@@ -66,10 +56,12 @@ export default function Notification(props) {
                         text: 'Yes',
                         onPress: () => {
                             showClearAllAlert(false);
+                            props.clearNotificationAction(undefined);
                             apiHandler.clearNotification({'Auth-Token': authToken}, ({}),
                                 (response) => {
-                                    setList([]);
-                                },(error) =>{}
+                                },(error) =>{
+                                    showErrorFlashMessage(error.errorAlert);
+                                }
                             )
                         }
                     },
@@ -86,15 +78,13 @@ export default function Notification(props) {
 
     let clearNotification = (notification) => {
         console.log('Delete item: ' + notification.id);
+        props.clearNotificationAction(notification);
+        if(prevOpenedRow){
+            prevOpenedRow.close();
+        }
+
         apiHandler.clearNotification({'Auth-Token': authToken}, ({"id": notification.id}),
             (response) => {
-                if(prevOpenedRow){
-                    prevOpenedRow.close();
-                }
-                let filteredList = list.filter(function (item) {
-                    return item.id !== notification.id
-                });
-                setList(filteredList);
             }, (error) => {
                 showErrorFlashMessage(error.errorAlert);
             })
@@ -122,6 +112,7 @@ export default function Notification(props) {
             </TouchableOpacity>
         );
     };
+
 
     let renderRow = ({item, index}) => {
         let imagePath = item.logType === 'U' ?
@@ -157,7 +148,9 @@ export default function Notification(props) {
         </Swipeable>
     };
 
+
     let closePreviousOpenRow = (index) =>{
+        console.log('onSwipeableWillOpen');
         if (prevOpenedRow && prevOpenedRow !== row[index]) {
             prevOpenedRow.close();
         }
@@ -173,13 +166,13 @@ export default function Notification(props) {
     };
 
     let renderContainer = () => {
-        if(list.length === 0){
+        if(props.notificationLogs.length === 0){
             return <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
                     <Text style={styles.boldFont}>No notifications to display</Text>
                 </View>
         }else{
             return <FlatList
-                data={list}
+                data={props.notificationLogs}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderRow}
                 ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
@@ -193,7 +186,23 @@ export default function Notification(props) {
             {clearAllAlert && renderClearAllAlert()}
         </View>
     )
-}
+};
+
+
+const mapStateToProps = state => {
+    return {
+        notificationLogs: state.notification.notificationLogs
+    };
+};
+
+const mapDispatchToProps = dispatch => ({
+    clearNotificationAction: (notification) => {
+        dispatch (clearNotification(notification))
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Notification);
+
 
 const styles = StyleSheet.create({
     container: {

@@ -45,6 +45,8 @@ import SearchTicket from '../components/dashboard/components/SearchTicket';
 import TicketFilter from '../components/dashboard/components/TicketFilter';
 import FeedbackSorter from '../components/feedback/FeedbackSorter';
 import SearchFeedback from '../components/feedback/SearchFeedback';
+import {getNotification} from "../redux/actions/notification.actions";
+
 
 const Drawer = createDrawerNavigator();
 const FeedbackStack = createStackNavigator();
@@ -85,6 +87,7 @@ const AppRouter = props => {
                 title: remoteMessage.notification.title,
                 data: remoteMessage.data
             }, parseInt(remoteMessage.messageId));
+            props.getNotification(authToken);
         });
         addNotificationListeners(ref);
         return () => {
@@ -116,6 +119,7 @@ const AppRouter = props => {
         if (!isStringNullOrEmpty(authToken)) {
             let data = [[ASYNC_AUTH_TOKEN, authToken],[ASYNC_USER_INFO, JSON.stringify(userInfo)]];
             AsyncStorage.multiSet(data, (error) => {});
+            props.getNotification(authToken);
         }
     }, [authToken]);
 
@@ -500,7 +504,10 @@ const AppRouter = props => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    dispatch
+    dispatch,
+    getNotification: (token) => {
+        dispatch(getNotification(token))
+    }
 });
 
 export default connect(null, mapDispatchToProps)(AppRouter);

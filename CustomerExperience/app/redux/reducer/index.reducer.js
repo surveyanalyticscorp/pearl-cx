@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 import dashboardReducer from './DashboardReducer';
 import globalReducer from './GlobalReducer';
+import notificationReducer from './NotificationReducer'
 import {CLEAR_USER_INFO} from '../actions';
 import {NetworkReducer} from 'react-native-redux-connectivity';
 
@@ -13,9 +14,10 @@ const rootReducer = (state, action) => {
 };
 
 const appReducer = combineReducers({
-  network: NetworkReducer,
-  dashboard: dashboardReducer,
-  global: globalReducer,
+    network: NetworkReducer,
+    dashboard: dashboardReducer,
+    global: globalReducer,
+    notification: notificationReducer,
 });
 
 
