@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: MarginConstants.tab1,
     paddingVertical: PaddingConstants.tab1,
-    marginBottom: MarginConstants.tab3
+    marginBottom: MarginConstants.tab2
   },
   container: {
     alignItems: 'center',

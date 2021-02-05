@@ -122,13 +122,13 @@ const ForgotPassword = props => {
 
     let renderSpinnerResetButton = () => {
         return props.isLoading ?
-            <View style={styles.nextButton}>
+            <View style={styles.resetPswdButton}>
                 <QPSpinner spinnerColor={Colors.white}/>
             </View>
             :
             <QPButton
                 testID='SignInButton'
-                style={styles.nextButton}
+                style={styles.resetPswdButton}
                 onPress={onResetPasswordClick}
                 buttonText={stringConst.resetPassword}
                 textStyle={styles.nextText}
@@ -264,12 +264,13 @@ const styles = StyleSheet.create({
         marginBottom: MarginConstants.tab3,
         paddingHorizontal: MarginConstants.tab1,
     },
-    nextButton: {
+    resetPswdButton: {
         height: MarginConstants.tab4,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: Colors.accent,
-        marginBottom: MarginConstants.tab3
+        marginBottom: MarginConstants.tab2,
+        marginHorizontal: MarginConstants.tab1
     },
     nextText: {
         color: Colors.white,
