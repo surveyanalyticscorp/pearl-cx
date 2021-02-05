@@ -46,6 +46,8 @@ import TicketFilter from '../components/dashboard/components/TicketFilter';
 import FeedbackSorter from '../components/feedback/FeedbackSorter';
 import SearchFeedback from '../components/feedback/SearchFeedback';
 import {getNotification} from "../redux/actions/notification.actions";
+import ResponsesStack from "./ResponsesStack";
+import DashboardStack from "./DashboardStack";
 
 
 const Drawer = createDrawerNavigator();
@@ -374,7 +376,7 @@ const AppRouter = props => {
         </FeedbackStack.Navigator>
     );
 
-    const feedbackModalStack = props => (
+    /*const responsesModalStack = props => (
         <FeedbackStack.Navigator mode="modal">
             <FeedbackStack.Screen
                 name="Responses"
@@ -399,7 +401,7 @@ const AppRouter = props => {
             />
 
         </FeedbackStack.Navigator>
-    );
+    );*/
 
     const dashboardStack = props => (
         <DetractorStack.Navigator>
@@ -432,7 +434,7 @@ const AppRouter = props => {
         </DetractorStack.Navigator>
     );
 
-    const dashboardModalStack = props => (
+    /*const dashboardModalStack = props => (
         <DetractorStack.Navigator mode="modal">
             <DetractorStack.Screen
                 name="Dashboard"
@@ -466,7 +468,7 @@ const AppRouter = props => {
             />
 
         </DetractorStack.Navigator>
-    );
+    );*/
 
     const settingStack = (props) => (
         <SettingsStack.Navigator>
@@ -500,8 +502,8 @@ const AppRouter = props => {
             {authToken ? <Drawer.Navigator
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
-                    <Drawer.Screen name="Dashboard" component={dashboardModalStack}/>
-                    <Drawer.Screen name="Responses" component={feedbackModalStack}/>
+                    <Drawer.Screen name="Dashboard" component={DashboardStack}/>
+                    <Drawer.Screen name="Responses" component={ResponsesStack}/>
                     <Drawer.Screen name="Settings" component={settingStack}/>
                 </Drawer.Navigator>
                 :
