@@ -187,12 +187,11 @@ const FeedbackTabStack = () => (
 
 
 const renderFeedbackScene = (props) => {
-
     const feedbackForm = useContext(FormContext);
     let [list, setList] = useState(feedbackForm.feedbackData);
     let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);
     let prevSortRef = usePrevious(feedbackForm.sortingText);
-    let [exitAlert, showExitAlert] = useState(false);
+    //let [exitAlert, showExitAlert] = useState(false);
 
     useEffect(() => {
         if(prevFeedbackRef !== feedbackForm.feedbackData) {
@@ -206,7 +205,7 @@ const renderFeedbackScene = (props) => {
         }
     },[feedbackForm.sortingText]);
 
-    useEffect(() => {
+    /*useEffect(() => {
         BackHandler.addEventListener("hardwareBackPress", handleBackPress);
         return function cleanup() {
             BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
@@ -220,32 +219,7 @@ const renderFeedbackScene = (props) => {
             showExitAlert(true);
         }
         return true
-    };
-
-
-    const renderExitAlert = () => {
-        return (
-            Alert.alert(
-                'Exit App',
-                'Are you sure?',
-                [
-                    {
-                        text: 'Yes',
-                        onPress: () => {
-                            showExitAlert(false);
-                            BackHandler.exitApp()
-                        }
-                    },
-                    {   text: 'No',
-                        onPress: () => {
-                            showExitAlert(false)
-                        }
-                    }
-                ],
-                { cancelable: false }
-            )
-        );
-    };
+    };*/
 
 
     const _onPressRow = (data) => {
@@ -321,7 +295,6 @@ const renderFeedbackScene = (props) => {
                     contentContainerStyle={styles.container}
                     ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
                     ListHeaderComponent={renderResponseFilterView}/>
-                {exitAlert && renderExitAlert()}
             </View>
         );
     };

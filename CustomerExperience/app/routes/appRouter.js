@@ -286,15 +286,14 @@ const AppRouter = props => {
             inactiveTintColor: Colors.primary,
         }}
                                 lazy
-                                keyboardDismissMode={'auto'}
-        >
+                                keyboardDismissMode={'auto'}>
             <TicketLogTab.Screen name="Overview" component={TicketOverview} initialParams={{ticketID: props.route.params.ticketID, parentRoute: props.route.params.parentRoute}}/>
             <TicketLogTab.Screen name="Comments" component={TicketComments} initialParams={{ticketID: props.route.params.ticketID, parentRoute: props.route.params.parentRoute}}/>
             <TicketLogTab.Screen name="Logs" component={TicketComments} initialParams={{ticketID: props.route.params.ticketID, parentRoute: props.route.params.parentRoute}}/>
         </TicketLogTab.Navigator>
     );
 
-    const DetractorTicketsTabStack = props => (
+    const CloseLoopTicketsTab = props => (
         <DetractorTicketsTab.Navigator tabBarOptions={{
             labelStyle: {width: width/3, fontSize: TextSizes.secondary},
             indicatorStyle: {backgroundColor: Colors.accent},
@@ -414,7 +413,7 @@ const AppRouter = props => {
             />
             <DetractorStack.Screen
                 name="Closed Loop"
-                component={DetractorTicketsTabStack}
+                component={CloseLoopTicketsTab}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                     headerRight: props => <SearchIcon route={'Dashboard'}/>,
