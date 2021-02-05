@@ -15,9 +15,12 @@ import {Sizes} from "../styles/Size.constant";
 import {MarginConstants} from "../styles/margin.constants";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import {FontFamily} from "../styles/font.constants";
+import DetractorScenes from "../components/dashboard/components/DetractorScenes";
 
 const DateRangeTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
+const DetractorTicketsTab = createMaterialTopTabNavigator();
+
 
 let { width } = Dimensions.get('window');
 
@@ -87,7 +90,7 @@ export const SearchIcon = (props) => {
 };
 
 
-const SaveDashboardDate = (props) => {
+export const SaveDashboardDate = (props) => {
     return (
         <View style={[styles.rightHeaderButton,{marginHorizontal: 1.5*MarginConstants.tab1}]}>
             <TouchableOpacity
@@ -101,7 +104,7 @@ const SaveDashboardDate = (props) => {
 };
 
 
-const EditTicket = () => {
+export const EditTicket = () => {
     let navigation = useNavigation();
     const state = useNavigationState(state => state);
     return (
@@ -116,7 +119,27 @@ const EditTicket = () => {
     );
 };
 
-const DateRangeTabStack = props => (
+export  const CloseLoopTicketsTab = props => (
+    <DetractorTicketsTab.Navigator tabBarOptions={{
+        labelStyle: {width: width/3, fontSize: TextSizes.secondary},
+        indicatorStyle: {backgroundColor: Colors.accent},
+        style:{backgroundColor: Colors.white, width: '100%'},
+        initialLayout: {width: Dimensions.get('window').width},
+        tabStyle:{height: 1.5*PaddingConstants.tab4},
+        activeTintColor: Colors.accent,
+        inactiveTintColor: Colors.primary,
+    }}
+                                   lazy
+                                   keyboardDismissMode={'auto'}
+    >
+        <DetractorTicketsTab.Screen name="New" component={DetractorScenes} initialParams={{ dataCount:0}}/>
+        <DetractorTicketsTab.Screen name="Open" component={DetractorScenes} initialParams={{ dataCount:1}}/>
+        <DetractorTicketsTab.Screen name="Escalated" component={DetractorScenes} initialParams={{ dataCount:3}}/>
+        <DetractorTicketsTab.Screen name="Resolved" component={DetractorScenes} initialParams={{ dataCount:2}}/>
+    </DetractorTicketsTab.Navigator>
+);
+
+export const DateRangeTabStack = props => (
     <DateRangeTab.Navigator tabBarOptions={{
         labelStyle: {color: Colors.primary, width: width / 2, fontSize: TextSizes.secondary},
         indicatorStyle: {backgroundColor: Colors.accent},
@@ -134,7 +157,7 @@ const DateRangeTabStack = props => (
     </DateRangeTab.Navigator>
 );
 
-const TicketLogTabStack = props => (
+export const TicketLogTabStack = props => (
     <TicketLogTab.Navigator tabBarOptions={{
         labelStyle: {width: width / 3, fontSize: TextSizes.semiSecondary},
         indicatorStyle: {backgroundColor: Colors.accent},
