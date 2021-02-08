@@ -1,10 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {DrawerActions, NavigationContainer, useNavigation, useNavigationState} from '@react-navigation/native';
+import { NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
 import DrawerContent from '../routes/DrawerContent';
@@ -12,20 +10,14 @@ import CxDashboard from '../components/dashboard/CxDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import SignInStack from './signInStack';
 import {isStringNullOrEmpty} from '../Utils/Utility';
-import Feedback from '../components/feedback/Feedback';
-import FeedbackDetails from '../components/feedback/FeedbackDetails';
 import {
     ASYNC_AUTH_TOKEN,
     ASYNC_USER_INFO,
 } from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 import {connect, useSelector} from 'react-redux';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
-import DetractorScenes from '../components/dashboard/components/DetractorScenes';
 import {MarginConstants} from '../styles/margin.constants';
-import UpdateTicket from '../components/dashboard/ticketManagement/UpdateTicket';
 import AppSettings from '../components/settings/AppSettings';
 import AccountDetails from '../components/settings/AccountDetails';
 import {Sizes} from '../styles/Size.constant';
@@ -40,7 +32,6 @@ import Notification from '../components/Notification';
 import CreateTicket from '../components/dashboard/components/CreateTicket';
 import SearchTicket from '../components/dashboard/components/SearchTicket';
 import TicketFilter from '../components/dashboard/components/TicketFilter';
-import SearchFeedback from '../components/feedback/SearchFeedback';
 import {getNotification} from "../redux/actions/notification.actions";
 import ResponsesStack from "./ResponsesStack";
 import {

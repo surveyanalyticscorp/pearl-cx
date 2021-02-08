@@ -98,7 +98,9 @@ const CxDashboard = props => {
 
 
     let handleBackPress = () => {
-        showExitAlert(true);
+        if(!props.navigation.canGoBack()) {
+            showExitAlert(true);
+        }
         return true
     };
 
