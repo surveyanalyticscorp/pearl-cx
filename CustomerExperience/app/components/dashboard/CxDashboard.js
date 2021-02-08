@@ -51,27 +51,29 @@ const CxDashboard = props => {
         wait(500).then();
     }, [props.range]);
 
-    useEffect(() => {
-        const unsubscribe = props.navigation.addListener('focus', () => {
-            if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate)) {
-                let selectedRange = getSelectedRange({type:1});
-                props.setRange({
-                    type: 1,
-                    startDate: selectedRange.startDate,
-                    endDate: selectedRange.endDate
-                });
-                let data = {
-                    startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
-                    endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT)
-                };
-                props.getDashboardContent(props.authToken, data);
-            } else {
-                getDashboardData();
-            }
-        });
 
-        return unsubscribe;
-    }, [props.navigation, props.range]);
+    useEffect(() => {
+        /*const unsubscribe = props.navigation.addListener('focus', () => {
+           // Add code here which execute every time when user landed on screen.
+        });
+        return unsubscribe;*/
+
+        if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate)) {
+            let selectedRange = getSelectedRange({type:1});
+            props.setRange({
+                type: 1,
+                startDate: selectedRange.startDate,
+                endDate: selectedRange.endDate
+            });
+            let data = {
+                startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
+                endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT)
+            };
+            props.getDashboardContent(props.authToken, data);
+        } else {
+            getDashboardData();
+        }
+    }, [props.range]);//props.navigation
 
 
     useEffect(() => {
