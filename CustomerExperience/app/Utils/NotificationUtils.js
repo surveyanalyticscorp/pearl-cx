@@ -16,12 +16,12 @@ async function requestUserPermission() {
 
 let getToken = () => {
     AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then((value) => {
-        console.log(value)
+        console.log(value);
         if(isStringNullOrEmpty(value)) {
             messaging()
                 .getToken()
                 .then(token => {
-                    console.log(token)
+                    console.log(token);
                     AsyncStorage.setItem(ASYNC_PUSH_TOKEN, token)
                 });
         }
@@ -47,7 +47,7 @@ export function addNotificationListeners(navigation) {
     /** When the user presses a notification displayed via FCM, this listener will be called if the app has opened from a background state */
     messaging().onNotificationOpenedApp(remoteMessage => {
         console.log('Notification caused app to open from background state:', remoteMessage.notification);
-        actionOnNotification(remoteMessage.data.CXTicket)
+        actionOnNotification(remoteMessage.data.CXTicket, navigation)
     });
 
     /** When a notification from FCM has triggered the application to open from a quit state */
