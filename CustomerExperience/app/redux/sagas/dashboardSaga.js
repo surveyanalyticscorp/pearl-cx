@@ -1,12 +1,12 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
-import {CX_HOME} from '../../api/Constant';
+import { CX_HOME} from '../../api/Constant';
 import {
   API_ERROR,
 } from '../actions/index';
 import {
-  DASHBOARD_RECEIVED,
-  GET_DASHBOARD,
+    DASHBOARD_RECEIVED,
+    GET_DASHBOARD,
 } from '../actions/dashboard.actions';
 import {showErrorFlashMessage} from '../../Utils/Utility';
 

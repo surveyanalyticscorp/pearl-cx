@@ -38,7 +38,7 @@ export const loginStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.accent,
-    marginBottom: MarginConstants.tab3
+    marginBottom: MarginConstants.tab2
   },
   signInText: {
     color: Colors.white,

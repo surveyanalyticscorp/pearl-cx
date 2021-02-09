@@ -1,5 +1,14 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, TouchableWithoutFeedback, useWindowDimensions, View} from 'react-native';
+import {
+    Alert,
+    BackHandler,
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableWithoutFeedback,
+    useWindowDimensions,
+    View
+} from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
@@ -19,6 +28,7 @@ import {apiHandler} from '../../api/ApiHandler';
 import {FontFamily} from '../../styles/font.constants';
 import {Sizes} from '../../styles/Size.constant';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {dashboardStyles} from "../dashboard/dashboard.style";
 
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
@@ -92,6 +102,7 @@ function Feedback(props){
     useEffect(() => {
         pagination && setPageOffset(pageOffset + 1)
     },[pagination]);
+
 
     let onEndReached = () => {
         !pagination && setPagination(true);
@@ -176,11 +187,11 @@ const FeedbackTabStack = () => (
 
 
 const renderFeedbackScene = (props) => {
-
     const feedbackForm = useContext(FormContext);
     let [list, setList] = useState(feedbackForm.feedbackData);
     let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);
     let prevSortRef = usePrevious(feedbackForm.sortingText);
+    //let [exitAlert, showExitAlert] = useState(false);
 
     useEffect(() => {
         if(prevFeedbackRef !== feedbackForm.feedbackData) {
@@ -193,6 +204,23 @@ const renderFeedbackScene = (props) => {
             feedbackForm.onRefresh()
         }
     },[feedbackForm.sortingText]);
+
+    /*useEffect(() => {
+        BackHandler.addEventListener("hardwareBackPress", handleBackPress);
+        return function cleanup() {
+            BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
+        };
+    },[]);
+
+    let handleBackPress = () => {
+        if(props.navigation.canGoBack()) {
+            props.navigation.goBack();
+        }else{
+            showExitAlert(true);
+        }
+        return true
+    };*/
+
 
     const _onPressRow = (data) => {
         props.navigation.navigate('Feedback Details', {
@@ -253,20 +281,21 @@ const renderFeedbackScene = (props) => {
 
     let renderFeedbackList = () => {
         return (
-            <FlatList
-                data={list}
-                renderItem={_renderRow}
-                keyExtractor={item => item.responseSetID+''}
-                onEndReachedThreshold={0}
-                onEndReached={feedbackForm.onFeedbackEndReached}
-                refreshing={false}
-                ListEmptyComponent={renderNoDataFound}
-                onRefresh={feedbackForm.onRefresh}
-                extraData={[list]}
-                contentContainerStyle={styles.container}
-                ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
-                ListHeaderComponent={renderResponseFilterView}
-            />
+            <View style={dashboardStyles.container}>
+                <FlatList
+                    data={list}
+                    renderItem={_renderRow}
+                    keyExtractor={item => item.responseSetID+''}
+                    onEndReachedThreshold={0}
+                    onEndReached={feedbackForm.onFeedbackEndReached}
+                    refreshing={false}
+                    ListEmptyComponent={renderNoDataFound}
+                    onRefresh={feedbackForm.onRefresh}
+                    extraData={[list]}
+                    contentContainerStyle={styles.container}
+                    ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
+                    ListHeaderComponent={renderResponseFilterView}/>
+            </View>
         );
     };
 

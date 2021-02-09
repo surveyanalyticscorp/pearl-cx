@@ -1,6 +1,6 @@
 import {all, fork} from 'redux-saga/effects';
 import {
-  watchGetDashboard,
+  watchGetDashboard
 } from './dashboardSaga';
 import {
   watchDoLogin,
@@ -13,11 +13,13 @@ import {
   watchGetClosedLoopSegmentDetails,
   watchGetDetractorTicketDetail,
 } from './ClosedLoopSaga';
+import {watchGetNotification} from "./notificationSaga";
 
 // Redux Saga: Root Saga
 export function* rootSaga() {
   yield all([
     fork(watchGetDashboard),
+    fork(watchGetNotification),
     fork(watchDoLogin),
     fork(watchValidatePasswordLink),
     fork(watchUpdatePassword),
