@@ -8,7 +8,6 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import StringUtils from '../../../Utils/StringUtils';
 import {FontFamily} from '../../../styles/font.constants';
 import moment from 'moment';
-import {HalfMonthDateYearFormat, YMDFORMAT} from '../../../Utils/AppConstants';
 import {Sizes} from '../../../styles/Size.constant';
 import Icomoon from '../../../config/Icons/icon-native';
 import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
@@ -16,7 +15,7 @@ import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
 export default function TicketWidget(props){
 
     let [viewDetails, setViewDetails] = useState(false);
-    let time = moment(props.item.timestamp, YMDFORMAT).fromNow();
+    let time = moment(props.item.timestamp).fromNow();
 
     useEffect(() => {
         if (viewDetails) {
