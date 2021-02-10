@@ -26,6 +26,7 @@ import {isObjectEmpty, isStringNullOrEmpty} from '../Utils/Utility';
 import messaging from '@react-native-firebase/messaging';
 import {DrawerActions} from '@react-navigation/native';
 import QPSpinner from '../widgets/QPSpinner';
+import {Notifications} from "react-native-notifications";
 
 const DrawerContent = props => {
     const [userCredentials, setUserCredentials] = useState('');
@@ -153,6 +154,7 @@ const DrawerContent = props => {
         };
         props.logoutUser(props.authToken, params);
         setLoading(true);
+        Notifications.removeAllDeliveredNotifications();
     };
 
     let renderAppVersion = () => {
