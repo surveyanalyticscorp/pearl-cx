@@ -41,14 +41,12 @@ import {
     SearchIcon,
 } from "./CommonScreen";
 import CommonScreens from "./CommonScreen";
+import {navigationRef} from "./RootNavigation";
 
 
 const Drawer = createDrawerNavigator();
-const FeedbackStack = createStackNavigator();
 const DetractorStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
-
-let { width } = Dimensions.get('window');
 
 const AppRouter = props => {
 
@@ -74,6 +72,7 @@ const AppRouter = props => {
                     handleDynamicLink(link)
                 }
             });
+
         const unsubscribeNotifications = messaging().onMessage(async remoteMessage => {
             console.log("on message"+JSON.stringify(remoteMessage));
             Notifications.postLocalNotification({
@@ -83,7 +82,9 @@ const AppRouter = props => {
             }, parseInt(remoteMessage.messageId));
             props.getNotification(authToken);
         });
-        addNotificationListeners(ref);
+
+        addNotificationListeners();
+
         return () => {
             unsubscribeLinks();
             unsubscribeNotifications()
@@ -255,7 +256,11 @@ const AppRouter = props => {
     };
 
     return (
-        <NavigationContainer theme={MyTheme} ref={ref} fallback={renderSpinner()} linking={linking} >
+        <NavigationContainer
+            theme={MyTheme}
+            ref={navigationRef}
+            fallback={renderSpinner()}
+            linking={linking} >
             {authToken ? <Drawer.Navigator
                     drawerStyle={styles.drawerStyle}
                     drawerContent={props => <DrawerContent {...props} />}>
