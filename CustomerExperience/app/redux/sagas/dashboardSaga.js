@@ -2,7 +2,7 @@ import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import { CX_HOME} from '../../api/Constant';
 import {
-  API_ERROR,
+    API_ERROR, WANT_TO_RELOAD_DASHBOARD,
 } from '../actions/index';
 import {
     DASHBOARD_RECEIVED,
@@ -22,6 +22,11 @@ export function* fetchDashboard(action) {
       type: DASHBOARD_RECEIVED,
       response: json,
     });
+
+    yield put({
+      type: WANT_TO_RELOAD_DASHBOARD,
+      payload: { wantToReload: false}
+    })
   } catch (error) {
     showErrorFlashMessage(error.errorAlert);
     yield put({

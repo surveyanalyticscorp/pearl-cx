@@ -55,9 +55,9 @@ const CxDashboard = props => {
     useEffect(() => {
         /*const unsubscribe = props.navigation.addListener('focus', () => {
            // Add code here which execute every time when user landed on screen.
+
         });
         return unsubscribe;*/
-
         if(StringUtils.isEmpty(props.range.startDate) && StringUtils.isEmpty(props.range.endDate)) {
             let selectedRange = getSelectedRange({type:1});
             props.setRange({
@@ -73,7 +73,7 @@ const CxDashboard = props => {
         } else {
             getDashboardData();
         }
-    }, [props.range]);//props.navigation
+    }, [props.range, props.wantToReload]);//props.navigation
 
 
     useEffect(() => {
@@ -338,7 +338,8 @@ const mapStateToProps = state => {
         authToken: state.global.authToken,
         range: state.global.range,
         sDate: state.global.range.startDate,
-        eDate: state.global.range.endDate
+        eDate: state.global.range.endDate,
+        wantToReload: state.global.wantToReloadDashboard
     };
 };
 
