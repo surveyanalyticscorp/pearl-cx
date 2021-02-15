@@ -19,7 +19,9 @@ export default function FeedbackCell(props){
     let disable = props.origin === 'Detail';
 
     let [feedbackTapped, setTapped] = useState(false);
-    let surveyTakenDate = moment(props.item.surveyTakenDate).fromNow();
+    //let surveyTakenDate = moment(props.item.surveyTakenDate).fromNow();
+    let surveyTakenDate = props.item.surveyTakenDate;
+
     useEffect(() => {
         if (feedbackTapped) {
             setTapped(false);

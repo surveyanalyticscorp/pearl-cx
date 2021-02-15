@@ -38,8 +38,7 @@ export default function FeedbackSorter(props) {
                         labelStyle={{fontSize: TextSizes.primary, color: Colors.primary}}
                         buttonSize={MarginConstants.tab3/2}
                         buttonOuterSize={MarginConstants.tab3}
-                        wrapStyle={{marginVertical: MarginConstants.tab1}}
-                    >
+                        wrapStyle={{marginVertical: MarginConstants.tab1}}>
                     </RadioForm>
                 </View>
             </ScrollView>

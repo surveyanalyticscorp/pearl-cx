@@ -28,6 +28,7 @@ import StringUtils from '../../../Utils/StringUtils';
 import {updateClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
 import QPSpinner from '../../../widgets/QPSpinner';
 import {showErrorFlashMessage} from '../../../Utils/Utility';
+import {wantToReloadDashboard} from "../../../redux/actions";
 
 function UpdateTicket(props) {
     let priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
@@ -345,7 +346,8 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearDetractorTicketDetails())
     },
     updateTicket: () => {
-        dispatch(updateTicket())
+        dispatch(updateTicket());
+        dispatch(wantToReloadDashboard(true));
     }
 });
 

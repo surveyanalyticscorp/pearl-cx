@@ -27,6 +27,7 @@ import {connect} from 'react-redux';
 import {addClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
 import {showErrorFlashMessage, validateEmail} from '../../../Utils/Utility';
 import {StackActions} from '@react-navigation/native';
+import {wantToReloadDashboard} from "../../../redux/actions";
 
 function CreateTicket(props) {
 
@@ -342,7 +343,8 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearDetractorTicketDetails())
     },
     addTicket: () => {
-        dispatch(addTicket())
+        dispatch(addTicket());
+        dispatch(wantToReloadDashboard(true));
     }
 });
 

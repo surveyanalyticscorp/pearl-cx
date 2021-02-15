@@ -4,6 +4,8 @@ import {ASYNC_PUSH_TOKEN} from '../api/Constant';
 import {isStringNullOrEmpty} from './Utility';
 import {Notifications} from 'react-native-notifications';
 import {AppState} from 'react-native';
+import * as RootNagation from '../routes/RootNavigation'
+
 
 async function requestUserPermission() {
     try {
@@ -16,12 +18,12 @@ async function requestUserPermission() {
 
 let getToken = () => {
     AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then((value) => {
-        console.log(value)
+        console.log(value);
         if(isStringNullOrEmpty(value)) {
             messaging()
                 .getToken()
                 .then(token => {
-                    console.log(token)
+                    console.log(token);
                     AsyncStorage.setItem(ASYNC_PUSH_TOKEN, token)
                 });
         }
@@ -37,25 +39,23 @@ export async function checkNotificationPermission() {
     }
 }
 
-export function addNotificationListeners(navigation) {
-
+export function addNotificationListeners() {
     messaging().setBackgroundMessageHandler(async remoteMessage => {
-        console.log('Message handled in the background!', remoteMessage);
+        console.log('Notification Message handled in the background!', remoteMessage);
     });
 
 
     /** When the user presses a notification displayed via FCM, this listener will be called if the app has opened from a background state */
     messaging().onNotificationOpenedApp(remoteMessage => {
         console.log('Notification caused app to open from background state:', remoteMessage.notification);
-        actionOnNotification(remoteMessage.data.CXTicket)
+        actionOnNotification(remoteMessage.data.CXTicket, 0)
     });
 
     /** When a notification from FCM has triggered the application to open from a quit state */
-    messaging().getInitialNotification()
-        .then(remoteMessage => {
+    messaging().getInitialNotification().then(remoteMessage => {
             if (remoteMessage) {
                 console.log('Notification caused app to open from quit state:', remoteMessage.notification,);
-                actionOnNotification(remoteMessage.data.CXTicket, navigation)
+                actionOnNotification(remoteMessage.data.CXTicket, 1000)
             }
         });
 
@@ -67,17 +67,20 @@ export function addNotificationListeners(navigation) {
     Notifications.events().registerNotificationOpened((notification: Notification, completion) => {
         console.log(`Notification opened here: ${JSON.stringify(notification.payload)}`);
         if(AppState.currentState === "active") {
-            actionOnNotification(notification.payload.data.CXTicket, navigation)
+            actionOnNotification(notification.payload.data.CXTicket, 0)
         }
         completion();
     });
 }
 
-function actionOnNotification(ticketId, navigation){
-    navigation.current?.navigate('Ticket Details', {
-        ticketID: ticketId,
-        parentRoute: 'Dashboard'
-    });
+function actionOnNotification(ticketId, timeOut){
+    setTimeout(()=>{
+        RootNagation.navigate('Ticket Details', {
+            ticketID: ticketId,
+            parentRoute: 'Dashboard'
+        });
+    },timeOut);
+
 }
 
 

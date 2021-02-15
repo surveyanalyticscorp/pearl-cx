@@ -7,7 +7,7 @@ import {
     SET_AUTH_TOKEN,
     SET_RANGE_FILTER,
     SET_USER_DETAILS_FOR_RESET_PASSWORD,
-    SET_DYNAMIC_LINK,
+    SET_DYNAMIC_LINK, WANT_TO_RELOAD_DASHBOARD,
 } from '../actions';
 import {
     LOGIN_RESPONSE,
@@ -23,6 +23,7 @@ const initialState = {
         endDate: ''
     },
     isLoading: false,
+    wantToReloadDashboard: true,
     isError: false,
     userInfo: {},
     authToken:'',
@@ -74,6 +75,9 @@ const globalReducer = (state = initialState, action) => {
         }
         case IS_LOADING: {
             return {...state, isLoading: action.payload.isLoading};
+        }
+        case WANT_TO_RELOAD_DASHBOARD: {
+            return {...state, wantToReloadDashboard: action.payload.wantToReload};
         }
         case FILL_USER_INFO: {
             return {
