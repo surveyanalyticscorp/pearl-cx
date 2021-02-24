@@ -6,11 +6,11 @@ import {CLEAR_USER_INFO} from '../actions';
 import {NetworkReducer} from 'react-native-redux-connectivity';
 
 const rootReducer = (state, action) => {
-  if (action.type === CLEAR_USER_INFO) {
-    let {network} = state;
-    state = {network};
-  }
-  return appReducer(state, action);
+    if (action.type === CLEAR_USER_INFO) {
+        let {network} = state;
+        state = {network};
+    }
+    return appReducer(state, action);
 };
 
 const appReducer = combineReducers({

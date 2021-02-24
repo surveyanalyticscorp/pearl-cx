@@ -25,6 +25,7 @@ const initialState = {
     isLoading: false,
     wantToReloadDashboard: true,
     isError: false,
+    baseUrl: 'https://api.questionpro.com/',
     userInfo: {},
     authToken:'',
     errorMessage: '',

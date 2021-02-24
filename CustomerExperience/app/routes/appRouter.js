@@ -62,6 +62,7 @@ const AppRouter = props => {
     };
 
     useEffect(() => {
+        global.baseUrl = props.baseUrl;
         const unsubscribeLinks = dynamicLinks().onLink(handleDynamicLink);
         Notifications.registerRemoteNotifications();
         checkNotificationPermission().then({});
@@ -277,7 +278,8 @@ const AppRouter = props => {
 
 const mapStateToProps = state => {
     return {
-        notificationLogs: state.notification.notificationLogs
+        notificationLogs: state.notification.notificationLogs,
+        baseUrl: state.global.baseUrl,
     };
 };
 

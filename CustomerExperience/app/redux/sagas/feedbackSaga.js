@@ -1,6 +1,6 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
-import {CX_GET_ALL_RESPONSE, CX_ADD_UPDATE_TICKET} from '../../api/Constant';
+import {CX_GET_ALL_RESPONSE} from '../../api/Constant';
 import {
   API_ERROR,
   IS_LOADING,
