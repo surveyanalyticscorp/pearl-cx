@@ -15,7 +15,7 @@ const getResetPasswordURLComponents = (link) => {
 
 export const handleResetPasswordLink = (dynamicLink, ref, authToken, dispatch) => {
     if(StringUtils.isNotEmpty(dynamicLink)) {
-        if(dynamicLink.includes('resetpassword') && isStringNullOrEmpty(authToken)) {
+        if(dynamicLink.includes('resetpassword') /*&& isStringNullOrEmpty(authToken)*/) {
             let components = getResetPasswordURLComponents(dynamicLink);
             if(ref.current?.getCurrentRoute().name === 'ForgotPassword') {
                 let data = {

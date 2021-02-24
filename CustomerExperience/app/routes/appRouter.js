@@ -94,12 +94,12 @@ const AppRouter = props => {
     },[]);
 
     useEffect(() => {
-        handleResetPasswordLink(dynamicLink, ref, authToken, props.dispatch);
+        handleResetPasswordLink(dynamicLink, navigationRef, authToken, props.dispatch);
     },[dynamicLink]);
 
     useEffect(() => {
         if(isAppActive) {
-            handleResetPasswordLink(dynamicLink, ref, authToken, props.dispatch);
+            handleResetPasswordLink(dynamicLink, navigationRef, authToken, props.dispatch);
             setAppActiveState(false);
         }
     },[isAppActive]);
