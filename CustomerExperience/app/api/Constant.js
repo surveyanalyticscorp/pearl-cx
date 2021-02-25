@@ -3,6 +3,7 @@ export const ASYNC_USER_INFO = 'userInfo';
 export const ASYNC_USER_CREDENTIALS = 'userCredentials';
 export const ASYNC_RESET_CREDENTIALS = 'resetCredentials';
 export const ASYNC_PUSH_TOKEN = 'pushtoken';
+export const BASE_URL = 'baseUrl';
 
 //export const BASE_URL = 'https://api.questionpro.com/';
 

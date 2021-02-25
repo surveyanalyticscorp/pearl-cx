@@ -14,7 +14,7 @@ import QPSpinner from '../../widgets/QPSpinner';
 import SafeAreaView from 'react-native-safe-area-view';
 import {setDynamicLink} from '../../redux/actions';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_PUSH_TOKEN} from '../../api/Constant';
+import {ASYNC_PUSH_TOKEN, BASE_URL} from '../../api/Constant';
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 
 const stringConst = require('../../config/locales/en');
@@ -51,6 +51,7 @@ const Login = props => {
 
     useEffect(() => {
         if(props.baseUrl && StringUtils.isNotEmpty(props.baseUrl)){
+            AsyncStorage.setItem(BASE_URL, props.baseUrl).then();
             global.baseUrl = props.baseUrl;
             onSignInPress();
         }

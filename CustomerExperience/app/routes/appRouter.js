@@ -11,8 +11,8 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import SignInStack from './signInStack';
 import {isStringNullOrEmpty} from '../Utils/Utility';
 import {
-    ASYNC_AUTH_TOKEN,
-    ASYNC_USER_INFO,
+    ASYNC_AUTH_TOKEN, ASYNC_PUSH_TOKEN,
+    ASYNC_USER_INFO, BASE_URL,
 } from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 import {connect, useSelector} from 'react-redux';
@@ -62,7 +62,13 @@ const AppRouter = props => {
     };
 
     useEffect(() => {
-        global.baseUrl = props.baseUrl;
+        global.baseUrl = '';
+        AsyncStorage.getItem(BASE_URL).then((baseUrl) => {
+            console.log(`Base url from async storage: ${baseUrl}`);
+            if(baseUrl){
+                global.baseUrl = baseUrl;
+            }
+        });
         const unsubscribeLinks = dynamicLinks().onLink(handleDynamicLink);
         Notifications.registerRemoteNotifications();
         checkNotificationPermission().then({});
@@ -278,8 +284,7 @@ const AppRouter = props => {
 
 const mapStateToProps = state => {
     return {
-        notificationLogs: state.notification.notificationLogs,
-        baseUrl: state.global.baseUrl,
+        notificationLogs: state.notification.notificationLogs
     };
 };
 
