@@ -17,7 +17,7 @@ import {MarginConstants} from '../styles/margin.constants';
 import {clearUserInfo} from '../redux/actions';
 import {doLogout} from '../redux/actions/login.actions';
 import {connect} from 'react-redux';
-import {ASYNC_PUSH_TOKEN, ASYNC_USER_CREDENTIALS} from '../api/Constant';
+import {ASYNC_PUSH_TOKEN, ASYNC_USER_CREDENTIALS, BASE_URL} from '../api/Constant';
 import {Sizes} from '../styles/Size.constant';
 import {PaddingConstants} from '../styles/padding.constants';
 import StringUtils from '../Utils/StringUtils';
@@ -155,6 +155,9 @@ const DrawerContent = props => {
         props.logoutUser(props.authToken, params);
         setLoading(true);
         Notifications.removeAllDeliveredNotifications();
+        AsyncStorage.setItem(BASE_URL, '').then(()=>{
+            global.baseUrl = ''
+        });
     };
 
     let renderAppVersion = () => {
