@@ -6,7 +6,7 @@ import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import {connect} from 'react-redux';
 import {clearError, showLoading} from '../../redux/actions/index';
-import {doLogin} from '../../redux/actions/login.actions';
+import {authenticatePanel, doLogin} from '../../redux/actions/login.actions';
 import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
 import {Colors} from '../../styles/color.constants';
@@ -49,6 +49,13 @@ const Login = props => {
         }
     }, [validation, props.isError]);
 
+    useEffect(() => {
+        if(props.baseUrl && StringUtils.isNotEmpty(props.baseUrl)){
+            global.baseUrl = props.baseUrl;
+            onSignInPress();
+        }
+    },[props.baseUrl]);
+
     const onSignInPress = () => {
         Keyboard.dismiss();
         AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then((token) => {
@@ -58,6 +65,12 @@ const Login = props => {
                 loginAction(token)
             }
         })
+    };
+
+    let authenticateAccessCode = () =>{
+        if(StringUtils.isEmpty(props.baseUrl)) {
+            props.authenticatePanel({accessCode: userData.accessCode});
+        }
     };
 
     let loginAction = (token) => {
@@ -133,7 +146,7 @@ const Login = props => {
 
 
     const handleSubmit = text =>{
-        onSignInPress();
+        authenticateAccessCode();
     };
 
     let renderSpinnerLoginButton = () => {
@@ -145,7 +158,7 @@ const Login = props => {
             <QPButton
                 testID='SignInButton'
                 style={loginStyles.signInButton}
-                onPress={onSignInPress}
+                onPress={authenticateAccessCode}
                 buttonText={stringConst.signIn}
                 textStyle={loginStyles.signInText}
             />
@@ -247,10 +260,14 @@ const mapStateToProps = state => {
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
         dynamicLink: state.global.dynamicLink,
+        baseUrl: state.global.baseUrl
     };
 };
 
 const mapDispatchToProps = dispatch => ({
+    authenticatePanel : param =>{
+        dispatch(authenticatePanel(param))
+    },
     loginClick: data => {
         dispatch(clearError());
         dispatch(doLogin(data));
