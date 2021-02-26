@@ -7,7 +7,7 @@ export const BASE_URL = 'baseUrl';
 
 //export const BASE_URL = 'https://api.questionpro.com/';
 
-export const PANEL_AUTH = 'https://cxlabs.questionpro.com/a/nativehtml/panel.auth.PanelRequestHandler';
+export const PANEL_AUTH = 'https://api.questionpro.com/a/nativehtml/panel.auth.PanelRequestHandler';
 export const AUTH_LOGIN =  '/a/nativehtml/cx.auth.CXLogin';
 export const CX_LOGOUT = '/a/nativehtml/cx.auth.CXLogout';
 
