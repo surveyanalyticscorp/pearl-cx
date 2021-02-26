@@ -111,6 +111,7 @@ const Login = props => {
     };
 
     const onForgotPasswordPress = () => {
+        props.clearError();
         Keyboard.dismiss();
         props.navigation.navigate('ForgotPassword', {
             email: userData.email,

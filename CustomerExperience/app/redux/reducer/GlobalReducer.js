@@ -79,6 +79,7 @@ const globalReducer = (state = initialState, action) => {
                 userDetailsForResetPassword: {},
                 updatePasswordResponse: action.response,
                 isLoading: false,
+                baseUrl: ''
             };
         }
         case IS_LOADING: {
@@ -131,6 +132,7 @@ const globalReducer = (state = initialState, action) => {
             return {
                 ...state,
                 logoutResponse: action.response,
+                baseUrl: ''
             };
         }
         default: {

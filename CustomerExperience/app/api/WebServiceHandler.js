@@ -47,6 +47,7 @@ export default class WebServiceHandler {
 
     static postNew(url, headerParam, parameter) {
         let fullUrl = url.includes('http')? url : global.baseUrl + url;
+        console.log(`Url: ${fullUrl}`);
         return new Promise(function (success, failed) {
             fetch(fullUrl, {
                 method: 'post',
