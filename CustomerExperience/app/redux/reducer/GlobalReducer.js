@@ -10,6 +10,7 @@ import {
     SET_DYNAMIC_LINK, WANT_TO_RELOAD_DASHBOARD,
 } from '../actions';
 import {
+    AUTHENTICATE_PANEL_RESPONSE,
     LOGIN_RESPONSE,
     LOGOUT_RESPONSE,
     UPDATE_PASSWORD_RESPONSE,
@@ -25,6 +26,7 @@ const initialState = {
     isLoading: false,
     wantToReloadDashboard: true,
     isError: false,
+    baseUrl: '',
     userInfo: {},
     authToken:'',
     errorMessage: '',
@@ -38,6 +40,12 @@ const initialState = {
 
 const globalReducer = (state = initialState, action) => {
     switch (action.type) {
+        case AUTHENTICATE_PANEL_RESPONSE: {
+            return{
+                ...state,
+                baseUrl: action.response.body.mobileAPIURL,
+            }
+        }
         case LOGIN_RESPONSE: {
             return {
                 ...state,
@@ -71,6 +79,7 @@ const globalReducer = (state = initialState, action) => {
                 userDetailsForResetPassword: {},
                 updatePasswordResponse: action.response,
                 isLoading: false,
+                baseUrl: ''
             };
         }
         case IS_LOADING: {
@@ -123,6 +132,7 @@ const globalReducer = (state = initialState, action) => {
             return {
                 ...state,
                 logoutResponse: action.response,
+                baseUrl: ''
             };
         }
         default: {

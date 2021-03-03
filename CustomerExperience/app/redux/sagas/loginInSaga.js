@@ -1,6 +1,7 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {
+    PANEL_AUTH,
     AUTH_LOGIN,
     CX_GET_RESET_PASSWORD_LINK,
     CX_VALIDATE_PASSWORD_LINK,
@@ -14,7 +15,8 @@ import {
 } from '../actions';
 import AsyncStorage from '@react-native-community/async-storage';
 import {showErrorFlashMessage, showSuccessFlashMessage} from '../../Utils/Utility';
-import {LOGIN_RESPONSE,
+import {
+    LOGIN_RESPONSE,
     GET_LOGIN,
     VALIDATE_RESET_PASSWORD_LINK,
     UPDATE_PASSWORD,
@@ -22,8 +24,30 @@ import {LOGIN_RESPONSE,
     GET_RESET_PASSWORD_LINK,
     VALIDATE_RESET_PASSWORD_LINK_RESPONSE,
     LOGOUT,
-    LOGOUT_RESPONSE,
+    LOGOUT_RESPONSE, AUTHENTICATE_PANEL, AUTHENTICATE_PANEL_RESPONSE,
 } from '../actions/login.actions';
+
+
+export function* doAuthenticatePanel(action) {
+    try {
+        const response = yield WebServiceHandler.postNew(
+            PANEL_AUTH,
+            {},
+            action.param,
+        );
+
+        yield put({type: AUTHENTICATE_PANEL_RESPONSE, response: response});
+
+    } catch (error) {
+        yield put({type: API_ERROR, error: error});
+    }
+}
+
+export function* watchAuthenticatePanel() {
+    yield takeLatest(AUTHENTICATE_PANEL, doAuthenticatePanel);
+}
+
+
 
 export function* doLoginApiCall(action) {
     try {
@@ -41,6 +65,8 @@ export function* doLoginApiCall(action) {
         AsyncStorage.setItem(ASYNC_USER_CREDENTIALS, JSON.stringify(userData))
     } catch (error) {
         yield put({type: API_ERROR, error: error});
+        yield put({type: AUTHENTICATE_PANEL_RESPONSE, response: {body:{mobileAPIURL:''}}});
+        global.baseUrl = '';
     }
 }
 

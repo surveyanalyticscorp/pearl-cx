@@ -11,8 +11,8 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import SignInStack from './signInStack';
 import {isStringNullOrEmpty} from '../Utils/Utility';
 import {
-    ASYNC_AUTH_TOKEN,
-    ASYNC_USER_INFO,
+    ASYNC_AUTH_TOKEN, ASYNC_PUSH_TOKEN,
+    ASYNC_USER_INFO, BASE_URL,
 } from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 import {connect, useSelector} from 'react-redux';
@@ -62,6 +62,8 @@ const AppRouter = props => {
     };
 
     useEffect(() => {
+        global.baseUrl = '';
+        setGlobalBaseUrl();
         const unsubscribeLinks = dynamicLinks().onLink(handleDynamicLink);
         Notifications.registerRemoteNotifications();
         checkNotificationPermission().then({});
@@ -74,7 +76,7 @@ const AppRouter = props => {
             });
 
         const unsubscribeNotifications = messaging().onMessage(async remoteMessage => {
-            console.log("on message"+JSON.stringify(remoteMessage));
+            //console.log("on message"+JSON.stringify(remoteMessage));
             Notifications.postLocalNotification({
                 body: remoteMessage.notification.body,
                 title: remoteMessage.notification.title,
@@ -93,12 +95,13 @@ const AppRouter = props => {
     },[]);
 
     useEffect(() => {
-        handleResetPasswordLink(dynamicLink, ref, authToken, props.dispatch);
+        setGlobalBaseUrl();
+        handleResetPasswordLink(dynamicLink, navigationRef, authToken, props.dispatch);
     },[dynamicLink]);
 
     useEffect(() => {
         if(isAppActive) {
-            handleResetPasswordLink(dynamicLink, ref, authToken, props.dispatch);
+            handleResetPasswordLink(dynamicLink, navigationRef, authToken, props.dispatch);
             setAppActiveState(false);
         }
     },[isAppActive]);
@@ -122,6 +125,14 @@ const AppRouter = props => {
         }
     }, [authToken]);
 
+    const setGlobalBaseUrl = () => {
+        AsyncStorage.getItem(BASE_URL).then((baseUrl) => {
+            //console.log(`Base url from async storage: ${baseUrl}`);
+            if(baseUrl){
+                global.baseUrl = baseUrl;
+            }
+        });
+    };
 
     const NotificationIcon = () => {
         let navigation = useNavigation();

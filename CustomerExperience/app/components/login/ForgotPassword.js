@@ -25,8 +25,8 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import SafeAreaView from 'react-native-safe-area-view';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_RESET_CREDENTIALS} from '../../api/Constant';
-import {requestPasswordLink, validateResetPasswordLink} from '../../redux/actions/login.actions';
+import {ASYNC_RESET_CREDENTIALS, BASE_URL} from '../../api/Constant';
+import {authenticatePanel, requestPasswordLink, validateResetPasswordLink} from '../../redux/actions/login.actions';
 
 let { width }= Dimensions.get('window');
 const stringConst = require('../../config/locales/en');
@@ -86,6 +86,20 @@ const ForgotPassword = props => {
         }
     }, [validation, props.isError]);
 
+    useEffect(() => {
+        if(props.baseUrl && StringUtils.isNotEmpty(props.baseUrl)){
+            AsyncStorage.setItem(BASE_URL, props.baseUrl).then();
+            global.baseUrl = props.baseUrl;
+            onResetPasswordClick();
+        }
+    },[props.baseUrl]);
+
+    const authenticateAccessCode = () =>{
+        if(StringUtils.isEmpty(props.baseUrl)) {
+            props.authenticatePanel({accessCode: accessCode});
+        }
+    };
+
     const onResetPasswordClick = () => {
         if (isValidateInput()) {
             let data = {
@@ -129,7 +143,7 @@ const ForgotPassword = props => {
             <QPButton
                 testID='SignInButton'
                 style={styles.resetPswdButton}
-                onPress={onResetPasswordClick}
+                onPress={authenticateAccessCode}
                 buttonText={stringConst.resetPassword}
                 textStyle={styles.nextText}
             />
@@ -211,10 +225,14 @@ const mapStateToProps = state => {
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
         dynamicLink: state.global.dynamicLink,
-        validatePasswordLinkResponse: state.global.validatePasswordLinkResponse
+        validatePasswordLinkResponse: state.global.validatePasswordLinkResponse,
+        baseUrl: state.global.baseUrl
     };
 };
 const mapDispatchToProps = dispatch => ({
+    authenticatePanel : param =>{
+        dispatch(authenticatePanel(param))
+    },
     setUserDetails: (data) => {
         dispatch(setUserDetailsForResetPassword(data))
     },

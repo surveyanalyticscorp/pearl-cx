@@ -6,7 +6,7 @@ import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import {connect} from 'react-redux';
 import {clearError, showLoading} from '../../redux/actions/index';
-import {doLogin} from '../../redux/actions/login.actions';
+import {authenticatePanel, doLogin} from '../../redux/actions/login.actions';
 import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
 import {Colors} from '../../styles/color.constants';
@@ -14,7 +14,7 @@ import QPSpinner from '../../widgets/QPSpinner';
 import SafeAreaView from 'react-native-safe-area-view';
 import {setDynamicLink} from '../../redux/actions';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_PUSH_TOKEN} from '../../api/Constant';
+import {ASYNC_PUSH_TOKEN, BASE_URL} from '../../api/Constant';
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 
 const stringConst = require('../../config/locales/en');
@@ -49,6 +49,14 @@ const Login = props => {
         }
     }, [validation, props.isError]);
 
+    useEffect(() => {
+        if(props.baseUrl && StringUtils.isNotEmpty(props.baseUrl)){
+            AsyncStorage.setItem(BASE_URL, props.baseUrl).then();
+            global.baseUrl = props.baseUrl;
+            onSignInPress();
+        }
+    },[props.baseUrl]);
+
     const onSignInPress = () => {
         Keyboard.dismiss();
         AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then((token) => {
@@ -58,6 +66,12 @@ const Login = props => {
                 loginAction(token)
             }
         })
+    };
+
+    let authenticateAccessCode = () =>{
+        if(StringUtils.isEmpty(props.baseUrl)) {
+            props.authenticatePanel({accessCode: userData.accessCode});
+        }
     };
 
     let loginAction = (token) => {
@@ -97,6 +111,7 @@ const Login = props => {
     };
 
     const onForgotPasswordPress = () => {
+        props.clearError();
         Keyboard.dismiss();
         props.navigation.navigate('ForgotPassword', {
             email: userData.email,
@@ -133,7 +148,7 @@ const Login = props => {
 
 
     const handleSubmit = text =>{
-        onSignInPress();
+        authenticateAccessCode();
     };
 
     let renderSpinnerLoginButton = () => {
@@ -145,7 +160,7 @@ const Login = props => {
             <QPButton
                 testID='SignInButton'
                 style={loginStyles.signInButton}
-                onPress={onSignInPress}
+                onPress={authenticateAccessCode}
                 buttonText={stringConst.signIn}
                 textStyle={loginStyles.signInText}
             />
@@ -247,10 +262,14 @@ const mapStateToProps = state => {
         isError: state.global.isError,
         errorMessage: state.global.errorMessage,
         dynamicLink: state.global.dynamicLink,
+        baseUrl: state.global.baseUrl
     };
 };
 
 const mapDispatchToProps = dispatch => ({
+    authenticatePanel : param =>{
+        dispatch(authenticatePanel(param))
+    },
     loginClick: data => {
         dispatch(clearError());
         dispatch(doLogin(data));
