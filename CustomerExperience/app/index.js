@@ -9,6 +9,8 @@ import { enableScreens } from 'react-native-screens';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as globalVariables from '../app/styles/globalStyleVariables';
 import {View} from 'react-native';
+import codePush from "react-native-code-push";
+
 import Siren from 'react-native-siren'
 
 EStyleSheet.build(globalVariables);
@@ -19,7 +21,7 @@ const defaultOptions = {
     message: 'Do you want to update the app?',
 };
 
-export default class CxApp extends Component {
+class CxApp extends Component {
 
     constructor(){
         super();
@@ -53,3 +55,5 @@ export default class CxApp extends Component {
         );
     }
 }
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+export default codePush(codePushOptions)(CxApp);

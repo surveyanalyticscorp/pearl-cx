@@ -40,6 +40,7 @@ export function* doAuthenticatePanel(action) {
 
     } catch (error) {
         yield put({type: API_ERROR, error: error});
+
     }
 }
 
