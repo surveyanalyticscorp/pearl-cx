@@ -69,7 +69,7 @@ const Login = props => {
     };
 
     let authenticateAccessCode = () =>{
-        if(StringUtils.isEmpty(props.baseUrl)) {
+        if(checkValidation() && StringUtils.isEmpty(props.baseUrl)) {
             props.authenticatePanel({accessCode: userData.accessCode});
         }
     };
@@ -268,6 +268,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     authenticatePanel : param =>{
+        dispatch(clearError());
         dispatch(authenticatePanel(param))
     },
     loginClick: data => {
