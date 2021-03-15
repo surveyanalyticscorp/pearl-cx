@@ -8,20 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* CustomerExperienceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CustomerExperienceTests.m */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
-		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		181D834824DACEFC005F57C2 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 181D834724DACEFC005F57C2 /* libRNDeviceInfo.a */; };
 		184A469324BC608A0048FF84 /* FiraSans-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 184A468E24BC60890048FF84 /* FiraSans-Medium.otf */; };
 		184A469424BC608A0048FF84 /* FiraSans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 184A468F24BC60890048FF84 /* FiraSans-Regular.otf */; };
 		184A469524BC608A0048FF84 /* FiraSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 184A469024BC60890048FF84 /* FiraSans-Bold.otf */; };
 		184A469624BC608A0048FF84 /* FiraSans-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 184A469124BC60890048FF84 /* FiraSans-SemiBold.otf */; };
 		184A469724BC608A0048FF84 /* FiraSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 184A469224BC608A0048FF84 /* FiraSans-Light.otf */; };
+		18724D7525FF511E009464D7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 18724D6E25FF511E009464D7 /* main.m */; };
+		18724D7625FF511E009464D7 /* Base.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 18724D6F25FF511E009464D7 /* Base.lproj */; };
+		18724D7725FF511E009464D7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18724D7025FF511E009464D7 /* Images.xcassets */; };
+		18724D7825FF511E009464D7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 18724D7325FF511E009464D7 /* AppDelegate.m */; };
+		18724D9625FF54A7009464D7 /* CXLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18724D9525FF54A7009464D7 /* CXLaunchScreen.storyboard */; };
 		219DCE1E25124CAA00236FA1 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 219DCE1D25124CAA00236FA1 /* icomoon.ttf */; };
 		21E6248A254A8291005F1200 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21E62489254A8290005F1200 /* GoogleService-Info.plist */; };
-		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* CustomerExperienceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CustomerExperienceTests.m */; };
 		B9E576B31B00B6622DA59074 /* libPods-CustomerExperience.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ED6973DFF20CC3BA22B0936D /* libPods-CustomerExperience.a */; };
 /* End PBXBuildFile section */
@@ -54,12 +53,6 @@
 		04AE03DE69A0461BA9710649 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		0F0C9E63594A41E18CF98FEE /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* CX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CX.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = CustomerExperoence/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = CustomerExperoence/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = CustomerExperoence/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = CustomerExperoence/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = CustomerExperoence/main.m; sourceTree = "<group>"; };
 		16516CCB359946E29FB9C1AA /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		181D834724DACEFC005F57C2 /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		184A468E24BC60890048FF84 /* FiraSans-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Medium.otf"; sourceTree = "<group>"; };
@@ -67,7 +60,14 @@
 		184A469024BC60890048FF84 /* FiraSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.otf"; sourceTree = "<group>"; };
 		184A469124BC60890048FF84 /* FiraSans-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-SemiBold.otf"; sourceTree = "<group>"; };
 		184A469224BC608A0048FF84 /* FiraSans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Light.otf"; sourceTree = "<group>"; };
-		2101A9FE254A8A4F004D104B /* CX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = CX.entitlements; path = CustomerExperience/CX.entitlements; sourceTree = "<group>"; };
+		18724D6E25FF511E009464D7 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = CustomerExperience/main.m; sourceTree = "<group>"; };
+		18724D6F25FF511E009464D7 /* Base.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Base.lproj; path = CustomerExperience/Base.lproj; sourceTree = "<group>"; };
+		18724D7025FF511E009464D7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = CustomerExperience/Images.xcassets; sourceTree = "<group>"; };
+		18724D7225FF511E009464D7 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = CustomerExperience/AppDelegate.h; sourceTree = "<group>"; };
+		18724D7325FF511E009464D7 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = CustomerExperience/AppDelegate.m; sourceTree = "<group>"; };
+		18724D7425FF511E009464D7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = CustomerExperience/Info.plist; sourceTree = "<group>"; };
+		18724D8625FF51D6009464D7 /* CX.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = CX.entitlements; path = CustomerExperience/CX.entitlements; sourceTree = "<group>"; };
+		18724D9525FF54A7009464D7 /* CXLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CXLaunchScreen.storyboard; sourceTree = "<group>"; };
 		219DCE1D25124CAA00236FA1 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
 		21E62489254A8290005F1200 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* CustomerExperience-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CustomerExperience-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,16 +145,10 @@
 		13B07FAE1A68108700A75B9A /* CustomerExperience */ = {
 			isa = PBXGroup;
 			children = (
-				2101A9FE254A8A4F004D104B /* CX.entitlements */,
+				18724C7C25FF4994009464D7 /* CustomerExperience */,
 				184A468D24BC60670048FF84 /* fonts */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				21E62489254A8290005F1200 /* GoogleService-Info.plist */,
-				13B07FB51A68108700A75B9A /* Images.xcassets */,
-				13B07FB61A68108700A75B9A /* Info.plist */,
-				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
-				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = CustomerExperience;
 			sourceTree = "<group>";
@@ -170,6 +164,21 @@
 				184A469124BC60890048FF84 /* FiraSans-SemiBold.otf */,
 			);
 			name = fonts;
+			sourceTree = "<group>";
+		};
+		18724C7C25FF4994009464D7 /* CustomerExperience */ = {
+			isa = PBXGroup;
+			children = (
+				18724D8625FF51D6009464D7 /* CX.entitlements */,
+				18724D7225FF511E009464D7 /* AppDelegate.h */,
+				18724D7325FF511E009464D7 /* AppDelegate.m */,
+				18724D6F25FF511E009464D7 /* Base.lproj */,
+				18724D7025FF511E009464D7 /* Images.xcassets */,
+				18724D7425FF511E009464D7 /* Info.plist */,
+				18724D6E25FF511E009464D7 /* main.m */,
+				18724D9525FF54A7009464D7 /* CXLaunchScreen.storyboard */,
+			);
+			name = CustomerExperience;
 			sourceTree = "<group>";
 		};
 		218ABB4710C94E958D79A8E6 /* Resources */ = {
@@ -391,10 +400,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				18724D7725FF511E009464D7 /* Images.xcassets in Resources */,
 				184A469424BC608A0048FF84 /* FiraSans-Regular.otf in Resources */,
+				18724D9625FF54A7009464D7 /* CXLaunchScreen.storyboard in Resources */,
 				21E6248A254A8291005F1200 /* GoogleService-Info.plist in Resources */,
-				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				18724D7625FF511E009464D7 /* Base.lproj in Resources */,
 				219DCE1E25124CAA00236FA1 /* icomoon.ttf in Resources */,
 				184A469524BC608A0048FF84 /* FiraSans-Bold.otf in Resources */,
 				184A469324BC608A0048FF84 /* FiraSans-Medium.otf in Resources */,
@@ -407,7 +417,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,8 +581,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				18724D7825FF511E009464D7 /* AppDelegate.m in Sources */,
+				18724D7525FF511E009464D7 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -581,7 +590,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,18 +615,6 @@
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		13B07FB11A68108700A75B9A /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				13B07FB21A68108700A75B9A /* Base */,
-			);
-			name = LaunchScreen.xib;
-			path = CustomerExperoence;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
@@ -678,7 +674,7 @@
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/CustomerExperoence/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/CustomerExperience/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.4.1;
 				OTHER_LDFLAGS = (
@@ -707,7 +703,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 0.1;
 				DEVELOPMENT_TEAM = 32Y3X84598;
-				INFOPLIST_FILE = "$(SRCROOT)/CustomerExperoence/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/CustomerExperience/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.4.1;
 				OTHER_LDFLAGS = (
