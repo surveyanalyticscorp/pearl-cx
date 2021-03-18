@@ -55,5 +55,8 @@ class CxApp extends Component {
         );
     }
 }
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+let codePushOptions = {
+    installMode: codePush.InstallMode.IMMEDIATE,
+    checkFrequency: codePush.CheckFrequency.ON_APP_RESUME
+};
 export default codePush(codePushOptions)(CxApp);
