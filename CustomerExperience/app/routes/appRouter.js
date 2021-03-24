@@ -55,6 +55,7 @@ const AppRouter = props => {
     const dynamicLink = useSelector(state => state.global.dynamicLink);
     let [isAppActive, setAppActiveState] = useState(false);
     let [notificationCount, setNotificationCount] = useState(0);
+    let [baseUrl, setBaseUrl] = useState(undefined);
     let ref = useRef();
 
     const linking = {
@@ -76,7 +77,7 @@ const AppRouter = props => {
             });
 
         const unsubscribeNotifications = messaging().onMessage(async remoteMessage => {
-            //console.log("on message"+JSON.stringify(remoteMessage));
+            console.log("on message"+JSON.stringify(remoteMessage));
             Notifications.postLocalNotification({
                 body: remoteMessage.notification.body,
                 title: remoteMessage.notification.title,
@@ -110,28 +111,35 @@ const AppRouter = props => {
         setNotificationCount(props.notificationLogs.length)
     },[props.notificationLogs]);
 
-    const handleDynamicLink = link => {
-        if (link && link.url) {
-            props.dispatch(setDynamicLink(link.url));
-            setAppActiveState(true)
-        }
-    };
 
     useEffect(() => {
         if (!isStringNullOrEmpty(authToken)) {
             let data = [[ASYNC_AUTH_TOKEN, authToken],[ASYNC_USER_INFO, JSON.stringify(userInfo)]];
             AsyncStorage.multiSet(data, (error) => {});
-            props.getNotification(authToken);
         }
     }, [authToken]);
+
+    useEffect(()=>{
+        if(authToken && baseUrl){
+            props.getNotification(authToken);
+        }
+    },[authToken, baseUrl]);
 
     const setGlobalBaseUrl = () => {
         AsyncStorage.getItem(BASE_URL).then((baseUrl) => {
             //console.log(`Base url from async storage: ${baseUrl}`);
             if(baseUrl){
                 global.baseUrl = baseUrl;
+                setBaseUrl(baseUrl)
             }
         });
+    };
+
+    const handleDynamicLink = link => {
+        if (link && link.url) {
+            props.dispatch(setDynamicLink(link.url));
+            setAppActiveState(true)
+        }
     };
 
     const NotificationIcon = () => {
