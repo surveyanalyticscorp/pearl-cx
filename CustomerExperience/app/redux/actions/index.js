@@ -3,6 +3,7 @@ export const IS_LOGIN = 'IS_LOGIN';
 export const FILL_USER_INFO = 'FILL_USER_INFO';
 export const CLEAR_USER_INFO = 'CLEAR_USER_INFO';
 export const API_ERROR = 'API_ERROR';
+export const IS_ERROR = 'IS_ERROR';
 export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const SET_RANGE_FILTER = 'SET_RANGE_FILTER';
