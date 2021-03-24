@@ -7,7 +7,7 @@ import {
     SET_AUTH_TOKEN,
     SET_RANGE_FILTER,
     SET_USER_DETAILS_FOR_RESET_PASSWORD,
-    SET_DYNAMIC_LINK, WANT_TO_RELOAD_DASHBOARD,
+    SET_DYNAMIC_LINK, WANT_TO_RELOAD_DASHBOARD, IS_ERROR,
 } from '../actions';
 import {
     AUTHENTICATE_PANEL_RESPONSE,
@@ -83,10 +83,16 @@ const globalReducer = (state = initialState, action) => {
             };
         }
         case IS_LOADING: {
-            return {...state, isLoading: action.payload.isLoading};
+            return {
+                ...state,
+                isLoading: action.payload.isLoading
+            };
         }
         case WANT_TO_RELOAD_DASHBOARD: {
-            return {...state, wantToReloadDashboard: action.payload.wantToReload};
+            return {
+                ...state,
+                wantToReloadDashboard: action.payload.wantToReload
+            };
         }
         case FILL_USER_INFO: {
             return {
@@ -134,6 +140,12 @@ const globalReducer = (state = initialState, action) => {
                 logoutResponse: action.response,
                 baseUrl: ''
             };
+        }
+        case IS_ERROR :{
+            return {
+                ...state,
+                isError: action.payload.isError,
+            }
         }
         default: {
             return state;
