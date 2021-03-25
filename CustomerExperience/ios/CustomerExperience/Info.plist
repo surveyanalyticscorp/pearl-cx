@@ -36,7 +36,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CodePushDeploymentKey</key>
-	<string>Jfvm8De91_tclnyo4EFtMaYs4ymQwh486W3Za</string>
+	<string>gPQhNs6OPDE9yJgEyYb0T_VX7jALi0WAojhya</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<true/>
 	<key>FirebaseDynamicLinksCustomDomains</key>
