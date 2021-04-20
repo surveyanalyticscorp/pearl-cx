@@ -94,16 +94,16 @@ const Login = props => {
 
     const checkValidation = () => {
         if (!validateEmail((userData.email))) {
-            setValidation(stringConst.invalidEmail);
+            setValidation(stringConst.onBoarding.invalidEmail);
             return false;
         }
         if (isStringNullOrEmpty(userData.password)) {
-            setValidation(stringConst.invalidPassword);
+            setValidation(stringConst.onBoarding.invalidPassword);
             return false;
         }
 
         if (isStringNullOrEmpty(userData.accessCode)) {
-            setValidation(stringConst.invalidCompanyCode);
+            setValidation(stringConst.onBoarding.invalidCompanyCode);
             return false;
         }
         setValidation('');
@@ -161,7 +161,7 @@ const Login = props => {
                 testID='SignInButton'
                 style={loginStyles.signInButton}
                 onPress={authenticateAccessCode}
-                buttonText={stringConst.signIn}
+                buttonText={stringConst.onBoarding.signIn}
                 textStyle={loginStyles.signInText}
             />
     };
@@ -190,7 +190,7 @@ const Login = props => {
                         <QPTextField
                             testID='emailTextField'
                             autofocus={false}
-                            label={stringConst.email}
+                            label={stringConst.onBoarding.email}
                             defaultValue={''}
                             style={loginStyles.emailInput}
                             onEndEdit={handleEmail}
@@ -204,7 +204,7 @@ const Login = props => {
                         <QPTextField
                             testID='passwordTextField'
                             secureText={true}
-                            label={stringConst.password}
+                            label={stringConst.onBoarding.password}
                             defaultValue={''}
                             style={loginStyles.emailInput}
                             onEndEdit={handlePassword}
@@ -219,7 +219,7 @@ const Login = props => {
                         <QPTextField
                             testID='companyCodeTextField'
                             defaultValue={''}
-                            label={stringConst.companyCode}
+                            label={stringConst.onBoarding.companyCode}
                             style={loginStyles.emailInput}
                             onChange={handleAccessCode}
                             onEndEdit={handleSubmit}
@@ -235,7 +235,7 @@ const Login = props => {
                             style={loginStyles.forgotPswdButton}
                             onPress={onForgotPasswordPress}
                             textStyle={loginStyles.forgotPasswordText}
-                            buttonText={stringConst.forgotPassword}
+                            buttonText={stringConst.onBoarding.forgotPassword}
                         />
                     </View>
                 </KeyboardAvoidingView>

@@ -75,7 +75,8 @@ const ForgotPassword = props => {
 
     useEffect(() => {
         if (StringUtils.isNotEmpty(validation) || props.isError) {
-            let message = props.isError ? props.errorMessage.errorAlert : validation;
+            let apiError = props.errorMessage.errorAlert ? props.errorMessage.errorAlert : props.errorMessage.message;
+            let message = props.isError ? apiError : validation;
             showErrorFlashMessage(message);
             let timer = setTimeout(() => {
                 setValidation('')
@@ -114,11 +115,11 @@ const ForgotPassword = props => {
 
     const isValidateInput = () => {
         if (!validateEmail(email)) {
-            setValidation(stringConst.invalidEmail);
+            setValidation(stringConst.onBoarding.invalidEmail);
             return false;
         }
         if (isStringNullOrEmpty(accessCode)) {
-            setValidation(stringConst.invalidCompanyCode);
+            setValidation(stringConst.onBoarding.invalidCompanyCode);
             return false;
         }
         setValidation('');
@@ -144,7 +145,7 @@ const ForgotPassword = props => {
                 testID='SignInButton'
                 style={styles.resetPswdButton}
                 onPress={authenticateAccessCode}
-                buttonText={stringConst.resetPassword}
+                buttonText={stringConst.onBoarding.resetPassword}
                 textStyle={styles.nextText}
             />
     };
@@ -172,11 +173,11 @@ const ForgotPassword = props => {
                     <View style={styles.textFieldContainer}>
                         <Text
                             style={styles.forgotPasswordMessage}>
-                            {stringConst.forgotPasswordMessage}
+                            {stringConst.onBoarding.forgotPasswordMessage}
                         </Text>
                         <QPTextField
                             autofocus={false}
-                            label={stringConst.email}
+                            label={stringConst.onBoarding.email}
                             defaultValue={email}
                             style={styles.textInput}
                             onChange={handleEmail}
@@ -189,7 +190,7 @@ const ForgotPassword = props => {
                         />
                         <QPTextField
                             defaultValue={accessCode}
-                            label={stringConst.companyCode}
+                            label={stringConst.onBoarding.companyCode}
                             style={styles.textInput}
                             onChange={handleAccessCode}
                             onSubmitEditing={() => {

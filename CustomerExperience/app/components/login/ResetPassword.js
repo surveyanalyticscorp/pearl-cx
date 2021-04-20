@@ -73,15 +73,15 @@ const ResetPassword = props => {
 
     const isValidateInput = () => {
         if (isStringNullOrEmpty(password)) {
-            setValidation(stringConst.invalidPassword);
+            setValidation(stringConst.onBoarding.invalidPassword);
             return false;
         }
         if (isStringNullOrEmpty(confirmPassword)) {
-            setValidation(stringConst.invalidPassword);
+            setValidation(stringConst.onBoarding.invalidPassword);
             return false;
         }
         if (password !== confirmPassword) {
-            setValidation(stringConst.passwordNotMatching);
+            setValidation(stringConst.onBoarding.passwordNotMatching);
             return false;
         }
         setValidation('');
@@ -136,7 +136,7 @@ const ResetPassword = props => {
                     <View style={styles.textFieldContainer}>
                         <Text
                             style={styles.resetPasswordMessage}>
-                            {stringConst.resetPasswordMessage}
+                            {stringConst.onBoarding.resetPasswordMessage}
                         </Text>
                         <QPTextField
                             autofocus={false}

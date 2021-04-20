@@ -1,21 +1,30 @@
 {
   "translation_for": "English",
-  "getStarted":"Get Started",
-  "accessCodeRequired": "Please enter access code",
-  "invalidEmail": "Please enter valid email address",
-  "invalidPassword": "Please enter valid password",
-  "invalidCompanyCode": "Please enter valid company code",
-  "otpRequired": "Please enter a OTP",
-  "email": "Email Address",
-  "password": "Password",
-  "companyCode": "Company Code",
-  "signIn": "Sign In",
-  "forgotPassword": "Forgot Password?",
-  "resetPassword": "Reset Password",
-  "done": "Done",
-  "cancel": "Cancel",
-  "passwordNotMatching": "Password and Confirm password not matching",
-  "enterOtp": "Please enter One Time Password received on your email",
-  "forgotPasswordMessage": "Please enter the details below and hit Reset Password button to reset your password.",
-  "resetPasswordMessage": "Please enter the new password and hit the Update button to change your password."
+  "onBoarding" : {
+    "getStarted":"Get Started",
+    "marketing_title_1" : "Connect and engage with your customers. Anytime, anywhere",
+    "marketing_desc_1" : "Communicate with customers or prospects through a wide selection of feedback channels at every touchpoint anywhere, no matter the device.",
+    "marketing_title_2" : "Take full control of your customer’s journey",
+    "marketing_desc_2" : "Analyze your customer’s 360 experience and quickly identify actionable insights and trends.",
+    "marketing_title_3" : "Manage real-time analytics in one dashboard",
+    "marketing_desc_3" : "Easily monitor your business with the role-based, customizable dashboard from anywhere.",
+    "marketing_title_4" : "Make immediate business decisions",
+    "marketing_desc_4" : "Prioritize actions quickly based on customer data to excel their expectations with our closed-loop feedback system with real-time alerts.",
+    "marketing_title_5" : "Fuel growth organically",
+    "marketing_desc_5" : "Identify your best customers and help them become your brand ambassadors through social referrals with our unique Promoter Amplification system.",
+
+    "invalidEmail": "Please enter valid email address",
+    "invalidPassword": "Please enter valid password",
+    "invalidCompanyCode": "Please enter valid company code",
+    "signIn": "Sign In",
+    "email": "Email Address",
+    "password": "Password",
+    "companyCode": "Company Code",
+    "forgotPassword": "Forgot Password?",
+    "resetPassword": "Reset Password",
+    "forgotPasswordMessage": "Please enter the details below and hit Reset Password button to reset your password.",
+    "passwordNotMatching": "Password and Confirm password not matching",
+    "resetPasswordMessage": "Please enter the new password and hit the Update button to change your password."
+  }
+
 }
