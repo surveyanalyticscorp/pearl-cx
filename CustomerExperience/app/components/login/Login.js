@@ -17,7 +17,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_PUSH_TOKEN, BASE_URL} from '../../api/Constant';
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 
-const stringConst = require('../../config/locales/en');
+const stringConst = require('../../config/translations/en');
 
 const Login = props => {
     let timer = useRef(null);
