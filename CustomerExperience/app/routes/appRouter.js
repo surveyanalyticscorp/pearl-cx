@@ -42,6 +42,7 @@ import {
 } from "./CommonScreen";
 import CommonScreens from "./CommonScreen";
 import {navigationRef} from "./RootNavigation";
+import {setI18nConfig} from "../Utils/MultilinguaUtils";
 
 
 const Drawer = createDrawerNavigator();
@@ -87,6 +88,8 @@ const AppRouter = props => {
         });
 
         addNotificationListeners();
+
+        setI18nConfig();
 
         return () => {
             unsubscribeLinks();

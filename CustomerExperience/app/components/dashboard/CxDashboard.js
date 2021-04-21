@@ -27,6 +27,7 @@ import FilterHeader from '../FilterHeader';
 import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import {setRangeFilter} from '../../redux/actions';
 import {DashboardClosedLoopView} from './DashboardClosedLoopView';
+import {setI18nConfig, translate} from "../../Utils/MultilinguaUtils";
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -281,7 +282,7 @@ const CxDashboard = props => {
                 <View>
                     {renderSegmentTitle(props.dashboardData.primaryStoreName)}
                     {renderDonutChart()}
-                    {renderSegmentTitle('Closed Loop')}
+                    {renderSegmentTitle(translate("closed_loop"))}
                     {getClosedLoopView()}
                     {renderSegmentTitle('Comparison')}
                     {renderStoreNPSList()}

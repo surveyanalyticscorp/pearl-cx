@@ -25,6 +25,10 @@
     "forgotPasswordMessage": "Please enter the details below and hit Reset Password button to reset your password.",
     "passwordNotMatching": "Password and Confirm password not matching",
     "resetPasswordMessage": "Please enter the new password and hit the Update button to change your password."
-  }
+  },
+
+  "dashboard" :" Dashboard",
+  "closed_loop" : "Closed Loop",
+  "comparison" : "Comparison"
 
 }
