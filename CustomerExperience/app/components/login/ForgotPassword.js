@@ -29,7 +29,7 @@ import {ASYNC_RESET_CREDENTIALS, BASE_URL} from '../../api/Constant';
 import {authenticatePanel, requestPasswordLink, validateResetPasswordLink} from '../../redux/actions/login.actions';
 
 let { width }= Dimensions.get('window');
-const stringConst = require('../../config/locales/en');
+const stringConst = require('../../config/translations/en');
 
 const ForgotPassword = props => {
     const [email, setEmail] = useState(props.route.params.email);

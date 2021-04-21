@@ -30,7 +30,7 @@ import {setDynamicLink} from '../../redux/actions';
 import QPTextField from '../../widgets/TextField';
 
 let { width }= Dimensions.get('window');
-const stringConst = require('../../config/locales/en');
+const stringConst = require('../../config/translations/en');
 
 const ResetPassword = props => {
     const [password, setPassword] = useState('');

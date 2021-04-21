@@ -8,7 +8,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {FontFamily} from '../../styles/font.constants';
 
-const stringConst = require('../../config/locales/en');
+const stringConst = require('../../config/translations/en');
 
 const MarketingScreen = props => {
 
