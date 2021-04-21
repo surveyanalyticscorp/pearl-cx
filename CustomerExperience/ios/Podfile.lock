@@ -348,6 +348,10 @@ PODS:
     - RNFBApp
   - RNGestureHandler (1.6.1):
     - React
+  - RNI18n (2.0.15):
+    - React
+  - RNLocalize (2.0.3):
+    - React-Core
   - RNReanimated (1.9.0):
     - React
   - RNScreens (2.9.0):
@@ -403,6 +407,8 @@ DEPENDENCIES:
   - "RNFBDynamicLinks (from `../node_modules/@react-native-firebase/dynamic-links`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNI18n (from `../node_modules/react-native-i18n`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -509,6 +515,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNI18n:
+    :path: "../node_modules/react-native-i18n"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -576,6 +586,8 @@ SPEC CHECKSUMS:
   RNFBDynamicLinks: 4c0bbaa12420d87a42c09f4520948e598db9338a
   RNFBMessaging: c57f56ccaae46907bea428392e17a5cd3291e4d1
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
+  RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
+  RNLocalize: 29e84ea169d3bca6c3b83584536c7f586a07fb98
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
