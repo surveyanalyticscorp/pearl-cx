@@ -16,10 +16,11 @@ import {MarginConstants} from "../styles/margin.constants";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import {FontFamily} from "../styles/font.constants";
 import DetractorScenes from "../components/dashboard/components/DetractorScenes";
+import {translate} from "../Utils/MultilinguaUtils";
 
 const DateRangeTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
-const DetractorTicketsTab = createMaterialTopTabNavigator();
+const CloseLoopTicketsTab = createMaterialTopTabNavigator();
 
 
 let { width } = Dimensions.get('window');
@@ -119,8 +120,8 @@ export const EditTicket = () => {
     );
 };
 
-export  const CloseLoopTicketsTab = props => (
-    <DetractorTicketsTab.Navigator tabBarOptions={{
+export  const CloseLoopTicketsTabs = props => (
+    <CloseLoopTicketsTab.Navigator tabBarOptions={{
         labelStyle: {width: width/3, fontSize: TextSizes.secondary},
         indicatorStyle: {backgroundColor: Colors.accent},
         style:{backgroundColor: Colors.white, width: '100%'},
@@ -132,11 +133,11 @@ export  const CloseLoopTicketsTab = props => (
                                    lazy
                                    keyboardDismissMode={'auto'}
     >
-        <DetractorTicketsTab.Screen name="New" component={DetractorScenes} initialParams={{ dataCount:0}}/>
-        <DetractorTicketsTab.Screen name="Open" component={DetractorScenes} initialParams={{ dataCount:1}}/>
-        <DetractorTicketsTab.Screen name="Escalated" component={DetractorScenes} initialParams={{ dataCount:3}}/>
-        <DetractorTicketsTab.Screen name="Resolved" component={DetractorScenes} initialParams={{ dataCount:2}}/>
-    </DetractorTicketsTab.Navigator>
+        <CloseLoopTicketsTab.Screen name = {translate("dashboard.new")} component={DetractorScenes} initialParams={{ dataCount:0}}/>
+        <CloseLoopTicketsTab.Screen name = {translate("dashboard.open")} component={DetractorScenes} initialParams={{ dataCount:1}}/>
+        <CloseLoopTicketsTab.Screen name = {translate("dashboard.escalated")} component={DetractorScenes} initialParams={{ dataCount:3}}/>
+        <CloseLoopTicketsTab.Screen name = {translate("dashboard.resolved")} component={DetractorScenes} initialParams={{ dataCount:2}}/>
+    </CloseLoopTicketsTab.Navigator>
 );
 
 export const DateRangeTabStack = props => (
