@@ -35,14 +35,14 @@ import TicketFilter from '../components/dashboard/components/TicketFilter';
 import {getNotification} from "../redux/actions/notification.actions";
 import ResponsesStack from "./ResponsesStack";
 import {
-    CloseButton, CloseLoopTicketsTab,
+    CloseButton, CloseLoopTicketsTabs,
     HeaderBackLeft,
     MenuIcon,
     SearchIcon,
 } from "./CommonScreen";
 import CommonScreens from "./CommonScreen";
 import {navigationRef} from "./RootNavigation";
-import {setI18nConfig} from "../Utils/MultilinguaUtils";
+import {setI18nConfig, translate} from "../Utils/MultilinguaUtils";
 
 
 const Drawer = createDrawerNavigator();
@@ -186,16 +186,16 @@ const AppRouter = props => {
     const dashboardStack = props => (
         <DetractorStack.Navigator>
             <DetractorStack.Screen
-                name="Dashboard"
-                component={CxDashboard}
-                options={({ navigation, route }) => ({
+                name = {translate("dashboard.dashboard")}
+                component = {CxDashboard}
+                options = {({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon/>,
                     headerRight: props => <NotificationIcon />,
                 })}
             />
             <DetractorStack.Screen
                 name="Closed Loop"
-                component={CloseLoopTicketsTab}
+                component={CloseLoopTicketsTabs}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                     headerRight: props => <SearchIcon route={'Dashboard'}/>,
@@ -239,7 +239,7 @@ const AppRouter = props => {
                 })}
             />
             <DetractorStack.Screen
-                name="Filter By"
+                name =  {translate("filter_by")}
                 component={TicketFilter}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <View/>,
