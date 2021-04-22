@@ -11,6 +11,7 @@ import moment from 'moment';
 import {Sizes} from '../../../styles/Size.constant';
 import Icomoon from '../../../config/Icons/icon-native';
 import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
+import {translate} from "../../../Utils/MultilinguaUtils";
 
 export default function TicketWidget(props){
 
@@ -81,13 +82,13 @@ export default function TicketWidget(props){
     let getPriority = () => {
         switch (props.item.priority) {
             case 0:
-                return 'Low';
+                return translate("close_loop.low");
             case 1:
-                return 'Medium';
+                return translate("close_loop.medium");
             case 2:
-                return'High';
+                return translate("close_loop.high");
             case 3:
-                return'Critical';
+                return translate("close_loop.critical");
         }
     };
     let getPriorityColor = () => {
