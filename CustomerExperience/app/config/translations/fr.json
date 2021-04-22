@@ -1,6 +1,23 @@
 {
   "translation_for": "French",
-  "dashboard" :"Tableau de bord",
-  "closed_loop" : "Boucle fermée",
-  "comparison" : "Comparaison"
+
+  "dashboard": {
+    "dashboard" :"Tableau de bord",
+    "closed_loop" : "Boucle fermée",
+    "comparison" : "Comparaison",
+    "surveys" : "Enquêtes",
+    "responses" : "Réponses",
+    "new" : "Nouveau",
+    "open" : "Ouvert",
+    "escalated" : "Escaladé",
+    "resolved" : "Résolue",
+    "tickets" : "Des billets",
+    "view_tickets" : "Voir les billets",
+    "critical" : "Critique",
+    "high" : "Haute",
+    "medium" : "Moyen",
+    "low" : "Faible",
+    "segment" : "Segment",
+    "no_segment_found" : "Aucun segment trouvé"
+  }
 }

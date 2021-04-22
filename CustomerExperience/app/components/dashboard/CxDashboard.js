@@ -27,7 +27,7 @@ import FilterHeader from '../FilterHeader';
 import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import {setRangeFilter} from '../../redux/actions';
 import {DashboardClosedLoopView} from './DashboardClosedLoopView';
-import {setI18nConfig, translate} from "../../Utils/MultilinguaUtils";
+import {translate} from "../../Utils/MultilinguaUtils";
 
 const wait = timeout => {
     return new Promise(resolve => {
@@ -182,8 +182,8 @@ const CxDashboard = props => {
 
     let renderDonutInfoContainer = (responseCount) => {
         return <View style={dashboardStyles.donutInfoContainer}>
-            {renderDonutInformation('check-square', 'Surveys',props.dashboardData.surveyCount)}
-            {renderDonutInformation('th-large', 'Responses', responseCount)}
+            {renderDonutInformation('check-square', translate("dashboard.surveys"),props.dashboardData.surveyCount)}
+            {renderDonutInformation('th-large', translate("dashboard.responses"), responseCount)}
         </View>
     };
 
@@ -227,7 +227,7 @@ const CxDashboard = props => {
         return (
             <View
                 style={dashboardStyles.emptyView}>
-                <Text style={dashboardStyles.emptyText}>No segment found</Text>
+                <Text style={dashboardStyles.emptyText}>{translate("dashboard.no_segment_found")}</Text>
             </View>
         );
     };
@@ -282,9 +282,9 @@ const CxDashboard = props => {
                 <View>
                     {renderSegmentTitle(props.dashboardData.primaryStoreName)}
                     {renderDonutChart()}
-                    {renderSegmentTitle(translate("closed_loop"))}
+                    {renderSegmentTitle(translate("dashboard.closed_loop"))}
                     {getClosedLoopView()}
-                    {renderSegmentTitle('Comparison')}
+                    {renderSegmentTitle(translate("dashboard.comparison"))}
                     {renderStoreNPSList()}
                 </View>
             );

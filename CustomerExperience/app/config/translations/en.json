@@ -26,9 +26,24 @@
     "passwordNotMatching": "Password and Confirm password not matching",
     "resetPasswordMessage": "Please enter the new password and hit the Update button to change your password."
   },
-
-  "dashboard" :" Dashboard",
-  "closed_loop" : "Closed Loop",
-  "comparison" : "Comparison"
+  "dashboard": {
+    "dashboard" :" Dashboard",
+    "closed_loop" : "Closed Loop",
+    "comparison" : "Comparison",
+    "surveys" : "Surveys",
+    "responses" : "Responses",
+    "new" : "New",
+    "open" : "Open",
+    "escalated" : "Escalated",
+    "resolved" : "Resolved",
+    "tickets" : "Tickets",
+    "view_tickets" : "View Tickets",
+    "critical" : "Critical",
+    "high" : "High",
+    "medium" : "Medium",
+    "low" : "Low",
+    "segment" : "Segment",
+    "no_segment_found" : "No segment found"
+  }
 
 }

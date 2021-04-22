@@ -9,13 +9,13 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import DeviceInfo from 'react-native-device-info';
 import {VictoryPie} from 'victory-native';
 import {StackActions} from '@react-navigation/native';
+import {translate} from "../../Utils/MultilinguaUtils";
 
 export const DashboardClosedLoopView = (props) => {
     return <TicketTabStack {...props}/>
 };
 
 const TicketTab = createMaterialTopTabNavigator();
-
 const TicketTabStack = props => (
     <TicketTab.Navigator tabBarOptions={{
         labelStyle: {width: useWindowDimensions().width/4, fontSize: TextSizes.secondary, fontFamily: FontFamily.regular},
@@ -29,10 +29,10 @@ const TicketTabStack = props => (
                          lazy
                          keyboardDismissMode={'auto'}
     >
-        <TicketTab.Screen name="New" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
-        <TicketTab.Screen name="Open" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
-        <TicketTab.Screen name="Escalated" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
-        <TicketTab.Screen name="Resolved" component={renderScene} initialParams={{ ticketCount: props.ticketCount}}/>
+        <TicketTab.Screen name = {translate("dashboard.new")} component={renderScene} initialParams={{index : 1, ticketCount: props.ticketCount}}/>
+        <TicketTab.Screen name= {translate("dashboard.open")} component={renderScene} initialParams={{index : 2, ticketCount: props.ticketCount}}/>
+        <TicketTab.Screen name= {translate("dashboard.escalated")} component={renderScene} initialParams={{index : 3, ticketCount: props.ticketCount}}/>
+        <TicketTab.Screen name= {translate("dashboard.resolved")} component={renderScene} initialParams={{index : 4, ticketCount: props.ticketCount}}/>
     </TicketTab.Navigator>
 );
 
@@ -64,7 +64,7 @@ const renderScene = (props) => {
                     />
                     <View style={styles.npsView}>
                         <Text style={[styles.npsPercentText]}>{count.totalTickets}</Text>
-                        <Text style={[styles.npsText]}>Tickets</Text>
+                        <Text style={[styles.npsText]}>{translate("dashboard.tickets")}</Text>
                     </View>
                 </View>
                 {renderDonutInfoViewContainer()}
@@ -73,15 +73,17 @@ const renderScene = (props) => {
     };
 
     let getCount = (object) => {
-        let name = props.route.name.toLowerCase();
-        switch (name) {
-            case 'new':
+        //let name = props.route.name.toLowerCase();
+        let index = props.route.params.index;
+        console.log(`index: ${index}`);
+        switch (index) {
+            case 1:
                 return object.new;
-            case 'open':
+            case 2:
                 return object.open;
-            case 'escalated':
+            case 3:
                 return object.escalated;
-            case 'resolved':
+            case 4:
                 return object.resolved;
         }
     };
@@ -95,7 +97,7 @@ const renderScene = (props) => {
                 props.navigation.dispatch(pushAction);
             }}>
             <View style={styles.viewTicketsContainer}>
-                <Text style={styles.viewTicketsText}>View Tickets</Text>
+                <Text style={styles.viewTicketsText}>{translate("dashboard.view_tickets")}</Text>
             </View>
             </TouchableWithoutFeedback>
         )
@@ -105,20 +107,20 @@ const renderScene = (props) => {
         let priorities = getCount(props.route.params.ticketCount);
       return (
           <View style={{paddingTop: 2 * PaddingConstants.tab4}}>
-              {renderTicketView(priorities.critical, Colors.critical, 'Critical')}
-              {renderTicketView(priorities.high, Colors.high, 'High')}
-              {renderTicketView(priorities.medium, Colors.passive, 'Medium')}
-              {renderTicketView(priorities.low, Colors.promoter, 'Low')}
+              {renderTicketView(priorities.critical, Colors.critical, translate("dashboard.critical"), Colors.white)}
+              {renderTicketView(priorities.high, Colors.high, translate("dashboard.high"), Colors.white)}
+              {renderTicketView(priorities.medium, Colors.passive, translate("dashboard.medium"), Colors.primary)}
+              {renderTicketView(priorities.low, Colors.promoter, translate("dashboard.low"), Colors.white)}
           </View>
       )
     };
 
-    let renderTicketView = (count, color, status) => {
+    let renderTicketView = (count, bgColor, status, textColor) => {
         return (
             <View style={styles.donutInfoContainer}>
                 <Text style={styles.ticketText}>{count}</Text>
-                <View style={[styles.ticketStatusView, {backgroundColor: color}]}>
-                    <Text style={[styles.ticketStatusText,{color: status === 'Medium' ? Colors.primary : Colors.white}]}>{status}</Text>
+                <View style={[styles.ticketStatusView, {backgroundColor: bgColor}]}>
+                    <Text style={[styles.ticketStatusText,{color: textColor}]}>{status}</Text>
                 </View>
             </View>
         )
