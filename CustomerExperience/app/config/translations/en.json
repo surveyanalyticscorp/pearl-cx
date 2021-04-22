@@ -44,6 +44,20 @@
     "low" : "Low",
     "segment" : "Segment",
     "no_segment_found" : "No segment found"
-  }
+  },
+  "close_loop" : {
+    "close_loop" : "Close loop",
+    "search_ticket" : "Search Ticket"
+  },
+  "responses" : {
+    "responses" : "Responses"
+  },
+  "settings" : {
+    "settings" : "Settings"
+  },
+  "logout" : "Logout",
+  "logout_confirmation_message" : "Are you sure you want to logout?",
+  "yes" : "Yes",
+  "no" : "No"
 
 }

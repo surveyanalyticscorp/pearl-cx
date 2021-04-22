@@ -27,6 +27,7 @@ import messaging from '@react-native-firebase/messaging';
 import {DrawerActions} from '@react-navigation/native';
 import QPSpinner from '../widgets/QPSpinner';
 import {Notifications} from "react-native-notifications";
+import {translate} from "../Utils/MultilinguaUtils";
 
 const DrawerContent = props => {
     const [userCredentials, setUserCredentials] = useState('');
@@ -61,7 +62,7 @@ const DrawerContent = props => {
                     }}>
                     <View style={styles.drawerRow}>
                         <Icon size={1.3*Sizes.icons} color={Colors.accent} name={'dashboard'} style={styles.rowIcon}/>
-                        <Text style={styles.labelStyle}>Dashboard</Text>
+                        <Text style={styles.labelStyle}>{translate("dashboard.dashboard")}</Text>
                     </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
@@ -70,7 +71,7 @@ const DrawerContent = props => {
                     }}>
                     <View style={styles.drawerRow}>
                         <Icon size={1.3*Sizes.icons} color={Colors.accent} name={'feedback'} style={styles.rowIcon}/>
-                        <Text style={styles.labelStyle}>Responses</Text>
+                        <Text style={styles.labelStyle}>{translate("responses.responses")}</Text>
                     </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
@@ -79,7 +80,7 @@ const DrawerContent = props => {
                     }}>
                     <View style={styles.drawerRow}>
                         <Icon size={1.3*Sizes.icons} color={Colors.accent} name={'settings'} style={styles.rowIcon}/>
-                        <Text style={styles.labelStyle}>Settings</Text>
+                        <Text style={styles.labelStyle}>{translate("settings.settings")}</Text>
                     </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
@@ -89,7 +90,7 @@ const DrawerContent = props => {
                     }}>
                     <View style={styles.drawerRow}>
                         <FontIcon size={1.3*Sizes.icons} color={Colors.accent} name={'sign-out-alt'} style={styles.rowIcon}/>
-                        <Text style={styles.labelStyle}>Logout</Text>
+                        <Text style={styles.labelStyle}>{translate("logout")}</Text>
                     </View>
                 </TouchableWithoutFeedback>
             </View>
@@ -99,14 +100,14 @@ const DrawerContent = props => {
     const renderDialog = () => {
         return (
             Alert.alert(
-                'Are you sure you want to logout?',
+                translate("logout_confirmation_message"),
                 '',
                 [
                     {
-                        text: 'Yes',
+                        text: translate("yes"),
                         onPress: logoutAction
                     },
-                    {   text: 'No',
+                    {   text: translate("no"),
                         onPress: () => {
                             setLogoutAlert(false)
                         }

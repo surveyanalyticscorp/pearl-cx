@@ -19,5 +19,19 @@
     "low" : "Faible",
     "segment" : "Segment",
     "no_segment_found" : "Aucun segment trouvé"
-  }
+  },
+  "close_loop" : {
+    "close_loop" : "Boucle fermée",
+    "search_ticket" : "Rechercher un billet"
+  },
+  "responses" : {
+    "responses" : "Réponses"
+  },
+  "settings" : {
+    "settings" : "Paramètres"
+  },
+  "logout" : "Se déconnecter",
+  "logout_confirmation_message" : "Êtes-vous sûr de vouloir vous déconnecter?",
+  "yes" : "Oui",
+  "no" : "Non"
 }
