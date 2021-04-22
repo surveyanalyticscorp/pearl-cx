@@ -89,7 +89,7 @@ const AppRouter = props => {
 
         addNotificationListeners();
 
-        setI18nConfig();
+        setI18nConfig('fr');
 
         return () => {
             unsubscribeLinks();
@@ -194,7 +194,7 @@ const AppRouter = props => {
                 })}
             />
             <DetractorStack.Screen
-                name="Closed Loop"
+                name = {translate("close_loop.close_loop")}
                 component={CloseLoopTicketsTabs}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,

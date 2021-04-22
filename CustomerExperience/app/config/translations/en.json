@@ -47,7 +47,12 @@
   },
   "close_loop" : {
     "close_loop" : "Close loop",
-    "search_ticket" : "Search Ticket"
+    "search_ticket" : "Search Ticket",
+    "critical" : "Critical",
+    "high" : "High",
+    "medium" : "Medium",
+    "low" : "Low",
+    "all" : "All"
   },
   "responses" : {
     "responses" : "Responses"
@@ -55,6 +60,7 @@
   "settings" : {
     "settings" : "Settings"
   },
+  "filter_by" : "Filter By",
   "logout" : "Logout",
   "logout_confirmation_message" : "Are you sure you want to logout?",
   "yes" : "Yes",

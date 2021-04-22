@@ -22,7 +22,12 @@
   },
   "close_loop" : {
     "close_loop" : "Boucle fermée",
-    "search_ticket" : "Rechercher un billet"
+    "search_ticket" : "Rechercher un billet",
+    "critical" : "Critique",
+    "high" : "Haute",
+    "medium" : "Moyen",
+    "low" : "faible",
+    "all" : "Toute"
   },
   "responses" : {
     "responses" : "Réponses"
@@ -30,6 +35,7 @@
   "settings" : {
     "settings" : "Paramètres"
   },
+  "filter_by" : "Filter By",
   "logout" : "Se déconnecter",
   "logout_confirmation_message" : "Êtes-vous sûr de vouloir vous déconnecter?",
   "yes" : "Oui",

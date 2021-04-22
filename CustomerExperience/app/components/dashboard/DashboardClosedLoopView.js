@@ -91,7 +91,7 @@ const renderScene = (props) => {
     let renderViewTicketsContainer = () => {
         return (
             <TouchableWithoutFeedback onPress={() => {
-                const pushAction = StackActions.push('Closed Loop', {
+                const pushAction = StackActions.push(translate("close_loop.close_loop"), {
                     screen: props.route.name
                 });
                 props.navigation.dispatch(pushAction);
