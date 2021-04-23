@@ -42,7 +42,9 @@
     "ticket_owner" : "Propriétaire du ticket:",
     "created_on" : "Créer sur:",
     "customer_comments" : "Commentaires des clients:",
-    "author" : "Auteure: "
+    "author" : "Auteure: ",
+    "update_ticket" : "Mettre à jour le ticket",
+    "owner" : "Propriétaire"
   },
   "responses" : {
     "responses" : "Réponses"

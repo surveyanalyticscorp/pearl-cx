@@ -27,7 +27,7 @@
     "resetPasswordMessage": "Please enter the new password and hit the Update button to change your password."
   },
   "dashboard": {
-    "dashboard" :" Dashboard",
+    "dashboard" :"Dashboard",
     "closed_loop" : "Closed Loop",
     "comparison" : "Comparison",
     "surveys" : "Surveys",
@@ -67,7 +67,9 @@
     "ticket_owner" : "Ticket Owner:",
     "created_on" : "Create On:",
     "customer_comments" : "Customer Comments:",
-    "author" : "Author: "
+    "author" : "Author: ",
+    "update_ticket" : "Update Ticket",
+    "owner" : "Owner"
   },
   "responses" : {
     "responses" : "Responses"

@@ -105,14 +105,14 @@ export const SaveDashboardDate = (props) => {
 };
 
 
-export const EditTicket = () => {
+const EditTicket = () => {
     let navigation = useNavigation();
     const state = useNavigationState(state => state);
     return (
         <View style={[styles.rightHeaderButton,{marginHorizontal: 1.5*MarginConstants.tab1}]}>
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate("Update Ticket",{parentRoute: state.routeNames[0]});
+                    navigation.navigate(translate("close_loop.update_ticket"),{parentRoute: state.routeNames[0]});
                 }}>
                 <MaterialIcon name={'edit'} size={Sizes.filterIcon} color={Colors.white}/>
             </TouchableOpacity>
@@ -216,7 +216,7 @@ const CommonScreens = (RootStack) => {
         />,
         <RootStack.Screen
             key={"Update Ticket"}
-            name="Update Ticket"
+            name = {translate("close_loop.update_ticket")}
             component={UpdateTicket}
             options={({navigation, route}) => ({
                 headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
