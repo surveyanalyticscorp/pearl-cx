@@ -15,6 +15,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {Sizes} from '../../styles/Size.constant';
 import moment from 'moment';
+import {translate} from "../../Utils/MultilinguaUtils";
 export default function FeedbackCell(props){
     let disable = props.origin === 'Detail';
 
@@ -25,7 +26,7 @@ export default function FeedbackCell(props){
     useEffect(() => {
         if (feedbackTapped) {
             setTapped(false);
-            props.navigation.navigate('Ticket Details', {ticketID: props.item.ticketID, parentRoute: 'Responses'});
+            props.navigation.navigate(translate("close_loop.ticket_details"), {ticketID: props.item.ticketID, parentRoute: 'Responses'});
         }
     }, [feedbackTapped]);
 

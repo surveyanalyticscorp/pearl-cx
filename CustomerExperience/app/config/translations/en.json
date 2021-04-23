@@ -52,7 +52,21 @@
     "high" : "High",
     "medium" : "Medium",
     "low" : "Low",
-    "all" : "All"
+    "all" : "All",
+    "ticket_details" : "Ticket Details",
+    "overview" : "Overview",
+    "comments" : "Comments",
+    "logs" : "Logs",
+    "response_id" : "Response ID:",
+    "view_response" : "View Response",
+    "priority" : "Priority:",
+    "status" : "Status:",
+    "customer_email" : "Customer Email:",
+    "origin_segment" : "Origin Segment:",
+    "current_segment" : "Current Segment:",
+    "ticket_owner" : "Ticket Owner:",
+    "created_on" : "Create On:",
+    "customer_comments" : "Customer Comments:"
   },
   "responses" : {
     "responses" : "Responses"

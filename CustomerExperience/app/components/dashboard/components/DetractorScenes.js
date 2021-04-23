@@ -15,6 +15,7 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import {Sizes} from '../../../styles/Size.constant';
 import {usePrevious} from '../../../Utils/Utility';
 import ArrayUtils from '../../../Utils/ArrayUtils';
+import {translate} from "../../../Utils/MultilinguaUtils";
 
 const DetractorScenes = props => {
 
@@ -57,7 +58,7 @@ const DetractorScenes = props => {
     let [responseData, setResponseData] = useState(initialData);
     let [showLoader, setShowLoader] = useState(false);
     let [callAPI, setCallAPI] = useState(false);
-    let [filterObject, setFilterObject] = useState({text:'All', value: -1});
+    let [filterObject, setFilterObject] = useState({text: translate("close_loop.all"), value: -1});
 
     let prevFilterRef = usePrevious(filterObject);
 
@@ -91,13 +92,13 @@ const DetractorScenes = props => {
                     props.authToken,
                     params,
                     response => {
-                        setCallAPI(false)
+                        setCallAPI(false);
                         let data = [...responseData];
                         data[responseCount].data = response.body;
                         setResponseData(data);
                     },
                     error => {
-                        setCallAPI(false)
+                        setCallAPI(false);
                         setShowLoader(false);
                     },
                 );
@@ -177,7 +178,7 @@ const DetractorScenes = props => {
     let renderTicketFilterView = () => {
         return (
             <TouchableWithoutFeedback onPress={() => {
-                props.navigation.navigate('Filter By',{setFilter: setTicketFilter, selectedFilter: filterObject.value})
+                props.navigation.navigate(translate("filter_by"),{setFilter: setTicketFilter, selectedFilter: filterObject.value})
             }} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
             >
                 <View style={dashboardStyles.filterView}>

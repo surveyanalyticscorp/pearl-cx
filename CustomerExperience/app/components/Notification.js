@@ -24,6 +24,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {Notifications} from 'react-native-notifications';
 import {connect} from 'react-redux';
 import {clearNotification} from "../redux/actions/notification.actions";
+import {translate} from "../Utils/MultilinguaUtils";
 
 
 const Notification = props =>{
@@ -93,7 +94,7 @@ const Notification = props =>{
 
 
     let viewTicket = (ticketID) => {
-        props.navigation.navigate('Ticket Details', {ticketID: ticketID, parentRoute: 'Dashboard'});
+        props.navigation.navigate(translate("close_loop.ticket_details"), {ticketID: ticketID, parentRoute: 'Dashboard'});
     };
 
 

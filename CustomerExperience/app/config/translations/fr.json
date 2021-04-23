@@ -27,7 +27,21 @@
     "high" : "Haute",
     "medium" : "Moyen",
     "low" : "faible",
-    "all" : "Toute"
+    "all" : "Toute",
+    "ticket_details" : "Détails du billet",
+    "overview" : "Aperçu",
+    "comments" : "commentaires",
+    "logs" : "Journaux",
+    "response_id" : "ID de réponse:",
+    "view_response" : "Afficher la réponse",
+    "priority" : "Priorité:",
+    "status" : "Statut:",
+    "customer_email" : "Email client:",
+    "origin_segment" : "Segment d'origine:",
+    "current_segment" : "Segment actuel:",
+    "ticket_owner" : "Propriétaire du ticket:",
+    "created_on" : "Créer sur:",
+    "customer_comments" : "Commentaires des clients:"
   },
   "responses" : {
     "responses" : "Réponses"

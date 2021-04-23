@@ -20,7 +20,7 @@ export default function TicketWidget(props){
 
     useEffect(() => {
         if (viewDetails) {
-            props.navigation.navigate('Ticket Details', {ticketID: props.item.ticketID, parentRoute: 'Dashboard'});
+            props.navigation.navigate(translate("close_loop.ticket_details"), {ticketID: props.item.ticketID, parentRoute: 'Dashboard'});
             setViewDetails(false);
         }
     }, [viewDetails]);

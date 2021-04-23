@@ -170,15 +170,15 @@ export const TicketLogTabStack = props => (
     }}
                             lazy
                             keyboardDismissMode={'auto'}>
-        <TicketLogTab.Screen name="Overview" component={TicketOverview} initialParams={{
+        <TicketLogTab.Screen name= {translate("close_loop.overview")}  component={TicketOverview} initialParams={{
             ticketID: props.route.params.ticketID,
             parentRoute: props.route.params.parentRoute
         }}/>
-        <TicketLogTab.Screen name="Comments" component={TicketComments} initialParams={{
+        <TicketLogTab.Screen name = {translate("close_loop.comments")} component={TicketComments} initialParams={{
             ticketID: props.route.params.ticketID,
             parentRoute: props.route.params.parentRoute
         }}/>
-        <TicketLogTab.Screen name="Logs" component={TicketComments} initialParams={{
+        <TicketLogTab.Screen name = {translate("close_loop.logs")} component={TicketComments} initialParams={{
             ticketID: props.route.params.ticketID,
             parentRoute: props.route.params.parentRoute
         }}/>
@@ -199,7 +199,7 @@ const CommonScreens = (RootStack) => {
         />,
         <RootStack.Screen
             key={"Ticket Details"}
-            name="Ticket Details"
+            name = {translate("close_loop.ticket_details")}
             component={TicketLogTabStack}
             options={({navigation, route}) => ({
                 headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
