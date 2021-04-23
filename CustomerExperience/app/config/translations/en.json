@@ -66,7 +66,8 @@
     "current_segment" : "Current Segment:",
     "ticket_owner" : "Ticket Owner:",
     "created_on" : "Create On:",
-    "customer_comments" : "Customer Comments:"
+    "customer_comments" : "Customer Comments:",
+    "author" : "Author: "
   },
   "responses" : {
     "responses" : "Responses"

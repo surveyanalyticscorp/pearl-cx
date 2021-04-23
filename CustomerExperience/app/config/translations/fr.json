@@ -41,7 +41,8 @@
     "current_segment" : "Segment actuel:",
     "ticket_owner" : "Propriétaire du ticket:",
     "created_on" : "Créer sur:",
-    "customer_comments" : "Commentaires des clients:"
+    "customer_comments" : "Commentaires des clients:",
+    "author" : "Auteure: "
   },
   "responses" : {
     "responses" : "Réponses"

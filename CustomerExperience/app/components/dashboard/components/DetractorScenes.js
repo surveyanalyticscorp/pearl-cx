@@ -14,7 +14,6 @@ import ActionButton from 'react-native-action-button';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {Sizes} from '../../../styles/Size.constant';
 import {usePrevious} from '../../../Utils/Utility';
-import ArrayUtils from '../../../Utils/ArrayUtils';
 import {translate} from "../../../Utils/MultilinguaUtils";
 
 const DetractorScenes = props => {
