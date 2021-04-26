@@ -9,14 +9,15 @@ import RadioForm from 'react-native-simple-radio-button';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {TextSizes} from '../../styles/textsize.constants';
+import {translate} from "../../Utils/MultilinguaUtils";
 
 
 export default function FeedbackSorter(props) {
     let radio_props = [
-        {label: 'Date', value: 0 },
-        {label: 'Score', value: 1 },
-        {label: 'Segment', value: 2 },
-        {label: 'Email', value: 3 },
+        {label: translate("responses.date"), value: 0 },
+        {label: translate("responses.score"), value: 1 },
+        {label: translate("dashboard.segment"), value: 2 },
+        {label: translate("responses.email"), value: 3 },
     ];
     let index = radio_props.findIndex(item => item.label === props.route.params.selectedSorter) || 0;
     return (
@@ -30,7 +31,7 @@ export default function FeedbackSorter(props) {
                         radio_props={radio_props}
                         initial={index}
                         onPress={(value) => {
-                            props.route.params.setSorter(radio_props[value].label);
+                            props.route.params.setSorter(radio_props[value].label, value);
                             props.navigation.goBack();
                         }}
                         buttonColor={Colors.accent}

@@ -47,7 +47,13 @@
     "owner" : "Propriétaire"
   },
   "responses" : {
-    "responses" : "Réponses"
+    "responses" : "Réponses",
+    "detractor" : "Détractrice",
+    "passive" : "Passif",
+    "promoter" : "Promotrice",
+    "date" : "Date",
+    "score" : "But",
+    "email" : "E-mail"
   },
   "settings" : {
     "settings" : "Paramètres"

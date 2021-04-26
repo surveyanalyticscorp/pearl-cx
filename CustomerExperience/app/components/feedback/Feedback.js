@@ -29,6 +29,7 @@ import {FontFamily} from '../../styles/font.constants';
 import {Sizes} from '../../styles/Size.constant';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {dashboardStyles} from "../dashboard/dashboard.style";
+import {translate} from "../../Utils/MultilinguaUtils";
 
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
@@ -39,8 +40,9 @@ function Feedback(props){
     let [pageOffset, setPageOffset] = useState(0);
     let [pagination, setPagination] = useState(false);
     let [showLoader, setShowLoader] = useState(false);
-    let [sortingText, setSortingText] = useState('Date');
+    let [sortingText, setSortingText] = useState({label :'Date', index: 0});
     let prevRangeRef = usePrevious(props.range);
+    let sortingAttribute = ["Date", "Score", "Segment", "Email"];
 
     let getFeedbackData = () => {
         /**
@@ -52,7 +54,7 @@ function Feedback(props){
                 sentiment: 'All',
                 startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
                 endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
-                filterText: sortingText.toLowerCase()
+                filterText: sortingAttribute[sortingText.index].toLowerCase()
             };
             apiHandler.getFeedbackResponseList(props.authToken, data, (response) => {
                 let data = pageOffset === 0 ? [] : [...feedbackData];
@@ -118,8 +120,8 @@ function Feedback(props){
         }
     };
 
-    let setSortText = (text) => {
-        setSortingText(text)
+    let setSortText = (text, index) => {
+        setSortingText({label : text, index: index})
     };
 
     let renderSpinner = () => {
@@ -152,7 +154,7 @@ function Feedback(props){
                     onRefresh: onRefresh,
                     range: props.range,
                     token: props.authToken,
-                    sortingText: sortingText,
+                    sortingText: sortingText.label,
                     setSortingText: setSortText
                 }}>
                     <FeedbackTabStack />
@@ -177,10 +179,10 @@ const FeedbackTabStack = () => (
                            lazy
                            keyboardDismissMode={'auto'}
     >
-        <FeedbackTab.Screen name="All" component={renderFeedbackScene} initialParams={{screenName: 'All'}} />
-        <FeedbackTab.Screen name="Detractor" component={renderFeedbackScene} initialParams={{screenName: 'Detractor'}} />
-        <FeedbackTab.Screen name="Passive" component={renderFeedbackScene} initialParams={{screenName: 'Passive'}} />
-        <FeedbackTab.Screen name="Promoter" component={renderFeedbackScene} initialParams={{screenName: 'Promoter'}} />
+        <FeedbackTab.Screen name = {translate("close_loop.all")} component={renderFeedbackScene} initialParams={{screenName: 'All'}} />
+        <FeedbackTab.Screen name = {translate("responses.detractor")} component={renderFeedbackScene} initialParams={{screenName: 'Detractor'}} />
+        <FeedbackTab.Screen name = {translate("responses.passive")} component={renderFeedbackScene} initialParams={{screenName: 'Passive'}} />
+        <FeedbackTab.Screen name = {translate("responses.promoter")} component={renderFeedbackScene} initialParams={{screenName: 'Promoter'}} />
     </FeedbackTab.Navigator>
 );
 
@@ -231,8 +233,8 @@ const renderFeedbackScene = (props) => {
         })
     };
 
-    let setResponseSorter = (value) => {
-        feedbackForm.setSortingText(value)
+    let setResponseSorter = (value, index) => {
+        feedbackForm.setSortingText(value, index)
     };
 
     let renderResponseFilterView = () => {

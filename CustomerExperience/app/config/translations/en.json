@@ -72,7 +72,13 @@
     "owner" : "Owner"
   },
   "responses" : {
-    "responses" : "Responses"
+    "responses" : "Responses",
+    "detractor" : "Detractor",
+    "passive" : "Passive",
+    "promoter" : "Promoter",
+    "date" : "Date",
+    "score" : "Score",
+    "email" : "Email"
   },
   "settings" : {
     "settings" : "Settings"
