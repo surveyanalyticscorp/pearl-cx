@@ -90,22 +90,22 @@ export default function FeedbackCell(props){
         let status = getTicketStatus();
         return StringUtils.isEmpty(status) ? <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                                                                        onPress={() => {
-                                                                           props.navigation.navigate('New Ticket',{parentRoute: 'Responses'})
+                                                                           props.navigation.navigate('New Ticket',{parentRoute: translate("responses.responses"})
                                                                        }}
             >
-                <Text style={styles.viewTicketsText}> Create Ticket</Text>
+                <Text style={styles.viewTicketsText}> {translate("responses.create_ticket")}</Text>
             </TouchableWithoutFeedback>
             : <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                                         onPress={() => {
                                             setTapped(true);
                                         }}
             >
-                <Text style={styles.viewTicketsText}> View Ticket</Text>
+                <Text style={styles.viewTicketsText}>{translate("responses.view_ticket")}</Text>
             </TouchableWithoutFeedback>
     };
 
     let renderResponseContainer = () => {
-        let flag = props.parentRoute === 'Responses';
+        let flag = props.parentRoute === translate("responses.responses");
         return (
             <View style={styles.responseContainer}>
                 {renderNPSView()}

@@ -56,7 +56,12 @@
     "score" : "But",
     "email" : "E-mail",
     "no_feedback_received" : "Aucun commentaire reçu",
-    "search_placeholder" : "Rechercher un e-mail ou un identifiant de réponse"
+    "search_placeholder" : "Rechercher un e-mail ou un identifiant de réponse",
+    "feedback_details" : "Détails des commentaires",
+    "feedback" : "Retour",
+    "profile" : "Profil",
+    "activity" : "Activité",
+    "view_ticket" : "Voir le ticket"
   },
   "settings" : {
     "settings" : "Paramètres"

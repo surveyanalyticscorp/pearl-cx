@@ -141,7 +141,7 @@ function TicketOverview(props) {
     },[responseData]);
 
     const moveToResponseViewer = () => {
-        props.navigation.navigate('Feedback Details',{
+        props.navigation.navigate(translate("responses.feedback_details"),{
             data: responseData[0],
             ticketStatus: ticketStatus,
             token: props.authToken,

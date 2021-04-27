@@ -207,7 +207,7 @@ const CommonScreens = (RootStack) => {
             })}
         />,
         <RootStack.Screen
-            name="Feedback Details"
+            name = {translate("responses.feedback_details")}
             key={"Feedback Details"}
             component={FeedbackDetails}
             options={({navigation, route}) => ({

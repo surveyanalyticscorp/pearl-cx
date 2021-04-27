@@ -76,7 +76,7 @@ export default function SearchFeedback(props) {
     };
 
     const _onPressRow = (data) => {
-        const pushAction = StackActions.push('Feedback Details', {
+        const pushAction = StackActions.push(translate("responses.feedback_details"), {
             data: data,
             ticketStatus: ticketStatus,
             token: authToken

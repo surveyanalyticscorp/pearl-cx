@@ -8,6 +8,7 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {translate} from "../../Utils/MultilinguaUtils";
 
 export default function FeedbackDetails(props){
 
@@ -47,9 +48,9 @@ const FeedbackDetailsTabStack = props => (
                           lazy
                           keyboardDismissMode={'auto'}
     >
-        <DetailsTab.Screen name="Feedback" component={renderScene}   initialParams={{ token: props.route.params.token, url: props.route.params.data.responseDataURL}}/>
-        <DetailsTab.Screen name="Profile" component={renderScene} initialParams={{ token: props.route.params.token, url: props.route.params.data.memberProfileURL}}/>
-        <DetailsTab.Screen name="Activity" component={renderScene} initialParams={{ token: props.route.params.token, url: props.route.params.data.activityURL}}/>
+        <DetailsTab.Screen name = {translate("responses.feedback")} component={renderScene}   initialParams={{ token: props.route.params.token, url: props.route.params.data.responseDataURL}}/>
+        <DetailsTab.Screen name = {translate("responses.profile")} component={renderScene} initialParams={{ token: props.route.params.token, url: props.route.params.data.memberProfileURL}}/>
+        <DetailsTab.Screen name = {translate("responses.activity")} component={renderScene} initialParams={{ token: props.route.params.token, url: props.route.params.data.activityURL}}/>
     </DetailsTab.Navigator>
 );
 
