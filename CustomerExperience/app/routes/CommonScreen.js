@@ -98,7 +98,7 @@ export const SaveDashboardDate = (props) => {
                 onPress={() => {
                     props.route.params.saveRange();
                 }}>
-                <Text style={styles.saveText}> Save </Text>
+                <Text style={styles.saveText}> {translate("date_filter.save")} </Text>
             </TouchableOpacity>
         </View>
     );
@@ -151,9 +151,9 @@ export const DateRangeTabStack = props => (
                             lazy
                             keyboardDismissMode={'auto'}
     >
-        <DateRangeTab.Screen name="Month" component={DashboardDateFilter}
+        <DateRangeTab.Screen name = {translate("date_filter.month")} component={DashboardDateFilter}
                              initialParams={{range: props.route.params.range, setRange: props.route.params.setRange}}/>
-        <DateRangeTab.Screen name="Custom" component={DashboardDateFilter}
+        <DateRangeTab.Screen name = {translate("date_filter.custom")} component={DashboardDateFilter}
                              initialParams={{range: props.route.params.range, setRange: props.route.params.setRange}}/>
     </DateRangeTab.Navigator>
 );
@@ -190,7 +190,7 @@ const CommonScreens = (RootStack) => {
     return [
         <RootStack.Screen
             key={"Date Range"}
-            name="Date Range"
+            name={translate("date_filter.date_range")}
             component={DateRangeTabStack}
             options={({navigation, route}) => ({
                 headerLeft: props => <HeaderBackLeft/>,

@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import QPCalendar from '../../../widgets/QPCalendar';
 import StringUtils from '../../../Utils/StringUtils';
 import {StackActions} from '@react-navigation/native';
+import {translate} from "../../../Utils/MultilinguaUtils";
 
 export default function DashboardDateFilter(props){
 
@@ -46,15 +47,15 @@ export default function DashboardDateFilter(props){
     let getFilterText = (type) => {
         switch (type) {
             case 1:
-                return 'Last 30 days';
+                return translate("date_filter.last_30_days");
             case 2:
-                return 'This month';
+                return translate("date_filter.this_month");
             case 3:
-                return 'Last month';
+                return translate("date_filter.last_month");
             case 4:
-                return 'Last 3 months';
+                return translate("date_filter.last_3_months");
             case 5:
-                return 'Last 6 months';
+                return translate("date_filter.last_6_months");
         }
     };
 
@@ -239,7 +240,7 @@ export default function DashboardDateFilter(props){
     };
 
     let renderStartDateRow = (isStartDate, displayDate) => {
-        let title = isStartDate ? 'Start date' : 'End date';
+        let title = isStartDate ? translate("date_filter.start_date") : translate("date_filter.end_date");
         let date = moment(displayDate, 'DD-MM-YYYY').format(HalfMonthDateYearFormat);
         return (
             <View style={{marginBottom: .5}}>
@@ -272,7 +273,7 @@ export default function DashboardDateFilter(props){
 
     return (
         <SafeAreaView style={styles.container}>
-            {routeName === 'Month' ? renderMonthView() : renderCustomView()}
+            {routeName === translate("date_filter.month") ? renderMonthView() : renderCustomView()}
         </SafeAreaView>
     );
 };

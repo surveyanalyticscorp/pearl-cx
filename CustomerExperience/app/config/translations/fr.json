@@ -58,6 +58,20 @@
   "settings" : {
     "settings" : "Paramètres"
   },
+  "date_filter" : {
+    "date_range" : "Plage de dates",
+    "save" : "Sauvegarder",
+    "month" : "Mois",
+    "custom" : "Personnalisé",
+    "start_date" : "Date de début",
+    "end_date" : "Date de fin",
+    "last_30_days" : "Les 30 derniers jours",
+    "this_month" : "Ce mois-ci",
+    "last_month" : "Le mois dernier",
+    "last_3_months" : "3 derniers mois",
+    "last_6_months" : "6 derniers mois"
+
+  },
   "filter_by" : "Filter By",
   "logout" : "Se déconnecter",
   "logout_confirmation_message" : "Êtes-vous sûr de vouloir vous déconnecter?",

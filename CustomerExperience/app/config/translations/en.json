@@ -83,6 +83,20 @@
   "settings" : {
     "settings" : "Settings"
   },
+  "date_filter" : {
+    "date_range" : "Date Range",
+    "save" : "Save",
+    "month" : "Month",
+    "custom" : "Custom",
+    "start_date" : "Start Date",
+    "end_date" : "End Date",
+    "last_30_days" : "Last 30 days",
+    "this_month" : "This month",
+    "last_month" : "Last month",
+    "last_3_months" : "Last 3 months",
+    "last_6_months" : "Last 6 months"
+
+  },
   "filter_by" : "Filter By",
   "logout" : "Logout",
   "logout_confirmation_message" : "Are you sure you want to logout?",
