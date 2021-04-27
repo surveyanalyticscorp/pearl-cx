@@ -6,13 +6,14 @@ import {createStackNavigator} from "@react-navigation/stack";
 import Feedback from "../components/feedback/Feedback";
 import SearchFeedback from "../components/feedback/SearchFeedback";
 import CommonScreens, {CloseButton, HeaderBackLeft, MenuIcon, SearchIcon} from "./CommonScreen";
+import {translate} from "../Utils/MultilinguaUtils";
 
 const FeedbackStack = createStackNavigator();
 
 const feedbackStack = props => (
     <FeedbackStack.Navigator>
         <FeedbackStack.Screen
-            name="Responses"
+            name={translate("responses.responses")}
             component={Feedback}
             options={({navigation, route}) => ({
                 headerLeft: props => <MenuIcon/>,
@@ -39,7 +40,7 @@ const ResponsesStack = ({navigation}) => (
             options={({navigation, route}) => ({headerShown: false})}
         />
         <FeedbackStack.Screen
-            name="Sort By"
+            name = {translate("responses.sort_by")}
             component={FeedbackSorter}
             options={({navigation, route}) => ({
                 headerLeft: props => <View/>,

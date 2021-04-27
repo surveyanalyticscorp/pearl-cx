@@ -51,9 +51,12 @@
     "detractor" : "Détractrice",
     "passive" : "Passif",
     "promoter" : "Promotrice",
+    "sort_by" : "Trier par",
     "date" : "Date",
     "score" : "But",
-    "email" : "E-mail"
+    "email" : "E-mail",
+    "no_feedback_received" : "Aucun commentaire reçu",
+    "search_placeholder" : "Rechercher un e-mail ou un identifiant de réponse"
   },
   "settings" : {
     "settings" : "Paramètres"
@@ -70,7 +73,6 @@
     "last_month" : "Le mois dernier",
     "last_3_months" : "3 derniers mois",
     "last_6_months" : "6 derniers mois"
-
   },
   "filter_by" : "Filter By",
   "logout" : "Se déconnecter",

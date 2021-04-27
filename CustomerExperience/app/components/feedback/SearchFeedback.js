@@ -15,6 +15,7 @@ import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {apiHandler} from '../../api/ApiHandler';
 import {showErrorFlashMessage} from '../../Utils/Utility';
 import ArrayUtils from '../../Utils/ArrayUtils';
+import {translate} from "../../Utils/MultilinguaUtils";
 
 export default function SearchFeedback(props) {
     const authToken = useSelector(state => state.global.authToken);
@@ -69,7 +70,7 @@ export default function SearchFeedback(props) {
     const renderNoDataFound = () => {
         return (
             <View style={styles.emptyView}>
-                <Text style={styles.emptyText}>No feedbacks received</Text>
+                <Text style={styles.emptyText}>{translate("responses.no_feedback_received")}</Text>
             </View>
         );
     };
@@ -132,7 +133,7 @@ export default function SearchFeedback(props) {
                     setShowLoader(true);
                 }}
                 placeholderTextColor={Colors.white}
-                placeholder={'Search email or response ID'}
+                placeholder={translate("responses.search_placeholder")}
                 value={searchText}
                 autoFocus={false}
                 autoCapitalize={'none'}

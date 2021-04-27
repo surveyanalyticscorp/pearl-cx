@@ -76,9 +76,12 @@
     "detractor" : "Detractor",
     "passive" : "Passive",
     "promoter" : "Promoter",
+    "sort_by" : "Sort By",
     "date" : "Date",
     "score" : "Score",
-    "email" : "Email"
+    "email" : "Email",
+    "no_feedback_received" : "No Feedback received",
+    "search_placeholder" : "Search email or response ID"
   },
   "settings" : {
     "settings" : "Settings"

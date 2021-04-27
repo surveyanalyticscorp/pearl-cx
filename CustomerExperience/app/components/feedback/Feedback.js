@@ -240,7 +240,7 @@ const renderFeedbackScene = (props) => {
     let renderResponseFilterView = () => {
         return (
             <TouchableWithoutFeedback onPress={() => {
-                props.navigation.navigate('Sort By',{setSorter: setResponseSorter, selectedSorter: feedbackForm.sortingText})
+                props.navigation.navigate(translate("responses.sort_by"),{setSorter: setResponseSorter, selectedSorter: feedbackForm.sortingText})
             }} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
             >
                 <View style={styles.filterView}>
@@ -266,7 +266,7 @@ const renderFeedbackScene = (props) => {
     const renderNoDataFound = () => {
         return (
             <View style={styles.emptyView}>
-                <Text style={styles.emptyText}>No feedbacks received</Text>
+                <Text style={styles.emptyText}>{translate("responses.no_feedback_received")}</Text>
             </View>
         );
     };
