@@ -203,7 +203,7 @@ function UpdateTicket(props) {
                     autoCorrect={false}
                     style={styles.commentText}
                     value={comment}
-                    placeholder={'Additional Comment'}
+                    placeholder={translate("close_loop.addition_comments")}
                     onChangeText={text => {
                         StringUtils.isNotEmpty(validationError) && setValidationError('');
                         setComment(text);
@@ -216,7 +216,7 @@ function UpdateTicket(props) {
     let validationAction = (body) => {
         for (const [key, value] of Object.entries(body)) {
             if(key === 'managerComment' && StringUtils.isEmpty(value)) {
-                setValidationError('Please add comment');
+                setValidationError(translate("close_loop.please_add_comments"));
                 return false
             }
         }

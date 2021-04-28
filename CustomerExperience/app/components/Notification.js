@@ -50,11 +50,11 @@ const Notification = props =>{
     let renderClearAllAlert = () => {
         return (
             Alert.alert(
-                'Clear all notification',
-                'Are you sure?',
+                translate("dashboard.clear_all_notification"),
+                translate("dashboard.are_you_sure"),
                 [
                     {
-                        text: 'Yes',
+                        text: translate("yes"),
                         onPress: () => {
                             showClearAllAlert(false);
                             props.clearNotificationAction(undefined);
@@ -67,7 +67,7 @@ const Notification = props =>{
                         }
                     },
                     {
-                        text: 'No',
+                        text: translate("no"),
                         onPress: () => {
                             showClearAllAlert(false)
                         }
@@ -79,7 +79,6 @@ const Notification = props =>{
     };
 
     let clearNotification = (notification, index) => {
-        console.log('Delete item: ' + notification.id);
         props.clearNotificationAction(notification);
         if(row[index]){
             row[index].close();
@@ -171,7 +170,7 @@ const Notification = props =>{
     let renderContainer = () => {
         if(props.notificationLogs.length === 0){
             return <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-                    <Text style={styles.boldFont}>No notifications to display</Text>
+                    <Text style={styles.boldFont}>{translate("dashboard.no_notification_to_display")}</Text>
                 </View>
         }else{
             return <FlatList

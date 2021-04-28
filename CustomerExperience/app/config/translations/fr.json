@@ -18,7 +18,12 @@
     "medium" : "Moyen",
     "low" : "Faible",
     "segment" : "Segment",
-    "no_segment_found" : "Aucun segment trouvé"
+    "no_segment_found" : "Aucun segment trouvé",
+    "notifications" : "Notifications",
+    "clear_all" : "Tout effacer",
+    "clear_all_notification" : "Effacer toutes les notifications",
+    "are_you_sure" : "Êtes-vous sûr?",
+    "no_notification_to_display" : "Aucune notification à afficher"
   },
   "close_loop" : {
     "close_loop" : "Boucle fermée",
@@ -44,7 +49,9 @@
     "customer_comments" : "Commentaires des clients:",
     "author" : "Auteure: ",
     "update_ticket" : "Mettre à jour le ticket",
-    "owner" : "Propriétaire"
+    "owner" : "Propriétaire",
+    "addition_comments" : "Commentaires supplémentaires",
+    "please_add_comments" : "Veuillez ajouter des commentaires"
   },
   "responses" : {
     "responses" : "Réponses",

@@ -43,7 +43,12 @@
     "medium" : "Medium",
     "low" : "Low",
     "segment" : "Segment",
-    "no_segment_found" : "No segment found"
+    "no_segment_found" : "No segment found",
+    "notifications" : "Notifications",
+    "clear_all" : "Clear All",
+    "clear_all_notification" : "Clear all notification",
+    "are_you_sure" : "Are you sure?",
+    "no_notification_to_display" : "No notifications to display"
   },
   "close_loop" : {
     "close_loop" : "Close loop",
@@ -70,6 +75,8 @@
     "author" : "Author: ",
     "update_ticket" : "Update Ticket",
     "owner" : "Owner",
+    "addition_comments" : "Additional Comments",
+    "please_add_comments" : "Veuillez ajouter des commentaires"
   },
   "responses" : {
     "responses" : "Responses",
