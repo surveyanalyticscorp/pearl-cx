@@ -71,7 +71,8 @@
     "view_ticket" : "Voir le ticket"
   },
   "settings" : {
-    "settings" : "Paramètres"
+    "settings" : "Paramètres",
+    "account_details" : "Détails du compte"
   },
   "date_filter" : {
     "date_range" : "Plage de dates",

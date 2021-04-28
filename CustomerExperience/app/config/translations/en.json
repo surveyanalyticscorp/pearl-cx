@@ -97,7 +97,8 @@
     "create_ticket" : "Create Ticket"
   },
   "settings" : {
-    "settings" : "Settings"
+    "settings" : "Settings",
+    "account_details" : "Account details"
   },
   "date_filter" : {
     "date_range" : "Date Range",

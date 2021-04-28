@@ -9,6 +9,7 @@ import {Sizes} from '../../styles/Size.constant';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {connect} from 'react-redux';
+import {translate} from "../../Utils/MultilinguaUtils";
 
 function AppSettings(props) {
 
@@ -30,13 +31,13 @@ function AppSettings(props) {
     };
 
     let pushToAccountDetails = () => {
-      props.navigation.navigate('Account Details',{userInfo: props.userInfo})
+      props.navigation.navigate(translate("settings.account_details"),{userInfo: props.userInfo})
     };
 
     return (
         <SafeAreaView forceInset={{bottom: 'never'}} style={styles.safeArea}>
             <View style={styles.container}>
-                {renderRow('account', 'Account details', '', pushToAccountDetails)}
+                {renderRow('account', translate("settings.account_details"), '', pushToAccountDetails)}
                 {/*{renderRow('segment', 'Segment', 'Selected segment')}*/}
             </View>
         </SafeAreaView>

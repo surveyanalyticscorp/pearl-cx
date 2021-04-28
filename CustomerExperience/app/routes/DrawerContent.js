@@ -76,7 +76,7 @@ const DrawerContent = props => {
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback
                     onPress={() => {
-                        props.navigation.navigate('Settings');
+                        props.navigation.navigate(translate("settings.settings"));
                     }}>
                     <View style={styles.drawerRow}>
                         <Icon size={1.3*Sizes.icons} color={Colors.accent} name={'settings'} style={styles.rowIcon}/>
