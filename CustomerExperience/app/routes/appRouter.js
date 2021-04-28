@@ -89,7 +89,7 @@ const AppRouter = props => {
 
         addNotificationListeners();
 
-        setI18nConfig('fr');
+        setI18nConfig();
 
         return () => {
             unsubscribeLinks();
