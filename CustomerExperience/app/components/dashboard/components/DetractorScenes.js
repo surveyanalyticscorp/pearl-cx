@@ -108,7 +108,7 @@ const DetractorScenes = props => {
     const renderNoDataFound = () => {
         return (
             <View style={dashboardStyles.emptyView}>
-                <Text style={dashboardStyles.detractorEmptyText}> No tickets</Text>
+                <Text style={dashboardStyles.detractorEmptyText}> {translate("close_loop.no_tickets")} </Text>
             </View>
         );
     };

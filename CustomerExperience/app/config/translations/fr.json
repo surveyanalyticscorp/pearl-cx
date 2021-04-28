@@ -36,6 +36,7 @@
     "ticket_details" : "Détails du billet",
     "overview" : "Aperçu",
     "comments" : "commentaires",
+    "comment" : "Commenter",
     "logs" : "Journaux",
     "response_id" : "ID de réponse:",
     "view_response" : "Afficher la réponse",
@@ -51,7 +52,10 @@
     "update_ticket" : "Mettre à jour le ticket",
     "owner" : "Propriétaire",
     "addition_comments" : "Commentaires supplémentaires",
-    "please_add_comments" : "Veuillez ajouter des commentaires"
+    "please_add_comments" : "Veuillez ajouter des commentaires",
+    "no_tickets" : "Pas de billets",
+    "enter_email_id" : "Entrer l'adresse e-mail",
+    "type_a_comment" : "Tapez un commentaire"
   },
   "responses" : {
     "responses" : "Réponses",

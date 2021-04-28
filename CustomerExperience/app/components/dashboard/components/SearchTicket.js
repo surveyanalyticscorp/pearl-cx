@@ -15,6 +15,7 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import QPSpinner from '../../../widgets/QPSpinner';
 import ActionButton from 'react-native-action-button';
 import ArrayUtils from '../../../Utils/ArrayUtils';
+import {translate} from "../../../Utils/MultilinguaUtils";
 
 function SearchTicket(props) {
 
@@ -38,7 +39,7 @@ function SearchTicket(props) {
     const renderNoDataFound = () => {
         return (
             <View style={dashboardStyles.emptyView}>
-                <Text style={dashboardStyles.detractorEmptyText}> No tickets</Text>
+                <Text style={dashboardStyles.detractorEmptyText}> {translate("close_loop.no_tickets")} </Text>
             </View>
         );
     };

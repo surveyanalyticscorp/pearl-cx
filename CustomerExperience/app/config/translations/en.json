@@ -61,6 +61,7 @@
     "ticket_details" : "Ticket Details",
     "overview" : "Overview",
     "comments" : "Comments",
+    "comment" : "Comment",
     "logs" : "Logs",
     "response_id" : "Response ID:",
     "view_response" : "View Response",
@@ -76,7 +77,10 @@
     "update_ticket" : "Update Ticket",
     "owner" : "Owner",
     "addition_comments" : "Additional Comments",
-    "please_add_comments" : "Veuillez ajouter des commentaires"
+    "please_add_comments" : "Please add comments",
+    "no_tickets" : "No tickets",
+    "enter_email_id" : "Enter email address",
+    "type_a_comment" : "Type a comment"
   },
   "responses" : {
     "responses" : "Responses",
