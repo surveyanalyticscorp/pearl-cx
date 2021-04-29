@@ -42,7 +42,7 @@ export default function TicketWidget(props){
                 <Text style={styles.comment}>{props.comment}</Text>
             </ReadMore>;
         }
-        return <Text style={styles.comment}>No comments</Text>;
+        return <Text style={styles.comment}>{translate("close_loop.no_comments")}</Text>;
     };
 
     let renderTicketDetailsView = () => {

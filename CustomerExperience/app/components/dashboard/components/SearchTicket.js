@@ -102,7 +102,7 @@ function SearchTicket(props) {
                     buttonColor= {Colors.accent}
                     buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
                     onPress={() => {
-                        props.navigation.navigate('New Ticket',{parentRoute: 'Dashboard'});
+                        props.navigation.navigate(translate("responses.new_ticket"),{parentRoute: 'Dashboard'});
                     }}
                 />
             </View>

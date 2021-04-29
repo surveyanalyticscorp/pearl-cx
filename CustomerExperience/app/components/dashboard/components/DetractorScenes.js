@@ -158,19 +158,19 @@ const DetractorScenes = props => {
         }
         switch (value) {
             case 3:
-                setFilterObject({text:'Critical', value: 3});
+                setFilterObject({text:translate("close_loop.critical"), value: 3});
                 break;
             case 2:
-                setFilterObject({text:'High', value: 2});
+                setFilterObject({text:translate("close_loop.high"), value: 2});
                 break;
             case 1:
-                setFilterObject({text:'Medium', value: 1});
+                setFilterObject({text:translate("close_loop.medium"), value: 1});
                 break;
             case 0:
-                setFilterObject({text:'Low', value: 0});
+                setFilterObject({text:translate("close_loop.low"), value: 0});
                 break;
             default:
-                setFilterObject({text:'All', value: -1})
+                setFilterObject({text:translate("close_loop.all"), value: -1})
         }
     };
 
@@ -208,7 +208,7 @@ const DetractorScenes = props => {
                     buttonColor= {Colors.accent}
                     buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
                     onPress={() => {
-                        props.navigation.navigate('New Ticket',{parentRoute: 'Dashboard'});
+                        props.navigation.navigate(translate("responses.new_ticket"),{parentRoute: 'Dashboard'});
                     }}
                 />
             </View>

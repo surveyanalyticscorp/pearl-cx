@@ -282,7 +282,7 @@ function CreateTicket(props) {
             :
             <View style={styles.submitButton}>
                 <TouchableWithoutFeedback onPress={submitAction}>
-                    <Text style={styles.submitText}> Submit </Text>
+                    <Text style={styles.submitText}> {translate("close_loop.submit")} </Text>
                 </TouchableWithoutFeedback>
             </View>
     };

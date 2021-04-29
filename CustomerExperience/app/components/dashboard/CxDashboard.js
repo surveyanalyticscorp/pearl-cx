@@ -111,17 +111,17 @@ const CxDashboard = props => {
     let renderExitAlert = () => {
             return (
                 Alert.alert(
-                    'Exit App',
-                    'Are you sure?',
+                    translate("exit_app"),
+                    translate("exit_message"),
                     [
                         {
-                            text: 'Yes',
+                            text: translate("yes"),
                             onPress: () => {
                                 showExitAlert(false);
                                 BackHandler.exitApp()
                             }
                         },
-                        {   text: 'No',
+                        {   text: translate("no"),
                             onPress: () => {
                                 showExitAlert(false)
                             }

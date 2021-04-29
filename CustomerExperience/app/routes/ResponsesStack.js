@@ -48,7 +48,7 @@ const ResponsesStack = ({navigation}) => (
             })}
         />
         <FeedbackStack.Screen
-            name="New Ticket"
+            name = {translate("responses.new_ticket")}
             component={CreateTicket}
             options={({navigation, route}) => ({
                 headerLeft: props => <View/>,

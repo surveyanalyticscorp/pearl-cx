@@ -80,7 +80,9 @@
     "please_add_comments" : "Please add comments",
     "no_tickets" : "No tickets",
     "enter_email_id" : "Enter email address",
-    "type_a_comment" : "Type a comment"
+    "type_a_comment" : "Type a comment",
+    "no_comments" : "No comments",
+    "submit" : "Submit"
   },
   "responses" : {
     "responses" : "Responses",
@@ -98,7 +100,8 @@
     "profile" : "Profile",
     "activity" : "Activity",
     "view_ticket" : "View Ticket",
-    "create_ticket" : "Create Ticket"
+    "create_ticket" : "Create Ticket",
+    "new_ticket" : "New Ticket"
   },
   "settings" : {
     "settings" : "Settings",
@@ -121,6 +124,8 @@
   "logout" : "Logout",
   "logout_confirmation_message" : "Are you sure you want to logout?",
   "yes" : "Yes",
-  "no" : "No"
+  "no" : "No",
+  "exit_app" : "Exit App",
+  "exit_message" : "Are you sure?"
 
 }

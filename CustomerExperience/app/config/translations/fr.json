@@ -55,7 +55,9 @@
     "please_add_comments" : "Veuillez ajouter des commentaires",
     "no_tickets" : "Pas de billets",
     "enter_email_id" : "Entrer l'adresse e-mail",
-    "type_a_comment" : "Tapez un commentaire"
+    "type_a_comment" : "Tapez un commentaire",
+    "no_comments" : "Sans commentaires",
+    "submit" : "Soumettre"
   },
   "responses" : {
     "responses" : "Réponses",
@@ -72,7 +74,9 @@
     "feedback" : "Retour",
     "profile" : "Profil",
     "activity" : "Activité",
-    "view_ticket" : "Voir le ticket"
+    "view_ticket" : "Voir le ticket",
+    "create_ticket" : "Créer un ticket",
+    "new_ticket" : "Nouveau ticket"
   },
   "settings" : {
     "settings" : "Paramètres",
@@ -91,9 +95,11 @@
     "last_3_months" : "3 derniers mois",
     "last_6_months" : "6 derniers mois"
   },
-  "filter_by" : "Filter By",
+  "filter_by" : "Filtrer par",
   "logout" : "Se déconnecter",
   "logout_confirmation_message" : "Êtes-vous sûr de vouloir vous déconnecter?",
   "yes" : "Oui",
-  "no" : "Non"
+  "no" : "Non",
+  "exit_app" : "Quitter l'application",
+  "exit_message" : "Êtes-vous sûr?"
 }
