@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableOpacity, View, TextInput, Text, FlatList} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, TextInput, Text, FlatList, SafeAreaView} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {Colors} from '../../styles/color.constants';
@@ -98,7 +98,7 @@ export default function SearchFeedback(props) {
 
     let renderFeedback = () => {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container,{backgroundColor: Colors.white}]}>
                 <FlatList
                     data={responseData}
                     keyExtractor={item => item.responseSetID+''}
@@ -166,21 +166,21 @@ export default function SearchFeedback(props) {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView forceInset={{bottom: 'never', top:'never'}} style={styles.container}>
             {renderNavigationHeader()}
             {showLoader ? renderSpinner() : renderFeedback()}
-        </View>
+        </SafeAreaView>
     )
 
 }
 
 const styles = StyleSheet.create({
     safeArea: {
-        flex: 1,
-        backgroundColor: Colors.white,
+        flex: 1
     },
     container: {
         flex: 1,
+        backgroundColor: Colors.accent,
     },
     headerContainer: {
         width:'100%',
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.accent,
         alignItems: "center",
         justifyContent: 'space-between',
-        paddingTop: 1.3*PaddingConstants.tab4
+        paddingTop: 1.3 * PaddingConstants.tab1
 
     },
     leftHeaderButton: {
