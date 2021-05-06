@@ -53,6 +53,7 @@ const AppRouter = props => {
 
     const authToken = useSelector(state => state.global.authToken);
     const userInfo = useSelector(state => state.global.userInfo);
+    const languageCode = useSelector(state => state.global.languageCode);
     const dynamicLink = useSelector(state => state.global.dynamicLink);
     const notificationCount = useSelector(state => state.notification.notificationLogs.length);
     let [isAppActive, setAppActiveState] = useState(false);
@@ -85,7 +86,7 @@ const AppRouter = props => {
                 title: remoteMessage.notification.title,
                 data: remoteMessage.data
             }, parseInt(remoteMessage.messageId));
-            props.getNotification(authToken);
+            dispatch(getNotification(authToken))
         });
 
         addNotificationListeners();
@@ -125,8 +126,8 @@ const AppRouter = props => {
 
 
     useEffect(() =>{
-        setI18nConfig(userInfo.languageCode);
-    },[userInfo.languageCode]);
+        setI18nConfig(languageCode);
+    },[languageCode]);
 
 
     const setGlobalBaseUrl = () => {

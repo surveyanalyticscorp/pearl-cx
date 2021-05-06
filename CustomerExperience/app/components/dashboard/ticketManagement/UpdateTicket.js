@@ -293,7 +293,7 @@ function UpdateTicket(props) {
             :
             <View style={styles.updateButton}>
                 <TouchableWithoutFeedback onPress={updateAction}>
-                    <Text style={styles.updateText}> Update </Text>
+                    <Text style={styles.updateText}> {translate("close_loop.update")} </Text>
                 </TouchableWithoutFeedback>
             </View>
     };

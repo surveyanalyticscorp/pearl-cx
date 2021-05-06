@@ -2,7 +2,7 @@ import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {CX_HOME} from '../../api/Constant';
 import {
-    API_ERROR, IS_ERROR, WANT_TO_RELOAD_DASHBOARD,
+    API_ERROR, IS_ERROR, SET_LANGUAGE_INFO, WANT_TO_RELOAD_DASHBOARD,
 } from '../actions/index';
 import {
     DASHBOARD_RECEIVED,
@@ -21,6 +21,11 @@ export function* fetchDashboard(action) {
         yield put({
             type: DASHBOARD_RECEIVED,
             response: json,
+        });
+
+        yield put({
+            type: SET_LANGUAGE_INFO,
+            payload: {languageInfo: {languageCode: json.body.languageCode}},
         });
 
         yield put({

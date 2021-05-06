@@ -7,7 +7,10 @@ import {
     SET_AUTH_TOKEN,
     SET_RANGE_FILTER,
     SET_USER_DETAILS_FOR_RESET_PASSWORD,
-    SET_DYNAMIC_LINK, WANT_TO_RELOAD_DASHBOARD, IS_ERROR,
+    SET_DYNAMIC_LINK,
+    WANT_TO_RELOAD_DASHBOARD,
+    IS_ERROR,
+    SET_LANGUAGE_INFO
 } from '../actions';
 import {
     AUTHENTICATE_PANEL_RESPONSE,
@@ -28,6 +31,7 @@ const initialState = {
     isError: false,
     baseUrl: '',
     userInfo: {},
+    languageCode: '',
     authToken:'',
     errorMessage: '',
     dynamicLink:'',
@@ -51,8 +55,15 @@ const globalReducer = (state = initialState, action) => {
                 ...state,
                 authToken:action.response.authToken,
                 userInfo: action.response.body,
+                //languageCode: action.response.body.languageCode,
                 isLoading: false,
             };
+        }
+        case SET_LANGUAGE_INFO : {
+            return {
+                ...state,
+                languageCode: action.payload.languageInfo.languageCode
+            }
         }
         case SET_DYNAMIC_LINK: {
             return {

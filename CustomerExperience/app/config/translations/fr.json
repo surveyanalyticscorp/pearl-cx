@@ -57,7 +57,8 @@
     "enter_email_id" : "Entrer l'adresse e-mail",
     "type_a_comment" : "Tapez un commentaire",
     "no_comments" : "Sans commentaires",
-    "submit" : "Soumettre"
+    "submit" : "Soumettre",
+    "update" : "Mettre à jour"
   },
   "responses" : {
     "responses" : "Réponses",

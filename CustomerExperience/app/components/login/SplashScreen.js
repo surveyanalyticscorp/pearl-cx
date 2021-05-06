@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import {fillUserInfo, setAuthToken} from '../../redux/actions/index';
 import {isStringNullOrEmpty} from '../../Utils/Utility';
 import {DASHBOARD_RANGE} from '../../redux/actions/dashboard.actions';
-import {setRangeFilter} from '../../redux/actions';
+import {setLanguageInfo, setRangeFilter} from '../../redux/actions';
 
 function SplashScreen(props) {
   let [moveNext, setMoveNext] = useState(false);
@@ -62,6 +62,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   saveUserInfo: userInfo => {
     dispatch(fillUserInfo(userInfo));
+    dispatch(setLanguageInfo(userInfo))
   },
   setToken: (token) => {
     dispatch(setAuthToken(token))

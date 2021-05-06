@@ -82,7 +82,8 @@
     "enter_email_id" : "Enter email address",
     "type_a_comment" : "Type a comment",
     "no_comments" : "No comments",
-    "submit" : "Submit"
+    "submit" : "Submit",
+    "update" : "Update"
   },
   "responses" : {
     "responses" : "Responses",
