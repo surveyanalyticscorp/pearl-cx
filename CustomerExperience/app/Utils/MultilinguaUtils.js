@@ -13,7 +13,8 @@ const translationGetters = {
     // lazy requires (metro bundler does not support symlinks)
     en: () => require("../config/translations/en.json"),
     fr: () => require("../config/translations/fr.json"),
-    de: () => require("../config/translations/de.json")
+    de: () => require("../config/translations/de.json"),
+    es: () => require("../config/translations/es.json"),
 };
 
 export const translate = memoize(
