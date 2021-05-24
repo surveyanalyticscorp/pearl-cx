@@ -9,14 +9,15 @@ import RadioForm from 'react-native-simple-radio-button';
 import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
+import {translate} from "../../../Utils/MultilinguaUtils";
 
 export default function TicketFilter(props) {
     let radio_props = [
-        {label: 'All', value: -1 },
-        {label: 'Critical', value: 3 },
-        {label: 'High', value: 2 },
-        {label: 'Medium', value: 1 },
-        {label: 'Low', value: 0 },
+        {label: translate("close_loop.all"), value: -1 },
+        {label: translate("close_loop.critical"), value: 3 },
+        {label: translate("close_loop.high"), value: 2 },
+        {label: translate("close_loop.medium"), value: 1 },
+        {label: translate("close_loop.low"), value: 0 },
     ];
     let index = radio_props.findIndex(item => item.value === props.route.params.selectedFilter) || 0;
     return (

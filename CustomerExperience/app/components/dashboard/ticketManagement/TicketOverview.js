@@ -23,6 +23,7 @@ import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
 import {DMYFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
 import {apiHandler} from '../../../api/ApiHandler';
 import ArrayUtils from '../../../Utils/ArrayUtils';
+import { translate} from "../../../Utils/MultilinguaUtils";
 
 function TicketOverview(props) {
 
@@ -55,15 +56,15 @@ function TicketOverview(props) {
         }
     };
 
-    let getPriorityColor = (priority) => {
-        switch(priority.toLowerCase()) {
-            case 'low':
+    let getPriorityColor = () => {
+        switch(props.ticketDetails.priority) {
+            case 0:
                 return Colors.promoter;
-            case 'medium':
+            case 1:
                 return Colors.passive;
-            case 'high':
+            case 2:
                 return Colors.high;
-            case 'critical':
+            case 3:
                 return Colors.critical;
         }
     };
@@ -71,26 +72,26 @@ function TicketOverview(props) {
     let getPriority = () => {
         switch (props.ticketDetails.priority) {
             case 0:
-                return 'Low';
+                return translate("close_loop.low");
             case 1:
-                return 'Medium';
+                return translate("close_loop.medium");
             case 2:
-                return'High';
+                return translate("close_loop.high");
             case 3:
-                return'Critical';
+                return translate("close_loop.critical");
         }
     };
 
     let getStatus = () => {
         switch (props.ticketDetails.status) {
             case 0:
-                return 'New';
+                return translate("dashboard.new");
             case 1:
-                return 'Open';
+                return translate("dashboard.open");
             case 2:
-                return'Resolved';
+                return translate("dashboard.resolved");
             case 5:
-                return'Escalated';
+                return translate("dashboard.escalated");
         }
     };
 
@@ -114,8 +115,8 @@ function TicketOverview(props) {
             let priority = getPriority();
             return (
                 <View style={[styles.responseIdContainer, {paddingHorizontal: PaddingConstants.tab1}]}>
-                    <Text style={styles.rowText}> Priority </Text>
-                    <View style={[styles.ticketStatusView, {backgroundColor: getPriorityColor(priority)}]}>
+                    <Text style={styles.rowText}> {translate("close_loop.priority")} </Text>
+                    <View style={[styles.ticketStatusView, {backgroundColor: getPriorityColor()}]}>
                         <Text
                             style={[styles.ticketStatusText, {color: priority === 'Medium' ? Colors.primary : Colors.white}]}>{priority}</Text>
                     </View>
@@ -140,7 +141,7 @@ function TicketOverview(props) {
     },[responseData]);
 
     const moveToResponseViewer = () => {
-        props.navigation.navigate('Feedback Details',{
+        props.navigation.navigate(translate("responses.feedback_details"),{
             data: responseData[0],
             ticketStatus: ticketStatus,
             token: props.authToken,
@@ -174,13 +175,13 @@ function TicketOverview(props) {
             let flag = props.ticketDetails.responseID > 0 && props.route.params.parentRoute !== 'Responses';
             return (
                 <View style={styles.responseIdContainer}>
-                    {renderRow('Response ID', props.ticketDetails.responseID)}
+                    {renderRow(translate("close_loop.response_id"), props.ticketDetails.responseID)}
                     {flag && <TouchableWithoutFeedback onPress={() => {
                         setShowLoader(true);
                         getFeedbackData()
                     }}>
                         <View style={styles.viewResponseContainer}>
-                            <Text style={styles.viewResponseText}>View Response</Text>
+                            <Text style={styles.viewResponseText}>{translate("close_loop.view_response")}</Text>
                         </View>
                     </TouchableWithoutFeedback> }
                 </View>
@@ -193,7 +194,7 @@ function TicketOverview(props) {
         if(!isObjectEmpty(props.ticketDetails)) {
             return (
                 <Text style={styles.commentContainer}>
-                    <Text style={styles.rowText}>Customer Comments:</Text>
+                    <Text style={styles.rowText}>{translate("close_loop.customer_comments")}</Text>
                     <Text style={styles.rowValue}> {props.ticketDetails.comment}</Text>
                 </Text>
             )
@@ -208,13 +209,13 @@ function TicketOverview(props) {
                 <View style={styles.container}>
                     {renderResponseIdView()}
                     {renderTicketPriority()}
-                    {renderRow('Status:', getStatus())}
-                    {renderRow('Customer Email:', props.ticketDetails.emailAddress)}
+                    {renderRow(translate("close_loop.status"), getStatus())}
+                    {renderRow(translate("close_loop.customer_email"), props.ticketDetails.emailAddress)}
                     {renderNPS()}
-                    {renderRow('Origin Segment:', props.ticketDetails.originSegment.name)}
-                    {renderRow('Current Segment:', props.ticketDetails.currentSegment.name)}
-                    {renderRow('Ticket Owner:', props.ticketDetails.ticketOwner)}
-                    {renderRow('Created On:', date)}
+                    {renderRow(translate("close_loop.origin_segment"), props.ticketDetails.originSegment.name)}
+                    {renderRow(translate("close_loop.current_segment"), props.ticketDetails.currentSegment.name)}
+                    {renderRow(translate("close_loop.ticket_owner"), props.ticketDetails.ticketOwner)}
+                    {renderRow(translate("close_loop.created_on"), date)}
                     {renderCustomerComment()}
                     {showLoader && renderSpinner()}
                 </View>

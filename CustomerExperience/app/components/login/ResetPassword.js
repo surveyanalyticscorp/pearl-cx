@@ -30,7 +30,7 @@ import {setDynamicLink} from '../../redux/actions';
 import QPTextField from '../../widgets/TextField';
 
 let { width }= Dimensions.get('window');
-const stringConst = require('../../config/locales/en');
+const stringConst = require('../../config/translations/en');
 
 const ResetPassword = props => {
     const [password, setPassword] = useState('');
@@ -73,15 +73,15 @@ const ResetPassword = props => {
 
     const isValidateInput = () => {
         if (isStringNullOrEmpty(password)) {
-            setValidation(stringConst.invalidPassword);
+            setValidation(stringConst.onBoarding.invalidPassword);
             return false;
         }
         if (isStringNullOrEmpty(confirmPassword)) {
-            setValidation(stringConst.invalidPassword);
+            setValidation(stringConst.onBoarding.invalidPassword);
             return false;
         }
         if (password !== confirmPassword) {
-            setValidation(stringConst.passwordNotMatching);
+            setValidation(stringConst.onBoarding.passwordNotMatching);
             return false;
         }
         setValidation('');
@@ -136,7 +136,7 @@ const ResetPassword = props => {
                     <View style={styles.textFieldContainer}>
                         <Text
                             style={styles.resetPasswordMessage}>
-                            {stringConst.resetPasswordMessage}
+                            {stringConst.onBoarding.resetPasswordMessage}
                         </Text>
                         <QPTextField
                             autofocus={false}

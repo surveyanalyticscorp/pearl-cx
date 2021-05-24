@@ -10,6 +10,7 @@ export const SET_RANGE_FILTER = 'SET_RANGE_FILTER';
 export const SET_USER_DETAILS_FOR_RESET_PASSWORD = 'SET_USER_DETAILS_FOR_RESET_PASSWORD';
 export const SET_DYNAMIC_LINK = 'SET_DYNAMIC_LINK';
 export const WANT_TO_RELOAD_DASHBOARD = 'WANT_TO_RELOAD_DASHBOARD';
+export const SET_LANGUAGE_INFO = 'SET_LANGUAGE_INFO';
 
 export const showLoading = (isLoading = true) => ({
   type: IS_LOADING,
@@ -24,6 +25,11 @@ export const wantToReloadDashboard = (wantToReload) => ({
 export const fillUserInfo = userInfo => ({
   type: FILL_USER_INFO,
   payload: {userInfo: userInfo},
+});
+
+export const setLanguageInfo = languageInfo => ({
+    type: SET_LANGUAGE_INFO,
+    payload: {languageInfo: languageInfo},
 });
 
 export const clearUserInfo = () => ({

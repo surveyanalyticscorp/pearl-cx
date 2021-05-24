@@ -24,6 +24,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {Notifications} from 'react-native-notifications';
 import {connect} from 'react-redux';
 import {clearNotification} from "../redux/actions/notification.actions";
+import {translate} from "../Utils/MultilinguaUtils";
 
 
 const Notification = props =>{
@@ -49,11 +50,11 @@ const Notification = props =>{
     let renderClearAllAlert = () => {
         return (
             Alert.alert(
-                'Clear all notification',
-                'Are you sure?',
+                translate("dashboard.clear_all_notification"),
+                translate("dashboard.are_you_sure"),
                 [
                     {
-                        text: 'Yes',
+                        text: translate("yes"),
                         onPress: () => {
                             showClearAllAlert(false);
                             props.clearNotificationAction(undefined);
@@ -66,7 +67,7 @@ const Notification = props =>{
                         }
                     },
                     {
-                        text: 'No',
+                        text: translate("no"),
                         onPress: () => {
                             showClearAllAlert(false)
                         }
@@ -78,7 +79,6 @@ const Notification = props =>{
     };
 
     let clearNotification = (notification, index) => {
-        console.log('Delete item: ' + notification.id);
         props.clearNotificationAction(notification);
         if(row[index]){
             row[index].close();
@@ -93,7 +93,7 @@ const Notification = props =>{
 
 
     let viewTicket = (ticketID) => {
-        props.navigation.navigate('Ticket Details', {ticketID: ticketID, parentRoute: 'Dashboard'});
+        props.navigation.navigate(translate("close_loop.ticket_details"), {ticketID: ticketID, parentRoute: 'Dashboard'});
     };
 
 
@@ -170,7 +170,7 @@ const Notification = props =>{
     let renderContainer = () => {
         if(props.notificationLogs.length === 0){
             return <View style={{flex: 1, justifyContent:'center', alignItems:'center'}}>
-                    <Text style={styles.boldFont}>No notifications to display</Text>
+                    <Text style={styles.boldFont}>{translate("dashboard.no_notification_to_display")}</Text>
                 </View>
         }else{
             return <FlatList

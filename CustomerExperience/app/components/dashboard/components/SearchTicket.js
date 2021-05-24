@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableOpacity, View, TextInput, Text, FlatList} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, TextInput, Text, FlatList, SafeAreaView} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {Sizes} from '../../../styles/Size.constant';
 import {Colors} from '../../../styles/color.constants';
@@ -15,6 +15,8 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import QPSpinner from '../../../widgets/QPSpinner';
 import ActionButton from 'react-native-action-button';
 import ArrayUtils from '../../../Utils/ArrayUtils';
+import {translate} from "../../../Utils/MultilinguaUtils";
+
 
 function SearchTicket(props) {
 
@@ -38,7 +40,7 @@ function SearchTicket(props) {
     const renderNoDataFound = () => {
         return (
             <View style={dashboardStyles.emptyView}>
-                <Text style={dashboardStyles.detractorEmptyText}> No tickets</Text>
+                <Text style={dashboardStyles.detractorEmptyText}> {translate("close_loop.no_tickets")} </Text>
             </View>
         );
     };
@@ -86,7 +88,7 @@ function SearchTicket(props) {
 
     let renderDetractorTickets = () => {
         return (
-            <View style={dashboardStyles.container}>
+            <View style={{flex : 1, backgroundColor: Colors.white}}>
                 <FlatList
                     data={responseData}
                     keyExtractor={item => item.ticketID+''}
@@ -101,7 +103,7 @@ function SearchTicket(props) {
                     buttonColor= {Colors.accent}
                     buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
                     onPress={() => {
-                        props.navigation.navigate('New Ticket',{parentRoute: 'Dashboard'});
+                        props.navigation.navigate(translate("responses.new_ticket"),{parentRoute: 'Dashboard'});
                     }}
                 />
             </View>
@@ -128,7 +130,7 @@ function SearchTicket(props) {
                     setShowLoader(true);
                 }}
                 placeholderTextColor={Colors.white}
-                placeholder={'Search email or response ID'}
+                placeholder={translate("responses.search_placeholder")}
                 value={searchText}
                 autoFocus={false}
                 autoCapitalize={'none'}
@@ -161,10 +163,10 @@ function SearchTicket(props) {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView forceInset={{bottom: 'never', top:'never'}} style={styles.container}>
             {renderNavigationHeader()}
             {showLoader ? renderSpinner() : renderDetractorTickets()}
-        </View>
+        </SafeAreaView>
     )
 
 }
@@ -187,11 +189,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(SearchTicket);
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: Colors.white,
     },
     container: {
         flex: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.accent,
     },
     headerContainer: {
         width:'100%',
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.accent,
         alignItems: "center",
         justifyContent: 'space-between',
-        paddingTop: 1.3*PaddingConstants.tab1
+        paddingTop: 1.3 * PaddingConstants.tab1
 
     },
     leftHeaderButton: {

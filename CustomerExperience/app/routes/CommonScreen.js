@@ -16,10 +16,11 @@ import {MarginConstants} from "../styles/margin.constants";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import {FontFamily} from "../styles/font.constants";
 import DetractorScenes from "../components/dashboard/components/DetractorScenes";
+import {translate} from "../Utils/MultilinguaUtils";
 
 const DateRangeTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
-const DetractorTicketsTab = createMaterialTopTabNavigator();
+const CloseLoopTicketsTab = createMaterialTopTabNavigator();
 
 
 let { width } = Dimensions.get('window');
@@ -97,21 +98,21 @@ export const SaveDashboardDate = (props) => {
                 onPress={() => {
                     props.route.params.saveRange();
                 }}>
-                <Text style={styles.saveText}> Save </Text>
+                <Text style={styles.saveText}> {translate("date_filter.save")} </Text>
             </TouchableOpacity>
         </View>
     );
 };
 
 
-export const EditTicket = () => {
+const EditTicket = () => {
     let navigation = useNavigation();
     const state = useNavigationState(state => state);
     return (
         <View style={[styles.rightHeaderButton,{marginHorizontal: 1.5*MarginConstants.tab1}]}>
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate("Update Ticket",{parentRoute: state.routeNames[0]});
+                    navigation.navigate(translate("close_loop.update_ticket"),{parentRoute: state.routeNames[0]});
                 }}>
                 <MaterialIcon name={'edit'} size={Sizes.filterIcon} color={Colors.white}/>
             </TouchableOpacity>
@@ -119,8 +120,8 @@ export const EditTicket = () => {
     );
 };
 
-export  const CloseLoopTicketsTab = props => (
-    <DetractorTicketsTab.Navigator tabBarOptions={{
+export  const CloseLoopTicketsTabs = props => (
+    <CloseLoopTicketsTab.Navigator tabBarOptions={{
         labelStyle: {width: width/3, fontSize: TextSizes.secondary},
         indicatorStyle: {backgroundColor: Colors.accent},
         style:{backgroundColor: Colors.white, width: '100%'},
@@ -132,11 +133,11 @@ export  const CloseLoopTicketsTab = props => (
                                    lazy
                                    keyboardDismissMode={'auto'}
     >
-        <DetractorTicketsTab.Screen name="New" component={DetractorScenes} initialParams={{ dataCount:0}}/>
-        <DetractorTicketsTab.Screen name="Open" component={DetractorScenes} initialParams={{ dataCount:1}}/>
-        <DetractorTicketsTab.Screen name="Escalated" component={DetractorScenes} initialParams={{ dataCount:3}}/>
-        <DetractorTicketsTab.Screen name="Resolved" component={DetractorScenes} initialParams={{ dataCount:2}}/>
-    </DetractorTicketsTab.Navigator>
+        <CloseLoopTicketsTab.Screen name = {translate("dashboard.new")} component={DetractorScenes} initialParams={{ dataCount:0}}/>
+        <CloseLoopTicketsTab.Screen name = {translate("dashboard.open")} component={DetractorScenes} initialParams={{ dataCount:1}}/>
+        <CloseLoopTicketsTab.Screen name = {translate("dashboard.escalated")} component={DetractorScenes} initialParams={{ dataCount:3}}/>
+        <CloseLoopTicketsTab.Screen name = {translate("dashboard.resolved")} component={DetractorScenes} initialParams={{ dataCount:2}}/>
+    </CloseLoopTicketsTab.Navigator>
 );
 
 export const DateRangeTabStack = props => (
@@ -150,9 +151,9 @@ export const DateRangeTabStack = props => (
                             lazy
                             keyboardDismissMode={'auto'}
     >
-        <DateRangeTab.Screen name="Month" component={DashboardDateFilter}
+        <DateRangeTab.Screen name = {translate("date_filter.month")} component={DashboardDateFilter}
                              initialParams={{range: props.route.params.range, setRange: props.route.params.setRange}}/>
-        <DateRangeTab.Screen name="Custom" component={DashboardDateFilter}
+        <DateRangeTab.Screen name = {translate("date_filter.custom")} component={DashboardDateFilter}
                              initialParams={{range: props.route.params.range, setRange: props.route.params.setRange}}/>
     </DateRangeTab.Navigator>
 );
@@ -169,15 +170,15 @@ export const TicketLogTabStack = props => (
     }}
                             lazy
                             keyboardDismissMode={'auto'}>
-        <TicketLogTab.Screen name="Overview" component={TicketOverview} initialParams={{
+        <TicketLogTab.Screen name= {translate("close_loop.overview")}  component={TicketOverview} initialParams={{
             ticketID: props.route.params.ticketID,
             parentRoute: props.route.params.parentRoute
         }}/>
-        <TicketLogTab.Screen name="Comments" component={TicketComments} initialParams={{
+        <TicketLogTab.Screen name = {translate("close_loop.comments")} component={TicketComments} initialParams={{
             ticketID: props.route.params.ticketID,
             parentRoute: props.route.params.parentRoute
         }}/>
-        <TicketLogTab.Screen name="Logs" component={TicketComments} initialParams={{
+        <TicketLogTab.Screen name = {translate("close_loop.logs")} component={TicketComments} initialParams={{
             ticketID: props.route.params.ticketID,
             parentRoute: props.route.params.parentRoute
         }}/>
@@ -189,7 +190,7 @@ const CommonScreens = (RootStack) => {
     return [
         <RootStack.Screen
             key={"Date Range"}
-            name="Date Range"
+            name={translate("date_filter.date_range")}
             component={DateRangeTabStack}
             options={({navigation, route}) => ({
                 headerLeft: props => <HeaderBackLeft/>,
@@ -198,7 +199,7 @@ const CommonScreens = (RootStack) => {
         />,
         <RootStack.Screen
             key={"Ticket Details"}
-            name="Ticket Details"
+            name = {translate("close_loop.ticket_details")}
             component={TicketLogTabStack}
             options={({navigation, route}) => ({
                 headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
@@ -206,7 +207,7 @@ const CommonScreens = (RootStack) => {
             })}
         />,
         <RootStack.Screen
-            name="Feedback Details"
+            name = {translate("responses.feedback_details")}
             key={"Feedback Details"}
             component={FeedbackDetails}
             options={({navigation, route}) => ({
@@ -215,7 +216,7 @@ const CommonScreens = (RootStack) => {
         />,
         <RootStack.Screen
             key={"Update Ticket"}
-            name="Update Ticket"
+            name = {translate("close_loop.update_ticket")}
             component={UpdateTicket}
             options={({navigation, route}) => ({
                 headerLeft: props => <HeaderBackLeft {...props} route={route}/>,

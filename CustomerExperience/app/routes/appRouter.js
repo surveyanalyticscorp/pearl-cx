@@ -15,7 +15,7 @@ import {
     ASYNC_USER_INFO, BASE_URL,
 } from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
-import {connect, useSelector} from 'react-redux';
+import {connect, useSelector, useDispatch} from 'react-redux';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import AppSettings from '../components/settings/AppSettings';
@@ -35,13 +35,14 @@ import TicketFilter from '../components/dashboard/components/TicketFilter';
 import {getNotification} from "../redux/actions/notification.actions";
 import ResponsesStack from "./ResponsesStack";
 import {
-    CloseButton, CloseLoopTicketsTab,
+    CloseButton, CloseLoopTicketsTabs,
     HeaderBackLeft,
     MenuIcon,
     SearchIcon,
 } from "./CommonScreen";
 import CommonScreens from "./CommonScreen";
 import {navigationRef} from "./RootNavigation";
+import {setI18nConfig, translate} from "../Utils/MultilinguaUtils";
 
 
 const Drawer = createDrawerNavigator();
@@ -52,11 +53,13 @@ const AppRouter = props => {
 
     const authToken = useSelector(state => state.global.authToken);
     const userInfo = useSelector(state => state.global.userInfo);
+    const languageCode = useSelector(state => state.global.languageCode);
     const dynamicLink = useSelector(state => state.global.dynamicLink);
+    const notificationCount = useSelector(state => state.notification.notificationLogs.length);
     let [isAppActive, setAppActiveState] = useState(false);
-    let [notificationCount, setNotificationCount] = useState(0);
     let [baseUrl, setBaseUrl] = useState(undefined);
     let ref = useRef();
+    const dispatch = useDispatch();
 
     const linking = {
         prefixes: ['https://mobileapps.questionpro.com/cx','https://questionpro.offline.link'],
@@ -83,7 +86,7 @@ const AppRouter = props => {
                 title: remoteMessage.notification.title,
                 data: remoteMessage.data
             }, parseInt(remoteMessage.messageId));
-            props.getNotification(authToken);
+            dispatch(getNotification(authToken))
         });
 
         addNotificationListeners();
@@ -107,10 +110,6 @@ const AppRouter = props => {
         }
     },[isAppActive]);
 
-    useEffect(() =>{
-        setNotificationCount(props.notificationLogs.length)
-    },[props.notificationLogs]);
-
 
     useEffect(() => {
         if (!isStringNullOrEmpty(authToken)) {
@@ -121,9 +120,15 @@ const AppRouter = props => {
 
     useEffect(()=>{
         if(authToken && baseUrl){
-            props.getNotification(authToken);
+            dispatch(getNotification(authToken))
         }
     },[authToken, baseUrl]);
+
+
+    useEffect(() =>{
+        setI18nConfig(languageCode);
+    },[languageCode]);
+
 
     const setGlobalBaseUrl = () => {
         AsyncStorage.getItem(BASE_URL).then((baseUrl) => {
@@ -173,7 +178,7 @@ const AppRouter = props => {
                     onPress={() => {
                         props.route.params.clearAllNotifications();
                     }}>
-                    <Text style={styles.saveText}> Clear All </Text>
+                    <Text style={styles.saveText}> {translate("dashboard.clear_all")} </Text>
                 </TouchableOpacity>
             </View>
         );
@@ -183,16 +188,16 @@ const AppRouter = props => {
     const dashboardStack = props => (
         <DetractorStack.Navigator>
             <DetractorStack.Screen
-                name="Dashboard"
-                component={CxDashboard}
-                options={({ navigation, route }) => ({
+                name = {translate("dashboard.dashboard")}
+                component = {CxDashboard}
+                options = {({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon/>,
                     headerRight: props => <NotificationIcon />,
                 })}
             />
             <DetractorStack.Screen
-                name="Closed Loop"
-                component={CloseLoopTicketsTab}
+                name = {translate("close_loop.close_loop")}
+                component={CloseLoopTicketsTabs}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
                     headerRight: props => <SearchIcon route={'Dashboard'}/>,
@@ -228,7 +233,7 @@ const AppRouter = props => {
                 })}
             />
             <DetractorStack.Screen
-                name="New Ticket"
+                name = {translate("responses.new_ticket")}
                 component={CreateTicket}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <View/>,
@@ -236,7 +241,7 @@ const AppRouter = props => {
                 })}
             />
             <DetractorStack.Screen
-                name="Filter By"
+                name =  {translate("filter_by")}
                 component={TicketFilter}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <View/>,
@@ -250,14 +255,14 @@ const AppRouter = props => {
     const settingStack = (props) => (
         <SettingsStack.Navigator>
             <SettingsStack.Screen
-                name="Settings"
+                name = {translate("settings.settings")}
                 component={AppSettings}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <MenuIcon/>,
                 })}
             />
             <SettingsStack.Screen
-                name="Account Details"
+                name = {translate("settings.account_details")}
                 component={AccountDetails}
                 options={({ navigation, route }) => ({
                     headerLeft: props => <HeaderBackLeft {...props} route={route}/>,
@@ -285,7 +290,7 @@ const AppRouter = props => {
                     drawerContent={props => <DrawerContent {...props} />}>
                     <Drawer.Screen name="Dashboard" component={dashboardModalStack}/>
                     <Drawer.Screen name="Responses" component={ResponsesStack}/>
-                    <Drawer.Screen name="Settings" component={settingStack}/>
+                    <Drawer.Screen name = {translate("settings.settings")} component={settingStack}/>
                 </Drawer.Navigator>
                 :
                 <SignInStack/>
@@ -294,21 +299,7 @@ const AppRouter = props => {
     );
 };
 
-const mapStateToProps = state => {
-    return {
-        notificationLogs: state.notification.notificationLogs
-    };
-};
-
-
-const mapDispatchToProps = dispatch => ({
-    dispatch,
-    getNotification: (token) => {
-        dispatch(getNotification(token))
-    }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);
+export default AppRouter;
 
 const styles = StyleSheet.create({
     drawerStyle: {

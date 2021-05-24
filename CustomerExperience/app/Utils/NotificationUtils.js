@@ -5,6 +5,7 @@ import {isStringNullOrEmpty} from './Utility';
 import {Notifications} from 'react-native-notifications';
 import {AppState} from 'react-native';
 import * as RootNagation from '../routes/RootNavigation'
+import {translate} from "./MultilinguaUtils";
 
 
 async function requestUserPermission() {
@@ -75,7 +76,7 @@ export function addNotificationListeners() {
 
 function actionOnNotification(ticketId, timeOut){
     setTimeout(()=>{
-        RootNagation.navigate('Ticket Details', {
+        RootNagation.navigate(translate("close_loop.ticket_details"), {
             ticketID: ticketId,
             parentRoute: 'Dashboard'
         });

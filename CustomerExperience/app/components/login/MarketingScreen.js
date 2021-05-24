@@ -8,7 +8,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {FontFamily} from '../../styles/font.constants';
 
-const stringConst = require('../../config/locales/en');
+const stringConst = require('../../config/translations/en');
 
 const MarketingScreen = props => {
 
@@ -42,7 +42,7 @@ const MarketingScreen = props => {
             {introPages}
           </Swiper>
           <TouchableOpacity style={styles.getStartedButton} onPress={onPress}>
-            <Text style={styles.buttonTextColor}>{stringConst.getStarted}</Text>
+            <Text style={styles.buttonTextColor}>{stringConst.onBoarding.getStarted}</Text>
           </TouchableOpacity>
         </SafeAreaView>
       </ImageBackground>
@@ -53,33 +53,28 @@ function getMarketingScreenContent() {
   return [
     {
       introImage: require('../../config/images/ms_connect_engage.png'),
-      introTitle: 'Connect and engage with your customers. Anytime, anywhere',
-      description:
-          'Communicate with customers or prospects through a wide selection of feedback channels at every touchpoint anywhere, no matter the device.',
+      introTitle: stringConst.onBoarding.marketing_title_1,
+      description: stringConst.onBoarding.marketing_desc_1,
     },
     {
       introImage: require('../../config/images/ms_take_control.png'),
-      introTitle: 'Take full control of your customer’s journey',
-      description:
-          'Analyze your customer’s 360 experience and quickly identify actionable insights and trends.',
+      introTitle: stringConst.onBoarding.marketing_title_2,
+      description: stringConst.onBoarding.marketing_desc_2,
     },
     {
       introImage: require('../../config/images/ms_mobile_dashboard.png'),
-      introTitle: 'Manage real-time analytics in one dashboard',
-      description:
-          'Easily monitor your business with the role-based, customizable dashboard from anywhere.',
+      introTitle: stringConst.onBoarding.marketing_title_3,
+      description: stringConst.onBoarding.marketing_desc_3,
     },
     {
       introImage: require('../../config/images/ms_drive_business_decisions.png'),
-      introTitle: 'Make immediate business decisions',
-      description:
-          'Prioritize actions quickly based on customer data to excel their expectations with our closed-loop feedback system with real-time alerts.',
+      introTitle: stringConst.onBoarding.marketing_title_4,
+      description: stringConst.onBoarding.marketing_desc_4,
     },
     {
       introImage: require('../../config/images/ms_full_growth.png'),
-      introTitle: 'Fuel growth organically',
-      description:
-          'Identify your best customers and help them become your brand ambassadors through social referrals with our unique Promoter Amplification system.',
+      introTitle: stringConst.onBoarding.marketing_title_5,
+      description: stringConst.onBoarding.marketing_desc_5,
     },
   ];
 }

@@ -11,6 +11,7 @@ import {MDYFORMAT} from '../../../Utils/AppConstants';
 import {isObjectEmpty} from '../../../Utils/Utility';
 import {useSelector} from 'react-redux';
 import QPSpinner from '../../../widgets/QPSpinner';
+import {translate} from "../../../Utils/MultilinguaUtils";
 
 export default function TicketComments(props) {
 
@@ -28,10 +29,10 @@ export default function TicketComments(props) {
             if (ArrayUtils.isNotEmpty(ticketLogs)) {
                 return ticketLogs.map((item, index) => {
                     let date = moment(item.logDate, MDYFORMAT).format('MMM DD, YYYY');
-                    let text = routeName === 'Comments' ? item.comment : item.logType;
+                    let text = routeName === translate("close_loop.comments") ? item.comment : item.logType;
                     return (
                         <View key={index} style={styles.commentRow}>
-                            <Text style={styles.authorText}>Author: {item.author}</Text>
+                            <Text style={styles.authorText}>{translate("close_loop.author") + item.author}</Text>
                             <Text style={styles.dateText}>{date}</Text>
                             <Text style={styles.commentText}>{text}</Text>
                         </View>

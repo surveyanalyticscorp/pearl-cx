@@ -15,6 +15,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {Sizes} from '../../styles/Size.constant';
 import moment from 'moment';
+import {translate} from "../../Utils/MultilinguaUtils";
 export default function FeedbackCell(props){
     let disable = props.origin === 'Detail';
 
@@ -25,7 +26,7 @@ export default function FeedbackCell(props){
     useEffect(() => {
         if (feedbackTapped) {
             setTapped(false);
-            props.navigation.navigate('Ticket Details', {ticketID: props.item.ticketID, parentRoute: 'Responses'});
+            props.navigation.navigate(translate("close_loop.ticket_details"), {ticketID: props.item.ticketID, parentRoute: 'Responses'});
         }
     }, [feedbackTapped]);
 
@@ -89,22 +90,22 @@ export default function FeedbackCell(props){
         let status = getTicketStatus();
         return StringUtils.isEmpty(status) ? <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                                                                        onPress={() => {
-                                                                           props.navigation.navigate('New Ticket',{parentRoute: 'Responses'})
+                                                                           props.navigation.navigate(translate("responses.new_ticket"),{parentRoute: translate("responses.responses")})
                                                                        }}
             >
-                <Text style={styles.viewTicketsText}> Create Ticket</Text>
+                <Text style={styles.viewTicketsText}> {translate("responses.create_ticket")}</Text>
             </TouchableWithoutFeedback>
             : <TouchableWithoutFeedback hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
                                         onPress={() => {
                                             setTapped(true);
                                         }}
             >
-                <Text style={styles.viewTicketsText}> View Ticket</Text>
+                <Text style={styles.viewTicketsText}>{translate("responses.view_ticket")}</Text>
             </TouchableWithoutFeedback>
     };
 
     let renderResponseContainer = () => {
-        let flag = props.parentRoute === 'Responses';
+        let flag = props.parentRoute === translate("responses.responses");
         return (
             <View style={styles.responseContainer}>
                 {renderNPSView()}

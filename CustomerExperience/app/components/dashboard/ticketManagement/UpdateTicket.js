@@ -29,11 +29,22 @@ import {updateClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
 import QPSpinner from '../../../widgets/QPSpinner';
 import {showErrorFlashMessage} from '../../../Utils/Utility';
 import {wantToReloadDashboard} from "../../../redux/actions";
+import {translate} from "../../../Utils/MultilinguaUtils";
 
 function UpdateTicket(props) {
-    let priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
-    let statusOptions = ['New', 'Open', 'Resolved', 'Escalated'];
-    let selectedStatus = props.ticket.status === 5 ? 'Escalated':statusOptions[props.ticket.status];
+    let priorityOptions = [
+        translate("close_loop.low"),
+        translate("close_loop.medium"),
+        translate("close_loop.high"),
+        translate("close_loop.critical")];
+
+    let statusOptions = [
+        translate("dashboard.new"),
+        translate("dashboard.open"),
+        translate("dashboard.resolved"),
+        translate("dashboard.escalated")];
+
+    let selectedStatus = props.ticket.status === 5 ? translate("dashboard.escalated") : statusOptions[props.ticket.status];
 
     let [comment, setComment] = useState('');
     let [priority, setPriority] = useState(priorityOptions[props.ticket.priority]);
@@ -47,7 +58,7 @@ function UpdateTicket(props) {
     let [callOwnerAPI, setCallOwnerAPI] = useState(false);
 
     let fetchClosedLoopSegments = () => {
-        let statusId = status === 'Escalated' ? 5 : statusOptions.findIndex(item => item === status);
+        let statusId = status === translate("dashboard.escalated") ? 5 : statusOptions.findIndex(item => item === status);
         let params = {
             "statusID": statusId,
         };
@@ -62,7 +73,7 @@ function UpdateTicket(props) {
                 "segmentID": selectedSegmentId
             };
             props.getClosedLoopOwners(props.authToken, params)
-        } else if (status === 'Escalated' && ArrayUtils.isEmpty(segmentOptions)) {
+        } else if (status === translate("dashboard.escalated") && ArrayUtils.isEmpty(segmentOptions)) {
             setOwnerOptions([])
         }
     };
@@ -101,10 +112,10 @@ function UpdateTicket(props) {
     let setDataOnSelection = (header, options, selectedIndex) => {
         StringUtils.isNotEmpty(validationError) && setValidationError('');
         switch (header) {
-            case 'Priority':
+            case translate("close_loop.priority").slice(0, -1):
                 setPriority(options[selectedIndex]);
                 break;
-            case 'Status':
+            case translate("close_loop.status").slice(0, -1):
                 /** if status is escalated i.e 3 then only need to reset segment and owner */
                 if(selectedIndex === 3){
                     setSegment('');
@@ -112,12 +123,12 @@ function UpdateTicket(props) {
                 }
                 setStatus(options[selectedIndex]);
                 break;
-            case 'Segment':
+            case translate("close_loop.segment"):
                 setCallOwnerAPI(true);
                 setSegment(options[selectedIndex]);
                 setOwner('');
                 break;
-            case 'Owner':
+            case translate("close_loop.owner"):
                 setOwner(options[selectedIndex]);
                 break;
         }
@@ -173,10 +184,10 @@ function UpdateTicket(props) {
         let segmentDefaultText = StringUtils.isEmpty(segment) ? 'Select' : segment;
         return (
             <View style={styles.fieldContainer}>
-                {renderField('Priority', priorityOptions, priority || 0)}
-                {renderField('Status', statusOptions, status || 0)}
-                {renderField('Segment', getSegmentArray(), segmentDefaultText)}
-                {renderField('Owner', getOwners(), ownerDefaultText)}
+                {renderField(translate("close_loop.priority").slice(0, -1), priorityOptions, priority || 0)}
+                {renderField(translate("close_loop.status").slice(0, -1), statusOptions, status || 0)}
+                {renderField(translate("dashboard.segment"), getSegmentArray(), segmentDefaultText)}
+                {renderField(translate("close_loop.owner"), getOwners(), ownerDefaultText)}
             </View>
         )
     };
@@ -192,7 +203,7 @@ function UpdateTicket(props) {
                     autoCorrect={false}
                     style={styles.commentText}
                     value={comment}
-                    placeholder={'Additional Comment'}
+                    placeholder={translate("close_loop.addition_comments")}
                     onChangeText={text => {
                         StringUtils.isNotEmpty(validationError) && setValidationError('');
                         setComment(text);
@@ -205,7 +216,7 @@ function UpdateTicket(props) {
     let validationAction = (body) => {
         for (const [key, value] of Object.entries(body)) {
             if(key === 'managerComment' && StringUtils.isEmpty(value)) {
-                setValidationError('Please add comment');
+                setValidationError(translate("close_loop.please_add_comments"));
                 return false
             }
         }
@@ -261,7 +272,7 @@ function UpdateTicket(props) {
                 setLoading(false);
                 if(props.route.params.parentRoute === 'Dashboard') {
                     props.navigation.navigate('Dashboard');
-                    props.navigation.push('Closed Loop');
+                    props.navigation.push(translate("close_loop.close_loop"));
                     props.clearTicketDetails();
                 } else {
                     props.navigation.navigate('Responses');
@@ -282,7 +293,7 @@ function UpdateTicket(props) {
             :
             <View style={styles.updateButton}>
                 <TouchableWithoutFeedback onPress={updateAction}>
-                    <Text style={styles.updateText}> Update </Text>
+                    <Text style={styles.updateText}> {translate("close_loop.update")} </Text>
                 </TouchableWithoutFeedback>
             </View>
     };

@@ -28,11 +28,12 @@ import {addClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
 import {showErrorFlashMessage, validateEmail} from '../../../Utils/Utility';
 import {StackActions} from '@react-navigation/native';
 import {wantToReloadDashboard} from "../../../redux/actions";
+import {translate} from "../../../Utils/MultilinguaUtils";
 
 function CreateTicket(props) {
 
-    let priorityOptions = ['Low', 'Medium', 'High', 'Critical'];
-    let statusOptions = ['New', 'Open', 'Resolved'];
+    let priorityOptions = [translate("dashboard.low"), translate("dashboard.medium"), translate("dashboard.high"), translate("dashboard.critical")];
+    let statusOptions = [translate("dashboard.new"), translate("dashboard.open"), translate("dashboard.resolved")];
 
     let [email, setEmail] = useState('');
     let [comment, setComment] = useState('');
@@ -98,14 +99,14 @@ function CreateTicket(props) {
 
     let renderCustomerEmail = () => {
         return <View>
-            <Text style={styles.emailHeaderText}> Customer Email </Text>
+            <Text style={styles.emailHeaderText}> {translate("close_loop.customer_email").slice(0, -1)} </Text>
             <TextInput
                 underlineAndroidColor={'transparent'}
                 autoFocus={false}
                 autoCorrect={false}
                 style={styles.emailText}
                 value={email}
-                placeholder={'Enter email address'}
+                placeholder={translate("close_loop.enter_email_id")}
                 // keyboardType='email-address'
                 onChangeText={text => {
                     StringUtils.isNotEmpty(validationError) && setValidationError('');
@@ -119,20 +120,20 @@ function CreateTicket(props) {
     let setDataOnSelection = (header, options, selectedIndex) => {
         StringUtils.isNotEmpty(validationError) && setValidationError('');
         switch (header) {
-            case 'Priority':
+            case translate("close_loop.priority").slice(0,-1):
                 setPriority(options[selectedIndex]);
                 break;
-            case 'Status':
+            case translate("close_loop.status").slice(0, -1):
                 setSegment('');
                 setOwner('');
                 setStatus(options[selectedIndex]);
                 break;
-            case 'Segment':
+            case translate("dashboard.segment"):
                 setCallOwnerAPI(true);
                 setSegment(options[selectedIndex]);
                 setOwner('');
                 break;
-            case 'Owner':
+            case translate("close_loop.owner"):
                 setOwner(options[selectedIndex]);
                 break;
         }
@@ -192,10 +193,10 @@ function CreateTicket(props) {
         let segmentDefaultText = StringUtils.isEmpty(segment) ? 'Select' : segment;
         return (
             <View style={styles.fieldContainer}>
-                {renderField('Priority', priorityOptions, priority || 0)}
-                {renderField('Status', statusOptions, status || 0)}
-                {renderField('Segment', getSegmentArray(), segmentDefaultText)}
-                {renderField('Owner', getOwners(), ownerDefaultText)}
+                {renderField(translate("close_loop.priority").slice(0, -1), priorityOptions, priority || 0)}
+                {renderField(translate("close_loop.status").slice(0, -1), statusOptions, status || 0)}
+                {renderField(translate("dashboard.segment"), getSegmentArray(), segmentDefaultText)}
+                {renderField(translate("close_loop.owner"), getOwners(), ownerDefaultText)}
             </View>
         )
     };
@@ -203,7 +204,7 @@ function CreateTicket(props) {
     let renderComment = () => {
         return (
             <View style={styles.commentContainer}>
-                <Text style={styles.emailHeaderText}> Comment </Text>
+                <Text style={styles.emailHeaderText}> {translate("close_loop.comment")} </Text>
                 <TextInput
                     multiline
                     maxLength={500}
@@ -212,7 +213,7 @@ function CreateTicket(props) {
                     autoCorrect={false}
                     style={styles.commentText}
                     value={comment}
-                    placeholder={'Type a comment'}
+                    placeholder={translate("close_loop.type_a_comment")}
                     onChangeText={text => {
                         StringUtils.isNotEmpty(validationError) && setValidationError('');
                         setComment(text);
@@ -281,7 +282,7 @@ function CreateTicket(props) {
             :
             <View style={styles.submitButton}>
                 <TouchableWithoutFeedback onPress={submitAction}>
-                    <Text style={styles.submitText}> Submit </Text>
+                    <Text style={styles.submitText}> {translate("close_loop.submit")} </Text>
                 </TouchableWithoutFeedback>
             </View>
     };

@@ -13,6 +13,7 @@ import {TextSizes} from '../styles/textsize.constants';
 import {setRangeFilter} from '../redux/actions';
 import {Sizes} from '../styles/Size.constant';
 import DeviceInfo from 'react-native-device-info';
+import {translate} from "../Utils/MultilinguaUtils";
 
 const FilterHeader = (props) => {
     let startDate = moment(props.range.startDate, DMYFORMAT).format(HalfMonthDateYearFormat);
@@ -24,7 +25,7 @@ const FilterHeader = (props) => {
     };
 
     let filterAction = () => {
-        const pushAction = StackActions.push('Date Range', {
+        const pushAction = StackActions.push(translate("date_filter.date_range"), {
             range: props.range,
             setRange: getDataOnNewRange,
         });
