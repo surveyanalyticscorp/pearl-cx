@@ -1,6 +1,6 @@
 import {put, takeLatest} from 'redux-saga/effects';
 import {doLoginApiCall, watchDoLogin} from '../redux/sagas/loginInSaga';
-import {GET_LOGIN, LOGIN_RESPONSE} from '../redux/actions';
+import {GET_LOGIN, LOGIN_RESPONSE} from '../redux/actions/login.actions';
 
 describe('SAGAS', () => {
   it('should dispatch action "GET_LOGIN" ', () => {
@@ -51,10 +51,10 @@ describe('SAGAS', () => {
     };
     const action = {
       param: {
-        accessCode: 'access',
-        emailAddress: 'saloni.shah+20@questionpro.com',
-        password: 'ggguku',
-        platform: 'ios',
+        accessCode: 'CX-Mobile',
+        emailAddress: 'datta.kunde@questionpro.com',
+        password: '12345',
+        platform: 'Android',
         sourceMode: 'email',
         udId: '79BDE4CB-F940-416C-81B0-4C7934ADF62B' + '',
       },
