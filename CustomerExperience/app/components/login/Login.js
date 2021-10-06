@@ -41,7 +41,7 @@ const Login = props => {
 
     useEffect(() => {
         if (StringUtils.isNotEmpty(validation) || props.isError) {
-            let message = props.isError ? props.errorMessage.errorAlert : validation;
+            let message = props.isError ? getApiValidationErrorMessage() : validation;
             showErrorFlashMessage(message);
             timer = setTimeout(() => {
                 setValidation('')
@@ -66,6 +66,11 @@ const Login = props => {
                 loginAction(token)
             }
         })
+    };
+
+    let getApiValidationErrorMessage = () =>{
+        return props.errorMessage.errorAlert?  props.errorMessage.errorAlert :
+            props.errorMessage.validationErrors[0].error;
     };
 
     let authenticateAccessCode = () =>{
@@ -93,6 +98,7 @@ const Login = props => {
     };
 
     const checkValidation = () => {
+        console.log('Validate email: '+validateEmail((userData.email)));
         if (!validateEmail((userData.email))) {
             setValidation(stringConst.onBoarding.invalidEmail);
             return false;
