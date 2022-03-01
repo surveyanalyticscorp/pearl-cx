@@ -11,7 +11,7 @@
 ## Usage
 #### Initialization
 ```JavaScript
-    import {initQp} from 'qp-widgets';
+    import {initQp} from 'qp-feedback-survey-sdk';
 
     let payload = { apiKey: 'api_access_key' };
 
