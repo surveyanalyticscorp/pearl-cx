@@ -3,7 +3,6 @@
 #### QuestionPro Cx feedback survey SDK(Software Development Kit) to collect the customer feedback. Capability to integrate it in mobile application and trigger feedback survey whenever you want.
 
 ## Getting started
----
 ### Install the package:
     npm i qp-widgets
 
