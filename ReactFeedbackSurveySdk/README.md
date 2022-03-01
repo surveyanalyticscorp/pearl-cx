@@ -4,7 +4,7 @@
 
 ## Getting started
 ### Install the package:
-    npm i qp-widgets
+    npm i qp-feedback-survey-sdk
 
 
 ## Usage
