@@ -29,6 +29,7 @@ export const QpFeedbackSurvey = props => {
                 console.log('getSurveyUrl: ' + JSON.stringify(apiResponse));
                 setIsLoading(false);
                 setSurveyUrl(apiResponse.SurveyURL);
+                console.log('Survey Url: '+ apiResponse.SurveyURL);
             });
         } else {
             setIsLoading(false);

@@ -1,6 +1,6 @@
 {
   "name": "qp-feedback-survey-sdk",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A simple and fully customizable React Native component to conduct the study and collect the feedback of customers.",
   "main": "index.js",
   "scripts": {

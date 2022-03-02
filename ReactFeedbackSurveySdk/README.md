@@ -21,7 +21,7 @@
 
 #### Trigger feedback survey and launch component
 ```JavaScript
-    import {QpFeedbackSurvey} from 'qp-widgets';
+    import {QpFeedbackSurvey} from 'qp-feedback-survey-sdk';
 
     <QpFeedbackSurvey
          surveyId={survey_id}
