@@ -28,7 +28,7 @@ export const QpFeedbackSurvey = props => {
             getSurveyUrl(props.surveyId).then(apiResponse => {
                 console.log('getSurveyUrl: ' + JSON.stringify(apiResponse));
                 setIsLoading(false);
-                setSurveyUrl(apiResponse.surveyURL);
+                setSurveyUrl(apiResponse.SurveyURL);
             });
         } else {
             setIsLoading(false);
