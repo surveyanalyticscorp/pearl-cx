@@ -4,13 +4,13 @@
 
 ## Getting started
 ### Install the package:
-    npm i qp-feedback-survey-sdk
+    npm i qp-feedback-survey
 
 
 ## Usage
 #### Initialization
 ```JavaScript
-    import {initQp} from 'qp-feedback-survey-sdk';
+    import {initQp} from 'qp-feedback-survey';
 
     let payload = { apiKey: 'api_access_key' };
 
@@ -21,7 +21,7 @@
 
 #### Trigger feedback survey and launch component
 ```JavaScript
-    import {QpFeedbackSurvey} from 'qp-feedback-survey-sdk';
+    import {QpFeedbackSurvey} from 'qp-feedback-survey';
 
     <QpFeedbackSurvey
          surveyId={survey_id}
