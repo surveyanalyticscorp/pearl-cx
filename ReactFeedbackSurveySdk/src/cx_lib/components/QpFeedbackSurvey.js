@@ -28,8 +28,14 @@ export const QpFeedbackSurvey = props => {
             getSurveyUrl(props.surveyId).then(apiResponse => {
                 console.log('getSurveyUrl: ' + JSON.stringify(apiResponse));
                 setIsLoading(false);
-                setSurveyUrl(apiResponse.SurveyURL);
-                console.log('Survey Url: '+ apiResponse.SurveyURL);
+                if(apiResponse){
+                    console.log('Survey Url: '+ apiResponse.SurveyURL);
+                    setSurveyUrl(apiResponse.SurveyURL);
+                }else{
+                    if (typeof props.onSurveyFinished === 'function') {
+                        props.onSurveyFinished();
+                    }
+                }
             });
         } else {
             setIsLoading(false);
