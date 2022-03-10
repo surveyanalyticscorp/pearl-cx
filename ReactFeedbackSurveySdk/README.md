@@ -12,7 +12,7 @@
 ```JavaScript
     import {initQp} from 'qp-feedback-survey';
 
-    let payload = { apiKey: 'api_access_key' };
+    let payload = { apiKey: 'api_access_key' };//Your API Access Key
 
     initQp(payload).then(status => {
           console.log('QP Feedback Survey Init status: ' + status);
