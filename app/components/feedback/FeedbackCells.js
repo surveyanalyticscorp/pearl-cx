@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, TouchableWithoutFeedback, Text} from 'react-native';
+import {View, TouchableWithoutFeedback, Text, Image} from 'react-native';
 import {StyleSheet} from 'react-native';
 import StringUtils from '../../Utils/StringUtils';
 import ArrayUtils from '../../Utils/ArrayUtils';
@@ -61,24 +61,41 @@ export default function FeedbackCell(props) {
     }
   };
 
-  let renderNPSView = () => {
-    let color = getNPSColor();
-    return (
-      <View style={[styles.npsContainer, {backgroundColor: color}]}>
-        <Text
-          style={[
-            styles.npsText,
-            {
-              color:
-                props.item.sentiment === 'Passive'
-                  ? Colors.primary
-                  : Colors.white,
-            },
-          ]}>
-          {props.item.answerText}
-        </Text>
-      </View>
-    );
+  //   let renderNPSView = () => {
+  //     let color = getNPSColor();
+  //     return (
+  //       <View style={[styles.npsContainer, {backgroundColor: color}]}>
+  //         <Text
+  //           style={[
+  //             styles.npsText,
+  //             {
+  //               color:
+  //                 props.item.sentiment === 'Passive'
+  //                   ? Colors.primary
+  //                   : Colors.white,
+  //             },
+  //           ]}>
+  //           {props.item.answerText}
+  //         </Text>
+  //       </View>
+  //     );
+  //   };
+
+  let getNPSIcon = () => {
+    let icon;
+    switch (props.item.sentiment) {
+      case 'Detractor':
+        icon = require('./../../../assets/images/detractor.png');
+        break;
+      case 'Passive':
+        icon = require('./../../../assets/images/passive.png');
+        break;
+      default:
+        icon = require('./../../../assets/images/promoter.png');
+        break;
+    }
+
+    return <Image source={icon} style={{width: 24, height: 24}} />;
   };
 
   let renderRespondentDetails = () => {
@@ -132,7 +149,8 @@ export default function FeedbackCell(props) {
     let flag = props.parentRoute === translate('responses.responses');
     return (
       <View style={styles.responseContainer}>
-        {renderNPSView()}
+        {/* {renderNPSView()} */}
+        {getNPSIcon()}
         {renderRespondentDetails()}
         {!disable && (
           <Icon
