@@ -12,6 +12,9 @@ import {FontFamily} from '../../styles/font.constants';
 import {Sizes} from '../../styles/Size.constant';
 import moment from 'moment';
 import {translate} from '../../Utils/MultilinguaUtils';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {backgroundColor} from '../../widgets/qp-calendar/style';
+import style from '../../widgets/qp-calendar/calendar/header/style';
 export default function FeedbackCell(props) {
   let disable = props.origin === 'Detail';
 
@@ -81,6 +84,28 @@ export default function FeedbackCell(props) {
   //     );
   //   };
 
+  let getUserName = () => {
+    let name = `${props.item.firstName ?? ''} ${props.item.lastName ?? ''}`;
+    return (
+      <Text style={styles.userNameText}>{name.length > 1 ? name : 'N/A'}</Text>
+    );
+  };
+
+  let getNPSScore = () => {
+    let textColor = getNPSColor();
+    return (
+      <Text
+        style={{
+          marginHorizontal: 12,
+          fontSize: 16,
+          fontWeight: 'bold',
+          color: textColor,
+        }}>
+        {props.item.answerText}
+      </Text>
+    );
+  };
+
   let getNPSIcon = () => {
     let icon;
     switch (props.item.sentiment) {
@@ -95,7 +120,27 @@ export default function FeedbackCell(props) {
         break;
     }
 
-    return <Image source={icon} style={{width: 24, height: 24}} />;
+    return <Image source={icon} style={{width: 16, height: 16}} />;
+  };
+
+  let getDate = () => {
+    return (
+      <Text style={[styles.subtitleText, {marginHorizontal: 12}]}>
+        {surveyTakenDate}
+      </Text>
+    );
+  };
+
+  let getResponseId = () => {
+    const responseId = props.item.responseSetID;
+
+    return (
+      <View style={styles.responseIdContainer}>
+        <Text style={styles.subtitleText}>{`${translate(
+          'close_loop.response_id',
+        )} ${responseId}`}</Text>
+      </View>
+    );
   };
 
   let renderRespondentDetails = () => {
@@ -117,6 +162,13 @@ export default function FeedbackCell(props) {
     );
   };
 
+  let renderCreateOrViewTicketButton = () => {
+    return renderCreateOrViewTicket();
+    //   <View style={{padding: 4, backgroundColor: Colors.primary}}>
+
+    //   </View>
+  };
+
   let renderCreateOrViewTicket = () => {
     let status = getTicketStatus();
     return StringUtils.isEmpty(status) ? (
@@ -128,7 +180,6 @@ export default function FeedbackCell(props) {
           });
         }}>
         <Text style={styles.viewTicketsText}>
-          {' '}
           {translate('responses.create_ticket')}
         </Text>
       </TouchableWithoutFeedback>
@@ -148,18 +199,40 @@ export default function FeedbackCell(props) {
   let renderResponseContainer = () => {
     let flag = props.parentRoute === translate('responses.responses');
     return (
-      <View style={styles.responseContainer}>
-        {/* {renderNPSView()} */}
-        {getNPSIcon()}
-        {renderRespondentDetails()}
-        {!disable && (
-          <Icon
-            name="arrow-right"
-            size={Sizes.icons}
-            color={Colors.secondary}
-          />
-        )}
-        {disable && flag && renderCreateOrViewTicket()}
+      <View style={styles.upperContainer}>
+        <View style={styles.responseContainer}>
+          {/* {renderNPSView()} */}
+
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+            }}>
+            {getNPSIcon()}
+            {getNPSScore()}
+            {getUserName()}
+          </View>
+
+          <View style={styles.dateAndArrowIconContainer}>
+            {getDate()}
+            {!disable && (
+              <Icon
+                name="arrow-right"
+                size={Sizes.icons}
+                color={Colors.secondary}
+              />
+            )}
+          </View>
+        </View>
+
+        {/* {renderRespondentDetails()} */}
+        {/* {getResponseId()}
+        {disable && flag && renderCreateOrViewTicket()} */}
+        <View style={styles.responseIdAndTicketRowContainer}>
+          {getResponseId()}
+          {disable && flag && renderCreateOrViewTicket()}
+        </View>
       </View>
     );
   };
@@ -170,9 +243,11 @@ export default function FeedbackCell(props) {
         props.onSelect();
       }}
       disabled={disable}>
-      <View style={styles.container}>
-        {renderTopSegmentView()}
-        {renderResponseContainer()}
+      <View>
+        <View style={styles.container}>
+          {/* {renderTopSegmentView()} */}
+          {renderResponseContainer()}
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -183,6 +258,11 @@ const styles = StyleSheet.create({
     margin: MarginConstants.tab1,
     padding: PaddingConstants.halfTab,
     backgroundColor: Colors.white,
+  },
+  upperContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   topSegmentContainer: {
     flexDirection: 'row',
@@ -217,6 +297,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: PaddingConstants.tab2,
     flex: 1,
   },
+  responseIdContainer: {
+    paddingHorizontal: PaddingConstants.tab2,
+    flex: 1,
+  },
   titleText: {
     color: Colors.primary,
     fontSize: TextSizes.secondary,
@@ -234,9 +318,33 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   viewTicketsText: {
-    color: Colors.accent,
+    backgroundColor: Colors.accentLight,
+    color: Colors.white,
     fontSize: TextSizes.secondary,
     textAlign: 'center',
     fontFamily: FontFamily.regular,
+    padding: 5,
+    borderRadius: 5,
+  },
+  userNameText: {
+    marginHorizontal: 12,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: Colors.accent,
+  },
+  responseIdAndTicketRowContainer: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+
+    justifyContent: 'center',
+    padding: 12,
+    margin: 24,
+  },
+
+  dateAndArrowIconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'flex-end',
   },
 });

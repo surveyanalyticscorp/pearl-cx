@@ -9,6 +9,7 @@ import {
   Alert,
   SafeAreaView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import {showLoading} from '../../redux/actions/index';
 import {
@@ -190,9 +191,18 @@ const CxDashboard = (props) => {
     let victoryPieData =
       responseCount !== 0
         ? [
-            {y: data.promoterFormattedPercent, x: ''},
-            {y: data.passiveFormattedPercent, x: ''},
-            {y: data.detractorFormattedPercent, x: ''},
+            {
+              y: data.promoterFormattedPercent,
+              x: '',
+            },
+            {
+              y: data.passiveFormattedPercent,
+              x: '',
+            },
+            {
+              y: data.detractorFormattedPercent,
+              x: '',
+            },
           ]
         : [
             {y: 100, x: ''}, //for empty nps chart
@@ -278,7 +288,22 @@ const CxDashboard = (props) => {
       </View>
     );
   };
+  let getNPSIcon = (sentiment) => {
+    let icon;
+    switch (sentiment) {
+      case 'Detractor':
+        icon = require('./../../../assets/images/detractor.png');
+        break;
+      case 'Passive':
+        icon = require('./../../../assets/images/passive.png');
+        break;
+      default:
+        icon = require('./../../../assets/images/promoter.png');
+        break;
+    }
 
+    return <Image source={icon} style={{width: 12, height: 12}} />;
+  };
   let renderDetailsInformation = (title, tag, onPressTab) => {
     return (
       <TouchableOpacity
