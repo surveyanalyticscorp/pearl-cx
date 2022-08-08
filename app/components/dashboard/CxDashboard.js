@@ -111,10 +111,13 @@ const CxDashboard = (props) => {
   }, [props.range, props.wantToReload]); //props.navigation
 
   useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    // BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    BackHandler.addEventListener(handleBackPress);
+
     getLastLogin();
     return function cleanup() {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+      // BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+      BackHandler.removeEventListener(handleBackPress);
     };
   }, []);
   //////////////////////////////////////////////

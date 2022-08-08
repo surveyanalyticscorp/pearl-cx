@@ -95,7 +95,24 @@ const DrawerContent = (props) => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            props.navigation.navigate('Tickets');
+            props.navigation.navigate('ClosedLoop');
+          }}>
+          <View style={styles.drawerRow}>
+            <MyIcon
+              size={1.3 * Sizes.icons}
+              color={Colors.accent}
+              name={'ticket-account'}
+              style={styles.rowIcon}
+            />
+            <Text style={styles.labelStyle}>
+              {translate('dashboard.closed_loop')}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+        {/* 
+        <TouchableWithoutFeedback
+          onPress={() => {
+            props.navigation.navigate(translate('Tickets'));
           }}>
           <View style={styles.drawerRow}>
             <MyIcon
@@ -108,7 +125,7 @@ const DrawerContent = (props) => {
               {translate('dashboard.tickets')}
             </Text>
           </View>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback> */}
         <TouchableWithoutFeedback
           onPress={() => {
             props.navigation.navigate(translate('settings.settings'));

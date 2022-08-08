@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: FontFamily.regular,
     padding: 5,
-    borderRadius: 5,
+    borderRadius: 2,
   },
   userNameText: {
     marginHorizontal: 12,
@@ -335,8 +335,7 @@ const styles = StyleSheet.create({
   responseIdAndTicketRowContainer: {
     flexDirection: 'row',
     alignItems: 'stretch',
-
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     padding: 12,
     margin: 24,
   },

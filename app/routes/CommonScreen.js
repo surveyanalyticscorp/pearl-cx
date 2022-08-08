@@ -74,8 +74,9 @@ export const HeaderBackLeft = (props) => {
   );
 };
 
-export const CloseButton = () => {
+export const CloseButton = ({color}) => {
   let navigation = useNavigation();
+  const iconColor = !color ? Colors.white : color;
   return (
     <View
       style={[
@@ -90,7 +91,7 @@ export const CloseButton = () => {
         <MaterialIcon
           name={'close'}
           size={1.1 * Sizes.filterIcon}
-          color={Colors.white}
+          color={iconColor}
         />
       </TouchableOpacity>
     </View>

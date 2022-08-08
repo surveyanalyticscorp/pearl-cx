@@ -47,6 +47,7 @@ import TicketFilter from '../components/dashboard/components/TicketFilter';
 import {getNotification} from '../redux/actions/notification.actions';
 import ResponsesStack from './ResponsesStack';
 import TicketsStack from './TicketsStack';
+import ClosedLoopStack from './ClosedLoopStack';
 import {
   CloseButton,
   CloseLoopTicketsTabs,
@@ -403,7 +404,8 @@ const AppRouter = (props) => {
           drawerContent={(props) => <DrawerContent {...props} />}>
           <Drawer.Screen name="Dashboard" component={dashboardModalStack} />
           <Drawer.Screen name="Responses" component={ResponsesStack} />
-          <Drawer.Screen name="Tickets" component={TicketsStack} />
+          {/* <Drawer.Screen name="Tickets" component={TicketsStack} /> */}
+          <Drawer.Screen name="ClosedLoop" component={ClosedLoopStack} />
 
           <Drawer.Screen
             name={translate('settings.settings')}

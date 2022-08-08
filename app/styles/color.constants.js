@@ -9,10 +9,12 @@ const Colors = {
   accentLight: '#1b87e6',
   accent: '#1B3380',
 
+  filterIconColor: '#545E6B',
   accentGradient: 'rgba(239, 246, 252, 1)',
   gradientColor: '#8AC0EA',
   grey: '#f9f9f9',
   lightBlack: '#404A5B',
+  evenDarkerGrey: '#9B9B9B',
   darkerGrey: '#eeeeee',
   darkGrey: '#d8d8d8',
   overlay: '#edf6fd',
@@ -66,7 +68,18 @@ const buttonColors = {
   negative: Colors.secondary,
 };
 
+const statusColors = {
+  openBorder: Colors.promoter,
+  openFiller: '#9FE4AC',
+
+  escalatedBorder: '#FF9045',
+  escalatedFiller: '#FFC7A2',
+
+  overDueBorder: Colors.error,
+  overDueFiller: '#F298A8',
+};
+
 export const PROGRESS_COLOR_INCOMPLETE = '#DD4F43';
 export const PROGRESS_COLOR_TERMINATED = '#FFCE42';
 
-export {Colors, textColors, buttonColors};
+export {Colors, textColors, buttonColors, statusColors};
