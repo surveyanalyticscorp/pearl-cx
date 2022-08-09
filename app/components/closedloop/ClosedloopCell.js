@@ -24,6 +24,14 @@ export default function ClosedLoopCell(props) {
     'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...';
   let [isTapped, setTapped] = useState(false);
 
+  useEffect(() => {
+    if (isTapped) {
+      setTapped(false);
+
+      props.navigation.navigate('closedLoopTicketDetails');
+    }
+  }, [isTapped]);
+
   const getTicketID = () => {
     return <Text style={styles.idText}>{'ID 9993213'} </Text>;
   };
@@ -159,15 +167,21 @@ export default function ClosedLoopCell(props) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={{backgroundColor: Colors.white}}>
-        {getNPSAndTicketRow()}
-        {/* {getTicketID()} */}
-        {getNameANdDateRow()}
-        {getTicketDetails()}
+    <TouchableWithoutFeedback
+      onPress={() => {
+        props.onPressHandler();
+      }}
+      style={styles.container}>
+      <View style={styles.container}>
+        <View style={{backgroundColor: Colors.white}}>
+          {getNPSAndTicketRow()}
+          {/* {getTicketID()} */}
+          {getNameANdDateRow()}
+          {getTicketDetails()}
+        </View>
+        <View>{getStatusRow()}</View>
       </View>
-      <View>{getStatusRow()}</View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

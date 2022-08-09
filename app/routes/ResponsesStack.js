@@ -22,7 +22,8 @@ const feedbackStack = (props) => (
       component={Feedback}
       options={({navigation, route}) => ({
         headerLeft: (props) => <MenuIcon />,
-        headerRight: (props) => <SearchIcon route={'Feedback'} />,
+        // headerRight: (props) => <SearchIcon route={'Feedback'} />,
+        // headerRight: (props) => <SearchIcon route={'Feedback'} />,
       })}
     />
     <FeedbackStack.Screen

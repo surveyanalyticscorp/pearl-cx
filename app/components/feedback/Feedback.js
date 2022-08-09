@@ -143,7 +143,7 @@ function Feedback(props) {
       <SafeAreaView
         forceInset={{top: 'never', bottom: 'never'}}
         style={styles.safeAreaView}>
-        <FilterHeader
+        {/* <FilterHeader
           actionOnArrowClick={() => {
             setFeedbackData([]);
             setPageOffset(0);
@@ -155,7 +155,7 @@ function Feedback(props) {
             setShowLoader(true);
           }}
           {...props}
-        />
+        /> */}
 
         <View
           style={{
@@ -163,14 +163,14 @@ function Feedback(props) {
             marginVertical: '0%',
             backgroundColor: Colors.fullTransparent,
           }}>
-          <MainDropDown
+          {/* <MainDropDown
             header={''}
             options={segmentOptions}
             defaultText={segmentOptions[0]}
             onSelection={(index) => {
               console.log(`Selected : ${segmentOptions[index]}`);
             }}
-          />
+          /> */}
         </View>
         <FormContext.Provider
           value={{
@@ -356,7 +356,7 @@ const renderFeedbackScene = (props) => {
           ListFooterComponent={() => (
             <View style={{paddingBottom: PaddingConstants.tab2}} />
           )}
-          ListHeaderComponent={renderResponseFilterView}
+          // ListHeaderComponent={renderResponseFilterView}
         />
       </View>
     );

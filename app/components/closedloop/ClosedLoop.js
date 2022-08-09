@@ -10,12 +10,15 @@ import {
 import ClosedLoopCell from './ClosedloopCell';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../styles/color.constants';
+import {translate} from '../../Utils/MultilinguaUtils';
 
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {SearchIcon} from '../../routes/CommonScreen';
 import style from '../../widgets/qp-calendar/calendar/header/style';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+
 import TicketOverview from './TicketOverview';
 import TicketDetails from './TicketDetails';
 import TicketComments from './TicketComments';
@@ -23,7 +26,9 @@ import TicketActivity from './TicketActivity';
 import CreateTicket from '../dashboard/ticketManagement/CreateTicket';
 import SendEmail from '../dashboard/components/SendEmail';
 
-export default function ClosedLoop() {
+// const ClosedLoopTab = createMaterialTopTabNavigator();
+
+export default function ClosedLoop(props) {
   const sampleData = {
     dateRageText: 'Nov 14, 2017 -Mar 14, 2018',
   };
@@ -74,16 +79,22 @@ export default function ClosedLoop() {
     );
   };
 
+  const onPressHandler = () => {
+    props.navigation.navigate('closedLoopTicketDetails');
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
-      {/* {<HeaderFilter />} */}
-      {/* <ClosedLoopCell /> */}
+      {<HeaderFilter />}
+
+      <ClosedLoopCell onPressHandler={onPressHandler} />
+
       {/* <TicketDetails /> */}
       {/* <TicketOverview /> */}
       {/* <TicketComments /> */}
       {/* <TicketActivity /> */}
       {/* <CreateTicket /> */}
-      <SendEmail />
+      {/* <SendEmail /> */}
     </SafeAreaView>
   );
 }

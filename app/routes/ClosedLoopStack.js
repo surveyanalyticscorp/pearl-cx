@@ -42,7 +42,6 @@ const feedbackStack = (props) => (
 );
 
 const ClosedLoopStack = ({navigation}) => {
-  console.log('ClosedLoop View');
   return (
     <FeedbackStack.Navigator mode="modal">
       <FeedbackStack.Screen
@@ -56,7 +55,7 @@ const ClosedLoopStack = ({navigation}) => {
       />
 
       <FeedbackStack.Screen
-        name="Ticket Details"
+        name={'closedLoopTicketDetails'}
         component={TicketDetails}
         options={({navigation, route}) => ({
           // headerShown: false,

@@ -25,6 +25,7 @@ export default function FeedbackCell(props) {
   useEffect(() => {
     if (feedbackTapped) {
       setTapped(false);
+      console.log('feedback tapped');
       props.navigation.navigate(translate('close_loop.ticket_details'), {
         ticketID: props.item.ticketID,
         parentRoute: 'Responses',
