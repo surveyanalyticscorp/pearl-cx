@@ -68,7 +68,7 @@ const DrawerContent = (props) => {
           <View style={styles.drawerRow}>
             <Icon
               size={1.3 * Sizes.icons}
-              color={Colors.accent}
+              color={Colors.filterIconColor}
               name={'dashboard'}
               style={styles.rowIcon}
             />
@@ -84,7 +84,7 @@ const DrawerContent = (props) => {
           <View style={styles.drawerRow}>
             <Icon
               size={1.3 * Sizes.icons}
-              color={Colors.accent}
+              color={Colors.filterIconColor}
               name={'feedback'}
               style={styles.rowIcon}
             />
@@ -100,7 +100,7 @@ const DrawerContent = (props) => {
           <View style={styles.drawerRow}>
             <MyIcon
               size={1.3 * Sizes.icons}
-              color={Colors.accent}
+              color={Colors.filterIconColor}
               name={'ticket-account'}
               style={styles.rowIcon}
             />
@@ -128,33 +128,44 @@ const DrawerContent = (props) => {
         </TouchableWithoutFeedback> */}
         <TouchableWithoutFeedback
           onPress={() => {
-            props.navigation.navigate(translate('settings.settings'));
+            props.navigation.navigate(translate('dashboard.notifications'));
           }}>
           <View style={styles.drawerRow}>
-            <Icon
+            {/* <Icon
               size={1.3 * Sizes.icons}
               color={Colors.accent}
               name={'settings'}
               style={styles.rowIcon}
+            /> */}
+            <MyIcon
+              name={'bell'}
+              size={1.3 * Sizes.icons}
+              color={Colors.filterIconColor}
+              style={styles.rowIcon}
             />
             <Text style={styles.labelStyle}>
-              {translate('settings.settings')}
+              {translate('dashboard.notifications')}
             </Text>
           </View>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            props.navigation.dispatch(DrawerActions.toggleDrawer());
-            !logoutAlert && setLogoutAlert(true);
+            props.navigation.navigate('search');
           }}>
           <View style={styles.drawerRow}>
-            <FontIcon
+            {/* <Icon
               size={1.3 * Sizes.icons}
               color={Colors.accent}
-              name={'sign-out-alt'}
+              name={'settings'}
+              style={styles.rowIcon}
+            /> */}
+            <Icon
+              name={'search'}
+              size={1.3 * Sizes.icons}
+              color={Colors.filterIconColor}
               style={styles.rowIcon}
             />
-            <Text style={styles.labelStyle}>{translate('logout')}</Text>
+            <Text style={styles.labelStyle}>{'Search'}</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -228,10 +239,41 @@ const DrawerContent = (props) => {
   let renderAppVersion = () => {
     return (
       <View style={styles.drawerVersionContainer}>
-        <Text style={styles.drawerVersionText}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            props.navigation.navigate(translate('settings.settings'));
+          }}>
+          <View style={styles.drawerRow}>
+            <Icon
+              size={1.3 * Sizes.icons}
+              color={Colors.filterIconColor}
+              name={'settings'}
+              style={styles.rowIcon}
+            />
+            <Text style={styles.labelStyle}>
+              {translate('settings.settings')}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            props.navigation.dispatch(DrawerActions.toggleDrawer());
+            !logoutAlert && setLogoutAlert(true);
+          }}>
+          <View style={styles.drawerRow}>
+            <FontIcon
+              size={1.3 * Sizes.icons}
+              color={Colors.filterIconColor}
+              name={'sign-out-alt'}
+              style={styles.rowIcon}
+            />
+            <Text style={styles.labelStyle}>{translate('logout')}</Text>
+          </View>
+        </TouchableWithoutFeedback>
+        {/* <Text style={styles.drawerVersionText}>
           {' '}
           {'v ' + DeviceInfo.getVersion()}{' '}
-        </Text>
+        </Text> */}
       </View>
     );
   };
