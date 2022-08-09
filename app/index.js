@@ -8,7 +8,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {enableScreens} from 'react-native-screens';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as globalVariables from '../app/styles/globalStyleVariables';
-import {View} from 'react-native';
+import {View, Platform} from 'react-native';
 import codePush from 'react-native-code-push';
 
 import Siren from 'react-native-siren';

@@ -8,16 +8,19 @@ import {fillUserInfo, setAuthToken} from '../../redux/actions/index';
 import {isStringNullOrEmpty} from '../../Utils/Utility';
 import {DASHBOARD_RANGE} from '../../redux/actions/dashboard.actions';
 import {setLanguageInfo, setRangeFilter} from '../../redux/actions';
+import {WelcomeScreen} from '../dashboard/WelcomeScreen';
 
 function SplashScreen(props) {
   let [moveNext, setMoveNext] = useState(false);
   let splashTimer = useRef(null);
 
-
   useEffect(() => {
-
     splashTimer = setTimeout(() => {
-      AsyncStorage.multiGet([ASYNC_AUTH_TOKEN, ASYNC_USER_INFO, DASHBOARD_RANGE]).then(response => {
+      AsyncStorage.multiGet([
+        ASYNC_AUTH_TOKEN,
+        ASYNC_USER_INFO,
+        DASHBOARD_RANGE,
+      ]).then((response) => {
         let token = response[0][1];
         let userInfo = response[1][1];
         let dashboardRange = response[2][1];
@@ -28,9 +31,9 @@ function SplashScreen(props) {
         if (!isStringNullOrEmpty(dashboardRange)) {
           props.setRange(JSON.parse(dashboardRange));
         }
-        setMoveNext(true)
-      })
-    },1000);
+        setMoveNext(true);
+      });
+    }, 1000);
 
     return () => {
       clearTimeout(splashTimer);
@@ -39,37 +42,38 @@ function SplashScreen(props) {
 
   let renderSplashScreenView = () => {
     return (
-        <ImageBackground
-            resizeMode={'cover'}
-            source={require('../../config/images/background1.png')}
-            style={styles.backgroundContainer}>
-          <Image
-              style={{width:'70%'}}
-              resizeMode={'contain'}
-              source={require('../../config/images/cx-logo.png')}
-          />
-        </ImageBackground>
+      <ImageBackground
+        resizeMode={'cover'}
+        source={require('../../config/images/background1.png')}
+        style={styles.backgroundContainer}>
+        <Image
+          style={{width: '70%'}}
+          resizeMode={'contain'}
+          source={require('../../config/images/cx-logo.png')}
+        />
+      </ImageBackground>
     );
   };
 
-  return moveNext ? <AppRouter /> : renderSplashScreenView();
+  // return moveNext ? <AppRouter /> : renderSplashScreenView();
+  return moveNext ? <WelcomeScreen /> : renderSplashScreenView();
 }
 
-const mapStateToProps = state => {
-  return {}
+const mapStateToProps = (state) => {
+  return {};
 };
 
-const mapDispatchToProps = dispatch => ({
-  saveUserInfo: userInfo => {
+const mapDispatchToProps = (dispatch) => ({
+  saveUserInfo: (userInfo) => {
     dispatch(fillUserInfo(userInfo));
-    dispatch(setLanguageInfo(userInfo))
+    dispatch(setLanguageInfo(userInfo));
   },
   setToken: (token) => {
-    dispatch(setAuthToken(token))
+    dispatch(setAuthToken(token));
   },
   setRange: (range) => {
-    dispatch(setRangeFilter(range))
-  }
+    dispatch(setRangeFilter(range));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);
@@ -79,6 +83,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  }
-
+  },
 });

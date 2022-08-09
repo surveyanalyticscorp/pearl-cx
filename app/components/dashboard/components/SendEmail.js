@@ -38,6 +38,7 @@ import {CloseButton} from '../../../routes/CommonScreen';
 import QPButton from '../../../widgets/Button';
 import style from '../../../widgets/qp-calendar/calendar/header/style';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function SendEmail(props) {
   const richText = React.useRef();
