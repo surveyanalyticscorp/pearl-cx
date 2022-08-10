@@ -181,13 +181,17 @@ export default function TicketOverview(props) {
     );
   };
 
+  const onTakeActionHandler = () => {
+    console.log('takeaction');
+  };
+
   const takeActionButton = () => {
     return (
       <View style={styles.takeActionContainer}>
         <QPButton
           testID="SignInButton"
           style={styles.takeActionButton}
-          onPress={() => {}}
+          onPress={onTakeActionHandler}
           buttonText={'Take Action'}
           textStyle={styles.takeActionText}
         />
@@ -258,6 +262,22 @@ export default function TicketOverview(props) {
     );
   };
 
+  const getUnderLineText = (text) => {
+    return (
+      <TouchableWithoutFeedback
+        onPress={() => {
+          console.log(text);
+        }}>
+        <View
+          style={[
+            {flex: 2, justifyContent: 'flex-start'},
+            styles.rowContainer,
+          ]}>
+          <Text style={styles.underLineText}>{text}</Text>
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  };
   const departmentNameCell = ({item}) => {
     return (
       <View style={[{flex: 1}, styles.rowContainer]}>
@@ -357,11 +377,11 @@ export default function TicketOverview(props) {
         </View>
         <View style={styles.rowContainer}>
           {Title('Email')}
-          {getText('jessica.plam@quntica.com')}
+          {getUnderLineText('jessica.plam@quntica.com')}
         </View>
         <View style={styles.rowContainer}>
           {Title('Phone')}
-          {getText('+140002031')}
+          {getUnderLineText('+140002031')}
         </View>
       </View>
     );
@@ -442,6 +462,14 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     fontSize: TextSizes.primary,
     color: Colors.filterIconColor,
+  },
+
+  underLineText: {
+    fontFamily: FontFamily.regular,
+    fontWeight: '900',
+    fontSize: TextSizes.primary,
+    color: Colors.accentLight,
+    textDecorationLine: 'underline',
   },
 
   idText: {

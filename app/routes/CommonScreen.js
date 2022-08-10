@@ -135,7 +135,7 @@ export const SaveDashboardDate = (props) => {
   );
 };
 
-const EditTicket = () => {
+export const EditTicket = () => {
   let navigation = useNavigation();
   const state = useNavigationState((state) => state);
   return (

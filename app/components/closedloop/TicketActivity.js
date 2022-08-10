@@ -38,15 +38,23 @@ export default function TicketActivity(props) {
     {
       id: 1,
       userId: 2,
-      userName: 'Astro',
+      userName: 'X Manager',
       date: '20, July',
       activity: 'updated the ticket status to Open',
     },
     {
       id: 2,
       userId: 23,
-      userName: 'Baku',
+      userName: 'Mehedi Hasan',
       date: '24, July',
+      activity: 'updated the ticket priority to Escalated',
+    },
+
+    {
+      id: 3,
+      userId: 3,
+      userName: 'Y Manager',
+      date: '29, July',
       activity: 'updated the ticket priority to Resolved',
     },
 
@@ -74,32 +82,20 @@ export default function TicketActivity(props) {
 
   const renderItem = ({item}) => {
     return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          margin: MarginConstants.tab1,
-          justifyContent: 'space-between',
-        }}>
-        <Text> {item.userName} </Text>
-        <Text> {item.date}</Text>
+      <View style={styles.renderItemStyle}>
+        <Text style={styles.userName}>{item.userName}</Text>
+        <Text style={styles.activity}>{item.activity}</Text>
+        <Text style={styles.date}> {item.date}</Text>
       </View>
     );
   };
 
   const renderMyItem = ({item}) => {
     return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          margin: MarginConstants.tab1,
-          justifyContent: 'space-between',
-          backgroundColor: Colors.white,
-          padding: PaddingConstants.halfTab,
-        }}>
-        <Text> {item.userName} </Text>
-        <Text> {item.date}</Text>
+      <View style={styles.myRenderItemStyle}>
+        <Text style={styles.userName}>{'You'}</Text>
+        <Text style={styles.activity}> {item.activity} </Text>
+        <Text style={styles.date}> {item.date}</Text>
       </View>
     );
   };
@@ -140,5 +136,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
+  },
+  renderItemStyle: {
+    flex: 1,
+    flexDirection: 'row',
+    margin: MarginConstants.tab1,
+    justifyContent: 'space-between',
+    padding: PaddingConstants.halfTab,
+  },
+  myRenderItemStyle: {
+    flex: 1,
+    flexDirection: 'row',
+    margin: MarginConstants.tab1,
+    justifyContent: 'space-between',
+    backgroundColor: Colors.white,
+    padding: PaddingConstants.halfTab,
+  },
+  userName: {
+    color: Colors.filterIconColor,
+    fontWeight: 'bold',
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  activity: {color: Colors.filterIconColor, fontWeight: 'normal', flex: 1},
+  date: {
+    color: Colors.filterIconColor,
+    fontWeight: 'normal',
+    marginHorizontal: MarginConstants.halfTab,
   },
 });

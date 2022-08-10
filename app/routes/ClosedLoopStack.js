@@ -7,6 +7,7 @@ import Feedback from '../components/feedback/Feedback';
 import SearchFeedback from '../components/feedback/SearchFeedback';
 import CommonScreens, {
   CloseButton,
+  EditTicket,
   HeaderBackLeft,
   MenuIcon,
   SearchIcon,
@@ -55,11 +56,12 @@ const ClosedLoopStack = ({navigation}) => {
       />
 
       <FeedbackStack.Screen
-        name={'closedLoopTicketDetails'}
+        name={'Ticket 9033212'}
         component={TicketDetails}
         options={({navigation, route}) => ({
           // headerShown: false,
           headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+          headerRight: (props) => <EditTicket {...props} route={route} />,
           // headerLeft: (props) => <MenuIcon />,
         })}
       />

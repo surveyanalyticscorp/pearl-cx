@@ -65,7 +65,7 @@ export default function CreateTicket(props) {
           <CloseButton color={Colors.filterIconColor} />
         </View>
         <View style={[styles.rowContainer, styles.rowItem]}>
-          {getIonIcon('search')}
+          {getIonIcon('star')}
           <TextInput placeholder="Segment" style={styles.titleText} />
         </View>
         <View style={[styles.rowContainer, styles.rowItem]}>
@@ -86,7 +86,7 @@ export default function CreateTicket(props) {
           <TextInput placeholder="Email" style={styles.titleText} />
         </View>
         <View style={[styles.rowContainer, styles.rowItem]}>
-          <IonIcons name="search" size={20} color={Colors.lightBlack} />
+          <IonIcons name="flag" size={20} color={Colors.lightBlack} />
           <TextInput placeholder="Priority" style={styles.titleText} />
         </View>
         <View style={[styles.rowContainer, styles.rowItem]}>
@@ -117,6 +117,7 @@ export default function CreateTicket(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.white,
   },
   rowContainer: {
     flex: 1,

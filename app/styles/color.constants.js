@@ -48,7 +48,11 @@ const Colors = {
   passive: '#FFE300',
   passive2: '#FFCB47',
   critical: '#E53251',
+  critical2: '#DA2222',
   high: '#FF6103',
+  high2: '#E4632D',
+  medium2: '#F6C140',
+  low2: '#A6BE54',
 
   negativePromter: '#E8E8E8',
   positivePromter: '#90BA5B',

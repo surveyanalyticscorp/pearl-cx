@@ -150,7 +150,7 @@ const DrawerContent = (props) => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            props.navigation.navigate('search');
+            props.navigation.navigate('Search Response');
           }}>
           <View style={styles.drawerRow}>
             {/* <Icon

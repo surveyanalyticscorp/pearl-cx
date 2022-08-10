@@ -29,8 +29,6 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import QPButton from '../../widgets/Button';
 import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
 import {backgroundColor} from '../../widgets/qp-calendar/style';
-import style from '../../widgets/qp-calendar/calendar/header/style';
-import {color} from 'react-native-reanimated';
 
 export default function TicketComments(props) {
   const sampleData = [

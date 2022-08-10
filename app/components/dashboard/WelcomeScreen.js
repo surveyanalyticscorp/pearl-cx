@@ -12,6 +12,7 @@ import {
 import {Colors} from '../../styles/color.constants';
 import {View} from 'react-native-animatable';
 import AppRouter from '../../routes/appRouter';
+import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = (props) => {
   let [moveNext, setMoveNext] = useState(false);
@@ -20,7 +21,7 @@ export const WelcomeScreen = (props) => {
   useEffect(() => {
     splashTimer = setTimeout(() => {
       setMoveNext(true);
-    }, 5000);
+    }, 3000);
 
     return () => {
       clearTimeout(splashTimer);

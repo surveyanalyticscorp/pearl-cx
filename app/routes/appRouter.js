@@ -80,8 +80,8 @@ const AppRouter = (props) => {
   let ref = useRef();
   let [lastLoginArray, setLastLoginArray] = useState([]);
   let [segmentOptions, setSegmentOptions] = useState([
-    'Main Segment',
-    'Child Segment',
+    // 'Main Segment',
+    // 'Child Segment',
   ]);
   const dispatch = useDispatch();
 
@@ -282,27 +282,30 @@ const AppRouter = (props) => {
         component={CxDashboard}
         options={({navigation, route}) => ({
           headerTitle: (props) => {
-            if (segmentOptions[0]) {
-              return (
-                <MainDropDown
-                  header={''}
-                  options={segmentOptions}
-                  defaultText={segmentOptions[0]}
-                  onSelection={(index) => {
-                    console.log(`Selected : ${segmentOptions[index]}`);
-                    //////
+            return segmentOptions.length ? (
+              <MainDropDown
+                options={segmentOptions}
+                defaultText={segmentOptions[0]}
+                onSelection={(index) => {
+                  console.log(`Selected : ${segmentOptions[index]}`);
+                  //////
 
-                    dispatch({
-                      type: SEGMENT_SELECTED,
-                      payload: segmentOptions[index],
-                    });
+                  dispatch({
+                    type: SEGMENT_SELECTED,
+                    payload: segmentOptions[index],
+                  });
 
-                    // updateSegment(`${segmentOptions[index]}`);
-                    //////
-                  }}
-                />
-              );
-            }
+                  // updateSegment(`${segmentOptions[index]}`);
+                  //////
+                }}
+              />
+            ) : (
+              <Text
+                style={{fontSize: TextSizes.largeText, color: Colors.white}}>
+                {' '}
+                Main Segment
+              </Text>
+            );
           },
 
           headerLeft: (props) => <MenuIcon />,

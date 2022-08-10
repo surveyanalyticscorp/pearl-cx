@@ -33,7 +33,7 @@ export default function ClosedLoopCell(props) {
   }, [isTapped]);
 
   const getTicketID = () => {
-    return <Text style={styles.idText}>{'ID 9993213'} </Text>;
+    return <Text style={styles.idText}>{'ID 9033212'} </Text>;
   };
 
   let getNPSIcon = (sentiment) => {
