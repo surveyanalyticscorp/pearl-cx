@@ -7,6 +7,7 @@ const Colors = {
   white: '#ffffff',
   black: '#000000',
   accentLight: '#1b87e6',
+
   accent: '#1B3380',
 
   filterIconColor: '#545E6B',
@@ -76,14 +77,46 @@ const statusColors = {
   openBorder: Colors.promoter,
   openFiller: '#9FE4AC',
 
+  closedBorder: Colors.evenDarkerGrey,
+  closedFiller: Colors.darkGrey,
+
   escalatedBorder: '#FF9045',
   escalatedFiller: '#FFC7A2',
 
   overDueBorder: Colors.error,
   overDueFiller: '#F298A8',
+
+  resolvedBorder: Colors.accentLight,
+  resolvedFiller: '#8DC3F2',
+
+  newBorder: Colors.evenDarkerGrey,
+  newFiller: Colors.white,
+};
+
+const priorityColors = {
+  critical: {
+    border: '#DA2222',
+    filler: '#DA222236',
+  },
+  high: {
+    border: '#E4632D',
+    filler: '#E4632D33',
+  },
+  normal: {
+    border: Colors.medium2,
+    filler: '#F6C14033',
+  },
+  low: {
+    border: Colors.low2,
+    filler: '#A6BE5433',
+  },
+  unassigned: {
+    border: Colors.darkGrey,
+    filler: '#D8D8D833',
+  },
 };
 
 export const PROGRESS_COLOR_INCOMPLETE = '#DD4F43';
 export const PROGRESS_COLOR_TERMINATED = '#FFCE42';
 
-export {Colors, textColors, buttonColors, statusColors};
+export {Colors, textColors, buttonColors, statusColors, priorityColors};

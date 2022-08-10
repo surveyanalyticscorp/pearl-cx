@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {Colors} from '../styles/color.constants';
+import {Colors, priorityColors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
@@ -26,6 +26,7 @@ import {Notifications} from 'react-native-notifications';
 import {connect} from 'react-redux';
 import {clearNotification} from '../redux/actions/notification.actions';
 import {translate} from '../Utils/MultilinguaUtils';
+import IonIcons from 'react-native-vector-icons/Ionicons';
 
 const Notification = (props) => {
   let row: Array<any> = [];
@@ -119,14 +120,40 @@ const Notification = (props) => {
     );
   };
 
+  let RenderPriorityRow = ({priority}) => {
+    let color = getPriorityColor(priority);
+    return (
+      <View style={styles.subTitleRow}>
+        <IonIcons name="flag" size={12} color={color.border} />
+        <Text style={styles.subtitle}> {priority}</Text>
+      </View>
+    );
+  };
+
+  let getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'critical':
+        return priorityColors.critical;
+      case 'high':
+        return priorityColors.high;
+      case 'normal':
+        return priorityColors.normal;
+      case 'low':
+        return priorityColors.low;
+      default:
+        return priorityColors.unassigned;
+    }
+  };
+
   let renderRow = ({item, index}) => {
+    console.log(`Notification Item: ${JSON.stringify(item)}`);
     let imagePath =
       item.logType === 'U'
         ? require('../config/images/notification_comment_blue.png')
         : require('../config/images/notification_ticket_blue.png');
     let text = item.notificationText.replace(item.emailAddress, '');
     let time = moment(item.timestamp).format(HalfMonthDateYearFormat);
-
+    let priority = 'high';
     return (
       <Swipeable
         ref={(ref) => (row[index] = ref)}
@@ -149,7 +176,14 @@ const Notification = (props) => {
                 <Text style={styles.regularFont}>{text}</Text>
                 <Text style={styles.boldFont}> {item.emailAddress}</Text>
               </Text>
-              <Text style={styles.subtitle}>{time}</Text>
+              <View
+                style={[
+                  styles.titleContainer,
+                  {flexDirection: 'row', justifyContent: 'space-between'},
+                ]}>
+                <Text style={styles.subtitle}>{time}</Text>
+                <RenderPriorityRow priority={priority} />
+              </View>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -221,18 +255,26 @@ export default connect(mapStateToProps, mapDispatchToProps)(Notification);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: MarginConstants.tab1,
+    padding: PaddingConstants.halfTab,
+    backgroundColor: Colors.white,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: '90%',
     padding: 1.2 * PaddingConstants.tab1,
     margin: MarginConstants.tab1,
     backgroundColor: Colors.white,
+    // borderColor: Colors.accentLight,
+    // borderRadius: 4,
+    // borderWidth: 1,
   },
   rowTextContainer: {
     marginHorizontal: MarginConstants.tab1,
     paddingHorizontal: PaddingConstants.tab1,
+    borderColor: Colors.darkGrey,
+    borderRadius: 4,
+    borderWidth: 1,
   },
   titleContainer: {
     fontSize: TextSizes.secondary,
@@ -244,6 +286,7 @@ const styles = StyleSheet.create({
   },
   boldFont: {
     fontFamily: FontFamily.semiBold,
+    fontWeight: 'bold',
   },
   subtitle: {
     fontSize: TextSizes.semiSecondary,
@@ -268,5 +311,10 @@ const styles = StyleSheet.create({
     margin: MarginConstants.tab1,
     width: 80,
     height: 70,
+  },
+  subTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginEnd: MarginConstants.tab4,
   },
 });
