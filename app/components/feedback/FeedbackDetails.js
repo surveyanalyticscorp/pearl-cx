@@ -9,6 +9,9 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {translate} from '../../Utils/MultilinguaUtils';
+import ResponseFeedback from './feedbackdetails/ResponseFeedback';
+import ResponseProfile from './feedbackdetails/ResponseProfile';
+import ResponseActivity from './feedbackdetails/ResponseActivity';
 
 export default function FeedbackDetails(props) {
   return (
@@ -34,6 +37,55 @@ export default function FeedbackDetails(props) {
 
 const DetailsTab = createMaterialTopTabNavigator();
 
+const questions = [
+  {
+    id: 1,
+    question:
+      'How likely is it that you would recommend our company to a friend or colleague?',
+    answer: '4',
+  },
+  {
+    id: 2,
+    question: 'What is the primary reason for your score?',
+    answer: 'The manager was super rude to us! ',
+  },
+  {
+    id: 3,
+    question:
+      'How likely is it that you would recommend our company to a friend or colleague?',
+    answer: '4',
+  },
+  {
+    id: 4,
+    question: 'What is the primary reason for your score?',
+    answer: 'The manager was super rude to us! ',
+  },
+  {
+    id: 5,
+    question: 'Different question with another comment from client?',
+    answer: 'Not happy about the service ',
+  },
+  {
+    id: 6,
+    question: 'What is the primary reason for your score?',
+    answer: 'The manager was super rude to us! ',
+  },
+  {
+    id: 7,
+    question: 'Different question with another comment from client?',
+    answer: 'Not happy about the service ',
+  },
+];
+
+const profileData = {
+  name: 'Jessica Palm',
+  email: 'jessica.plam@rocker.com',
+  phone: '+1 923 978 3434',
+  ticketCount: '4',
+  surveyCount: '1',
+  date: 'Dec 21, 2021',
+};
+
 const FeedbackDetailsTabStack = (props) => (
   <DetailsTab.Navigator
     tabBarOptions={{
@@ -52,26 +104,29 @@ const FeedbackDetailsTabStack = (props) => (
     keyboardDismissMode={'auto'}>
     <DetailsTab.Screen
       name={translate('responses.feedback')}
-      component={renderScene}
+      component={ResponseFeedback}
       initialParams={{
         token: props.route.params.token,
         url: props.route.params.data.responseDataURL,
+        listData: questions,
       }}
     />
     <DetailsTab.Screen
       name={translate('responses.profile')}
-      component={renderScene}
+      component={ResponseProfile}
       initialParams={{
         token: props.route.params.token,
         url: props.route.params.data.memberProfileURL,
+        data: profileData,
       }}
     />
     <DetailsTab.Screen
       name={translate('responses.activity')}
-      component={renderScene}
+      component={ResponseActivity}
       initialParams={{
         token: props.route.params.token,
         url: props.route.params.data.activityURL,
+        data: profileData,
       }}
     />
   </DetailsTab.Navigator>
