@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   useWindowDimensions,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {Colors} from '../../../styles/color.constants';
+import {Colors, statusColors} from '../../../styles/color.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -16,106 +16,128 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
 const ResponseActivity = (props) => {
-  const profileData = props.route.params.data;
+  let [activityData, setActivityData] = useState(props.route.params.data);
 
-  console.log(`feedback: ${profileData}`);
+  console.log(`feedback: ${activityData}`);
 
-  const SurveyCounterView = ({children}) => {
-    const color = Colors.accent;
+  const RenderSurveySent = ({children}) => {
     return (
-      <View style={[styles.counterView, {borderColor: color}]}>
-        <Text style={[styles.counterTitle, {color: color}]}>Surveys</Text>
-        <Text style={[styles.counterText, {backgroundColor: color}]}>
-          {children}
-        </Text>
+      <View style={styles.surveyDateBox}>
+        <Text style={styles.secondaryTitle}>Survey Sent</Text>
+        <Text style={styles.secondaryText}>{children}</Text>
+      </View>
+    );
+  };
+  const RenderSurveyComplete = ({children}) => {
+    return (
+      <View style={styles.surveyDateBox}>
+        <Text style={styles.secondaryTitle}>Completed</Text>
+        <Text style={styles.secondaryText}>{children}</Text>
       </View>
     );
   };
 
-  const TicketCounterView = ({children}) => {
-    const color = Colors.accentLight;
+  const RenderSurveyDetails = () => {
     return (
-      <View style={[styles.counterView, {borderColor: color}]}>
-        <Text style={[styles.counterTitle, {color: color}]}>Tickets</Text>
-        <Text style={[styles.counterText, {backgroundColor: color}]}>
-          {children}
-        </Text>
-      </View>
-    );
-  };
-
-  const RenderCounter = () => {
-    return (
-      <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-        <SurveyCounterView> {profileData.surveyCount}</SurveyCounterView>
-        <TicketCounterView> {profileData.ticketCount}</TicketCounterView>
-      </View>
-    );
-  };
-
-  const RenderPhoneNumber = () => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          console.log('Phone Number');
-        }}
-        style={styles.contactBox}>
-        <IonIcon name="call" size={12} color={Colors.filterIconColor} />
-        <Text style={styles.contactText}>{profileData.phone}</Text>
-      </TouchableOpacity>
-    );
-  };
-
-  const RenderEmailAddress = () => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          console.log('Email Address');
-        }}
-        style={styles.contactBox}>
-        <IonIcon name="mail" size={14} color={Colors.filterIconColor} />
-        <Text style={styles.contactText}>{profileData.email}</Text>
-      </TouchableOpacity>
-    );
-  };
-
-  const RenderNameDetails = () => {
-    return (
-      <View style={{marginVertical: MarginConstants.tab1}}>
-        <Text style={styles.secondaryTitle}>Name</Text>
-        <Text style={styles.secondaryText}>{profileData.name}</Text>
-      </View>
-    );
-  };
-
-  const RenderContactDetails = () => {
-    return (
-      <View style={{marginVertical: MarginConstants.tab2}}>
-        <Text style={styles.secondaryTitle}>Contact Information</Text>
-        <RenderPhoneNumber />
-        <RenderEmailAddress />
-      </View>
-    );
-  };
-  const RenderDateDetails = () => {
-    return (
-      <View style={{marginVertical: MarginConstants.tab1}}>
-        <Text style={styles.secondaryTitle}>Date</Text>
-        <Text style={styles.secondaryText}>{profileData.date}</Text>
-      </View>
-    );
-  };
-
-  const ProfileDetails = () => {
-    return (
-      <View style={{margin: MarginConstants.tab2}}>
-        <Text style={styles.profileHeader}>Profile Details</Text>
+      <View style={styles.innerContainer}>
+        <RenderSurveySent>
+          {' '}
+          {activityData.surveyHistory.sentDate}
+        </RenderSurveySent>
         <View style={styles.border} />
+        <RenderSurveyComplete>
+          {' '}
+          {activityData.surveyHistory.completeDate}
+        </RenderSurveyComplete>
+      </View>
+    );
+  };
 
-        <View style={{marginHorizontal: MarginConstants.tab2}}>
-          <RenderNameDetails />
-          <RenderContactDetails />
-          <RenderDateDetails />
+  const RenderStatusCell = ({item}) => {
+    let borderColor = statusColors.newBorder;
+    let fillerColor = statusColors.newFiller;
+
+    switch (item.status) {
+      case 'open':
+        borderColor = statusColors.openBorder;
+        fillerColor = statusColors.openFiller;
+        break;
+      case 'closed':
+        borderColor = statusColors.closedBorder;
+        fillerColor = statusColors.closedFiller;
+        break;
+      case 'escalated':
+        borderColor = statusColors.escalatedBorder;
+        fillerColor = statusColors.escalatedFiller;
+        break;
+      case 'resolved':
+        borderColor = statusColors.resolvedBorder;
+        fillerColor = statusColors.resolvedFiller;
+        break;
+      case 'overdue':
+        borderColor = statusColors.overDueBorder;
+        fillerColor = statusColors.overDueFiller;
+        break;
+      default:
+        break;
+    }
+
+    return (
+      <View style={{flexDirection: 'row'}}>
+        <View
+          style={{
+            width: 14,
+            height: 14,
+            backgroundColor: fillerColor,
+            borderColor: borderColor,
+            borderRadius: 25,
+            borderWidth: 1,
+            margin: MarginConstants.halfTab,
+          }}
+        />
+        <Text>{item.status}</Text>
+      </View>
+    );
+  };
+
+  const renderSeparator = () => {
+    return (
+      <View style={{alignItems: 'center', justifyContent: 'center'}}>
+        <IonIcon
+          name="arrow-forward"
+          size={14}
+          color={Colors.filterIconColor}
+        />
+      </View>
+    );
+  };
+
+  const RenderActivityDetails = () => {
+    const managerName = activityData.surveyHistory.managerName;
+    const lastUpdated = activityData.surveyHistory.lastUpdated;
+    const comment = activityData.surveyHistory.comment;
+    const history = activityData.history;
+
+    return (
+      <View style={styles.innerContainer}>
+        <View>
+          <Text style={styles.mediumText}>{managerName}</Text>
+          <Text style={styles.secondaryText}>{lastUpdated}</Text>
+          <Text style={styles.mediumText}>{comment}</Text>
+          <Text style={styles.secondaryTitle}>Status Change</Text>
+          <FlatList
+            style={{
+              marginHorizontal: MarginConstants.tab1,
+              marginBottom: MarginConstants.tab2,
+            }}
+            data={history}
+            keyExtractor={(_, index) => index.toString()}
+            renderItem={RenderStatusCell}
+            onEndReachedThreshold={0}
+            refreshing={false}
+            horizontal={true}
+            ItemSeparatorComponent={renderSeparator}
+          />
         </View>
       </View>
     );
@@ -124,8 +146,8 @@ const ResponseActivity = (props) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.container}>
-        <RenderCounter />
-        <ProfileDetails />
+        <RenderSurveyDetails />
+        <RenderActivityDetails />
       </View>
     </ScrollView>
   );
@@ -136,12 +158,22 @@ export default ResponseActivity;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
   },
   border: {
-    height: 1,
     backgroundColor: Colors.darkGrey,
-    marginBottom: MarginConstants.tab1,
+    width: 1,
+  },
+  surveyDateBox: {
+    flex: 1,
+    padding: PaddingConstants.tab2,
+  },
+  innerContainer: {
+    flexDirection: 'row',
+    borderRadius: 4,
+    backgroundColor: Colors.white,
+    borderColor: Colors.darkGrey,
+    borderWidth: 1,
+    margin: MarginConstants.tab1,
   },
 
   counterView: {
@@ -167,7 +199,7 @@ const styles = StyleSheet.create({
 
     textAlign: 'center',
     flex: 1,
-    padding: PaddingConstants.halfTab,
+    margin: MarginConstants.halfTab,
   },
   ticketCounterTitle: {
     fontSize: TextSizes.secondary,
@@ -177,28 +209,24 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: PaddingConstants.halfTab,
   },
-  counterText: {
+  mediumText: {
     fontSize: TextSizes.secondary,
     fontWeight: '900',
-    color: Colors.white,
-    backgroundColor: Colors.accent,
-    textAlign: 'center',
-    padding: PaddingConstants.halfTab,
-  },
-  profileHeader: {
-    fontSize: TextSizes.largeText,
-    fontWeight: 'bold',
-    color: Colors.filterIconColor,
+    color: Colors.lightBlack,
+    margin: MarginConstants.tab1,
   },
   secondaryTitle: {
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
     fontWeight: 'bold',
+    margin: MarginConstants.tab1,
+    paddingBottom: PaddingConstants.tab1,
   },
   secondaryText: {
-    fontSize: TextSizes.secondary,
+    fontSize: TextSizes.semiMediumText,
     color: Colors.filterIconColor,
     fontWeight: '900',
+    margin: MarginConstants.tab1,
   },
   contactBox: {
     flexDirection: 'row',

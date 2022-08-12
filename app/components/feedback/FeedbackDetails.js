@@ -86,6 +86,27 @@ const profileData = {
   date: 'Dec 21, 2021',
 };
 
+const activityData = {
+  surveyHistory: {
+    sentDate: 'Jan 28, 2022',
+    completeDate: 'Oct 8, 2022',
+    comment: 'Made some comments about the response and responed by SMS',
+    managerName: 'FBB Manager',
+    lastUpdated: 'Oct 8, 2022',
+  },
+  history: [
+    {
+      status: 'new',
+    },
+    {
+      status: 'open',
+    },
+    {
+      status: 'resolved',
+    },
+  ],
+};
+
 const FeedbackDetailsTabStack = (props) => (
   <DetailsTab.Navigator
     tabBarOptions={{
@@ -126,7 +147,7 @@ const FeedbackDetailsTabStack = (props) => (
       initialParams={{
         token: props.route.params.token,
         url: props.route.params.data.activityURL,
-        data: profileData,
+        data: activityData,
       }}
     />
   </DetailsTab.Navigator>
