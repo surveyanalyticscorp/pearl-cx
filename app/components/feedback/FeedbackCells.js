@@ -1,9 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {View, TouchableWithoutFeedback, Text, Image} from 'react-native';
+import {
+  View,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  Text,
+  Image,
+} from 'react-native';
 import {StyleSheet} from 'react-native';
 import StringUtils from '../../Utils/StringUtils';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
@@ -17,6 +24,9 @@ import {backgroundColor} from '../../widgets/qp-calendar/style';
 import style from '../../widgets/qp-calendar/calendar/header/style';
 export default function FeedbackCell(props) {
   let disable = props.origin === 'Detail';
+  let [isNewResponse, setNewResponse] = useState(
+    props.item.ticketStatus === -1,
+  );
 
   let [feedbackTapped, setTapped] = useState(false);
   //let surveyTakenDate = moment(props.item.surveyTakenDate).fromNow();
@@ -170,6 +180,15 @@ export default function FeedbackCell(props) {
     //   </View>
   };
 
+  const RenderIsNewResponse = () => {
+    let color = isNewResponse ? Colors.accentLight : Colors.fullTransparent;
+    return (
+      !disable && (
+        <View style={[styles.unreadIndicator, {backgroundColor: color}]} />
+      )
+    );
+  };
+
   let renderCreateOrViewTicket = () => {
     let status = getTicketStatus();
     return StringUtils.isEmpty(status) ? (
@@ -196,6 +215,67 @@ export default function FeedbackCell(props) {
       </TouchableWithoutFeedback>
     );
   };
+  const RenderContactDetails = () => {
+    return (
+      <View style={{marginVertical: MarginConstants.tab2}}>
+        <Text style={styles.secondaryTitle}>Contact Information</Text>
+        <RenderPhoneNumber />
+        <RenderEmailAddress />
+      </View>
+    );
+  };
+
+  const RenderPhoneNumber = () => {
+    let phoneNumber = props.item.phone ?? '';
+    return phoneNumber.length ? (
+      <TouchableOpacity
+        onPress={() => {
+          console.log('Phone Number');
+        }}
+        style={styles.contactBox}>
+        <IonIcon name="call" size={12} color={Colors.filterIconColor} />
+        <Text style={styles.contactText}>{phoneNumber}</Text>
+      </TouchableOpacity>
+    ) : (
+      <View />
+    );
+  };
+
+  const RenderEmailAddress = () => {
+    let email = props.item.emailAddress ?? 'sampleEmail';
+    return email.length ? (
+      <TouchableOpacity
+        onPress={() => {
+          console.log('Email Address');
+        }}
+        style={styles.contactBox}>
+        <IonIcon name="mail" size={14} color={Colors.filterIconColor} />
+        <Text style={styles.contactText}>{email}</Text>
+      </TouchableOpacity>
+    ) : (
+      <View />
+    );
+  };
+
+  const RenderDateDetails = () => {
+    let date = props.item.surveyTakenDate ?? '';
+
+    return (
+      <View style={{marginVertical: MarginConstants.tab1}}>
+        <Text style={styles.secondaryTitle}>Date</Text>
+        <Text style={styles.secondaryText}>{date}</Text>
+      </View>
+    );
+  };
+
+  const RenderInfo = () => {
+    return (
+      <View style={{marginHorizontal: MarginConstants.tab1}}>
+        <RenderContactDetails />
+        <RenderDateDetails />
+      </View>
+    );
+  };
 
   let renderResponseContainer = () => {
     let flag = props.parentRoute === translate('responses.responses');
@@ -204,12 +284,7 @@ export default function FeedbackCell(props) {
         <View style={styles.responseContainer}>
           {/* {renderNPSView()} */}
 
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-            }}>
+          <View style={styles.rowContainer}>
             {getNPSIcon()}
             {getNPSScore()}
             {getUserName()}
@@ -234,6 +309,7 @@ export default function FeedbackCell(props) {
           {getResponseId()}
           {disable && flag && renderCreateOrViewTicket()}
         </View>
+        {disable && flag && RenderInfo()}
       </View>
     );
   };
@@ -244,7 +320,8 @@ export default function FeedbackCell(props) {
         props.onSelect();
       }}
       disabled={disable}>
-      <View>
+      <View style={styles.rowContainer}>
+        <RenderIsNewResponse />
         <View style={styles.container}>
           {/* {renderTopSegmentView()} */}
           {renderResponseContainer()}
@@ -256,15 +333,17 @@ export default function FeedbackCell(props) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     margin: MarginConstants.tab1,
     padding: PaddingConstants.halfTab,
     backgroundColor: Colors.white,
   },
   upperContainer: {
     flexDirection: 'column',
-    alignItems: 'center',
     justifyContent: 'center',
   },
+
+  rowContainer: {flexDirection: 'row', alignItems: 'center'},
   topSegmentContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -318,6 +397,29 @@ const styles = StyleSheet.create({
     marginVertical: MarginConstants.halfTab / 2,
     paddingBottom: 2,
   },
+  secondaryTitle: {
+    fontSize: TextSizes.secondary,
+    color: Colors.filterIconColor,
+    fontWeight: 'bold',
+  },
+  secondaryText: {
+    fontSize: TextSizes.secondary,
+    color: Colors.filterIconColor,
+    fontWeight: '900',
+  },
+  contactBox: {
+    flexDirection: 'row',
+    marginVertical: MarginConstants.halfTab,
+
+    alignItems: 'baseline',
+  },
+  contactText: {
+    fontSize: TextSizes.secondary,
+    color: Colors.accentLight,
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+    marginHorizontal: MarginConstants.tab1,
+  },
   viewTicketsText: {
     backgroundColor: Colors.accentLight,
     color: Colors.white,
@@ -337,8 +439,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'stretch',
     justifyContent: 'space-around',
-    padding: 12,
-    margin: 24,
+    padding: PaddingConstants.halfTab,
+    margin: MarginConstants.halfTab,
   },
 
   dateAndArrowIconContainer: {
@@ -346,5 +448,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'flex-end',
+  },
+  unreadIndicator: {
+    height: 12,
+    width: 12,
+    borderRadius: 25,
+    marginHorizontal: MarginConstants.tab1,
   },
 });
