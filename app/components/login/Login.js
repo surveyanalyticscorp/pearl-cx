@@ -256,15 +256,15 @@ const Login = (props) => {
               value={userData.accessCode}
               returnKey={'done'}
             />
-            <QPButton
-              style={loginStyles.forgotPswdButton}
-              onPress={onForgotPasswordPress}
-              textStyle={loginStyles.forgotPasswordText}
-              buttonText={stringConst.onBoarding.forgotPassword}
-            />
           </View>
         </KeyboardAvoidingView>
         {renderSpinnerLoginButton()}
+        <QPButton
+          style={loginStyles.forgotPswdButton}
+          onPress={onForgotPasswordPress}
+          textStyle={loginStyles.forgotPasswordText}
+          buttonText={stringConst.onBoarding.forgotPassword}
+        />
       </ScrollView>
     );
   };

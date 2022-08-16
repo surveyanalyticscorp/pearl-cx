@@ -5,23 +5,23 @@ import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 
-let { width }= Dimensions.get('window');
+let {width} = Dimensions.get('window');
 
 export const loginStyles = StyleSheet.create({
-  safeArea:{
-    flex:1
+  safeArea: {
+    flex: 1,
   },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: PaddingConstants.tab2
+    paddingTop: PaddingConstants.tab2,
   },
   scrollContainer: {
     flexGrow: 1,
   },
   logoImage: {
-    width: width * 0.75 ,
+    width: width * 0.75,
     height: width * 0.45,
   },
   logo: {
@@ -37,17 +37,16 @@ export const loginStyles = StyleSheet.create({
     height: MarginConstants.tab4,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.accent,
-    marginBottom: MarginConstants.tab2
+    backgroundColor: Colors.accentLight,
   },
   signInText: {
     color: Colors.white,
     fontFamily: FontFamily.regular,
-    fontSize: TextSizes.largeText
+    fontSize: TextSizes.largeText,
   },
   forgotPasswordText: {
     alignSelf: 'center',
-    color: Colors.accent,
+    color: Colors.accentLight,
     fontFamily: FontFamily.regular,
     fontSize: Platform.isPad ? TextSizes.largeText : TextSizes.primary,
   },
@@ -55,5 +54,6 @@ export const loginStyles = StyleSheet.create({
     height: MarginConstants.tab4,
     justifyContent: 'center',
     marginTop: MarginConstants.tab2,
+    marginBottom: MarginConstants.tab2,
   },
 });
