@@ -96,7 +96,9 @@ const renderScene = (props) => {
             colorScale={victoryPieColorScale}
           />
           <View style={styles.npsView}>
-            <Text style={[styles.npsPercentText]}>{count.totalTickets}</Text>
+            {/* <Text style={[styles.npsPercentText]}>{count.totalTickets}</Text> */}
+            <Text style={[styles.npsPercentText]}>CX</Text>
+
             <Text style={[styles.npsText]}>
               {translate('dashboard.tickets')}
             </Text>
@@ -178,13 +180,23 @@ const renderScene = (props) => {
 
   let renderTicketView = (count, bgColor, status, textColor) => {
     return (
+      // <View style={styles.donutInfoContainer}>
+      //   <Text style={styles.ticketText}>{count}</Text>
+      //   <View style={[styles.ticketStatusView, {backgroundColor: bgColor}]}>
+      //     <Text style={[styles.ticketStatusText, {color: textColor}]}>
+      //       {status}
+      //     </Text>
+      //   </View>
+      // </View>
+
       <View style={styles.donutInfoContainer}>
-        <Text style={styles.ticketText}>{count}</Text>
-        <View style={[styles.ticketStatusView, {backgroundColor: bgColor}]}>
-          <Text style={[styles.ticketStatusText, {color: textColor}]}>
-            {status}
-          </Text>
+        <View
+          style={[styles.ticketStatusIndicatorView, {backgroundColor: bgColor}]}
+        />
+        <View style={[styles.ticketStatusView]}>
+          <Text style={[styles.ticketStatusText]}>{status}</Text>
         </View>
+        <Text style={styles.ticketText}>{`${count}%`}</Text>
       </View>
     );
   };
@@ -218,6 +230,8 @@ const styles = StyleSheet.create({
     marginTop: MarginConstants.tab4,
   },
   donutInfoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginHorizontal: MarginConstants.tab1,
     paddingVertical: PaddingConstants.tab1,
   },
@@ -262,13 +276,19 @@ const styles = StyleSheet.create({
   ticketStatusView: {
     width: 2 * MarginConstants.tab4,
     paddingVertical: 2,
-    borderRadius: 15,
+    alignItems: 'flex-start',
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  ticketStatusIndicatorView: {
+    width: MarginConstants.tab2,
+    height: MarginConstants.tab2,
+
+    borderRadius: 5,
     alignItems: 'center',
   },
   ticketStatusText: {
-    color: Colors.white,
+    color: Colors.filterIconColor,
     fontSize: TextSizes.secondary,
     fontFamily: FontFamily.regular,
-    textAlign: 'center',
   },
 });
