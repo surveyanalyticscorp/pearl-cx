@@ -195,6 +195,7 @@ function Feedback(props) {
 const FeedbackTabStack = () => (
   <FeedbackTab.Navigator
     tabBarOptions={{
+      scrollEnabled: true,
       labelStyle: {
         width: useWindowDimensions().width / 4,
         fontSize: TextSizes.secondary,
@@ -217,16 +218,19 @@ const FeedbackTabStack = () => (
       name={translate('responses.detractor')}
       component={renderFeedbackScene}
       initialParams={{screenName: 'Detractor'}}
+      options={{tabBarLabel: 'Dummy 1'}}
     />
     <FeedbackTab.Screen
       name={translate('responses.passive')}
       component={renderFeedbackScene}
       initialParams={{screenName: 'Passive'}}
+      options={{tabBarLabel: 'Dummy 2'}}
     />
     <FeedbackTab.Screen
       name={translate('responses.promoter')}
       component={renderFeedbackScene}
       initialParams={{screenName: 'Promoter'}}
+      options={{tabBarLabel: 'Dummy 3', title: 'Dummy 3'}}
     />
   </FeedbackTab.Navigator>
 );

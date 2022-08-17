@@ -41,7 +41,8 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import {Notifications} from 'react-native-notifications';
 import Notification from '../components/Notification';
-import CreateTicket from '../components/dashboard/components/CreateTicket';
+// import CreateTicket from '../components/dashboard/components/CreateTicket';
+import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
 import SearchTicket from '../components/dashboard/components/SearchTicket';
 import TicketFilter from '../components/dashboard/components/TicketFilter';
 import {getNotification} from '../redux/actions/notification.actions';
@@ -353,8 +354,9 @@ const AppRouter = (props) => {
         name={translate('responses.new_ticket')}
         component={CreateTicket}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <View />,
-          headerRight: (props) => <CloseButton />,
+          // headerLeft: (props) => <View />,
+          // headerRight: (props) => <CloseButton />,
+          headerShown: false,
         })}
       />
       <DetractorStack.Screen

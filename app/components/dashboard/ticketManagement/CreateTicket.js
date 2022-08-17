@@ -107,7 +107,10 @@ export default function CreateTicket(props) {
           <TextInput placeholder="Add Comments" style={styles.titleText} />
         </View>
         <View style={[styles.rowContainer, styles.rowButton]}>
-          <QPButton buttonText={'Create Ticket'} />
+          <QPButton
+            buttonColor={Colors.accentLight}
+            buttonText={'Create Ticket'}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

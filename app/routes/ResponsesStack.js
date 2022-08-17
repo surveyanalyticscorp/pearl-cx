@@ -1,6 +1,7 @@
 import FeedbackSorter from '../components/feedback/FeedbackSorter';
 import {StyleSheet, View} from 'react-native';
-import CreateTicket from '../components/dashboard/components/CreateTicket';
+// import CreateTicket from '../components/dashboard/components/CreateTicket';
+import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Feedback from '../components/feedback/Feedback';
@@ -56,9 +57,9 @@ const ResponsesStack = ({navigation}) => (
     <FeedbackStack.Screen
       name={translate('responses.new_ticket')}
       component={CreateTicket}
+      headerShown={false}
       options={({navigation, route}) => ({
-        headerLeft: (props) => <View />,
-        headerRight: (props) => <CloseButton />,
+        headerShown: false,
       })}
     />
   </FeedbackStack.Navigator>

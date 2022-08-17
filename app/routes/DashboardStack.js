@@ -1,5 +1,6 @@
 import Notification from '../components/Notification';
-import CreateTicket from '../components/dashboard/components/CreateTicket';
+// import CreateTicket from '../components/dashboard/components/CreateTicket';
+import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
 import {
   Dimensions,
   StyleSheet,
