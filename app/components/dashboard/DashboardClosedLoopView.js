@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   useWindowDimensions,
   StyleSheet,
   View,
   Text,
   TouchableWithoutFeedback,
+  Switch,
 } from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily} from '../../styles/font.constants';
@@ -22,6 +23,7 @@ export const DashboardClosedLoopView = (props) => {
 };
 
 const TicketTab = createMaterialTopTabNavigator();
+
 const TicketTabStack = (props) => (
   <TicketTab.Navigator
     tabBarOptions={{
@@ -32,7 +34,7 @@ const TicketTabStack = (props) => (
       },
       indicatorStyle: {backgroundColor: Colors.accent},
       style: {backgroundColor: Colors.white, width: '100%'},
-      initialLayout: {width: useWindowDimensions().width},
+      // initialLayout: {width: useWindowDimensions().width},
       tabStyle: {height: 1.5 * PaddingConstants.tab4},
       activeTintColor: Colors.accent,
       inactiveTintColor: Colors.primary,
@@ -41,34 +43,43 @@ const TicketTabStack = (props) => (
     keyboardDismissMode={'auto'}>
     <TicketTab.Screen
       name={translate('dashboard.new')}
-      component={renderScene}
-      initialParams={{index: 1, ticketCount: props.ticketCount}}
+      component={RenderScene}
+      initialParams={{
+        index: 1,
+        ticketCount: props.ticketCount,
+      }}
     />
     <TicketTab.Screen
       name={translate('dashboard.open')}
-      component={renderScene}
+      component={RenderScene}
       initialParams={{index: 2, ticketCount: props.ticketCount}}
     />
     <TicketTab.Screen
       name={translate('dashboard.escalated')}
-      component={renderScene}
+      component={RenderScene}
       initialParams={{index: 3, ticketCount: props.ticketCount}}
     />
     {/* <TicketTab.Screen name= {translate("dashboard.resolved")} component={renderScene} initialParams={{index : 4, ticketCount: props.ticketCount}}/> */}
     <TicketTab.Screen
       name={'OVERDUE'}
-      component={renderScene}
+      component={RenderScene}
       initialParams={{index: 4, ticketCount: props.ticketCount}}
     />
   </TicketTab.Navigator>
 );
 
-const renderScene = (props) => {
+const RenderScene = (props) => {
+  const [showPercentageCount, setShowPercentageCount] = useState(false);
+
+  console.log(
+    `Ticket Count: ${JSON.stringify(props.route.params.ticketCount)}`,
+  );
+
   let renderDonutChart = () => {
     let count = getCount(props.route.params.ticketCount);
     let victoryPieColorScale =
       count.totalTickets > 0
-        ? [Colors.promoter, Colors.passive, Colors.high, Colors.critical]
+        ? [Colors.low2, Colors.medium2, Colors.high2, Colors.critical2]
         : [Colors.primary];
     let dataScale =
       count.totalTickets > 0
@@ -97,7 +108,7 @@ const renderScene = (props) => {
           />
           <View style={styles.npsView}>
             {/* <Text style={[styles.npsPercentText]}>{count.totalTickets}</Text> */}
-            <Text style={[styles.npsPercentText]}>CX</Text>
+            <Text style={[styles.npsText]}>CX</Text>
 
             <Text style={[styles.npsText]}>
               {translate('dashboard.tickets')}
@@ -112,7 +123,7 @@ const renderScene = (props) => {
   let getCount = (object) => {
     //let name = props.route.name.toLowerCase();
     let index = props.route.params.index;
-    console.log(`index: ${index}`);
+    // console.log(`index: ${index}`);
     switch (index) {
       case 1:
         return object.new;
@@ -125,24 +136,55 @@ const renderScene = (props) => {
     }
   };
 
-  let renderViewTicketsContainer = () => {
+  let getParcentage = (total, count) => (100 * count) / total;
+
+  let RenderViewTicketsContainer = () => {
+    const toggleSwitch = () =>
+      setShowPercentageCount((previousState) => !previousState);
+    const count = getCount(props.route.params.ticketCount);
     return (
-      <TouchableWithoutFeedback
-        onPress={() => {
-          const pushAction = StackActions.push(
-            translate('close_loop.close_loop'),
-            {
-              screen: props.route.name,
-            },
-          );
-          props.navigation.dispatch(pushAction);
-        }}>
-        <View style={styles.viewTicketsContainer}>
-          <Text style={styles.viewTicketsText}>
-            {translate('dashboard.view_tickets')}
-          </Text>
+      <View style={styles.viewTicketsContainer}>
+        <View
+          style={{
+            flex: 2,
+            height: MarginConstants.tab4,
+            justifyContent: 'center',
+          }}>
+          <Text style>{`${count.totalTickets} total`}</Text>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              const pushAction = StackActions.push(
+                translate('close_loop.close_loop'),
+                {
+                  screen: props.route.name,
+                },
+              );
+              props.navigation.dispatch(pushAction);
+            }}>
+            <Text style={styles.viewTicketsText}>
+              {translate('dashboard.view_tickets')}
+            </Text>
+          </TouchableWithoutFeedback>
         </View>
-      </TouchableWithoutFeedback>
+        <View
+          style={{
+            flex: 2,
+            height: MarginConstants.tab4,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}>
+          <Text>Percentage</Text>
+          <Switch
+            trackColor={{true: Colors.accent, false: Colors.darkGrey}}
+            thumbColor={Colors.white}
+            ios_backgroundColor={Colors.critical}
+            onValueChange={toggleSwitch}
+            value={showPercentageCount}
+          />
+          <Text>Count</Text>
+        </View>
+      </View>
     );
   };
 
@@ -151,24 +193,28 @@ const renderScene = (props) => {
     return (
       <View style={{paddingTop: 2 * PaddingConstants.tab4}}>
         {renderTicketView(
+          priorities.totalTickets,
           priorities.critical,
           Colors.critical2,
           translate('dashboard.critical'),
           Colors.white,
         )}
         {renderTicketView(
+          priorities.totalTickets,
           priorities.high,
           Colors.high2,
           translate('dashboard.high'),
           Colors.white,
         )}
         {renderTicketView(
+          priorities.totalTickets,
           priorities.medium,
           Colors.medium2,
           translate('dashboard.medium'),
           Colors.primary,
         )}
         {renderTicketView(
+          priorities.totalTickets,
           priorities.low,
           Colors.low2,
           translate('dashboard.low'),
@@ -178,7 +224,11 @@ const renderScene = (props) => {
     );
   };
 
-  let renderTicketView = (count, bgColor, status, textColor) => {
+  let renderTicketView = (totalTickets, count, bgColor, status, textColor) => {
+    const ticketCount = showPercentageCount
+      ? `${getParcentage(totalTickets, count)}%`
+      : `${count}`;
+
     return (
       // <View style={styles.donutInfoContainer}>
       //   <Text style={styles.ticketText}>{count}</Text>
@@ -196,7 +246,7 @@ const renderScene = (props) => {
         <View style={[styles.ticketStatusView]}>
           <Text style={[styles.ticketStatusText]}>{status}</Text>
         </View>
-        <Text style={styles.ticketText}>{`${count}%`}</Text>
+        <Text style={styles.ticketText}>{ticketCount}</Text>
       </View>
     );
   };
@@ -204,7 +254,8 @@ const renderScene = (props) => {
   return (
     <View style={styles.container}>
       {renderDonutChart()}
-      {renderViewTicketsContainer()}
+
+      <RenderViewTicketsContainer />
     </View>
   );
 };
@@ -237,10 +288,12 @@ const styles = StyleSheet.create({
   },
   viewTicketsContainer: {
     flex: 1,
-    width: '50%',
+    flexDirection: 'row',
+    width: '80%',
     marginHorizontal: MarginConstants.tab3,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    marginTop: MarginConstants.tab3,
+    // backgroundColor: Colors.accentLight,
+
     paddingBottom: PaddingConstants.tab3,
   },
   viewTicketsText: {
@@ -250,7 +303,10 @@ const styles = StyleSheet.create({
   npsView: {
     position: 'absolute',
     left: '20%',
-    top: DeviceInfo.isTablet() ? '40%' : '45%',
+
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: DeviceInfo.isTablet() ? '50%' : '55%',
     width: 3 * MarginConstants.tab4,
     paddingHorizontal: PaddingConstants.halfTab,
   },
@@ -263,7 +319,7 @@ const styles = StyleSheet.create({
   npsText: {
     color: Colors.primary,
     fontSize: TextSizes.primary,
-    fontFamily: FontFamily.semiBold,
+    fontFamily: FontFamily.medium,
     textAlign: 'center',
   },
   ticketText: {
