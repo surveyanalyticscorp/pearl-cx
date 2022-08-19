@@ -12,7 +12,11 @@ import {
 import StringUtils from '../../Utils/StringUtils';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import {Colors, statusColors} from '../../styles/color.constants';
+import {
+  Colors,
+  statusColors,
+  priorityColors,
+} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
@@ -26,21 +30,30 @@ import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
 import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
 import {backgroundColor} from '../../widgets/qp-calendar/style';
 import style from '../../widgets/qp-calendar/calendar/header/style';
-import {color} from 'react-native-reanimated';
 
 export default function TicketOverview(props) {
   const statusoptions = [
-    'Open',
-    'Closed',
-    'Overdue',
-    'Escalated',
-    'Resolved',
-    'New',
+    {value: 'Open', color: statusColors.openFiller},
+    {value: 'Closed', color: statusColors.closedFiller},
+    {value: 'Overdue', color: statusColors.overDueFiller},
+    {value: 'Escalated', color: statusColors.escalatedFiller},
+    {value: 'Resolved', color: statusColors.resolvedFiller},
+    {value: 'New', color: statusColors.newFiller},
   ];
 
-  const priorityOptions = ['Critical', 'High', 'Normal', 'Low', 'Unassigned'];
+  const priorityOptions = [
+    {value: 'Critical', color: priorityColors.critical.filler},
+    {value: 'High', color: priorityColors.high.filler},
+    {value: 'Normal', color: priorityColors.normal.filler},
+    {value: 'Low', color: priorityColors.low.filler},
+    {value: 'Unassigned', color: priorityColors.unassigned.filler},
+  ];
 
-  const userOptions = ['Dummy 1', 'Dummy 2', 'Dummy 3'];
+  const userOptions = [
+    {value: 'Dummy 1', url: 'https://picsum.photos/id/237/200'},
+    {value: 'Dummy 2', url: 'https://picsum.photos/id/327/200'},
+    {value: 'Dummy 3', url: 'https://picsum.photos/id/247/200'},
+  ];
   const departmentOptions = ['Sales', 'Client Services'];
 
   let sampleText =
@@ -211,14 +224,42 @@ export default function TicketOverview(props) {
             height: 20,
             width: 20,
             borderRadius: 50,
-            backgroundColor: Colors.accent,
-          }}
-        /> */}
-        <Text style={styles.dropdownText}>{rowData}</Text>
+            backgroundColor: rowData.color,
+          }}/> */}
+        {renderImageOrColor(rowData)}
+        <Text style={styles.dropdownText}>{rowData.value}</Text>
       </View>
     );
   }
+  const renderImageOrColor = (data) => {
+    const viewStyles = StyleSheet.create({
+      color: {
+        height: 20,
+        width: 20,
+        borderRadius: 50,
+        alignSelf: 'center',
+        backgroundColor: data.color ?? Colors.transparent,
+      },
+      image: {
+        height: 20,
+        width: 20,
+        borderRadius: 50,
+        alignSelf: 'center',
+        backgroundColor: Colors.transparent,
+      },
+    });
 
+    return data.hasOwnProperty('color') ? (
+      <View style={viewStyles.color} />
+    ) : (
+      <Image
+        source={{
+          uri: data.url,
+        }}
+        style={viewStyles.image}
+      />
+    );
+  };
   const DropDownView = (options, defaultText) => {
     return (
       <View style={[{flex: 2}, styles.rowContainer]}>

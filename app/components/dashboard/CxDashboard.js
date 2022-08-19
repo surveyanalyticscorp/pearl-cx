@@ -253,7 +253,7 @@ const CxDashboard = (props) => {
             <Text style={[dashboardStyles.detailsText]}>Your YTD NPS 27</Text> */}
             {/* translation missing */}
 
-            <HorizontalScaleBar value={'99'} />
+            <HorizontalScaleBar value={data.npsPercentage} />
             <View style={{marginTop: 12}}>
               {renderDetailsInformation(
                 'View Responses',

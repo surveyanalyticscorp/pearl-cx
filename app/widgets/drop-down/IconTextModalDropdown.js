@@ -14,6 +14,7 @@ import {
   Modal,
   ActivityIndicator,
   FlatList,
+  Image,
 } from 'react-native';
 
 import PropTypes from 'prop-types';
@@ -213,6 +214,37 @@ export default class IconTextModalDropdown extends Component {
     const arrowColor = arrowIconColor || Colors.accent;
     const alignContentForText = isRTL ? 'flex-end' : 'flex-start';
     const alignContentForIcon = isRTL ? 'flex-start' : 'flex-end';
+
+    const renderImageOrColor = (data) => {
+      const viewStyles = StyleSheet.create({
+        color: {
+          height: 20,
+          width: 20,
+          borderRadius: 50,
+          alignSelf: 'center',
+          backgroundColor: data.color ?? Colors.transparent,
+        },
+        image: {
+          height: 20,
+          width: 20,
+          borderRadius: 50,
+          alignSelf: 'center',
+          backgroundColor: Colors.transparent,
+        },
+      });
+
+      return data.hasOwnProperty('color') ? (
+        <View style={viewStyles.color} />
+      ) : (
+        <Image
+          source={{
+            uri: data.url,
+          }}
+          style={viewStyles.image}
+        />
+      );
+    };
+
     return (
       <TouchableOpacity
         ref={(button) => (this._button = button)}
@@ -237,15 +269,18 @@ export default class IconTextModalDropdown extends Component {
                   flex: 0.9,
                 },
               ]}>
-              <Text
-                numberOfLines={1}
-                style={[
-                  styles.buttonText,
-                  textStyle,
-                  {textAlign: isRTL ? 'right' : 'left'},
-                ]}>
-                {buttonText}
-              </Text>
+              <View style={styles.rowContainer}>
+                {renderImageOrColor(buttonText)}
+                <Text
+                  numberOfLines={1}
+                  style={[
+                    styles.buttonText,
+                    textStyle,
+                    {textAlign: isRTL ? 'right' : 'left'},
+                  ]}>
+                  {buttonText.value ?? buttonText}
+                </Text>
+              </View>
             </View>
             <View
               style={[
@@ -484,8 +519,7 @@ export default class IconTextModalDropdown extends Component {
     const {onSelect, renderButtonText, onDropdownWillHide} = this.props;
     if (!onSelect || onSelect(rowID, rowData) !== false) {
       highlightRow.highlight(rowID);
-      const value =
-        (renderButtonText && renderButtonText(rowData)) || rowData.toString();
+      const value = (renderButtonText && renderButtonText(rowData)) || rowData;
       this._nextValue = value;
       this._nextIndex = rowID;
       this.setState({
