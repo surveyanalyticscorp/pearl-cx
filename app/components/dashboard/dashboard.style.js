@@ -164,9 +164,10 @@ export const dashboardStyles = StyleSheet.create({
   },
   npsView: {
     position: 'absolute',
-    left: '30%',
-    top: DeviceInfo.isTablet() ? '30%' : '35%',
-    width: 3 * MarginConstants.tab4,
+    left: '10%',
+    top: DeviceInfo.isTablet() ? '15%' : '20%',
+    width: 5 * MarginConstants.tab4,
+
     paddingHorizontal: PaddingConstants.halfTab,
   },
   npsPercentText: {
@@ -191,17 +192,17 @@ export const dashboardStyles = StyleSheet.create({
   chartContainer: {
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 7
-      : MarginConstants.tab4 * 6,
+      ? MarginConstants.tab4 * 8
+      : MarginConstants.tab4 * 7,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginHorizontal: MarginConstants.tab2,
     borderBottomEndRadius: 5,
     borderBottomStartRadius: 5,
   },
   donut: {
-    marginTop: MarginConstants.tab4,
+    marginTop: MarginConstants.tab1,
     paddingHorizontal: PaddingConstants.tab2,
   },
   donutInfoContainer: {

@@ -25,7 +25,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {MarginConstants} from '../../styles/margin.constants';
-import {VictoryPie} from 'victory-native';
+import {
+  VictoryPie,
+  VictoryChart,
+  VictoryBar,
+  VictoryTheme,
+} from 'victory-native';
 import {Sizes} from '../../styles/Size.constant';
 import StringUtils from '../../Utils/StringUtils';
 import FilterHeader from '../FilterHeader';
@@ -38,6 +43,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
 import {WelcomeScreen} from '../dashboard/WelcomeScreen';
+import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -187,6 +193,10 @@ const CxDashboard = (props) => {
     console.log(`${JSON.stringify(props)} :Data`);
   };
 
+  const RenderHorizontalBarView = () => {
+    return <HorizontalScaleBar value={'40'} />;
+  };
+
   const renderDonutChart = () => {
     let data = props.dashboardData.primaryStoreNPS;
     let responses = props.dashboardData.primaryStoreNPS.totalResponses;
@@ -242,6 +252,8 @@ const CxDashboard = (props) => {
             {/* <Text style={[dashboardStyles.detailsText]}>Company NPS 32</Text>
             <Text style={[dashboardStyles.detailsText]}>Your YTD NPS 27</Text> */}
             {/* translation missing */}
+
+            <HorizontalScaleBar value={'99'} />
             <View style={{marginTop: 12}}>
               {renderDetailsInformation(
                 'View Responses',
