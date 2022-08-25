@@ -183,6 +183,7 @@ const Login = (props) => {
       <QPButton
         testID="SignInButton"
         style={loginStyles.signInButton}
+        buttonColor={Colors.accentLight}
         onPress={authenticateAccessCode}
         buttonText={stringConst.onBoarding.signIn}
         textStyle={loginStyles.signInText}
@@ -261,6 +262,7 @@ const Login = (props) => {
         {renderSpinnerLoginButton()}
         <QPButton
           style={loginStyles.forgotPswdButton}
+          buttonColor={Colors.fullTransparent}
           onPress={onForgotPasswordPress}
           textStyle={loginStyles.forgotPasswordText}
           buttonText={stringConst.onBoarding.forgotPassword}

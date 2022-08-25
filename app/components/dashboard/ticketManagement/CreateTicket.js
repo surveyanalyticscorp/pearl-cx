@@ -58,6 +58,7 @@ export default function CreateTicket(props) {
   );
 
   return (
+    // <BottomSheet>
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.container}>
         <View style={[styles.rowContainer, {justifyContent: 'space-between'}]}>
@@ -114,6 +115,7 @@ export default function CreateTicket(props) {
         </View>
       </ScrollView>
     </SafeAreaView>
+    // </BottomSheet>
   );
 }
 

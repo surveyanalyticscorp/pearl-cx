@@ -55,5 +55,6 @@ export const loginStyles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: MarginConstants.tab2,
     marginBottom: MarginConstants.tab2,
+    backgroundColor: Colors.fullTransparent,
   },
 });
