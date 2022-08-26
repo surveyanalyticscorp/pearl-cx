@@ -112,9 +112,7 @@ const Notification = (props) => {
         onPress={() => clearNotification(item)}
         activeOpacity={0.5}>
         <View style={styles.deleteBox}>
-          <Animated.Text
-            useNativeDriver={true}
-            style={{transform: [{scale: scale}]}}>
+          <Animated.Text style={{transform: [{scale: scale}]}}>
             Deleting
           </Animated.Text>
         </View>

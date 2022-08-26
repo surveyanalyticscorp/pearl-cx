@@ -189,6 +189,7 @@ const AppRouter = (props) => {
   }, [authToken, baseUrl]);
 
   useEffect(() => {
+    console.log(`Language Code: `, languageCode);
     setI18nConfig(languageCode);
   }, [languageCode]);
 

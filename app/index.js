@@ -1,3 +1,4 @@
+// import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import React, {Component} from 'react';
 import {store} from './redux/store/store';
 import {Provider} from 'react-redux';
@@ -12,7 +13,6 @@ import {View, Platform} from 'react-native';
 import codePush from 'react-native-code-push';
 
 import Siren from 'react-native-siren';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 EStyleSheet.build(globalVariables);
 
@@ -47,12 +47,10 @@ class CxApp extends Component {
   render() {
     return (
       <Provider store={store}>
-        <GestureHandlerRootView useNativeDriver={true} style={{flex: 1}}>
-          <SafeAreaProvider>
-            {this.state.styleBuilt ? <SplashScreen /> : <View />}
-            <FlashMessage position="top" />
-          </SafeAreaProvider>
-        </GestureHandlerRootView>
+        <SafeAreaProvider>
+          {this.state.styleBuilt ? <SplashScreen /> : <View />}
+          <FlashMessage position="top" />
+        </SafeAreaProvider>
       </Provider>
     );
   }

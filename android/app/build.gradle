@@ -174,7 +174,7 @@ android {
         pickFirst "lib/x86/libc++_shared.so"
         pickFirst "lib/x86_64/libc++_shared.so"
     }
-    ndkVersion '22.0.7026061'
+//    ndkVersion '22.0.7026061'
 
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->

@@ -76,7 +76,6 @@ export default class DialogContainer extends React.PureComponent {
         isVisible={visible}
         animationIn={Platform.OS === 'ios' ? IOS_MODAL_ANIMATION : 'zoomIn'}
         animationOut={'fadeOut'}
-        useNativeDriver={true}
         {...otherProps}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
