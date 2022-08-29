@@ -70,8 +70,8 @@ const ClosedLoopStack = ({navigation}) => {
         name={'TicketTakeAction'}
         component={TicketTakeAction}
         options={({navigation, route}) => ({
-          // headerShown: false,
-          headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+          headerShown: false,
+          // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
           // headerRight: (props) => <EditTicket {...props} route={route} />,
           // headerLeft: (props) => <MenuIcon />,
         })}

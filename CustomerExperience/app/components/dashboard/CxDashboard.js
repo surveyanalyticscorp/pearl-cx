@@ -44,6 +44,7 @@ import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
 import {WelcomeScreen} from '../dashboard/WelcomeScreen';
 import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
+import {FabAddButton} from '../../routes/CommonScreen';
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -509,6 +510,7 @@ const CxDashboard = (props) => {
             {exitAlert && renderExitAlert()}
           </View>
         </ScrollView>
+        <FabAddButton onPress={onFabPressHandler} />
       </SafeAreaView>
     );
   };
@@ -527,6 +529,9 @@ const CxDashboard = (props) => {
     return <WelcomeScreen />;
   };
 
+  let onFabPressHandler = () => {
+    console.log('onPress Add Ticket!!!!');
+  };
   // return welcomeScreenShow ? renderDashboard() : renderWelcomeScreen();
   return renderDashboard();
 };

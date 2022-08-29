@@ -34,6 +34,31 @@ const CloseLoopTicketsTab = createMaterialTopTabNavigator();
 
 let {width} = Dimensions.get('window');
 
+export const FabAddButton = (props) => {
+  let size = width / 8;
+  let fabStyle = StyleSheet.create({
+    fabContainer: {
+      position: 'absolute',
+      bottom: 24,
+      right: 24,
+      width: size,
+      height: size,
+      borderRadius: 50,
+      backgroundColor: Colors.accentLight,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  });
+
+  return (
+    <View style={fabStyle.fabContainer}>
+      <TouchableOpacity onPress={props.onPress}>
+        <MaterialIcon name="add" size={size - 5} color={Colors.white} />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 export const MenuIcon = () => {
   let navigation = useNavigation();
   return (
