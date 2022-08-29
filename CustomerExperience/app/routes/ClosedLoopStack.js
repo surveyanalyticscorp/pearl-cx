@@ -15,6 +15,7 @@ import CommonScreens, {
 import {translate} from '../Utils/MultilinguaUtils';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
 import TicketDetails from '../components/closedloop/TicketDetails';
+import TicketTakeAction from '../components/closedloop/takeaction/TIcketTakeAction';
 
 const FeedbackStack = createStackNavigator();
 
@@ -56,12 +57,22 @@ const ClosedLoopStack = ({navigation}) => {
       />
 
       <FeedbackStack.Screen
-        name={'Ticket 9033212'}
+        name={'TicketDetails'}
         component={TicketDetails}
         options={({navigation, route}) => ({
           // headerShown: false,
           headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
           headerRight: (props) => <EditTicket {...props} route={route} />,
+          // headerLeft: (props) => <MenuIcon />,
+        })}
+      />
+      <FeedbackStack.Screen
+        name={'TicketTakeAction'}
+        component={TicketTakeAction}
+        options={({navigation, route}) => ({
+          // headerShown: false,
+          headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+          // headerRight: (props) => <EditTicket {...props} route={route} />,
           // headerLeft: (props) => <MenuIcon />,
         })}
       />

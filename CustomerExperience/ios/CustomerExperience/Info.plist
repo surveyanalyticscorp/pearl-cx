@@ -87,6 +87,34 @@
 		<string>FiraSans-Regular.otf</string>
 		<string>FiraSans-SemiBold.otf</string>
 		<string>icomoon.ttf</string>
+		<string>FiraSans-BoldItalic.otf</string>
+		<string>FiraSans-Book.otf</string>
+		<string>FiraSans-BookItalic.otf</string>
+		<string>FiraSans-Eight.otf</string>
+		<string>FiraSans-EightItalic.otf</string>
+		<string>FiraSans-ExtraBold.otf</string>
+		<string>FiraSans-ExtraBoldItalic.otf</string>
+		<string>FiraSans-ExtraLight.otf</string>
+		<string>FiraSans-ExtraLightItalic.otf</string>
+		<string>FiraSans-Four.otf</string>
+		<string>FiraSans-FourItalic.otf</string>
+		<string>FiraSans-Hair.otf</string>
+		<string>FiraSans-HairItalic.otf</string>
+		<string>FiraSans-Heavy.otf</string>
+		<string>FiraSans-HeavyItalic.otf</string>
+		<string>FiraSans-Italic.otf</string>
+		<string>FiraSans-LightItalic.otf</string>
+		<string>FiraSans-MediumItalic.otf</string>
+		<string>firasans-regularitalic.ttf</string>
+		<string>FiraSans-SemiBoldItalic.otf</string>
+		<string>FiraSans-Thin.otf</string>
+		<string>FiraSans-ThinItalic.otf</string>
+		<string>FiraSans-Two.otf</string>
+		<string>FiraSans-TwoItalic.otf</string>
+		<string>FiraSans-Ultra.otf</string>
+		<string>FiraSans-UltraItalic.otf</string>
+		<string>FiraSans-UltraLight.otf</string>
+		<string>FiraSans-UltraLightItalic.otf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

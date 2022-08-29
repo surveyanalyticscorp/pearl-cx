@@ -26,6 +26,7 @@ import TicketActivity from './TicketActivity';
 import CreateTicket from '../dashboard/ticketManagement/CreateTicket';
 import SendEmail from '../dashboard/components/SendEmail';
 import TakeActionScreen from './TakeActionScreen';
+import TicketTakeAction from './takeaction/TIcketTakeAction';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
@@ -81,7 +82,7 @@ export default function ClosedLoop(props) {
   };
 
   const onPressHandler = () => {
-    props.navigation.navigate('Ticket 9033212');
+    props.navigation.navigate('TicketDetails');
   };
 
   return (
@@ -89,7 +90,7 @@ export default function ClosedLoop(props) {
       {<HeaderFilter />}
 
       <ClosedLoopCell onPressHandler={onPressHandler} />
-
+      {/* <TicketTakeAction /> */}
       {/* <TicketDetails /> */}
       {/* <TicketOverview /> */}
       {/* <TicketComments /> */}
