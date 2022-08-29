@@ -4,13 +4,15 @@ import {
   CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
   CLOSED_LOOP_TICKET_DETAILS_RECEIVED,
   DASHBOARD_RECEIVED,
+  SEGMENT_SELECTED,
 } from '../actions/dashboard.actions';
 
 const initialState = {
   dashboardData: {},
   ticketDetails: {},
   segmentDetails: {},
-  ownerDetails: {}
+  ownerDetails: {},
+  segment: 'Main',
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -44,8 +46,18 @@ const dashboardReducer = (state = initialState, action) => {
         ...state,
         ticketDetails: {},
         segmentDetails: {},
-        ownerDetails: {}
-      }
+        ownerDetails: {},
+      };
+    }
+
+    case SEGMENT_SELECTED: {
+      console.log(`SEGEMENT TESTING: prev  ${JSON.stringify(state.segment)}`);
+      console.log(`SEGEMENT TESTING: new ${JSON.stringify(action.payload)}`);
+
+      return {
+        ...state,
+        segment: action.payload,
+      };
     }
 
     default: {

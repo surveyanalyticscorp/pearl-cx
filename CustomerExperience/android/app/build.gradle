@@ -123,6 +123,7 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+    
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -147,7 +148,8 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file("/Users/apple/pearl/questionpro_offline_surveys/android/QuestionProKey")
+            // storeFile file("/Users/apple/pearl/questionpro_offline_surveys/android/QuestionProKey")
+            storeFile file('../keystore/debug.keystore')
             storePassword 'questionpro'
             keyAlias 'questionpro_keystore'
             keyPassword 'questionpro'

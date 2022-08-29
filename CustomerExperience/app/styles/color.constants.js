@@ -6,11 +6,16 @@ const Colors = {
   lightRed: '#FC1154',
   white: '#ffffff',
   black: '#000000',
-  accent: '#1b87e6',
+  accentLight: '#1b87e6',
+
+  accent: '#1B3380',
+
+  filterIconColor: '#545E6B',
   accentGradient: 'rgba(239, 246, 252, 1)',
   gradientColor: '#8AC0EA',
   grey: '#f9f9f9',
-  lightBlack:'#404A5B',
+  lightBlack: '#404A5B',
+  evenDarkerGrey: '#9B9B9B',
   darkerGrey: '#eeeeee',
   darkGrey: '#d8d8d8',
   overlay: '#edf6fd',
@@ -38,10 +43,17 @@ const Colors = {
   selectionGreyColor: '#F7F8F9',
 
   promoter: '#3FCA5A',
-  detractor:'#CE002A',
-  passive:'#FFE300',
+  promoter2: '#1BA758',
+  detractor: '#CE002A',
+  detractor2: '#FF7681',
+  passive: '#FFE300',
+  passive2: '#FFCB47',
   critical: '#E53251',
+  critical2: '#DA2222',
   high: '#FF6103',
+  high2: '#E4632D',
+  medium2: '#F6C140',
+  low2: '#A6BE54',
 
   negativePromter: '#E8E8E8',
   positivePromter: '#90BA5B',
@@ -61,7 +73,50 @@ const buttonColors = {
   negative: Colors.secondary,
 };
 
+const statusColors = {
+  openBorder: Colors.promoter,
+  openFiller: '#9FE4AC',
+
+  closedBorder: Colors.evenDarkerGrey,
+  closedFiller: Colors.darkGrey,
+
+  escalatedBorder: '#FF9045',
+  escalatedFiller: '#FFC7A2',
+
+  overDueBorder: Colors.error,
+  overDueFiller: '#F298A8',
+
+  resolvedBorder: Colors.accentLight,
+  resolvedFiller: '#8DC3F2',
+
+  newBorder: Colors.evenDarkerGrey,
+  newFiller: Colors.white,
+};
+
+const priorityColors = {
+  critical: {
+    border: '#DA2222',
+    filler: '#DA222236',
+  },
+  high: {
+    border: '#E4632D',
+    filler: '#E4632D33',
+  },
+  normal: {
+    border: Colors.medium2,
+    filler: '#F6C14033',
+  },
+  low: {
+    border: Colors.low2,
+    filler: '#A6BE5433',
+  },
+  unassigned: {
+    border: Colors.darkGrey,
+    filler: '#D8D8D833',
+  },
+};
+
 export const PROGRESS_COLOR_INCOMPLETE = '#DD4F43';
 export const PROGRESS_COLOR_TERMINATED = '#FFCE42';
 
-export {Colors, textColors, buttonColors};
+export {Colors, textColors, buttonColors, statusColors, priorityColors};
