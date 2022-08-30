@@ -197,6 +197,7 @@ export default function TicketOverview(props) {
   const onTakeActionHandler = () => {
     console.log('takeaction');
     props.navigation.navigate('TicketTakeAction');
+    // props.navigation.navigate('SelectEmailTemplate');
   };
 
   const takeActionButton = () => {

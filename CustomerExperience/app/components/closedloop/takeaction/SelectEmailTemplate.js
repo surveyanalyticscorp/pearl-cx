@@ -6,44 +6,39 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {CloseButton} from '../../../routes/CommonScreen';
+import {CloseButton, listItemSeparator} from '../../../routes/CommonScreen';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-
-const TicketTakeAction = (props) => {
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+const SelectEmailTemplate = () => {
   const data = [
-    {id: 1, title: 'Respond via Email', icon: 'email'},
-    {id: 2, title: 'Respond via phone', icon: 'phone'},
-    {id: 3, title: 'Respond via SMS', icon: 'chat-bubble'},
-    {id: 4, title: 'Forward via Email', icon: 'exit-to-app'},
+    'Template 01',
+    'Template 02',
+    'Template 03',
+    'Template 04',
+    'Template 05',
   ];
 
   const renderRow = ({item}) => {
     return (
       <TouchableWithoutFeedback onPress={() => handleOnPress(item)}>
         <View style={styles.row}>
-          <MaterialIcon
-            name={item.icon}
-            size={20}
-            color={Colors.filterIconColor}
-          />
-          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.title}>{item}</Text>
         </View>
       </TouchableWithoutFeedback>
     );
   };
 
   const handleOnPress = (item) => {
-    console.log(item.title);
+    console.log(item);
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
-        <Text style={styles.header}>Take Action</Text>
+        <Text style={styles.header}>Select Template</Text>
         <CloseButton color={Colors.filterIconColor} />
       </View>
       <FlatList
@@ -51,15 +46,18 @@ const TicketTakeAction = (props) => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
+        ItemSeparatorComponent={listItemSeparator}
       />
     </View>
   );
 };
 
-export default TicketTakeAction;
+export default SelectEmailTemplate;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.white,
   },
   headerRow: {
     flexDirection: 'row',

@@ -530,7 +530,7 @@ const CxDashboard = (props) => {
   };
 
   let onFabPressHandler = () => {
-    console.log('onPress Add Ticket!!!!');
+    props.navigation.navigate('New Ticket');
   };
   // return welcomeScreenShow ? renderDashboard() : renderWelcomeScreen();
   return renderDashboard();

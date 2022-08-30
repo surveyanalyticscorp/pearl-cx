@@ -99,6 +99,14 @@ export const HeaderBackLeft = (props) => {
   );
 };
 
+export const BottomSheetHandler = () => {
+  return <View></View>;
+};
+
+export const listItemSeparator = () => {
+  return <View style={{height: 0.5, backgroundColor: Colors.darkGrey}} />;
+};
+
 export const CloseButton = ({color}) => {
   let navigation = useNavigation();
   const iconColor = !color ? Colors.white : color;

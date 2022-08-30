@@ -32,11 +32,11 @@ const TicketTabStack = (props) => (
         fontSize: TextSizes.secondary,
         fontFamily: FontFamily.regular,
       },
-      indicatorStyle: {backgroundColor: Colors.accent},
+      indicatorStyle: {backgroundColor: Colors.accentLight},
       style: {backgroundColor: Colors.white, width: '100%'},
       // initialLayout: {width: useWindowDimensions().width},
       tabStyle: {height: 1.5 * PaddingConstants.tab4},
-      activeTintColor: Colors.accent,
+      activeTintColor: Colors.accentLight,
       inactiveTintColor: Colors.primary,
     }}
     lazy
@@ -139,33 +139,19 @@ const RenderScene = (props) => {
   let getParcentage = (total, count) =>
     total === 0 ? 0 : (100 * count) / total;
 
-  let RenderViewTicketsContainer = () => {
+  let RenderCountContainer = () => {
     const toggleSwitch = () =>
       setShowPercentageCount((previousState) => !previousState);
     const count = getCount(props.route.params.ticketCount);
     return (
-      <View style={styles.viewTicketsContainer}>
+      <View style={[styles.viewCountContainer]}>
         <View
           style={{
             flex: 2,
             height: MarginConstants.tab4,
             justifyContent: 'center',
           }}>
-          <Text style>{`${count.totalTickets} total`}</Text>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              const pushAction = StackActions.push(
-                translate('close_loop.close_loop'),
-                {
-                  screen: props.route.name,
-                },
-              );
-              props.navigation.dispatch(pushAction);
-            }}>
-            <Text style={styles.viewTicketsText}>
-              {translate('dashboard.view_tickets')}
-            </Text>
-          </TouchableWithoutFeedback>
+          <Text style={styles.countText}>{`${count.totalTickets} total`}</Text>
         </View>
         <View
           style={{
@@ -175,7 +161,7 @@ const RenderScene = (props) => {
             alignItems: 'center',
             justifyContent: 'flex-start',
           }}>
-          <Text>Percentage</Text>
+          <Text style={styles.countText}>Percentage</Text>
           <Switch
             trackColor={{true: Colors.accent, false: Colors.darkGrey}}
             thumbColor={Colors.white}
@@ -183,8 +169,29 @@ const RenderScene = (props) => {
             onValueChange={toggleSwitch}
             value={showPercentageCount}
           />
-          <Text>Count</Text>
+          <Text style={styles.countText}>Count</Text>
         </View>
+      </View>
+    );
+  };
+
+  let RenderViewTicketsContainer = () => {
+    return (
+      <View style={styles.viewTicketsContainer}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            const pushAction = StackActions.push(
+              translate('close_loop.close_loop'),
+              {
+                screen: props.route.name,
+              },
+            );
+            props.navigation.dispatch(pushAction);
+          }}>
+          <Text style={styles.viewTicketsText}>
+            {translate('dashboard.view_tickets')}
+          </Text>
+        </TouchableWithoutFeedback>
       </View>
     );
   };
@@ -255,7 +262,7 @@ const RenderScene = (props) => {
   return (
     <View style={styles.container}>
       {renderDonutChart()}
-
+      <RenderCountContainer />
       <RenderViewTicketsContainer />
     </View>
   );
@@ -265,9 +272,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 8
-      : MarginConstants.tab4 * 7,
-    justifyContent: 'center',
+      ? MarginConstants.tab4 * 10
+      : MarginConstants.tab4 * 9,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   chartContainer: {
     backgroundColor: Colors.white,
@@ -288,18 +296,24 @@ const styles = StyleSheet.create({
     paddingVertical: PaddingConstants.tab1,
   },
   viewTicketsContainer: {
-    flex: 1,
+    flexDirection: 'row',
+    width: '80%',
+    marginHorizontal: MarginConstants.tab3,
+    marginTop: MarginConstants.halfTab,
+    // backgroundColor: Colors.accentLight,
+  },
+  viewCountContainer: {
     flexDirection: 'row',
     width: '80%',
     marginHorizontal: MarginConstants.tab3,
     marginTop: MarginConstants.tab3,
     // backgroundColor: Colors.accentLight,
-
-    paddingBottom: PaddingConstants.tab3,
+    paddingVertical: MarginConstants.halfTab,
   },
   viewTicketsText: {
-    color: Colors.accent,
+    color: Colors.accentLight,
     padding: 2,
+    fontFamily: FontFamily.regular,
   },
   npsView: {
     position: 'absolute',
@@ -347,5 +361,9 @@ const styles = StyleSheet.create({
     color: Colors.filterIconColor,
     fontSize: TextSizes.secondary,
     fontFamily: FontFamily.regular,
+  },
+  countText: {
+    fontFamily: FontFamily.medium,
+    color: Colors.filterIconColor,
   },
 });

@@ -123,6 +123,7 @@ export const dashboardStyles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     marginHorizontal: MarginConstants.tab2,
+    marginBottom: MarginConstants.tab2,
   },
   ticketContainer: {
     flex: 3,

@@ -1,35 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import SafeAreaView from 'react-native-safe-area-view';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
-import ModalDropdown from '../../../widgets/drop-down/ModalDropdown';
-import {connect} from 'react-redux';
-import {
-  clearDetractorTicketDetails,
-  getClosedLoopOwnerDetails,
-  getClosedLoopSegmentDetails,
-  updateTicket,
-} from '../../../redux/actions/dashboard.actions';
-import ArrayUtils from '../../../Utils/ArrayUtils';
-import StringUtils from '../../../Utils/StringUtils';
-import {updateClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
-import QPSpinner from '../../../widgets/QPSpinner';
-import {showErrorFlashMessage} from '../../../Utils/Utility';
-import {wantToReloadDashboard} from '../../../redux/actions';
-import {translate} from '../../../Utils/MultilinguaUtils';
+// import ModalDropdown from '../../../widgets/drop-down/ModalDropdown';
+// import {connect} from 'react-redux';
+// import {
+//   clearDetractorTicketDetails,
+//   getClosedLoopOwnerDetails,
+//   getClosedLoopSegmentDetails,
+//   updateTicket,
+// } from '../../../redux/actions/dashboard.actions';
+// import ArrayUtils from '../../../Utils/ArrayUtils';
+// import StringUtils from '../../../Utils/StringUtils';
+// import {updateClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
+// import QPSpinner from '../../../widgets/QPSpinner';
+// import {showErrorFlashMessage} from '../../../Utils/Utility';
+// import {wantToReloadDashboard} from '../../../redux/actions';
+// import {translate} from '../../../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
