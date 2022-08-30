@@ -137,7 +137,7 @@ const RenderScene = (props) => {
   };
 
   let getParcentage = (total, count) =>
-    total === 0 ? 0 : (100 * count) / total;
+    Number((total === 0 ? 0 : (100 * count) / total).toFixed(2));
 
   let RenderCountContainer = () => {
     const toggleSwitch = () =>
