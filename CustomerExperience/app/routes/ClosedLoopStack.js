@@ -46,7 +46,7 @@ const feedbackStack = (props) => (
 
 const ClosedLoopStack = ({navigation}) => {
   return (
-    <FeedbackStack.Navigator mode="modal">
+    <FeedbackStack.Navigator>
       <FeedbackStack.Screen
         name="Closed Loop"
         component={ClosedLoop}

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   TouchableWithoutFeedback,
   Text,
   StyleSheet,
+  Dimensions,
   FlatList,
 } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -12,18 +13,17 @@ import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-
+// import {FlatList, ScrollView} from 'react-native-gesture-handler';
 const TicketTakeAction = (props) => {
-  const data = [
-    {id: 1, title: 'Respond via Email', icon: 'email'},
-    {id: 2, title: 'Respond via phone', icon: 'phone'},
-    {id: 3, title: 'Respond via SMS', icon: 'chat-bubble'},
-    {id: 4, title: 'Forward via Email', icon: 'exit-to-app'},
-  ];
+  const [data, setData] = useState(props.data);
 
   const renderRow = ({item}) => {
     return (
-      <TouchableWithoutFeedback onPress={() => handleOnPress(item)}>
+      <TouchableWithoutFeedback
+        onPress={() =>
+          // handleOnPress(item)
+          props.handleOnPress(item)
+        }>
         <View style={styles.row}>
           <MaterialIcon
             name={item.icon}
@@ -37,15 +37,15 @@ const TicketTakeAction = (props) => {
   };
 
   const handleOnPress = (item) => {
-    console.log(item.title);
+    // console.log(item.title);
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerRow}>
+      {/* <View style={styles.headerRow}>
         <Text style={styles.header}>Take Action</Text>
         <CloseButton color={Colors.filterIconColor} />
-      </View>
+      </View> */}
       <FlatList
         style={styles.flatList}
         data={data}

@@ -24,6 +24,7 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {Sizes} from '../styles/Size.constant';
 import {MarginConstants} from '../styles/margin.constants';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import IonIcons from 'react-native-vector-icons/Ionicons';
 import {FontFamily} from '../styles/font.constants';
 import DetractorScenes from '../components/dashboard/components/DetractorScenes';
 import {translate} from '../Utils/MultilinguaUtils';
@@ -98,9 +99,20 @@ export const HeaderBackLeft = (props) => {
     </View>
   );
 };
-
-export const BottomSheetHandler = () => {
-  return <View></View>;
+export const BottomSheetHeader = (props) => {
+  return (
+    <View style={styles.panelHeaderContainer}>
+      <View style={styles.panelHandleContainer}>
+        <View style={styles.panelHandle} />
+      </View>
+      <View style={styles.panelTitleContainer}>
+        <Text style={styles.header}>{props.title}</Text>
+        <TouchableOpacity onPress={props.onPressClose}>
+          <IonIcons name="close" size={20} color={Colors.filterIconColor} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 };
 
 export const listItemSeparator = () => {
@@ -363,5 +375,35 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     paddingTop: 5,
     paddingLeft: 5,
+  },
+  panelHeaderContainer: {
+    flex: 1,
+
+    padding: MarginConstants.tab1,
+    backgroundColor: Colors.white,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
+  },
+  panelHandleContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  panelTitleContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+  },
+  panelHandle: {
+    height: 4,
+    width: width / 5,
+    backgroundColor: Colors.darkGrey,
+  },
+  header: {
+    marginHorizontal: MarginConstants.tab2,
+    fontFamily: FontFamily.bold,
+    fontSize: TextSizes.largeText,
+    marginVertical: MarginConstants.halfTab,
+    color: Colors.filterIconColor,
   },
 });

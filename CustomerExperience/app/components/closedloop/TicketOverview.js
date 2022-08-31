@@ -28,8 +28,11 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import QPButton from '../../widgets/Button';
 import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
 import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
-import {backgroundColor} from '../../widgets/qp-calendar/style';
-import style from '../../widgets/qp-calendar/calendar/header/style';
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from 'react-native-reanimated';
+import TicketTakeAction from './takeaction/TIcketTakeAction';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {BottomSheetHeader} from '../../routes/CommonScreen';
 
 export default function TicketOverview(props) {
   const statusoptions = [
@@ -196,8 +199,9 @@ export default function TicketOverview(props) {
 
   const onTakeActionHandler = () => {
     console.log('takeaction');
-    props.navigation.navigate('TicketTakeAction');
+    // props.navigation.navigate('TicketTakeAction');
     // props.navigation.navigate('SelectEmailTemplate');
+    bs.current.snapTo(0);
   };
 
   const takeActionButton = () => {
@@ -430,21 +434,83 @@ export default function TicketOverview(props) {
     );
   };
 
-  return (
-    <ScrollView>
-      <View style={styles.container}>
-        {takeActionButton()}
-        {ticketStatusPriorityView()}
-        {descriptionView()}
-        {contactView()}
+  const handleTicketAction = (item) => {
+    console.log('Selected Action', item.title);
+  };
+
+  const renderTicketTakeAction = () => {
+    const data = [
+      {id: 1, title: 'Respond via Email', icon: 'email'},
+      {id: 2, title: 'Respond via phone', icon: 'phone'},
+      {id: 3, title: 'Respond via SMS', icon: 'chat-bubble'},
+      {id: 4, title: 'Forward via Email', icon: 'exit-to-app'},
+    ];
+
+    return (
+      <View style={{backgroundColor: Colors.white, height: '100%'}}>
+        <TicketTakeAction
+          data={data}
+          handleOnPress={(item) => handleTicketAction(item)}
+        />
       </View>
-    </ScrollView>
+    );
+  };
+
+  const renderHeader = () => {
+    return (
+      <BottomSheetHeader
+        title={'Take Action'}
+        onPressClose={() => bs.current.snapTo(bsSnapPoints.length - 1)}
+      />
+    );
+  };
+
+  // variables for bottom sheet
+  const bs = React.useRef(null);
+  const fall = new Animated.Value(1);
+  const bsSnapPoints = ['33%', '0%'];
+  const [shadow, setShadow] = useState(false);
+
+  return (
+    <Animated.View style={styles.container}>
+      <Animated.ScrollView
+        style={{
+          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+          color: shadow ? Colors.accent : Colors.borderColor,
+        }}>
+        <View style={styles.container}>
+          {takeActionButton()}
+          {ticketStatusPriorityView()}
+          {descriptionView()}
+          {contactView()}
+        </View>
+      </Animated.ScrollView>
+
+      <BottomSheet
+        ref={bs}
+        snapPoints={bsSnapPoints}
+        initialSnap={bsSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderTicketTakeAction}
+        renderHeader={renderHeader}
+        callbackNode={fall}
+        onCloseEnd={() => setShadow(false)}
+        onOpenStart={() => setShadow(true)}
+      />
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: Colors.white,
+  },
+
   container: {
     margin: MarginConstants.tab1,
+    flex: 1,
     // borderColor: Colors.evenDarkerGrey,
     // borderWidth: 1,
     // borderRadius: 4,
@@ -581,5 +647,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: PaddingConstants.halfTab,
     backgroundColor: Colors.accent,
+  },
+
+  panelHeaderContainer: {
+    flex: 1,
+
+    padding: MarginConstants.tab2,
+    backgroundColor: Colors.white,
+    borderTopStartRadius: 5,
+    borderTopEndRadius: 5,
+  },
+  panelHandleContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: MarginConstants.tab2,
+  },
+  panelHandle: {
+    height: 4,
+    width: 80,
+    backgroundColor: Colors.filterIconColor,
+  },
+  header: {
+    marginHorizontal: MarginConstants.tab2,
+    fontFamily: FontFamily.bold,
+    fontSize: TextSizes.largeText,
+    marginVertical: MarginConstants.tab1,
+    color: Colors.filterIconColor,
   },
 });
