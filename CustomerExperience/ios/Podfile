@@ -39,11 +39,33 @@ target 'CustomerExperience' do
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
   pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
-  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
   pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
   pod 'RNFBDynamicLinks', :path => '../node_modules/@react-native-firebase/dynamic-links'
   pod 'react-native-notifications', :path => '../node_modules/react-native-notifications'
   use_native_modules!
+
+  
+end
+
+post_install do |installer|
+  ## Fix for XCode 12.5
+  find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm",
+  "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
+  find_and_replace("../node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm",
+  "RCTBridgeModuleNameForClass(strongModule))", "RCTBridgeModuleNameForClass(Class(strongModule)))")
+end
+
+def find_and_replace(dir, findstr, replacestr)
+  Dir[dir].each do |name|
+      text = File.read(name)
+      replace = text.gsub(findstr,replacestr)
+      if text != replace
+          puts "Fix: " + name
+          File.open(name, "w") { |file| file.puts replace }
+          STDOUT.flush
+      end
+  end
+  Dir[dir + '*/'].each(&method(:find_and_replace))
 end
