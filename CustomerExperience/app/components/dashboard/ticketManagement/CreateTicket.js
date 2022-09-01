@@ -129,6 +129,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderTopStartRadius: 8,
     borderTopEndRadius: 8,
+    marginHorizontal: MarginConstants.tab1,
+    marginTop: MarginConstants.tab1,
   },
   rowContainer: {
     flex: 1,
