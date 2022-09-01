@@ -36,95 +36,115 @@ import {CloseButton} from '../../../routes/CommonScreen';
 import QPButton from '../../../widgets/Button';
 
 export default function CreateTicket(props) {
-  const [headerTitle, setHeaderTitle] = useState('Create Ticket');
+  const [headerTitle, setHeaderTitle] = useState('Create New Ticket');
   const [ticket, setTicket] = useState({});
 
   const getIonIcon = (iconName) => (
-    <IonIcons name={iconName} size={18} color={Colors.lightBlack} />
+    <IonIcons name={iconName} size={14} color={Colors.lightBlack} />
   );
 
   const getMaterialIcon = (iconName) => (
-    <MaterialIcon name={iconName} size={18} color={Colors.lightBlack} />
+    <MaterialIcon name={iconName} size={14} color={Colors.lightBlack} />
   );
 
   const getMateriaCommunityIcon = (iconName) => (
     <MaterialCommunityIcon
       name={iconName}
-      size={18}
+      size={14}
       color={Colors.lightBlack}
     />
   );
+
+  const handleStatusSelection = () => {
+    // open status selection bottom sheet
+  };
 
   const handlePrioritySelection = () => {
     // open priority selection bottom sheet
   };
 
-  return (
-    // <BottomSheet>
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.container}>
-        <View style={[styles.rowContainer, {justifyContent: 'space-between'}]}>
-          <Text style={styles.headerText}>{headerTitle}</Text>
-          <CloseButton color={Colors.filterIconColor} />
-        </View>
-        <View style={[styles.rowContainer, styles.rowItem]}>
-          {getIonIcon('star')}
-          <TextInput placeholder="Segment" style={styles.titleText} />
-        </View>
-        <View style={[styles.rowContainer, styles.rowItem]}>
-          {getMaterialIcon('date-range')}
-          <TextInput placeholder="Date" style={styles.titleText} />
-        </View>
-        <View style={[styles.rowContainer, styles.rowItem]}>
-          {getIonIcon('person')}
-          <TextInput placeholder="Customer Name" style={styles.titleText} />
-        </View>
-        <View style={[styles.rowContainer, styles.rowItem]}>
-          {getIonIcon('call')}
-          <TextInput placeholder="Phone" style={styles.titleText} />
-        </View>
+  const handleSegmentSelection = () => {
+    // open segment selection bottom sheet
+  };
 
-        <View style={[styles.rowContainer, styles.rowItem]}>
-          {getIonIcon('mail')}
-          <TextInput placeholder="Email" style={styles.titleText} />
-        </View>
-        <TouchableOpacity onPress={handlePrioritySelection}>
-          <View style={[styles.rowContainer, styles.rowItem]}>
-            <IonIcons name="flag" size={20} color={Colors.lightBlack} />
-            <TextInput placeholder="Priority" style={styles.titleText} />
+  const handleCreateTicket = () => {
+    props.navigation.goBack();
+  };
+
+  return (
+    <SafeAreaView style={styles.rootContainer}>
+      <View style={styles.container}>
+        <ScrollView style={styles.container}>
+          <View
+            style={[styles.rowContainer, {justifyContent: 'space-between'}]}>
+            <Text style={styles.headerText}>{headerTitle}</Text>
+            <CloseButton color={Colors.filterIconColor} />
           </View>
-        </TouchableOpacity>
-        <View style={[styles.rowContainer, styles.rowItem]}>
-          <IonIcons name="search" size={20} color={Colors.lightBlack} />
-          <TextInput placeholder="Status" style={styles.titleText} />
-        </View>
-        <View style={[styles.rowContainer, styles.rowItem]}>
-          {getIonIcon('eye')}
-          {/* {getIonIcon('eye-off')} */}
-          <TextInput placeholder="Watching" style={styles.titleText} />
-        </View>
-        <View style={[styles.rowContainer, styles.rowItem]}>
-          {getMateriaCommunityIcon('shield-account')}
-          <TextInput placeholder="Ticket Owner" style={styles.titleText} />
-        </View>
-        <View style={[styles.rowContainer, styles.rowItem]}>
-          {getMaterialIcon('chat-bubble')}
-          <TextInput placeholder="Add Comments" style={styles.titleText} />
-        </View>
-        <View style={[styles.rowContainer, styles.rowButton]}>
-          <QPButton
-            buttonColor={Colors.accentLight}
-            buttonText={'Create Ticket'}
-          />
-        </View>
-      </ScrollView>
+          <View style={[styles.rowContainer, styles.rowItem]}>
+            {getIonIcon('star')}
+            <TextInput placeholder="Segment" style={styles.titleText} />
+          </View>
+          <View style={[styles.rowContainer, styles.rowItem]}>
+            {getMaterialIcon('date-range')}
+            <TextInput placeholder="Date" style={styles.titleText} />
+          </View>
+          <View style={[styles.rowContainer, styles.rowItem]}>
+            {getIonIcon('person')}
+            <TextInput placeholder="Customer Name" style={styles.titleText} />
+          </View>
+          <View style={[styles.rowContainer, styles.rowItem]}>
+            {getIonIcon('call')}
+            <TextInput placeholder="Phone" style={styles.titleText} />
+          </View>
+
+          <View style={[styles.rowContainer, styles.rowItem]}>
+            {getIonIcon('mail')}
+            <TextInput placeholder="Email" style={styles.titleText} />
+          </View>
+          <TouchableOpacity onPress={handlePrioritySelection}>
+            <View style={[styles.rowContainer, styles.rowItem]}>
+              {getIonIcon('flag')}
+              <TextInput placeholder="Priority" style={styles.titleText} />
+            </View>
+          </TouchableOpacity>
+          <View style={[styles.rowContainer, styles.rowItem]}>
+            {getIonIcon('search')}
+            <TextInput placeholder="Status" style={styles.titleText} />
+          </View>
+          <View style={[styles.rowContainer, styles.rowItem]}>
+            {getIonIcon('eye')}
+            {/* {getIonIcon('eye-off')} */}
+            <TextInput placeholder="Watching" style={styles.titleText} />
+          </View>
+          <View style={[styles.rowContainer, styles.rowItem]}>
+            {getMateriaCommunityIcon('shield-account')}
+            <TextInput placeholder="Ticket Owner" style={styles.titleText} />
+          </View>
+          <View style={[styles.rowContainer, styles.rowItem]}>
+            {getMaterialIcon('chat-bubble')}
+            <TextInput placeholder="Add Comments" style={styles.titleText} />
+          </View>
+          <View style={[styles.rowContainer, styles.rowButton]}>
+            <QPButton
+              onPress={handleCreateTicket}
+              buttonColor={Colors.accentLight}
+              buttonText={'Create Ticket'}
+              textStyle={{
+                fontFamily: FontFamily.light,
+                fontSize: TextSizes.primary,
+                color: Colors.white,
+              }}
+              style={styles.buttonStyle}
+            />
+          </View>
+        </ScrollView>
+      </View>
     </SafeAreaView>
-    // </BottomSheet>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  rootContainer: {
     flex: 1,
     backgroundColor: Colors.white,
     borderTopStartRadius: 8,
@@ -132,6 +152,15 @@ const styles = StyleSheet.create({
     marginHorizontal: MarginConstants.tab1,
     marginTop: MarginConstants.tab1,
   },
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
+
+    marginTop: MarginConstants.tab1,
+  },
+
   rowContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -145,21 +174,29 @@ const styles = StyleSheet.create({
   },
   titleText: {
     flex: 1,
-    fontFamily: FontFamily.medium,
+    fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,
   },
   rowItem: {
-    margin: MarginConstants.tab2,
+    margin: MarginConstants.tab1,
     alignItems: 'center',
     padding: PaddingConstants.halfTab,
-    borderBottomColor: Colors.filterIconColor,
+    borderBottomColor: Colors.darkGrey,
     borderBottomWidth: 1,
   },
   rowButton: {
     marginHorizontal: MarginConstants.tab2,
     alignItems: 'center',
     paddingHorizontal: PaddingConstants.halfTab,
+  },
+  buttonStyle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: MarginConstants.tab2,
+    padding: MarginConstants.tab1,
+    flex: 1,
+    borderRadius: 2,
   },
 });
