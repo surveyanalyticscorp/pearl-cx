@@ -1,6 +1,7 @@
 import FeedbackSorter from '../components/feedback/FeedbackSorter';
 import {StyleSheet, View} from 'react-native';
-import CreateTicket from '../components/dashboard/components/CreateTicket';
+// import CreateTicket from '../components/dashboard/components/CreateTicket';
+import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Feedback from '../components/feedback/Feedback';
@@ -62,8 +63,10 @@ const ClosedLoopStack = ({navigation}) => {
         component={TicketDetails}
         options={({navigation, route}) => ({
           // headerShown: false,
+          title: 'Ticket Details',
           headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
-          headerRight: (props) => <EditTicket {...props} route={route} />,
+          headerRight: (props) => <View />,
+          // headerRight: (props) => <EditTicket {...props} route={route} />,
           // headerLeft: (props) => <MenuIcon />,
         })}
       />
@@ -76,6 +79,16 @@ const ClosedLoopStack = ({navigation}) => {
           // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
           // headerRight: (props) => <EditTicket {...props} route={route} />,
           // headerLeft: (props) => <MenuIcon />,
+        })}
+      />
+      <FeedbackStack.Screen
+        mode="modal"
+        name="New Ticket"
+        component={CreateTicket}
+        options={({navigation, route}) => ({
+          headerShown: false,
+          // headerLeft: (props) => <View />,
+          // headerRight: (props) => <CloseButton />,
         })}
       />
 

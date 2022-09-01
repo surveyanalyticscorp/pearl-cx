@@ -15,7 +15,7 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {SearchIcon} from '../../routes/CommonScreen';
+import {FabAddButton, SearchIcon} from '../../routes/CommonScreen';
 import style from '../../widgets/qp-calendar/calendar/header/style';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
@@ -85,6 +85,10 @@ export default function ClosedLoop(props) {
     props.navigation.navigate('TicketDetails');
   };
 
+  const onFabHandler = () => {
+    props.navigation.navigate('New Ticket');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {<HeaderFilter />}
@@ -98,6 +102,7 @@ export default function ClosedLoop(props) {
       {/* <CreateTicket /> */}
       {/* <SendEmail /> */}
       {/* <TakeActionScreen /> */}
+      <FabAddButton onPress={onFabHandler} />
     </SafeAreaView>
   );
 }

@@ -447,7 +447,7 @@ export default function TicketOverview(props) {
     ];
 
     return (
-      <View style={{backgroundColor: Colors.white, height: '100%'}}>
+      <View style={styles.contentContainer}>
         <TicketTakeAction
           data={data}
           handleOnPress={(item) => handleTicketAction(item)}
@@ -674,4 +674,5 @@ const styles = StyleSheet.create({
     marginVertical: MarginConstants.tab1,
     color: Colors.filterIconColor,
   },
+  contentContainer: {backgroundColor: Colors.white, height: '100%'},
 });

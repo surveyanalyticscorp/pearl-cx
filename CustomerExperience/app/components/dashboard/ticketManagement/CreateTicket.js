@@ -1,6 +1,13 @@
 import React, {useState} from 'react';
 import SafeAreaView from 'react-native-safe-area-view';
-import {ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -48,6 +55,10 @@ export default function CreateTicket(props) {
     />
   );
 
+  const handlePrioritySelection = () => {
+    // open priority selection bottom sheet
+  };
+
   return (
     // <BottomSheet>
     <SafeAreaView style={styles.container}>
@@ -77,10 +88,12 @@ export default function CreateTicket(props) {
           {getIonIcon('mail')}
           <TextInput placeholder="Email" style={styles.titleText} />
         </View>
-        <View style={[styles.rowContainer, styles.rowItem]}>
-          <IonIcons name="flag" size={20} color={Colors.lightBlack} />
-          <TextInput placeholder="Priority" style={styles.titleText} />
-        </View>
+        <TouchableOpacity onPress={handlePrioritySelection}>
+          <View style={[styles.rowContainer, styles.rowItem]}>
+            <IonIcons name="flag" size={20} color={Colors.lightBlack} />
+            <TextInput placeholder="Priority" style={styles.titleText} />
+          </View>
+        </TouchableOpacity>
         <View style={[styles.rowContainer, styles.rowItem]}>
           <IonIcons name="search" size={20} color={Colors.lightBlack} />
           <TextInput placeholder="Status" style={styles.titleText} />
@@ -114,6 +127,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
   },
   rowContainer: {
     flex: 1,
@@ -127,6 +142,7 @@ const styles = StyleSheet.create({
     color: Colors.filterIconColor,
   },
   titleText: {
+    flex: 1,
     fontFamily: FontFamily.medium,
     fontSize: TextSizes.secondary,
     padding: PaddingConstants.tab1,
