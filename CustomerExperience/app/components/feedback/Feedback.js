@@ -31,6 +31,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {dashboardStyles} from '../dashboard/dashboard.style';
 import {translate} from '../../Utils/MultilinguaUtils';
 import MainDropDown from '../../widgets/drop-down/MainDropDown';
+import {FabAddButton} from '../../routes/CommonScreen';
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
 
@@ -343,6 +344,10 @@ const renderFeedbackScene = (props) => {
     }
   };
 
+  const onFabHandler = () => {
+    props.navigation.navigate(translate('responses.new_ticket'));
+  };
+
   let renderFeedbackList = () => {
     return (
       <View style={dashboardStyles.container}>
@@ -362,6 +367,7 @@ const renderFeedbackScene = (props) => {
           )}
           // ListHeaderComponent={renderResponseFilterView}
         />
+        <FabAddButton onPress={onFabHandler} />
       </View>
     );
   };
