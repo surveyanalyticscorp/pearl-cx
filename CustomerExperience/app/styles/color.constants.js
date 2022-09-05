@@ -73,6 +73,70 @@ const buttonColors = {
   negative: Colors.secondary,
 };
 
+const getStatusBorderColor = (_status) => {
+  switch (_status) {
+    case 'Open':
+      return statusColors.openBorder;
+    case 'Closed':
+      return statusColors.closedBorder;
+    case 'Escalated':
+      return statusColors.escalatedBorder;
+    case 'Overdue':
+      return statusColors.overDueBorder;
+    case 'Resolved':
+      return statusColors.resolvedBorder;
+    default:
+      return statusColors.newBorder;
+  }
+};
+
+const getStatusFillerColor = (_status) => {
+  switch (_status) {
+    case 'Open':
+      return statusColors.openFiller;
+    case 'Closed':
+      return statusColors.closedFiller;
+    case 'Escalated':
+      return statusColors.escalatedFiller;
+    case 'Overdue':
+      return statusColors.overDueFiller;
+    case 'Resolved':
+      return statusColors.resolvedFiller;
+    default:
+      return statusColors.newFiller;
+  }
+};
+
+const getPriorityBorderColor = (_priority) => {
+  switch (_priority) {
+    case 'Critical':
+      return priorityColors.critical.border;
+    case 'High':
+      return priorityColors.high.border;
+    case 'Normal':
+      return priorityColors.normal.border;
+    case 'Low':
+      return priorityColors.low.border;
+    default:
+      return priorityColors.unassigned.border;
+  }
+};
+
+const getPriorityFillerColor = (_priority) => {
+  switch (_priority) {
+    case 'Critical':
+      return priorityColors.critical.filler;
+    case 'High':
+      return priorityColors.high.filler;
+    case 'Normal':
+      return priorityColors.normal.filler;
+    case 'Low':
+      return priorityColors.low.filler;
+    default:
+      return priorityColors.unassigned.filler;
+  }
+};
+
 const statusColors = {
   openBorder: Colors.promoter,
   openFiller: '#9FE4AC',
@@ -119,4 +183,14 @@ const priorityColors = {
 export const PROGRESS_COLOR_INCOMPLETE = '#DD4F43';
 export const PROGRESS_COLOR_TERMINATED = '#FFCE42';
 
-export {Colors, textColors, buttonColors, statusColors, priorityColors};
+export {
+  Colors,
+  textColors,
+  buttonColors,
+  statusColors,
+  priorityColors,
+  getPriorityBorderColor,
+  getPriorityFillerColor,
+  getStatusBorderColor,
+  getStatusFillerColor,
+};

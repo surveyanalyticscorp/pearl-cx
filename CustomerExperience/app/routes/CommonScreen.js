@@ -13,7 +13,11 @@ import {
 } from '@react-navigation/native';
 import UpdateTicket from '../components/dashboard/ticketManagement/UpdateTicket';
 import React from 'react';
-import {Colors} from '../styles/color.constants';
+import {
+  Colors,
+  getStatusBorderColor,
+  getStatusFillerColor,
+} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import DashboardDateFilter from '../components/dashboard/components/DashboardDateFilter';
@@ -117,6 +121,21 @@ export const BottomSheetHeader = (props) => {
 
 export const listItemSeparator = () => {
   return <View style={{height: 0.5, backgroundColor: Colors.darkGrey}} />;
+};
+
+export const RenderStatusIcon = (props) => {
+  return (
+    <View
+      style={{
+        borderRadius: 50,
+        borderWidth: 1,
+        borderColor: getStatusBorderColor(props.title),
+        backgroundColor: getStatusFillerColor(props.title),
+        height: props.size ?? 14,
+        width: props.size ?? 14,
+      }}
+    />
+  );
 };
 
 export const CloseButton = ({color}) => {

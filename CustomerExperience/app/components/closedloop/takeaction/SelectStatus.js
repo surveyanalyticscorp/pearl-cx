@@ -8,56 +8,30 @@ import {
 } from 'react-native';
 import {
   Colors,
-  getPriorityBorderColor,
-  getPriorityFillerColor,
+  getStatusBorderColor,
+  getStatusFillerColor,
 } from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-
-const SelectPriority = (props) => {
+import StatusItem from './StatusItem';
+const SelectStatus = (props) => {
   const [data, setData] = useState(props.data);
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
 
   const renderRow = ({item, index}) => {
-    const borderColor = getPriorityBorderColor(item.title);
-    const backgroundColor = getPriorityFillerColor(item.title);
-
     return (
-      <TouchableWithoutFeedback
-        onPress={
-          () => {
-            props.handleOnPress(item, index);
-            setSelectedIndex(index);
-          }
-          // handleOnPress(item)
-        }>
-        <View
-          style={[
-            styles.row,
-            {borderColor: borderColor, backgroundColor: backgroundColor},
-          ]}>
-          <IonIcon
-            style={{marginHorizontal: MarginConstants.halfTab}}
-            name={item.icon}
-            size={20}
-            color={borderColor}
-          />
-          <Text style={styles.title}>{item.title}</Text>
-          {selectedIndex === index ? (
-            <IonIcon
-              style={{marginHorizontal: MarginConstants.halfTab}}
-              name={'checkmark'}
-              size={20}
-              color={Colors.filterIconColor}
-            />
-          ) : (
-            <View />
-          )}
-        </View>
-      </TouchableWithoutFeedback>
+      <StatusItem
+        item={item}
+        selectedIndex={selectedIndex}
+        index={index}
+        onPressHandler={() => {
+          props.handleOnPress(item, index);
+          setSelectedIndex(index);
+        }}
+      />
     );
   };
 
@@ -73,7 +47,7 @@ const SelectPriority = (props) => {
   );
 };
 
-export default SelectPriority;
+export default SelectStatus;
 
 const styles = StyleSheet.create({
   container: {

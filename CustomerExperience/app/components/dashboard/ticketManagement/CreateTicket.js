@@ -8,39 +8,62 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Colors} from '../../../styles/color.constants';
+import {
+  Colors,
+  getPriorityFillerColor,
+  getPriorityBorderColor,
+  priorityColors,
+  getStatusBorderColor,
+} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
-// import ModalDropdown from '../../../widgets/drop-down/ModalDropdown';
-// import {connect} from 'react-redux';
-// import {
-//   clearDetractorTicketDetails,
-//   getClosedLoopOwnerDetails,
-//   getClosedLoopSegmentDetails,
-//   updateTicket,
-// } from '../../../redux/actions/dashboard.actions';
-// import ArrayUtils from '../../../Utils/ArrayUtils';
-// import StringUtils from '../../../Utils/StringUtils';
-// import {updateClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
-// import QPSpinner from '../../../widgets/QPSpinner';
-// import {showErrorFlashMessage} from '../../../Utils/Utility';
-// import {wantToReloadDashboard} from '../../../redux/actions';
-// import {translate} from '../../../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CloseButton} from '../../../routes/CommonScreen';
+import {
+  CloseButton,
+  BottomSheetHeader,
+  RenderStatusIcon,
+} from '../../../routes/CommonScreen';
 
 import QPButton from '../../../widgets/Button';
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from 'react-native-reanimated';
+import SelectPriority from '../../closedloop/takeaction/SelectPriority';
+import SelectStatus from '../../closedloop/takeaction/SelectStatus';
 
 export default function CreateTicket(props) {
   const [headerTitle, setHeaderTitle] = useState('Create New Ticket');
   const [ticket, setTicket] = useState({});
 
-  const getIonIcon = (iconName) => (
-    <IonIcons name={iconName} size={14} color={Colors.lightBlack} />
+  const [priority, setPriority] = useState('Unassigned');
+  const [priorityIndex, setPriorityIndex] = useState(4);
+
+  const [bottomSheet, setBottomSheet] = useState('priority');
+
+  const [status, setStatus] = useState('New');
+  const [statusIndex, setStatusIndex] = useState(0);
+
+  // variables for bottom sheet
+  const priorityBottomSheet = React.useRef(null);
+  const statusBottomSheet = React.useRef(null);
+  const segmentBottomSheet = React.useRef(null);
+
+  const fall = new Animated.Value(1);
+  const priorityBottomSheetSnapPoints = ['45%', '0%'];
+  const statusBottomSheetSnapPoints = ['45%', '0%'];
+  const segmentBottomSheetSnapPoints = ['33%', '0%'];
+
+  const [shadow, setShadow] = useState(false);
+
+  const getIonIcon = (iconName, iconColor) => (
+    <IonIcons
+      name={iconName}
+      size={14}
+      color={iconColor ?? Colors.lightBlack}
+    />
   );
 
   const getMaterialIcon = (iconName) => (
@@ -55,12 +78,22 @@ export default function CreateTicket(props) {
     />
   );
 
+  const closeAllBottomSheet = () => {
+    priorityBottomSheet.current.snapTo(
+      priorityBottomSheetSnapPoints.length - 1,
+    );
+    statusBottomSheet.current.snapTo(statusBottomSheetSnapPoints.length - 1);
+  };
+
   const handleStatusSelection = () => {
     // open status selection bottom sheet
+    statusBottomSheet.current.snapTo(0);
   };
 
   const handlePrioritySelection = () => {
     // open priority selection bottom sheet
+    // closeAllBottomSheet();
+    priorityBottomSheet.current.snapTo(0);
   };
 
   const handleSegmentSelection = () => {
@@ -69,6 +102,113 @@ export default function CreateTicket(props) {
 
   const handleCreateTicket = () => {
     props.navigation.goBack();
+  };
+
+  const renderPrioritySelectContent = () => {
+    const data = [
+      {id: 1, title: 'Critical', icon: 'flag'},
+      {id: 2, title: 'High', icon: 'flag'},
+      {id: 3, title: 'Normal', icon: 'flag'},
+      {id: 4, title: 'Low', icon: 'flag'},
+      {id: 5, title: 'Unassigned', icon: 'flag'},
+    ];
+
+    return (
+      <View style={styles.contentContainer}>
+        <SelectPriority
+          data={data}
+          selectedIndex={priorityIndex}
+          handleOnPress={(item, index) => {
+            console.log(JSON.stringify(item));
+            setPriority(item.title);
+            setPriorityIndex(index);
+          }}
+        />
+      </View>
+    );
+  };
+
+  const renderStatusSelectContent = () => {
+    const data = [
+      {id: 1, title: 'New'},
+      {id: 2, title: 'Open'},
+      {id: 3, title: 'Escalated'},
+      {id: 4, title: 'Overdue'},
+      {id: 5, title: 'Resolved'},
+      {id: 5, title: 'Closed'},
+    ];
+
+    return (
+      <View style={styles.contentContainer}>
+        <SelectStatus
+          data={data}
+          selectedIndex={statusIndex}
+          handleOnPress={(item, index) => {
+            console.log(JSON.stringify(item));
+            setStatus(item.title);
+            setStatusIndex(index);
+          }}
+        />
+      </View>
+    );
+  };
+
+  const renderPriorityHeader = (_title) => {
+    return (
+      <BottomSheetHeader
+        title={'Select Priority'}
+        onPressClose={() =>
+          priorityBottomSheet.current.snapTo(
+            priorityBottomSheetSnapPoints.length - 1,
+          )
+        }
+      />
+    );
+  };
+
+  const renderStatusHeader = (_title) => {
+    return (
+      <BottomSheetHeader
+        title={'Select Status'}
+        onPressClose={() =>
+          statusBottomSheet.current.snapTo(
+            statusBottomSheetSnapPoints.length - 1,
+          )
+        }
+      />
+    );
+  };
+
+  const RenderPriorityBottomSheet = () => {
+    return (
+      <BottomSheet
+        ref={priorityBottomSheet}
+        snapPoints={priorityBottomSheetSnapPoints}
+        initialSnap={priorityBottomSheetSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderPrioritySelectContent}
+        renderHeader={renderPriorityHeader}
+        callbackNode={fall}
+        onCloseEnd={() => setShadow(false)}
+        onOpenStart={() => setShadow(true)}
+      />
+    );
+  };
+
+  const RenderStatusBottomSheet = () => {
+    return (
+      <BottomSheet
+        ref={statusBottomSheet}
+        snapPoints={statusBottomSheetSnapPoints}
+        initialSnap={statusBottomSheetSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderStatusSelectContent}
+        renderHeader={renderStatusHeader}
+        callbackNode={fall}
+        onCloseEnd={() => setShadow(false)}
+        onOpenStart={() => setShadow(true)}
+      />
+    );
   };
 
   return (
@@ -101,16 +241,27 @@ export default function CreateTicket(props) {
             {getIonIcon('mail')}
             <TextInput placeholder="Email" style={styles.titleText} />
           </View>
+
           <TouchableOpacity onPress={handlePrioritySelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
-              {getIonIcon('flag')}
-              <TextInput placeholder="Priority" style={styles.titleText} />
+              {getIonIcon('flag', getPriorityBorderColor(priority))}
+              <Text style={styles.titleText}>{`${
+                priority ?? 'Unassigned'
+              } Priority`}</Text>
+              {/* <TextInput placeholder="Priority" style={styles.titleText} /> */}
             </View>
           </TouchableOpacity>
-          <View style={[styles.rowContainer, styles.rowItem]}>
-            {getIonIcon('search')}
-            <TextInput placeholder="Status" style={styles.titleText} />
-          </View>
+
+          <TouchableOpacity onPress={handleStatusSelection}>
+            <View style={[styles.rowContainer, styles.rowItem]}>
+              {/* {getIonIcon('search')} */}
+              {/* <TextInput placeholder="Status" style={styles.titleText} /> */}
+              <RenderStatusIcon title={status ?? 'New'} size={14} />
+              <Text style={styles.titleText}>{`${
+                status ?? 'New'
+              } Status`}</Text>
+            </View>
+          </TouchableOpacity>
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getIonIcon('eye')}
             {/* {getIonIcon('eye-off')} */}
@@ -139,6 +290,8 @@ export default function CreateTicket(props) {
           </View>
         </ScrollView>
       </View>
+      <RenderPriorityBottomSheet />
+      <RenderStatusBottomSheet />
     </SafeAreaView>
   );
 }
@@ -199,4 +352,5 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 2,
   },
+  contentContainer: {backgroundColor: Colors.white, height: '100%'},
 });
