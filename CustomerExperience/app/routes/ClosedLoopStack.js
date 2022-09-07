@@ -18,6 +18,7 @@ import ClosedLoop from '../components/closedloop/ClosedLoop';
 import TicketDetails from '../components/closedloop/TicketDetails';
 import TicketTakeAction from '../components/closedloop/takeaction/TIcketTakeAction';
 import SelectEmailTemplate from '../components/closedloop/takeaction/SelectEmailTemplate';
+import SendEmail from '../components/closedloop/takeaction/SendEmail';
 
 const FeedbackStack = createStackNavigator();
 
@@ -97,6 +98,17 @@ const ClosedLoopStack = ({navigation}) => {
         component={SelectEmailTemplate}
         options={({navigation, route}) => ({
           title: 'Select Template',
+          headerShown: false,
+          // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+          // headerRight: (props) => <EditTicket {...props} route={route} />,
+          // headerLeft: (props) => <MenuIcon />,
+        })}
+      />
+      <FeedbackStack.Screen
+        name={'sendEmail'}
+        component={SendEmail}
+        options={({navigation, route}) => ({
+          title: 'Send Email',
           headerShown: false,
           // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
           // headerRight: (props) => <EditTicket {...props} route={route} />,

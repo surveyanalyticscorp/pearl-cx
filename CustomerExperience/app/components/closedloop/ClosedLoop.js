@@ -24,7 +24,7 @@ import TicketDetails from './TicketDetails';
 import TicketComments from './TicketComments';
 import TicketActivity from './TicketActivity';
 import CreateTicket from '../dashboard/ticketManagement/CreateTicket';
-import SendEmail from '../dashboard/components/SendEmail';
+import SendEmail from './takeaction/SendEmail';
 import TakeActionScreen from './TakeActionScreen';
 import TicketTakeAction from './takeaction/TIcketTakeAction';
 

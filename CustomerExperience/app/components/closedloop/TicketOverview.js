@@ -201,7 +201,7 @@ export default function TicketOverview(props) {
     console.log('takeaction');
     // props.navigation.navigate('TicketTakeAction');
     // props.navigation.navigate('SelectEmailTemplate');
-    bs.current.snapTo(0);
+    bs.current.snapTo();
   };
 
   const takeActionButton = () => {
@@ -436,6 +436,8 @@ export default function TicketOverview(props) {
 
   const handleTicketAction = (item) => {
     console.log('Selected Action', item.title);
+    bs.current.snapTo(bsSnapPoints.length - 1);
+    props.navigation.navigate('sendEmail');
   };
 
   const renderTicketTakeAction = () => {
