@@ -30,9 +30,12 @@ import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
 import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
-import TicketTakeAction from './takeaction/TIcketTakeAction';
+import TicketTakeAction from './takeaction/TicketTakeAction';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {BottomSheetHeader} from '../../routes/CommonScreen';
+import {
+  BottomSheetHeader,
+  RenderRoundImageOrColor,
+} from '../../routes/CommonScreen';
 
 export default function TicketOverview(props) {
   const statusoptions = [
@@ -225,47 +228,12 @@ export default function TicketOverview(props) {
           styles.dropdownRow,
           {backgroundColor: highlighted ? Colors.overlay : Colors.white},
         ]}>
-        {/* <View
-          style={{
-            height: 20,
-            width: 20,
-            borderRadius: 50,
-            backgroundColor: rowData.color,
-          }}/> */}
-        {renderImageOrColor(rowData)}
+        <RenderRoundImageOrColor data={rowData} />
         <Text style={styles.dropdownText}>{rowData.value}</Text>
       </View>
     );
   }
-  const renderImageOrColor = (data) => {
-    const viewStyles = StyleSheet.create({
-      color: {
-        height: 20,
-        width: 20,
-        borderRadius: 50,
-        alignSelf: 'center',
-        backgroundColor: data.color ?? Colors.transparent,
-      },
-      image: {
-        height: 20,
-        width: 20,
-        borderRadius: 50,
-        alignSelf: 'center',
-        backgroundColor: Colors.transparent,
-      },
-    });
 
-    return data.hasOwnProperty('color') ? (
-      <View style={viewStyles.color} />
-    ) : (
-      <Image
-        source={{
-          uri: data.url,
-        }}
-        style={viewStyles.image}
-      />
-    );
-  };
   const DropDownView = (options, defaultText) => {
     return (
       <View style={[{flex: 2}, styles.rowContainer]}>

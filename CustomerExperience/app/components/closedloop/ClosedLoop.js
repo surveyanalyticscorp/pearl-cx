@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   Text,
   Image,
   StyleSheet,
@@ -15,7 +16,11 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {FabAddButton, SearchIcon} from '../../routes/CommonScreen';
+import {
+  BottomSheetHeader,
+  FabAddButton,
+  SearchIcon,
+} from '../../routes/CommonScreen';
 import style from '../../widgets/qp-calendar/calendar/header/style';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
@@ -26,11 +31,50 @@ import TicketActivity from './TicketActivity';
 import CreateTicket from '../dashboard/ticketManagement/CreateTicket';
 import SendEmail from './takeaction/SendEmail';
 import TakeActionScreen from './TakeActionScreen';
-import TicketTakeAction from './takeaction/TIcketTakeAction';
+import TicketTakeAction from './takeaction/TicketTakeAction';
+import FilterTicket from './takeaction/FilterTickets';
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
 export default function ClosedLoop(props) {
+  const sampleFilterData = {
+    priority: [
+      {title: 'Critical', isChecked: false},
+      {title: 'High', isChecked: false},
+      {title: 'Normal', isChecked: false},
+      {title: 'Low', isChecked: false},
+      {title: 'Unassigned', isChecked: false},
+    ],
+    status: [
+      {title: 'New', isChecked: false},
+      {title: 'Open', isChecked: false},
+      {title: 'Escalated', isChecked: false},
+      {title: 'Overdue', isChecked: false},
+      {title: 'Resolved', isChecked: false},
+      {title: 'Closed', isChecked: false},
+    ],
+    managers: [
+      {
+        value: 'Dummy 1',
+        url: 'https://picsum.photos/id/237/200',
+        isAssigned: false,
+      },
+      {
+        value: 'Dummy 2',
+        url: 'https://picsum.photos/id/327/200',
+        isAssigned: false,
+      },
+      {
+        value: 'Dummy 3',
+        url: 'https://picsum.photos/id/247/200',
+        isAssigned: false,
+      },
+    ],
+  };
+
+  const [filterData, setFilterData] = useState(sampleFilterData);
   const sampleData = {
     dateRageText: 'Nov 14, 2017 -Mar 14, 2018',
   };
@@ -39,7 +83,11 @@ export default function ClosedLoop(props) {
   };
 
   const getFilterIcon = () => {
-    return <IonIcons name="funnel" size={20} color={Colors.lightBlack} />;
+    return (
+      <TouchableOpacity onPress={() => openFilter()}>
+        <IonIcons name="funnel" size={20} color={Colors.lightBlack} />
+      </TouchableOpacity>
+    );
   };
 
   const HeaderFilter = () => {
@@ -89,20 +137,87 @@ export default function ClosedLoop(props) {
     props.navigation.navigate('New Ticket');
   };
 
+  const renderFilterContent = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <FilterTicket
+          data={filterData}
+          onPressHandler={(item, action) => handleAction(item, action)}
+        />
+      </View>
+    );
+  };
+
+  const handleAction = (item, action) => {
+    switch (action) {
+      case 'apply':
+        applyFilter(item);
+        break;
+      default:
+        closeFilter();
+    }
+  };
+  const closeFilter = () => {
+    bs.current.snapTo(bsSnapPoints.length - 1);
+  };
+  const openFilter = () => {
+    bs.current.snapTo(0);
+  };
+
+  const applyFilter = (item) => {
+    setFilterData(item);
+    console.log('Apply filter');
+    closeFilter();
+  };
+
+  const renderFilterHeader = () => {
+    return (
+      <BottomSheetHeader
+        title={'Ticket Filter'}
+        onPressClose={() => closeFilter()}
+      />
+    );
+  };
+
+  // variables for bottom sheet
+  const bs = React.useRef(null);
+  const fall = new Animated.Value(1);
+  const bsSnapPoints = ['75%', '95%', '0%'];
+  const [shadow, setShadow] = useState(false);
+
   return (
     <SafeAreaView style={styles.container}>
-      {<HeaderFilter />}
+      <Animated.View
+        style={{
+          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+          color: shadow ? Colors.accent : Colors.borderColor,
+          flex: 1,
+        }}>
+        <HeaderFilter />
+        <ClosedLoopCell onPressHandler={onPressHandler} />
+        <FabAddButton onPress={onFabHandler} />
 
-      <ClosedLoopCell onPressHandler={onPressHandler} />
-      {/* <TicketTakeAction /> */}
-      {/* <TicketDetails /> */}
-      {/* <TicketOverview /> */}
-      {/* <TicketComments /> */}
-      {/* <TicketActivity /> */}
-      {/* <CreateTicket /> */}
-      {/* <SendEmail /> */}
-      {/* <TakeActionScreen /> */}
-      <FabAddButton onPress={onFabHandler} />
+        {/* <TicketTakeAction /> */}
+        {/* <TicketDetails /> */}
+        {/* <TicketOverview /> */}
+        {/* <TicketComments /> */}
+        {/* <TicketActivity /> */}
+        {/* <CreateTicket /> */}
+        {/* <SendEmail /> */}
+        {/* <TakeActionScreen /> */}
+        {/* <FilterTicket /> */}
+      </Animated.View>
+      <BottomSheet
+        ref={bs}
+        snapPoints={bsSnapPoints}
+        initialSnap={bsSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderFilterContent}
+        renderHeader={renderFilterHeader}
+        callbackNode={fall}
+        onCloseEnd={() => setShadow(false)}
+        onOpenStart={() => setShadow(true)}
+      />
     </SafeAreaView>
   );
 }
@@ -128,4 +243,5 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.tab1,
     margin: MarginConstants.tab1,
   },
+  contentContainer: {backgroundColor: Colors.white, height: '100%'},
 });

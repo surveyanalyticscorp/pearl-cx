@@ -16,7 +16,7 @@ import CommonScreens, {
 import {translate} from '../Utils/MultilinguaUtils';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
 import TicketDetails from '../components/closedloop/TicketDetails';
-import TicketTakeAction from '../components/closedloop/takeaction/TIcketTakeAction';
+import TicketTakeAction from '../components/closedloop/takeaction/TicketTakeAction';
 import SelectEmailTemplate from '../components/closedloop/takeaction/SelectEmailTemplate';
 import SendEmail from '../components/closedloop/takeaction/SendEmail';
 

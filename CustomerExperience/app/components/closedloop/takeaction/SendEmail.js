@@ -40,7 +40,7 @@ import style from '../../../widgets/qp-calendar/calendar/header/style';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import QPTextField from '../../../widgets/TextField';
-
+import BottomSheet from 'reanimated-bottom-sheet';
 export default function SendEmail(props) {
   const richText = React.useRef();
 
@@ -200,6 +200,7 @@ export default function SendEmail(props) {
           </KeyboardAvoidingView>
         </View>
       </ScrollView>
+      <BottomSheet />
     </SafeAreaView>
   );
 }

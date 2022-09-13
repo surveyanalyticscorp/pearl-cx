@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
 import FeedbackDetails from '../components/feedback/FeedbackDetails';
 import {
@@ -32,6 +33,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import {FontFamily} from '../styles/font.constants';
 import DetractorScenes from '../components/dashboard/components/DetractorScenes';
 import {translate} from '../Utils/MultilinguaUtils';
+import CheckBox from '@react-native-community/checkbox';
 
 const DateRangeTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
@@ -196,6 +198,63 @@ export const SaveDashboardDate = (props) => {
         <Text style={styles.saveText}> {translate('date_filter.save')} </Text>
       </TouchableOpacity>
     </View>
+  );
+};
+
+export const RenderRoundImageOrColor = ({data}, props) => {
+  const size = props.size ?? 20;
+  const viewStyles = StyleSheet.create({
+    color: {
+      height: size,
+      width: size,
+      borderRadius: 50,
+      alignSelf: 'center',
+      backgroundColor: data.color ?? Colors.transparent,
+    },
+    image: {
+      height: size,
+      width: size,
+      borderRadius: 50,
+      alignSelf: 'center',
+      backgroundColor: Colors.transparent,
+    },
+  });
+
+  return data.hasOwnProperty('color') ? (
+    <View style={viewStyles.color} />
+  ) : (
+    <Image
+      source={{
+        uri: data.url,
+      }}
+      style={viewStyles.image}
+    />
+  );
+};
+
+export const CheckBoxItem = ({item, index, onPress}, props) => {
+  const textStyle = props.textStyle ?? styles.checkBoxText;
+  return (
+    <TouchableOpacity onPress={() => onPress(index)}>
+      <View style={styles.checkBoxRow}>
+        {/* <CheckBox
+          disabled={false}
+          value={item.isChecked}
+          onCheckColor={Colors.accentLight}
+          boxType={'square'}
+          onValueChange={(newValue) => {
+            // onPress(index);
+          }}
+        /> */}
+        <IonIcons
+          name={item.isChecked ? 'checkbox' : 'square-outline'}
+          size={24}
+          color={Colors.accentLight}
+          style={{marginHorizontal: MarginConstants.halfTab}}
+        />
+        <Text style={textStyle}>{item.title}</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -424,5 +483,16 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.largeText,
     marginVertical: MarginConstants.halfTab,
     color: Colors.filterIconColor,
+  },
+  checkBoxRow: {
+    flexDirection: 'row',
+    padding: PaddingConstants.halfTab,
+    alignItems: 'center',
+  },
+  checkBoxText: {
+    color: Colors.filterIconColor,
+    textAlignVertical: 'center',
+    fontSize: TextSizes.secondary,
+    fontFamily: FontFamily.regular,
   },
 });
