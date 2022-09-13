@@ -56,9 +56,18 @@ export default function TicketOverview(props) {
   ];
 
   const userOptions = [
-    {value: 'Dummy 1', url: 'https://picsum.photos/id/237/200'},
-    {value: 'Dummy 2', url: 'https://picsum.photos/id/327/200'},
-    {value: 'Dummy 3', url: 'https://picsum.photos/id/247/200'},
+    {
+      value: 'Dummy 1',
+      url: 'https://images.dog.ceo/breeds/labradoodle/labradoodle-forrest.png',
+    },
+    {
+      value: 'Dummy 2',
+      url: 'https://images.dog.ceo/breeds/labradoodle/labradoodle-forrest.png',
+    },
+    {
+      value: 'Dummy 3',
+      url: 'https://images.dog.ceo/breeds/labradoodle/labradoodle-forrest.png',
+    },
   ];
   const departmentOptions = ['Sales', 'Client Services'];
 

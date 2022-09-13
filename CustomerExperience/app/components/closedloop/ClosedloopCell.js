@@ -9,7 +9,14 @@ import {
 import StringUtils from '../../Utils/StringUtils';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import {Colors, statusColors} from '../../styles/color.constants';
+import {
+  Colors,
+  getPriorityBorderColor,
+  getPriorityFillerColor,
+  getStatusBorderColor,
+  getStatusFillerColor,
+  statusColors,
+} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
@@ -20,6 +27,8 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 
 export default function ClosedLoopCell(props) {
+  const data = props.data;
+
   let sampleText =
     'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...';
   let [isTapped, setTapped] = useState(false);
@@ -33,7 +42,7 @@ export default function ClosedLoopCell(props) {
   }, [isTapped]);
 
   const getTicketID = () => {
-    return <Text style={styles.idText}>{'ID 9033212'} </Text>;
+    return <Text style={styles.idText}>{`ID ${data.ticketId}`} </Text>;
   };
 
   let getNPSIcon = (sentiment) => {
@@ -83,8 +92,8 @@ export default function ClosedLoopCell(props) {
     return (
       <View style={styles.rowContainer}>
         <View style={[{flex: 2}, styles.rowContainer]}>
-          {getNPSIcon('Detractor')}
-          {getNPSScore('2', 'Detractor')}
+          {getNPSIcon(data.nps)}
+          {getNPSScore(data.npsScore, data.nps)}
         </View>
         <View
           style={[{flex: 2, justifyContent: 'flex-end'}, styles.rowContainer]}>
@@ -97,8 +106,8 @@ export default function ClosedLoopCell(props) {
   const getNameANdDateRow = () => {
     return (
       <View style={styles.rowContainer}>
-        <Text style={styles.userNameText}>Jessica Parker</Text>
-        <Text style={styles.dateText}> · May 15, 2022</Text>
+        <Text style={styles.userNameText}>{data.customerName}</Text>
+        <Text style={styles.dateText}>{` · ${data.date}`}</Text>
       </View>
     );
   };
@@ -107,13 +116,16 @@ export default function ClosedLoopCell(props) {
     return (
       <View style={styles.rowContainer}>
         <Text style={styles.detailsText} numberOfLines={3} ellipsizeMode="tail">
-          {sampleText}
+          {data.messsage}
         </Text>
       </View>
     );
   };
 
-  const getStatusUI = () => {
+  const getStatusUI = (status) => {
+    const borderColor = getStatusBorderColor(status.toLowerCase());
+    const fillerColor = getStatusFillerColor(status.toLowerCase());
+
     return (
       <View style={styles.rowContainer}>
         <View
@@ -122,34 +134,34 @@ export default function ClosedLoopCell(props) {
             height: 20,
 
             borderRadius: 50,
-            borderColor: statusColors.escalatedBorder,
+            borderColor: borderColor,
             borderWidth: 1,
-            backgroundColor: statusColors.escalatedFiller,
+            backgroundColor: fillerColor,
           }}
         />
-        <Text style={[{marginHorizontal: 4}, styles.statusText]}>
-          Escalated
-        </Text>
+        <Text style={[{marginHorizontal: 4}, styles.statusText]}>{status}</Text>
       </View>
     );
   };
 
-  const getPriorityUI = () => {
+  const getPriorityUI = (priority) => {
+    const priorityColor = getPriorityBorderColor(priority.toLowerCase());
+
     return (
       <View style={styles.rowContainer}>
-        <IonIcons name="flag" size={20} color={Colors.passive2} />
-        <Text style={[{marginStart: 4}, styles.detailsText]}>Normal</Text>
+        <IonIcons name="flag" size={20} color={priorityColor} />
+        <Text style={[{marginStart: 4}, styles.detailsText]}>{priority}</Text>
       </View>
     );
   };
 
-  const getUserPic = () => {
+  const getUserPic = (avatarUrl) => {
     return (
       <View>
         <Image
           style={{height: 24, width: 24, borderRadius: 50}}
           source={{
-            uri: 'https://reactnative.dev/img/tiny_logo.png',
+            uri: avatarUrl,
           }}
         />
       </View>
@@ -159,9 +171,9 @@ export default function ClosedLoopCell(props) {
   const getStatusRow = () => {
     return (
       <View style={styles.statusContainer}>
-        {getStatusUI()}
-        {getPriorityUI()}
-        {getUserPic()}
+        {getStatusUI(data.status)}
+        {getPriorityUI(data.priority)}
+        {getUserPic(data.userAvatar)}
       </View>
     );
   };
@@ -169,7 +181,7 @@ export default function ClosedLoopCell(props) {
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-        props.onPressHandler();
+        props.onPressHandler(props.data, props.index);
       }}
       style={styles.container}>
       <View style={styles.container}>

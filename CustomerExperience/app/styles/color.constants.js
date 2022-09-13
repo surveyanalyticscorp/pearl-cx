@@ -75,15 +75,15 @@ const buttonColors = {
 
 const getStatusBorderColor = (_status) => {
   switch (_status) {
-    case 'Open':
+    case 'open':
       return statusColors.openBorder;
-    case 'Closed':
+    case 'closed':
       return statusColors.closedBorder;
-    case 'Escalated':
+    case 'escalated':
       return statusColors.escalatedBorder;
-    case 'Overdue':
+    case 'overdue':
       return statusColors.overDueBorder;
-    case 'Resolved':
+    case 'resolved':
       return statusColors.resolvedBorder;
     default:
       return statusColors.newBorder;
@@ -92,15 +92,15 @@ const getStatusBorderColor = (_status) => {
 
 const getStatusFillerColor = (_status) => {
   switch (_status) {
-    case 'Open':
+    case 'open':
       return statusColors.openFiller;
-    case 'Closed':
+    case 'closed':
       return statusColors.closedFiller;
-    case 'Escalated':
+    case 'escalated':
       return statusColors.escalatedFiller;
-    case 'Overdue':
+    case 'overdue':
       return statusColors.overDueFiller;
-    case 'Resolved':
+    case 'resolved':
       return statusColors.resolvedFiller;
     default:
       return statusColors.newFiller;
@@ -109,13 +109,13 @@ const getStatusFillerColor = (_status) => {
 
 const getPriorityBorderColor = (_priority) => {
   switch (_priority) {
-    case 'Critical':
+    case 'critical':
       return priorityColors.critical.border;
-    case 'High':
+    case 'high':
       return priorityColors.high.border;
-    case 'Normal':
+    case 'normal':
       return priorityColors.normal.border;
-    case 'Low':
+    case 'low':
       return priorityColors.low.border;
     default:
       return priorityColors.unassigned.border;
@@ -124,13 +124,13 @@ const getPriorityBorderColor = (_priority) => {
 
 const getPriorityFillerColor = (_priority) => {
   switch (_priority) {
-    case 'Critical':
+    case 'critical':
       return priorityColors.critical.filler;
-    case 'High':
+    case 'high':
       return priorityColors.high.filler;
-    case 'Normal':
+    case 'normal':
       return priorityColors.normal.filler;
-    case 'Low':
+    case 'low':
       return priorityColors.low.filler;
     default:
       return priorityColors.unassigned.filler;

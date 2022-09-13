@@ -201,22 +201,23 @@ export const SaveDashboardDate = (props) => {
   );
 };
 
-export const RenderRoundImageOrColor = ({data}, props) => {
-  const size = props.size ?? 20;
+export const RenderRoundImageOrColor = ({data, size}) => {
+  const _size = size ?? 20;
+
   const viewStyles = StyleSheet.create({
     color: {
-      height: size,
-      width: size,
+      height: _size,
+      width: _size,
       borderRadius: 50,
       alignSelf: 'center',
+      borderColor: data.borderColor ?? Colors.transparent,
       backgroundColor: data.color ?? Colors.transparent,
     },
     image: {
-      height: size,
-      width: size,
+      height: _size,
+      width: _size,
       borderRadius: 50,
       alignSelf: 'center',
-      backgroundColor: Colors.transparent,
     },
   });
 
@@ -232,8 +233,8 @@ export const RenderRoundImageOrColor = ({data}, props) => {
   );
 };
 
-export const CheckBoxItem = ({item, index, onPress}, props) => {
-  const textStyle = props.textStyle ?? styles.checkBoxText;
+export const CheckBoxItem = ({item, index, onPress, textStyle}) => {
+  const _textStyle = textStyle ?? styles.checkBoxText;
   return (
     <TouchableOpacity onPress={() => onPress(index)}>
       <View style={styles.checkBoxRow}>
@@ -252,7 +253,7 @@ export const CheckBoxItem = ({item, index, onPress}, props) => {
           color={Colors.accentLight}
           style={{marginHorizontal: MarginConstants.halfTab}}
         />
-        <Text style={textStyle}>{item.title}</Text>
+        <Text style={_textStyle}>{item.title}</Text>
       </View>
     </TouchableOpacity>
   );

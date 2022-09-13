@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Text,
   Image,
+  FlatList,
   StyleSheet,
   SafeAreaView,
 } from 'react-native';
@@ -39,6 +40,57 @@ import BottomSheet from 'reanimated-bottom-sheet';
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
 export default function ClosedLoop(props) {
+  const sampleTicketList = [
+    {
+      customerName: 'Jassica Palm',
+      ticketId: '9033212',
+      npsScore: '3',
+      nps: 'Detractor',
+      priority: 'Normal',
+      status: 'Escalated',
+      date: '15 May, 2022',
+      userAvatar: 'https://reactnative.dev/img/tiny_logo.png',
+      messsage:
+        'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...',
+    },
+    {
+      customerName: 'Jil Kirk',
+      ticketId: '9033213',
+      npsScore: '2',
+      nps: 'Detractor',
+      priority: 'Normal',
+      status: 'Escalated',
+      date: '15 May, 2022',
+      userAvatar: 'https://reactnative.dev/img/tiny_logo.png',
+      messsage:
+        'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...',
+    },
+    {
+      customerName: 'Jassica Palm',
+      ticketId: '9033214',
+      npsScore: '2',
+      nps: 'Detractor',
+      priority: 'Normal',
+      status: 'Escalated',
+      date: '15 May, 2022',
+      userAvatar: 'https://reactnative.dev/img/tiny_logo.png',
+      messsage:
+        'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...',
+    },
+    {
+      customerName: 'Jassica Palm',
+      ticketId: '9033215',
+      npsScore: '2',
+      nps: 'Detractor',
+      priority: 'Normal',
+      status: 'Escalated',
+      date: '15 May, 2022',
+      userAvatar: 'https://reactnative.dev/img/tiny_logo.png',
+      messsage:
+        'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...',
+    },
+  ];
+
   const sampleFilterData = {
     priority: [
       {title: 'Critical', isChecked: false},
@@ -129,8 +181,27 @@ export default function ClosedLoop(props) {
     );
   };
 
-  const onPressHandler = () => {
-    props.navigation.navigate('TicketDetails');
+  const ClosedLoopTicketList = () => {
+    return (
+      <FlatList
+        style={styles.container}
+        data={sampleTicketList}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item, index}) => {
+          return (
+            <ClosedLoopCell
+              data={item}
+              index={index}
+              onPressHandler={(item, index) => onPressHandler(item, index)}
+            />
+          );
+        }}
+      />
+    );
+  };
+
+  const onPressHandler = (item, index) => {
+    props.navigation.navigate('TicketDetails', item);
   };
 
   const onFabHandler = () => {
@@ -190,11 +261,11 @@ export default function ClosedLoop(props) {
       <Animated.View
         style={{
           opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-          color: shadow ? Colors.accent : Colors.borderColor,
           flex: 1,
         }}>
         <HeaderFilter />
-        <ClosedLoopCell onPressHandler={onPressHandler} />
+        <ClosedLoopTicketList />
+        {/* <ClosedLoopCell onPressHandler={onPressHandler} /> */}
         <FabAddButton onPress={onFabHandler} />
 
         {/* <TicketTakeAction /> */}
