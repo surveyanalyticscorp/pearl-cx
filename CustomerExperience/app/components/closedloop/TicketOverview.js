@@ -56,18 +56,9 @@ export default function TicketOverview(props) {
   ];
 
   const userOptions = [
-    {
-      value: 'Dummy 1',
-      url: 'https://images.dog.ceo/breeds/labradoodle/labradoodle-forrest.png',
-    },
-    {
-      value: 'Dummy 2',
-      url: 'https://images.dog.ceo/breeds/labradoodle/labradoodle-forrest.png',
-    },
-    {
-      value: 'Dummy 3',
-      url: 'https://images.dog.ceo/breeds/labradoodle/labradoodle-forrest.png',
-    },
+    {value: 'Dummy 1', url: 'https://picsum.photos/id/237/200'},
+    {value: 'Dummy 2', url: 'https://picsum.photos/id/327/200'},
+    {value: 'Dummy 3', url: 'https://picsum.photos/id/247/200'},
   ];
   const departmentOptions = ['Sales', 'Client Services'];
 
@@ -249,7 +240,6 @@ export default function TicketOverview(props) {
         <IconTextModalDropdown
           style={styles.modelDropdown}
           textStyle={styles.dropdownText}
-          dropdownStyle={styles.dropdownStyle}
           dropdownTextStyle={styles.dropdownText}
           arrowIconColor={Colors.secondary}
           options={options}
@@ -595,8 +585,7 @@ const styles = StyleSheet.create({
   },
   modelDropdown: {
     minHeight: MarginConstants.tab3,
-    justifyContent: 'flex-end',
-    alignItems: 'stretch',
+
     marginHorizontal: MarginConstants.tab1,
     paddingHorizontal: PaddingConstants.halfTab,
     borderColor: Colors.evenDarkerGrey,
@@ -618,6 +607,7 @@ const styles = StyleSheet.create({
     paddingLeft: MarginConstants.halfTab,
     paddingRight: MarginConstants.tab3,
     textAlignVertical: 'center',
+    alignSelf: 'center',
     borderColor: Colors.darkerGrey,
   },
   dropdownRow: {

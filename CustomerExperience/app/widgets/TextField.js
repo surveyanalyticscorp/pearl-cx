@@ -6,7 +6,7 @@ import {Colors} from '../styles/color.constants';
 import StringUtils from '../Utils/StringUtils';
 import {TextSizes} from '../styles/textsize.constants';
 
-const QPTextField = props => {
+const QPTextField = (props) => {
   const fieldRef = React.createRef();
   const [secureText, setSecureText] = useState(props.secureText);
   const onSubmit = () => {
@@ -19,7 +19,7 @@ const QPTextField = props => {
     props.onEndEdit && props.onEndEdit(field.value());
   };
 
-  const onChange = text => {
+  const onChange = (text) => {
     // let {current: field} = fieldRef;
     props.onChange && props.onChange(text);
   };
@@ -36,18 +36,20 @@ const QPTextField = props => {
   let icon = secureText ? 'visibility-off' : 'visibility';
 
   let renderVisibility = () => {
-    return StringUtils.isNotEmpty(props.value) && (
-      <Icon
-        style={{
-          position: 'absolute',
-          top: 38,
-          right: 10
-        }}
-        name={icon}
-        size={25}
-        color={Colors.textTintColor}
-        onPress={changePwdType}
-      />
+    return (
+      StringUtils.isNotEmpty(props.value) && (
+        <Icon
+          style={{
+            position: 'absolute',
+            top: 38,
+            right: 10,
+          }}
+          name={icon}
+          size={25}
+          color={Colors.textTintColor}
+          onPress={changePwdType}
+        />
+      )
     );
   };
 

@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   Platform,
 } from 'react-native';
-import {Colors} from '../../../styles/color.constants';
+import {Colors, priorityColors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -20,10 +20,12 @@ import {
 } from '../../../routes/CommonScreen';
 import IconTextModalDropdown from '../../../widgets/drop-down/IconTextModalDropdown';
 
-const FilterTicket = ({data, onPressHandler}, props) => {
+const FilterTicket = ({data, onPressHandler}) => {
   const [status, setStatus] = useState(data.status);
   const [priority, setPriority] = useState(data.priority);
-  const [managerlist, setManagerlist] = useState(data.managers);
+  const managerlist = data.managers;
+  let selectedManager = data.selectedManager;
+
   const RenderStatusFilter = () => {
     return (
       <View>
@@ -86,21 +88,23 @@ const FilterTicket = ({data, onPressHandler}, props) => {
   };
 
   const RenderAssigneeDropDown = () => {
+    const defaultText = selectedManager.value ?? 'Select...';
+
     return (
       <View>
         <Text style={styles.titleText}>Assignee</Text>
+
         <IconTextModalDropdown
           style={styles.modelDropdown}
           textStyle={styles.dropdownText}
-          dropdownStyle={styles.dropdownStyle}
-          dropdownTextStyle={styles.optionText}
-          arrowIconColor={Colors.evenDarkerGrey}
+          dropdownTextStyle={styles.dropdownText}
+          arrowIconColor={Colors.secondary}
           options={managerlist}
-          defaultValue={'select...'}
+          defaultValue={defaultText}
           renderRow={dropdownRenderRow}
-          onSelect={(i) => {
-            // setDataOnSelection(header, options, i);
-            // console.log(userOptions[i].value);
+          onSelect={(_index) => {
+            selectedManager = managerlist[_index];
+            console.log(selectedManager);
           }}
         />
       </View>
@@ -108,7 +112,6 @@ const FilterTicket = ({data, onPressHandler}, props) => {
   };
 
   const dropdownRenderRow = (rowData, rowID, highlighted) => {
-    console.log(rowData.value);
     return (
       <View
         style={[
@@ -116,7 +119,7 @@ const FilterTicket = ({data, onPressHandler}, props) => {
           {backgroundColor: highlighted ? Colors.overlay : Colors.white},
         ]}>
         <RenderRoundImageOrColor data={rowData} />
-        <Text style={styles.optionText}>{rowData.value}</Text>
+        <Text style={styles.dropdownText}>{rowData.value ?? rowData}</Text>
       </View>
     );
   };
@@ -133,7 +136,7 @@ const FilterTicket = ({data, onPressHandler}, props) => {
     data.status = status;
     data.priority = priority;
     data.managers = managerlist;
-
+    data.selectedManager = selectedManager;
     onPressHandler(data, 'apply');
   };
 
@@ -149,6 +152,8 @@ const FilterTicket = ({data, onPressHandler}, props) => {
       const temp = prevState.map((item) => ({...item, isChecked: false}));
       return temp;
     });
+
+    selectedManager = {};
 
     console.log(status);
   };
@@ -262,20 +267,17 @@ const styles = StyleSheet.create({
   },
 
   modelDropdown: {
-    minHeight: MarginConstants.tab4,
-    justifyContent: 'center',
-
+    minHeight: MarginConstants.tab3,
+    justifyContent: 'space-around',
     marginHorizontal: MarginConstants.tab1,
     paddingHorizontal: PaddingConstants.halfTab,
     borderColor: Colors.evenDarkerGrey,
     borderWidth: 1,
     borderRadius: 4,
-    width: '75%',
-    height: MarginConstants.tab4,
   },
   dropdownText: {
     flex: 1,
-    color: Colors.secondary,
+    color: Colors.primary,
     marginVertical: MarginConstants.tab1,
     marginHorizontal: MarginConstants.halfTab,
     fontSize: Platform.isPad
@@ -287,6 +289,7 @@ const styles = StyleSheet.create({
     paddingLeft: MarginConstants.halfTab,
     paddingRight: MarginConstants.tab3,
     textAlignVertical: 'center',
+    alignSelf: 'center',
     borderColor: Colors.darkerGrey,
   },
   dropdownRow: {

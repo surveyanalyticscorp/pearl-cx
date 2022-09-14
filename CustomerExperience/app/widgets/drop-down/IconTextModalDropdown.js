@@ -245,6 +245,8 @@ export default class IconTextModalDropdown extends Component {
       );
     };
 
+    let _buttonText = buttonText.value ?? buttonText;
+
     return (
       <TouchableOpacity
         ref={(button) => (this._button = button)}
@@ -278,7 +280,8 @@ export default class IconTextModalDropdown extends Component {
                     textStyle,
                     {textAlign: isRTL ? 'right' : 'left'},
                   ]}>
-                  {buttonText.value ?? buttonText}
+                  {console.log('Selected: ', _buttonText)}
+                  {_buttonText}
                 </Text>
               </View>
             </View>

@@ -111,19 +111,17 @@ export default function ClosedLoop(props) {
       {
         value: 'Dummy 1',
         url: 'https://picsum.photos/id/237/200',
-        isAssigned: false,
       },
       {
         value: 'Dummy 2',
         url: 'https://picsum.photos/id/327/200',
-        isAssigned: false,
       },
       {
         value: 'Dummy 3',
         url: 'https://picsum.photos/id/247/200',
-        isAssigned: false,
       },
     ],
+    selectedManager: {},
   };
 
   const [filterData, setFilterData] = useState(sampleFilterData);
@@ -265,7 +263,6 @@ export default function ClosedLoop(props) {
         }}>
         <HeaderFilter />
         <ClosedLoopTicketList />
-        {/* <ClosedLoopCell onPressHandler={onPressHandler} /> */}
         <FabAddButton onPress={onFabHandler} />
 
         {/* <TicketTakeAction /> */}
@@ -276,7 +273,10 @@ export default function ClosedLoop(props) {
         {/* <CreateTicket /> */}
         {/* <SendEmail /> */}
         {/* <TakeActionScreen /> */}
-        {/* <FilterTicket /> */}
+        {/* <FilterTicket
+          data={filterData}
+          onPressHandler={(item, action) => handleAction(item, action)}
+        /> */}
       </Animated.View>
       <BottomSheet
         ref={bs}
