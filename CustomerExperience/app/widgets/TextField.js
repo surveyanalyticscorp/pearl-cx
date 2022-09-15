@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Platform, View} from 'react-native';
+import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {TextField} from 'react-native-material-textfield';
 import {Colors} from '../styles/color.constants';

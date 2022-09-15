@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 
-const ThreeDot = props => {
+const ThreeDot = (props) => {
   let circles = [];
   for (let i = 0; i < 3; i++) {
     circles.push(<Circle color={props.color} key={i} />);
@@ -10,7 +10,7 @@ const ThreeDot = props => {
   return <View style={styles.container}>{circles}</View>;
 };
 
-const Circle = props => {
+const Circle = (props) => {
   return <View style={[styles.dot, {backgroundColor: props.color}]} />;
 };
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  Dimensions,
+  // Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -19,12 +19,16 @@ import {isStringNullOrEmpty} from '../Utils/Utility';
 import {
   ASYNC_AUTH_TOKEN,
   ASYNC_LAST_LOGIN,
-  ASYNC_PUSH_TOKEN,
+  // ASYNC_PUSH_TOKEN,
   ASYNC_USER_INFO,
   BASE_URL,
 } from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
-import {connect, useSelector, useDispatch} from 'react-redux';
+import {
+  // connect,
+  useSelector,
+  useDispatch,
+} from 'react-redux';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import AppSettings from '../components/settings/AppSettings';
@@ -47,7 +51,7 @@ import SearchTicket from '../components/dashboard/components/SearchTicket';
 import TicketFilter from '../components/dashboard/components/TicketFilter';
 import {getNotification} from '../redux/actions/notification.actions';
 import ResponsesStack from './ResponsesStack';
-import TicketsStack from './TicketsStack';
+// import TicketsStack from './TicketsStack';
 import ClosedLoopStack from './ClosedLoopStack';
 import {
   CloseButton,

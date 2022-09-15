@@ -1,17 +1,17 @@
 import React from 'react';
 import {
-  useWindowDimensions,
+  // useWindowDimensions,
   StyleSheet,
   Text,
   View,
-  FlatList,
+  // FlatList,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
-import {FontFamily} from '../../../styles/font.constants';
+// import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 

@@ -1,34 +1,38 @@
-import React, {useEffect, useState} from 'react';
+import React from // , {useEffect, useState}
+'react';
 import {
   View,
-  TouchableWithoutFeedback,
+  // TouchableWithoutFeedback,
   TouchableOpacity,
   Text,
-  Image,
+  // Image,
   StyleSheet,
-  ScrollView,
-  Platform,
+  // ScrollView,
+  // Platform,
   FlatList,
-  SafeAreaView,
+  // SafeAreaView,
   TextInput,
-  LogBox,
+  // LogBox,
 } from 'react-native';
-import StringUtils from '../../Utils/StringUtils';
-import ArrayUtils from '../../Utils/ArrayUtils';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
+// import StringUtils from '../../Utils/StringUtils';
+// import ArrayUtils from '../../Utils/ArrayUtils';
+// import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {Colors, statusColors} from '../../styles/color.constants';
+import {
+  Colors,
+  // , statusColors
+} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
-import {Sizes} from '../../styles/Size.constant';
-import moment from 'moment';
-import {translate} from '../../Utils/MultilinguaUtils';
-import IonIcons from 'react-native-vector-icons/Ionicons';
-import QPButton from '../../widgets/Button';
-import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
-import {backgroundColor} from '../../widgets/qp-calendar/style';
+// import {Sizes} from '../../styles/Size.constant';
+// import moment from 'moment';
+// import {translate} from '../../Utils/MultilinguaUtils';
+// import IonIcons from 'react-native-vector-icons/Ionicons';
+// import QPButton from '../../widgets/Button';
+// import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
+// import {backgroundColor} from '../../widgets/qp-calendar/style';
 
 export default function TicketComments(props) {
   const sampleData = [

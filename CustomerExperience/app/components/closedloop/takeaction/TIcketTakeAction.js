@@ -4,11 +4,11 @@ import {
   TouchableWithoutFeedback,
   Text,
   StyleSheet,
-  Dimensions,
+  // Dimensions,
   FlatList,
 } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {CloseButton} from '../../../routes/CommonScreen';
+// import {CloseButton} from '../../../routes/CommonScreen';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';

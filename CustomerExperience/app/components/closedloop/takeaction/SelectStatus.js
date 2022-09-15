@@ -1,21 +1,21 @@
 import React, {useState} from 'react';
 import {
   View,
-  TouchableWithoutFeedback,
-  Text,
+  // TouchableWithoutFeedback,
+  // Text,
   StyleSheet,
   FlatList,
 } from 'react-native';
 import {
   Colors,
-  getStatusBorderColor,
-  getStatusFillerColor,
+  // getStatusBorderColor,
+  // getStatusFillerColor,
 } from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import IonIcon from 'react-native-vector-icons/Ionicons';
+// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+// import IonIcon from 'react-native-vector-icons/Ionicons';
 import StatusItem from './StatusItem';
 const SelectStatus = (props) => {
   const [data, setData] = useState(props.data);

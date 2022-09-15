@@ -3,7 +3,7 @@ import {StyleSheet, View, TouchableWithoutFeedback, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {TextSizes} from '../../../styles/textsize.constants';
 
-const CXTrendItemWidget = props => {
+const CXTrendItemWidget = (props) => {
   let total = props.promoter + props.detractor + props.passive;
   let promoterPercent = (props.promoter / total) * 100;
   let detractorPercent = (props.detractor / total) * 100;
@@ -17,7 +17,7 @@ const CXTrendItemWidget = props => {
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-          props.isClickable && props.onPress();
+        props.isClickable && props.onPress();
       }}>
       <View style={styles.mainContainer}>
         <View style={styles.titleContainer}>

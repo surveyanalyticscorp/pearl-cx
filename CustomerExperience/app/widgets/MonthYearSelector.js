@@ -37,7 +37,7 @@ var styles = StyleSheet.create({
   },
 });
 const dateFormat = 'YYYY';
-const getMonthListFirstDayDate = date => {
+const getMonthListFirstDayDate = (date) => {
   const monthList = [];
   const year = date.format('YYYY');
   for (let i = 1; i < 13; i += 1) {
@@ -200,7 +200,7 @@ export default class MonthYearSelector extends Component {
           fontSize: 18,
           fontFamily: FontFamily.bold,
         }}
-        onValueChange={value => {
+        onValueChange={(value) => {
           this.validateAndSetMonth(value, this.state.selectedYear);
         }}>
         {items.map((value, i) => (
@@ -234,7 +234,7 @@ export default class MonthYearSelector extends Component {
           fontSize: 18,
           fontFamily: FontFamily.bold,
         }}
-        onValueChange={value => {
+        onValueChange={(value) => {
           this.setState({selectedYear: value}, () => {
             this.validateAndSetMonth(this.state.selectedMonth, value);
           });

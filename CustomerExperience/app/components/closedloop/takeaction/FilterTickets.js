@@ -4,12 +4,15 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
-  ScrollView,
+  // ScrollView,
   FlatList,
   SafeAreaView,
   Platform,
 } from 'react-native';
-import {Colors, priorityColors} from '../../../styles/color.constants';
+import {
+  Colors,
+  // priorityColors
+} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {MarginConstants} from '../../../styles/margin.constants';

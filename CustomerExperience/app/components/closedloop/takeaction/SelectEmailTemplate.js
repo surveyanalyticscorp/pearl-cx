@@ -11,7 +11,7 @@ import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 const SelectEmailTemplate = () => {
   const data = [
     'Template 01',

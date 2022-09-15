@@ -1,18 +1,18 @@
 import React, {useEffect, useState, useRef} from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-community/async-storage';
 import {
-  ScrollView,
-  SafeAreaView,
+  // ScrollView,
+  // SafeAreaView,
   StyleSheet,
   ImageBackground,
-  Image,
+  // Image,
   Button,
   Text,
 } from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {View} from 'react-native-animatable';
 import AppRouter from '../../routes/appRouter';
-import CreateTicket from './ticketManagement/CreateTicket';
+// import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = (props) => {
   let [moveNext, setMoveNext] = useState(false);

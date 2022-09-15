@@ -14,7 +14,7 @@ import {
 import {showLoading} from '../../redux/actions/index';
 import {
   getDashboardContent,
-  getSegment,
+  // getSegment,
 } from '../../redux/actions/dashboard.actions';
 import {connect, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
@@ -27,18 +27,18 @@ import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {
   VictoryPie,
-  VictoryChart,
-  VictoryBar,
-  VictoryTheme,
+  // VictoryChart,
+  // VictoryBar,
+  // VictoryTheme,
 } from 'victory-native';
 import {Sizes} from '../../styles/Size.constant';
 import StringUtils from '../../Utils/StringUtils';
-import FilterHeader from '../FilterHeader';
+// import FilterHeader from '../FilterHeader';
 import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import {setRangeFilter} from '../../redux/actions';
 import {DashboardClosedLoopView} from './DashboardClosedLoopView';
 import {translate} from '../../Utils/MultilinguaUtils';
-import MainDropDown from '../../widgets/drop-down/MainDropDown';
+// import MainDropDown from '../../widgets/drop-down/MainDropDown';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';

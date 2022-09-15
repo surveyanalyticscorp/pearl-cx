@@ -1,5 +1,13 @@
 import React from 'react';
-import {Image, ImageBackground, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  ImageBackground,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -10,16 +18,15 @@ import {FontFamily} from '../../styles/font.constants';
 
 const stringConst = require('../../config/translations/en');
 
-const MarketingScreen = props => {
-
+const MarketingScreen = (props) => {
   let content = getMarketingScreenContent();
 
   let introPages = [];
   for (let i = 0; i < content.length; i++) {
     introPages.push(
-        <View key={i}>
-          <IntroPage marketingComponent={content[i]} />
-        </View>,
+      <View key={i}>
+        <IntroPage marketingComponent={content[i]} />
+      </View>,
     );
   }
 
@@ -28,24 +35,27 @@ const MarketingScreen = props => {
   };
 
   return (
-      <ImageBackground
-          resizeMode={'cover'}
-          source={require('../../config/images/background1.png')}
-          style={styles.imageBackgroundContainer}>
-        <SafeAreaView forceInset={{vertical: 'never'}} style={styles.safeAreaView}>
-          <Swiper
-              loop={false}
-              showsButtons={false}
-              dotColor={textColors.secondary}
-              activeDotColor={Colors.accent}
-          >
-            {introPages}
-          </Swiper>
-          <TouchableOpacity style={styles.getStartedButton} onPress={onPress}>
-            <Text style={styles.buttonTextColor}>{stringConst.onBoarding.getStarted}</Text>
-          </TouchableOpacity>
-        </SafeAreaView>
-      </ImageBackground>
+    <ImageBackground
+      resizeMode={'cover'}
+      source={require('../../config/images/background1.png')}
+      style={styles.imageBackgroundContainer}>
+      <SafeAreaView
+        forceInset={{vertical: 'never'}}
+        style={styles.safeAreaView}>
+        <Swiper
+          loop={false}
+          showsButtons={false}
+          dotColor={textColors.secondary}
+          activeDotColor={Colors.accent}>
+          {introPages}
+        </Swiper>
+        <TouchableOpacity style={styles.getStartedButton} onPress={onPress}>
+          <Text style={styles.buttonTextColor}>
+            {stringConst.onBoarding.getStarted}
+          </Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
@@ -84,19 +94,21 @@ export default MarketingScreen;
 function IntroPage(props) {
   const {marketingComponent} = props;
   return (
-      <View style={styles.container}>
-        <View style={styles.logoImageView}>
-          <Image
-              style={styles.logoImage}
-              resizeMode="contain"
-              source={marketingComponent.introImage}
-          />
-        </View>
-        <View style={styles.introView}>
-          <Text style={styles.introTextHeader}>{marketingComponent.introTitle}</Text>
-          <Text style={styles.introText}>{marketingComponent.description}</Text>
-        </View>
+    <View style={styles.container}>
+      <View style={styles.logoImageView}>
+        <Image
+          style={styles.logoImage}
+          resizeMode="contain"
+          source={marketingComponent.introImage}
+        />
       </View>
+      <View style={styles.introView}>
+        <Text style={styles.introTextHeader}>
+          {marketingComponent.introTitle}
+        </Text>
+        <Text style={styles.introText}>{marketingComponent.description}</Text>
+      </View>
+    </View>
   );
 }
 
@@ -112,14 +124,14 @@ const styles = StyleSheet.create({
   buttonTextColor: {
     color: Colors.white,
     fontFamily: FontFamily.regular,
-    fontSize: TextSizes.largeText
+    fontSize: TextSizes.largeText,
   },
   getStartedButton: {
     backgroundColor: Colors.accent,
     alignItems: 'center',
     marginHorizontal: MarginConstants.tab1,
     paddingVertical: PaddingConstants.tab1,
-    marginBottom: MarginConstants.tab2
+    marginBottom: MarginConstants.tab2,
   },
   container: {
     alignItems: 'center',
@@ -127,13 +139,13 @@ const styles = StyleSheet.create({
   logoImage: {
     height: '100%',
     width: '100%',
-    marginTop: 2*MarginConstants.tab3
+    marginTop: 2 * MarginConstants.tab3,
   },
   introView: {
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: MarginConstants.tab1,
-    height:'50%'
+    height: '50%',
   },
   logoImageView: {
     justifyContent: 'center',

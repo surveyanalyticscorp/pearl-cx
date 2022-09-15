@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {WebView} from 'react-native-webview';
 import QPSpinner from './QPSpinner';
 
-const QPWebView = props => {
+const QPWebView = (props) => {
   return (
     <View style={{flex: 1, justifyContent: 'center'}}>
       <WebView
@@ -16,7 +16,7 @@ const QPWebView = props => {
         domStorageEnabled={true}
         startInLoadingState={true}
         renderLoading={() => {
-          return <QPSpinner/>
+          return <QPSpinner />;
         }}
         showsVerticalScrollIndicator={false}
       />

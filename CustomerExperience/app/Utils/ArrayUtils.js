@@ -66,7 +66,7 @@ export default class ArrayUtils {
 
   static mereArraysFromObjectValues(object) {
     let array = [];
-    Object.keys(object).forEach(key => {
+    Object.keys(object).forEach((key) => {
       array = [...array, ...object[key]];
     });
     return array;

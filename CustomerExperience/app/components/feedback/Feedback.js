@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
-  Alert,
-  BackHandler,
+  // Alert,
+  // BackHandler,
   FlatList,
   StyleSheet,
   Text,
@@ -20,7 +20,7 @@ import ArrayUtils from '../../Utils/ArrayUtils';
 import {TextSizes} from '../../styles/textsize.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import FilterHeader from '../FilterHeader';
+// import FilterHeader from '../FilterHeader';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -30,7 +30,7 @@ import {Sizes} from '../../styles/Size.constant';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {dashboardStyles} from '../dashboard/dashboard.style';
 import {translate} from '../../Utils/MultilinguaUtils';
-import MainDropDown from '../../widgets/drop-down/MainDropDown';
+// import MainDropDown from '../../widgets/drop-down/MainDropDown';
 import {FabAddButton} from '../../routes/CommonScreen';
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();

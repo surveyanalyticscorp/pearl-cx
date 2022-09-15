@@ -6,24 +6,24 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import StringUtils from '../../Utils/StringUtils';
-import ArrayUtils from '../../Utils/ArrayUtils';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
+// import StringUtils from '../../Utils/StringUtils';
+// import ArrayUtils from '../../Utils/ArrayUtils';
+// import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {
   Colors,
   getPriorityBorderColor,
-  getPriorityFillerColor,
+  // getPriorityFillerColor,
   getStatusBorderColor,
   getStatusFillerColor,
-  statusColors,
+  // statusColors,
 } from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
-import {TextSizes} from '../../styles/textsize.constants';
+// import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
-import {Sizes} from '../../styles/Size.constant';
-import moment from 'moment';
-import {translate} from '../../Utils/MultilinguaUtils';
+// import {Sizes} from '../../styles/Size.constant';
+// import moment from 'moment';
+// import {translate} from '../../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 
 export default function ClosedLoopCell(props) {

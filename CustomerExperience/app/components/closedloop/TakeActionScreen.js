@@ -1,32 +1,36 @@
-import React, {useEffect, useState} from 'react';
+import React from // {useEffect, useState}
+'react';
 import {
   View,
   TouchableWithoutFeedback,
   TouchableOpacity,
   Text,
-  Image,
+  // Image,
   StyleSheet,
-  ScrollView,
-  Platform,
-  FlatList,
-  SafeAreaView,
-  TextInput,
-  LogBox,
+  // ScrollView,
+  // Platform,
+  // FlatList,
+  // SafeAreaView,
+  // TextInput,
+  // LogBox,
 } from 'react-native';
-import StringUtils from '../../Utils/StringUtils';
-import ArrayUtils from '../../Utils/ArrayUtils';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import {Colors, statusColors} from '../../styles/color.constants';
+// import StringUtils from '../../Utils/StringUtils';
+// import ArrayUtils from '../../Utils/ArrayUtils';
+// import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import {
+  Colors,
+  // statusColors
+} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
-import {Sizes} from '../../styles/Size.constant';
-import moment from 'moment';
-import {translate} from '../../Utils/MultilinguaUtils';
-import QPButton from '../../widgets/Button';
-import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
-import {backgroundColor} from '../../widgets/qp-calendar/style';
+// import {Sizes} from '../../styles/Size.constant';
+// import moment from 'moment';
+// import {translate} from '../../Utils/MultilinguaUtils';
+// import QPButton from '../../widgets/Button';
+// import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
+// import {backgroundColor} from '../../widgets/qp-calendar/style';
 import {CloseButton} from '../../routes/CommonScreen';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';

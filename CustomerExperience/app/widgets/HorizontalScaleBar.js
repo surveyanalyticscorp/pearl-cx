@@ -1,27 +1,9 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {
-  FlatList,
-  RefreshControl,
-  ScrollView,
-  Text,
-  View,
-  BackHandler,
-  Alert,
-  SafeAreaView,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-} from 'react-native';
-// import {styles} from '../components/FilterHeader';
-
+import React from 'react';
+import {Text, View, StyleSheet} from 'react-native';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
-import styleConstructor from './qp-calendar/calendar/dot/style';
-// import {Sizes} from '../../styles/Size.constant';
-// import StringUtils from '../../Utils/StringUtils';
-// import {translate} from '../../Utils/MultilinguaUtils';
 
 const HorizontalScaleBar = (props) => {
   const getNagativePercentage = () => {

@@ -17,11 +17,11 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {Sizes} from '../../styles/Size.constant';
-import moment from 'moment';
+// import moment from 'moment';
 import {translate} from '../../Utils/MultilinguaUtils';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
-import {backgroundColor} from '../../widgets/qp-calendar/style';
-import style from '../../widgets/qp-calendar/calendar/header/style';
+// import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+// import {backgroundColor} from '../../widgets/qp-calendar/style';
+// import style from '../../widgets/qp-calendar/calendar/header/style';
 export default function FeedbackCell(props) {
   let disable = props.origin === 'Detail';
   let [isNewResponse, setNewResponse] = useState(

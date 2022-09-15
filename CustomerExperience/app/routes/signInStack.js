@@ -15,70 +15,78 @@ import {View} from 'react-native-animatable';
 const RootStack = createStackNavigator();
 
 const stackHeaderProps = (route, navigation) => {
-    return (
-        <View style={styles.headerButtonStyle}>
-            <TouchableOpacity
-                buttonStyle={styles.headerButtonStyle}
-                onPress={() => {
-                    const popAction = CommonActions.goBack();
-                    navigation.dispatch(popAction)
-                }}>
-                <Icon name="arrow-left" size={20} color= {Colors.white}/>
-            </TouchableOpacity>
-        </View>
-    )
+  return (
+    <View style={styles.headerButtonStyle}>
+      <TouchableOpacity
+        buttonStyle={styles.headerButtonStyle}
+        onPress={() => {
+          const popAction = CommonActions.goBack();
+          navigation.dispatch(popAction);
+        }}>
+        <Icon name="arrow-left" size={20} color={Colors.white} />
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const SignInStack = ({navigation}) => (
-    <RootStack.Navigator >
-        <RootStack.Screen name="MarketingScreen" component={MarketingScreen}
-                          options={({ route }) => ({
-                              headerShown:false
-                          })}
-        />
-        <RootStack.Screen name="Login" component={Login}
-                          options={({ navigation, route }) => ({
-                              headerTransparent: true,
-                              title:'',
-                              headerLeft: (props) => {
-                                  return stackHeaderProps(route, navigation)
-                              },
-                          })}
-        />
-        <RootStack.Screen name="ForgotPassword" component={ForgotPassword}
-                          options={({ navigation, route }) => ({
-                              headerTransparent: true,
-                              title:'',
-                              headerLeft: (props) => {
-                                  return stackHeaderProps(route, navigation)
-                              }
-                          })}
-        />
-        <RootStack.Screen name="ResetPassword" component={ResetPassword}
-                          options={({ navigation, route }) => ({
-                              headerTransparent: true,
-                              title:'',
-                              headerLeft: (props) => {
-                                  return stackHeaderProps(route, navigation)
-                              },
-                          })}
-        />
-    </RootStack.Navigator>
+  <RootStack.Navigator>
+    <RootStack.Screen
+      name="MarketingScreen"
+      component={MarketingScreen}
+      options={({route}) => ({
+        headerShown: false,
+      })}
+    />
+    <RootStack.Screen
+      name="Login"
+      component={Login}
+      options={({navigation, route}) => ({
+        headerTransparent: true,
+        title: '',
+        headerLeft: (props) => {
+          return stackHeaderProps(route, navigation);
+        },
+      })}
+    />
+    <RootStack.Screen
+      name="ForgotPassword"
+      component={ForgotPassword}
+      options={({navigation, route}) => ({
+        headerTransparent: true,
+        title: '',
+        headerLeft: (props) => {
+          return stackHeaderProps(route, navigation);
+        },
+      })}
+    />
+    <RootStack.Screen
+      name="ResetPassword"
+      component={ResetPassword}
+      options={({navigation, route}) => ({
+        headerTransparent: true,
+        title: '',
+        headerLeft: (props) => {
+          return stackHeaderProps(route, navigation);
+        },
+      })}
+    />
+  </RootStack.Navigator>
 );
 
 export default SignInStack;
 
 const styles = StyleSheet.create({
-    headerButtonStyle:{
-        marginLeft: MarginConstants.tab1,
-        flexDirection: 'row',
-        paddingVertical:PaddingConstants.tab1,
-    },
-    transparentHeader: {
-        backgroundColor: 'transparent',
-        zIndex: 2,
-        elevation: 0,
-        shadowOpacity: 0,
-        borderBottomWidth: 0,
-    },
+  headerButtonStyle: {
+    marginLeft: MarginConstants.tab1,
+    flexDirection: 'row',
+    paddingVertical: PaddingConstants.tab1,
+  },
+  transparentHeader: {
+    backgroundColor: 'transparent',
+    zIndex: 2,
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 0,
+  },
 });

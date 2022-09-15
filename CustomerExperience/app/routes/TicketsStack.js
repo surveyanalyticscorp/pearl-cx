@@ -1,5 +1,5 @@
 import FeedbackSorter from '../components/feedback/FeedbackSorter';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 // import CreateTicket from '../components/dashboard/components/CreateTicket';
 import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
 import React from 'react';

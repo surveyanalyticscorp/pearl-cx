@@ -1,12 +1,11 @@
 import React from 'react';
 
-import {buttonColors, Colors, textColors} from '../styles/color.constants';
+import {buttonColors, textColors} from '../styles/color.constants';
 import {
   Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
   Dimensions,
 } from 'react-native';
 import {MarginConstants} from '../styles/margin.constants';

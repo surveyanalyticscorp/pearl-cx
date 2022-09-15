@@ -2,7 +2,7 @@ import {ImageBackground, Image, StyleSheet} from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../../api/Constant';
-import AppRouter from '../../routes/appRouter';
+// import AppRouter from '../../routes/appRouter';
 import {connect} from 'react-redux';
 import {fillUserInfo, setAuthToken} from '../../redux/actions/index';
 import {isStringNullOrEmpty} from '../../Utils/Utility';

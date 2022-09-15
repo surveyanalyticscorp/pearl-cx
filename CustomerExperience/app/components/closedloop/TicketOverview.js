@@ -1,17 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {
+  // useEffect,
+  useState,
+} from 'react';
 import {
   View,
   TouchableWithoutFeedback,
   Text,
   Image,
   StyleSheet,
-  ScrollView,
+  // ScrollView,
   Platform,
   FlatList,
 } from 'react-native';
-import StringUtils from '../../Utils/StringUtils';
-import ArrayUtils from '../../Utils/ArrayUtils';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
+// import StringUtils from '../../Utils/StringUtils';
+// import ArrayUtils from '../../Utils/ArrayUtils';
+// import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {
   Colors,
   statusColors,
@@ -21,17 +24,17 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
-import {Sizes} from '../../styles/Size.constant';
-import moment from 'moment';
-import {translate} from '../../Utils/MultilinguaUtils';
+// import {Sizes} from '../../styles/Size.constant';
+// import moment from 'moment';
+// import {translate} from '../../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import QPButton from '../../widgets/Button';
-import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
+// import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
 import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import TicketTakeAction from './takeaction/TicketTakeAction';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+// import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
   BottomSheetHeader,
   RenderRoundImageOrColor,

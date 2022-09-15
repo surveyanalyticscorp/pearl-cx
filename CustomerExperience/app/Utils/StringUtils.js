@@ -146,9 +146,7 @@ export default class StringUtils {
   }
 
   static getRandomAlphanumericString() {
-    return Math.random()
-      .toString(36)
-      .substring(7);
+    return Math.random().toString(36).substring(7);
   }
 
   static getTextArraySeparatedByNewline(text) {
@@ -215,6 +213,6 @@ export default class StringUtils {
   }
 
   static getStringFromNumber(number) {
-    return number.toString()
+    return number.toString();
   }
 }

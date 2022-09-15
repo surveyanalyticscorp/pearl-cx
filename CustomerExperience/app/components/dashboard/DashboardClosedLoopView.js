@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   useWindowDimensions,
   StyleSheet,
@@ -165,9 +165,10 @@ const RenderScene = (props) => {
           <Switch
             trackColor={{true: Colors.accent, false: Colors.darkGrey}}
             thumbColor={Colors.white}
-            ios_backgroundColor={Colors.critical}
+            ios_backgroundColor={Colors.filterIconColor}
             onValueChange={toggleSwitch}
             value={showPercentageCount}
+            style={styles.switch}
           />
           <Text style={styles.countText}>Count</Text>
         </View>
@@ -365,5 +366,9 @@ const styles = StyleSheet.create({
   countText: {
     fontFamily: FontFamily.medium,
     color: Colors.filterIconColor,
+  },
+  switch: {
+    marginHorizontal: MarginConstants.tab1,
+    maxHeight: MarginConstants.tab4,
   },
 });

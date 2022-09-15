@@ -33,7 +33,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import {FontFamily} from '../styles/font.constants';
 import DetractorScenes from '../components/dashboard/components/DetractorScenes';
 import {translate} from '../Utils/MultilinguaUtils';
-import CheckBox from '@react-native-community/checkbox';
+// import CheckBox from '@react-native-community/checkbox';
 
 const DateRangeTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();

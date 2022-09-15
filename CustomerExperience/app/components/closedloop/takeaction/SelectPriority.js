@@ -14,7 +14,7 @@ import {
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
 const SelectPriority = (props) => {

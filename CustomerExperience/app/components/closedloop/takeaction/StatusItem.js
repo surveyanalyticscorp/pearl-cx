@@ -2,9 +2,9 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import {
   Colors,
-  getStatusBorderColor,
-  getStatusFillerColor,
-  textColors,
+  // getStatusBorderColor,
+  // getStatusFillerColor,
+  // textColors,
 } from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';

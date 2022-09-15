@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import {
   Colors,
-  getPriorityFillerColor,
+  // getPriorityFillerColor,
   getPriorityBorderColor,
-  priorityColors,
-  getStatusBorderColor,
+  // priorityColors,
+  // getStatusBorderColor,
 } from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';

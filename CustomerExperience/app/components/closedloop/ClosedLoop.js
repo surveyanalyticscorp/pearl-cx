@@ -1,10 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {
+  // useEffect,
+  useState,
+} from 'react';
 import {
   View,
-  TouchableWithoutFeedback,
+  // TouchableWithoutFeedback,
   TouchableOpacity,
   Text,
-  Image,
+  // Image,
   FlatList,
   StyleSheet,
   SafeAreaView,
@@ -12,27 +15,27 @@ import {
 import ClosedLoopCell from './ClosedloopCell';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../styles/color.constants';
-import {translate} from '../../Utils/MultilinguaUtils';
+// import {translate} from '../../Utils/MultilinguaUtils';
 
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
-import {TextSizes} from '../../styles/textsize.constants';
+// import {TextSizes} from '../../styles/textsize.constants';
 import {
   BottomSheetHeader,
   FabAddButton,
-  SearchIcon,
+  // SearchIcon,
 } from '../../routes/CommonScreen';
-import style from '../../widgets/qp-calendar/calendar/header/style';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+// import style from '../../widgets/qp-calendar/calendar/header/style';
+// import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
-import TicketOverview from './TicketOverview';
-import TicketDetails from './TicketDetails';
-import TicketComments from './TicketComments';
-import TicketActivity from './TicketActivity';
-import CreateTicket from '../dashboard/ticketManagement/CreateTicket';
-import SendEmail from './takeaction/SendEmail';
-import TakeActionScreen from './TakeActionScreen';
-import TicketTakeAction from './takeaction/TicketTakeAction';
+// import TicketOverview from './TicketOverview';
+// import TicketDetails from './TicketDetails';
+// import TicketComments from './TicketComments';
+// import TicketActivity from './TicketActivity';
+// import CreateTicket from '../dashboard/ticketManagement/CreateTicket';
+// import SendEmail from './takeaction/SendEmail';
+// import TakeActionScreen from './TakeActionScreen';
+// import TicketTakeAction from './takeaction/TicketTakeAction';
 import FilterTicket from './takeaction/FilterTickets';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -190,7 +193,7 @@ export default function ClosedLoop(props) {
             <ClosedLoopCell
               data={item}
               index={index}
-              onPressHandler={(item, index) => onPressHandler(item, index)}
+              onPressHandler={() => onPressHandler(item, index)}
             />
           );
         }}

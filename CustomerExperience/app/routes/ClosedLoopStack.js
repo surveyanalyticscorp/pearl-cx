@@ -1,5 +1,8 @@
-import FeedbackSorter from '../components/feedback/FeedbackSorter';
-import {StyleSheet, View} from 'react-native';
+// import FeedbackSorter from '../components/feedback/FeedbackSorter';
+import {
+  // StyleSheet,
+  View,
+} from 'react-native';
 // import CreateTicket from '../components/dashboard/components/CreateTicket';
 import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
 import React from 'react';
@@ -7,8 +10,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Feedback from '../components/feedback/Feedback';
 import SearchFeedback from '../components/feedback/SearchFeedback';
 import CommonScreens, {
-  CloseButton,
-  EditTicket,
+  // CloseButton,
+  // EditTicket,
   HeaderBackLeft,
   MenuIcon,
   SearchIcon,

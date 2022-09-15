@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  ScrollView,
+  // ScrollView,
   StyleSheet,
   View,
-  SafeAreaView,
+  // SafeAreaView,
   Text,
-  TextInput,
-  TouchableWithoutFeedback,
+  // TextInput,
+  // TouchableWithoutFeedback,
   Platform,
 } from 'react-native';
 
@@ -14,9 +14,9 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {Colors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {FontFamily} from '../../styles/font.constants';
-import {translate} from '../../Utils/MultilinguaUtils';
-import StringUtils from '../../Utils/StringUtils';
+// import {FontFamily} from '../../styles/font.constants';
+// import {translate} from '../../Utils/MultilinguaUtils';
+// import StringUtils from '../../Utils/StringUtils';
 import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
 
 // let MainDropDown = (header, options, defaultText, onSelection) => {

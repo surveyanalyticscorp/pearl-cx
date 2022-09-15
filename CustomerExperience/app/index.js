@@ -12,7 +12,7 @@ import * as globalVariables from '../app/styles/globalStyleVariables';
 import {View, Platform} from 'react-native';
 import codePush from 'react-native-code-push';
 
-import Siren from 'react-native-siren';
+// import Siren from 'react-native-siren';
 
 EStyleSheet.build(globalVariables);
 
