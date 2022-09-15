@@ -1,17 +1,13 @@
 import React, {useEffect, useState, useRef} from 'react';
 // import AsyncStorage from '@react-native-community/async-storage';
-import {
-  // ScrollView,
-  // SafeAreaView,
-  StyleSheet,
-  ImageBackground,
-  // Image,
-  Button,
-  Text,
-} from 'react-native';
+import {StyleSheet, ImageBackground, Text} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {View} from 'react-native-animatable';
 import AppRouter from '../../routes/appRouter';
+import QPButton from '../../widgets/Button';
+import {TextSizes} from '../../styles/textsize.constants';
+import {FontFamily} from '../../styles/font.constants';
+import {MarginConstants} from '../../styles/margin.constants';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = (props) => {
@@ -60,8 +56,12 @@ export const WelcomeScreen = (props) => {
             </View>
           </View>
         </View>
-        <View style={styles.skipButton}>
-          <Button title="SKIP" onPress={onSkipHandler} />
+        <View>
+          <QPButton
+            buttonText="SKIP"
+            buttonColor={Colors.accentLight}
+            onPress={onSkipHandler}
+          />
         </View>
       </ImageBackground>
     );
@@ -76,32 +76,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   welcomeText: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: TextSizes.largeText,
+    fontFamily: FontFamily.semiBold,
     color: Colors.accent,
     width: '80%',
   },
   nameText: {
-    fontSize: 26,
-    fontWeight: '100',
+    fontSize: TextSizes.extraLargeText,
+    fontFamily: FontFamily.light,
     color: Colors.accent,
     width: '80%',
-    marginBottom: 16,
+    marginBottom: MarginConstants.tab2,
   },
-
   titleText: {
-    fontSize: 20,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
+    fontSize: TextSizes.largeText,
+    fontFamily: FontFamily.semiBold,
     color: Colors.accent,
     textAlign: 'center',
   },
-
   valueText: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: TextSizes.secondary,
+    fontFamily: FontFamily.regular,
     color: Colors.accent,
     textAlign: 'center',
   },

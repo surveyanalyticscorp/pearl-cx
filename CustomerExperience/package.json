@@ -114,7 +114,9 @@
   },
   "rnpm": {
     "assets": [
-      "./assets/fonts/"
+      "./assets/fonts/",
+      "./config/fonts/",
+      "./config/images/"
     ]
   }
 }
