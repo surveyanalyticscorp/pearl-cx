@@ -1,0 +1,1 @@
+# For images not loading issue in iOS v14+ soultion: 'https://jeffgukang.github.io/react-native-tutorial/docs/tips/image-error-ios14.html'
