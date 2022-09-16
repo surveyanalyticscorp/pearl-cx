@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import SafeAreaView from 'react-native-safe-area-view';
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -244,7 +245,10 @@ export default function CreateTicket(props) {
 
           <TouchableOpacity onPress={handlePrioritySelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
-              {getIonIcon('flag', getPriorityBorderColor(priority))}
+              {getIonIcon(
+                'flag',
+                getPriorityBorderColor(priority.toLowerCase()),
+              )}
               <Text style={styles.titleText}>{`${
                 priority ?? 'Unassigned'
               } Priority`}</Text>
@@ -303,7 +307,8 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 8,
     borderTopEndRadius: 8,
     marginHorizontal: MarginConstants.tab1,
-    marginTop: MarginConstants.tab1,
+    marginTop:
+      Platform.OS === 'ios' ? MarginConstants.tab4 : MarginConstants.tab1,
   },
   container: {
     flex: 1,

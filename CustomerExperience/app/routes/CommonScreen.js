@@ -131,8 +131,8 @@ export const RenderStatusIcon = (props) => {
       style={{
         borderRadius: 50,
         borderWidth: 1,
-        borderColor: getStatusBorderColor(props.title),
-        backgroundColor: getStatusFillerColor(props.title),
+        borderColor: getStatusBorderColor(props.title.toLowerCase()),
+        backgroundColor: getStatusFillerColor(props.title.toLowerCase()),
         height: props.size ?? 14,
         width: props.size ?? 14,
       }}

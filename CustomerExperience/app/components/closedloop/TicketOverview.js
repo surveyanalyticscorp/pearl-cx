@@ -207,7 +207,7 @@ export default function TicketOverview(props) {
     console.log('takeaction');
     // props.navigation.navigate('TicketTakeAction');
     // props.navigation.navigate('SelectEmailTemplate');
-    bs.current.snapTo();
+    bs.current.snapTo(0);
   };
 
   const takeActionButton = () => {
@@ -215,6 +215,7 @@ export default function TicketOverview(props) {
       <View style={styles.takeActionContainer}>
         <QPButton
           testID="SignInButton"
+          buttonColor={Colors.accentLight}
           style={styles.takeActionButton}
           onPress={onTakeActionHandler}
           buttonText={'Take Action'}

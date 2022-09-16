@@ -33,7 +33,8 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 // import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {CloseButton} from '../../../routes/CommonScreen';
+import {BottomSheetHeader, CloseButton} from '../../../routes/CommonScreen';
+import Animated from 'react-native-reanimated';
 
 // import QPButton from '../../../widgets/Button';
 // import style from '../../../widgets/qp-calendar/calendar/header/style';
@@ -41,6 +42,7 @@ import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 // import QPTextField from '../../../widgets/TextField';
 import BottomSheet from 'reanimated-bottom-sheet';
+import SelectEmailTemplate from './SelectEmailTemplate';
 export default function SendEmail(props) {
   const richText = React.useRef();
 
@@ -91,7 +93,11 @@ export default function SendEmail(props) {
 
   const getTemplateIcon = () => {
     return (
-      <TouchableOpacity style={styles.optionIcon}>
+      <TouchableOpacity
+        onPress={() => {
+          bs.current.snapTo(0);
+        }}
+        style={styles.optionIcon}>
         <RenderIonIcon name={'ios-reader'} />
       </TouchableOpacity>
     );
@@ -137,12 +143,45 @@ export default function SendEmail(props) {
       </View>
     );
   };
+
+  const handleTemplateSelectAction = (item) => {
+    console.log(item);
+    bs.current.snapTo(bsSnapPoints.length - 1);
+  };
+
+  const renderSelectTemplate = () => {
+    const data = [
+      'Template 01',
+      'Template 02',
+      'Template 03',
+      'Template 04',
+      'Template 05',
+    ];
+
+    return (
+      <View style={styles.contentContainer}>
+        <SelectEmailTemplate
+          data={data}
+          handleOnPress={(item) => handleTemplateSelectAction(item)}
+        />
+      </View>
+    );
+  };
+
+  const renderHeader = () => {
+    return (
+      <BottomSheetHeader
+        title={'Select Template'}
+        onPressClose={() => bs.current.snapTo(bsSnapPoints.length - 1)}
+      />
+    );
+  };
+
   const RenderSubjectTextInput = () => {
     return (
       <View>
         <View style={styles.rowContainerCenterAlign}>
           <Text style={styles.titleText}>{'Subject:'}</Text>
-
           <TextInput placeholder="Email subject" style={styles.textInput} />
         </View>
         <View style={styles.devider} />
@@ -150,9 +189,21 @@ export default function SendEmail(props) {
     );
   };
 
+  const bs = React.useRef(null);
+  const fall = new Animated.Value(1);
+  const bsSnapPoints = ['33%', '0%'];
+  const [shadow, setShadow] = useState(false);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.innerContainer}>
+    <View style={styles.container}>
+      <Animated.ScrollView
+        style={[
+          styles.innerContainer,
+          {
+            opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+            color: shadow ? Colors.accent : Colors.borderColor,
+          },
+        ]}>
         <RenderHeader />
         <RenderOptionsView />
         <RenderToTextInput />
@@ -199,9 +250,20 @@ export default function SendEmail(props) {
             </View>
           </KeyboardAvoidingView>
         </View>
-      </ScrollView>
-      <BottomSheet />
-    </SafeAreaView>
+      </Animated.ScrollView>
+
+      <BottomSheet
+        ref={bs}
+        snapPoints={bsSnapPoints}
+        initialSnap={bsSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderSelectTemplate}
+        renderHeader={renderHeader}
+        callbackNode={fall}
+        onCloseEnd={() => setShadow(false)}
+        onOpenStart={() => setShadow(true)}
+      />
+    </View>
   );
 }
 
@@ -299,4 +361,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.darkGrey,
   },
+  contentContainer: {backgroundColor: Colors.white, height: '100%'},
 });

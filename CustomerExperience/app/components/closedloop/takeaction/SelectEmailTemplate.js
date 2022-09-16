@@ -6,21 +6,13 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
-import {CloseButton, listItemSeparator} from '../../../routes/CommonScreen';
+import {listItemSeparator} from '../../../routes/CommonScreen';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-const SelectEmailTemplate = () => {
-  const data = [
-    'Template 01',
-    'Template 02',
-    'Template 03',
-    'Template 04',
-    'Template 05',
-  ];
-
+const SelectEmailTemplate = (props) => {
   const renderRow = ({item}) => {
     return (
       <TouchableWithoutFeedback onPress={() => handleOnPress(item)}>
@@ -32,18 +24,18 @@ const SelectEmailTemplate = () => {
   };
 
   const handleOnPress = (item) => {
-    console.log(item);
+    props.handleOnPress(item);
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerRow}>
+      {/* <View style={styles.headerRow}>
         <Text style={styles.header}>Select Template</Text>
         <CloseButton color={Colors.filterIconColor} />
-      </View>
+      </View> */}
       <FlatList
         style={styles.flatList}
-        data={data}
+        data={props.data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
         ItemSeparatorComponent={listItemSeparator}

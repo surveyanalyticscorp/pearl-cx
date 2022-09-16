@@ -20,7 +20,7 @@ import ArrayUtils from '../../Utils/ArrayUtils';
 import {TextSizes} from '../../styles/textsize.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-// import FilterHeader from '../FilterHeader';
+import FilterHeader from '../FilterHeader';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -365,7 +365,7 @@ const renderFeedbackScene = (props) => {
           ListFooterComponent={() => (
             <View style={{paddingBottom: PaddingConstants.tab2}} />
           )}
-          // ListHeaderComponent={renderResponseFilterView}
+          ListHeaderComponent={renderResponseFilterView}
         />
         <FabAddButton onPress={onFabHandler} />
       </View>

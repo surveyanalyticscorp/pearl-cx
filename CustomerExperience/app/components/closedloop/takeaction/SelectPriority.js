@@ -22,8 +22,8 @@ const SelectPriority = (props) => {
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
 
   const renderRow = ({item, index}) => {
-    const borderColor = getPriorityBorderColor(item.title);
-    const backgroundColor = getPriorityFillerColor(item.title);
+    const borderColor = getPriorityBorderColor(item.title.toLowerCase());
+    const backgroundColor = getPriorityFillerColor(item.title.toLowerCase());
 
     return (
       <TouchableWithoutFeedback

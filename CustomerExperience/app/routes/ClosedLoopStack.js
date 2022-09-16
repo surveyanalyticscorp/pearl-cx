@@ -10,6 +10,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Feedback from '../components/feedback/Feedback';
 import SearchFeedback from '../components/feedback/SearchFeedback';
 import CommonScreens, {
+  CloseButton,
   // CloseButton,
   // EditTicket,
   HeaderBackLeft,
@@ -22,6 +23,7 @@ import TicketDetails from '../components/closedloop/TicketDetails';
 import TicketTakeAction from '../components/closedloop/takeaction/TicketTakeAction';
 import SelectEmailTemplate from '../components/closedloop/takeaction/SelectEmailTemplate';
 import SendEmail from '../components/closedloop/takeaction/SendEmail';
+import FeedbackSorter from '../components/feedback/FeedbackSorter';
 
 const FeedbackStack = createStackNavigator();
 
@@ -85,6 +87,15 @@ const ClosedLoopStack = ({navigation}) => {
           // headerLeft: (props) => <MenuIcon />,
         })}
       />
+      <FeedbackStack.Screen
+        name={translate('responses.sort_by')}
+        component={FeedbackSorter}
+        options={({navigation, route}) => ({
+          headerLeft: (props) => <View />,
+          headerRight: (props) => <CloseButton />,
+        })}
+      />
+
       <FeedbackStack.Screen
         mode="modal"
         name="New Ticket"

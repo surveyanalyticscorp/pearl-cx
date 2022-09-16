@@ -10,7 +10,7 @@ import {
   // Image,
   FlatList,
   StyleSheet,
-  SafeAreaView,
+  // SafeAreaView,
 } from 'react-native';
 import ClosedLoopCell from './ClosedloopCell';
 import IonIcons from 'react-native-vector-icons/Ionicons';
@@ -173,12 +173,19 @@ export default function ClosedLoop(props) {
       />
     );
   };
+
+  const handleDateFilter = () => {
+    console.log('date filter');
+  };
+
   const getFilterDateBox = () => {
     return (
-      <View style={styles.filterBox}>
-        {getDateText()}
-        {getDateIcon()}
-      </View>
+      <TouchableOpacity onPress={handleDateFilter}>
+        <View style={styles.filterBox}>
+          {getDateText()}
+          {getDateIcon()}
+        </View>
+      </TouchableOpacity>
     );
   };
 
@@ -254,11 +261,11 @@ export default function ClosedLoop(props) {
   // variables for bottom sheet
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
-  const bsSnapPoints = ['75%', '95%', '0%'];
+  const bsSnapPoints = ['75%', '85%', '0%'];
   const [shadow, setShadow] = useState(false);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <Animated.View
         style={{
           opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
@@ -292,7 +299,7 @@ export default function ClosedLoop(props) {
         onCloseEnd={() => setShadow(false)}
         onOpenStart={() => setShadow(true)}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -311,6 +318,7 @@ const styles = StyleSheet.create({
   filterBox: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 5,
     borderWidth: 1,
     borderColor: Colors.borderColor,

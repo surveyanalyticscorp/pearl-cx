@@ -25,6 +25,7 @@ import {FontFamily} from '../../styles/font.constants';
 // import moment from 'moment';
 // import {translate} from '../../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import {TextSizes} from '../../styles/textsize.constants';
 
 export default function ClosedLoopCell(props) {
   const data = props.data;
@@ -77,12 +78,13 @@ export default function ClosedLoopCell(props) {
     let textColor = getNPSColor(sentiment);
     return (
       <Text
-        style={{
-          marginHorizontal: 12,
-          fontSize: 16,
-          fontWeight: 'bold',
-          color: textColor,
-        }}>
+        style={[
+          styles.statusText,
+          {
+            color: textColor,
+            marginHorizontal: MarginConstants.tab1,
+          },
+        ]}>
         {score}
       </Text>
     );
@@ -217,37 +219,34 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.tab1,
   },
   userNameText: {
-    fontFamily: FontFamily.bold,
-    fontWeight: 'bold',
-    fontSize: 16,
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.primary,
     color: Colors.accent,
   },
 
   dateText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '400',
-    fontSize: 16,
+    fontSize: TextSizes.secondary,
     color: Colors.primary,
   },
 
   detailsText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '900',
-    fontSize: 16,
-    color: Colors.lightBlack,
+
+    fontSize: TextSizes.regular,
+    color: Colors.filterIconColor,
   },
 
   idText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '900',
-    fontSize: 16,
+
+    fontSize: TextSizes.secondary,
     color: Colors.accentLight,
   },
 
   statusText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '900',
-    fontSize: 16,
+    fontSize: TextSizes.primary,
     color: Colors.lightBlack,
   },
 });
