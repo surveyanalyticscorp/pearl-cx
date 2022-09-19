@@ -65,6 +65,7 @@ import {navigationRef} from './RootNavigation';
 import {setI18nConfig, translate} from '../Utils/MultilinguaUtils';
 import MainDropDown from '../widgets/drop-down/MainDropDown';
 import {SEGMENT_SELECTED} from '../redux/actions/dashboard.actions';
+import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
 // import {connect} from 'react-redux';
 
 const Drawer = createDrawerNavigator();
@@ -402,6 +403,43 @@ const AppRouter = (props) => {
     );
   };
 
+  const RenderDrawer = () => {
+    return (
+      <Drawer.Navigator
+        drawerStyle={styles.drawerStyle}
+        drawerContent={(props) => <DrawerContent {...props} />}>
+        <Drawer.Screen name="Dashboard" component={dashboardModalStack} />
+        <Drawer.Screen name="Responses" component={ResponsesStack} />
+        {/* <Drawer.Screen name="Tickets" component={TicketsStack} /> */}
+        <Drawer.Screen name="ClosedLoop" component={ClosedLoopStack} />
+
+        <Drawer.Screen
+          name={translate('settings.settings')}
+          component={settingStack}
+        />
+      </Drawer.Navigator>
+    );
+  };
+
+  let [moveNext, setMoveNext] = useState(false);
+  let splashTimer = useRef(null);
+
+  useEffect(() => {
+    splashTimer = setTimeout(() => {
+      setMoveNext(true);
+    }, 3000);
+
+    return () => {
+      clearTimeout(splashTimer);
+    };
+  }, []);
+
+  const onSkipHandler = () => {
+    console.log('SKIP!!');
+    setMoveNext(true);
+    clearTimeout(splashTimer);
+  };
+
   return (
     <NavigationContainer
       theme={MyTheme}
@@ -409,19 +447,11 @@ const AppRouter = (props) => {
       fallback={renderSpinner()}
       linking={linking}>
       {authToken ? (
-        <Drawer.Navigator
-          drawerStyle={styles.drawerStyle}
-          drawerContent={(props) => <DrawerContent {...props} />}>
-          <Drawer.Screen name="Dashboard" component={dashboardModalStack} />
-          <Drawer.Screen name="Responses" component={ResponsesStack} />
-          {/* <Drawer.Screen name="Tickets" component={TicketsStack} /> */}
-          <Drawer.Screen name="ClosedLoop" component={ClosedLoopStack} />
-
-          <Drawer.Screen
-            name={translate('settings.settings')}
-            component={settingStack}
-          />
-        </Drawer.Navigator>
+        moveNext ? (
+          <RenderDrawer />
+        ) : (
+          <WelcomeScreen skipHandler={onSkipHandler} />
+        )
       ) : (
         <SignInStack />
       )}

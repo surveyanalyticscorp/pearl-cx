@@ -181,13 +181,13 @@ const RenderScene = (props) => {
       <View style={styles.viewTicketsContainer}>
         <TouchableWithoutFeedback
           onPress={() => {
-            const pushAction = StackActions.push(
-              translate('close_loop.close_loop'),
-              {
-                screen: props.route.name,
-              },
-            );
-            props.navigation.dispatch(pushAction);
+            // const pushAction = StackActions.push(
+            //   translate('close_loop.close_loop'),
+            //   {
+            //     screen: props.route.name,
+            //   },
+            // );
+            // props.navigation.dispatch(pushAction);
           }}>
           <Text style={styles.viewTicketsText}>
             {translate('dashboard.view_tickets')}

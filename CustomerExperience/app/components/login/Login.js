@@ -104,7 +104,7 @@ const Login = (props) => {
         pushToken: token,
       };
 
-      console.log(`LOGIN DATA: ${JSON.stringify(data)}`);
+      // console.log(`LOGIN DATA: ${JSON.stringify(data)}`);
       if (
         StringUtils.isNotEmpty(props.dynamicLink) &&
         props.dynamicLink.includes('resetpassword')
@@ -116,7 +116,7 @@ const Login = (props) => {
   };
 
   const checkValidation = () => {
-    console.log('Validate email: ' + validateEmail(userData.email));
+    // console.log('Validate email: ' + validateEmail(userData.email));
     if (!validateEmail(userData.email)) {
       setValidation(stringConst.onBoarding.invalidEmail);
       return false;

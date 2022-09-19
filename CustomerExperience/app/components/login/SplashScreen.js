@@ -9,6 +9,7 @@ import {isStringNullOrEmpty} from '../../Utils/Utility';
 import {DASHBOARD_RANGE} from '../../redux/actions/dashboard.actions';
 import {setLanguageInfo, setRangeFilter} from '../../redux/actions';
 import {WelcomeScreen} from '../dashboard/WelcomeScreen';
+import AppRouter from '../../routes/appRouter';
 
 function SplashScreen(props) {
   let [moveNext, setMoveNext] = useState(false);
@@ -55,8 +56,8 @@ function SplashScreen(props) {
     );
   };
 
-  // return moveNext ? <AppRouter /> : renderSplashScreenView();
-  return moveNext ? <WelcomeScreen /> : renderSplashScreenView();
+  return moveNext ? <AppRouter /> : renderSplashScreenView();
+  // return moveNext ? <WelcomeScreen /> : renderSplashScreenView();
 }
 
 const mapStateToProps = (state) => {

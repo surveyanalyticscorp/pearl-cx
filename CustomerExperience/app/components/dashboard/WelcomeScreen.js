@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 // import AsyncStorage from '@react-native-community/async-storage';
 import {StyleSheet, ImageBackground, Text} from 'react-native';
 import {Colors} from '../../styles/color.constants';
@@ -8,66 +8,83 @@ import QPButton from '../../widgets/Button';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {MarginConstants} from '../../styles/margin.constants';
+import AsyncStorage from '@react-native-community/async-storage';
+import {ASYNC_USER_CREDENTIALS, ASYNC_USER_INFO} from '../../api/Constant';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = (props) => {
-  let [moveNext, setMoveNext] = useState(false);
-  let splashTimer = useRef(null);
+  const [userInfo, setUserInfo] = useState();
+
+  // let [moveNext, setMoveNext] = useState(false);
+  // let splashTimer = useRef(null);
+
+  // useEffect(() => {
+  //   splashTimer = setTimeout(() => {
+  //     setMoveNext(true);
+  //   }, 3000);
+
+  //   return () => {
+  //     clearTimeout(splashTimer);
+  //   };
+  // }, []);
+
+  // const onSkipHandler = () => {
+  //   setMoveNext(true);
+  //   clearTimeout(splashTimer);
+  // };
 
   useEffect(() => {
-    splashTimer = setTimeout(() => {
-      setMoveNext(true);
-    }, 3000);
-
-    return () => {
-      clearTimeout(splashTimer);
-    };
+    AsyncStorage.getItem(ASYNC_USER_INFO).then((value) => {
+      setUserInfo(JSON.parse(value));
+      console.log('USER_INFO__', value);
+    });
   }, []);
 
-  const onSkipHandler = () => {
-    setMoveNext(true);
-    clearTimeout(splashTimer);
-  };
+  // useEffect(() => {
+  //   AsyncStorage.getItem(ASYNC_USER_INFO).then((value) => {
+  //     setUserInfo(value);
+  //     console.log('USER_INFO___', value);
 
-  const RenderWelcomeScreen = () => {
-    return (
-      <ImageBackground
-        resizeMode={'cover'}
-        source={require('../../config/images/background1.png')}
-        style={styles.backgroundContainer}>
-        <View style={styles.backgroundContainer}>
-          <Text style={styles.welcomeText}>Welcome back</Text>
-          <Text style={styles.nameText}>Mehedi hasan</Text>
+  //   });
+  // }, []);
 
-          <View style={styles.responseContainer}>
-            <View style={styles.responseBox}>
-              <Text style={styles.titleText}>34</Text>
-              <Text style={styles.valueText}>New Responses</Text>
-            </View>
-          </View>
-          <View style={styles.ticketAndOverdueContainer}>
-            <View style={styles.ticketBox}>
-              <Text style={styles.titleText}>5</Text>
-              <Text style={styles.valueText}>New Tickets</Text>
-            </View>
-            <View style={styles.ticketBox}>
-              <Text style={styles.titleText}>1</Text>
-              <Text style={styles.valueText}>Over due</Text>
-            </View>
+  return (
+    <ImageBackground
+      resizeMode={'cover'}
+      source={require('../../config/images/background1.png')}
+      style={styles.backgroundContainer}>
+      <View style={styles.backgroundContainer}>
+        <Text style={styles.welcomeText}>Welcome back</Text>
+        <Text style={styles.nameText}>
+          {userInfo?.firstName + ' ' + userInfo?.lastName}
+        </Text>
+
+        <View style={styles.responseContainer}>
+          <View style={styles.responseBox}>
+            <Text style={styles.titleText}>34</Text>
+            <Text style={styles.valueText}>New Responses</Text>
           </View>
         </View>
-        <View>
-          <QPButton
-            buttonText="SKIP"
-            buttonColor={Colors.accentLight}
-            onPress={onSkipHandler}
-          />
+        <View style={styles.ticketAndOverdueContainer}>
+          <View style={styles.ticketBox}>
+            <Text style={styles.titleText}>5</Text>
+            <Text style={styles.valueText}>New Tickets</Text>
+          </View>
+          <View style={styles.ticketBox}>
+            <Text style={styles.titleText}>1</Text>
+            <Text style={styles.valueText}>Over due</Text>
+          </View>
         </View>
-      </ImageBackground>
-    );
-  };
-
-  return moveNext ? <AppRouter /> : <RenderWelcomeScreen />;
+      </View>
+      <View>
+        <QPButton
+          buttonText="SKIP"
+          buttonColor={Colors.accentLight}
+          onPress={props.skipHandler}
+        />
+      </View>
+    </ImageBackground>
+  );
 };
 
 const styles = StyleSheet.create({
