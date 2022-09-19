@@ -1,166 +1,164 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {
-    PANEL_AUTH,
-    AUTH_LOGIN,
-    CX_GET_RESET_PASSWORD_LINK,
-    CX_VALIDATE_PASSWORD_LINK,
-    AUTH_UPDATE_PASSWORD,
-    ASYNC_USER_CREDENTIALS, CX_LOGOUT,
+  PANEL_AUTH,
+  AUTH_LOGIN,
+  CX_GET_RESET_PASSWORD_LINK,
+  CX_VALIDATE_PASSWORD_LINK,
+  AUTH_UPDATE_PASSWORD,
+  ASYNC_USER_CREDENTIALS,
+  CX_LOGOUT,
 } from '../../api/Constant';
-import {
-    API_ERROR,
-    CLEAR_API_ERROR,
-    IS_LOADING,
-} from '../actions';
+import {API_ERROR, CLEAR_API_ERROR, IS_LOADING} from '../actions';
 import AsyncStorage from '@react-native-community/async-storage';
-import {showErrorFlashMessage, showSuccessFlashMessage} from '../../Utils/Utility';
 import {
-    LOGIN_RESPONSE,
-    GET_LOGIN,
-    VALIDATE_RESET_PASSWORD_LINK,
-    UPDATE_PASSWORD,
-    UPDATE_PASSWORD_RESPONSE,
-    GET_RESET_PASSWORD_LINK,
-    VALIDATE_RESET_PASSWORD_LINK_RESPONSE,
-    LOGOUT,
-    LOGOUT_RESPONSE, AUTHENTICATE_PANEL, AUTHENTICATE_PANEL_RESPONSE,
+  showErrorFlashMessage,
+  showSuccessFlashMessage,
+} from '../../Utils/Utility';
+import {
+  LOGIN_RESPONSE,
+  GET_LOGIN,
+  VALIDATE_RESET_PASSWORD_LINK,
+  UPDATE_PASSWORD,
+  UPDATE_PASSWORD_RESPONSE,
+  GET_RESET_PASSWORD_LINK,
+  VALIDATE_RESET_PASSWORD_LINK_RESPONSE,
+  LOGOUT,
+  LOGOUT_RESPONSE,
+  AUTHENTICATE_PANEL,
+  AUTHENTICATE_PANEL_RESPONSE,
 } from '../actions/login.actions';
 
-
 export function* doAuthenticatePanel(action) {
-    try {
-        const response = yield WebServiceHandler.postNew(
-            PANEL_AUTH,
-            {},
-            action.param,
-        );
+  try {
+    const response = yield WebServiceHandler.postNew(
+      PANEL_AUTH,
+      {},
+      action.param,
+    );
 
-        yield put({type: AUTHENTICATE_PANEL_RESPONSE, response: response});
-
-    } catch (error) {
-        yield put({type: API_ERROR, error: error});
-
-    }
+    yield put({type: AUTHENTICATE_PANEL_RESPONSE, response: response});
+  } catch (error) {
+    yield put({type: API_ERROR, error: error});
+  }
 }
 
 export function* watchAuthenticatePanel() {
-    yield takeLatest(AUTHENTICATE_PANEL, doAuthenticatePanel);
+  yield takeLatest(AUTHENTICATE_PANEL, doAuthenticatePanel);
 }
 
-
-
 export function* doLoginApiCall(action) {
-    try {
-        const response = yield WebServiceHandler.postNew(
-            AUTH_LOGIN,
-            {},
-            action.param,
-        );
-        yield put({type: LOGIN_RESPONSE, response: response});
-        let userData = {
-            email: action.param.emailAddress,
-            password: action.param.password,
-            accessCode: action.param.accessCode
-        };
-        AsyncStorage.setItem(ASYNC_USER_CREDENTIALS, JSON.stringify(userData))
-    } catch (error) {
-        yield put({type: API_ERROR, error: error});
-        yield put({type: AUTHENTICATE_PANEL_RESPONSE, response: {body:{mobileAPIURL:''}}});
-        global.baseUrl = '';
-    }
+  try {
+    const response = yield WebServiceHandler.postNew(
+      AUTH_LOGIN,
+      {},
+      action.param,
+    );
+    yield put({type: LOGIN_RESPONSE, response: response});
+    let userData = {
+      email: action.param.emailAddress,
+      password: action.param.password,
+      accessCode: action.param.accessCode,
+    };
+    AsyncStorage.setItem(ASYNC_USER_CREDENTIALS, JSON.stringify(userData));
+  } catch (error) {
+    yield put({type: API_ERROR, error: error});
+    yield put({
+      type: AUTHENTICATE_PANEL_RESPONSE,
+      response: {body: {mobileAPIURL: ''}},
+    });
+    global.baseUrl = '';
+  }
 }
 
 export function* watchDoLogin() {
-    yield takeLatest(GET_LOGIN, doLoginApiCall);
+  yield takeLatest(GET_LOGIN, doLoginApiCall);
 }
 
 function* getResetPasswordLink(action) {
-    try {
-        const response = yield WebServiceHandler.postNew(
-            CX_GET_RESET_PASSWORD_LINK,
-            {},
-            action.param,
-        );
-        yield showSuccessFlashMessage(response.body.message)
-
-    } catch (error) {
-        yield put({
-            type: API_ERROR,
-            error: error,
-        });
-    }
+  try {
+    const response = yield WebServiceHandler.postNew(
+      CX_GET_RESET_PASSWORD_LINK,
+      {},
+      action.param,
+    );
+    yield showSuccessFlashMessage(response.body.message);
+  } catch (error) {
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
 }
 
 export function* watchForgotPasswordLink() {
-    yield takeLatest(GET_RESET_PASSWORD_LINK, getResetPasswordLink);
+  yield takeLatest(GET_RESET_PASSWORD_LINK, getResetPasswordLink);
 }
 
 function* validateResetPasswordLink(action) {
-    try {
-        yield put({type: IS_LOADING, payload: {isLoading: true}});
-        const response = yield WebServiceHandler.postNew(
-            CX_VALIDATE_PASSWORD_LINK,
-            {},
-            action.param,
-        );
+  try {
+    yield put({type: IS_LOADING, payload: {isLoading: true}});
+    const response = yield WebServiceHandler.postNew(
+      CX_VALIDATE_PASSWORD_LINK,
+      {},
+      action.param,
+    );
 
-        yield put({
-            type: VALIDATE_RESET_PASSWORD_LINK_RESPONSE,
-            response: response.body,
-        });
-
-    } catch (error) {
-        yield put({
-            type: API_ERROR,
-            error: error,
-        });
-    }
+    yield put({
+      type: VALIDATE_RESET_PASSWORD_LINK_RESPONSE,
+      response: response.body,
+    });
+  } catch (error) {
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
 }
 
 export function* watchValidatePasswordLink() {
-    yield takeLatest(VALIDATE_RESET_PASSWORD_LINK, validateResetPasswordLink);
+  yield takeLatest(VALIDATE_RESET_PASSWORD_LINK, validateResetPasswordLink);
 }
 
 function* updatePasswordApiCall(action) {
-    try {
-        yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
-        const response = yield WebServiceHandler.postNew(
-            AUTH_UPDATE_PASSWORD,
-            {},
-            action.param,
-        );
+  try {
+    yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
+    const response = yield WebServiceHandler.postNew(
+      AUTH_UPDATE_PASSWORD,
+      {},
+      action.param,
+    );
 
-        yield put({
-            type: UPDATE_PASSWORD_RESPONSE,
-            response: response,
-        });
-    } catch (error) {
-        yield put({
-            type: API_ERROR,
-            error: error,
-        });
-    }
+    yield put({
+      type: UPDATE_PASSWORD_RESPONSE,
+      response: response,
+    });
+  } catch (error) {
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
 }
 
 export function* watchUpdatePassword() {
-    yield takeLatest(UPDATE_PASSWORD, updatePasswordApiCall);
+  yield takeLatest(UPDATE_PASSWORD, updatePasswordApiCall);
 }
 
 function* doLogoutAction(action) {
-    try {
-        const response = yield WebServiceHandler.postNew(
-            CX_LOGOUT,
-            {'Auth-Token': action.token},
-            action.param,
-        );
-        yield put({type: LOGOUT_RESPONSE, response: response});
-    } catch (error) {
-        showErrorFlashMessage(error.message);
-        yield put({type: API_ERROR, error: error.message});
-    }
+  try {
+    const response = yield WebServiceHandler.postNew(
+      CX_LOGOUT,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({type: LOGOUT_RESPONSE, response: response});
+  } catch (error) {
+    showErrorFlashMessage(error.message);
+    yield put({type: API_ERROR, error: error.message});
+  }
 }
 
 export function* watchLogout() {
-    yield takeLatest(LOGOUT, doLogoutAction)
+  yield takeLatest(LOGOUT, doLogoutAction);
 }

@@ -32,7 +32,7 @@ import QPButton from '../../widgets/Button';
 // import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
 import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
 import BottomSheet from 'reanimated-bottom-sheet';
-import Animated from 'react-native-reanimated';
+import Animated, {color} from 'react-native-reanimated';
 import TicketTakeAction from './takeaction/TicketTakeAction';
 // import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
@@ -280,6 +280,33 @@ export default function TicketOverview(props) {
     );
   };
 
+  const getNPSScoreText = (text) => {
+    return (
+      <View
+        style={[{flex: 2, justifyContent: 'flex-start'}, styles.rowContainer]}>
+        <Image
+          style={{width: 16, height: 16}}
+          source={require('./../../../assets/images/nps_meter.png')}
+        />
+        <View
+          style={{
+            marginStart: MarginConstants.halfTab,
+            padding: PaddingConstants.tab1,
+            backgroundColor: Colors.critical2,
+            borderRadius: 50,
+            height: MarginConstants.tab3,
+            width: MarginConstants.tab3,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text style={[styles.detailsText, {color: Colors.white}]}>
+            {text}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
   const getUnderLineText = (text) => {
     return (
       <TouchableWithoutFeedback
@@ -367,7 +394,7 @@ export default function TicketOverview(props) {
         </View>
         <View style={styles.rowContainer}>
           {Title('NPS')}
-          {getText('0')}
+          {getNPSScoreText('3')}
         </View>
         <View style={styles.columnContainer}>
           {Title('Description')}
