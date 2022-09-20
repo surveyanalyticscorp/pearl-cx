@@ -12,6 +12,7 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import ResponseFeedback from './feedbackdetails/ResponseFeedback';
 import ResponseProfile from './feedbackdetails/ResponseProfile';
 import ResponseActivity from './feedbackdetails/ResponseActivity';
+import {FontFamily} from '../../styles/font.constants';
 
 export default function FeedbackDetails(props) {
   return (
@@ -113,12 +114,13 @@ const FeedbackDetailsTabStack = (props) => (
       labelStyle: {
         width: useWindowDimensions().width / 3,
         fontSize: TextSizes.secondary,
+        fontFamily: FontFamily.secondary,
       },
-      indicatorStyle: {backgroundColor: Colors.accent},
+      indicatorStyle: {backgroundColor: Colors.accentLight},
       style: {backgroundColor: Colors.white, width: '100%'},
       initialLayout: {width: useWindowDimensions().width},
-      tabStyle: {height: 1.5 * PaddingConstants.tab4},
-      activeTintColor: Colors.accent,
+      tabStyle: {height: 1.2 * PaddingConstants.tab4},
+      activeTintColor: Colors.accentLight,
       inactiveTintColor: Colors.primary,
     }}
     lazy

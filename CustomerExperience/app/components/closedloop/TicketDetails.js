@@ -22,6 +22,7 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import TicketOverview from './TicketOverview';
 import TicketComments from './TicketComments';
 import TicketActivity from './TicketActivity';
+import {FontFamily} from '../../styles/font.constants';
 
 export default function TicketDetails(props) {
   const TicketTabs = createMaterialTopTabNavigator();
@@ -37,12 +38,13 @@ export default function TicketDetails(props) {
           labelStyle: {
             width: useWindowDimensions().width / 4,
             fontSize: TextSizes.secondary,
+            fontFamily: FontFamily.secondary,
           },
-          indicatorStyle: {backgroundColor: Colors.accent},
+          indicatorStyle: {backgroundColor: Colors.accentLight},
           style: {backgroundColor: Colors.white, width: '100%'},
           initialLayout: {width: useWindowDimensions().width},
-          tabStyle: {height: 1.7 * PaddingConstants.tab4},
-          activeTintColor: Colors.accent,
+          tabStyle: {height: 1.2 * PaddingConstants.tab4},
+          activeTintColor: Colors.accentLight,
           inactiveTintColor: Colors.primary,
         }}
         lazy

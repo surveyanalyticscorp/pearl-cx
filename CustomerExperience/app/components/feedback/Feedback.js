@@ -144,7 +144,7 @@ function Feedback(props) {
       <SafeAreaView
         forceInset={{top: 'never', bottom: 'never'}}
         style={styles.safeAreaView}>
-        {/* <FilterHeader
+        <FilterHeader
           actionOnArrowClick={() => {
             setFeedbackData([]);
             setPageOffset(0);
@@ -156,7 +156,7 @@ function Feedback(props) {
             setShowLoader(true);
           }}
           {...props}
-        /> */}
+        />
 
         <View
           style={{
@@ -200,12 +200,13 @@ const FeedbackTabStack = () => (
       labelStyle: {
         width: useWindowDimensions().width / 4,
         fontSize: TextSizes.secondary,
+        FontFamily: FontFamily.secondary,
       },
-      indicatorStyle: {backgroundColor: Colors.accent},
+      indicatorStyle: {backgroundColor: Colors.accentLight},
       style: {backgroundColor: Colors.white, width: '100%'},
       initialLayout: {width: useWindowDimensions().width},
-      tabStyle: {height: 1.7 * PaddingConstants.tab4},
-      activeTintColor: Colors.accent,
+      tabStyle: {height: 1.2 * PaddingConstants.tab4},
+      activeTintColor: Colors.accentLight,
       inactiveTintColor: Colors.primary,
     }}
     lazy
