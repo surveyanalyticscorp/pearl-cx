@@ -188,6 +188,7 @@ const RenderScene = (props) => {
             //   },
             // );
             // props.navigation.dispatch(pushAction);
+            props.navigation.navigate('ClosedLoop');
           }}>
           <Text style={styles.viewTicketsText}>
             {translate('dashboard.view_tickets')}

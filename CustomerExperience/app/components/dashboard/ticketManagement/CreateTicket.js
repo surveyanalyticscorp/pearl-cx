@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import SafeAreaView from 'react-native-safe-area-view';
 import {
   Platform,
@@ -48,9 +48,9 @@ export default function CreateTicket(props) {
   const [statusIndex, setStatusIndex] = useState(0);
 
   // variables for bottom sheet
-  const priorityBottomSheet = React.useRef(null);
-  const statusBottomSheet = React.useRef(null);
-  const segmentBottomSheet = React.useRef(null);
+  let priorityBottomSheet = React.useRef();
+  let statusBottomSheet = React.useRef();
+  const segmentBottomSheet = React.useRef();
 
   const fall = new Animated.Value(1);
   const priorityBottomSheetSnapPoints = ['45%', '0%'];
@@ -58,6 +58,10 @@ export default function CreateTicket(props) {
   const segmentBottomSheetSnapPoints = ['33%', '0%'];
 
   const [shadow, setShadow] = useState(false);
+
+  useLayoutEffect(() => {
+    console.log('Screen layout');
+  }, []);
 
   const getIonIcon = (iconName, iconColor) => (
     <IonIcons
@@ -93,7 +97,6 @@ export default function CreateTicket(props) {
 
   const handlePrioritySelection = () => {
     // open priority selection bottom sheet
-    // closeAllBottomSheet();
     priorityBottomSheet.current.snapTo(0);
   };
 
@@ -190,8 +193,6 @@ export default function CreateTicket(props) {
         renderContent={renderPrioritySelectContent}
         renderHeader={renderPriorityHeader}
         callbackNode={fall}
-        onCloseEnd={() => setShadow(false)}
-        onOpenStart={() => setShadow(true)}
       />
     );
   };
@@ -206,15 +207,19 @@ export default function CreateTicket(props) {
         renderContent={renderStatusSelectContent}
         renderHeader={renderStatusHeader}
         callbackNode={fall}
-        onCloseEnd={() => setShadow(false)}
-        onOpenStart={() => setShadow(true)}
       />
     );
   };
 
   return (
-    <SafeAreaView style={styles.rootContainer}>
-      <View style={styles.container}>
+    <View style={styles.rootContainer}>
+      <Animated.View
+        style={[
+          styles.container,
+          {
+            opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+          },
+        ]}>
         <ScrollView style={styles.container}>
           <View
             style={[styles.rowContainer, {justifyContent: 'space-between'}]}>
@@ -293,10 +298,10 @@ export default function CreateTicket(props) {
             />
           </View>
         </ScrollView>
-      </View>
+      </Animated.View>
       <RenderPriorityBottomSheet />
       <RenderStatusBottomSheet />
-    </SafeAreaView>
+    </View>
   );
 }
 
