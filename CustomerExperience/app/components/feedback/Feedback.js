@@ -144,7 +144,7 @@ function Feedback(props) {
       <SafeAreaView
         forceInset={{top: 'never', bottom: 'never'}}
         style={styles.safeAreaView}>
-        <FilterHeader
+        {/* <FilterHeader
           actionOnArrowClick={() => {
             setFeedbackData([]);
             setPageOffset(0);
@@ -156,7 +156,7 @@ function Feedback(props) {
             setShowLoader(true);
           }}
           {...props}
-        />
+        /> */}
 
         <View
           style={{
