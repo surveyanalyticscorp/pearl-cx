@@ -1,5 +1,4 @@
-import React from // , {useEffect, useState}
-'react';
+import React from 'react'; // , {useEffect, useState}
 import {
   View,
   // TouchableWithoutFeedback,
@@ -75,7 +74,7 @@ export default function TicketComments(props) {
   const onChangeCommentHandler = (text) => {
     console.log(text);
   };
-  const getCommentBox = () => {
+  const CommentBox = () => {
     return (
       <View style={styles.commentBox}>
         <MaterialIconView iconName="chat-bubble" />
@@ -83,7 +82,6 @@ export default function TicketComments(props) {
           // style={styles.input}
           onChangeText={onChangeCommentHandler}
           placeholder="Comment"
-          scrollEnabled={true}
         />
       </View>
     );
@@ -122,7 +120,7 @@ export default function TicketComments(props) {
   const CommentFooter = () => {
     return (
       <View style={styles.commentFooter}>
-        {getCommentBox()}
+        <CommentBox style={styles.commentBox} />
         <ContactButton />
         <AttachmentButton />
         <PictureButton />

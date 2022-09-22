@@ -59,9 +59,9 @@ export default function TicketOverview(props) {
   ];
 
   const userOptions = [
-    {value: 'Dummy 1', url: 'https://picsum.photos/id/237/200'},
-    {value: 'Dummy 2', url: 'https://picsum.photos/id/327/200'},
-    {value: 'Dummy 3', url: 'https://picsum.photos/id/247/200'},
+    {value: 'Manager 1', url: 'https://picsum.photos/id/237/200'},
+    {value: 'Manager 2', url: 'https://picsum.photos/id/327/200'},
+    {value: 'Manager 3', url: 'https://picsum.photos/id/247/200'},
   ];
   const departmentOptions = ['Sales', 'Client Services'];
 

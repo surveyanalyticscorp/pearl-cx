@@ -214,6 +214,7 @@ const Login = (props) => {
               />
             </View>
             <QPTextField
+              secureText={false}
               testID="emailTextField"
               autofocus={false}
               label={stringConst.onBoarding.email}

@@ -144,7 +144,7 @@ function Feedback(props) {
       <SafeAreaView
         forceInset={{top: 'never', bottom: 'never'}}
         style={styles.safeAreaView}>
-        {/* <FilterHeader
+        <FilterHeader
           actionOnArrowClick={() => {
             setFeedbackData([]);
             setPageOffset(0);
@@ -156,7 +156,7 @@ function Feedback(props) {
             setShowLoader(true);
           }}
           {...props}
-        /> */}
+        />
 
         <View
           style={{
@@ -198,9 +198,9 @@ const FeedbackTabStack = () => (
     tabBarOptions={{
       scrollEnabled: true,
       labelStyle: {
-        width: useWindowDimensions().width / 4,
-        fontSize: TextSizes.secondary,
-        FontFamily: FontFamily.secondary,
+        width: useWindowDimensions().width / 3,
+        fontSize: TextSizes.semiSecondary,
+        fontFamily: FontFamily.semiSecondary,
       },
       indicatorStyle: {backgroundColor: Colors.accentLight},
       style: {backgroundColor: Colors.white, width: '100%'},
@@ -220,19 +220,19 @@ const FeedbackTabStack = () => (
       name={translate('responses.detractor')}
       component={renderFeedbackScene}
       initialParams={{screenName: 'Detractor'}}
-      options={{tabBarLabel: 'Dummy 1'}}
+      options={{tabBarLabel: 'Child Segment 1'}}
     />
     <FeedbackTab.Screen
       name={translate('responses.passive')}
       component={renderFeedbackScene}
       initialParams={{screenName: 'Passive'}}
-      options={{tabBarLabel: 'Dummy 2'}}
+      options={{tabBarLabel: 'Child Segment 2'}}
     />
     <FeedbackTab.Screen
       name={translate('responses.promoter')}
       component={renderFeedbackScene}
       initialParams={{screenName: 'Promoter'}}
-      options={{tabBarLabel: 'Dummy 3', title: 'Dummy 3'}}
+      options={{tabBarLabel: 'Child Segment 3', title: 'Dummy 3'}}
     />
   </FeedbackTab.Navigator>
 );

@@ -270,10 +270,10 @@ const DrawerContent = (props) => {
             <Text style={styles.labelStyle}>{translate('logout')}</Text>
           </View>
         </TouchableWithoutFeedback>
-        {/* <Text style={styles.drawerVersionText}>
+        <Text style={styles.drawerVersionText}>
           {' '}
           {'v ' + DeviceInfo.getVersion()}{' '}
-        </Text> */}
+        </Text>
       </View>
     );
   };
@@ -374,8 +374,8 @@ const styles = StyleSheet.create({
   drawerVersionText: {
     margin: MarginConstants.tab1,
     color: Colors.primary,
-    fontSize: TextSizes.primary,
-    textAlign: 'left',
+    fontSize: TextSizes.secondary,
+    textAlign: 'right',
   },
   loading: {
     position: 'absolute',

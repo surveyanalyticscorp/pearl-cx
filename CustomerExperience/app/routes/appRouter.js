@@ -424,15 +424,15 @@ const AppRouter = (props) => {
   let [moveNext, setMoveNext] = useState(false);
   let splashTimer = useRef(null);
 
-  useEffect(() => {
-    splashTimer = setTimeout(() => {
-      setMoveNext(true);
-    }, 3000);
+  // useEffect(() => {
+  //   splashTimer = setTimeout(() => {
+  //     setMoveNext(true);
+  //   }, 3000);
 
-    return () => {
-      clearTimeout(splashTimer);
-    };
-  }, []);
+  //   return () => {
+  //     clearTimeout(splashTimer);
+  //   };
+  // }, []);
 
   const onSkipHandler = () => {
     console.log('SKIP!!');
