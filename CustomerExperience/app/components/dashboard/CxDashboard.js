@@ -224,7 +224,7 @@ const CxDashboard = (props) => {
     let victoryPieColorScale =
       responseCount !== 0
         ? [Colors.promoter2, Colors.passive2, Colors.detractor2]
-        : [Colors.primary];
+        : [Colors.darkGrey];
     return (
       <View style={dashboardStyles.chartContainer}>
         <View style={dashboardStyles.donut}>

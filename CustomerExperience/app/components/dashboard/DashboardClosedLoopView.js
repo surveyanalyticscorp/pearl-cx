@@ -80,7 +80,7 @@ const RenderScene = (props) => {
     let victoryPieColorScale =
       count.totalTickets > 0
         ? [Colors.low2, Colors.medium2, Colors.high2, Colors.critical2]
-        : [Colors.primary];
+        : [Colors.darkGrey];
     let dataScale =
       count.totalTickets > 0
         ? [

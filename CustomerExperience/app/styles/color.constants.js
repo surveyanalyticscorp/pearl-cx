@@ -158,6 +158,10 @@ const statusColors = {
 };
 
 const priorityColors = {
+  //   Critical: #6E003C
+  // High: #B40014
+  // Medium: #FF8C00
+  // Low: #FFCF70
   critical: {
     border: '#DA2222',
     filler: '#DA222236',
