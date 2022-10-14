@@ -98,11 +98,15 @@ const DrawerContent = (props) => {
             props.navigation.navigate('ClosedLoop');
           }}>
           <View style={styles.drawerRow}>
-            <MyIcon
+            {/* <MyIcon
               size={1.3 * Sizes.icons}
               color={Colors.filterIconColor}
               name={'ticket-account'}
               style={styles.rowIcon}
+            /> */}
+            <Image
+              source={require('./../../assets/images/closed_loop.png')}
+              style={[styles.rowIcon, {height: 24, width: 24}]}
             />
             <Text style={styles.labelStyle}>
               {translate('dashboard.closed_loop')}
