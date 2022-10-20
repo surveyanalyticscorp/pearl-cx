@@ -66,6 +66,7 @@ import {setI18nConfig, translate} from '../Utils/MultilinguaUtils';
 import MainDropDown from '../widgets/drop-down/MainDropDown';
 import {SEGMENT_SELECTED} from '../redux/actions/dashboard.actions';
 import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
+import SearchStack from './SearchStack';
 // import {connect} from 'react-redux';
 
 const Drawer = createDrawerNavigator();
@@ -412,7 +413,7 @@ const AppRouter = (props) => {
         <Drawer.Screen name="Responses" component={ResponsesStack} />
         {/* <Drawer.Screen name="Tickets" component={TicketsStack} /> */}
         <Drawer.Screen name="ClosedLoop" component={ClosedLoopStack} />
-
+        <Drawer.Screen name="Search Response" component={SearchStack} />
         <Drawer.Screen
           name={translate('settings.settings')}
           component={settingStack}
