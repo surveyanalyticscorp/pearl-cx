@@ -57,6 +57,7 @@
     "react-native-notifications": "^3.4.0",
     "react-native-orientation-locker": "^1.2.0",
     "react-native-pell-rich-editor": "^1.8.8",
+    "react-native-phone-number-input": "^2.1.0",
     "react-native-pie": "^1.1.2",
     "react-native-read-more-text": "^1.1.2",
     "react-native-reanimated": "^1.7.0",

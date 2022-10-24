@@ -257,16 +257,13 @@ const CxDashboard = (props) => {
             <HorizontalScaleBar value={data.npsPercentage} />
             <View
               style={{
+                zIndex: 99,
                 marginTop: MarginConstants.tab1,
               }}>
               {renderDetailsInformation(
                 'View Responses',
                 'viewDetails',
-                (tag) => {
-                  console.log(tag);
-
-                  props.navigation.navigate('Responses');
-                },
+                (tag) => {},
               )}
             </View>
           </View>
@@ -327,7 +324,11 @@ const CxDashboard = (props) => {
   };
   let renderDetailsInformation = (title, tag, onPressTab) => {
     return (
-      <TouchableOpacity onPress={() => console.log('tap tap')}>
+      <TouchableOpacity
+        onPress={() => {
+          console.log('tap tap');
+          props.navigation.navigate('Responses');
+        }}>
         <Text style={{textAlign: 'left', color: Colors.accentLight}}>
           {title}
         </Text>
