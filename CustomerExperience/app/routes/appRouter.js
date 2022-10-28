@@ -86,10 +86,10 @@ const AppRouter = (props) => {
   let [baseUrl, setBaseUrl] = useState(undefined);
   let ref = useRef();
   let [lastLoginArray, setLastLoginArray] = useState([]);
-  let [segmentOptions, setSegmentOptions] = useState([
-    // 'Main Segment',
-    // 'Child Segment',
-  ]);
+  let [segmentOptions, setSegmentOptions] = useState([]);
+  let [selectedSegment, setSelectedSegment] = useState({});
+  let segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
+
   const dispatch = useDispatch();
 
   const linking = {
@@ -100,6 +100,12 @@ const AppRouter = (props) => {
   };
 
   useEffect(() => {
+    console.log('Segment List', segmentOptions);
+    setSegmentOptions((segments) => segmentDetails.segments);
+    setSelectedSegment((segment) => ({
+      segmentName: segmentDetails.currentSegment,
+      segmentID: segmentDetails.currentSegmentID,
+    }));
     global.baseUrl = '';
     setGlobalBaseUrl();
     const unsubscribeLinks = dynamicLinks().onLink(handleDynamicLink);
@@ -186,6 +192,7 @@ const AppRouter = (props) => {
       ];
       AsyncStorage.multiSet(data, (error) => {});
     }
+    setMoveNext((state) => !authToken);
   }, [authToken]);
 
   useEffect(() => {
@@ -292,8 +299,8 @@ const AppRouter = (props) => {
           headerTitle: (props) => {
             return segmentOptions.length ? (
               <MainDropDown
-                options={segmentOptions}
-                defaultText={segmentOptions[0]}
+                options={segmentOptions.map((item) => item.segmentName)}
+                defaultText={selectedSegment.segmentName}
                 onSelection={(index) => {
                   console.log(`Selected : ${segmentOptions[index]}`);
                   //////
@@ -310,8 +317,7 @@ const AppRouter = (props) => {
             ) : (
               <Text
                 style={{fontSize: TextSizes.largeText, color: Colors.white}}>
-                {' '}
-                Main Segment
+                {selectedSegment.segmentName}
               </Text>
             );
           },
