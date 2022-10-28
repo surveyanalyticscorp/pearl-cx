@@ -10,10 +10,17 @@ import {FontFamily} from '../../styles/font.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_USER_CREDENTIALS, ASYNC_USER_INFO} from '../../api/Constant';
+import {useSelector, useDispatch} from 'react-redux';
+import {getClosedLoopSegmentDetails} from '../../redux/actions/dashboard.actions';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = (props) => {
-  const [userInfo, setUserInfo] = useState();
+  const dispatch = useDispatch();
+  const [userInfo, setUserInfo] = useState(
+    useSelector((state) => state.global.userInfo),
+  );
+  const authToken = useSelector((state) => state.global.authToken);
+  // const user = ;
 
   // let [moveNext, setMoveNext] = useState(false);
   // let splashTimer = useRef(null);
@@ -34,19 +41,10 @@ export const WelcomeScreen = (props) => {
   // };
 
   useEffect(() => {
-    AsyncStorage.getItem(ASYNC_USER_INFO).then((value) => {
-      setUserInfo(JSON.parse(value));
-      console.log('USER_INFO__', value);
-    });
-  }, []);
-
-  // useEffect(() => {
-  //   AsyncStorage.getItem(ASYNC_USER_INFO).then((value) => {
-  //     setUserInfo(value);
-  //     console.log('USER_INFO___', value);
-
-  //   });
-  // }, []);
+    console.log('USER_DATA: ', userInfo, authToken);
+    // console.log('USER_DATA: ', userInfo);
+    dispatch(getClosedLoopSegmentDetails(authToken, {statusID: 0}));
+  }, [userInfo, dispatch, authToken]);
 
   return (
     <ImageBackground
@@ -56,7 +54,9 @@ export const WelcomeScreen = (props) => {
       <View style={styles.backgroundContainer}>
         <Text style={styles.welcomeText}>Welcome back</Text>
         <Text style={styles.nameText}>
-          {userInfo?.firstName + ' ' + userInfo?.lastName}
+          {(userInfo?.firstName === undefined ? '' : userInfo?.firstName) +
+            ' ' +
+            (userInfo?.lastName === undefined ? '' : userInfo?.lastName)}
         </Text>
 
         <View style={styles.responseContainer}>

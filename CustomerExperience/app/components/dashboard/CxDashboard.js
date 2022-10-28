@@ -6,6 +6,7 @@ import {
   Text,
   View,
   BackHandler,
+  BackPressEventName,
   Alert,
   SafeAreaView,
   TouchableOpacity,
@@ -15,8 +16,9 @@ import {showLoading} from '../../redux/actions/index';
 import {
   getDashboardContent,
   // getSegment,
+  getClosedLoopSegmentDetails,
 } from '../../redux/actions/dashboard.actions';
-import {connect, useSelector} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
 import {isObjectEmpty} from '../../Utils/Utility';
@@ -45,6 +47,7 @@ import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
 import {WelcomeScreen} from '../dashboard/WelcomeScreen';
 import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
 import {FabAddButton} from '../../routes/CommonScreen';
+import {useNavigation} from '@react-navigation/native';
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -58,6 +61,9 @@ const CxDashboard = (props) => {
   let [exitAlert, showExitAlert] = useState(false);
   let [lastLoginArray, setLastLoginArray] = useState([]);
   let [welcomeScreenShow, setWelcomeScreenShown] = useState(false);
+  let dispatcher = useDispatch();
+  let myState = useSelector((state) => state);
+  const navigation = useNavigation();
 
   // let [mSegment, setSegment] = useState(props.segment);
   // let [segmentName, setSegmentName] = useState('Given');
@@ -79,6 +85,9 @@ const CxDashboard = (props) => {
       endDate: moment(props.eDate, DMYFORMAT).format(YMDFORMAT),
     };
     props.getDashboardContent(props.authToken, data);
+    props.getSegmentDetails(props.authToken, {statusID: 0});
+
+    dispatcher(getClosedLoopSegmentDetails(props.authToken, {statusID: 0}));
 
     wait(500).then();
   }, [props.range]);
@@ -112,18 +121,20 @@ const CxDashboard = (props) => {
         endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT),
       };
       props.getDashboardContent(props.authToken, data);
+      dispatcher(getClosedLoopSegmentDetails(props.authToken, {statusID: 0}));
     } else {
       getDashboardData();
     }
   }, [props.range, props.wantToReload]); //props.navigation
 
   useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    BackHandler.addEventListener(BackPressEventName, handleBackPress);
     // BackHandler.addEventListener(handleBackPress);
 
     getLastLogin();
-    return function cleanup() {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+    return () => {
+      BackHandler.removeEventListener(BackPressEventName, handleBackPress);
+      // console.log('removed ');
       // BackHandler.removeEventListener(handleBackPress);
     };
   }, []);
@@ -155,10 +166,14 @@ const CxDashboard = (props) => {
   }, [props.dashboardData.detractorTicketsCount]);
 
   let handleBackPress = () => {
-    /*if(!props.navigation.canGoBack()) {
-            showExitAlert(true);
-        }*/
-    showExitAlert(true);
+    if (!props.navigation.canGoBack()) {
+      showExitAlert(true);
+      console.log('go back pressed, show exit');
+    } else {
+      showExitAlert(false);
+      props.navigation.goBack();
+      console.log('go back pressed, just navigate');
+    }
     return true;
   };
 
@@ -565,6 +580,9 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(showLoading(true));
     dispatch(getDashboardContent(token, data));
   },
+  // getSegmentDetails: (token, data) => {
+  //   dispatch(getClosedLoopSegmentDetails(token, data));
+  // },
   showLoading: (flag) => {
     dispatch(showLoading(flag));
   },

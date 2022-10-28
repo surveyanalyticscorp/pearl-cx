@@ -40,6 +40,17 @@ export const CX_GET_NOTIFICATION_LIST =
 export const CX_CLEAR_NOTIFICATION_LOGS =
   '/a/nativehtml/cx.CXClearNotificationLogs';
 
+// CLF 3.0 APIs
+
+export const CLF_GET_TICKET_LIST =
+  'https://clf-backend.questionpro.com/api/mobile/tickets/feedback/';
+// "ex: {{BASE_URL}}/mobile/tickets/feedback/:feedBackId/segment/:segmentId?fromDate=2022-09-28&toDate=2022-10-28"
+export const CLF_GET_TICKET_DETAILS =
+  'https://clf-backend.questionpro.com/api/mobile/tickets/:ticketId';
+// ex: {{BASE_URL}}/mobile/tickets/:ticketId
+export const FEEDBACK = 'feedback';
+export const SEGMENT = 'segment';
+
 export const CX_DASHBOARD = 'CX_DASHBOARD';
 export const CX_DETRACTOR_TICKETS_NEW = 'CX_DETRACTOR_TICKETS_NEW';
 export const CX_DETRACTOR_TICKETS_PENDING = 'CX_DETRACTOR_TICKETS_PENDING';
