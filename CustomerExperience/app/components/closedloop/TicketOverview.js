@@ -33,7 +33,7 @@ import QPButton from '../../widgets/Button';
 import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated, {color} from 'react-native-reanimated';
-import TicketTakeAction from './takeaction/TicketTakeAction';
+import TicketTakeAction from './takeaction/TIcketTakeAction';
 // import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
   BottomSheetHeader,

@@ -3,6 +3,7 @@ import {
   CLOSED_LOOP_OWNER_DETAILS_RECEIVED,
   CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
   CLOSED_LOOP_TICKET_DETAILS_RECEIVED,
+  CLOSED_LOOP_TICKET_LIST_RECEIVED,
   DASHBOARD_RECEIVED,
   SEGMENT_SELECTED,
 } from '../actions/dashboard.actions';
@@ -58,6 +59,11 @@ const dashboardReducer = (state = initialState, action) => {
         ...state,
         segment: action.payload,
       };
+    }
+
+    case CLOSED_LOOP_TICKET_LIST_RECEIVED: {
+      console.log('TICKET', action.response);
+      return {...state, ticketDetails: action.response};
     }
 
     default: {

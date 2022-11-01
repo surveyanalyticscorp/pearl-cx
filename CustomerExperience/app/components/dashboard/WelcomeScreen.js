@@ -16,9 +16,8 @@ import {getClosedLoopSegmentDetails} from '../../redux/actions/dashboard.actions
 
 export const WelcomeScreen = (props) => {
   const dispatch = useDispatch();
-  const [userInfo, setUserInfo] = useState(
-    useSelector((state) => state.global.userInfo),
-  );
+  const userInfo = useSelector((state) => state.global.userInfo);
+
   const authToken = useSelector((state) => state.global.authToken);
   // const user = ;
 

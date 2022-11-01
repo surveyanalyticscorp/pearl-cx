@@ -20,6 +20,10 @@ const ADD_CLOSED_LOOP_TICKET = 'ADD_CLOSED_LOOP_TICKET';
 export const DASHBOARD_RANGE = 'DASHBOARD_RANGE';
 export const SEGMENT_SELECTED = 'SEGMENT_SELECTED';
 
+export const GET_CLOSED_LOOP_TICKET_LIST = 'GET_CLOSED_LOOP_TICKET_LIST';
+export const CLOSED_LOOP_TICKET_LIST_RECEIVED =
+  'CLOSED_LOOP_TICKET_LIST_RECEIVED';
+
 export const getDashboardContent = (token, param) => ({
   type: GET_DASHBOARD,
   token,
@@ -54,6 +58,14 @@ export const updateTicket = () => ({
 
 export const addTicket = () => ({
   type: ADD_CLOSED_LOOP_TICKET,
+});
+
+// CLF 3.0 APIs
+
+export const getClosedLoopTicketList = (token, param) => ({
+  type: GET_CLOSED_LOOP_TICKET_LIST,
+  token,
+  param,
 });
 
 // export const getSegment = () => ({

@@ -83,10 +83,12 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
   },
   modelDropdown: {
+    flex: 1,
     minHeight: MarginConstants.tab3,
-    justifyContent: 'flex-end',
-    marginRight: MarginConstants.tab1,
-    width: '50%',
+    justifyContent: 'center',
+
+    marginRight: Platform.OS === 'android' ? MarginConstants.tab1 : 0,
+    width: '90%',
   },
   dropdownText: {
     flex: 1,

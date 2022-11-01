@@ -12,6 +12,7 @@ import {
   watchGetClosedLoopOwnerDetails,
   watchGetClosedLoopSegmentDetails,
   watchGetDetractorTicketDetail,
+  watchGetClosedLoopTicketList,
 } from './ClosedLoopSaga';
 import {watchGetNotification} from './notificationSaga';
 
@@ -26,6 +27,7 @@ export function* rootSaga() {
     fork(watchUpdatePassword),
     fork(watchGetDetractorTicketDetail),
     fork(watchGetClosedLoopSegmentDetails),
+    fork(watchGetClosedLoopTicketList),
     fork(watchGetClosedLoopOwnerDetails),
     fork(watchForgotPasswordLink),
     fork(watchLogout),

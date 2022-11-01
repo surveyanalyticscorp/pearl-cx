@@ -61,8 +61,7 @@ const CxDashboard = (props) => {
   let [exitAlert, showExitAlert] = useState(false);
   let [lastLoginArray, setLastLoginArray] = useState([]);
   let [welcomeScreenShow, setWelcomeScreenShown] = useState(false);
-  let dispatcher = useDispatch();
-  let myState = useSelector((state) => state);
+
   const navigation = useNavigation();
 
   // let [mSegment, setSegment] = useState(props.segment);
@@ -85,9 +84,6 @@ const CxDashboard = (props) => {
       endDate: moment(props.eDate, DMYFORMAT).format(YMDFORMAT),
     };
     props.getDashboardContent(props.authToken, data);
-    props.getSegmentDetails(props.authToken, {statusID: 0});
-
-    dispatcher(getClosedLoopSegmentDetails(props.authToken, {statusID: 0}));
 
     wait(500).then();
   }, [props.range]);
@@ -121,7 +117,7 @@ const CxDashboard = (props) => {
         endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT),
       };
       props.getDashboardContent(props.authToken, data);
-      dispatcher(getClosedLoopSegmentDetails(props.authToken, {statusID: 0}));
+      // dispatcher(getClosedLoopSegmentDetails(props.authToken, {statusID: 0}));
     } else {
       getDashboardData();
     }

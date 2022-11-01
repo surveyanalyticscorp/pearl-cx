@@ -1,4 +1,5 @@
 import React, {
+  useEffect,
   // useEffect,
   useState,
 } from 'react';
@@ -39,10 +40,33 @@ import {
 import FilterTicket from './takeaction/FilterTickets';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
+import {useDispatch, useSelector} from 'react-redux';
+import {getClosedLoopTicketList} from '../../redux/actions/dashboard.actions';
+import moment from 'moment';
+import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
 export default function ClosedLoop(props) {
+  const dispatch = useDispatch();
+  const {authToken, range} = useSelector((state) => state.global);
+
+  const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
+  const state = useSelector((state) => state.dashboard);
+  const [ticketList, setTicketList] = useState([]);
+  useEffect(() => {
+    const params = {
+      fromDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
+      toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
+    };
+    dispatch(getClosedLoopTicketList(authToken, params));
+  }, []);
+
+  useEffect(() => {
+    setTicketList((state) => ticketDetails.data);
+  }, [ticketDetails]);
+
+  console.log('Ticket list: ', JSON.stringify(ticketDetails.data));
   const sampleTicketList = [
     {
       customerName: 'Jassica Palm',
@@ -193,7 +217,7 @@ export default function ClosedLoop(props) {
     return (
       <FlatList
         style={styles.container}
-        data={sampleTicketList}
+        data={ticketList}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
           return (

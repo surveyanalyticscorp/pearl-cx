@@ -1,3 +1,5 @@
+import {SUCCESS} from './Constant';
+
 const HTTP_FAILED =
   'There was an error processing this request. Please try again.';
 
@@ -40,7 +42,7 @@ export default class WebServiceHandler {
         .then((response) => response.json())
         .then((response) => {
           console.log(`Response Data: ${JSON.stringify(response)}`);
-          if (response.statusCode === 200) {
+          if (response.statusCode === 200 || response.status === SUCCESS) {
             success(response);
           } else {
             failed(response);
@@ -67,7 +69,7 @@ export default class WebServiceHandler {
         .then((response) => response.json())
         .then((response) => {
           console.log(`Response Data: ${JSON.stringify(response)}`);
-          if (response.statusCode === 200) {
+          if (response.statusCode === 200 || response.status === SUCCESS) {
             success(response);
           } else {
             failed(response);

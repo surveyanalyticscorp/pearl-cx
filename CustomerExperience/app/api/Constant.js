@@ -46,10 +46,11 @@ export const CLF_GET_TICKET_LIST =
   'https://clf-backend.questionpro.com/api/mobile/tickets/feedback/';
 // "ex: {{BASE_URL}}/mobile/tickets/feedback/:feedBackId/segment/:segmentId?fromDate=2022-09-28&toDate=2022-10-28"
 export const CLF_GET_TICKET_DETAILS =
-  'https://clf-backend.questionpro.com/api/mobile/tickets/:ticketId';
+  'https://clf-backend.questionpro.com/api/mobile/tickets/';
 // ex: {{BASE_URL}}/mobile/tickets/:ticketId
-export const FEEDBACK = 'feedback';
-export const SEGMENT = 'segment';
+
+export const FEEDBACK = 'feedback/';
+export const SEGMENT = 'segment/';
 
 export const CX_DASHBOARD = 'CX_DASHBOARD';
 export const CX_DETRACTOR_TICKETS_NEW = 'CX_DETRACTOR_TICKETS_NEW';
@@ -60,6 +61,6 @@ export const CX_FEEDBACK_SELECTED = 'CX_FEEDBACK_SELECTED';
 export const CX_FEEDBACK_UPDATED = 'CX_FEEDBACK_UPDATED';
 export const LOADING_PROGRESS = 'LOADING_PROGRESS';
 export const LOADING_ERROR = 'ERROR';
-
+export const SUCCESS = 'success';
 export const EMAIL_PATTERN =
   "^[A-Za-z0-9][\\'A-Za-z0-9_+/-]*(\\.[\\'_A-Za-z0-9-+/]+)*@((([a-zA-Z]+)?\\.[a-zA-Z]+-[a-zA-Z]+\\.[A-Za-z]{2,})|([A-Za-z0-9]([A-Za-z0-9_-]*)(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})))";

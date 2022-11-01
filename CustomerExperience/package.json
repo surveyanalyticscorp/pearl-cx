@@ -9,7 +9,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "postinstall": "patch-package"
+    "postinstall": "react-native patch-package"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.3",
@@ -35,6 +35,7 @@
     "lodash.memoize": "^4.1.2",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.31",
+    "patch-package": "^6.5.0",
     "prop-types": "latest",
     "react": "16.11.0",
     "react-dom": "^16.13.1",

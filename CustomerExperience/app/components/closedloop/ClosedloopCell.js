@@ -12,9 +12,12 @@ import {
 import {
   Colors,
   getPriorityBorderColor,
+  getPriorityBorderColorbyId,
   // getPriorityFillerColor,
   getStatusBorderColor,
+  getStatusBorderColorbyId,
   getStatusFillerColor,
+  getStatusFillerColorbyId,
   // statusColors,
 } from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -43,7 +46,7 @@ export default function ClosedLoopCell(props) {
   }, [isTapped]);
 
   const getTicketID = () => {
-    return <Text style={styles.idText}>{`ID ${data.ticketId}`} </Text>;
+    return <Text style={styles.idText}>{`ID ${data.id}`} </Text>;
   };
 
   let getNPSIcon = (sentiment) => {
@@ -93,10 +96,10 @@ export default function ClosedLoopCell(props) {
   const getNPSAndTicketRow = () => {
     return (
       <View style={styles.rowContainer}>
-        <View style={[{flex: 2}, styles.rowContainer]}>
+        {/* <View style={[{flex: 2}, styles.rowContainer]}>
           {getNPSIcon(data.nps)}
           {getNPSScore(data.npsScore, data.nps)}
-        </View>
+        </View> */}
         <View
           style={[{flex: 2, justifyContent: 'flex-end'}, styles.rowContainer]}>
           {getTicketID()}
@@ -108,8 +111,8 @@ export default function ClosedLoopCell(props) {
   const getNameANdDateRow = () => {
     return (
       <View style={styles.rowContainer}>
-        <Text style={styles.userNameText}>{data.customerName}</Text>
-        <Text style={styles.dateText}>{` · ${data.date}`}</Text>
+        <Text style={styles.userNameText}>{data.customerName ?? ' '}</Text>
+        <Text style={styles.dateText}>{` · ${data.createdAt}`}</Text>
       </View>
     );
   };
@@ -118,15 +121,15 @@ export default function ClosedLoopCell(props) {
     return (
       <View style={styles.rowContainer}>
         <Text style={styles.detailsText} numberOfLines={3} ellipsizeMode="tail">
-          {data.messsage}
+          {data.comment}
         </Text>
       </View>
     );
   };
 
   const getStatusUI = (status) => {
-    const borderColor = getStatusBorderColor(status.toLowerCase());
-    const fillerColor = getStatusFillerColor(status.toLowerCase());
+    const borderColor = getStatusBorderColorbyId(status);
+    const fillerColor = getStatusFillerColorbyId(status);
 
     return (
       <View style={styles.rowContainer}>
@@ -147,7 +150,7 @@ export default function ClosedLoopCell(props) {
   };
 
   const getPriorityUI = (priority) => {
-    const priorityColor = getPriorityBorderColor(priority.toLowerCase());
+    const priorityColor = getPriorityBorderColorbyId(priority);
 
     return (
       <View style={styles.rowContainer}>

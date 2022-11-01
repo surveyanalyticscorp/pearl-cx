@@ -90,6 +90,23 @@ const getStatusBorderColor = (_status) => {
   }
 };
 
+const getStatusBorderColorbyId = (_status) => {
+  switch (_status) {
+    case 'open':
+      return statusColors.openBorder;
+    case 'closed':
+      return statusColors.closedBorder;
+    case 'escalated':
+      return statusColors.escalatedBorder;
+    case 'overdue':
+      return statusColors.overDueBorder;
+    case 'resolved':
+      return statusColors.resolvedBorder;
+    default:
+      return statusColors.newBorder;
+  }
+};
+
 const getStatusFillerColor = (_status) => {
   switch (_status) {
     case 'open':
@@ -104,6 +121,24 @@ const getStatusFillerColor = (_status) => {
       return statusColors.resolvedFiller;
     default:
       return statusColors.newFiller;
+  }
+};
+const getStatusFillerColorbyId = (_status) => {
+  switch (_status) {
+    case 1:
+      return statusColors.openFiller;
+    case 2:
+      return statusColors.escalatedFiller;
+    case 3:
+      return statusColors.overDueFiller;
+    case 4:
+      return statusColors.resolvedFiller;
+    case 0:
+      return statusColors.newFiller;
+
+    default:
+      //'closed'
+      return statusColors.closedFiller;
   }
 };
 
@@ -122,6 +157,21 @@ const getPriorityBorderColor = (_priority) => {
   }
 };
 
+const getPriorityBorderColorbyId = (_priority) => {
+  switch (_priority) {
+    case 3:
+      return priorityColors.critical.border;
+    case 2:
+      return priorityColors.high.border;
+    case 1:
+      return priorityColors.normal.border;
+    case 0:
+      return priorityColors.low.border;
+    default:
+      return priorityColors.unassigned.border;
+  }
+};
+
 const getPriorityFillerColor = (_priority) => {
   switch (_priority) {
     case 'critical':
@@ -131,6 +181,21 @@ const getPriorityFillerColor = (_priority) => {
     case 'normal':
       return priorityColors.normal.filler;
     case 'low':
+      return priorityColors.low.filler;
+    default:
+      return priorityColors.unassigned.filler;
+  }
+};
+
+const getPriorityFillerColorbyId = (_priority) => {
+  switch (_priority) {
+    case 3:
+      return priorityColors.critical.filler;
+    case 2:
+      return priorityColors.high.filler;
+    case 1:
+      return priorityColors.normal.filler;
+    case 0:
       return priorityColors.low.filler;
     default:
       return priorityColors.unassigned.filler;
@@ -197,4 +262,8 @@ export {
   getPriorityFillerColor,
   getStatusBorderColor,
   getStatusFillerColor,
+  getPriorityBorderColorbyId,
+  getPriorityFillerColorbyId,
+  getStatusBorderColorbyId,
+  getStatusFillerColorbyId,
 };

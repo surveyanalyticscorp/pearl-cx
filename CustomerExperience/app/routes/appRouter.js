@@ -100,12 +100,13 @@ const AppRouter = (props) => {
   };
 
   useEffect(() => {
-    console.log('Segment List', segmentOptions);
-    setSegmentOptions((segments) => segmentDetails.segments);
+    setSegmentOptions((segments) => segmentDetails?.segments ?? []);
     setSelectedSegment((segment) => ({
       segmentName: segmentDetails.currentSegment,
       segmentID: segmentDetails.currentSegmentID,
     }));
+
+    console.log('Segment List', segmentOptions);
     global.baseUrl = '';
     setGlobalBaseUrl();
     const unsubscribeLinks = dynamicLinks().onLink(handleDynamicLink);
@@ -140,7 +141,7 @@ const AppRouter = (props) => {
       unsubscribeLinks();
       unsubscribeNotifications();
     };
-  }, []);
+  }, [segmentDetails]);
 
   useEffect(() => {
     setGlobalBaseUrl();
@@ -297,23 +298,25 @@ const AppRouter = (props) => {
         component={CxDashboard}
         options={({navigation, route}) => ({
           headerTitle: (props) => {
-            return segmentOptions.length ? (
-              <MainDropDown
-                options={segmentOptions.map((item) => item.segmentName)}
-                defaultText={selectedSegment.segmentName}
-                onSelection={(index) => {
-                  console.log(`Selected : ${segmentOptions[index]}`);
-                  //////
+            return segmentOptions && segmentOptions.length ? (
+              <View style={{flex: 1}}>
+                <MainDropDown
+                  options={segmentOptions.map((item) => item.segmentName)}
+                  defaultText={selectedSegment.segmentName}
+                  onSelection={(index) => {
+                    console.log(`Selected : ${segmentOptions[index]}`);
+                    //////
 
-                  dispatch({
-                    type: SEGMENT_SELECTED,
-                    payload: segmentOptions[index],
-                  });
+                    dispatch({
+                      type: SEGMENT_SELECTED,
+                      payload: segmentOptions[index],
+                    });
 
-                  // updateSegment(`${segmentOptions[index]}`);
-                  //////
-                }}
-              />
+                    // updateSegment(`${segmentOptions[index]}`);
+                    //////
+                  }}
+                />
+              </View>
             ) : (
               <Text
                 style={{fontSize: TextSizes.largeText, color: Colors.white}}>
@@ -432,19 +435,19 @@ const AppRouter = (props) => {
   let splashTimer = useRef(null);
 
   // useEffect(() => {
-  //   splashTimer = setTimeout(() => {
+  //   splashTimer.current = setTimeout(() => {
   //     setMoveNext(true);
   //   }, 3000);
 
   //   return () => {
-  //     clearTimeout(splashTimer);
+  //     clearTimeout(splashTimer.current);
   //   };
-  // }, []);
+  // }, [moveNext]);
 
   const onSkipHandler = () => {
     console.log('SKIP!!');
     setMoveNext(true);
-    clearTimeout(splashTimer);
+    clearTimeout(splashTimer.current);
   };
 
   return (
