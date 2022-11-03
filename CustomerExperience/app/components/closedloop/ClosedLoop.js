@@ -44,6 +44,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getClosedLoopTicketList} from '../../redux/actions/dashboard.actions';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
+import {showLoading} from '../../redux/actions';
+import {dashboardStyles} from '../dashboard/dashboard.style';
+import QPSpinner from '../../widgets/QPSpinner';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
@@ -52,14 +55,26 @@ export default function ClosedLoop(props) {
   const {authToken, range} = useSelector((state) => state.global);
 
   const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
-  const state = useSelector((state) => state.dashboard);
+  // const state = useSelector((state) => state.dashboard);
+  const currentFeedback = useSelector(
+    (state) => state.dashboard.currentFeedback,
+  );
+  const currentSegment = useSelector((state) => state.dashboard.currentSegment);
   const [ticketList, setTicketList] = useState([]);
   useEffect(() => {
     const params = {
       fromDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
       toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
     };
-    dispatch(getClosedLoopTicketList(authToken, params));
+    dispatch(
+      getClosedLoopTicketList(
+        authToken,
+        params,
+        currentFeedback.feedbackID,
+        currentSegment.currentSegmentID,
+      ),
+    );
+    dispatch(showLoading(true));
   }, []);
 
   useEffect(() => {
@@ -154,6 +169,16 @@ export default function ClosedLoop(props) {
   const [filterData, setFilterData] = useState(sampleFilterData);
   const sampleData = {
     dateRageText: 'Nov 14, 2017 -Mar 14, 2018',
+  };
+
+  let renderSpinner = () => {
+    if (props.isLoading) {
+      return (
+        <View style={dashboardStyles.loading}>
+          <QPSpinner />
+        </View>
+      );
+    }
   };
   const getSearchIcon = () => {
     return <IonIcons name="search" size={20} color={Colors.lightBlack} />;
@@ -295,6 +320,7 @@ export default function ClosedLoop(props) {
           opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
           flex: 1,
         }}>
+        {renderSpinner()}
         <HeaderFilter />
         <ClosedLoopTicketList />
         <FabAddButton onPress={onFabHandler} />

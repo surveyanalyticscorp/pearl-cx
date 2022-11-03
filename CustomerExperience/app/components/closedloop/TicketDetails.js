@@ -23,12 +23,20 @@ import TicketOverview from './TicketOverview';
 import TicketComments from './TicketComments';
 import TicketActivity from './TicketActivity';
 import {FontFamily} from '../../styles/font.constants';
+import {useDispatch, useSelector} from 'react-redux';
+import {getClosedLoopTicketItem} from '../../redux/actions/dashboard.actions';
 
 export default function TicketDetails(props) {
+  // const {authToken, range} = useSelector((state) => state.global);
+  const ticketId = props.route.params;
+  const dispatch = useDispatch();
+
+  console.log('Ticket ID', ticketId);
   const TicketTabs = createMaterialTopTabNavigator();
 
   useEffect(() => {
     // props.Navigator.screenName = 'Screen';
+    // dispatch(getClosedLoopTicketItem());
   }, []);
 
   const CLFTicketTabStack = () => {

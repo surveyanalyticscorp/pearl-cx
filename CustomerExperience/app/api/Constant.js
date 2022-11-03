@@ -51,6 +51,8 @@ export const CLF_GET_TICKET_DETAILS =
 
 export const FEEDBACK = 'feedback/';
 export const SEGMENT = 'segment/';
+export const COMMNETS = 'comments/';
+export const ACTIVITY_LOG = 'activity-log/';
 
 export const CX_DASHBOARD = 'CX_DASHBOARD';
 export const CX_DETRACTOR_TICKETS_NEW = 'CX_DETRACTOR_TICKETS_NEW';

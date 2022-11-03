@@ -13,6 +13,9 @@ import {
   watchGetClosedLoopSegmentDetails,
   watchGetDetractorTicketDetail,
   watchGetClosedLoopTicketList,
+  watchGetClosedLoopTicketItem,
+  watchGetClosedLoopTicketComments,
+  watchGetClosedLoopTicketActivity,
 } from './ClosedLoopSaga';
 import {watchGetNotification} from './notificationSaga';
 
@@ -28,6 +31,9 @@ export function* rootSaga() {
     fork(watchGetDetractorTicketDetail),
     fork(watchGetClosedLoopSegmentDetails),
     fork(watchGetClosedLoopTicketList),
+    fork(watchGetClosedLoopTicketItem),
+    fork(watchGetClosedLoopTicketComments),
+    fork(watchGetClosedLoopTicketActivity),
     fork(watchGetClosedLoopOwnerDetails),
     fork(watchForgotPasswordLink),
     fork(watchLogout),

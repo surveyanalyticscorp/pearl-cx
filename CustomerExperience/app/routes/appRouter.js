@@ -74,7 +74,7 @@ const DetractorStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
 
 const AppRouter = (props) => {
-  const {updateSegment} = props;
+  // const {updateSegment} = props;
   const authToken = useSelector((state) => state.global.authToken);
   const userInfo = useSelector((state) => state.global.userInfo);
   const languageCode = useSelector((state) => state.global.languageCode);
@@ -84,7 +84,7 @@ const AppRouter = (props) => {
   );
   let [isAppActive, setAppActiveState] = useState(false);
   let [baseUrl, setBaseUrl] = useState(undefined);
-  let ref = useRef();
+  // let ref = useRef();
   let [lastLoginArray, setLastLoginArray] = useState([]);
   let [segmentOptions, setSegmentOptions] = useState([]);
   let [selectedSegment, setSelectedSegment] = useState({});
@@ -434,15 +434,15 @@ const AppRouter = (props) => {
   let [moveNext, setMoveNext] = useState(false);
   let splashTimer = useRef(null);
 
-  // useEffect(() => {
-  //   splashTimer.current = setTimeout(() => {
-  //     setMoveNext(true);
-  //   }, 3000);
+  useEffect(() => {
+    splashTimer.current = setTimeout(() => {
+      setMoveNext(true);
+    }, 3000);
 
-  //   return () => {
-  //     clearTimeout(splashTimer.current);
-  //   };
-  // }, [moveNext]);
+    return () => {
+      clearTimeout(splashTimer.current);
+    };
+  }, [moveNext]);
 
   const onSkipHandler = () => {
     console.log('SKIP!!');

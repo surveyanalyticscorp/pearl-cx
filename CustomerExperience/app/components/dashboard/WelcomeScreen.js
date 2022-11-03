@@ -43,7 +43,7 @@ export const WelcomeScreen = (props) => {
     console.log('USER_DATA: ', userInfo, authToken);
     // console.log('USER_DATA: ', userInfo);
     dispatch(getClosedLoopSegmentDetails(authToken, {statusID: 0}));
-  }, [userInfo, dispatch, authToken]);
+  }, []);
 
   return (
     <ImageBackground

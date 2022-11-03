@@ -5,11 +5,17 @@ import {
   CLOSED_LOOP_OWNER_DETAILS_RECEIVED,
   CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
   CLOSED_LOOP_TICKET_DETAILS_RECEIVED,
+  CLOSED_LOOP_TICKET_ITEM_RECEIVED,
   CLOSED_LOOP_TICKET_LIST_RECEIVED,
   GET_CLOSED_LOOP_OWNER_DETAILS,
   GET_CLOSED_LOOP_SEGMENT_DETAILS,
   GET_CLOSED_LOOP_TICKET_DETAILS,
+  GET_CLOSED_LOOP_TICKET_ITEM,
   GET_CLOSED_LOOP_TICKET_LIST,
+  GET_CLOSED_LOOP_TICKET_ITEM_COMMENTS,
+  GET_CLOSED_LOOP_TICKET_ITEM_ACTIVITY,
+  CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED,
+  CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED,
 } from '../actions/dashboard.actions';
 import {
   CX_ADD_CLOSED_LOOP_TICKET,
@@ -20,6 +26,9 @@ import {
   CLF_GET_TICKET_LIST,
   FEEDBACK,
   SEGMENT,
+  CLF_GET_TICKET_DETAILS,
+  COMMNETS,
+  ACTIVITY_LOG,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 
@@ -60,6 +69,7 @@ function* fetchClosedLoopSegmentDetails(action) {
       type: CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
       response: json,
     });
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
     yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({
@@ -87,6 +97,7 @@ function* fetchClosedLoopOwnerDetails(action) {
       type: CLOSED_LOOP_OWNER_DETAILS_RECEIVED,
       response: json,
     });
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
     yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({
@@ -150,7 +161,11 @@ export function addClosedLoopTicket(
 function* fetchClosedLoopTicketList(action) {
   try {
     const json = yield WebServiceHandler.get(
-      CLF_GET_TICKET_LIST + '25951' + '/' + SEGMENT + '188911',
+      CLF_GET_TICKET_LIST +
+        action.feedbackId +
+        '/' +
+        SEGMENT +
+        action.segmentId,
       {'Auth-Token': action.token},
       action.param,
     );
@@ -169,4 +184,84 @@ function* fetchClosedLoopTicketList(action) {
 }
 export function* watchGetClosedLoopTicketList() {
   yield takeLatest(GET_CLOSED_LOOP_TICKET_LIST, fetchClosedLoopTicketList);
+}
+
+function* fetchClosedLoopTicketItem(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      CLF_GET_TICKET_DETAILS + action.ticketId,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: CLOSED_LOOP_TICKET_ITEM_RECEIVED,
+      response: json,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchGetClosedLoopTicketItem() {
+  yield takeLatest(GET_CLOSED_LOOP_TICKET_ITEM, fetchClosedLoopTicketItem);
+}
+
+function* fetchClosedLoopTicketComments(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED,
+      response: json,
+    });
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchGetClosedLoopTicketComments() {
+  yield takeLatest(
+    GET_CLOSED_LOOP_TICKET_ITEM_COMMENTS,
+    fetchClosedLoopTicketComments,
+  );
+}
+
+function* fetchClosedLoopTicketActivity(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED,
+      response: json,
+    });
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchGetClosedLoopTicketActivity() {
+  yield takeLatest(
+    GET_CLOSED_LOOP_TICKET_ITEM_ACTIVITY,
+    fetchClosedLoopTicketActivity,
+  );
 }

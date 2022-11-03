@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   View,
   TouchableWithoutFeedback,
@@ -11,14 +11,9 @@ import {
 // import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {
   Colors,
-  getPriorityBorderColor,
   getPriorityBorderColorbyId,
-  // getPriorityFillerColor,
-  getStatusBorderColor,
   getStatusBorderColorbyId,
-  getStatusFillerColor,
   getStatusFillerColorbyId,
-  // statusColors,
 } from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
@@ -29,21 +24,23 @@ import {FontFamily} from '../../styles/font.constants';
 // import {translate} from '../../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {TextSizes} from '../../styles/textsize.constants';
-
+import moment from 'moment';
+import {FullMonthDateYearFormat} from '../../Utils/AppConstants';
+import {getStatusById, getPriorityById} from '../../Utils/TicketUtils';
 export default function ClosedLoopCell(props) {
   const data = props.data;
 
-  let sampleText =
-    'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...';
-  let [isTapped, setTapped] = useState(false);
+  // let sampleText =
+  //   'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...';
+  // let [isTapped, setTapped] = useState(false);
 
-  useEffect(() => {
-    if (isTapped) {
-      setTapped(false);
+  // useEffect(() => {
+  //   if (isTapped) {
+  //     setTapped(false);
 
-      props.navigation.navigate('closedLoopTicketDetails');
-    }
-  }, [isTapped]);
+  //     props.navigation.navigate('closedLoopTicketDetails');
+  //   }
+  // }, [isTapped]);
 
   const getTicketID = () => {
     return <Text style={styles.idText}>{`ID ${data.id}`} </Text>;
@@ -109,10 +106,12 @@ export default function ClosedLoopCell(props) {
   };
 
   const getNameANdDateRow = () => {
+    const createdDate = moment(data.createdAt).format(FullMonthDateYearFormat);
+
     return (
       <View style={styles.rowContainer}>
         <Text style={styles.userNameText}>{data.customerName ?? ' '}</Text>
-        <Text style={styles.dateText}>{` · ${data.createdAt}`}</Text>
+        <Text style={styles.dateText}>{` · ${createdDate ?? ' '}`}</Text>
       </View>
     );
   };
@@ -144,18 +143,22 @@ export default function ClosedLoopCell(props) {
             backgroundColor: fillerColor,
           }}
         />
-        <Text style={[{marginHorizontal: 4}, styles.statusText]}>{status}</Text>
+        <Text style={[{marginHorizontal: 4}, styles.statusText]}>
+          {getStatusById(status)}
+        </Text>
       </View>
     );
   };
 
   const getPriorityUI = (priority) => {
     const priorityColor = getPriorityBorderColorbyId(priority);
-
+    const priorityText = getPriorityById(priority);
     return (
       <View style={styles.rowContainer}>
         <IonIcons name="flag" size={20} color={priorityColor} />
-        <Text style={[{marginStart: 4}, styles.detailsText]}>{priority}</Text>
+        <Text style={[{marginStart: 4}, styles.detailsText]}>
+          {priorityText}
+        </Text>
       </View>
     );
   };

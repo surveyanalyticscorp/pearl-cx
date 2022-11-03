@@ -24,6 +24,20 @@ export const GET_CLOSED_LOOP_TICKET_LIST = 'GET_CLOSED_LOOP_TICKET_LIST';
 export const CLOSED_LOOP_TICKET_LIST_RECEIVED =
   'CLOSED_LOOP_TICKET_LIST_RECEIVED';
 
+export const GET_CLOSED_LOOP_TICKET_ITEM = 'GET_CLOSED_LOOP_TICKET_ITEM';
+export const CLOSED_LOOP_TICKET_ITEM_RECEIVED =
+  'CLOSED_LOOP_TICKET_ITEM_RECEIVED';
+
+export const GET_CLOSED_LOOP_TICKET_ITEM_COMMENTS =
+  'GET_CLOSED_LOOP_TICKET_ITEM_COMMENTS';
+export const CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED =
+  'CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED';
+
+export const GET_CLOSED_LOOP_TICKET_ITEM_ACTIVITY =
+  'GET_CLOSED_LOOP_TICKET_ITEM_ACTIVITY';
+export const CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED =
+  'CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED';
+
 export const getDashboardContent = (token, param) => ({
   type: GET_DASHBOARD,
   token,
@@ -62,10 +76,36 @@ export const addTicket = () => ({
 
 // CLF 3.0 APIs
 
-export const getClosedLoopTicketList = (token, param) => ({
+export const getClosedLoopTicketList = (
+  token,
+  param,
+  feedbackId,
+  segmentId,
+) => ({
   type: GET_CLOSED_LOOP_TICKET_LIST,
   token,
   param,
+  feedbackId,
+  segmentId,
+});
+
+export const getClosedLoopTicketItem = (token, param, ticketId) => ({
+  type: GET_CLOSED_LOOP_TICKET_ITEM,
+  token,
+  param,
+  ticketId,
+});
+
+export const getClosedLoopTicketItemComments = (token, ticketId) => ({
+  type: GET_CLOSED_LOOP_TICKET_ITEM_COMMENTS,
+  token,
+  ticketId,
+});
+
+export const getClosedLoopTicketItemActivity = (token, ticketId) => ({
+  type: GET_CLOSED_LOOP_TICKET_ITEM_ACTIVITY,
+  token,
+  ticketId,
 });
 
 // export const getSegment = () => ({
