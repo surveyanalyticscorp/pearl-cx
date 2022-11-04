@@ -58,7 +58,11 @@ const dashboardReducer = (state = initialState, action) => {
         ticketDetails: {},
         segmentDetails: {},
         ownerDetails: {},
-        ticketItem: {},
+        ticket: {
+          details: {},
+          comments: {},
+          activity: {},
+        },
       };
     }
 
@@ -73,13 +77,13 @@ const dashboardReducer = (state = initialState, action) => {
     }
 
     case CLOSED_LOOP_TICKET_LIST_RECEIVED: {
-      console.log('TICKET', action.response);
+      console.log('TICKETLIST', action.response);
       return {...state, ticketDetails: action.response};
     }
 
     case CLOSED_LOOP_TICKET_ITEM_RECEIVED: {
-      console.log('TICKET', action.response);
-      return {...state, ticketItem: action.response};
+      console.log('TICKETDETAILS', action.response.data);
+      return {...state, ticket: action.response.data};
     }
 
     default: {

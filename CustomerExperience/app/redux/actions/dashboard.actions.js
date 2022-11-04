@@ -89,10 +89,9 @@ export const getClosedLoopTicketList = (
   segmentId,
 });
 
-export const getClosedLoopTicketItem = (token, param, ticketId) => ({
+export const getClosedLoopTicketItem = (token, ticketId) => ({
   type: GET_CLOSED_LOOP_TICKET_ITEM,
   token,
-  param,
   ticketId,
 });
 

@@ -39,24 +39,40 @@ import {
   BottomSheetHeader,
   RenderRoundImageOrColor,
 } from '../../routes/CommonScreen';
+import {useSelector} from 'react-redux';
+import {
+  getPriorityById,
+  getStatusById,
+  priorityList,
+  statusList,
+} from '../../Utils/TicketUtils';
+import moment from 'moment';
+import {FullMonthDateYearFormat} from '../../Utils/AppConstants';
 
 export default function TicketOverview(props) {
-  const statusoptions = [
-    {value: 'Open', color: statusColors.openFiller},
-    {value: 'Closed', color: statusColors.closedFiller},
-    {value: 'Overdue', color: statusColors.overDueFiller},
-    {value: 'Escalated', color: statusColors.escalatedFiller},
-    {value: 'Resolved', color: statusColors.resolvedFiller},
-    {value: 'New', color: statusColors.newFiller},
-  ];
+  const ticketDetails = useSelector((state) => state.dashboard.ticket);
+  const currentSegment = useSelector(
+    (state) => state.dashboard.currentSegment.currentSegment,
+  );
 
-  const priorityOptions = [
-    {value: 'Critical', color: priorityColors.critical.filler},
-    {value: 'High', color: priorityColors.high.filler},
-    {value: 'Normal', color: priorityColors.normal.filler},
-    {value: 'Low', color: priorityColors.low.filler},
-    {value: 'Unassigned', color: priorityColors.unassigned.filler},
-  ];
+  console.log('TTTTT', ticketDetails ?? '');
+
+  // const statusoptions = [
+  //   {value: 'Open', color: statusColors.openFiller},
+  //   {value: 'Closed', color: statusColors.closedFiller},
+  //   {value: 'Overdue', color: statusColors.overDueFiller},
+  //   {value: 'Escalated', color: statusColors.escalatedFiller},
+  //   {value: 'Resolved', color: statusColors.resolvedFiller},
+  //   {value: 'New', color: statusColors.newFiller},
+  // ];
+
+  // const priorityOptions = [
+  //   {value: 'Critical', color: priorityColors.critical.filler},
+  //   {value: 'High', color: priorityColors.high.filler},
+  //   {value: 'Normal', color: priorityColors.normal.filler},
+  //   {value: 'Low', color: priorityColors.low.filler},
+  //   {value: 'Unassigned', color: priorityColors.unassigned.filler},
+  // ];
 
   const userOptions = [
     {value: 'Manager 1', url: 'https://picsum.photos/id/237/200'},
@@ -69,8 +85,8 @@ export default function TicketOverview(props) {
     'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...';
   let [isTapped, setTapped] = useState(false);
 
-  const getTicketID = () => {
-    return <Text style={styles.idText}>{'ID 9993213'} </Text>;
+  const TicketID = ({children}) => {
+    return <Text style={styles.idText}>{`ID ${children}`} </Text>;
   };
 
   let getNPSIcon = (sentiment) => {
@@ -125,7 +141,7 @@ export default function TicketOverview(props) {
         </View>
         <View
           style={[{flex: 2, justifyContent: 'flex-end'}, styles.rowContainer]}>
-          {getTicketID()}
+          <TicketID>''</TicketID>
         </View>
       </View>
     );
@@ -336,11 +352,21 @@ export default function TicketOverview(props) {
       <View style={styles.ticketStatusContainer}>
         <View style={styles.rowContainer}>
           {Title('Status')}
-          {DropDownView(statusoptions, 'Select status')}
+          {DropDownView(
+            statusList,
+            ticketDetails !== undefined
+              ? getStatusById(ticketDetails.status)
+              : 'Select status',
+          )}
         </View>
         <View style={styles.rowContainer}>
           {Title('Priority')}
-          {DropDownView(priorityOptions, 'Select priority')}
+          {DropDownView(
+            priorityList,
+            ticketDetails !== undefined
+              ? getPriorityById(ticketDetails.priority)
+              : 'Select priority',
+          )}
         </View>
         <View style={styles.rowContainer}>
           {Title('Assigned to')}
@@ -378,7 +404,7 @@ export default function TicketOverview(props) {
                   fontSize: TextSizes.primary,
                   color: Colors.accentLight,
                 }}>
-                ID 9033212
+                {`ID ${ticketDetails !== undefined ? ticketDetails.id : ''}`}
               </Text>
             </View>
           </TouchableWithoutFeedback>
@@ -386,11 +412,15 @@ export default function TicketOverview(props) {
 
         <View style={styles.rowContainer}>
           {Title('Segment')}
-          {getText('Main segment')}
+          {getText(currentSegment)}
         </View>
         <View style={styles.rowContainer}>
           {Title('Created')}
-          {getText('22 July, 2022')}
+          {getText(
+            ticketDetails !== undefined
+              ? moment(ticketDetails.createdAt).format(FullMonthDateYearFormat)
+              : '',
+          )}
         </View>
         <View style={styles.rowContainer}>
           {Title('NPS')}

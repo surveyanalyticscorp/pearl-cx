@@ -27,16 +27,16 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getClosedLoopTicketItem} from '../../redux/actions/dashboard.actions';
 
 export default function TicketDetails(props) {
-  // const {authToken, range} = useSelector((state) => state.global);
-  const ticketId = props.route.params;
+  const {authToken} = useSelector((state) => state.global);
+  const ticketItem = props.route.params;
   const dispatch = useDispatch();
 
-  console.log('Ticket ID', ticketId);
+  console.log('Ticket ID', ticketItem);
   const TicketTabs = createMaterialTopTabNavigator();
 
   useEffect(() => {
     // props.Navigator.screenName = 'Screen';
-    // dispatch(getClosedLoopTicketItem());
+    dispatch(getClosedLoopTicketItem(authToken, ticketItem.id));
   }, []);
 
   const CLFTicketTabStack = () => {
