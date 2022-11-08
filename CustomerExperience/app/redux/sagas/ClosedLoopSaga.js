@@ -173,6 +173,7 @@ function* fetchClosedLoopTicketList(action) {
       type: CLOSED_LOOP_TICKET_LIST_RECEIVED,
       response: json,
     });
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
     yield put({type: IS_LOADING, payload: {isLoading: false}});
@@ -197,6 +198,7 @@ function* fetchClosedLoopTicketItem(action) {
       type: CLOSED_LOOP_TICKET_ITEM_RECEIVED,
       response: json,
     });
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
     yield put({type: IS_LOADING, payload: {isLoading: false}});

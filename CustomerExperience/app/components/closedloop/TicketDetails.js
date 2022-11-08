@@ -24,7 +24,11 @@ import TicketComments from './TicketComments';
 import TicketActivity from './TicketActivity';
 import {FontFamily} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {getClosedLoopTicketItem} from '../../redux/actions/dashboard.actions';
+import {
+  getClosedLoopTicketItem,
+  getClosedLoopTicketItemActivity,
+  getClosedLoopTicketItemComments,
+} from '../../redux/actions/dashboard.actions';
 
 export default function TicketDetails(props) {
   const {authToken} = useSelector((state) => state.global);
@@ -37,7 +41,9 @@ export default function TicketDetails(props) {
   useEffect(() => {
     // props.Navigator.screenName = 'Screen';
     dispatch(getClosedLoopTicketItem(authToken, ticketItem.id));
-  }, []);
+    dispatch(getClosedLoopTicketItemComments(authToken, ticketItem.id));
+    dispatch(getClosedLoopTicketItemActivity(authToken, ticketItem.id));
+  }, [dispatch, ticketItem, authToken]);
 
   const CLFTicketTabStack = () => {
     return (

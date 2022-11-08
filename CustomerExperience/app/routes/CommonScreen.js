@@ -233,6 +233,25 @@ export const RenderRoundImageOrColor = ({data, size}) => {
   );
 };
 
+export const NoItemsFound = ({children}) => {
+  return (
+    <View
+      style={{
+        flex: 1,
+
+        margin: MarginConstants.tab3,
+      }}>
+      <Text
+        style={{
+          fontFamily: FontFamily.medium,
+          color: Colors.filterIconColor,
+          fontSize: TextSizes.primary,
+        }}>
+        {children ?? 'No items found'}
+      </Text>
+    </View>
+  );
+};
 export const CheckBoxItem = ({item, index, onPress, textStyle}) => {
   const _textStyle = textStyle ?? styles.checkBoxText;
   return (

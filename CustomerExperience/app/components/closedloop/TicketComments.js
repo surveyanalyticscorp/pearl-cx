@@ -1,4 +1,4 @@
-import React from 'react'; // , {useEffect, useState}
+import React, {useEffect, useState} from 'react'; // , {useEffect, useState}
 import {
   View,
   // TouchableWithoutFeedback,
@@ -25,6 +25,8 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
+import {useSelector} from 'react-redux';
+import {NoItemsFound} from '../../routes/CommonScreen';
 // import {Sizes} from '../../styles/Size.constant';
 // import moment from 'moment';
 // import {translate} from '../../Utils/MultilinguaUtils';
@@ -34,42 +36,44 @@ import {FontFamily} from '../../styles/font.constants';
 // import {backgroundColor} from '../../widgets/qp-calendar/style';
 
 export default function TicketComments(props) {
+  const [ticketComments, setTicketComments] = useState(
+    useSelector((state) => state.dashboard.ticketComments),
+  );
+  const commentList = useSelector;
   const sampleData = [
     // {id: 1, title: 'Astro'},
     // {id: 2, title: 'Bakun'},
   ];
 
+  // useEffect(() => {
+  //   setTicketComments();
+  // }, []);
+
+  console.log('TICKET COMMENTS on UI', JSON.stringify(ticketComments));
   const ShowFlatlistOrNoCommentText = () => {
-    return sampleData.length ? <ShowFlatList /> : <ShowNoComments />;
+    return ticketComments.length ? (
+      <ShowFlatList />
+    ) : (
+      <NoItemsFound>No comments found</NoItemsFound>
+    );
   };
 
   const ShowFlatList = () => {
     return (
       <FlatList
         style={styles.container}
-        data={sampleData}
+        data={ticketComments}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
       />
     );
   };
 
-  const renderItem = ({item}) => <Text> {item.title} </Text>;
-
-  const ShowNoComments = () => {
-    return (
-      <View style={{flex: 1, margin: MarginConstants.tab3}}>
-        <Text
-          style={{
-            fontFamily: FontFamily.medium,
-            color: Colors.filterIconColor,
-            fontSize: TextSizes.primary,
-          }}>
-          No Comments...
-        </Text>
-      </View>
-    );
-  };
+  const renderItem = ({item}) => (
+    <Text style={styles.commentBox}>
+      {item.text} from {item.commentBy}
+    </Text>
+  );
 
   const onChangeCommentHandler = (text) => {
     console.log(text);
@@ -100,7 +104,13 @@ export default function TicketComments(props) {
       </TouchableOpacity>
     );
   };
-
+  const SendButton = () => {
+    return (
+      <TouchableOpacity>
+        <MaterialIconView iconName="send" />
+      </TouchableOpacity>
+    );
+  };
   const AttachmentButton = () => {
     return (
       <TouchableOpacity>
@@ -121,6 +131,7 @@ export default function TicketComments(props) {
     return (
       <View style={styles.commentFooter}>
         <CommentBox style={styles.commentBox} />
+        <SendButton />
         <ContactButton />
         <AttachmentButton />
         <PictureButton />
@@ -150,5 +161,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
+    backgroundColor: Colors.white,
+    padding: MarginConstants.tab1,
+    marginHorizontal: MarginConstants.tab1,
   },
 });

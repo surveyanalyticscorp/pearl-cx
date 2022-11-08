@@ -32,7 +32,7 @@ import QPButton from '../../widgets/Button';
 // import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
 import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
 import BottomSheet from 'reanimated-bottom-sheet';
-import Animated, {color} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import TicketTakeAction from './takeaction/TIcketTakeAction';
 // import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
@@ -50,7 +50,9 @@ import moment from 'moment';
 import {FullMonthDateYearFormat} from '../../Utils/AppConstants';
 
 export default function TicketOverview(props) {
-  const ticketDetails = useSelector((state) => state.dashboard.ticket);
+  const [ticketDetails, setTicketDetails] = useState(
+    useSelector((state) => state.dashboard.ticket),
+  );
   const currentSegment = useSelector(
     (state) => state.dashboard.currentSegment.currentSegment,
   );
@@ -249,7 +251,7 @@ export default function TicketOverview(props) {
           {backgroundColor: highlighted ? Colors.overlay : Colors.white},
         ]}>
         <RenderRoundImageOrColor data={rowData} />
-        <Text style={styles.dropdownText}>{rowData.value}</Text>
+        <Text style={styles.dropdownText}>{rowData.title}</Text>
       </View>
     );
   }

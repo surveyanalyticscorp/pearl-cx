@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useEffect,
   // useEffect,
   useState,
@@ -11,6 +12,9 @@ import {
   // Image,
   FlatList,
   StyleSheet,
+  BackHandler,
+  ScrollView,
+  RefreshControl,
   // SafeAreaView,
 } from 'react-native';
 import ClosedLoopCell from './ClosedloopCell';
@@ -24,6 +28,7 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {
   BottomSheetHeader,
   FabAddButton,
+  NoItemsFound,
   // SearchIcon,
 } from '../../routes/CommonScreen';
 // import style from '../../widgets/qp-calendar/calendar/header/style';
@@ -47,12 +52,13 @@ import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {showLoading} from '../../redux/actions';
 import {dashboardStyles} from '../dashboard/dashboard.style';
 import QPSpinner from '../../widgets/QPSpinner';
+import {useNavigation} from '@react-navigation/native';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
-  const {authToken, range} = useSelector((state) => state.global);
+  const {authToken, range, isLoading} = useSelector((state) => state.global);
 
   const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
   // const state = useSelector((state) => state.dashboard);
@@ -61,24 +67,20 @@ export default function ClosedLoop(props) {
   );
   const currentSegment = useSelector((state) => state.dashboard.currentSegment);
   const [ticketList, setTicketList] = useState([]);
+
+  const [refreshing, setRefreshing] = useState(false);
+  console.log('CLOSED_LOOP', JSON.stringify(props));
+
   useEffect(() => {
-    const params = {
-      fromDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
-      toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
-    };
-    dispatch(
-      getClosedLoopTicketList(
-        authToken,
-        params,
-        currentFeedback.feedbackID,
-        currentSegment.currentSegmentID,
-      ),
-    );
-    dispatch(showLoading(true));
+    getTicketList();
+  }, []);
+
+  const onRefresh = useCallback(() => {
+    getTicketList();
   }, []);
 
   useEffect(() => {
-    setTicketList((state) => ticketDetails.data);
+    setTicketList((state) => ticketDetails.data ?? []);
   }, [ticketDetails]);
 
   console.log('Ticket list: ', JSON.stringify(ticketDetails.data));
@@ -171,8 +173,26 @@ export default function ClosedLoop(props) {
     dateRageText: 'Nov 14, 2017 -Mar 14, 2018',
   };
 
+  const getTicketList = () => {
+    dispatch(showLoading(true));
+    // setRefreshing(true);
+    const params = {
+      fromDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
+      toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
+    };
+    dispatch(
+      getClosedLoopTicketList(
+        authToken,
+        params,
+        currentFeedback.feedbackID,
+        currentSegment.currentSegmentID,
+      ),
+    );
+  };
+
   let renderSpinner = () => {
-    if (props.isLoading) {
+    console.log('QPSPINNER');
+    if (isLoading) {
       return (
         <View style={dashboardStyles.loading}>
           <QPSpinner />
@@ -239,7 +259,7 @@ export default function ClosedLoop(props) {
   };
 
   const ClosedLoopTicketList = () => {
-    return (
+    return ticketList.length !== 0 ? (
       <FlatList
         style={styles.container}
         data={ticketList}
@@ -254,6 +274,8 @@ export default function ClosedLoop(props) {
           );
         }}
       />
+    ) : (
+      <NoItemsFound>No tickets found</NoItemsFound>
     );
   };
 

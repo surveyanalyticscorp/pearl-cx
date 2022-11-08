@@ -28,6 +28,7 @@ export const GET_CLOSED_LOOP_TICKET_ITEM = 'GET_CLOSED_LOOP_TICKET_ITEM';
 export const CLOSED_LOOP_TICKET_ITEM_RECEIVED =
   'CLOSED_LOOP_TICKET_ITEM_RECEIVED';
 
+export const REMOVE_CLOSED_LOOP_TICKET_ITEM = 'REMOVE_CLOSED_LOOP_TICKET_ITEM';
 export const GET_CLOSED_LOOP_TICKET_ITEM_COMMENTS =
   'GET_CLOSED_LOOP_TICKET_ITEM_COMMENTS';
 export const CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED =
@@ -91,6 +92,12 @@ export const getClosedLoopTicketList = (
 
 export const getClosedLoopTicketItem = (token, ticketId) => ({
   type: GET_CLOSED_LOOP_TICKET_ITEM,
+  token,
+  ticketId,
+});
+
+export const removeTicketItemData = (token, ticketId) => ({
+  type: REMOVE_CLOSED_LOOP_TICKET_ITEM,
   token,
   ticketId,
 });

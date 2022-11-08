@@ -3,9 +3,12 @@ import {
   CLOSED_LOOP_OWNER_DETAILS_RECEIVED,
   CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
   CLOSED_LOOP_TICKET_DETAILS_RECEIVED,
+  CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED,
+  CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED,
   CLOSED_LOOP_TICKET_ITEM_RECEIVED,
   CLOSED_LOOP_TICKET_LIST_RECEIVED,
   DASHBOARD_RECEIVED,
+  REMOVE_CLOSED_LOOP_TICKET_ITEM,
   SEGMENT_SELECTED,
 } from '../actions/dashboard.actions';
 
@@ -16,7 +19,9 @@ const initialState = {
   ownerDetails: {},
   currentSegment: {},
   currentFeedback: {},
-  ticketItem: {},
+  ticket: {},
+  ticketComments: {},
+  ticketActivity: {},
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -58,11 +63,9 @@ const dashboardReducer = (state = initialState, action) => {
         ticketDetails: {},
         segmentDetails: {},
         ownerDetails: {},
-        ticket: {
-          details: {},
-          comments: {},
-          activity: {},
-        },
+        ticket: {},
+        ticketComments: {},
+        ticketActivity: {},
       };
     }
 
@@ -77,15 +80,33 @@ const dashboardReducer = (state = initialState, action) => {
     }
 
     case CLOSED_LOOP_TICKET_LIST_RECEIVED: {
-      console.log('TICKETLIST', action.response);
+      // console.log('TICKETLIST', action.response);
       return {...state, ticketDetails: action.response};
     }
 
     case CLOSED_LOOP_TICKET_ITEM_RECEIVED: {
-      console.log('TICKETDETAILS', action.response.data);
+      // console.log('TICKETDETAILS', action.response.data);
       return {...state, ticket: action.response.data};
     }
 
+    case CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED: {
+      // console.log('TICKETCOMMENTS', action.response.data);
+      return {...state, ticketComments: action.response.data};
+    }
+
+    case CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED: {
+      // console.log('TICKETACTIVITY', action.response.data);
+      return {...state, ticketActivity: action.response.data};
+    }
+
+    case REMOVE_CLOSED_LOOP_TICKET_ITEM: {
+      return {
+        ...state,
+        ticket: {},
+        ticketActivity: {},
+        ticketComments: {},
+      };
+    }
     default: {
       return state;
     }

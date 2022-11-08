@@ -34,18 +34,19 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import SelectPriority from '../../closedloop/takeaction/SelectPriority';
 import SelectStatus from '../../closedloop/takeaction/SelectStatus';
+import {priorityList, statusList} from '../../../Utils/TicketUtils';
 
 export default function CreateTicket(props) {
   const [headerTitle, setHeaderTitle] = useState('Create New Ticket');
   const [ticket, setTicket] = useState({});
 
   const [priority, setPriority] = useState('Unassigned');
-  const [priorityIndex, setPriorityIndex] = useState(4);
+  const [priorityIndex, setPriorityIndex] = useState(-1);
 
   const [bottomSheet, setBottomSheet] = useState('priority');
 
   const [status, setStatus] = useState('New');
-  const [statusIndex, setStatusIndex] = useState(0);
+  const [statusIndex, setStatusIndex] = useState(-1);
 
   // variables for bottom sheet
   let priorityBottomSheet = React.useRef();
@@ -109,18 +110,18 @@ export default function CreateTicket(props) {
   };
 
   const renderPrioritySelectContent = () => {
-    const data = [
-      {id: 1, title: 'Critical', icon: 'flag'},
-      {id: 2, title: 'High', icon: 'flag'},
-      {id: 3, title: 'Normal', icon: 'flag'},
-      {id: 4, title: 'Low', icon: 'flag'},
-      {id: 5, title: 'Unassigned', icon: 'flag'},
-    ];
+    // const data = [
+    //   {id: 1, title: 'Critical', icon: 'flag'},
+    //   {id: 2, title: 'High', icon: 'flag'},
+    //   {id: 3, title: 'Normal', icon: 'flag'},
+    //   {id: 4, title: 'Low', icon: 'flag'},
+    //   {id: 5, title: 'Unassigned', icon: 'flag'},
+    // ];
 
     return (
       <View style={styles.contentContainer}>
         <SelectPriority
-          data={data}
+          data={priorityList}
           selectedIndex={priorityIndex}
           handleOnPress={(item, index) => {
             console.log(JSON.stringify(item));
@@ -133,19 +134,19 @@ export default function CreateTicket(props) {
   };
 
   const renderStatusSelectContent = () => {
-    const data = [
-      {id: 1, title: 'New'},
-      {id: 2, title: 'Open'},
-      {id: 3, title: 'Escalated'},
-      {id: 4, title: 'Overdue'},
-      {id: 5, title: 'Resolved'},
-      {id: 5, title: 'Closed'},
-    ];
+    // const data = [
+    //   {id: 1, title: 'New'},
+    //   {id: 2, title: 'Open'},
+    //   {id: 3, title: 'Escalated'},
+    //   {id: 4, title: 'Overdue'},
+    //   {id: 5, title: 'Resolved'},
+    //   {id: 5, title: 'Closed'},
+    // ];
 
     return (
       <View style={styles.contentContainer}>
         <SelectStatus
-          data={data}
+          data={statusList}
           selectedIndex={statusIndex}
           handleOnPress={(item, index) => {
             console.log(JSON.stringify(item));
@@ -271,18 +272,18 @@ export default function CreateTicket(props) {
               } Status`}</Text>
             </View>
           </TouchableOpacity>
-          <View style={[styles.rowContainer, styles.rowItem]}>
-            {getIonIcon('eye')}
-            {/* {getIonIcon('eye-off')} */}
-            <TextInput placeholder="Watching" style={styles.titleText} />
-          </View>
+          {/* <View style={[styles.rowContainer, styles.rowItem]}> */}
+          {/* {getIonIcon('eye')} */}
+          {/* {getIonIcon('eye-off')} */}
+          {/* <TextInput placeholder="Watching" style={styles.titleText} /> */}
+          {/* </View> */}
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getMateriaCommunityIcon('shield-account')}
             <TextInput placeholder="Ticket Owner" style={styles.titleText} />
           </View>
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getMaterialIcon('chat-bubble')}
-            <TextInput placeholder="Add Comments" style={styles.titleText} />
+            <TextInput placeholder="Description" style={styles.titleText} />
           </View>
           <View style={[styles.rowContainer, styles.rowButton]}>
             <QPButton

@@ -10,7 +10,7 @@ import {enableScreens} from 'react-native-screens';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as globalVariables from '../app/styles/globalStyleVariables';
 import {View, Platform} from 'react-native';
-import codePush from 'react-native-code-push';
+// import codePush from 'react-native-code-push';
 
 // import Siren from 'react-native-siren';
 
@@ -56,8 +56,9 @@ class CxApp extends Component {
   }
 }
 
-let codePushOptions = {
-  installMode: codePush.InstallMode.IMMEDIATE,
-  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
-};
-export default codePush(codePushOptions)(CxApp);
+// let codePushOptions = {
+//   installMode: codePush.InstallMode.IMMEDIATE,
+//   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
+// };
+export default CxApp;
+// export default codePush(codePushOptions)(CxApp);

@@ -1,5 +1,6 @@
-import React from // {useEffect, useState}
-'react';
+import React, {
+  useState, // {useEffect, useState}
+} from 'react';
 import {
   View,
   // TouchableWithoutFeedback,
@@ -26,6 +27,7 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
+import {useSelector} from 'react-redux';
 // import {Sizes} from '../../styles/Size.constant';
 // import moment from 'moment';
 // import {translate} from '../../Utils/MultilinguaUtils';
@@ -37,43 +39,46 @@ import {FontFamily} from '../../styles/font.constants';
 // import {color} from 'react-native-reanimated';
 
 export default function TicketActivity(props) {
-  const userId = 23;
-  const sampleData = [
-    {
-      id: 1,
-      userId: 2,
-      userName: 'X Manager',
-      date: '20, July',
-      activity: 'updated the ticket status to Open',
-    },
-    {
-      id: 2,
-      userId: 23,
-      userName: 'Mehedi Hasan',
-      date: '24, July',
-      activity: 'updated the ticket priority to Escalated',
-    },
+  const [ticketActivityList, setTicketActivityList] = useState(
+    useSelector((state) => state.dashboard.ticketActivity),
+  );
+  // const userId = 23;
+  // const sampleData = [
+  //   {
+  //     id: 1,
+  //     userId: 2,
+  //     userName: 'X Manager',
+  //     date: '20, July',
+  //     activity: 'updated the ticket status to Open',
+  //   },
+  //   {
+  //     id: 2,
+  //     userId: 23,
+  //     userName: 'Mehedi Hasan',
+  //     date: '24, July',
+  //     activity: 'updated the ticket priority to Escalated',
+  //   },
 
-    {
-      id: 3,
-      userId: 3,
-      userName: 'Y Manager',
-      date: '29, July',
-      activity: 'updated the ticket priority to Resolved',
-    },
+  //   {
+  //     id: 3,
+  //     userId: 3,
+  //     userName: 'Y Manager',
+  //     date: '29, July',
+  //     activity: 'updated the ticket priority to Resolved',
+  //   },
 
-    // {id: 2, title: 'Bakun'},
-  ];
+  //   // {id: 2, title: 'Bakun'},
+  // ];
 
   const ShowFlatlistOrNoActivityText = () => {
-    return sampleData.length ? <ShowFlatList /> : <ShowNoActivity />;
+    return ticketActivityList.length ? <ShowFlatList /> : <ShowNoActivity />;
   };
 
   const ShowFlatList = () => {
     return (
       <FlatList
         style={styles.container}
-        data={sampleData}
+        data={ticketActivityList}
         renderItem={getRenderItem}
         keyExtractor={(item) => item.id}
       />
@@ -81,15 +86,17 @@ export default function TicketActivity(props) {
   };
 
   const getRenderItem = ({item}) => {
-    return userId === item.userId ? renderMyItem({item}) : renderItem({item});
+    // return userId === item.userId ? renderMyItem({item}) : renderItem({item});
+
+    return renderItem({item});
   };
 
   const renderItem = ({item}) => {
     return (
       <View style={styles.renderItemStyle}>
-        <Text style={styles.userName}>{item.userName}</Text>
-        <Text style={styles.activity}>{item.activity}</Text>
-        <Text style={styles.date}> {item.date}</Text>
+        <Text style={styles.userName}> </Text>
+        <Text style={styles.activity}>{item.activityText}</Text>
+        <Text style={styles.date}> </Text>
       </View>
     );
   };
