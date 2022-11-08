@@ -6,7 +6,8 @@ const HTTP_FAILED =
 export default class WebServiceHandler {
   static header(headerParam) {
     let headers = new Headers();
-    headers.append('Accept', 'application/json');
+    headers.append('Accept', 'application/json, text/plain, */*');
+    headers.append('Content-Type', 'application/json');
     Object.keys(headerParam).forEach(function (key) {
       headers.append(key, headerParam[key]);
     });
@@ -56,13 +57,41 @@ export default class WebServiceHandler {
 
   static postNew(url, headerParam, parameter) {
     let fullUrl = url.includes('http') ? url : global.baseUrl + url;
+
     console.log(`POST REQUEST Url: ${fullUrl}`);
     console.log(`HeaderParams: ${JSON.stringify(headerParam)}`);
     console.log(`Parameter: ${JSON.stringify(parameter)}`);
 
     return new Promise(function (success, failed) {
       fetch(fullUrl, {
-        method: 'post',
+        method: 'POST',
+        headers: WebServiceHandler.header(headerParam),
+        body: JSON.stringify(parameter),
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(`Response Data: ${JSON.stringify(response)}`);
+          if (response.statusCode === 200 || response.status === SUCCESS) {
+            success(response);
+          } else {
+            failed(response);
+          }
+        })
+        .catch(function (err) {
+          failed(err);
+        });
+    });
+  }
+
+  static postBody(url, headerParam, parameter) {
+    let fullUrl = url.includes('http') ? url : global.baseUrl + url;
+    console.log(`POST REQUEST Url: ${fullUrl}`);
+    console.log(`HeaderParams: ${JSON.stringify(headerParam)}`);
+    console.log(`Parameter: ${JSON.stringify(parameter)}`);
+
+    return new Promise(function (success, failed) {
+      fetch(fullUrl, {
+        method: 'POST',
         headers: WebServiceHandler.header(headerParam),
         body: JSON.stringify(parameter),
       })

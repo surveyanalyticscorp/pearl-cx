@@ -25,8 +25,10 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {NoItemsFound} from '../../routes/CommonScreen';
+import {addClosedLoopTicket} from '../../redux/sagas/ClosedLoopSaga';
+import {postAddTicketComment} from '../../redux/actions/dashboard.actions';
 // import {Sizes} from '../../styles/Size.constant';
 // import moment from 'moment';
 // import {translate} from '../../Utils/MultilinguaUtils';
@@ -36,10 +38,21 @@ import {NoItemsFound} from '../../routes/CommonScreen';
 // import {backgroundColor} from '../../widgets/qp-calendar/style';
 
 export default function TicketComments(props) {
+  const {authToken} = useSelector((state) => state.global);
   const [ticketComments, setTicketComments] = useState(
     useSelector((state) => state.dashboard.ticketComments),
   );
-  const commentList = useSelector;
+  const ticketId = useSelector((state) => state.dashboard.ticket.id);
+  const dispach = useDispatch();
+  const [commentState, setCommentState] = useState({
+    commentBy: 'Mehedi',
+    text: '',
+    ticket: ticketId,
+    parentId: 0,
+    subscriberId: 4894850,
+  });
+  let commentText = '';
+
   const sampleData = [
     // {id: 1, title: 'Astro'},
     // {id: 2, title: 'Bakun'},
@@ -77,6 +90,21 @@ export default function TicketComments(props) {
 
   const onChangeCommentHandler = (text) => {
     console.log(text);
+    commentText = text;
+    // setCommentState((state) => ({...state, text: text}));
+  };
+
+  const handleOnSubmit = () => {
+    let state = {
+      commentBy: 'Mehedi',
+      text: commentText,
+      ticket: ticketId,
+      parentId: 0,
+      subscriberId: 4894850,
+    };
+    dispach(postAddTicketComment(authToken, state, ticketId));
+
+    setCommentState((state) => ({...state, text: ''}));
   };
   const CommentBox = () => {
     return (
@@ -86,6 +114,7 @@ export default function TicketComments(props) {
           // style={styles.input}
           onChangeText={onChangeCommentHandler}
           placeholder="Comment"
+          onEndEditing={onChangeCommentHandler}
         />
       </View>
     );
@@ -106,7 +135,7 @@ export default function TicketComments(props) {
   };
   const SendButton = () => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleOnSubmit}>
         <MaterialIconView iconName="send" />
       </TouchableOpacity>
     );

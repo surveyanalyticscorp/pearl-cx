@@ -34,6 +34,11 @@ export const GET_CLOSED_LOOP_TICKET_ITEM_COMMENTS =
 export const CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED =
   'CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED';
 
+export const ADD_CLOSED_LOOP_TICKET_ITEM_COMMENTS =
+  'ADD_CLOSED_LOOP_TICKET_ITEM_COMMENTS';
+export const ADD_CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED =
+  'ADD_CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED';
+
 export const GET_CLOSED_LOOP_TICKET_ITEM_ACTIVITY =
   'GET_CLOSED_LOOP_TICKET_ITEM_ACTIVITY';
 export const CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED =
@@ -111,6 +116,13 @@ export const getClosedLoopTicketItemComments = (token, ticketId) => ({
 export const getClosedLoopTicketItemActivity = (token, ticketId) => ({
   type: GET_CLOSED_LOOP_TICKET_ITEM_ACTIVITY,
   token,
+  ticketId,
+});
+
+export const postAddTicketComment = (token, param, ticketId) => ({
+  type: ADD_CLOSED_LOOP_TICKET_ITEM_COMMENTS,
+  token,
+  param,
   ticketId,
 });
 
