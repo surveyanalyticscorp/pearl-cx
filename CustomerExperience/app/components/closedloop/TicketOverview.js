@@ -371,6 +371,11 @@ export default function TicketOverview(props) {
           )}
         </View>
         <View style={styles.rowContainer}>
+          {Title('Segment')}
+          {DropDownView(userOptions, 'Select Segement')}
+        </View>
+
+        <View style={styles.rowContainer}>
           {Title('Assigned to')}
           {DropDownView(userOptions, 'Assign manager')}
         </View>

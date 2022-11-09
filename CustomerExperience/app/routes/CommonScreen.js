@@ -33,6 +33,8 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import {FontFamily} from '../styles/font.constants';
 import DetractorScenes from '../components/dashboard/components/DetractorScenes';
 import {translate} from '../Utils/MultilinguaUtils';
+import {dashboardStyles} from '../components/dashboard/dashboard.style';
+import QPSpinner from '../widgets/QPSpinner';
 // import CheckBox from '@react-native-community/checkbox';
 
 const DateRangeTab = createMaterialTopTabNavigator();
@@ -249,6 +251,14 @@ export const NoItemsFound = ({children}) => {
         }}>
         {children ?? 'No items found'}
       </Text>
+    </View>
+  );
+};
+
+export const RenderSpinner = () => {
+  return (
+    <View style={dashboardStyles.loading}>
+      <QPSpinner />
     </View>
   );
 };

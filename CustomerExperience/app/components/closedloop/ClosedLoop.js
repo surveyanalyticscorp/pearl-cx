@@ -29,6 +29,7 @@ import {
   BottomSheetHeader,
   FabAddButton,
   NoItemsFound,
+  RenderSpinner,
   // SearchIcon,
 } from '../../routes/CommonScreen';
 // import style from '../../widgets/qp-calendar/calendar/header/style';
@@ -190,13 +191,6 @@ export default function ClosedLoop(props) {
     );
   };
 
-  let RenderSpinner = () => {
-    return (
-      <View style={dashboardStyles.loading}>
-        <QPSpinner />
-      </View>
-    );
-  };
   const getSearchIcon = () => {
     return <IonIcons name="search" size={20} color={Colors.lightBlack} />;
   };

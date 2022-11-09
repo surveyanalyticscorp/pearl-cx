@@ -80,7 +80,7 @@ export default function TicketActivity(props) {
         style={styles.container}
         data={ticketActivityList}
         renderItem={getRenderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => JSON.stringify(item.id)}
       />
     );
   };

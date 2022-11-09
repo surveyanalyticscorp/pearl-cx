@@ -16,7 +16,7 @@ import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {SearchIcon} from '../../routes/CommonScreen';
+import {RenderSpinner, SearchIcon} from '../../routes/CommonScreen';
 import style from '../../widgets/qp-calendar/calendar/header/style';
 import {translate} from '../../Utils/MultilinguaUtils';
 import TicketOverview from './TicketOverview';
@@ -31,7 +31,7 @@ import {
 } from '../../redux/actions/dashboard.actions';
 
 export default function TicketDetails(props) {
-  const {authToken} = useSelector((state) => state.global);
+  const {authToken, isLoading} = useSelector((state) => state.global);
   const ticketItem = props.route.params;
   const dispatch = useDispatch();
 
@@ -82,5 +82,5 @@ export default function TicketDetails(props) {
     );
   };
 
-  return <CLFTicketTabStack />;
+  return isLoading ? <RenderSpinner /> : <CLFTicketTabStack />;
 }
