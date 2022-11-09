@@ -190,15 +190,12 @@ export default function ClosedLoop(props) {
     );
   };
 
-  let renderSpinner = () => {
-    console.log('QPSPINNER');
-    if (isLoading) {
-      return (
-        <View style={dashboardStyles.loading}>
-          <QPSpinner />
-        </View>
-      );
-    }
+  let RenderSpinner = () => {
+    return (
+      <View style={dashboardStyles.loading}>
+        <QPSpinner />
+      </View>
+    );
   };
   const getSearchIcon = () => {
     return <IonIcons name="search" size={20} color={Colors.lightBlack} />;
@@ -335,44 +332,47 @@ export default function ClosedLoop(props) {
   const bsSnapPoints = ['75%', '85%', '0%'];
   const [shadow, setShadow] = useState(false);
 
-  return (
-    <View style={styles.container}>
-      <Animated.View
-        style={{
-          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-          flex: 1,
-        }}>
-        {renderSpinner()}
-        <HeaderFilter />
-        <ClosedLoopTicketList />
-        <FabAddButton onPress={onFabHandler} />
+  const RenderClosedLoop = () => {
+    return (
+      <View style={styles.container}>
+        <Animated.View
+          style={{
+            opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+            flex: 1,
+          }}>
+          <HeaderFilter />
+          <ClosedLoopTicketList />
+          <FabAddButton onPress={onFabHandler} />
 
-        {/* <TicketTakeAction /> */}
-        {/* <TicketDetails /> */}
-        {/* <TicketOverview /> */}
-        {/* <TicketComments /> */}
-        {/* <TicketActivity /> */}
-        {/* <CreateTicket /> */}
-        {/* <SendEmail /> */}
-        {/* <TakeActionScreen /> */}
-        {/* <FilterTicket
-          data={filterData}
-          onPressHandler={(item, action) => handleAction(item, action)}
-        /> */}
-      </Animated.View>
-      <BottomSheet
-        ref={bs}
-        snapPoints={bsSnapPoints}
-        initialSnap={bsSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderFilterContent}
-        renderHeader={renderFilterHeader}
-        callbackNode={fall}
-        onCloseEnd={() => setShadow(false)}
-        onOpenStart={() => setShadow(true)}
-      />
-    </View>
-  );
+          {/* <TicketTakeAction /> */}
+          {/* <TicketDetails /> */}
+          {/* <TicketOverview /> */}
+          {/* <TicketComments /> */}
+          {/* <TicketActivity /> */}
+          {/* <CreateTicket /> */}
+          {/* <SendEmail /> */}
+          {/* <TakeActionScreen /> */}
+          {/* <FilterTicket
+      data={filterData}
+      onPressHandler={(item, action) => handleAction(item, action)}
+    /> */}
+        </Animated.View>
+        <BottomSheet
+          ref={bs}
+          snapPoints={bsSnapPoints}
+          initialSnap={bsSnapPoints.length - 1}
+          enabledGestureInteraction={true}
+          renderContent={renderFilterContent}
+          renderHeader={renderFilterHeader}
+          callbackNode={fall}
+          onCloseEnd={() => setShadow(false)}
+          onOpenStart={() => setShadow(true)}
+        />
+      </View>
+    );
+  };
+
+  return isLoading ? <RenderSpinner /> : <RenderClosedLoop />;
 }
 
 const styles = StyleSheet.create({
