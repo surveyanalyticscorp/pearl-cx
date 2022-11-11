@@ -1,5 +1,5 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import SafeAreaView from 'react-native-safe-area-view';
+// import SafeAreaView from 'react-native-safe-area-view';
 import {
   Platform,
   ScrollView,
@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
 import {
   Colors,
@@ -16,6 +17,7 @@ import {
   // priorityColors,
   // getStatusBorderColor,
 } from '../../../styles/color.constants';
+import PhoneInput from 'react-native-phone-number-input';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
@@ -35,33 +37,60 @@ import Animated from 'react-native-reanimated';
 import SelectPriority from '../../closedloop/takeaction/SelectPriority';
 import SelectStatus from '../../closedloop/takeaction/SelectStatus';
 import {priorityList, statusList} from '../../../Utils/TicketUtils';
+import {useSelector} from 'react-redux';
 
 export default function CreateTicket(props) {
   const [headerTitle, setHeaderTitle] = useState('Create New Ticket');
   const [ticket, setTicket] = useState({});
 
-  const [priority, setPriority] = useState('Unassigned');
+  const [priority, setPriority] = useState('Select');
   const [priorityIndex, setPriorityIndex] = useState(-1);
+  const [segment, setSegment] = useState('Select Segment');
+  const [segmentIndex, setSegmentIndex] = useState(-1);
+  const [ticketOwner, setTicketOwner] = useState('Select Ticket Owner');
+  const [ticketOwnerIndex, setTIcketOwnerIndex] = useState(-1);
 
   const [bottomSheet, setBottomSheet] = useState('priority');
 
-  const [status, setStatus] = useState('New');
+  const [status, setStatus] = useState('Select');
   const [statusIndex, setStatusIndex] = useState(-1);
-
+  let segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
+  const segmentIcon = './../../../../assets/images/segment_icon.png';
   // variables for bottom sheet
-  let priorityBottomSheet = React.useRef();
-  let statusBottomSheet = React.useRef();
+  const priorityBottomSheet = React.useRef();
+  const statusBottomSheet = React.useRef();
   const segmentBottomSheet = React.useRef();
+  const ownerBottomSheet = React.useRef();
+  const phoneInput = React.useRef();
 
   const fall = new Animated.Value(1);
   const priorityBottomSheetSnapPoints = ['45%', '0%'];
   const statusBottomSheetSnapPoints = ['45%', '0%'];
-  const segmentBottomSheetSnapPoints = ['33%', '0%'];
+  const segmentBottomSheetSnapPoints = ['45%', '0%'];
+  const ownerBottomSheetSnapPoints = ['45%', '0%'];
 
   const [shadow, setShadow] = useState(false);
 
+  const sampleRequest = {
+    subscriberId: 4894850,
+    ownerId: 4894850,
+    emailAddress: 'samsul.alam+13@gmail.com',
+    firstName: 'Samsul Alam',
+    mobileNumber: '+8801849900311',
+    feedbackId: 25951,
+    originSegmentId: 188908,
+    currentSegmentId: 188908,
+    priority: 1,
+    status: 1,
+    type: 0,
+    source: 1,
+    assignToId: 4894850,
+    comment: 'generate Lorem Ipsum which looks reasonable.',
+    issueDate: '2022-11-02 05:18:23.295',
+  };
+
   useLayoutEffect(() => {
-    console.log('Screen layout');
+    // console.log('Screen layout');
   }, []);
 
   const getIonIcon = (iconName, iconColor) => (
@@ -70,6 +99,19 @@ export default function CreateTicket(props) {
       size={14}
       color={iconColor ?? Colors.lightBlack}
     />
+  );
+
+  const getSegmentIcon = () => (
+    <Image
+      // source={require('./../../../assets/images/segment_icon.png')}
+      source={require(segmentIcon)}
+      style={styles.image}
+    />
+    // <IonIcons
+    //   name={iconName}
+    //   size={14}
+    //   color={iconColor ?? Colors.lightBlack}
+    // />
   );
 
   const getMaterialIcon = (iconName) => (
@@ -103,6 +145,12 @@ export default function CreateTicket(props) {
 
   const handleSegmentSelection = () => {
     // open segment selection bottom sheet
+    segmentBottomSheet.current.snapTo(0);
+  };
+
+  const handleOwnerSelection = () => {
+    // open owner selection bottom sheet
+    ownerBottomSheet.current.snapTo(0);
   };
 
   const handleCreateTicket = () => {
@@ -227,10 +275,15 @@ export default function CreateTicket(props) {
             <Text style={styles.headerText}>{headerTitle}</Text>
             <CloseButton color={Colors.filterIconColor} />
           </View>
-          <View style={[styles.rowContainer, styles.rowItem]}>
-            {getIonIcon('star')}
-            <TextInput placeholder="Segment" style={styles.titleText} />
-          </View>
+          <TouchableOpacity onPress={handleSegmentSelection}>
+            <View style={[styles.rowContainer, styles.rowItem]}>
+              {/* {getIonIcon('star')} */}
+              {getSegmentIcon()}
+              {/* <TextInput placeholder="Segment" style={styles.titleText} /> */}
+              <Text style={styles.titleText}>{segment}</Text>
+            </View>
+          </TouchableOpacity>
+
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getMaterialIcon('date-range')}
             <TextInput placeholder="Date" style={styles.titleText} />
@@ -241,7 +294,25 @@ export default function CreateTicket(props) {
           </View>
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getIonIcon('call')}
-            <TextInput placeholder="Phone" style={styles.titleText} />
+            {/* <TextInput placeholder="Phone" style={styles.titleText} /> */}
+            <PhoneInput
+              containerStyle={styles.phoneInputContainer}
+              codeTextStyle={styles.phoneInputCodeText}
+              textContainerStyle={styles.phoneInputTextContainer}
+              textInputStyle={styles.phoneInputTextInputStyle}
+              ref={phoneInput}
+              // defaultValue={value}
+              defaultCode="US"
+              layout="first"
+              onChangeText={(text) => {
+                // setValue(text);
+                console.log('PHONE:', text);
+              }}
+              onChangeFormattedText={(text) => {
+                // setFormattedValue(text);
+                console.log('FORMATTED PHONE:', text);
+              }}
+            />
           </View>
 
           <View style={[styles.rowContainer, styles.rowItem]}>
@@ -277,10 +348,13 @@ export default function CreateTicket(props) {
           {/* {getIonIcon('eye-off')} */}
           {/* <TextInput placeholder="Watching" style={styles.titleText} /> */}
           {/* </View> */}
-          <View style={[styles.rowContainer, styles.rowItem]}>
-            {getMateriaCommunityIcon('shield-account')}
-            <TextInput placeholder="Ticket Owner" style={styles.titleText} />
-          </View>
+          <TouchableOpacity onPress={handleSegmentSelection}>
+            <View style={[styles.rowContainer, styles.rowItem]}>
+              {getMateriaCommunityIcon('shield-account')}
+              {/* <TextInput placeholder="Ticket Owner" style={styles.titleText} /> */}
+              <Text style={styles.titleText}>{`${ticketOwner ?? ''} `}</Text>
+            </View>
+          </TouchableOpacity>
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getMaterialIcon('chat-bubble')}
             <TextInput placeholder="Description" style={styles.titleText} />
@@ -290,11 +364,7 @@ export default function CreateTicket(props) {
               onPress={handleCreateTicket}
               buttonColor={Colors.accentLight}
               buttonText={'Create Ticket'}
-              textStyle={{
-                fontFamily: FontFamily.light,
-                fontSize: TextSizes.primary,
-                color: Colors.white,
-              }}
+              textStyle={styles.qpButtonTextStyles}
               style={styles.buttonStyle}
             />
           </View>
@@ -364,4 +434,33 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   contentContainer: {backgroundColor: Colors.white, height: '100%'},
+
+  phoneInputContainer: {height: MarginConstants.tab4},
+  phoneInputCodeText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    color: Colors.filterIconColor,
+  },
+  phoneInputTextContainer: {
+    backgroundColor: Colors.white,
+    flex: 1,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    color: Colors.filterIconColor,
+  },
+  phoneInputTextInputStyle: {
+    height: MarginConstants.tab4,
+    flex: 1,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    padding: PaddingConstants.tab1,
+    color: Colors.filterIconColor,
+  },
+  image: {width: 14, height: 14},
+
+  qpButtonTextStyles: {
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.primary,
+    color: Colors.white,
+  },
 });
