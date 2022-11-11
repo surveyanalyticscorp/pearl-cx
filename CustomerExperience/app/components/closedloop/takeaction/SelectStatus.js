@@ -19,17 +19,17 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import StatusItem from './StatusItem';
 const SelectStatus = (props) => {
   const [data, setData] = useState(props.data);
-  const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
+  // const [selectedIndex, setSelectedIndex] = useState();
 
   const renderRow = ({item, index}) => {
+    console.log(props.selectedIndex);
     return (
       <StatusItem
         item={item}
-        selectedIndex={selectedIndex}
+        selectedIndex={props.selectedIndex}
         index={index}
         onPressHandler={() => {
           props.handleOnPress(item, index);
-          setSelectedIndex(index);
         }}
       />
     );

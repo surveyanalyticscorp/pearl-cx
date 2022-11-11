@@ -14,7 +14,7 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 
-const SelectSegment = (props) => {
+const SelectTicketOwner = (props) => {
   const [data, setData] = useState(props.data);
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
 
@@ -29,7 +29,7 @@ const SelectSegment = (props) => {
           // handleOnPress(item)
         }>
         <View style={[styles.row]}>
-          <Text style={styles.title}>{item.segmentName}</Text>
+          <Text style={styles.title}>{item.ownerName}</Text>
           {selectedIndex === index ? (
             <IonIcon
               style={{marginHorizontal: MarginConstants.halfTab}}
@@ -57,7 +57,7 @@ const SelectSegment = (props) => {
   );
 };
 
-export default SelectSegment;
+export default SelectTicketOwner;
 
 const styles = StyleSheet.create({
   container: {

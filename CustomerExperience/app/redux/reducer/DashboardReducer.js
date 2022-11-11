@@ -7,9 +7,11 @@ import {
   CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED,
   CLOSED_LOOP_TICKET_ITEM_RECEIVED,
   CLOSED_LOOP_TICKET_LIST_RECEIVED,
+  CREATE_CLF_TICKET_RECIEVED,
   DASHBOARD_RECEIVED,
   REMOVE_CLOSED_LOOP_TICKET_ITEM,
   SEGMENT_SELECTED,
+  UPDATE_CLF_TICKET_RECIEVED,
 } from '../actions/dashboard.actions';
 
 const initialState = {
@@ -22,6 +24,7 @@ const initialState = {
   ticket: {},
   ticketComments: {},
   ticketActivity: {},
+  apiCallStatus: {},
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -66,6 +69,7 @@ const dashboardReducer = (state = initialState, action) => {
         ticket: {},
         ticketComments: {},
         ticketActivity: {},
+        apiCallStatus: {},
       };
     }
 
@@ -105,6 +109,20 @@ const dashboardReducer = (state = initialState, action) => {
         ticket: {},
         ticketActivity: {},
         ticketComments: {},
+      };
+    }
+
+    case CREATE_CLF_TICKET_RECIEVED: {
+      return {
+        ...state,
+        apiCallStatus: action.response,
+      };
+    }
+
+    case UPDATE_CLF_TICKET_RECIEVED: {
+      return {
+        ...state,
+        apiCallStatus: action.response,
       };
     }
     default: {

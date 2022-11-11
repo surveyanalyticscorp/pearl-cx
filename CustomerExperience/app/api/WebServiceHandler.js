@@ -83,7 +83,7 @@ export default class WebServiceHandler {
     });
   }
 
-  static postBody(url, headerParam, parameter) {
+  static patch(url, headerParam, parameter) {
     let fullUrl = url.includes('http') ? url : global.baseUrl + url;
     console.log(`POST REQUEST Url: ${fullUrl}`);
     console.log(`HeaderParams: ${JSON.stringify(headerParam)}`);
@@ -91,7 +91,7 @@ export default class WebServiceHandler {
 
     return new Promise(function (success, failed) {
       fetch(fullUrl, {
-        method: 'POST',
+        method: 'PATCH',
         headers: WebServiceHandler.header(headerParam),
         body: JSON.stringify(parameter),
       })

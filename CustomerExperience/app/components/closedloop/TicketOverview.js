@@ -39,7 +39,7 @@ import {
   BottomSheetHeader,
   RenderRoundImageOrColor,
 } from '../../routes/CommonScreen';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   getPriorityById,
   getStatusById,
@@ -48,8 +48,13 @@ import {
 } from '../../Utils/TicketUtils';
 import moment from 'moment';
 import {FullMonthDateYearFormat} from '../../Utils/AppConstants';
+import {updateClfTicket} from '../../redux/actions/dashboard.actions';
 
 export default function TicketOverview(props) {
+  const dispatch = useDispatch();
+  const {authToken} = useSelector((state) => state.global);
+  const {owners} = useSelector((state) => state.dashboard.ownerDetails);
+
   const [ticketDetails, setTicketDetails] = useState(
     useSelector((state) => state.dashboard.ticket),
   );
@@ -75,6 +80,10 @@ export default function TicketOverview(props) {
   //   {value: 'Low', color: priorityColors.low.filler},
   //   {value: 'Unassigned', color: priorityColors.unassigned.filler},
   // ];
+
+  const updateTicket = () => {
+    dispatch(updateClfTicket(authToken, {status: 3}, ticketDetails.id));
+  };
 
   const userOptions = [
     {value: 'Manager 1', url: 'https://picsum.photos/id/237/200'},
@@ -354,12 +363,19 @@ export default function TicketOverview(props) {
       <View style={styles.ticketStatusContainer}>
         <View style={styles.rowContainer}>
           {Title('Status')}
-          {DropDownView(
+          {/* {DropDownView(
             statusList,
             ticketDetails !== undefined
               ? getStatusById(ticketDetails.status)
               : 'Select status',
-          )}
+          )} */}
+          <TouchableWithoutFeedback onPress={() => updateTicket()}>
+            <Text>
+              {ticketDetails !== undefined
+                ? getStatusById(ticketDetails.status)
+                : 'Select status'}
+            </Text>
+          </TouchableWithoutFeedback>
         </View>
         <View style={styles.rowContainer}>
           {Title('Priority')}

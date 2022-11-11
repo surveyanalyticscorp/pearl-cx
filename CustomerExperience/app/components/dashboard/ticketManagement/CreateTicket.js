@@ -37,9 +37,19 @@ import Animated from 'react-native-reanimated';
 import SelectPriority from '../../closedloop/takeaction/SelectPriority';
 import SelectStatus from '../../closedloop/takeaction/SelectStatus';
 import {priorityList, statusList} from '../../../Utils/TicketUtils';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  createClfTicket,
+  getClosedLoopOwnerDetails,
+} from '../../../redux/actions/dashboard.actions';
+import {showLoading} from '../../../redux/actions';
+import SelectSegment from '../../closedloop/takeaction/SelectSegment';
+import SelectTicketOwner from '../../closedloop/takeaction/SelectTicketOwner';
 
 export default function CreateTicket(props) {
+  const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
+  const {authToken} = useSelector((state) => state.global);
+  const {owners} = useSelector((state) => state.dashboard.ownerDetails);
   const [headerTitle, setHeaderTitle] = useState('Create New Ticket');
   const [ticket, setTicket] = useState({});
 
@@ -47,14 +57,13 @@ export default function CreateTicket(props) {
   const [priorityIndex, setPriorityIndex] = useState(-1);
   const [segment, setSegment] = useState('Select Segment');
   const [segmentIndex, setSegmentIndex] = useState(-1);
+  const [segmentId, setSegmentId] = useState(segmentDetails.currentSegmentID);
   const [ticketOwner, setTicketOwner] = useState('Select Ticket Owner');
   const [ticketOwnerIndex, setTIcketOwnerIndex] = useState(-1);
-
-  const [bottomSheet, setBottomSheet] = useState('priority');
-
   const [status, setStatus] = useState('Select');
   const [statusIndex, setStatusIndex] = useState(-1);
-  let segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
+  // const [bottomSheet, setBottomSheet] = useState('priority');
+
   const segmentIcon = './../../../../assets/images/segment_icon.png';
   // variables for bottom sheet
   const priorityBottomSheet = React.useRef();
@@ -70,28 +79,43 @@ export default function CreateTicket(props) {
   const ownerBottomSheetSnapPoints = ['45%', '0%'];
 
   const [shadow, setShadow] = useState(false);
+  const dispatch = useDispatch();
 
-  const sampleRequest = {
-    subscriberId: 4894850,
-    ownerId: 4894850,
-    emailAddress: 'samsul.alam+13@gmail.com',
-    firstName: 'Samsul Alam',
-    mobileNumber: '+8801849900311',
-    feedbackId: 25951,
-    originSegmentId: 188908,
-    currentSegmentId: 188908,
-    priority: 1,
-    status: 1,
+  let ticketBody = {
+    subscriberId: 0,
+    ownerId: 0,
+    emailAddress: '',
+    firstName: '',
+    mobileNumber: '',
+    feedbackId: 0,
+    originSegmentId: 0,
+    currentSegmentId: 0,
+    priority: 0,
+    status: 0,
     type: 0,
     source: 1,
-    assignToId: 4894850,
-    comment: 'generate Lorem Ipsum which looks reasonable.',
-    issueDate: '2022-11-02 05:18:23.295',
+    assignToId: 0,
+    comment: '',
+    issueDate: '',
   };
+
+  const getTicketOwnerList = (segmentId_) => {
+    dispatch(
+      getClosedLoopOwnerDetails(authToken, {
+        segmentID: segmentId_,
+      }),
+    );
+  };
+
+  // console.log('OWNERS:', JSON.stringify(owners));
 
   useLayoutEffect(() => {
     // console.log('Screen layout');
   }, []);
+
+  useEffect(() => {
+    getTicketOwnerList(segmentId);
+  }, [segmentId]);
 
   const getIonIcon = (iconName, iconColor) => (
     <IonIcons
@@ -154,18 +178,12 @@ export default function CreateTicket(props) {
   };
 
   const handleCreateTicket = () => {
-    props.navigation.goBack();
+    // props.navigation.goBack();
+    // dispatch(showLoading(true));
+    // dispatch(createClfTicket(authToken, ticketBody));
   };
 
   const renderPrioritySelectContent = () => {
-    // const data = [
-    //   {id: 1, title: 'Critical', icon: 'flag'},
-    //   {id: 2, title: 'High', icon: 'flag'},
-    //   {id: 3, title: 'Normal', icon: 'flag'},
-    //   {id: 4, title: 'Low', icon: 'flag'},
-    //   {id: 5, title: 'Unassigned', icon: 'flag'},
-    // ];
-
     return (
       <View style={styles.contentContainer}>
         <SelectPriority
@@ -181,16 +199,24 @@ export default function CreateTicket(props) {
     );
   };
 
-  const renderStatusSelectContent = () => {
-    // const data = [
-    //   {id: 1, title: 'New'},
-    //   {id: 2, title: 'Open'},
-    //   {id: 3, title: 'Escalated'},
-    //   {id: 4, title: 'Overdue'},
-    //   {id: 5, title: 'Resolved'},
-    //   {id: 5, title: 'Closed'},
-    // ];
+  const renderSegmentSelectContent = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <SelectSegment
+          data={segmentDetails.segments}
+          selectedIndex={segmentIndex}
+          handleOnPress={(item, index) => {
+            console.log(JSON.stringify(item));
+            setSegment(item.segmentName);
+            setSegmentIndex(index);
+            setSegmentId((prev) => item.segmentID);
+          }}
+        />
+      </View>
+    );
+  };
 
+  const renderStatusSelectContent = () => {
     return (
       <View style={styles.contentContainer}>
         <SelectStatus
@@ -200,6 +226,22 @@ export default function CreateTicket(props) {
             console.log(JSON.stringify(item));
             setStatus(item.title);
             setStatusIndex(index);
+          }}
+        />
+      </View>
+    );
+  };
+
+  const renderOwnerSelectContent = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <SelectTicketOwner
+          data={owners}
+          selectedIndex={ticketOwnerIndex}
+          handleOnPress={(item, index) => {
+            console.log(JSON.stringify(item));
+            setTicketOwner(item.ownerName);
+            setTIcketOwnerIndex(index);
           }}
         />
       </View>
@@ -232,6 +274,30 @@ export default function CreateTicket(props) {
     );
   };
 
+  const renderSegmentHeader = (_title) => {
+    return (
+      <BottomSheetHeader
+        title={'Select Segment'}
+        onPressClose={() =>
+          segmentBottomSheet.current.snapTo(
+            segmentBottomSheetSnapPoints.length - 1,
+          )
+        }
+      />
+    );
+  };
+
+  const renderOwnerHeader = (_title) => {
+    return (
+      <BottomSheetHeader
+        title={'Select Ticket Owner'}
+        onPressClose={() =>
+          ownerBottomSheet.current.snapTo(ownerBottomSheetSnapPoints.length - 1)
+        }
+      />
+    );
+  };
+
   const RenderPriorityBottomSheet = () => {
     return (
       <BottomSheet
@@ -255,6 +321,34 @@ export default function CreateTicket(props) {
         enabledGestureInteraction={true}
         renderContent={renderStatusSelectContent}
         renderHeader={renderStatusHeader}
+        callbackNode={fall}
+      />
+    );
+  };
+
+  const RenderSegmentBottomSheet = () => {
+    return (
+      <BottomSheet
+        ref={segmentBottomSheet}
+        snapPoints={segmentBottomSheetSnapPoints}
+        initialSnap={segmentBottomSheetSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderSegmentSelectContent}
+        renderHeader={renderSegmentHeader}
+        callbackNode={fall}
+      />
+    );
+  };
+
+  const RenderOwnerBottomSheet = () => {
+    return (
+      <BottomSheet
+        ref={ownerBottomSheet}
+        snapPoints={ownerBottomSheetSnapPoints}
+        initialSnap={ownerBottomSheetSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderOwnerSelectContent}
+        renderHeader={renderOwnerHeader}
         callbackNode={fall}
       />
     );
@@ -348,7 +442,7 @@ export default function CreateTicket(props) {
           {/* {getIonIcon('eye-off')} */}
           {/* <TextInput placeholder="Watching" style={styles.titleText} /> */}
           {/* </View> */}
-          <TouchableOpacity onPress={handleSegmentSelection}>
+          <TouchableOpacity onPress={handleOwnerSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               {getMateriaCommunityIcon('shield-account')}
               {/* <TextInput placeholder="Ticket Owner" style={styles.titleText} /> */}
@@ -372,6 +466,8 @@ export default function CreateTicket(props) {
       </Animated.View>
       <RenderPriorityBottomSheet />
       <RenderStatusBottomSheet />
+      <RenderSegmentBottomSheet />
+      <RenderOwnerBottomSheet />
     </View>
   );
 }

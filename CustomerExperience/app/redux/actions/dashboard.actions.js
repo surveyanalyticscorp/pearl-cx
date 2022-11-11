@@ -44,6 +44,11 @@ export const GET_CLOSED_LOOP_TICKET_ITEM_ACTIVITY =
 export const CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED =
   'CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED';
 
+export const CREATE_CLF_TICKET = 'CREATE_CLF_TICKET';
+export const CREATE_CLF_TICKET_RECIEVED = 'CREATE_CLF_TICKET_RECIEVED';
+
+export const UPDATE_CLF_TICKET = 'UPDATE_CLF_TICKET';
+export const UPDATE_CLF_TICKET_RECIEVED = 'UPDATE_CLF_TICKET_RECIEVED';
 export const getDashboardContent = (token, param) => ({
   type: GET_DASHBOARD,
   token,
@@ -126,6 +131,18 @@ export const postAddTicketComment = (token, param, ticketId) => ({
   ticketId,
 });
 
+export const createClfTicket = (token, param) => ({
+  type: CREATE_CLF_TICKET,
+  token,
+  param,
+});
+
+export const updateClfTicket = (token, param, ticketId) => ({
+  type: UPDATE_CLF_TICKET,
+  token,
+  param,
+  ticketId,
+});
 // export const getSegment = () => ({
 //   type: SEGMENT_SELECTED,
 // });

@@ -13,8 +13,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import {RenderStatusIcon} from '../../../routes/CommonScreen';
 
 const StatusItem = (props) => {
-  const selectedIndex = props.selectedIndex;
-  const index = props.item.index;
+  const index = props.index;
   const title = props.item.title;
 
   return (
@@ -24,7 +23,8 @@ const StatusItem = (props) => {
       <View style={styles.container}>
         <RenderStatusIcon title={title} />
         <Text style={styles.title}>{title}</Text>
-        {selectedIndex === index ? (
+
+        {props.selectedIndex === index ? (
           <IonIcon
             style={{marginHorizontal: MarginConstants.halfTab}}
             name={'checkmark'}
@@ -56,5 +56,10 @@ const styles = StyleSheet.create({
     marginStart: MarginConstants.halfTab,
     color: Colors.filterIconColor,
   },
-  icon: {borderRadius: 50, borderWidth: 1},
+  icon: {
+    flex: 1,
+    borderRadius: 50,
+    borderWidth: 1,
+    backgroundColor: Colors.accent,
+  },
 });

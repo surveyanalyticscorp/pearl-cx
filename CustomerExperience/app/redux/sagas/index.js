@@ -17,6 +17,8 @@ import {
   watchGetClosedLoopTicketComments,
   watchGetClosedLoopTicketActivity,
   watchPostTicketComment,
+  watchPostCreateTicket,
+  watchPatchUpdateTicket,
 } from './ClosedLoopSaga';
 import {watchGetNotification} from './notificationSaga';
 
@@ -39,5 +41,7 @@ export function* rootSaga() {
     fork(watchForgotPasswordLink),
     fork(watchLogout),
     fork(watchPostTicketComment),
+    fork(watchPostCreateTicket),
+    fork(watchPatchUpdateTicket),
   ]);
 }

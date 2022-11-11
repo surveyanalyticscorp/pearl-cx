@@ -18,6 +18,10 @@ import {
   CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED,
   ADD_CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED,
   ADD_CLOSED_LOOP_TICKET_ITEM_COMMENTS,
+  CREATE_CLF_TICKET_RECIEVED,
+  CREATE_CLF_TICKET,
+  UPDATE_CLF_TICKET_RECIEVED,
+  UPDATE_CLF_TICKET,
 } from '../actions/dashboard.actions';
 import {
   CX_ADD_CLOSED_LOOP_TICKET,
@@ -307,4 +311,56 @@ function* postTicketComment(action) {
 }
 export function* watchPostTicketComment() {
   yield takeLatest(ADD_CLOSED_LOOP_TICKET_ITEM_COMMENTS, postTicketComment);
+}
+
+function* postCreateClfTicket(action) {
+  try {
+    const json = yield WebServiceHandler.postNew(
+      CLF_GET_TICKET_DETAILS,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: CREATE_CLF_TICKET_RECIEVED,
+      response: json,
+    });
+
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchPostCreateTicket() {
+  yield takeLatest(CREATE_CLF_TICKET, postCreateClfTicket);
+}
+
+function* patchUpdateClfTicket(action) {
+  try {
+    const json = yield WebServiceHandler.patch(
+      CLF_GET_TICKET_DETAILS + action.ticketId,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: UPDATE_CLF_TICKET_RECIEVED,
+      response: json,
+    });
+
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchPatchUpdateTicket() {
+  yield takeLatest(UPDATE_CLF_TICKET, patchUpdateClfTicket);
 }
