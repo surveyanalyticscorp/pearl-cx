@@ -35,6 +35,8 @@ import {
   CLF_GET_TICKET_DETAILS,
   COMMNETS,
   ACTIVITY_LOG,
+  FEEDBACK_API_KEY,
+  FEEDBACK_API_KEY_ENDPOINT,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 
@@ -196,7 +198,10 @@ export function* watchGetClosedLoopTicketList() {
 function* fetchClosedLoopTicketItem(action) {
   try {
     const json = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS + action.ticketId,
+      CLF_GET_TICKET_DETAILS +
+        action.ticketId +
+        FEEDBACK_API_KEY_ENDPOINT +
+        action.feedbackApiKey,
       {'Auth-Token': action.token},
       action.param,
     );
@@ -315,8 +320,12 @@ export function* watchPostTicketComment() {
 
 function* postCreateClfTicket(action) {
   try {
+    const URL =
+      CLF_GET_TICKET_DETAILS +
+      FEEDBACK_API_KEY_ENDPOINT +
+      action.feedbackApiKey;
     const json = yield WebServiceHandler.postNew(
-      CLF_GET_TICKET_DETAILS,
+      URL,
       {'Auth-Token': action.token},
       action.param,
     );

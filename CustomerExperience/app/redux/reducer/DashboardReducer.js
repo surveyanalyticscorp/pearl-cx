@@ -123,6 +123,7 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         apiCallStatus: action.response,
+        ticket: action.response.data,
       };
     }
     default: {

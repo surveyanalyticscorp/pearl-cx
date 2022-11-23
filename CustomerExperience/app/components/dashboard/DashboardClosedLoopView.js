@@ -71,9 +71,9 @@ const TicketTabStack = (props) => (
 const RenderScene = (props) => {
   const [showPercentageCount, setShowPercentageCount] = useState(false);
 
-  console.log(
-    `Ticket Count: ${JSON.stringify(props.route.params.ticketCount)}`,
-  );
+  // console.log(
+  //   `Ticket Count: ${JSON.stringify(props.route.params.ticketCount)}`,
+  // );
 
   let renderDonutChart = () => {
     let count = getCount(props.route.params.ticketCount);

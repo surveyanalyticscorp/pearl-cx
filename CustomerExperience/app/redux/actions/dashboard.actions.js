@@ -100,10 +100,11 @@ export const getClosedLoopTicketList = (
   segmentId,
 });
 
-export const getClosedLoopTicketItem = (token, ticketId) => ({
+export const getClosedLoopTicketItem = (token, ticketId, feedbackApiKey) => ({
   type: GET_CLOSED_LOOP_TICKET_ITEM,
   token,
   ticketId,
+  feedbackApiKey,
 });
 
 export const removeTicketItemData = (token, ticketId) => ({
@@ -131,10 +132,11 @@ export const postAddTicketComment = (token, param, ticketId) => ({
   ticketId,
 });
 
-export const createClfTicket = (token, param) => ({
+export const createClfTicket = (token, param, feedbackApiKey) => ({
   type: CREATE_CLF_TICKET,
   token,
   param,
+  feedbackApiKey,
 });
 
 export const updateClfTicket = (token, param, ticketId) => ({

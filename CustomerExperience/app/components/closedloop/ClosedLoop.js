@@ -47,7 +47,10 @@ import FilterTicket from './takeaction/FilterTickets';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {useDispatch, useSelector} from 'react-redux';
-import {getClosedLoopTicketList} from '../../redux/actions/dashboard.actions';
+import {
+  getClosedLoopOwnerDetails,
+  getClosedLoopTicketList,
+} from '../../redux/actions/dashboard.actions';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {showLoading} from '../../redux/actions';
@@ -188,6 +191,12 @@ export default function ClosedLoop(props) {
         currentFeedback.feedbackID,
         currentSegment.currentSegmentID,
       ),
+    );
+
+    dispatch(
+      getClosedLoopOwnerDetails(authToken, {
+        segmentID: currentSegment.currentSegmentID,
+      }),
     );
   };
 

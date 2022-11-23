@@ -16,6 +16,8 @@ import UpdateTicket from '../components/dashboard/ticketManagement/UpdateTicket'
 import React from 'react';
 import {
   Colors,
+  getPriorityBorderColor,
+  getPriorityBorderColorbyId,
   getStatusBorderColor,
   getStatusFillerColor,
 } from '../styles/color.constants';
@@ -130,14 +132,42 @@ export const listItemSeparator = () => {
 export const RenderStatusIcon = (props) => {
   return (
     <View
-      style={{
-        borderRadius: 50,
-        borderWidth: 1,
-        borderColor: getStatusBorderColor(props.title.toLowerCase()),
-        backgroundColor: getStatusFillerColor(props.title.toLowerCase()),
-        height: props.size ?? 14,
-        width: props.size ?? 14,
-      }}
+      style={[
+        {
+          borderRadius: 50,
+          borderWidth: 1,
+          borderColor: getStatusBorderColor(props.title.toLowerCase()),
+          backgroundColor: getStatusFillerColor(props.title.toLowerCase()),
+          height: props.size ?? 14,
+          width: props.size ?? 14,
+        },
+        props.style,
+      ]}
+    />
+  );
+};
+
+export const RenderPriorityIcon = (props) => {
+  return (
+    // <View
+    //   style={[
+    //     {
+    //       borderRadius: 50,
+    //       borderWidth: 1,
+    //       borderColor: getStatusBorderColor(props.title.toLowerCase()),
+    //       backgroundColor: getStatusFillerColor(props.title.toLowerCase()),
+    //       height: props.size ?? 14,
+    //       width: props.size ?? 14,
+    //     },
+    //     props.style,
+    //   ]}
+    // />
+
+    <IonIcons
+      style={{marginHorizontal: MarginConstants.halfTab}}
+      name={'flag'}
+      size={14}
+      color={getPriorityBorderColor(props.title.toLowerCase())}
     />
   );
 };

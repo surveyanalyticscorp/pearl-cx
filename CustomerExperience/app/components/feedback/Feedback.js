@@ -66,7 +66,7 @@ function Feedback(props) {
           data = [...new Set(data)];
           setTicketStatus(response.body.cxTicketStatusValues);
           setFeedbackData(data);
-          console.log('pageOffset data count ' + data.length);
+          // console.log('pageOffset data count ' + data.length);
           showLoader && setShowLoader(false);
           pagination && setPagination(false);
         },
@@ -308,7 +308,7 @@ const renderFeedbackScene = (props) => {
   };
 
   const _renderRow = ({item}) => {
-    console.log(`Feed back item: ${JSON.stringify(item)}`);
+    // console.log(`Feed back item: ${JSON.stringify(item)}`);
 
     return (
       <FeedbackCell

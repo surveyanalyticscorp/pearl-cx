@@ -1,4 +1,5 @@
 import React, {
+  useEffect,
   // useEffect,
   useState,
 } from 'react';
@@ -23,11 +24,12 @@ import {
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {FontFamily} from '../../styles/font.constants';
+import {FontFamily, FontWeight} from '../../styles/font.constants';
 // import {Sizes} from '../../styles/Size.constant';
 // import moment from 'moment';
 // import {translate} from '../../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import QPButton from '../../widgets/Button';
 // import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
 import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
@@ -37,59 +39,347 @@ import TicketTakeAction from './takeaction/TIcketTakeAction';
 // import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
   BottomSheetHeader,
+  RenderPriorityIcon,
   RenderRoundImageOrColor,
+  RenderStatusIcon,
 } from '../../routes/CommonScreen';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  getOwnerNameById,
   getPriorityById,
+  getPriorityIndexById,
+  getSegmentNameById,
   getStatusById,
+  getStatusIndexById,
   priorityList,
   statusList,
 } from '../../Utils/TicketUtils';
 import moment from 'moment';
 import {FullMonthDateYearFormat} from '../../Utils/AppConstants';
-import {updateClfTicket} from '../../redux/actions/dashboard.actions';
+import {
+  getClosedLoopOwnerDetails,
+  updateClfTicket,
+} from '../../redux/actions/dashboard.actions';
+import SelectStatus from './takeaction/SelectStatus';
+import SelectPriority from './takeaction/SelectPriority';
+import SelectSegment from './takeaction/SelectSegment';
+import SelectTicketOwner from './takeaction/SelectTicketOwner';
+import {element} from 'prop-types';
 
 export default function TicketOverview(props) {
   const dispatch = useDispatch();
   const {authToken} = useSelector((state) => state.global);
-  const {owners} = useSelector((state) => state.dashboard.ownerDetails);
+  const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
 
   const [ticketDetails, setTicketDetails] = useState(
     useSelector((state) => state.dashboard.ticket),
   );
-  const currentSegment = useSelector(
-    (state) => state.dashboard.currentSegment.currentSegment,
+  const [selectedSegment, setSelectedSegment] = useState();
+  const [statusIndex, setStatusIndex] = useState(
+    getStatusIndexById(ticketDetails.status ?? -1),
+  );
+  const [priorityIndex, setPriorityIndex] = useState(
+    getPriorityIndexById(ticketDetails.priority ?? -1),
   );
 
+  const segments = useSelector(
+    (state) => state.dashboard.segmentDetails.segments,
+  );
   console.log('TTTTT', ticketDetails ?? '');
 
-  // const statusoptions = [
-  //   {value: 'Open', color: statusColors.openFiller},
-  //   {value: 'Closed', color: statusColors.closedFiller},
-  //   {value: 'Overdue', color: statusColors.overDueFiller},
-  //   {value: 'Escalated', color: statusColors.escalatedFiller},
-  //   {value: 'Resolved', color: statusColors.resolvedFiller},
-  //   {value: 'New', color: statusColors.newFiller},
-  // ];
-
-  // const priorityOptions = [
-  //   {value: 'Critical', color: priorityColors.critical.filler},
-  //   {value: 'High', color: priorityColors.high.filler},
-  //   {value: 'Normal', color: priorityColors.normal.filler},
-  //   {value: 'Low', color: priorityColors.low.filler},
-  //   {value: 'Unassigned', color: priorityColors.unassigned.filler},
-  // ];
-
-  const updateTicket = () => {
-    dispatch(updateClfTicket(authToken, {status: 3}, ticketDetails.id));
+  const getSegmentIndex = (segmentId) => {
+    let index = 0;
+    segments.forEach((element, index_) => {
+      if (element.currentSegmentID === segmentId) {
+        index = index_;
+      }
+    });
+    return index;
   };
 
-  const userOptions = [
-    {value: 'Manager 1', url: 'https://picsum.photos/id/237/200'},
-    {value: 'Manager 2', url: 'https://picsum.photos/id/327/200'},
-    {value: 'Manager 3', url: 'https://picsum.photos/id/247/200'},
-  ];
+  const getSegmentBySegmentId = (segmentId) => {
+    let item = {};
+    segments.forEach((element) => {
+      if (element.currentSegmentID === segmentId) {
+        item = element;
+      }
+    });
+    return item;
+  };
+
+  const getOwnerIndex = (ownnerId) => {
+    let index_ = -1;
+    owners.forEach((element, index) => {
+      if (element.ownerID === ownnerId) {
+        index_ = index;
+      }
+    });
+    return index_;
+  };
+
+  const [currentSegment, setCurrentSegment] = useState(
+    getSegmentBySegmentId(ticketDetails.currentSegmentId ?? 0),
+  );
+  const [segmentIndex, setSegmentIndex] = useState(
+    getSegmentIndex(currentSegment.currentSegmentID),
+  );
+
+  const [ticketOwnerIndex, setTicketOwnerIndex] = useState(
+    getOwnerIndex(ticketDetails.assignToId ?? 0),
+  );
+  const getTicketOwnerList = (segmentId_) => {
+    dispatch(
+      getClosedLoopOwnerDetails(authToken, {
+        segmentID: segmentId_,
+      }),
+    );
+  };
+
+  const updateTicket = (params) => {
+    let body = {...params, userId: ticketDetails.subscriberId};
+    console.log('UPDATE_TICKET', body);
+
+    dispatch(updateClfTicket(authToken, body, ticketDetails.id));
+  };
+
+  /// BOTTOM SHEET
+
+  // variables for bottom sheet
+  const actionBottomSheet = React.useRef(null);
+  const statusBottomSheet = React.useRef();
+  const priorityBottomSheet = React.useRef();
+  const segmentBottomSheet = React.useRef();
+  const ownerBottomSheet = React.useRef();
+
+  const actionBottomSheetSnapPoints = ['33%', '0%'];
+  const statusBottomSheetSnapPoints = ['45', '0'];
+  const priorityBottomSheetSnapPoints = ['45', '0'];
+  const segmentBottomSheetSnapPoints = ['45', '0'];
+  const ownerBottomSheetSnapPoints = ['45', '0'];
+
+  const fall = new Animated.Value(1);
+
+  const [shadow, setShadow] = useState(false);
+
+  const onTakeActionHandler = () => {
+    // console.log('takeaction');
+    // props.navigation.navigate('TicketTakeAction');
+    // props.navigation.navigate('SelectEmailTemplate');
+    actionBottomSheet.current.snapTo(0);
+  };
+  const handleStatusSelection = () => {
+    statusBottomSheet.current.snapTo(0);
+  };
+
+  const handlePrioritySelection = () => {
+    priorityBottomSheet.current.snapTo(0);
+  };
+
+  const handleSegmentSelection = () => {
+    segmentBottomSheet.current.snapTo(0);
+  };
+
+  const handleOwnerSelection = () => {
+    ownerBottomSheet.current.snapTo(0);
+  };
+
+  const renderStatusHeader = (_title) => {
+    return (
+      <BottomSheetHeader
+        title={'Select Status'}
+        onPressClose={() =>
+          statusBottomSheet.current.snapTo(
+            statusBottomSheetSnapPoints.length - 1,
+          )
+        }
+      />
+    );
+  };
+
+  const renderStatusSelectContent = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <SelectStatus
+          data={statusList}
+          selectedIndex={statusIndex}
+          handleOnPress={(item, index) => {
+            // console.log(JSON.stringify(item));
+            // setStatus(item.title);
+            // setTicketState((state) => ({...state, status: item.id}));
+            updateTicket({status: item.id});
+            setStatusIndex(index);
+          }}
+        />
+      </View>
+    );
+  };
+
+  const RenderStatusBottomSheet = () => {
+    return (
+      <BottomSheet
+        ref={statusBottomSheet}
+        snapPoints={statusBottomSheetSnapPoints}
+        initialSnap={statusBottomSheetSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderStatusSelectContent}
+        renderHeader={renderStatusHeader}
+        callbackNode={fall}
+      />
+    );
+  };
+
+  const renderPriorityHeader = (_title) => {
+    return (
+      <BottomSheetHeader
+        title={'Select Priority'}
+        onPressClose={() =>
+          priorityBottomSheet.current.snapTo(
+            priorityBottomSheetSnapPoints.length - 1,
+          )
+        }
+      />
+    );
+  };
+
+  const renderPrioritySelectContent = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <SelectPriority
+          data={priorityList}
+          selectedIndex={priorityIndex}
+          handleOnPress={(item, index) => {
+            // console.log(JSON.stringify(item));
+            // setPriority(item.title);
+            setPriorityIndex(index);
+            updateTicket({priority: item.id});
+            // setTicketState((state) => ({
+            //   ...state,
+            //   priority: item.id,
+            // }));
+          }}
+        />
+      </View>
+    );
+  };
+
+  const RenderPriorityBottomSheet = () => {
+    return (
+      <BottomSheet
+        ref={priorityBottomSheet}
+        snapPoints={priorityBottomSheetSnapPoints}
+        initialSnap={priorityBottomSheetSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderPrioritySelectContent}
+        renderHeader={renderPriorityHeader}
+        callbackNode={fall}
+      />
+    );
+  };
+
+  const renderSegmentHeader = (_title) => {
+    return (
+      <BottomSheetHeader
+        title={'Select Segment'}
+        onPressClose={() =>
+          segmentBottomSheet.current.snapTo(
+            segmentBottomSheetSnapPoints.length - 1,
+          )
+        }
+      />
+    );
+  };
+
+  const renderSegmentSelectContent = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <SelectSegment
+          data={segments}
+          selectedIndex={segmentIndex}
+          handleOnPress={(item, index) => {
+            console.log('SEGMENT', JSON.stringify(item));
+            // console.log(JSON.stringify(item));
+            // setSegment(item.segmentName);
+            setSegmentIndex(index);
+            updateTicket({currentSegmentId: item.segmentID});
+            getTicketOwnerList(item.segmentID);
+            // setSegmentId((prev) => item.segmentID);
+
+            //   setTicketState((state) => ({
+            //     ...state,
+            //     currentSegmentId: item.segmentID,
+            //   }));
+          }}
+        />
+      </View>
+    );
+  };
+
+  const RenderSegmentBottomSheet = () => {
+    return (
+      <BottomSheet
+        ref={segmentBottomSheet}
+        snapPoints={segmentBottomSheetSnapPoints}
+        initialSnap={segmentBottomSheetSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderSegmentSelectContent}
+        renderHeader={renderSegmentHeader}
+        callbackNode={fall}
+      />
+    );
+  };
+
+  const renderOwnerHeader = (_title) => {
+    return (
+      <BottomSheetHeader
+        title={'Select Ticket Owner'}
+        onPressClose={() =>
+          ownerBottomSheet.current.snapTo(ownerBottomSheetSnapPoints.length - 1)
+        }
+      />
+    );
+  };
+
+  const renderOwnerSelectContent = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <SelectTicketOwner
+          data={owners}
+          selectedIndex={ticketOwnerIndex}
+          handleOnPress={(item, index) => {
+            // console.log(JSON.stringify(item));
+            // setTicketOwner(item.ownerName);
+            setTicketOwnerIndex(index);
+            updateTicket({assignToId: item.ownerID});
+            // setTicketState((state) => ({
+            //   ...state,
+            //   assignToId: item.ownerID,
+            //   ownerId: item.ownerID,
+            // }));
+          }}
+        />
+      </View>
+    );
+  };
+
+  const RenderOwnerBottomSheet = () => {
+    return (
+      <BottomSheet
+        ref={ownerBottomSheet}
+        snapPoints={ownerBottomSheetSnapPoints}
+        initialSnap={ownerBottomSheetSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderOwnerSelectContent}
+        renderHeader={renderOwnerHeader}
+        callbackNode={fall}
+      />
+    );
+  };
+
+  // const userOptions = [
+  //   {value: 'Manager 1', url: 'https://picsum.photos/id/237/200'},
+  //   {value: 'Manager 2', url: 'https://picsum.photos/id/327/200'},
+  //   {value: 'Manager 3', url: 'https://picsum.photos/id/247/200'},
+  // ];
   const departmentOptions = ['Sales', 'Client Services'];
 
   let sampleText =
@@ -230,13 +520,6 @@ export default function TicketOverview(props) {
     );
   };
 
-  const onTakeActionHandler = () => {
-    console.log('takeaction');
-    // props.navigation.navigate('TicketTakeAction');
-    // props.navigation.navigate('SelectEmailTemplate');
-    bs.current.snapTo(0);
-  };
-
   const takeActionButton = () => {
     return (
       <View style={styles.takeActionContainer}>
@@ -291,6 +574,7 @@ export default function TicketOverview(props) {
       </View>
     );
   };
+
   const Title = (text) => {
     return (
       <View style={[{flex: 1}, styles.rowContainer]}>
@@ -298,6 +582,7 @@ export default function TicketOverview(props) {
       </View>
     );
   };
+
   const getText = (text) => {
     return (
       <View
@@ -350,6 +635,7 @@ export default function TicketOverview(props) {
       </TouchableWithoutFeedback>
     );
   };
+
   const departmentNameCell = ({item}) => {
     return (
       <View style={[{flex: 1}, styles.rowContainer]}>
@@ -358,42 +644,181 @@ export default function TicketOverview(props) {
     );
   };
 
+  const RenderStatusDropDownButton = () => {
+    return (
+      <View style={styles.dropdownContainer}>
+        <TouchableWithoutFeedback onPress={handleStatusSelection}>
+          <View style={styles.dropdownInnerContainer}>
+            <View style={styles.dropdownInnerContainer}>
+              <RenderStatusIcon
+                style={{margin: MarginConstants.halfTab}}
+                title={
+                  ticketDetails !== undefined
+                    ? getStatusById(ticketDetails.status)
+                    : 'Select status'
+                }
+              />
+              <Text style={styles.dropdownContainerText}>
+                {ticketDetails !== undefined
+                  ? getStatusById(ticketDetails.status)
+                  : 'Select status'}
+              </Text>
+            </View>
+            {/* <Icon name={arrowIcon} size={15} color={arrowColor} /> */}
+
+            <SimpleLineIcon
+              name={'arrow-down'}
+              size={15}
+              color={Colors.evenDarkerGrey}
+            />
+          </View>
+
+          {/* <IonIcons name="down-arrow" /> */}
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
+  const RenderPriorityDropDownButton = () => {
+    return (
+      <View style={styles.dropdownContainer}>
+        <TouchableWithoutFeedback onPress={handlePrioritySelection}>
+          <View style={styles.dropdownInnerContainer}>
+            <View style={styles.dropdownInnerContainer}>
+              <RenderPriorityIcon
+                style={{margin: MarginConstants.halfTab}}
+                title={
+                  ticketDetails !== undefined
+                    ? getPriorityById(ticketDetails.priority)
+                    : 'Select priority'
+                }
+              />
+              <Text style={styles.dropdownContainerText}>
+                {ticketDetails !== undefined
+                  ? getPriorityById(ticketDetails.priority)
+                  : 'Select priority'}
+              </Text>
+            </View>
+            {/* <Icon name={arrowIcon} size={15} color={arrowColor} /> */}
+
+            <SimpleLineIcon
+              name={'arrow-down'}
+              size={15}
+              color={Colors.evenDarkerGrey}
+            />
+          </View>
+
+          {/* <IonIcons name="down-arrow" /> */}
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
+  const RenderSegmentDropDownButton = () => {
+    return (
+      <View style={styles.dropdownContainer}>
+        <TouchableWithoutFeedback onPress={handleSegmentSelection}>
+          <View style={styles.dropdownInnerContainer}>
+            <View style={styles.dropdownInnerContainer}>
+              {/* <RenderPriorityIcon
+                style={{margin: MarginConstants.halfTab}}
+                title={
+                  ticketDetails !== undefined
+                    ? getPriorityById(ticketDetails.priority)
+                    : 'Select priority'
+                }
+              /> */}
+              <Text style={styles.dropdownContainerText}>
+                {ticketDetails !== undefined
+                  ? getSegmentNameById(segments, ticketDetails.currentSegmentId)
+                  : 'Select segment'}
+              </Text>
+            </View>
+            {/* <Icon name={arrowIcon} size={15} color={arrowColor} /> */}
+
+            <SimpleLineIcon
+              name={'arrow-down'}
+              size={15}
+              color={Colors.evenDarkerGrey}
+            />
+          </View>
+
+          {/* <IonIcons name="down-arrow" /> */}
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
+  const RenderOwnerDropDownButton = () => {
+    return (
+      <View style={styles.dropdownContainer}>
+        <TouchableWithoutFeedback onPress={handleOwnerSelection}>
+          <View style={styles.dropdownInnerContainer}>
+            <View style={styles.dropdownInnerContainer}>
+              {/* <RenderPriorityIcon
+                style={{margin: MarginConstants.halfTab}}
+                title={
+                  ticketDetails !== undefined
+                    ? getPriorityById(ticketDetails.priority)
+                    : 'Select priority'
+                }
+              /> */}
+              <Text style={styles.dropdownContainerText}>
+                {ticketDetails !== undefined
+                  ? // ? ticketDetails.assignToId
+                    getOwnerNameById(owners, ticketDetails.assignToId)
+                  : 'Select owner'}
+              </Text>
+            </View>
+            {/* <Icon name={arrowIcon} size={15} color={arrowColor} /> */}
+
+            <SimpleLineIcon
+              name={'arrow-down'}
+              size={15}
+              color={Colors.evenDarkerGrey}
+            />
+          </View>
+
+          {/* <IonIcons name="down-arrow" /> */}
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
   const ticketStatusPriorityView = () => {
     return (
       <View style={styles.ticketStatusContainer}>
         <View style={styles.rowContainer}>
-          {Title('Status')}
+          {Title('Ticket Status')}
+          <RenderStatusDropDownButton />
+
           {/* {DropDownView(
             statusList,
             ticketDetails !== undefined
               ? getStatusById(ticketDetails.status)
               : 'Select status',
           )} */}
-          <TouchableWithoutFeedback onPress={() => updateTicket()}>
-            <Text>
-              {ticketDetails !== undefined
-                ? getStatusById(ticketDetails.status)
-                : 'Select status'}
-            </Text>
-          </TouchableWithoutFeedback>
         </View>
         <View style={styles.rowContainer}>
           {Title('Priority')}
-          {DropDownView(
+          <RenderPriorityDropDownButton />
+          {/* {DropDownView(
             priorityList,
             ticketDetails !== undefined
               ? getPriorityById(ticketDetails.priority)
               : 'Select priority',
-          )}
+          )} */}
         </View>
         <View style={styles.rowContainer}>
           {Title('Segment')}
-          {DropDownView(userOptions, 'Select Segement')}
+          {/* {DropDownView(userOptions, 'Select Segement')} */}
+          <RenderSegmentDropDownButton />
         </View>
 
         <View style={styles.rowContainer}>
           {Title('Assigned to')}
-          {DropDownView(userOptions, 'Assign manager')}
+          {/* {DropDownView(userOptions, 'Assign manager')} */}
+          <RenderOwnerDropDownButton />
         </View>
         <View style={styles.rowContainer}>{Title('Department')}</View>
         <View style={styles.rowContainer}>
@@ -435,7 +860,7 @@ export default function TicketOverview(props) {
 
         <View style={styles.rowContainer}>
           {Title('Segment')}
-          {getText(currentSegment)}
+          {getText(currentSegment.currentSegment)}
         </View>
         <View style={styles.rowContainer}>
           {Title('Created')}
@@ -445,10 +870,14 @@ export default function TicketOverview(props) {
               : '',
           )}
         </View>
-        <View style={styles.rowContainer}>
-          {Title('NPS')}
-          {getNPSScoreText('3')}
-        </View>
+        {ticketDetails.npsScore ? (
+          <View style={styles.rowContainer}>
+            {Title('NPS')}
+            {getNPSScoreText('3')}
+          </View>
+        ) : (
+          <View />
+        )}
         <View style={styles.columnContainer}>
           {Title('Description')}
           <Text style={{paddingHorizontal: PaddingConstants.halfTab}}>
@@ -459,35 +888,51 @@ export default function TicketOverview(props) {
     );
   };
 
-  const contactView = () => {
+  const ContactView = () => {
     return (
       <View style={styles.ticketStatusContainer}>
         {DescriptionHeader('Contact')}
         <View style={styles.rowContainer}>
-          <Text
-            style={{
-              color: Colors.accent,
-              fontSize: TextSizes.largeText,
-              fontWeight: 'bold',
-            }}>
-            Jessica Plam
-          </Text>
+          {ticketDetails.panelMember.name ? (
+            <Text
+              style={{
+                color: Colors.accent,
+                fontSize: TextSizes.largeText,
+                fontWeight: 'bold',
+              }}>
+              {ticketDetails.panelMember.name}
+            </Text>
+          ) : (
+            <View />
+          )}
         </View>
-        <View style={styles.rowContainer}>
-          {Title('Email')}
-          {getUnderLineText('jessica.plam@quntica.com')}
-        </View>
-        <View style={styles.rowContainer}>
+        {ticketDetails.panelMember.email ? (
+          <View style={styles.rowContainer}>
+            {Title('Email')}
+            {getUnderLineText(ticketDetails.panelMember.email)}
+          </View>
+        ) : (
+          <View />
+        )}
+        {ticketDetails.panelMember.phone ? (
+          <View style={styles.rowContainer}>
+            {Title('Phone')}
+            {getUnderLineText(ticketDetails.panelMember.phone)}
+          </View>
+        ) : (
+          <View />
+        )}
+        {/* <View style={styles.rowContainer}>
           {Title('Phone')}
           {getUnderLineText('+140002031')}
-        </View>
+        </View> */}
       </View>
     );
   };
 
   const handleTicketAction = (item) => {
     console.log('Selected Action', item.title);
-    bs.current.snapTo(bsSnapPoints.length - 1);
+    actionBottomSheet.current.snapTo(actionBottomSheetSnapPoints.length - 1);
     props.navigation.navigate('sendEmail');
   };
 
@@ -513,16 +958,14 @@ export default function TicketOverview(props) {
     return (
       <BottomSheetHeader
         title={'Take Action'}
-        onPressClose={() => bs.current.snapTo(bsSnapPoints.length - 1)}
+        onPressClose={() =>
+          actionBottomSheet.current.snapTo(
+            actionBottomSheetSnapPoints.length - 1,
+          )
+        }
       />
     );
   };
-
-  // variables for bottom sheet
-  const bs = React.useRef(null);
-  const fall = new Animated.Value(1);
-  const bsSnapPoints = ['33%', '0%'];
-  const [shadow, setShadow] = useState(false);
 
   return (
     <Animated.View style={styles.container}>
@@ -535,14 +978,17 @@ export default function TicketOverview(props) {
           {takeActionButton()}
           {ticketStatusPriorityView()}
           {descriptionView()}
-          {contactView()}
+          {ticketDetails.panelMember !== undefined ? <ContactView /> : <View />}
         </View>
       </Animated.ScrollView>
-
+      <RenderStatusBottomSheet />
+      <RenderPriorityBottomSheet />
+      <RenderSegmentBottomSheet />
+      <RenderOwnerBottomSheet />
       <BottomSheet
-        ref={bs}
-        snapPoints={bsSnapPoints}
-        initialSnap={bsSnapPoints.length - 1}
+        ref={actionBottomSheet}
+        snapPoints={actionBottomSheetSnapPoints}
+        initialSnap={actionBottomSheetSnapPoints.length - 1}
         enabledGestureInteraction={true}
         renderContent={renderTicketTakeAction}
         renderHeader={renderHeader}
@@ -562,7 +1008,7 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    margin: MarginConstants.tab1,
+    margin: MarginConstants.halfTab,
     flex: 1,
     // borderColor: Colors.evenDarkerGrey,
     // borderWidth: 1,
@@ -599,8 +1045,8 @@ const styles = StyleSheet.create({
   },
 
   titleText: {
-    fontFamily: FontFamily.bold,
-    fontWeight: 'bold',
+    fontFamily: FontFamily.medium,
+    fontWeight: FontWeight._500,
     fontSize: TextSizes.primary,
     color: Colors.filterIconColor,
   },
@@ -728,4 +1174,39 @@ const styles = StyleSheet.create({
     color: Colors.filterIconColor,
   },
   contentContainer: {backgroundColor: Colors.white, height: '100%'},
+  dropdownContainer: {
+    flex: 2,
+    flexDirection: 'row',
+
+    height: '100%',
+    backgroundColor: Colors.white,
+    borderColor: Colors.evenDarkerGrey,
+
+    borderWidth: 1,
+    borderRadius: 3,
+  },
+
+  dropdownInnerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    height: '100%',
+    paddingHorizontal: PaddingConstants.halfTab,
+  },
+
+  // dropdownIconTextContainer: {
+  //   flex: 1,
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   justifyContent: 'flex-start',
+  //   height: '100%',
+  // },
+
+  dropdownContainerText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.regular,
+    marginVertical: MarginConstants.tab1,
+    color: Colors.filterIconColor,
+  },
 });

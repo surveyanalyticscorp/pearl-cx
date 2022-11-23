@@ -22,7 +22,6 @@ const SelectStatus = (props) => {
   // const [selectedIndex, setSelectedIndex] = useState();
 
   const renderRow = ({item, index}) => {
-    console.log(props.selectedIndex);
     return (
       <StatusItem
         item={item}

@@ -60,6 +60,49 @@ export const getPriorityById = (priorityId) => {
   return title;
 };
 
+export const getSegmentNameById = (segmentList, segmentId) => {
+  let title = 'Segment';
+  segmentList.forEach((element) => {
+    if (element.segmentID === segmentId) {
+      title = element.segmentName;
+    }
+  });
+
+  return title;
+};
+
+export const getOwnerNameById = (owners, ownerId) => {
+  let title = 'Owner';
+  owners.forEach((element) => {
+    if (element.ownerID === ownerId) {
+      title = element.ownerName;
+    }
+  });
+
+  return title;
+};
+
+export const getStatusIndexById = (statusId) => {
+  let index = -1;
+  statusList.forEach((element, i) => {
+    if (element.id === statusId) {
+      index = i;
+    }
+  });
+
+  return index;
+};
+
+export const getPriorityIndexById = (priorityId) => {
+  let index = -1;
+  statusList.forEach((element, i) => {
+    if (element.id === priorityId) {
+      index = i;
+    }
+  });
+
+  return index;
+};
 // const statusList = {
 //   'NEW' : 0,
 //   'OPEN' : 1,

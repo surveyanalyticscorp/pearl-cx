@@ -202,7 +202,7 @@ const CxDashboard = (props) => {
       endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
     };
     props.getDashboardContent(props.authToken, data);
-    console.log(`${JSON.stringify(props)} :Data`);
+    // console.log(`${JSON.stringify(props)} :Data`);
   };
 
   const RenderHorizontalBarView = () => {

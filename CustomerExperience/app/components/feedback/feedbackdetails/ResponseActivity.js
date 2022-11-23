@@ -18,7 +18,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 const ResponseActivity = (props) => {
   let [activityData, setActivityData] = useState(props.route.params.data);
 
-  console.log(`feedback: ${activityData}`);
+  // console.log(`feedback: ${activityData}`);
 
   const RenderSurveySent = ({children}) => {
     return (

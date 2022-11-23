@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 // import SafeAreaView from 'react-native-safe-area-view';
 import {
   Platform,
@@ -13,7 +13,8 @@ import {
 import {
   Colors,
   // getPriorityFillerColor,
-  getPriorityBorderColor,
+  // getPriorityBorderColor,
+  getPriorityBorderColorbyId,
   // priorityColors,
   // getStatusBorderColor,
 } from '../../../styles/color.constants';
@@ -36,7 +37,12 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import SelectPriority from '../../closedloop/takeaction/SelectPriority';
 import SelectStatus from '../../closedloop/takeaction/SelectStatus';
-import {priorityList, statusList} from '../../../Utils/TicketUtils';
+import {
+  getPriorityById,
+  getStatusById,
+  priorityList,
+  statusList,
+} from '../../../Utils/TicketUtils';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   createClfTicket,
@@ -45,15 +51,22 @@ import {
 import {showLoading} from '../../../redux/actions';
 import SelectSegment from '../../closedloop/takeaction/SelectSegment';
 import SelectTicketOwner from '../../closedloop/takeaction/SelectTicketOwner';
+import SelectDate from '../../closedloop/takeaction/SelectDate';
+import moment from 'moment';
+import {
+  FullMonthDateYearFormat,
+  // HalfMonthDateYearFormat,
+  YMDFORMAT,
+} from '../../../Utils/AppConstants';
+import {FEEDBACK_API_KEY} from '../../../api/Constant';
 
 export default function CreateTicket(props) {
   const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
   const {authToken} = useSelector((state) => state.global);
   const {owners} = useSelector((state) => state.dashboard.ownerDetails);
   const [headerTitle, setHeaderTitle] = useState('Create New Ticket');
-  const [ticket, setTicket] = useState({});
-
-  const [priority, setPriority] = useState('Select');
+  const subscriberId = useSelector((state) => state.global.subscriberId);
+  // const [priority, setPriority] = useState('Select');
   const [priorityIndex, setPriorityIndex] = useState(-1);
   const [segment, setSegment] = useState('Select Segment');
   const [segmentIndex, setSegmentIndex] = useState(-1);
@@ -62,6 +75,16 @@ export default function CreateTicket(props) {
   const [ticketOwnerIndex, setTIcketOwnerIndex] = useState(-1);
   const [status, setStatus] = useState('Select');
   const [statusIndex, setStatusIndex] = useState(-1);
+  let userInfo = {
+    emailAddress: '',
+    firstName: '',
+    mobileNumber: '',
+    comment: '',
+  };
+
+  const [issueDate, setIssueDate] = useState(
+    moment().format(FullMonthDateYearFormat),
+  );
   // const [bottomSheet, setBottomSheet] = useState('priority');
 
   const segmentIcon = './../../../../assets/images/segment_icon.png';
@@ -70,6 +93,7 @@ export default function CreateTicket(props) {
   const statusBottomSheet = React.useRef();
   const segmentBottomSheet = React.useRef();
   const ownerBottomSheet = React.useRef();
+  // const calendarBottomSheet = React.useRef();
   const phoneInput = React.useRef();
 
   const fall = new Animated.Value(1);
@@ -77,27 +101,28 @@ export default function CreateTicket(props) {
   const statusBottomSheetSnapPoints = ['45%', '0%'];
   const segmentBottomSheetSnapPoints = ['45%', '0%'];
   const ownerBottomSheetSnapPoints = ['45%', '0%'];
+  // const calenderBottomSheetSnapPoints = ['45%', '0%'];
 
   const [shadow, setShadow] = useState(false);
   const dispatch = useDispatch();
 
-  let ticketBody = {
-    subscriberId: 0,
-    ownerId: 0,
-    emailAddress: '',
-    firstName: '',
-    mobileNumber: '',
-    feedbackId: 0,
-    originSegmentId: 0,
-    currentSegmentId: 0,
+  const [ticketState, setTicketState] = useState({
+    subscriberId: 4894850,
+    // ownerId: ,
+    // emailAddress: '',
+    // firstName: '',
+    // mobileNumber: '',
+    feedbackId: segmentDetails.feedbackID,
+    originSegmentId: segmentDetails.currentSegmentID,
+    // currentSegmentId: 0,
     priority: 0,
     status: 0,
     type: 0,
     source: 1,
-    assignToId: 0,
-    comment: '',
-    issueDate: '',
-  };
+    // assignToId: 0,
+    // comment: '',
+    // issueDate: '',
+  });
 
   const getTicketOwnerList = (segmentId_) => {
     dispatch(
@@ -108,10 +133,6 @@ export default function CreateTicket(props) {
   };
 
   // console.log('OWNERS:', JSON.stringify(owners));
-
-  useLayoutEffect(() => {
-    // console.log('Screen layout');
-  }, []);
 
   useEffect(() => {
     getTicketOwnerList(segmentId);
@@ -177,10 +198,21 @@ export default function CreateTicket(props) {
     ownerBottomSheet.current.snapTo(0);
   };
 
+  const handleDateSelection = () => {
+    // open owner selection bottom sheet
+    // calendarBottomSheet.current.snapTo(0);
+    setTicketState((state) => ({
+      ...state,
+      issueDate: moment(issueDate).format(YMDFORMAT),
+    }));
+  };
+
   const handleCreateTicket = () => {
     // props.navigation.goBack();
     // dispatch(showLoading(true));
-    // dispatch(createClfTicket(authToken, ticketBody));
+    // console.log(JSON.stringify(userInfo));
+    // setTicketState((state) => ({...state, ...userInfo}));
+    dispatch(createClfTicket(authToken, ticketState, FEEDBACK_API_KEY));
   };
 
   const renderPrioritySelectContent = () => {
@@ -190,9 +222,13 @@ export default function CreateTicket(props) {
           data={priorityList}
           selectedIndex={priorityIndex}
           handleOnPress={(item, index) => {
-            console.log(JSON.stringify(item));
-            setPriority(item.title);
+            // console.log(JSON.stringify(item));
+            // setPriority(item.title);
             setPriorityIndex(index);
+            setTicketState((state) => ({
+              ...state,
+              priority: item.id,
+            }));
           }}
         />
       </View>
@@ -206,10 +242,15 @@ export default function CreateTicket(props) {
           data={segmentDetails.segments}
           selectedIndex={segmentIndex}
           handleOnPress={(item, index) => {
-            console.log(JSON.stringify(item));
+            // console.log(JSON.stringify(item));
             setSegment(item.segmentName);
             setSegmentIndex(index);
-            setSegmentId((prev) => item.segmentID);
+            // setSegmentId((prev) => item.segmentID);
+
+            setTicketState((state) => ({
+              ...state,
+              currentSegmentId: item.segmentID,
+            }));
           }}
         />
       </View>
@@ -223,8 +264,9 @@ export default function CreateTicket(props) {
           data={statusList}
           selectedIndex={statusIndex}
           handleOnPress={(item, index) => {
-            console.log(JSON.stringify(item));
-            setStatus(item.title);
+            // console.log(JSON.stringify(item));
+            // setStatus(item.title);
+            setTicketState((state) => ({...state, status: item.id}));
             setStatusIndex(index);
           }}
         />
@@ -239,14 +281,35 @@ export default function CreateTicket(props) {
           data={owners}
           selectedIndex={ticketOwnerIndex}
           handleOnPress={(item, index) => {
-            console.log(JSON.stringify(item));
+            // console.log(JSON.stringify(item));
             setTicketOwner(item.ownerName);
             setTIcketOwnerIndex(index);
+            setTicketState((state) => ({
+              ...state,
+              assignToId: item.ownerID,
+              ownerId: item.ownerID,
+            }));
           }}
         />
       </View>
     );
   };
+
+  // const renderDateSelectContent = () => {
+  //   return (
+  //     <View style={styles.contentContainer}>
+  //       <SelectDate
+  //         data={owners}
+  //         selectedIndex={ticketOwnerIndex}
+  //         handleOnPress={(item, index) => {
+  //           // console.log(JSON.stringify(item));
+  //           setIssueDate(moment().format(HalfMonthDateYearFormat));
+  //           // setTIcketOwnerIndex(index);
+  //         }}
+  //       />
+  //     </View>
+  //   );
+  // };
 
   const renderPriorityHeader = (_title) => {
     return (
@@ -297,6 +360,19 @@ export default function CreateTicket(props) {
       />
     );
   };
+
+  // const renderCalenderHeader = (_title) => {
+  //   return (
+  //     <BottomSheetHeader
+  //       title={'Select Issue date'}
+  //       onPressClose={() =>
+  //         calendarBottomSheet.current.snapTo(
+  //           calenderBottomSheetSnapPoints.length - 1,
+  //         )
+  //       }
+  //     />
+  //   );
+  // };
 
   const RenderPriorityBottomSheet = () => {
     return (
@@ -354,6 +430,20 @@ export default function CreateTicket(props) {
     );
   };
 
+  // const RenderCalenderBottomSheet = () => {
+  //   return (
+  //     <BottomSheet
+  //       ref={calendarBottomSheet}
+  //       snapPoints={calenderBottomSheetSnapPoints}
+  //       initialSnap={calenderBottomSheetSnapPoints.length - 1}
+  //       enabledGestureInteraction={false}
+  //       renderContent={renderDateSelectContent}
+  //       renderHeader={renderCalenderHeader}
+  //       callbackNode={fall}
+  //     />
+  //   );
+  // };
+
   return (
     <View style={styles.rootContainer}>
       <Animated.View
@@ -377,14 +467,24 @@ export default function CreateTicket(props) {
               <Text style={styles.titleText}>{segment}</Text>
             </View>
           </TouchableOpacity>
-
-          <View style={[styles.rowContainer, styles.rowItem]}>
-            {getMaterialIcon('date-range')}
-            <TextInput placeholder="Date" style={styles.titleText} />
-          </View>
+          <TouchableOpacity onPress={handleDateSelection}>
+            <View style={[styles.rowContainer, styles.rowItem]}>
+              {getMaterialIcon('date-range')}
+              {/* <TextInput placeholder="Date" style={styles.titleText} /> */}
+              <Text style={styles.titleText}>{issueDate}</Text>
+            </View>
+          </TouchableOpacity>
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getIonIcon('person')}
-            <TextInput placeholder="Customer Name" style={styles.titleText} />
+            <TextInput
+              placeholder="Customer Name"
+              style={styles.titleText}
+              onChangeText={(text) => {
+                console.log(text);
+                // userInfo.firstName = text;
+                setTicketState((state) => ({...state, firstName: text}));
+              }}
+            />
           </View>
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getIonIcon('call')}
@@ -400,28 +500,39 @@ export default function CreateTicket(props) {
               layout="first"
               onChangeText={(text) => {
                 // setValue(text);
-                console.log('PHONE:', text);
+                // console.log('PHONE:', text);
               }}
               onChangeFormattedText={(text) => {
                 // setFormattedValue(text);
                 console.log('FORMATTED PHONE:', text);
+
+                setTicketState((state) => ({...state, mobileNumber: text}));
+                // userInfo.mobileNumber = text;
               }}
             />
           </View>
 
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getIonIcon('mail')}
-            <TextInput placeholder="Email" style={styles.titleText} />
+            <TextInput
+              placeholder="Email"
+              style={styles.titleText}
+              onChangeText={(text) => {
+                console.log(text);
+                // userInfo.emailAddress = text;
+                setTicketState((state) => ({...state, emailAddress: text}));
+              }}
+            />
           </View>
 
           <TouchableOpacity onPress={handlePrioritySelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               {getIonIcon(
                 'flag',
-                getPriorityBorderColor(priority.toLowerCase()),
+                getPriorityBorderColorbyId(ticketState.priority),
               )}
               <Text style={styles.titleText}>{`${
-                priority ?? 'Unassigned'
+                getPriorityById(ticketState.priority) ?? 'Unassigned'
               } Priority`}</Text>
               {/* <TextInput placeholder="Priority" style={styles.titleText} /> */}
             </View>
@@ -431,9 +542,12 @@ export default function CreateTicket(props) {
             <View style={[styles.rowContainer, styles.rowItem]}>
               {/* {getIonIcon('search')} */}
               {/* <TextInput placeholder="Status" style={styles.titleText} /> */}
-              <RenderStatusIcon title={status ?? 'New'} size={14} />
+              <RenderStatusIcon
+                title={getStatusById(ticketState.status) ?? 'New'}
+                size={14}
+              />
               <Text style={styles.titleText}>{`${
-                status ?? 'New'
+                getStatusById(ticketState.status) ?? 'New'
               } Status`}</Text>
             </View>
           </TouchableOpacity>
@@ -451,7 +565,16 @@ export default function CreateTicket(props) {
           </TouchableOpacity>
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getMaterialIcon('chat-bubble')}
-            <TextInput placeholder="Description" style={styles.titleText} />
+            <TextInput
+              multiline
+              placeholder="Description"
+              style={styles.titleText}
+              onChangeText={(text) => {
+                console.log(text);
+                // userInfo.emailAddress = text;
+                setTicketState((state) => ({...state, comment: text}));
+              }}
+            />
           </View>
           <View style={[styles.rowContainer, styles.rowButton]}>
             <QPButton
@@ -468,6 +591,7 @@ export default function CreateTicket(props) {
       <RenderStatusBottomSheet />
       <RenderSegmentBottomSheet />
       <RenderOwnerBottomSheet />
+      {/* <RenderCalenderBottomSheet /> */}
     </View>
   );
 }

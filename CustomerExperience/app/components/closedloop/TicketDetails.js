@@ -29,6 +29,7 @@ import {
   getClosedLoopTicketItemActivity,
   getClosedLoopTicketItemComments,
 } from '../../redux/actions/dashboard.actions';
+import {FEEDBACK_API_KEY} from '../../api/Constant';
 
 export default function TicketDetails(props) {
   const {authToken, isLoading} = useSelector((state) => state.global);
@@ -40,7 +41,9 @@ export default function TicketDetails(props) {
 
   useEffect(() => {
     // props.Navigator.screenName = 'Screen';
-    dispatch(getClosedLoopTicketItem(authToken, ticketItem.id));
+    dispatch(
+      getClosedLoopTicketItem(authToken, ticketItem.id, FEEDBACK_API_KEY),
+    );
     dispatch(getClosedLoopTicketItemComments(authToken, ticketItem.id));
     dispatch(getClosedLoopTicketItemActivity(authToken, ticketItem.id));
   }, [dispatch, ticketItem, authToken]);

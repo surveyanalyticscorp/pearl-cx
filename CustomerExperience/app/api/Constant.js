@@ -42,6 +42,9 @@ export const CX_CLEAR_NOTIFICATION_LOGS =
 
 // CLF 3.0 APIs
 
+export const FEEDBACK_API_KEY = 'e8caf096-4f19-4b34-a7cd-4bcaa8197c1d';
+export const FEEDBACK_API_KEY_ENDPOINT = '?feedbackApiKey=';
+
 export const CLF_GET_TICKET_LIST =
   'https://clf-backend.questionpro.com/api/mobile/tickets/feedback/';
 // "ex: {{BASE_URL}}/mobile/tickets/feedback/:feedBackId/segment/:segmentId?fromDate=2022-09-28&toDate=2022-10-28"

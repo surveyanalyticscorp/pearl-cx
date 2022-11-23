@@ -40,7 +40,7 @@ export const WelcomeScreen = (props) => {
   // };
 
   useEffect(() => {
-    console.log('USER_DATA: ', userInfo, authToken);
+    // console.log('USER_DATA: ', userInfo, authToken);
     // console.log('USER_DATA: ', userInfo);
     dispatch(getClosedLoopSegmentDetails(authToken, {statusID: 0}));
   }, []);
