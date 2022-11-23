@@ -52,6 +52,9 @@ export const CLF_GET_TICKET_DETAILS =
   'https://clf-backend.questionpro.com/api/mobile/tickets/';
 // ex: {{BASE_URL}}/mobile/tickets/:ticketId
 
+export const CLF_STATUS_WISE_PRIORITY_ANALYTICS =
+  'https://clf-backend.questionpro.com/api/mobile/tickets/status-wise-priority/segments/';
+
 export const FEEDBACK = 'feedback/';
 export const SEGMENT = 'segment/';
 export const COMMNETS = 'comments/';

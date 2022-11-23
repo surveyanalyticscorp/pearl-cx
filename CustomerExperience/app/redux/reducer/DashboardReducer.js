@@ -16,6 +16,7 @@ import {
 
 const initialState = {
   dashboardData: {},
+  dashboardTicketCount: {},
   ticketDetails: {},
   segmentDetails: {},
   ownerDetails: {},
@@ -33,6 +34,7 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         dashboardData: action.response.body,
+        dashBoardTicketCount: action.ticketCount.data,
       };
     }
     case CLOSED_LOOP_TICKET_DETAILS_RECEIVED: {

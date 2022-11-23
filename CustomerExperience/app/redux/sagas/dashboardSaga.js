@@ -1,6 +1,6 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
-import {CX_HOME} from '../../api/Constant';
+import {CLF_STATUS_WISE_PRIORITY_ANALYTICS, CX_HOME} from '../../api/Constant';
 import {
   API_ERROR,
   IS_ERROR,
@@ -12,8 +12,15 @@ import {showErrorFlashMessage} from '../../Utils/Utility';
 
 export function* fetchDashboard(action) {
   try {
+    console.log('SEGMENT_ID', action.segmentId);
     const json = yield WebServiceHandler.postNew(
       CX_HOME,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+
+    const closedloopData = yield WebServiceHandler.get(
+      CLF_STATUS_WISE_PRIORITY_ANALYTICS + JSON.stringify(action.segmentId),
       {'Auth-Token': action.token},
       action.param,
     );
@@ -21,8 +28,8 @@ export function* fetchDashboard(action) {
     yield put({
       type: DASHBOARD_RECEIVED,
       response: json,
+      ticketCount: closedloopData,
     });
-
     yield put({
       type: SET_LANGUAGE_INFO,
       payload: {languageInfo: {languageCode: json.body.languageCode}},

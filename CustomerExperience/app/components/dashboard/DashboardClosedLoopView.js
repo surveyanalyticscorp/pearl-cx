@@ -126,13 +126,13 @@ const RenderScene = (props) => {
     // console.log(`index: ${index}`);
     switch (index) {
       case 1:
-        return object.new;
+        return object.NEW ?? object.new;
       case 2:
-        return object.open;
+        return object.OPEN ?? object.open;
       case 3:
-        return object.escalated;
+        return object.ESCALATED ?? object.escalated;
       case 4:
-        return object.resolved;
+        return object.OVERDUE ?? object.resolved;
     }
   };
 

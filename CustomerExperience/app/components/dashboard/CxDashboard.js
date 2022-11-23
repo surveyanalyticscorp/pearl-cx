@@ -61,6 +61,9 @@ const CxDashboard = (props) => {
   let [exitAlert, showExitAlert] = useState(false);
   let [lastLoginArray, setLastLoginArray] = useState([]);
   let [welcomeScreenShow, setWelcomeScreenShown] = useState(false);
+  let [segmentId, setSegmentId] = useState(
+    useSelector((state) => state.dashboard.currentSegment.currentSegmentID),
+  );
 
   const navigation = useNavigation();
 
@@ -79,12 +82,13 @@ const CxDashboard = (props) => {
 
   const onRefresh = useCallback(() => {
     //setRefreshing(true);//No need to show 2 loading
-    let data = {
-      startDate: moment(props.sDate, DMYFORMAT).format(YMDFORMAT),
-      endDate: moment(props.eDate, DMYFORMAT).format(YMDFORMAT),
-    };
-    props.getDashboardContent(props.authToken, data);
+    // let data = {
+    //   startDate: moment(props.sDate, DMYFORMAT).format(YMDFORMAT),
+    //   endDate: moment(props.eDate, DMYFORMAT).format(YMDFORMAT),
+    // };
+    // props.getDashboardContent(props.authToken, data);
 
+    getDashboardData();
     wait(500).then();
   }, [props.range]);
   //////////////////////////////////
@@ -112,16 +116,17 @@ const CxDashboard = (props) => {
         startDate: selectedRange.startDate,
         endDate: selectedRange.endDate,
       });
-      let data = {
-        startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
-        endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT),
-      };
-      props.getDashboardContent(props.authToken, data);
+      getDashboardData();
+      // let data = {
+      //   startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
+      //   endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT),
+      // };
+      // props.getDashboardContent(props.authToken, data);
       // dispatcher(getClosedLoopSegmentDetails(props.authToken, {statusID: 0}));
     } else {
       getDashboardData();
     }
-  }, [props.range, props.wantToReload]); //props.navigation
+  }, [props.range, props.wantToReload, segmentId]); //props.navigation
 
   useEffect(() => {
     BackHandler.addEventListener(BackPressEventName, handleBackPress);
@@ -200,8 +205,10 @@ const CxDashboard = (props) => {
     let data = {
       startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
       endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
+      fromDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+      toDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
     };
-    props.getDashboardContent(props.authToken, data);
+    props.getDashboardContent(props.authToken, data, segmentId);
     // console.log(`${JSON.stringify(props)} :Data`);
   };
 
@@ -363,7 +370,8 @@ const CxDashboard = (props) => {
     return (
       <View style={dashboardStyles.closedLoopView}>
         <DashboardClosedLoopView
-          ticketCount={props.dashboardData.detractorTicketsCount}
+          // ticketCount={props.dashboardData.detractorTicketsCount}
+          ticketCount={props.ticketCount}
         />
       </View>
     );
@@ -551,6 +559,7 @@ const CxDashboard = (props) => {
 const mapStateToProps = (state) => {
   return {
     dashboardData: state.dashboard.dashboardData,
+    ticketCount: state.dashboard.dashBoardTicketCount,
     userInfo: state.global.userInfo,
     isLoading: state.global.isLoading,
     isError: state.global.isError,
@@ -572,9 +581,9 @@ const mapDispatchToProps = (dispatch) => ({
     });
   },
 
-  getDashboardContent: (token, data) => {
+  getDashboardContent: (token, data, segmentId) => {
     dispatch(showLoading(true));
-    dispatch(getDashboardContent(token, data));
+    dispatch(getDashboardContent(token, data, segmentId));
   },
   // getSegmentDetails: (token, data) => {
   //   dispatch(getClosedLoopSegmentDetails(token, data));

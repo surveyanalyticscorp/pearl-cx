@@ -49,10 +49,11 @@ export const CREATE_CLF_TICKET_RECIEVED = 'CREATE_CLF_TICKET_RECIEVED';
 
 export const UPDATE_CLF_TICKET = 'UPDATE_CLF_TICKET';
 export const UPDATE_CLF_TICKET_RECIEVED = 'UPDATE_CLF_TICKET_RECIEVED';
-export const getDashboardContent = (token, param) => ({
+export const getDashboardContent = (token, param, segmentId) => ({
   type: GET_DASHBOARD,
   token,
   param,
+  segmentId,
 });
 
 export const getDetractorTicketDetails = (token, param) => ({
