@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Modal,
+  SafeAreaView,
 } from 'react-native';
 import {
   Colors,
@@ -54,11 +56,13 @@ import SelectTicketOwner from '../../closedloop/takeaction/SelectTicketOwner';
 import SelectDate from '../../closedloop/takeaction/SelectDate';
 import moment from 'moment';
 import {
+  DMYFORMAT,
   FullMonthDateYearFormat,
   // HalfMonthDateYearFormat,
   YMDFORMAT,
 } from '../../../Utils/AppConstants';
 import {FEEDBACK_API_KEY} from '../../../api/Constant';
+import QPCalendar from '../../../widgets/QPCalendar';
 
 export default function CreateTicket(props) {
   const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
@@ -75,6 +79,8 @@ export default function CreateTicket(props) {
   const [ticketOwnerIndex, setTIcketOwnerIndex] = useState(-1);
   const [status, setStatus] = useState('Select');
   const [statusIndex, setStatusIndex] = useState(-1);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedDate, setSelectedDate] = useState();
   let userInfo = {
     emailAddress: '',
     firstName: '',
@@ -201,10 +207,7 @@ export default function CreateTicket(props) {
   const handleDateSelection = () => {
     // open owner selection bottom sheet
     // calendarBottomSheet.current.snapTo(0);
-    setTicketState((state) => ({
-      ...state,
-      issueDate: moment(issueDate).format(YMDFORMAT),
-    }));
+    setShowCalendar(true);
   };
 
   const handleCreateTicket = () => {
@@ -444,6 +447,104 @@ export default function CreateTicket(props) {
   //   );
   // };
 
+  let renderCancelButton = () => {
+    return (
+      <TouchableOpacity
+        style={styles.cancelButton}
+        onPress={() => {
+          setShowCalendar(false);
+        }}>
+        <Text style={styles.buttonText}>Cancel</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  let renderOkButton = () => {
+    return (
+      <TouchableOpacity
+        style={styles.cancelButton}
+        onPress={() => {
+          console.log('DATE_', JSON.stringify(selectedDate));
+          setTicketState((state) => ({
+            ...state,
+            issueDate: moment(selectedDate, DMYFORMAT).format(YMDFORMAT),
+          }));
+          //save date
+          // if (startDateSelected) {
+          //   setSelectedRange({
+          //     ...selectedRange,
+          //     type: 6,
+          //     startDate: customDate,
+          //   });
+          // } else {
+          //   setSelectedRange({...selectedRange, type: 6, endDate: customDate});
+          // }
+          setShowCalendar(false);
+        }}>
+        <Text style={styles.buttonText}>Ok</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  let renderCalendarFooter = () => {
+    return (
+      <View style={styles.calendarFooter}>
+        {renderCancelButton()}
+        {renderOkButton()}
+      </View>
+    );
+  };
+
+  let setCalendarDate = (date) => {
+    let tempDate = moment(date, 'YYYY-MM-DD').format(DMYFORMAT);
+    setSelectedDate(tempDate);
+  };
+
+  let renderCalendar = () => {
+    // let date = startDateSelected
+    //   ? selectedRange.startDate
+    //   : selectedRange.endDate;
+    // let selectedDate = moment(date, DMYFORMAT).format('YYYY-MM-DD');
+    let currentDate = moment().format('YYYY-MM-DD');
+    let currentYear = moment().year();
+    let minYear = parseInt(currentYear) - 4;
+    return (
+      <View style={styles.calendarContainer}>
+        <View style={styles.calendarBox}>
+          <QPCalendar
+            {...props}
+            selectDate={setCalendarDate}
+            selectedDate={currentDate}
+            minimumDate={minYear + '-01-01'}
+            maximumDate={currentDate}
+            minYear={minYear}
+            maxYear={currentYear}
+          />
+        </View>
+        {renderCalendarFooter()}
+      </View>
+    );
+  };
+
+  let renderCalendarViewOnModal = () => {
+    return (
+      <Modal
+        animationType={'fade'}
+        transparent={true}
+        onRequestClose={() => {}}
+        visible={showCalendar}
+        supportedOrientations={['portrait']}>
+        <View style={styles.modalContainer}>
+          <SafeAreaView style={{flex: 1}}>
+            <ScrollView style={styles.scrollContainer}>
+              {renderCalendar()}
+            </ScrollView>
+          </SafeAreaView>
+        </View>
+      </Modal>
+    );
+  };
+
   return (
     <View style={styles.rootContainer}>
       <Animated.View
@@ -471,7 +572,11 @@ export default function CreateTicket(props) {
             <View style={[styles.rowContainer, styles.rowItem]}>
               {getMaterialIcon('date-range')}
               {/* <TextInput placeholder="Date" style={styles.titleText} /> */}
-              <Text style={styles.titleText}>{issueDate}</Text>
+              <Text style={styles.titleText}>
+                {moment(selectedDate, DMYFORMAT).format(
+                  FullMonthDateYearFormat,
+                )}
+              </Text>
             </View>
           </TouchableOpacity>
           <View style={[styles.rowContainer, styles.rowItem]}>
@@ -592,6 +697,7 @@ export default function CreateTicket(props) {
       <RenderSegmentBottomSheet />
       <RenderOwnerBottomSheet />
       {/* <RenderCalenderBottomSheet /> */}
+      {showCalendar && renderCalendarViewOnModal()}
     </View>
   );
 }
@@ -682,5 +788,48 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.light,
     fontSize: TextSizes.primary,
     color: Colors.white,
+  },
+  calendarContainer: {
+    flex: 1,
+    marginHorizontal: MarginConstants.tab1,
+    marginTop: 6 * MarginConstants.tab4,
+  },
+  calendarBox: {
+    backgroundColor: Colors.white,
+  },
+  modalContainer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+  },
+  calendarFooter: {
+    justifyContent: 'flex-end',
+    backgroundColor: Colors.white,
+    flexDirection: 'row',
+  },
+  cancelButton: {
+    minWidth: PaddingConstants.tab4,
+    height: PaddingConstants.tab3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: MarginConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab1,
+  },
+  okButton: {
+    minWidth: PaddingConstants.tab4 + PaddingConstants.tab1,
+    height: PaddingConstants.tab3,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: MarginConstants.tab1,
+  },
+  buttonText: {
+    color: Colors.accent,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    textAlign: 'center',
   },
 });

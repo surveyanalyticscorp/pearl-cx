@@ -55,6 +55,9 @@ export const CLF_GET_TICKET_DETAILS =
 export const CLF_STATUS_WISE_PRIORITY_ANALYTICS =
   'https://clf-backend.questionpro.com/api/mobile/tickets/status-wise-priority/segments/';
 
+export const CX_WELCOME_SCREEN_COUNTS =
+  'https://cxlabs.questionpro.com/a/nativehtml/cx.CXWelcomeScreenDataCount';
+
 export const FEEDBACK = 'feedback/';
 export const SEGMENT = 'segment/';
 export const COMMNETS = 'comments/';
