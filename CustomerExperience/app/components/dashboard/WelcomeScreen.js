@@ -3,19 +3,17 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, ImageBackground, Text} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {View} from 'react-native-animatable';
-import AppRouter from '../../routes/appRouter';
 import QPButton from '../../widgets/Button';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {MarginConstants} from '../../styles/margin.constants';
-import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_USER_CREDENTIALS, ASYNC_USER_INFO} from '../../api/Constant';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   getClosedLoopSegmentDetails,
   getWelcomeScreenDataCount,
 } from '../../redux/actions/dashboard.actions';
 import QPSpinner from '../../widgets/QPSpinner';
+import {RenderSpinner} from '../../routes/CommonScreen';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = (props) => {
@@ -69,10 +67,11 @@ export const WelcomeScreen = (props) => {
     );
   };
 
-  let RenderSpinner = () => {
+  const RenderCountItem = ({style, title, data}) => {
     return (
-      <View style={styles.loading}>
-        <QPSpinner />
+      <View style={styles.ticketBox}>
+        <Text style={styles.titleText}>{data}</Text>
+        <Text style={styles.valueText}>{title}</Text>
       </View>
     );
   };
@@ -89,24 +88,23 @@ export const WelcomeScreen = (props) => {
           </Text>
 
           <View style={styles.responseContainer}>
-            <View style={styles.responseBox}>
-              <Text style={styles.titleText}>{0}</Text>
-              <Text style={styles.valueText}>New Responses</Text>
-            </View>
+            <RenderCountItem
+              title={'New Responses'}
+              data={0}
+              style={styles.responseBox}
+            />
           </View>
           <View style={styles.ticketAndOverdueContainer}>
-            <View style={styles.ticketBox}>
-              <Text style={styles.titleText}>
-                {welcomeScreenData ? welcomeScreenData[0].value : 0}
-              </Text>
-              <Text style={styles.valueText}>New Tickets</Text>
-            </View>
-            <View style={styles.ticketBox}>
-              <Text style={styles.titleText}>
-                {welcomeScreenData ? welcomeScreenData[1].value : 0}
-              </Text>
-              <Text style={styles.valueText}>Over due</Text>
-            </View>
+            <RenderCountItem
+              title={'New Tickets'}
+              data={welcomeScreenData ? welcomeScreenData[0].value : 0}
+              style={styles.ticketBox}
+            />
+            <RenderCountItem
+              title={'Overdues'}
+              data={welcomeScreenData ? welcomeScreenData[1].value : 0}
+              style={styles.ticketBox}
+            />
           </View>
         </View>
         <View>
@@ -202,14 +200,5 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.accent,
     width: '90%',
     margin: 16,
-  },
-  loading: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
