@@ -1,13 +1,23 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
-import {CLF_STATUS_WISE_PRIORITY_ANALYTICS, CX_HOME} from '../../api/Constant';
+import {
+  CLF_STATUS_WISE_PRIORITY_ANALYTICS,
+  CLF_WELCOME_SCREEN_COUNTS,
+  CX_HOME,
+} from '../../api/Constant';
 import {
   API_ERROR,
   IS_ERROR,
+  IS_LOADING,
   SET_LANGUAGE_INFO,
   WANT_TO_RELOAD_DASHBOARD,
 } from '../actions/index';
-import {DASHBOARD_RECEIVED, GET_DASHBOARD} from '../actions/dashboard.actions';
+import {
+  DASHBOARD_RECEIVED,
+  GET_DASHBOARD,
+  GET_WELCOME_SCREEN_DATA,
+  WELCOME_SCREEN_DATA_RECIEVED,
+} from '../actions/dashboard.actions';
 import {showErrorFlashMessage} from '../../Utils/Utility';
 
 export function* fetchDashboard(action) {
@@ -55,4 +65,35 @@ export function* fetchDashboard(action) {
 
 export function* watchGetDashboard() {
   yield takeLatest(GET_DASHBOARD, fetchDashboard);
+}
+
+export function* fetchDataCount(action) {
+  try {
+    yield put({type: IS_LOADING, payload: {isLoading: true}});
+
+    const response = yield WebServiceHandler.get(
+      CLF_WELCOME_SCREEN_COUNTS,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+
+    yield put({
+      type: WELCOME_SCREEN_DATA_RECIEVED,
+      response: response,
+    });
+
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+
+    showErrorFlashMessage(error.errorAlert);
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+
+export function* watchDataCount() {
+  yield takeLatest(GET_WELCOME_SCREEN_DATA, fetchDataCount);
 }

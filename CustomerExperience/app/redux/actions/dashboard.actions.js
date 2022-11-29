@@ -49,6 +49,10 @@ export const CREATE_CLF_TICKET_RECIEVED = 'CREATE_CLF_TICKET_RECIEVED';
 
 export const UPDATE_CLF_TICKET = 'UPDATE_CLF_TICKET';
 export const UPDATE_CLF_TICKET_RECIEVED = 'UPDATE_CLF_TICKET_RECIEVED';
+
+export const GET_WELCOME_SCREEN_DATA = 'GET_WELCOME_SCREEN_DATA';
+export const WELCOME_SCREEN_DATA_RECIEVED = 'WELCOME_SCREEN_DATA_RECIEVED';
+
 export const getDashboardContent = (token, param, segmentId) => ({
   type: GET_DASHBOARD,
   token,
@@ -145,6 +149,12 @@ export const updateClfTicket = (token, param, ticketId) => ({
   token,
   param,
   ticketId,
+});
+
+export const getWelcomeScreenDataCount = (token, param) => ({
+  type: GET_WELCOME_SCREEN_DATA,
+  token,
+  param,
 });
 // export const getSegment = () => ({
 //   type: SEGMENT_SELECTED,

@@ -64,8 +64,10 @@ const CxDashboard = (props) => {
   let [segmentId, setSegmentId] = useState(
     useSelector((state) => state.dashboard.currentSegment.currentSegmentID),
   );
+  const {range, wantToReload} = props;
 
   const navigation = useNavigation();
+  const {subscriberId} = useState(useSelector((state) => state.global));
 
   // let [mSegment, setSegment] = useState(props.segment);
   // let [segmentName, setSegmentName] = useState('Given');
@@ -90,7 +92,7 @@ const CxDashboard = (props) => {
 
     getDashboardData();
     wait(500).then();
-  }, [props.range]);
+  }, []);
   //////////////////////////////////
   // useEffect(() => {
   // props.navigation.setParams({selectedSegment: selectSegment});
@@ -101,6 +103,7 @@ const CxDashboard = (props) => {
   // }, [props.segment]);
   /////////////////////////////////////
   useEffect(() => {
+    console.log('DASHBOARD_1');
     /*const unsubscribe = props.navigation.addListener('focus', () => {
            // Add code here which execute every time when user landed on screen.
 
@@ -116,17 +119,19 @@ const CxDashboard = (props) => {
         startDate: selectedRange.startDate,
         endDate: selectedRange.endDate,
       });
-      getDashboardData();
+      // getDashboardData();
       // let data = {
       //   startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
       //   endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT),
       // };
       // props.getDashboardContent(props.authToken, data);
       // dispatcher(getClosedLoopSegmentDetails(props.authToken, {statusID: 0}));
-    } else {
-      getDashboardData();
     }
-  }, [props.range, props.wantToReload, segmentId]); //props.navigation
+    // else {
+    //   getDashboardData();
+    // }
+    getDashboardData();
+  }, [range, wantToReload, segmentId]); //props.navigation
 
   useEffect(() => {
     BackHandler.addEventListener(BackPressEventName, handleBackPress);
@@ -154,6 +159,8 @@ const CxDashboard = (props) => {
   /////////////////////////////////////////////
   useEffect(() => {
     if (comparision) {
+      console.log('DASHBOARD_2');
+
       getDashboardData();
       setComparision(false);
     }

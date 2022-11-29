@@ -12,6 +12,7 @@ import {
   REMOVE_CLOSED_LOOP_TICKET_ITEM,
   SEGMENT_SELECTED,
   UPDATE_CLF_TICKET_RECIEVED,
+  WELCOME_SCREEN_DATA_RECIEVED,
 } from '../actions/dashboard.actions';
 
 const initialState = {
@@ -26,6 +27,7 @@ const initialState = {
   ticketComments: {},
   ticketActivity: {},
   apiCallStatus: {},
+  welcomeScreenData: {},
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -128,6 +130,14 @@ const dashboardReducer = (state = initialState, action) => {
         ticket: action.response.data,
       };
     }
+
+    case WELCOME_SCREEN_DATA_RECIEVED: {
+      return {
+        ...state,
+        welcomeScreenData: action.response,
+      };
+    }
+
     default: {
       return state;
     }

@@ -22,6 +22,7 @@ import {
   // ASYNC_PUSH_TOKEN,
   ASYNC_USER_INFO,
   BASE_URL,
+  SUBSCRIBER_ID,
 } from '../api/Constant';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
@@ -84,11 +85,14 @@ const AppRouter = (props) => {
   );
   let [isAppActive, setAppActiveState] = useState(false);
   let [baseUrl, setBaseUrl] = useState(undefined);
+  let [subscriberId, setSubscriberId] = useState(undefined);
+
   // let ref = useRef();
   let [lastLoginArray, setLastLoginArray] = useState([]);
   let [segmentOptions, setSegmentOptions] = useState([]);
   let [selectedSegment, setSelectedSegment] = useState({});
   let segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
+  // const isLoading = useSelector((state) => state.global.isLoading);
 
   const dispatch = useDispatch();
 
@@ -108,7 +112,9 @@ const AppRouter = (props) => {
 
     console.log('Segment List', segmentOptions);
     global.baseUrl = '';
+
     setGlobalBaseUrl();
+    setGlobalSubscriberId();
     const unsubscribeLinks = dynamicLinks().onLink(handleDynamicLink);
     Notifications.registerRemoteNotifications();
     checkNotificationPermission().then({});
@@ -145,6 +151,8 @@ const AppRouter = (props) => {
 
   useEffect(() => {
     setGlobalBaseUrl();
+    setGlobalSubscriberId();
+
     handleResetPasswordLink(
       dynamicLink,
       navigationRef,
@@ -213,6 +221,17 @@ const AppRouter = (props) => {
       if (baseUrl) {
         global.baseUrl = baseUrl;
         setBaseUrl(baseUrl);
+      }
+    });
+  };
+
+  const setGlobalSubscriberId = () => {
+    AsyncStorage.getItem(SUBSCRIBER_ID).then((subscriberId) => {
+      // console.log(`subscriber ID from async storage: ${subscriberId}`);
+      if (subscriberId) {
+        global.subscriberId = subscriberId;
+        // setBaseUrl(baseUrl);
+        setSubscriberId(subscriberId);
       }
     });
   };
@@ -433,21 +452,28 @@ const AppRouter = (props) => {
 
   let [moveNext, setMoveNext] = useState(false);
   let splashTimer = useRef(null);
-
+  const welcomeScreenData = useSelector(
+    (state) => state.dashboard.welcomeScreenData.data,
+  );
   useEffect(() => {
-    splashTimer.current = setTimeout(() => {
-      setMoveNext(true);
-    }, 3000);
+    if (welcomeScreenData) {
+      splashTimer.current = setTimeout(() => {
+        setMoveNext(true);
+      }, 3000);
 
-    return () => {
-      clearTimeout(splashTimer.current);
-    };
-  }, [moveNext]);
+      return () => {
+        clearTimeout(splashTimer.current);
+      };
+    }
+  }, [moveNext, welcomeScreenData]);
 
   const onSkipHandler = () => {
     console.log('SKIP!!');
     setMoveNext(true);
-    clearTimeout(splashTimer.current);
+
+    if (splashTimer.current) {
+      clearTimeout(splashTimer.current);
+    }
   };
 
   return (

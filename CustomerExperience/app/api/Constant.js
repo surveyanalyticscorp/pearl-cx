@@ -4,6 +4,7 @@ export const ASYNC_USER_CREDENTIALS = 'userCredentials';
 export const ASYNC_RESET_CREDENTIALS = 'resetCredentials';
 export const ASYNC_PUSH_TOKEN = 'pushtoken';
 export const BASE_URL = 'baseUrl';
+export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
 
 //export const BASE_URL = 'https://api.questionpro.com/';
@@ -58,6 +59,8 @@ export const CLF_STATUS_WISE_PRIORITY_ANALYTICS =
 export const CX_WELCOME_SCREEN_COUNTS =
   'https://cxlabs.questionpro.com/a/nativehtml/cx.CXWelcomeScreenDataCount';
 
+export const CLF_WELCOME_SCREEN_COUNTS =
+  'https://clf-backend.questionpro.com/api/analytics/status/mobile';
 export const FEEDBACK = 'feedback/';
 export const SEGMENT = 'segment/';
 export const COMMNETS = 'comments/';

@@ -55,9 +55,11 @@ export default class WebServiceHandler {
     });
   }
 
-  static postNew(url, headerParam, parameter) {
+  static postNew(url, headerParam, parameter, queryParam = null) {
     let fullUrl = url.includes('http') ? url : global.baseUrl + url;
-
+    fullUrl = queryParam
+      ? fullUrl.WebServiceHandler.parameter(queryParam)
+      : fullUrl;
     console.log(`POST REQUEST Url: ${fullUrl}`);
     console.log(`HeaderParams: ${JSON.stringify(headerParam)}`);
     console.log(`Parameter: ${JSON.stringify(parameter)}`);
@@ -70,7 +72,10 @@ export default class WebServiceHandler {
       })
         .then((response) => response.json())
         .then((response) => {
-          console.log(`Response Data: ${JSON.stringify(response)}`);
+          console.log(
+            `URL: ${fullUrl}`,
+            `Response Data: ${JSON.stringify(response)}`,
+          );
           if (response.statusCode === 200 || response.status === SUCCESS) {
             success(response);
           } else {

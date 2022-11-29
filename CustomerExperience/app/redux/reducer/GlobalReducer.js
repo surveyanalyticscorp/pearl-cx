@@ -30,6 +30,7 @@ const initialState = {
   wantToReloadDashboard: true,
   isError: false,
   baseUrl: '',
+  subscriberId: '',
   userInfo: {},
   languageCode: '',
   authToken: '',
@@ -48,7 +49,7 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         baseUrl: action.response.body.mobileAPIURL,
-        subscriberId: action.response.body.userID,
+        subscriberId: JSON.stringify(action.response.body.userID),
       };
     }
     case LOGIN_RESPONSE: {
@@ -151,6 +152,7 @@ const globalReducer = (state = initialState, action) => {
         ...state,
         logoutResponse: action.response,
         baseUrl: '',
+        subscriberId: '',
       };
     }
     case IS_ERROR: {

@@ -1,5 +1,5 @@
 import {all, fork} from 'redux-saga/effects';
-import {watchGetDashboard} from './dashboardSaga';
+import {watchDataCount, watchGetDashboard} from './dashboardSaga';
 import {
   watchAuthenticatePanel,
   watchDoLogin,
@@ -26,6 +26,7 @@ import {watchGetNotification} from './notificationSaga';
 export function* rootSaga() {
   yield all([
     fork(watchGetDashboard),
+    fork(watchDataCount),
     fork(watchGetNotification),
     fork(watchAuthenticatePanel),
     fork(watchDoLogin),

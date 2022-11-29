@@ -11,7 +11,11 @@ import {MarginConstants} from '../../styles/margin.constants';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_USER_CREDENTIALS, ASYNC_USER_INFO} from '../../api/Constant';
 import {useSelector, useDispatch} from 'react-redux';
-import {getClosedLoopSegmentDetails} from '../../redux/actions/dashboard.actions';
+import {
+  getClosedLoopSegmentDetails,
+  getWelcomeScreenDataCount,
+} from '../../redux/actions/dashboard.actions';
+import QPSpinner from '../../widgets/QPSpinner';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = (props) => {
@@ -19,6 +23,12 @@ export const WelcomeScreen = (props) => {
   const userInfo = useSelector((state) => state.global.userInfo);
 
   const authToken = useSelector((state) => state.global.authToken);
+  const [subscriberId, setSubscriberId] = useState(global.subscriberId);
+  const welcomeScreenData = useSelector(
+    (state) => state.dashboard.welcomeScreenData.data,
+  );
+  console.log('WELCOME_SCREEN', JSON.stringify(welcomeScreenData));
+
   // const user = ;
 
   // let [moveNext, setMoveNext] = useState(false);
@@ -43,46 +53,79 @@ export const WelcomeScreen = (props) => {
     // console.log('USER_DATA: ', userInfo, authToken);
     // console.log('USER_DATA: ', userInfo);
     dispatch(getClosedLoopSegmentDetails(authToken, {statusID: 0}));
-  }, []);
+    dispatch(
+      getWelcomeScreenDataCount(authToken, {subscriberId: subscriberId}),
+    );
+  }, [authToken, subscriberId]);
 
-  return (
-    <ImageBackground
-      resizeMode={'cover'}
-      source={require('../../config/images/background1.png')}
-      style={styles.backgroundContainer}>
-      <View style={styles.backgroundContainer}>
-        <Text style={styles.welcomeText}>Welcome back</Text>
-        <Text style={styles.nameText}>
-          {(userInfo?.firstName === undefined ? '' : userInfo?.firstName) +
-            ' ' +
-            (userInfo?.lastName === undefined ? '' : userInfo?.lastName)}
-        </Text>
+  const CustomBackground = ({children}) => {
+    return (
+      <ImageBackground
+        resizeMode={'cover'}
+        source={require('../../config/images/background1.png')}
+        style={styles.backgroundContainer}>
+        {children}
+      </ImageBackground>
+    );
+  };
 
-        <View style={styles.responseContainer}>
-          <View style={styles.responseBox}>
-            <Text style={styles.titleText}>34</Text>
-            <Text style={styles.valueText}>New Responses</Text>
+  let RenderSpinner = () => {
+    return (
+      <View style={styles.loading}>
+        <QPSpinner />
+      </View>
+    );
+  };
+
+  const RenderWelcomeScreen = () => {
+    return (
+      <CustomBackground>
+        <View style={styles.backgroundContainer}>
+          <Text style={styles.welcomeText}>Welcome back</Text>
+          <Text style={styles.nameText}>
+            {(userInfo?.firstName === undefined ? '' : userInfo?.firstName) +
+              ' ' +
+              (userInfo?.lastName === undefined ? '' : userInfo?.lastName)}
+          </Text>
+
+          <View style={styles.responseContainer}>
+            <View style={styles.responseBox}>
+              <Text style={styles.titleText}>{0}</Text>
+              <Text style={styles.valueText}>New Responses</Text>
+            </View>
+          </View>
+          <View style={styles.ticketAndOverdueContainer}>
+            <View style={styles.ticketBox}>
+              <Text style={styles.titleText}>
+                {welcomeScreenData ? welcomeScreenData[0].value : 0}
+              </Text>
+              <Text style={styles.valueText}>New Tickets</Text>
+            </View>
+            <View style={styles.ticketBox}>
+              <Text style={styles.titleText}>
+                {welcomeScreenData ? welcomeScreenData[1].value : 0}
+              </Text>
+              <Text style={styles.valueText}>Over due</Text>
+            </View>
           </View>
         </View>
-        <View style={styles.ticketAndOverdueContainer}>
-          <View style={styles.ticketBox}>
-            <Text style={styles.titleText}>5</Text>
-            <Text style={styles.valueText}>New Tickets</Text>
-          </View>
-          <View style={styles.ticketBox}>
-            <Text style={styles.titleText}>1</Text>
-            <Text style={styles.valueText}>Over due</Text>
-          </View>
+        <View>
+          <QPButton
+            buttonText="SKIP"
+            buttonColor={Colors.accentLight}
+            onPress={props.skipHandler}
+          />
         </View>
-      </View>
-      <View>
-        <QPButton
-          buttonText="SKIP"
-          buttonColor={Colors.accentLight}
-          onPress={props.skipHandler}
-        />
-      </View>
-    </ImageBackground>
+      </CustomBackground>
+    );
+  };
+
+  return welcomeScreenData ? (
+    <RenderWelcomeScreen />
+  ) : (
+    <CustomBackground>
+      <RenderSpinner />
+    </CustomBackground>
   );
 };
 
@@ -159,5 +202,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.accent,
     width: '90%',
     margin: 16,
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
