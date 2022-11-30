@@ -37,8 +37,20 @@ import {
   ACTIVITY_LOG,
   FEEDBACK_API_KEY,
   FEEDBACK_API_KEY_ENDPOINT,
+  CLF_GET_EMAIL_TEMPLATES,
+  CLF_GET_DEFAULT_EMAIL_TEMPLATE,
+  CLF_SEND_EMAIL_PREFIX,
+  CLF_SEND_EMAIL_POSTFIX,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
+import {
+  GET_DEFAULT_EMAIL_TEMPLATE,
+  GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
+  GET_EMAIL_TEMPLATES,
+  GET_EMAIL_TEMPLATES_RECEIVED,
+  SEND_EMAIL,
+  SEND_EMAIL_RECEIVED,
+} from '../actions/closedloop.actions';
 
 function* fetchDetractorTicketDetails(action) {
   try {
@@ -372,4 +384,74 @@ function* patchUpdateClfTicket(action) {
 }
 export function* watchPatchUpdateTicket() {
   yield takeLatest(UPDATE_CLF_TICKET, patchUpdateClfTicket);
+}
+
+function* getEmailTemplates(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      CLF_GET_EMAIL_TEMPLATES,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: GET_EMAIL_TEMPLATES_RECEIVED,
+      response: json.data,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchGetEmailTemplates() {
+  yield takeLatest(GET_EMAIL_TEMPLATES, getEmailTemplates);
+}
+
+function* getDefaultEmailTemplate(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      CLF_GET_DEFAULT_EMAIL_TEMPLATE,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
+      response: json.data,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchGetDefaultEmailTemplate() {
+  yield takeLatest(GET_DEFAULT_EMAIL_TEMPLATE, getDefaultEmailTemplate);
+}
+
+function* sendEmail(action) {
+  try {
+    const json = yield WebServiceHandler.postNew(
+      CLF_SEND_EMAIL_PREFIX + action.ticketId + CLF_SEND_EMAIL_POSTFIX,
+      {'Auth-Token': action.token},
+      action.param,
+      action.queryParam,
+    );
+    yield put({
+      type: SEND_EMAIL_RECEIVED,
+      response: json.data,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchSendEmail() {
+  yield takeLatest(SEND_EMAIL, sendEmail);
 }

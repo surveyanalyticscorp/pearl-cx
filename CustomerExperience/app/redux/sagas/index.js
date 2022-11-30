@@ -19,6 +19,9 @@ import {
   watchPostTicketComment,
   watchPostCreateTicket,
   watchPatchUpdateTicket,
+  watchGetDefaultEmailTemplate,
+  watchGetEmailTemplates,
+  watchSendEmail,
 } from './ClosedLoopSaga';
 import {watchGetNotification} from './notificationSaga';
 
@@ -44,5 +47,8 @@ export function* rootSaga() {
     fork(watchPostTicketComment),
     fork(watchPostCreateTicket),
     fork(watchPatchUpdateTicket),
+    fork(watchGetDefaultEmailTemplate),
+    fork(watchGetEmailTemplates),
+    fork(watchSendEmail),
   ]);
 }

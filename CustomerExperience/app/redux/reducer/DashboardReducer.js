@@ -1,4 +1,8 @@
 import {
+  GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
+  GET_EMAIL_TEMPLATES_RECEIVED,
+} from '../actions/closedloop.actions';
+import {
   CLEAR_CLOSED_LOOP_TICKET_DETAILS,
   CLOSED_LOOP_OWNER_DETAILS_RECEIVED,
   CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
@@ -28,6 +32,7 @@ const initialState = {
   ticketActivity: {},
   apiCallStatus: {},
   welcomeScreenData: {},
+  emailData: {},
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -135,6 +140,24 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         welcomeScreenData: action.response,
+      };
+    }
+
+    case GET_EMAIL_TEMPLATES_RECEIVED: {
+      return {
+        ...state,
+        emailData: {
+          emailTemplates: action.response,
+        },
+      };
+    }
+
+    case GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED: {
+      return {
+        ...state,
+        emailData: {
+          defaultTemplate: action.response,
+        },
       };
     }
 
