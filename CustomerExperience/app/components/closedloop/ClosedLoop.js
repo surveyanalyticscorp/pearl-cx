@@ -56,7 +56,8 @@ import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {showLoading} from '../../redux/actions';
 import {dashboardStyles} from '../dashboard/dashboard.style';
 import QPSpinner from '../../widgets/QPSpinner';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {watchPostTicketComment} from '../../redux/sagas/ClosedLoopSaga';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
@@ -73,21 +74,28 @@ export default function ClosedLoop(props) {
   const [ticketList, setTicketList] = useState([]);
 
   const [refreshing, setRefreshing] = useState(false);
-  console.log('CLOSED_LOOP', JSON.stringify(props));
 
+  const isFocused = useIsFocused();
   useEffect(() => {
     getTicketList();
-  }, []);
+  }, [isFocused]);
 
+  const wait = (timeout) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  };
   const onRefresh = useCallback(() => {
+    setRefreshing(true);
     getTicketList();
+    wait(500).then(() => setRefreshing(false));
   }, []);
 
   useEffect(() => {
     setTicketList((state) => ticketDetails.data ?? []);
   }, [ticketDetails]);
 
-  console.log('Ticket list: ', JSON.stringify(ticketDetails.data));
+  // console.log('Ticket list: ', JSON.stringify(ticketDetails.data));
   const sampleTicketList = [
     {
       customerName: 'Jassica Palm',
@@ -261,6 +269,9 @@ export default function ClosedLoop(props) {
   const ClosedLoopTicketList = () => {
     return ticketList.length !== 0 ? (
       <FlatList
+        refreshControl={
+          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+        }
         style={styles.container}
         data={ticketList}
         keyExtractor={(item, index) => index.toString()}

@@ -1,8 +1,4 @@
-import React, {
-  useEffect,
-  // useEffect,
-  useState,
-} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   TouchableWithoutFeedback,
@@ -41,6 +37,7 @@ import {
   BottomSheetHeader,
   RenderPriorityIcon,
   RenderRoundImageOrColor,
+  RenderSpinner,
   RenderStatusIcon,
 } from '../../routes/CommonScreen';
 import {useDispatch, useSelector} from 'react-redux';
@@ -70,7 +67,9 @@ export default function TicketOverview(props) {
   const dispatch = useDispatch();
   const {authToken} = useSelector((state) => state.global);
   const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
-
+  const [isLoading, setLoading] = useState(
+    useSelector((state) => state.global.isLoading),
+  );
   const [ticketDetails, setTicketDetails] = useState(
     useSelector((state) => state.dashboard.ticket),
   );
@@ -967,7 +966,7 @@ export default function TicketOverview(props) {
     );
   };
 
-  return (
+  const RenderTicketOverView = () => (
     <Animated.View style={styles.container}>
       <Animated.ScrollView
         style={{
@@ -998,6 +997,8 @@ export default function TicketOverview(props) {
       />
     </Animated.View>
   );
+
+  return isLoading ? <RenderSpinner /> : <RenderTicketOverView />;
 }
 
 const styles = StyleSheet.create({

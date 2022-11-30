@@ -209,6 +209,8 @@ export function* watchGetClosedLoopTicketList() {
 
 function* fetchClosedLoopTicketItem(action) {
   try {
+    yield put({type: IS_LOADING, payload: {isLoading: true}});
+
     const json = yield WebServiceHandler.get(
       CLF_GET_TICKET_DETAILS +
         action.ticketId +
