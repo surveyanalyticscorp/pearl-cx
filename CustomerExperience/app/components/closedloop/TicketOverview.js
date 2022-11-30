@@ -859,7 +859,11 @@ export default function TicketOverview(props) {
 
         <View style={styles.rowContainer}>
           {Title('Segment')}
-          {getText(currentSegment.currentSegment)}
+          {getText(
+            ticketDetails
+              ? getSegmentNameById(segments, ticketDetails.currentSegmentId)
+              : 'Segment',
+          )}
         </View>
         <View style={styles.rowContainer}>
           {Title('Created')}
@@ -880,7 +884,7 @@ export default function TicketOverview(props) {
         <View style={styles.columnContainer}>
           {Title('Description')}
           <Text style={{paddingHorizontal: PaddingConstants.halfTab}}>
-            {sampleText}
+            {ticketDetails ? ticketDetails.comment : ''}
           </Text>
         </View>
       </View>

@@ -1,48 +1,24 @@
-import React, {
-  useCallback,
-  useEffect,
-  // useEffect,
-  useState,
-} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
-  // TouchableWithoutFeedback,
   TouchableOpacity,
   Text,
-  // Image,
   FlatList,
   StyleSheet,
-  BackHandler,
-  ScrollView,
   RefreshControl,
-  // SafeAreaView,
 } from 'react-native';
 import ClosedLoopCell from './ClosedloopCell';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../styles/color.constants';
-// import {translate} from '../../Utils/MultilinguaUtils';
 
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
-// import {TextSizes} from '../../styles/textsize.constants';
 import {
   BottomSheetHeader,
   FabAddButton,
   NoItemsFound,
   RenderSpinner,
-  // SearchIcon,
 } from '../../routes/CommonScreen';
-// import style from '../../widgets/qp-calendar/calendar/header/style';
-// import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-
-// import TicketOverview from './TicketOverview';
-// import TicketDetails from './TicketDetails';
-// import TicketComments from './TicketComments';
-// import TicketActivity from './TicketActivity';
-// import CreateTicket from '../dashboard/ticketManagement/CreateTicket';
-// import SendEmail from './takeaction/SendEmail';
-// import TakeActionScreen from './TakeActionScreen';
-// import TicketTakeAction from './takeaction/TicketTakeAction';
 import FilterTicket from './takeaction/FilterTickets';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';

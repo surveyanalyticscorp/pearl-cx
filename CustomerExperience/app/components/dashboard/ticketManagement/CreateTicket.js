@@ -80,7 +80,7 @@ export default function CreateTicket(props) {
   const [status, setStatus] = useState('Select');
   const [statusIndex, setStatusIndex] = useState(-1);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDate, setSelectedDate] = useState();
+  const [selectedDate, setSelectedDate] = useState(moment().format(DMYFORMAT));
   let userInfo = {
     emailAddress: '',
     firstName: '',
@@ -88,9 +88,8 @@ export default function CreateTicket(props) {
     comment: '',
   };
 
-  const [issueDate, setIssueDate] = useState(
-    moment().format(FullMonthDateYearFormat),
-  );
+  // const [issueDate, setIssueDate] = useState(
+  // );
   // const [bottomSheet, setBottomSheet] = useState('priority');
 
   const segmentIcon = './../../../../assets/images/segment_icon.png';
@@ -573,6 +572,7 @@ export default function CreateTicket(props) {
               {getMaterialIcon('date-range')}
               {/* <TextInput placeholder="Date" style={styles.titleText} /> */}
               <Text style={styles.titleText}>
+                {console.log('SELECTED_DATE', selectedDate)}
                 {moment(selectedDate, DMYFORMAT).format(
                   FullMonthDateYearFormat,
                 )}
