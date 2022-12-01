@@ -48,9 +48,15 @@ const globalReducer = (state = initialState, action) => {
     case AUTHENTICATE_PANEL_RESPONSE: {
       return {
         ...state,
-        baseUrl: action.response.body.mobileAPIURL,
+        baseUrl: 'https://cxlabs.questionpro.com',
         subscriberId: JSON.stringify(action.response.body.userID),
       };
+
+      // return {
+      //   ...state,
+      //   // baseUrl: action.response.body.mobileAPIURL,
+      //   subscriberId: JSON.stringify(action.response.body.userID),
+      // };
     }
     case LOGIN_RESPONSE: {
       return {
