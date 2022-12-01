@@ -61,7 +61,11 @@ import SelectStatus from './takeaction/SelectStatus';
 import SelectPriority from './takeaction/SelectPriority';
 import SelectSegment from './takeaction/SelectSegment';
 import SelectTicketOwner from './takeaction/SelectTicketOwner';
-import {element} from 'prop-types';
+// import {element} from 'prop-types';
+import {
+  getDefaultEmailTemplate,
+  getEmailTemplates,
+} from '../../redux/actions/closedloop.actions';
 
 export default function TicketOverview(props) {
   const dispatch = useDispatch();
@@ -84,7 +88,7 @@ export default function TicketOverview(props) {
   const segments = useSelector(
     (state) => state.dashboard.segmentDetails.segments,
   );
-  console.log('TTTTT', ticketDetails ?? '');
+  // console.log('TTTTT', ticketDetails ?? '');
 
   const getSegmentIndex = (segmentId) => {
     let index = 0;
@@ -136,10 +140,22 @@ export default function TicketOverview(props) {
 
   const updateTicket = (params) => {
     let body = {...params, userId: ticketDetails.subscriberId};
-    console.log('UPDATE_TICKET', body);
+    // console.log('UPDATE_TICKET', body);
 
     dispatch(updateClfTicket(authToken, body, ticketDetails.id));
   };
+
+  useEffect(() => {
+    if (authToken) {
+      // console.log('DEFAULT_EMAIL');
+      dispatch(
+        getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
+      );
+      dispatch(
+        getEmailTemplates(authToken, {subscriberId: global.subscriberId}),
+      );
+    }
+  }, [authToken]);
 
   /// BOTTOM SHEET
 
@@ -936,7 +952,10 @@ export default function TicketOverview(props) {
   const handleTicketAction = (item) => {
     console.log('Selected Action', item.title);
     actionBottomSheet.current.snapTo(actionBottomSheetSnapPoints.length - 1);
-    props.navigation.navigate('sendEmail');
+    props.navigation.navigate('sendEmail', {
+      toEmail: ticketDetails?.panelMember?.email ?? '',
+      ticketId: ticketDetails?.id,
+    });
   };
 
   const renderTicketTakeAction = () => {

@@ -1,13 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import SafeAreaView from 'react-native-safe-area-view';
 import {
   KeyboardAvoidingView,
-  // Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  // TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
@@ -15,63 +11,56 @@ import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
-// import ModalDropdown from '../../../widgets/drop-down/ModalDropdown';
-// import {connect} from 'react-redux';
-// import {
-//   clearDetractorTicketDetails,
-//   getClosedLoopOwnerDetails,
-//   getClosedLoopSegmentDetails,
-//   updateTicket,
-// } from '../../../redux/actions/dashboard.actions';
-// import ArrayUtils from '../../../Utils/ArrayUtils';
-// import StringUtils from '../../../Utils/StringUtils';
-// import {updateClosedLoopTicket} from '../../../redux/sagas/ClosedLoopSaga';
-// import QPSpinner from '../../../widgets/QPSpinner';
-// import {showErrorFlashMessage} from '../../../Utils/Utility';
-// import {wantToReloadDashboard} from '../../../redux/actions';
-// import {translate} from '../../../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
-// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-// import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {BottomSheetHeader, CloseButton} from '../../../routes/CommonScreen';
 import Animated from 'react-native-reanimated';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_USER_INFO, ASYNC_USER_CREDENTIALS} from '../../../api/Constant';
-// import QPButton from '../../../widgets/Button';
-// import style from '../../../widgets/qp-calendar/calendar/header/style';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-// import QPTextField from '../../../widgets/TextField';
 import BottomSheet from 'reanimated-bottom-sheet';
 import SelectEmailTemplate from './SelectEmailTemplate';
+import {useDispatch, useSelector} from 'react-redux';
+import {sendEmail} from '../../../redux/actions/closedloop.actions';
 export default function SendEmail(props) {
+  const [body, setBody] = useState({
+    subject: '',
+    toEmail: props.route.params.toEmail ?? '',
+    fromEmail: 'noreply@questionpro.com',
+    emailBody: '',
+  });
+  const dispatch = useDispatch();
+  const {authToken} = useSelector((state) => state.global);
   const richText = React.useRef();
   const richTextToolBar = React.useRef();
   const [userInfo, setUserInfo] = useState();
   const [userEmail, setUserEmail] = useState('');
+  const [templateList, setTemplateList] = useState(
+    useSelector((state) => state.dashboard.emailData.emailTemplates),
+  );
+  const [defaultEmail, setDefaultEmail] = useState(
+    useSelector((state) => state.dashboard.emailData.defaultTemplate),
+  );
 
-  const [emailBody, setEmailBody] = useState('');
-  const [emailSubject, setEmailSubject] = useState('');
-
+  const ticketId = JSON.stringify(props.route.params.ticketId);
   useEffect(() => {
     AsyncStorage.getItem(ASYNC_USER_INFO).then((value) => {
       setUserInfo(JSON.parse(value));
-      console.log('USER_INFO__', value);
+      // console.log('USER_INFO__', value);
     });
     AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then((value) => {
       setUserEmail(JSON.parse(value)?.email);
     });
-  }, []);
+  }, [authToken]);
 
-  console.log('USER_EMAIL__', userEmail);
+  useEffect(() => {
+    setBody((state) => ({
+      ...state,
+      subject: defaultEmail.title ?? '',
+      emailBody: defaultEmail.templateText,
+    }));
+  }, [defaultEmail]);
 
-  const richTextHandle = (text) => {
-    console.log(`Email text: ${text}`);
-  };
-
-  const updateRichText = (htmlText) => {
-    richText.current.setContentHTML(htmlText);
-  };
   const RenderHeader = () => {
     return (
       <View style={styles.rowContainerHeader}>
@@ -95,7 +84,9 @@ export default function SendEmail(props) {
   };
   const getSendIcon = () => {
     return (
-      <TouchableOpacity style={styles.optionIcon}>
+      <TouchableOpacity
+        onPress={() => callSendEmailApi()}
+        style={styles.optionIcon}>
         <RenderIonIcon
           name={'send'}
           color={Colors.accentLight}
@@ -135,65 +126,17 @@ export default function SendEmail(props) {
     );
   };
 
-  const RenderToTextInput = () => {
-    return (
-      <View>
-        <View style={styles.rowContainerCenterAlign}>
-          <Text style={styles.titleText}>{'To:'}</Text>
-
-          <TextInput
-            placeholder="Send to email"
-            style={styles.textInputEmail}
-          />
-        </View>
-        <View style={styles.devider} />
-      </View>
-    );
-  };
-  const RenderFromTextInput = () => {
-    let email = userEmail;
-    return (
-      <View>
-        <View style={styles.rowContainerCenterAlign}>
-          <Text style={styles.titleText}>{'From:'}</Text>
-
-          <TextInput
-            defaultValue={email}
-            onChangeText={(newEmail) => (email = newEmail)}
-            placeholder="Send from email"
-            style={styles.textInputEmail}
-            onEndEditing={() => setUserEmail(email)}
-          />
-        </View>
-        <View style={styles.devider} />
-      </View>
-    );
-  };
-
   const handleTemplateSelectAction = (item) => {
-    console.log(item);
-    setEmailSubject(item);
-
-    richText.current.setContentHTML(
-      '<div>Dear Charlie,</div><div>Thank you for your feedback on December 29. We make every effort to give our customers the best experience, in this case we came up short.&nbsp;</div><div>Please allow us to make it right for you. Here is a link for $5.00 off your next visit. You may contact me at&nbsp;</div><div><b>storemgns@questionpro.com</b> or <b>(612) 444-0483 </b>.&nbsp;</div><div>Please reference case <i>#80830384720</i>. We hope to serve youe a better experience next time around.</div><div>Best Regards,</div><div>Stewie Namds</div><div>Store Manager</div>',
-    );
-
+    setDefaultEmail(item);
+    richText.current.setContentHTML(item.templateText);
     bs.current.snapTo(bsSnapPoints.length - 1);
   };
 
   const renderSelectTemplate = () => {
-    const data = [
-      'Template 01',
-      'Template 02',
-      'Template 03',
-      'Template 04',
-      'Template 05',
-    ];
-
     return (
       <View style={styles.contentContainer}>
         <SelectEmailTemplate
-          data={data}
+          data={templateList}
           handleOnPress={(item) => handleTemplateSelectAction(item)}
         />
       </View>
@@ -209,20 +152,17 @@ export default function SendEmail(props) {
     );
   };
 
-  const RenderSubjectTextInput = () => {
-    return (
-      <View>
-        <View style={styles.rowContainerCenterAlign}>
-          <Text style={styles.titleText}>{'Subject:'}</Text>
-          <TextInput
-            placeholder="Email subject"
-            value={emailSubject}
-            style={styles.textInput}
-          />
-        </View>
-        <View style={styles.devider} />
-      </View>
-    );
+  const callSendEmailApi = () => {
+    const queryParam = {
+      subscriberId: global.subscriberId,
+      emailAddress: userEmail,
+    };
+
+    dispatch(sendEmail(authToken, ticketId, body, queryParam));
+    // console.log('EMAIL_PAYLOAD', JSON.stringify(body));
+    // console.log('EMAIL_PAYLOAD', JSON.stringify(ticketId));
+    // console.log('EMAIL_PAYLOAD', JSON.stringify(queryParam));
+    props.navigation.goBack();
   };
 
   const bs = React.useRef(null);
@@ -239,12 +179,58 @@ export default function SendEmail(props) {
             opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
             color: shadow ? Colors.accent : Colors.borderColor,
           },
-        ]}>
+        ]}
+        keyboardDismissMode="none">
         <RenderHeader />
         <RenderOptionsView />
-        <RenderToTextInput />
-        <RenderFromTextInput />
-        <RenderSubjectTextInput />
+        {/* <RenderToTextInput />
+        <RenderFromTextInput /> */}
+        <View>
+          <View style={styles.rowContainerCenterAlign}>
+            <Text style={styles.titleText}>{'To:'}</Text>
+
+            <TextInput
+              placeholder="Send to email"
+              style={styles.textInputEmail}
+              defaultValue={body.toEmail}
+              onChangeText={(text) => {
+                setBody((state) => ({...state, toEmail: text}));
+              }}
+            />
+          </View>
+          <View style={styles.devider} />
+        </View>
+
+        <View>
+          <View style={styles.rowContainerCenterAlign}>
+            <Text style={styles.titleText}>{'From:'}</Text>
+
+            <TextInput
+              defaultValue={body.fromEmail ?? ''}
+              onChangeText={(text) => {
+                setBody((state) => ({...state, fromEmail: text}));
+              }}
+              placeholder="Send from email"
+              style={styles.textInputEmail}
+            />
+          </View>
+          <View style={styles.devider} />
+        </View>
+        {/* <RenderSubjectTextInput /> */}
+        <View>
+          <View style={styles.rowContainerCenterAlign}>
+            <Text style={styles.titleText}>{'Subject:'}</Text>
+            <TextInput
+              placeholder="Email subject"
+              defaultValue={body.subject ?? ''}
+              style={styles.textInput}
+              onChangeText={(text) => {
+                setBody((state) => ({...state, subject: text}));
+              }}
+            />
+          </View>
+          <View style={styles.devider} />
+        </View>
         <View style={styles.textBox}>
           <KeyboardAvoidingView>
             {/* <TextInput
@@ -256,11 +242,14 @@ export default function SendEmail(props) {
 
             <RichEditor
               ref={richText}
-              onChange={richTextHandle}
+              onChange={(text) => {
+                setBody((state) => ({...state, emailBody: text}));
+              }}
               placeholder="Email body"
               androidHardwareAccelerationDisabled={true}
               initialHeight={300}
               style={styles.textInput}
+              initialContentHTML={defaultEmail?.templateText}
             />
             <View style={styles.rowContainer}>
               <RichToolbar
@@ -268,7 +257,7 @@ export default function SendEmail(props) {
                 editor={richText}
                 selectedIconTint={Colors.accentLight}
                 iconTint={Colors.lightBlack}
-                editorInitializedCallback={() => updateRichText(emailBody)}
+                // editorInitializedCallback={() => updateRichText(emailBody)}
                 actions={[
                   actions.setBold,
                   actions.setItalic,
@@ -277,8 +266,8 @@ export default function SendEmail(props) {
                   actions.insertOrderedList,
                   actions.insertLink,
                   actions.setStrikethrough,
-                  actions.insertImage,
-                  actions.keyboard,
+                  // actions.insertImage,
+                  // actions.keyboard,
                 ]}
                 style={{
                   justifyContent: 'flex-start',

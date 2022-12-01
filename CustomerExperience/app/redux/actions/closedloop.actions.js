@@ -75,9 +75,10 @@ export const getEmailTemplates = (token, param) => ({
   param,
 });
 
-export const sendEmail = (token, param, queryParam) => ({
+export const sendEmail = (token, ticketId, param, queryParam) => ({
   type: SEND_EMAIL,
   token,
+  ticketId,
   param,
   queryParam,
 });

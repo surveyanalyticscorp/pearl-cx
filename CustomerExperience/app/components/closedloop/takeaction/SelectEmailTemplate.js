@@ -17,7 +17,7 @@ const SelectEmailTemplate = (props) => {
     return (
       <TouchableWithoutFeedback onPress={() => handleOnPress(item)}>
         <View style={styles.row}>
-          <Text style={styles.title}>{item}</Text>
+          <Text style={styles.title}>{item.title}</Text>
         </View>
       </TouchableWithoutFeedback>
     );

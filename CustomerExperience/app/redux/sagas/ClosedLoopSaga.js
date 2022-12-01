@@ -51,6 +51,10 @@ import {
   SEND_EMAIL,
   SEND_EMAIL_RECEIVED,
 } from '../actions/closedloop.actions';
+import {
+  showErrorFlashMessage,
+  showSuccessFlashMessage,
+} from '../../Utils/Utility';
 
 function* fetchDetractorTicketDetails(action) {
   try {
@@ -444,9 +448,11 @@ function* sendEmail(action) {
     );
     yield put({
       type: SEND_EMAIL_RECEIVED,
-      response: json.data,
+      response: json,
     });
+    showSuccessFlashMessage(json.message);
   } catch (error) {
+    showErrorFlashMessage(error.message);
     console.log('ERROR:', JSON.stringify(error));
     yield put({
       type: API_ERROR,

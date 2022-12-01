@@ -63,7 +63,7 @@ export const CLF_WELCOME_SCREEN_COUNTS =
   'https://clf-backend.questionpro.com/api/analytics/status/mobile';
 
 export const CLF_GET_DEFAULT_EMAIL_TEMPLATE =
-  'https://clf-backend.questionpro.com/api/actionTemplate/mobile';
+  'https://clf-backend.questionpro.com/api/actionTemplate/get-default/mobile';
 export const CLF_GET_EMAIL_TEMPLATES =
   'https://clf-backend.questionpro.com/api/actionTemplate/mobile';
 export const CLF_SEND_EMAIL_PREFIX =

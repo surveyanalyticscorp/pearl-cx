@@ -30,6 +30,7 @@ import {
   getClosedLoopTicketItemComments,
 } from '../../redux/actions/dashboard.actions';
 import {FEEDBACK_API_KEY} from '../../api/Constant';
+import {getDefaultEmailTemplate} from '../../redux/actions/closedloop.actions';
 
 export default function TicketDetails(props) {
   const {authToken, isLoading} = useSelector((state) => state.global);

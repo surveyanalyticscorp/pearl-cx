@@ -1,6 +1,7 @@
 import {
   GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
   GET_EMAIL_TEMPLATES_RECEIVED,
+  SEND_EMAIL_RECEIVED,
 } from '../actions/closedloop.actions';
 import {
   CLEAR_CLOSED_LOOP_TICKET_DETAILS,
@@ -146,21 +147,22 @@ const dashboardReducer = (state = initialState, action) => {
     case GET_EMAIL_TEMPLATES_RECEIVED: {
       return {
         ...state,
-        emailData: {
-          emailTemplates: action.response,
-        },
+        emailData: {...state.emailData, emailTemplates: action.response},
       };
     }
 
     case GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED: {
       return {
         ...state,
-        emailData: {
-          defaultTemplate: action.response,
-        },
+        emailData: {...state.emailData, defaultTemplate: action.response},
       };
     }
-
+    case SEND_EMAIL_RECEIVED: {
+      return {
+        ...state,
+        emailData: {...state.emailData, emailSentResponse: action.response},
+      };
+    }
     default: {
       return state;
     }
