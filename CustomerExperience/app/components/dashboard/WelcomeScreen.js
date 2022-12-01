@@ -23,8 +23,9 @@ export const WelcomeScreen = (props) => {
   const authToken = useSelector((state) => state.global.authToken);
   const [subscriberId, setSubscriberId] = useState(global.subscriberId);
   const welcomeScreenData = useSelector(
-    (state) => state.dashboard.welcomeScreenData.data,
+    (state) => state.dashboard.welcomeScreenData,
   );
+  // console.log('WELCOME_SCREEN', JSON.stringify(cxData));
   console.log('WELCOME_SCREEN', JSON.stringify(welcomeScreenData));
 
   // const user = ;
@@ -90,19 +91,19 @@ export const WelcomeScreen = (props) => {
           <View style={styles.responseContainer}>
             <RenderCountItem
               title={'New Responses'}
-              data={0}
+              data={welcomeScreenData?.cxData?.body?.newResponses ?? 0}
               style={styles.responseBox}
             />
           </View>
           <View style={styles.ticketAndOverdueContainer}>
             <RenderCountItem
               title={'New Tickets'}
-              data={welcomeScreenData ? welcomeScreenData[0].value : 0}
+              data={welcomeScreenData?.clfData?.data[0]?.value ?? 0}
               style={styles.ticketBox}
             />
             <RenderCountItem
               title={'Overdues'}
-              data={welcomeScreenData ? welcomeScreenData[1].value : 0}
+              data={welcomeScreenData?.clfData?.data[1]?.value ?? 0}
               style={styles.ticketBox}
             />
           </View>
@@ -118,7 +119,7 @@ export const WelcomeScreen = (props) => {
     );
   };
 
-  return welcomeScreenData ? (
+  return welcomeScreenData.cxData && welcomeScreenData.clfData ? (
     <RenderWelcomeScreen />
   ) : (
     <CustomBackground>

@@ -140,7 +140,10 @@ const dashboardReducer = (state = initialState, action) => {
     case WELCOME_SCREEN_DATA_RECIEVED: {
       return {
         ...state,
-        welcomeScreenData: action.response,
+        welcomeScreenData: {
+          cxData: action.cxResponse,
+          clfData: action.clfResponse,
+        },
       };
     }
 

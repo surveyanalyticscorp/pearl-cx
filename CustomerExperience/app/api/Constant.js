@@ -40,10 +40,12 @@ export const CX_GET_NOTIFICATION_LIST =
   '/a/nativehtml/cx.CXGetNotificationLogs';
 export const CX_CLEAR_NOTIFICATION_LOGS =
   '/a/nativehtml/cx.CXClearNotificationLogs';
+export const CX_WELCOME_SCREEN_DATA =
+  '/a/nativehtml/cx.CXWelcomeScreenDataCount';
 
 // CLF 3.0 APIs
 
-export const FEEDBACK_API_KEY = 'e8caf096-4f19-4b34-a7cd-4bcaa8197c1d';
+// export const FEEDBACK_API_KEY = 'e8caf096-4f19-4b34-a7cd-4bcaa8197c1d';
 export const FEEDBACK_API_KEY_ENDPOINT = '?feedbackApiKey=';
 
 export const CLF_GET_TICKET_LIST =
@@ -55,9 +57,6 @@ export const CLF_GET_TICKET_DETAILS =
 
 export const CLF_STATUS_WISE_PRIORITY_ANALYTICS =
   'https://clf-backend.questionpro.com/api/mobile/tickets/status-wise-priority/segments/';
-
-export const CX_WELCOME_SCREEN_COUNTS =
-  'https://cxlabs.questionpro.com/a/nativehtml/cx.CXWelcomeScreenDataCount';
 
 export const CLF_WELCOME_SCREEN_COUNTS =
   'https://clf-backend.questionpro.com/api/analytics/status/mobile';

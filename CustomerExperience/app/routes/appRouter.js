@@ -453,7 +453,7 @@ const AppRouter = (props) => {
   let [moveNext, setMoveNext] = useState(false);
   let splashTimer = useRef(null);
   const welcomeScreenData = useSelector(
-    (state) => state.dashboard.welcomeScreenData.data,
+    (state) => state.dashboard.welcomeScreenData,
   );
   useEffect(() => {
     if (welcomeScreenData) {

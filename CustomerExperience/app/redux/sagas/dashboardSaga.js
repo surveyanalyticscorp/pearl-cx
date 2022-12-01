@@ -4,6 +4,7 @@ import {
   CLF_STATUS_WISE_PRIORITY_ANALYTICS,
   CLF_WELCOME_SCREEN_COUNTS,
   CX_HOME,
+  CX_WELCOME_SCREEN_DATA,
 } from '../../api/Constant';
 import {
   API_ERROR,
@@ -71,15 +72,22 @@ export function* fetchDataCount(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
 
-    const response = yield WebServiceHandler.get(
+    const clf_response = yield WebServiceHandler.get(
       CLF_WELCOME_SCREEN_COUNTS,
       {'Auth-Token': action.token},
       action.param,
     );
 
+    const cx_response = yield WebServiceHandler.postNew(
+      CX_WELCOME_SCREEN_DATA,
+      {'Auth-Token': action.token},
+      {},
+    );
+
     yield put({
       type: WELCOME_SCREEN_DATA_RECIEVED,
-      response: response,
+      cxResponse: cx_response,
+      clfResponse: clf_response,
     });
 
     yield put({type: IS_LOADING, payload: {isLoading: false}});
