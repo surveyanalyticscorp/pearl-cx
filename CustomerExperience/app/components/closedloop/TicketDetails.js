@@ -1,23 +1,11 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  TouchableWithoutFeedback,
-  Text,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-  useWindowDimensions,
-} from 'react-native';
-import ClosedLoopCell from './ClosedloopCell';
-import IonIcons from 'react-native-vector-icons/Ionicons';
+import {useWindowDimensions} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 
-import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {RenderSpinner, SearchIcon} from '../../routes/CommonScreen';
-import style from '../../widgets/qp-calendar/calendar/header/style';
+import {RenderSpinner} from '../../routes/CommonScreen';
 import {translate} from '../../Utils/MultilinguaUtils';
 import TicketOverview from './TicketOverview';
 import TicketComments from './TicketComments';
@@ -29,11 +17,10 @@ import {
   getClosedLoopTicketItemActivity,
   getClosedLoopTicketItemComments,
 } from '../../redux/actions/dashboard.actions';
-import {FEEDBACK_API_KEY} from '../../api/Constant';
-import {getDefaultEmailTemplate} from '../../redux/actions/closedloop.actions';
 
 export default function TicketDetails(props) {
   const {authToken, isLoading} = useSelector((state) => state.global);
+  const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
   const ticketItem = props.route.params;
   const dispatch = useDispatch();
 
@@ -42,9 +29,7 @@ export default function TicketDetails(props) {
 
   useEffect(() => {
     // props.Navigator.screenName = 'Screen';
-    dispatch(
-      getClosedLoopTicketItem(authToken, ticketItem.id, FEEDBACK_API_KEY),
-    );
+    dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
     dispatch(getClosedLoopTicketItemComments(authToken, ticketItem.id));
     dispatch(getClosedLoopTicketItemActivity(authToken, ticketItem.id));
   }, [dispatch, ticketItem, authToken]);

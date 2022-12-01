@@ -10,7 +10,7 @@ export const ASYNC_LAST_LOGIN = 'lastLogin';
 //export const BASE_URL = 'https://api.questionpro.com/';
 
 export const PANEL_AUTH =
-  'https://api.questionpro.com/a/nativehtml/panel.auth.PanelRequestHandler';
+  'https://cxlabs.questionpro.com/a/nativehtml/panel.auth.PanelRequestHandler';
 export const AUTH_LOGIN = '/a/nativehtml/cx.auth.CXLogin';
 export const CX_LOGOUT = '/a/nativehtml/cx.auth.CXLogout';
 

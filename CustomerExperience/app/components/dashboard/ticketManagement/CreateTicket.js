@@ -70,6 +70,7 @@ export default function CreateTicket(props) {
   const {owners} = useSelector((state) => state.dashboard.ownerDetails);
   const [headerTitle, setHeaderTitle] = useState('Create New Ticket');
   const subscriberId = useSelector((state) => state.global.subscriberId);
+  const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
   // const [priority, setPriority] = useState('Select');
   const [priorityIndex, setPriorityIndex] = useState(-1);
   const [segment, setSegment] = useState('Select Segment');
@@ -214,7 +215,8 @@ export default function CreateTicket(props) {
     // dispatch(showLoading(true));
     // console.log(JSON.stringify(userInfo));
     // setTicketState((state) => ({...state, ...userInfo}));
-    dispatch(createClfTicket(authToken, ticketState, FEEDBACK_API_KEY));
+    dispatch(createClfTicket(authToken, ticketState, feedbackApiKey));
+    props.navigation.goBack();
   };
 
   const renderPrioritySelectContent = () => {
