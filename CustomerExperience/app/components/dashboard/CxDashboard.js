@@ -61,8 +61,8 @@ const CxDashboard = (props) => {
   let [exitAlert, showExitAlert] = useState(false);
   let [lastLoginArray, setLastLoginArray] = useState([]);
   let [welcomeScreenShow, setWelcomeScreenShown] = useState(false);
-  let [segmentId, setSegmentId] = useState(
-    useSelector((state) => state.dashboard.currentSegment.currentSegmentID),
+  let segmentId = useSelector(
+    (state) => state.dashboard.currentSegment.currentSegmentID,
   );
   const {range, wantToReload} = props;
 
@@ -92,7 +92,7 @@ const CxDashboard = (props) => {
 
     getDashboardData();
     wait(500).then();
-  }, []);
+  }, [segmentId]);
   //////////////////////////////////
   // useEffect(() => {
   // props.navigation.setParams({selectedSegment: selectSegment});

@@ -85,11 +85,14 @@ const dashboardReducer = (state = initialState, action) => {
 
     case SEGMENT_SELECTED: {
       // console.log(`SEGEMENT TESTING: prev  ${JSON.stringify(state.segment)}`);
-      // console.log(`SEGEMENT TESTING: new ${JSON.stringify(action.payload)}`);
+      console.log(`SEGEMENT TESTING: new ${JSON.stringify(action.segment)}`);
 
       return {
         ...state,
-        segment: action.payload,
+        currentSegment: {
+          currentSegment: action.segment.segmentName,
+          currentSegmentID: action.segment.segmentID,
+        },
       };
     }
 

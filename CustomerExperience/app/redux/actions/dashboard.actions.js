@@ -156,6 +156,7 @@ export const getWelcomeScreenDataCount = (token, param) => ({
   token,
   param,
 });
-// export const getSegment = () => ({
-//   type: SEGMENT_SELECTED,
-// });
+export const setSegment = (segment) => ({
+  type: SEGMENT_SELECTED,
+  segment: segment,
+});

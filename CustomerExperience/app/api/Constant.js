@@ -69,6 +69,9 @@ export const CLF_SEND_EMAIL_PREFIX =
   'https://clf-backend.questionpro.com/api/tickets/';
 export const CLF_SEND_EMAIL_POSTFIX = '/actionMail/mobile';
 
+export const EMAIL = 'email';
+export const PHONE = 'phone';
+
 export const FEEDBACK = 'feedback/';
 export const SEGMENT = 'segment/';
 export const COMMNETS = 'comments/';

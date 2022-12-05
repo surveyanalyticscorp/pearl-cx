@@ -65,7 +65,7 @@ import CommonScreens from './CommonScreen';
 import {navigationRef} from './RootNavigation';
 import {setI18nConfig, translate} from '../Utils/MultilinguaUtils';
 import MainDropDown from '../widgets/drop-down/MainDropDown';
-import {SEGMENT_SELECTED} from '../redux/actions/dashboard.actions';
+import {SEGMENT_SELECTED, setSegment} from '../redux/actions/dashboard.actions';
 import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
 import SearchStack from './SearchStack';
 // import {connect} from 'react-redux';
@@ -323,13 +323,16 @@ const AppRouter = (props) => {
                   options={segmentOptions.map((item) => item.segmentName)}
                   defaultText={selectedSegment.segmentName}
                   onSelection={(index) => {
-                    console.log(`Selected : ${segmentOptions[index]}`);
+                    console.log(
+                      `Selected : ${JSON.stringify(segmentOptions[index])}`,
+                    );
                     //////
+                    dispatch(setSegment(segmentOptions[index]));
 
-                    dispatch({
-                      type: SEGMENT_SELECTED,
-                      payload: segmentOptions[index],
-                    });
+                    // dispatch({
+                    //   type: SEGMENT_SELECTED,
+                    //   payload: segmentOptions[index],
+                    // });
 
                     // updateSegment(`${segmentOptions[index]}`);
                     //////

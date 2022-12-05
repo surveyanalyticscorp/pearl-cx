@@ -66,6 +66,7 @@ import {
   getDefaultEmailTemplate,
   getEmailTemplates,
 } from '../../redux/actions/closedloop.actions';
+import {EMAIL, PHONE} from '../../api/Constant';
 
 export default function TicketOverview(props) {
   const dispatch = useDispatch();
@@ -634,11 +635,20 @@ export default function TicketOverview(props) {
     );
   };
 
-  const getUnderLineText = (text) => {
+  const getUnderLineText = (text, type) => {
     return (
       <TouchableWithoutFeedback
         onPress={() => {
           console.log(text);
+
+          switch (type) {
+            case PHONE:
+              promptCall();
+              break;
+            default:
+              navigateToSendEmail();
+              break;
+          }
         }}>
         <View
           style={[
@@ -928,15 +938,16 @@ export default function TicketOverview(props) {
         {ticketDetails.panelMember.email ? (
           <View style={styles.rowContainer}>
             {Title('Email')}
-            {getUnderLineText(ticketDetails.panelMember.email)}
+            {getUnderLineText(ticketDetails.panelMember.email, EMAIL)}
           </View>
         ) : (
           <View />
         )}
-        {ticketDetails.panelMember.phone ? (
+        {'eertdsg' ? (
           <View style={styles.rowContainer}>
             {Title('Phone')}
-            {getUnderLineText(ticketDetails.panelMember.phone)}
+
+            {getUnderLineText('01849900311', PHONE)}
           </View>
         ) : (
           <View />
@@ -949,13 +960,36 @@ export default function TicketOverview(props) {
     );
   };
 
-  const handleTicketAction = (item) => {
-    console.log('Selected Action', item.title);
+  const navigateToSendEmail = () => {
     actionBottomSheet.current.snapTo(actionBottomSheetSnapPoints.length - 1);
     props.navigation.navigate('sendEmail', {
       toEmail: ticketDetails?.panelMember?.email ?? '',
       ticketId: ticketDetails?.id,
     });
+  };
+
+  const promptCall = () => {
+    console.log('call');
+  };
+
+  const promptSms = () => {
+    console.log('SMS');
+  };
+  const handleTicketAction = (item) => {
+    switch (item.id) {
+      case 1:
+        navigateToSendEmail();
+        break;
+      case 2:
+        promptCall();
+        break;
+      case 3:
+        promptSms();
+        break;
+      default:
+        navigateToSendEmail();
+        break;
+    }
   };
 
   const renderTicketTakeAction = () => {
