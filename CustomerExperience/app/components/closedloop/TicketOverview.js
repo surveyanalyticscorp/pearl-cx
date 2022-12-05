@@ -943,11 +943,11 @@ export default function TicketOverview(props) {
         ) : (
           <View />
         )}
-        {'eertdsg' ? (
+        {ticketDetails.panelMember.phone ? (
           <View style={styles.rowContainer}>
             {Title('Phone')}
 
-            {getUnderLineText('01849900311', PHONE)}
+            {getUnderLineText(ticketDetails.panelMember.phone, PHONE)}
           </View>
         ) : (
           <View />

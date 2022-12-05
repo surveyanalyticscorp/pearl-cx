@@ -215,8 +215,9 @@ const CxDashboard = (props) => {
       fromDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
       toDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
     };
-    props.getDashboardContent(props.authToken, data, segmentId);
-    // console.log(`${JSON.stringify(props)} :Data`);
+    if (data.startDate !== 'Invalid date') {
+      props.getDashboardContent(props.authToken, data, segmentId);
+    }
   };
 
   const RenderHorizontalBarView = () => {
