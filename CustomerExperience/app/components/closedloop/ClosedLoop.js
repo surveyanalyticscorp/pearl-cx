@@ -201,10 +201,10 @@ export default function ClosedLoop(props) {
       <View style={styles.filterAndSearchBox}>
         {getFilterIcon()}
         {getFilterDateBox()}
-        <View
+        {/* <View
           style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
           {getSearchIcon()}
-        </View>
+        </View> */}
       </View>
     );
   };
