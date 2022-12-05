@@ -47,9 +47,9 @@ export default function TicketComments(props) {
   const [commentState, setCommentState] = useState({
     commentBy: 'Mehedi',
     text: '',
-    ticket: ticketId,
+    ticket: JSON.stringify(ticketId),
     parentId: 0,
-    subscriberId: 4894850,
+    subscriberId: global.subscriberId,
   });
   let commentText = '';
 
@@ -83,7 +83,7 @@ export default function TicketComments(props) {
   };
 
   const renderItem = ({item}) => (
-    <Text style={styles.commentBox}>
+    <Text style={styles.commentText}>
       {item.text} from {item.commentBy}
     </Text>
   );
@@ -98,9 +98,9 @@ export default function TicketComments(props) {
     let state = {
       commentBy: 'Mehedi',
       text: commentText,
-      ticket: ticketId,
+      ticketId: ticketId,
       parentId: 0,
-      subscriberId: 4894850,
+      subscriberId: global.subscriberId,
     };
     dispach(postAddTicketComment(authToken, state, ticketId));
 
@@ -161,9 +161,9 @@ export default function TicketComments(props) {
       <View style={styles.commentFooter}>
         <CommentBox style={styles.commentBox} />
         <SendButton />
-        <ContactButton />
+        {/* <ContactButton />
         <AttachmentButton />
-        <PictureButton />
+        <PictureButton /> */}
       </View>
     );
   };
@@ -193,5 +193,19 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     padding: MarginConstants.tab1,
     marginHorizontal: MarginConstants.tab1,
+    marginVertical: MarginConstants.halfTab,
+  },
+
+  commentText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: Colors.white,
+    padding: MarginConstants.tab1,
+    marginHorizontal: MarginConstants.tab1,
+    marginVertical: MarginConstants.halfTab,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    borderRadius: 5,
   },
 });

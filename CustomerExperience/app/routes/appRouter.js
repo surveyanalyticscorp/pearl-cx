@@ -444,7 +444,7 @@ const AppRouter = (props) => {
         <Drawer.Screen name="Responses" component={ResponsesStack} />
         {/* <Drawer.Screen name="Tickets" component={TicketsStack} /> */}
         <Drawer.Screen name="ClosedLoop" component={ClosedLoopStack} />
-        <Drawer.Screen name="Search Response" component={SearchStack} />
+        {/* <Drawer.Screen name="Search Response" component={SearchStack} /> */}
         <Drawer.Screen
           name={translate('settings.settings')}
           component={settingStack}

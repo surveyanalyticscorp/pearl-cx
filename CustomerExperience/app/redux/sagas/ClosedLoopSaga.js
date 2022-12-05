@@ -347,9 +347,21 @@ function* postCreateClfTicket(action) {
       {'Auth-Token': action.token},
       action.param,
     );
+
+    const json_ = yield WebServiceHandler.get(
+      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+
     yield put({
       type: CREATE_CLF_TICKET_RECIEVED,
       response: json,
+    });
+
+    yield put({
+      type: CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED,
+      response: json_,
     });
 
     yield put({type: IS_LOADING, payload: {isLoading: false}});

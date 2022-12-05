@@ -845,7 +845,7 @@ export default function TicketOverview(props) {
           {/* {DropDownView(userOptions, 'Assign manager')} */}
           <RenderOwnerDropDownButton />
         </View>
-        <View style={styles.rowContainer}>{Title('Department')}</View>
+        {/* <View style={styles.rowContainer}>{Title('Department')}</View>
         <View style={styles.rowContainer}>
           <FlatList
             horizontal={true}
@@ -853,7 +853,7 @@ export default function TicketOverview(props) {
             renderItem={departmentNameCell}
             keyExtractor={(item) => item}
           />
-        </View>
+        </View> */}
       </View>
     );
   };
@@ -995,9 +995,9 @@ export default function TicketOverview(props) {
   const renderTicketTakeAction = () => {
     const data = [
       {id: 1, title: 'Respond via Email', icon: 'email'},
-      {id: 2, title: 'Respond via phone', icon: 'phone'},
-      {id: 3, title: 'Respond via SMS', icon: 'chat-bubble'},
-      {id: 4, title: 'Forward via Email', icon: 'exit-to-app'},
+      // {id: 2, title: 'Respond via phone', icon: 'phone'},
+      // {id: 3, title: 'Respond via SMS', icon: 'chat-bubble'},
+      // {id: 4, title: 'Forward via Email', icon: 'exit-to-app'},
     ];
 
     return (

@@ -152,26 +152,26 @@ const DrawerContent = (props) => {
             </Text>
           </View>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
+        {/* <TouchableWithoutFeedback
           onPress={() => {
             props.navigation.navigate('Search Response');
           }}>
-          <View style={styles.drawerRow}>
-            {/* <Icon
+          <View style={styles.drawerRow}> */}
+        {/* <Icon
               size={1.3 * Sizes.icons}
               color={Colors.accent}
               name={'settings'}
               style={styles.rowIcon}
             /> */}
-            <Icon
+        {/* <Icon
               name={'search'}
               size={1.3 * Sizes.icons}
               color={Colors.filterIconColor}
               style={styles.rowIcon}
-            />
-            <Text style={styles.labelStyle}>{'Search'}</Text>
-          </View>
-        </TouchableWithoutFeedback>
+            /> */}
+        {/* <Text style={styles.labelStyle}>{'Search'}</Text> */}
+        {/* </View>
+        </TouchableWithoutFeedback> */}
       </View>
     );
   };
