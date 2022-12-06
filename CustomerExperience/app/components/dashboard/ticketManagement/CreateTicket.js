@@ -113,7 +113,7 @@ export default function CreateTicket(props) {
   const dispatch = useDispatch();
 
   const [ticketState, setTicketState] = useState({
-    subscriberId: 4894850,
+    subscriberId: global.subscriberId,
     // ownerId: ,
     // emailAddress: '',
     // firstName: '',

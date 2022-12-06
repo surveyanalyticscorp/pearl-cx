@@ -318,6 +318,32 @@ export const CheckBoxItem = ({item, index, onPress, textStyle}) => {
   );
 };
 
+export const CheckRadioButtonItem = ({item, index, onPress, textStyle}) => {
+  const _textStyle = textStyle ?? styles.checkBoxText;
+  return (
+    <TouchableOpacity onPress={() => onPress(index)}>
+      <View style={styles.checkBoxRow}>
+        {/* <CheckBox
+          disabled={false}
+          value={item.isChecked}
+          onCheckColor={Colors.accentLight}
+          boxType={'square'}
+          onValueChange={(newValue) => {
+            // onPress(index);
+          }}
+        /> */}
+        <IonIcons
+          name={item.isChecked ? 'radio-button-on' : 'radio-button-off'}
+          size={24}
+          color={Colors.accentLight}
+          style={{marginHorizontal: MarginConstants.halfTab}}
+        />
+        <Text style={_textStyle}>{item.title}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
 export const EditTicket = () => {
   let navigation = useNavigation();
   const state = useNavigationState((state) => state);

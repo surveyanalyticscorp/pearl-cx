@@ -19,15 +19,24 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {
   CheckBoxItem,
+  CheckRadioButtonItem,
   RenderRoundImageOrColor,
 } from '../../../routes/CommonScreen';
 import IconTextModalDropdown from '../../../widgets/drop-down/IconTextModalDropdown';
+import {useSelector} from 'react-redux';
 
 const FilterTicket = ({data, onPressHandler}) => {
   const [status, setStatus] = useState(data.status);
   const [priority, setPriority] = useState(data.priority);
-  const managerlist = data.managers;
-  let selectedManager = data.selectedManager;
+  // const [type, setType] = useState(data.type);
+  // const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
+
+  const [managerlist, setManagerList] = useState(
+    useSelector((state) => state.dashboard.ownerDetails.owners ?? []),
+  );
+  let [selectedManager, setSelectedManager] = useState(
+    data.selectedManager ?? [],
+  );
 
   const RenderStatusFilter = () => {
     return (
@@ -35,7 +44,7 @@ const FilterTicket = ({data, onPressHandler}) => {
         <Text style={styles.titleText}>Status</Text>
         <FlatList
           data={status}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item.toString()}
           numColumns={3}
           renderItem={({item, index}) => (
             <CheckBoxItem
@@ -54,7 +63,6 @@ const FilterTicket = ({data, onPressHandler}) => {
     setStatus((prevState) => {
       const temp = [...prevState];
       temp[index].isChecked = !prevState[index].isChecked;
-      console.log(temp);
       return temp;
     });
   };
@@ -65,7 +73,7 @@ const FilterTicket = ({data, onPressHandler}) => {
         <Text style={styles.titleText}>Priority</Text>
         <FlatList
           data={priority}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item.toString()}
           numColumns={3}
           renderItem={({item, index}) => (
             <CheckBoxItem
@@ -84,15 +92,13 @@ const FilterTicket = ({data, onPressHandler}) => {
     setPriority((prevState) => {
       const temp = [...prevState];
       temp[index].isChecked = !prevState[index].isChecked;
-      console.log(temp[index]);
-
       return temp;
     });
   };
 
   const RenderAssigneeDropDown = () => {
-    const defaultText = selectedManager.value ?? 'Select...';
-
+    const defaultText = 'Select...';
+    console.log('MANAGERS', JSON.stringify(managerlist));
     return (
       <View>
         <Text style={styles.titleText}>Assignee</Text>
@@ -102,12 +108,14 @@ const FilterTicket = ({data, onPressHandler}) => {
           textStyle={styles.dropdownText}
           dropdownTextStyle={styles.dropdownText}
           arrowIconColor={Colors.secondary}
-          options={managerlist}
+          options={managerlist.map((item) => item.ownerName)}
           defaultValue={defaultText}
           renderRow={dropdownRenderRow}
           onSelect={(_index) => {
-            selectedManager = managerlist[_index];
-            console.log(selectedManager);
+            setSelectedManager((state) => [...state, managerlist[_index]]);
+            setManagerList((state) =>
+              state.filter((item) => item.ownerID !== state[_index].ownerID),
+            );
           }}
         />
       </View>
@@ -121,8 +129,8 @@ const FilterTicket = ({data, onPressHandler}) => {
           styles.dropdownRow,
           {backgroundColor: highlighted ? Colors.overlay : Colors.white},
         ]}>
-        <RenderRoundImageOrColor data={rowData} />
-        <Text style={styles.dropdownText}>{rowData.value ?? rowData}</Text>
+        {/* <RenderRoundImageOrColor data={rowData} /> */}
+        <Text style={styles.dropdownText}>{rowData}</Text>
       </View>
     );
   };
@@ -157,8 +165,6 @@ const FilterTicket = ({data, onPressHandler}) => {
     });
 
     selectedManager = {};
-
-    console.log(status);
   };
 
   const RenderButtons = () => {
@@ -198,11 +204,34 @@ const FilterTicket = ({data, onPressHandler}) => {
     );
   };
 
+  const assigneeCell = ({item, index}) => {
+    return (
+      <View style={[{flex: 1}, styles.rowContainer]}>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedManager((state) =>
+              state.filter((item) => item.ownerID !== state[index].ownerID),
+            );
+            setManagerList((state) => [...state, selectedManager[index]]);
+          }}>
+          <Text style={styles.departmentNameText}>{item.ownerName}</Text>
+          <Text style={styles.departmentNameText}>{'X'}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
         <RenderStatusFilter />
         <RenderPriorityFilter />
+        <FlatList
+          horizontal={true}
+          data={selectedManager}
+          renderItem={assigneeCell}
+          keyExtractor={(item) => item.toString()}
+        />
+
         <RenderAssigneeDropDown />
         <RenderButtons />
       </View>

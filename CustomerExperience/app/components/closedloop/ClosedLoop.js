@@ -34,17 +34,23 @@ import {
   YMDFORMAT,
 } from '../../Utils/AppConstants';
 import {showLoading} from '../../redux/actions';
-import {dashboardStyles} from '../dashboard/dashboard.style';
-import QPSpinner from '../../widgets/QPSpinner';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {watchPostTicketComment} from '../../redux/sagas/ClosedLoopSaga';
+import {useIsFocused} from '@react-navigation/native';
+import {priorityList, statusList} from '../../Utils/TicketUtils';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
   const {authToken, range, isLoading} = useSelector((state) => state.global);
-
+  const [filterState, setFilterState] = useState({
+    status: '',
+    priority: '',
+    assignToId: '',
+    pageNumber: 1,
+    perPage: 10,
+    fromDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
+    toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
+  });
   const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
   // const state = useSelector((state) => state.dashboard);
   const currentFeedback = useSelector(
@@ -52,13 +58,15 @@ export default function ClosedLoop(props) {
   );
   const currentSegment = useSelector((state) => state.dashboard.currentSegment);
   const [ticketList, setTicketList] = useState([]);
+  const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
 
   const [refreshing, setRefreshing] = useState(false);
 
   const isFocused = useIsFocused();
   useEffect(() => {
-    getTicketList();
-  }, [isFocused]);
+    getTicketList(filterState);
+    getTicketOwnerList(currentSegment.currentSegmentID);
+  }, [isFocused, filterState, currentSegment]);
 
   const wait = (timeout) => {
     return new Promise((resolve) => {
@@ -67,123 +75,64 @@ export default function ClosedLoop(props) {
   };
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    getTicketList();
+    getTicketList(filterState);
     wait(500).then(() => setRefreshing(false));
   }, []);
 
   useEffect(() => {
+    statusList;
     setTicketList((state) => ticketDetails.data ?? []);
   }, [ticketDetails]);
 
   // console.log('Ticket list: ', JSON.stringify(ticketDetails.data));
-  const sampleTicketList = [
-    {
-      customerName: 'Jassica Palm',
-      ticketId: '9033212',
-      npsScore: '3',
-      nps: 'Detractor',
-      priority: 'Normal',
-      status: 'Escalated',
-      date: '15 May, 2022',
-      userAvatar: 'https://reactnative.dev/img/tiny_logo.png',
-      messsage:
-        'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...',
-    },
-    {
-      customerName: 'Jil Kirk',
-      ticketId: '9033213',
-      npsScore: '2',
-      nps: 'Detractor',
-      priority: 'Normal',
-      status: 'Escalated',
-      date: '15 May, 2022',
-      userAvatar: 'https://reactnative.dev/img/tiny_logo.png',
-      messsage:
-        'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...',
-    },
-    {
-      customerName: 'Jassica Palm',
-      ticketId: '9033214',
-      npsScore: '2',
-      nps: 'Detractor',
-      priority: 'Normal',
-      status: 'Escalated',
-      date: '15 May, 2022',
-      userAvatar: 'https://reactnative.dev/img/tiny_logo.png',
-      messsage:
-        'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...',
-    },
-    {
-      customerName: 'Jassica Palm',
-      ticketId: '9033215',
-      npsScore: '2',
-      nps: 'Detractor',
-      priority: 'Normal',
-      status: 'Escalated',
-      date: '15 May, 2022',
-      userAvatar: 'https://reactnative.dev/img/tiny_logo.png',
-      messsage:
-        'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...',
-    },
-  ];
 
-  const sampleFilterData = {
-    priority: [
-      {title: 'Critical', isChecked: false},
-      {title: 'High', isChecked: false},
-      {title: 'Normal', isChecked: false},
-      {title: 'Low', isChecked: false},
-      {title: 'Unassigned', isChecked: false},
-    ],
-    status: [
-      {title: 'New', isChecked: false},
-      {title: 'Open', isChecked: false},
-      {title: 'Escalated', isChecked: false},
-      {title: 'Overdue', isChecked: false},
-      {title: 'Resolved', isChecked: false},
-      {title: 'Closed', isChecked: false},
-    ],
-    managers: [
-      {
-        value: 'Dummy 1',
-        url: 'https://picsum.photos/id/237/200',
-      },
-      {
-        value: 'Dummy 2',
-        url: 'https://picsum.photos/id/327/200',
-      },
-      {
-        value: 'Dummy 3',
-        url: 'https://picsum.photos/id/247/200',
-      },
-    ],
-    selectedManager: {},
+  const sampleFilterData = () => {
+    const priority = priorityList.map((value) => ({
+      ...value,
+      isChecked: false,
+    }));
+    const status = statusList.map((value) => ({...value, isChecked: false}));
+    console.log('OWNERS', JSON.stringify(owners));
+    return {
+      priority: priority,
+      status: status,
+
+      selectedManager: [],
+      managers: owners,
+    };
   };
 
   const [filterData, setFilterData] = useState(sampleFilterData);
-  const sampleData = {
-    dateRageText: 'Nov 14, 2017 -Mar 14, 2018',
-  };
 
-  const getTicketList = () => {
-    dispatch(showLoading(true));
-    // setRefreshing(true);
-    const params = {
-      fromDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
-      toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
+  const getTicketList =
+    // useCallback(() => {
+    (filterState_) => {
+      dispatch(showLoading(true));
+      // setRefreshing(true);
+
+      dispatch(
+        getClosedLoopTicketList(
+          authToken,
+          filterState_,
+          currentFeedback.feedbackID,
+          currentSegment.currentSegmentID,
+        ),
+      );
+
+      dispatch(
+        getClosedLoopOwnerDetails(authToken, {
+          segmentID: currentSegment.currentSegmentID,
+        }),
+      );
     };
-    dispatch(
-      getClosedLoopTicketList(
-        authToken,
-        params,
-        currentFeedback.feedbackID,
-        currentSegment.currentSegmentID,
-      ),
-    );
+  // }, [filterState]);
 
+  // const getTicketList = ;
+
+  const getTicketOwnerList = (segmentId_) => {
     dispatch(
       getClosedLoopOwnerDetails(authToken, {
-        segmentID: currentSegment.currentSegmentID,
+        segmentID: segmentId_,
       }),
     );
   };
@@ -295,6 +244,12 @@ export default function ClosedLoop(props) {
     );
   };
 
+  const getIds = (items) =>
+    items
+      .filter((item) => item.isChecked === true)
+      .map((id) => id.id)
+      .toString();
+
   const handleAction = (item, action) => {
     switch (action) {
       case 'apply':
@@ -313,6 +268,14 @@ export default function ClosedLoop(props) {
 
   const applyFilter = (item) => {
     setFilterData(item);
+
+    console.log('StatusParam: ', JSON.stringify(item));
+    setFilterState((state) => ({
+      ...state,
+      status: getIds(item.status),
+      priority: getIds(item.priority),
+    }));
+
     console.log('Apply filter');
     closeFilter();
   };
