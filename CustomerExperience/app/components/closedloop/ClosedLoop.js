@@ -28,7 +28,11 @@ import {
   getClosedLoopTicketList,
 } from '../../redux/actions/dashboard.actions';
 import moment from 'moment';
-import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
+import {
+  DMYFORMAT,
+  HalfMonthDateYearFormat,
+  YMDFORMAT,
+} from '../../Utils/AppConstants';
 import {showLoading} from '../../redux/actions';
 import {dashboardStyles} from '../dashboard/dashboard.style';
 import QPSpinner from '../../widgets/QPSpinner';
@@ -208,10 +212,16 @@ export default function ClosedLoop(props) {
       </View>
     );
   };
-  const getDateText = () => {
+  const getDateText = (dateRange) => {
+    const sDate = moment(dateRange.startDate, DMYFORMAT).format(
+      HalfMonthDateYearFormat,
+    );
+    const eDate = moment(dateRange.endDate, DMYFORMAT).format(
+      HalfMonthDateYearFormat,
+    );
     return (
       <Text style={{margin: MarginConstants.halfTab, color: Colors.lightBlack}}>
-        {sampleData.dateRageText}
+        {`${sDate} - ${eDate}`}
       </Text>
     );
   };
@@ -235,7 +245,7 @@ export default function ClosedLoop(props) {
     return (
       <TouchableOpacity onPress={handleDateFilter}>
         <View style={styles.filterBox}>
-          {getDateText()}
+          {getDateText(range)}
           {getDateIcon()}
         </View>
       </TouchableOpacity>
