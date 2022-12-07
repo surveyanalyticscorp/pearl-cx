@@ -103,7 +103,12 @@ const dashboardReducer = (state = initialState, action) => {
 
     case CLOSED_LOOP_TICKET_ITEM_RECEIVED: {
       // console.log('TICKETDETAILS', action.response.data);
-      return {...state, ticket: action.response.data};
+      return {
+        ...state,
+        ticket: action.ticketData,
+        ticketComments: action.ticketComments,
+        ticketActivity: action.ticketActivity,
+      };
     }
 
     case CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED: {

@@ -121,9 +121,9 @@ function* fetchClosedLoopOwnerDetails(action) {
       type: CLOSED_LOOP_OWNER_DETAILS_RECEIVED,
       response: json,
     });
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({
       type: API_ERROR,
       error: error,
@@ -215,7 +215,7 @@ function* fetchClosedLoopTicketItem(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
 
-    const json = yield WebServiceHandler.get(
+    const ticketItem = yield WebServiceHandler.get(
       CLF_GET_TICKET_DETAILS +
         action.ticketId +
         FEEDBACK_API_KEY_ENDPOINT +
@@ -223,9 +223,23 @@ function* fetchClosedLoopTicketItem(action) {
       {'Auth-Token': action.token},
       action.param,
     );
+
+    const comments = yield WebServiceHandler.get(
+      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+
+    const ticketActivity = yield WebServiceHandler.get(
+      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
+      {'Auth-Token': action.token},
+      action.param,
+    );
     yield put({
       type: CLOSED_LOOP_TICKET_ITEM_RECEIVED,
-      response: json,
+      ticketData: ticketItem.data,
+      ticketComments: comments.data,
+      ticketActivity: ticketActivity.data,
     });
     yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
@@ -281,7 +295,7 @@ function* fetchClosedLoopTicketActivity(action) {
       response: json,
     });
 
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
     yield put({type: IS_LOADING, payload: {isLoading: false}});

@@ -69,16 +69,21 @@ import {
 import {EMAIL, PHONE} from '../../api/Constant';
 
 export default function TicketOverview(props) {
+  const bottomSheetEnum = {
+    status: 'status',
+    priority: 'priority',
+    owners: 'owners',
+    segment: 'segment',
+  };
   const dispatch = useDispatch();
+  const [currentBS, setCurrentBS] = useState(bottomSheetEnum.status);
   const {authToken} = useSelector((state) => state.global);
   const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
-  const [isLoading, setLoading] = useState(
-    useSelector((state) => state.global.isLoading),
-  );
+  const isLoading = useSelector((state) => state.global.isLoading);
   const [ticketDetails, setTicketDetails] = useState(
     useSelector((state) => state.dashboard.ticket),
   );
-  const [selectedSegment, setSelectedSegment] = useState();
+  // const [selectedSegment, setSelectedSegment] = useState();
   const [statusIndex, setStatusIndex] = useState(
     getStatusIndexById(ticketDetails.status ?? -1),
   );
@@ -89,7 +94,7 @@ export default function TicketOverview(props) {
   const segments = useSelector(
     (state) => state.dashboard.segmentDetails.segments,
   );
-  // console.log('TTTTT', ticketDetails ?? '');
+  console.log('TTTTT', ticketDetails ?? '');
 
   const getSegmentIndex = (segmentId) => {
     let index = 0;
@@ -148,7 +153,6 @@ export default function TicketOverview(props) {
 
   useEffect(() => {
     if (authToken) {
-      // console.log('DEFAULT_EMAIL');
       dispatch(
         getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
       );
@@ -161,52 +165,58 @@ export default function TicketOverview(props) {
   /// BOTTOM SHEET
 
   // variables for bottom sheet
-  const actionBottomSheet = React.useRef(null);
+  const actionBottomSheet = React.useRef();
   const statusBottomSheet = React.useRef();
-  const priorityBottomSheet = React.useRef();
-  const segmentBottomSheet = React.useRef();
-  const ownerBottomSheet = React.useRef();
+  // const priorityBottomSheet = React.useRef();
+  // const segmentBottomSheet = React.useRef();
+  // const ownerBottomSheet = React.useRef();
 
   const actionBottomSheetSnapPoints = ['33%', '0%'];
   const statusBottomSheetSnapPoints = ['45', '0'];
-  const priorityBottomSheetSnapPoints = ['45', '0'];
-  const segmentBottomSheetSnapPoints = ['45', '0'];
-  const ownerBottomSheetSnapPoints = ['45', '0'];
+  // const priorityBottomSheetSnapPoints = ['45', '0'];
+  // const segmentBottomSheetSnapPoints = ['45', '0'];
+  // const ownerBottomSheetSnapPoints = ['45', '0'];
 
   const fall = new Animated.Value(1);
 
-  const [shadow, setShadow] = useState(false);
+  // const [shadow, setShadow] = useState(false);
 
   const onTakeActionHandler = () => {
-    // console.log('takeaction');
-    // props.navigation.navigate('TicketTakeAction');
-    // props.navigation.navigate('SelectEmailTemplate');
     actionBottomSheet.current.snapTo(0);
   };
   const handleStatusSelection = () => {
+    setCurrentBS(bottomSheetEnum.status);
     statusBottomSheet.current.snapTo(0);
   };
 
   const handlePrioritySelection = () => {
-    priorityBottomSheet.current.snapTo(0);
+    setCurrentBS(bottomSheetEnum.priority);
+    statusBottomSheet.current.snapTo(0);
+    // priorityBottomSheet.current.snapTo(0);
   };
 
   const handleSegmentSelection = () => {
-    segmentBottomSheet.current.snapTo(0);
+    setCurrentBS(bottomSheetEnum.segment);
+    statusBottomSheet.current.snapTo(0);
+    // segmentBottomSheet.current.snapTo(0);
   };
 
   const handleOwnerSelection = () => {
-    ownerBottomSheet.current.snapTo(0);
+    setCurrentBS((state) => bottomSheetEnum.owners);
+    statusBottomSheet.current.snapTo(0);
+    // ownerBottomSheet.current.snapTo(0);
   };
 
   const renderStatusHeader = (_title) => {
     return (
       <BottomSheetHeader
         title={'Select Status'}
-        onPressClose={() =>
-          statusBottomSheet.current.snapTo(
-            statusBottomSheetSnapPoints.length - 1,
-          )
+        onPressClose={
+          closeBS
+          // () =>
+          // statusBottomSheet.current.snapTo(
+          //   statusBottomSheetSnapPoints.length - 1,
+          // )
         }
       />
     );
@@ -230,15 +240,35 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderStatusBottomSheet = () => {
+  const RenderStatusBottomSheet = ({currentBS_}) => {
+    let renderContent = renderStatusSelectContent;
+    let renderHeader = renderStatusHeader;
+
+    switch (currentBS_) {
+      case bottomSheetEnum.priority:
+        renderContent = renderPrioritySelectContent;
+        renderHeader = renderPriorityHeader;
+        break;
+
+      case bottomSheetEnum.segment:
+        renderContent = renderSegmentSelectContent;
+        renderHeader = renderSegmentHeader;
+        break;
+
+      case bottomSheetEnum.owners:
+        renderContent = renderOwnerSelectContent;
+        renderHeader = renderOwnerHeader;
+        break;
+    }
+    console.log('SNAP', currentBS_);
     return (
       <BottomSheet
         ref={statusBottomSheet}
         snapPoints={statusBottomSheetSnapPoints}
         initialSnap={statusBottomSheetSnapPoints.length - 1}
         enabledGestureInteraction={true}
-        renderContent={renderStatusSelectContent}
-        renderHeader={renderStatusHeader}
+        renderContent={renderContent}
+        renderHeader={renderHeader}
         callbackNode={fall}
       />
     );
@@ -248,10 +278,12 @@ export default function TicketOverview(props) {
     return (
       <BottomSheetHeader
         title={'Select Priority'}
-        onPressClose={() =>
-          priorityBottomSheet.current.snapTo(
-            priorityBottomSheetSnapPoints.length - 1,
-          )
+        onPressClose={
+          closeBS
+          // () =>
+          // priorityBottomSheet.current.snapTo(
+          //   priorityBottomSheetSnapPoints.length - 1,
+          // )
         }
       />
     );
@@ -278,28 +310,30 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderPriorityBottomSheet = () => {
-    return (
-      <BottomSheet
-        ref={priorityBottomSheet}
-        snapPoints={priorityBottomSheetSnapPoints}
-        initialSnap={priorityBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderPrioritySelectContent}
-        renderHeader={renderPriorityHeader}
-        callbackNode={fall}
-      />
-    );
-  };
+  // const RenderPriorityBottomSheet = () => {
+  //   return (
+  //     <BottomSheet
+  //       ref={priorityBottomSheet}
+  //       snapPoints={priorityBottomSheetSnapPoints}
+  //       initialSnap={priorityBottomSheetSnapPoints.length - 1}
+  //       enabledGestureInteraction={true}
+  //       renderContent={renderPrioritySelectContent}
+  //       renderHeader={renderPriorityHeader}
+  //       callbackNode={fall}
+  //     />
+  //   );
+  // };
 
   const renderSegmentHeader = (_title) => {
     return (
       <BottomSheetHeader
         title={'Select Segment'}
-        onPressClose={() =>
-          segmentBottomSheet.current.snapTo(
-            segmentBottomSheetSnapPoints.length - 1,
-          )
+        onPressClose={
+          closeBS
+          // () =>
+          //   segmentBottomSheet.current.snapTo(
+          //     segmentBottomSheetSnapPoints.length - 1,
+          //   )
         }
       />
     );
@@ -330,26 +364,31 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderSegmentBottomSheet = () => {
-    return (
-      <BottomSheet
-        ref={segmentBottomSheet}
-        snapPoints={segmentBottomSheetSnapPoints}
-        initialSnap={segmentBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderSegmentSelectContent}
-        renderHeader={renderSegmentHeader}
-        callbackNode={fall}
-      />
-    );
-  };
+  // const RenderSegmentBottomSheet = () => {
+  //   return (
+  //     <BottomSheet
+  //       ref={segmentBottomSheet}
+  //       snapPoints={segmentBottomSheetSnapPoints}
+  //       initialSnap={segmentBottomSheetSnapPoints.length - 1}
+  //       enabledGestureInteraction={true}
+  //       renderContent={renderSegmentSelectContent}
+  //       renderHeader={renderSegmentHeader}
+  //       callbackNode={fall}
+  //     />
+  //   );
+  // };
 
   const renderOwnerHeader = (_title) => {
     return (
       <BottomSheetHeader
         title={'Select Ticket Owner'}
-        onPressClose={() =>
-          ownerBottomSheet.current.snapTo(ownerBottomSheetSnapPoints.length - 1)
+        onPressClose={
+          closeBS
+          // () =>
+          //   statusBottomSheet.current.snapTo(
+          //     statusBottomSheetSnapPoints.length - 1,
+          //   )
+          // ownerBottomSheet.current.snapTo(ownerBottomSheetSnapPoints.length - 1)
         }
       />
     );
@@ -377,18 +416,22 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderOwnerBottomSheet = () => {
-    return (
-      <BottomSheet
-        ref={ownerBottomSheet}
-        snapPoints={ownerBottomSheetSnapPoints}
-        initialSnap={ownerBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderOwnerSelectContent}
-        renderHeader={renderOwnerHeader}
-        callbackNode={fall}
-      />
-    );
+  // const RenderOwnerBottomSheet = () => {
+  //   return (
+  //     <BottomSheet
+  //       ref={ownerBottomSheet}
+  //       snapPoints={ownerBottomSheetSnapPoints}
+  //       initialSnap={ownerBottomSheetSnapPoints.length - 1}
+  //       enabledGestureInteraction={true}
+  //       renderContent={renderOwnerSelectContent}
+  //       renderHeader={renderOwnerHeader}
+  //       callbackNode={fall}
+  //     />
+  //   );
+  // };
+
+  const closeBS = () => {
+    statusBottomSheet.current.snapTo(statusBottomSheetSnapPoints.length - 1);
   };
 
   // const userOptions = [
@@ -909,7 +952,11 @@ export default function TicketOverview(props) {
         )}
         <View style={styles.columnContainer}>
           {Title('Description')}
-          <Text style={{paddingHorizontal: PaddingConstants.halfTab}}>
+          <Text
+            style={{
+              margin: MarginConstants.halfTab,
+              paddingHorizontal: PaddingConstants.halfTab,
+            }}>
             {ticketDetails ? ticketDetails.comment : ''}
           </Text>
         </View>
@@ -1028,7 +1075,6 @@ export default function TicketOverview(props) {
       <Animated.ScrollView
         style={{
           opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-          color: shadow ? Colors.accent : Colors.borderColor,
         }}>
         <View style={styles.container}>
           {takeActionButton()}
@@ -1037,10 +1083,10 @@ export default function TicketOverview(props) {
           {ticketDetails.panelMember !== undefined ? <ContactView /> : <View />}
         </View>
       </Animated.ScrollView>
-      <RenderStatusBottomSheet />
-      <RenderPriorityBottomSheet />
+      <RenderStatusBottomSheet currentBS_={currentBS} />
+      {/* <RenderPriorityBottomSheet />
       <RenderSegmentBottomSheet />
-      <RenderOwnerBottomSheet />
+      <RenderOwnerBottomSheet /> */}
       <BottomSheet
         ref={actionBottomSheet}
         snapPoints={actionBottomSheetSnapPoints}
@@ -1049,13 +1095,14 @@ export default function TicketOverview(props) {
         renderContent={renderTicketTakeAction}
         renderHeader={renderHeader}
         callbackNode={fall}
-        onCloseEnd={() => setShadow(false)}
-        onOpenStart={() => setShadow(true)}
+        // onCloseEnd={() => setShadow(false)}
+        // onOpenStart={() => setShadow(true)}
       />
     </Animated.View>
   );
 
   return isLoading ? <RenderSpinner /> : <RenderTicketOverView />;
+  // return <RenderTicketOverView />;
 }
 
 const styles = StyleSheet.create({
@@ -1096,14 +1143,14 @@ const styles = StyleSheet.create({
   },
 
   headerText: {
-    fontFamily: FontFamily.regular,
-    fontWeight: '500',
-    fontSize: TextSizes.extraLargeText,
+    fontFamily: FontFamily.light,
+
+    fontSize: TextSizes.largeText,
     color: Colors.filterIconColor,
   },
 
   titleText: {
-    fontFamily: FontFamily.medium,
+    fontFamily: FontFamily.regular,
     fontWeight: FontWeight._500,
     fontSize: TextSizes.primary,
     color: Colors.filterIconColor,

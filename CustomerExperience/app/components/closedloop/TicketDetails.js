@@ -1,5 +1,5 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useWindowDimensions} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 
@@ -12,11 +12,7 @@ import TicketComments from './TicketComments';
 import TicketActivity from './TicketActivity';
 import {FontFamily} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  getClosedLoopTicketItem,
-  getClosedLoopTicketItemActivity,
-  getClosedLoopTicketItemComments,
-} from '../../redux/actions/dashboard.actions';
+import {getClosedLoopTicketItem} from '../../redux/actions/dashboard.actions';
 
 export default function TicketDetails(props) {
   const {authToken, isLoading} = useSelector((state) => state.global);
@@ -28,11 +24,8 @@ export default function TicketDetails(props) {
   const TicketTabs = createMaterialTopTabNavigator();
 
   useEffect(() => {
-    // props.Navigator.screenName = 'Screen';
     dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
-    dispatch(getClosedLoopTicketItemComments(authToken, ticketItem.id));
-    dispatch(getClosedLoopTicketItemActivity(authToken, ticketItem.id));
-  }, [dispatch, ticketItem, authToken]);
+  }, [ticketItem, authToken]);
 
   const CLFTicketTabStack = () => {
     return (

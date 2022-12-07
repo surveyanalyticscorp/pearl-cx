@@ -80,7 +80,6 @@ export default function ClosedLoop(props) {
   }, []);
 
   useEffect(() => {
-    statusList;
     setTicketList((state) => ticketDetails.data ?? []);
   }, [ticketDetails]);
 
