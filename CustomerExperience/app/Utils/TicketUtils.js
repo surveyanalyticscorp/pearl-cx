@@ -13,6 +13,11 @@ export const statusList = [
   {title: 'Resolved', id: 4},
 ];
 
+export const ticketTypeList = [
+  {title: 'Manual Ticket', id: 0},
+  {title: 'Detractor Alert', id: 1},
+];
+
 export const getStatusById = (statusId) => {
   //   switch (statusId) {
   //     case 0:

@@ -35,7 +35,11 @@ import {
 } from '../../Utils/AppConstants';
 import {showLoading} from '../../redux/actions';
 import {useIsFocused} from '@react-navigation/native';
-import {priorityList, statusList} from '../../Utils/TicketUtils';
+import {
+  priorityList,
+  statusList,
+  ticketTypeList,
+} from '../../Utils/TicketUtils';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
@@ -50,6 +54,7 @@ export default function ClosedLoop(props) {
     perPage: 20,
     fromDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
     toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
+    type: '',
   });
   const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
   // const state = useSelector((state) => state.dashboard);
@@ -58,8 +63,9 @@ export default function ClosedLoop(props) {
   );
   const currentSegment = useSelector((state) => state.dashboard.currentSegment);
   const [ticketList, setTicketList] = useState([]);
-  const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
-
+  const [owners, setOwners] = useState(
+    useSelector((state) => state.dashboard.ownerDetails.owners ?? []),
+  );
   const [refreshing, setRefreshing] = useState(false);
 
   const isFocused = useIsFocused();
@@ -91,17 +97,19 @@ export default function ClosedLoop(props) {
       isChecked: false,
     }));
     const status = statusList.map((value) => ({...value, isChecked: false}));
+    const type = ticketTypeList.map((value) => ({...value, isChecked: false}));
+    const managers = owners;
     console.log('OWNERS', JSON.stringify(owners));
     return {
       priority: priority,
       status: status,
-
       selectedManager: [],
-      managers: owners,
+      managers: managers,
+      type: type,
     };
   };
 
-  const [filterData, setFilterData] = useState(sampleFilterData);
+  const [filterData, setFilterData] = useState(sampleFilterData());
 
   const getTicketList =
     // useCallback(() => {
@@ -249,6 +257,8 @@ export default function ClosedLoop(props) {
       .map((id) => id.id)
       .toString();
 
+  const getOwnerIds = (items) => items.map((owner) => owner.ownerID).toString();
+
   const handleAction = (item, action) => {
     switch (action) {
       case 'apply':
@@ -273,6 +283,8 @@ export default function ClosedLoop(props) {
       ...state,
       status: getIds(item.status),
       priority: getIds(item.priority),
+      assignToId: getOwnerIds(item.selectedManager),
+      type: getIds(item.type),
     }));
 
     console.log('Apply filter');
@@ -291,7 +303,7 @@ export default function ClosedLoop(props) {
   // variables for bottom sheet
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
-  const bsSnapPoints = ['75%', '85%', '0%'];
+  const bsSnapPoints = ['80%', '90%', '0%'];
   const [shadow, setShadow] = useState(false);
 
   const RenderClosedLoop = () => {

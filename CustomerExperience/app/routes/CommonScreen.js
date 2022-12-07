@@ -309,7 +309,7 @@ export const CheckBoxItem = ({item, index, onPress, textStyle}) => {
         <IonIcons
           name={item.isChecked ? 'checkbox' : 'square-outline'}
           size={24}
-          color={Colors.accentLight}
+          color={item.isChecked ? Colors.accentLight : Colors.checkboxColor}
           style={{marginHorizontal: MarginConstants.halfTab}}
         />
         <Text style={_textStyle}>{item.title}</Text>
@@ -335,7 +335,7 @@ export const CheckRadioButtonItem = ({item, index, onPress, textStyle}) => {
         <IonIcons
           name={item.isChecked ? 'radio-button-on' : 'radio-button-off'}
           size={24}
-          color={Colors.accentLight}
+          color={item.isChecked ? Colors.accentLight : Colors.checkboxColor}
           style={{marginHorizontal: MarginConstants.halfTab}}
         />
         <Text style={_textStyle}>{item.title}</Text>

@@ -7,7 +7,7 @@ const Colors = {
   white: '#ffffff',
   black: '#000000',
   accentLight: '#1b87e6',
-
+  checkboxColor: '#ababab',
   accent: '#1B3380',
 
   filterIconColor: '#545E6B',

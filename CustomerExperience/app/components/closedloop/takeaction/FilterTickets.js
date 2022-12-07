@@ -20,20 +20,28 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import {
   CheckBoxItem,
   CheckRadioButtonItem,
-  RenderRoundImageOrColor,
+  // CheckRadioButtonItem,
+  // RenderRoundImageOrColor,
 } from '../../../routes/CommonScreen';
 import IconTextModalDropdown from '../../../widgets/drop-down/IconTextModalDropdown';
-import {useSelector} from 'react-redux';
+import {ReactReduxContext, useSelector} from 'react-redux';
+import IonIcons from 'react-native-vector-icons/Ionicons';
+import {set} from 'react-native-reanimated';
 
 const FilterTicket = ({data, onPressHandler}) => {
   const [status, setStatus] = useState(data.status);
   const [priority, setPriority] = useState(data.priority);
+  const [type, setType] = useState(data.type);
   // const [type, setType] = useState(data.type);
-  // const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
+  // const {owners} = useSelector(
+  //   (state) => state.dashboard.ownerDetails.owners ?? [],
+  // );
 
   const [managerlist, setManagerList] = useState(
     useSelector((state) => state.dashboard.ownerDetails.owners ?? []),
   );
+
+  // let [managerlist, setManagerList] = useState(data.managers);
   let [selectedManager, setSelectedManager] = useState(
     data.selectedManager ?? [],
   );
@@ -96,13 +104,43 @@ const FilterTicket = ({data, onPressHandler}) => {
     });
   };
 
+  const RenderTypeFilter = () => {
+    return (
+      <View>
+        <Text style={styles.titleText}>Type</Text>
+        <FlatList
+          data={type}
+          keyExtractor={(item, index) => item.toString()}
+          numColumns={3}
+          renderItem={({item, index}) => (
+            <CheckRadioButtonItem
+              textStyle={styles.optionText}
+              item={item}
+              index={index}
+              onPress={selectType}
+            />
+          )}
+        />
+      </View>
+    );
+  };
+
+  const selectType = (index_) => {
+    setType((prevState) =>
+      prevState.map((item, index, arr) => {
+        item.isChecked = index_ === index;
+        return item;
+      }),
+    );
+  };
+
   const RenderAssigneeDropDown = () => {
     const defaultText = 'Select...';
     console.log('MANAGERS', JSON.stringify(managerlist));
     return (
       <View>
         <Text style={styles.titleText}>Assignee</Text>
-
+        <RenderAssigneeList />
         <IconTextModalDropdown
           style={styles.modelDropdown}
           textStyle={styles.dropdownText}
@@ -164,7 +202,12 @@ const FilterTicket = ({data, onPressHandler}) => {
       return temp;
     });
 
-    selectedManager = {};
+    setType((prevState) => {
+      const temp = prevState.map((item) => ({...item, isChecked: false}));
+      return temp;
+    });
+
+    selectedManager = [];
   };
 
   const RenderButtons = () => {
@@ -206,32 +249,41 @@ const FilterTicket = ({data, onPressHandler}) => {
 
   const assigneeCell = ({item, index}) => {
     return (
-      <View style={[{flex: 1}, styles.rowContainer]}>
+      <View style={[styles.assigneeCell, styles.rowContainer]}>
         <TouchableOpacity
+          style={styles.rowContainer}
           onPress={() => {
             setSelectedManager((state) =>
-              state.filter((item) => item.ownerID !== state[index].ownerID),
+              state.filter((item_) => item_.ownerID !== state[index].ownerID),
             );
             setManagerList((state) => [...state, selectedManager[index]]);
           }}>
           <Text style={styles.departmentNameText}>{item.ownerName}</Text>
-          <Text style={styles.departmentNameText}>{'X'}</Text>
+          <IonIcons name="close" size={20} color={Colors.filterIconColor} />
         </TouchableOpacity>
       </View>
     );
   };
+
+  const RenderAssigneeList = () => {
+    return (
+      <View style={[{margin: MarginConstants.halfTab}]}>
+        <FlatList
+          horizontal={true}
+          data={selectedManager}
+          renderItem={assigneeCell}
+          keyExtractor={(item) => item.ownerID.toString()}
+        />
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
         <RenderStatusFilter />
         <RenderPriorityFilter />
-        <FlatList
-          horizontal={true}
-          data={selectedManager}
-          renderItem={assigneeCell}
-          keyExtractor={(item) => item.toString()}
-        />
-
+        <RenderTypeFilter />
         <RenderAssigneeDropDown />
         <RenderButtons />
       </View>
@@ -258,6 +310,13 @@ const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
     paddingHorizontal: PaddingConstants.tab1,
+  },
+  assigneeCell: {
+    borderWidth: 1,
+    borderRadius: 2,
+    padding: PaddingConstants.halfTab,
+    borderColor: Colors.checkboxColor,
+    margin: MarginConstants.halfTab,
   },
   titleText: {
     fontFamily: FontFamily.medium,
