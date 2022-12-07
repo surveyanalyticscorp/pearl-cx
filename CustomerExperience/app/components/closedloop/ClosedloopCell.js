@@ -107,10 +107,12 @@ export default function ClosedLoopCell(props) {
 
   const getNameANdDateRow = () => {
     const createdDate = moment(data.createdAt).format(FullMonthDateYearFormat);
-
+    console.log('USERDATA', JSON.stringify(data));
     return (
       <View style={styles.rowContainer}>
-        <Text style={styles.userNameText}>{data.customerName ?? ' '}</Text>
+        <Text style={styles.userNameText}>
+          {data?.panelMember?.name ?? ' '}
+        </Text>
         <Text style={styles.dateText}>{` · ${createdDate ?? ' '}`}</Text>
       </View>
     );

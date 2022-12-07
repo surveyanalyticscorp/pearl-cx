@@ -45,8 +45,11 @@ import {
 
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
+  const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
+
   const {authToken, range, isLoading} = useSelector((state) => state.global);
   const [filterState, setFilterState] = useState({
+    feedbackApiKey: feedbackApiKey,
     status: '',
     priority: '',
     assignToId: '',
@@ -62,6 +65,7 @@ export default function ClosedLoop(props) {
     (state) => state.dashboard.currentFeedback,
   );
   const currentSegment = useSelector((state) => state.dashboard.currentSegment);
+
   const [ticketList, setTicketList] = useState([]);
   const [owners, setOwners] = useState(
     useSelector((state) => state.dashboard.ownerDetails.owners ?? []),

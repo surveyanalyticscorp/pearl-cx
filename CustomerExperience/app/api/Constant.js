@@ -49,29 +49,24 @@ export const CX_WELCOME_SCREEN_DATA =
   '/a/nativehtml/cx.CXWelcomeScreenDataCount';
 
 // CLF 3.0 APIs
+// export const CLF_BASE_URL = 'https://clf-backend.questionpro.com/api/';
+export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
 
 // export const FEEDBACK_API_KEY = 'e8caf096-4f19-4b34-a7cd-4bcaa8197c1d';
 export const FEEDBACK_API_KEY_ENDPOINT = '?feedbackApiKey=';
 
-export const CLF_GET_TICKET_LIST =
-  'https://clf-backend.questionpro.com/api/mobile/tickets/feedback/';
+export const CLF_GET_TICKET_LIST = `${CLF_BASE_URL}mobile/tickets/feedback/`;
 // "ex: {{BASE_URL}}/mobile/tickets/feedback/:feedBackId/segment/:segmentId?fromDate=2022-09-28&toDate=2022-10-28"
-export const CLF_GET_TICKET_DETAILS =
-  'https://clf-backend.questionpro.com/api/mobile/tickets/';
+export const CLF_GET_TICKET_DETAILS = `${CLF_BASE_URL}mobile/tickets/`;
 // ex: {{BASE_URL}}/mobile/tickets/:ticketId
 
-export const CLF_STATUS_WISE_PRIORITY_ANALYTICS =
-  'https://clf-backend.questionpro.com/api/mobile/tickets/status-wise-priority/segments/';
+export const CLF_STATUS_WISE_PRIORITY_ANALYTICS = `${CLF_BASE_URL}mobile/tickets/status-wise-priority/segments/`;
 
-export const CLF_WELCOME_SCREEN_COUNTS =
-  'https://clf-backend.questionpro.com/api/analytics/status/mobile';
+export const CLF_WELCOME_SCREEN_COUNTS = `${CLF_BASE_URL}analytics/status/mobile`;
 
-export const CLF_GET_DEFAULT_EMAIL_TEMPLATE =
-  'https://clf-backend.questionpro.com/api/actionTemplate/get-default/mobile';
-export const CLF_GET_EMAIL_TEMPLATES =
-  'https://clf-backend.questionpro.com/api/actionTemplate/mobile';
-export const CLF_SEND_EMAIL_PREFIX =
-  'https://clf-backend.questionpro.com/api/tickets/';
+export const CLF_GET_DEFAULT_EMAIL_TEMPLATE = `${CLF_BASE_URL}actionTemplate/get-default/mobile`;
+export const CLF_GET_EMAIL_TEMPLATES = `${CLF_BASE_URL}actionTemplate/mobile`;
+export const CLF_SEND_EMAIL_PREFIX = `${CLF_BASE_URL}tickets/`;
 export const CLF_SEND_EMAIL_POSTFIX = '/actionMail/mobile';
 
 export const EMAIL = 'email';
