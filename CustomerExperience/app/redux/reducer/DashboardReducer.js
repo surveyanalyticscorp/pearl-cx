@@ -5,6 +5,7 @@ import {
 } from '../actions/closedloop.actions';
 import {
   CLEAR_CLOSED_LOOP_TICKET_DETAILS,
+  CLOSED_LOOP_ALL_OWNERS_DETAILS_RECEIVED,
   CLOSED_LOOP_OWNER_DETAILS_RECEIVED,
   CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
   CLOSED_LOOP_TICKET_DETAILS_RECEIVED,
@@ -26,6 +27,7 @@ const initialState = {
   ticketDetails: {},
   segmentDetails: {},
   ownerDetails: {},
+  allOwnersDetails: {},
   currentSegment: {},
   currentFeedback: {},
   ticket: {},
@@ -68,6 +70,13 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         ownerDetails: action.response.body,
+      };
+    }
+
+    case CLOSED_LOOP_ALL_OWNERS_DETAILS_RECEIVED: {
+      return {
+        ...state,
+        allOwnersDetails: action.response.body,
       };
     }
     case CLEAR_CLOSED_LOOP_TICKET_DETAILS: {

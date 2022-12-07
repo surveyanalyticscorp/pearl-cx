@@ -28,10 +28,15 @@ export const CX_GET_ALL_RESPONSE = '/a/nativehtml/cx.CXGetAllResponses';
 
 export const CX_GET_CLOSED_LOOP_TICKET_DETAILS =
   '/a/nativehtml/cx.closedloop.CXGetTicketDetails';
+// export const CX_GET_CLOSED_LOOP_SEGMENT_DETAILS =
+//   '/a/nativehtml/cx.closedloop.CXGetSegmentByStatus';
 export const CX_GET_CLOSED_LOOP_SEGMENT_DETAILS =
-  '/a/nativehtml/cx.closedloop.CXGetSegmentByStatus';
+  '/a/nativehtml/cx.closedloop.CXGetAllSegment';
+
 export const CX_GET_CLOSED_LOOP_OWNER_DETAILS =
   '/a/nativehtml/cx.closedloop.CXGetOwnerBySegment';
+export const CX_GET_CLOSED_LOOP_SEGMENT_AND_OWNER_BY_FEEDBACK =
+  '/a/nativehtml/cx.closedloop.CXGetSegmentAndOwnerByFeedback';
 export const CX_UPDATE_CLOSED_LOOP_TICKET =
   '/a/nativehtml/cx.closedloop.CXUpdateTicket';
 export const CX_ADD_CLOSED_LOOP_TICKET = '/a/nativehtml/cx.CXAddTicket';

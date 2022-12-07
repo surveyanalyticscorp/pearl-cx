@@ -10,10 +10,16 @@ export const CLEAR_CLOSED_LOOP_TICKET_DETAILS =
 export const GET_CLOSED_LOOP_SEGMENT_DETAILS =
   'GET_CLOSED_LOOP_SEGMENT_DETAILS';
 export const GET_CLOSED_LOOP_OWNER_DETAILS = 'GET_CLOSED_LOOP_OWNER_DETAILS';
+export const GET_CLOSED_LOOP_ALL_OWNERS_DETAILS =
+  'GET_CLOSED_LOOP_ALL_OWNERS_DETAILS';
+
 export const CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED =
   'CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED';
 export const CLOSED_LOOP_OWNER_DETAILS_RECEIVED =
   'CLOSED_LOOP_OWNER_DETAILS_RECEIVED';
+
+export const CLOSED_LOOP_ALL_OWNERS_DETAILS_RECEIVED =
+  'CLOSED_LOOP_ALL_OWNERS_DETAILS_RECEIVED';
 const UPDATE_TICKET = 'UPDATE_TICKET';
 const ADD_CLOSED_LOOP_TICKET = 'ADD_CLOSED_LOOP_TICKET';
 
@@ -78,6 +84,12 @@ export const getClosedLoopSegmentDetails = (token, param) => ({
 
 export const getClosedLoopOwnerDetails = (token, param) => ({
   type: GET_CLOSED_LOOP_OWNER_DETAILS,
+  token,
+  param,
+});
+
+export const getClosedLoopAllOwnersDetails = (token, param) => ({
+  type: GET_CLOSED_LOOP_ALL_OWNERS_DETAILS,
   token,
   param,
 });

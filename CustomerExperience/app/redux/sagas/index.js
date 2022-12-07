@@ -22,6 +22,7 @@ import {
   watchGetDefaultEmailTemplate,
   watchGetEmailTemplates,
   watchSendEmail,
+  watchGetClosedLoopAllOwners,
 } from './ClosedLoopSaga';
 import {watchGetNotification} from './notificationSaga';
 
@@ -42,6 +43,7 @@ export function* rootSaga() {
     fork(watchGetClosedLoopTicketComments),
     fork(watchGetClosedLoopTicketActivity),
     fork(watchGetClosedLoopOwnerDetails),
+    fork(watchGetClosedLoopAllOwners),
     fork(watchForgotPasswordLink),
     fork(watchLogout),
     fork(watchPostTicketComment),

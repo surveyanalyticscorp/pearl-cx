@@ -22,6 +22,8 @@ import {
   CREATE_CLF_TICKET,
   UPDATE_CLF_TICKET_RECIEVED,
   UPDATE_CLF_TICKET,
+  CLOSED_LOOP_ALL_OWNERS_DETAILS_RECEIVED,
+  GET_CLOSED_LOOP_ALL_OWNERS_DETAILS,
 } from '../actions/dashboard.actions';
 import {
   CX_ADD_CLOSED_LOOP_TICKET,
@@ -41,6 +43,7 @@ import {
   CLF_GET_DEFAULT_EMAIL_TEMPLATE,
   CLF_SEND_EMAIL_PREFIX,
   CLF_SEND_EMAIL_POSTFIX,
+  CX_GET_CLOSED_LOOP_SEGMENT_AND_OWNER_BY_FEEDBACK,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -133,6 +136,34 @@ function* fetchClosedLoopOwnerDetails(action) {
 
 export function* watchGetClosedLoopOwnerDetails() {
   yield takeLatest(GET_CLOSED_LOOP_OWNER_DETAILS, fetchClosedLoopOwnerDetails);
+}
+
+function* fetchClosedLoopAllOwners(action) {
+  try {
+    const json = yield WebServiceHandler.postNew(
+      CX_GET_CLOSED_LOOP_SEGMENT_AND_OWNER_BY_FEEDBACK,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: CLOSED_LOOP_ALL_OWNERS_DETAILS_RECEIVED,
+      response: json,
+    });
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+
+export function* watchGetClosedLoopAllOwners() {
+  yield takeLatest(
+    GET_CLOSED_LOOP_ALL_OWNERS_DETAILS,
+    fetchClosedLoopAllOwners,
+  );
 }
 
 export function updateClosedLoopTicket(

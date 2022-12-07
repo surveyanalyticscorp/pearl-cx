@@ -9,10 +9,12 @@ import {FontFamily} from '../../styles/font.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {useSelector, useDispatch} from 'react-redux';
 import {
+  getClosedLoopAllOwnersDetails,
+  getClosedLoopOwnerDetails,
   getClosedLoopSegmentDetails,
   getWelcomeScreenDataCount,
 } from '../../redux/actions/dashboard.actions';
-import QPSpinner from '../../widgets/QPSpinner';
+// import QPSpinner from '../../widgets/QPSpinner';
 import {RenderSpinner} from '../../routes/CommonScreen';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
@@ -51,10 +53,12 @@ export const WelcomeScreen = (props) => {
   useEffect(() => {
     // console.log('USER_DATA: ', userInfo, authToken);
     // console.log('USER_DATA: ', userInfo);
-    dispatch(getClosedLoopSegmentDetails(authToken, {statusID: 0}));
+    dispatch(getClosedLoopSegmentDetails(authToken));
     dispatch(
       getWelcomeScreenDataCount(authToken, {subscriberId: subscriberId}),
     );
+    // dispatch(getClosedLoopAllOwnersDetails(authToken));
+    dispatch(getClosedLoopOwnerDetails(authToken));
   }, [authToken, subscriberId]);
 
   const CustomBackground = ({children}) => {

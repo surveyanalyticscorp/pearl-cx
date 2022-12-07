@@ -111,30 +111,25 @@ export default function ClosedLoop(props) {
 
   const [filterData, setFilterData] = useState(sampleFilterData());
 
-  const getTicketList =
-    // useCallback(() => {
-    (filterState_) => {
-      dispatch(showLoading(true));
-      // setRefreshing(true);
+  const getTicketList = (filterState_) => {
+    dispatch(showLoading(true));
+    // setRefreshing(true);
 
-      dispatch(
-        getClosedLoopTicketList(
-          authToken,
-          filterState_,
-          currentFeedback.feedbackID,
-          currentSegment.currentSegmentID,
-        ),
-      );
+    dispatch(
+      getClosedLoopTicketList(
+        authToken,
+        filterState_,
+        currentFeedback.feedbackID,
+        currentSegment.currentSegmentID,
+      ),
+    );
 
-      dispatch(
-        getClosedLoopOwnerDetails(authToken, {
-          segmentID: currentSegment.currentSegmentID,
-        }),
-      );
-    };
-  // }, [filterState]);
-
-  // const getTicketList = ;
+    dispatch(
+      getClosedLoopOwnerDetails(authToken, {
+        segmentID: currentSegment.currentSegmentID,
+      }),
+    );
+  };
 
   const getTicketOwnerList = (segmentId_) => {
     dispatch(
