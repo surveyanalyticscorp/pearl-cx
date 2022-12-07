@@ -12,7 +12,6 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {useSelector} from 'react-redux';
 
 const SelectTicketOwner = (props) => {
   const [data, setData] = useState(props.data);
@@ -68,12 +67,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     margin: MarginConstants.tab1,
-    borderWidth: 1,
+    borderWidth: 0.5,
     padding: MarginConstants.tab1,
   },
   title: {
     flex: 1,
-    fontFamily: FontFamily.medium,
+    fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     marginStart: MarginConstants.halfTab,
     color: Colors.filterIconColor,

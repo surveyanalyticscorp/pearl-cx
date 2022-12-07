@@ -47,7 +47,7 @@ export default function ClosedLoop(props) {
     priority: '',
     assignToId: '',
     pageNumber: 1,
-    perPage: 10,
+    perPage: 20,
     fromDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
     toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
   });
