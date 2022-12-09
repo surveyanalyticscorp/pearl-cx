@@ -41,9 +41,16 @@ const DrawerContent = (props) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    let hasValue = true;
     AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then((value) => {
-      setUserCredentials(JSON.parse(value));
+      if (hasValue) {
+        setUserCredentials(JSON.parse(value));
+      }
     });
+
+    return () => {
+      hasValue = false;
+    };
   }, []);
 
   useEffect(() => {

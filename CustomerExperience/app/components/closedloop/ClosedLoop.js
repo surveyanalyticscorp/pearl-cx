@@ -6,6 +6,7 @@ import {
   FlatList,
   StyleSheet,
   RefreshControl,
+  ScrollView,
 } from 'react-native';
 import ClosedLoopCell from './ClosedloopCell';
 import IonIcons from 'react-native-vector-icons/Ionicons';
@@ -33,13 +34,14 @@ import {
   HalfMonthDateYearFormat,
   YMDFORMAT,
 } from '../../Utils/AppConstants';
-import {showLoading} from '../../redux/actions';
-import {useIsFocused} from '@react-navigation/native';
+import {setRangeFilter, showLoading} from '../../redux/actions';
+import {StackActions, useIsFocused} from '@react-navigation/native';
 import {
   priorityList,
   statusList,
   ticketTypeList,
 } from '../../Utils/TicketUtils';
+import {translate} from '../../Utils/MultilinguaUtils';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
@@ -67,12 +69,45 @@ export default function ClosedLoop(props) {
   const currentSegment = useSelector((state) => state.dashboard.currentSegment);
 
   const [ticketList, setTicketList] = useState([]);
-  const [owners, setOwners] = useState(
-    useSelector((state) => state.dashboard.ownerDetails.owners ?? []),
-  );
+  const owners = useSelector((state) => state.dashboard.ownerDetails.owners);
   const [refreshing, setRefreshing] = useState(false);
+  const sampleFilterData = () => {
+    const priority = priorityList.map((value) => ({
+      ...value,
+      isChecked: false,
+    }));
+    const status = statusList.map((value) => ({...value, isChecked: false}));
+    const type = ticketTypeList.map((value) => ({...value, isChecked: false}));
+    // const managers = owners.map((value) => ({...value, isChecked: false}));
 
+    return {
+      priority: priority,
+      status: status,
+      managers: [],
+      type: type,
+    };
+  };
+  const [filterData, setFilterData] = useState(sampleFilterData());
+  console.log('OWNERS', JSON.stringify(owners));
   const isFocused = useIsFocused();
+
+  let getDataOnNewRange = (range_) => {
+    // console.log('DATE_RANGE', JSON.stringify(range_));
+    // dispatch( setRangeFilter(range));
+    // props.setRange(range);
+    // props.callDataAPI();
+  };
+
+  let filterAction = (range_) => {
+    console.log('DATE_RANGE', JSON.stringify(range_));
+
+    const pushAction = StackActions.push(translate('date_filter.date_range'), {
+      range: range,
+      // setRange: getDataOnNewRange,
+    });
+    props.navigation.dispatch(pushAction);
+  };
+
   useEffect(() => {
     getTicketList(filterState);
     getTicketOwnerList(currentSegment.currentSegmentID);
@@ -94,31 +129,20 @@ export default function ClosedLoop(props) {
   }, [ticketDetails]);
 
   // console.log('Ticket list: ', JSON.stringify(ticketDetails.data));
+  useEffect(() => {
+    if (owners && owners.length > 0) {
+      const managers = owners.map((value) => ({...value, isChecked: false}));
 
-  const sampleFilterData = () => {
-    const priority = priorityList.map((value) => ({
-      ...value,
-      isChecked: false,
-    }));
-    const status = statusList.map((value) => ({...value, isChecked: false}));
-    const type = ticketTypeList.map((value) => ({...value, isChecked: false}));
-    const managers = owners;
-    console.log('OWNERS', JSON.stringify(owners));
-    return {
-      priority: priority,
-      status: status,
-      selectedManager: [],
-      managers: managers,
-      type: type,
-    };
-  };
+      setFilterData((state) => ({...state, managers: managers}));
+      console.log('OWNERS', JSON.stringify(owners));
+    }
+  }, [owners]);
 
-  const [filterData, setFilterData] = useState(sampleFilterData());
+  // useEffect(() => {}, []);
 
   const getTicketList = (filterState_) => {
-    dispatch(showLoading(true));
     // setRefreshing(true);
-
+    dispatch(showLoading(true));
     dispatch(
       getClosedLoopTicketList(
         authToken,
@@ -128,11 +152,11 @@ export default function ClosedLoop(props) {
       ),
     );
 
-    dispatch(
-      getClosedLoopOwnerDetails(authToken, {
-        segmentID: currentSegment.currentSegmentID,
-      }),
-    );
+    //   dispatch(
+    //     getClosedLoopOwnerDetails(authToken, {
+    //       segmentID: currentSegment.currentSegmentID,
+    //     }),
+    //   );
   };
 
   const getTicketOwnerList = (segmentId_) => {
@@ -198,7 +222,7 @@ export default function ClosedLoop(props) {
 
   const getFilterDateBox = () => {
     return (
-      <TouchableOpacity onPress={handleDateFilter}>
+      <TouchableOpacity onPress={() => filterAction(range)}>
         <View style={styles.filterBox}>
           {getDateText(range)}
           {getDateIcon()}
@@ -227,7 +251,13 @@ export default function ClosedLoop(props) {
         }}
       />
     ) : (
-      <NoItemsFound>No tickets found</NoItemsFound>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+        }>
+        <NoItemsFound>No tickets found</NoItemsFound>
+      </ScrollView>
     );
   };
 
@@ -256,7 +286,11 @@ export default function ClosedLoop(props) {
       .map((id) => id.id)
       .toString();
 
-  const getOwnerIds = (items) => items.map((owner) => owner.ownerID).toString();
+  const getOwnerIds = (items) =>
+    items
+      .filter((item) => item.isChecked === true)
+      .map((owner) => owner.ownerID)
+      .toString();
 
   const handleAction = (item, action) => {
     switch (action) {
@@ -282,7 +316,7 @@ export default function ClosedLoop(props) {
       ...state,
       status: getIds(item.status),
       priority: getIds(item.priority),
-      assignToId: getOwnerIds(item.selectedManager),
+      assignToId: getOwnerIds(item.managers),
       type: getIds(item.type),
     }));
 

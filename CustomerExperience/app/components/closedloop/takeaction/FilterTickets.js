@@ -37,9 +37,8 @@ const FilterTicket = ({data, onPressHandler}) => {
   //   (state) => state.dashboard.ownerDetails.owners ?? [],
   // );
 
-  const [managerlist, setManagerList] = useState(
-    useSelector((state) => state.dashboard.ownerDetails.owners ?? []),
-  );
+  const [managerlist, setManagerList] = useState(data.managers);
+  console.log('MANAGERS', JSON.stringify(data));
 
   // let [managerlist, setManagerList] = useState(data.managers);
   let [selectedManager, setSelectedManager] = useState(
@@ -136,7 +135,7 @@ const FilterTicket = ({data, onPressHandler}) => {
 
   const RenderAssigneeDropDown = () => {
     const defaultText = 'Select...';
-    console.log('MANAGERS', JSON.stringify(managerlist));
+    const list = managerlist.filter((item) => item.isChecked === false);
     return (
       <View>
         <Text style={styles.titleText}>Assignee</Text>
@@ -146,20 +145,35 @@ const FilterTicket = ({data, onPressHandler}) => {
           textStyle={styles.dropdownText}
           dropdownTextStyle={styles.dropdownText}
           arrowIconColor={Colors.secondary}
-          options={managerlist.map((item) => item.ownerName)}
+          options={list.map((item) => item.ownerName)}
           defaultValue={defaultText}
           renderRow={dropdownRenderRow}
           onSelect={(_index) => {
-            setSelectedManager((state) => [...state, managerlist[_index]]);
-            setManagerList((state) =>
-              state.filter((item) => item.ownerID !== state[_index].ownerID),
-            );
+            setAssigneeManager(list[_index], true);
+            // setSelectedManager((state) => [...state, managerlist[_index]]);
+            // setManagerList((state) =>
+            //   state.filter((item) => item.ownerID !== state[_index].ownerID),
+            // );
           }}
         />
       </View>
     );
   };
 
+  const setAssigneeManager = (item, isChecked) => {
+    let index = 0;
+    managerlist.map((item_, index_) => {
+      if (item_.ownerID === item.ownerID) {
+        index = index_;
+      }
+    });
+
+    setManagerList((prevState) => {
+      const temp = [...prevState];
+      temp[index].isChecked = isChecked;
+      return temp;
+    });
+  };
   const dropdownRenderRow = (rowData, rowID, highlighted) => {
     return (
       <View
@@ -253,10 +267,13 @@ const FilterTicket = ({data, onPressHandler}) => {
         <TouchableOpacity
           style={styles.rowContainer}
           onPress={() => {
-            setSelectedManager((state) =>
-              state.filter((item_) => item_.ownerID !== state[index].ownerID),
-            );
-            setManagerList((state) => [...state, selectedManager[index]]);
+            // setSelectedManager((state) =>
+            //   state.filter((item_) => item_.ownerID !== state[index].ownerID),
+            // );
+            // setManagerList((state) => [...state, selectedManager[index]]);
+            console.log({SELECTED_INDEX: index});
+
+            setAssigneeManager(item, false);
           }}>
           <Text style={styles.departmentNameText}>{item.ownerName}</Text>
           <IonIcons name="close" size={20} color={Colors.filterIconColor} />
@@ -266,13 +283,14 @@ const FilterTicket = ({data, onPressHandler}) => {
   };
 
   const RenderAssigneeList = () => {
+    const list = managerlist.filter((item) => item.isChecked);
     return (
       <View style={[{margin: MarginConstants.halfTab}]}>
         <FlatList
           horizontal={true}
-          data={selectedManager}
+          data={list}
           renderItem={assigneeCell}
-          keyExtractor={(item) => item.ownerID.toString()}
+          keyExtractor={(item) => item.toString()}
         />
       </View>
     );

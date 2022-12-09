@@ -58,7 +58,7 @@ export const UPDATE_CLF_TICKET_RECIEVED = 'UPDATE_CLF_TICKET_RECIEVED';
 
 export const GET_WELCOME_SCREEN_DATA = 'GET_WELCOME_SCREEN_DATA';
 export const WELCOME_SCREEN_DATA_RECIEVED = 'WELCOME_SCREEN_DATA_RECIEVED';
-
+export const SEGMENT_SELECTOR_OPEN = 'SEGMENT_SELECTOR_OPEN';
 export const getDashboardContent = (token, param, segmentId) => ({
   type: GET_DASHBOARD,
   token,
@@ -171,4 +171,9 @@ export const getWelcomeScreenDataCount = (token, param) => ({
 export const setSegment = (segment) => ({
   type: SEGMENT_SELECTED,
   segment: segment,
+});
+
+export const setSegmentSelectorOpen = (isOpen) => ({
+  type: SEGMENT_SELECTOR_OPEN,
+  isOpen: isOpen,
 });

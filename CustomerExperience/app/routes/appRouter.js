@@ -65,9 +65,16 @@ import CommonScreens from './CommonScreen';
 import {navigationRef} from './RootNavigation';
 import {setI18nConfig, translate} from '../Utils/MultilinguaUtils';
 import MainDropDown from '../widgets/drop-down/MainDropDown';
-import {SEGMENT_SELECTED, setSegment} from '../redux/actions/dashboard.actions';
+import {
+  getClosedLoopOwnerDetails,
+  SEGMENT_SELECTED,
+  setSegment,
+  setSegmentSelectorOpen,
+} from '../redux/actions/dashboard.actions';
 import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
 import SearchStack from './SearchStack';
+import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
+
 // import {connect} from 'react-redux';
 
 const Drawer = createDrawerNavigator();
@@ -92,6 +99,7 @@ const AppRouter = (props) => {
   let [segmentOptions, setSegmentOptions] = useState([]);
   let [selectedSegment, setSelectedSegment] = useState({});
   let segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
+  let currentSegment = useSelector((state) => state.dashboard.currentSegment);
   // const isLoading = useSelector((state) => state.global.isLoading);
 
   const dispatch = useDispatch();
@@ -102,6 +110,18 @@ const AppRouter = (props) => {
       'https://questionpro.offline.link',
     ],
   };
+
+  useEffect(() => {
+    console.log('SELECTED SEGMENT__', JSON.stringify(currentSegment));
+
+    if (currentSegment.currentSegmentID) {
+      dispatch(
+        getClosedLoopOwnerDetails(authToken, {
+          segmentID: currentSegment.currentSegmentID,
+        }),
+      );
+    }
+  }, [currentSegment]);
 
   useEffect(() => {
     setSegmentOptions((segments) => segmentDetails?.segments ?? []);
@@ -310,6 +330,56 @@ const AppRouter = (props) => {
     );
   };
 
+  const SegmentSelector = ({segmentName}) => {
+    // const segmentName =
+    //   ;
+    return segmentOptions && segmentOptions.length ? (
+      <View style={{flex: 1}}>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(setSegmentSelectorOpen(true));
+          }}>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <Text style={styles.drawerTitle}>{segmentName}</Text>
+
+            <SimpleLineIcon
+              name={'arrow-down'}
+              size={15}
+              color={Colors.darkGrey}
+            />
+          </View>
+        </TouchableOpacity>
+        {/* <MainDropDown
+      options={segmentOptions.map((item) => item.segmentName)}
+      defaultText={selectedSegment.segmentName}
+      onSelection={(index) => {
+        console.log(
+          `Selected : ${JSON.stringify(segmentOptions[index])}`,
+        );
+        //////
+        dispatch(setSegment(segmentOptions[index]));
+
+        // dispatch({
+        //   type: SEGMENT_SELECTED,
+        //   payload: segmentOptions[index],
+        // });
+
+        // updateSegment(`${segmentOptions[index]}`);
+        //////
+      }}
+    />*/}
+      </View>
+    ) : (
+      <Text style={styles.drawerTitle}>{segmentName}</Text>
+    );
+  };
+
   const dashboardStack = (props) => (
     <DetractorStack.Navigator>
       <DetractorStack.Screen
@@ -317,33 +387,12 @@ const AppRouter = (props) => {
         component={CxDashboard}
         options={({navigation, route}) => ({
           headerTitle: (props) => {
-            return segmentOptions && segmentOptions.length ? (
-              <View style={{flex: 1}}>
-                <MainDropDown
-                  options={segmentOptions.map((item) => item.segmentName)}
-                  defaultText={selectedSegment.segmentName}
-                  onSelection={(index) => {
-                    console.log(
-                      `Selected : ${JSON.stringify(segmentOptions[index])}`,
-                    );
-                    //////
-                    dispatch(setSegment(segmentOptions[index]));
-
-                    // dispatch({
-                    //   type: SEGMENT_SELECTED,
-                    //   payload: segmentOptions[index],
-                    // });
-
-                    // updateSegment(`${segmentOptions[index]}`);
-                    //////
-                  }}
-                />
-              </View>
-            ) : (
-              <Text
-                style={{fontSize: TextSizes.largeText, color: Colors.white}}>
-                {selectedSegment.segmentName}
-              </Text>
+            return (
+              <SegmentSelector
+                segmentName={
+                  currentSegment.currentSegment ?? selectedSegment.segmentName
+                }
+              />
             );
           },
 
@@ -463,7 +512,6 @@ const AppRouter = (props) => {
       splashTimer.current = setTimeout(() => {
         setMoveNext(true);
       }, 3000);
-
       return () => {
         clearTimeout(splashTimer.current);
       };
@@ -554,6 +602,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  drawerTitle: {fontSize: TextSizes.primary, color: Colors.white},
 });
 
 const MyTheme = {

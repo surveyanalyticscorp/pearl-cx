@@ -11,10 +11,12 @@ import Feedback from '../components/feedback/Feedback';
 import SearchFeedback from '../components/feedback/SearchFeedback';
 import CommonScreens, {
   CloseButton,
+  DateRangeTabStack,
   // CloseButton,
   // EditTicket,
   HeaderBackLeft,
   MenuIcon,
+  SaveDashboardDate,
   SearchIcon,
 } from './CommonScreen';
 import {translate} from '../Utils/MultilinguaUtils';
@@ -63,7 +65,6 @@ const ClosedLoopStack = ({navigation}) => {
           headerLeft: (props) => <MenuIcon />,
         })}
       />
-
       <FeedbackStack.Screen
         name={'TicketDetails'}
         component={TicketDetails}
@@ -95,7 +96,6 @@ const ClosedLoopStack = ({navigation}) => {
           headerRight: (props) => <CloseButton />,
         })}
       />
-
       <FeedbackStack.Screen
         mode="modal"
         name="New Ticket"
@@ -106,7 +106,6 @@ const ClosedLoopStack = ({navigation}) => {
           // headerRight: (props) => <CloseButton />,
         })}
       />
-
       <FeedbackStack.Screen
         name={'SelectEmailTemplate'}
         component={SelectEmailTemplate}
@@ -130,6 +129,17 @@ const ClosedLoopStack = ({navigation}) => {
         })}
       />
 
+      {/* <FeedbackStack.Screen
+        key={'Date Range'}
+        name={translate('date_filter.date_range')}
+        component={DateRangeTabStack}
+        options={({navigation, route}) => ({
+          headerLeft: (props) => <HeaderBackLeft />,
+          headerRight: (props) => (
+            <SaveDashboardDate {...props} route={route} />
+          ),
+        })}
+      /> */}
       {/* <FeedbackStack.Screen
         name={translate('responses.sort_by')}
         component={FeedbackSorter}

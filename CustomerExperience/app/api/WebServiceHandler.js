@@ -42,7 +42,10 @@ export default class WebServiceHandler {
       })
         .then((response) => response.json())
         .then((response) => {
-          console.log(`Response Data: ${JSON.stringify(response)}`);
+          console.log(
+            `URL: ${fullUrl}`,
+            `Response Data: ${JSON.stringify(response)}`,
+          );
           if (response.statusCode === 200 || response.status === SUCCESS) {
             success(response);
           } else {

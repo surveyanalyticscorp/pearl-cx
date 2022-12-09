@@ -1,0 +1,120 @@
+import React, {useState} from 'react';
+import {
+  View,
+  TouchableWithoutFeedback,
+  Text,
+  StyleSheet,
+  FlatList,
+  TextInput,
+} from 'react-native';
+import {listItemSeparator} from '../../routes/CommonScreen';
+import {Colors} from '../../styles/color.constants';
+import {FontFamily} from '../../styles/font.constants';
+import {MarginConstants} from '../../styles/margin.constants';
+import {TextSizes} from '../../styles/textsize.constants';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import {PaddingConstants} from '../../styles/padding.constants';
+import {getSegmentBySegmentId} from '../../Utils/TicketUtils';
+
+// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+const GlobalSelectSegment = (props) => {
+  const [filteredList, setFilteredList] = useState(props.data);
+  const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex ?? 0);
+
+  const renderRow = ({item, index}) => {
+    return (
+      <TouchableWithoutFeedback onPress={() => handleOnPress(item, index)}>
+        <View style={styles.row}>
+          <Text style={styles.title}>{item.segmentName}</Text>
+          {props.data[selectedIndex].segmentID === item.segmentID ? (
+            <IonIcon
+              style={{marginHorizontal: MarginConstants.halfTab}}
+              name={'checkmark'}
+              size={20}
+              color={Colors.filterIconColor}
+            />
+          ) : (
+            <View />
+          )}
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  };
+
+  const handleOnPress = (item, index) => {
+    props.handleOnPress(item);
+    setSelectedIndex(getSegmentBySegmentId(props.data, item.segmentID));
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={{
+          borderBottomWidth: 1,
+          borderColor: Colors.filterIconColor,
+          marginHorizontal: MarginConstants.tab2,
+          marginBottom: MarginConstants.tab2,
+          paddingHorizontal: PaddingConstants.halfTab,
+        }}
+        placeholder="Search..."
+        onChangeText={(text) => {
+          console.log(text);
+          if (text) {
+            setFilteredList((state) =>
+              state.filter((item) =>
+                item.segmentName.toLowerCase().includes(text.toLowerCase()),
+              ),
+            );
+          } else {
+            setFilteredList(props.data);
+          }
+        }}
+      />
+      <FlatList
+        style={styles.flatList}
+        data={filteredList}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderRow}
+        ItemSeparatorComponent={listItemSeparator}
+      />
+    </View>
+  );
+};
+
+export default GlobalSelectSegment;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+
+    justifyContent: 'space-between',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: MarginConstants.tab1,
+  },
+  flatList: {
+    marginHorizontal: MarginConstants.tab2,
+    fontFamily: FontFamily.bold,
+    fontSize: TextSizes.largeText,
+  },
+  header: {
+    marginHorizontal: MarginConstants.tab2,
+    fontFamily: FontFamily.bold,
+    fontSize: TextSizes.largeText,
+    marginVertical: MarginConstants.tab1,
+    color: Colors.filterIconColor,
+  },
+  title: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.secondary,
+    marginStart: MarginConstants.halfTab,
+    color: Colors.filterIconColor,
+  },
+});

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   TouchableWithoutFeedback,
@@ -8,6 +8,7 @@ import {
   // ScrollView,
   Platform,
   FlatList,
+  Pressable,
 } from 'react-native';
 // import StringUtils from '../../Utils/StringUtils';
 // import ArrayUtils from '../../Utils/ArrayUtils';
@@ -42,9 +43,12 @@ import {
 } from '../../routes/CommonScreen';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  getOwnerIndex,
   getOwnerNameById,
   getPriorityById,
   getPriorityIndexById,
+  getSegmentBySegmentId,
+  getSegmentIndex,
   getSegmentNameById,
   getStatusById,
   getStatusIndexById,
@@ -80,9 +84,7 @@ export default function TicketOverview(props) {
   const {authToken} = useSelector((state) => state.global);
   const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
   const isLoading = useSelector((state) => state.global.isLoading);
-  const [ticketDetails, setTicketDetails] = useState(
-    useSelector((state) => state.dashboard.ticket),
-  );
+  const ticketDetails = useSelector((state) => state.dashboard.ticket);
   // const [selectedSegment, setSelectedSegment] = useState();
   const [statusIndex, setStatusIndex] = useState(
     getStatusIndexById(ticketDetails.status ?? -1),
@@ -95,46 +97,46 @@ export default function TicketOverview(props) {
     (state) => state.dashboard.segmentDetails.segments,
   );
   console.log('TTTTT', ticketDetails ?? '');
+  console.log({isLoading});
+  // const getSegmentIndex = (segemntlist, segmentId) => {
+  //   let index = 0;
+  //   segemntlist.forEach((element, index_) => {
+  //     if (element.currentSegmentID === segmentId) {
+  //       index = index_;
+  //     }
+  //   });
+  //   return index;
+  // };
 
-  const getSegmentIndex = (segmentId) => {
-    let index = 0;
-    segments.forEach((element, index_) => {
-      if (element.currentSegmentID === segmentId) {
-        index = index_;
-      }
-    });
-    return index;
-  };
+  // const getSegmentBySegmentId = (segmentlist, segmentId) => {
+  //   let item = {};
+  //   segmentlist.forEach((element) => {
+  //     if (element.currentSegmentID === segmentId) {
+  //       item = element;
+  //     }
+  //   });
+  //   return item;
+  // };
 
-  const getSegmentBySegmentId = (segmentId) => {
-    let item = {};
-    segments.forEach((element) => {
-      if (element.currentSegmentID === segmentId) {
-        item = element;
-      }
-    });
-    return item;
-  };
-
-  const getOwnerIndex = (ownnerId) => {
-    let index_ = -1;
-    owners.forEach((element, index) => {
-      if (element.ownerID === ownnerId) {
-        index_ = index;
-      }
-    });
-    return index_;
-  };
+  // const getOwnerIndex = (ownerlist, ownnerId) => {
+  //   let index_ = -1;
+  //   ownerlist.forEach((element, index) => {
+  //     if (element.ownerID === ownnerId) {
+  //       index_ = index;
+  //     }
+  //   });
+  //   return index_;
+  // };
 
   const [currentSegment, setCurrentSegment] = useState(
-    getSegmentBySegmentId(ticketDetails.currentSegmentId ?? 0),
+    getSegmentBySegmentId(segments, ticketDetails.currentSegmentId ?? 0),
   );
   const [segmentIndex, setSegmentIndex] = useState(
-    getSegmentIndex(currentSegment.currentSegmentID),
+    getSegmentIndex(segments, currentSegment.currentSegmentID),
   );
 
   const [ticketOwnerIndex, setTicketOwnerIndex] = useState(
-    getOwnerIndex(ticketDetails.assignToId ?? 0),
+    getOwnerIndex(owners, ticketDetails.assignToId ?? 0),
   );
   const getTicketOwnerList = (segmentId_) => {
     dispatch(
@@ -202,8 +204,9 @@ export default function TicketOverview(props) {
   };
 
   const handleOwnerSelection = () => {
-    setCurrentBS((state) => bottomSheetEnum.owners);
+    setCurrentBS(bottomSheetEnum.owners);
     statusBottomSheet.current.snapTo(0);
+
     // ownerBottomSheet.current.snapTo(0);
   };
 
@@ -712,7 +715,7 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderStatusDropDownButton = () => {
+  const RenderStatusDropDownButton = ({text}) => {
     return (
       <View style={styles.dropdownContainer}>
         <TouchableWithoutFeedback onPress={handleStatusSelection}>
@@ -720,17 +723,9 @@ export default function TicketOverview(props) {
             <View style={styles.dropdownInnerContainer}>
               <RenderStatusIcon
                 style={{margin: MarginConstants.halfTab}}
-                title={
-                  ticketDetails !== undefined
-                    ? getStatusById(ticketDetails.status)
-                    : 'Select status'
-                }
+                title={text}
               />
-              <Text style={styles.dropdownContainerText}>
-                {ticketDetails !== undefined
-                  ? getStatusById(ticketDetails.status)
-                  : 'Select status'}
-              </Text>
+              <Text style={styles.dropdownContainerText}>{text}</Text>
             </View>
             {/* <Icon name={arrowIcon} size={15} color={arrowColor} /> */}
 
@@ -747,7 +742,7 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderPriorityDropDownButton = () => {
+  const RenderPriorityDropDownButton = ({text}) => {
     return (
       <View style={styles.dropdownContainer}>
         <TouchableWithoutFeedback onPress={handlePrioritySelection}>
@@ -755,17 +750,9 @@ export default function TicketOverview(props) {
             <View style={styles.dropdownInnerContainer}>
               <RenderPriorityIcon
                 style={{margin: MarginConstants.halfTab}}
-                title={
-                  ticketDetails !== undefined
-                    ? getPriorityById(ticketDetails.priority)
-                    : 'Select priority'
-                }
+                title={text}
               />
-              <Text style={styles.dropdownContainerText}>
-                {ticketDetails !== undefined
-                  ? getPriorityById(ticketDetails.priority)
-                  : 'Select priority'}
-              </Text>
+              <Text style={styles.dropdownContainerText}>{text}</Text>
             </View>
             {/* <Icon name={arrowIcon} size={15} color={arrowColor} /> */}
 
@@ -782,7 +769,7 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderSegmentDropDownButton = () => {
+  const RenderSegmentDropDownButton = ({text}) => {
     return (
       <View style={styles.dropdownContainer}>
         <TouchableWithoutFeedback onPress={handleSegmentSelection}>
@@ -796,11 +783,7 @@ export default function TicketOverview(props) {
                     : 'Select priority'
                 }
               /> */}
-              <Text style={styles.dropdownContainerText}>
-                {ticketDetails !== undefined
-                  ? getSegmentNameById(segments, ticketDetails.currentSegmentId)
-                  : 'Select segment'}
-              </Text>
+              <Text style={styles.dropdownContainerText}>{text}</Text>
             </View>
             {/* <Icon name={arrowIcon} size={15} color={arrowColor} /> */}
 
@@ -817,7 +800,7 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderOwnerDropDownButton = () => {
+  const RenderOwnerDropDownButton = ({text}) => {
     return (
       <View style={styles.dropdownContainer}>
         <TouchableWithoutFeedback onPress={handleOwnerSelection}>
@@ -831,12 +814,7 @@ export default function TicketOverview(props) {
                     : 'Select priority'
                 }
               /> */}
-              <Text style={styles.dropdownContainerText}>
-                {ticketDetails !== undefined
-                  ? // ? ticketDetails.assignToId
-                    getOwnerNameById(owners, ticketDetails.assignToId)
-                  : 'Select owner'}
-              </Text>
+              <Text style={styles.dropdownContainerText}>{text}</Text>
             </View>
             {/* <Icon name={arrowIcon} size={15} color={arrowColor} /> */}
 
@@ -858,7 +836,13 @@ export default function TicketOverview(props) {
       <View style={styles.ticketStatusContainer}>
         <View style={styles.rowContainer}>
           {Title('Ticket Status')}
-          <RenderStatusDropDownButton />
+          <RenderStatusDropDownButton
+            text={
+              ticketDetails !== undefined
+                ? getStatusById(ticketDetails.status)
+                : 'Select status'
+            }
+          />
 
           {/* {DropDownView(
             statusList,
@@ -869,7 +853,13 @@ export default function TicketOverview(props) {
         </View>
         <View style={styles.rowContainer}>
           {Title('Priority')}
-          <RenderPriorityDropDownButton />
+          <RenderPriorityDropDownButton
+            text={
+              ticketDetails !== undefined
+                ? getPriorityById(ticketDetails.priority)
+                : 'Select priority'
+            }
+          />
           {/* {DropDownView(
             priorityList,
             ticketDetails !== undefined
@@ -880,13 +870,26 @@ export default function TicketOverview(props) {
         <View style={styles.rowContainer}>
           {Title('Segment')}
           {/* {DropDownView(userOptions, 'Select Segement')} */}
-          <RenderSegmentDropDownButton />
+          <RenderSegmentDropDownButton
+            text={
+              ticketDetails !== undefined
+                ? getSegmentNameById(segments, ticketDetails.currentSegmentId)
+                : 'Select segment'
+            }
+          />
         </View>
 
         <View style={styles.rowContainer}>
           {Title('Assigned to')}
           {/* {DropDownView(userOptions, 'Assign manager')} */}
-          <RenderOwnerDropDownButton />
+          <RenderOwnerDropDownButton
+            text={
+              ticketDetails !== undefined
+                ? // ? ticketDetails.assignToId
+                  getOwnerNameById(owners, ticketDetails.assignToId)
+                : 'Select owner'
+            }
+          />
         </View>
         {/* <View style={styles.rowContainer}>{Title('Department')}</View>
         <View style={styles.rowContainer}>
@@ -1070,8 +1073,12 @@ export default function TicketOverview(props) {
     );
   };
 
+  const TempUI = () => {
+    return useCallback(() => <RenderTicketOverView />, [ticketDetails]);
+  };
+
   const RenderTicketOverView = () => (
-    <Animated.View style={styles.container}>
+    <View style={styles.container}>
       <Animated.ScrollView
         style={{
           opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
@@ -1080,6 +1087,7 @@ export default function TicketOverview(props) {
           {takeActionButton()}
           {ticketStatusPriorityView()}
           {descriptionView()}
+          {console.log('RENDER')}
           {ticketDetails.panelMember !== undefined ? <ContactView /> : <View />}
         </View>
       </Animated.ScrollView>
@@ -1098,11 +1106,13 @@ export default function TicketOverview(props) {
         // onCloseEnd={() => setShadow(false)}
         // onOpenStart={() => setShadow(true)}
       />
-    </Animated.View>
+    </View>
   );
 
   return isLoading ? <RenderSpinner /> : <RenderTicketOverView />;
+
   // return <RenderTicketOverView />;
+  // return isLoading ? <RenderSpinner /> : <TempUI />;
 }
 
 const styles = StyleSheet.create({

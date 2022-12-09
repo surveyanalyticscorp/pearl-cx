@@ -65,6 +65,11 @@ const TicketTabStack = (props) => (
       component={RenderScene}
       initialParams={{index: 4, ticketCount: props.ticketCount}}
     />
+    <TicketTab.Screen
+      name={'RESOLVED'}
+      component={RenderScene}
+      initialParams={{index: 5, ticketCount: props.ticketCount}}
+    />
   </TicketTab.Navigator>
 );
 
@@ -133,6 +138,8 @@ const RenderScene = (props) => {
         return object.ESCALATED ?? object.escalated;
       case 4:
         return object.OVERDUE ?? object.resolved;
+      case 5:
+        return object.RESOLVED ?? object.resolved;
     }
   };
 

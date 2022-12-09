@@ -15,8 +15,11 @@ import {
 import {showLoading} from '../../redux/actions/index';
 import {
   getDashboardContent,
+  setSegment,
   // getSegment,
-  getClosedLoopSegmentDetails,
+  // getClosedLoopSegmentDetails,
+  // setSegment,
+  setSegmentSelectorOpen,
 } from '../../redux/actions/dashboard.actions';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
@@ -46,8 +49,12 @@ import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
 import {WelcomeScreen} from '../dashboard/WelcomeScreen';
 import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
-import {FabAddButton} from '../../routes/CommonScreen';
+import {BottomSheetHeader, FabAddButton} from '../../routes/CommonScreen';
 import {useNavigation} from '@react-navigation/native';
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from 'react-native-reanimated';
+import {getSegmentIndex} from '../../Utils/TicketUtils';
+import GlobalSelectSegment from './GlobalSelectSegment';
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -56,6 +63,7 @@ const wait = (timeout) => {
 };
 
 const CxDashboard = (props) => {
+  let dispatch = useDispatch();
   let [refreshing, setRefreshing] = useState(false);
   let [comparision, setComparision] = useState(false);
   let [exitAlert, showExitAlert] = useState(false);
@@ -104,6 +112,7 @@ const CxDashboard = (props) => {
   /////////////////////////////////////
   useEffect(() => {
     console.log('DASHBOARD_1');
+
     /*const unsubscribe = props.navigation.addListener('focus', () => {
            // Add code here which execute every time when user landed on screen.
 
@@ -538,6 +547,7 @@ const CxDashboard = (props) => {
             {exitAlert && renderExitAlert()}
           </View>
         </ScrollView>
+        <RenderSegmentSelector />
         <FabAddButton onPress={onFabPressHandler} />
       </SafeAreaView>
     );
@@ -560,6 +570,74 @@ const CxDashboard = (props) => {
   let onFabPressHandler = () => {
     props.navigation.navigate('New Ticket');
   };
+
+  const bs = React.useRef(null);
+  const fall = new Animated.Value(1);
+  const bsSnapPoints = ['50%', '0%'];
+  const [shadow, setShadow] = useState(false);
+
+  useEffect(() => {
+    if (bs) {
+      bs.current.snapTo(
+        props.isSegmentSelectorOpen ? 0 : bsSnapPoints.length - 1,
+      );
+    }
+    console.log({isOpen: props.isSegmentSelectorOpen});
+  }, [props.isSegmentSelectorOpen]);
+
+  const handleSegmentSelectionAction = (item) => {
+    // setDefaultEmail(item);
+    // richText.current.setContentHTML(item.templateText);
+    dispatch(setSegment(item));
+
+    dispatch(setSegmentSelectorOpen(false));
+    bs.current.snapTo(bsSnapPoints.length - 1);
+  };
+
+  const renderSelectSegmentHeader = () => {
+    return (
+      <BottomSheetHeader
+        title={'Select Segment'}
+        onPressClose={() => {
+          dispatch(setSegmentSelectorOpen(false));
+        }}
+      />
+    );
+  };
+
+  const renderSelectSegment = () => {
+    return (
+      <View
+        //  style={styles.contentContainer}
+        style={{backgroundColor: Colors.white, height: '100%'}}>
+        <GlobalSelectSegment
+          data={props.segmentList}
+          selectedIndex={
+            getSegmentIndex(
+              props.segmentList ?? [],
+              props.segment.currentSegmentID,
+            ) ?? 0
+          }
+          handleOnPress={(item) => handleSegmentSelectionAction(item)}
+        />
+      </View>
+    );
+  };
+
+  const RenderSegmentSelector = () => {
+    return (
+      <BottomSheet
+        ref={bs}
+        snapPoints={bsSnapPoints}
+        initialSnap={bsSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderSelectSegment}
+        renderHeader={renderSelectSegmentHeader}
+        callbackNode={fall}
+      />
+    );
+  };
+
   // return welcomeScreenShow ? renderDashboard() : renderWelcomeScreen();
   return renderDashboard();
 };
@@ -577,7 +655,9 @@ const mapStateToProps = (state) => {
     sDate: state.global.range.startDate,
     eDate: state.global.range.endDate,
     wantToReload: state.global.wantToReloadDashboard,
-    segment: state.dashboard.segment,
+    segment: state.dashboard.currentSegment,
+    isSegmentSelectorOpen: state.dashboard.isSegmentSelectorOpen,
+    segmentList: state.dashboard.segmentDetails.segments,
   };
 };
 

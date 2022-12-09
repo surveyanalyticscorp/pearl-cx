@@ -17,6 +17,7 @@ import {
   DASHBOARD_RECEIVED,
   REMOVE_CLOSED_LOOP_TICKET_ITEM,
   SEGMENT_SELECTED,
+  SEGMENT_SELECTOR_OPEN,
   UPDATE_CLF_TICKET_RECIEVED,
   WELCOME_SCREEN_DATA_RECIEVED,
 } from '../actions/dashboard.actions';
@@ -26,6 +27,7 @@ const initialState = {
   dashboardTicketCount: {},
   ticketDetails: {},
   segmentDetails: {},
+  isSegmentSelectorOpen: false,
   ownerDetails: {},
   allOwnersDetails: {},
   currentSegment: {},
@@ -66,6 +68,19 @@ const dashboardReducer = (state = initialState, action) => {
         },
       };
     }
+
+    case SEGMENT_SELECTED: {
+      // console.log(`SEGEMENT TESTING: prev  ${JSON.stringify(state.segment)}`);
+      // console.log(`SEGEMENT TESTING: new ${JSON.stringify(action.segment)}`);
+
+      return {
+        ...state,
+        currentSegment: {
+          currentSegment: action.segment.segmentName,
+          currentSegmentID: action.segment.segmentID,
+        },
+      };
+    }
     case CLOSED_LOOP_OWNER_DETAILS_RECEIVED: {
       return {
         ...state,
@@ -92,17 +107,8 @@ const dashboardReducer = (state = initialState, action) => {
       };
     }
 
-    case SEGMENT_SELECTED: {
-      // console.log(`SEGEMENT TESTING: prev  ${JSON.stringify(state.segment)}`);
-      console.log(`SEGEMENT TESTING: new ${JSON.stringify(action.segment)}`);
-
-      return {
-        ...state,
-        currentSegment: {
-          currentSegment: action.segment.segmentName,
-          currentSegmentID: action.segment.segmentID,
-        },
-      };
+    case SEGMENT_SELECTOR_OPEN: {
+      return {...state, isSegmentSelectorOpen: action.isOpen};
     }
 
     case CLOSED_LOOP_TICKET_LIST_RECEIVED: {

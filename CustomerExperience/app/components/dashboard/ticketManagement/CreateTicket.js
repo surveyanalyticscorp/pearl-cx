@@ -63,6 +63,10 @@ import {
 } from '../../../Utils/AppConstants';
 import {FEEDBACK_API_KEY} from '../../../api/Constant';
 import QPCalendar from '../../../widgets/QPCalendar';
+import {
+  isStringNullOrEmpty,
+  showErrorFlashMessage,
+} from '../../../Utils/Utility';
 
 export default function CreateTicket(props) {
   const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
@@ -111,6 +115,7 @@ export default function CreateTicket(props) {
 
   const [shadow, setShadow] = useState(false);
   const dispatch = useDispatch();
+  const [validation, setValidation] = useState('');
 
   const [ticketState, setTicketState] = useState({
     subscriberId: global.subscriberId,
@@ -127,7 +132,7 @@ export default function CreateTicket(props) {
     source: 1,
     // assignToId: 0,
     // comment: '',
-    // issueDate: '',
+    issueDate: moment().format(YMDFORMAT),
   });
 
   const getTicketOwnerList = (segmentId_) => {
@@ -210,13 +215,58 @@ export default function CreateTicket(props) {
     setShowCalendar(true);
   };
 
+  useEffect(() => {
+    if (!isStringNullOrEmpty(validation)) {
+      showErrorFlashMessage(validation);
+      setValidation('');
+    }
+  }, [validation, props.error]);
+
   const handleCreateTicket = () => {
-    // props.navigation.goBack();
-    // dispatch(showLoading(true));
-    // console.log(JSON.stringify(userInfo));
-    // setTicketState((state) => ({...state, ...userInfo}));
-    dispatch(createClfTicket(authToken, ticketState, feedbackApiKey));
-    props.navigation.goBack();
+    if (isValid(ticketState)) {
+      setValidation('');
+      dispatch(createClfTicket(authToken, ticketState, feedbackApiKey));
+      props.navigation.goBack();
+      // console.log(JSON.stringify(ticketState));
+    }
+  };
+
+  const isValid = (ticketState_) => {
+    if (!ticketState_.currentSegmentId) {
+      setValidation('Segment not selected');
+      return false;
+    }
+    if (!ticketState_.issueDate) {
+      setValidation('Issue date not selected');
+      return false;
+    }
+    if (!ticketState_.firstName) {
+      setValidation('Enter customer name');
+      return false;
+    }
+    if (!ticketState_.firstName) {
+      setValidation('Enter an email');
+      return false;
+    }
+    if (!ticketState_.priority) {
+      setValidation('Priority not selected');
+      return false;
+    }
+    if (!ticketState_.status) {
+      setValidation('Status not selected');
+      return false;
+    }
+
+    if (!ticketState_.assignToId) {
+      setValidation('Select a ticket owner');
+      return false;
+    }
+
+    if (!ticketState_.comment) {
+      setValidation('Add description');
+      return false;
+    }
+    return true;
   };
 
   const renderPrioritySelectContent = () => {
@@ -249,7 +299,7 @@ export default function CreateTicket(props) {
             // console.log(JSON.stringify(item));
             setSegment(item.segmentName);
             setSegmentIndex(index);
-            // setSegmentId((prev) => item.segmentID);
+            setSegmentId((prev) => item.segmentID);
 
             setTicketState((state) => ({
               ...state,

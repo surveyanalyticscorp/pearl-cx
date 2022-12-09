@@ -58,7 +58,7 @@ export const WelcomeScreen = (props) => {
       getWelcomeScreenDataCount(authToken, {subscriberId: subscriberId}),
     );
     // dispatch(getClosedLoopAllOwnersDetails(authToken));
-    dispatch(getClosedLoopOwnerDetails(authToken));
+    // dispatch(getClosedLoopOwnerDetails(authToken));
   }, [authToken, subscriberId]);
 
   const CustomBackground = ({children}) => {
