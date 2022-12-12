@@ -15,13 +15,7 @@ import {call} from 'react-native-reanimated';
 import {State} from 'react-native-gesture-handler/GestureHandler';
 import {useEffect} from 'react';
 
-const RenderSegmentBottomSheet = ({
-  //   ref_,
-  //   snapPoints,
-  callbackNode,
-  segmentList,
-  segmentId,
-}) => {
+const RenderSegmentBottomSheet = ({callbackNode}) => {
   const dispatch = useDispatch();
   const bs = React.useRef(null);
   //   const fall = new Animated.Value(1);
@@ -30,6 +24,12 @@ const RenderSegmentBottomSheet = ({
   const isSegmentSelectorOpen = useSelector(
     (state) => state.dashboard.isSegmentSelectorOpen,
   );
+
+  const segmentList_ = useSelector(
+    (state) => state.dashboard.segmentDetails.segments,
+  );
+  const currentSegment = useSelector((state) => state.dashboard.currentSegment);
+
   //   let segmentId = useSelector(
   //     (state) => state.dashboard.currentSegment.currentSegmentID,
   //   );
@@ -52,16 +52,21 @@ const RenderSegmentBottomSheet = ({
   };
 
   const renderSelectSegment = () => {
-    {
-      console.log('SEGMENT_LIST: ', JSON.stringify(segmentList), segmentId);
-    }
+    // {
+    //   console.log('SEGMENT_LIST: ', JSON.stringify(segmentList), segmentId);
+    // }
     return (
       <View
         //  style={styles.contentContainer}
         style={{backgroundColor: Colors.white, height: '100%'}}>
         <GlobalSelectSegment
-          data={segmentList}
-          selectedIndex={getSegmentIndex(segmentList ?? [], segmentId) ?? 0}
+          data={segmentList_}
+          selectedIndex={
+            getSegmentIndex(
+              segmentList_ ?? [],
+              currentSegment.currentSegmentID,
+            ) ?? 0
+          }
           handleOnPress={(item) => handleSegmentSelectionAction(item)}
         />
       </View>

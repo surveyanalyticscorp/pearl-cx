@@ -339,7 +339,9 @@ const AppRouter = (props) => {
         component={CxDashboard}
         options={({navigation, route}) => ({
           headerTitle: (props) => {
-            return <SegmentSelector />;
+            return (
+              <SegmentSelector screenName={translate('dashboard.dashboard')} />
+            );
           },
 
           headerLeft: (props) => <MenuIcon />,

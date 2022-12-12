@@ -61,7 +61,9 @@ const ClosedLoopStack = ({navigation}) => {
         name="Closed Loop"
         component={ClosedLoop}
         options={({navigation, route}) => ({
-          headerTitle: (props) => <SegmentSelector />,
+          headerTitle: (props) => (
+            <SegmentSelector screenName={'Closed Loop'} />
+          ),
           // headerShown: false,
           // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
           headerLeft: (props) => <MenuIcon />,

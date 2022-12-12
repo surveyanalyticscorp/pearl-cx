@@ -372,8 +372,6 @@ export default function ClosedLoop(props) {
           // ref={bs}
           // snapPoints={bsSnapPoints}
           callbackNode={fall}
-          segmentList={segmentList}
-          segmentId={currentSegment.currentSegmentID}
         />
         <BottomSheet
           ref={bs}

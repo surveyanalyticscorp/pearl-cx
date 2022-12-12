@@ -32,6 +32,8 @@ import {dashboardStyles} from '../dashboard/dashboard.style';
 import {translate} from '../../Utils/MultilinguaUtils';
 // import MainDropDown from '../../widgets/drop-down/MainDropDown';
 import {FabAddButton} from '../../routes/CommonScreen';
+import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
+import Animated from 'react-native-reanimated';
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
 
@@ -243,6 +245,7 @@ const renderFeedbackScene = (props) => {
   let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);
   let prevSortRef = usePrevious(feedbackForm.sortingText);
   //let [exitAlert, showExitAlert] = useState(false);
+  const fall = new Animated.Value(1);
 
   useEffect(() => {
     if (prevFeedbackRef !== feedbackForm.feedbackData) {
@@ -369,6 +372,7 @@ const renderFeedbackScene = (props) => {
           ListHeaderComponent={renderResponseFilterView}
         />
         <FabAddButton onPress={onFabHandler} />
+        <RenderSegmentBottomSheet callbackNode={fall} />
       </View>
     );
   };

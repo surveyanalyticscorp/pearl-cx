@@ -565,8 +565,6 @@ const CxDashboard = (props) => {
           // ref={bs}
           // snapPoints={bsSnapPoints}
           callbackNode={fall}
-          segmentList={props.segmentList}
-          segmentId={props.segment.currentSegmentID}
         />
         <FabAddButton onPress={onFabPressHandler} />
       </SafeAreaView>

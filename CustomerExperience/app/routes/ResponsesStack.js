@@ -13,6 +13,7 @@ import CommonScreens, {
   // SearchIcon,
 } from './CommonScreen';
 import {translate} from '../Utils/MultilinguaUtils';
+import SegmentSelector from '../components/SegmentSelector';
 
 const FeedbackStack = createStackNavigator();
 
@@ -23,6 +24,9 @@ const feedbackStack = (props) => (
       component={Feedback}
       options={({navigation, route}) => ({
         headerLeft: (props) => <MenuIcon />,
+        headerTitle: (props) => (
+          <SegmentSelector screenName={translate('responses.responses')} />
+        ),
         // headerRight: (props) => <SearchIcon route={'Feedback'} />,
         // headerRight: (props) => <SearchIcon route={'Feedback'} />,
       })}

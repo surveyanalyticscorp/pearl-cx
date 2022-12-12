@@ -10,7 +10,7 @@ import {
 } from '../redux/actions/dashboard.actions';
 import {useEffect} from 'react';
 
-const SegmentSelector = () => {
+const SegmentSelector = ({screenName}) => {
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.global.authToken);
   const segmentSelectorOpenState = useSelector(
@@ -35,9 +35,11 @@ const SegmentSelector = () => {
 
   const onPressHandle = () =>
     dispatch(setSegmentSelectorOpen(!segmentSelectorOpenState));
-  const SegmentText = ({segmentName}) => (
-    <Text style={styles.appbarTitle}>{segmentName ?? ''}</Text>
-  );
+  const SegmentText = ({segmentName}) => {
+    const title = `${screenName ? screenName + ':' : ''} ${segmentName ?? ''}`;
+
+    return <Text style={styles.appbarTitle}>{title}</Text>;
+  };
 
   return segmentList && segmentList.length ? (
     <View style={styles.container}>
