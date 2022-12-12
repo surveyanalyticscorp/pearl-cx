@@ -109,9 +109,9 @@ export const getPriorityIndexById = (priorityId) => {
   return index;
 };
 
-export const getSegmentIndex = (segementlist, segmentId) => {
+export const getSegmentIndex = (segmentlist, segmentId) => {
   let index = 0;
-  segementlist.forEach((element, index_) => {
+  segmentlist.forEach((element, index_) => {
     if (element.segmentID === segmentId) {
       index = index_;
     }

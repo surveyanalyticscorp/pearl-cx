@@ -26,6 +26,7 @@ import TicketTakeAction from '../components/closedloop/takeaction/TIcketTakeActi
 import SelectEmailTemplate from '../components/closedloop/takeaction/SelectEmailTemplate';
 import SendEmail from '../components/closedloop/takeaction/SendEmail';
 import FeedbackSorter from '../components/feedback/FeedbackSorter';
+import SegmentSelector from '../components/SegmentSelector';
 
 const FeedbackStack = createStackNavigator();
 
@@ -60,6 +61,7 @@ const ClosedLoopStack = ({navigation}) => {
         name="Closed Loop"
         component={ClosedLoop}
         options={({navigation, route}) => ({
+          headerTitle: (props) => <SegmentSelector />,
           // headerShown: false,
           // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
           headerLeft: (props) => <MenuIcon />,

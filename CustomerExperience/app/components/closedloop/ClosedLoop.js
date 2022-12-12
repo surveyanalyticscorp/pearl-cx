@@ -42,6 +42,7 @@ import {
   ticketTypeList,
 } from '../../Utils/TicketUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
+import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
@@ -70,6 +71,9 @@ export default function ClosedLoop(props) {
 
   const [ticketList, setTicketList] = useState([]);
   const owners = useSelector((state) => state.dashboard.ownerDetails.owners);
+  const segmentList = useSelector(
+    (state) => state.dashboard.segmentDetails.segments,
+  );
   const [refreshing, setRefreshing] = useState(false);
   const sampleFilterData = () => {
     const priority = priorityList.map((value) => ({
@@ -364,6 +368,13 @@ export default function ClosedLoop(props) {
       onPressHandler={(item, action) => handleAction(item, action)}
     /> */}
         </Animated.View>
+        <RenderSegmentBottomSheet
+          // ref={bs}
+          // snapPoints={bsSnapPoints}
+          callbackNode={fall}
+          segmentList={segmentList}
+          segmentId={currentSegment.currentSegmentID}
+        />
         <BottomSheet
           ref={bs}
           snapPoints={bsSnapPoints}

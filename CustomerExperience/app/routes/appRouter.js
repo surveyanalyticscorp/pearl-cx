@@ -72,8 +72,9 @@ import {
   setSegmentSelectorOpen,
 } from '../redux/actions/dashboard.actions';
 import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
-import SearchStack from './SearchStack';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
+import SegmentSelector from '../components/SegmentSelector';
+// import SearchStack from './SearchStack';
+// import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
 // import {connect} from 'react-redux';
 
@@ -96,10 +97,10 @@ const AppRouter = (props) => {
 
   // let ref = useRef();
   let [lastLoginArray, setLastLoginArray] = useState([]);
-  let [segmentOptions, setSegmentOptions] = useState([]);
-  let [selectedSegment, setSelectedSegment] = useState({});
-  let segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
-  let currentSegment = useSelector((state) => state.dashboard.currentSegment);
+  // let [segmentOptions, setSegmentOptions] = useState([]);
+  // let [selectedSegment, setSelectedSegment] = useState({});
+  // let segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
+  // let currentSegment = useSelector((state) => state.dashboard.currentSegment);
   // const isLoading = useSelector((state) => state.global.isLoading);
 
   const dispatch = useDispatch();
@@ -111,26 +112,26 @@ const AppRouter = (props) => {
     ],
   };
 
+  // useEffect(() => {
+  //   console.log('SELECTED SEGMENT__', JSON.stringify(currentSegment));
+
+  //   if (currentSegment.currentSegmentID) {
+  //     dispatch(
+  //       getClosedLoopOwnerDetails(authToken, {
+  //         segmentID: currentSegment.currentSegmentID,
+  //       }),
+  //     );
+  //   }
+  // }, [currentSegment]);
+
   useEffect(() => {
-    console.log('SELECTED SEGMENT__', JSON.stringify(currentSegment));
+    // setSegmentOptions((segments) => segmentDetails?.segments ?? []);
+    // setSelectedSegment((segment) => ({
+    //   segmentName: segmentDetails.currentSegment,
+    //   segmentID: segmentDetails.currentSegmentID,
+    // }));
 
-    if (currentSegment.currentSegmentID) {
-      dispatch(
-        getClosedLoopOwnerDetails(authToken, {
-          segmentID: currentSegment.currentSegmentID,
-        }),
-      );
-    }
-  }, [currentSegment]);
-
-  useEffect(() => {
-    setSegmentOptions((segments) => segmentDetails?.segments ?? []);
-    setSelectedSegment((segment) => ({
-      segmentName: segmentDetails.currentSegment,
-      segmentID: segmentDetails.currentSegmentID,
-    }));
-
-    console.log('Segment List', segmentOptions);
+    // console.log('Segment List', segmentOptions);
     global.baseUrl = '';
 
     setGlobalBaseUrl();
@@ -167,7 +168,8 @@ const AppRouter = (props) => {
       unsubscribeLinks();
       unsubscribeNotifications();
     };
-  }, [segmentDetails]);
+    // }, [segmentDetails]);
+  }, []);
 
   useEffect(() => {
     setGlobalBaseUrl();
@@ -330,56 +332,6 @@ const AppRouter = (props) => {
     );
   };
 
-  const SegmentSelector = ({segmentName}) => {
-    // const segmentName =
-    //   ;
-    return segmentOptions && segmentOptions.length ? (
-      <View style={{flex: 1}}>
-        <TouchableOpacity
-          onPress={() => {
-            dispatch(setSegmentSelectorOpen(true));
-          }}>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={styles.drawerTitle}>{segmentName}</Text>
-
-            <SimpleLineIcon
-              name={'arrow-down'}
-              size={15}
-              color={Colors.darkGrey}
-            />
-          </View>
-        </TouchableOpacity>
-        {/* <MainDropDown
-      options={segmentOptions.map((item) => item.segmentName)}
-      defaultText={selectedSegment.segmentName}
-      onSelection={(index) => {
-        console.log(
-          `Selected : ${JSON.stringify(segmentOptions[index])}`,
-        );
-        //////
-        dispatch(setSegment(segmentOptions[index]));
-
-        // dispatch({
-        //   type: SEGMENT_SELECTED,
-        //   payload: segmentOptions[index],
-        // });
-
-        // updateSegment(`${segmentOptions[index]}`);
-        //////
-      }}
-    />*/}
-      </View>
-    ) : (
-      <Text style={styles.drawerTitle}>{segmentName}</Text>
-    );
-  };
-
   const dashboardStack = (props) => (
     <DetractorStack.Navigator>
       <DetractorStack.Screen
@@ -387,13 +339,7 @@ const AppRouter = (props) => {
         component={CxDashboard}
         options={({navigation, route}) => ({
           headerTitle: (props) => {
-            return (
-              <SegmentSelector
-                segmentName={
-                  currentSegment.currentSegment ?? selectedSegment.segmentName
-                }
-              />
-            );
+            return <SegmentSelector />;
           },
 
           headerLeft: (props) => <MenuIcon />,
@@ -602,7 +548,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  drawerTitle: {fontSize: TextSizes.primary, color: Colors.white},
+  appbarTitle: {fontSize: TextSizes.primary, color: Colors.white},
 });
 
 const MyTheme = {

@@ -37,6 +37,8 @@ import DetractorScenes from '../components/dashboard/components/DetractorScenes'
 import {translate} from '../Utils/MultilinguaUtils';
 import {dashboardStyles} from '../components/dashboard/dashboard.style';
 import QPSpinner from '../widgets/QPSpinner';
+import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
+
 // import CheckBox from '@react-native-community/checkbox';
 
 const DateRangeTab = createMaterialTopTabNavigator();
@@ -366,6 +368,59 @@ export const EditTicket = () => {
         />
       </TouchableOpacity>
     </View>
+  );
+};
+
+const SegmentSelector = ({segmentName, segmentList, onPressHandle}) => {
+  const segmentSelectorStyles = StyleSheet.create({
+    container: {flex: 1},
+    appbarTitle: {fontSize: TextSizes.primary, color: Colors.white},
+    innerContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+  });
+  return segmentList && segmentList.length ? (
+    <View style={segmentSelectorStyles.container}>
+      <TouchableOpacity
+        // onPress={() => {
+        //   dispatch(setSegmentSelectorOpen(true));
+        // }}
+        onPress={onPressHandle}>
+        <View style={segmentSelectorStyles.innerContainer}>
+          <Text style={segmentSelectorStyles.appbarTitle}>{segmentName}</Text>
+
+          <SimpleLineIcon
+            name={'arrow-down'}
+            size={15}
+            color={Colors.darkGrey}
+          />
+        </View>
+      </TouchableOpacity>
+      {/* <MainDropDown
+    options={segmentOptions.map((item) => item.segmentName)}
+    defaultText={selectedSegment.segmentName}
+    onSelection={(index) => {
+      console.log(
+        `Selected : ${JSON.stringify(segmentOptions[index])}`,
+      );
+      //////
+      dispatch(setSegment(segmentOptions[index]));
+
+      // dispatch({
+      //   type: SEGMENT_SELECTED,
+      //   payload: segmentOptions[index],
+      // });
+
+      // updateSegment(`${segmentOptions[index]}`);
+      //////
+    }}
+  />*/}
+    </View>
+  ) : (
+    <Text style={segmentSelectorStyles.appbarTitle}>{segmentName}</Text>
   );
 };
 

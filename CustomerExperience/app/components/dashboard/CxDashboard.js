@@ -55,6 +55,7 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import {getSegmentIndex} from '../../Utils/TicketUtils';
 import GlobalSelectSegment from './GlobalSelectSegment';
+import RenderSegmentBottomSheet from './RenderSegmentBottomSheet';
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -73,9 +74,15 @@ const CxDashboard = (props) => {
     (state) => state.dashboard.currentSegment.currentSegmentID,
   );
   const {range, wantToReload} = props;
-
+  const segmentSelectorOpenState = useSelector(
+    (state) => state.dashboard.isSegmentSelectorOpen,
+  );
   const navigation = useNavigation();
   const {subscriberId} = useState(useSelector((state) => state.global));
+  const bs = React.useRef(null);
+  const fall = new Animated.Value(1);
+  const bsSnapPoints = ['50%', '0%'];
+  // const [shadow, setShadow] = useState(false);
 
   // let [mSegment, setSegment] = useState(props.segment);
   // let [segmentName, setSegmentName] = useState('Given');
@@ -547,7 +554,20 @@ const CxDashboard = (props) => {
             {exitAlert && renderExitAlert()}
           </View>
         </ScrollView>
-        <RenderSegmentSelector />
+        {/* <RenderSegmentSelector
+          bs_={bs}
+          bsSnapPoints_={bsSnapPoints}
+          fall_={fall}
+          renderSelectSegment_={renderSelectSegment}
+          renderSelectSegmentHeader_={renderSelectSegmentHeader}
+        /> */}
+        <RenderSegmentBottomSheet
+          // ref={bs}
+          // snapPoints={bsSnapPoints}
+          callbackNode={fall}
+          segmentList={props.segmentList}
+          segmentId={props.segment.currentSegmentID}
+        />
         <FabAddButton onPress={onFabPressHandler} />
       </SafeAreaView>
     );
@@ -571,18 +591,13 @@ const CxDashboard = (props) => {
     props.navigation.navigate('New Ticket');
   };
 
-  const bs = React.useRef(null);
-  const fall = new Animated.Value(1);
-  const bsSnapPoints = ['50%', '0%'];
-  const [shadow, setShadow] = useState(false);
-
   useEffect(() => {
-    if (bs) {
+    if (bs.current) {
       bs.current.snapTo(
         props.isSegmentSelectorOpen ? 0 : bsSnapPoints.length - 1,
       );
     }
-    console.log({isOpen: props.isSegmentSelectorOpen});
+    // console.log({isOpen: props.isSegmentSelectorOpen});
   }, [props.isSegmentSelectorOpen]);
 
   const handleSegmentSelectionAction = (item) => {
@@ -624,16 +639,22 @@ const CxDashboard = (props) => {
     );
   };
 
-  const RenderSegmentSelector = () => {
+  const RenderSegmentSelector = ({
+    bs_,
+    bsSnapPoints_,
+    fall_,
+    renderSelectSegment_,
+    renderSelectSegmentHeader_,
+  }) => {
     return (
       <BottomSheet
-        ref={bs}
-        snapPoints={bsSnapPoints}
-        initialSnap={bsSnapPoints.length - 1}
+        ref={bs_}
+        snapPoints={bsSnapPoints_}
+        initialSnap={bsSnapPoints_.length - 1}
         enabledGestureInteraction={true}
-        renderContent={renderSelectSegment}
-        renderHeader={renderSelectSegmentHeader}
-        callbackNode={fall}
+        renderContent={renderSelectSegment_}
+        renderHeader={renderSelectSegmentHeader_}
+        callbackNode={fall_}
       />
     );
   };

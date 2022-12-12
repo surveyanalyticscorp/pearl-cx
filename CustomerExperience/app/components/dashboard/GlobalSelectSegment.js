@@ -14,7 +14,7 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {PaddingConstants} from '../../styles/padding.constants';
-import {getSegmentBySegmentId} from '../../Utils/TicketUtils';
+import {getSegmentIndex} from '../../Utils/TicketUtils';
 
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 const GlobalSelectSegment = (props) => {
@@ -43,19 +43,13 @@ const GlobalSelectSegment = (props) => {
 
   const handleOnPress = (item, index) => {
     props.handleOnPress(item);
-    setSelectedIndex(getSegmentBySegmentId(props.data, item.segmentID));
+    setSelectedIndex(getSegmentIndex(props.data, item.segmentID));
   };
 
   return (
     <View style={styles.container}>
       <TextInput
-        style={{
-          borderBottomWidth: 1,
-          borderColor: Colors.filterIconColor,
-          marginHorizontal: MarginConstants.tab2,
-          marginBottom: MarginConstants.tab2,
-          paddingHorizontal: PaddingConstants.halfTab,
-        }}
+        style={styles.searchInput}
         placeholder="Search..."
         onChangeText={(text) => {
           console.log(text);
@@ -116,5 +110,12 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
     marginStart: MarginConstants.halfTab,
     color: Colors.filterIconColor,
+  },
+  searchInput: {
+    borderBottomWidth: 1,
+    borderColor: Colors.filterIconColor,
+    marginHorizontal: MarginConstants.tab2,
+    marginBottom: MarginConstants.tab2,
+    paddingHorizontal: PaddingConstants.halfTab,
   },
 });
