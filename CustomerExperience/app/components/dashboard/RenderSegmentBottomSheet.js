@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {KeyboardAvoidingView, View} from 'react-native';
 import {BottomSheetHeader} from '../../routes/CommonScreen';
 import BottomSheet from 'reanimated-bottom-sheet';
 // import Animated from 'react-native-reanimated';
@@ -11,8 +11,6 @@ import {
 import GlobalSelectSegment from './GlobalSelectSegment';
 import {getSegmentIndex} from '../../Utils/TicketUtils';
 import {Colors} from '../../styles/color.constants';
-import {call} from 'react-native-reanimated';
-import {State} from 'react-native-gesture-handler/GestureHandler';
 import {useEffect} from 'react';
 
 const RenderSegmentBottomSheet = ({callbackNode}) => {
@@ -51,7 +49,7 @@ const RenderSegmentBottomSheet = ({callbackNode}) => {
     );
   };
 
-  const renderSelectSegment = () => {
+  const renderSelectSegment = (props) => {
     // {
     //   console.log('SEGMENT_LIST: ', JSON.stringify(segmentList), segmentId);
     // }
@@ -60,6 +58,7 @@ const RenderSegmentBottomSheet = ({callbackNode}) => {
         //  style={styles.contentContainer}
         style={{backgroundColor: Colors.white, height: '100%'}}>
         <GlobalSelectSegment
+          {...props}
           data={segmentList_}
           selectedIndex={
             getSegmentIndex(
@@ -83,10 +82,10 @@ const RenderSegmentBottomSheet = ({callbackNode}) => {
       ref={bs}
       snapPoints={bsSnapPoints}
       initialSnap={bsSnapPoints.length - 1}
-      enabledGestureInteraction={true}
       renderContent={renderSelectSegment}
       renderHeader={renderSelectSegmentHeader}
       callbackNode={callbackNode}
+      enabledInnerScrolling={true}
     />
   );
 };

@@ -187,6 +187,7 @@ function Feedback(props) {
             setSortingText: setSortText,
           }}>
           <FeedbackTabStack />
+          {/* <RenderFeedbackScene /> */}
         </FormContext.Provider>
         {showLoader && renderSpinner()}
       </SafeAreaView>
@@ -215,31 +216,31 @@ const FeedbackTabStack = () => (
     keyboardDismissMode={'auto'}>
     <FeedbackTab.Screen
       name={translate('close_loop.all')}
-      component={renderFeedbackScene}
+      component={RenderFeedbackScene}
       initialParams={{screenName: 'All'}}
     />
     <FeedbackTab.Screen
       name={translate('responses.detractor')}
-      component={renderFeedbackScene}
+      component={RenderFeedbackScene}
       initialParams={{screenName: 'Detractor'}}
       options={{tabBarLabel: 'Child Segment 1'}}
     />
     <FeedbackTab.Screen
       name={translate('responses.passive')}
-      component={renderFeedbackScene}
+      component={RenderFeedbackScene}
       initialParams={{screenName: 'Passive'}}
       options={{tabBarLabel: 'Child Segment 2'}}
     />
     <FeedbackTab.Screen
       name={translate('responses.promoter')}
-      component={renderFeedbackScene}
+      component={RenderFeedbackScene}
       initialParams={{screenName: 'Promoter'}}
       options={{tabBarLabel: 'Child Segment 3', title: 'Dummy 3'}}
     />
   </FeedbackTab.Navigator>
 );
 
-const renderFeedbackScene = (props) => {
+const RenderFeedbackScene = (props) => {
   const feedbackForm = useContext(FormContext);
   let [list, setList] = useState(feedbackForm.feedbackData);
   let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);

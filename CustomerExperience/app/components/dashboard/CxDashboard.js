@@ -65,6 +65,8 @@ const wait = (timeout) => {
 
 const CxDashboard = (props) => {
   let dispatch = useDispatch();
+  let isFocused = useDispatch();
+
   let [refreshing, setRefreshing] = useState(false);
   let [comparision, setComparision] = useState(false);
   let [exitAlert, showExitAlert] = useState(false);
@@ -96,6 +98,12 @@ const CxDashboard = (props) => {
   //     setSegmentName(segment);
   //   }
   // }, [mData]);
+
+  useEffect(() => {
+    if (isFocused) {
+      getDashboardData();
+    }
+  }, [isFocused]);
 
   const onRefresh = useCallback(() => {
     //setRefreshing(true);//No need to show 2 loading

@@ -4,7 +4,7 @@ import {
   TouchableWithoutFeedback,
   Text,
   StyleSheet,
-  FlatList,
+  // FlatList,
   TextInput,
 } from 'react-native';
 import {listItemSeparator} from '../../routes/CommonScreen';
@@ -15,6 +15,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {getSegmentIndex} from '../../Utils/TicketUtils';
+import {FlatList} from 'react-native-gesture-handler';
 
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 const GlobalSelectSegment = (props) => {

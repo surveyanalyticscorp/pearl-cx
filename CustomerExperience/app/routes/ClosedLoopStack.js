@@ -132,7 +132,7 @@ const ClosedLoopStack = ({navigation}) => {
           // headerLeft: (props) => <MenuIcon />,
         })}
       />
-
+      {CommonScreens(FeedbackStack)}
       {/* <FeedbackStack.Screen
         key={'Date Range'}
         name={translate('date_filter.date_range')}

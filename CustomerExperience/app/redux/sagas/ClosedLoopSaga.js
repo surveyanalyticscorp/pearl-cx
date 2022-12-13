@@ -1,4 +1,4 @@
-import {API_ERROR, IS_LOADING} from '../actions';
+import {API_ERROR, IS_LOADING, WANT_TO_RELOAD_DASHBOARD} from '../actions';
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {
@@ -393,22 +393,26 @@ function* postCreateClfTicket(action) {
       action.param,
     );
 
-    const json_ = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
-      {'Auth-Token': action.token},
-      action.param,
-    );
+    // const json_ = yield WebServiceHandler.get(
+    //   CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
+    //   {'Auth-Token': action.token},
+    //   action.param,
+    // );
 
     yield put({
       type: CREATE_CLF_TICKET_RECIEVED,
       response: json,
     });
 
-    yield put({
-      type: CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED,
-      response: json_,
-    });
+    // yield put({
+    //   type: CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED,
+    //   response: json_,
+    // });
 
+    yield put({
+      type: WANT_TO_RELOAD_DASHBOARD,
+      payload: {wantToReload: true},
+    });
     yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));

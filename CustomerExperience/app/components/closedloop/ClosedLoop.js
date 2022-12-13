@@ -48,6 +48,7 @@ import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
+  const itemPerPage = 10;
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
 
   const {authToken, range, isLoading} = useSelector((state) => state.global);
@@ -57,13 +58,16 @@ export default function ClosedLoop(props) {
     priority: '',
     assignToId: '',
     pageNumber: 1,
-    perPage: 20,
+    perPage: itemPerPage,
     fromDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
     toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
     type: '',
   });
   const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
   // const state = useSelector((state) => state.dashboard);
+  const pagerOptions = useSelector(
+    (state) => state.dashboard.ticketDetails.pagerOptions,
+  );
   const currentFeedback = useSelector(
     (state) => state.dashboard.currentFeedback,
   );
@@ -92,22 +96,20 @@ export default function ClosedLoop(props) {
     };
   };
   const [filterData, setFilterData] = useState(sampleFilterData());
-  console.log('OWNERS', JSON.stringify(owners));
+  // console.log('OWNERS', JSON.stringify(owners));
   const isFocused = useIsFocused();
 
   let getDataOnNewRange = (range_) => {
-    // console.log('DATE_RANGE', JSON.stringify(range_));
-    // dispatch( setRangeFilter(range));
-    // props.setRange(range);
-    // props.callDataAPI();
+    console.log('DATE_RANGE', JSON.stringify(range_));
+    dispatch(setRangeFilter(range_));
   };
 
   let filterAction = (range_) => {
-    console.log('DATE_RANGE', JSON.stringify(range_));
+    console.log(JSON.stringify(props.navigation));
 
     const pushAction = StackActions.push(translate('date_filter.date_range'), {
       range: range,
-      // setRange: getDataOnNewRange,
+      setRange: getDataOnNewRange,
     });
     props.navigation.dispatch(pushAction);
   };
@@ -123,13 +125,18 @@ export default function ClosedLoop(props) {
     });
   };
   const onRefresh = useCallback(() => {
+    setFilterState((state) => ({...state, pageNumber: 1}));
+    setTicketList([]);
+
     setRefreshing(true);
     getTicketList(filterState);
     wait(500).then(() => setRefreshing(false));
   }, []);
 
   useEffect(() => {
-    setTicketList((state) => ticketDetails.data ?? []);
+    setTicketList((state) => [
+      ...new Set([...state, ...(ticketDetails.data ?? [])]),
+    ]);
   }, [ticketDetails]);
 
   // console.log('Ticket list: ', JSON.stringify(ticketDetails.data));
@@ -163,6 +170,14 @@ export default function ClosedLoop(props) {
     //   );
   };
 
+  const loadMoreData = () => {
+    if (ticketList.length < pagerOptions.totalCount) {
+      setFilterState((state) => ({
+        ...state,
+        pageNumber: state.pageNumber + 1,
+      }));
+    }
+  };
   const getTicketOwnerList = (segmentId_) => {
     dispatch(
       getClosedLoopOwnerDetails(authToken, {
@@ -195,7 +210,7 @@ export default function ClosedLoop(props) {
       </View>
     );
   };
-  const getDateText = (dateRange) => {
+  const GetDateText = ({dateRange}) => {
     const sDate = moment(dateRange.startDate, DMYFORMAT).format(
       HalfMonthDateYearFormat,
     );
@@ -220,15 +235,11 @@ export default function ClosedLoop(props) {
     );
   };
 
-  const handleDateFilter = () => {
-    console.log('date filter');
-  };
-
   const getFilterDateBox = () => {
     return (
       <TouchableOpacity onPress={() => filterAction(range)}>
         <View style={styles.filterBox}>
-          {getDateText(range)}
+          <GetDateText dateRange={range} />
           {getDateIcon()}
         </View>
       </TouchableOpacity>
@@ -243,6 +254,8 @@ export default function ClosedLoop(props) {
         }
         style={styles.container}
         data={ticketList}
+        onEndReached={loadMoreData}
+        onEndReachedThreshold={0.1}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
           return (
@@ -381,8 +394,6 @@ export default function ClosedLoop(props) {
           renderContent={renderFilterContent}
           renderHeader={renderFilterHeader}
           callbackNode={fall}
-          onCloseEnd={() => setShadow(false)}
-          onOpenStart={() => setShadow(true)}
         />
       </View>
     );

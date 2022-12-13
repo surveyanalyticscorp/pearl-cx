@@ -248,11 +248,12 @@ export default function CreateTicket(props) {
       setValidation('Enter an email');
       return false;
     }
-    if (!ticketState_.priority) {
+    if (ticketState_.priority === null || ticketState_.priority === undefined) {
       setValidation('Priority not selected');
       return false;
     }
-    if (!ticketState_.status) {
+    if (ticketState_.status === null || ticketState_.status === undefined) {
+      console.log(ticketState_.status);
       setValidation('Status not selected');
       return false;
     }
@@ -278,11 +279,12 @@ export default function CreateTicket(props) {
           handleOnPress={(item, index) => {
             // console.log(JSON.stringify(item));
             // setPriority(item.title);
-            setPriorityIndex(index);
+
             setTicketState((state) => ({
               ...state,
               priority: item.id,
             }));
+            setPriorityIndex(index);
           }}
         />
       </View>

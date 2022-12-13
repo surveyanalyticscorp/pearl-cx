@@ -41,7 +41,7 @@ const SegmentSelector = ({screenName}) => {
     return <Text style={styles.appbarTitle}>{title}</Text>;
   };
 
-  return segmentList && segmentList.length ? (
+  return segmentList && segmentList.length > 1 ? (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPressHandle}>
         <View style={styles.innerContainer}>
