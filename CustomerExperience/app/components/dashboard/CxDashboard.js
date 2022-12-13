@@ -55,7 +55,7 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import {getSegmentIndex} from '../../Utils/TicketUtils';
 import GlobalSelectSegment from './GlobalSelectSegment';
-import RenderSegmentBottomSheet from './RenderSegmentBottomSheet';
+// import RenderSegmentBottomSheet from './RenderSegmentBottomSheet';
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -71,14 +71,13 @@ const CxDashboard = (props) => {
   let [comparision, setComparision] = useState(false);
   let [exitAlert, showExitAlert] = useState(false);
   let [lastLoginArray, setLastLoginArray] = useState([]);
-  let [welcomeScreenShow, setWelcomeScreenShown] = useState(false);
   let segmentId = useSelector(
     (state) => state.dashboard.currentSegment.currentSegmentID,
   );
   const {range, wantToReload} = props;
-  const segmentSelectorOpenState = useSelector(
-    (state) => state.dashboard.isSegmentSelectorOpen,
-  );
+  // const segmentSelectorOpenState = useSelector(
+  //   (state) => state.dashboard.isSegmentSelectorOpen,
+  // );
   const navigation = useNavigation();
   const {subscriberId} = useState(useSelector((state) => state.global));
   const bs = React.useRef(null);
@@ -569,11 +568,11 @@ const CxDashboard = (props) => {
           renderSelectSegment_={renderSelectSegment}
           renderSelectSegmentHeader_={renderSelectSegmentHeader}
         /> */}
-        <RenderSegmentBottomSheet
+        {/* <RenderSegmentBottomSheet
           // ref={bs}
           // snapPoints={bsSnapPoints}
           callbackNode={fall}
-        />
+        /> */}
         <FabAddButton onPress={onFabPressHandler} />
       </SafeAreaView>
     );

@@ -13,7 +13,7 @@ import FeedbackCell from './FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
 import {clearError, setError, setRangeFilter} from '../../redux/actions';
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import QPSpinner from '../../widgets/QPSpinner';
 import {showErrorFlashMessage, usePrevious} from '../../Utils/Utility';
 import ArrayUtils from '../../Utils/ArrayUtils';
@@ -31,8 +31,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {dashboardStyles} from '../dashboard/dashboard.style';
 import {translate} from '../../Utils/MultilinguaUtils';
 // import MainDropDown from '../../widgets/drop-down/MainDropDown';
-import {FabAddButton} from '../../routes/CommonScreen';
-import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
+import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
+// import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 import Animated from 'react-native-reanimated';
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
@@ -140,13 +140,11 @@ function Feedback(props) {
   };
 
   const renderFeedbackView = () => {
-    const segmentOptions = ['Main Segment', 'Child Segment'];
-
     return (
       <SafeAreaView
         forceInset={{top: 'never', bottom: 'never'}}
         style={styles.safeAreaView}>
-        <FilterHeader
+        {/* <FilterHeader
           actionOnArrowClick={() => {
             setFeedbackData([]);
             setPageOffset(0);
@@ -158,7 +156,7 @@ function Feedback(props) {
             setShowLoader(true);
           }}
           {...props}
-        />
+        /> */}
 
         <View
           style={{
@@ -186,8 +184,8 @@ function Feedback(props) {
             sortingText: sortingText.label,
             setSortingText: setSortText,
           }}>
-          <FeedbackTabStack />
-          {/* <RenderFeedbackScene /> */}
+          {/* <FeedbackTabStack /> */}
+          <RenderFeedbackScene {...props} />
         </FormContext.Provider>
         {showLoader && renderSpinner()}
       </SafeAreaView>
@@ -219,7 +217,7 @@ const FeedbackTabStack = () => (
       component={RenderFeedbackScene}
       initialParams={{screenName: 'All'}}
     />
-    <FeedbackTab.Screen
+    {/* <FeedbackTab.Screen
       name={translate('responses.detractor')}
       component={RenderFeedbackScene}
       initialParams={{screenName: 'Detractor'}}
@@ -236,7 +234,7 @@ const FeedbackTabStack = () => (
       component={RenderFeedbackScene}
       initialParams={{screenName: 'Promoter'}}
       options={{tabBarLabel: 'Child Segment 3', title: 'Dummy 3'}}
-    />
+    /> */}
   </FeedbackTab.Navigator>
 );
 
@@ -247,10 +245,12 @@ const RenderFeedbackScene = (props) => {
   let prevSortRef = usePrevious(feedbackForm.sortingText);
   //let [exitAlert, showExitAlert] = useState(false);
   const fall = new Animated.Value(1);
+  const {authToken, range, isLoading} = useSelector((state) => state.global);
 
   useEffect(() => {
     if (prevFeedbackRef !== feedbackForm.feedbackData) {
-      getData();
+      // getData();
+      getAllData();
     }
   }, [feedbackForm.feedbackData]);
 
@@ -349,13 +349,39 @@ const RenderFeedbackScene = (props) => {
     }
   };
 
+  let getAllData = () => {
+    let data = [...feedbackForm.feedbackData];
+    setList(data);
+  };
+
   const onFabHandler = () => {
     props.navigation.navigate(translate('responses.new_ticket'));
+  };
+
+  const dateRangeHandler = (range_) => {
+    console.log('DATE_RANGE', JSON.stringify(range_));
+    // dispatch(setRangeFilter(range_));
+    // setFeedbackData([]);
+    //         setPageOffset(0);
+    //         setShowLoader(true);
+  };
+
+  const filterHandler = () => {
+    console.log('FILTER');
+    props.navigation.navigate(translate('responses.sort_by'), {
+      setSorter: setResponseSorter,
+      selectedSorter: feedbackForm.sortingText,
+    });
   };
 
   let renderFeedbackList = () => {
     return (
       <View style={dashboardStyles.container}>
+        <HeaderFilter
+          dateRange={range}
+          onPressDateRange={dateRangeHandler}
+          onPressFilter={filterHandler}
+        />
         <FlatList
           data={list}
           renderItem={_renderRow}
@@ -370,10 +396,10 @@ const RenderFeedbackScene = (props) => {
           ListFooterComponent={() => (
             <View style={{paddingBottom: PaddingConstants.tab2}} />
           )}
-          ListHeaderComponent={renderResponseFilterView}
+          // ListHeaderComponent={renderResponseFilterView}
         />
         <FabAddButton onPress={onFabHandler} />
-        <RenderSegmentBottomSheet callbackNode={fall} />
+        {/* <RenderSegmentBottomSheet callbackNode={fall} /> */}
       </View>
     );
   };

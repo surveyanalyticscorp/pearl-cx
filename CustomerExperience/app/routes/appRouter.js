@@ -340,7 +340,10 @@ const AppRouter = (props) => {
         options={({navigation, route}) => ({
           headerTitle: (props) => {
             return (
-              <SegmentSelector screenName={translate('dashboard.dashboard')} />
+              <SegmentSelector
+                screenName={translate('dashboard.dashboard')}
+                navigation={navigation}
+              />
             );
           },
 

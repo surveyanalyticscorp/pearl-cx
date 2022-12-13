@@ -89,3 +89,5 @@ export const LOADING_ERROR = 'ERROR';
 export const SUCCESS = 'success';
 export const EMAIL_PATTERN =
   "^[A-Za-z0-9][\\'A-Za-z0-9_+/-]*(\\.[\\'_A-Za-z0-9-+/]+)*@((([a-zA-Z]+)?\\.[a-zA-Z]+-[a-zA-Z]+\\.[A-Za-z]{2,})|([A-Za-z0-9]([A-Za-z0-9_-]*)(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})))";
+
+export const SEGMENT_SELECTOR = 'segmentSelector';

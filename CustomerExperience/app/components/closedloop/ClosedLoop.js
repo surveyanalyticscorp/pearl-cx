@@ -17,6 +17,9 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {
   BottomSheetHeader,
   FabAddButton,
+  FilterDateBox,
+  FilterIcon,
+  HeaderFilter,
   NoItemsFound,
   RenderSpinner,
 } from '../../routes/CommonScreen';
@@ -42,7 +45,7 @@ import {
   ticketTypeList,
 } from '../../Utils/TicketUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
-import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
+// import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
@@ -102,16 +105,14 @@ export default function ClosedLoop(props) {
   let getDataOnNewRange = (range_) => {
     console.log('DATE_RANGE', JSON.stringify(range_));
     dispatch(setRangeFilter(range_));
-  };
-
-  let filterAction = (range_) => {
-    console.log(JSON.stringify(props.navigation));
-
-    const pushAction = StackActions.push(translate('date_filter.date_range'), {
-      range: range,
-      setRange: getDataOnNewRange,
-    });
-    props.navigation.dispatch(pushAction);
+    // reset pageNumber, ticket list, range
+    setFilterState((state) => ({
+      ...state,
+      pageNumber: 1,
+      fromDate: moment(range_.startDate, DMYFORMAT).format(YMDFORMAT),
+      toDate: moment(range_.endDate, DMYFORMAT).format(YMDFORMAT),
+    }));
+    setTicketList([]);
   };
 
   useEffect(() => {
@@ -153,6 +154,7 @@ export default function ClosedLoop(props) {
 
   const getTicketList = (filterState_) => {
     // setRefreshing(true);
+
     dispatch(showLoading(true));
     dispatch(
       getClosedLoopTicketList(
@@ -188,62 +190,6 @@ export default function ClosedLoop(props) {
 
   const getSearchIcon = () => {
     return <IonIcons name="search" size={20} color={Colors.lightBlack} />;
-  };
-
-  const getFilterIcon = () => {
-    return (
-      <TouchableOpacity onPress={() => openFilter()}>
-        <IonIcons name="funnel" size={20} color={Colors.lightBlack} />
-      </TouchableOpacity>
-    );
-  };
-
-  const HeaderFilter = () => {
-    return (
-      <View style={styles.filterAndSearchBox}>
-        {getFilterIcon()}
-        {getFilterDateBox()}
-        {/* <View
-          style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
-          {getSearchIcon()}
-        </View> */}
-      </View>
-    );
-  };
-  const GetDateText = ({dateRange}) => {
-    const sDate = moment(dateRange.startDate, DMYFORMAT).format(
-      HalfMonthDateYearFormat,
-    );
-    const eDate = moment(dateRange.endDate, DMYFORMAT).format(
-      HalfMonthDateYearFormat,
-    );
-    return (
-      <Text style={{margin: MarginConstants.halfTab, color: Colors.lightBlack}}>
-        {`${sDate} - ${eDate}`}
-      </Text>
-    );
-  };
-
-  const getDateIcon = () => {
-    return (
-      <IonIcons
-        style={{margin: MarginConstants.halfTab}}
-        name="calendar"
-        size={20}
-        color={Colors.lightBlack}
-      />
-    );
-  };
-
-  const getFilterDateBox = () => {
-    return (
-      <TouchableOpacity onPress={() => filterAction(range)}>
-        <View style={styles.filterBox}>
-          <GetDateText dateRange={range} />
-          {getDateIcon()}
-        </View>
-      </TouchableOpacity>
-    );
   };
 
   const ClosedLoopTicketList = () => {
@@ -364,7 +310,11 @@ export default function ClosedLoop(props) {
             opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
             flex: 1,
           }}>
-          <HeaderFilter />
+          <HeaderFilter
+            dateRange={range}
+            onPressDateRange={getDataOnNewRange}
+            onPressFilter={openFilter}
+          />
           <ClosedLoopTicketList />
           <FabAddButton onPress={onFabHandler} />
 
@@ -381,11 +331,11 @@ export default function ClosedLoop(props) {
       onPressHandler={(item, action) => handleAction(item, action)}
     /> */}
         </Animated.View>
-        <RenderSegmentBottomSheet
+        {/* <RenderSegmentBottomSheet
           // ref={bs}
           // snapPoints={bsSnapPoints}
           callbackNode={fall}
-        />
+        /> */}
         <BottomSheet
           ref={bs}
           snapPoints={bsSnapPoints}

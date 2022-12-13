@@ -9,6 +9,7 @@ import {
 import FeedbackDetails from '../components/feedback/FeedbackDetails';
 import {
   DrawerActions,
+  StackActions,
   useNavigation,
   useNavigationState,
 } from '@react-navigation/native';
@@ -38,6 +39,10 @@ import {translate} from '../Utils/MultilinguaUtils';
 import {dashboardStyles} from '../components/dashboard/dashboard.style';
 import QPSpinner from '../widgets/QPSpinner';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
+import {SEGMENT_SELECTOR} from '../api/Constant';
+import SelectSegmentScreen from '../components/SelectSegmentScreen';
+import moment from 'moment';
+import {DMYFORMAT, HalfMonthDateYearFormat} from '../Utils/AppConstants';
 
 // import CheckBox from '@react-native-community/checkbox';
 
@@ -371,6 +376,76 @@ export const EditTicket = () => {
   );
 };
 
+export const FilterDateBox = ({range, onDateRangeChangeHandler}) => {
+  const navigation = useNavigation();
+
+  const DateIcon = () => {
+    return (
+      <IonIcons
+        style={{margin: MarginConstants.halfTab}}
+        name="calendar"
+        size={20}
+        color={Colors.lightBlack}
+      />
+    );
+  };
+
+  const GetDateText = ({dateRange}) => {
+    const sDate = moment(dateRange.startDate, DMYFORMAT).format(
+      HalfMonthDateYearFormat,
+    );
+    const eDate = moment(dateRange.endDate, DMYFORMAT).format(
+      HalfMonthDateYearFormat,
+    );
+    return (
+      <Text style={{margin: MarginConstants.halfTab, color: Colors.lightBlack}}>
+        {`${sDate} - ${eDate}`}
+      </Text>
+    );
+  };
+
+  let filterAction = (range_, callBackHandler) => {
+    const pushAction = StackActions.push(translate('date_filter.date_range'), {
+      range: range_,
+      setRange: callBackHandler,
+    });
+    navigation.dispatch(pushAction);
+  };
+
+  return (
+    <TouchableOpacity
+      onPress={() => filterAction(range, onDateRangeChangeHandler)}>
+      <View style={styles.filterBox}>
+        <GetDateText dateRange={range} />
+        <DateIcon />
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+export const FilterIcon = ({onPressFilter}) => {
+  return (
+    <TouchableOpacity onPress={onPressFilter}>
+      <IonIcons name="funnel" size={20} color={Colors.lightBlack} />
+    </TouchableOpacity>
+  );
+};
+
+export const HeaderFilter = ({dateRange, onPressFilter, onPressDateRange}) => {
+  return (
+    <View style={styles.filterAndSearchBox}>
+      <FilterIcon onPressFilter={onPressFilter} />
+      <FilterDateBox
+        range={dateRange}
+        onDateRangeChangeHandler={onPressDateRange}
+      />
+      {/* <View
+        style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
+        {getSearchIcon()}
+      </View> */}
+    </View>
+  );
+};
 const SegmentSelector = ({segmentName, segmentList, onPressHandle}) => {
   const segmentSelectorStyles = StyleSheet.create({
     container: {flex: 1},
@@ -571,6 +646,16 @@ const CommonScreens = (RootStack) => {
         headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
       })}
     />,
+
+    <RootStack.Screen
+      key={translate('dashboard.segment')}
+      name={translate('dashboard.segment')}
+      component={SelectSegmentScreen}
+      options={({navigation, route}) => ({
+        headerShown: false,
+        // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+      })}
+    />,
   ];
 };
 
@@ -635,5 +720,23 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     fontSize: TextSizes.secondary,
     fontFamily: FontFamily.regular,
+  },
+  filterBox: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: Colors.borderColor,
+    padding: PaddingConstants.tab1,
+    margin: MarginConstants.tab1,
+  },
+  filterAndSearchBox: {
+    flexDirection: 'row',
+
+    alignItems: 'center',
+    padding: PaddingConstants.halfTab,
+    marginHorizontal: MarginConstants.tab1,
+    backgroundColor: Colors.white,
   },
 });

@@ -4,18 +4,19 @@ import {Colors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  getClosedLoopOwnerDetails,
-  setSegmentSelectorOpen,
-} from '../redux/actions/dashboard.actions';
+import {getClosedLoopOwnerDetails} from '../redux/actions/dashboard.actions';
 import {useEffect} from 'react';
+import {StackActions, useNavigation} from '@react-navigation/native';
+// import {SEGMENT_SELECTOR} from '../api/Constant';
+import {translate} from '../Utils/MultilinguaUtils';
 
 const SegmentSelector = ({screenName}) => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const authToken = useSelector((state) => state.global.authToken);
-  const segmentSelectorOpenState = useSelector(
-    (state) => state.dashboard.isSegmentSelectorOpen,
-  );
+  // const segmentSelectorOpenState = useSelector(
+  //   (state) => state.dashboard.isSegmentSelectorOpen,
+  // );
   const segmentList = useSelector(
     (state) => state.dashboard.segmentDetails.segments,
   );
@@ -33,8 +34,13 @@ const SegmentSelector = ({screenName}) => {
     }
   }, [currentSegment]);
 
-  const onPressHandle = () =>
-    dispatch(setSegmentSelectorOpen(!segmentSelectorOpenState));
+  const onPressHandle = () => {
+    // dispatch(setSegmentSelectorOpen(!segmentSelectorOpenState));
+
+    const pushAction = StackActions.push(translate('dashboard.segment'));
+    navigation.dispatch(pushAction);
+  };
+
   const SegmentText = ({segmentName}) => {
     const title = `${screenName ? screenName + ':' : ''} ${segmentName ?? ''}`;
 
