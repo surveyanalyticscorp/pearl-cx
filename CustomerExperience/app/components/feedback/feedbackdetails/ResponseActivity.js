@@ -16,7 +16,7 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
 const ResponseActivity = (props) => {
-  let [activityData, setActivityData] = useState(props.route.params.data);
+  let activityData = props.route.params.data;
 
   // console.log(`feedback: ${activityData}`);
 
@@ -40,14 +40,10 @@ const ResponseActivity = (props) => {
   const RenderSurveyDetails = () => {
     return (
       <View style={styles.innerContainer}>
-        <RenderSurveySent>
-          {' '}
-          {activityData.surveyHistory.sentDate}
-        </RenderSurveySent>
+        <RenderSurveySent>{'STATIC Survey sent DATE'}</RenderSurveySent>
         <View style={styles.border} />
         <RenderSurveyComplete>
-          {' '}
-          {activityData.surveyHistory.completeDate}
+          {'STATIC Survey complete DATE'}
         </RenderSurveyComplete>
       </View>
     );
@@ -113,10 +109,20 @@ const ResponseActivity = (props) => {
   };
 
   const RenderActivityDetails = () => {
-    const managerName = activityData.surveyHistory.managerName;
-    const lastUpdated = activityData.surveyHistory.lastUpdated;
-    const comment = activityData.surveyHistory.comment;
-    const history = activityData.history;
+    const managerName = 'DUMMY MANAGER';
+    const lastUpdated = 'DUMMY COMMENT';
+    const comment = 'LAST COMMENT';
+    const history = [
+      {
+        status: 'new',
+      },
+      {
+        status: 'open',
+      },
+      {
+        status: 'resolved',
+      },
+    ];
 
     return (
       <View style={styles.innerContainer}>

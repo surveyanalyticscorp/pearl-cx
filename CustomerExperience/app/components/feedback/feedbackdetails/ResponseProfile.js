@@ -14,11 +14,13 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 // import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import {useSelector} from 'react-redux';
 
 const ResponseProfile = (props) => {
-  const profileData = props.route.params.data;
-
-  console.log(`feedback: ${profileData}`);
+  const {panelMember, surveyDetails} = useSelector((state) => state.response);
+  const data = props.route.params.data;
+  console.log(`FEEDBACK_DATA_SURVEY: ${JSON.stringify(surveyDetails)}`);
+  console.log(`FEEDBACK_DATA_PROFILE: ${JSON.stringify(panelMember)}`);
 
   const SurveyCounterView = ({children}) => {
     const color = Colors.accent;
@@ -47,8 +49,10 @@ const ResponseProfile = (props) => {
   const RenderCounter = () => {
     return (
       <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-        <SurveyCounterView> {profileData.surveyCount}</SurveyCounterView>
-        <TicketCounterView> {profileData.ticketCount}</TicketCounterView>
+        <SurveyCounterView>
+          {panelMember.totalSurveysResponded ?? 0}
+        </SurveyCounterView>
+        <TicketCounterView> {panelMember.totalTickets ?? 0}</TicketCounterView>
       </View>
     );
   };
@@ -61,7 +65,7 @@ const ResponseProfile = (props) => {
         }}
         style={styles.contactBox}>
         <IonIcon name="call" size={12} color={Colors.filterIconColor} />
-        <Text style={styles.contactText}>{profileData.phone}</Text>
+        <Text style={styles.contactText}>{panelMember.phone ?? 'N/A'}</Text>
       </TouchableOpacity>
     );
   };
@@ -74,7 +78,9 @@ const ResponseProfile = (props) => {
         }}
         style={styles.contactBox}>
         <IonIcon name="mail" size={14} color={Colors.filterIconColor} />
-        <Text style={styles.contactText}>{profileData.email}</Text>
+        <Text style={styles.contactText}>
+          {panelMember.emailAddress ?? 'N/A'}
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -83,7 +89,7 @@ const ResponseProfile = (props) => {
     return (
       <View style={{marginVertical: MarginConstants.tab1}}>
         <Text style={styles.secondaryTitle}>Name</Text>
-        <Text style={styles.secondaryText}>{profileData.name}</Text>
+        <Text style={styles.secondaryText}>{panelMember.name ?? 'N/A'}</Text>
       </View>
     );
   };
@@ -101,7 +107,9 @@ const ResponseProfile = (props) => {
     return (
       <View style={{marginVertical: MarginConstants.tab1}}>
         <Text style={styles.secondaryTitle}>Date</Text>
-        <Text style={styles.secondaryText}>{profileData.date}</Text>
+        <Text style={styles.secondaryText}>
+          {data.surveyTakenDate ?? 'N/A'}
+        </Text>
       </View>
     );
   };

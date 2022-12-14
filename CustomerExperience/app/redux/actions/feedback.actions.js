@@ -4,14 +4,13 @@ export const GET_SURVEY_RESPONSE_DETAILS = 'GET_SURVEY_RESPONSE_DETAILS';
 export const SURVEY_RESPONSE_DETAILS_RECEIVED =
   'SURVEY_RESPONSE_DETAILS_RECEIVED';
 
-//
-export const getPanelMemberDetails = (param, token) => ({
+export const getPanelMemberDetails = (token, param) => ({
   type: GET_PANEL_MEMBER,
   param,
   token,
 });
 
-export const getSurveyResponseDetails = (param, token) => ({
+export const getSurveyResponseDetails = (token, param) => ({
   type: GET_SURVEY_RESPONSE_DETAILS,
   param,
   token,

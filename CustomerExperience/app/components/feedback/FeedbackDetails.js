@@ -9,12 +9,34 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 // import ActionButton from 'react-native-action-button';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 import {translate} from '../../Utils/MultilinguaUtils';
-import ResponseFeedback from './feedbackdetails/ResponseFeedback';
+// import ResponseFeedback from './feedbackdetails/ResponseFeedback';
 import ResponseProfile from './feedbackdetails/ResponseProfile';
 import ResponseActivity from './feedbackdetails/ResponseActivity';
 import {FontFamily} from '../../styles/font.constants';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getPanelMemberDetails,
+  getSurveyResponseDetails,
+} from '../../redux/actions/feedback.actions';
 
 export default function FeedbackDetails(props) {
+  const dispatch = useDispatch();
+  const authToken = useSelector((state) => state.global.authToken);
+  const data = props.route.params.data;
+
+  console.log('RESPONSE_DATA', JSON.stringify(props.route.params.data));
+
+  dispatch(
+    getPanelMemberDetails(authToken, {panelMemberID: data.panelMemberID}),
+  );
+
+  // dispatch(
+  //   getSurveyResponseDetails(authToken, {
+  //     surveyID: data.surveyID,
+  //     responseID: data.responseSetID,
+  //   }),
+  // );
+
   return (
     <View style={styles.container}>
       <FeedbackDetailsTabStack {...props} />
@@ -37,46 +59,6 @@ export default function FeedbackDetails(props) {
 }
 
 const DetailsTab = createMaterialTopTabNavigator();
-
-const questions = [
-  {
-    id: 1,
-    question:
-      'How likely is it that you would recommend our company to a friend or colleague?',
-    answer: '4',
-  },
-  {
-    id: 2,
-    question: 'What is the primary reason for your score?',
-    answer: 'The manager was super rude to us! ',
-  },
-  {
-    id: 3,
-    question:
-      'How likely is it that you would recommend our company to a friend or colleague?',
-    answer: '4',
-  },
-  {
-    id: 4,
-    question: 'What is the primary reason for your score?',
-    answer: 'The manager was super rude to us! ',
-  },
-  {
-    id: 5,
-    question: 'Different question with another comment from client?',
-    answer: 'Not happy about the service ',
-  },
-  {
-    id: 6,
-    question: 'What is the primary reason for your score?',
-    answer: 'The manager was super rude to us! ',
-  },
-  {
-    id: 7,
-    question: 'Different question with another comment from client?',
-    answer: 'Not happy about the service ',
-  },
-];
 
 const profileData = {
   name: 'Jessica Palm',
@@ -131,7 +113,6 @@ const FeedbackDetailsTabStack = (props) => (
       initialParams={{
         token: props.route.params.token,
         url: props.route.params.data.responseDataURL,
-        listData: questions,
       }}
     />
     <DetailsTab.Screen
@@ -140,7 +121,7 @@ const FeedbackDetailsTabStack = (props) => (
       initialParams={{
         token: props.route.params.token,
         url: props.route.params.data.memberProfileURL,
-        data: profileData,
+        data: props.route.params.data,
       }}
     />
     <DetailsTab.Screen
@@ -149,7 +130,7 @@ const FeedbackDetailsTabStack = (props) => (
       initialParams={{
         token: props.route.params.token,
         url: props.route.params.data.activityURL,
-        data: activityData,
+        data: props.route.params.data,
       }}
     />
   </DetailsTab.Navigator>

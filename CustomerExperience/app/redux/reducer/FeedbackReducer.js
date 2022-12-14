@@ -13,7 +13,7 @@ const feedbackReducer = (state = initialState, action) => {
     case PANEL_MEMBER_RECEIVED: {
       return {
         ...state,
-        panelMember: action.response.body,
+        panelMember: action.response.body ?? {},
       };
     }
     case SURVEY_RESPONSE_DETAILS_RECEIVED: {
