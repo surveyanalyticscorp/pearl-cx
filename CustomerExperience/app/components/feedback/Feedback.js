@@ -13,14 +13,14 @@ import FeedbackCell from './FeedbackCells';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
 import {clearError, setError, setRangeFilter} from '../../redux/actions';
-import {connect, useSelector} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import QPSpinner from '../../widgets/QPSpinner';
 import {showErrorFlashMessage, usePrevious} from '../../Utils/Utility';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import {TextSizes} from '../../styles/textsize.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import FilterHeader from '../FilterHeader';
+// import FilterHeader from '../FilterHeader';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -38,6 +38,7 @@ const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
 
 function Feedback(props) {
+  let dispatch = useDispatch();
   let [feedbackData, setFeedbackData] = useState([]);
   let [ticketStatus, setTicketStatus] = useState([]);
   let [pageOffset, setPageOffset] = useState(0);
@@ -59,6 +60,7 @@ function Feedback(props) {
         endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
         filterText: sortingAttribute[sortingText.index].toLowerCase(),
       };
+
       apiHandler.getFeedbackResponseList(
         props.authToken,
         data,
@@ -139,6 +141,20 @@ function Feedback(props) {
     );
   };
 
+  const dateRangeHandler = (range_) => {
+    dispatch(setRangeFilter(range_));
+    setFeedbackData([]);
+    setPageOffset(0);
+    setShowLoader(true);
+  };
+
+  const filterHandler = () => {
+    props.navigation.navigate(translate('responses.sort_by'), {
+      setSorter: setSortText,
+      selectedSorter: sortingText.label,
+    });
+  };
+
   const renderFeedbackView = () => {
     return (
       <SafeAreaView
@@ -157,7 +173,11 @@ function Feedback(props) {
           }}
           {...props}
         /> */}
-
+        <HeaderFilter
+          dateRange={props.range}
+          onPressDateRange={dateRangeHandler}
+          onPressFilter={filterHandler}
+        />
         <View
           style={{
             marginHorizontal: '0%',
@@ -358,30 +378,9 @@ const RenderFeedbackScene = (props) => {
     props.navigation.navigate(translate('responses.new_ticket'));
   };
 
-  const dateRangeHandler = (range_) => {
-    console.log('DATE_RANGE', JSON.stringify(range_));
-    // dispatch(setRangeFilter(range_));
-    // setFeedbackData([]);
-    //         setPageOffset(0);
-    //         setShowLoader(true);
-  };
-
-  const filterHandler = () => {
-    console.log('FILTER');
-    props.navigation.navigate(translate('responses.sort_by'), {
-      setSorter: setResponseSorter,
-      selectedSorter: feedbackForm.sortingText,
-    });
-  };
-
   let renderFeedbackList = () => {
     return (
       <View style={dashboardStyles.container}>
-        <HeaderFilter
-          dateRange={range}
-          onPressDateRange={dateRangeHandler}
-          onPressFilter={filterHandler}
-        />
         <FlatList
           data={list}
           renderItem={_renderRow}

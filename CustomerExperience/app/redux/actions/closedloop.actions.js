@@ -63,6 +63,13 @@ export const GET_EMAIL_TEMPLATES_RECEIVED = 'GET_EMAIL_TEMPLATES_RECEIVED';
 export const SEND_EMAIL = 'SEND_EMAIL';
 export const SEND_EMAIL_RECEIVED = 'SEND_EMAIL_RECEIVED';
 
+export const GET_LATEST_COMMENT = 'GET_LATEST_COMMENT';
+export const LATEST_COMMENT_RECEIVED = 'LATEST_COMMENT_RECEIVED';
+
+export const GET_TICKET_STATUS_HISTORY = 'GET_TICKET_STATUS_HISTORY';
+export const GET_TICKET_STATUS_HISTORY_RECEIVED =
+  'GET_TICKET_STATUS_HISTORY_RECEIVED';
+
 export const getDefaultEmailTemplate = (token, param) => ({
   type: GET_DEFAULT_EMAIL_TEMPLATE,
   token,
@@ -81,4 +88,21 @@ export const sendEmail = (token, ticketId, param, queryParam) => ({
   ticketId,
   param,
   queryParam,
+});
+
+// Takes CX Ticket ID
+export const getLatestComment = (token, ticketId, param) => ({
+  type: GET_LATEST_COMMENT,
+  token,
+  ticketId,
+  param,
+});
+
+// Takes CX Ticket ID
+
+export const getTicketStatusHistory = (token, ticketId, param) => ({
+  type: GET_TICKET_STATUS_HISTORY,
+  token,
+  ticketId,
+  param,
 });

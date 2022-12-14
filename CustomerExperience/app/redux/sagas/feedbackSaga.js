@@ -1,32 +1,57 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
-import {CX_GET_ALL_RESPONSE} from '../../api/Constant';
 import {
-  API_ERROR,
-  IS_LOADING,
-} from '../actions/index';
+  CX_GET_PANEL_MEMBER,
+  CX_RESPONSE_SURVEY_DETAILS,
+} from '../../api/Constant';
+import {API_ERROR} from '../actions/index';
+import {
+  GET_PANEL_MEMBER,
+  GET_SURVEY_RESPONSE_DETAILS,
+  PANEL_MEMBER_RECEIVED,
+  SURVEY_RESPONSE_DETAILS_RECEIVED,
+} from '../actions/feedback.actions';
 // import {FEEDBACK_RECEIVED, FEEDBACK_UPDATED, GET_FEEDBACK, UPDATE_FEEDBACK} from '../actions/feedback.actions';
 
-// export function* fetchFeedback(action) {
-//   try {
-//     const json = yield WebServiceHandler.postNew(
-//         CX_GET_ALL_RESPONSE,
-//         {'Auth-Token': action.token},
-//         action.param,
-//     );
-//
-//     yield put({type: FEEDBACK_RECEIVED, response: json});
-//     // yield put({type: IS_LOADING, payload: {isLoading: false}});
-//
-//   } catch (error) {
-//     yield put({type: IS_LOADING, payload: {isLoading: false}});
-//     yield put({type: API_ERROR, error: error});
-//   }
-// }
+export function* fetchPanelMemberData(action) {
+  try {
+    const json = yield WebServiceHandler.postNew(
+      CX_GET_PANEL_MEMBER,
+      {'Auth-Token': action.token},
+      action.param,
+    );
 
-// export function* watchGetFeedback() {
-//   yield takeLatest(GET_FEEDBACK, fetchFeedback);
-// }
+    yield put({type: PANEL_MEMBER_RECEIVED, response: json});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: API_ERROR, error: error});
+  }
+}
+
+export function* watchGetPanelMember() {
+  yield takeLatest(GET_PANEL_MEMBER, fetchPanelMemberData);
+}
+
+export function* fetchSurveyResponseDetails(action) {
+  try {
+    const json = yield WebServiceHandler.postNew(
+      CX_RESPONSE_SURVEY_DETAILS,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+
+    yield put({type: SURVEY_RESPONSE_DETAILS_RECEIVED, response: json});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: API_ERROR, error: error});
+  }
+}
+
+export function* watchGetSurveyResponseDetails() {
+  yield takeLatest(GET_SURVEY_RESPONSE_DETAILS, fetchSurveyResponseDetails);
+}
 
 // export function* updateFetchFeedback(action) {
 //   try {

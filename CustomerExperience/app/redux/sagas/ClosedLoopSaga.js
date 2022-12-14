@@ -44,6 +44,10 @@ import {
   CLF_SEND_EMAIL_PREFIX,
   CLF_SEND_EMAIL_POSTFIX,
   CX_GET_CLOSED_LOOP_SEGMENT_AND_OWNER_BY_FEEDBACK,
+  CLF_LATEST_COMMENT_BY_TICKET_ID_POSTFIX,
+  CLF_LATEST_COMMENT_BY_TICKET_ID_PREFIX,
+  CLF_STATUS_HISTORY_BY_PREFIX,
+  CLF_STATUS_HISTORY_BY_POSTFIX,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -51,6 +55,10 @@ import {
   GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
   GET_EMAIL_TEMPLATES,
   GET_EMAIL_TEMPLATES_RECEIVED,
+  GET_LATEST_COMMENT,
+  GET_TICKET_STATUS_HISTORY,
+  GET_TICKET_STATUS_HISTORY_RECEIVED,
+  LATEST_COMMENT_RECEIVED,
   SEND_EMAIL,
   SEND_EMAIL_RECEIVED,
 } from '../actions/closedloop.actions';
@@ -523,4 +531,54 @@ function* sendEmail(action) {
 }
 export function* watchSendEmail() {
   yield takeLatest(SEND_EMAIL, sendEmail);
+}
+
+function* getLatestComment(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      CLF_LATEST_COMMENT_BY_TICKET_ID_PREFIX +
+        action.ticketId +
+        CLF_LATEST_COMMENT_BY_TICKET_ID_POSTFIX,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: LATEST_COMMENT_RECEIVED,
+      response: json,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchGetLatestComment() {
+  yield takeLatest(GET_LATEST_COMMENT, getLatestComment);
+}
+
+function* getTicketStatusHistory(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      CLF_STATUS_HISTORY_BY_PREFIX +
+        action.ticketId +
+        CLF_STATUS_HISTORY_BY_POSTFIX,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: GET_TICKET_STATUS_HISTORY_RECEIVED,
+      response: json,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchGetTicketStatusHistory() {
+  yield takeLatest(GET_TICKET_STATUS_HISTORY, getTicketStatusHistory);
 }

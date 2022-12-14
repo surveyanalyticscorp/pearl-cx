@@ -127,7 +127,7 @@ const FeedbackDetailsTabStack = (props) => (
     keyboardDismissMode={'auto'}>
     <DetailsTab.Screen
       name={translate('responses.feedback')}
-      component={ResponseFeedback}
+      component={renderScene}
       initialParams={{
         token: props.route.params.token,
         url: props.route.params.data.responseDataURL,

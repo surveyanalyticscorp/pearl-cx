@@ -10,7 +10,7 @@ export const ASYNC_LAST_LOGIN = 'lastLogin';
 //export const BASE_URL = 'https://api.questionpro.com/';
 
 export const PANEL_AUTH =
-  'https://cxlabs.questionpro.com/a/nativehtml/panel.auth.PanelRequestHandler';
+  'https://api.questionpro.com/a/nativehtml/panel.auth.PanelRequestHandler';
 export const AUTH_LOGIN = '/a/nativehtml/cx.auth.CXLogin';
 export const CX_LOGOUT = '/a/nativehtml/cx.auth.CXLogout';
 
@@ -24,6 +24,11 @@ export const CX_HOME = '/a/nativehtml/cx.CXHome';
 export const CX_DETRACTOR_TICKETS = '/a/nativehtml/cx.CXDetractorTicket';
 export const CX_GET_ALL_RESPONSE = '/a/nativehtml/cx.CXGetAllResponses';
 
+export const CX_GET_PANEL_MEMBER = '/a/nativehtml/cx.CXPanelMemberProfile';
+export const CX_RESPONSE_TICKET_DETAILS = '/a/nativehtml/cx.CXTicketDetails';
+export const CX_RESPONSE_SURVEY_DETAILS =
+  '/a/nativehtml/cx.SurveyResponseDetails';
+
 //export const CX_ADD_UPDATE_TICKET = 'a/nativehtml/cx.CXAddOrUpdateTicket';
 
 export const CX_GET_CLOSED_LOOP_TICKET_DETAILS =
@@ -32,7 +37,6 @@ export const CX_GET_CLOSED_LOOP_TICKET_DETAILS =
 //   '/a/nativehtml/cx.closedloop.CXGetSegmentByStatus';
 export const CX_GET_CLOSED_LOOP_SEGMENT_DETAILS =
   '/a/nativehtml/cx.closedloop.CXGetAllSegment';
-
 export const CX_GET_CLOSED_LOOP_OWNER_DETAILS =
   '/a/nativehtml/cx.closedloop.CXGetOwnerBySegment';
 export const CX_GET_CLOSED_LOOP_SEGMENT_AND_OWNER_BY_FEEDBACK =
@@ -61,13 +65,18 @@ export const CLF_GET_TICKET_DETAILS = `${CLF_BASE_URL}mobile/tickets/`;
 // ex: {{BASE_URL}}/mobile/tickets/:ticketId
 
 export const CLF_STATUS_WISE_PRIORITY_ANALYTICS = `${CLF_BASE_URL}mobile/tickets/status-wise-priority/segments/`;
-
 export const CLF_WELCOME_SCREEN_COUNTS = `${CLF_BASE_URL}analytics/status/mobile`;
 
 export const CLF_GET_DEFAULT_EMAIL_TEMPLATE = `${CLF_BASE_URL}actionTemplate/get-default/mobile`;
 export const CLF_GET_EMAIL_TEMPLATES = `${CLF_BASE_URL}actionTemplate/mobile`;
 export const CLF_SEND_EMAIL_PREFIX = `${CLF_BASE_URL}tickets/`;
 export const CLF_SEND_EMAIL_POSTFIX = '/actionMail/mobile';
+
+export const CLF_LATEST_COMMENT_BY_TICKET_ID_PREFIX = 'comments/tickets/';
+export const CLF_LATEST_COMMENT_BY_TICKET_ID_POSTFIX = '/latest-comment';
+
+export const CLF_STATUS_HISTORY_BY_PREFIX = '/tickets/';
+export const CLF_STATUS_HISTORY_BY_POSTFIX = '/last-status-history';
 
 export const EMAIL = 'email';
 export const PHONE = 'phone';

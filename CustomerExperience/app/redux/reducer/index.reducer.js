@@ -4,6 +4,7 @@ import globalReducer from './GlobalReducer';
 import notificationReducer from './NotificationReducer';
 import {CLEAR_USER_INFO} from '../actions';
 import {NetworkReducer} from 'react-native-redux-connectivity';
+import feedbackReducer from './FeedbackReducer';
 
 const rootReducer = (state, action) => {
   if (action.type === CLEAR_USER_INFO) {
@@ -18,6 +19,7 @@ const appReducer = combineReducers({
   dashboard: dashboardReducer,
   global: globalReducer,
   notification: notificationReducer,
+  response: feedbackReducer,
 });
 
 export default rootReducer;

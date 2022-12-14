@@ -23,8 +23,14 @@ import {
   watchGetEmailTemplates,
   watchSendEmail,
   watchGetClosedLoopAllOwners,
+  watchGetLatestComment,
+  watchGetTicketStatusHistory,
 } from './ClosedLoopSaga';
 import {watchGetNotification} from './notificationSaga';
+import {
+  watchGetPanelMember,
+  watchGetSurveyResponseDetails,
+} from './feedbackSaga';
 
 // Redux Saga: Root Saga
 export function* rootSaga() {
@@ -52,5 +58,9 @@ export function* rootSaga() {
     fork(watchGetDefaultEmailTemplate),
     fork(watchGetEmailTemplates),
     fork(watchSendEmail),
+    fork(watchGetPanelMember),
+    fork(watchGetSurveyResponseDetails),
+    fork(watchGetLatestComment),
+    fork(watchGetTicketStatusHistory),
   ]);
 }
