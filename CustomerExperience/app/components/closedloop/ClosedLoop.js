@@ -40,6 +40,7 @@ import {
 import {setRangeFilter, showLoading} from '../../redux/actions';
 import {StackActions, useIsFocused} from '@react-navigation/native';
 import {
+  getPriorityById,
   priorityList,
   statusList,
   ticketTypeList,
@@ -102,23 +103,34 @@ export default function ClosedLoop(props) {
   // console.log('OWNERS', JSON.stringify(owners));
   const isFocused = useIsFocused();
 
-  let getDataOnNewRange = (range_) => {
-    console.log('DATE_RANGE', JSON.stringify(range_));
-    dispatch(setRangeFilter(range_));
-    // reset pageNumber, ticket list, range
+  const resetFilterState = (range_, pagenumber) => {
     setFilterState((state) => ({
       ...state,
       pageNumber: 1,
       fromDate: moment(range_.startDate, DMYFORMAT).format(YMDFORMAT),
       toDate: moment(range_.endDate, DMYFORMAT).format(YMDFORMAT),
     }));
+  };
+
+  let getDataOnNewRange = (range_) => {
+    dispatch(setRangeFilter(range_));
+    // reset pageNumber, ticket list, range
     setTicketList([]);
+    resetFilterState(range_, 1);
   };
 
   useEffect(() => {
-    getTicketList(filterState);
+    getTicketList(filterState, currentSegment.currentSegmentID);
     getTicketOwnerList(currentSegment.currentSegmentID);
-  }, [isFocused, filterState, currentSegment]);
+  }, [filterState]);
+
+  useEffect(() => {
+    setTicketList([]);
+    resetFilterState(range, 1);
+
+    // getTicketList(filterState, currentSegment.currentSegmentID);
+    // getTicketOwnerList(currentSegment.currentSegmentID);
+  }, [currentSegment]);
 
   const wait = (timeout) => {
     return new Promise((resolve) => {
@@ -152,7 +164,7 @@ export default function ClosedLoop(props) {
 
   // useEffect(() => {}, []);
 
-  const getTicketList = (filterState_) => {
+  const getTicketList = (filterState_, currentSegmentId) => {
     // setRefreshing(true);
 
     dispatch(showLoading(true));
@@ -161,7 +173,7 @@ export default function ClosedLoop(props) {
         authToken,
         filterState_,
         currentFeedback.feedbackID,
-        currentSegment.currentSegmentID,
+        currentSegmentId,
       ),
     );
 
@@ -275,8 +287,10 @@ export default function ClosedLoop(props) {
     setFilterData(item);
 
     console.log('StatusParam: ', JSON.stringify(item));
+    setTicketList([]);
     setFilterState((state) => ({
       ...state,
+      pageNumber: 1,
       status: getIds(item.status),
       priority: getIds(item.priority),
       assignToId: getOwnerIds(item.managers),

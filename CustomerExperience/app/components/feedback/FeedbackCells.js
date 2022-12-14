@@ -242,7 +242,7 @@ export default function FeedbackCell(props) {
   };
 
   const RenderEmailAddress = () => {
-    let email = props.item.emailAddress ?? 'sampleEmail';
+    let email = props.item.emailAddress ?? '';
     return email.length ? (
       <TouchableOpacity
         onPress={() => {

@@ -162,7 +162,7 @@ export default function TicketOverview(props) {
         getEmailTemplates(authToken, {subscriberId: global.subscriberId}),
       );
     }
-  }, [authToken]);
+  }, []);
 
   /// BOTTOM SHEET
 
