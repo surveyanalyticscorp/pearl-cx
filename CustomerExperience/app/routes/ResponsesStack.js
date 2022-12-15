@@ -39,6 +39,16 @@ const feedbackStack = (props) => (
         headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
       })}
     />
+
+    <FeedbackStack.Screen
+      name={translate('responses.new_ticket')}
+      component={CreateTicket}
+      options={({navigation, route}) => ({
+        // headerLeft: (props) => <View />,
+        // headerRight: (props) => <CloseButton />,
+        headerShown: false,
+      })}
+    />
     {CommonScreens(FeedbackStack)}
   </FeedbackStack.Navigator>
 );

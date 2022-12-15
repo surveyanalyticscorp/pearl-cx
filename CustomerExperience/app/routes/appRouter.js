@@ -64,13 +64,13 @@ import {
 import CommonScreens from './CommonScreen';
 import {navigationRef} from './RootNavigation';
 import {setI18nConfig, translate} from '../Utils/MultilinguaUtils';
-import MainDropDown from '../widgets/drop-down/MainDropDown';
-import {
-  getClosedLoopOwnerDetails,
-  SEGMENT_SELECTED,
-  setSegment,
-  setSegmentSelectorOpen,
-} from '../redux/actions/dashboard.actions';
+// import MainDropDown from '../widgets/drop-down/MainDropDown';
+// import {
+//   getClosedLoopOwnerDetails,
+//   SEGMENT_SELECTED,
+//   setSegment,
+//   setSegmentSelectorOpen,
+// } from '../redux/actions/dashboard.actions';
 import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
 import SegmentSelector from '../components/SegmentSelector';
 // import SearchStack from './SearchStack';
@@ -368,6 +368,15 @@ const AppRouter = (props) => {
           headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
         })}
       />
+      <DetractorStack.Screen
+        name={translate('responses.new_ticket')}
+        component={CreateTicket}
+        options={({navigation, route}) => ({
+          // headerLeft: (props) => <View />,
+          // headerRight: (props) => <CloseButton />,
+          headerShown: false,
+        })}
+      />
       {CommonScreens(DetractorStack)}
     </DetractorStack.Navigator>
   );
@@ -388,7 +397,7 @@ const AppRouter = (props) => {
           headerRight: (props) => <ClearAllButton {...props} route={route} />,
         })}
       />
-      <DetractorStack.Screen
+      {/* <DetractorStack.Screen
         name={translate('responses.new_ticket')}
         component={CreateTicket}
         options={({navigation, route}) => ({
@@ -396,7 +405,7 @@ const AppRouter = (props) => {
           // headerRight: (props) => <CloseButton />,
           headerShown: false,
         })}
-      />
+      /> */}
       <DetractorStack.Screen
         name={translate('filter_by')}
         component={TicketFilter}

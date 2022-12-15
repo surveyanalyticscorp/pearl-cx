@@ -137,17 +137,11 @@ const DrawerContent = (props) => {
             </Text>
           </View>
         </TouchableWithoutFeedback> */}
-        <TouchableWithoutFeedback
+        {/* <TouchableWithoutFeedback
           onPress={() => {
             props.navigation.navigate(translate('dashboard.notifications'));
           }}>
           <View style={styles.drawerRow}>
-            {/* <Icon
-              size={1.3 * Sizes.icons}
-              color={Colors.accent}
-              name={'settings'}
-              style={styles.rowIcon}
-            /> */}
             <MyIcon
               name={'bell'}
               size={1.3 * Sizes.icons}
@@ -158,7 +152,7 @@ const DrawerContent = (props) => {
               {translate('dashboard.notifications')}
             </Text>
           </View>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback> */}
         {/* <TouchableWithoutFeedback
           onPress={() => {
             props.navigation.navigate('Search Response');

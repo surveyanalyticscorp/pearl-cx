@@ -1,8 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  getClosedLoopSegmentDetails,
   setSegment,
   setSegmentSelectorOpen,
 } from '../redux/actions/dashboard.actions';
@@ -16,35 +17,88 @@ import {getSegmentIndex} from '../Utils/TicketUtils';
 import GlobalSelectSegment from './dashboard/GlobalSelectSegment';
 
 const SelectSegmentScreen = (props) => {
+  // {currentSegmentId, setSegmentSelection}
   const dispatch = useDispatch();
-
-  const segmentList_ = useSelector(
-    (state) => state.dashboard.segmentDetails.segments,
-  );
-  const currentSegment = useSelector((state) => state.dashboard.currentSegment);
+  let currentSegmentId = props.route.params.currentSegmentId;
+  const setSegmentSelection = props.route.params.setSegmentSelection;
+  const [isLoading, setLoading] = useState(false);
+  const authToken = useSelector((state) => state.global.authToken);
+  const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
+  const [segmentList_, setSegmentList_] = useState([]);
+  // const currentSegment = useSelector((state) => state.dashboard.currentSegment);
   const navigation = useNavigation();
+  const [pageOffset, setPageOffset] = useState(0);
   const handleSegmentSelectionAction = (item) => {
-    dispatch(setSegment(item));
-    dispatch(setSegmentSelectorOpen(false));
+    // dispatch(setSegment(item));
+    // dispatch(setSegmentSelectorOpen(false));
+    setSegmentSelection(item);
     if (navigation.canGoBack) {
+      setSegmentList_([]);
       navigation.goBack();
     }
   };
+  console.log('CURRENT_SEGMENT_ID', currentSegmentId);
 
-  const renderSelectSegment = (props) => {
+  useEffect(() => {
+    console.log('Segment_API_CALL_FIRSTTIME');
+    getSegmentData(pageOffset);
+  }, [authToken]);
+
+  // useCallback(() => {
+  //   setSegmentList_((prevState) => [
+  //     ...new Set([...prevState, ...(segmentDetails.segments ?? [])]),
+  //   ]);
+  // }, [segmentDetails.pageOffset]);
+
+  useEffect(() => {
+    // let data = pageOffset === 0 ? [] : [...segmentList_];
+    // data = [...data, ...segmentDetails.segments];
+
+    // setSegmentList_([new Set(data)]);
+    setLoading(false);
+    setSegmentList_((prevState) => [
+      ...new Set([...prevState, ...segmentDetails.segments]),
+    ]);
+  }, [segmentDetails.pageOffset]);
+
+  // const loadMoreData = useCallback(() => {
+  //   console.log('Segment_API_CALL_LOADMORE');
+
+  //   if (segmentList_.length < segmentDetails.count) {
+  //     setPageOffset((state) => state + 1);
+  //     getSegmentData(pageOffset);
+  //   }
+  // }, []);
+
+  const loadMoreData = () => {
+    console.log('LOAD_MORE', segmentList_.length, segmentDetails.count);
+    if (segmentList_.length < segmentDetails.count && !isLoading) {
+      setPageOffset((state) => state + 1);
+      getSegmentData(pageOffset);
+    }
+  };
+
+  const getSegmentData = (pageOffset_) => {
+    setLoading(true);
+    dispatch(
+      getClosedLoopSegmentDetails(authToken, {
+        pageOffset: pageOffset_.toString(),
+      }),
+    );
+  };
+  const RenderSelectSegment = (props) => {
     return (
       <View
         //  style={styles.contentContainer}
         style={{backgroundColor: Colors.white, flex: 1}}>
         <GlobalSelectSegment
-          {...props}
+          // {...props}
           data={segmentList_}
-          selectedIndex={
-            getSegmentIndex(
-              segmentList_ ?? [],
-              currentSegment.currentSegmentID,
-            ) ?? 0
-          }
+          // selectedIndex={
+          //   getSegmentIndex(segmentList_ ?? [], currentSegmentId) ?? 0
+          // }
+          currentSegmentId={currentSegmentId}
+          loadMoreData={loadMoreData}
           handleOnPress={(item) => handleSegmentSelectionAction(item)}
         />
       </View>
@@ -65,7 +119,7 @@ const SelectSegmentScreen = (props) => {
           <Text style={styles.headerText}>{'Select Segment'}</Text>
           <CloseButton color={Colors.filterIconColor} />
         </View>
-        {renderSelectSegment()}
+        <RenderSelectSegment />
       </View>
     </View>
   );

@@ -4,7 +4,7 @@ import {
   TouchableWithoutFeedback,
   Text,
   StyleSheet,
-  // FlatList,
+  FlatList,
   TextInput,
 } from 'react-native';
 import {listItemSeparator} from '../../routes/CommonScreen';
@@ -14,20 +14,24 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {PaddingConstants} from '../../styles/padding.constants';
-import {getSegmentIndex} from '../../Utils/TicketUtils';
-import {FlatList} from 'react-native-gesture-handler';
+// import {getSegmentIndex} from '../../Utils/TicketUtils';
+// import {FlatList} from 'react-native-gesture-handler';
 
-// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-const GlobalSelectSegment = (props) => {
-  const [filteredList, setFilteredList] = useState(props.data);
-  const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex ?? 0);
+const GlobalSelectSegment = ({
+  currentSegmentId,
+  data,
+  loadMoreData,
+  handleOnPress,
+}) => {
+  const [filteredList, setFilteredList] = useState(data);
+  // const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex ?? 0);
 
   const renderRow = ({item, index}) => {
     return (
-      <TouchableWithoutFeedback onPress={() => handleOnPress(item, index)}>
+      <TouchableWithoutFeedback onPress={() => handleOnPress(item)}>
         <View style={styles.row}>
           <Text style={styles.title}>{item.segmentName}</Text>
-          {props.data[selectedIndex].segmentID === item.segmentID ? (
+          {currentSegmentId === item.segmentID ? (
             <IonIcon
               style={{marginHorizontal: MarginConstants.halfTab}}
               name={'checkmark'}
@@ -42,10 +46,11 @@ const GlobalSelectSegment = (props) => {
     );
   };
 
-  const handleOnPress = (item, index) => {
-    props.handleOnPress(item);
-    setSelectedIndex(getSegmentIndex(props.data, item.segmentID));
-  };
+  // const handleOnPress = (item, index) => {
+  //   handleOnPress(item);
+  // };
+
+  console.log('Segment_API_CALL', JSON.stringify(filteredList));
 
   return (
     <View style={styles.container}>
@@ -61,17 +66,23 @@ const GlobalSelectSegment = (props) => {
               ),
             );
           } else {
-            setFilteredList(props.data);
+            setFilteredList(data);
           }
         }}
       />
-      <FlatList
-        style={styles.flatList}
-        data={filteredList}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderRow}
-        ItemSeparatorComponent={listItemSeparator}
-      />
+      {filteredList && filteredList.length > 0 ? (
+        <FlatList
+          style={styles.flatList}
+          data={filteredList}
+          keyExtractor={(item, index) => item.toString()}
+          renderItem={renderRow}
+          ItemSeparatorComponent={listItemSeparator}
+          // onEndReached={loadMoreData}
+          // onEndReachedThreshold={0.7}
+        />
+      ) : (
+        <View />
+      )}
     </View>
   );
 };
@@ -92,10 +103,11 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: MarginConstants.tab1,
+    marginVertical: MarginConstants.tab2,
   },
   flatList: {
     marginHorizontal: MarginConstants.tab2,
+
     fontFamily: FontFamily.bold,
     fontSize: TextSizes.largeText,
   },

@@ -71,6 +71,8 @@ import {
   getEmailTemplates,
 } from '../../redux/actions/closedloop.actions';
 import {EMAIL, PHONE} from '../../api/Constant';
+import {StackActions, useNavigation} from '@react-navigation/native';
+import {translate} from '../../Utils/MultilinguaUtils';
 
 export default function TicketOverview(props) {
   const bottomSheetEnum = {
@@ -80,6 +82,7 @@ export default function TicketOverview(props) {
     segment: 'segment',
   };
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [currentBS, setCurrentBS] = useState(bottomSheetEnum.status);
   const {authToken} = useSelector((state) => state.global);
   const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
@@ -131,9 +134,9 @@ export default function TicketOverview(props) {
   const [currentSegment, setCurrentSegment] = useState(
     getSegmentBySegmentId(segments, ticketDetails.currentSegmentId ?? 0),
   );
-  const [segmentIndex, setSegmentIndex] = useState(
-    getSegmentIndex(segments, currentSegment.currentSegmentID),
-  );
+  // const [segmentIndex, setSegmentIndex] = useState(
+  //   getSegmentIndex(segments, currentSegment.currentSegmentID),
+  // );
 
   const [ticketOwnerIndex, setTicketOwnerIndex] = useState(
     getOwnerIndex(owners, ticketDetails.assignToId ?? 0),
@@ -153,16 +156,12 @@ export default function TicketOverview(props) {
     dispatch(updateClfTicket(authToken, body, ticketDetails.id));
   };
 
-  useEffect(() => {
-    if (authToken) {
-      dispatch(
-        getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
-      );
-      dispatch(
-        getEmailTemplates(authToken, {subscriberId: global.subscriberId}),
-      );
-    }
-  }, []);
+  // useEffect(() => {
+  // dispatch(
+  //   getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
+  // );
+  // dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
+  // }, []);
 
   /// BOTTOM SHEET
 
@@ -198,9 +197,20 @@ export default function TicketOverview(props) {
   };
 
   const handleSegmentSelection = () => {
-    setCurrentBS(bottomSheetEnum.segment);
-    statusBottomSheet.current.snapTo(0);
+    // setCurrentBS(bottomSheetEnum.segment);
+    // statusBottomSheet.current.snapTo(0);
     // segmentBottomSheet.current.snapTo(0);
+    const pushAction = StackActions.push(translate('dashboard.segment'), {
+      currentSegmentId: ticketDetails.segmentId,
+      setSegmentSelection: setSegmentSelection,
+    });
+    navigation.dispatch(pushAction);
+  };
+
+  const setSegmentSelection = (segment) => {
+    console.log('TICKET_OVERVIEW', JSON.stringify(segment));
+    updateTicket({currentSegmentId: segment.segmentID});
+    getTicketOwnerList(segment.segmentID);
   };
 
   const handleOwnerSelection = () => {
@@ -253,10 +263,10 @@ export default function TicketOverview(props) {
         renderHeader = renderPriorityHeader;
         break;
 
-      case bottomSheetEnum.segment:
-        renderContent = renderSegmentSelectContent;
-        renderHeader = renderSegmentHeader;
-        break;
+      // case bottomSheetEnum.segment:
+      //   renderContent = renderSegmentSelectContent;
+      //   renderHeader = renderSegmentHeader;
+      //   break;
 
       case bottomSheetEnum.owners:
         renderContent = renderOwnerSelectContent;
@@ -342,30 +352,30 @@ export default function TicketOverview(props) {
     );
   };
 
-  const renderSegmentSelectContent = () => {
-    return (
-      <View style={styles.contentContainer}>
-        <SelectSegment
-          data={segments}
-          selectedIndex={segmentIndex}
-          handleOnPress={(item, index) => {
-            console.log('SEGMENT', JSON.stringify(item));
-            // console.log(JSON.stringify(item));
-            // setSegment(item.segmentName);
-            setSegmentIndex(index);
-            updateTicket({currentSegmentId: item.segmentID});
-            getTicketOwnerList(item.segmentID);
-            // setSegmentId((prev) => item.segmentID);
+  // const renderSegmentSelectContent = () => {
+  //   return (
+  //     <View style={styles.contentContainer}>
+  //       <SelectSegment
+  //         data={segments}
+  //         selectedIndex={segmentIndex}
+  //         handleOnPress={(item, index) => {
+  //           console.log('SEGMENT', JSON.stringify(item));
+  //           // console.log(JSON.stringify(item));
+  //           // setSegment(item.segmentName);
+  //           setSegmentIndex(index);
+  //           updateTicket({currentSegmentId: item.segmentID});
+  //           getTicketOwnerList(item.segmentID);
+  //           // setSegmentId((prev) => item.segmentID);
 
-            //   setTicketState((state) => ({
-            //     ...state,
-            //     currentSegmentId: item.segmentID,
-            //   }));
-          }}
-        />
-      </View>
-    );
-  };
+  //           //   setTicketState((state) => ({
+  //           //     ...state,
+  //           //     currentSegmentId: item.segmentID,
+  //           //   }));
+  //         }}
+  //       />
+  //     </View>
+  //   );
+  // };
 
   // const RenderSegmentBottomSheet = () => {
   //   return (

@@ -25,12 +25,14 @@ import {
   watchGetClosedLoopAllOwners,
   watchGetLatestComment,
   watchGetTicketStatusHistory,
+  watchGetFirstTimeClosedLoopSegmentDetails,
 } from './ClosedLoopSaga';
 import {watchGetNotification} from './notificationSaga';
 import {
   watchGetPanelMember,
   watchGetSurveyResponseDetails,
 } from './feedbackSaga';
+import {getFirstTimeClosedLoopSegmentDetails} from '../actions/dashboard.actions';
 
 // Redux Saga: Root Saga
 export function* rootSaga() {
@@ -44,6 +46,7 @@ export function* rootSaga() {
     fork(watchUpdatePassword),
     fork(watchGetDetractorTicketDetail),
     fork(watchGetClosedLoopSegmentDetails),
+    fork(watchGetFirstTimeClosedLoopSegmentDetails),
     fork(watchGetClosedLoopTicketList),
     fork(watchGetClosedLoopTicketItem),
     fork(watchGetClosedLoopTicketComments),

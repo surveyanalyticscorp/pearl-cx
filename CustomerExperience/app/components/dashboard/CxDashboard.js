@@ -605,14 +605,14 @@ const CxDashboard = (props) => {
     // console.log({isOpen: props.isSegmentSelectorOpen});
   }, [props.isSegmentSelectorOpen]);
 
-  const handleSegmentSelectionAction = (item) => {
-    // setDefaultEmail(item);
-    // richText.current.setContentHTML(item.templateText);
-    dispatch(setSegment(item));
+  // const handleSegmentSelectionAction = (item) => {
+  //   // setDefaultEmail(item);
+  //   // richText.current.setContentHTML(item.templateText);
+  //   dispatch(setSegment(item));
 
-    dispatch(setSegmentSelectorOpen(false));
-    bs.current.snapTo(bsSnapPoints.length - 1);
-  };
+  //   dispatch(setSegmentSelectorOpen(false));
+  //   bs.current.snapTo(bsSnapPoints.length - 1);
+  // };
 
   const renderSelectSegmentHeader = () => {
     return (

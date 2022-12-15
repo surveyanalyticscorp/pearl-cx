@@ -21,7 +21,11 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import BottomSheet from 'reanimated-bottom-sheet';
 import SelectEmailTemplate from './SelectEmailTemplate';
 import {useDispatch, useSelector} from 'react-redux';
-import {sendEmail} from '../../../redux/actions/closedloop.actions';
+import {
+  getDefaultEmailTemplate,
+  getEmailTemplates,
+  sendEmail,
+} from '../../../redux/actions/closedloop.actions';
 export default function SendEmail(props) {
   const [body, setBody] = useState({
     subject: '',
@@ -35,11 +39,11 @@ export default function SendEmail(props) {
   const richTextToolBar = React.useRef();
   const [userInfo, setUserInfo] = useState();
   const [userEmail, setUserEmail] = useState('');
-  const [templateList, setTemplateList] = useState(
-    useSelector((state) => state.dashboard.emailData.emailTemplates),
+  const templateList = useSelector(
+    (state) => state.dashboard.emailData.emailTemplates,
   );
-  const [defaultEmail, setDefaultEmail] = useState(
-    useSelector((state) => state.dashboard.emailData.defaultTemplate),
+  const defaultEmail = useSelector(
+    (state) => state.dashboard.emailData.defaultTemplate,
   );
 
   const ticketId = JSON.stringify(props.route.params.ticketId);
@@ -54,12 +58,20 @@ export default function SendEmail(props) {
   }, [authToken]);
 
   useEffect(() => {
-    setBody((state) => ({
-      ...state,
-      subject: defaultEmail.title ?? '',
-      emailBody: defaultEmail.templateText,
-    }));
-  }, [defaultEmail]);
+    console.log(`EMAIL_DATA: ${authToken} ${global.subscriberId}`);
+    dispatch(
+      getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
+    );
+    dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
+  }, []);
+
+  // useEffect(() => {
+  //   setBody((state) => ({
+  //     ...state,
+  //     subject: defaultEmail.title ?? '',
+  //     emailBody: defaultEmail.templateText,
+  //   }));
+  // }, [defaultEmail]);
 
   const RenderHeader = () => {
     return (
@@ -127,7 +139,13 @@ export default function SendEmail(props) {
   };
 
   const handleTemplateSelectAction = (item) => {
-    setDefaultEmail(item);
+    // setDefaultEmail(item);
+    setBody((state) => ({
+      ...state,
+      subject: item.title ?? '',
+      emailBody: item.templateText,
+    }));
+
     richText.current.setContentHTML(item.templateText);
     bs.current.snapTo(bsSnapPoints.length - 1);
   };

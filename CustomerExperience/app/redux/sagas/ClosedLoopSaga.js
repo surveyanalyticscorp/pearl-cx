@@ -24,6 +24,8 @@ import {
   UPDATE_CLF_TICKET,
   CLOSED_LOOP_ALL_OWNERS_DETAILS_RECEIVED,
   GET_CLOSED_LOOP_ALL_OWNERS_DETAILS,
+  FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
+  GET_FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS,
 } from '../actions/dashboard.actions';
 import {
   CX_ADD_CLOSED_LOOP_TICKET,
@@ -91,6 +93,34 @@ function* fetchDetractorTicketDetails(action) {
 
 export function* watchGetDetractorTicketDetail() {
   yield takeLatest(GET_CLOSED_LOOP_TICKET_DETAILS, fetchDetractorTicketDetails);
+}
+
+function* fetchFirstTimeClosedLoopSegmentDetails(action) {
+  try {
+    const json = yield WebServiceHandler.postNew(
+      CX_GET_CLOSED_LOOP_SEGMENT_DETAILS,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
+      response: json,
+    });
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+
+export function* watchGetFirstTimeClosedLoopSegmentDetails() {
+  yield takeLatest(
+    GET_FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS,
+    fetchFirstTimeClosedLoopSegmentDetails,
+  );
 }
 
 function* fetchClosedLoopSegmentDetails(action) {

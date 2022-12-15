@@ -67,6 +67,8 @@ import {
   isStringNullOrEmpty,
   showErrorFlashMessage,
 } from '../../../Utils/Utility';
+import {StackActions, useNavigation} from '@react-navigation/native';
+import {translate} from '../../../Utils/MultilinguaUtils';
 
 export default function CreateTicket(props) {
   const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
@@ -86,6 +88,7 @@ export default function CreateTicket(props) {
   const [statusIndex, setStatusIndex] = useState(-1);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(moment().format(DMYFORMAT));
+  const navigation = useNavigation();
   let userInfo = {
     emailAddress: '',
     firstName: '',
@@ -201,7 +204,13 @@ export default function CreateTicket(props) {
 
   const handleSegmentSelection = () => {
     // open segment selection bottom sheet
-    segmentBottomSheet.current.snapTo(0);
+    // segmentBottomSheet.current.snapTo(0);
+
+    const pushAction = StackActions.push(translate('dashboard.segment'), {
+      currentSegmentId: segmentId,
+      setSegmentSelection: setSegmentSelection,
+    });
+    navigation.dispatch(pushAction);
   };
 
   const handleOwnerSelection = () => {
@@ -213,6 +222,17 @@ export default function CreateTicket(props) {
     // open owner selection bottom sheet
     // calendarBottomSheet.current.snapTo(0);
     setShowCalendar(true);
+  };
+
+  const setSegmentSelection = (segment_) => {
+    setSegment(segment_.segmentName);
+    // setSegmentIndex(index);
+    setSegmentId((prev) => segment_.segmentID);
+
+    setTicketState((state) => ({
+      ...state,
+      currentSegmentId: segment_.segmentID,
+    }));
   };
 
   useEffect(() => {

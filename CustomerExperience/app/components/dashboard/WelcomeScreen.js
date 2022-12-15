@@ -12,7 +12,9 @@ import {
   getClosedLoopAllOwnersDetails,
   getClosedLoopOwnerDetails,
   getClosedLoopSegmentDetails,
+  getFirstTimeClosedLoopSegmentDetails,
   getWelcomeScreenDataCount,
+  setSegment,
 } from '../../redux/actions/dashboard.actions';
 // import QPSpinner from '../../widgets/QPSpinner';
 import {RenderSpinner} from '../../routes/CommonScreen';
@@ -24,6 +26,7 @@ export const WelcomeScreen = (props) => {
 
   const authToken = useSelector((state) => state.global.authToken);
   const [subscriberId, setSubscriberId] = useState(global.subscriberId);
+  const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
   const welcomeScreenData = useSelector(
     (state) => state.dashboard.welcomeScreenData,
   );
@@ -53,7 +56,11 @@ export const WelcomeScreen = (props) => {
   useEffect(() => {
     // console.log('USER_DATA: ', userInfo, authToken);
     // console.log('USER_DATA: ', userInfo);
-    dispatch(getClosedLoopSegmentDetails(authToken));
+    // dispatch(getClosedLoopSegmentDetails(authToken, {pageOffset: '0'}));
+    dispatch(
+      getFirstTimeClosedLoopSegmentDetails(authToken, {pageOffset: '0'}),
+    );
+
     dispatch(
       getWelcomeScreenDataCount(authToken, {subscriberId: subscriberId}),
     );

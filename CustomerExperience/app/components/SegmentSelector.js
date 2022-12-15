@@ -4,7 +4,10 @@ import {Colors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import {useDispatch, useSelector} from 'react-redux';
-import {getClosedLoopOwnerDetails} from '../redux/actions/dashboard.actions';
+import {
+  getClosedLoopOwnerDetails,
+  setSegment,
+} from '../redux/actions/dashboard.actions';
 import {useEffect} from 'react';
 import {StackActions, useNavigation} from '@react-navigation/native';
 // import {SEGMENT_SELECTOR} from '../api/Constant';
@@ -36,9 +39,18 @@ const SegmentSelector = ({screenName}) => {
 
   const onPressHandle = () => {
     // dispatch(setSegmentSelectorOpen(!segmentSelectorOpenState));
+    // console.log('CURRENT_SEGMENT_ID', JSON.stringify(currentSegment));
 
-    const pushAction = StackActions.push(translate('dashboard.segment'));
+    const pushAction = StackActions.push(translate('dashboard.segment'), {
+      currentSegmentId: currentSegment.currentSegmentID,
+      setSegmentSelection: setSegmentSelection,
+    });
+
     navigation.dispatch(pushAction);
+  };
+
+  const setSegmentSelection = (segment_) => {
+    dispatch(setSegment(segment_));
   };
 
   const SegmentText = ({segmentName}) => {

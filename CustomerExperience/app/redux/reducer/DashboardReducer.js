@@ -15,6 +15,8 @@ import {
   CLOSED_LOOP_TICKET_LIST_RECEIVED,
   CREATE_CLF_TICKET_RECIEVED,
   DASHBOARD_RECEIVED,
+  FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
+  GET_FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS,
   REMOVE_CLOSED_LOOP_TICKET_ITEM,
   SEGMENT_SELECTED,
   SEGMENT_SELECTOR_OPEN,
@@ -56,6 +58,17 @@ const dashboardReducer = (state = initialState, action) => {
       };
     }
     case CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED: {
+      return {
+        ...state,
+        segmentDetails: action.response.body,
+
+        currentFeedback: {
+          feedbackID: action.response.body.feedbackID,
+        },
+      };
+    }
+
+    case FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED: {
       return {
         ...state,
         segmentDetails: action.response.body,

@@ -101,7 +101,7 @@ const ClosedLoopStack = ({navigation}) => {
         })}
       />
       <FeedbackStack.Screen
-        mode="modal"
+        // mode="modal"
         name="New Ticket"
         component={CreateTicket}
         options={({navigation, route}) => ({

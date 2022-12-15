@@ -53,14 +53,17 @@ export const CX_WELCOME_SCREEN_DATA =
   '/a/nativehtml/cx.CXWelcomeScreenDataCount';
 
 // CLF 3.0 APIs
-// export const CLF_BASE_URL = 'https://clf-backend.questionpro.com/api/';
-export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
+export const CLF_BASE_URL = 'https://clf-backend.questionpro.com/api/';
+// export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
 
 // export const FEEDBACK_API_KEY = 'e8caf096-4f19-4b34-a7cd-4bcaa8197c1d';
 export const FEEDBACK_API_KEY_ENDPOINT = '?feedbackApiKey=';
 
 export const CLF_GET_TICKET_LIST = `${CLF_BASE_URL}mobile/tickets/feedback/`;
 // "ex: {{BASE_URL}}/mobile/tickets/feedback/:feedBackId/segment/:segmentId?fromDate=2022-09-28&toDate=2022-10-28"
+export const CLF_GET_TICKET_LIST_BY_RESPONSEID = `${CLF_BASE_URL}mobile/tickets/feedbacks/`;
+// ex: {{BASE_URL}}/mobile/tickets/feedbacks/{feedbackId}/responses/{responseId}?feedbackApiKey=95e89018-22a9-4a23-b774-ee0041010813
+
 export const CLF_GET_TICKET_DETAILS = `${CLF_BASE_URL}mobile/tickets/`;
 // ex: {{BASE_URL}}/mobile/tickets/:ticketId
 
@@ -85,6 +88,7 @@ export const FEEDBACK = 'feedback/';
 export const SEGMENT = 'segment/';
 export const COMMNETS = 'comments/';
 export const ACTIVITY_LOG = 'activity-log/';
+export const RESPONSES = 'responses/';
 
 export const CX_DASHBOARD = 'CX_DASHBOARD';
 export const CX_DETRACTOR_TICKETS_NEW = 'CX_DETRACTOR_TICKETS_NEW';
