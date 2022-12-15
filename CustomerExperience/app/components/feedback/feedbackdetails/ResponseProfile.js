@@ -19,6 +19,9 @@ import {useSelector} from 'react-redux';
 const ResponseProfile = (props) => {
   const {panelMember, surveyDetails} = useSelector((state) => state.response);
   const data = props.route.params.data;
+  const responseTickets = useSelector(
+    (state) => state.response.responseTickets,
+  );
   console.log(`FEEDBACK_DATA_SURVEY: ${JSON.stringify(surveyDetails)}`);
   console.log(`FEEDBACK_DATA_PROFILE: ${JSON.stringify(panelMember)}`);
 
@@ -52,7 +55,9 @@ const ResponseProfile = (props) => {
         <SurveyCounterView>
           {panelMember.totalSurveysResponded ?? 0}
         </SurveyCounterView>
-        <TicketCounterView> {panelMember.totalTickets ?? 0}</TicketCounterView>
+        <TicketCounterView>
+          {responseTickets?.data?.length ?? 0}
+        </TicketCounterView>
       </View>
     );
   };

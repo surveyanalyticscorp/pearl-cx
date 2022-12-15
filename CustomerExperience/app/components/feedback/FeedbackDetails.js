@@ -1,5 +1,5 @@
-import React from 'react';
-import {useWindowDimensions, StyleSheet, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {useWindowDimensions, StyleSheet, View, FlatList} from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {Colors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
@@ -16,20 +16,70 @@ import {FontFamily} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getPanelMemberDetails,
+  getResponseTickets,
   getSurveyResponseDetails,
 } from '../../redux/actions/feedback.actions';
+import ClosedLoopCell from '../closedloop/ClosedloopCell';
+import ResponseTicketCell from '../closedloop/ResponseTicketCell';
+import {
+  getLatestComment,
+  getTicketStatusHistory,
+} from '../../redux/actions/closedloop.actions';
 
 export default function FeedbackDetails(props) {
   const dispatch = useDispatch();
   const authToken = useSelector((state) => state.global.authToken);
+  const {feedbackApiKey, feedbackID} = useSelector(
+    (state) => state.global.userInfo,
+  );
+  const responseTickets = useSelector(
+    (state) => state.response.responseTickets,
+  );
   const data = props.route.params.data;
 
+  const [selectedTicketId, setSelectedTicket] = useState(0);
   console.log('RESPONSE_DATA', JSON.stringify(props.route.params.data));
 
-  dispatch(
-    getPanelMemberDetails(authToken, {panelMemberID: data.panelMemberID}),
-  );
+  // dispatch(
+  //   getPanelMemberDetails(authToken, {panelMemberID: data.panelMemberID}),
+  // );
 
+  // dispatch(
+  //   getResponseTickets(authToken, feedbackID, data.responseSetID, {
+  //     feedbackApiKey: feedbackApiKey,
+  //   }),
+  // );
+
+  useEffect(() => {
+    dispatch(
+      getPanelMemberDetails(authToken, {panelMemberID: data.panelMemberID}),
+    );
+
+    dispatch(
+      getResponseTickets(authToken, feedbackID, data.responseSetID, {
+        feedbackApiKey: feedbackApiKey,
+      }),
+    );
+  }, [authToken]);
+  useEffect(() => {
+    console.log(
+      'RESPONSE_DATA_RESPONSE_TICKETS',
+      JSON.stringify(responseTickets),
+    );
+
+    if (responseTickets && responseTickets?.data?.length > 0) {
+      dispatch(getLatestComment(authToken, responseTickets.data[0].id));
+      dispatch(getTicketStatusHistory(authToken, responseTickets.data[0].id));
+    }
+  }, [responseTickets]);
+
+  const onTapHandler = (item, index) => {
+    console.log(item);
+  };
+
+  const onPressViewTicket = (item) => {
+    console.log(item);
+  };
   // dispatch(
   //   getSurveyResponseDetails(authToken, {
   //     surveyID: data.surveyID,
@@ -43,10 +93,35 @@ export default function FeedbackDetails(props) {
       <FeedbackCell
         item={props.route.params.data}
         origin="Detail"
+        hasTicket={responseTickets.data?.length > 0}
         ticketStatuses={props.route.params.ticketStatus}
         parentRoute={props.route.params.parentRoute}
         {...props}
       />
+      {responseTickets &&
+      responseTickets.data &&
+      responseTickets.data.length > 0 ? (
+        <FlatList
+          lazy
+          style={styles.flatlist}
+          data={responseTickets.data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item, index}) => {
+            return (
+              <ResponseTicketCell
+                data={item}
+                index={index}
+                selectedTicketId={selectedTicketId}
+                onPressHandler={() => onTapHandler(item, index)}
+                onPressViewTicket={() => onPressViewTicket(item)}
+              />
+            );
+          }}
+        />
+      ) : (
+        <View />
+      )}
+
       {/** enable it when email functionality */}
       {/*<ActionButton*/}
       {/*buttonColor= {Colors.accent}*/}
@@ -148,6 +223,13 @@ const renderScene = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 5,
+  },
+
+  flatlist: {
+    backgroundColor: Colors.grey,
+    flex: 1,
+    maxHeight: '50%',
     paddingTop: 5,
   },
 });

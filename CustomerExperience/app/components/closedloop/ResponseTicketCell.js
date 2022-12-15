@@ -1,0 +1,282 @@
+import React from 'react';
+import {
+  View,
+  TouchableWithoutFeedback,
+  Text,
+  Image,
+  StyleSheet,
+} from 'react-native';
+// import StringUtils from '../../Utils/StringUtils';
+// import ArrayUtils from '../../Utils/ArrayUtils';
+// import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import {
+  Colors,
+  getPriorityBorderColorbyId,
+  getStatusBorderColorbyId,
+  getStatusFillerColorbyId,
+} from '../../styles/color.constants';
+import {MarginConstants} from '../../styles/margin.constants';
+import {PaddingConstants} from '../../styles/padding.constants';
+// import {TextSizes} from '../../styles/textsize.constants';
+import {FontFamily} from '../../styles/font.constants';
+// import {Sizes} from '../../styles/Size.constant';
+// import moment from 'moment';
+// import {translate} from '../../Utils/MultilinguaUtils';
+import IonIcons from 'react-native-vector-icons/Ionicons';
+import {TextSizes} from '../../styles/textsize.constants';
+import moment from 'moment';
+import {FullMonthDateYearFormat} from '../../Utils/AppConstants';
+import {getStatusById, getPriorityById} from '../../Utils/TicketUtils';
+import {translate} from '../../Utils/MultilinguaUtils';
+export default function ResponseTicketCell(props) {
+  const data = props.data;
+
+  // let sampleText =
+  //   'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...';
+  // let [isTapped, setTapped] = useState(false);
+
+  // useEffect(() => {
+  //   if (isTapped) {
+  //     setTapped(false);
+
+  //     props.navigation.navigate('closedLoopTicketDetails');
+  //   }
+  // }, [isTapped]);
+
+  const getTicketID = () => {
+    return <Text style={styles.idText}>{`TICKET ID ${data.id}`} </Text>;
+  };
+
+  let getNPSIcon = (sentiment) => {
+    let icon;
+    switch (sentiment) {
+      case 'Detractor':
+        icon = require('./../../../assets/images/detractor.png');
+        break;
+      case 'Passive':
+        icon = require('./../../../assets/images/passive.png');
+        break;
+      default:
+        icon = require('./../../../assets/images/promoter.png');
+        break;
+    }
+
+    return <Image source={icon} style={{width: 16, height: 16}} />;
+  };
+
+  let getNPSColor = (sentiment) => {
+    switch (sentiment) {
+      case 'Detractor':
+        return Colors.detractor2;
+      case 'Passive':
+        return Colors.passive2;
+      default:
+        return Colors.promoter2;
+    }
+  };
+
+  let getNPSScore = (score, sentiment) => {
+    let textColor = getNPSColor(sentiment);
+    return (
+      <Text
+        style={[
+          styles.statusText,
+          {
+            color: textColor,
+            marginHorizontal: MarginConstants.tab1,
+          },
+        ]}>
+        {score}
+      </Text>
+    );
+  };
+
+  const getNPSAndTicketRow = () => {
+    return (
+      <View style={styles.rowContainer}>
+        {/* <View style={[{flex: 2}, styles.rowContainer]}>
+          {getNPSIcon(data.nps)}
+          {getNPSScore(data.npsScore, data.nps)}
+        </View> */}
+        {/* <View
+          style={[{flex: 2, justifyContent: 'flex-end'}, styles.rowContainer]}>
+          {getTicketID()}
+        </View> */}
+      </View>
+    );
+  };
+
+  const getNameANdDateRow = () => {
+    const createdDate = moment(data.createdAt).format(FullMonthDateYearFormat);
+    console.log('USERDATA', JSON.stringify(data));
+    return (
+      <View style={styles.rowContainer}>
+        <Text style={styles.userNameText}>
+          {data?.panelMember?.name ?? ' '}
+        </Text>
+        <Text style={styles.dateText}>{` · ${createdDate ?? ' '}`}</Text>
+        <View style={{flex: 1, flexDirection: 'row-reverse'}}>
+          {getTicketID()}
+        </View>
+      </View>
+    );
+  };
+
+  const getTicketDetails = () => {
+    return (
+      <View style={styles.rowContainer}>
+        <Text style={styles.detailsText} numberOfLines={3} ellipsizeMode="tail">
+          {data.comment}
+        </Text>
+      </View>
+    );
+  };
+
+  const getStatusUI = (status) => {
+    const borderColor = getStatusBorderColorbyId(status);
+    const fillerColor = getStatusFillerColorbyId(status);
+
+    return (
+      <View style={styles.rowContainer}>
+        <View
+          style={{
+            width: 20,
+            height: 20,
+
+            borderRadius: 50,
+            borderColor: borderColor,
+            borderWidth: 1,
+            backgroundColor: fillerColor,
+          }}
+        />
+        <Text style={[{marginHorizontal: 4}, styles.statusText]}>
+          {getStatusById(status)}
+        </Text>
+      </View>
+    );
+  };
+
+  const getPriorityUI = (priority) => {
+    const priorityColor = getPriorityBorderColorbyId(priority);
+    const priorityText = getPriorityById(priority);
+    return (
+      <View style={styles.rowContainer}>
+        <IonIcons name="flag" size={20} color={priorityColor} />
+        <Text style={[{marginStart: 4}, styles.detailsText]}>
+          {priorityText}
+        </Text>
+      </View>
+    );
+  };
+
+  const getUserPic = (avatarUrl) => {
+    return (
+      <View>
+        <Image
+          style={{height: 24, width: 24, borderRadius: 50}}
+          source={{
+            uri: avatarUrl,
+          }}
+        />
+      </View>
+    );
+  };
+
+  const getStatusRow = () => {
+    return (
+      <View style={styles.statusContainer}>
+        {getStatusUI(data.status)}
+        {getPriorityUI(data.priority)}
+        {/* {getUserPic(data.userAvatar)} */}
+        <TouchableWithoutFeedback
+          hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+          onPress={() => {
+            props.onPressViewTicket(props.item);
+          }}>
+          <Text style={styles.viewTicketsText}>
+            {translate('responses.view_ticket')}
+          </Text>
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  };
+
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => {
+        props.onPressHandler(props.data, props.index);
+      }}
+      style={styles.container}>
+      <View style={styles.container}>
+        <View style={{backgroundColor: Colors.white}}>
+          {getNPSAndTicketRow()}
+          {/* {getTicketID()} */}
+          {getNameANdDateRow()}
+          {getTicketDetails()}
+        </View>
+        <View>{getStatusRow()}</View>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    margin: MarginConstants.tab1,
+    borderColor: Colors.evenDarkerGrey,
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: PaddingConstants.tab1,
+  },
+
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: PaddingConstants.tab1,
+  },
+  userNameText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.primary,
+    color: Colors.accent,
+  },
+
+  dateText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    color: Colors.primary,
+  },
+
+  detailsText: {
+    fontFamily: FontFamily.regular,
+
+    fontSize: TextSizes.regular,
+    color: Colors.filterIconColor,
+  },
+
+  idText: {
+    fontFamily: FontFamily.regular,
+
+    fontSize: TextSizes.secondary,
+    color: Colors.accentLight,
+  },
+
+  statusText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.primary,
+    color: Colors.lightBlack,
+  },
+  viewTicketsText: {
+    backgroundColor: Colors.accentLight,
+    color: Colors.white,
+    fontSize: TextSizes.secondary,
+    textAlign: 'center',
+    fontFamily: FontFamily.regular,
+    padding: 5,
+    borderRadius: 2,
+  },
+});

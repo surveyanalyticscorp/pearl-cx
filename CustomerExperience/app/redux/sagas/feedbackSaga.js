@@ -1,12 +1,16 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {
+  CLF_GET_TICKET_LIST_BY_RESPONSEID,
   CX_GET_PANEL_MEMBER,
   CX_RESPONSE_SURVEY_DETAILS,
+  RESPONSES,
 } from '../../api/Constant';
 import {API_ERROR} from '../actions/index';
 import {
   GET_PANEL_MEMBER,
+  GET_RESPONSE_TICKETS,
+  GET_RESPONSE_TICKETS_RECEIVED,
   GET_SURVEY_RESPONSE_DETAILS,
   PANEL_MEMBER_RECEIVED,
   SURVEY_RESPONSE_DETAILS_RECEIVED,
@@ -51,6 +55,30 @@ export function* fetchSurveyResponseDetails(action) {
 
 export function* watchGetSurveyResponseDetails() {
   yield takeLatest(GET_SURVEY_RESPONSE_DETAILS, fetchSurveyResponseDetails);
+}
+
+export function* fetchResponseTickets(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      CLF_GET_TICKET_LIST_BY_RESPONSEID +
+        action.feedbackId +
+        '/' +
+        RESPONSES +
+        action.responseId,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+
+    yield put({type: GET_RESPONSE_TICKETS_RECEIVED, response: json});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: API_ERROR, error: error});
+  }
+}
+
+export function* watchGetResponseTickets() {
+  yield takeLatest(GET_RESPONSE_TICKETS, fetchResponseTickets);
 }
 
 // export function* updateFetchFeedback(action) {

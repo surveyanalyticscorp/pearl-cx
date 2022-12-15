@@ -34,6 +34,8 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
 // import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 import Animated from 'react-native-reanimated';
+import {useIsFocused} from '@react-navigation/native';
+import {clearResponseData} from '../../redux/actions/feedback.actions';
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
 
@@ -259,6 +261,7 @@ const FeedbackTabStack = () => (
 );
 
 const RenderFeedbackScene = (props) => {
+  const dispatch = useDispatch();
   const feedbackForm = useContext(FormContext);
   let [list, setList] = useState(feedbackForm.feedbackData);
   let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);
@@ -266,7 +269,13 @@ const RenderFeedbackScene = (props) => {
   //let [exitAlert, showExitAlert] = useState(false);
   const fall = new Animated.Value(1);
   const {authToken, range, isLoading} = useSelector((state) => state.global);
+  const isFocused = useIsFocused();
 
+  useEffect(() => {
+    if (isFocused) {
+      dispatch(clearResponseData());
+    }
+  }, [isFocused]);
   useEffect(() => {
     if (prevFeedbackRef !== feedbackForm.feedbackData) {
       // getData();

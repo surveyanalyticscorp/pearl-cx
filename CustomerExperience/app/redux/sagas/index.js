@@ -30,6 +30,7 @@ import {
 import {watchGetNotification} from './notificationSaga';
 import {
   watchGetPanelMember,
+  watchGetResponseTickets,
   watchGetSurveyResponseDetails,
 } from './feedbackSaga';
 import {getFirstTimeClosedLoopSegmentDetails} from '../actions/dashboard.actions';
@@ -64,6 +65,7 @@ export function* rootSaga() {
     fork(watchGetPanelMember),
     fork(watchGetSurveyResponseDetails),
     fork(watchGetLatestComment),
+    fork(watchGetResponseTickets),
     fork(watchGetTicketStatusHistory),
   ]);
 }

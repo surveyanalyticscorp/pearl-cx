@@ -24,6 +24,7 @@ import {translate} from '../../Utils/MultilinguaUtils';
 // import style from '../../widgets/qp-calendar/calendar/header/style';
 export default function FeedbackCell(props) {
   let disable = props.origin === 'Detail';
+  let hasTicket = props.hasTicket;
   let [isNewResponse, setNewResponse] = useState(
     props.item.ticketStatus === -1,
   );
@@ -191,28 +192,30 @@ export default function FeedbackCell(props) {
 
   let renderCreateOrViewTicket = () => {
     let status = getTicketStatus();
-    return StringUtils.isEmpty(status) ? (
+    // return StringUtils.isEmpty(status) ? (
+    return !hasTicket ? (
       <TouchableWithoutFeedback
         hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
         onPress={() => {
-          props.navigation.navigate(translate('responses.new_ticket'), {
-            parentRoute: translate('responses.responses'),
-          });
+          // props.navigation.navigate(translate('responses.new_ticket'), {
+          //   parentRoute: translate('responses.responses'),
+          // });
         }}>
         <Text style={styles.viewTicketsText}>
           {translate('responses.create_ticket')}
         </Text>
       </TouchableWithoutFeedback>
     ) : (
-      <TouchableWithoutFeedback
-        hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
-        onPress={() => {
-          setTapped(true);
-        }}>
-        <Text style={styles.viewTicketsText}>
-          {translate('responses.view_ticket')}
-        </Text>
-      </TouchableWithoutFeedback>
+      // <TouchableWithoutFeedback
+      //   hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+      //   onPress={() => {
+      //     // setTapped(true);
+      //   }}>
+      //   <Text style={styles.viewTicketsText}>
+      //     {translate('responses.view_ticket')}
+      //   </Text>
+      // </TouchableWithoutFeedback>
+      <View />
     );
   };
   const RenderContactDetails = () => {
@@ -309,7 +312,7 @@ export default function FeedbackCell(props) {
           {getResponseId()}
           {disable && flag && renderCreateOrViewTicket()}
         </View>
-        {disable && flag && RenderInfo()}
+        {/* {disable && flag && RenderInfo()} */}
       </View>
     );
   };

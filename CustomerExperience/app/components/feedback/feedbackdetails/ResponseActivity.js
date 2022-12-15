@@ -14,9 +14,14 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 // import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import {useSelector} from 'react-redux';
+import {FontWeight} from '../../../styles/font.constants';
 
 const ResponseActivity = (props) => {
   let activityData = props.route.params.data;
+  const {ticketStatusHistory, ticketLastComment} = useSelector(
+    (state) => state.response,
+  );
 
   // console.log(`feedback: ${activityData}`);
 
@@ -40,10 +45,10 @@ const ResponseActivity = (props) => {
   const RenderSurveyDetails = () => {
     return (
       <View style={styles.innerContainer}>
-        <RenderSurveySent>{'STATIC Survey sent DATE'}</RenderSurveySent>
+        <RenderSurveySent>{'N/A'}</RenderSurveySent>
         <View style={styles.border} />
         <RenderSurveyComplete>
-          {'STATIC Survey complete DATE'}
+          {activityData.surveyTakenDate}
         </RenderSurveyComplete>
       </View>
     );
@@ -53,7 +58,7 @@ const ResponseActivity = (props) => {
     let borderColor = statusColors.newBorder;
     let fillerColor = statusColors.newFiller;
 
-    switch (item.status) {
+    switch (item.title.toLowerCase()) {
       case 'open':
         borderColor = statusColors.openBorder;
         fillerColor = statusColors.openFiller;
@@ -112,38 +117,54 @@ const ResponseActivity = (props) => {
     const managerName = 'DUMMY MANAGER';
     const lastUpdated = 'DUMMY COMMENT';
     const comment = 'LAST COMMENT';
-    const history = [
-      {
-        status: 'new',
-      },
-      {
-        status: 'open',
-      },
-      {
-        status: 'resolved',
-      },
-    ];
+    // const history = [
+    //   {
+    //     status: 'new',
+    //   },
+    //   {
+    //     status: 'open',
+    //   },
+    //   {
+    //     status: 'resolved',
+    //   },
+    // ];
 
     return (
       <View style={styles.innerContainer}>
         <View>
-          <Text style={styles.mediumText}>{managerName}</Text>
-          <Text style={styles.secondaryText}>{lastUpdated}</Text>
-          <Text style={styles.mediumText}>{comment}</Text>
-          <Text style={styles.secondaryTitle}>Status Change</Text>
-          <FlatList
-            style={{
-              marginHorizontal: MarginConstants.tab1,
-              marginBottom: MarginConstants.tab2,
-            }}
-            data={history}
-            keyExtractor={(_, index) => index.toString()}
-            renderItem={RenderStatusCell}
-            onEndReachedThreshold={0}
-            refreshing={false}
-            horizontal={true}
-            ItemSeparatorComponent={renderSeparator}
-          />
+          <View>
+            <Text style={styles.mediumText}>
+              {ticketLastComment?.data?.commentBy ?? 'N/A'}
+            </Text>
+            <Text style={[styles.commentHeaderText, {color: Colors.accent}]}>
+              {'Latest comment'}
+            </Text>
+            <Text style={styles.secondaryText}>
+              {ticketLastComment?.data?.text ?? 'N/A'}
+            </Text>
+          </View>
+
+          {ticketStatusHistory && ticketStatusHistory?.data?.length > 0 ? (
+            <View>
+              <Text style={styles.secondaryTitle}>Status Change</Text>
+
+              <FlatList
+                style={{
+                  marginHorizontal: MarginConstants.tab1,
+                  marginBottom: MarginConstants.tab2,
+                }}
+                data={ticketStatusHistory.data}
+                keyExtractor={(_, index) => index.toString()}
+                renderItem={RenderStatusCell}
+                onEndReachedThreshold={0}
+                refreshing={false}
+                horizontal={true}
+                ItemSeparatorComponent={renderSeparator}
+              />
+            </View>
+          ) : (
+            <View />
+          )}
         </View>
       </View>
     );
@@ -231,8 +252,16 @@ const styles = StyleSheet.create({
   secondaryText: {
     fontSize: TextSizes.semiMediumText,
     color: Colors.filterIconColor,
-    fontWeight: '900',
-    margin: MarginConstants.tab1,
+    fontWeight: FontWeight._500,
+    marginHorizontal: MarginConstants.tab1,
+    marginVertical: MarginConstants.halfTab,
+  },
+  commentHeaderText: {
+    fontSize: TextSizes.smallText,
+    color: Colors.filterIconColor,
+    fontWeight: FontWeight._500,
+    marginHorizontal: MarginConstants.tab1,
+    marginVertical: MarginConstants.halfTab,
   },
   contactBox: {
     flexDirection: 'row',
