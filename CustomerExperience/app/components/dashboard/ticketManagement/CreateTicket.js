@@ -71,6 +71,7 @@ import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
 
 export default function CreateTicket(props) {
+  const responseId = props.route?.params?.responseId ?? null;
   const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
   const {authToken} = useSelector((state) => state.global);
   const {owners} = useSelector((state) => state.dashboard.ownerDetails);
@@ -122,6 +123,7 @@ export default function CreateTicket(props) {
 
   const [ticketState, setTicketState] = useState({
     subscriberId: global.subscriberId,
+    responseId: responseId,
     // ownerId: ,
     // emailAddress: '',
     // firstName: '',

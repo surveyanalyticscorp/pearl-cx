@@ -14,6 +14,7 @@ import CommonScreens, {
 } from './CommonScreen';
 import {translate} from '../Utils/MultilinguaUtils';
 import SegmentSelector from '../components/SegmentSelector';
+import TicketDetails from '../components/closedloop/TicketDetails';
 
 const FeedbackStack = createStackNavigator();
 
@@ -47,6 +48,19 @@ const feedbackStack = (props) => (
         // headerLeft: (props) => <View />,
         // headerRight: (props) => <CloseButton />,
         headerShown: false,
+      })}
+    />
+
+    <FeedbackStack.Screen
+      name={'TicketDetails'}
+      component={TicketDetails}
+      options={({navigation, route}) => ({
+        // headerShown: false,
+        title: 'Ticket Details',
+        headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+        headerRight: (props) => <View />,
+        // headerRight: (props) => <EditTicket {...props} route={route} />,
+        // headerLeft: (props) => <MenuIcon />,
       })}
     />
     {CommonScreens(FeedbackStack)}

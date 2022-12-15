@@ -200,6 +200,9 @@ export default function FeedbackCell(props) {
           // props.navigation.navigate(translate('responses.new_ticket'), {
           //   parentRoute: translate('responses.responses'),
           // });
+          props.navigation.navigate('New Ticket', {
+            responseId: props.item.responseSetID,
+          });
         }}>
         <Text style={styles.viewTicketsText}>
           {translate('responses.create_ticket')}

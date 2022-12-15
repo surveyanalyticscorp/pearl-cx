@@ -25,6 +25,7 @@ import {
   getLatestComment,
   getTicketStatusHistory,
 } from '../../redux/actions/closedloop.actions';
+import {useIsFocused} from '@react-navigation/native';
 
 export default function FeedbackDetails(props) {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ export default function FeedbackDetails(props) {
   const {feedbackApiKey, feedbackID} = useSelector(
     (state) => state.global.userInfo,
   );
+  const isFocused = useIsFocused();
   const responseTickets = useSelector(
     (state) => state.response.responseTickets,
   );
@@ -60,7 +62,7 @@ export default function FeedbackDetails(props) {
         feedbackApiKey: feedbackApiKey,
       }),
     );
-  }, [authToken]);
+  }, [isFocused]);
   useEffect(() => {
     console.log(
       'RESPONSE_DATA_RESPONSE_TICKETS',
@@ -74,12 +76,18 @@ export default function FeedbackDetails(props) {
   }, [responseTickets]);
 
   const onTapHandler = (item, index) => {
-    console.log(item);
+    // console.log(item);
+    dispatch(getLatestComment(authToken, item.id));
+    dispatch(getTicketStatusHistory(authToken, item.id));
   };
 
   const onPressViewTicket = (item) => {
-    console.log(item);
+    props.navigation.navigate('TicketDetails', item);
   };
+
+  // const onPressHandler = (item, index) => {
+  //   props.navigation.navigate('TicketDetails', item);
+  // };
   // dispatch(
   //   getSurveyResponseDetails(authToken, {
   //     surveyID: data.surveyID,
