@@ -1,5 +1,4 @@
-import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
-// import SafeAreaView from 'react-native-safe-area-view';
+import React, {useEffect, useState} from 'react';
 import {
   Platform,
   ScrollView,
@@ -50,10 +49,10 @@ import {
   createClfTicket,
   getClosedLoopOwnerDetails,
 } from '../../../redux/actions/dashboard.actions';
-import {showLoading} from '../../../redux/actions';
+// import {showLoading} from '../../../redux/actions';
 import SelectSegment from '../../closedloop/takeaction/SelectSegment';
 import SelectTicketOwner from '../../closedloop/takeaction/SelectTicketOwner';
-import SelectDate from '../../closedloop/takeaction/SelectDate';
+// import SelectDate from '../../closedloop/takeaction/SelectDate';
 import moment from 'moment';
 import {
   DMYFORMAT,
@@ -61,7 +60,6 @@ import {
   // HalfMonthDateYearFormat,
   YMDFORMAT,
 } from '../../../Utils/AppConstants';
-import {FEEDBACK_API_KEY} from '../../../api/Constant';
 import QPCalendar from '../../../widgets/QPCalendar';
 import {
   isStringNullOrEmpty,
@@ -85,17 +83,17 @@ export default function CreateTicket(props) {
   const [segmentId, setSegmentId] = useState(segmentDetails.currentSegmentID);
   const [ticketOwner, setTicketOwner] = useState('Select Ticket Owner');
   const [ticketOwnerIndex, setTIcketOwnerIndex] = useState(-1);
-  const [status, setStatus] = useState('Select');
+  // const [status, setStatus] = useState('Select');
   const [statusIndex, setStatusIndex] = useState(-1);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(moment().format(DMYFORMAT));
   const navigation = useNavigation();
-  let userInfo = {
-    emailAddress: '',
-    firstName: '',
-    mobileNumber: '',
-    comment: '',
-  };
+  // let userInfo = {
+  //   emailAddress: '',
+  //   firstName: '',
+  //   mobileNumber: '',
+  //   comment: '',
+  // };
 
   // const [issueDate, setIssueDate] = useState(
   // );
@@ -117,7 +115,7 @@ export default function CreateTicket(props) {
   const ownerBottomSheetSnapPoints = ['45%', '0%'];
   // const calenderBottomSheetSnapPoints = ['45%', '0%'];
 
-  const [shadow, setShadow] = useState(false);
+  // const [shadow, setShadow] = useState(false);
   const dispatch = useDispatch();
   const [validation, setValidation] = useState('');
 

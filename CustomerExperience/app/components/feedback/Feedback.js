@@ -41,6 +41,7 @@ const FormContext = React.createContext();
 
 function Feedback(props) {
   let dispatch = useDispatch();
+  let currentSegment = useSelector((state) => state.dashboard.currentSegment);
   let [feedbackData, setFeedbackData] = useState([]);
   let [ticketStatus, setTicketStatus] = useState([]);
   let [pageOffset, setPageOffset] = useState(0);
@@ -58,11 +59,16 @@ function Feedback(props) {
       const data = {
         pageOffset: pageOffset,
         sentiment: 'All',
+        storeId: currentSegment.currentSegmentID,
         startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
         endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
         filterText: sortingAttribute[sortingText.index].toLowerCase(),
       };
+      console.log(
+        'SEGMENT_ON_RESPONSE:',
 
+        JSON.stringify(data),
+      );
       apiHandler.getFeedbackResponseList(
         props.authToken,
         data,
@@ -102,6 +108,7 @@ function Feedback(props) {
   }, [showLoader]);
 
   useEffect(() => {
+    console.log('CURRENT_SEGMENT: ', JSON.stringify(currentSegment));
     if (prevRangeRef && prevRangeRef !== props.range) {
       if (pageOffset === 0) {
         setFeedbackData([]);
@@ -112,6 +119,16 @@ function Feedback(props) {
       }
     }
   }, [props.range]);
+
+  useEffect(() => {
+    // if (pageOffset === 0) {
+    //   setFeedbackData([]);
+    //   setShowLoader(true);
+    // } else {
+    setPageOffset(0);
+    setShowLoader(true);
+    // }
+  }, [currentSegment]);
 
   useEffect(() => {
     pagination && setPageOffset(pageOffset + 1);
