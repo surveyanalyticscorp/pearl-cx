@@ -19,7 +19,7 @@ const surveyUrl =  (apiKey, type, surveyId) => {
     }
 };
 
-export {CX_PAYLOAD, CX_THEME_COLOR, CX_API_KEY, CX_SURVEY_HEADER, surveyUrl};
+export {CX_PAYLOAD, CX_THEME_COLOR, CX_API_KEY, CX_SURVEY_HEADER, SURVEY_TYPE, surveyUrl};
 
 export const SurveyType = {
     Core: 'Core',
