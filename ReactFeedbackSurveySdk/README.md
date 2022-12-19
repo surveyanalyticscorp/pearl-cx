@@ -10,9 +10,12 @@
 ## Usage
 #### Initialization
 ```JavaScript
-    import {initQp} from 'questionpro-feedback-survey';
+    import {initQp, SurveyType} from 'questionpro-feedback-survey';
 
-    let payload = { apiKey: 'api_access_key' };//Your API Access Key
+    let payload = { 
+        apiKey: 'api_access_key', //Your API Access Key
+        surveyType: SurveyType.Feedback 
+    };
 
     initQp(payload).then(status => {
           console.log('QP Feedback Survey Init status: ' + status);
@@ -35,7 +38,8 @@
 ## Initialization payload Props
 | Props | Details | Example | Default Value |
 | ----- | ------- | ------- | ------------- |
-| apiKey | `[Required]` API Access Key of feedback system. | -- | Required field |
+| apiKey | `[Required]` API Access Key which you will get from the QuestionPro system. | -- | -- |
+| surveyType | `[Required]` Type of survey whether it is Customer Experience feedback survey or the core survey. | SurveyType.Feedback OR SurveyType.Core | -- |
 | email | `[Optional]` Respondant email address. If not set this props, the response will be collected as an anonymous. | "john@example.com"  | anonymous |
 | firstName | `[Optional]` First name of respondent. | "John" | ' ' |
 | lastName | `[Optional]` Last name of respondent. | "john" | ' ' |

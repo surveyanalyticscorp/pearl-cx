@@ -3,7 +3,8 @@
  */
 
 import React, {useState, useEffect} from 'react';
-import {View, ActivityIndicator, Alert, AsyncStorage} from 'react-native';
+import {View, ActivityIndicator, Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {WebView} from 'react-native-webview';
 import {getSurveyUrl} from '../QuestionProCx';
 import SurveyHeader from './SurveyHeader';
@@ -29,8 +30,7 @@ export const QpFeedbackSurvey = props => {
                 console.log('getSurveyUrl: ' + JSON.stringify(apiResponse));
                 setIsLoading(false);
                 if(apiResponse){
-                    console.log('Survey Url: '+ apiResponse.SurveyURL);
-                    setSurveyUrl(apiResponse.SurveyURL);
+                    setSurveyUrl(apiResponse);
                 }else{
                     if (typeof props.onSurveyFinished === 'function') {
                         props.onSurveyFinished();
