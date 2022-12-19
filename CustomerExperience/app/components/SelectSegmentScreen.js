@@ -1,11 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getClosedLoopSegmentDetails,
-  setSegment,
-  setSegmentSelectorOpen,
+  // setSegment,
+  // setSegmentSelectorOpen,
 } from '../redux/actions/dashboard.actions';
 import {CloseButton} from '../routes/CommonScreen';
 import {Colors} from '../styles/color.constants';
@@ -13,7 +13,7 @@ import {FontFamily} from '../styles/font.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
-import {getSegmentIndex} from '../Utils/TicketUtils';
+// import {getSegmentIndex} from '../Utils/TicketUtils';
 import GlobalSelectSegment from './dashboard/GlobalSelectSegment';
 
 const SelectSegmentScreen = (props) => {
@@ -24,7 +24,7 @@ const SelectSegmentScreen = (props) => {
   const [isLoading, setLoading] = useState(false);
   const authToken = useSelector((state) => state.global.authToken);
   const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
-  const [segmentList_, setSegmentList_] = useState([]);
+  const [segmentList, setSegmentList] = useState([]);
   // const currentSegment = useSelector((state) => state.dashboard.currentSegment);
   const navigation = useNavigation();
   const [pageOffset, setPageOffset] = useState(0);
@@ -33,7 +33,7 @@ const SelectSegmentScreen = (props) => {
     // dispatch(setSegmentSelectorOpen(false));
     setSegmentSelection(item);
     if (navigation.canGoBack) {
-      setSegmentList_([]);
+      setSegmentList([]);
       navigation.goBack();
     }
   };
@@ -41,9 +41,12 @@ const SelectSegmentScreen = (props) => {
 
   useEffect(() => {
     console.log('Segment_API_CALL_FIRSTTIME');
-    getSegmentData(pageOffset);
+    getSegmentData();
   }, [authToken]);
 
+  useEffect(() => {
+    getSegmentData();
+  }, [pageOffset]);
   // useCallback(() => {
   //   setSegmentList_((prevState) => [
   //     ...new Set([...prevState, ...(segmentDetails.segments ?? [])]),
@@ -56,10 +59,14 @@ const SelectSegmentScreen = (props) => {
 
     // setSegmentList_([new Set(data)]);
     setLoading(false);
-    setSegmentList_((prevState) => [
-      ...new Set([...prevState, ...segmentDetails.segments]),
-    ]);
-  }, [segmentDetails.pageOffset]);
+    if (pageOffset === 0) {
+      setSegmentList(segmentDetails.segments);
+    } else {
+      setSegmentList((prevState) => [
+        ...new Set([...prevState, ...segmentDetails.segments]),
+      ]);
+    }
+  }, [segmentDetails]);
 
   // const loadMoreData = useCallback(() => {
   //   console.log('Segment_API_CALL_LOADMORE');
@@ -71,18 +78,19 @@ const SelectSegmentScreen = (props) => {
   // }, []);
 
   const loadMoreData = () => {
-    console.log('LOAD_MORE', segmentList_.length, segmentDetails.count);
-    if (segmentList_.length < segmentDetails.count && !isLoading) {
-      setPageOffset((state) => state + 1);
-      getSegmentData(pageOffset);
-    }
+    // console.log('LOAD_MORE', segmentList.length, segmentDetails.count);
+    // if (!isLoading && segmentList.length < segmentDetails.count) {
+    //   setPageOffset((state) => state + 1);
+    //   getSegmentData();
+    // }
+    !isLoading && setPageOffset((state) => state + 1);
   };
 
-  const getSegmentData = (pageOffset_) => {
+  const getSegmentData = () => {
     setLoading(true);
     dispatch(
       getClosedLoopSegmentDetails(authToken, {
-        pageOffset: pageOffset_.toString(),
+        pageOffset: pageOffset.toString(),
       }),
     );
   };
@@ -93,7 +101,7 @@ const SelectSegmentScreen = (props) => {
         style={{backgroundColor: Colors.white, flex: 1}}>
         <GlobalSelectSegment
           // {...props}
-          data={segmentList_}
+          data={segmentList}
           // selectedIndex={
           //   getSegmentIndex(segmentList_ ?? [], currentSegmentId) ?? 0
           // }

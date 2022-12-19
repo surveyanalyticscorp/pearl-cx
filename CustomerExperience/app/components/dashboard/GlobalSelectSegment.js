@@ -77,8 +77,8 @@ const GlobalSelectSegment = ({
           keyExtractor={(item, index) => item.toString()}
           renderItem={renderRow}
           ItemSeparatorComponent={listItemSeparator}
-          // onEndReached={loadMoreData}
-          // onEndReachedThreshold={0.7}
+          onEndReached={loadMoreData}
+          onEndReachedThreshold={0}
         />
       ) : (
         <View />

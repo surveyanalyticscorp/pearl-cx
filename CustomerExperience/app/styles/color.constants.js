@@ -148,7 +148,7 @@ const getPriorityBorderColor = (_priority) => {
       return priorityColors.critical.border;
     case 'high':
       return priorityColors.high.border;
-    case 'normal':
+    case 'medium':
       return priorityColors.normal.border;
     case 'low':
       return priorityColors.low.border;
@@ -236,7 +236,7 @@ const priorityColors = {
     filler: '#E4632D33',
   },
   normal: {
-    border: Colors.medium2,
+    border: '#F6C140',
     filler: '#F6C14033',
   },
   low: {

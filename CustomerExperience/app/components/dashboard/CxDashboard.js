@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useReducer, useState} from 'react';
 import {
   FlatList,
   RefreshControl,
@@ -83,6 +83,7 @@ const CxDashboard = (props) => {
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
   const bsSnapPoints = ['50%', '0%'];
+  const [npsScoreData, setNpsScoreData] = useState({});
   // const [shadow, setShadow] = useState(false);
 
   // let [mSegment, setSegment] = useState(props.segment);
@@ -103,6 +104,18 @@ const CxDashboard = (props) => {
       getDashboardData();
     }
   }, [isFocused]);
+
+  // const filterNPSData = useCallback(() => {
+  //   /// to find the proper obejct from a list
+  //   // list filter
+
+  //   props.dashboardData
+
+  // }, [segmentId]);
+
+  // useEffect(() => {
+  //   filterNPSData();
+  // }, [segmentId]);
 
   const onRefresh = useCallback(() => {
     //setRefreshing(true);//No need to show 2 loading
@@ -561,18 +574,7 @@ const CxDashboard = (props) => {
             {exitAlert && renderExitAlert()}
           </View>
         </ScrollView>
-        {/* <RenderSegmentSelector
-          bs_={bs}
-          bsSnapPoints_={bsSnapPoints}
-          fall_={fall}
-          renderSelectSegment_={renderSelectSegment}
-          renderSelectSegmentHeader_={renderSelectSegmentHeader}
-        /> */}
-        {/* <RenderSegmentBottomSheet
-          // ref={bs}
-          // snapPoints={bsSnapPoints}
-          callbackNode={fall}
-        /> */}
+
         <FabAddButton onPress={onFabPressHandler} />
       </SafeAreaView>
     );

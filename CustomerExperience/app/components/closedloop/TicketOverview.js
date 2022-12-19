@@ -933,7 +933,9 @@ export default function TicketOverview(props) {
                   fontSize: TextSizes.primary,
                   color: Colors.accentLight,
                 }}>
-                {`ID ${ticketDetails !== undefined ? ticketDetails.id : ''}`}
+                {`Ticket ID #${
+                  ticketDetails !== undefined ? ticketDetails.id : ''
+                }`}
               </Text>
             </View>
           </TouchableWithoutFeedback>

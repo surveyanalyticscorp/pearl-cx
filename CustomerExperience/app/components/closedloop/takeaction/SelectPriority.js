@@ -16,6 +16,7 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import {listItemSeparator} from '../../../routes/CommonScreen';
 
 const SelectPriority = (props) => {
   const [data, setData] = useState(props.data);
@@ -34,14 +35,10 @@ const SelectPriority = (props) => {
           }
           // handleOnPress(item)
         }>
-        <View
-          style={[
-            styles.row,
-            {borderColor: borderColor, backgroundColor: backgroundColor},
-          ]}>
+        <View style={[styles.row]}>
           <IonIcon
             style={{marginHorizontal: MarginConstants.halfTab}}
-            name={item.icon}
+            name={'flag'}
             size={20}
             color={borderColor}
           />
@@ -68,6 +65,7 @@ const SelectPriority = (props) => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
+        ItemSeparatorComponent={listItemSeparator}
       />
     </View>
   );
@@ -84,7 +82,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     margin: MarginConstants.tab1,
-    borderWidth: 1,
+
     padding: MarginConstants.tab1,
   },
   title: {

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
+import {listItemSeparator} from '../../../routes/CommonScreen';
 import {
   Colors,
   // getStatusBorderColor,
@@ -41,6 +42,7 @@ const SelectStatus = (props) => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
+        ItemSeparatorComponent={listItemSeparator}
       />
     </View>
   );

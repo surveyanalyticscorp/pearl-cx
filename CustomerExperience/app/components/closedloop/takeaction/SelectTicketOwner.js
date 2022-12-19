@@ -12,6 +12,7 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import {listItemSeparator} from '../../../routes/CommonScreen';
 
 const SelectTicketOwner = (props) => {
   const [data, setData] = useState(props.data);
@@ -51,6 +52,7 @@ const SelectTicketOwner = (props) => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
+        ItemSeparatorComponent={listItemSeparator}
       />
     </View>
   );
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     margin: MarginConstants.tab1,
-    borderWidth: 0.5,
+
     padding: MarginConstants.tab1,
   },
   title: {

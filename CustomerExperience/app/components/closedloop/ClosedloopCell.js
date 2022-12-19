@@ -43,7 +43,12 @@ export default function ClosedLoopCell(props) {
   // }, [isTapped]);
 
   const getTicketID = () => {
-    return <Text style={styles.idText}>{`ID ${data.id}`} </Text>;
+    return (
+      <View style={{flexDirection: 'row'}}>
+        <Text style={styles.idTitleText}>{`Ticket ID`} </Text>
+        <Text style={styles.idText}>{`#${data.id}`} </Text>
+      </View>
+    );
   };
 
   let getNPSIcon = (sentiment) => {
@@ -250,6 +255,13 @@ const styles = StyleSheet.create({
 
     fontSize: TextSizes.secondary,
     color: Colors.accentLight,
+  },
+
+  idTitleText: {
+    fontFamily: FontFamily.regular,
+
+    fontSize: TextSizes.secondary,
+    color: Colors.filterIconColor,
   },
 
   statusText: {

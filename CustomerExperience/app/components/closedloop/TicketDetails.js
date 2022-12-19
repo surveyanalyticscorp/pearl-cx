@@ -24,6 +24,12 @@ export default function TicketDetails(props) {
   const TicketTabs = createMaterialTopTabNavigator();
 
   useEffect(() => {
+    props.navigation.setOptions({
+      title: `Ticket ${ticketItem.id}`,
+    });
+  }, [props.navigation]);
+
+  useEffect(() => {
     dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
   }, [ticketItem, authToken]);
 
