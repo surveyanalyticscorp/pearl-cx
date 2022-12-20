@@ -285,7 +285,7 @@ const RenderFeedbackScene = (props) => {
   let prevSortRef = usePrevious(feedbackForm.sortingText);
   //let [exitAlert, showExitAlert] = useState(false);
   const fall = new Animated.Value(1);
-  const {authToken, range, isLoading} = useSelector((state) => state.global);
+  // const {authToken, range, isLoading} = useSelector((state) => state.global);
   const isFocused = useIsFocused();
 
   useEffect(() => {

@@ -1,20 +1,30 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getClosedLoopSegmentDetails,
   // setSegment,
   // setSegmentSelectorOpen,
 } from '../redux/actions/dashboard.actions';
-import {CloseButton} from '../routes/CommonScreen';
+import {CloseButton, listItemSeparator} from '../routes/CommonScreen';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+
 // import {getSegmentIndex} from '../Utils/TicketUtils';
-import GlobalSelectSegment from './dashboard/GlobalSelectSegment';
+// import GlobalSelectSegment from './dashboard/GlobalSelectSegment';
 
 const SelectSegmentScreen = (props) => {
   // {currentSegmentId, setSegmentSelection}
@@ -33,7 +43,6 @@ const SelectSegmentScreen = (props) => {
     // dispatch(setSegmentSelectorOpen(false));
     setSegmentSelection(item);
     if (navigation.canGoBack) {
-      setSegmentList([]);
       navigation.goBack();
     }
   };
@@ -62,9 +71,16 @@ const SelectSegmentScreen = (props) => {
     if (pageOffset === 0) {
       setSegmentList(segmentDetails.segments);
     } else {
-      setSegmentList((prevState) => [
-        ...new Set([...prevState, ...segmentDetails.segments]),
-      ]);
+      let list = [...segmentList, ...segmentDetails.segments];
+      let uniqueList = [
+        ...new Map(list.map((item) => [item['segmentID'], item])).values(),
+      ];
+      setSegmentList(uniqueList);
+      // setSegmentList([...new Set(list)]);
+      // let data = pageOffset === 0 ? [] : [...segmentList];
+      // data = [...data, ...segmentDetails.segments];
+
+      // setSegmentList([new Set(data)]);
     }
   }, [segmentDetails]);
 
@@ -84,6 +100,7 @@ const SelectSegmentScreen = (props) => {
     //   getSegmentData();
     // }
     !isLoading && setPageOffset((state) => state + 1);
+    console.log('LOAD_MORE');
   };
 
   const getSegmentData = () => {
@@ -98,20 +115,87 @@ const SelectSegmentScreen = (props) => {
     return (
       <View
         //  style={styles.contentContainer}
-        style={{backgroundColor: Colors.white, flex: 1}}>
+        style={styles.innerContainer}>
         <GlobalSelectSegment
-          // {...props}
-          data={segmentList}
+          {...props}
+          // data={segmentList}
           // selectedIndex={
           //   getSegmentIndex(segmentList_ ?? [], currentSegmentId) ?? 0
           // }
-          currentSegmentId={currentSegmentId}
-          loadMoreData={loadMoreData}
-          handleOnPress={(item) => handleSegmentSelectionAction(item)}
+          // currentSegmentId={currentSegmentId}
+          // loadMoreData={loadMoreData}
+          // handleOnPress={(item) => handleSegmentSelectionAction(item)}
         />
       </View>
     );
   };
+
+  const GlobalSelectSegment = (props) => {
+    // const [filteredList, setFilteredList] = useState(data);
+    // const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex ?? 0);
+
+    const renderRow = ({item, index}) => {
+      return (
+        <TouchableWithoutFeedback
+          onPress={() => handleSegmentSelectionAction(item)}>
+          <View style={styles.row}>
+            <Text style={styles.title}>{item.segmentName}</Text>
+            {currentSegmentId === item.segmentID ? (
+              <IonIcon
+                style={{marginHorizontal: MarginConstants.halfTab}}
+                name={'checkmark'}
+                size={20}
+                color={Colors.filterIconColor}
+              />
+            ) : (
+              <View />
+            )}
+          </View>
+        </TouchableWithoutFeedback>
+      );
+    };
+
+    // const handleOnPress = (item, index) => {
+    //   handleOnPress(item);
+    // };
+
+    // console.log('Segment_API_CALL', JSON.stringify(filteredList));
+
+    return (
+      <View style={styles.innerContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search..."
+          onChangeText={(text) => {
+            console.log(text);
+            // if (text) {
+            //   setFilteredList((state) =>
+            //     state.filter((item) =>
+            //       item.segmentName.toLowerCase().includes(text.toLowerCase()),
+            //     ),
+            //   );
+            // } else {
+            //   setFilteredList(data);
+            // }
+          }}
+        />
+        {segmentList && segmentList.length > 0 ? (
+          <FlatList
+            style={styles.flatList}
+            data={segmentList}
+            keyExtractor={(item, index) => item.segmentName}
+            renderItem={renderRow}
+            ItemSeparatorComponent={listItemSeparator}
+            onEndReached={loadMoreData}
+            onEndReachedThreshold={0.5}
+          />
+        ) : (
+          <View />
+        )}
+      </View>
+    );
+  };
+
   return (
     <View style={styles.rootContainer}>
       <View style={styles.container}>
@@ -163,6 +247,48 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.largeText,
     padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,
+  },
+
+  innerContainer: {
+    flex: 1,
+    backgroundColor: Colors.white,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+
+    justifyContent: 'space-between',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: MarginConstants.tab2,
+  },
+  flatList: {
+    marginHorizontal: MarginConstants.tab2,
+
+    fontFamily: FontFamily.bold,
+    fontSize: TextSizes.largeText,
+  },
+  header: {
+    marginHorizontal: MarginConstants.tab2,
+    fontFamily: FontFamily.bold,
+    fontSize: TextSizes.largeText,
+    marginVertical: MarginConstants.tab1,
+    color: Colors.filterIconColor,
+  },
+  title: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.secondary,
+    marginStart: MarginConstants.halfTab,
+    color: Colors.filterIconColor,
+  },
+  searchInput: {
+    borderBottomWidth: 1,
+    borderColor: Colors.filterIconColor,
+    marginHorizontal: MarginConstants.tab2,
+    marginBottom: MarginConstants.tab2,
+    paddingHorizontal: PaddingConstants.halfTab,
   },
 });
 export default SelectSegmentScreen;

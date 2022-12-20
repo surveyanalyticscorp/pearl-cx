@@ -74,11 +74,12 @@ const GlobalSelectSegment = ({
         <FlatList
           style={styles.flatList}
           data={filteredList}
-          keyExtractor={(item, index) => item.toString()}
+          keyExtractor={(item, index) => item.segmentName}
           renderItem={renderRow}
           ItemSeparatorComponent={listItemSeparator}
           onEndReached={loadMoreData}
           onEndReachedThreshold={0}
+          extraData={[filteredList]}
         />
       ) : (
         <View />
