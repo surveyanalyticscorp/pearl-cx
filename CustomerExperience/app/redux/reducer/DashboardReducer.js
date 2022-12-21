@@ -29,6 +29,7 @@ const initialState = {
   dashboardTicketCount: {},
   ticketDetails: {},
   segmentDetails: {},
+  segmentList: [],
   isSegmentSelectorOpen: false,
   ownerDetails: {},
   allOwnersDetails: {},
@@ -61,10 +62,7 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         segmentDetails: action.response.body,
-
-        currentFeedback: {
-          feedbackID: action.response.body.feedbackID,
-        },
+        segmentlist: getSegmentListData(state, action.response.body),
       };
     }
 
@@ -205,6 +203,15 @@ const dashboardReducer = (state = initialState, action) => {
     default: {
       return state;
     }
+  }
+};
+
+const getSegmentListData = (state, segmentDetails_) => {
+  if (segmentDetails_.pageOffset === '0') {
+    return segmentDetails_.segments;
+  } else {
+    return [...state.segmentList, ...segmentDetails_.segments];
+    // [...new Map(list.map((item) => [item['segmentID'], item])).values()];
   }
 };
 export default dashboardReducer;
