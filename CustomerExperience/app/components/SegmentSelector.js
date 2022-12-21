@@ -13,7 +13,7 @@ import {StackActions, useNavigation} from '@react-navigation/native';
 // import {SEGMENT_SELECTOR} from '../api/Constant';
 import {translate} from '../Utils/MultilinguaUtils';
 
-const SegmentSelector = ({screenName}) => {
+const SegmentSelector = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const authToken = useSelector((state) => state.global.authToken);
@@ -54,7 +54,9 @@ const SegmentSelector = ({screenName}) => {
   };
 
   const SegmentText = ({segmentName}) => {
-    const title = `${screenName ? screenName + ':' : ''} ${segmentName ?? ''}`;
+    const title = `${props.screenName ? props.screenName + ':' : ''} ${
+      segmentName ?? ''
+    }`;
 
     return <Text style={styles.appbarTitle}>{title}</Text>;
   };

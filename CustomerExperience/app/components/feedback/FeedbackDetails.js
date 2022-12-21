@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {useWindowDimensions, StyleSheet, View, FlatList} from 'react-native';
+import {
+  useWindowDimensions,
+  StyleSheet,
+  View,
+  FlatList,
+  BackHandler,
+} from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {Colors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';

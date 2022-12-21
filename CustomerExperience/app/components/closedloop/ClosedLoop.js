@@ -7,6 +7,8 @@ import {
   StyleSheet,
   RefreshControl,
   ScrollView,
+  BackHandler,
+  Alert,
 } from 'react-native';
 import ClosedLoopCell from './ClosedloopCell';
 import IonIcons from 'react-native-vector-icons/Ionicons';
@@ -38,7 +40,11 @@ import {
   YMDFORMAT,
 } from '../../Utils/AppConstants';
 import {setRangeFilter, showLoading} from '../../redux/actions';
-import {StackActions, useIsFocused} from '@react-navigation/native';
+import {
+  StackActions,
+  useFocusEffect,
+  useIsFocused,
+} from '@react-navigation/native';
 import {
   getPriorityById,
   priorityList,
@@ -52,7 +58,7 @@ import {translate} from '../../Utils/MultilinguaUtils';
 
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
-  const itemPerPage = 10;
+  const itemPerPage = 5;
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
 
   const {authToken, range, isLoading} = useSelector((state) => state.global);
@@ -99,6 +105,7 @@ export default function ClosedLoop(props) {
       type: type,
     };
   };
+
   const [filterData, setFilterData] = useState(sampleFilterData());
   // console.log('OWNERS', JSON.stringify(owners));
   const isFocused = useIsFocused();

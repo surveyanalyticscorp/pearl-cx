@@ -50,7 +50,7 @@ import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
 import {WelcomeScreen} from '../dashboard/WelcomeScreen';
 import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
 import {BottomSheetHeader, FabAddButton} from '../../routes/CommonScreen';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import {getSegmentIndex} from '../../Utils/TicketUtils';
@@ -71,6 +71,7 @@ const CxDashboard = (props) => {
   let [comparision, setComparision] = useState(false);
   let [exitAlert, showExitAlert] = useState(false);
   let [lastLoginArray, setLastLoginArray] = useState([]);
+
   let segmentId = useSelector(
     (state) => state.dashboard.currentSegment.currentSegmentID,
   );
@@ -170,12 +171,12 @@ const CxDashboard = (props) => {
   }, [range, wantToReload, segmentId]); //props.navigation
 
   useEffect(() => {
-    BackHandler.addEventListener(BackPressEventName, handleBackPress);
+    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
     // BackHandler.addEventListener(handleBackPress);
 
     getLastLogin();
     return () => {
-      BackHandler.removeEventListener(BackPressEventName, handleBackPress);
+      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
       // console.log('removed ');
       // BackHandler.removeEventListener(handleBackPress);
     };
@@ -210,15 +211,30 @@ const CxDashboard = (props) => {
   }, [props.dashboardData.detractorTicketsCount]);
 
   let handleBackPress = () => {
-    if (!props.navigation.canGoBack()) {
+    if (
+      props.route.name === translate('dashboard.dashboard') &&
+      !props.navigation.canGoBack()
+    ) {
       showExitAlert(true);
-      console.log('go back pressed, show exit');
+      return true;
     } else {
       showExitAlert(false);
-      props.navigation.goBack();
-      console.log('go back pressed, just navigate');
+      return false;
     }
-    return true;
+
+    // console.log('navigation_dashboard');
+    // console.log(
+    //   JSON.stringify(props.route.name === translate('dashboard.dashboard')),
+    // );
+    // if (props.navigation.canGoBack()) {
+    //   showExitAlert(false);
+    //   props.navigation.goBack();
+    //   console.log('go back pressed, just navigate');
+    // } else {
+    //   showExitAlert(true);
+    //   console.log('go back pressed, show exit');
+    // }
+    // return true;
   };
 
   let renderExitAlert = () => {

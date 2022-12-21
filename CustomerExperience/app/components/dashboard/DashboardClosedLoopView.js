@@ -154,7 +154,6 @@ const RenderScene = (props) => {
       <View style={[styles.viewCountContainer]}>
         <View
           style={{
-            flex: 2,
             height: MarginConstants.tab4,
             justifyContent: 'center',
           }}>
@@ -162,11 +161,10 @@ const RenderScene = (props) => {
         </View>
         <View
           style={{
-            flex: 2,
             height: MarginConstants.tab4,
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'flex-start',
+            justifyContent: 'center',
           }}>
           <Text style={styles.countText}>Percentage</Text>
           <Switch
@@ -318,6 +316,7 @@ const styles = StyleSheet.create({
     marginTop: MarginConstants.tab3,
     // backgroundColor: Colors.accentLight,
     paddingVertical: MarginConstants.halfTab,
+    justifyContent: 'space-between',
   },
   viewTicketsText: {
     color: Colors.accentLight,
@@ -373,6 +372,7 @@ const styles = StyleSheet.create({
   },
   countText: {
     fontFamily: FontFamily.medium,
+    fontSize: TextSizes.semiSecondary,
     color: Colors.filterIconColor,
   },
   switch: {

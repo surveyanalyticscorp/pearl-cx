@@ -1,5 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
+  Alert,
+  BackHandler,
   // Alert,
   // BackHandler,
   FlatList,
@@ -47,6 +49,7 @@ function Feedback(props) {
   let [pageOffset, setPageOffset] = useState(0);
   let [pagination, setPagination] = useState(false);
   let [showLoader, setShowLoader] = useState(false);
+
   let [sortingText, setSortingText] = useState({label: 'Date', index: 0});
   let prevRangeRef = usePrevious(props.range);
   let sortingAttribute = ['Date', 'Score', 'Segment', 'Email'];

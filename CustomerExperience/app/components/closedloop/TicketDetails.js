@@ -1,6 +1,6 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React, {useEffect} from 'react';
-import {useWindowDimensions} from 'react-native';
+import {BackHandler, useWindowDimensions} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 
 import {PaddingConstants} from '../../styles/padding.constants';

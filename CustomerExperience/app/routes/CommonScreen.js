@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Alert,
+  BackHandler,
 } from 'react-native';
 import FeedbackDetails from '../components/feedback/FeedbackDetails';
 import {
@@ -496,6 +498,29 @@ const SegmentSelector = ({segmentName, segmentList, onPressHandle}) => {
     </View>
   ) : (
     <Text style={segmentSelectorStyles.appbarTitle}>{segmentName}</Text>
+  );
+};
+
+export const RenderExitAlert = (props) => {
+  return Alert.alert(
+    translate('exit_app'),
+    translate('exit_message'),
+    [
+      {
+        text: translate('yes'),
+        onPress: () => {
+          props.showExitAlert(false);
+          BackHandler.exitApp();
+        },
+      },
+      {
+        text: translate('no'),
+        onPress: () => {
+          props.showExitAlert(false);
+        },
+      },
+    ],
+    {cancelable: false},
   );
 };
 
