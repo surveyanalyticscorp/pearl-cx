@@ -22,6 +22,7 @@ import {
   SEGMENT_SELECTOR_OPEN,
   UPDATE_CLF_TICKET_RECIEVED,
   WELCOME_SCREEN_DATA_RECIEVED,
+  CLEAR_SEGEMENT_LIST,
 } from '../actions/dashboard.actions';
 
 const initialState = {
@@ -62,7 +63,7 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         segmentDetails: action.response.body,
-        segmentlist: getSegmentListData(state, action.response.body),
+        segmentList: getSegmentListData(state, action.response.body),
       };
     }
 
@@ -115,6 +116,13 @@ const dashboardReducer = (state = initialState, action) => {
         ticketComments: {},
         ticketActivity: {},
         apiCallStatus: {},
+      };
+    }
+
+    case CLEAR_SEGEMENT_LIST: {
+      return {
+        ...state,
+        segmentList: [],
       };
     }
 
@@ -208,7 +216,7 @@ const dashboardReducer = (state = initialState, action) => {
 
 const getSegmentListData = (state, segmentDetails_) => {
   if (segmentDetails_.pageOffset === '0') {
-    return segmentDetails_.segments;
+    return [...segmentDetails_.segments];
   } else {
     return [...state.segmentList, ...segmentDetails_.segments];
     // [...new Map(list.map((item) => [item['segmentID'], item])).values()];
