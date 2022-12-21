@@ -67,6 +67,8 @@ export const GET_WELCOME_SCREEN_DATA = 'GET_WELCOME_SCREEN_DATA';
 export const WELCOME_SCREEN_DATA_RECIEVED = 'WELCOME_SCREEN_DATA_RECIEVED';
 export const SEGMENT_SELECTOR_OPEN = 'SEGMENT_SELECTOR_OPEN';
 
+export const CLEAR_SEGEMENT_LIST = 'CLEAR_SEGEMENT_LIST';
+
 export const getDashboardContent = (token, param, segmentId) => ({
   type: GET_DASHBOARD,
   token,
@@ -190,4 +192,8 @@ export const setSegment = (segment) => ({
 export const setSegmentSelectorOpen = (isOpen) => ({
   type: SEGMENT_SELECTOR_OPEN,
   isOpen: isOpen,
+});
+
+export const clearSegmentList = () => ({
+  type: CLEAR_SEGEMENT_LIST,
 });

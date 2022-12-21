@@ -58,7 +58,7 @@ import {translate} from '../../Utils/MultilinguaUtils';
 
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
-  const itemPerPage = 5;
+  const itemPerPage = 50;
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
 
   const {authToken, range, isLoading} = useSelector((state) => state.global);
@@ -113,7 +113,7 @@ export default function ClosedLoop(props) {
   const resetFilterState = (range_, pagenumber) => {
     setFilterState((state) => ({
       ...state,
-      pageNumber: 1,
+      pageNumber: pagenumber,
       fromDate: moment(range_.startDate, DMYFORMAT).format(YMDFORMAT),
       toDate: moment(range_.endDate, DMYFORMAT).format(YMDFORMAT),
     }));
@@ -219,8 +219,8 @@ export default function ClosedLoop(props) {
         }
         style={styles.container}
         data={ticketList}
-        onEndReached={loadMoreData}
-        onEndReachedThreshold={0.1}
+        // onEndReached={loadMoreData}
+        // onEndReachedThreshold={0.1}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
           return (

@@ -125,6 +125,8 @@ export function* watchGetFirstTimeClosedLoopSegmentDetails() {
 
 function* fetchClosedLoopSegmentDetails(action) {
   try {
+    yield put({type: IS_LOADING, payload: {isLoading: true}});
+
     const json = yield WebServiceHandler.postNew(
       CX_GET_CLOSED_LOOP_SEGMENT_DETAILS,
       {'Auth-Token': action.token},

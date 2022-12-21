@@ -408,6 +408,7 @@ const RenderFeedbackScene = (props) => {
   };
 
   let renderFeedbackList = () => {
+    console.log('RERENDER_RESPONSES!!!');
     return (
       <View style={dashboardStyles.container}>
         <FlatList
