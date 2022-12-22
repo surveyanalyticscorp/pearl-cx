@@ -17,7 +17,11 @@ import {
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import {connect} from 'react-redux';
-import {clearError, showLoading} from '../../redux/actions/index';
+import {
+  clearError,
+  clearUserInfo,
+  showLoading,
+} from '../../redux/actions/index';
 import {authenticatePanel, doLogin} from '../../redux/actions/login.actions';
 import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
@@ -46,6 +50,7 @@ const Login = (props) => {
   useEffect(() => {
     return function cleanup() {
       props.clearError();
+
       clearTimeout(timer);
       clearTimeout(textFieldTimer);
     };
@@ -55,6 +60,7 @@ const Login = (props) => {
     if (StringUtils.isNotEmpty(validation) || props.isError) {
       let message = props.isError ? getApiValidationErrorMessage() : validation;
       showErrorFlashMessage(message);
+      props.clearUserInfo();
       timer = setTimeout(() => {
         setValidation('');
       }, 1000);
@@ -67,7 +73,7 @@ const Login = (props) => {
       AsyncStorage.setItem(SUBSCRIBER_ID, props.subscriberId).then();
       global.baseUrl = props.baseUrl;
       global.subscriberId = props.subscriberId;
-
+      console.log('BASEURL', props.baseUrl);
       onSignInPress();
     }
   }, [props.baseUrl]);
@@ -76,8 +82,11 @@ const Login = (props) => {
     Keyboard.dismiss();
     AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then((token) => {
       if (isStringNullOrEmpty(token)) {
+        console.log('onSignInPress: token:', token);
         checkNotificationPermission().then(() => onSignInPress());
       } else {
+        console.log('loginAction: called:');
+
         loginAction(token);
       }
     });
@@ -90,6 +99,8 @@ const Login = (props) => {
   };
 
   let authenticateAccessCode = () => {
+    console.log('authenticateAccessCode', checkValidation(), props.baseUrl);
+
     if (checkValidation() && StringUtils.isEmpty(props.baseUrl)) {
       props.authenticatePanel({accessCode: userData.accessCode});
     }
@@ -315,6 +326,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   resetPasswordLink: () => {
     dispatch(setDynamicLink(''));
+  },
+  clearUserInfo: () => {
+    dispatch(clearUserInfo());
   },
 });
 
