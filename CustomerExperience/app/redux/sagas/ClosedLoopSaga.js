@@ -125,7 +125,7 @@ export function* watchGetFirstTimeClosedLoopSegmentDetails() {
 
 function* fetchClosedLoopSegmentDetails(action) {
   try {
-    yield put({type: IS_LOADING, payload: {isLoading: true}});
+    // yield put({type: IS_LOADING, payload: {isLoading: true}});
 
     const json = yield WebServiceHandler.postNew(
       CX_GET_CLOSED_LOOP_SEGMENT_DETAILS,
@@ -136,9 +136,9 @@ function* fetchClosedLoopSegmentDetails(action) {
       type: CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
       response: json,
     });
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({
       type: API_ERROR,
       error: error,

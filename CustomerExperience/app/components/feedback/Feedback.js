@@ -399,8 +399,8 @@ const RenderFeedbackScene = (props) => {
   };
 
   let getAllData = () => {
-    let data = [...feedbackForm.feedbackData];
-    setList(data);
+    // let data = [...];
+    setList(feedbackForm.feedbackData);
   };
 
   const onFabHandler = () => {
@@ -415,7 +415,7 @@ const RenderFeedbackScene = (props) => {
           data={list}
           renderItem={_renderRow}
           keyExtractor={(item) => item.responseSetID + ''}
-          onEndReachedThreshold={0}
+          onEndReachedThreshold={0.25}
           onEndReached={feedbackForm.onFeedbackEndReached}
           refreshing={false}
           ListEmptyComponent={renderNoDataFound}

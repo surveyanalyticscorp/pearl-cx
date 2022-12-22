@@ -30,6 +30,7 @@ const initialState = {
   dashboardTicketCount: {},
   ticketDetails: {},
   segmentDetails: {},
+  segmentState: {},
   segmentList: [],
   isSegmentSelectorOpen: false,
   ownerDetails: {},
@@ -62,7 +63,7 @@ const dashboardReducer = (state = initialState, action) => {
     case CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED: {
       return {
         ...state,
-        segmentDetails: action.response.body,
+        segmentState: action.response.body,
         segmentList: getSegmentListData(state, action.response.body),
       };
     }
