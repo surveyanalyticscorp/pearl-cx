@@ -302,7 +302,7 @@ const DrawerContent = (props) => {
             source={require('../config/images/cx-logo.png')}
             resizeMode="contain"
           />
-          <View style={{marginTop: MarginConstants.halfTab}}>
+          <View style={styles.emailView}>
             <Text style={styles.emailCaption}>{titleText}</Text>
           </View>
           {renderDrawerButtons()}
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     color: Colors.primary,
-    textAlign: 'center',
+    textAlign: 'auto',
   },
   drawerRow: {
     flexDirection: 'row',
@@ -390,5 +390,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  emailView: {
+    marginVertical: MarginConstants.halfTab,
+    marginHorizontal: MarginConstants.tab1,
   },
 });
