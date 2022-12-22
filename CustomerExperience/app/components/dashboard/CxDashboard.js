@@ -16,10 +16,6 @@ import {showLoading} from '../../redux/actions/index';
 import {
   getDashboardContent,
   setSegment,
-  // getSegment,
-  // getClosedLoopSegmentDetails,
-  // setSegment,
-  setSegmentSelectorOpen,
 } from '../../redux/actions/dashboard.actions';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
@@ -30,32 +26,18 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {MarginConstants} from '../../styles/margin.constants';
-import {
-  VictoryPie,
-  // VictoryChart,
-  // VictoryBar,
-  // VictoryTheme,
-} from 'victory-native';
+import {VictoryPie} from 'victory-native';
 import {Sizes} from '../../styles/Size.constant';
 import StringUtils from '../../Utils/StringUtils';
-// import FilterHeader from '../FilterHeader';
 import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import {setRangeFilter} from '../../redux/actions';
 import {DashboardClosedLoopView} from './DashboardClosedLoopView';
 import {translate} from '../../Utils/MultilinguaUtils';
-// import MainDropDown from '../../widgets/drop-down/MainDropDown';
 import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
-import {WelcomeScreen} from '../dashboard/WelcomeScreen';
 import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
-import {BottomSheetHeader, FabAddButton} from '../../routes/CommonScreen';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import BottomSheet from 'reanimated-bottom-sheet';
-import Animated from 'react-native-reanimated';
-import {getSegmentIndex} from '../../Utils/TicketUtils';
-import GlobalSelectSegment from './GlobalSelectSegment';
-// import RenderSegmentBottomSheet from './RenderSegmentBottomSheet';
+import {FabAddButton} from '../../routes/CommonScreen';
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -64,7 +46,6 @@ const wait = (timeout) => {
 };
 
 const CxDashboard = (props) => {
-  let dispatch = useDispatch();
   let isFocused = useDispatch();
 
   let [refreshing, setRefreshing] = useState(false);
@@ -76,29 +57,6 @@ const CxDashboard = (props) => {
     (state) => state.dashboard.currentSegment.currentSegmentID,
   );
   const {range, wantToReload} = props;
-  // const segmentSelectorOpenState = useSelector(
-  //   (state) => state.dashboard.isSegmentSelectorOpen,
-  // );
-  const navigation = useNavigation();
-  const {subscriberId} = useState(useSelector((state) => state.global));
-  const bs = React.useRef(null);
-  const fall = new Animated.Value(1);
-  const bsSnapPoints = ['50%', '0%'];
-  const [npsScoreData, setNpsScoreData] = useState({});
-  // const [shadow, setShadow] = useState(false);
-
-  // let [mSegment, setSegment] = useState(props.segment);
-  // let [segmentName, setSegmentName] = useState('Given');
-
-  // let mData = useSelector((state) => state.dashboard);
-  // console.log({mdata: mData.dashboard.segment});
-  // let {segment} = mData;
-
-  // useEffect(() => {
-  //   if (segment) {
-  //     setSegmentName(segment);
-  //   }
-  // }, [mData]);
 
   useEffect(() => {
     if (isFocused) {
@@ -106,46 +64,12 @@ const CxDashboard = (props) => {
     }
   }, [isFocused]);
 
-  // const filterNPSData = useCallback(() => {
-  //   /// to find the proper obejct from a list
-  //   // list filter
-
-  //   props.dashboardData
-
-  // }, [segmentId]);
-
-  // useEffect(() => {
-  //   filterNPSData();
-  // }, [segmentId]);
-
   const onRefresh = useCallback(() => {
-    //setRefreshing(true);//No need to show 2 loading
-    // let data = {
-    //   startDate: moment(props.sDate, DMYFORMAT).format(YMDFORMAT),
-    //   endDate: moment(props.eDate, DMYFORMAT).format(YMDFORMAT),
-    // };
-    // props.getDashboardContent(props.authToken, data);
-
     getDashboardData();
     wait(500).then();
   }, [segmentId]);
-  //////////////////////////////////
-  // useEffect(() => {
-  // props.navigation.setParams({selectedSegment: selectSegment});
-  // let selectSegment = (segment) => {
-  //   setSegment(segment);
-  // };
-  // setSegment(props.segment);
-  // }, [props.segment]);
-  /////////////////////////////////////
+
   useEffect(() => {
-    console.log('DASHBOARD_1');
-
-    /*const unsubscribe = props.navigation.addListener('focus', () => {
-           // Add code here which execute every time when user landed on screen.
-
-        });
-        return unsubscribe;*/
     if (
       StringUtils.isEmpty(props.range.startDate) &&
       StringUtils.isEmpty(props.range.endDate)
@@ -156,29 +80,17 @@ const CxDashboard = (props) => {
         startDate: selectedRange.startDate,
         endDate: selectedRange.endDate,
       });
-      // getDashboardData();
-      // let data = {
-      //   startDate: moment(selectedRange.startDate, DMYFORMAT).format(YMDFORMAT),
-      //   endDate: moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT),
-      // };
-      // props.getDashboardContent(props.authToken, data);
-      // dispatcher(getClosedLoopSegmentDetails(props.authToken, {statusID: 0}));
     }
-    // else {
-    //   getDashboardData();
-    // }
+
     getDashboardData();
   }, [range, wantToReload, segmentId]); //props.navigation
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-    // BackHandler.addEventListener(handleBackPress);
 
     getLastLogin();
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
-      // console.log('removed ');
-      // BackHandler.removeEventListener(handleBackPress);
     };
   }, []);
   //////////////////////////////////////////////
@@ -187,7 +99,6 @@ const CxDashboard = (props) => {
       const lastLogin = await AsyncStorage.getItem(ASYNC_LAST_LOGIN);
       if (JSON.parse(lastLogin) !== null) {
         setLastLoginArray(JSON.parse(lastLogin));
-        // console.log(`LAST LOGIN ASYNC: ${lastLoginArray}`);
       }
     } catch (e) {
       // console.log(`LAST LOGIN ASYNC ERROR: ${JSON.stringify(e)}`);
@@ -196,8 +107,6 @@ const CxDashboard = (props) => {
   /////////////////////////////////////////////
   useEffect(() => {
     if (comparision) {
-      console.log('DASHBOARD_2');
-
       getDashboardData();
       setComparision(false);
     }
@@ -221,20 +130,6 @@ const CxDashboard = (props) => {
       showExitAlert(false);
       return false;
     }
-
-    // console.log('navigation_dashboard');
-    // console.log(
-    //   JSON.stringify(props.route.name === translate('dashboard.dashboard')),
-    // );
-    // if (props.navigation.canGoBack()) {
-    //   showExitAlert(false);
-    //   props.navigation.goBack();
-    //   console.log('go back pressed, just navigate');
-    // } else {
-    //   showExitAlert(true);
-    //   console.log('go back pressed, show exit');
-    // }
-    // return true;
   };
 
   let renderExitAlert = () => {
@@ -277,8 +172,12 @@ const CxDashboard = (props) => {
   };
 
   const renderDonutChart = () => {
-    let data = props.dashboardData.primaryStoreNPS;
-    let responses = props.dashboardData.primaryStoreNPS.totalResponses;
+    console.log('NPS OBJECT', JSON.stringify(props.currentNPSData.NPSScore));
+    let data = props.currentNPSData?.NPSScore;
+    // ?? props.dashboardData.primaryStoreNPS;
+    let responses = props.currentNPSData?.NPSScore?.totalResponses ?? 0;
+    // ??
+    // props.dashboardData.primaryStoreNPS.totalResponses;
     let responseCount = getTrimmedNoOfResponses(responses);
     let victoryPieData =
       responseCount !== 0
@@ -323,7 +222,7 @@ const CxDashboard = (props) => {
           />
           <View style={dashboardStyles.npsView}>
             <Text style={[dashboardStyles.npsPercentText]}>
-              {data.npsPercentage}
+              {data?.npsPercentage ?? 0}
             </Text>
             <Text style={[dashboardStyles.npsText]}>NPS</Text>
             <View style={[dashboardStyles.emptySeparator]}></View>
@@ -332,7 +231,7 @@ const CxDashboard = (props) => {
             <Text style={[dashboardStyles.detailsText]}>Your YTD NPS 27</Text> */}
             {/* translation missing */}
 
-            <HorizontalScaleBar value={data.npsPercentage} />
+            <HorizontalScaleBar value={data?.npsPercentage ?? 0} />
             <View
               style={{
                 zIndex: 99,
@@ -555,7 +454,10 @@ const CxDashboard = (props) => {
               }}></View>
           </View>
 
-          {renderSegmentTitle(props.dashboardData.primaryStoreName)}
+          {renderSegmentTitle(
+            props.segment.currentSegment ??
+              props.dashboardData.primaryStoreName,
+          )}
           {renderDonutChart()}
           {renderSegmentTitle(translate('dashboard.closed_loop'))}
           {getClosedLoopView()}
@@ -606,83 +508,10 @@ const CxDashboard = (props) => {
     }
   };
 
-  let renderWelcomeScreen = () => {
-    return <WelcomeScreen />;
-  };
-
   let onFabPressHandler = () => {
     props.navigation.navigate('New Ticket');
   };
 
-  useEffect(() => {
-    if (bs.current) {
-      bs.current.snapTo(
-        props.isSegmentSelectorOpen ? 0 : bsSnapPoints.length - 1,
-      );
-    }
-    // console.log({isOpen: props.isSegmentSelectorOpen});
-  }, [props.isSegmentSelectorOpen]);
-
-  // const handleSegmentSelectionAction = (item) => {
-  //   // setDefaultEmail(item);
-  //   // richText.current.setContentHTML(item.templateText);
-  //   dispatch(setSegment(item));
-
-  //   dispatch(setSegmentSelectorOpen(false));
-  //   bs.current.snapTo(bsSnapPoints.length - 1);
-  // };
-
-  const renderSelectSegmentHeader = () => {
-    return (
-      <BottomSheetHeader
-        title={'Select Segment'}
-        onPressClose={() => {
-          dispatch(setSegmentSelectorOpen(false));
-        }}
-      />
-    );
-  };
-
-  const renderSelectSegment = () => {
-    return (
-      <View
-        //  style={styles.contentContainer}
-        style={{backgroundColor: Colors.white, height: '100%'}}>
-        <GlobalSelectSegment
-          data={props.segmentList}
-          selectedIndex={
-            getSegmentIndex(
-              props.segmentList ?? [],
-              props.segment.currentSegmentID,
-            ) ?? 0
-          }
-          handleOnPress={(item) => handleSegmentSelectionAction(item)}
-        />
-      </View>
-    );
-  };
-
-  const RenderSegmentSelector = ({
-    bs_,
-    bsSnapPoints_,
-    fall_,
-    renderSelectSegment_,
-    renderSelectSegmentHeader_,
-  }) => {
-    return (
-      <BottomSheet
-        ref={bs_}
-        snapPoints={bsSnapPoints_}
-        initialSnap={bsSnapPoints_.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderSelectSegment_}
-        renderHeader={renderSelectSegmentHeader_}
-        callbackNode={fall_}
-      />
-    );
-  };
-
-  // return welcomeScreenShow ? renderDashboard() : renderWelcomeScreen();
   return renderDashboard();
 };
 
@@ -690,6 +519,7 @@ const mapStateToProps = (state) => {
   return {
     dashboardData: state.dashboard.dashboardData,
     ticketCount: state.dashboard.dashBoardTicketCount,
+    currentNPSData: state.dashboard.currentNPSData,
     userInfo: state.global.userInfo,
     isLoading: state.global.isLoading,
     isError: state.global.isError,
@@ -700,7 +530,7 @@ const mapStateToProps = (state) => {
     eDate: state.global.range.endDate,
     wantToReload: state.global.wantToReloadDashboard,
     segment: state.dashboard.currentSegment,
-    isSegmentSelectorOpen: state.dashboard.isSegmentSelectorOpen,
+    // isSegmentSelectorOpen: state.dashboard.isSegmentSelectorOpen,
     segmentList: state.dashboard.segmentDetails.segments,
   };
 };

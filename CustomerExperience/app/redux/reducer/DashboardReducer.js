@@ -28,6 +28,7 @@ import {
 const initialState = {
   dashboardData: {},
   dashboardTicketCount: {},
+  currentNPSData: {},
   ticketDetails: {},
   segmentDetails: {},
   segmentState: {},
@@ -52,6 +53,7 @@ const dashboardReducer = (state = initialState, action) => {
         ...state,
         dashboardData: action.response.body,
         dashBoardTicketCount: action.ticketCount.data,
+        currentNPSData: getCurrentNPS(action.segmentId, action.npsScoreList),
       };
     }
     case CLOSED_LOOP_TICKET_DETAILS_RECEIVED: {
@@ -222,5 +224,12 @@ const getSegmentListData = (state, segmentDetails_) => {
     return [...state.segmentList, ...segmentDetails_.segments];
     // [...new Map(list.map((item) => [item['segmentID'], item])).values()];
   }
+};
+
+const getCurrentNPS = (segmentId, npsScoreList) => {
+  let index = npsScoreList.findIndex(
+    (element) => element['storeId'] === segmentId,
+  );
+  return index >= 0 ? npsScoreList[index] : {};
 };
 export default dashboardReducer;

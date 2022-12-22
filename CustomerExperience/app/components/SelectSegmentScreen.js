@@ -10,89 +10,38 @@ import {
   View,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {apiHandler} from '../api/ApiHandler';
 import {getClosedLoopSegmentDetails} from '../redux/actions/dashboard.actions';
-import {
-  CloseButton,
-  listItemSeparator,
-  RenderSpinner,
-} from '../routes/CommonScreen';
+import {CloseButton, listItemSeparator} from '../routes/CommonScreen';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
-import {showErrorFlashMessage} from '../Utils/Utility';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 
 const SelectSegmentScreen = (props) => {
-  // {currentSegmentId, setSegmentSelection}
   const dispatch = useDispatch();
   let currentSegmentId = props.route.params.currentSegmentId;
   const setSegmentSelection = props.route.params.setSegmentSelection;
   const [isLoading, setLoading] = useState(false);
-  // const isLoading = useSelector((state) => state.global.isLoading);
   const authToken = useSelector((state) => state.global.authToken);
-  // const segmentDetails = useSelector((state) => state.dashboard.segmentState);
-  // const [segmentList, setSegmentList] = useState([]);
   const segmentList = useSelector((state) => state.dashboard.segmentList);
-  // const currentSegment = useSelector((state) => state.dashboard.currentSegment);
   const navigation = useNavigation();
   const [pageOffset, setPageOffset] = useState(0);
-  // const isInfocus = useIsFocused();
   const handleSegmentSelectionAction = (item) => {
-    // dispatch(setSegment(item));
-    // dispatch(setSegmentSelectorOpen(false));
     setPageOffset(0);
     setSegmentSelection(item);
     if (navigation.canGoBack) {
       navigation.goBack();
     }
   };
-  
+
   useEffect(() => {
     getSegmentData();
-    // getSegmentDataFromLocal();
   }, [pageOffset]);
 
   const loadMoreData = () => {
-    // console.log('LOAD_MORE', segmentList.length, segmentDetails.count);
-    // if (!isLoading && segmentList.length < segmentDetails.count) {
-    //   setPageOffset((state) => state + 1);
-    //   getSegmentData();
-    // }
-    // if (!isLoading) {
     setPageOffset(pageOffset + 1);
-    console.log('LOAD_MORE_updated_pageOffset');
-    // }
-
-    console.log('LOAD_MORE');
-  };
-
-  const getSegmentDataFromLocal = () => {
-    const data = {
-      pageOffset: pageOffset.toString(),
-    };
-
-    apiHandler.getSegmentList(
-      authToken,
-      data,
-      (response) => {
-        let data = pageOffset === 0 ? [] : [...segmentList];
-        data = [...data, ...response.body.segments];
-        data = [...new Set(data)];
-        // setSegmentList(data);
-        console.log('data' + JSON.stringify(response));
-        isLoading && setLoading(false);
-        // pagination && setPagination(false);
-      },
-      (error) => {
-        setLoading(false);
-        // props.setError(error);
-        console.log('ERROR_API', error.message);
-        showErrorFlashMessage(error.message);
-      },
-    );
   };
 
   const getSegmentData = () => {
@@ -101,25 +50,6 @@ const SelectSegmentScreen = (props) => {
       getClosedLoopSegmentDetails(authToken, {
         pageOffset: pageOffset.toString(),
       }),
-    );
-  };
-  const RenderSelectSegment = (props) => {
-    return (
-      <View
-        // style={styles.contentContainer}
-        style={styles.innerContainer}>
-        {/* <GlobalSelectSegment
-        // {...props}
-        // data={segmentList}
-        // selectedIndex={
-        //   getSegmentIndex(segmentList_ ?? [], currentSegmentId) ?? 0
-        // }
-        // currentSegmentId={currentSegmentId}
-        // loadMoreData={loadMoreData}
-        // handleOnPress={(item) => handleSegmentSelectionAction(item)}
-        /> */}
-        {globalSelectSegment()}
-      </View>
     );
   };
 
@@ -144,7 +74,6 @@ const SelectSegmentScreen = (props) => {
     );
   };
 
-
   const renderSegmentSearch = () => {
     return (
       <TextInput
@@ -167,8 +96,6 @@ const SelectSegmentScreen = (props) => {
   };
 
   const globalSelectSegment = (props) => {
-
-    console.log('Segment_API_CALL');
     return (
       <FlatList
         // ref={flatListRef}
@@ -177,7 +104,7 @@ const SelectSegmentScreen = (props) => {
         keyExtractor={(item) => item.segmentID + ''}
         renderItem={renderRow}
         ItemSeparatorComponent={listItemSeparator}
-        // ListHeaderComponent={renderSegmentSearch}
+        ListHeaderComponent={renderSegmentSearch}
         onEndReached={loadMoreData}
         onEndReachedThreshold={0.25}
         // ListFooterComponent={isLoading && <RenderSpinner />}
@@ -202,7 +129,7 @@ const SelectSegmentScreen = (props) => {
           <Text style={styles.headerText}>{'Select Segment'}</Text>
           <CloseButton color={Colors.filterIconColor} />
         </View>
-      
+
         {globalSelectSegment()}
       </View>
     </View>

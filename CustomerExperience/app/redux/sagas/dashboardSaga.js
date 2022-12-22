@@ -40,6 +40,8 @@ export function* fetchDashboard(action) {
       type: DASHBOARD_RECEIVED,
       response: json,
       ticketCount: closedloopData,
+      segmentId: action.segmentId,
+      npsScoreList: json.body.storeNPSList,
     });
     yield put({
       type: SET_LANGUAGE_INFO,
