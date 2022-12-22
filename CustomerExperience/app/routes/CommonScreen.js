@@ -760,8 +760,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
 
     alignItems: 'center',
-    padding: PaddingConstants.halfTab,
-    marginHorizontal: MarginConstants.tab1,
+    paddingVertical: PaddingConstants.halfTab,
+    paddingHorizontal: PaddingConstants.tab1,
+
     backgroundColor: Colors.white,
   },
 });

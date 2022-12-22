@@ -54,7 +54,7 @@ import QPSpinner from '../../widgets/QPSpinner';
 
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
-  const itemPerPage = 2;
+  const itemPerPage = 20;
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
 
   const {authToken, range, isLoading} = useSelector((state) => state.global);

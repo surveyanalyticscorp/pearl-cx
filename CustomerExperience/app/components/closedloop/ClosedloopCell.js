@@ -222,7 +222,8 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab1,
+    paddingVertical: PaddingConstants.halfTab,
   },
 
   statusContainer: {
