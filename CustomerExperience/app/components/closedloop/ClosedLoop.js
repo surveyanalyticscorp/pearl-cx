@@ -40,25 +40,21 @@ import {
   YMDFORMAT,
 } from '../../Utils/AppConstants';
 import {setRangeFilter, showLoading} from '../../redux/actions';
+
 import {
-  StackActions,
-  useFocusEffect,
-  useIsFocused,
-} from '@react-navigation/native';
-import {
-  getPriorityById,
   priorityList,
   statusList,
   ticketTypeList,
 } from '../../Utils/TicketUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
+import QPSpinner from '../../widgets/QPSpinner';
 // import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
-  const itemPerPage = 50;
+  const itemPerPage = 2;
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
 
   const {authToken, range, isLoading} = useSelector((state) => state.global);
@@ -85,9 +81,7 @@ export default function ClosedLoop(props) {
 
   const [ticketList, setTicketList] = useState([]);
   const owners = useSelector((state) => state.dashboard.ownerDetails.owners);
-  const segmentList = useSelector(
-    (state) => state.dashboard.segmentDetails.segments,
-  );
+
   const [refreshing, setRefreshing] = useState(false);
   const sampleFilterData = () => {
     const priority = priorityList.map((value) => ({
@@ -108,7 +102,6 @@ export default function ClosedLoop(props) {
 
   const [filterData, setFilterData] = useState(sampleFilterData());
   // console.log('OWNERS', JSON.stringify(owners));
-  const isFocused = useIsFocused();
 
   const resetFilterState = (range_, pagenumber) => {
     setFilterState((state) => ({
@@ -192,7 +185,7 @@ export default function ClosedLoop(props) {
   };
 
   const loadMoreData = () => {
-    if (ticketList.length < pagerOptions.totalCount) {
+    if (!isLoading && ticketList.length < pagerOptions.totalCount) {
       setFilterState((state) => ({
         ...state,
         pageNumber: state.pageNumber + 1,
@@ -211,16 +204,19 @@ export default function ClosedLoop(props) {
     return <IonIcons name="search" size={20} color={Colors.lightBlack} />;
   };
 
-  const ClosedLoopTicketList = () => {
-    return ticketList.length !== 0 ? (
+  const closedLoopTicketList = () => {
+    return (
       <FlatList
         refreshControl={
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
         }
         style={styles.container}
         data={ticketList}
-        // onEndReached={loadMoreData}
-        // onEndReachedThreshold={0.1}
+        onEndReached={loadMoreData}
+        onEndReachedThreshold={0.25}
+        ListFooterComponent={isLoading ? <QPSpinner /> : <View />}
+        extraData={[ticketList]}
+        // ListEmptyComponent={<NoItemsFound>No tickets found</NoItemsFound>}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
           return (
@@ -232,14 +228,6 @@ export default function ClosedLoop(props) {
           );
         }}
       />
-    ) : (
-      <ScrollView
-        style={styles.container}
-        refreshControl={
-          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-        }>
-        <NoItemsFound>No tickets found</NoItemsFound>
-      </ScrollView>
     );
   };
 
@@ -323,54 +311,52 @@ export default function ClosedLoop(props) {
   const bsSnapPoints = ['80%', '90%', '0%'];
   const [shadow, setShadow] = useState(false);
 
-  const RenderClosedLoop = () => {
-    return (
-      <View style={styles.container}>
-        <Animated.View
-          style={{
-            opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-            flex: 1,
-          }}>
-          <HeaderFilter
-            dateRange={range}
-            onPressDateRange={getDataOnNewRange}
-            onPressFilter={openFilter}
-          />
-          <ClosedLoopTicketList />
-          <FabAddButton onPress={onFabHandler} />
-
-          {/* <TicketTakeAction /> */}
-          {/* <TicketDetails /> */}
-          {/* <TicketOverview /> */}
-          {/* <TicketComments /> */}
-          {/* <TicketActivity /> */}
-          {/* <CreateTicket /> */}
-          {/* <SendEmail /> */}
-          {/* <TakeActionScreen /> */}
-          {/* <FilterTicket
-      data={filterData}
-      onPressHandler={(item, action) => handleAction(item, action)}
-    /> */}
-        </Animated.View>
-        {/* <RenderSegmentBottomSheet
-          // ref={bs}
-          // snapPoints={bsSnapPoints}
-          callbackNode={fall}
-        /> */}
-        <BottomSheet
-          ref={bs}
-          snapPoints={bsSnapPoints}
-          initialSnap={bsSnapPoints.length - 1}
-          enabledGestureInteraction={true}
-          renderContent={renderFilterContent}
-          renderHeader={renderFilterHeader}
-          callbackNode={fall}
+  // return isLoading ? <RenderSpinner /> : <RenderClosedLoop />;
+  return (
+    <View style={styles.container}>
+      <Animated.View
+        style={{
+          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+          flex: 1,
+        }}>
+        <HeaderFilter
+          dateRange={range}
+          onPressDateRange={getDataOnNewRange}
+          onPressFilter={openFilter}
         />
-      </View>
-    );
-  };
+        {/* <ClosedLoopTicketList /> */}
+        {closedLoopTicketList()}
+        <FabAddButton onPress={onFabHandler} />
 
-  return isLoading ? <RenderSpinner /> : <RenderClosedLoop />;
+        {/* <TicketTakeAction /> */}
+        {/* <TicketDetails /> */}
+        {/* <TicketOverview /> */}
+        {/* <TicketComments /> */}
+        {/* <TicketActivity /> */}
+        {/* <CreateTicket /> */}
+        {/* <SendEmail /> */}
+        {/* <TakeActionScreen /> */}
+        {/* <FilterTicket
+    data={filterData}
+    onPressHandler={(item, action) => handleAction(item, action)}
+  /> */}
+      </Animated.View>
+      {/* <RenderSegmentBottomSheet
+        // ref={bs}
+        // snapPoints={bsSnapPoints}
+        callbackNode={fall}
+      /> */}
+      <BottomSheet
+        ref={bs}
+        snapPoints={bsSnapPoints}
+        initialSnap={bsSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderFilterContent}
+        renderHeader={renderFilterHeader}
+        callbackNode={fall}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
