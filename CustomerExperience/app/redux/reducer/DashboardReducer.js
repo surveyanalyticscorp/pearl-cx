@@ -1,3 +1,4 @@
+import {getUniqueValues} from '../../Utils/TicketUtils';
 import {
   GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
   GET_EMAIL_TEMPLATES_RECEIVED,
@@ -30,6 +31,7 @@ const initialState = {
   dashboardTicketCount: {},
   currentNPSData: {},
   ticketDetails: {},
+  ticketList: [],
   segmentDetails: {},
   segmentState: {},
   segmentList: [],
@@ -38,6 +40,7 @@ const initialState = {
   allOwnersDetails: {},
   currentSegment: {},
   currentFeedback: {},
+  ticketFilter: {},
   ticket: {},
   ticketComments: {},
   ticketActivity: {},
@@ -60,6 +63,7 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         ticketDetails: action.response.body,
+        // ticketList: getTicketList(state, action.response.body),
       };
     }
     case CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED: {
@@ -135,7 +139,11 @@ const dashboardReducer = (state = initialState, action) => {
 
     case CLOSED_LOOP_TICKET_LIST_RECEIVED: {
       // console.log('TICKETLIST', action.response);
-      return {...state, ticketDetails: action.response};
+      return {
+        ...state,
+        ticketDetails: action.response,
+        ticketList: getTicketList(state, action.response),
+      };
     }
 
     case CLOSED_LOOP_TICKET_ITEM_RECEIVED: {
@@ -221,7 +229,23 @@ const getSegmentListData = (state, segmentDetails_) => {
   if (segmentDetails_.pageOffset === '0') {
     return [...segmentDetails_.segments];
   } else {
-    return [...state.segmentList, ...segmentDetails_.segments];
+    return getUniqueValues(
+      [...state.segmentList, ...segmentDetails_.segments],
+      'segmentID',
+    );
+    // [...new Map(list.map((item) => [item['segmentID'], item])).values()];
+  }
+};
+
+const getTicketList = (state, ticketDetails_) => {
+  console.log(
+    'TICKET_PAGE_NUMBER:',
+    ticketDetails_.pagerOptions.pagerDto.pageNumber,
+  );
+  if (ticketDetails_.pagerOptions.pagerDto.pageNumber === 1) {
+    return [...ticketDetails_.data];
+  } else {
+    return getUniqueValues([...state.ticketList, ...ticketDetails_.data], 'id');
     // [...new Map(list.map((item) => [item['segmentID'], item])).values()];
   }
 };

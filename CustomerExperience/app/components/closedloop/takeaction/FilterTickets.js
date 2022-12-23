@@ -203,26 +203,26 @@ const FilterTicket = ({data, onPressHandler}) => {
     onPressHandler(data, 'apply');
   };
 
-  const onClearHandler = () => {
-    // clear filter fields
+  // const onClearHandler = () => {
+  //   // clear filter fields
 
-    setPriority((prevState) => {
-      const temp = prevState.map((item) => ({...item, isChecked: false}));
-      return temp;
-    });
+  //   setPriority((prevState) => {
+  //     const temp = prevState.map((item) => ({...item, isChecked: false}));
+  //     return temp;
+  //   });
 
-    setStatus((prevState) => {
-      const temp = prevState.map((item) => ({...item, isChecked: false}));
-      return temp;
-    });
+  //   setStatus((prevState) => {
+  //     const temp = prevState.map((item) => ({...item, isChecked: false}));
+  //     return temp;
+  //   });
 
-    setType((prevState) => {
-      const temp = prevState.map((item) => ({...item, isChecked: false}));
-      return temp;
-    });
+  //   setType((prevState) => {
+  //     const temp = prevState.map((item) => ({...item, isChecked: false}));
+  //     return temp;
+  //   });
 
-    selectedManager = [];
-  };
+  //   selectedManager = [];
+  // };
 
   const RenderButtons = () => {
     return (
@@ -236,11 +236,11 @@ const FilterTicket = ({data, onPressHandler}) => {
           textStyle={styles.clearButtonText}
           text={'Close'}
         />
-        <RenderButton
+        {/* <RenderButton
           onPress={onClearHandler}
           textStyle={styles.clearButtonText}
           text={'Clear filter'}
-        />
+        /> */}
 
         <RenderButton
           onPress={onApplyFilterHandler}

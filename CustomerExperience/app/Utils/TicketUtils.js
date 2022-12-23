@@ -165,3 +165,16 @@ export const getOwnerIndex = (ownerlist, ownnerId) => {
 //     HIGH = 2,
 //     CRITICAL = 3,
 //   }
+export function getUniqueValues(arr, key) {
+  const unique = [];
+  const distinctPropertyValues = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    if (!unique[arr[i][key]]) {
+      distinctPropertyValues.push(arr[i]);
+      unique[arr[i][key]] = 1;
+    }
+  }
+
+  return distinctPropertyValues;
+}

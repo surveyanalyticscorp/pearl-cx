@@ -1,15 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  FlatList,
-  StyleSheet,
-  RefreshControl,
-  ScrollView,
-  BackHandler,
-  Alert,
-} from 'react-native';
+import {View, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import ClosedLoopCell from './ClosedloopCell';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../styles/color.constants';
@@ -19,11 +9,8 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {
   BottomSheetHeader,
   FabAddButton,
-  FilterDateBox,
-  FilterIcon,
   HeaderFilter,
   NoItemsFound,
-  RenderSpinner,
 } from '../../routes/CommonScreen';
 import FilterTicket from './takeaction/FilterTickets';
 import Animated from 'react-native-reanimated';
@@ -34,14 +21,11 @@ import {
   getClosedLoopTicketList,
 } from '../../redux/actions/dashboard.actions';
 import moment from 'moment';
-import {
-  DMYFORMAT,
-  HalfMonthDateYearFormat,
-  YMDFORMAT,
-} from '../../Utils/AppConstants';
+import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {setRangeFilter, showLoading} from '../../redux/actions';
 
 import {
+  getUniqueValues,
   priorityList,
   statusList,
   ticketTypeList,
@@ -55,21 +39,25 @@ import QPSpinner from '../../widgets/QPSpinner';
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
   const itemPerPage = 20;
+  const [pageNumber, setPageNumber] = useState(1);
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
-
-  const {authToken, range, isLoading} = useSelector((state) => state.global);
+  // const [isLoading, setLoading] = useState(false);
+  const {authToken, isLoading, range} = useSelector((state) => state.global);
   const [filterState, setFilterState] = useState({
     feedbackApiKey: feedbackApiKey,
     status: '',
     priority: '',
     assignToId: '',
-    pageNumber: 1,
+    pageNumber: pageNumber,
     perPage: itemPerPage,
     fromDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
     toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
     type: '',
   });
   const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
+  const ticketList = useSelector((state) => state.dashboard.ticketList);
+
+  console.log('TICKET_LIST: ', JSON.stringify(ticketList));
   // const state = useSelector((state) => state.dashboard);
   const pagerOptions = useSelector(
     (state) => state.dashboard.ticketDetails.pagerOptions,
@@ -79,7 +67,7 @@ export default function ClosedLoop(props) {
   );
   const currentSegment = useSelector((state) => state.dashboard.currentSegment);
 
-  const [ticketList, setTicketList] = useState([]);
+  // const [ticketList, setTicketList] = useState([]);
   const owners = useSelector((state) => state.dashboard.ownerDetails.owners);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -103,10 +91,12 @@ export default function ClosedLoop(props) {
   const [filterData, setFilterData] = useState(sampleFilterData());
   // console.log('OWNERS', JSON.stringify(owners));
 
-  const resetFilterState = (range_, pagenumber) => {
+  const resetFilterState = (range_) => {
+    // setTicketList([]);
+    setPageNumber(1);
     setFilterState((state) => ({
       ...state,
-      pageNumber: pagenumber,
+      pageNumber: pageNumber,
       fromDate: moment(range_.startDate, DMYFORMAT).format(YMDFORMAT),
       toDate: moment(range_.endDate, DMYFORMAT).format(YMDFORMAT),
     }));
@@ -115,53 +105,64 @@ export default function ClosedLoop(props) {
   let getDataOnNewRange = (range_) => {
     dispatch(setRangeFilter(range_));
     // reset pageNumber, ticket list, range
-    setTicketList([]);
-    resetFilterState(range_, 1);
+
+    resetFilterState(range_);
   };
 
   useEffect(() => {
-    getTicketList(filterState, currentSegment.currentSegmentID);
-    getTicketOwnerList(currentSegment.currentSegmentID);
+    makeAPICall();
   }, [filterState]);
 
   useEffect(() => {
-    setTicketList([]);
-    resetFilterState(range, 1);
-
-    // getTicketList(filterState, currentSegment.currentSegmentID);
-    // getTicketOwnerList(currentSegment.currentSegmentID);
+    resetFilterState(range);
   }, [currentSegment]);
 
+  const makeAPICall = () => {
+    // setLoading(true);
+    getTicketList(filterState, currentSegment.currentSegmentID);
+    getTicketOwnerList(currentSegment.currentSegmentID);
+  };
   const wait = (timeout) => {
     return new Promise((resolve) => {
       setTimeout(resolve, timeout);
     });
   };
   const onRefresh = useCallback(() => {
-    setFilterState((state) => ({...state, pageNumber: 1}));
-    setTicketList([]);
+    // setFilterState((state) => ({...state, pageNumber: 1}));
+    // setTicketList([]);
+    resetFilterState(range);
 
     setRefreshing(true);
-    getTicketList(filterState);
+    makeAPICall();
     wait(500).then(() => setRefreshing(false));
   }, []);
 
-  useEffect(() => {
-    setTicketList((state) => [
-      ...new Set([...state, ...(ticketDetails.data ?? [])]),
-    ]);
-  }, [ticketDetails]);
+  // useEffect(() => {
+  //   updateTicketList();
+  // }, [ticketDetails.data]);
+
+  // const updateTicketList = () => {
+  //   setLoading(false);
+  //   setTicketList((state) =>
+  //     getUniqueValues([...state, ...(ticketDetails.data ?? [])], 'id'),
+  //   );
+  // };
 
   // console.log('Ticket list: ', JSON.stringify(ticketDetails.data));
   useEffect(() => {
+    updateFilterData();
+  }, [owners]);
+
+  const updateFilterData = () => {
     if (owners && owners.length > 0) {
       const managers = owners.map((value) => ({...value, isChecked: false}));
 
       setFilterData((state) => ({...state, managers: managers}));
-      console.log('OWNERS', JSON.stringify(owners));
+    } else {
+      setFilterData((state) => ({...state, managers: []}));
     }
-  }, [owners]);
-
+    console.log('OWNERS', JSON.stringify(owners));
+  };
   // useEffect(() => {}, []);
 
   const getTicketList = (filterState_, currentSegmentId) => {
@@ -185,7 +186,7 @@ export default function ClosedLoop(props) {
   };
 
   const loadMoreData = () => {
-    if (!isLoading && ticketList.length < pagerOptions.totalCount) {
+    if (ticketList.length < pagerOptions.totalCount) {
       setFilterState((state) => ({
         ...state,
         pageNumber: state.pageNumber + 1,
@@ -210,13 +211,13 @@ export default function ClosedLoop(props) {
         refreshControl={
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
         }
-        style={styles.container}
+        style={styles.flatList}
         data={ticketList}
         onEndReached={loadMoreData}
         onEndReachedThreshold={0.25}
         ListFooterComponent={isLoading ? <QPSpinner /> : <View />}
         extraData={[ticketList]}
-        // ListEmptyComponent={<NoItemsFound>No tickets found</NoItemsFound>}
+        ListEmptyComponent={<NoItemsFound>No tickets found</NoItemsFound>}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
           return (
@@ -282,14 +283,14 @@ export default function ClosedLoop(props) {
     setFilterData(item);
 
     console.log('StatusParam: ', JSON.stringify(item));
-    setTicketList([]);
+    // setTicketList([]);
     setFilterState((state) => ({
       ...state,
       pageNumber: 1,
-      status: getIds(item.status),
-      priority: getIds(item.priority),
-      assignToId: getOwnerIds(item.managers),
-      type: getIds(item.type),
+      status: getIds(item.status) ?? '',
+      priority: getIds(item.priority) ?? '',
+      assignToId: getOwnerIds(item.managers) ?? '',
+      type: getIds(item.type) ?? '',
     }));
 
     console.log('Apply filter');
@@ -361,6 +362,8 @@ export default function ClosedLoop(props) {
 
 const styles = StyleSheet.create({
   container: {flex: 1},
+
+  flatList: {flex: 1, paddingBottom: MarginConstants.halfTab},
 
   filterAndSearchBox: {
     flexDirection: 'row',
