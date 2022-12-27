@@ -9,7 +9,7 @@ import {
 import {Colors} from '../../../styles/color.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
-import {FontFamily} from '../../../styles/font.constants';
+import {FontFamily, FontWeight} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 
 const ResponseFeedback = (props) => {
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   question: {
     fontSize: TextSizes.secondary,
-    fontWeight: '900',
+    fontWeight: FontWeight._900,
     fontFamily: FontFamily.light,
     color: Colors.filterIconColor,
     paddingVertical: PaddingConstants.halfTab,

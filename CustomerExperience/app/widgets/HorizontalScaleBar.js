@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {Colors} from '../styles/color.constants';
-import {FontFamily} from '../styles/font.constants';
+import {FontFamily, FontWeight} from '../styles/font.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
 
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     color: Colors.borderColor,
     fontSize: TextSizes.secondary,
     fontFamily: FontFamily.regular,
-    fontWeight: '400',
+    fontWeight: FontWeight._400,
     textAlign: 'center',
     width: MarginConstants.tab4,
   },

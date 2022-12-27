@@ -13,11 +13,7 @@ import {
 } from 'react-native';
 import {
   Colors,
-  // getPriorityFillerColor,
-  // getPriorityBorderColor,
   getPriorityBorderColorbyId,
-  // priorityColors,
-  // getStatusBorderColor,
 } from '../../../styles/color.constants';
 import PhoneInput from 'react-native-phone-number-input';
 import {FontFamily} from '../../../styles/font.constants';
@@ -70,6 +66,10 @@ import {translate} from '../../../Utils/MultilinguaUtils';
 
 export default function CreateTicket(props) {
   const responseId = props.route?.params?.responseId ?? null;
+  const customerName = props.route?.params?.customerName;
+  const customerEmail = props.route?.params?.customerEmail;
+  const surveyId = props.route?.params?.surveyId ?? null;
+
   const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
   const {authToken} = useSelector((state) => state.global);
   const {owners} = useSelector((state) => state.dashboard.ownerDetails);
@@ -99,6 +99,7 @@ export default function CreateTicket(props) {
   // );
   // const [bottomSheet, setBottomSheet] = useState('priority');
 
+  console.log('DETAILS_OF_PROPS', JSON.stringify(props.route.params));
   const segmentIcon = './../../../../assets/images/segment_icon.png';
   // variables for bottom sheet
   const priorityBottomSheet = React.useRef();
@@ -122,9 +123,10 @@ export default function CreateTicket(props) {
   const [ticketState, setTicketState] = useState({
     subscriberId: global.subscriberId,
     responseId: responseId,
+    surveyId: surveyId,
     // ownerId: ,
-    // emailAddress: '',
-    // firstName: '',
+    emailAddress: customerEmail ?? '',
+    firstName: customerName ?? '',
     // mobileNumber: '',
     feedbackId: segmentDetails.feedbackID,
     originSegmentId: segmentDetails.currentSegmentID,
@@ -264,7 +266,7 @@ export default function CreateTicket(props) {
       setValidation('Enter customer name');
       return false;
     }
-    if (!ticketState_.firstName) {
+    if (!ticketState_.emailAddress) {
       setValidation('Enter an email');
       return false;
     }
@@ -657,6 +659,8 @@ export default function CreateTicket(props) {
             {getIonIcon('person')}
             <TextInput
               placeholder="Customer Name"
+              defaultValue={customerName}
+              keyboardType="default"
               style={styles.titleText}
               onChangeText={(text) => {
                 console.log(text);
@@ -694,7 +698,9 @@ export default function CreateTicket(props) {
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getIonIcon('mail')}
             <TextInput
+              defaultValue={customerEmail}
               placeholder="Email"
+              keyboardType="email-address"
               style={styles.titleText}
               onChangeText={(text) => {
                 console.log(text);

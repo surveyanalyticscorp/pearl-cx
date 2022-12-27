@@ -15,7 +15,7 @@ import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {FontFamily} from '../../styles/font.constants';
+import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {Sizes} from '../../styles/Size.constant';
 // import moment from 'moment';
 import {translate} from '../../Utils/MultilinguaUtils';
@@ -25,6 +25,9 @@ import {translate} from '../../Utils/MultilinguaUtils';
 export default function FeedbackCell(props) {
   let disable = props.origin === 'Detail';
   let hasTicket = props.hasTicket;
+  const name = `${props.item.firstName ?? ''} ${props.item.lastName ?? ''}`;
+  const email = props.item.emailAddress ?? '';
+  const surveyID = props.item.surveyID;
   let [isNewResponse, setNewResponse] = useState(
     props.item.ticketStatus === -1,
   );
@@ -97,7 +100,6 @@ export default function FeedbackCell(props) {
   //   };
 
   let getUserName = () => {
-    let name = `${props.item.firstName ?? ''} ${props.item.lastName ?? ''}`;
     return (
       <Text style={styles.userNameText}>{name.length > 1 ? name : 'N/A'}</Text>
     );
@@ -108,9 +110,9 @@ export default function FeedbackCell(props) {
     return (
       <Text
         style={{
-          marginHorizontal: 12,
-          fontSize: 16,
-          fontWeight: 'bold',
+          marginHorizontal: MarginConstants.tab1,
+          fontSize: TextSizes.primary,
+          fontWeight: FontWeight.bold,
           color: textColor,
         }}>
         {props.item.answerText}
@@ -132,7 +134,12 @@ export default function FeedbackCell(props) {
         break;
     }
 
-    return <Image source={icon} style={{width: 16, height: 16}} />;
+    return (
+      <Image
+        source={icon}
+        style={{width: TextSizes.primary, height: TextSizes.primary}}
+      />
+    );
   };
 
   let getDate = () => {
@@ -191,7 +198,7 @@ export default function FeedbackCell(props) {
   };
 
   let renderCreateOrViewTicket = () => {
-    let status = getTicketStatus();
+    // let status = getTicketStatus();
     // return StringUtils.isEmpty(status) ? (
     return !hasTicket ? (
       <TouchableWithoutFeedback
@@ -202,6 +209,9 @@ export default function FeedbackCell(props) {
           // });
           props.navigation.navigate('New Ticket', {
             responseId: props.item.responseSetID,
+            customerName: name,
+            customerEmail: email,
+            surveyId: surveyID,
           });
         }}>
         <Text style={styles.viewTicketsText}>
@@ -248,7 +258,6 @@ export default function FeedbackCell(props) {
   };
 
   const RenderEmailAddress = () => {
-    let email = props.item.emailAddress ?? '';
     return email.length ? (
       <TouchableOpacity
         onPress={() => {
@@ -349,7 +358,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  rowContainer: {flexDirection: 'row', alignItems: 'center'},
+  rowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   topSegmentContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -436,9 +449,9 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   userNameText: {
-    marginHorizontal: 12,
-    fontSize: 16,
-    fontWeight: 'bold',
+    marginHorizontal: MarginConstants.tab1,
+    fontSize: TextSizes.primary,
+    fontWeight: FontWeight.bold,
     color: Colors.accent,
   },
   responseIdAndTicketRowContainer: {

@@ -149,36 +149,6 @@ export default function FeedbackDetails(props) {
 
 const DetailsTab = createMaterialTopTabNavigator();
 
-const profileData = {
-  name: 'Jessica Palm',
-  email: 'jessica.plam@rocker.com',
-  phone: '+1 923 978 3434',
-  ticketCount: '4',
-  surveyCount: '1',
-  date: 'Dec 21, 2021',
-};
-
-const activityData = {
-  surveyHistory: {
-    sentDate: 'Jan 28, 2022',
-    completeDate: 'Oct 8, 2022',
-    comment: 'Made some comments about the response and responed by SMS',
-    managerName: 'FBB Manager',
-    lastUpdated: 'Oct 8, 2022',
-  },
-  history: [
-    {
-      status: 'new',
-    },
-    {
-      status: 'open',
-    },
-    {
-      status: 'resolved',
-    },
-  ],
-};
-
 const FeedbackDetailsTabStack = (props) => (
   <DetailsTab.Navigator
     tabBarOptions={{

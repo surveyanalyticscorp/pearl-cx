@@ -304,7 +304,7 @@ const AppRouter = (props) => {
           backgroundColor: 'red',
           alignItems: 'center',
         }}>
-        <Text style={{fontSize: 10, color: 'white'}}>
+        <Text style={{fontSize: TextSizes.primary, color: 'white'}}>
           {' '}
           {notificationCount}{' '}
         </Text>

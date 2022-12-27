@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
 
   skipButton: {
-    fontSize: 18,
+    fontSize: TextSizes.largeText,
     fontWeight: '500',
     color: Colors.white,
     backgroundColor: Colors.accent,
