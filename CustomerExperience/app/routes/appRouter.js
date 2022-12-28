@@ -95,13 +95,7 @@ const AppRouter = (props) => {
   let [baseUrl, setBaseUrl] = useState(undefined);
   let [subscriberId, setSubscriberId] = useState(undefined);
 
-  // let ref = useRef();
   let [lastLoginArray, setLastLoginArray] = useState([]);
-  // let [segmentOptions, setSegmentOptions] = useState([]);
-  // let [selectedSegment, setSelectedSegment] = useState({});
-  // let segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
-  // let currentSegment = useSelector((state) => state.dashboard.currentSegment);
-  // const isLoading = useSelector((state) => state.global.isLoading);
 
   const dispatch = useDispatch();
 
@@ -239,6 +233,8 @@ const AppRouter = (props) => {
 
   const setGlobalBaseUrl = () => {
     AsyncStorage.getItem(BASE_URL).then((baseUrl) => {
+      // console.log(`subscriber ID from async storage: ${subscriberId}`);
+
       //console.log(`Base url from async storage: ${baseUrl}`);
       if (baseUrl) {
         global.baseUrl = baseUrl;
@@ -249,9 +245,11 @@ const AppRouter = (props) => {
 
   const setGlobalSubscriberId = () => {
     AsyncStorage.getItem(SUBSCRIBER_ID).then((subscriberId) => {
-      // console.log(`subscriber ID from async storage: ${subscriberId}`);
+      console.log(`subscriber ID from async storage: ${subscriberId}`);
       if (subscriberId) {
         global.subscriberId = subscriberId;
+        console.log(`subscriber ID from global: ${global.subscriberId}`);
+
         // setBaseUrl(baseUrl);
         setSubscriberId(subscriberId);
       }

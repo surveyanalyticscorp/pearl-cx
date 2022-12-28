@@ -48,7 +48,7 @@ const globalReducer = (state = initialState, action) => {
     case AUTHENTICATE_PANEL_RESPONSE: {
       return {
         ...state,
-        baseUrl: 'https://qa.questionpro.com',
+        baseUrl: 'https://cxlabs.questionpro.com',
         subscriberId: JSON.stringify(action.response.body.userID),
       };
 

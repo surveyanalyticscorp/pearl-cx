@@ -74,6 +74,8 @@ const Login = (props) => {
       global.baseUrl = props.baseUrl;
       global.subscriberId = props.subscriberId;
       console.log('BASEURL', props.baseUrl);
+      console.log('SUBSCRIBER_ID', props.subscriberId);
+
       onSignInPress();
     }
   }, [props.baseUrl]);

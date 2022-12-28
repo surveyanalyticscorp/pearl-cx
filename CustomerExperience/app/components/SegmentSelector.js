@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet, Platform} from 'react-native';
 import {Colors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
@@ -12,6 +12,7 @@ import {useEffect} from 'react';
 import {StackActions, useNavigation} from '@react-navigation/native';
 // import {SEGMENT_SELECTOR} from '../api/Constant';
 import {translate} from '../Utils/MultilinguaUtils';
+import {MarginConstants} from '../styles/margin.constants';
 
 const SegmentSelector = (props) => {
   const dispatch = useDispatch();
@@ -61,6 +62,9 @@ const SegmentSelector = (props) => {
     return <Text style={styles.appbarTitle}>{title}</Text>;
   };
 
+  console.log('SEGMENT_SELECTOR_VIEW');
+  // return <SegmentText segmentName={currentSegment.currentSegment} />;
+
   return segmentList && segmentList.length > 1 ? (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPressHandle}>
@@ -81,12 +85,16 @@ const SegmentSelector = (props) => {
 
 const styles = StyleSheet.create({
   container: {flex: 1},
-  appbarTitle: {fontSize: TextSizes.primary, color: Colors.white},
+  appbarTitle: {
+    fontSize: TextSizes.primary,
+    color: Colors.white,
+    marginEnd: Platform.OS === 'ios' ? MarginConstants.tab1 : 0,
+  },
   innerContainer: {
-    flex: 1,
+    alignContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
 });
 

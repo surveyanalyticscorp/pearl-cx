@@ -74,7 +74,6 @@ export default function CreateTicket(props) {
   const {authToken} = useSelector((state) => state.global);
   const {owners} = useSelector((state) => state.dashboard.ownerDetails);
   const [headerTitle, setHeaderTitle] = useState('Create New Ticket');
-  const subscriberId = useSelector((state) => state.global.subscriberId);
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
   // const [priority, setPriority] = useState('Select');
   const [priorityIndex, setPriorityIndex] = useState(-1);

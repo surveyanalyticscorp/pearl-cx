@@ -9,29 +9,26 @@ import {FontFamily} from '../../styles/font.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {useSelector, useDispatch} from 'react-redux';
 import {
-  getClosedLoopAllOwnersDetails,
-  getClosedLoopOwnerDetails,
-  getClosedLoopSegmentDetails,
   getFirstTimeClosedLoopSegmentDetails,
   getWelcomeScreenDataCount,
-  setSegment,
 } from '../../redux/actions/dashboard.actions';
 // import QPSpinner from '../../widgets/QPSpinner';
 import {RenderSpinner} from '../../routes/CommonScreen';
+import {SUBSCRIBER_ID} from '../../api/Constant';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = (props) => {
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.global.userInfo);
+  const {authToken, userInfo} = useSelector((state) => state.global);
 
-  const authToken = useSelector((state) => state.global.authToken);
-  const [subscriberId, setSubscriberId] = useState(global.subscriberId);
-  const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
+  // const authToken = useSelector((state) => state.global.authToken);
+  // const [subscriberId, setSubscriberId] = useState(state.global.subscriberId);
+  // const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
   const welcomeScreenData = useSelector(
     (state) => state.dashboard.welcomeScreenData,
   );
   // console.log('WELCOME_SCREEN', JSON.stringify(cxData));
-  console.log('WELCOME_SCREEN', JSON.stringify(welcomeScreenData));
+  // console.log('WELCOME_SCREEN', JSON.stringify(welcomeScreenData));
 
   // const user = ;
 
@@ -57,16 +54,17 @@ export const WelcomeScreen = (props) => {
     // console.log('USER_DATA: ', userInfo, authToken);
     // console.log('USER_DATA: ', userInfo);
     // dispatch(getClosedLoopSegmentDetails(authToken, {pageOffset: '0'}));
+    console.log('SUBSCRIBER_ID', global.subscriberId);
     dispatch(
       getFirstTimeClosedLoopSegmentDetails(authToken, {pageOffset: '0'}),
     );
 
     dispatch(
-      getWelcomeScreenDataCount(authToken, {subscriberId: subscriberId}),
+      getWelcomeScreenDataCount(authToken, {subscriberId: global.subscriberId}),
     );
     // dispatch(getClosedLoopAllOwnersDetails(authToken));
     // dispatch(getClosedLoopOwnerDetails(authToken));
-  }, [authToken, subscriberId]);
+  }, [authToken]);
 
   const CustomBackground = ({children}) => {
     return (
