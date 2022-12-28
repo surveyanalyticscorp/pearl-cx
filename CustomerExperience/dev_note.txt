@@ -1,4 +1,5 @@
 # For images not loading issue in iOS v14+ soultion: 'https://jeffgukang.github.io/react-native-tutorial/docs/tips/image-error-ios14.html'
+# Keep patch-package version to 5.0.0 for react-native 0.62.2
 
 
 # "react-native-code-push": "^7.0.0" 
