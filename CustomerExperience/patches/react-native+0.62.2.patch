@@ -1,20 +1,26 @@
+diff --git a/node_modules/react-native/.DS_Store b/node_modules/react-native/.DS_Store
+new file mode 100644
+index 0000000..f5f0f4a
+Binary files /dev/null and b/node_modules/react-native/.DS_Store differ
 diff --git a/node_modules/react-native/Libraries/Animated/release/.npmignore b/node_modules/react-native/Libraries/Animated/release/.gitignore
 similarity index 100%
 rename from node_modules/react-native/Libraries/Animated/release/.npmignore
 rename to node_modules/react-native/Libraries/Animated/release/.gitignore
 diff --git a/node_modules/react-native/Libraries/Image/RCTUIImageViewAnimated.m b/node_modules/react-native/Libraries/Image/RCTUIImageViewAnimated.m
-index 21f1a06..3f7db69 100644
+index 21f1a06..8b80139 100644
 --- a/node_modules/react-native/Libraries/Image/RCTUIImageViewAnimated.m
 +++ b/node_modules/react-native/Libraries/Image/RCTUIImageViewAnimated.m
-@@ -275,6 +275,8 @@ - (void)displayLayer:(CALayer *)layer
+@@ -275,7 +275,10 @@ - (void)displayLayer:(CALayer *)layer
    if (_currentFrame) {
      layer.contentsScale = self.animatedImageScale;
      layer.contents = (__bridge id)_currentFrame.CGImage;
 +  }else {
 +    [super displayLayer:layer];
    }
++
  }
  
+ #pragma mark - Util
 diff --git a/node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm b/node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm
 index 18b0e09..6e676f9 100644
 --- a/node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm
