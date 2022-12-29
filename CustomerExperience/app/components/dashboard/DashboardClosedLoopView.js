@@ -166,7 +166,7 @@ const RenderScene = (props) => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <Text style={styles.countText}>Percentage</Text>
+          <Text style={styles.countText}>Count</Text>
           <Switch
             trackColor={{true: Colors.accent, false: Colors.darkGrey}}
             thumbColor={Colors.white}
@@ -175,7 +175,7 @@ const RenderScene = (props) => {
             value={showPercentageCount}
             style={styles.switch}
           />
-          <Text style={styles.countText}>Count</Text>
+          <Text style={styles.countText}>Percentage</Text>
         </View>
       </View>
     );

@@ -244,47 +244,48 @@ export default function CreateTicket(props) {
   }, [validation, props.error]);
 
   const handleCreateTicket = () => {
-    if (isValid(ticketState)) {
+    if (isValid()) {
       setValidation('');
+      console.log('TICKET_DETAILS_', JSON.stringify(ticketState));
       dispatch(createClfTicket(authToken, ticketState, feedbackApiKey));
       props.navigation.goBack();
       // console.log(JSON.stringify(ticketState));
     }
   };
 
-  const isValid = (ticketState_) => {
-    if (!ticketState_.currentSegmentId) {
+  const isValid = () => {
+    if (!ticketState.currentSegmentId) {
       setValidation('Segment not selected');
       return false;
     }
-    if (!ticketState_.issueDate) {
+    if (!ticketState.issueDate) {
       setValidation('Issue date not selected');
       return false;
     }
-    if (!ticketState_.firstName) {
+    if (!ticketState.firstName) {
       setValidation('Enter customer name');
       return false;
     }
-    if (!ticketState_.emailAddress) {
+    if (!ticketState.emailAddress) {
       setValidation('Enter an email');
       return false;
     }
-    if (ticketState_.priority === null || ticketState_.priority === undefined) {
+    if (ticketState.priority === null || ticketState.priority === undefined) {
       setValidation('Priority not selected');
       return false;
     }
-    if (ticketState_.status === null || ticketState_.status === undefined) {
-      console.log(ticketState_.status);
+    if (ticketState.status === null || ticketState.status === undefined) {
+      console.log(ticketState.status);
       setValidation('Status not selected');
       return false;
     }
 
-    if (!ticketState_.assignToId) {
+    if (!ticketState.assignToId) {
       setValidation('Select a ticket owner');
       return false;
     }
 
-    if (!ticketState_.comment) {
+    if (!ticketState.comment) {
       setValidation('Add description');
       return false;
     }
