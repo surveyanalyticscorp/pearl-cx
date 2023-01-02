@@ -836,7 +836,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = CustomerExperience/CX.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 0.2;
 				DEVELOPMENT_TEAM = 32Y3X84598;
@@ -857,7 +857,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.questionpro.cx;
 				PRODUCT_NAME = CX;
 				PROVISIONING_PROFILE_SPECIFIER = QP_CX_Productions;
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = QP_CX_Dev;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = QP_CX_Productions;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -889,7 +889,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.questionpro.cx;
 				PRODUCT_NAME = CX;
 				PROVISIONING_PROFILE_SPECIFIER = QP_CX_Productions;
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = QP_CXAdHoc;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = QP_CX_Productions;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

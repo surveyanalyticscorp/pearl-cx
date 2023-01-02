@@ -1,3 +1,4 @@
+import {DEV_BASE_URL} from '../../api/Constant';
 import {
   FILL_USER_INFO,
   IS_LOADING,
@@ -48,7 +49,7 @@ const globalReducer = (state = initialState, action) => {
     case AUTHENTICATE_PANEL_RESPONSE: {
       return {
         ...state,
-        baseUrl: 'https://cxlabs.questionpro.com',
+        baseUrl: DEV_BASE_URL,
         subscriberId: JSON.stringify(action.response.body.userID),
       };
 

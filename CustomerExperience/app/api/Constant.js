@@ -8,6 +8,7 @@ export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
 
 //export const BASE_URL = 'https://api.questionpro.com/';
+export const DEV_BASE_URL = 'https://cxlabs.questionpro.com';
 
 export const PANEL_AUTH =
   'https://api.questionpro.com/a/nativehtml/panel.auth.PanelRequestHandler';

@@ -9,7 +9,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {enableScreens} from 'react-native-screens';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as globalVariables from '../app/styles/globalStyleVariables';
-import {View, Platform} from 'react-native';
+import {View, Platform, StatusBar} from 'react-native';
 // import codePush from 'react-native-code-push';
 
 // import Siren from 'react-native-siren';
@@ -48,6 +48,7 @@ class CxApp extends Component {
     return (
       <Provider store={store}>
         <SafeAreaProvider>
+          <StatusBar barStyle={'light-content'} />
           {this.state.styleBuilt ? <SplashScreen /> : <View />}
           <FlashMessage position="top" />
         </SafeAreaProvider>
