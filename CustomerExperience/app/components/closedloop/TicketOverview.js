@@ -953,7 +953,7 @@ export default function TicketOverview(props) {
           {Title('Created')}
           {getText(
             ticketDetails !== undefined
-              ? moment(ticketDetails.createdAt).format(FullMonthDateYearFormat)
+              ? moment(ticketDetails.issueDate).format(FullMonthDateYearFormat)
               : '',
           )}
         </View>
@@ -1187,21 +1187,21 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '400',
+    fontWeight: FontWeight._400,
     fontSize: 16,
     color: Colors.primary,
   },
 
   detailsText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '900',
+    fontWeight: FontWeight._900,
     fontSize: TextSizes.primary,
     color: Colors.filterIconColor,
   },
 
   underLineText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '900',
+    fontWeight: FontWeight._900,
     fontSize: TextSizes.primary,
     color: Colors.accentLight,
     textDecorationLine: 'underline',
@@ -1209,14 +1209,14 @@ const styles = StyleSheet.create({
 
   idText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '900',
+    fontWeight: FontWeight._900,
     fontSize: 16,
     color: Colors.accentLight,
   },
 
   statusText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '900',
+    fontWeight: FontWeight._900,
     fontSize: 16,
     color: Colors.lightBlack,
   },

@@ -4,39 +4,23 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
-  // ScrollView,
   FlatList,
   SafeAreaView,
   Platform,
 } from 'react-native';
-import {
-  Colors,
-  // priorityColors
-} from '../../../styles/color.constants';
+import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import {
-  CheckBoxItem,
-  CheckRadioButtonItem,
-  // CheckRadioButtonItem,
-  // RenderRoundImageOrColor,
-} from '../../../routes/CommonScreen';
+import {CheckBoxItem, CheckRadioButtonItem} from '../../../routes/CommonScreen';
 import IconTextModalDropdown from '../../../widgets/drop-down/IconTextModalDropdown';
-import {ReactReduxContext, useSelector} from 'react-redux';
 import IonIcons from 'react-native-vector-icons/Ionicons';
-import {set} from 'react-native-reanimated';
 
 const FilterTicket = ({data, onPressHandler}) => {
   const [status, setStatus] = useState(data.status);
   const [priority, setPriority] = useState(data.priority);
   const [type, setType] = useState(data.type);
-  // const [type, setType] = useState(data.type);
-  // const {owners} = useSelector(
-  //   (state) => state.dashboard.ownerDetails.owners ?? [],
-  // );
-
   const [managerlist, setManagerList] = useState(data.managers);
   console.log('MANAGERS', JSON.stringify(data));
 
