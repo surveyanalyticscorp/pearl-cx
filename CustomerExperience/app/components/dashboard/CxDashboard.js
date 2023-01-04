@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
+  StatusBar,
 } from 'react-native';
 import {showLoading} from '../../redux/actions/index';
 import {
@@ -119,7 +120,7 @@ const CxDashboard = (props) => {
     }
   }, [props.dashboardData.detractorTicketsCount]);
 
-  let handleBackPress = () => {
+  function handleBackPress() {
     if (
       props.route.name === translate('dashboard.dashboard') &&
       !props.navigation.canGoBack()
@@ -130,7 +131,7 @@ const CxDashboard = (props) => {
       showExitAlert(false);
       return false;
     }
-  };
+  }
 
   let renderExitAlert = () => {
     return Alert.alert(
@@ -474,6 +475,7 @@ const CxDashboard = (props) => {
       <SafeAreaView
         forceInset={{bottom: 'never', top: 'never'}}
         style={dashboardStyles.container}>
+        {/* <StatusBar barStyle={'light-content'} /> */}
         {/* <FilterHeader
           actionOnArrowClick={() => {
             setComparision(true);
