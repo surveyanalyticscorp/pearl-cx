@@ -45,6 +45,7 @@ import {SEGMENT_SELECTOR} from '../api/Constant';
 import SelectSegmentScreen from '../components/SelectSegmentScreen';
 import moment from 'moment';
 import {DMYFORMAT, HalfMonthDateYearFormat} from '../Utils/AppConstants';
+import SearchFeedback from '../components/feedback/SearchFeedback';
 
 // import CheckBox from '@react-native-community/checkbox';
 
@@ -215,9 +216,11 @@ export const SearchIcon = (props) => {
       ]}>
       <TouchableOpacity
         onPress={() => {
-          props.route === 'Dashboard'
-            ? navigation.navigate('Search Ticket')
-            : navigation.navigate('Search Response');
+          // props.route === 'Dashboard'
+          //   ? navigation.navigate('Search Ticket')
+          //   : navigation.navigate('Search Response');
+
+          navigation.navigate('Search Response');
         }}>
         <Icon name={'magnifier'} size={Sizes.icons} color={Colors.white} />
       </TouchableOpacity>
@@ -679,6 +682,15 @@ const CommonScreens = (RootStack) => {
       options={({navigation, route}) => ({
         headerShown: false,
         // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+      })}
+    />,
+
+    <RootStack.Screen
+      name="Search Response"
+      component={SearchFeedback}
+      options={({navigation, route}) => ({
+        headerShown: false,
+        headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
       })}
     />,
   ];

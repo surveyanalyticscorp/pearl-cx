@@ -283,6 +283,8 @@ const styles = StyleSheet.create({
       : MarginConstants.tab4 * 9,
     justifyContent: 'flex-start',
     alignItems: 'center',
+    borderBottomEndRadius: 5,
+    borderBottomStartRadius: 5,
   },
   chartContainer: {
     backgroundColor: Colors.white,
