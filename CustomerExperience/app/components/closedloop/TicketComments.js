@@ -11,6 +11,7 @@ import {
   FlatList,
   // SafeAreaView,
   TextInput,
+  KeyboardAvoidingView,
   // LogBox,
 } from 'react-native';
 // import StringUtils from '../../Utils/StringUtils';
@@ -108,15 +109,16 @@ export default function TicketComments(props) {
   };
   const CommentBox = () => {
     return (
-      <View style={styles.commentBox}>
+      <KeyboardAvoidingView style={styles.commentBox}>
         <MaterialIconView iconName="chat-bubble" />
+
         <TextInput
-          // style={styles.input}
+          style={styles.container}
           onChangeText={onChangeCommentHandler}
           placeholder="Comment"
           onEndEditing={onChangeCommentHandler}
         />
-      </View>
+      </KeyboardAvoidingView>
     );
   };
 
