@@ -32,7 +32,7 @@ export function usePrevious(value) {
 
 export const showErrorFlashMessage = (error) => {
   return showMessage({
-    message: error,
+    message: error ?? 'something went worng, please try again later.',
     type: 'danger',
     backgroundColor: Colors.red,
     color: Colors.white,

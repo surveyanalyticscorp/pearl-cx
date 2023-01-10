@@ -15,6 +15,7 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
+import {FontFamily} from '../../../styles/font.constants';
 
 const ResponseProfile = (props) => {
   const {panelMember, surveyDetails} = useSelector((state) => state.response);
@@ -223,8 +224,8 @@ const styles = StyleSheet.create({
   contactText: {
     fontSize: TextSizes.secondary,
     color: Colors.accentLight,
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
+    fontFamily: FontFamily.regular,
+
     marginHorizontal: MarginConstants.tab1,
   },
 });

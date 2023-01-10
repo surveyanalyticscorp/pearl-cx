@@ -12,6 +12,7 @@ import {
   WANT_TO_RELOAD_DASHBOARD,
   IS_ERROR,
   SET_LANGUAGE_INFO,
+  IS_PAGINATION,
 } from '../actions';
 import {
   AUTHENTICATE_PANEL_RESPONSE,
@@ -28,6 +29,7 @@ const initialState = {
     endDate: '',
   },
   isLoading: false,
+  isPagination: false,
   wantToReloadDashboard: true,
   isError: false,
   baseUrl: '',
@@ -106,6 +108,13 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: action.payload.isLoading,
+      };
+    }
+
+    case IS_PAGINATION: {
+      return {
+        ...state,
+        isPagination: action.payload.isPagination,
       };
     }
     case WANT_TO_RELOAD_DASHBOARD: {

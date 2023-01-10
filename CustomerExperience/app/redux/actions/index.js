@@ -1,5 +1,6 @@
 export const IS_LOADING = 'IS_LOADING';
 export const IS_LOGIN = 'IS_LOGIN';
+export const IS_PAGINATION = 'IS_PAGINATION';
 export const FILL_USER_INFO = 'FILL_USER_INFO';
 export const CLEAR_USER_INFO = 'CLEAR_USER_INFO';
 export const API_ERROR = 'API_ERROR';
@@ -7,7 +8,8 @@ export const IS_ERROR = 'IS_ERROR';
 export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const SET_RANGE_FILTER = 'SET_RANGE_FILTER';
-export const SET_USER_DETAILS_FOR_RESET_PASSWORD = 'SET_USER_DETAILS_FOR_RESET_PASSWORD';
+export const SET_USER_DETAILS_FOR_RESET_PASSWORD =
+  'SET_USER_DETAILS_FOR_RESET_PASSWORD';
 export const SET_DYNAMIC_LINK = 'SET_DYNAMIC_LINK';
 export const WANT_TO_RELOAD_DASHBOARD = 'WANT_TO_RELOAD_DASHBOARD';
 export const SET_LANGUAGE_INFO = 'SET_LANGUAGE_INFO';
@@ -18,23 +20,23 @@ export const showLoading = (isLoading = true) => ({
 });
 
 export const wantToReloadDashboard = (wantToReload) => ({
-    type: WANT_TO_RELOAD_DASHBOARD,
-    payload: {wantToReload: wantToReload},
+  type: WANT_TO_RELOAD_DASHBOARD,
+  payload: {wantToReload: wantToReload},
 });
 
-export const fillUserInfo = userInfo => ({
+export const fillUserInfo = (userInfo) => ({
   type: FILL_USER_INFO,
   payload: {userInfo: userInfo},
 });
 
-export const setLanguageInfo = languageInfo => ({
-    type: SET_LANGUAGE_INFO,
-    payload: {languageInfo: languageInfo},
+export const setLanguageInfo = (languageInfo) => ({
+  type: SET_LANGUAGE_INFO,
+  payload: {languageInfo: languageInfo},
 });
 
 export const clearUserInfo = () => ({
   type: CLEAR_USER_INFO,
-  payload: {}
+  payload: {},
 });
 
 export const clearError = (isLoading = true) => ({
@@ -47,14 +49,14 @@ export const setAuthToken = (token) => ({
   payload: {authToken: token},
 });
 
-export const setRangeFilter = range => ({
+export const setRangeFilter = (range) => ({
   type: SET_RANGE_FILTER,
   range,
 });
 
 export const setError = (error) => ({
   type: API_ERROR,
-  error
+  error,
 });
 
 export const setUserDetailsForResetPassword = (body) => ({
@@ -64,5 +66,5 @@ export const setUserDetailsForResetPassword = (body) => ({
 
 export const setDynamicLink = (link) => ({
   type: SET_DYNAMIC_LINK,
-  payload: link
+  payload: link,
 });

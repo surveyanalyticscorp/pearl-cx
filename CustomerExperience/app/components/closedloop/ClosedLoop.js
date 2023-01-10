@@ -11,6 +11,7 @@ import {
   FabAddButton,
   HeaderFilter,
   NoItemsFound,
+  RenderSpinner,
 } from '../../routes/CommonScreen';
 import FilterTicket from './takeaction/FilterTickets';
 import Animated from 'react-native-reanimated';
@@ -38,10 +39,11 @@ import QPSpinner from '../../widgets/QPSpinner';
 
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
-  const itemPerPage = 20;
+  const itemPerPage = 2;
   const [pageNumber, setPageNumber] = useState(1);
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
   // const [isLoading, setLoading] = useState(false);
+  const [isPagination, setpagination] = useState(false);
   const {authToken, isLoading, range} = useSelector((state) => state.global);
   const [filterState, setFilterState] = useState({
     feedbackApiKey: feedbackApiKey,
@@ -187,6 +189,7 @@ export default function ClosedLoop(props) {
 
   const loadMoreData = () => {
     if (ticketList.length < pagerOptions.totalCount) {
+      setpagination(true);
       setFilterState((state) => ({
         ...state,
         pageNumber: state.pageNumber + 1,
@@ -215,9 +218,15 @@ export default function ClosedLoop(props) {
         data={ticketList}
         onEndReached={loadMoreData}
         onEndReachedThreshold={0.25}
-        ListFooterComponent={isLoading ? <QPSpinner /> : <View />}
+        ListFooterComponent={isPagination ? <QPSpinner /> : <View />}
         extraData={[ticketList]}
-        ListEmptyComponent={<NoItemsFound>No tickets found</NoItemsFound>}
+        ListEmptyComponent={
+          !isLoading && !isPagination ? (
+            <NoItemsFound>No tickets found</NoItemsFound>
+          ) : (
+            <View />
+          )
+        }
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
           return (
@@ -312,52 +321,55 @@ export default function ClosedLoop(props) {
   const bsSnapPoints = ['80%', '90%', '0%'];
   const [shadow, setShadow] = useState(false);
 
-  // return isLoading ? <RenderSpinner /> : <RenderClosedLoop />;
-  return (
-    <View style={styles.container}>
-      <Animated.View
-        style={{
-          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-          flex: 1,
-        }}>
-        <HeaderFilter
-          dateRange={range}
-          onPressDateRange={getDataOnNewRange}
-          onPressFilter={openFilter}
-        />
-        {/* <ClosedLoopTicketList /> */}
-        {closedLoopTicketList()}
-        <FabAddButton onPress={onFabHandler} />
+  const RenderClosedLoop = () => {
+    return (
+      <View style={styles.container}>
+        <Animated.View
+          style={{
+            opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+            flex: 1,
+          }}>
+          <HeaderFilter
+            dateRange={range}
+            onPressDateRange={getDataOnNewRange}
+            onPressFilter={openFilter}
+          />
+          {/* <ClosedLoopTicketList /> */}
+          {closedLoopTicketList()}
+          <FabAddButton onPress={onFabHandler} />
 
-        {/* <TicketTakeAction /> */}
-        {/* <TicketDetails /> */}
-        {/* <TicketOverview /> */}
-        {/* <TicketComments /> */}
-        {/* <TicketActivity /> */}
-        {/* <CreateTicket /> */}
-        {/* <SendEmail /> */}
-        {/* <TakeActionScreen /> */}
-        {/* <FilterTicket
+          {/* <TicketTakeAction /> */}
+          {/* <TicketDetails /> */}
+          {/* <TicketOverview /> */}
+          {/* <TicketComments /> */}
+          {/* <TicketActivity /> */}
+          {/* <CreateTicket /> */}
+          {/* <SendEmail /> */}
+          {/* <TakeActionScreen /> */}
+          {/* <FilterTicket
     data={filterData}
     onPressHandler={(item, action) => handleAction(item, action)}
   /> */}
-      </Animated.View>
-      {/* <RenderSegmentBottomSheet
+        </Animated.View>
+        {/* <RenderSegmentBottomSheet
         // ref={bs}
         // snapPoints={bsSnapPoints}
         callbackNode={fall}
       /> */}
-      <BottomSheet
-        ref={bs}
-        snapPoints={bsSnapPoints}
-        initialSnap={bsSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderFilterContent}
-        renderHeader={renderFilterHeader}
-        callbackNode={fall}
-      />
-    </View>
-  );
+        <BottomSheet
+          ref={bs}
+          snapPoints={bsSnapPoints}
+          initialSnap={bsSnapPoints.length - 1}
+          enabledGestureInteraction={true}
+          renderContent={renderFilterContent}
+          renderHeader={renderFilterHeader}
+          callbackNode={fall}
+        />
+      </View>
+    );
+  };
+
+  return isLoading && !isPagination ? <RenderSpinner /> : RenderClosedLoop();
 }
 
 const styles = StyleSheet.create({
