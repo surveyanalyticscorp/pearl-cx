@@ -45,7 +45,7 @@ export default function DashboardDateFilter(props) {
       YMDFORMAT,
     );
 
-    if (moment(tempEnd).isAfter(tempStart)) {
+    if (moment(tempEnd).isSameOrAfter(tempStart)) {
       props.route.params.setRange(selectedRange);
       AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(selectedRange));
       props.navigation.dispatch(StackActions.popToTop());

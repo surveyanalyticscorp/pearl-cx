@@ -103,7 +103,7 @@ export default function RangeCalendar(props) {
       } else {
         let tempEnd = moment(endDate, DMYFORMAT).format(YMDFORMAT);
         let tempStart = moment(startDate, DMYFORMAT).format(YMDFORMAT);
-        if (moment(tempEnd).isAfter(tempStart)) {
+        if (moment(tempEnd).isSameOrAfter(tempStart)) {
           tempEnd = moment(tempEnd, YMDFORMAT).format(DMYFORMAT);
           tempStart = moment(tempStart, YMDFORMAT).format(DMYFORMAT);
           props.onSubmit(4, tempStart, tempEnd);
