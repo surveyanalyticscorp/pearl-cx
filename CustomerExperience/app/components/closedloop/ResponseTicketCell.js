@@ -44,7 +44,7 @@ export default function ResponseTicketCell(props) {
   // }, [isTapped]);
 
   const getTicketID = () => {
-    return <Text style={styles.idText}>{`TICKET ID ${data.id}`} </Text>;
+    return <Text style={styles.idText}>{`Ticket ID #${data.id}`} </Text>;
   };
 
   let getNPSIcon = (sentiment) => {
