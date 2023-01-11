@@ -138,19 +138,44 @@ export const listItemSeparator = () => {
   return <View style={{height: 0.5, backgroundColor: Colors.darkGrey}} />;
 };
 
-export const RenderStatusIcon = (props) => {
+export const StatusIcon = ({
+  size,
+  borderRadius,
+  borderWidth,
+  borderColor,
+  fillerColor,
+}) => {
+  const size_ = size ?? 20;
+  const radius_ = borderRadius ?? 50;
+  const borderWidth_ = borderWidth ?? 1;
+  return (
+    <View
+      style={{
+        width: size_,
+        height: size_,
+
+        borderRadius: radius_,
+        borderColor: borderColor,
+        borderWidth: borderWidth_,
+        backgroundColor: fillerColor,
+      }}
+    />
+  );
+};
+
+export const RenderStatusIcon = ({size, title, style}) => {
   return (
     <View
       style={[
         {
           borderRadius: 50,
           borderWidth: 1,
-          borderColor: getStatusBorderColor(props.title.toLowerCase()),
-          backgroundColor: getStatusFillerColor(props.title.toLowerCase()),
-          height: props.size ?? 14,
-          width: props.size ?? 14,
+          borderColor: getStatusBorderColor(title.toLowerCase()),
+          backgroundColor: getStatusFillerColor(title.toLowerCase()),
+          height: size ?? 14,
+          width: size ?? 14,
         },
-        props.style,
+        style,
       ]}
     />
   );

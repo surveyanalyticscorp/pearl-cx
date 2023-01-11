@@ -27,6 +27,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 import moment from 'moment';
 import {FullMonthDateYearFormat} from '../../Utils/AppConstants';
 import {getStatusById, getPriorityById} from '../../Utils/TicketUtils';
+import {RenderStatusIcon, StatusIcon} from '../../routes/CommonScreen';
 export default function ClosedLoopCell(props) {
   const data = props.data;
 
@@ -139,20 +140,10 @@ export default function ClosedLoopCell(props) {
 
     return (
       <View style={styles.rowContainer}>
-        <View
-          style={{
-            width: 20,
-            height: 20,
+        <RenderStatusIcon size={16} title={getStatusById(status)} />
 
-            borderRadius: 50,
-            borderColor: borderColor,
-            borderWidth: 1,
-            backgroundColor: fillerColor,
-          }}
-        />
-        <Text style={[{marginHorizontal: 4}, styles.statusText]}>
-          {getStatusById(status)}
-        </Text>
+        {/* <StatusIcon borderColor={borderColor} fillerColor={fillerColor} /> */}
+        <Text style={styles.statusText}>{getStatusById(status)}</Text>
       </View>
     );
   };
@@ -200,7 +191,7 @@ export default function ClosedLoopCell(props) {
       }}
       style={styles.container}>
       <View style={styles.container}>
-        <View style={{backgroundColor: Colors.white}}>
+        <View style={styles.ticketContainer}>
           {getNPSAndTicketRow()}
           {/* {getTicketID()} */}
           {getNameANdDateRow()}
@@ -226,6 +217,11 @@ const styles = StyleSheet.create({
     paddingVertical: PaddingConstants.halfTab,
   },
 
+  ticketContainer: {
+    borderTopStartRadius: 5,
+    borderTopEndRadius: 5,
+    backgroundColor: Colors.white,
+  },
   statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -267,7 +263,8 @@ const styles = StyleSheet.create({
 
   statusText: {
     fontFamily: FontFamily.regular,
-    fontSize: TextSizes.primary,
+    fontSize: TextSizes.regular,
     color: Colors.lightBlack,
+    marginHorizontal: 4,
   },
 });
