@@ -3,3 +3,6 @@
 
 
 # "react-native-code-push": "^7.0.0" 
+
+
+# "react-native-siren": "0.0.3" was removed from the package
