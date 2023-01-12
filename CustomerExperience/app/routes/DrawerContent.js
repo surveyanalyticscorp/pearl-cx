@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Text,
   Alert,
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MyIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -275,10 +276,6 @@ const DrawerContent = (props) => {
             <Text style={styles.labelStyle}>{translate('logout')}</Text>
           </View>
         </TouchableWithoutFeedback>
-        <Text style={styles.drawerVersionText}>
-          {' '}
-          {'v ' + DeviceInfo.getVersion()}{' '}
-        </Text>
       </View>
     );
   };
@@ -302,6 +299,9 @@ const DrawerContent = (props) => {
             source={require('../config/images/cx-logo.png')}
             resizeMode="contain"
           />
+          <Text style={styles.drawerVersionText}>
+            {'v ' + DeviceInfo.getVersion()}
+          </Text>
           <View style={styles.emailView}>
             <Text style={styles.emailCaption}>{titleText}</Text>
           </View>
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
   image: {
     marginTop: MarginConstants.tab4,
     width: MarginConstants.tab4 * 6,
-    height: MarginConstants.tab4 * 4,
+    height: MarginConstants.tab4 * 2,
   },
   labelStyle: {
     fontFamily: FontFamily.regular,
@@ -377,7 +377,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   drawerVersionText: {
-    margin: MarginConstants.tab1,
+    marginHorizontal: MarginConstants.tab1,
+    marginBottom: MarginConstants.tab4,
     color: Colors.primary,
     fontSize: TextSizes.secondary,
     textAlign: 'right',

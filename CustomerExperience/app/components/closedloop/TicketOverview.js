@@ -647,10 +647,10 @@ export default function TicketOverview(props) {
     );
   };
 
-  const Title = (text) => {
+  const Title = ({value}) => {
     return (
       <View style={[{flex: 1}, styles.rowContainer]}>
-        <Text style={styles.titleText}>{text}</Text>
+        <Text style={styles.titleText}>{value}</Text>
       </View>
     );
   };
@@ -782,10 +782,10 @@ export default function TicketOverview(props) {
   const RenderSegmentDropDownButton = ({text}) => {
     return (
       <View style={styles.dropdownContainer}>
-        <TouchableWithoutFeedback onPress={handleSegmentSelection}>
+        {/* <TouchableWithoutFeedback onPress={handleSegmentSelection}> */}
+        <View style={styles.dropdownInnerContainer}>
           <View style={styles.dropdownInnerContainer}>
-            <View style={styles.dropdownInnerContainer}>
-              {/* <RenderPriorityIcon
+            {/* <RenderPriorityIcon
                 style={{margin: MarginConstants.halfTab}}
                 title={
                   ticketDetails !== undefined
@@ -793,19 +793,19 @@ export default function TicketOverview(props) {
                     : 'Select priority'
                 }
               /> */}
-              <Text style={styles.dropdownContainerText}>{text}</Text>
-            </View>
-            {/* <Icon name={arrowIcon} size={15} color={arrowColor} /> */}
-
-            <SimpleLineIcon
-              name={'arrow-down'}
-              size={15}
-              color={Colors.evenDarkerGrey}
-            />
+            <Text style={styles.dropdownContainerText}>{text}</Text>
           </View>
+          {/* <Icon name={arrowIcon} size={15} color={arrowColor} /> */}
 
-          {/* <IonIcons name="down-arrow" /> */}
-        </TouchableWithoutFeedback>
+          {/* <SimpleLineIcon
+            name={'arrow-down'}
+            size={15}
+            color={Colors.evenDarkerGrey}
+          /> */}
+        </View>
+
+        {/* <IonIcons name="down-arrow" /> */}
+        {/* </TouchableWithoutFeedback> */}
       </View>
     );
   };
@@ -845,7 +845,19 @@ export default function TicketOverview(props) {
     return (
       <View style={styles.ticketStatusContainer}>
         <View style={styles.rowContainer}>
-          {Title('Ticket Status')}
+          <Title value={'Current Segment'} />
+
+          {/* {DropDownView(userOptions, 'Select Segement')} */}
+          <RenderSegmentDropDownButton
+            text={
+              ticketDetails !== undefined
+                ? getSegmentNameById(segments, ticketDetails.currentSegmentId)
+                : 'Select segment'
+            }
+          />
+        </View>
+        <View style={styles.rowContainer}>
+          <Title value={'Ticket Status'} />
           <RenderStatusDropDownButton
             text={
               ticketDetails !== undefined
@@ -862,7 +874,8 @@ export default function TicketOverview(props) {
           )} */}
         </View>
         <View style={styles.rowContainer}>
-          {Title('Priority')}
+          <Title value={'Priority'} />
+
           <RenderPriorityDropDownButton
             text={
               ticketDetails !== undefined
@@ -877,20 +890,9 @@ export default function TicketOverview(props) {
               : 'Select priority',
           )} */}
         </View>
-        <View style={styles.rowContainer}>
-          {Title('Segment')}
-          {/* {DropDownView(userOptions, 'Select Segement')} */}
-          <RenderSegmentDropDownButton
-            text={
-              ticketDetails !== undefined
-                ? getSegmentNameById(segments, ticketDetails.currentSegmentId)
-                : 'Select segment'
-            }
-          />
-        </View>
 
         <View style={styles.rowContainer}>
-          {Title('Assigned to')}
+          <Title value={'Assigned to'} />
           {/* {DropDownView(userOptions, 'Assign manager')} */}
           <RenderOwnerDropDownButton
             text={
@@ -942,15 +944,17 @@ export default function TicketOverview(props) {
         </View>
 
         <View style={styles.rowContainer}>
-          {Title('Segment')}
+          <Title value={'Origin Segment'} />
+
           {getText(
             ticketDetails
-              ? getSegmentNameById(segments, ticketDetails.currentSegmentId)
+              ? getSegmentNameById(segments, ticketDetails.originSegmentId)
               : 'Segment',
           )}
         </View>
         <View style={styles.rowContainer}>
-          {Title('Created')}
+          <Title value={'Created'} />
+
           {getText(
             ticketDetails !== undefined
               ? moment(ticketDetails.createdAt).format(FullMonthDateYearFormat)
@@ -959,14 +963,16 @@ export default function TicketOverview(props) {
         </View>
         {ticketDetails.npsScore ? (
           <View style={styles.rowContainer}>
-            {Title('NPS')}
+            <Title value={'NPS'} />
+
             {getNPSScoreText('3')}
           </View>
         ) : (
           <View />
         )}
         <View style={styles.columnContainer}>
-          {Title('Description')}
+          <Title value={'Description'} />
+
           <Text
             style={{
               margin: MarginConstants.halfTab,
@@ -999,7 +1005,7 @@ export default function TicketOverview(props) {
         </View>
         {ticketDetails.panelMember.email ? (
           <View style={styles.rowContainer}>
-            {Title('Email')}
+            <Title value={'Email'} />
             {getUnderLineText(ticketDetails.panelMember.email, EMAIL)}
           </View>
         ) : (
@@ -1007,7 +1013,7 @@ export default function TicketOverview(props) {
         )}
         {ticketDetails.panelMember.phone ? (
           <View style={styles.rowContainer}>
-            {Title('Phone')}
+            <Title value={'Phone'} />
 
             {getUnderLineText(ticketDetails.panelMember.phone, PHONE)}
           </View>
@@ -1174,7 +1180,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontFamily: FontFamily.regular,
     fontWeight: FontWeight._500,
-    fontSize: TextSizes.primary,
+    fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
   },
 
@@ -1187,21 +1193,21 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '400',
+    fontWeight: FontWeight._400,
     fontSize: 16,
     color: Colors.primary,
   },
 
   detailsText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '900',
+    fontWeight: FontWeight._400,
     fontSize: TextSizes.primary,
     color: Colors.filterIconColor,
   },
 
   underLineText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '900',
+    fontWeight: FontWeight._400,
     fontSize: TextSizes.primary,
     color: Colors.accentLight,
     textDecorationLine: 'underline',
@@ -1209,14 +1215,14 @@ const styles = StyleSheet.create({
 
   idText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '900',
+    fontWeight: FontWeight._900,
     fontSize: 16,
     color: Colors.accentLight,
   },
 
   statusText: {
     fontFamily: FontFamily.regular,
-    fontWeight: '900',
+    fontWeight: FontWeight._900,
     fontSize: 16,
     color: Colors.lightBlack,
   },
