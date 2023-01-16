@@ -957,7 +957,7 @@ export default function TicketOverview(props) {
 
           {getText(
             ticketDetails !== undefined
-              ? moment(ticketDetails.createdAt).format(FullMonthDateYearFormat)
+              ? moment(ticketDetails.issueDate).format(FullMonthDateYearFormat)
               : '',
           )}
         </View>

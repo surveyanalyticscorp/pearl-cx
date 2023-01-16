@@ -1,9 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
-  Alert,
-  BackHandler,
-  // Alert,
-  // BackHandler,
   FlatList,
   StyleSheet,
   Text,
@@ -22,7 +18,6 @@ import ArrayUtils from '../../Utils/ArrayUtils';
 import {TextSizes} from '../../styles/textsize.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-// import FilterHeader from '../FilterHeader';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -32,9 +27,7 @@ import {Sizes} from '../../styles/Size.constant';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {dashboardStyles} from '../dashboard/dashboard.style';
 import {translate} from '../../Utils/MultilinguaUtils';
-// import MainDropDown from '../../widgets/drop-down/MainDropDown';
 import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
-// import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 import Animated from 'react-native-reanimated';
 import {useIsFocused} from '@react-navigation/native';
 import {clearResponseData} from '../../redux/actions/feedback.actions';
@@ -308,22 +301,6 @@ const RenderFeedbackScene = (props) => {
       feedbackForm.onRefresh();
     }
   }, [feedbackForm.sortingText]);
-
-  /*useEffect(() => {
-        BackHandler.addEventListener("hardwareBackPress", handleBackPress);
-        return function cleanup() {
-            BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
-        };
-    },[]);
-
-    let handleBackPress = () => {
-        if(props.navigation.canGoBack()) {
-            props.navigation.goBack();
-        }else{
-            showExitAlert(true);
-        }
-        return true
-    };*/
 
   const _onPressRow = (data) => {
     props.navigation.navigate(translate('responses.feedback_details'), {
