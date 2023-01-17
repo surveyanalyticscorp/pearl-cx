@@ -60,7 +60,10 @@ export const WelcomeScreen = (props) => {
     );
 
     dispatch(
-      getWelcomeScreenDataCount(authToken, {subscriberId: global.subscriberId}),
+      getWelcomeScreenDataCount(authToken, {
+        subscriberId: global.subscriberId,
+        assignToId: userInfo.userID,
+      }),
     );
     // dispatch(getClosedLoopAllOwnersDetails(authToken));
     // dispatch(getClosedLoopOwnerDetails(authToken));

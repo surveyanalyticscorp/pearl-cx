@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, FlatList, StyleSheet, RefreshControl} from 'react-native';
+import {View, Text, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import ClosedLoopCell from './ClosedloopCell';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../styles/color.constants';
@@ -33,6 +33,7 @@ import {
 } from '../../Utils/TicketUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
 import QPSpinner from '../../widgets/QPSpinner';
+import ShowFilterTag from '../view/ShowFilterTag';
 // import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
@@ -321,6 +322,39 @@ export default function ClosedLoop(props) {
   const bsSnapPoints = ['80%', '90%', '0%'];
   const [shadow, setShadow] = useState(false);
 
+  const clearFilterData = (item) => {
+    const priority = priorityList.map((value) => ({
+      ...value,
+      isChecked: false,
+    }));
+    const status = statusList.map((value) => ({...value, isChecked: false}));
+    const type = ticketTypeList.map((value) => ({...value, isChecked: false}));
+    // const managers = owners.map((value) => ({...value, isChecked: false}));
+
+    switch (item) {
+      case 'priority':
+        return priorityList.map((value) => ({
+          ...value,
+          isChecked: false,
+        }));
+
+      case 'status':
+        return statusList.map((value) => ({
+          ...value,
+          isChecked: false,
+        }));
+
+      case 'type':
+        return ticketTypeList.map((value) => ({
+          ...value,
+          isChecked: false,
+        }));
+
+      case 'assignToId':
+        return [];
+    }
+  };
+
   const RenderClosedLoop = () => {
     return (
       <View style={styles.container}>
@@ -334,7 +368,23 @@ export default function ClosedLoop(props) {
             onPressDateRange={getDataOnNewRange}
             onPressFilter={openFilter}
           />
+
           {/* <ClosedLoopTicketList /> */}
+          <ShowFilterTag
+            filterData={filterState}
+            handleFilterTag={(item) => {
+              setFilterState((state) => ({
+                ...state,
+                [item]: '',
+              }));
+              setFilterData((state) => ({
+                ...state,
+                [item]: clearFilterData(item),
+              }));
+
+              console.log(`CLICKED: ${item}`);
+            }}
+          />
           {closedLoopTicketList()}
           <FabAddButton onPress={onFabHandler} />
 
