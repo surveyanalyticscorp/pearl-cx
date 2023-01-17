@@ -193,7 +193,10 @@ const RenderScene = (props) => {
             //   },
             // );
             // props.navigation.dispatch(pushAction);
-            props.navigation.navigate('ClosedLoop');
+            props.navigation.navigate('ClosedLoop', {
+              screen: 'Closed Loop',
+              params: {index: JSON.stringify(props.route.params.index - 1)},
+            });
           }}>
           <Text style={styles.viewTicketsText}>
             {translate('dashboard.view_tickets')}

@@ -34,6 +34,7 @@ import {
 import {translate} from '../../Utils/MultilinguaUtils';
 import QPSpinner from '../../widgets/QPSpinner';
 import ShowFilterTag from '../view/ShowFilterTag';
+import StringUtils from '../../Utils/StringUtils';
 // import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
@@ -41,6 +42,8 @@ import ShowFilterTag from '../view/ShowFilterTag';
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
   const itemPerPage = 20;
+  const [statusId, setStatusId] = useState(props.route.params.index ?? '');
+
   const [pageNumber, setPageNumber] = useState(1);
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
   // const [isLoading, setLoading] = useState(false);
@@ -48,7 +51,7 @@ export default function ClosedLoop(props) {
   const {authToken, isLoading, range} = useSelector((state) => state.global);
   const [filterState, setFilterState] = useState({
     feedbackApiKey: feedbackApiKey,
-    status: '',
+    status: statusId,
     priority: '',
     assignToId: '',
     pageNumber: pageNumber,
@@ -112,6 +115,18 @@ export default function ClosedLoop(props) {
     resetFilterState(range_);
   };
 
+  const filterByStatus = () => {
+    if (StringUtils.isNotEmpty(statusId)) {
+      setFilterState((state) => ({
+        ...state,
+        status: statusId,
+      }));
+    }
+  };
+  // useEffect(() => {
+  //   filterByStatus();
+  // }, [statusId]);
+
   useEffect(() => {
     makeAPICall();
   }, [filterState]);
@@ -122,6 +137,7 @@ export default function ClosedLoop(props) {
 
   const makeAPICall = () => {
     // setLoading(true);
+
     getTicketList(filterState, currentSegment.currentSegmentID);
     getTicketOwnerList(currentSegment.currentSegmentID);
   };
