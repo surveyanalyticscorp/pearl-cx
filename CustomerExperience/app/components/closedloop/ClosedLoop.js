@@ -35,6 +35,7 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import QPSpinner from '../../widgets/QPSpinner';
 import ShowFilterTag from '../view/ShowFilterTag';
 import StringUtils from '../../Utils/StringUtils';
+import {resetStatusId} from '../../redux/actions/closedloop.actions';
 // import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
@@ -42,7 +43,7 @@ import StringUtils from '../../Utils/StringUtils';
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
   const itemPerPage = 20;
-  // const [statusId, setStatusId] = useState(props.route.params.index ?? '');
+  const {statusId} = useSelector((state) => state.global);
 
   const [pageNumber, setPageNumber] = useState(1);
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
@@ -65,8 +66,11 @@ export default function ClosedLoop(props) {
   const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
   const ticketList = useSelector((state) => state.dashboard.ticketList);
 
-  console.log('TICKET_LIST: ', JSON.stringify(ticketList));
+  // console.log('TICKET_LIST: ', JSON.stringify(ticketList));
+  console.log('TICKET_STATUS: ', JSON.stringify(statusId));
+
   // const state = useSelector((state) => state.dashboard);
+
   const pagerOptions = useSelector(
     (state) => state.dashboard.ticketDetails.pagerOptions,
   );
@@ -123,11 +127,12 @@ export default function ClosedLoop(props) {
         ...state,
         status: statusId,
       }));
+      dispatch(resetStatusId());
     }
   };
-  // useEffect(() => {
-  //   filterByStatus();
-  // }, [statusId]);
+  useEffect(() => {
+    filterByStatus();
+  }, [statusId]);
 
   useEffect(() => {
     makeAPICall();

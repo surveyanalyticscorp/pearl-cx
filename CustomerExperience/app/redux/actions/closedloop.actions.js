@@ -70,6 +70,7 @@ export const GET_TICKET_STATUS_HISTORY = 'GET_TICKET_STATUS_HISTORY';
 export const GET_TICKET_STATUS_HISTORY_RECEIVED =
   'GET_TICKET_STATUS_HISTORY_RECEIVED';
 
+export const SET_TICKET_FILTER_BY_STATUS_ID = 'SET_TICKET_FILTER_BY_STATUS_ID';
 export const getDefaultEmailTemplate = (token, param) => ({
   type: GET_DEFAULT_EMAIL_TEMPLATE,
   token,
@@ -105,4 +106,14 @@ export const getTicketStatusHistory = (token, ticketId, param) => ({
   token,
   ticketId,
   param,
+});
+
+export const setStatusFilterById = (statusId) => ({
+  type: SET_TICKET_FILTER_BY_STATUS_ID,
+  statusId,
+});
+
+export const resetStatusId = () => ({
+  type: SET_TICKET_FILTER_BY_STATUS_ID,
+  statusId: '',
 });

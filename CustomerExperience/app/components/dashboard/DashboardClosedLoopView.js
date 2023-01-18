@@ -17,6 +17,8 @@ import DeviceInfo from 'react-native-device-info';
 import {VictoryPie} from 'victory-native';
 import {StackActions} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
+import {setStatusFilterById} from '../../redux/actions/closedloop.actions';
+import {useDispatch} from 'react-redux';
 
 export const DashboardClosedLoopView = (props) => {
   return <TicketTabStack {...props} />;
@@ -182,6 +184,7 @@ const RenderScene = (props) => {
   };
 
   let RenderViewTicketsContainer = () => {
+    const dispatch = useDispatch();
     return (
       <View style={styles.viewTicketsContainer}>
         <TouchableWithoutFeedback
@@ -193,10 +196,14 @@ const RenderScene = (props) => {
             //   },
             // );
             // props.navigation.dispatch(pushAction);
-            props.navigation.navigate('ClosedLoop', {
-              screen: 'Closed Loop',
-              params: {index: JSON.stringify(props.route.params.index - 1)},
-            });
+            // props.navigation.navigate('ClosedLoop', {
+            //   screen: 'Closed Loop',
+            //   params: {index: JSON.stringify(props.route.params.index - 1)},
+            // });
+            dispatch(
+              setStatusFilterById(JSON.stringify(props.route.params.index - 1)),
+            );
+            props.navigation.navigate('ClosedLoop');
           }}>
           <Text style={styles.viewTicketsText}>
             {translate('dashboard.view_tickets')}

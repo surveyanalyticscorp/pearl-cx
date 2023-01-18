@@ -17,6 +17,7 @@ import {
   IS_TICKET_LOADING,
   IS_SEGMENT_LOADING,
 } from '../actions';
+import {SET_TICKET_FILTER_BY_STATUS_ID} from '../actions/closedloop.actions';
 import {
   AUTHENTICATE_PANEL_RESPONSE,
   LOGIN_RESPONSE,
@@ -36,6 +37,7 @@ const initialState = {
   isTicketLoading: false,
   isSegmentLoading: false,
   isPagination: false,
+  statusId: '',
   wantToReloadDashboard: true,
   isError: false,
   baseUrl: '',
@@ -142,6 +144,13 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         isPagination: action.payload.isPagination,
+      };
+    }
+
+    case SET_TICKET_FILTER_BY_STATUS_ID: {
+      return {
+        ...state,
+        statusId: action.statusId,
       };
     }
     case WANT_TO_RELOAD_DASHBOARD: {
