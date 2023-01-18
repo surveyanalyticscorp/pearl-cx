@@ -268,7 +268,7 @@ export default function SendEmail(props) {
                   actions.setUnderline,
                   actions.insertBulletsList,
                   actions.insertOrderedList,
-                  actions.insertLink,
+                  // actions.insertLink,
                   actions.setStrikethrough,
                   // actions.insertImage,
                   // actions.keyboard,

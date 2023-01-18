@@ -191,7 +191,9 @@ export default function TicketOverview(props) {
   // const [shadow, setShadow] = useState(false);
 
   const onTakeActionHandler = () => {
-    actionBottomSheet.current.snapTo(0);
+    if (ticketDetails?.panelMember?.email) {
+      actionBottomSheet.current.snapTo(0);
+    }
   };
   const handleStatusSelection = () => {
     setCurrentBS(bottomSheetEnum.status);
@@ -596,11 +598,14 @@ export default function TicketOverview(props) {
   };
 
   const takeActionButton = () => {
+    const buttonColor = ticketDetails.panelMember.email
+      ? Colors.accentLight
+      : Colors.filterIconColor;
     return (
       <View style={styles.takeActionContainer}>
         <QPButton
           testID="SignInButton"
-          buttonColor={Colors.accentLight}
+          buttonColor={buttonColor}
           style={styles.takeActionButton}
           onPress={onTakeActionHandler}
           buttonText={'Take Action'}
@@ -1240,6 +1245,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.accentLight,
     marginBottom: MarginConstants.tab2,
   },
+
   takeActionText: {
     color: Colors.white,
     fontFamily: FontFamily.regular,
