@@ -49,6 +49,8 @@ export default class WebServiceHandler {
           if (response.statusCode === 200 || response.status === SUCCESS) {
             success(response);
           } else {
+            console.log('ERROR', JSON.stringify(response));
+
             failed(response);
           }
         })
@@ -82,10 +84,14 @@ export default class WebServiceHandler {
           if (response.statusCode === 200 || response.status === SUCCESS) {
             success(response);
           } else {
+            console.log('ERROR', JSON.stringify(response));
+
             failed(response);
           }
         })
         .catch(function (err) {
+          // console.log('ERROR', JSON.stringify(err));
+
           failed(err);
         });
     });
@@ -112,11 +118,13 @@ export default class WebServiceHandler {
           if (response.statusCode === 200 || response.status === SUCCESS) {
             success(response);
           } else {
+            console.log('ERROR', JSON.stringify(response));
+
             failed(response);
           }
         })
         .catch(function (err) {
-          failed(err);
+          // console.log('ERROR', JSON.stringify(err));
         });
     });
   }

@@ -207,14 +207,7 @@ export default function SendEmail(props) {
           <View style={styles.rowContainerCenterAlign}>
             <Text style={styles.titleText}>{'To:'}</Text>
 
-            <TextInput
-              placeholder="Send to email"
-              style={styles.textInputEmail}
-              defaultValue={body.toEmail}
-              onChangeText={(text) => {
-                setBody((state) => ({...state, toEmail: text}));
-              }}
-            />
+            <Text style={styles.textInputEmail}>{body.toEmail}</Text>
           </View>
           <View style={styles.devider} />
         </View>
@@ -223,14 +216,7 @@ export default function SendEmail(props) {
           <View style={styles.rowContainerCenterAlign}>
             <Text style={styles.titleText}>{'From:'}</Text>
 
-            <TextInput
-              defaultValue={body.fromEmail ?? ''}
-              onChangeText={(text) => {
-                setBody((state) => ({...state, fromEmail: text}));
-              }}
-              placeholder="Send from email"
-              style={styles.textInputEmail}
-            />
+            <Text style={styles.textInputEmail}>{body.fromEmail}</Text>
           </View>
           <View style={styles.devider} />
         </View>
@@ -317,7 +303,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopEndRadius: 5,
     borderTopStartRadius: 5,
-    marginTop: MarginConstants.halfTab,
+    marginTop: MarginConstants.tab2,
+    paddingTop: PaddingConstants.tab1,
   },
 
   innerContainer: {

@@ -154,8 +154,9 @@ function* doLogoutAction(action) {
     );
     yield put({type: LOGOUT_RESPONSE, response: response});
   } catch (error) {
-    showErrorFlashMessage(error.message);
-    yield put({type: API_ERROR, error: error.message});
+    // showErrorFlashMessage(error.message);
+    // yield put({type: API_ERROR, error: error.message});
+    yield put({type: LOGOUT_RESPONSE, response: ''});
   }
 }
 

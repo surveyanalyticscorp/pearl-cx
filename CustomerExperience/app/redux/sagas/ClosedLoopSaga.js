@@ -102,10 +102,12 @@ function* fetchFirstTimeClosedLoopSegmentDetails(action) {
       {'Auth-Token': action.token},
       action.param,
     );
+
     yield put({
       type: FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
       response: json,
     });
+
     yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
     yield put({type: IS_LOADING, payload: {isLoading: false}});

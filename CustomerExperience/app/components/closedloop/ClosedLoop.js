@@ -42,7 +42,7 @@ import StringUtils from '../../Utils/StringUtils';
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
   const itemPerPage = 20;
-  const [statusId, setStatusId] = useState(props.route.params.index ?? '');
+  // const [statusId, setStatusId] = useState(props.route.params.index ?? '');
 
   const [pageNumber, setPageNumber] = useState(1);
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
@@ -51,7 +51,7 @@ export default function ClosedLoop(props) {
   const {authToken, isLoading, range} = useSelector((state) => state.global);
   const [filterState, setFilterState] = useState({
     feedbackApiKey: feedbackApiKey,
-    status: statusId,
+    status: '',
     priority: '',
     assignToId: '',
     pageNumber: pageNumber,

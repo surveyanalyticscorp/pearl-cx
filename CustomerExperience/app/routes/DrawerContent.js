@@ -10,7 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import MyIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+// import MyIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome5';
 import {Colors} from '../styles/color.constants';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -56,13 +56,13 @@ const DrawerContent = (props) => {
 
   useEffect(() => {
     if (!isObjectEmpty(props.logoutResponse)) {
-      if (props.logoutResponse.statusCode === 200) {
-        AsyncStorage.clear().then(() => {
-          props.clearUserData();
-          setLogoutAlert(false);
-          setLoading(false);
-        });
-      }
+      // if (props.logoutResponse.statusCode === 200) {
+      AsyncStorage.clear().then(() => {
+        props.clearUserData();
+        setLogoutAlert(false);
+        setLoading(false);
+      });
+      // }
     }
   }, [props.logoutResponse]);
 
