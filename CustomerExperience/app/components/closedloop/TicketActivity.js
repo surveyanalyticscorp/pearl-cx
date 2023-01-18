@@ -26,8 +26,13 @@ import {
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {FontFamily} from '../../styles/font.constants';
+import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useSelector} from 'react-redux';
+import moment from 'moment';
+import {
+  FullMonthDateYearFormat,
+  HalfMonthDateYearFormat,
+} from '../../Utils/AppConstants';
 // import {Sizes} from '../../styles/Size.constant';
 // import moment from 'moment';
 // import {translate} from '../../Utils/MultilinguaUtils';
@@ -39,6 +44,7 @@ import {useSelector} from 'react-redux';
 // import {color} from 'react-native-reanimated';
 
 export default function TicketActivity(props) {
+  const {userID} = useSelector((state) => state.global.userInfo);
   const [ticketActivityList, setTicketActivityList] = useState(
     useSelector((state) => state.dashboard.ticketActivity),
   );
@@ -86,27 +92,35 @@ export default function TicketActivity(props) {
   };
 
   const getRenderItem = ({item}) => {
-    // return userId === item.userId ? renderMyItem({item}) : renderItem({item});
+    return userID === item.userId ? renderMyItem({item}) : renderItem({item});
 
-    return renderItem({item});
+    // return renderItem({item});
   };
 
   const renderItem = ({item}) => {
+    let date = moment(item.createdAt).format(HalfMonthDateYearFormat);
     return (
       <View style={styles.renderItemStyle}>
-        <Text style={styles.userName}> </Text>
+        <Text style={styles.userName}>{item.userName ?? 'USER N/A'}</Text>
         <Text style={styles.activity}>{item.activityText}</Text>
-        <Text style={styles.date}> </Text>
+        <Text style={styles.date}>{date}</Text>
       </View>
     );
   };
 
   const renderMyItem = ({item}) => {
+    let date = moment(item.createdAt).format(HalfMonthDateYearFormat);
+
     return (
-      <View style={styles.myRenderItemStyle}>
-        <Text style={styles.userName}>{'You'}</Text>
-        <Text style={styles.activity}> {item.activity} </Text>
-        <Text style={styles.date}> {item.date}</Text>
+      <View style={styles.myRenderItemContainerStyle}>
+        <View style={styles.myRenderItemStyle}>
+          <Text style={styles.userName}>{'You'}</Text>
+
+          <Text style={styles.date}> {date}</Text>
+        </View>
+        <View style={{marginHorizontal: MarginConstants.tab1}}>
+          <Text style={styles.activity}> {item.activityText} </Text>
+        </View>
       </View>
     );
   };
@@ -156,22 +170,37 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.halfTab,
   },
   myRenderItemStyle: {
-    flex: 1,
     flexDirection: 'row',
     margin: MarginConstants.tab1,
     justifyContent: 'space-between',
     backgroundColor: Colors.white,
     padding: PaddingConstants.halfTab,
   },
+
+  myRenderItemContainerStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: Colors.white,
+    padding: PaddingConstants.halfTab,
+    margin: MarginConstants.tab1,
+    borderRadius: 5,
+  },
   userName: {
-    color: Colors.filterIconColor,
-    fontWeight: 'bold',
+    color: Colors.accent,
+    fontWeight: FontWeight.bold,
+    fontSize: TextSizes.semiSecondary,
     marginHorizontal: MarginConstants.halfTab,
   },
-  activity: {color: Colors.filterIconColor, fontWeight: 'normal', flex: 1},
+  activity: {
+    color: Colors.filterIconColor,
+    fontSize: TextSizes.semiSecondary,
+    fontWeight: FontWeight._400,
+    flex: 1,
+  },
   date: {
     color: Colors.filterIconColor,
-    fontWeight: 'normal',
-    marginHorizontal: MarginConstants.halfTab,
+    fontWeight: FontWeight._400,
+    fontSize: TextSizes.semiSecondary,
+    marginStart: MarginConstants.halfTab,
   },
 });

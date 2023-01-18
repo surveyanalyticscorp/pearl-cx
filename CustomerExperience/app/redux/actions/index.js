@@ -1,4 +1,7 @@
 export const IS_LOADING = 'IS_LOADING';
+export const IS_RESPONSE_LOADING = 'IS_RESPONSE_LOADING';
+export const IS_TICKET_LOADING = 'IS_TICKET_LOADING';
+export const IS_SEGMENT_LOADING = 'IS_SEGMENT_LOADING';
 export const IS_LOGIN = 'IS_LOGIN';
 export const IS_PAGINATION = 'IS_PAGINATION';
 export const FILL_USER_INFO = 'FILL_USER_INFO';

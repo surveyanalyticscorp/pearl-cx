@@ -1,4 +1,9 @@
-import {API_ERROR, IS_LOADING, WANT_TO_RELOAD_DASHBOARD} from '../actions';
+import {
+  API_ERROR,
+  IS_LOADING,
+  IS_TICKET_LOADING,
+  WANT_TO_RELOAD_DASHBOARD,
+} from '../actions';
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {
@@ -258,6 +263,7 @@ export function addClosedLoopTicket(
 function* fetchClosedLoopTicketList(action) {
   try {
     // yield put({type: IS_LOADING, payload: {isLoading: true}});
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
     const json = yield WebServiceHandler.get(
       CLF_GET_TICKET_LIST +
@@ -272,10 +278,10 @@ function* fetchClosedLoopTicketList(action) {
       type: CLOSED_LOOP_TICKET_LIST_RECEIVED,
       response: json,
     });
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
     yield put({
       type: API_ERROR,
       error: error,

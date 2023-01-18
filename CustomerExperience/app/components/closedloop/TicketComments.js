@@ -43,10 +43,15 @@ export default function TicketComments(props) {
   const [ticketComments, setTicketComments] = useState(
     useSelector((state) => state.dashboard.ticketComments),
   );
+  const {emailAddress, firstName, lastName} = useSelector(
+    (state) => state.global.userInfo,
+  );
   const ticketId = useSelector((state) => state.dashboard.ticket.id);
   const dispach = useDispatch();
   const [commentState, setCommentState] = useState({
-    commentBy: 'Mehedi',
+    commentBy: `${firstName} ${lastName}`,
+    userName: `${firstName} ${lastName}`,
+    userEmailAddress: `${emailAddress}`,
     text: '',
     ticket: JSON.stringify(ticketId),
     parentId: 0,

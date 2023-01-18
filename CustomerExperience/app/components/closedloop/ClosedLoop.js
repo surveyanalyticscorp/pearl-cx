@@ -48,7 +48,9 @@ export default function ClosedLoop(props) {
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
   // const [isLoading, setLoading] = useState(false);
   const [isPagination, setpagination] = useState(false);
-  const {authToken, isLoading, range} = useSelector((state) => state.global);
+  const {authToken, isTicketLoading, range} = useSelector(
+    (state) => state.global,
+  );
   const [filterState, setFilterState] = useState({
     feedbackApiKey: feedbackApiKey,
     status: '',
@@ -187,7 +189,7 @@ export default function ClosedLoop(props) {
   const getTicketList = (filterState_, currentSegmentId) => {
     // setRefreshing(true);
 
-    dispatch(showLoading(true));
+    // dispatch(showLoading(true));
     dispatch(
       getClosedLoopTicketList(
         authToken,
@@ -238,7 +240,7 @@ export default function ClosedLoop(props) {
         ListFooterComponent={isPagination ? <QPSpinner /> : <View />}
         extraData={[ticketList]}
         ListEmptyComponent={
-          !isLoading && !isPagination ? (
+          !isTicketLoading && !isPagination ? (
             <NoItemsFound>No tickets found</NoItemsFound>
           ) : (
             <View />
@@ -435,7 +437,11 @@ export default function ClosedLoop(props) {
     );
   };
 
-  return isLoading && !isPagination ? <RenderSpinner /> : RenderClosedLoop();
+  return isTicketLoading && !isPagination ? (
+    <RenderSpinner />
+  ) : (
+    RenderClosedLoop()
+  );
 }
 
 const styles = StyleSheet.create({

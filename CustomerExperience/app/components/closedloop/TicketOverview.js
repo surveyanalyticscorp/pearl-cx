@@ -88,6 +88,9 @@ export default function TicketOverview(props) {
   const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
   const isLoading = useSelector((state) => state.global.isLoading);
   const ticketDetails = useSelector((state) => state.dashboard.ticket);
+  const {emailAddress, firstName, lastName} = useSelector(
+    (state) => state.global.userInfo,
+  );
   // const [selectedSegment, setSelectedSegment] = useState();
   const [statusIndex, setStatusIndex] = useState(
     getStatusIndexById(ticketDetails.status ?? -1),
@@ -150,7 +153,12 @@ export default function TicketOverview(props) {
   };
 
   const updateTicket = (params) => {
-    let body = {...params, userId: ticketDetails.subscriberId};
+    let body = {
+      ...params,
+      userName: `${firstName} ${lastName}`,
+      userEmailAddress: `${emailAddress}`,
+      userId: ticketDetails.subscriberId,
+    };
     // console.log('UPDATE_TICKET', body);
 
     dispatch(updateClfTicket(authToken, body, ticketDetails.id));
@@ -447,11 +455,6 @@ export default function TicketOverview(props) {
     statusBottomSheet.current.snapTo(statusBottomSheetSnapPoints.length - 1);
   };
 
-  // const userOptions = [
-  //   {value: 'Manager 1', url: 'https://picsum.photos/id/237/200'},
-  //   {value: 'Manager 2', url: 'https://picsum.photos/id/327/200'},
-  //   {value: 'Manager 3', url: 'https://picsum.photos/id/247/200'},
-  // ];
   const departmentOptions = ['Sales', 'Client Services'];
 
   let sampleText =

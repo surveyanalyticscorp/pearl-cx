@@ -20,7 +20,7 @@ export default function TicketDetails(props) {
   const ticketItem = props.route.params;
   const dispatch = useDispatch();
 
-  console.log('Ticket ID', ticketItem);
+  // console.log('Ticket ID', ticketItem);
   const TicketTabs = createMaterialTopTabNavigator();
 
   useEffect(() => {

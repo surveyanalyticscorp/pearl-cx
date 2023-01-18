@@ -13,6 +13,9 @@ import {
   IS_ERROR,
   SET_LANGUAGE_INFO,
   IS_PAGINATION,
+  IS_RESPONSE_LOADING,
+  IS_TICKET_LOADING,
+  IS_SEGMENT_LOADING,
 } from '../actions';
 import {
   AUTHENTICATE_PANEL_RESPONSE,
@@ -29,6 +32,9 @@ const initialState = {
     endDate: '',
   },
   isLoading: false,
+  isResponseLoading: false,
+  isTicketLoading: false,
+  isSegmentLoading: false,
   isPagination: false,
   wantToReloadDashboard: true,
   isError: false,
@@ -108,6 +114,27 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: action.payload.isLoading,
+      };
+    }
+
+    case IS_RESPONSE_LOADING: {
+      return {
+        ...state,
+        isResponseLoading: action.payload.isLoading,
+      };
+    }
+
+    case IS_TICKET_LOADING: {
+      return {
+        ...state,
+        isTicketLoading: action.payload.isLoading,
+      };
+    }
+
+    case IS_SEGMENT_LOADING: {
+      return {
+        ...state,
+        isSegmentLoading: action.payload.isLoading,
       };
     }
 

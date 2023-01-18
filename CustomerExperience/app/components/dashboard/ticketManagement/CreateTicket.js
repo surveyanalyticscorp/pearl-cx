@@ -63,6 +63,7 @@ import {
 } from '../../../Utils/Utility';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
+import StringUtils from '../../../Utils/StringUtils';
 
 export default function CreateTicket(props) {
   const responseId = props.route?.params?.responseId ?? null;
@@ -74,7 +75,9 @@ export default function CreateTicket(props) {
   const {authToken} = useSelector((state) => state.global);
   const {owners} = useSelector((state) => state.dashboard.ownerDetails);
   const [headerTitle, setHeaderTitle] = useState('Create New Ticket');
-  const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
+  const {feedbackApiKey, emailAddress, firstName, lastName} = useSelector(
+    (state) => state.global.userInfo,
+  );
   // const [priority, setPriority] = useState('Select');
   const [priorityIndex, setPriorityIndex] = useState(-1);
   const [segment, setSegment] = useState('Select Segment');
@@ -120,6 +123,8 @@ export default function CreateTicket(props) {
   const [validation, setValidation] = useState('');
 
   const [ticketState, setTicketState] = useState({
+    userName: `${firstName} ${lastName}`,
+    userEmailAddress: `${emailAddress}`,
     subscriberId: global.subscriberId,
     responseId: responseId,
     surveyId: surveyId,
