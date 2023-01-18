@@ -54,7 +54,7 @@ export const CX_WELCOME_SCREEN_DATA =
   '/a/nativehtml/cx.CXWelcomeScreenDataCount';
 
 // CLF 3.0 APIs
-export const CLF_BASE_URL = 'https://clf-backend.questionpro.com/api/';
+export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
 // export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
 
 // export const FEEDBACK_API_KEY = 'e8caf096-4f19-4b34-a7cd-4bcaa8197c1d';

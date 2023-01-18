@@ -25,7 +25,7 @@ export default function TicketDetails(props) {
 
   useEffect(() => {
     props.navigation.setOptions({
-      title: `Ticket ${ticketItem.id}`,
+      title: `Ticket #${ticketItem.id}`,
     });
   }, [props.navigation]);
 
