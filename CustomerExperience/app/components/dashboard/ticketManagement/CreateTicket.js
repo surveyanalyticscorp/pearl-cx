@@ -60,6 +60,7 @@ import QPCalendar from '../../../widgets/QPCalendar';
 import {
   isStringNullOrEmpty,
   showErrorFlashMessage,
+  validateEmail,
 } from '../../../Utils/Utility';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
@@ -273,6 +274,10 @@ export default function CreateTicket(props) {
     }
     if (!ticketState.emailAddress) {
       setValidation('Enter an email');
+      return false;
+    }
+    if (ticketState.emailAddress && !validateEmail(ticketState.emailAddress)) {
+      setValidation('Enter an valid email');
       return false;
     }
     if (ticketState.priority === null || ticketState.priority === undefined) {
