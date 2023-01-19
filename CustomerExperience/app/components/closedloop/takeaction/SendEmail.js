@@ -26,6 +26,8 @@ import {
   getEmailTemplates,
   sendEmail,
 } from '../../../redux/actions/closedloop.actions';
+import StringUtils from '../../../Utils/StringUtils';
+import {showErrorFlashMessage} from '../../../Utils/Utility';
 export default function SendEmail(props) {
   const [body, setBody] = useState({
     subject: '',
@@ -176,11 +178,23 @@ export default function SendEmail(props) {
       emailAddress: userEmail,
     };
 
-    dispatch(sendEmail(authToken, ticketId, body, queryParam));
+    // console.log('EMAIL_BODY', JSON.stringify(body));
+    // console.log('EMAIL_QUERY', JSON.stringify(queryParam));
+    if (StringUtils.isEmpty(body.subject)) {
+      showErrorFlashMessage('Empty email subject');
+      return;
+    }
+    if (StringUtils.isEmpty(body.emailBody)) {
+      showErrorFlashMessage('Empty email body');
+      return;
+    } else {
+      dispatch(sendEmail(authToken, ticketId, body, queryParam));
+      props.navigation.goBack();
+    }
+
     // console.log('EMAIL_PAYLOAD', JSON.stringify(body));
     // console.log('EMAIL_PAYLOAD', JSON.stringify(ticketId));
     // console.log('EMAIL_PAYLOAD', JSON.stringify(queryParam));
-    props.navigation.goBack();
   };
 
   const bs = React.useRef(null);
