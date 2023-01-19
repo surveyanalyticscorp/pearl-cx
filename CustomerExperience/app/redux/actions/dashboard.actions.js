@@ -172,11 +172,12 @@ export const createClfTicket = (token, param, feedbackApiKey) => ({
   feedbackApiKey,
 });
 
-export const updateClfTicket = (token, param, ticketId) => ({
+export const updateClfTicket = (token, param, ticketId, feedbackApiKey) => ({
   type: UPDATE_CLF_TICKET,
   token,
   param,
   ticketId,
+  feedbackApiKey,
 });
 
 export const getWelcomeScreenDataCount = (token, param) => ({

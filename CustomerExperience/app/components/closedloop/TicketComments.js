@@ -40,24 +40,23 @@ import {postAddTicketComment} from '../../redux/actions/dashboard.actions';
 
 export default function TicketComments(props) {
   const {authToken} = useSelector((state) => state.global);
-  const [ticketComments, setTicketComments] = useState(
-    useSelector((state) => state.dashboard.ticketComments),
-  );
-  const {emailAddress, firstName, lastName} = useSelector(
+  const ticketComments = useSelector((state) => state.dashboard.ticketComments);
+  const {emailAddress, firstName, lastName, userID} = useSelector(
     (state) => state.global.userInfo,
   );
   const ticketId = useSelector((state) => state.dashboard.ticket.id);
   const dispach = useDispatch();
-  const [commentState, setCommentState] = useState({
+
+  const commentState = {
     commentBy: `${firstName} ${lastName}`,
     userName: `${firstName} ${lastName}`,
     userEmailAddress: `${emailAddress}`,
-    text: '',
-    ticket: JSON.stringify(ticketId),
+    userId: userID,
+    ticketId: ticketId,
     parentId: 0,
     subscriberId: global.subscriberId,
-  });
-  let commentText = '';
+  };
+  const [commentText, setCommentText] = useState('');
 
   const sampleData = [
     // {id: 1, title: 'Astro'},
@@ -68,7 +67,7 @@ export default function TicketComments(props) {
   //   setTicketComments();
   // }, []);
 
-  console.log('TICKET COMMENTS on UI', JSON.stringify(ticketComments));
+  // console.log('TICKET COMMENTS on UI', JSON.stringify(ticketComments));
   const ShowFlatlistOrNoCommentText = () => {
     return ticketComments.length ? (
       <ShowFlatList />
@@ -95,29 +94,33 @@ export default function TicketComments(props) {
   );
 
   const onChangeCommentHandler = (text) => {
-    console.log(text);
-    commentText = text;
-    // setCommentState((state) => ({...state, text: text}));
+    // console.log(text);
+    // commentText = text;
+    setCommentText(text);
   };
 
   const handleOnSubmit = () => {
-    let state = {
-      commentBy: 'Mehedi',
-      text: commentText,
-      ticketId: ticketId,
-      parentId: 0,
-      subscriberId: global.subscriberId,
-    };
-    dispach(postAddTicketComment(authToken, state, ticketId));
+    console.log(
+      JSON.stringify({COMMENT_STATE: commentState, text: commentText}),
+    );
+    // setCommentState((state) => ({...state, text: commentText}));
+    dispach(
+      postAddTicketComment(
+        authToken,
+        {...commentState, text: commentText},
+        ticketId,
+      ),
+    );
 
-    setCommentState((state) => ({...state, text: ''}));
+    setCommentText('');
   };
-  const CommentBox = () => {
+  const commentBox = () => {
     return (
       <KeyboardAvoidingView style={styles.commentBox}>
         <MaterialIconView iconName="chat-bubble" />
 
         <TextInput
+          value={commentText}
           style={styles.container}
           onChangeText={onChangeCommentHandler}
           placeholder="Comment"
@@ -163,10 +166,10 @@ export default function TicketComments(props) {
     );
   };
 
-  const CommentFooter = () => {
+  const commentFooter = () => {
     return (
       <View style={styles.commentFooter}>
-        <CommentBox style={styles.commentBox} />
+        {commentBox()}
         <SendButton />
         {/* <ContactButton />
         <AttachmentButton />
@@ -178,7 +181,7 @@ export default function TicketComments(props) {
   return (
     <View style={styles.container}>
       <ShowFlatlistOrNoCommentText />
-      <CommentFooter />
+      {commentFooter()}
     </View>
   );
 }

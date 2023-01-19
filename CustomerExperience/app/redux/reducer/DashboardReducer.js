@@ -157,8 +157,8 @@ const dashboardReducer = (state = initialState, action) => {
     }
 
     case CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED: {
-      // console.log('TICKETCOMMENTS', action.response.data);
-      return {...state, ticketComments: action.response.data};
+      console.log('TICKETCOMMENTS', action.ticketComments);
+      return {...state, ticketComments: action.ticketComments};
     }
 
     case CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED: {
@@ -186,7 +186,9 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         apiCallStatus: action.response,
-        ticket: action.response.data,
+        ticket: action.ticketData,
+        ticketComments: action.ticketComments,
+        ticketActivity: action.ticketActivity,
       };
     }
 

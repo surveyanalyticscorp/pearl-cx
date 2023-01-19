@@ -15,7 +15,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getClosedLoopTicketItem} from '../../redux/actions/dashboard.actions';
 
 export default function TicketDetails(props) {
-  const {authToken, isLoading} = useSelector((state) => state.global);
+  const {authToken, isTicketLoading} = useSelector((state) => state.global);
   const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
   const ticketItem = props.route.params;
   const dispatch = useDispatch();
@@ -70,5 +70,5 @@ export default function TicketDetails(props) {
     );
   };
 
-  return isLoading ? <RenderSpinner /> : <CLFTicketTabStack />;
+  return isTicketLoading ? <RenderSpinner /> : <CLFTicketTabStack />;
 }

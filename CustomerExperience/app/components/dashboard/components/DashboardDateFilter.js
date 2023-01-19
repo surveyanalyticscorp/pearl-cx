@@ -39,6 +39,13 @@ export default function DashboardDateFilter(props) {
   let [customDate, setCustomDate] = useState('');
   let [validationError, setValidationError] = useState('');
 
+  const LAST_30_DAYS = 1;
+  const THIS_MONTH = 2;
+  const LAST_MONTH = 3;
+  const LAST_3_MONTHS = 4;
+  const LAST_6_MONTHS = 5;
+  const CUSTOM_DATE_RANGE = 6;
+
   let saveRange = () => {
     let tempEnd = moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT);
     let tempStart = moment(selectedRange.startDate, DMYFORMAT).format(
@@ -60,15 +67,15 @@ export default function DashboardDateFilter(props) {
 
   let getFilterText = (type) => {
     switch (type) {
-      case 1:
+      case LAST_30_DAYS:
         return translate('date_filter.last_30_days');
-      case 2:
+      case THIS_MONTH:
         return translate('date_filter.this_month');
-      case 3:
+      case LAST_MONTH:
         return translate('date_filter.last_month');
-      case 4:
+      case LAST_3_MONTHS:
         return translate('date_filter.last_3_months');
-      case 5:
+      case LAST_6_MONTHS:
         return translate('date_filter.last_6_months');
     }
   };
@@ -78,18 +85,18 @@ export default function DashboardDateFilter(props) {
     let month = today.getMonth() + 1;
     let tempEndDate = today.getDate() + '/' + month + '/' + today.getFullYear();
     switch (type) {
-      case 1:
+      case LAST_30_DAYS:
         /** Last 30 days*/
         let tempStartDate = moment(tempEndDate, DMYFORMAT)
           .subtract(30, 'days')
           .format(DMYFORMAT);
         return {startDate: tempStartDate, endDate: tempEndDate};
-      case 2:
+      case THIS_MONTH:
         /** This month*/
         let firstDate = 1 + '/' + month + '/' + today.getFullYear();
         tempStartDate = moment(firstDate, DMYFORMAT).format(DMYFORMAT);
         return {startDate: tempStartDate, endDate: tempEndDate};
-      case 3:
+      case LAST_MONTH:
         /** Last month*/
         firstDate = 1 + '/' + today.getMonth() + '/' + today.getFullYear();
         tempStartDate = moment(firstDate, DMYFORMAT).format(DMYFORMAT);
@@ -99,13 +106,13 @@ export default function DashboardDateFilter(props) {
           lastDate.getDate() + '/' + month + '/' + lastDate.getFullYear();
         tempEndDate = moment(tempEndDate, DMYFORMAT).format(DMYFORMAT);
         return {startDate: tempStartDate, endDate: tempEndDate};
-      case 4:
+      case LAST_3_MONTHS:
         /** Last 3 months*/
         tempStartDate = moment(tempEndDate, DMYFORMAT)
           .subtract(3, 'months')
           .format(DMYFORMAT);
         return {startDate: tempStartDate, endDate: tempEndDate};
-      case 5:
+      case LAST_6_MONTHS:
         /** Last 6 months */
         tempStartDate = moment(tempEndDate, DMYFORMAT)
           .subtract(6, 'months')
@@ -118,15 +125,15 @@ export default function DashboardDateFilter(props) {
 
   let getRange = (type) => {
     switch (type) {
-      case 1:
-      case 4:
-      case 5:
+      case LAST_30_DAYS:
+      case LAST_3_MONTHS:
+      case LAST_6_MONTHS:
         let range = getSelectedRange(type);
         return range.startDate + ' - ' + range.endDate;
-      case 2:
+      case THIS_MONTH:
         let date1 = new Date();
         return date1.toLocaleString('default', {month: 'long'});
-      case 3:
+      case LAST_MONTH:
         let date2 = new Date();
         let date = new Date(
           date2.getFullYear(),
@@ -156,7 +163,7 @@ export default function DashboardDateFilter(props) {
           <View style={styles.monthRow}>
             <View>
               <Text style={styles.dateTitle}>{title}</Text>
-              <Text style={styles.rangeTitle}>{range}</Text>
+              <Text style={styles.rangeTitle}>{''}</Text>
             </View>
             {selectedType === type && (
               <View style={styles.checkIcon}>
@@ -165,7 +172,7 @@ export default function DashboardDateFilter(props) {
             )}
           </View>
         </TouchableWithoutFeedback>
-        {type !== 5 && <View style={styles.separator} />}
+        {type !== LAST_6_MONTHS && <View style={styles.separator} />}
       </View>
     );
   };
@@ -174,11 +181,11 @@ export default function DashboardDateFilter(props) {
     return (
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.container}>
-          {renderMonthRow(1)}
-          {renderMonthRow(2)}
-          {renderMonthRow(3)}
-          {renderMonthRow(4)}
-          {renderMonthRow(5)}
+          {renderMonthRow(LAST_30_DAYS)}
+          {renderMonthRow(THIS_MONTH)}
+          {renderMonthRow(LAST_MONTH)}
+          {renderMonthRow(LAST_3_MONTHS)}
+          {renderMonthRow(LAST_6_MONTHS)}
         </View>
       </ScrollView>
     );
@@ -205,11 +212,15 @@ export default function DashboardDateFilter(props) {
           if (startDateSelected) {
             setSelectedRange({
               ...selectedRange,
-              type: 6,
+              type: CUSTOM_DATE_RANGE,
               startDate: customDate,
             });
           } else {
-            setSelectedRange({...selectedRange, type: 6, endDate: customDate});
+            setSelectedRange({
+              ...selectedRange,
+              type: CUSTOM_DATE_RANGE,
+              endDate: customDate,
+            });
           }
           setShowCalendar(false);
         }}>

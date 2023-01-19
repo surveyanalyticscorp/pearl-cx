@@ -294,7 +294,8 @@ export function* watchGetClosedLoopTicketList() {
 
 function* fetchClosedLoopTicketItem(action) {
   try {
-    yield put({type: IS_LOADING, payload: {isLoading: true}});
+    // yield put({type: IS_LOADING, payload: {isLoading: true}});
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
     const ticketItem = yield WebServiceHandler.get(
       CLF_GET_TICKET_DETAILS +
@@ -322,10 +323,13 @@ function* fetchClosedLoopTicketItem(action) {
       ticketComments: comments.data,
       ticketActivity: ticketActivity.data,
     });
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
+
     yield put({
       type: API_ERROR,
       error: error,
@@ -396,31 +400,62 @@ export function* watchGetClosedLoopTicketActivity() {
 function* postTicketComment(action) {
   try {
     console.log('TICKET_COMENTS', JSON.stringify(action));
+    // yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
     const json = yield WebServiceHandler.postNew(
       CLF_GET_TICKET_DETAILS + COMMNETS,
       {'Auth-Token': action.token},
       action.param,
     );
-
     yield put({
       type: ADD_CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED,
       response: json,
     });
 
-    const json_ = yield WebServiceHandler.get(
+    const comments = yield WebServiceHandler.get(
       CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS,
       {'Auth-Token': action.token},
       action.param,
     );
+
     yield put({
       type: CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED,
-      response: json_,
+      ticketComments: comments.data,
     });
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+
+    const ticketItem = yield WebServiceHandler.get(
+      CLF_GET_TICKET_DETAILS +
+        action.ticketId +
+        FEEDBACK_API_KEY_ENDPOINT +
+        action.feedbackApiKey,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+
+    const ticketActivity = yield WebServiceHandler.get(
+      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: UPDATE_CLF_TICKET_RECIEVED,
+      ticketData: ticketItem.data,
+      ticketComments: comments.data,
+      ticketActivity: ticketActivity.data,
+    });
+
+    // yield put({
+    //   type: ADD_CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED,
+    //   response: json,
+    // });
+
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
+
     yield put({
       type: API_ERROR,
       error: error,
@@ -479,20 +514,41 @@ export function* watchPostCreateTicket() {
 
 function* patchUpdateClfTicket(action) {
   try {
-    const json = yield WebServiceHandler.patch(
-      CLF_GET_TICKET_DETAILS + action.ticketId,
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
+
+    const ticketItem = yield WebServiceHandler.patch(
+      CLF_GET_TICKET_DETAILS +
+        action.ticketId +
+        FEEDBACK_API_KEY_ENDPOINT +
+        action.feedbackApiKey,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    const comments = yield WebServiceHandler.get(
+      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+
+    const ticketActivity = yield WebServiceHandler.get(
+      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
       {'Auth-Token': action.token},
       action.param,
     );
     yield put({
       type: UPDATE_CLF_TICKET_RECIEVED,
-      response: json,
+      ticketData: ticketItem.data,
+      ticketComments: comments.data,
+      ticketActivity: ticketActivity.data,
     });
 
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
+
     yield put({
       type: API_ERROR,
       error: error,

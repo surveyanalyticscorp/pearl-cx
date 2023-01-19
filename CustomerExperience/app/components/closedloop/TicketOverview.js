@@ -88,9 +88,13 @@ export default function TicketOverview(props) {
   const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
   const isLoading = useSelector((state) => state.global.isLoading);
   const ticketDetails = useSelector((state) => state.dashboard.ticket);
-  const {emailAddress, firstName, lastName} = useSelector(
-    (state) => state.global.userInfo,
-  );
+  const {
+    emailAddress,
+    firstName,
+    lastName,
+    userID,
+    feedbackApiKey,
+  } = useSelector((state) => state.global.userInfo);
   // const [selectedSegment, setSelectedSegment] = useState();
   const [statusIndex, setStatusIndex] = useState(
     getStatusIndexById(ticketDetails.status ?? -1),
@@ -157,11 +161,13 @@ export default function TicketOverview(props) {
       ...params,
       userName: `${firstName} ${lastName}`,
       userEmailAddress: `${emailAddress}`,
-      userId: ticketDetails.subscriberId,
+      userId: `${userID}`,
     };
     // console.log('UPDATE_TICKET', body);
 
-    dispatch(updateClfTicket(authToken, body, ticketDetails.id));
+    dispatch(
+      updateClfTicket(authToken, body, ticketDetails.id, feedbackApiKey),
+    );
   };
 
   // useEffect(() => {
