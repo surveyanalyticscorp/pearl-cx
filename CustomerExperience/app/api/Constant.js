@@ -82,6 +82,16 @@ export const CLF_LATEST_COMMENT_BY_TICKET_ID_POSTFIX = '/latest-comment';
 export const CLF_STATUS_HISTORY_BY_PREFIX = '/tickets/';
 export const CLF_STATUS_HISTORY_BY_POSTFIX = '/last-status-history';
 
+export const CLF_GET_ROOT_CAUSE_PREFIX = '/rootCause/subscribers/'; // subscriberId
+export const CLF_GET_ROOT_CAUSE_POSTFIX = '/mobile';
+
+export const CLF_GET_ROOT_CAUSE_ACTIONS_PREFIX =
+  '/root-cause-action/subscribers/'; // subscriberId
+export const CLF_GET_ROOT_CAUSE_ACTIONS_POSTFIX = '/mobile';
+
+export const CLF_UPDATE_ROOT_CAUSE_PREFIX = '/mobile/tickets/'; // ticketId
+export const CLF_UPDATE_ROOT_CAUSE_POSTFIX = '/update-root-causes';
+
 export const EMAIL = 'email';
 export const PHONE = 'phone';
 
