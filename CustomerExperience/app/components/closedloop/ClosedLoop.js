@@ -66,11 +66,6 @@ export default function ClosedLoop(props) {
   const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
   const ticketList = useSelector((state) => state.dashboard.ticketList);
 
-  // console.log('TICKET_LIST: ', JSON.stringify(ticketList));
-  console.log('TICKET_STATUS: ', JSON.stringify(statusId));
-
-  // const state = useSelector((state) => state.dashboard);
-
   const pagerOptions = useSelector(
     (state) => state.dashboard.ticketDetails.pagerOptions,
   );

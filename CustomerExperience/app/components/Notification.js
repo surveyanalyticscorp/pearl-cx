@@ -146,7 +146,7 @@ const Notification = (props) => {
   };
 
   let renderRow = ({item, index}) => {
-    console.log(`Notification Item: ${JSON.stringify(item)}`);
+    // console.log(`Notification Item: ${JSON.stringify(item)}`);
     let imagePath =
       item.logType === 'U'
         ? require('../config/images/notification_comment_blue.png')
@@ -192,7 +192,7 @@ const Notification = (props) => {
   };
 
   let closePreviousOpenRow = (index) => {
-    console.log('onSwipeableWillOpen');
+    // console.log('onSwipeableWillOpen');
     if (prevOpenedRow && prevOpenedRow !== row[index]) {
       prevOpenedRow.close();
     }

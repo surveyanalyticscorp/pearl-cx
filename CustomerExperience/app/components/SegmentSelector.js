@@ -27,7 +27,7 @@ const SegmentSelector = (props) => {
   const currentSegment = useSelector((state) => state.dashboard.currentSegment);
 
   useEffect(() => {
-    console.log('SELECTED SEGMENT__', JSON.stringify(currentSegment));
+    // console.log('SELECTED SEGMENT__', JSON.stringify(currentSegment));
 
     if (currentSegment.currentSegmentID) {
       dispatch(
@@ -62,7 +62,7 @@ const SegmentSelector = (props) => {
     return <Text style={styles.appbarTitle}>{title}</Text>;
   };
 
-  console.log('SEGMENT_SELECTOR_VIEW');
+  // console.log('SEGMENT_SELECTOR_VIEW');
   // return <SegmentText segmentName={currentSegment.currentSegment} />;
 
   return segmentList && segmentList.length > 1 ? (

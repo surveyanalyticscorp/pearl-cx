@@ -80,7 +80,6 @@ const SelectSegmentScreen = (props) => {
         style={styles.searchInput}
         placeholder="Search..."
         onChangeText={(text) => {
-          console.log(text);
           // if (text) {
           //   setFilteredList((state) =>
           //     state.filter((item) =>

@@ -29,6 +29,13 @@ import {StackActions} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
 
 export default function DashboardDateFilter(props) {
+  const LAST_30_DAYS = 1;
+  const THIS_MONTH = 2;
+  const LAST_MONTH = 3;
+  const LAST_3_MONTHS = 4;
+  const LAST_6_MONTHS = 5;
+  const CUSTOM_DATE_RANGE = 6;
+
   let routeName = props.route.name;
   let [selectedRange, setSelectedRange] = useState(props.route.params.range);
   let [selectedType, setSelectedType] = useState(
@@ -38,13 +45,6 @@ export default function DashboardDateFilter(props) {
   let [showCalendar, setShowCalendar] = useState(false);
   let [customDate, setCustomDate] = useState('');
   let [validationError, setValidationError] = useState('');
-
-  const LAST_30_DAYS = 1;
-  const THIS_MONTH = 2;
-  const LAST_MONTH = 3;
-  const LAST_3_MONTHS = 4;
-  const LAST_6_MONTHS = 5;
-  const CUSTOM_DATE_RANGE = 6;
 
   let saveRange = () => {
     let tempEnd = moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT);
@@ -98,13 +98,16 @@ export default function DashboardDateFilter(props) {
         return {startDate: tempStartDate, endDate: tempEndDate};
       case LAST_MONTH:
         /** Last month*/
-        firstDate = 1 + '/' + today.getMonth() + '/' + today.getFullYear();
-        tempStartDate = moment(firstDate, DMYFORMAT).format(DMYFORMAT);
-        let lastDate = new Date(today.getFullYear(), today.getMonth(), 0);
-        month = lastDate.getMonth() + 1;
-        tempEndDate =
-          lastDate.getDate() + '/' + month + '/' + lastDate.getFullYear();
-        tempEndDate = moment(tempEndDate, DMYFORMAT).format(DMYFORMAT);
+        // new code
+
+        tempStartDate = moment(moment(today).startOf('month'), DMYFORMAT)
+          .subtract(1, 'months')
+          .format(DMYFORMAT);
+        tempEndDate = moment(
+          moment(tempStartDate, DMYFORMAT).endOf('month'),
+          DMYFORMAT,
+        ).format(DMYFORMAT);
+
         return {startDate: tempStartDate, endDate: tempEndDate};
       case LAST_3_MONTHS:
         /** Last 3 months*/
@@ -156,6 +159,7 @@ export default function DashboardDateFilter(props) {
         <TouchableWithoutFeedback
           onPress={() => {
             let rangeSelected = getSelectedRange(type);
+
             setSelectedType(type);
             let dashboardRange = {type: type, ...rangeSelected};
             setSelectedRange(dashboardRange);
