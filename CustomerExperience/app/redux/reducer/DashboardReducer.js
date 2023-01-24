@@ -1,7 +1,10 @@
 import {getUniqueValues} from '../../Utils/TicketUtils';
 import {
+  ACTIONS_RECEIVED,
   GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
   GET_EMAIL_TEMPLATES_RECEIVED,
+  ROOT_CASUES_RECEIVED,
+  ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL_RECEIVED,
 } from '../actions/closedloop.actions';
 import {
@@ -35,6 +38,8 @@ const initialState = {
   segmentDetails: {},
   segmentState: {},
   segmentList: [],
+  rootCauseList: [],
+  rootCauseActionList: [],
   isSegmentSelectorOpen: false,
   ownerDetails: {},
   allOwnersDetails: {},
@@ -221,6 +226,32 @@ const dashboardReducer = (state = initialState, action) => {
         emailData: {...state.emailData, emailSentResponse: action.response},
       };
     }
+
+    case ROOT_CASUES_RECEIVED: {
+      return {
+        ...state,
+        rootCauseList: action.response,
+      };
+    }
+
+    case ACTIONS_RECEIVED: {
+      return {
+        ...state,
+        rootCauseActionList: action.response,
+      };
+    }
+
+    case ROOT_CAUSE_UPDATE_RECEIVED: {
+      return {
+        ...state,
+        ticket: {
+          ...state.ticket,
+          rootCauses: action.response.rootCauses,
+          rootCauseActions: action.response.rootCauseActions,
+        },
+      };
+    }
+
     default: {
       return state;
     }

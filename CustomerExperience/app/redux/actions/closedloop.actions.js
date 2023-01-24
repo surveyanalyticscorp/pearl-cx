@@ -71,6 +71,15 @@ export const GET_TICKET_STATUS_HISTORY_RECEIVED =
   'GET_TICKET_STATUS_HISTORY_RECEIVED';
 
 export const SET_TICKET_FILTER_BY_STATUS_ID = 'SET_TICKET_FILTER_BY_STATUS_ID';
+
+export const GET_ROOT_CASUES = 'GET_ROOT_CASUES';
+export const ROOT_CASUES_RECEIVED = 'ROOT_CASUES_RECEIVED';
+export const GET_ACTIONS = 'GET_ACTIONS';
+export const ACTIONS_RECEIVED = 'ACTIONS_RECEIVED';
+
+export const UPDATE_ROOT_CAUSE = 'UPDATE_ROOT_CAUSE';
+export const ROOT_CAUSE_UPDATE_RECEIVED = 'ROOT_CAUSE_UPDATE_RECEIVED';
+
 export const getDefaultEmailTemplate = (token, param) => ({
   type: GET_DEFAULT_EMAIL_TEMPLATE,
   token,
@@ -103,6 +112,25 @@ export const getLatestComment = (token, ticketId, param) => ({
 
 export const getTicketStatusHistory = (token, ticketId, param) => ({
   type: GET_TICKET_STATUS_HISTORY,
+  token,
+  ticketId,
+  param,
+});
+
+export const getRootCauseList = (token, subscriberId) => ({
+  type: GET_ROOT_CASUES,
+  token,
+  subscriberId,
+});
+
+export const getActionList = (token, subscriberId) => ({
+  type: GET_ACTIONS,
+  token,
+  subscriberId,
+});
+
+export const updateRootCause = (token, ticketId, param) => ({
+  type: UPDATE_ROOT_CAUSE,
   token,
   ticketId,
   param,

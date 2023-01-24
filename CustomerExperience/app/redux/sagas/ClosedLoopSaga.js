@@ -39,12 +39,10 @@ import {
   CX_GET_CLOSED_LOOP_TICKET_DETAILS,
   CX_UPDATE_CLOSED_LOOP_TICKET,
   CLF_GET_TICKET_LIST,
-  FEEDBACK,
   SEGMENT,
   CLF_GET_TICKET_DETAILS,
   COMMNETS,
   ACTIVITY_LOG,
-  FEEDBACK_API_KEY,
   FEEDBACK_API_KEY_ENDPOINT,
   CLF_GET_EMAIL_TEMPLATES,
   CLF_GET_DEFAULT_EMAIL_TEMPLATE,
@@ -55,19 +53,33 @@ import {
   CLF_LATEST_COMMENT_BY_TICKET_ID_PREFIX,
   CLF_STATUS_HISTORY_BY_PREFIX,
   CLF_STATUS_HISTORY_BY_POSTFIX,
+  CLF_GET_ROOT_CAUSE_PREFIX,
+  CLF_GET_ROOT_CAUSE_POSTFIX,
+  CLF_GET_ROOT_CAUSE_ACTIONS_PREFIX,
+  CLF_GET_ROOT_CAUSE_ACTIONS_POSTFIX,
+  CLF_UPDATE_ROOT_CAUSE_PREFIX,
+  CLF_UPDATE_ROOT_CAUSE_POSTFIX,
+  CLF_BASE_URL,
+  CLF_QA_BASE_URL,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
+  ACTIONS_RECEIVED,
+  GET_ACTIONS,
   GET_DEFAULT_EMAIL_TEMPLATE,
   GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
   GET_EMAIL_TEMPLATES,
   GET_EMAIL_TEMPLATES_RECEIVED,
   GET_LATEST_COMMENT,
+  GET_ROOT_CASUES,
   GET_TICKET_STATUS_HISTORY,
   GET_TICKET_STATUS_HISTORY_RECEIVED,
   LATEST_COMMENT_RECEIVED,
+  ROOT_CASUES_RECEIVED,
+  ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL,
   SEND_EMAIL_RECEIVED,
+  UPDATE_ROOT_CAUSE,
 } from '../actions/closedloop.actions';
 import {
   showErrorFlashMessage,
@@ -544,6 +556,7 @@ function* patchUpdateClfTicket(action) {
 
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
+    showSuccessFlashMessage(ticketItem.message);
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
@@ -679,4 +692,83 @@ function* getTicketStatusHistory(action) {
 }
 export function* watchGetTicketStatusHistory() {
   yield takeLatest(GET_TICKET_STATUS_HISTORY, getTicketStatusHistory);
+}
+
+function* getRootCauseList(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      CLF_GET_ROOT_CAUSE_PREFIX +
+        action.subscriberId +
+        CLF_GET_ROOT_CAUSE_POSTFIX,
+      {'Auth-Token': action.token},
+      {},
+    );
+    yield put({
+      type: ROOT_CASUES_RECEIVED,
+      response: json.data,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchGetrootCauseList() {
+  yield takeLatest(GET_ROOT_CASUES, getRootCauseList);
+}
+
+function* getRootCauseActionList(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      CLF_GET_ROOT_CAUSE_ACTIONS_PREFIX +
+        action.subscriberId +
+        CLF_GET_ROOT_CAUSE_ACTIONS_POSTFIX,
+      {'Auth-Token': action.token},
+      {},
+    );
+    yield put({
+      type: ACTIONS_RECEIVED,
+      response: json.data,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchGetrootCauseActionList() {
+  yield takeLatest(GET_ACTIONS, getRootCauseActionList);
+}
+
+function* updateRootCauseAndAction(action) {
+  try {
+    const json = yield WebServiceHandler.patch(
+      CLF_UPDATE_ROOT_CAUSE_PREFIX +
+        action.ticketId +
+        CLF_UPDATE_ROOT_CAUSE_POSTFIX,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: ROOT_CAUSE_UPDATE_RECEIVED,
+      response: json.data,
+    });
+    showSuccessFlashMessage(json.message ?? 'Updated');
+  } catch (error) {
+    showErrorFlashMessage(
+      error.message ?? error.status ?? JSON.stringify(error),
+    );
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchUpdateRootCause() {
+  yield takeLatest(UPDATE_ROOT_CAUSE, updateRootCauseAndAction);
 }

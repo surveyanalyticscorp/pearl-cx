@@ -63,7 +63,7 @@ export default function ClosedLoop(props) {
     toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
     type: '',
   });
-  const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
+  // const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
   const ticketList = useSelector((state) => state.dashboard.ticketList);
 
   const pagerOptions = useSelector(

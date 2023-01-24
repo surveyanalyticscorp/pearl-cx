@@ -10,6 +10,7 @@ import {
   FlatList,
   Pressable,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 // import StringUtils from '../../Utils/StringUtils';
 // import ArrayUtils from '../../Utils/ArrayUtils';
@@ -43,57 +44,90 @@ import {
   RenderStatusIcon,
 } from '../../routes/CommonScreen';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  getOwnerIndex,
-  getOwnerNameById,
-  getPriorityById,
-  getPriorityIndexById,
-  getSegmentBySegmentId,
-  getSegmentIndex,
-  getSegmentNameById,
-  getStatusById,
-  getStatusIndexById,
-  priorityList,
-  statusList,
-} from '../../Utils/TicketUtils';
-import moment from 'moment';
-import {FullMonthDateYearFormat} from '../../Utils/AppConstants';
-import {
-  getClosedLoopOwnerDetails,
-  updateClfTicket,
-} from '../../redux/actions/dashboard.actions';
-import SelectStatus from './takeaction/SelectStatus';
-import SelectPriority from './takeaction/SelectPriority';
-import SelectSegment from './takeaction/SelectSegment';
-import SelectTicketOwner from './takeaction/SelectTicketOwner';
-// import {element} from 'prop-types';
-import {
-  getDefaultEmailTemplate,
-  getEmailTemplates,
-} from '../../redux/actions/closedloop.actions';
-import {EMAIL, PHONE} from '../../api/Constant';
-import {StackActions, useNavigation} from '@react-navigation/native';
-import {translate} from '../../Utils/MultilinguaUtils';
+import {CheckBoxItem} from '../../routes/CommonScreen';
+import {updateRootCause} from '../../redux/actions/closedloop.actions';
 
 export default function TicketRootCause(props) {
   const ROOT_CAUSES = 'Root Causes';
   const ACTIONS = 'Actions';
+  const dispatch = useDispatch();
+  const {authToken} = useSelector((state) => state.global);
+  const {ticket, rootCauseList, rootCauseActionList} = useSelector(
+    (state) => state.dashboard,
+  );
+
+  const hasId = (id, arr) => {
+    for (let i = 0; i < arr.length; i++) {
+      if (id === arr[i].id) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const getRootCauses = () => {
+    return rootCauseList.length > 0
+      ? rootCauseList.map((value, index) => ({
+          ...value,
+          isChecked: hasId(value.id, ticket.rootCauses),
+        }))
+      : [];
+  };
+
+  const getRootActions = () => {
+    return rootCauseActionList.length > 0
+      ? rootCauseActionList.map((value, index) => ({
+          ...value,
+          title: value.actionName,
+          isChecked: hasId(value.id, ticket.rootCauseActions),
+        }))
+      : [];
+  };
+  const [rootCauses, setRootCauses] = useState(getRootCauses());
+  const [rootCauseActions, setRootActions] = useState(getRootActions());
+
+  console.log('ROOT_CAUSES', JSON.stringify(rootCauseList));
+  console.log('ROOT_CAUSES_ACTIONS', JSON.stringify(rootCauseActionList));
+  console.log('TICKET', JSON.stringify(ticket));
+
+  const updateRootCauses = (item, index) => {
+    setRootCauses((prevState) => {
+      const temp = [...prevState];
+      temp[index].isChecked = !prevState[index].isChecked;
+      return temp;
+    });
+  };
+
+  const updateRootActions = (item, index) => {
+    setRootActions((prevState) => {
+      const temp = [...prevState];
+      temp[index].isChecked = !prevState[index].isChecked;
+      return temp;
+    });
+  };
 
   const RenderRootCauseItem = ({title, data}) => {
     return (
-      <View>
+      <View style={{marginVertical: MarginConstants.tab2}}>
         <Text style={styles.titleText}>{title}</Text>
         <FlatList
           data={data}
-          keyExtractor={(item, index) => item.toString()}
-          numColumns={3}
+          keyExtractor={(item, index) => item.id.toString()}
+          numColumns={2}
+          ListEmptyComponent={
+            <Text style={styles.dateText}>{`No ${title} found`} </Text>
+          }
           renderItem={({item, index}) => (
             <CheckBoxItem
               textStyle={styles.optionText}
               item={item}
               index={index}
-              onPress={() => {
-                console.log(item);
+              onPress={(item, index) => {
+                if (title === ROOT_CAUSES) {
+                  updateRootCauses(item, index);
+                } else {
+                  updateRootActions(item, index);
+                }
               }}
             />
           )}
@@ -102,18 +136,57 @@ export default function TicketRootCause(props) {
     );
   };
 
+  const resetSelections = () => {
+    setRootActions(getRootActions);
+    setRootCauses(getRootCauses);
+  };
+
+  const updateRootCauseAndAction = () => {
+    const rootCauseArr = [];
+    for (let item of rootCauses) {
+      if (item.isChecked) {
+        rootCauseArr.push(item.id);
+      }
+    }
+
+    const rootActionArr = [];
+    for (let item of rootCauseActions) {
+      if (item.isChecked) {
+        rootActionArr.push(item.id);
+      }
+    }
+
+    // console.log({rootCauses: rootCauseArr, rootCauseActions: rootActionArr});
+
+    dispatch(
+      updateRootCause(authToken, JSON.stringify(ticket.id), {
+        rootCauses: rootCauseArr,
+        rootCauseActions: rootActionArr,
+      }),
+    );
+  };
+
   const RenderTicketOverView = () => (
-    <View style={styles.container}>
-      <ScrollView>
-        <RenderRootCauseItem />
-        <RenderRootCauseItem />
-      </ScrollView>
+    <View style={styles.rootContainer}>
+      <View style={styles.container}>
+        <RenderRootCauseItem title={ROOT_CAUSES} data={rootCauses} />
+        <RenderRootCauseItem title={ACTIONS} data={rootCauseActions} />
+      </View>
+
+      <View style={styles.buttonView}>
+        <TouchableOpacity onPress={resetSelections} style={styles.button}>
+          <Text style={[styles.buttonText, styles.resetButton]}> Reset </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={updateRootCauseAndAction}
+          style={[styles.button, {backgroundColor: Colors.accentLight}]}>
+          <Text style={[styles.buttonText, styles.updatetButton]}>Update</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
   return <RenderTicketOverView />;
-
-  // return <RenderTicketOverView />;
   // return isLoading ? <RenderSpinner /> : <TempUI />;
 }
 
@@ -121,12 +194,16 @@ const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
     flexDirection: 'column',
+
     backgroundColor: Colors.white,
+    padding: PaddingConstants.tab1,
+    justifyContent: 'space-between',
   },
 
   container: {
-    margin: MarginConstants.halfTab,
+    margin: MarginConstants.tab1,
     flex: 1,
+
     // borderColor: Colors.evenDarkerGrey,
     // borderWidth: 1,
     // borderRadius: 4,
@@ -162,9 +239,9 @@ const styles = StyleSheet.create({
   },
 
   titleText: {
-    fontFamily: FontFamily.regular,
-    fontWeight: FontWeight._500,
-    fontSize: TextSizes.secondary,
+    fontFamily: FontFamily.medium,
+    fontWeight: FontWeight._700,
+    fontSize: TextSizes.primary,
     color: Colors.filterIconColor,
   },
 
@@ -210,7 +287,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.accentLight,
   },
-
+  buttonText: {
+    fontFamily: FontFamily.regular,
+    fontWeight: FontWeight._900,
+    fontSize: TextSizes.secondary,
+  },
+  resetButton: {color: Colors.accentLight},
+  updatetButton: {color: Colors.white},
   statusText: {
     fontFamily: FontFamily.regular,
     fontWeight: FontWeight._900,
@@ -237,6 +320,18 @@ const styles = StyleSheet.create({
   rowText: {
     color: Colors.primary,
     fontSize: TextSizes.secondary,
+  },
+
+  buttonView: {
+    margin: MarginConstants.tab2,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  button: {
+    margin: MarginConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab2,
+    paddingVertical: PaddingConstants.tab1,
+    borderRadius: 5,
   },
   modelDropdown: {
     minHeight: MarginConstants.tab3,

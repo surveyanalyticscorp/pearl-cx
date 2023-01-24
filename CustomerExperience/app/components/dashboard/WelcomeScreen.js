@@ -15,6 +15,10 @@ import {
 // import QPSpinner from '../../widgets/QPSpinner';
 import {RenderSpinner} from '../../routes/CommonScreen';
 import {SUBSCRIBER_ID} from '../../api/Constant';
+import {
+  getActionList,
+  getRootCauseList,
+} from '../../redux/actions/closedloop.actions';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = (props) => {
@@ -65,6 +69,8 @@ export const WelcomeScreen = (props) => {
         assignToId: userInfo.userID,
       }),
     );
+    dispatch(getRootCauseList(authToken, global.subscriberId));
+    dispatch(getActionList(authToken, global.subscriberId));
     // dispatch(getClosedLoopAllOwnersDetails(authToken));
     // dispatch(getClosedLoopOwnerDetails(authToken));
   }, [authToken]);

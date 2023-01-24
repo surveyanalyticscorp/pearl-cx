@@ -50,7 +50,7 @@ const FilterTicket = ({data, onPressHandler}) => {
     );
   };
 
-  const selectedStatus = (index) => {
+  const selectedStatus = (item, index) => {
     setStatus((prevState) => {
       const temp = [...prevState];
       temp[index].isChecked = !prevState[index].isChecked;
@@ -79,7 +79,7 @@ const FilterTicket = ({data, onPressHandler}) => {
     );
   };
 
-  const selectedPriority = (index) => {
+  const selectedPriority = (item, index) => {
     setPriority((prevState) => {
       const temp = [...prevState];
       temp[index].isChecked = !prevState[index].isChecked;
@@ -108,10 +108,10 @@ const FilterTicket = ({data, onPressHandler}) => {
     );
   };
 
-  const selectType = (index_) => {
+  const selectType = (item, index) => {
     setType((prevState) =>
-      prevState.map((item, index, arr) => {
-        item.isChecked = index_ === index;
+      prevState.map((item, index_, arr) => {
+        item.isChecked = index === index_;
         return item;
       }),
     );

@@ -55,7 +55,7 @@ export const CX_WELCOME_SCREEN_DATA =
 
 // CLF 3.0 APIs
 export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
-// export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
+// export const CLF_BASE_URL = 'https://clf-backend.questionpro.com/api/';
 
 // export const FEEDBACK_API_KEY = 'e8caf096-4f19-4b34-a7cd-4bcaa8197c1d';
 export const FEEDBACK_API_KEY_ENDPOINT = '?feedbackApiKey=';
@@ -76,20 +76,19 @@ export const CLF_GET_EMAIL_TEMPLATES = `${CLF_BASE_URL}actionTemplate/mobile`;
 export const CLF_SEND_EMAIL_PREFIX = `${CLF_BASE_URL}tickets/`;
 export const CLF_SEND_EMAIL_POSTFIX = '/actionMail/mobile';
 
-export const CLF_LATEST_COMMENT_BY_TICKET_ID_PREFIX = 'comments/tickets/';
+export const CLF_LATEST_COMMENT_BY_TICKET_ID_PREFIX = `${CLF_BASE_URL}comments/tickets/`;
 export const CLF_LATEST_COMMENT_BY_TICKET_ID_POSTFIX = '/latest-comment';
 
-export const CLF_STATUS_HISTORY_BY_PREFIX = '/tickets/';
+export const CLF_STATUS_HISTORY_BY_PREFIX = `${CLF_BASE_URL}tickets/`;
 export const CLF_STATUS_HISTORY_BY_POSTFIX = '/last-status-history';
 
-export const CLF_GET_ROOT_CAUSE_PREFIX = '/rootCause/subscribers/'; // subscriberId
+export const CLF_GET_ROOT_CAUSE_PREFIX = `${CLF_BASE_URL}rootCause/subscribers/`; // subscriberId
 export const CLF_GET_ROOT_CAUSE_POSTFIX = '/mobile';
 
-export const CLF_GET_ROOT_CAUSE_ACTIONS_PREFIX =
-  '/root-cause-action/subscribers/'; // subscriberId
+export const CLF_GET_ROOT_CAUSE_ACTIONS_PREFIX = `${CLF_BASE_URL}root-cause-action/subscribers/`; // subscriberId
 export const CLF_GET_ROOT_CAUSE_ACTIONS_POSTFIX = '/mobile';
 
-export const CLF_UPDATE_ROOT_CAUSE_PREFIX = '/mobile/tickets/'; // ticketId
+export const CLF_UPDATE_ROOT_CAUSE_PREFIX = `${CLF_BASE_URL}mobile/tickets/`; // ticketId
 export const CLF_UPDATE_ROOT_CAUSE_POSTFIX = '/update-root-causes';
 
 export const EMAIL = 'email';

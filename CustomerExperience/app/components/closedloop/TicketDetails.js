@@ -13,6 +13,7 @@ import TicketActivity from './TicketActivity';
 import {FontFamily} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {getClosedLoopTicketItem} from '../../redux/actions/dashboard.actions';
+import TicketRootCause from './TicketRootCause';
 
 export default function TicketDetails(props) {
   const {authToken, isTicketLoading} = useSelector((state) => state.global);
@@ -65,6 +66,13 @@ export default function TicketDetails(props) {
           name={translate('responses.activity')}
           component={TicketActivity}
           initialParams={{screenName: 'Activity'}}
+        />
+
+        <TicketTabs.Screen
+          // name={translate('responses.activity')}
+          name={'Root Cause'}
+          component={TicketRootCause}
+          initialParams={{screenName: 'Root Cause'}}
         />
       </TicketTabs.Navigator>
     );

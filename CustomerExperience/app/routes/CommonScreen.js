@@ -331,7 +331,7 @@ export const RenderSpinner = () => {
 export const CheckBoxItem = ({item, index, onPress, textStyle}) => {
   const _textStyle = textStyle ?? styles.checkBoxText;
   return (
-    <TouchableOpacity onPress={() => onPress(index)}>
+    <TouchableOpacity onPress={() => onPress(item, index)}>
       <View style={styles.checkBoxRow}>
         {/* <CheckBox
           disabled={false}

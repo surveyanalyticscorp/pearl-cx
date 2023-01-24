@@ -936,19 +936,8 @@ export default function TicketOverview(props) {
         <View style={styles.rowContainer}>
           {DescriptionHeader('Description')}
           <TouchableWithoutFeedback>
-            <View
-              style={{
-                borderColor: Colors.accentLight,
-                borderRadius: 4,
-                borderWidth: 1,
-                padding: PaddingConstants.halfTab,
-              }}>
-              <Text
-                style={{
-                  fontFamily: FontFamily.medium,
-                  fontSize: TextSizes.primary,
-                  color: Colors.accentLight,
-                }}>
+            <View style={styles.ticketIdView}>
+              <Text style={styles.ticketIdText}>
                 {`Ticket ID #${
                   ticketDetails !== undefined ? ticketDetails.id : ''
                 }`}
@@ -1251,7 +1240,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.accentLight,
     marginBottom: MarginConstants.tab2,
   },
-
+  ticketIdView: {
+    borderColor: Colors.accentLight,
+    borderRadius: 4,
+    borderWidth: 1,
+    padding: PaddingConstants.halfTab,
+  },
+  ticketIdText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.primary,
+    color: Colors.accentLight,
+  },
   takeActionText: {
     color: Colors.white,
     fontFamily: FontFamily.regular,

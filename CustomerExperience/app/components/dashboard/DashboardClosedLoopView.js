@@ -62,11 +62,11 @@ const TicketTabStack = (props) => (
       initialParams={{index: 3, ticketCount: props.ticketCount}}
     />
     {/* <TicketTab.Screen name= {translate("dashboard.resolved")} component={renderScene} initialParams={{index : 4, ticketCount: props.ticketCount}}/> */}
-    <TicketTab.Screen
+    {/* <TicketTab.Screen
       name={'OVERDUE'}
       component={RenderScene}
       initialParams={{index: 4, ticketCount: props.ticketCount}}
-    />
+    /> */}
     <TicketTab.Screen
       name={'RESOLVED'}
       component={RenderScene}
