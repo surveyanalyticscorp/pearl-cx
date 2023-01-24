@@ -6,3 +6,4 @@ export const FullMonthYearFormat = 'MMMM yyyy';
 export const HalfMonthDateYearFormat = 'MMM DD, yyyy';
 export const FullMonthDateYearFormat = 'MMMM DD, yyyy';
 export const PPP = 'PPP';
+export const DMY_AT_TIME_FORMAT = 'MMM DD, YYYY [at] h:mm A';

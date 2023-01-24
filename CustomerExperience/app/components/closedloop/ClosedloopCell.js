@@ -6,9 +6,6 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-// import StringUtils from '../../Utils/StringUtils';
-// import ArrayUtils from '../../Utils/ArrayUtils';
-// import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {
   Colors,
   getPriorityBorderColorbyId,
@@ -17,15 +14,14 @@ import {
 } from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
-// import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
-// import {Sizes} from '../../styles/Size.constant';
-// import moment from 'moment';
-// import {translate} from '../../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {TextSizes} from '../../styles/textsize.constants';
 import moment from 'moment';
-import {FullMonthDateYearFormat} from '../../Utils/AppConstants';
+import {
+  FullMonthDateYearFormat,
+  DMY_AT_TIME_FORMAT,
+} from '../../Utils/AppConstants';
 import {getStatusById, getPriorityById} from '../../Utils/TicketUtils';
 import {RenderStatusIcon, StatusIcon} from '../../routes/CommonScreen';
 export default function ClosedLoopCell(props) {
@@ -184,14 +180,42 @@ export default function ClosedLoopCell(props) {
     );
   };
 
+  const OverdueBar = () => {
+    const date = moment(data.overdueDate).format(DMY_AT_TIME_FORMAT);
+    return (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          padding: PaddingConstants.halfTab,
+          backgroundColor: Colors.overdueBackgroundColor,
+        }}>
+        <IonIcons
+          name="notifications-sharp"
+          size={20}
+          color={Colors.overdueTextColor}
+        />
+
+        <Text
+          style={{
+            marginHorizontal: MarginConstants.halfTab,
+            color: Colors.overdueTextColor,
+          }}>
+          {`Alert!  Overdue (${date})`}
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
         props.onPressHandler(props.data, props.index);
       }}
-      style={styles.container}>
+      style={[styles.container, {borderTopWidth: data.isOverdue ? 0 : 1}]}>
       <View style={styles.container}>
         <View style={styles.ticketContainer}>
+          {data.isOverdue && <OverdueBar />}
           {getNPSAndTicketRow()}
           {/* {getTicketID()} */}
           {getNameANdDateRow()}
@@ -207,7 +231,9 @@ const styles = StyleSheet.create({
   container: {
     margin: MarginConstants.tab1,
     borderColor: Colors.evenDarkerGrey,
-    borderWidth: 1,
+    borderStartWidth: 1,
+    borderEndWidth: 1,
+    borderBottomWidth: 1,
     borderRadius: 4,
   },
   rowContainer: {

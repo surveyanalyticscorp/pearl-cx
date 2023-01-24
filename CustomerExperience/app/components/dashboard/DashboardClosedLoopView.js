@@ -138,9 +138,9 @@ const RenderScene = (props) => {
         return object.OPEN ?? object.open;
       case 3:
         return object.ESCALATED ?? object.escalated;
+      // case 4:
+      //   return object.OVERDUE ?? object.resolved;
       case 4:
-        return object.OVERDUE ?? object.resolved;
-      case 5:
         return object.RESOLVED ?? object.resolved;
     }
   };

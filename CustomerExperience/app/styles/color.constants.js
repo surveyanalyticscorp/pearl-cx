@@ -59,6 +59,8 @@ const Colors = {
   positivePromter: '#90BA5B',
   negativePassive: '#CE3E3E',
   positivePassive: '#E8E8E8',
+  overdueBackgroundColor: '#FFBABA',
+  overdueTextColor: '#D8000C',
 };
 
 const textColors = {
