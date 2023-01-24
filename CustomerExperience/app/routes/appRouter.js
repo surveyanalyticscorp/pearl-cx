@@ -347,7 +347,7 @@ const AppRouter = (props) => {
 
           headerLeft: (props) => <MenuIcon />,
           // headerRight: (props) => <NotificationIcon />,
-          headerRight: (props) => <SearchIcon route={'Dashboard'} />,
+          // headerRight: (props) => <SearchIcon route={'Dashboard'} />,
         })}
       />
       <DetractorStack.Screen
