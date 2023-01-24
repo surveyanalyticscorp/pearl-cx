@@ -10,6 +10,9 @@ export const ASYNC_LAST_LOGIN = 'lastLogin';
 //export const BASE_URL = 'https://api.questionpro.com/';
 export const DEV_BASE_URL = 'https://qa.questionpro.com';
 
+export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
+// export const CLF_BASE_URL = 'https://clf-backend.questionpro.com/api/';
+
 export const PANEL_AUTH =
   'https://api.questionpro.com/a/nativehtml/panel.auth.PanelRequestHandler';
 export const AUTH_LOGIN = '/a/nativehtml/cx.auth.CXLogin';
@@ -54,8 +57,6 @@ export const CX_WELCOME_SCREEN_DATA =
   '/a/nativehtml/cx.CXWelcomeScreenDataCount';
 
 // CLF 3.0 APIs
-export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
-// export const CLF_BASE_URL = 'https://clf-backend.questionpro.com/api/';
 
 // export const FEEDBACK_API_KEY = 'e8caf096-4f19-4b34-a7cd-4bcaa8197c1d';
 export const FEEDBACK_API_KEY_ENDPOINT = '?feedbackApiKey=';

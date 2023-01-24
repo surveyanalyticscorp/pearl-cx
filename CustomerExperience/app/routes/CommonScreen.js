@@ -460,10 +460,15 @@ export const FilterIcon = ({onPressFilter}) => {
   );
 };
 
-export const HeaderFilter = ({dateRange, onPressFilter, onPressDateRange}) => {
+export const HeaderFilter = ({
+  hasFilterIcon = true,
+  dateRange,
+  onPressFilter,
+  onPressDateRange,
+}) => {
   return (
     <View style={styles.filterAndSearchBox}>
-      <FilterIcon onPressFilter={onPressFilter} />
+      {hasFilterIcon && <FilterIcon onPressFilter={onPressFilter} />}
       <FilterDateBox
         range={dateRange}
         onDateRangeChangeHandler={onPressDateRange}

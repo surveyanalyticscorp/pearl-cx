@@ -6,18 +6,13 @@ import {
   Text,
   View,
   BackHandler,
-  BackPressEventName,
   Alert,
   SafeAreaView,
   TouchableOpacity,
   Image,
-  StatusBar,
 } from 'react-native';
 import {showLoading} from '../../redux/actions/index';
-import {
-  getDashboardContent,
-  setSegment,
-} from '../../redux/actions/dashboard.actions';
+import {getDashboardContent} from '../../redux/actions/dashboard.actions';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
@@ -38,7 +33,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
 import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
-import {FabAddButton} from '../../routes/CommonScreen';
+import {
+  FabAddButton,
+  FilterDateBox,
+  HeaderFilter,
+} from '../../routes/CommonScreen';
 
 const wait = (timeout) => {
   return new Promise((resolve) => {
@@ -119,6 +118,10 @@ const CxDashboard = (props) => {
       setRefreshing(false);
     }
   }, [props.dashboardData.detractorTicketsCount]);
+
+  const onDateRangeChangeHandler = (range_) => {
+    props.setRange(range_);
+  };
 
   function handleBackPress() {
     if (
@@ -483,6 +486,12 @@ const CxDashboard = (props) => {
           callDataAPI={() => {}}
           {...props}
         /> */}
+        <HeaderFilter
+          hasFilterIcon={false}
+          dateRange={range}
+          onPressDateRange={onDateRangeChangeHandler}
+        />
+
         <ScrollView
           contentContainerStyle={dashboardStyles.scrollView}
           refreshControl={
