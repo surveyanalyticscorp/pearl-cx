@@ -25,11 +25,14 @@ import {
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {FontFamily} from '../../styles/font.constants';
+import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {NoItemsFound} from '../../routes/CommonScreen';
 import {addClosedLoopTicket} from '../../redux/sagas/ClosedLoopSaga';
 import {postAddTicketComment} from '../../redux/actions/dashboard.actions';
+import moment from 'moment';
+import {DMY_AT_TIME_FORMAT} from '../../Utils/AppConstants';
+import {clockRunning} from 'react-native-reanimated';
 // import {Sizes} from '../../styles/Size.constant';
 // import moment from 'moment';
 // import {translate} from '../../Utils/MultilinguaUtils';
@@ -48,8 +51,8 @@ export default function TicketComments(props) {
   const dispach = useDispatch();
 
   const commentState = {
-    commentBy: `${firstName} ${lastName}`,
-    userName: `${firstName} ${lastName}`,
+    commentBy: `${firstName} ${lastName}`.trim(),
+    userName: `${firstName} ${lastName}`.trim(),
     userEmailAddress: `${emailAddress}`,
     userId: userID,
     ticketId: ticketId,
@@ -87,10 +90,40 @@ export default function TicketComments(props) {
     );
   };
 
+  const Avatar = ({title}) => {
+    const nameArray = title.trim().split(/[. ]/);
+    const name =
+      nameArray.length > 1
+        ? nameArray
+            .map((item) => item[0].toUpperCase())
+            .join('')
+            .slice(0, 2)
+        : nameArray[0].slice(0, 2);
+
+    console.log(name);
+
+    return (
+      <View style={styles.avatarView}>
+        <Text style={styles.avatarText}>{name}</Text>
+      </View>
+    );
+  };
+
   const renderItem = ({item}) => (
-    <Text style={styles.commentText}>
-      {item.text} from {item.commentBy}
-    </Text>
+    <View style={styles.commentItemView}>
+      <View style={styles.commentUserView}>
+        <Avatar title={item.commentBy} />
+        <Text style={styles.commentByText}>{item.commentBy.trim()} </Text>
+      </View>
+      <View style={[styles.commentTextView]}>
+        <Text style={styles.commentText}>{item.text}</Text>
+      </View>
+      <View style={styles.commentDateView}>
+        <Text style={styles.commentDateText}>
+          {moment.utc(item.createdAt).local().format(DMY_AT_TIME_FORMAT)}
+        </Text>
+      </View>
+    </View>
   );
 
   const onChangeCommentHandler = (text) => {
@@ -130,9 +163,13 @@ export default function TicketComments(props) {
     );
   };
 
-  const MaterialIconView = ({iconName}) => (
+  const MaterialIconView = ({iconName, color}) => (
     <View style={{margin: MarginConstants.halfTab}}>
-      <MaterialIcon name={iconName} size={24} color={Colors.filterIconColor} />
+      <MaterialIcon
+        name={iconName}
+        size={24}
+        color={color ?? Colors.filterIconColor}
+      />
     </View>
   );
 
@@ -189,12 +226,15 @@ export default function TicketComments(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.white,
   },
   commentFooter: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.white,
     padding: PaddingConstants.tab1,
+    borderTopColor: Colors.darkerGrey,
+    borderTopWidth: 1,
   },
   commentBox: {
     flexDirection: 'row',
@@ -206,16 +246,82 @@ const styles = StyleSheet.create({
     marginVertical: MarginConstants.halfTab,
   },
 
-  commentText: {
+  commentUserView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: MarginConstants.tab1,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    borderRadius: 5,
+  },
+
+  commentDateView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginEnd: MarginConstants.halfTab,
+    padding: PaddingConstants.halfTab,
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.medium,
+    borderRadius: 5,
+  },
+
+  commentTextView: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
-    backgroundColor: Colors.white,
+
+    marginStart: MarginConstants.tab4,
+    marginEnd: MarginConstants.halfTab,
+
+    backgroundColor: Colors.darkerGrey,
     padding: MarginConstants.tab1,
-    marginHorizontal: MarginConstants.tab1,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    borderRadius: 5,
+  },
+  commentItemView: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    flex: 1,
+
+    padding: MarginConstants.tab1,
     marginVertical: MarginConstants.halfTab,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     borderRadius: 5,
+  },
+  commentText: {
+    flex: 1,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    color: Colors.filterIconColor,
+  },
+  commentByText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    color: Colors.filterIconColor,
+  },
+  commentDateText: {
+    flex: 1,
+    textAlign: 'right',
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.mediumText,
+    color: Colors.filterIconColor,
+  },
+  avatarView: {
+    borderRadius: 50,
+    height: MarginConstants.tab3,
+    width: MarginConstants.tab3,
+    backgroundColor: Colors.filterIconColor,
+    marginHorizontal: MarginConstants.halfTab,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: {
+    color: Colors.white,
+    fontFamily: FontFamily.regular,
+    fontWeight: FontWeight._600,
+    fontSize: TextSizes.secondary,
   },
 });
