@@ -51,13 +51,13 @@ const feedbackReducer = (state = initialState, action) => {
     case GET_TICKET_STATUS_HISTORY_RECEIVED: {
       return {
         ...state,
-        ticketStatusHistory: action.response.data,
+        ticketStatusHistory: action.response,
       };
     }
     case LATEST_COMMENT_RECEIVED: {
       return {
         ...state,
-        ticketLastComment: action.response.data,
+        ticketLastComment: action.response,
       };
     }
 

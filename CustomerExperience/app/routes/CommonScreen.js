@@ -35,7 +35,7 @@ import {Sizes} from '../styles/Size.constant';
 import {MarginConstants} from '../styles/margin.constants';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcons from 'react-native-vector-icons/Ionicons';
-import {FontFamily} from '../styles/font.constants';
+import {FontFamily, FontWeight} from '../styles/font.constants';
 import DetractorScenes from '../components/dashboard/components/DetractorScenes';
 import {translate} from '../Utils/MultilinguaUtils';
 import {dashboardStyles} from '../components/dashboard/dashboard.style';
@@ -45,6 +45,7 @@ import {SEGMENT_SELECTOR} from '../api/Constant';
 import SelectSegmentScreen from '../components/SelectSegmentScreen';
 import moment from 'moment';
 import {DMYFORMAT, HalfMonthDateYearFormat} from '../Utils/AppConstants';
+import {getNameInitials} from '../Utils/TicketUtils';
 
 // import CheckBox from '@react-native-community/checkbox';
 
@@ -452,6 +453,14 @@ export const FilterDateBox = ({range, onDateRangeChangeHandler}) => {
   );
 };
 
+export const Avatar = ({title}) => {
+  return (
+    <View style={styles.avatarView}>
+      <Text style={styles.avatarText}>{getNameInitials(title ?? 'NA')}</Text>
+    </View>
+  );
+};
+
 export const FilterIcon = ({onPressFilter}) => {
   return (
     <TouchableOpacity onPress={onPressFilter}>
@@ -796,5 +805,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: PaddingConstants.tab1,
 
     backgroundColor: Colors.white,
+  },
+
+  avatarView: {
+    borderRadius: 50,
+    height: MarginConstants.tab3,
+    width: MarginConstants.tab3,
+    backgroundColor: Colors.filterIconColor,
+    marginHorizontal: MarginConstants.halfTab,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: {
+    color: Colors.white,
+    fontFamily: FontFamily.regular,
+    fontWeight: FontWeight._600,
+    fontSize: TextSizes.secondary,
   },
 });

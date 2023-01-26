@@ -178,3 +178,15 @@ export function getUniqueValues(arr, key) {
 
   return distinctPropertyValues;
 }
+
+export const getNameInitials = (title) => {
+  const nameArray = title.trim().split(/[. ]/);
+  return nameArray.length > 1
+    ? nameArray
+        .map((item) => item[0].toUpperCase())
+        .join('')
+        .slice(0, 2)
+    : nameArray[0].length > 1
+    ? nameArray[0].slice(0, 2)
+    : nameArray[0];
+};

@@ -101,20 +101,18 @@ export const sendEmail = (token, ticketId, param, queryParam) => ({
 });
 
 // Takes CX Ticket ID
-export const getLatestComment = (token, ticketId, param) => ({
+export const getLatestComment = (token, ticketId) => ({
   type: GET_LATEST_COMMENT,
   token,
   ticketId,
-  param,
 });
 
 // Takes CX Ticket ID
 
-export const getTicketStatusHistory = (token, ticketId, param) => ({
+export const getTicketStatusHistory = (token, ticketId) => ({
   type: GET_TICKET_STATUS_HISTORY,
   token,
   ticketId,
-  param,
 });
 
 export const getRootCauseList = (token, subscriberId) => ({

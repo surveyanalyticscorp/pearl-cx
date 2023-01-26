@@ -82,9 +82,9 @@ export default function FeedbackDetails(props) {
   }, [responseTickets]);
 
   const onTapHandler = (item, index) => {
-    // console.log(item);
-    dispatch(getLatestComment(authToken, item.id));
-    dispatch(getTicketStatusHistory(authToken, item.id));
+    console.log('TICKET_ITEM: ', JSON.stringify(item));
+    dispatch(getLatestComment(authToken, `${item.id}`));
+    dispatch(getTicketStatusHistory(authToken, `${item.id}`));
   };
 
   const onPressViewTicket = (item) => {

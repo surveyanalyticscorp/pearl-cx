@@ -212,6 +212,10 @@ export default class StringUtils {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+  static uppercaseFirstCharRestLowercase(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  }
+
   static getStringFromNumber(number) {
     return number.toString();
   }

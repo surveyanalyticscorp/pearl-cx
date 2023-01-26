@@ -651,11 +651,11 @@ function* getLatestComment(action) {
         action.ticketId +
         CLF_LATEST_COMMENT_BY_TICKET_ID_POSTFIX,
       {'Auth-Token': action.token},
-      action.param,
+      {},
     );
     yield put({
       type: LATEST_COMMENT_RECEIVED,
-      response: json,
+      response: json.data,
     });
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
@@ -676,11 +676,11 @@ function* getTicketStatusHistory(action) {
         action.ticketId +
         CLF_STATUS_HISTORY_BY_POSTFIX,
       {'Auth-Token': action.token},
-      action.param,
+      {},
     );
     yield put({
       type: GET_TICKET_STATUS_HISTORY_RECEIVED,
-      response: json,
+      response: json.data,
     });
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
