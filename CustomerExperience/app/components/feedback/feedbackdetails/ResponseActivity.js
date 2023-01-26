@@ -16,6 +16,10 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 import {FontWeight} from '../../../styles/font.constants';
+import StringUtils from '../../../Utils/StringUtils';
+import {Avatar, StatusIcon} from '../../../routes/CommonScreen';
+import moment from 'moment';
+import {DMY_AT_TIME_FORMAT} from '../../../Utils/AppConstants';
 
 const ResponseActivity = (props) => {
   let activityData = props.route.params.data;
@@ -36,7 +40,7 @@ const ResponseActivity = (props) => {
   const RenderSurveyComplete = ({children}) => {
     return (
       <View style={styles.surveyDateBox}>
-        <Text style={styles.secondaryTitle}>Completed</Text>
+        <Text style={styles.secondaryTitle}>Survey Completed</Text>
         <Text style={styles.secondaryText}>{children}</Text>
       </View>
     );
@@ -44,9 +48,9 @@ const ResponseActivity = (props) => {
 
   const RenderSurveyDetails = () => {
     return (
-      <View style={styles.innerContainer}>
-        <RenderSurveySent>{'N/A'}</RenderSurveySent>
-        <View style={styles.border} />
+      <View style={[styles.innerContainer, {justifyContent: 'center'}]}>
+        {/* <RenderSurveySent>{'N/A'}</RenderSurveySent>
+        <View style={styles.border} /> */}
         <RenderSurveyComplete>
           {activityData.surveyTakenDate}
         </RenderSurveyComplete>
@@ -84,26 +88,22 @@ const ResponseActivity = (props) => {
     }
 
     return (
-      <View style={{flexDirection: 'row'}}>
-        <View
-          style={{
-            width: 14,
-            height: 14,
-            backgroundColor: fillerColor,
-            borderColor: borderColor,
-            borderRadius: 25,
-            borderWidth: 1,
-            margin: MarginConstants.halfTab,
-          }}
+      <View style={styles.statusRow}>
+        <StatusIcon
+          borderColor={borderColor}
+          fillerColor={fillerColor}
+          size={14}
         />
-        <Text>{item.status}</Text>
+        <Text style={styles.statusText}>
+          {StringUtils.uppercaseFirstCharRestLowercase(item.title)}
+        </Text>
       </View>
     );
   };
 
   const renderSeparator = () => {
     return (
-      <View style={{alignItems: 'center', justifyContent: 'center'}}>
+      <View style={styles.separator}>
         <IonIcon
           name="arrow-forward"
           size={14}
@@ -113,47 +113,42 @@ const ResponseActivity = (props) => {
     );
   };
 
-  const RenderActivityDetails = () => {
-    const managerName = 'DUMMY MANAGER';
-    const lastUpdated = 'DUMMY COMMENT';
-    const comment = 'LAST COMMENT';
-    // const history = [
-    //   {
-    //     status: 'new',
-    //   },
-    //   {
-    //     status: 'open',
-    //   },
-    //   {
-    //     status: 'resolved',
-    //   },
-    // ];
+  const CommentSection = ({commentBy, text, createdAt}) => {
+    return (
+      <View>
+        <View style={styles.statusRow}>
+          <Avatar title={commentBy} />
+          <Text style={styles.secondaryTitle}>
+            {(commentBy ?? 'N/A').trim()}
+          </Text>
+        </View>
 
+        <Text style={styles.commentHeaderText}>
+          {`Last comment: ${moment
+            .utc(createdAt)
+            .local()
+            .format(DMY_AT_TIME_FORMAT)}`}
+        </Text>
+        <Text style={styles.mediumText}>{text ?? 'N/A'}</Text>
+      </View>
+    );
+  };
+
+  const RenderActivityDetails = () => {
     return (
       <View style={styles.innerContainer}>
         <View>
-          <View>
-            <Text style={styles.mediumText}>
-              {ticketLastComment?.data?.commentBy ?? 'N/A'}
-            </Text>
-            <Text style={[styles.commentHeaderText, {color: Colors.accent}]}>
-              {'Latest comment'}
-            </Text>
-            <Text style={styles.secondaryText}>
-              {ticketLastComment?.data?.text ?? 'N/A'}
-            </Text>
-          </View>
-
-          {ticketStatusHistory && ticketStatusHistory?.data?.length > 0 ? (
+          {ticketLastComment && <CommentSection {...ticketLastComment} />}
+          {ticketStatusHistory && ticketStatusHistory.length > 0 ? (
             <View>
-              <Text style={styles.secondaryTitle}>Status Change</Text>
+              <Text style={styles.secondaryTitle}>Status Changes</Text>
 
               <FlatList
                 style={{
                   marginHorizontal: MarginConstants.tab1,
                   marginBottom: MarginConstants.tab2,
                 }}
-                data={ticketStatusHistory.data}
+                data={ticketStatusHistory}
                 keyExtractor={(_, index) => index.toString()}
                 renderItem={RenderStatusCell}
                 onEndReachedThreshold={0}
@@ -194,7 +189,17 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: PaddingConstants.tab2,
   },
+  statusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  separator: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   innerContainer: {
+    flex: 1,
     flexDirection: 'row',
     borderRadius: 4,
     backgroundColor: Colors.white,
@@ -222,7 +227,7 @@ const styles = StyleSheet.create({
   },
   counterTitle: {
     fontSize: TextSizes.secondary,
-    fontWeight: 'bold',
+    fontWeight: FontWeight.bold,
 
     textAlign: 'center',
     flex: 1,
@@ -230,7 +235,7 @@ const styles = StyleSheet.create({
   },
   ticketCounterTitle: {
     fontSize: TextSizes.secondary,
-    fontWeight: 'bold',
+    fontWeight: FontWeight.bold,
     color: Colors.accentLight,
     textAlign: 'center',
     flex: 1,
@@ -238,14 +243,14 @@ const styles = StyleSheet.create({
   },
   mediumText: {
     fontSize: TextSizes.secondary,
-    fontWeight: '900',
+    fontWeight: FontWeight._800,
     color: Colors.lightBlack,
     margin: MarginConstants.tab1,
   },
   secondaryTitle: {
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
-    fontWeight: 'bold',
+    fontWeight: FontWeight.bold,
     margin: MarginConstants.tab1,
     paddingBottom: PaddingConstants.tab1,
   },
@@ -254,6 +259,13 @@ const styles = StyleSheet.create({
     color: Colors.filterIconColor,
     fontWeight: FontWeight._500,
     marginHorizontal: MarginConstants.tab1,
+    marginVertical: MarginConstants.halfTab,
+  },
+  statusText: {
+    fontSize: TextSizes.semiMediumText,
+    color: Colors.filterIconColor,
+    fontWeight: FontWeight._500,
+    marginHorizontal: MarginConstants.halfTab,
     marginVertical: MarginConstants.halfTab,
   },
   commentHeaderText: {
@@ -273,7 +285,7 @@ const styles = StyleSheet.create({
   contactText: {
     fontSize: TextSizes.secondary,
     color: Colors.accentLight,
-    fontWeight: 'bold',
+    fontWeight: FontWeight.bold,
     textDecorationLine: 'underline',
     marginHorizontal: MarginConstants.tab1,
   },
