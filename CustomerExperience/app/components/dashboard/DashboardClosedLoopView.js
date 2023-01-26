@@ -70,7 +70,7 @@ const TicketTabStack = (props) => (
     <TicketTab.Screen
       name={'RESOLVED'}
       component={RenderScene}
-      initialParams={{index: 5, ticketCount: props.ticketCount}}
+      initialParams={{index: 4, ticketCount: props.ticketCount}}
     />
   </TicketTab.Navigator>
 );
@@ -78,12 +78,13 @@ const TicketTabStack = (props) => (
 const RenderScene = (props) => {
   const [showPercentageCount, setShowPercentageCount] = useState(false);
 
-  // console.log(
-  //   `Ticket Count: ${JSON.stringify(props.route.params.ticketCount)}`,
-  // );
+  console.log(
+    `Ticket Count: ${JSON.stringify(props.route.params.ticketCount)}`,
+  );
 
   let renderDonutChart = () => {
     let count = getCount(props.route.params.ticketCount);
+
     let victoryPieColorScale =
       count.totalTickets > 0
         ? [Colors.low2, Colors.medium2, Colors.high2, Colors.critical2]

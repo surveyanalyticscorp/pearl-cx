@@ -62,41 +62,75 @@ export default function TicketComments(props) {
   };
   const [commentText, setCommentText] = useState('');
 
-  const sampleData = [
-    // {id: 1, title: 'Astro'},
-    // {id: 2, title: 'Bakun'},
-  ];
-
-  // useEffect(() => {
-  //   setTicketComments();
-  // }, []);
-
-  // console.log('TICKET COMMENTS on UI', JSON.stringify(ticketComments));
-  const ShowFlatlistOrNoCommentText = () => {
-    return ticketComments.length ? (
-      <ShowFlatList />
-    ) : (
-      <NoItemsFound>No comments found</NoItemsFound>
-    );
-  };
-
-  const ShowFlatList = () => {
+  const ShowFlatList = (data) => {
     return (
       <FlatList
         style={styles.container}
-        data={ticketComments}
+        data={data}
+        inverted={data.length !== 0}
         renderItem={renderItem}
+        ListEmptyComponent={
+          ticketComments.length === 0 && (
+            <NoItemsFound>No comments found</NoItemsFound>
+          )
+        }
+        keyExtractor={(item) => item.id.toString()}
+      />
+    );
+  };
+
+  const ShowNestedFlatList = (data) => {
+    return (
+      <FlatList
+        style={[styles.container, {marginStart: MarginConstants.tab2}]}
+        data={data}
+        inverted={false}
+        renderItem={CommentItem}
         keyExtractor={(item) => item.id.toString()}
       />
     );
   };
 
   const renderItem = ({item}) => {
+    return (
+      <View
+        style={[
+          styles.commentItemView,
+          // {
+          //   backgroundColor: Colors.darkerGrey,
+          //   margin: MarginConstants.tab1,
+          //   padding: PaddingConstants.halfTab,
+          // },
+        ]}>
+        {CommentItem({item})}
+        {item.children && (
+          <View style={{marginStart: MarginConstants.tab1}}>
+            {ShowNestedFlatList(item.children)}
+          </View>
+        )}
+        <View
+          style={[
+            styles.commentItemView,
+            {marginHorizontal: MarginConstants.tab4},
+          ]}>
+          <TouchableOpacity>
+            <Text style={[styles.commentByText, {color: Colors.accent}]}>
+              Reply
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
+
+  const CommentItem = ({item}) => {
     const isOtherUser = item.userId !== userID;
     return (
       <View style={styles.commentItemView}>
         <View style={styles.commentUserView}>
           {item.userId !== userID && <Avatar title={item.commentBy} />}
+        </View>
+        <View style={[styles.commentTextView]}>
           <Text
             style={[
               styles.commentByText,
@@ -104,15 +138,12 @@ export default function TicketComments(props) {
             ]}>
             {isOtherUser ? item.commentBy.trim() : 'You'}
           </Text>
-        </View>
-        <View style={[styles.commentTextView]}>
           <Text style={styles.commentText}>{item.text}</Text>
-        </View>
-        <View style={styles.commentDateView}>
           <Text style={styles.commentDateText}>
             {moment.utc(item.createdAt).local().format(DMY_AT_TIME_FORMAT)}
           </Text>
         </View>
+        <View style={styles.commentDateView}></View>
       </View>
     );
   };
@@ -146,6 +177,12 @@ export default function TicketComments(props) {
           onChangeText={onChangeCommentHandler}
           placeholder="Comment"
           onEndEditing={onChangeCommentHandler}
+          returnKeyType={'send'}
+          onSubmitEditing={(event) => {
+            console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
+            onChangeCommentHandler(event.nativeEvent.text);
+            handleOnSubmit();
+          }}
         />
       </KeyboardAvoidingView>
     );
@@ -205,7 +242,7 @@ export default function TicketComments(props) {
 
   return (
     <View style={styles.container}>
-      <ShowFlatlistOrNoCommentText />
+      {ShowFlatList(ticketComments)}
       {commentFooter()}
     </View>
   );
@@ -249,22 +286,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginEnd: MarginConstants.halfTab,
-    padding: PaddingConstants.halfTab,
     fontFamily: FontFamily.medium,
     fontSize: TextSizes.medium,
     borderRadius: 5,
   },
 
   commentTextView: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'column',
     flex: 1,
 
     marginStart: MarginConstants.tab4,
     marginEnd: MarginConstants.halfTab,
 
     backgroundColor: Colors.darkerGrey,
-    padding: MarginConstants.tab1,
+    padding: MarginConstants.halfTab,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     borderRadius: 5,
@@ -273,8 +308,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
 
-    padding: MarginConstants.tab1,
-    marginVertical: MarginConstants.halfTab,
+    paddingHorizontal: MarginConstants.halfTab,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     borderRadius: 5,
@@ -287,7 +321,7 @@ const styles = StyleSheet.create({
   },
   commentByText: {
     flex: 1,
-    fontFamily: FontFamily.regular,
+    fontFamily: FontFamily.semiBold,
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
   },

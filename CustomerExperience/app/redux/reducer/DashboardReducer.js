@@ -47,8 +47,8 @@ const initialState = {
   currentFeedback: {},
   ticketFilter: {},
   ticket: {},
-  ticketComments: {},
-  ticketActivity: {},
+  ticketComments: [],
+  ticketActivity: [],
   apiCallStatus: {},
   welcomeScreenData: {},
   emailData: {},
@@ -156,14 +156,14 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         ticket: action.ticketData,
-        ticketComments: action.ticketComments,
+        ticketComments: [...action.ticketComments].reverse(),
         ticketActivity: action.ticketActivity,
       };
     }
 
     case CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED: {
       console.log('TICKETCOMMENTS', action.ticketComments);
-      return {...state, ticketComments: action.ticketComments};
+      return {...state, ticketComments: [...action.ticketComments].reverse()};
     }
 
     case CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED: {
@@ -192,7 +192,7 @@ const dashboardReducer = (state = initialState, action) => {
         ...state,
         apiCallStatus: action.response,
         ticket: action.ticketData,
-        ticketComments: action.ticketComments,
+        ticketComments: [...action.ticketComments].reverse(),
         ticketActivity: action.ticketActivity,
       };
     }
