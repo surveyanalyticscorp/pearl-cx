@@ -1,11 +1,12 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   FlatList,
   Platform,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -18,18 +19,27 @@ import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import style from '../widgets/qp-calendar/calendar/header/style';
 
 const SelectSegmentScreen = (props) => {
   const dispatch = useDispatch();
   let currentSegmentId = props.route.params.currentSegmentId;
   const setSegmentSelection = props.route.params.setSegmentSelection;
   const [isLoading, setLoading] = useState(false);
+  const textInputRef = useRef();
   const authToken = useSelector((state) => state.global.authToken);
   const segmentList = useSelector((state) => state.dashboard.segmentList);
   const navigation = useNavigation();
-  const [pageOffset, setPageOffset] = useState(0);
+  const defaultRequestBody = {
+    pageOffset: 0,
+    perPage: 20,
+    segmentName: '',
+  };
+  // const [pageOffset, setPageOffset] = useState(0);
+  const [requestBody, setRequestBody] = useState(defaultRequestBody);
   const handleSegmentSelectionAction = (item) => {
-    setPageOffset(0);
+    // setPageOffset(0);
+    setRequestBody(defaultRequestBody);
     setSegmentSelection(item);
     if (navigation.canGoBack) {
       navigation.goBack();
@@ -38,17 +48,23 @@ const SelectSegmentScreen = (props) => {
 
   useEffect(() => {
     getSegmentData();
-  }, [pageOffset]);
+  }, [requestBody]);
 
   const loadMoreData = () => {
-    setPageOffset(pageOffset + 1);
+    // setPageOffset(pageOffset + 1);
+    setRequestBody((prevState) => ({
+      ...prevState,
+      pageOffset: prevState.pageOffset + 1,
+    }));
   };
 
   const getSegmentData = () => {
-    setLoading(true);
+    // setLoading(true);
     dispatch(
       getClosedLoopSegmentDetails(authToken, {
-        pageOffset: pageOffset.toString(),
+        pageOffset: `${requestBody.pageOffset}`,
+        perPage: `${requestBody.perPage}`,
+        segmentName: requestBody.segmentName,
       }),
     );
   };
@@ -74,23 +90,61 @@ const SelectSegmentScreen = (props) => {
     );
   };
 
+  const onSearchHandler = (text) => {
+    setRequestBody({
+      ...defaultRequestBody,
+      segmentName: text,
+    });
+  };
+
+  const clearSearchHandler = () => {
+    setRequestBody(defaultRequestBody);
+    textInputRef.current.clear();
+  };
+
   const renderSegmentSearch = () => {
     return (
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search..."
-        onChangeText={(text) => {
-          // if (text) {
-          //   setFilteredList((state) =>
-          //     state.filter((item) =>
-          //       item.segmentName.toLowerCase().includes(text.toLowerCase()),
-          //     ),
-          //   );
-          // } else {
-          //   setFilteredList(data);
-          // }
-        }}
-      />
+      <View
+        style={[
+          {
+            flexDirection: 'row',
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+          styles.bottomBar,
+        ]}>
+        <TextInput
+          ref={textInputRef}
+          style={[styles.searchInput, {flex: 1}]}
+          placeholder="Search..."
+          returnKeyType={'search'}
+          onSubmitEditing={(event) => {
+            console.log('KEYBOARD_SEARCH', JSON.stringify(event.nativeEvent));
+            onSearchHandler(event.nativeEvent.text);
+          }}
+        />
+        {/* <TouchableOpacity
+          style={[styles.searchInput, {marginEnd: MarginConstants.tab1}]}
+          onPress={clearSearchHandler}>
+          <IonIcons
+            style={{marginHorizontal: MarginConstants.halfTab}}
+            name={'close-circle'}
+            size={20}
+            color={Colors.filterIconColor}
+          />
+        </TouchableOpacity> */}
+        {/* <TouchableOpacity
+          style={[
+            styles.searchInput,
+            {
+              padding: PaddingConstants.halfTab,
+            },
+          ]}
+          onPress={onSearchHandler}>
+          <Text>{'Search'}</Text>
+        </TouchableOpacity> */}
+      </View>
     );
   };
 
@@ -204,10 +258,13 @@ const styles = StyleSheet.create({
     color: Colors.filterIconColor,
   },
   searchInput: {
-    borderBottomWidth: 1,
-    borderColor: Colors.filterIconColor,
+    marginBottom: MarginConstants.halfTab,
+  },
+  bottomBar: {
+    borderBottomWidth: 0.5,
 
-    marginBottom: MarginConstants.tab2,
+    borderColor: Colors.borderColor,
+    padding: PaddingConstants.halfTab,
   },
 });
 export default SelectSegmentScreen;
