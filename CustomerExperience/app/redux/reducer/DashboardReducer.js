@@ -125,7 +125,7 @@ const dashboardReducer = (state = initialState, action) => {
         segmentDetails: {},
         ownerDetails: {},
         ticket: {},
-        ticketComments: {},
+        ticketComments: [],
         ticketActivity: {},
         apiCallStatus: {},
       };
@@ -156,14 +156,14 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         ticket: action.ticketData,
-        ticketComments: [...action.ticketComments].reverse(),
+        ticketComments: action.ticketComments,
         ticketActivity: action.ticketActivity,
       };
     }
 
     case CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED: {
       console.log('TICKETCOMMENTS', action.ticketComments);
-      return {...state, ticketComments: [...action.ticketComments].reverse()};
+      return {...state, ticketComments: action.ticketComments};
     }
 
     case CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED: {
@@ -176,7 +176,7 @@ const dashboardReducer = (state = initialState, action) => {
         ...state,
         ticket: {},
         ticketActivity: {},
-        ticketComments: {},
+        ticketComments: [],
       };
     }
 
@@ -192,7 +192,7 @@ const dashboardReducer = (state = initialState, action) => {
         ...state,
         apiCallStatus: action.response,
         ticket: action.ticketData,
-        ticketComments: [...action.ticketComments].reverse(),
+        ticketComments: action.ticketComments,
         ticketActivity: action.ticketActivity,
       };
     }

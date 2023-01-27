@@ -50,6 +50,7 @@ export default function TicketComments(props) {
   );
   const ticketId = useSelector((state) => state.dashboard.ticket.id);
   const dispach = useDispatch();
+  const [isMainCommentHidden, setMainCommentVisibility] = useState(false);
 
   const commentState = {
     commentBy: `${firstName} ${lastName}`.trim(),
@@ -67,13 +68,14 @@ export default function TicketComments(props) {
       <FlatList
         style={styles.container}
         data={data}
-        inverted={data.length !== 0}
+        inverted={false}
         renderItem={renderItem}
         ListEmptyComponent={
           ticketComments.length === 0 && (
             <NoItemsFound>No comments found</NoItemsFound>
           )
         }
+        ListFooterComponent={commentFooter()}
         keyExtractor={(item) => item.id.toString()}
       />
     );
@@ -91,36 +93,46 @@ export default function TicketComments(props) {
     );
   };
 
-  const renderItem = ({item}) => {
+  const CommentParentItem = ({item}) => {
+    const [isCommentBoxVisible, setCommentBoxVisibility] = useState(false);
+    const toggleCommentBoxVisibility = () => {
+      setCommentBoxVisibility((isHidden) => !isHidden);
+      // setMainCommentVisibility((isHidden) => !isHidden);
+    };
     return (
       <View
-        style={[
-          styles.commentItemView,
-          // {
-          //   backgroundColor: Colors.darkerGrey,
-          //   margin: MarginConstants.tab1,
-          //   padding: PaddingConstants.halfTab,
-          // },
-        ]}>
+        style={{
+          margin: MarginConstants.tab1,
+          padding: PaddingConstants.halfTab,
+        }}>
         {CommentItem({item})}
         {item.children && (
-          <View style={{marginStart: MarginConstants.tab1}}>
+          <View
+            style={{
+              marginStart: MarginConstants.tab2,
+              marginTop: MarginConstants.tab1,
+            }}>
             {ShowNestedFlatList(item.children)}
           </View>
         )}
-        <View
-          style={[
-            styles.commentItemView,
-            {marginHorizontal: MarginConstants.tab4},
-          ]}>
-          <TouchableOpacity>
-            <Text style={[styles.commentByText, {color: Colors.accent}]}>
-              Reply
-            </Text>
-          </TouchableOpacity>
-        </View>
+
+        <TouchableOpacity
+          style={{
+            marginStart: MarginConstants.tab4,
+            marginVertical: MarginConstants.halfTab,
+          }}
+          onPress={toggleCommentBoxVisibility}>
+          <Text style={[styles.replyText, {color: Colors.accentLight}]}>
+            {isCommentBoxVisible ? 'Cancel' : 'Reply'}
+          </Text>
+        </TouchableOpacity>
+        {isCommentBoxVisible && commentFooter()}
       </View>
     );
+  };
+
+  const renderItem = ({item}) => {
+    return <CommentParentItem item={item} />;
   };
 
   const CommentItem = ({item}) => {
@@ -130,7 +142,7 @@ export default function TicketComments(props) {
         <View style={styles.commentUserView}>
           {item.userId !== userID && <Avatar title={item.commentBy} />}
         </View>
-        <View style={[styles.commentTextView]}>
+        <View style={styles.commentTextView}>
           <Text
             style={[
               styles.commentByText,
@@ -143,7 +155,6 @@ export default function TicketComments(props) {
             {moment.utc(item.createdAt).local().format(DMY_AT_TIME_FORMAT)}
           </Text>
         </View>
-        <View style={styles.commentDateView}></View>
       </View>
     );
   };
@@ -168,22 +179,32 @@ export default function TicketComments(props) {
   };
   const commentBox = () => {
     return (
-      <KeyboardAvoidingView style={styles.commentBox}>
-        <MaterialIconView iconName="chat-bubble" />
+      <KeyboardAvoidingView style={styles.commentBoxContainer}>
+        {/* <View
+          style={[styles.commentBox, {marginBottom: MarginConstants.halfTab}]}>
+          <Avatar title={`${firstName} ${lastName}`.trim()} />
+          <Text style={styles.commentByText}>You</Text>
+        </View> */}
 
-        <TextInput
-          value={commentText}
-          style={styles.container}
-          onChangeText={onChangeCommentHandler}
-          placeholder="Comment"
-          onEndEditing={onChangeCommentHandler}
-          returnKeyType={'send'}
-          onSubmitEditing={(event) => {
-            console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
-            onChangeCommentHandler(event.nativeEvent.text);
-            handleOnSubmit();
-          }}
-        />
+        <View style={[styles.commentBox, styles.borderStyle]}>
+          <MaterialIconView iconName="chat-bubble" />
+
+          <TextInput
+            value={commentText}
+            multiline
+            style={[styles.container, styles.commentText]}
+            onChangeText={onChangeCommentHandler}
+            placeholder="Write a comment"
+            onEndEditing={onChangeCommentHandler}
+            returnKeyType={'send'}
+            onSubmitEditing={(event) => {
+              console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
+              onChangeCommentHandler(event.nativeEvent.text);
+              handleOnSubmit();
+            }}
+          />
+          <SendButton />
+        </View>
       </KeyboardAvoidingView>
     );
   };
@@ -198,13 +219,13 @@ export default function TicketComments(props) {
     </View>
   );
 
-  const ContactButton = () => {
-    return (
-      <TouchableOpacity>
-        <MaterialIconView iconName="account-circle" />
-      </TouchableOpacity>
-    );
-  };
+  // const ContactButton = () => {
+  //   return (
+  //     <TouchableOpacity>
+  //       <MaterialIconView iconName="account-circle" />
+  //     </TouchableOpacity>
+  //   );
+  // };
   const SendButton = () => {
     return (
       <TouchableOpacity onPress={handleOnSubmit}>
@@ -212,27 +233,27 @@ export default function TicketComments(props) {
       </TouchableOpacity>
     );
   };
-  const AttachmentButton = () => {
-    return (
-      <TouchableOpacity>
-        <MaterialIconView iconName="attach-file" />
-      </TouchableOpacity>
-    );
-  };
+  // const AttachmentButton = () => {
+  //   return (
+  //     <TouchableOpacity>
+  //       <MaterialIconView iconName="attach-file" />
+  //     </TouchableOpacity>
+  //   );
+  // };
 
-  const PictureButton = () => {
-    return (
-      <TouchableOpacity>
-        <MaterialIconView iconName="photo" />
-      </TouchableOpacity>
-    );
-  };
+  // const PictureButton = () => {
+  //   return (
+  //     <TouchableOpacity>
+  //       <MaterialIconView iconName="photo" />
+  //     </TouchableOpacity>
+  //   );
+  // };
 
   const commentFooter = () => {
     return (
       <View style={styles.commentFooter}>
         {commentBox()}
-        <SendButton />
+        {/* <SendButton /> */}
         {/* <ContactButton />
         <AttachmentButton />
         <PictureButton /> */}
@@ -243,7 +264,7 @@ export default function TicketComments(props) {
   return (
     <View style={styles.container}>
       {ShowFlatList(ticketComments)}
-      {commentFooter()}
+      {/* {commentFooter()} */}
     </View>
   );
 }
@@ -257,24 +278,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.white,
-    padding: PaddingConstants.tab1,
-    borderTopColor: Colors.darkerGrey,
-    borderTopWidth: 1,
+
+    marginHorizontal: MarginConstants.tab2,
   },
   commentBox: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
     backgroundColor: Colors.white,
-    padding: MarginConstants.tab1,
-    marginHorizontal: MarginConstants.tab1,
-    marginVertical: MarginConstants.halfTab,
+    marginStart: MarginConstants.halfTab,
+  },
+
+  borderStyle: {borderColor: Colors.darkerGrey, borderWidth: 1},
+  commentBoxContainer: {
+    flex: 1,
   },
 
   commentUserView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: MarginConstants.tab1,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    padding: MarginConstants.halfTab,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
 
@@ -292,22 +315,16 @@ const styles = StyleSheet.create({
   },
 
   commentTextView: {
-    flexDirection: 'column',
     flex: 1,
-
-    marginStart: MarginConstants.tab4,
     marginEnd: MarginConstants.halfTab,
 
     backgroundColor: Colors.darkerGrey,
-    padding: MarginConstants.halfTab,
+    padding: PaddingConstants.halfTab,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
-    borderRadius: 5,
   },
   commentItemView: {
-    flexDirection: 'column',
-    flex: 1,
-
+    flexDirection: 'row',
     paddingHorizontal: MarginConstants.halfTab,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
@@ -320,8 +337,14 @@ const styles = StyleSheet.create({
     color: Colors.filterIconColor,
   },
   commentByText: {
-    flex: 1,
     fontFamily: FontFamily.semiBold,
+    fontSize: TextSizes.secondary,
+    color: Colors.filterIconColor,
+  },
+  replyText: {
+    flex: 1,
+    marginStart: MarginConstants.tab1,
+    fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
   },
@@ -336,6 +359,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontFamily: FontFamily.medium,
     fontSize: TextSizes.mediumText,
-    color: Colors.filterIconColor,
+    color: Colors.primary,
   },
 });

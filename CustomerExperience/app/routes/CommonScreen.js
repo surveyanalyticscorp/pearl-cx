@@ -811,7 +811,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: MarginConstants.tab3,
     width: MarginConstants.tab3,
-    backgroundColor: Colors.filterIconColor,
+    backgroundColor: Colors.borderColor,
     marginHorizontal: MarginConstants.halfTab,
     alignItems: 'center',
     justifyContent: 'center',
