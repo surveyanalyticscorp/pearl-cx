@@ -202,7 +202,7 @@ export default function TicketComments(props) {
     };
 
     const handleOnSubmit = () => {
-      if (StringUtils.isEmptyOrNull(commentText)) {
+      if (StringUtils.isEmptyOrNull(commentText) || commentText.length === 0) {
         return;
       }
       console.log(

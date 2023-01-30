@@ -1,39 +1,28 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   TouchableWithoutFeedback,
   Text,
   Image,
   StyleSheet,
-  // ScrollView,
   Platform,
-  FlatList,
-  Pressable,
 } from 'react-native';
 // import StringUtils from '../../Utils/StringUtils';
 // import ArrayUtils from '../../Utils/ArrayUtils';
 // import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import {
-  Colors,
-  statusColors,
-  priorityColors,
-} from '../../styles/color.constants';
+import {Colors, statusColors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
-// import {Sizes} from '../../styles/Size.constant';
-// import moment from 'moment';
-// import {translate} from '../../Utils/MultilinguaUtils';
+
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import QPButton from '../../widgets/Button';
-// import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
 import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import TicketTakeAction from './takeaction/TIcketTakeAction';
-// import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
   BottomSheetHeader,
   RenderPriorityIcon,
@@ -48,7 +37,6 @@ import {
   getPriorityById,
   getPriorityIndexById,
   getSegmentBySegmentId,
-  getSegmentIndex,
   getSegmentNameById,
   getStatusById,
   getStatusIndexById,
@@ -63,17 +51,10 @@ import {
 } from '../../redux/actions/dashboard.actions';
 import SelectStatus from './takeaction/SelectStatus';
 import SelectPriority from './takeaction/SelectPriority';
-import SelectSegment from './takeaction/SelectSegment';
 import SelectTicketOwner from './takeaction/SelectTicketOwner';
-// import {element} from 'prop-types';
-import {
-  getDefaultEmailTemplate,
-  getEmailTemplates,
-} from '../../redux/actions/closedloop.actions';
 import {EMAIL, PHONE} from '../../api/Constant';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
-
 export default function TicketOverview(props) {
   const bottomSheetEnum = {
     status: 'status',
@@ -108,42 +89,6 @@ export default function TicketOverview(props) {
   );
   console.log('TTTTT', ticketDetails ?? '');
   console.log({isLoading});
-  // const getSegmentIndex = (segemntlist, segmentId) => {
-  //   let index = 0;
-  //   segemntlist.forEach((element, index_) => {
-  //     if (element.currentSegmentID === segmentId) {
-  //       index = index_;
-  //     }
-  //   });
-  //   return index;
-  // };
-
-  // const getSegmentBySegmentId = (segmentlist, segmentId) => {
-  //   let item = {};
-  //   segmentlist.forEach((element) => {
-  //     if (element.currentSegmentID === segmentId) {
-  //       item = element;
-  //     }
-  //   });
-  //   return item;
-  // };
-
-  // const getOwnerIndex = (ownerlist, ownnerId) => {
-  //   let index_ = -1;
-  //   ownerlist.forEach((element, index) => {
-  //     if (element.ownerID === ownnerId) {
-  //       index_ = index;
-  //     }
-  //   });
-  //   return index_;
-  // };
-
-  const [currentSegment, setCurrentSegment] = useState(
-    getSegmentBySegmentId(segments, ticketDetails.currentSegmentId ?? 0),
-  );
-  // const [segmentIndex, setSegmentIndex] = useState(
-  //   getSegmentIndex(segments, currentSegment.currentSegmentID),
-  // );
 
   const [ticketOwnerIndex, setTicketOwnerIndex] = useState(
     getOwnerIndex(owners, ticketDetails.assignToId ?? 0),
@@ -163,38 +108,22 @@ export default function TicketOverview(props) {
       userEmailAddress: `${emailAddress}`,
       userId: `${userID}`,
     };
-    // console.log('UPDATE_TICKET', body);
 
     dispatch(
       updateClfTicket(authToken, body, ticketDetails.id, feedbackApiKey),
     );
   };
 
-  // useEffect(() => {
-  // dispatch(
-  //   getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
-  // );
-  // dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
-  // }, []);
-
   /// BOTTOM SHEET
 
   // variables for bottom sheet
   const actionBottomSheet = React.useRef();
   const statusBottomSheet = React.useRef();
-  // const priorityBottomSheet = React.useRef();
-  // const segmentBottomSheet = React.useRef();
-  // const ownerBottomSheet = React.useRef();
 
   const actionBottomSheetSnapPoints = ['33%', '0%'];
   const statusBottomSheetSnapPoints = ['45', '0'];
-  // const priorityBottomSheetSnapPoints = ['45', '0'];
-  // const segmentBottomSheetSnapPoints = ['45', '0'];
-  // const ownerBottomSheetSnapPoints = ['45', '0'];
 
   const fall = new Animated.Value(1);
-
-  // const [shadow, setShadow] = useState(false);
 
   const onTakeActionHandler = () => {
     // if (ticketDetails?.panelMember?.email) {
