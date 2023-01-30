@@ -12,6 +12,7 @@ import {
   // SafeAreaView,
   TextInput,
   KeyboardAvoidingView,
+  ScrollView,
   // LogBox,
 } from 'react-native';
 // import StringUtils from '../../Utils/StringUtils';
@@ -34,6 +35,7 @@ import moment from 'moment';
 import {DMY_AT_TIME_FORMAT} from '../../Utils/AppConstants';
 import {clockRunning} from 'react-native-reanimated';
 import {getNameInitials} from '../../Utils/TicketUtils';
+import StringUtils from '../../Utils/StringUtils';
 // import {Sizes} from '../../styles/Size.constant';
 // import moment from 'moment';
 // import {translate} from '../../Utils/MultilinguaUtils';
@@ -61,7 +63,6 @@ export default function TicketComments(props) {
     parentId: 0,
     subscriberId: global.subscriberId,
   };
-  const [commentText, setCommentText] = useState('');
 
   const ShowFlatList = (data) => {
     return (
@@ -70,12 +71,12 @@ export default function TicketComments(props) {
         data={data}
         inverted={false}
         renderItem={renderItem}
-        ListEmptyComponent={
-          ticketComments.length === 0 && (
-            <NoItemsFound>No comments found</NoItemsFound>
-          )
-        }
-        ListFooterComponent={commentFooter()}
+        // ListEmptyComponent={
+        //   ticketComments.length === 0 && (
+        //     <NoItemsFound>No comments found</NoItemsFound>
+        //   )
+        // }
+        ListFooterComponent={CommentBox(data.id)}
         keyExtractor={(item) => item.id.toString()}
       />
     );
@@ -116,7 +117,7 @@ export default function TicketComments(props) {
           </View>
         )}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{
             marginStart: MarginConstants.tab4,
             marginVertical: MarginConstants.halfTab,
@@ -126,7 +127,8 @@ export default function TicketComments(props) {
             {isCommentBoxVisible ? 'Cancel' : 'Reply'}
           </Text>
         </TouchableOpacity>
-        {isCommentBoxVisible && commentFooter()}
+        {isCommentBoxVisible && CommentBox(item.id)} */}
+        {CommentBox(item.id)}
       </View>
     );
   };
@@ -138,19 +140,25 @@ export default function TicketComments(props) {
   const CommentItem = ({item}) => {
     const isOtherUser = item.userId !== userID;
     return (
-      <View style={styles.commentItemView}>
+      <View
+        style={[
+          styles.commentItemView,
+          {marginVertical: MarginConstants.halfTab},
+        ]}>
         <View style={styles.commentUserView}>
-          {item.userId !== userID && <Avatar title={item.commentBy} />}
+          {/* {item.userId !== userID && <Avatar title={item.commentBy} />} */}
+          <Avatar title={item.commentBy} />
         </View>
         <View style={styles.commentTextView}>
           <Text
             style={[
               styles.commentByText,
-              {textAlign: isOtherUser ? 'left' : 'right'},
+              // {textAlign: isOtherUser ? 'left' : 'right'},
             ]}>
-            {isOtherUser ? item.commentBy.trim() : 'You'}
+            {/* {isOtherUser ? item.commentBy.trim() : 'You'} */}
+            {item.commentBy.trim()}
           </Text>
-          <Text style={styles.commentText}>{item.text}</Text>
+          <Text style={styles.commentText}>{item.text.trim()}</Text>
           <Text style={styles.commentDateText}>
             {moment.utc(item.createdAt).local().format(DMY_AT_TIME_FORMAT)}
           </Text>
@@ -159,27 +167,65 @@ export default function TicketComments(props) {
     );
   };
 
-  const onChangeCommentHandler = (text) => {
-    setCommentText(text);
-  };
+  // const onChangeCommentHandler = (text, parentId) => {
+  //   setCommentText(text);
+  //   setParentId(parentId);
+  // };
 
-  const handleOnSubmit = () => {
-    console.log(
-      JSON.stringify({COMMENT_STATE: commentState, text: commentText}),
-    );
-    dispach(
-      postAddTicketComment(
-        authToken,
-        {...commentState, text: commentText},
-        ticketId,
-      ),
-    );
+  // const handleOnSubmit = () => {
+  //   if (StringUtils.isEmptyOrNull(commentText)) {
+  //     return;
+  //   }
+  //   console.log(
+  //     JSON.stringify({COMMENT_STATE: commentState, text: commentText}),
+  //   );
 
-    setCommentText('');
-  };
-  const commentBox = () => {
+  //   dispach(
+  //     postAddTicketComment(
+  //       authToken,
+  //       {...commentState, text: commentText, parentId: parentId},
+  //       ticketId,
+  //     ),
+  //   );
+
+  //   setCommentText('');
+  //   setParentId(0);
+  // };
+  const CommentBox = (parentId_) => {
+    const [commentText, setCommentText] = useState('');
+    // const [parentId, setParentId] = useState(parentId_);
+    const placeHolder = parentId_ > 0 ? 'Write a reply' : 'Write a comment';
+    const marginForCommentBox = parentId_ > 0 ? MarginConstants.tab4 : 0;
+
+    const onChangeCommentHandler = (text) => {
+      setCommentText(text);
+    };
+
+    const handleOnSubmit = () => {
+      if (StringUtils.isEmptyOrNull(commentText)) {
+        return;
+      }
+      console.log(
+        JSON.stringify({COMMENT_STATE: commentState, text: commentText}),
+      );
+
+      dispach(
+        postAddTicketComment(
+          authToken,
+          {...commentState, text: commentText, parentId: parentId_},
+          ticketId,
+        ),
+      );
+
+      setCommentText('');
+    };
+
     return (
-      <KeyboardAvoidingView style={styles.commentBoxContainer}>
+      <KeyboardAvoidingView
+        style={[
+          styles.commentBoxContainer,
+          {marginStart: marginForCommentBox},
+        ]}>
         {/* <View
           style={[styles.commentBox, {marginBottom: MarginConstants.halfTab}]}>
           <Avatar title={`${firstName} ${lastName}`.trim()} />
@@ -190,12 +236,13 @@ export default function TicketComments(props) {
           <MaterialIconView iconName="chat-bubble" />
 
           <TextInput
-            value={commentText}
+            // value={commentText}
+            defaultValue={commentText}
             multiline
             style={[styles.container, styles.commentText]}
             onChangeText={onChangeCommentHandler}
-            placeholder="Write a comment"
-            onEndEditing={onChangeCommentHandler}
+            placeholder={placeHolder}
+            // onEndEditing={onChangeCommentHandler}
             returnKeyType={'send'}
             onSubmitEditing={(event) => {
               console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
@@ -203,11 +250,43 @@ export default function TicketComments(props) {
               handleOnSubmit();
             }}
           />
-          <SendButton />
+          <SendButton handleOnSubmit={handleOnSubmit} />
         </View>
       </KeyboardAvoidingView>
     );
   };
+
+  // const parentCommentBox = (parentId) => {
+  //   return (
+  //     <KeyboardAvoidingView style={styles.commentBoxContainer}>
+  //       {/* <View
+  //         style={[styles.commentBox, {marginBottom: MarginConstants.halfTab}]}>
+  //         <Avatar title={`${firstName} ${lastName}`.trim()} />
+  //         <Text style={styles.commentByText}>You</Text>
+  //       </View> */}
+
+  //       <View style={[styles.commentBox, styles.borderStyle]}>
+  //         <MaterialIconView iconName="chat-bubble" />
+
+  //         <TextInput
+  //           value={commentText}
+  //           multiline
+  //           style={[styles.container, styles.commentText]}
+  //           onChangeText={(text) => onChangeCommentHandler(text, parentId)}
+  //           placeholder="Write a comment"
+  //           // onEndEditing={onChangeCommentHandler}
+  //           returnKeyType={'send'}
+  //           onSubmitEditing={(event) => {
+  //             console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
+  //             onChangeCommentHandler(event.nativeEvent.text, parentId);
+  //             handleOnSubmit();
+  //           }}
+  //         />
+  //         <SendButton handleOnSubmit={handleOnSubmit} />
+  //       </View>
+  //     </KeyboardAvoidingView>
+  //   );
+  // };
 
   const MaterialIconView = ({iconName, color}) => (
     <View style={{margin: MarginConstants.halfTab}}>
@@ -226,7 +305,7 @@ export default function TicketComments(props) {
   //     </TouchableOpacity>
   //   );
   // };
-  const SendButton = () => {
+  const SendButton = ({handleOnSubmit}) => {
     return (
       <TouchableOpacity onPress={handleOnSubmit}>
         <MaterialIconView iconName="send" />
@@ -249,23 +328,30 @@ export default function TicketComments(props) {
   //   );
   // };
 
-  const commentFooter = () => {
-    return (
-      <View style={styles.commentFooter}>
-        {commentBox()}
-        {/* <SendButton /> */}
-        {/* <ContactButton />
-        <AttachmentButton />
-        <PictureButton /> */}
-      </View>
-    );
-  };
+  // const commentFooter = () => {
+  //   return (
+  //     <View style={styles.commentFooter}>
+  //       {CommentBox(0)}
+  //       {/* <SendButton /> */}
+  //       {/* <ContactButton />
+  //       <AttachmentButton />
+  //       <PictureButton /> */}
+  //     </View>
+  //   );
+  // };
 
   return (
-    <View style={styles.container}>
-      {ShowFlatList(ticketComments)}
+    <ScrollView style={styles.container}>
+      {/* {ShowFlatList(ticketComments)} */}
+
       {/* {commentFooter()} */}
-    </View>
+      {ticketComments.length > 0 ? (
+        ticketComments.map((item) => <CommentParentItem item={item} />)
+      ) : (
+        <View />
+      )}
+      {CommentBox(0)}
+    </ScrollView>
   );
 }
 
@@ -286,12 +372,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     backgroundColor: Colors.white,
-    marginStart: MarginConstants.halfTab,
+    marginHorizontal: MarginConstants.halfTab,
   },
 
   borderStyle: {borderColor: Colors.darkerGrey, borderWidth: 1},
   commentBoxContainer: {
     flex: 1,
+    marginVertical: MarginConstants.tab1,
   },
 
   commentUserView: {
