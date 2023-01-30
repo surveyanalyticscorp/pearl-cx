@@ -708,18 +708,19 @@ export default function TicketOverview(props) {
   const getUnderLineText = (text, type) => {
     return (
       <TouchableWithoutFeedback
-        onPress={() => {
-          console.log(text);
+      // onPress={() => {
+      //   console.log(text);
 
-          switch (type) {
-            case PHONE:
-              promptCall();
-              break;
-            default:
-              navigateToSendEmail();
-              break;
-          }
-        }}>
+      //   switch (type) {
+      //     case PHONE:
+      //       promptCall();
+      //       break;
+      //     default:
+      //       navigateToSendEmail();
+      //       break;
+      //   }
+      // }}
+      >
         <View
           style={[
             {flex: 2, justifyContent: 'flex-start'},
@@ -1094,9 +1095,9 @@ export default function TicketOverview(props) {
     );
   };
 
-  const TempUI = () => {
-    return useCallback(() => <RenderTicketOverView />, [ticketDetails]);
-  };
+  // const TempUI = () => {
+  //   return useCallback(() => <RenderTicketOverView />, [ticketDetails]);
+  // };
 
   const RenderTicketOverView = () => (
     <View style={styles.container}>
