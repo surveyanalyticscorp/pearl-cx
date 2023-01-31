@@ -1,33 +1,22 @@
-import React, {useCallback, useEffect, useState} from 'react'; // , {useEffect, useState}
+import React, {useCallback, useState} from 'react'; // , {useEffect, useState}
 import {
   View,
-  // TouchableWithoutFeedback,
   TouchableOpacity,
   Text,
-  // Image,
   StyleSheet,
-  // ScrollView,
-  // Platform,
   FlatList,
-  // SafeAreaView,
   TextInput,
   KeyboardAvoidingView,
   ScrollView,
   RefreshControl,
-  // LogBox,
+  SafeAreaView,
 } from 'react-native';
-// import StringUtils from '../../Utils/StringUtils';
-// import ArrayUtils from '../../Utils/ArrayUtils';
-// import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {
-  Colors,
-  // , statusColors
-} from '../../styles/color.constants';
+import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {FontFamily, FontWeight} from '../../styles/font.constants';
+import {FontFamily} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {Avatar} from '../../routes/CommonScreen';
 import {
@@ -89,8 +78,10 @@ const ShowNestedFlatList = ({data}) => {
     <FlatList
       style={[styles.container, {marginStart: MarginConstants.tab2}]}
       data={data}
+      initialNumToRender={4}
       inverted={false}
       renderItem={CommentItem}
+      extraData={data}
       keyExtractor={(item) => item.id.toString()}
     />
   );
@@ -103,7 +94,7 @@ export default function TicketComments(props) {
     (state) => state.global.userInfo,
   );
   const ticketId = useSelector((state) => state.dashboard.ticket.id);
-  const dispach = useDispatch();
+  const dispatch = useDispatch();
 
   const commentState = {
     commentBy: `${firstName} ${lastName}`.trim(),
@@ -117,8 +108,7 @@ export default function TicketComments(props) {
   const [refreshing, setRefreshing] = useState(false);
 
   const makeAPICall = () => {
-    console.log('MAKE_API_CALL');
-    dispach(getClosedLoopTicketItemComments(authToken, ticketId));
+    dispatch(getClosedLoopTicketItemComments(authToken, ticketId));
   };
 
   const wait = (timeout) => {
@@ -135,16 +125,16 @@ export default function TicketComments(props) {
   const ShowFlatList = ({data}) => {
     return (
       <FlatList
-        style={styles.container}
         data={data}
         refreshControl={
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
         }
-        re
-        inverted={false}
-        renderItem={renderItem}
-        ListFooterComponent={<CommentBox parentId={data.id} />}
+        keyboardShouldPersistTaps={'never'}
         keyExtractor={(item) => item.id.toString()}
+        renderItem={({item}) => <CommentParentItem item={item} />}
+        extraData={data}
+        // ListFooterComponent={<CommentBox parentId={0} />}
+        ListFooterComponent={<View style={{margin: MarginConstants.tab4}} />}
       />
     );
   };
@@ -155,19 +145,22 @@ export default function TicketComments(props) {
       setCommentBoxVisibility((isHidden) => !isHidden);
     };
     return (
-      <View
+      <ScrollView
         style={{
           margin: MarginConstants.tab1,
           padding: PaddingConstants.halfTab,
         }}>
         <CommentItem item={item} />
-        {item.children && (
+        {item.children.length > 0 && (
           <View
             style={{
               marginStart: MarginConstants.tab2,
               marginTop: MarginConstants.halfTab,
             }}>
             <ShowNestedFlatList data={item.children} />
+            {/* {item.children.map((item_) => {
+              return <CommentItem item={item_} />;
+            })} */}
           </View>
         )}
 
@@ -183,18 +176,16 @@ export default function TicketComments(props) {
         </TouchableOpacity>
         {isCommentBoxVisible && <CommentBox parentId={item.id} />}
         {/* <CommentBox parentId={item.id} /> */}
-      </View>
+      </ScrollView>
     );
-  };
-
-  const renderItem = ({item}) => {
-    return <CommentParentItem item={item} />;
   };
 
   const CommentBox = ({parentId}) => {
     const [commentText, setCommentText] = useState('');
     const placeHolder = parentId > 0 ? 'Write a reply' : 'Write a comment';
     const marginForCommentBox = parentId > 0 ? MarginConstants.tab4 : 0;
+
+    console.log('RERENDERED_API_CALL');
 
     const onChangeCommentHandler = (text) => {
       setCommentText(text);
@@ -208,7 +199,7 @@ export default function TicketComments(props) {
         JSON.stringify({COMMENT_STATE: commentState, text: commentText}),
       );
 
-      dispach(
+      dispatch(
         postAddTicketComment(
           authToken,
           {...commentState, text: commentText, parentId: parentId},
@@ -233,8 +224,11 @@ export default function TicketComments(props) {
 
         <View style={[styles.commentBox, styles.borderStyle]}>
           <MaterialIconView iconName="chat-bubble" />
-
+          {console.log('KEYBOARD')}
           <TextInput
+            onFocus={(e) => {
+              console.log('FOCUSs');
+            }}
             // value={commentText}
             defaultValue={commentText}
             multiline
@@ -256,13 +250,17 @@ export default function TicketComments(props) {
   };
 
   return (
-    <View style={styles.container}>
-      <ShowFlatList
-        data={ticketComments}
-        onRefresh_={onRefresh}
-        refreshing_={refreshing}
-      />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <ShowFlatList
+          data={ticketComments}
+          onRefresh_={onRefresh}
+          refreshing_={refreshing}
+        />
+      </View>
+      <CommentBox parentId={0} />
+      {/* <View style={{maxHeight: MarginConstants.tab4}} /> */}
+    </SafeAreaView>
   );
 }
 
@@ -288,7 +286,7 @@ const styles = StyleSheet.create({
 
   borderStyle: {borderColor: Colors.darkerGrey, borderWidth: 1},
   commentBoxContainer: {
-    flex: 1,
+    minHeight: MarginConstants.tab2 * 3,
     marginVertical: MarginConstants.tab1,
   },
 

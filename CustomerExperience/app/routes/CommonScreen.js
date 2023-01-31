@@ -453,9 +453,9 @@ export const FilterDateBox = ({range, onDateRangeChangeHandler}) => {
   );
 };
 
-export const Avatar = ({title}) => {
+export const Avatar = ({title, style}) => {
   return (
-    <View style={styles.avatarView}>
+    <View style={[styles.avatarView, {...style}]}>
       <Text style={styles.avatarText}>{getNameInitials(title ?? 'NA')}</Text>
     </View>
   );
