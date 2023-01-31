@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'; // , {useEffect, useState}
+import React, {useCallback, useEffect, useState} from 'react'; // , {useEffect, useState}
 import {
   View,
   // TouchableWithoutFeedback,
@@ -13,6 +13,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   ScrollView,
+  RefreshControl,
   // LogBox,
 } from 'react-native';
 // import StringUtils from '../../Utils/StringUtils';
@@ -28,21 +29,72 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {Avatar, NoItemsFound} from '../../routes/CommonScreen';
-import {addClosedLoopTicket} from '../../redux/sagas/ClosedLoopSaga';
-import {postAddTicketComment} from '../../redux/actions/dashboard.actions';
+import {Avatar} from '../../routes/CommonScreen';
+import {
+  getClosedLoopTicketItemComments,
+  postAddTicketComment,
+} from '../../redux/actions/dashboard.actions';
 import moment from 'moment';
 import {DMY_AT_TIME_FORMAT} from '../../Utils/AppConstants';
-import {clockRunning} from 'react-native-reanimated';
-import {getNameInitials} from '../../Utils/TicketUtils';
 import StringUtils from '../../Utils/StringUtils';
-// import {Sizes} from '../../styles/Size.constant';
-// import moment from 'moment';
-// import {translate} from '../../Utils/MultilinguaUtils';
-// import IonIcons from 'react-native-vector-icons/Ionicons';
-// import QPButton from '../../widgets/Button';
-// import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
-// import {backgroundColor} from '../../widgets/qp-calendar/style';
+
+const MaterialIconView = ({iconName, color}) => (
+  <View style={{margin: MarginConstants.halfTab}}>
+    <MaterialIcon
+      name={iconName}
+      size={24}
+      color={color ?? Colors.filterIconColor}
+    />
+  </View>
+);
+
+const SendButton = ({handleOnSubmit}) => {
+  return (
+    <TouchableOpacity onPress={handleOnSubmit}>
+      <MaterialIconView iconName="send" />
+    </TouchableOpacity>
+  );
+};
+const CommentItem = ({item}) => {
+  return (
+    <View
+      style={[
+        styles.commentItemView,
+        {marginVertical: MarginConstants.halfTab},
+      ]}>
+      <View style={styles.commentUserView}>
+        {/* {item.userId !== userID && <Avatar title={item.commentBy} />} */}
+        <Avatar title={item.commentBy} />
+      </View>
+      <View style={styles.commentTextView}>
+        <Text
+          style={[
+            styles.commentByText,
+            // {textAlign: isOtherUser ? 'left' : 'right'},
+          ]}>
+          {/* {isOtherUser ? item.commentBy.trim() : 'You'} */}
+          {item.commentBy.trim()}
+        </Text>
+        <Text style={styles.commentText}>{item.text.trim()}</Text>
+        <Text style={styles.commentDateText}>
+          {moment.utc(item.createdAt).local().format(DMY_AT_TIME_FORMAT)}
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+const ShowNestedFlatList = ({data}) => {
+  return (
+    <FlatList
+      style={[styles.container, {marginStart: MarginConstants.tab2}]}
+      data={data}
+      inverted={false}
+      renderItem={CommentItem}
+      keyExtractor={(item) => item.id.toString()}
+    />
+  );
+};
 
 export default function TicketComments(props) {
   const {authToken} = useSelector((state) => state.global);
@@ -52,7 +104,6 @@ export default function TicketComments(props) {
   );
   const ticketId = useSelector((state) => state.dashboard.ticket.id);
   const dispach = useDispatch();
-  const [isMainCommentHidden, setMainCommentVisibility] = useState(false);
 
   const commentState = {
     commentBy: `${firstName} ${lastName}`.trim(),
@@ -63,32 +114,36 @@ export default function TicketComments(props) {
     parentId: 0,
     subscriberId: global.subscriberId,
   };
+  const [refreshing, setRefreshing] = useState(false);
 
-  const ShowFlatList = (data) => {
+  const makeAPICall = () => {
+    console.log('MAKE_API_CALL');
+    dispach(getClosedLoopTicketItemComments(authToken, ticketId));
+  };
+
+  const wait = (timeout) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  };
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    makeAPICall();
+    wait(500).then(() => setRefreshing(false));
+  }, []);
+
+  const ShowFlatList = ({data}) => {
     return (
       <FlatList
         style={styles.container}
         data={data}
+        refreshControl={
+          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+        }
+        re
         inverted={false}
         renderItem={renderItem}
-        // ListEmptyComponent={
-        //   ticketComments.length === 0 && (
-        //     <NoItemsFound>No comments found</NoItemsFound>
-        //   )
-        // }
-        ListFooterComponent={CommentBox(data.id)}
-        keyExtractor={(item) => item.id.toString()}
-      />
-    );
-  };
-
-  const ShowNestedFlatList = (data) => {
-    return (
-      <FlatList
-        style={[styles.container, {marginStart: MarginConstants.tab2}]}
-        data={data}
-        inverted={false}
-        renderItem={CommentItem}
+        ListFooterComponent={<CommentBox parentId={data.id} />}
         keyExtractor={(item) => item.id.toString()}
       />
     );
@@ -98,7 +153,6 @@ export default function TicketComments(props) {
     const [isCommentBoxVisible, setCommentBoxVisibility] = useState(false);
     const toggleCommentBoxVisibility = () => {
       setCommentBoxVisibility((isHidden) => !isHidden);
-      // setMainCommentVisibility((isHidden) => !isHidden);
     };
     return (
       <View
@@ -106,18 +160,18 @@ export default function TicketComments(props) {
           margin: MarginConstants.tab1,
           padding: PaddingConstants.halfTab,
         }}>
-        {CommentItem({item})}
+        <CommentItem item={item} />
         {item.children && (
           <View
             style={{
               marginStart: MarginConstants.tab2,
-              marginTop: MarginConstants.tab1,
+              marginTop: MarginConstants.halfTab,
             }}>
-            {ShowNestedFlatList(item.children)}
+            <ShowNestedFlatList data={item.children} />
           </View>
         )}
 
-        {/* <TouchableOpacity
+        <TouchableOpacity
           style={{
             marginStart: MarginConstants.tab4,
             marginVertical: MarginConstants.halfTab,
@@ -127,8 +181,8 @@ export default function TicketComments(props) {
             {isCommentBoxVisible ? 'Cancel' : 'Reply'}
           </Text>
         </TouchableOpacity>
-        {isCommentBoxVisible && CommentBox(item.id)} */}
-        {CommentBox(item.id)}
+        {isCommentBoxVisible && <CommentBox parentId={item.id} />}
+        {/* <CommentBox parentId={item.id} /> */}
       </View>
     );
   };
@@ -137,65 +191,10 @@ export default function TicketComments(props) {
     return <CommentParentItem item={item} />;
   };
 
-  const CommentItem = ({item}) => {
-    const isOtherUser = item.userId !== userID;
-    return (
-      <View
-        style={[
-          styles.commentItemView,
-          {marginVertical: MarginConstants.halfTab},
-        ]}>
-        <View style={styles.commentUserView}>
-          {/* {item.userId !== userID && <Avatar title={item.commentBy} />} */}
-          <Avatar title={item.commentBy} />
-        </View>
-        <View style={styles.commentTextView}>
-          <Text
-            style={[
-              styles.commentByText,
-              // {textAlign: isOtherUser ? 'left' : 'right'},
-            ]}>
-            {/* {isOtherUser ? item.commentBy.trim() : 'You'} */}
-            {item.commentBy.trim()}
-          </Text>
-          <Text style={styles.commentText}>{item.text.trim()}</Text>
-          <Text style={styles.commentDateText}>
-            {moment.utc(item.createdAt).local().format(DMY_AT_TIME_FORMAT)}
-          </Text>
-        </View>
-      </View>
-    );
-  };
-
-  // const onChangeCommentHandler = (text, parentId) => {
-  //   setCommentText(text);
-  //   setParentId(parentId);
-  // };
-
-  // const handleOnSubmit = () => {
-  //   if (StringUtils.isEmptyOrNull(commentText)) {
-  //     return;
-  //   }
-  //   console.log(
-  //     JSON.stringify({COMMENT_STATE: commentState, text: commentText}),
-  //   );
-
-  //   dispach(
-  //     postAddTicketComment(
-  //       authToken,
-  //       {...commentState, text: commentText, parentId: parentId},
-  //       ticketId,
-  //     ),
-  //   );
-
-  //   setCommentText('');
-  //   setParentId(0);
-  // };
-  const CommentBox = (parentId_) => {
+  const CommentBox = ({parentId}) => {
     const [commentText, setCommentText] = useState('');
-    // const [parentId, setParentId] = useState(parentId_);
-    const placeHolder = parentId_ > 0 ? 'Write a reply' : 'Write a comment';
-    const marginForCommentBox = parentId_ > 0 ? MarginConstants.tab4 : 0;
+    const placeHolder = parentId > 0 ? 'Write a reply' : 'Write a comment';
+    const marginForCommentBox = parentId > 0 ? MarginConstants.tab4 : 0;
 
     const onChangeCommentHandler = (text) => {
       setCommentText(text);
@@ -212,7 +211,7 @@ export default function TicketComments(props) {
       dispach(
         postAddTicketComment(
           authToken,
-          {...commentState, text: commentText, parentId: parentId_},
+          {...commentState, text: commentText, parentId: parentId},
           ticketId,
         ),
       );
@@ -256,102 +255,14 @@ export default function TicketComments(props) {
     );
   };
 
-  // const parentCommentBox = (parentId) => {
-  //   return (
-  //     <KeyboardAvoidingView style={styles.commentBoxContainer}>
-  //       {/* <View
-  //         style={[styles.commentBox, {marginBottom: MarginConstants.halfTab}]}>
-  //         <Avatar title={`${firstName} ${lastName}`.trim()} />
-  //         <Text style={styles.commentByText}>You</Text>
-  //       </View> */}
-
-  //       <View style={[styles.commentBox, styles.borderStyle]}>
-  //         <MaterialIconView iconName="chat-bubble" />
-
-  //         <TextInput
-  //           value={commentText}
-  //           multiline
-  //           style={[styles.container, styles.commentText]}
-  //           onChangeText={(text) => onChangeCommentHandler(text, parentId)}
-  //           placeholder="Write a comment"
-  //           // onEndEditing={onChangeCommentHandler}
-  //           returnKeyType={'send'}
-  //           onSubmitEditing={(event) => {
-  //             console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
-  //             onChangeCommentHandler(event.nativeEvent.text, parentId);
-  //             handleOnSubmit();
-  //           }}
-  //         />
-  //         <SendButton handleOnSubmit={handleOnSubmit} />
-  //       </View>
-  //     </KeyboardAvoidingView>
-  //   );
-  // };
-
-  const MaterialIconView = ({iconName, color}) => (
-    <View style={{margin: MarginConstants.halfTab}}>
-      <MaterialIcon
-        name={iconName}
-        size={24}
-        color={color ?? Colors.filterIconColor}
+  return (
+    <View style={styles.container}>
+      <ShowFlatList
+        data={ticketComments}
+        onRefresh_={onRefresh}
+        refreshing_={refreshing}
       />
     </View>
-  );
-
-  // const ContactButton = () => {
-  //   return (
-  //     <TouchableOpacity>
-  //       <MaterialIconView iconName="account-circle" />
-  //     </TouchableOpacity>
-  //   );
-  // };
-  const SendButton = ({handleOnSubmit}) => {
-    return (
-      <TouchableOpacity onPress={handleOnSubmit}>
-        <MaterialIconView iconName="send" />
-      </TouchableOpacity>
-    );
-  };
-  // const AttachmentButton = () => {
-  //   return (
-  //     <TouchableOpacity>
-  //       <MaterialIconView iconName="attach-file" />
-  //     </TouchableOpacity>
-  //   );
-  // };
-
-  // const PictureButton = () => {
-  //   return (
-  //     <TouchableOpacity>
-  //       <MaterialIconView iconName="photo" />
-  //     </TouchableOpacity>
-  //   );
-  // };
-
-  // const commentFooter = () => {
-  //   return (
-  //     <View style={styles.commentFooter}>
-  //       {CommentBox(0)}
-  //       {/* <SendButton /> */}
-  //       {/* <ContactButton />
-  //       <AttachmentButton />
-  //       <PictureButton /> */}
-  //     </View>
-  //   );
-  // };
-
-  return (
-    <ScrollView style={styles.container}>
-      {/* {ShowFlatList(ticketComments)} */}
-
-      {/* {commentFooter()} */}
-      {ticketComments.length > 0 ? (
-        ticketComments.map((item) => <CommentParentItem item={item} />)
-      ) : (
-        <View />
-      )}
-      {CommentBox(0)}
-    </ScrollView>
   );
 }
 
@@ -430,7 +341,7 @@ const styles = StyleSheet.create({
   },
   replyText: {
     flex: 1,
-    marginStart: MarginConstants.tab1,
+    marginStart: MarginConstants.tab4,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,

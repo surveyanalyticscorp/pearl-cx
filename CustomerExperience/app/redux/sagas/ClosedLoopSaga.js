@@ -354,19 +354,19 @@ export function* watchGetClosedLoopTicketItem() {
 
 function* fetchClosedLoopTicketComments(action) {
   try {
-    const json = yield WebServiceHandler.get(
+    const comments = yield WebServiceHandler.get(
       CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS,
       {'Auth-Token': action.token},
       action.param,
     );
     yield put({
       type: CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED,
-      response: json,
+      ticketComments: comments.data,
     });
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
     yield put({
       type: API_ERROR,
       error: error,
