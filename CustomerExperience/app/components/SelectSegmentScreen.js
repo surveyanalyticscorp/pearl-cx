@@ -31,12 +31,14 @@ const SelectSegmentScreen = (props) => {
   const [isLoading, setLoading] = useState(false);
   const textInputRef = useRef();
   const authToken = useSelector((state) => state.global.authToken);
+  const ownerID = useSelector((state) => state.global.userInfo.userID);
   const segmentList = useSelector((state) => state.dashboard.segmentList);
   const navigation = useNavigation();
   const defaultRequestBody = {
     pageOffset: 0,
     perPage: 20,
     segmentName: '',
+    ownerID: ownerID,
   };
   // const [pageOffset, setPageOffset] = useState(0);
   const [requestBody, setRequestBody] = useState(defaultRequestBody);
@@ -69,6 +71,7 @@ const SelectSegmentScreen = (props) => {
         pageOffset: `${requestBody.pageOffset}`,
         perPage: `${requestBody.perPage}`,
         segmentName: requestBody.segmentName,
+        ownerID: `${requestBody.ownerID}`,
       }),
     );
   };
