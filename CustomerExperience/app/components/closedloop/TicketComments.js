@@ -26,6 +26,8 @@ import {
 import moment from 'moment';
 import {DMY_AT_TIME_FORMAT} from '../../Utils/AppConstants';
 import StringUtils from '../../Utils/StringUtils';
+// import Clipboard from '@react-native-clipboard/clipboard';
+// import {showSuccessFlashMessage} from '../../Utils/Utility';
 
 const MaterialIconView = ({iconName, color}) => (
   <View style={{margin: MarginConstants.halfTab}}>
@@ -46,7 +48,11 @@ const SendButton = ({handleOnSubmit}) => {
 };
 const CommentItem = ({item}) => {
   return (
-    <View
+    <TouchableOpacity
+      onLongPress={() => {
+        // Clipboard.setString(item.text.trim());
+        // showSuccessFlashMessage('Text copied to Clipboard');
+      }}
       style={[
         styles.commentItemView,
         {marginVertical: MarginConstants.halfTab},
@@ -69,18 +75,20 @@ const CommentItem = ({item}) => {
           {moment.utc(item.createdAt).local().format(DMY_AT_TIME_FORMAT)}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
 const ShowNestedFlatList = ({data}) => {
+  const MemoizedCommentItem = React.memo(CommentItem);
+
   return (
     <FlatList
       style={[styles.container, {marginStart: MarginConstants.tab2}]}
       data={data}
       initialNumToRender={4}
       inverted={false}
-      renderItem={CommentItem}
+      renderItem={({item}) => <MemoizedCommentItem item={item} />}
       extraData={data}
       keyExtractor={(item) => item.id.toString()}
     />
@@ -123,6 +131,8 @@ export default function TicketComments(props) {
   }, []);
 
   const ShowFlatList = ({data}) => {
+    const MemoizedCommentParentItem = React.memo(CommentParentItem);
+
     return (
       <FlatList
         data={data}
@@ -131,7 +141,7 @@ export default function TicketComments(props) {
         }
         keyboardShouldPersistTaps={'never'}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({item}) => <CommentParentItem item={item} />}
+        renderItem={({item}) => <MemoizedCommentParentItem item={item} />}
         extraData={data}
         // ListFooterComponent={<CommentBox parentId={0} />}
         ListFooterComponent={<View style={{margin: MarginConstants.tab4}} />}
