@@ -7,6 +7,7 @@ import {
   GET_RESPONSE_TICKETS_RECEIVED,
   PANEL_MEMBER_RECEIVED,
   SURVEY_RESPONSE_DETAILS_RECEIVED,
+  RESPONSE_DETAILS_BY_RESPONSEID_RECEIVED,
 } from '../actions/feedback.actions';
 
 const initialState = {
@@ -15,6 +16,7 @@ const initialState = {
   responseTickets: {},
   ticketStatusHistory: {},
   ticketLastComment: {},
+  responseDetailsByResponseDetails: {},
 };
 
 const feedbackReducer = (state = initialState, action) => {
@@ -46,12 +48,19 @@ const feedbackReducer = (state = initialState, action) => {
         responseTickets: {},
         ticketStatusHistory: {},
         ticketLastComment: {},
+        responseDetailsByResponseDetails: {},
       };
     }
     case GET_TICKET_STATUS_HISTORY_RECEIVED: {
       return {
         ...state,
         ticketStatusHistory: action.response,
+      };
+    }
+    case RESPONSE_DETAILS_BY_RESPONSEID_RECEIVED: {
+      return {
+        ...state,
+        responseDetailsByResponseDetails: action.data,
       };
     }
     case LATEST_COMMENT_RECEIVED: {

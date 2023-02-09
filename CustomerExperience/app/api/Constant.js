@@ -33,6 +33,8 @@ export const CX_GET_PANEL_MEMBER = '/a/nativehtml/cx.CXPanelMemberProfile';
 export const CX_RESPONSE_TICKET_DETAILS = '/a/nativehtml/cx.CXTicketDetails';
 export const CX_RESPONSE_SURVEY_DETAILS =
   '/a/nativehtml/cx.SurveyResponseDetails';
+export const CX_RESPONSE_DETAILS_BY_RESPONSEID =
+  '/a/nativehtml/cx.CXGetResponseByResponseSetID';
 
 //export const CX_ADD_UPDATE_TICKET = 'a/nativehtml/cx.CXAddOrUpdateTicket';
 

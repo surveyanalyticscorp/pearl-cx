@@ -3,16 +3,19 @@ import WebServiceHandler from '../../api/WebServiceHandler';
 import {
   CLF_GET_TICKET_LIST_BY_RESPONSEID,
   CX_GET_PANEL_MEMBER,
+  CX_RESPONSE_DETAILS_BY_RESPONSEID,
   CX_RESPONSE_SURVEY_DETAILS,
   RESPONSES,
 } from '../../api/Constant';
 import {API_ERROR} from '../actions/index';
 import {
   GET_PANEL_MEMBER,
+  GET_RESPONSE_DETAILS_BY_RESPONSEID,
   GET_RESPONSE_TICKETS,
   GET_RESPONSE_TICKETS_RECEIVED,
   GET_SURVEY_RESPONSE_DETAILS,
   PANEL_MEMBER_RECEIVED,
+  RESPONSE_DETAILS_BY_RESPONSEID_RECEIVED,
   SURVEY_RESPONSE_DETAILS_RECEIVED,
 } from '../actions/feedback.actions';
 // import {FEEDBACK_RECEIVED, FEEDBACK_UPDATED, GET_FEEDBACK, UPDATE_FEEDBACK} from '../actions/feedback.actions';
@@ -79,6 +82,26 @@ export function* fetchResponseTickets(action) {
 
 export function* watchGetResponseTickets() {
   yield takeLatest(GET_RESPONSE_TICKETS, fetchResponseTickets);
+}
+
+export function* fetchResponseByResponseId(action) {
+  try {
+    const json = yield WebServiceHandler.postNew(
+      CX_RESPONSE_DETAILS_BY_RESPONSEID,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+
+    yield put({type: RESPONSE_DETAILS_BY_RESPONSEID_RECEIVED, data: json});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: API_ERROR, error: error});
+  }
+}
+
+export function* watchGetResponseDetailsByResponseId() {
+  yield takeLatest(GET_RESPONSE_DETAILS_BY_RESPONSEID, fetchResponseTickets);
 }
 
 // export function* updateFetchFeedback(action) {

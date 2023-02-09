@@ -33,6 +33,7 @@ import {
 import {watchGetNotification} from './notificationSaga';
 import {
   watchGetPanelMember,
+  watchGetResponseDetailsByResponseId,
   watchGetResponseTickets,
   watchGetSurveyResponseDetails,
 } from './feedbackSaga';
@@ -72,6 +73,7 @@ export function* rootSaga() {
     fork(watchGetSurveyResponseDetails),
     fork(watchGetLatestComment),
     fork(watchGetResponseTickets),
+    fork(watchGetResponseDetailsByResponseId),
     fork(watchGetTicketStatusHistory),
   ]);
 }
