@@ -36,6 +36,12 @@ export const clearResponseData = () => ({
   type: CLEAR_ALL_RESPONSE_DATA,
 });
 
+export const getResponseDetailsByResponseId = (token, param) => ({
+  type: GET_RESPONSE_DETAILS_BY_RESPONSEID,
+  token,
+  param,
+});
+
 //
 // export const cleanUpdateFeedBack = () => ({
 //   type: FEEDBACK_UPDATED,

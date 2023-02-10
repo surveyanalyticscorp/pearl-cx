@@ -305,6 +305,7 @@ const RenderFeedbackScene = (props) => {
   const _onPressRow = (data) => {
     props.navigation.navigate(translate('responses.feedback_details'), {
       data: data,
+      isFromFeedback: true,
       ticketStatus: feedbackForm.ticketStatus,
       token: feedbackForm.token,
       parentRoute: translate('responses.responses'),

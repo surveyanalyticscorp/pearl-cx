@@ -14,6 +14,8 @@ import {FontFamily} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {getClosedLoopTicketItem} from '../../redux/actions/dashboard.actions';
 import TicketRootCause from './TicketRootCause';
+import {getResponseDetailsByResponseId} from '../../redux/actions/feedback.actions';
+import StringUtils from '../../Utils/StringUtils';
 
 export default function TicketDetails(props) {
   const {authToken, isTicketLoading} = useSelector((state) => state.global);
@@ -21,7 +23,8 @@ export default function TicketDetails(props) {
   const ticketItem = props.route.params;
   const dispatch = useDispatch();
 
-  // console.log('Ticket ID', ticketItem);
+  console.log(`Ticket Detailsssss: ${JSON.stringify(ticketItem)}`);
+
   const TicketTabs = createMaterialTopTabNavigator();
 
   useEffect(() => {
@@ -32,6 +35,14 @@ export default function TicketDetails(props) {
 
   useEffect(() => {
     dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
+
+    if (!StringUtils.isEmptyOrNull(ticketItem.responseId)) {
+      dispatch(
+        getResponseDetailsByResponseId(authToken, {
+          responseSetID: ticketItem.responseId,
+        }),
+      );
+    }
   }, [ticketItem, authToken]);
 
   const CLFTicketTabStack = () => {

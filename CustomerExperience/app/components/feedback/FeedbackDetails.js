@@ -44,6 +44,7 @@ export default function FeedbackDetails(props) {
     (state) => state.response.responseTickets,
   );
   const data = props.route.params.data;
+  const isFromFeedback = props.route.params.isFromFeedback;
 
   const [selectedTicketId, setSelectedTicket] = useState(0);
   console.log('RESPONSE_DATA', JSON.stringify(props.route.params.data));
@@ -101,41 +102,49 @@ export default function FeedbackDetails(props) {
   //   }),
   // );
 
+  const ShowTicketList = () => {
+    const hasTickets =
+      responseTickets &&
+      responseTickets.data &&
+      responseTickets.data.length > 0;
+
+    return hasTickets ? (
+      <FlatList
+        lazy
+        style={styles.flatlist}
+        data={responseTickets.data}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item, index}) => {
+          return (
+            <ResponseTicketCell
+              data={item}
+              index={index}
+              selectedTicketId={selectedTicketId}
+              onPressHandler={() => onTapHandler(item, index)}
+              onPressViewTicket={() => onPressViewTicket(item)}
+            />
+          );
+        }}
+      />
+    ) : (
+      <View />
+    );
+  };
+
   return (
     <View style={styles.container}>
       <FeedbackDetailsTabStack {...props} />
-      <FeedbackCell
-        item={props.route.params.data}
-        origin="Detail"
-        hasTicket={responseTickets.data?.length > 0}
-        ticketStatuses={props.route.params.ticketStatus}
-        parentRoute={props.route.params.parentRoute}
-        {...props}
-      />
-      {responseTickets &&
-      responseTickets.data &&
-      responseTickets.data.length > 0 ? (
-        <FlatList
-          lazy
-          style={styles.flatlist}
-          data={responseTickets.data}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => {
-            return (
-              <ResponseTicketCell
-                data={item}
-                index={index}
-                selectedTicketId={selectedTicketId}
-                onPressHandler={() => onTapHandler(item, index)}
-                onPressViewTicket={() => onPressViewTicket(item)}
-              />
-            );
-          }}
+      {isFromFeedback && (
+        <FeedbackCell
+          item={props.route.params.data}
+          origin="Detail"
+          hasTicket={responseTickets.data?.length > 0}
+          ticketStatuses={props.route.params.ticketStatus}
+          parentRoute={props.route.params.parentRoute}
+          {...props}
         />
-      ) : (
-        <View />
       )}
-
+      {isFromFeedback && <ShowTicketList />}
       {/** enable it when email functionality */}
       {/*<ActionButton*/}
       {/*buttonColor= {Colors.accent}*/}

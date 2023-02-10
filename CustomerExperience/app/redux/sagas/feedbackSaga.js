@@ -92,7 +92,10 @@ export function* fetchResponseByResponseId(action) {
       action.param,
     );
 
-    yield put({type: RESPONSE_DETAILS_BY_RESPONSEID_RECEIVED, data: json});
+    yield put({
+      type: RESPONSE_DETAILS_BY_RESPONSEID_RECEIVED,
+      data: json.body.response,
+    });
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
@@ -101,7 +104,10 @@ export function* fetchResponseByResponseId(action) {
 }
 
 export function* watchGetResponseDetailsByResponseId() {
-  yield takeLatest(GET_RESPONSE_DETAILS_BY_RESPONSEID, fetchResponseTickets);
+  yield takeLatest(
+    GET_RESPONSE_DETAILS_BY_RESPONSEID,
+    fetchResponseByResponseId,
+  );
 }
 
 // export function* updateFetchFeedback(action) {
