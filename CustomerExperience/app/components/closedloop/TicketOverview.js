@@ -156,12 +156,7 @@ const RenderDropDownButton = ({
     </View>
   );
 };
-const DescriptionView = ({segments, ticketDetails, npsScore}) => {
-  const originSegmentName =
-    ticketDetails !== undefined
-      ? getSegmentNameById(segments, ticketDetails.originSegmentId)
-      : 'Segment';
-
+const DescriptionView = ({ticketDetails}) => {
   const createdDate =
     ticketDetails !== undefined
       ? moment(ticketDetails.issueDate).format(FullMonthDateYearFormat)
@@ -180,7 +175,10 @@ const DescriptionView = ({segments, ticketDetails, npsScore}) => {
           </View>
         </TouchableWithoutFeedback>
       </View>
-      <ShowTitleAndText title={'Origin Segment'} subText={originSegmentName} />
+      <ShowTitleAndText
+        title={'Origin Segment'}
+        subText={ticketDetails?.originSegment?.name ?? ''}
+      />
       <ShowTitleAndText title={'Created'} subText={createdDate} />
 
       {ticketDetails.npsScore && (
@@ -240,7 +238,7 @@ export default function TicketOverview(props) {
   const {authToken} = useSelector((state) => state.global);
   const [currentBS, setCurrentBS] = useState(bottomSheetEnum.status);
   const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
-  const isLoading = useSelector((state) => state.global.isLoading);
+  const isLoading = useSelector((state) => state.global.isTicketLoading);
   const ticketDetails = useSelector((state) => state.dashboard.ticket);
 
   const {
@@ -258,9 +256,9 @@ export default function TicketOverview(props) {
     getPriorityIndexById(ticketDetails.priority ?? -1),
   );
 
-  const segments = useSelector(
-    (state) => state.dashboard.segmentDetails.segments,
-  );
+  // const segments = useSelector(
+  //   (state) => state.dashboard.segmentDetails.segments,
+  // );
   console.log('TTTTT', ticketDetails ?? '');
   console.log({isLoading});
 
@@ -474,10 +472,10 @@ export default function TicketOverview(props) {
   };
 
   const TicketStatusPriorityView = ({ticket}) => {
-    const segmentName =
-      ticket !== undefined
-        ? getSegmentNameById(segments, ticket.currentSegmentId)
-        : 'Select segment';
+    // const segmentName =
+    //   ticket !== undefined
+    //     ? getSegmentNameById(segments, ticket.currentSegmentId)
+    //     : 'Select segment';
 
     const statusName =
       ticket !== undefined ? getStatusById(ticket.status) : 'Select status';
@@ -495,7 +493,7 @@ export default function TicketOverview(props) {
       <View style={styles.ticketStatusContainer}>
         <View style={styles.rowContainer}>
           <Title value={'Current Segment'} />
-          <RenderDropDownButton text={segmentName} />
+          <RenderDropDownButton text={ticket?.currentSegment?.name ?? ''} />
         </View>
 
         <View style={styles.rowContainer}>
@@ -651,7 +649,7 @@ export default function TicketOverview(props) {
           <TakeActionButton onTakeActionHandler={onTakeActionHandler} />
           {/* {ticketStatusPriorityView()} */}
           <TicketStatusPriorityView ticket={ticketDetails} />
-          <DescriptionView ticketDetails={ticketDetails} segments={segments} />
+          <DescriptionView ticketDetails={ticketDetails} />
 
           {ticketDetails.panelMember !== undefined ? <ContactView /> : <View />}
         </View>

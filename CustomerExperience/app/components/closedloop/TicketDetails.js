@@ -23,7 +23,7 @@ export default function TicketDetails(props) {
   const ticketItem = props.route.params;
   const dispatch = useDispatch();
 
-  console.log(`Ticket Detailsssss: ${JSON.stringify(ticketItem)}`);
+  // console.log(`Ticket Detailsssss: ${JSON.stringify(ticketItem)}`);
 
   const TicketTabs = createMaterialTopTabNavigator();
 
