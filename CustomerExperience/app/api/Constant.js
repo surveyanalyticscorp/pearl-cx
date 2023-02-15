@@ -6,10 +6,10 @@ export const ASYNC_PUSH_TOKEN = 'pushtoken';
 export const BASE_URL = 'baseUrl';
 export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
-
+export const ACTION_EMAIL = 'noreply@InsightsHub.com';
 //export const BASE_URL = 'https://api.questionpro.com/';
-// export const DEV_BASE_URL = 'https://qa.questionpro.com';
-export const DEV_BASE_URL = 'https://cxlabs.questionpro.com';
+export const DEV_BASE_URL = 'https://qa.questionpro.com';
+// export const DEV_BASE_URL = 'https://cxlabs.questionpro.com';
 
 export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
 // export const CLF_BASE_URL = 'https://clf-backend.questionpro.com/api/';

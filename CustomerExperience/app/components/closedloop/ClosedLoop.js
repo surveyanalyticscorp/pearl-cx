@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, FlatList, StyleSheet, RefreshControl} from 'react-native';
+import {View, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import ClosedLoopCell from './ClosedloopCell';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../styles/color.constants';
@@ -23,15 +23,14 @@ import {
 } from '../../redux/actions/dashboard.actions';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
-import {setRangeFilter, showLoading} from '../../redux/actions';
+import {setRangeFilter} from '../../redux/actions';
 
 import {
-  getUniqueValues,
   priorityList,
   statusList,
   ticketTypeList,
 } from '../../Utils/TicketUtils';
-import {translate} from '../../Utils/MultilinguaUtils';
+// import {translate} from '../../Utils/MultilinguaUtils';
 import QPSpinner from '../../widgets/QPSpinner';
 import ShowFilterTag from '../view/ShowFilterTag';
 import StringUtils from '../../Utils/StringUtils';

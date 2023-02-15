@@ -7,23 +7,20 @@ import {
   StyleSheet,
   Platform,
 } from 'react-native';
-import {Colors, statusColors} from '../../styles/color.constants';
+import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 
-import IonIcons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import QPButton from '../../widgets/Button';
-import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import TicketTakeAction from './takeaction/TIcketTakeAction';
 import {
   BottomSheetHeader,
   RenderPriorityIcon,
-  RenderRoundImageOrColor,
   RenderSpinner,
   RenderStatusIcon,
 } from '../../routes/CommonScreen';
@@ -33,7 +30,6 @@ import {
   getOwnerNameById,
   getPriorityById,
   getPriorityIndexById,
-  getSegmentNameById,
   getStatusById,
   getStatusIndexById,
   priorityList,
@@ -51,26 +47,33 @@ import SelectTicketOwner from './takeaction/SelectTicketOwner';
 import {EMAIL, PHONE} from '../../api/Constant';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
-
+import {isObjectEmpty, showErrorFlashMessage} from '../../Utils/Utility';
 const NPSScoreText = ({text}) => {
+  const npsStyles = StyleSheet.create({
+    npsView: {
+      flex: 2,
+      justifyContent: 'flex-start',
+    },
+    npsBackground: {
+      marginStart: MarginConstants.halfTab,
+      padding: PaddingConstants.tab1,
+      backgroundColor: Colors.critical2,
+      borderRadius: 50,
+      height: MarginConstants.tab3,
+      width: MarginConstants.tab3,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    npsImage: {width: 16, height: 16},
+  });
+
   return (
-    <View
-      style={[{flex: 2, justifyContent: 'flex-start'}, styles.rowContainer]}>
+    <View style={[npsStyles.npsView, styles.rowContainer]}>
       <Image
-        style={{width: 16, height: 16}}
+        style={npsStyles.npsImage}
         source={require('./../../../assets/images/nps_meter.png')}
       />
-      <View
-        style={{
-          marginStart: MarginConstants.halfTab,
-          padding: PaddingConstants.tab1,
-          backgroundColor: Colors.critical2,
-          borderRadius: 50,
-          height: MarginConstants.tab3,
-          width: MarginConstants.tab3,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+      <View style={npsStyles.npsBackground}>
         <Text style={[styles.detailsText, {color: Colors.white}]}>{text}</Text>
       </View>
     </View>
@@ -93,12 +96,14 @@ const TicketID = ({children}) => {
   return <Text style={styles.idText}>{`ID ${children}`} </Text>;
 };
 
-const TakeActionButton = ({onTakeActionHandler}) => {
+const TakeActionButton = ({onTakeActionHandler, hasPanelMember}) => {
   return (
     <View style={styles.takeActionContainer}>
       <QPButton
         testID="TakeActionButton"
-        buttonColor={Colors.accentLight}
+        buttonColor={
+          hasPanelMember ? Colors.accentLight : Colors.filterIconColor
+        }
         style={styles.takeActionButton}
         onPress={onTakeActionHandler}
         buttonText={'Take Action'}
@@ -156,10 +161,10 @@ const RenderDropDownButton = ({
     </View>
   );
 };
-const DescriptionView = ({ticketDetails}) => {
+const DescriptionView = ({ticket}) => {
   const createdDate =
-    ticketDetails !== undefined
-      ? moment(ticketDetails.issueDate).format(FullMonthDateYearFormat)
+    ticket !== undefined
+      ? moment(ticket.issueDate).format(FullMonthDateYearFormat)
       : '';
   return (
     <View style={styles.ticketStatusContainer}>
@@ -168,23 +173,21 @@ const DescriptionView = ({ticketDetails}) => {
         <TouchableWithoutFeedback>
           <View style={styles.ticketIdView}>
             <Text style={styles.ticketIdText}>
-              {`Ticket ID #${
-                ticketDetails !== undefined ? ticketDetails.id : ''
-              }`}
+              {`Ticket ID #${ticket !== undefined ? ticket.id : ''}`}
             </Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
       <ShowTitleAndText
         title={'Origin Segment'}
-        subText={ticketDetails?.originSegment?.name ?? ''}
+        subText={ticket?.originSegment?.name ?? ''}
       />
       <ShowTitleAndText title={'Created'} subText={createdDate} />
 
-      {ticketDetails.npsScore && (
+      {ticket.npsScore && (
         <View style={styles.rowContainer}>
           <Title value={'NPS'} />
-          <NPSScoreText text={ticketDetails.npsScore} />
+          <NPSScoreText text={ticket.npsScore} />
         </View>
       )}
       <View style={styles.columnContainer}>
@@ -194,11 +197,74 @@ const DescriptionView = ({ticketDetails}) => {
             margin: MarginConstants.halfTab,
             paddingHorizontal: PaddingConstants.halfTab,
           }}>
-          {ticketDetails ? ticketDetails.comment : ''}
+          {isObjectEmpty(ticket) ? ticket.comment : ''}
         </Text>
       </View>
-      {ticketDetails.responseId && <ViewResponseDetailsButton />}
+      {ticket.responseId && <ViewResponseDetailsButton />}
     </View>
+  );
+};
+
+const ContactView = ({panelMember}) => {
+  return (
+    <View style={styles.ticketStatusContainer}>
+      <DescriptionHeader text={'Contact'} />
+      <View style={styles.rowContainer}>
+        <Text
+          style={{
+            color: Colors.accent,
+            fontSize: TextSizes.largeText,
+            fontWeight: 'bold',
+          }}>
+          {panelMember?.name ?? 'anonymous'}
+        </Text>
+      </View>
+      {panelMember?.email ? (
+        <View style={styles.rowContainer}>
+          <Title value={'Email'} />
+          {getUnderLineText(panelMember.email ?? '', EMAIL)}
+        </View>
+      ) : (
+        <View />
+      )}
+      {panelMember?.phone ? (
+        <View style={styles.rowContainer}>
+          <Title value={'Phone'} />
+
+          {getUnderLineText(panelMember.phone ?? '', PHONE)}
+        </View>
+      ) : (
+        <View />
+      )}
+      {/* <View style={styles.rowContainer}>
+        {Title('Phone')}
+        {getUnderLineText('+140002031')}
+      </View> */}
+    </View>
+  );
+};
+
+const getUnderLineText = (text, type) => {
+  return (
+    <TouchableWithoutFeedback
+    // onPress={() => {
+    //   console.log(text);
+
+    //   switch (type) {
+    //     case PHONE:
+    //       promptCall();
+    //       break;
+    //     default:
+    //       navigateToSendEmail();
+    //       break;
+    //   }
+    // }}
+    >
+      <View
+        style={[{flex: 2, justifyContent: 'flex-start'}, styles.rowContainer]}>
+        <Text style={styles.underLineText}>{text}</Text>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -226,6 +292,10 @@ const ViewResponseDetailsButton = () => {
   );
 };
 
+function hasPanelMemberObj(obj) {
+  return obj !== null && obj !== undefined && !isObjectEmpty(obj);
+}
+
 export default function TicketOverview(props) {
   const bottomSheetEnum = {
     status: 'status',
@@ -240,7 +310,7 @@ export default function TicketOverview(props) {
   const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
   const isLoading = useSelector((state) => state.global.isTicketLoading);
   const ticketDetails = useSelector((state) => state.dashboard.ticket);
-
+  const hasPanelMember = hasPanelMemberObj(ticketDetails.panelMember);
   const {
     emailAddress,
     firstName,
@@ -298,8 +368,11 @@ export default function TicketOverview(props) {
   const fall = new Animated.Value(1);
 
   const onTakeActionHandler = () => {
-    // if (ticketDetails?.panelMember?.email) {
-    actionBottomSheet.current.snapTo(0);
+    if (hasPanelMember) {
+      actionBottomSheet.current.snapTo(0);
+    }
+    // else {
+    //   showErrorFlashMessage('Actions disabled, customer details missing');
     // }
   };
   const handleStatusSelection = () => {
@@ -436,33 +509,6 @@ export default function TicketOverview(props) {
     }
   };
 
-  const getUnderLineText = (text, type) => {
-    return (
-      <TouchableWithoutFeedback
-      // onPress={() => {
-      //   console.log(text);
-
-      //   switch (type) {
-      //     case PHONE:
-      //       promptCall();
-      //       break;
-      //     default:
-      //       navigateToSendEmail();
-      //       break;
-      //   }
-      // }}
-      >
-        <View
-          style={[
-            {flex: 2, justifyContent: 'flex-start'},
-            styles.rowContainer,
-          ]}>
-          <Text style={styles.underLineText}>{text}</Text>
-        </View>
-      </TouchableWithoutFeedback>
-    );
-  };
-
   const departmentNameCell = ({item}) => {
     return (
       <View style={[{flex: 1}, styles.rowContainer]}>
@@ -472,11 +518,7 @@ export default function TicketOverview(props) {
   };
 
   const TicketStatusPriorityView = ({ticket}) => {
-    // const segmentName =
-    //   ticket !== undefined
-    //     ? getSegmentNameById(segments, ticket.currentSegmentId)
-    //     : 'Select segment';
-
+    const segmentName = ticketDetails?.currentSegment?.name ?? '';
     const statusName =
       ticket !== undefined ? getStatusById(ticket.status) : 'Select status';
 
@@ -493,7 +535,7 @@ export default function TicketOverview(props) {
       <View style={styles.ticketStatusContainer}>
         <View style={styles.rowContainer}>
           <Title value={'Current Segment'} />
-          <RenderDropDownButton text={ticket?.currentSegment?.name ?? ''} />
+          <RenderDropDownButton text={segmentName} />
         </View>
 
         <View style={styles.rowContainer}>
@@ -534,49 +576,6 @@ export default function TicketOverview(props) {
             hasArrowDownIcon={true}
           />
         </View>
-      </View>
-    );
-  };
-
-  const ContactView = () => {
-    return (
-      <View style={styles.ticketStatusContainer}>
-        {DescriptionHeader('Contact')}
-        <View style={styles.rowContainer}>
-          {ticketDetails.panelMember.name ? (
-            <Text
-              style={{
-                color: Colors.accent,
-                fontSize: TextSizes.largeText,
-                fontWeight: 'bold',
-              }}>
-              {ticketDetails.panelMember.name}
-            </Text>
-          ) : (
-            <View />
-          )}
-        </View>
-        {ticketDetails.panelMember.email ? (
-          <View style={styles.rowContainer}>
-            <Title value={'Email'} />
-            {getUnderLineText(ticketDetails.panelMember.email, EMAIL)}
-          </View>
-        ) : (
-          <View />
-        )}
-        {ticketDetails.panelMember.phone ? (
-          <View style={styles.rowContainer}>
-            <Title value={'Phone'} />
-
-            {getUnderLineText(ticketDetails.panelMember.phone, PHONE)}
-          </View>
-        ) : (
-          <View />
-        )}
-        {/* <View style={styles.rowContainer}>
-          {Title('Phone')}
-          {getUnderLineText('+140002031')}
-        </View> */}
       </View>
     );
   };
@@ -639,19 +638,26 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderTicketOverView = () => (
+  const RenderTicketOverView = (props) => (
     <View style={styles.container}>
       <Animated.ScrollView
         style={{
           opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
         }}>
         <View style={styles.container}>
-          <TakeActionButton onTakeActionHandler={onTakeActionHandler} />
+          <TakeActionButton
+            hasPanelMember={hasPanelMember}
+            onTakeActionHandler={onTakeActionHandler}
+          />
           {/* {ticketStatusPriorityView()} */}
           <TicketStatusPriorityView ticket={ticketDetails} />
-          <DescriptionView ticketDetails={ticketDetails} />
+          <DescriptionView ticket={ticketDetails} />
 
-          {ticketDetails.panelMember !== undefined ? <ContactView /> : <View />}
+          {/* {hasPanelMember ? ( */}
+          <ContactView panelMember={ticketDetails?.panelMember} />
+          {/* ) : (
+            <View />
+          )} */}
         </View>
       </Animated.ScrollView>
       <RenderStatusBottomSheet currentBS_={currentBS} />
@@ -779,7 +785,7 @@ const styles = StyleSheet.create({
     height: MarginConstants.tab4,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.accentLight,
+    backgroundColor: Colors.filterIconColor,
     marginBottom: MarginConstants.tab2,
   },
   ticketIdView: {

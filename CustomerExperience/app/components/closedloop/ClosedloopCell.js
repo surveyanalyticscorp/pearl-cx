@@ -6,12 +6,7 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import {
-  Colors,
-  getPriorityBorderColorbyId,
-  getStatusBorderColorbyId,
-  getStatusFillerColorbyId,
-} from '../../styles/color.constants';
+import {Colors, getPriorityBorderColorbyId} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {FontFamily} from '../../styles/font.constants';
@@ -23,30 +18,100 @@ import {
   DMY_AT_TIME_FORMAT,
 } from '../../Utils/AppConstants';
 import {getStatusById, getPriorityById} from '../../Utils/TicketUtils';
-import {RenderStatusIcon, StatusIcon} from '../../routes/CommonScreen';
+import {RenderStatusIcon} from '../../routes/CommonScreen';
+
+const StatusUI = ({status}) => {
+  return (
+    <View style={styles.rowContainer}>
+      <RenderStatusIcon size={16} title={getStatusById(status)} />
+
+      {/* <StatusIcon borderColor={borderColor} fillerColor={fillerColor} /> */}
+      <Text style={styles.statusText}>{getStatusById(status)}</Text>
+    </View>
+  );
+};
+
+const PriorityUI = ({priority}) => {
+  const priorityColor = getPriorityBorderColorbyId(priority);
+  const priorityText = getPriorityById(priority);
+  return (
+    <View style={styles.rowContainer}>
+      <IonIcons name="flag" size={20} color={priorityColor} />
+      <Text style={[{marginStart: 4}, styles.detailsText]}>{priorityText}</Text>
+    </View>
+  );
+};
+
+const UserPic = ({avatarUrl}) => {
+  return (
+    <View>
+      <Image
+        style={{height: 24, width: 24, borderRadius: 50}}
+        source={{
+          uri: avatarUrl,
+        }}
+      />
+    </View>
+  );
+};
+
+const TicketID = ({ticketId}) => {
+  return (
+    <View style={{flexDirection: 'row'}}>
+      <Text style={styles.idTitleText}>{`Ticket ID`} </Text>
+      <Text style={styles.idText}>{`#${ticketId}`} </Text>
+    </View>
+  );
+};
+
+const NameANdDateRow = ({name, issueDate}) => {
+  const date = moment(issueDate).format(FullMonthDateYearFormat);
+  // console.log('USERDATA', JSON.stringify(data));
+  return (
+    <View style={styles.rowContainer}>
+      <Text style={styles.userNameText}>{name ?? 'anonymous'}</Text>
+      <Text style={styles.dateText}>{` · ${date ?? ' '}`}</Text>
+    </View>
+  );
+};
+
+const NPSAndTicketRow = ({ticketId}) => {
+  return (
+    <View style={styles.rowContainer}>
+      {/* <View style={[{flex: 2}, styles.rowContainer]}>
+        {getNPSIcon(data.nps)}
+        {getNPSScore(data.npsScore, data.nps)}
+      </View> */}
+      <View
+        style={[{flex: 2, justifyContent: 'flex-end'}, styles.rowContainer]}>
+        <TicketID ticketId={ticketId} />
+      </View>
+    </View>
+  );
+};
+
+const TicketDetails = ({comment}) => {
+  return (
+    <View style={styles.rowContainer}>
+      <Text style={styles.detailsText} numberOfLines={3} ellipsizeMode="tail">
+        {comment}
+      </Text>
+    </View>
+  );
+};
+
+const StatusRow = ({data}) => {
+  return (
+    <View style={styles.statusContainer}>
+      <StatusUI status={data.status} />
+      <PriorityUI priority={data.priority} />
+      <UserPic avatarUrl={data.userAvatar} />
+    </View>
+  );
+};
+
 export default function ClosedLoopCell(props) {
   const data = props.data;
-
-  // let sampleText =
-  //   'The manager completely botched our loan application! We were there for more than four hours trying to resolve t...';
-  // let [isTapped, setTapped] = useState(false);
-
-  // useEffect(() => {
-  //   if (isTapped) {
-  //     setTapped(false);
-
-  //     props.navigation.navigate('closedLoopTicketDetails');
-  //   }
-  // }, [isTapped]);
-
-  const getTicketID = () => {
-    return (
-      <View style={{flexDirection: 'row'}}>
-        <Text style={styles.idTitleText}>{`Ticket ID`} </Text>
-        <Text style={styles.idText}>{`#${data.id}`} </Text>
-      </View>
-    );
-  };
 
   let getNPSIcon = (sentiment) => {
     let icon;
@@ -92,117 +157,17 @@ export default function ClosedLoopCell(props) {
     );
   };
 
-  const getNPSAndTicketRow = () => {
-    return (
-      <View style={styles.rowContainer}>
-        {/* <View style={[{flex: 2}, styles.rowContainer]}>
-          {getNPSIcon(data.nps)}
-          {getNPSScore(data.npsScore, data.nps)}
-        </View> */}
-        <View
-          style={[{flex: 2, justifyContent: 'flex-end'}, styles.rowContainer]}>
-          {getTicketID()}
-        </View>
-      </View>
-    );
-  };
-
-  const getNameANdDateRow = () => {
-    const issueDate = moment(data.issueDate).format(FullMonthDateYearFormat);
-    // console.log('USERDATA', JSON.stringify(data));
-    return (
-      <View style={styles.rowContainer}>
-        <Text style={styles.userNameText}>
-          {data?.panelMember?.name ?? ' '}
-        </Text>
-        <Text style={styles.dateText}>{` · ${issueDate ?? ' '}`}</Text>
-      </View>
-    );
-  };
-
-  const getTicketDetails = () => {
-    return (
-      <View style={styles.rowContainer}>
-        <Text style={styles.detailsText} numberOfLines={3} ellipsizeMode="tail">
-          {data.comment}
-        </Text>
-      </View>
-    );
-  };
-
-  const getStatusUI = (status) => {
-    const borderColor = getStatusBorderColorbyId(status);
-    const fillerColor = getStatusFillerColorbyId(status);
-
-    return (
-      <View style={styles.rowContainer}>
-        <RenderStatusIcon size={16} title={getStatusById(status)} />
-
-        {/* <StatusIcon borderColor={borderColor} fillerColor={fillerColor} /> */}
-        <Text style={styles.statusText}>{getStatusById(status)}</Text>
-      </View>
-    );
-  };
-
-  const getPriorityUI = (priority) => {
-    const priorityColor = getPriorityBorderColorbyId(priority);
-    const priorityText = getPriorityById(priority);
-    return (
-      <View style={styles.rowContainer}>
-        <IonIcons name="flag" size={20} color={priorityColor} />
-        <Text style={[{marginStart: 4}, styles.detailsText]}>
-          {priorityText}
-        </Text>
-      </View>
-    );
-  };
-
-  const getUserPic = (avatarUrl) => {
-    return (
-      <View>
-        <Image
-          style={{height: 24, width: 24, borderRadius: 50}}
-          source={{
-            uri: avatarUrl,
-          }}
-        />
-      </View>
-    );
-  };
-
-  const getStatusRow = () => {
-    return (
-      <View style={styles.statusContainer}>
-        {getStatusUI(data.status)}
-        {getPriorityUI(data.priority)}
-        {getUserPic(data.userAvatar)}
-      </View>
-    );
-  };
-
   const OverdueBar = () => {
     const date = moment(data.overdueDate).format(DMY_AT_TIME_FORMAT);
     return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          padding: PaddingConstants.halfTab,
-          backgroundColor: Colors.overdueBackgroundColor,
-        }}>
+      <View style={styles.overdueContainer}>
         <IonIcons
           name="notifications-sharp"
           size={20}
           color={Colors.overdueTextColor}
         />
 
-        <Text
-          style={{
-            marginHorizontal: MarginConstants.halfTab,
-            color: Colors.overdueTextColor,
-          }}>
-          {`Alert!  Overdue (${date})`}
-        </Text>
+        <Text style={styles.overdueText}>{`Alert!  Overdue (${date})`}</Text>
       </View>
     );
   };
@@ -216,12 +181,17 @@ export default function ClosedLoopCell(props) {
       <View style={styles.container}>
         <View style={styles.ticketContainer}>
           {data.isOverdue && <OverdueBar />}
-          {getNPSAndTicketRow()}
+          <NPSAndTicketRow ticketId={data.id} />
           {/* {getTicketID()} */}
-          {getNameANdDateRow()}
-          {getTicketDetails()}
+          <NameANdDateRow
+            name={data?.panelMember?.name}
+            issueDate={data.issueDate}
+          />
+          <TicketDetails comment={data.comment} />
         </View>
-        <View>{getStatusRow()}</View>
+        <View>
+          <StatusRow data={data} />
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -292,5 +262,15 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.regular,
     color: Colors.lightBlack,
     marginHorizontal: 4,
+  },
+  overdueContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: PaddingConstants.halfTab,
+    backgroundColor: Colors.overdueBackgroundColor,
+  },
+  overdueText: {
+    marginHorizontal: MarginConstants.halfTab,
+    color: Colors.overdueTextColor,
   },
 });

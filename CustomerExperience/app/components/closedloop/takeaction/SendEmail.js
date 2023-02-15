@@ -15,7 +15,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import {BottomSheetHeader, CloseButton} from '../../../routes/CommonScreen';
 import Animated from 'react-native-reanimated';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ASYNC_USER_INFO, ASYNC_USER_CREDENTIALS} from '../../../api/Constant';
+import {ACTION_EMAIL, ASYNC_USER_CREDENTIALS} from '../../../api/Constant';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -28,18 +28,32 @@ import {
 } from '../../../redux/actions/closedloop.actions';
 import StringUtils from '../../../Utils/StringUtils';
 import {showErrorFlashMessage} from '../../../Utils/Utility';
+
+const EmailToFrom = ({title, value}) => {
+  return (
+    <View>
+      <View style={styles.rowContainerCenterAlign}>
+        <Text style={styles.titleText}>{title}</Text>
+
+        <Text style={styles.textInputEmail}>{value}</Text>
+      </View>
+      <View style={styles.devider} />
+    </View>
+  );
+};
+
 export default function SendEmail(props) {
   const [body, setBody] = useState({
     subject: '',
     toEmail: props.route.params.toEmail ?? '',
-    fromEmail: 'noreply@questionpro.com',
+    fromEmail: ACTION_EMAIL,
     emailBody: '',
   });
   const dispatch = useDispatch();
   const {authToken} = useSelector((state) => state.global);
   const richText = React.useRef();
   const richTextToolBar = React.useRef();
-  const [userInfo, setUserInfo] = useState();
+  // const [userInfo, setUserInfo] = useState();
   const [userEmail, setUserEmail] = useState('');
   const templateList = useSelector(
     (state) => state.dashboard.emailData.emailTemplates,
@@ -50,10 +64,10 @@ export default function SendEmail(props) {
 
   const ticketId = JSON.stringify(props.route.params.ticketId);
   useEffect(() => {
-    AsyncStorage.getItem(ASYNC_USER_INFO).then((value) => {
-      setUserInfo(JSON.parse(value));
-      // console.log('USER_INFO__', value);
-    });
+    // AsyncStorage.getItem(ASYNC_USER_INFO).then((value) => {
+    //   setUserInfo(JSON.parse(value));
+    //   // console.log('USER_INFO__', value);
+    // });
     AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then((value) => {
       setUserEmail(JSON.parse(value)?.email);
     });
@@ -217,24 +231,8 @@ export default function SendEmail(props) {
         <RenderOptionsView />
         {/* <RenderToTextInput />
         <RenderFromTextInput /> */}
-        <View>
-          <View style={styles.rowContainerCenterAlign}>
-            <Text style={styles.titleText}>{'To:'}</Text>
-
-            <Text style={styles.textInputEmail}>{body.toEmail}</Text>
-          </View>
-          <View style={styles.devider} />
-        </View>
-
-        <View>
-          <View style={styles.rowContainerCenterAlign}>
-            <Text style={styles.titleText}>{'From:'}</Text>
-
-            <Text style={styles.textInputEmail}>{body.fromEmail}</Text>
-          </View>
-          <View style={styles.devider} />
-        </View>
-        {/* <RenderSubjectTextInput /> */}
+        <EmailToFrom title={'To:'} value={body.toEmail} />
+        <EmailToFrom title={'From:'} value={body.fromEmail} />
         <View>
           <View style={styles.rowContainerCenterAlign}>
             <Text style={styles.titleText}>{'Subject:'}</Text>
