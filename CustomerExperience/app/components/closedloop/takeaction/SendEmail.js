@@ -27,7 +27,7 @@ import {
   sendEmail,
 } from '../../../redux/actions/closedloop.actions';
 import StringUtils from '../../../Utils/StringUtils';
-import {showErrorFlashMessage} from '../../../Utils/Utility';
+import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
 
 const EmailToFrom = ({title, value}) => {
   return (
@@ -43,6 +43,9 @@ const EmailToFrom = ({title, value}) => {
 };
 
 export default function SendEmail(props) {
+  const defaultEmail = useSelector(
+    (state) => state.dashboard.emailData.defaultTemplate,
+  );
   const [body, setBody] = useState({
     subject: '',
     toEmail: props.route.params.toEmail ?? '',
@@ -58,9 +61,6 @@ export default function SendEmail(props) {
   const templateList = useSelector(
     (state) => state.dashboard.emailData.emailTemplates,
   );
-  const defaultEmail = useSelector(
-    (state) => state.dashboard.emailData.defaultTemplate,
-  );
 
   const ticketId = JSON.stringify(props.route.params.ticketId);
   useEffect(() => {
@@ -72,6 +72,19 @@ export default function SendEmail(props) {
       setUserEmail(JSON.parse(value)?.email);
     });
   }, [authToken]);
+
+  useEffect(() => {
+    if (!isObjectEmpty(defaultEmail)) {
+      setBody((state) => ({
+        ...state,
+        emailBody: defaultEmail?.templateText ?? '',
+      }));
+
+      richText.current.setContentHTML(
+        defaultEmail?.templateText ?? '(empty body)',
+      );
+    }
+  }, [defaultEmail]);
 
   useEffect(() => {
     console.log(`EMAIL_DATA: ${authToken} ${global.subscriberId}`);
@@ -158,7 +171,7 @@ export default function SendEmail(props) {
     // setDefaultEmail(item);
     setBody((state) => ({
       ...state,
-      subject: item.title ?? '',
+      // subject: item.title ?? '',
       emailBody: item.templateText,
     }));
 
@@ -209,6 +222,10 @@ export default function SendEmail(props) {
     // console.log('EMAIL_PAYLOAD', JSON.stringify(body));
     // console.log('EMAIL_PAYLOAD', JSON.stringify(ticketId));
     // console.log('EMAIL_PAYLOAD', JSON.stringify(queryParam));
+  };
+
+  const getEmailBodyText = (text) => {
+    return text;
   };
 
   const bs = React.useRef(null);
@@ -265,7 +282,8 @@ export default function SendEmail(props) {
               androidHardwareAccelerationDisabled={true}
               initialHeight={300}
               style={styles.textInput}
-              initialContentHTML={defaultEmail?.templateText}
+              // initialContentHTML={body.emailBody}
+              setContentHTML={body.emailBody}
             />
             <View style={styles.rowContainer}>
               <RichToolbar

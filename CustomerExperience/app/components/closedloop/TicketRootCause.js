@@ -1,48 +1,17 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
-  TouchableWithoutFeedback,
   Text,
-  Image,
   StyleSheet,
-  // ScrollView,
   Platform,
   FlatList,
-  Pressable,
-  ScrollView,
   TouchableOpacity,
 } from 'react-native';
-// import StringUtils from '../../Utils/StringUtils';
-// import ArrayUtils from '../../Utils/ArrayUtils';
-// import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import {
-  Colors,
-  statusColors,
-  priorityColors,
-} from '../../styles/color.constants';
+import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
-// import {Sizes} from '../../styles/Size.constant';
-// import moment from 'moment';
-// import {translate} from '../../Utils/MultilinguaUtils';
-import IonIcons from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import QPButton from '../../widgets/Button';
-// import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
-import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
-import BottomSheet from 'reanimated-bottom-sheet';
-import Animated from 'react-native-reanimated';
-import TicketTakeAction from './takeaction/TIcketTakeAction';
-// import {TouchableOpacity} from 'react-native-gesture-handler';
-import {
-  BottomSheetHeader,
-  RenderPriorityIcon,
-  RenderRoundImageOrColor,
-  RenderSpinner,
-  RenderStatusIcon,
-} from '../../routes/CommonScreen';
 import {useDispatch, useSelector} from 'react-redux';
 import {CheckBoxItem} from '../../routes/CommonScreen';
 import {updateRootCause} from '../../redux/actions/closedloop.actions';

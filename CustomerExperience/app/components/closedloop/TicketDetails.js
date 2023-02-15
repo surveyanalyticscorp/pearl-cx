@@ -16,6 +16,10 @@ import {getClosedLoopTicketItem} from '../../redux/actions/dashboard.actions';
 import TicketRootCause from './TicketRootCause';
 import {getResponseDetailsByResponseId} from '../../redux/actions/feedback.actions';
 import StringUtils from '../../Utils/StringUtils';
+import {
+  getActionList,
+  getRootCauseList,
+} from '../../redux/actions/closedloop.actions';
 
 export default function TicketDetails(props) {
   const {authToken, isTicketLoading} = useSelector((state) => state.global);
@@ -34,6 +38,8 @@ export default function TicketDetails(props) {
   }, [props.navigation]);
 
   useEffect(() => {
+    dispatch(getRootCauseList(authToken, global.subscriberId));
+    dispatch(getActionList(authToken, global.subscriberId));
     dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
 
     if (!StringUtils.isEmptyOrNull(ticketItem.responseId)) {
