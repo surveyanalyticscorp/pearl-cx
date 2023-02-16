@@ -28,7 +28,7 @@ import {
   BottomSheetHeader,
   RenderStatusIcon,
 } from '../../../routes/CommonScreen';
-
+import QPSpinner from '../../../widgets/QPSpinner';
 import QPButton from '../../../widgets/Button';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
@@ -65,6 +65,7 @@ import {
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import StringUtils from '../../../Utils/StringUtils';
+import {debounce} from '../../../Utils/TimeOutUtil';
 
 export default function CreateTicket(props) {
   const responseId = props.route?.params?.responseId ?? null;
@@ -122,7 +123,7 @@ export default function CreateTicket(props) {
   // const [shadow, setShadow] = useState(false);
   const dispatch = useDispatch();
   const [validation, setValidation] = useState('');
-
+  const [showLoading, setLoading] = useState(false);
   const [ticketState, setTicketState] = useState({
     userName: `${firstName} ${lastName}`,
     userEmailAddress: `${emailAddress}`,
@@ -251,8 +252,9 @@ export default function CreateTicket(props) {
 
   const handleCreateTicket = () => {
     if (isValid()) {
+      setLoading(true);
       setValidation('');
-      console.log('TICKET_DETAILS_', JSON.stringify(ticketState));
+      // console.log('TICKET_DETAILS_', JSON.stringify(ticketState));
       dispatch(createClfTicket(authToken, ticketState, feedbackApiKey));
       props.navigation.goBack();
       // console.log(JSON.stringify(ticketState));
@@ -772,13 +774,23 @@ export default function CreateTicket(props) {
             />
           </View>
           <View style={[styles.rowContainer, styles.rowButton]}>
-            <QPButton
-              onPress={handleCreateTicket}
-              buttonColor={Colors.accentLight}
-              buttonText={'Create Ticket'}
-              textStyle={styles.qpButtonTextStyles}
-              style={styles.buttonStyle}
-            />
+            {showLoading ? (
+              <View
+                style={[
+                  styles.buttonStyle,
+                  {backgroundColor: Colors.accentLight},
+                ]}>
+                <QPSpinner spinnerColor={Colors.white} />
+              </View>
+            ) : (
+              <QPButton
+                onPress={handleCreateTicket}
+                buttonColor={Colors.accentLight}
+                buttonText={'Create Ticket'}
+                textStyle={styles.qpButtonTextStyles}
+                style={styles.buttonStyle}
+              />
+            )}
           </View>
         </ScrollView>
       </Animated.View>
