@@ -13,6 +13,14 @@ export const statusList = [
   {title: 'Resolved', id: 3},
 ];
 
+export const statusListForCreateTicket = [
+  {title: 'New', id: 0},
+  {title: 'Open', id: 1},
+  // {title: 'Escalated', id: 2},
+  // {title: 'Overdue', id: 3},
+  {title: 'Resolved', id: 3},
+];
+
 export const ticketTypeList = [
   {title: 'Manual Ticket', id: 0},
   {title: 'Detractor Alert', id: 1},

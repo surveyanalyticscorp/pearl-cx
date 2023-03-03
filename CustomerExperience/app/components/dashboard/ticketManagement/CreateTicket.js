@@ -38,7 +38,7 @@ import {
   getPriorityById,
   getStatusById,
   priorityList,
-  statusList,
+  statusListForCreateTicket,
 } from '../../../Utils/TicketUtils';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -351,7 +351,7 @@ export default function CreateTicket(props) {
     return (
       <View style={styles.contentContainer}>
         <SelectStatus
-          data={statusList}
+          data={statusListForCreateTicket}
           selectedIndex={statusIndex}
           handleOnPress={(item, index) => {
             // console.log(JSON.stringify(item));
