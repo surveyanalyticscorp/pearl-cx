@@ -70,7 +70,7 @@ const NameANdDateRow = ({name, issueDate}) => {
   // console.log('USERDATA', JSON.stringify(data));
   return (
     <View style={styles.rowContainer}>
-      <Text style={styles.userNameText}>{name ?? 'anonymous'}</Text>
+      <Text style={styles.userNameText}>{name}</Text>
       <Text style={styles.dateText}>{` · ${date ?? ' '}`}</Text>
     </View>
   );
@@ -186,9 +186,9 @@ export default function ClosedLoopCell(props) {
           {/* {getTicketID()} */}
           <NameANdDateRow
             name={
-              !StringUtils.isEmpty(data?.panelMember?.name)
+              (!StringUtils.isEmpty(data?.panelMember?.name)
                 ? data?.panelMember?.name
-                : data.panelMember?.email
+                : data.panelMember?.email) ?? 'anonymous'
             }
             issueDate={data.issueDate}
           />

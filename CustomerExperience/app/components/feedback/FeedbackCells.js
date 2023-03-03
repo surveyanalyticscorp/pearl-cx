@@ -23,9 +23,21 @@ import {translate} from '../../Utils/MultilinguaUtils';
 // import {backgroundColor} from '../../widgets/qp-calendar/style';
 // import style from '../../widgets/qp-calendar/calendar/header/style';
 export default function FeedbackCell(props) {
+  function showName(item) {
+    let name = `${item.firstName ?? ''} ${item.lastName ?? ''}`;
+    let email = item.emailAddress ?? '';
+    if (!StringUtils.isEmpty(name.trim())) {
+      return name.trim();
+    } else if (!StringUtils.isEmpty(email.trim())) {
+      return email;
+    } else {
+      return 'anonymous';
+    }
+  }
   let disable = props.origin === 'Detail';
   let hasTicket = props.hasTicket;
-  const name = `${props.item.firstName ?? ''} ${props.item.lastName ?? ''}`;
+  // const name = showName(props.item);
+  const name = showName(props.item);
   const email = props.item.emailAddress ?? '';
   const surveyID = props.item.surveyID;
   let [isNewResponse, setNewResponse] = useState(
@@ -101,7 +113,9 @@ export default function FeedbackCell(props) {
 
   let getUserName = () => {
     return (
-      <Text style={styles.userNameText}>{name.length > 1 ? name : 'N/A'}</Text>
+      <Text style={styles.userNameText}>
+        {name.length > 1 ? name : 'anonymous'}
+      </Text>
     );
   };
 
