@@ -19,6 +19,7 @@ import {
 } from '../../Utils/AppConstants';
 import {getStatusById, getPriorityById} from '../../Utils/TicketUtils';
 import {RenderStatusIcon} from '../../routes/CommonScreen';
+import StringUtils from '../../Utils/StringUtils';
 
 const StatusUI = ({status}) => {
   return (
@@ -184,7 +185,11 @@ export default function ClosedLoopCell(props) {
           <NPSAndTicketRow ticketId={data.id} />
           {/* {getTicketID()} */}
           <NameANdDateRow
-            name={data?.panelMember?.name}
+            name={
+              !StringUtils.isEmpty(data?.panelMember?.name)
+                ? data?.panelMember?.name
+                : data.panelMember?.email
+            }
             issueDate={data.issueDate}
           />
           <TicketDetails comment={data.comment} />

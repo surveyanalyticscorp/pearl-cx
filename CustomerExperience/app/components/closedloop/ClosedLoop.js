@@ -64,10 +64,14 @@ export default function ClosedLoop(props) {
     assignToId: '',
     pageNumber: pageNumber,
     perPage: itemPerPage,
-    fromDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
-    toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
+    fromDate: convertDateToYMDFORMAT(range.startDate),
+    toDate: convertDateToYMDFORMAT(range.endDate),
     type: '',
   });
+
+  function convertDateToYMDFORMAT(date) {
+    return moment(date, DMYFORMAT).format(YMDFORMAT);
+  }
   // const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
   const ticketList = useSelector((state) => state.dashboard.ticketList);
 
@@ -161,7 +165,14 @@ export default function ClosedLoop(props) {
     if (keepSyncingTickets) {
       sync();
     }
-    getTicketList(filterState, currentSegment.currentSegmentID);
+
+    let filterObj = {
+      ...filterState,
+      fromDate: convertDateToYMDFORMAT(range.startDate),
+      toDate: convertDateToYMDFORMAT(range.endDate),
+    };
+
+    getTicketList(filterObj, currentSegment.currentSegmentID);
     getTicketOwnerList(currentSegment.currentSegmentID);
     // dispatch(clearSyncTicketStatus());
   };
