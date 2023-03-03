@@ -29,6 +29,7 @@ import {
   watchGetrootCauseList,
   watchGetrootCauseActionList,
   watchUpdateRootCause,
+  watchSyncTickets,
 } from './ClosedLoopSaga';
 import {watchGetNotification} from './notificationSaga';
 import {
@@ -53,6 +54,7 @@ export function* rootSaga() {
     fork(watchGetClosedLoopSegmentDetails),
     fork(watchGetFirstTimeClosedLoopSegmentDetails),
     fork(watchGetClosedLoopTicketList),
+    fork(watchSyncTickets),
     fork(watchGetClosedLoopTicketItem),
     fork(watchGetClosedLoopTicketComments),
     fork(watchGetClosedLoopTicketActivity),

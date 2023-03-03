@@ -53,6 +53,9 @@
 // export const GET_WELCOME_SCREEN_DATA = 'GET_WELCOME_SCREEN_DATA';
 // export const WELCOME_SCREEN_DATA_RECIEVED = 'WELCOME_SCREEN_DATA_RECIEVED';
 
+export const GET_TICKET_LIST_SYNC = 'GET_TICKET_LIST_SYNC';
+export const GET_TICKET_LIST_SYNC_RECEIVED = 'GET_TICKET_LIST_SYNC_RECEIVED';
+export const CLEAR_TICKET_SYNC = 'CLEAR_TICKET_SYNC';
 export const GET_DEFAULT_EMAIL_TEMPLATE = 'GET_DEFAULT_EMAIL_TEMPLATE';
 export const GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED =
   'GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED';
@@ -79,6 +82,17 @@ export const ACTIONS_RECEIVED = 'ACTIONS_RECEIVED';
 
 export const UPDATE_ROOT_CAUSE = 'UPDATE_ROOT_CAUSE';
 export const ROOT_CAUSE_UPDATE_RECEIVED = 'ROOT_CAUSE_UPDATE_RECEIVED';
+
+export const syncTickets = (token, param, feedbackId) => ({
+  type: GET_TICKET_LIST_SYNC,
+  token,
+  param,
+  feedbackId,
+});
+
+export const clearSyncTicketStatus = () => ({
+  type: CLEAR_TICKET_SYNC,
+});
 
 export const getDefaultEmailTemplate = (token, param) => ({
   type: GET_DEFAULT_EMAIL_TEMPLATE,

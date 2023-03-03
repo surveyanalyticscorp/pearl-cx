@@ -61,6 +61,7 @@ import {
   CLF_UPDATE_ROOT_CAUSE_POSTFIX,
   CLF_BASE_URL,
   CLF_QA_BASE_URL,
+  CLF_GET_TICKET_lIST_SYNC,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -72,6 +73,8 @@ import {
   GET_EMAIL_TEMPLATES_RECEIVED,
   GET_LATEST_COMMENT,
   GET_ROOT_CASUES,
+  GET_TICKET_LIST_SYNC,
+  GET_TICKET_LIST_SYNC_RECEIVED,
   GET_TICKET_STATUS_HISTORY,
   GET_TICKET_STATUS_HISTORY_RECEIVED,
   LATEST_COMMENT_RECEIVED,
@@ -272,6 +275,31 @@ export function addClosedLoopTicket(
     });
 }
 
+function* syncTickets(action) {
+  try {
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
+
+    const response = yield WebServiceHandler.get(
+      CLF_GET_TICKET_lIST_SYNC(action.feedbackId),
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: GET_TICKET_LIST_SYNC_RECEIVED,
+      response: response,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    // yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchSyncTickets() {
+  yield takeLatest(GET_TICKET_LIST_SYNC, syncTickets);
+}
 function* fetchClosedLoopTicketList(action) {
   try {
     // yield put({type: IS_LOADING, payload: {isLoading: true}});

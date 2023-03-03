@@ -57,17 +57,17 @@ const initialState = {
 const globalReducer = (state = initialState, action) => {
   switch (action.type) {
     case AUTHENTICATE_PANEL_RESPONSE: {
-      return {
-        ...state,
-        baseUrl: DEV_BASE_URL,
-        subscriberId: JSON.stringify(action.response.body.userID),
-      };
-
       // return {
       //   ...state,
-      //   // baseUrl: action.response.body.mobileAPIURL,
+      //   baseUrl: DEV_BASE_URL,
       //   subscriberId: JSON.stringify(action.response.body.userID),
       // };
+
+      return {
+        ...state,
+        baseUrl: action.response.body.mobileAPIURL,
+        subscriberId: JSON.stringify(action.response.body.userID),
+      };
     }
     case LOGIN_RESPONSE: {
       return {

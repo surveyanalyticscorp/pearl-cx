@@ -34,7 +34,11 @@ import {
 import QPSpinner from '../../widgets/QPSpinner';
 import ShowFilterTag from '../view/ShowFilterTag';
 import StringUtils from '../../Utils/StringUtils';
-import {resetStatusId} from '../../redux/actions/closedloop.actions';
+import {
+  clearSyncTicketStatus,
+  resetStatusId,
+  syncTickets,
+} from '../../redux/actions/closedloop.actions';
 // import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
@@ -45,10 +49,12 @@ export default function ClosedLoop(props) {
   const {statusId} = useSelector((state) => state.global);
 
   const [pageNumber, setPageNumber] = useState(1);
-  const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
+  const {feedbackApiKey, feedbackID} = useSelector(
+    (state) => state.global.userInfo,
+  );
   // const [isLoading, setLoading] = useState(false);
   const [isPagination, setpagination] = useState(false);
-  const {authToken, isTicketLoading, range} = useSelector(
+  const {authToken, isTicketLoading, range, subscriberId} = useSelector(
     (state) => state.global,
   );
   const [filterState, setFilterState] = useState({
@@ -75,8 +81,22 @@ export default function ClosedLoop(props) {
 
   // const [ticketList, setTicketList] = useState([]);
   const owners = useSelector((state) => state.dashboard.ownerDetails.owners);
-
+  const keepSyncingTickets = useSelector((state) => state.dashboard.ticketSync);
   const [refreshing, setRefreshing] = useState(false);
+  const sync = () => {
+    dispatch(
+      syncTickets(
+        authToken,
+        {subscriberId: subscriberId, feedbackApiKey: feedbackApiKey},
+        feedbackID,
+      ),
+    );
+  };
+  useEffect(() => {
+    if (keepSyncingTickets) {
+      sync();
+    }
+  }, [keepSyncingTickets]);
   const sampleFilterData = () => {
     const priority = priorityList.map((value) => ({
       ...value,
@@ -138,9 +158,16 @@ export default function ClosedLoop(props) {
 
   const makeAPICall = () => {
     // setLoading(true);
-
+    if (keepSyncingTickets) {
+      sync();
+    }
     getTicketList(filterState, currentSegment.currentSegmentID);
     getTicketOwnerList(currentSegment.currentSegmentID);
+    // dispatch(clearSyncTicketStatus());
+  };
+
+  const resetSyncTicket = () => {
+    dispatch(clearSyncTicketStatus());
   };
   const wait = (timeout) => {
     return new Promise((resolve) => {
@@ -151,8 +178,8 @@ export default function ClosedLoop(props) {
     // setFilterState((state) => ({...state, pageNumber: 1}));
     // setTicketList([]);
     resetFilterState(range);
-
     setRefreshing(true);
+    resetSyncTicket();
     makeAPICall();
     wait(500).then(() => setRefreshing(false));
   }, []);

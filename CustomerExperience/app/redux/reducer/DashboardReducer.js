@@ -1,8 +1,10 @@
 import {getUniqueValues} from '../../Utils/TicketUtils';
 import {
   ACTIONS_RECEIVED,
+  CLEAR_TICKET_SYNC,
   GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
   GET_EMAIL_TEMPLATES_RECEIVED,
+  GET_TICKET_LIST_SYNC_RECEIVED,
   ROOT_CASUES_RECEIVED,
   ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL_RECEIVED,
@@ -49,6 +51,7 @@ const initialState = {
   ticket: {},
   ticketComments: [],
   ticketActivity: [],
+  ticketSync: true,
   apiCallStatus: {},
   welcomeScreenData: {},
   emailData: {},
@@ -140,6 +143,14 @@ const dashboardReducer = (state = initialState, action) => {
 
     case SEGMENT_SELECTOR_OPEN: {
       return {...state, isSegmentSelectorOpen: action.isOpen};
+    }
+
+    case GET_TICKET_LIST_SYNC_RECEIVED: {
+      return {...state, ticketSync: action.response.hasNextCall};
+    }
+
+    case CLEAR_TICKET_SYNC: {
+      return {...state, ticketSync: true};
     }
 
     case CLOSED_LOOP_TICKET_LIST_RECEIVED: {

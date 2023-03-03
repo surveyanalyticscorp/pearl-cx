@@ -7,12 +7,12 @@ export const BASE_URL = 'baseUrl';
 export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
 export const ACTION_EMAIL = 'noreply@InsightsHub.com';
-//export const BASE_URL = 'https://api.questionpro.com/';
-export const DEV_BASE_URL = 'https://qa.questionpro.com';
+// export const BASE_URL = 'https://api.questionpro.com/';
+// export const DEV_BASE_URL = 'https://qa.questionpro.com';
 // export const DEV_BASE_URL = 'https://cxlabs.questionpro.com';
 
-export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
-// export const CLF_BASE_URL = 'https://clf-backend.questionpro.com/api/';
+// export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
+export const CLF_BASE_URL = 'https://clf-backend.questionpro.com/api/';
 
 export const PANEL_AUTH =
   'https://api.questionpro.com/a/nativehtml/panel.auth.PanelRequestHandler';
@@ -63,7 +63,12 @@ export const CX_WELCOME_SCREEN_DATA =
 
 // export const FEEDBACK_API_KEY = 'e8caf096-4f19-4b34-a7cd-4bcaa8197c1d';
 export const FEEDBACK_API_KEY_ENDPOINT = '?feedbackApiKey=';
+export const CLF_GET_TICKET_lIST_SYNC = (feedBackId) =>
+  `${CLF_BASE_URL}tickets/import/feedback/${feedBackId}/mobile`;
+// export const CLF_GET_TICKET_lIST_SYNC_PREFIX = `${CLF_BASE_URL}/tickets/import/feedback/`;
+// export const CLF_GET_TICKET_lIST_SYNC_POSTFIX = `/mobile`;
 
+// /tickets/import/feedback/25697/mobile?subscriberId=4896658&feedbackApiKey=eba03e1f-d8d0-4f1f-8752-70893eac665c
 export const CLF_GET_TICKET_LIST = `${CLF_BASE_URL}mobile/tickets/feedback/`;
 // "ex: {{BASE_URL}}/mobile/tickets/feedback/:feedBackId/segment/:segmentId?fromDate=2022-09-28&toDate=2022-10-28"
 export const CLF_GET_TICKET_LIST_BY_RESPONSEID = `${CLF_BASE_URL}mobile/tickets/feedbacks/`;
