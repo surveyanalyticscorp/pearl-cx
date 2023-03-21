@@ -13,7 +13,7 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {listItemSeparator} from '../../../routes/CommonScreen';
+import {listItemSeparator, SearchTextInput} from '../../../routes/CommonScreen';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import StringUtils from '../../../Utils/StringUtils';
 import {NoItemsFound} from '../../../routes/CommonScreen';
@@ -61,7 +61,7 @@ const SelectTicketOwner = (props) => {
 
   return (
     <View style={styles.container}>
-      <TextInput
+      {/* <TextInput
         ref={textInputRef}
         defaultValue={''}
         style={styles.search}
@@ -70,6 +70,12 @@ const SelectTicketOwner = (props) => {
         onChangeText={(text) => {
           filterOwnerList(text);
         }}
+      /> */}
+      <SearchTextInput
+        ref={textInputRef}
+        placeholder={'Search assignee/Owner name here...'}
+        returnKeyType={'search'}
+        onChangeText={filterOwnerList}
       />
       <FlatList
         style={styles.flatList}
@@ -105,11 +111,5 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
     marginStart: MarginConstants.halfTab,
     color: Colors.filterIconColor,
-  },
-  search: {
-    padding: PaddingConstants.halfTab,
-    margin: MarginConstants.halfTab,
-    borderColor: Colors.filterIconColor,
-    borderBottomWidth: 0.5,
   },
 });

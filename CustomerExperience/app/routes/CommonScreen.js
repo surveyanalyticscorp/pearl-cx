@@ -7,6 +7,7 @@ import {
   Image,
   Alert,
   BackHandler,
+  TextInput,
 } from 'react-native';
 import FeedbackDetails from '../components/feedback/FeedbackDetails';
 import {
@@ -231,6 +232,33 @@ export const CloseButton = ({color}) => {
   );
 };
 
+export const SearchTextInput = ({
+  textInputRef,
+  defaultValue,
+  style,
+  placeholder,
+  returnKeyType,
+  onChangeText,
+}) => {
+  const styles = StyleSheet.create({
+    search: {
+      padding: PaddingConstants.halfTab,
+      margin: MarginConstants.halfTab,
+      borderColor: Colors.filterIconColor,
+      borderBottomWidth: 0.5,
+    },
+  });
+  return (
+    <TextInput
+      ref={textInputRef}
+      defaultValue={defaultValue ?? ''}
+      style={style ?? styles.search}
+      placeholder={placeholder}
+      returnKeyType={returnKeyType}
+      onChangeText={onChangeText}
+    />
+  );
+};
 export const SearchIcon = (props) => {
   let navigation = useNavigation();
   return (
