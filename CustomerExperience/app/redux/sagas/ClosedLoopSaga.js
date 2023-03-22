@@ -376,6 +376,7 @@ function* fetchClosedLoopTicketItem(action) {
     });
   }
 }
+
 export function* watchGetClosedLoopTicketItem() {
   yield takeLatest(GET_CLOSED_LOOP_TICKET_ITEM, fetchClosedLoopTicketItem);
 }
@@ -410,20 +411,24 @@ export function* watchGetClosedLoopTicketComments() {
 
 function* fetchClosedLoopTicketActivity(action) {
   try {
-    const json = yield WebServiceHandler.get(
+    // yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
+
+    const ticketActivity = yield WebServiceHandler.get(
       CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
       {'Auth-Token': action.token},
       action.param,
     );
     yield put({
       type: CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED,
-      response: json,
+      ticketActivity: ticketActivity.data,
     });
+    // yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
 
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    // yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
+
     yield put({
       type: API_ERROR,
       error: error,

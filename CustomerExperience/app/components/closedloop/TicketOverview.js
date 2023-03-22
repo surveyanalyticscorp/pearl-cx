@@ -47,7 +47,7 @@ import SelectTicketOwner from './takeaction/SelectTicketOwner';
 import {EMAIL, PHONE} from '../../api/Constant';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
-import {isObjectEmpty, showErrorFlashMessage} from '../../Utils/Utility';
+import {isObjectEmpty} from '../../Utils/Utility';
 const NPSScoreText = ({text}) => {
   const npsStyles = StyleSheet.create({
     npsView: {

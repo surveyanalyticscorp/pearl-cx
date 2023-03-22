@@ -14,7 +14,7 @@ import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {listItemSeparator, SearchTextInput} from '../../../routes/CommonScreen';
-import {PaddingConstants} from '../../../styles/padding.constants';
+// import {PaddingConstants} from '../../../styles/padding.constants';
 import StringUtils from '../../../Utils/StringUtils';
 import {NoItemsFound} from '../../../routes/CommonScreen';
 
@@ -61,19 +61,9 @@ const SelectTicketOwner = (props) => {
 
   return (
     <View style={styles.container}>
-      {/* <TextInput
-        ref={textInputRef}
-        defaultValue={''}
-        style={styles.search}
-        placeholder="Search assignee/Owner name here..."
-        returnKeyType={'search'}
-        onChangeText={(text) => {
-          filterOwnerList(text);
-        }}
-      /> */}
       <SearchTextInput
         ref={textInputRef}
-        placeholder={'Search assignee/Owner name here...'}
+        placeholder={'Search...'}
         returnKeyType={'search'}
         onChangeText={filterOwnerList}
       />
@@ -102,7 +92,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     margin: MarginConstants.tab1,
-
     padding: MarginConstants.tab1,
   },
   title: {

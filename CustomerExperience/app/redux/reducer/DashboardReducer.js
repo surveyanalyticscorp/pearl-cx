@@ -172,14 +172,16 @@ const dashboardReducer = (state = initialState, action) => {
       };
     }
 
+    case CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED: {
+      return {
+        ...state,
+        ticketActivity: action.ticketActivity,
+      };
+    }
+
     case CLOSED_LOOP_TICKET_ITEM_COMMENTS_RECEIVED: {
       console.log('TICKETCOMMENTS', action.ticketComments);
       return {...state, ticketComments: action.ticketComments};
-    }
-
-    case CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED: {
-      // console.log('TICKETACTIVITY', action.response.data);
-      return {...state, ticketActivity: action.response.data};
     }
 
     case REMOVE_CLOSED_LOOP_TICKET_ITEM: {

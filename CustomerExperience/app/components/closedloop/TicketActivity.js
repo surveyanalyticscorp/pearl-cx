@@ -1,148 +1,91 @@
-import React, {
-  useState, // {useEffect, useState}
-} from 'react';
-import {
-  View,
-  // TouchableWithoutFeedback,
-  // TouchableOpacity,
-  Text,
-  // Image,
-  StyleSheet,
-  // ScrollView,
-  // Platform,
-  FlatList,
-  // SafeAreaView,
-  // TextInput,
-  // LogBox,
-} from 'react-native';
-// import StringUtils from '../../Utils/StringUtils';
-// import ArrayUtils from '../../Utils/ArrayUtils';
-// import Icon from 'react-native-vector-icons/SimpleLineIcons';
-// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {
-  Colors,
-  // statusColors
-} from '../../styles/color.constants';
+import React, {useState, useCallback} from 'react';
+import {View, Text, StyleSheet, FlatList, RefreshControl} from 'react-native';
+import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
-import {
-  FullMonthDateYearFormat,
-  HalfMonthDateYearFormat,
-} from '../../Utils/AppConstants';
-// import {Sizes} from '../../styles/Size.constant';
-// import moment from 'moment';
-// import {translate} from '../../Utils/MultilinguaUtils';
-// import IonIcons from 'react-native-vector-icons/Ionicons';
-// import QPButton from '../../widgets/Button';
-// import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
-// import {backgroundColor} from '../../widgets/qp-calendar/style';
-// import style from '../../widgets/qp-calendar/calendar/header/style';
-// import {color} from 'react-native-reanimated';
+import {NoItemsFound} from '../../routes/CommonScreen';
+import {getDateTimeAgo} from '../../Utils/TimeUtils';
+import {getClosedLoopTicketItemActivity} from '../../redux/actions/dashboard.actions';
+
+const RenderItem = ({item}) => {
+  return (
+    <View style={styles.renderItemContainerStyle}>
+      <View style={styles.renderItemStyle}>
+        <Text style={styles.userName}>{item.userName ?? 'anonymous'}</Text>
+      </View>
+      <View style={{marginHorizontal: MarginConstants.tab1}}>
+        <Text style={styles.activity}>{item.activityText}</Text>
+      </View>
+      <Text style={styles.date}>{convertDateTime(item.createdAt)}</Text>
+    </View>
+  );
+};
+
+const RenderMyItem = ({item}) => {
+  return (
+    <View style={styles.myRenderItemContainerStyle}>
+      <View style={styles.myRenderItemStyle}>
+        <Text style={styles.userName}>{'You'}</Text>
+      </View>
+      <View style={{marginHorizontal: MarginConstants.tab1}}>
+        <Text style={styles.activity}> {item.activityText} </Text>
+      </View>
+      <Text style={styles.date}> {convertDateTime(item.createdAt)}</Text>
+    </View>
+  );
+};
+
+function convertDateTime(dateStr) {
+  return getDateTimeAgo(moment.utc(dateStr).toDate());
+}
 
 export default function TicketActivity(props) {
+  const [refreshing, setRefreshing] = useState(false);
+  const dispatch = useDispatch();
+  const {authToken} = useSelector((state) => state.global);
+  const ticketId = useSelector((state) => state.dashboard.ticket.id);
   const {userID} = useSelector((state) => state.global.userInfo);
-  const [ticketActivityList, setTicketActivityList] = useState(
-    useSelector((state) => state.dashboard.ticketActivity),
+  const ticketActivityList = useSelector(
+    (state) => state.dashboard.ticketActivity,
   );
-  // const userId = 23;
-  // const sampleData = [
-  //   {
-  //     id: 1,
-  //     userId: 2,
-  //     userName: 'X Manager',
-  //     date: '20, July',
-  //     activity: 'updated the ticket status to Open',
-  //   },
-  //   {
-  //     id: 2,
-  //     userId: 23,
-  //     userName: 'Mehedi Hasan',
-  //     date: '24, July',
-  //     activity: 'updated the ticket priority to Escalated',
-  //   },
 
-  //   {
-  //     id: 3,
-  //     userId: 3,
-  //     userName: 'Y Manager',
-  //     date: '29, July',
-  //     activity: 'updated the ticket priority to Resolved',
-  //   },
-
-  //   // {id: 2, title: 'Bakun'},
-  // ];
-
-  const ShowFlatlistOrNoActivityText = () => {
-    return ticketActivityList.length ? <ShowFlatList /> : <ShowNoActivity />;
-  };
-
-  const ShowFlatList = () => {
-    return (
-      <FlatList
-        style={styles.container}
-        data={ticketActivityList}
-        renderItem={getRenderItem}
-        keyExtractor={(item) => JSON.stringify(item.id)}
-      />
+  const makeAPICall = () => {
+    dispatch(
+      getClosedLoopTicketItemActivity(authToken, JSON.stringify(ticketId)),
     );
   };
+
+  const wait = (timeout) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  };
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    makeAPICall();
+    wait(500).then(() => setRefreshing(false));
+  }, []);
 
   const getRenderItem = ({item}) => {
-    return userID === item.userId ? renderMyItem({item}) : renderItem({item});
-
-    // return renderItem({item});
-  };
-
-  const renderItem = ({item}) => {
-    let date = moment(item.createdAt).format(HalfMonthDateYearFormat);
-    return (
-      <View style={styles.renderItemStyle}>
-        <Text style={styles.userName}>{item.userName ?? 'USER N/A'}</Text>
-        <Text style={styles.activity}>{item.activityText}</Text>
-        <Text style={styles.date}>{date}</Text>
-      </View>
-    );
-  };
-
-  const renderMyItem = ({item}) => {
-    let date = moment(item.createdAt).format(HalfMonthDateYearFormat);
-
-    return (
-      <View style={styles.myRenderItemContainerStyle}>
-        <View style={styles.myRenderItemStyle}>
-          <Text style={styles.userName}>{'You'}</Text>
-
-          <Text style={styles.date}> {date}</Text>
-        </View>
-        <View style={{marginHorizontal: MarginConstants.tab1}}>
-          <Text style={styles.activity}> {item.activityText} </Text>
-        </View>
-      </View>
-    );
-  };
-
-  const ShowNoActivity = () => {
-    return (
-      <View style={{flex: 1, margin: MarginConstants.tab3}}>
-        <Text
-          style={{
-            fontFamily: FontFamily.medium,
-            color: Colors.filterIconColor,
-            fontSize: TextSizes.primary,
-          }}>
-          No Activity...
-        </Text>
-      </View>
-    );
+    return userID === item.userId ? RenderMyItem({item}) : RenderItem({item});
   };
 
   return (
     <View style={styles.container}>
-      <ShowFlatlistOrNoActivityText />
+      <FlatList
+        refreshControl={
+          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+        }
+        style={styles.container}
+        data={ticketActivityList}
+        renderItem={getRenderItem}
+        ListEmptyComponent={<NoItemsFound>No Activity...</NoItemsFound>}
+        keyExtractor={(item) => JSON.stringify(item.id)}
+      />
     </View>
   );
 }
@@ -165,22 +108,30 @@ const styles = StyleSheet.create({
   renderItemStyle: {
     flex: 1,
     flexDirection: 'row',
-    margin: MarginConstants.tab1,
+
     justifyContent: 'space-between',
-    padding: PaddingConstants.halfTab,
+    paddingVertical: PaddingConstants.halfTab,
   },
   myRenderItemStyle: {
+    flex: 1,
     flexDirection: 'row',
-    margin: MarginConstants.tab1,
+
     justifyContent: 'space-between',
     backgroundColor: Colors.white,
-    padding: PaddingConstants.halfTab,
+    paddingVertical: PaddingConstants.halfTab,
   },
 
   myRenderItemContainerStyle: {
     flex: 1,
     justifyContent: 'center',
     backgroundColor: Colors.white,
+    padding: PaddingConstants.halfTab,
+    margin: MarginConstants.tab1,
+    borderRadius: 5,
+  },
+  renderItemContainerStyle: {
+    flex: 1,
+    justifyContent: 'center',
     padding: PaddingConstants.halfTab,
     margin: MarginConstants.tab1,
     borderRadius: 5,
@@ -198,9 +149,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   date: {
+    flex: 1,
     color: Colors.filterIconColor,
-    fontWeight: FontWeight._400,
-    fontSize: TextSizes.semiSecondary,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.mediumText,
     marginStart: MarginConstants.halfTab,
+    textAlign: 'right',
   },
 });

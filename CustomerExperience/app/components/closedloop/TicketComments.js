@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react'; // , {useEffect, useState}
+import React, {useCallback, useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -24,10 +24,8 @@ import {
   postAddTicketComment,
 } from '../../redux/actions/dashboard.actions';
 import moment from 'moment';
-import {DMY_AT_TIME_FORMAT} from '../../Utils/AppConstants';
 import StringUtils from '../../Utils/StringUtils';
-// import Clipboard from '@react-native-clipboard/clipboard';
-// import {showSuccessFlashMessage} from '../../Utils/Utility';
+import {getDateTimeAgo} from '../../Utils/TimeUtils';
 
 const MaterialIconView = ({iconName, color}) => (
   <View style={{margin: MarginConstants.halfTab}}>
@@ -49,30 +47,18 @@ const SendButton = ({handleOnSubmit}) => {
 const CommentItem = ({item}) => {
   return (
     <TouchableOpacity
-      onLongPress={() => {
-        // Clipboard.setString(item.text.trim());
-        // showSuccessFlashMessage('Text copied to Clipboard');
-      }}
       style={[
         styles.commentItemView,
         {marginVertical: MarginConstants.halfTab},
       ]}>
       <View style={styles.commentUserView}>
-        {/* {item.userId !== userID && <Avatar title={item.commentBy} />} */}
         <Avatar title={item.commentBy} />
       </View>
       <View style={styles.commentTextView}>
-        <Text
-          style={[
-            styles.commentByText,
-            // {textAlign: isOtherUser ? 'left' : 'right'},
-          ]}>
-          {/* {isOtherUser ? item.commentBy.trim() : 'You'} */}
-          {item.commentBy.trim()}
-        </Text>
+        <Text style={[styles.commentByText]}>{item.commentBy.trim()}</Text>
         <Text style={styles.commentText}>{item.text.trim()}</Text>
         <Text style={styles.commentDateText}>
-          {moment.utc(item.createdAt).local().format(DMY_AT_TIME_FORMAT)}
+          {getDateTimeAgo(moment.utc(item.createdAt).toDate())}
         </Text>
       </View>
     </TouchableOpacity>
@@ -143,7 +129,6 @@ export default function TicketComments(props) {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({item}) => <MemoizedCommentParentItem item={item} />}
         extraData={data}
-        // ListFooterComponent={<CommentBox parentId={0} />}
         ListFooterComponent={<View style={{margin: MarginConstants.tab4}} />}
       />
     );
@@ -168,9 +153,6 @@ export default function TicketComments(props) {
               marginTop: MarginConstants.halfTab,
             }}>
             <ShowNestedFlatList data={item.children} />
-            {/* {item.children.map((item_) => {
-              return <CommentItem item={item_} />;
-            })} */}
           </View>
         )}
 
@@ -185,7 +167,6 @@ export default function TicketComments(props) {
           </Text>
         </TouchableOpacity>
         {isCommentBoxVisible && <CommentBox parentId={item.id} />}
-        {/* <CommentBox parentId={item.id} /> */}
       </ScrollView>
     );
   };
@@ -226,20 +207,10 @@ export default function TicketComments(props) {
           styles.commentBoxContainer,
           {marginStart: marginForCommentBox},
         ]}>
-        {/* <View
-          style={[styles.commentBox, {marginBottom: MarginConstants.halfTab}]}>
-          <Avatar title={`${firstName} ${lastName}`.trim()} />
-          <Text style={styles.commentByText}>You</Text>
-        </View> */}
-
         <View style={[styles.commentBox, styles.borderStyle]}>
           <MaterialIconView iconName="chat-bubble" />
           {console.log('KEYBOARD')}
           <TextInput
-            onFocus={(e) => {
-              console.log('FOCUSs');
-            }}
-            // value={commentText}
             defaultValue={commentText}
             multiline
             style={[styles.container, styles.commentText]}
@@ -269,7 +240,6 @@ export default function TicketComments(props) {
         />
       </View>
       <CommentBox parentId={0} />
-      {/* <View style={{maxHeight: MarginConstants.tab4}} /> */}
     </SafeAreaView>
   );
 }
@@ -363,7 +333,7 @@ const styles = StyleSheet.create({
   commentDateText: {
     flex: 1,
     textAlign: 'right',
-    fontFamily: FontFamily.medium,
+    fontFamily: FontFamily.regular,
     fontSize: TextSizes.mediumText,
     color: Colors.primary,
   },
