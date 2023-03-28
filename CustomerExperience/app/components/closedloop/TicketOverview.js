@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
   Platform,
+  Modal,
 } from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -20,6 +21,7 @@ import Animated from 'react-native-reanimated';
 import TicketTakeAction from './takeaction/TIcketTakeAction';
 import {
   BottomSheetHeader,
+  CloseButton,
   RenderPriorityIcon,
   RenderSpinner,
   RenderStatusIcon,
@@ -48,6 +50,8 @@ import {EMAIL, PHONE} from '../../api/Constant';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {isObjectEmpty} from '../../Utils/Utility';
+import IonIcons from 'react-native-vector-icons/Ionicons';
+
 const NPSScoreText = ({text}) => {
   const npsStyles = StyleSheet.create({
     npsView: {
@@ -303,6 +307,8 @@ export default function TicketOverview(props) {
     owners: 'owners',
     segment: 'segment',
   };
+
+  const [showAssigneeModal, setAssigneeModal] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {authToken} = useSelector((state) => state.global);
@@ -371,6 +377,7 @@ export default function TicketOverview(props) {
     if (hasPanelMember) {
       actionBottomSheet.current.snapTo(0);
     }
+    // setAssigneeModal(true);
     // else {
     //   showErrorFlashMessage('Actions disabled, customer details missing');
     // }
@@ -404,19 +411,26 @@ export default function TicketOverview(props) {
     statusBottomSheet.current.snapTo(0);
   };
 
-  const renderStatusHeader = (_title) => {
+  const RenderStatusHeader = (_title) => {
     return <BottomSheetHeader title={'Select Status'} onPressClose={closeBS} />;
   };
 
-  const renderStatusSelectContent = () => {
+  const RenderStatusSelectContent = () => {
     return (
       <View style={styles.contentContainer}>
         <SelectStatus
           data={statusList}
           selectedIndex={statusIndex}
           handleOnPress={(item, index) => {
-            updateTicket({status: item.id});
+            if (item.id === 2) {
+              // popup assign user bottom sheet and let him choose an assignee
+              setAssigneeModal(true);
+            } else {
+              updateTicket({status: item.id});
+            }
             setStatusIndex(index);
+
+            // updateTicket({status: item.id});
           }}
         />
       </View>
@@ -424,18 +438,18 @@ export default function TicketOverview(props) {
   };
 
   const RenderStatusBottomSheet = ({currentBS_}) => {
-    let renderContent = renderStatusSelectContent;
-    let renderHeader = renderStatusHeader;
+    let renderContent = RenderStatusSelectContent;
+    let renderHeader = RenderStatusHeader;
 
     switch (currentBS_) {
       case bottomSheetEnum.priority:
-        renderContent = renderPrioritySelectContent;
-        renderHeader = renderPriorityHeader;
+        renderContent = RenderPrioritySelectContent;
+        renderHeader = RenderPriorityHeader;
         break;
 
       case bottomSheetEnum.owners:
-        renderContent = renderOwnerSelectContent;
-        renderHeader = renderOwnerHeader;
+        renderContent = RenderOwnerSelectContent;
+        renderHeader = RenderOwnerHeader;
         break;
     }
     console.log('SNAP', currentBS_);
@@ -452,13 +466,13 @@ export default function TicketOverview(props) {
     );
   };
 
-  const renderPriorityHeader = (_title) => {
+  const RenderPriorityHeader = (_title) => {
     return (
       <BottomSheetHeader title={'Select Priority'} onPressClose={closeBS} />
     );
   };
 
-  const renderPrioritySelectContent = () => {
+  const RenderPrioritySelectContent = () => {
     return (
       <View style={styles.contentContainer}>
         <SelectPriority
@@ -473,24 +487,49 @@ export default function TicketOverview(props) {
     );
   };
 
-  const renderOwnerHeader = (_title) => {
+  const RenderOwnerHeader = (_title) => {
     return (
       <BottomSheetHeader title={'Select Ticket Owner'} onPressClose={closeBS} />
     );
   };
 
-  const renderOwnerSelectContent = () => {
+  const RenderOwnerSelectContent = () => {
     return (
       <View style={styles.contentContainer}>
         <SelectTicketOwner
           data={owners}
           selectedIndex={ticketOwnerIndex}
           handleOnPress={(item, index) => {
+            setAssigneeModal(false);
             setTicketOwnerIndex(index);
             updateTicket({assignToId: item.ownerID});
           }}
         />
       </View>
+    );
+  };
+
+  const RenderShowAssigneeModal = ({showAssigneeModal, id, currentSegment}) => {
+    return (
+      <Modal animationType="slide" visible={showAssigneeModal}>
+        <View>
+          <View style={[styles.rowContainer, styles.modalHeader]}>
+            <Text
+              style={
+                styles.modalHeaderText
+              }>{`Assign User to Ticket #${id}`}</Text>
+            <TouchableWithoutFeedback onPress={() => setAssigneeModal(false)}>
+              <IonIcons name="close" size={20} color={Colors.filterIconColor} />
+            </TouchableWithoutFeedback>
+          </View>
+          <View style={{marginVertical: MarginConstants.tab2}}>
+            <DescriptionHeader
+              text={`Current Segment: ${currentSegment?.name ?? ''}`}
+            />
+          </View>
+          <RenderOwnerSelectContent />
+        </View>
+      </Modal>
     );
   };
 
@@ -658,6 +697,11 @@ export default function TicketOverview(props) {
           {/* ) : (
             <View />
           )} */}
+          <RenderShowAssigneeModal
+            showAssigneeModal={showAssigneeModal}
+            id={ticketDetails.id}
+            currentSegment={ticketDetails.currentSegment}
+          />
         </View>
       </Animated.ScrollView>
       <RenderStatusBottomSheet currentBS_={currentBS} />
@@ -727,7 +771,17 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.largeText,
     color: Colors.filterIconColor,
   },
-
+  modalHeader: {
+    justifyContent: 'space-between',
+    backgroundColor: Colors.darkGrey,
+    borderTopStartRadius: 5,
+    borderTopEndRadius: 5,
+  },
+  modalHeaderText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.largeText,
+    color: Colors.filterIconColor,
+  },
   titleText: {
     fontFamily: FontFamily.regular,
     fontWeight: FontWeight._500,
