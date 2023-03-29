@@ -49,7 +49,7 @@ export default function ClosedLoop(props) {
   const {statusId} = useSelector((state) => state.global);
 
   const [pageNumber, setPageNumber] = useState(1);
-  const {feedbackApiKey, feedbackID} = useSelector(
+  const {feedbackApiKey, feedbackID, userID} = useSelector(
     (state) => state.global.userInfo,
   );
   // const [isLoading, setLoading] = useState(false);
@@ -61,7 +61,7 @@ export default function ClosedLoop(props) {
     feedbackApiKey: feedbackApiKey,
     status: '',
     priority: '',
-    assignToId: '',
+    assignToId: JSON.stringify(userID),
     pageNumber: pageNumber,
     perPage: itemPerPage,
     fromDate: convertDateToYMDFORMAT(range.startDate),

@@ -9,7 +9,12 @@ import {TextSizes} from '../../styles/textsize.constants';
 import StringUtils from '../../Utils/StringUtils';
 
 const ShowFilterTag = ({handleFilterTag, filterData}) => {
-  let taglist = ['status', 'priority', 'type', 'assignToId'];
+  let taglist = [
+    'status',
+    'priority',
+    'type',
+    // 'assignToId'
+  ];
   let [list, setList] = useState([]);
 
   //   taglistMap.set('status', 'Status');
@@ -41,12 +46,12 @@ const ShowFilterTag = ({handleFilterTag, filterData}) => {
   }, [filterData]);
 
   const getTagName = (tag) => {
-    switch (tag) {
-      case 'assignToId':
-        return 'Assignee';
-      default:
-        return StringUtils.uppercaseFirstChar(tag);
-    }
+    // switch (tag) {
+    //   case 'assignToId':
+    //     return 'Assignee';
+    //   default:
+    return StringUtils.uppercaseFirstChar(tag);
+    // }
   };
 
   return (
