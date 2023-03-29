@@ -21,7 +21,7 @@ const FilterTicket = ({data, onPressHandler}) => {
   const [status, setStatus] = useState(data.status);
   const [priority, setPriority] = useState(data.priority);
   const [type, setType] = useState(data.type);
-  const [managerlist, setManagerList] = useState(data.managers);
+  // const [managerlist, setManagerList] = useState(data.managers);
   console.log('MANAGERS', JSON.stringify(data));
 
   // let [managerlist, setManagerList] = useState(data.managers);
@@ -117,47 +117,47 @@ const FilterTicket = ({data, onPressHandler}) => {
     );
   };
 
-  const RenderAssigneeDropDown = () => {
-    const defaultText = 'Select...';
-    const list = managerlist.filter((item) => item.isChecked === false);
-    return (
-      <View>
-        <Text style={styles.titleText}>Assignee</Text>
-        <RenderAssigneeList />
-        <IconTextModalDropdown
-          style={styles.modelDropdown}
-          textStyle={styles.dropdownText}
-          dropdownTextStyle={styles.dropdownText}
-          arrowIconColor={Colors.secondary}
-          options={list.map((item) => item.ownerName)}
-          defaultValue={defaultText}
-          renderRow={dropdownRenderRow}
-          onSelect={(_index) => {
-            setAssigneeManager(list[_index], true);
-            // setSelectedManager((state) => [...state, managerlist[_index]]);
-            // setManagerList((state) =>
-            //   state.filter((item) => item.ownerID !== state[_index].ownerID),
-            // );
-          }}
-        />
-      </View>
-    );
-  };
+  // const RenderAssigneeDropDown = () => {
+  //   const defaultText = 'Select...';
+  //   const list = managerlist.filter((item) => item.isChecked === false);
+  //   return (
+  //     <View>
+  //       <Text style={styles.titleText}>Assignee</Text>
+  //       <RenderAssigneeList />
+  //       <IconTextModalDropdown
+  //         style={styles.modelDropdown}
+  //         textStyle={styles.dropdownText}
+  //         dropdownTextStyle={styles.dropdownText}
+  //         arrowIconColor={Colors.secondary}
+  //         options={list.map((item) => item.ownerName)}
+  //         defaultValue={defaultText}
+  //         renderRow={dropdownRenderRow}
+  //         onSelect={(_index) => {
+  //           setAssigneeManager(list[_index], true);
+  //           // setSelectedManager((state) => [...state, managerlist[_index]]);
+  //           // setManagerList((state) =>
+  //           //   state.filter((item) => item.ownerID !== state[_index].ownerID),
+  //           // );
+  //         }}
+  //       />
+  //     </View>
+  //   );
+  // };
 
-  const setAssigneeManager = (item, isChecked) => {
-    let index = 0;
-    managerlist.map((item_, index_) => {
-      if (item_.ownerID === item.ownerID) {
-        index = index_;
-      }
-    });
+  // const setAssigneeManager = (item, isChecked) => {
+  //   let index = 0;
+  //   managerlist.map((item_, index_) => {
+  //     if (item_.ownerID === item.ownerID) {
+  //       index = index_;
+  //     }
+  //   });
 
-    setManagerList((prevState) => {
-      const temp = [...prevState];
-      temp[index].isChecked = isChecked;
-      return temp;
-    });
-  };
+  //   setManagerList((prevState) => {
+  //     const temp = [...prevState];
+  //     temp[index].isChecked = isChecked;
+  //     return temp;
+  //   });
+  // };
   const dropdownRenderRow = (rowData, rowID, highlighted) => {
     return (
       <View
@@ -182,7 +182,7 @@ const FilterTicket = ({data, onPressHandler}) => {
 
     data.status = status;
     data.priority = priority;
-    data.managers = managerlist;
+    // data.managers = managerlist;
     data.selectedManager = selectedManager;
     onPressHandler(data, 'apply');
   };
@@ -245,48 +245,48 @@ const FilterTicket = ({data, onPressHandler}) => {
     );
   };
 
-  const assigneeCell = ({item, index}) => {
-    return (
-      <View style={[styles.assigneeCell, styles.rowContainer]}>
-        <TouchableOpacity
-          style={styles.rowContainer}
-          onPress={() => {
-            // setSelectedManager((state) =>
-            //   state.filter((item_) => item_.ownerID !== state[index].ownerID),
-            // );
-            // setManagerList((state) => [...state, selectedManager[index]]);
-            console.log({SELECTED_INDEX: index});
+  // const assigneeCell = ({item, index}) => {
+  //   return (
+  //     <View style={[styles.assigneeCell, styles.rowContainer]}>
+  //       <TouchableOpacity
+  //         style={styles.rowContainer}
+  //         onPress={() => {
+  //           // setSelectedManager((state) =>
+  //           //   state.filter((item_) => item_.ownerID !== state[index].ownerID),
+  //           // );
+  //           // setManagerList((state) => [...state, selectedManager[index]]);
+  //           console.log({SELECTED_INDEX: index});
 
-            setAssigneeManager(item, false);
-          }}>
-          <Text style={styles.departmentNameText}>{item.ownerName}</Text>
-          <IonIcons name="close" size={20} color={Colors.filterIconColor} />
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  //           setAssigneeManager(item, false);
+  //         }}>
+  //         <Text style={styles.departmentNameText}>{item.ownerName}</Text>
+  //         <IonIcons name="close" size={20} color={Colors.filterIconColor} />
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // };
 
-  const RenderAssigneeList = () => {
-    const list = managerlist.filter((item) => item.isChecked);
-    return (
-      <View style={[{margin: MarginConstants.halfTab}]}>
-        <FlatList
-          horizontal={true}
-          data={list}
-          renderItem={assigneeCell}
-          keyExtractor={(item) => item.toString()}
-        />
-      </View>
-    );
-  };
+  // const RenderAssigneeList = () => {
+  //   const list = managerlist.filter((item) => item.isChecked);
+  //   return (
+  //     <View style={[{margin: MarginConstants.halfTab}]}>
+  //       <FlatList
+  //         horizontal={true}
+  //         data={list}
+  //         renderItem={assigneeCell}
+  //         keyExtractor={(item) => item.toString()}
+  //       />
+  //     </View>
+  //   );
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
         <RenderStatusFilter />
         <RenderPriorityFilter />
-        <RenderTypeFilter />
-        <RenderAssigneeDropDown />
+        {/* <RenderTypeFilter /> */}
+        {/* <RenderAssigneeDropDown /> */}
         <RenderButtons />
       </View>
     </SafeAreaView>
