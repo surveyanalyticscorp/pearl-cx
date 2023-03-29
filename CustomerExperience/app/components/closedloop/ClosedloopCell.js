@@ -76,13 +76,45 @@ const NameANdDateRow = ({name, issueDate}) => {
   );
 };
 
-const NPSAndTicketRow = ({ticketId}) => {
+const NPSAndTicketRow = ({nps, ticketId}) => {
+  let NPSIcon = () => {
+    let icon = require('./../../../assets/images/detractor.png');
+    return <Image source={icon} style={{width: 16, height: 16}} />;
+  };
+
+  let getNPSColor = () => {
+    return Colors.detractor2;
+  };
+
+  let getNPSScore = (score) => {
+    let textColor = getNPSColor();
+    return (
+      <Text
+        style={[
+          styles.npsText,
+          {
+            color: textColor,
+            marginHorizontal: MarginConstants.tab1,
+          },
+        ]}>
+        {score}
+      </Text>
+    );
+  };
+
   return (
     <View style={styles.rowContainer}>
-      {/* <View style={[{flex: 2}, styles.rowContainer]}>
-        {getNPSIcon(data.nps)}
-        {getNPSScore(data.npsScore, data.nps)}
-      </View> */}
+      <View
+        style={[
+          {
+            flex: 2,
+          },
+
+          styles.rowContainer,
+        ]}>
+        {nps && <NPSIcon />}
+        {nps && getNPSScore(nps)}
+      </View>
       <View
         style={[{flex: 2, justifyContent: 'flex-end'}, styles.rowContainer]}>
         <TicketID ticketId={ticketId} />
@@ -114,50 +146,6 @@ const StatusRow = ({data}) => {
 export default function ClosedLoopCell(props) {
   const data = props.data;
 
-  let getNPSIcon = (sentiment) => {
-    let icon;
-    switch (sentiment) {
-      case 'Detractor':
-        icon = require('./../../../assets/images/detractor.png');
-        break;
-      case 'Passive':
-        icon = require('./../../../assets/images/passive.png');
-        break;
-      default:
-        icon = require('./../../../assets/images/promoter.png');
-        break;
-    }
-
-    return <Image source={icon} style={{width: 16, height: 16}} />;
-  };
-
-  let getNPSColor = (sentiment) => {
-    switch (sentiment) {
-      case 'Detractor':
-        return Colors.detractor2;
-      case 'Passive':
-        return Colors.passive2;
-      default:
-        return Colors.promoter2;
-    }
-  };
-
-  let getNPSScore = (score, sentiment) => {
-    let textColor = getNPSColor(sentiment);
-    return (
-      <Text
-        style={[
-          styles.statusText,
-          {
-            color: textColor,
-            marginHorizontal: MarginConstants.tab1,
-          },
-        ]}>
-        {score}
-      </Text>
-    );
-  };
-
   const OverdueBar = () => {
     const date = moment(data.overdueDate).format(DMY_AT_TIME_FORMAT);
     return (
@@ -182,7 +170,7 @@ export default function ClosedLoopCell(props) {
       <View style={styles.container}>
         <View style={styles.ticketContainer}>
           {data.isOverdue && <OverdueBar />}
-          <NPSAndTicketRow ticketId={data.id} />
+          <NPSAndTicketRow nps={data.npsScore} ticketId={data.id} />
           {/* {getTicketID()} */}
           <NameANdDateRow
             name={
@@ -267,6 +255,12 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.regular,
     color: Colors.lightBlack,
     marginHorizontal: 4,
+  },
+  npsText: {
+    fontFamily: FontFamily.semiBold,
+    fontSize: TextSizes.primary,
+    marginHorizontal: 4,
+    alignSelf: 'center',
   },
   overdueContainer: {
     flex: 1,
