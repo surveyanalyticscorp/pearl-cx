@@ -51,6 +51,7 @@ import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {isObjectEmpty} from '../../Utils/Utility';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import {updateSetTicketEscalation} from '../../redux/actions/closedloop.actions';
 
 const NPSScoreText = ({text}) => {
   const npsStyles = StyleSheet.create({
@@ -148,9 +149,10 @@ const RenderDropDownButton = ({
   frontIcon,
   handleOnPress,
   hasArrowDownIcon = false,
+  isDisabled = false,
 }) => {
   return (
-    <View style={styles.dropdownContainer}>
+    <View style={[styles.dropdownContainer, {opacity: isDisabled ? 0.6 : 1}]}>
       <TouchableWithoutFeedback onPress={handleOnPress}>
         <View style={styles.dropdownInnerContainer}>
           {frontIcon}
@@ -362,7 +364,23 @@ export default function TicketOverview(props) {
       updateClfTicket(authToken, body, ticketDetails.id, feedbackApiKey),
     );
   };
+  const ticketEscalate = (params) => {
+    let body = {
+      ...params,
+      userName: `${firstName} ${lastName}`,
+      userEmailAddress: `${emailAddress}`,
+      userId: `${userID}`,
+    };
 
+    dispatch(
+      updateSetTicketEscalation(
+        authToken,
+        body,
+        ticketDetails.id,
+        feedbackApiKey,
+      ),
+    );
+  };
   /// BOTTOM SHEET
 
   // variables for bottom sheet
@@ -512,14 +530,14 @@ export default function TicketOverview(props) {
   const RenderShowAssigneeModal = ({showAssigneeModal, id, currentSegment}) => {
     return (
       <Modal animationType="slide" visible={showAssigneeModal}>
-        <View>
+        <View style={{height: '80%'}}>
           <View style={[styles.rowContainer, styles.modalHeader]}>
             <Text
               style={
                 styles.modalHeaderText
               }>{`Assign User to Ticket #${id}`}</Text>
             <TouchableWithoutFeedback onPress={() => setAssigneeModal(false)}>
-              <IonIcons name="close" size={20} color={Colors.filterIconColor} />
+              <IonIcons name="close" size={20} color={Colors.white} />
             </TouchableWithoutFeedback>
           </View>
           <View style={{marginVertical: MarginConstants.tab2}}>
@@ -527,7 +545,18 @@ export default function TicketOverview(props) {
               text={`Current Segment: ${currentSegment?.name ?? ''}`}
             />
           </View>
-          <RenderOwnerSelectContent />
+          <View style={styles.contentContainer}>
+            <SelectTicketOwner
+              data={owners}
+              selectedIndex={ticketOwnerIndex}
+              handleOnPress={(item, index) => {
+                setAssigneeModal(false);
+                setTicketOwnerIndex(index);
+                // updateTicketEscalation{{userName: }}
+                ticketEscalate({assignToId: item.ownerID});
+              }}
+            />
+          </View>
         </View>
       </Modal>
     );
@@ -557,6 +586,7 @@ export default function TicketOverview(props) {
   };
 
   const TicketStatusPriorityView = ({ticket}) => {
+    const isEscalated = ticket.status == 2;
     const segmentName = ticketDetails?.currentSegment?.name ?? '';
     const statusName =
       ticket !== undefined ? getStatusById(ticket.status) : 'Select status';
@@ -609,10 +639,12 @@ export default function TicketOverview(props) {
 
         <View style={styles.rowContainer}>
           <Title value={'Assigned to'} />
+
           <RenderDropDownButton
             text={ownerName}
-            handleOnPress={handleOwnerSelection}
-            hasArrowDownIcon={true}
+            handleOnPress={isEscalated ? () => {} : handleOwnerSelection}
+            hasArrowDownIcon={!isEscalated}
+            isDisabled={isEscalated}
           />
         </View>
       </View>
@@ -773,14 +805,15 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     justifyContent: 'space-between',
-    backgroundColor: Colors.darkGrey,
+    backgroundColor: Colors.accent,
     borderTopStartRadius: 5,
     borderTopEndRadius: 5,
+    paddingVertical: PaddingConstants.tab1,
   },
   modalHeaderText: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.largeText,
-    color: Colors.filterIconColor,
+    color: Colors.white,
   },
   titleText: {
     fontFamily: FontFamily.regular,

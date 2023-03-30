@@ -17,10 +17,14 @@ import {listItemSeparator, SearchTextInput} from '../../../routes/CommonScreen';
 // import {PaddingConstants} from '../../../styles/padding.constants';
 import StringUtils from '../../../Utils/StringUtils';
 import {NoItemsFound} from '../../../routes/CommonScreen';
+import QPButton from '../../../widgets/Button';
 
 const SelectTicketOwner = (props) => {
   const [data, setData] = useState(props.data);
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
+  const [selectedItem, setSelectedItem] = useState(
+    props.data[props.selectedIndex],
+  );
   const textInputRef = useRef();
 
   function filterOwnerList(text) {
@@ -37,8 +41,9 @@ const SelectTicketOwner = (props) => {
       <TouchableWithoutFeedback
         onPress={
           () => {
-            props.handleOnPress(item, index);
+            // props.handleOnPress(item, index);
             setSelectedIndex(index);
+            setSelectedItem(item);
           }
           // handleOnPress(item)
         }>
@@ -77,6 +82,14 @@ const SelectTicketOwner = (props) => {
           <NoItemsFound>No Assignee/Owner found</NoItemsFound>
         }
       />
+      <QPButton
+        testID="TakeActionButton"
+        buttonColor={Colors.accentLight}
+        style={styles.takeActionButton}
+        onPress={() => props.handleOnPress(selectedItem, selectedIndex)}
+        buttonText={'Select'}
+        textStyle={styles.takeActionText}
+      />
     </View>
   );
 };
@@ -93,6 +106,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: MarginConstants.tab1,
     padding: MarginConstants.tab1,
+  },
+  takeActionText: {
+    color: Colors.white,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.largeText,
+  },
+  takeActionButton: {
+    height: MarginConstants.tab4,
+    marginHorizontal: MarginConstants.tab2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.filterIconColor,
+    marginBottom: MarginConstants.tab2,
   },
   title: {
     flex: 1,

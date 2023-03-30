@@ -111,6 +111,7 @@ export const SEGMENT = 'segment/';
 export const COMMNETS = 'comments/';
 export const ACTIVITY_LOG = 'activity-log/';
 export const RESPONSES = 'responses/';
+export const ESCALATE = '/escalate';
 
 export const CX_DASHBOARD = 'CX_DASHBOARD';
 export const CX_DETRACTOR_TICKETS_NEW = 'CX_DETRACTOR_TICKETS_NEW';

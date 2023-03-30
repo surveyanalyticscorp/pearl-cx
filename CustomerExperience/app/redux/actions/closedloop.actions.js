@@ -83,6 +83,9 @@ export const ACTIONS_RECEIVED = 'ACTIONS_RECEIVED';
 export const UPDATE_ROOT_CAUSE = 'UPDATE_ROOT_CAUSE';
 export const ROOT_CAUSE_UPDATE_RECEIVED = 'ROOT_CAUSE_UPDATE_RECEIVED';
 
+export const UPDATE_TICKET_ESCALATION = 'UPDATE_TICKET_ESCALATION';
+export const TICKET_ESCALATION_RECIEVED = 'TICKET_ESCALATION_RECIEVED';
+
 export const syncTickets = (token, param, feedbackId) => ({
   type: GET_TICKET_LIST_SYNC,
   token,
@@ -156,4 +159,17 @@ export const setStatusFilterById = (statusId) => ({
 export const resetStatusId = () => ({
   type: SET_TICKET_FILTER_BY_STATUS_ID,
   statusId: '',
+});
+
+export const updateSetTicketEscalation = (
+  token,
+  param,
+  ticketId,
+  feedbackApiKey,
+) => ({
+  type: UPDATE_TICKET_ESCALATION,
+  token,
+  param,
+  ticketId,
+  feedbackApiKey,
 });

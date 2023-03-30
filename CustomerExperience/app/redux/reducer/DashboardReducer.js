@@ -8,6 +8,8 @@ import {
   ROOT_CASUES_RECEIVED,
   ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL_RECEIVED,
+  TICKET_ESCALATION_RECIEVED,
+  UPDATE_TICKET_ESCALATION,
 } from '../actions/closedloop.actions';
 import {
   CLEAR_CLOSED_LOOP_TICKET_DETAILS,
@@ -262,6 +264,18 @@ const dashboardReducer = (state = initialState, action) => {
           rootCauses: action.response.rootCauses,
           rootCauseActions: action.response.rootCauseActions,
         },
+      };
+    }
+
+    case TICKET_ESCALATION_RECIEVED: {
+      return {
+        ...state,
+        ticket: {
+          ...state.ticket,
+          status: action.ticketData.status,
+          assignToId: action.ticketData.assignToId,
+        },
+        ticketActivity: action.ticketActivity,
       };
     }
 

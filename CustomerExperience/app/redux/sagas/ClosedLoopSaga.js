@@ -62,6 +62,7 @@ import {
   CLF_BASE_URL,
   CLF_QA_BASE_URL,
   CLF_GET_TICKET_lIST_SYNC,
+  ESCALATE,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -82,7 +83,9 @@ import {
   ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL,
   SEND_EMAIL_RECEIVED,
+  TICKET_ESCALATION_RECIEVED,
   UPDATE_ROOT_CAUSE,
+  UPDATE_TICKET_ESCALATION,
 } from '../actions/closedloop.actions';
 import {
   showErrorFlashMessage,
@@ -603,6 +606,47 @@ function* patchUpdateClfTicket(action) {
 }
 export function* watchPatchUpdateTicket() {
   yield takeLatest(UPDATE_CLF_TICKET, patchUpdateClfTicket);
+}
+
+function* patchTicketEscalation(action) {
+  try {
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
+
+    const ticketItem = yield WebServiceHandler.patch(
+      CLF_GET_TICKET_DETAILS + action.ticketId + ESCALATE,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+
+    const ticketActivity = yield WebServiceHandler.get(
+      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+
+    yield put({
+      type: TICKET_ESCALATION_RECIEVED,
+      ticketData: ticketItem.data,
+      // ticketComments: comments.data,
+      ticketActivity: ticketActivity.data,
+    });
+
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
+    showSuccessFlashMessage(ticketItem.message);
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
+
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchTicketEscalation() {
+  yield takeLatest(UPDATE_TICKET_ESCALATION, patchTicketEscalation);
 }
 
 function* getEmailTemplates(action) {
