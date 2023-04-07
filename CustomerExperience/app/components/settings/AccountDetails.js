@@ -8,14 +8,14 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Sizes} from '../../styles/Size.constant';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_USER_CREDENTIALS} from '../../api/Constant';
 
 export default function AccountDetails(props) {
   const [userCredentials, setUserCredentials] = useState('');
 
   useEffect(() => {
-    AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then((value) => {
+    AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then(value => {
       setUserCredentials(JSON.parse(value));
     });
   }, []);

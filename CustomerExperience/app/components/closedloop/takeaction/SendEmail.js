@@ -14,7 +14,7 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {BottomSheetHeader, CloseButton} from '../../../routes/CommonScreen';
 import Animated from 'react-native-reanimated';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACTION_EMAIL, ASYNC_USER_CREDENTIALS} from '../../../api/Constant';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -44,7 +44,7 @@ const EmailToFrom = ({title, value}) => {
 
 export default function SendEmail(props) {
   const defaultEmail = useSelector(
-    (state) => state.dashboard.emailData.defaultTemplate,
+    state => state.dashboard.emailData.defaultTemplate,
   );
   const [body, setBody] = useState({
     subject: '',
@@ -53,13 +53,13 @@ export default function SendEmail(props) {
     emailBody: '',
   });
   const dispatch = useDispatch();
-  const {authToken} = useSelector((state) => state.global);
+  const {authToken} = useSelector(state => state.global);
   const richText = React.useRef();
   const richTextToolBar = React.useRef();
   // const [userInfo, setUserInfo] = useState();
   const [userEmail, setUserEmail] = useState('');
   const templateList = useSelector(
-    (state) => state.dashboard.emailData.emailTemplates,
+    state => state.dashboard.emailData.emailTemplates,
   );
 
   const ticketId = JSON.stringify(props.route.params.ticketId);
@@ -68,14 +68,14 @@ export default function SendEmail(props) {
     //   setUserInfo(JSON.parse(value));
     //   // console.log('USER_INFO__', value);
     // });
-    AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then((value) => {
+    AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then(value => {
       setUserEmail(JSON.parse(value)?.email);
     });
   }, [authToken]);
 
   useEffect(() => {
     if (!isObjectEmpty(defaultEmail)) {
-      setBody((state) => ({
+      setBody(state => ({
         ...state,
         emailBody: defaultEmail?.templateText ?? '',
       }));
@@ -111,7 +111,7 @@ export default function SendEmail(props) {
     );
   };
 
-  const RenderIonIcon = (props) => {
+  const RenderIonIcon = props => {
     const color = Colors.filterIconColor;
 
     return (
@@ -167,9 +167,9 @@ export default function SendEmail(props) {
     );
   };
 
-  const handleTemplateSelectAction = (item) => {
+  const handleTemplateSelectAction = item => {
     // setDefaultEmail(item);
-    setBody((state) => ({
+    setBody(state => ({
       ...state,
       // subject: item.title ?? '',
       emailBody: item.templateText,
@@ -184,7 +184,7 @@ export default function SendEmail(props) {
       <View style={styles.contentContainer}>
         <SelectEmailTemplate
           data={templateList}
-          handleOnPress={(item) => handleTemplateSelectAction(item)}
+          handleOnPress={item => handleTemplateSelectAction(item)}
         />
       </View>
     );
@@ -224,7 +224,7 @@ export default function SendEmail(props) {
     // console.log('EMAIL_PAYLOAD', JSON.stringify(queryParam));
   };
 
-  const getEmailBodyText = (text) => {
+  const getEmailBodyText = text => {
     return text;
   };
 
@@ -257,8 +257,8 @@ export default function SendEmail(props) {
               placeholder="Email subject"
               defaultValue={body.subject ?? ''}
               style={styles.textInput}
-              onChangeText={(text) => {
-                setBody((state) => ({...state, subject: text}));
+              onChangeText={text => {
+                setBody(state => ({...state, subject: text}));
               }}
             />
           </View>
@@ -275,8 +275,8 @@ export default function SendEmail(props) {
 
             <RichEditor
               ref={richText}
-              onChange={(text) => {
-                setBody((state) => ({...state, emailBody: text}));
+              onChange={text => {
+                setBody(state => ({...state, emailBody: text}));
               }}
               placeholder="Email body"
               androidHardwareAccelerationDisabled={true}

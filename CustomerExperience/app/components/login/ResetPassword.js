@@ -28,7 +28,7 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import SafeAreaView from 'react-native-safe-area-view';
 import QPSpinner from '../../widgets/QPSpinner';
 import {TextSizes} from '../../styles/textsize.constants';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_RESET_CREDENTIALS} from '../../api/Constant';
 import {setDynamicLink} from '../../redux/actions';
 import QPTextField from '../../widgets/TextField';
@@ -36,7 +36,7 @@ import QPTextField from '../../widgets/TextField';
 let {width} = Dimensions.get('window');
 const stringConst = require('../../config/translations/en');
 
-const ResetPassword = (props) => {
+const ResetPassword = props => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [validation, setValidation] = useState('');
@@ -92,12 +92,12 @@ const ResetPassword = (props) => {
     return true;
   };
 
-  const handlePassword = (text) => {
+  const handlePassword = text => {
     setPassword(text);
     setValidation('');
   };
 
-  const handleConfirmPassword = (text) => {
+  const handleConfirmPassword = text => {
     setConfirmPassword(text);
     setValidation('');
   };
@@ -193,7 +193,7 @@ const ResetPassword = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     isLoading: state.global.isLoading,
     isError: state.global.isError,
@@ -201,11 +201,11 @@ const mapStateToProps = (state) => {
     updatePasswordResponse: state.global.updatePasswordResponse,
   };
 };
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   clearError: () => {
     dispatch(clearError(false));
   },
-  updatePassword: (data) => {
+  updatePassword: data => {
     dispatch(updatePassword(data));
   },
   setDynamicLink: () => {

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-// import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StyleSheet, ImageBackground, Text} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {View} from 'react-native-animatable';
@@ -21,15 +21,15 @@ import {
 } from '../../redux/actions/closedloop.actions';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
-export const WelcomeScreen = (props) => {
+export const WelcomeScreen = props => {
   const dispatch = useDispatch();
-  const {authToken, userInfo} = useSelector((state) => state.global);
+  const {authToken, userInfo} = useSelector(state => state.global);
 
   // const authToken = useSelector((state) => state.global.authToken);
   // const [subscriberId, setSubscriberId] = useState(state.global.subscriberId);
   // const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
   const welcomeScreenData = useSelector(
-    (state) => state.dashboard.welcomeScreenData,
+    state => state.dashboard.welcomeScreenData,
   );
   // console.log('WELCOME_SCREEN', JSON.stringify(cxData));
   // console.log('WELCOME_SCREEN', JSON.stringify(welcomeScreenData));

@@ -1,6 +1,6 @@
 import {ImageBackground, Image, StyleSheet} from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../../api/Constant';
 // import AppRouter from '../../routes/appRouter';
 import {connect} from 'react-redux';
@@ -21,7 +21,7 @@ function SplashScreen(props) {
         ASYNC_AUTH_TOKEN,
         ASYNC_USER_INFO,
         DASHBOARD_RANGE,
-      ]).then((response) => {
+      ]).then(response => {
         let token = response[0][1];
         let userInfo = response[1][1];
         let dashboardRange = response[2][1];
@@ -60,19 +60,19 @@ function SplashScreen(props) {
   // return moveNext ? <WelcomeScreen /> : renderSplashScreenView();
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {};
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  saveUserInfo: (userInfo) => {
+const mapDispatchToProps = dispatch => ({
+  saveUserInfo: userInfo => {
     dispatch(fillUserInfo(userInfo));
     dispatch(setLanguageInfo(userInfo));
   },
-  setToken: (token) => {
+  setToken: token => {
     dispatch(setAuthToken(token));
   },
-  setRange: (range) => {
+  setRange: range => {
     dispatch(setRangeFilter(range));
   },
 });

@@ -2,10 +2,10 @@ import React from 'react';
 import StringUtils from './StringUtils';
 // import {isStringNullOrEmpty} from './Utility';
 import {validateResetPasswordLink} from '../redux/actions/login.actions';
-// import AsyncStorage from "@react-native-community/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 // import {BASE_URL} from "../api/Constant";
 
-const getResetPasswordURLComponents = (link) => {
+const getResetPasswordURLComponents = link => {
   const route = link.replace(/.*?:\/\//g, '');
   const path = route.match(/\/([^\/]+)\/?$/)[1];
   let components = path.replace('resetpassword?', '').split('&');

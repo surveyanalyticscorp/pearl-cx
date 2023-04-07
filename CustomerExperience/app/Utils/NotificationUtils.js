@@ -1,5 +1,5 @@
 import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_PUSH_TOKEN} from '../api/Constant';
 import {isStringNullOrEmpty} from './Utility';
 import {Notifications} from 'react-native-notifications';
@@ -17,12 +17,12 @@ async function requestUserPermission() {
 }
 
 let getToken = () => {
-  AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then((value) => {
+  AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(value => {
     console.log(value);
     if (isStringNullOrEmpty(value)) {
       messaging()
         .getToken()
-        .then((token) => {
+        .then(token => {
           console.log(token);
           AsyncStorage.setItem(ASYNC_PUSH_TOKEN, token);
         });
@@ -40,7 +40,7 @@ export async function checkNotificationPermission() {
 }
 
 export function addNotificationListeners() {
-  messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+  messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log(
       'Notification Message handled in the background!',
       remoteMessage,
@@ -48,7 +48,7 @@ export function addNotificationListeners() {
   });
 
   /** When the user presses a notification displayed via FCM, this listener will be called if the app has opened from a background state */
-  messaging().onNotificationOpenedApp((remoteMessage) => {
+  messaging().onNotificationOpenedApp(remoteMessage => {
     console.log(
       'Notification caused app to open from background state:',
       remoteMessage.notification,
@@ -59,7 +59,7 @@ export function addNotificationListeners() {
   /** When a notification from FCM has triggered the application to open from a quit state */
   messaging()
     .getInitialNotification()
-    .then((remoteMessage) => {
+    .then(remoteMessage => {
       if (remoteMessage) {
         console.log(
           'Notification caused app to open from quit state:',

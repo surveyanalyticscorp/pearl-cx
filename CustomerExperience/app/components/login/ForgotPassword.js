@@ -33,7 +33,7 @@ import QPSpinner from '../../widgets/QPSpinner';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import SafeAreaView from 'react-native-safe-area-view';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_RESET_CREDENTIALS, BASE_URL} from '../../api/Constant';
 import {
   authenticatePanel,
@@ -44,7 +44,7 @@ import {
 let {width} = Dimensions.get('window');
 const stringConst = require('../../config/translations/en');
 
-const ForgotPassword = (props) => {
+const ForgotPassword = props => {
   const [email, setEmail] = useState(props.route.params.email);
   const [accessCode, setAccessCode] = useState(props.route.params.accessCode);
   const [validation, setValidation] = useState('');
@@ -147,11 +147,11 @@ const ForgotPassword = (props) => {
     return true;
   };
 
-  const handleEmail = (text) => {
+  const handleEmail = text => {
     setEmail(text);
     setValidation('');
   };
-  const handleAccessCode = (text) => {
+  const handleAccessCode = text => {
     setAccessCode(text);
     setValidation('');
   };
@@ -243,7 +243,7 @@ const ForgotPassword = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     isLoading: state.global.isLoading,
     isError: state.global.isError,
@@ -253,20 +253,20 @@ const mapStateToProps = (state) => {
     baseUrl: state.global.baseUrl,
   };
 };
-const mapDispatchToProps = (dispatch) => ({
-  authenticatePanel: (param) => {
+const mapDispatchToProps = dispatch => ({
+  authenticatePanel: param => {
     dispatch(authenticatePanel(param));
   },
-  setUserDetails: (data) => {
+  setUserDetails: data => {
     dispatch(setUserDetailsForResetPassword(data));
   },
   clearError: () => {
     dispatch(clearError(false));
   },
-  requestPasswordLink: (param) => {
+  requestPasswordLink: param => {
     dispatch(requestPasswordLink(param));
   },
-  validatePasswordLink: (param) => {
+  validatePasswordLink: param => {
     dispatch(validateResetPasswordLink(param));
   },
   setDynamicLink: () => {

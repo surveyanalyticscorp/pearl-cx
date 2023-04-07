@@ -24,7 +24,7 @@ import {
   BASE_URL,
   SUBSCRIBER_ID,
 } from '../api/Constant';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   // connect,
   useSelector,
@@ -82,14 +82,14 @@ const Drawer = createDrawerNavigator();
 const DetractorStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
 
-const AppRouter = (props) => {
+const AppRouter = props => {
   // const {updateSegment} = props;
-  const authToken = useSelector((state) => state.global.authToken);
-  const userInfo = useSelector((state) => state.global.userInfo);
-  const languageCode = useSelector((state) => state.global.languageCode);
-  const dynamicLink = useSelector((state) => state.global.dynamicLink);
+  const authToken = useSelector(state => state.global.authToken);
+  const userInfo = useSelector(state => state.global.userInfo);
+  const languageCode = useSelector(state => state.global.languageCode);
+  const dynamicLink = useSelector(state => state.global.dynamicLink);
   const notificationCount = useSelector(
-    (state) => state.notification.notificationLogs.length,
+    state => state.notification.notificationLogs.length,
   );
   let [isAppActive, setAppActiveState] = useState(false);
   let [baseUrl, setBaseUrl] = useState(undefined);
@@ -135,14 +135,14 @@ const AppRouter = (props) => {
     checkNotificationPermission().then({});
     dynamicLinks()
       .getInitialLink()
-      .then((link) => {
+      .then(link => {
         if (link && link.url) {
           handleDynamicLink(link);
         }
       });
 
     const unsubscribeNotifications = messaging().onMessage(
-      async (remoteMessage) => {
+      async remoteMessage => {
         console.log('on message' + JSON.stringify(remoteMessage));
         Notifications.postLocalNotification(
           {
@@ -215,9 +215,9 @@ const AppRouter = (props) => {
         [ASYNC_USER_INFO, JSON.stringify(userInfo)],
         [ASYNC_LAST_LOGIN, JSON.stringify(lastLoginArray)],
       ];
-      AsyncStorage.multiSet(data, (error) => {});
+      AsyncStorage.multiSet(data, error => {});
     }
-    setMoveNext((state) => !authToken);
+    setMoveNext(state => !authToken);
   }, [authToken]);
 
   useEffect(() => {
@@ -232,7 +232,7 @@ const AppRouter = (props) => {
   }, [languageCode]);
 
   const setGlobalBaseUrl = () => {
-    AsyncStorage.getItem(BASE_URL).then((baseUrl) => {
+    AsyncStorage.getItem(BASE_URL).then(baseUrl => {
       // console.log(`subscriber ID from async storage: ${subscriberId}`);
 
       //console.log(`Base url from async storage: ${baseUrl}`);
@@ -244,7 +244,7 @@ const AppRouter = (props) => {
   };
 
   const setGlobalSubscriberId = () => {
-    AsyncStorage.getItem(SUBSCRIBER_ID).then((subscriberId) => {
+    AsyncStorage.getItem(SUBSCRIBER_ID).then(subscriberId => {
       console.log(`subscriber ID from async storage: ${subscriberId}`);
       if (subscriberId) {
         global.subscriberId = subscriberId;
@@ -256,7 +256,7 @@ const AppRouter = (props) => {
     });
   };
 
-  const handleDynamicLink = (link) => {
+  const handleDynamicLink = link => {
     if (link && link.url) {
       props.dispatch(setDynamicLink(link.url));
       setAppActiveState(true);
@@ -310,7 +310,7 @@ const AppRouter = (props) => {
     );
   };
 
-  const ClearAllButton = (props) => {
+  const ClearAllButton = props => {
     return (
       <View
         style={[
@@ -330,13 +330,13 @@ const AppRouter = (props) => {
     );
   };
 
-  const dashboardStack = (props) => (
+  const dashboardStack = props => (
     <DetractorStack.Navigator>
       <DetractorStack.Screen
         name={translate('dashboard.dashboard')}
         component={CxDashboard}
         options={({navigation, route}) => ({
-          headerTitle: (props) => {
+          headerTitle: props => {
             return (
               <SegmentSelector
                 screenName={translate('dashboard.dashboard')}
@@ -345,7 +345,7 @@ const AppRouter = (props) => {
             );
           },
 
-          headerLeft: (props) => <MenuIcon />,
+          headerLeft: props => <MenuIcon />,
           // headerRight: (props) => <NotificationIcon />,
           // headerRight: (props) => <SearchIcon route={'Dashboard'} />,
         })}
@@ -354,8 +354,8 @@ const AppRouter = (props) => {
         name={translate('close_loop.close_loop')}
         component={CloseLoopTicketsTabs}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
-          headerRight: (props) => <SearchIcon route={'Dashboard'} />,
+          headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+          headerRight: props => <SearchIcon route={'Dashboard'} />,
         })}
       />
       <DetractorStack.Screen
@@ -363,7 +363,7 @@ const AppRouter = (props) => {
         component={SearchTicket}
         options={({navigation, route}) => ({
           headerShown: false,
-          headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+          headerLeft: props => <HeaderBackLeft {...props} route={route} />,
         })}
       />
       <DetractorStack.Screen
@@ -379,7 +379,7 @@ const AppRouter = (props) => {
     </DetractorStack.Navigator>
   );
 
-  const dashboardModalStack = (props) => (
+  const dashboardModalStack = props => (
     <DetractorStack.Navigator mode="modal">
       <DetractorStack.Screen
         name="Dashboard"
@@ -391,8 +391,8 @@ const AppRouter = (props) => {
         name="Notifications"
         component={Notification}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <HeaderBackLeft />,
-          headerRight: (props) => <ClearAllButton {...props} route={route} />,
+          headerLeft: props => <HeaderBackLeft />,
+          headerRight: props => <ClearAllButton {...props} route={route} />,
         })}
       />
       {/* <DetractorStack.Screen
@@ -408,27 +408,27 @@ const AppRouter = (props) => {
         name={translate('filter_by')}
         component={TicketFilter}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <View />,
-          headerRight: (props) => <CloseButton />,
+          headerLeft: props => <View />,
+          headerRight: props => <CloseButton />,
         })}
       />
     </DetractorStack.Navigator>
   );
 
-  const settingStack = (props) => (
+  const settingStack = props => (
     <SettingsStack.Navigator>
       <SettingsStack.Screen
         name={translate('settings.settings')}
         component={AppSettings}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <MenuIcon />,
+          headerLeft: props => <MenuIcon />,
         })}
       />
       <SettingsStack.Screen
         name={translate('settings.account_details')}
         component={AccountDetails}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+          headerLeft: props => <HeaderBackLeft {...props} route={route} />,
         })}
       />
     </SettingsStack.Navigator>
@@ -446,7 +446,7 @@ const AppRouter = (props) => {
     return (
       <Drawer.Navigator
         drawerStyle={styles.drawerStyle}
-        drawerContent={(props) => <DrawerContent {...props} />}>
+        drawerContent={props => <DrawerContent {...props} />}>
         <Drawer.Screen name="Dashboard" component={dashboardModalStack} />
         <Drawer.Screen name="Responses" component={ResponsesStack} />
         {/* <Drawer.Screen name="Tickets" component={TicketsStack} /> */}
@@ -463,7 +463,7 @@ const AppRouter = (props) => {
   let [moveNext, setMoveNext] = useState(false);
   let splashTimer = useRef(null);
   const welcomeScreenData = useSelector(
-    (state) => state.dashboard.welcomeScreenData,
+    state => state.dashboard.welcomeScreenData,
   );
   useEffect(() => {
     if (welcomeScreenData) {

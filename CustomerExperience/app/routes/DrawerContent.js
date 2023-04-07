@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 // import MyIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome5';
 import {Colors} from '../styles/color.constants';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
@@ -36,14 +36,14 @@ import QPSpinner from '../widgets/QPSpinner';
 import {Notifications} from 'react-native-notifications';
 import {translate} from '../Utils/MultilinguaUtils';
 
-const DrawerContent = (props) => {
+const DrawerContent = props => {
   const [userCredentials, setUserCredentials] = useState('');
   const [logoutAlert, setLogoutAlert] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let hasValue = true;
-    AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then((value) => {
+    AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then(value => {
       if (hasValue) {
         setUserCredentials(JSON.parse(value));
       }
@@ -210,7 +210,7 @@ const DrawerContent = (props) => {
 
   let logoutAction = () => {
     AsyncStorage.multiGet([ASYNC_PUSH_TOKEN, ASYNC_USER_CREDENTIALS]).then(
-      (response) => {
+      response => {
         let token = response[0][1];
         let userDetails = response[1][1];
         if (!isStringNullOrEmpty(token)) {
@@ -218,7 +218,7 @@ const DrawerContent = (props) => {
         } else {
           messaging()
             .getToken()
-            .then((token) => {
+            .then(token => {
               callLogoutAPI(userDetails, token);
             });
         }
@@ -315,7 +315,7 @@ const DrawerContent = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     userInfo: state.global.userInfo,
     logoutResponse: state.global.logoutResponse,
@@ -323,7 +323,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   logoutUser: (token, params) => {
     dispatch(doLogout(token, params));
   },

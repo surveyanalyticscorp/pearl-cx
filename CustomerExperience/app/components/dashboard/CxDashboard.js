@@ -29,7 +29,7 @@ import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import {setRangeFilter} from '../../redux/actions';
 import {DashboardClosedLoopView} from './DashboardClosedLoopView';
 import {translate} from '../../Utils/MultilinguaUtils';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
 import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
@@ -39,13 +39,13 @@ import {
   HeaderFilter,
 } from '../../routes/CommonScreen';
 
-const wait = (timeout) => {
-  return new Promise((resolve) => {
+const wait = timeout => {
+  return new Promise(resolve => {
     setTimeout(resolve, timeout);
   });
 };
 
-const CxDashboard = (props) => {
+const CxDashboard = props => {
   let isFocused = useDispatch();
 
   let [refreshing, setRefreshing] = useState(false);
@@ -54,7 +54,7 @@ const CxDashboard = (props) => {
   let [lastLoginArray, setLastLoginArray] = useState([]);
 
   let segmentId = useSelector(
-    (state) => state.dashboard.currentSegment.currentSegmentID,
+    state => state.dashboard.currentSegment.currentSegmentID,
   );
   const {range, wantToReload} = props;
 
@@ -119,7 +119,7 @@ const CxDashboard = (props) => {
     }
   }, [props.dashboardData.detractorTicketsCount]);
 
-  const onDateRangeChangeHandler = (range_) => {
+  const onDateRangeChangeHandler = range_ => {
     props.setRange(range_);
   };
 
@@ -244,7 +244,7 @@ const CxDashboard = (props) => {
               {renderDetailsInformation(
                 'View Responses',
                 'viewDetails',
-                (tag) => {},
+                tag => {},
               )}
             </View>
           </View>
@@ -254,7 +254,7 @@ const CxDashboard = (props) => {
     );
   };
 
-  let renderDonutInfoContainer = (responseCount) => {
+  let renderDonutInfoContainer = responseCount => {
     return (
       <View style={dashboardStyles.donutInfoContainer}>
         {renderDonutInformation(
@@ -287,7 +287,7 @@ const CxDashboard = (props) => {
       </View>
     );
   };
-  let getNPSIcon = (sentiment) => {
+  let getNPSIcon = sentiment => {
     let icon;
     switch (sentiment) {
       case 'Detractor':
@@ -340,7 +340,7 @@ const CxDashboard = (props) => {
     );
   };
 
-  const getTrimmedNoOfResponses = (responseCount) => {
+  const getTrimmedNoOfResponses = responseCount => {
     let numberOfResponses = responseCount ? responseCount : 0;
 
     if (numberOfResponses >= 10000) {
@@ -364,7 +364,7 @@ const CxDashboard = (props) => {
     );
   };
 
-  let renderRow = (storeItem) => {
+  let renderRow = storeItem => {
     return (
       <View
         style={[
@@ -417,14 +417,14 @@ const CxDashboard = (props) => {
     );
   };
 
-  let renderSegmentTitle = (text) => {
+  let renderSegmentTitle = text => {
     return (
       <View style={dashboardStyles.dashboardTitleContainer}>
         <Text style={dashboardStyles.dashboardTitle}>{text}</Text>
       </View>
     );
   };
-  let renderWelcomeMessage = (text) => {
+  let renderWelcomeMessage = text => {
     return (
       <View style={dashboardStyles.dashboardTitleContainer}>
         <Text style={dashboardStyles.dashboardTitle}>{text}</Text>
@@ -526,7 +526,7 @@ const CxDashboard = (props) => {
   return renderDashboard();
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     dashboardData: state.dashboard.dashboardData,
     ticketCount: state.dashboard.dashBoardTicketCount,
@@ -546,8 +546,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  updateSegment: (segment) => {
+const mapDispatchToProps = dispatch => ({
+  updateSegment: segment => {
     dispatch({
       type: SEGMENT_SELECTED,
       payload: segment,
@@ -561,10 +561,10 @@ const mapDispatchToProps = (dispatch) => ({
   // getSegmentDetails: (token, data) => {
   //   dispatch(getClosedLoopSegmentDetails(token, data));
   // },
-  showLoading: (flag) => {
+  showLoading: flag => {
     dispatch(showLoading(flag));
   },
-  setRange: (range) => {
+  setRange: range => {
     dispatch(setRangeFilter(range));
   },
 });

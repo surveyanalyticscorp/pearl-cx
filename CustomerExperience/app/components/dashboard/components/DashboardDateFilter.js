@@ -22,7 +22,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {DASHBOARD_RANGE} from '../../../redux/actions/dashboard.actions';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import QPCalendar from '../../../widgets/QPCalendar';
 import StringUtils from '../../../Utils/StringUtils';
 import {StackActions} from '@react-navigation/native';
@@ -65,7 +65,7 @@ export default function DashboardDateFilter(props) {
     props.navigation.dangerouslyGetParent().setParams({saveRange: saveRange});
   }, [selectedRange]);
 
-  let getFilterText = (type) => {
+  let getFilterText = type => {
     switch (type) {
       case LAST_30_DAYS:
         return translate('date_filter.last_30_days');
@@ -80,7 +80,7 @@ export default function DashboardDateFilter(props) {
     }
   };
 
-  let getSelectedRange = (type) => {
+  let getSelectedRange = type => {
     let today = new Date();
     let month = today.getMonth() + 1;
     let tempEndDate = today.getDate() + '/' + month + '/' + today.getFullYear();
@@ -126,7 +126,7 @@ export default function DashboardDateFilter(props) {
     }
   };
 
-  let getRange = (type) => {
+  let getRange = type => {
     switch (type) {
       case LAST_30_DAYS:
       case LAST_3_MONTHS:
@@ -151,7 +151,7 @@ export default function DashboardDateFilter(props) {
     return <Text style={styles.error}>{validationError}</Text>;
   };
 
-  let renderMonthRow = (type) => {
+  let renderMonthRow = type => {
     let title = getFilterText(type);
     let range = getRange(type);
     return (
@@ -242,7 +242,7 @@ export default function DashboardDateFilter(props) {
     );
   };
 
-  let setCalendarDate = (date) => {
+  let setCalendarDate = date => {
     let tempDate = moment(date, 'YYYY-MM-DD').format(DMYFORMAT);
     setCustomDate(tempDate);
   };

@@ -10,7 +10,7 @@ import {
   CX_LOGOUT,
 } from '../../api/Constant';
 import {API_ERROR, CLEAR_API_ERROR, IS_LOADING} from '../actions';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   showErrorFlashMessage,
   showSuccessFlashMessage,

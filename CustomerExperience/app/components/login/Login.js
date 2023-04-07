@@ -29,13 +29,13 @@ import {Colors} from '../../styles/color.constants';
 import QPSpinner from '../../widgets/QPSpinner';
 import SafeAreaView from 'react-native-safe-area-view';
 import {setDynamicLink} from '../../redux/actions';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_PUSH_TOKEN, BASE_URL, SUBSCRIBER_ID} from '../../api/Constant';
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 
 const stringConst = require('../../config/translations/en');
 
-const Login = (props) => {
+const Login = props => {
   let timer = useRef(null);
   let textFieldTimer = useRef(null);
 
@@ -82,7 +82,7 @@ const Login = (props) => {
 
   const onSignInPress = () => {
     Keyboard.dismiss();
-    AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then((token) => {
+    AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(token => {
       if (isStringNullOrEmpty(token)) {
         console.log('onSignInPress: token:', token);
         checkNotificationPermission().then(() => onSignInPress());
@@ -108,7 +108,7 @@ const Login = (props) => {
     }
   };
 
-  let loginAction = (token) => {
+  let loginAction = token => {
     if (checkValidation()) {
       let data = {
         accessCode: userData.accessCode,
@@ -159,7 +159,7 @@ const Login = (props) => {
     });
   };
 
-  const handleEmail = (text) => {
+  const handleEmail = text => {
     if (userData.email !== text) {
       setUserData({
         ...userData,
@@ -168,7 +168,7 @@ const Login = (props) => {
     }
   };
 
-  const handlePassword = (text) => {
+  const handlePassword = text => {
     if (userData.password !== text) {
       setUserData({
         ...userData,
@@ -177,7 +177,7 @@ const Login = (props) => {
     }
   };
 
-  const handleAccessCode = (text) => {
+  const handleAccessCode = text => {
     if (userData.accessCode !== text) {
       setUserData({
         ...userData,
@@ -186,7 +186,7 @@ const Login = (props) => {
     }
   };
 
-  const handleSubmit = (text) => {
+  const handleSubmit = text => {
     authenticateAccessCode();
   };
 
@@ -302,7 +302,7 @@ const Login = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     isLoading: state.global.isLoading,
     isError: state.global.isError,
@@ -313,12 +313,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  authenticatePanel: (param) => {
+const mapDispatchToProps = dispatch => ({
+  authenticatePanel: param => {
     dispatch(clearError());
     dispatch(authenticatePanel(param));
   },
-  loginClick: (data) => {
+  loginClick: data => {
     dispatch(clearError());
     dispatch(doLogin(data));
     dispatch(showLoading(true));
