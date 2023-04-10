@@ -19,7 +19,7 @@ import StringUtils from '../../../Utils/StringUtils';
 import {NoItemsFound} from '../../../routes/CommonScreen';
 import QPButton from '../../../widgets/Button';
 
-const SelectTicketOwner = (props) => {
+const SelectTicketOwner = props => {
   const [data, setData] = useState(props.data);
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
   const [selectedItem, setSelectedItem] = useState(
@@ -31,8 +31,8 @@ const SelectTicketOwner = (props) => {
     if (StringUtils.isEmpty(text)) {
       setData(props.data);
     } else {
-      setData((prevState) =>
-        prevState.filter((item) => item.ownerName.includes(text)),
+      setData(prevState =>
+        prevState.filter(item => item.ownerName.includes(text)),
       );
     }
   }

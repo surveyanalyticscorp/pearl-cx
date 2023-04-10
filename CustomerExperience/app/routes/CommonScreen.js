@@ -56,7 +56,7 @@ const CloseLoopTicketsTab = createMaterialTopTabNavigator();
 
 let {width} = Dimensions.get('window');
 
-export const FabAddButton = (props) => {
+export const FabAddButton = props => {
   let size = width / 8;
   let fabStyle = StyleSheet.create({
     fabContainer: {
@@ -96,7 +96,7 @@ export const MenuIcon = () => {
   );
 };
 
-export const HeaderBackLeft = (props) => {
+export const HeaderBackLeft = props => {
   const navigation = useNavigation();
   return (
     <View style={styles.leftHeaderButton}>
@@ -120,7 +120,7 @@ export const HeaderBackLeft = (props) => {
     </View>
   );
 };
-export const BottomSheetHeader = (props) => {
+export const BottomSheetHeader = props => {
   return (
     <View style={styles.panelHeaderContainer}>
       <View style={styles.panelHandleContainer}>
@@ -183,7 +183,7 @@ export const RenderStatusIcon = ({size, title, style}) => {
   );
 };
 
-export const RenderPriorityIcon = (props) => {
+export const RenderPriorityIcon = props => {
   return (
     // <View
     //   style={[
@@ -232,14 +232,7 @@ export const CloseButton = ({color}) => {
   );
 };
 
-export const SearchTextInput = ({
-  textInputRef,
-  defaultValue,
-  style,
-  placeholder,
-  returnKeyType,
-  onChangeText,
-}) => {
+export const SearchTextInput = React.forwardRef((props, ref) => {
   const styles = StyleSheet.create({
     search: {
       padding: PaddingConstants.halfTab,
@@ -250,16 +243,16 @@ export const SearchTextInput = ({
   });
   return (
     <TextInput
-      ref={textInputRef}
-      defaultValue={defaultValue ?? ''}
-      style={style ?? styles.search}
-      placeholder={placeholder}
-      returnKeyType={returnKeyType}
-      onChangeText={onChangeText}
+      ref={ref}
+      defaultValue={props.defaultValue ?? ''}
+      style={props.style ?? styles.search}
+      placeholder={props.placeholder}
+      returnKeyType={props.returnKeyType}
+      onChangeText={props.onChangeText}
     />
   );
-};
-export const SearchIcon = (props) => {
+});
+export const SearchIcon = props => {
   let navigation = useNavigation();
   return (
     <View
@@ -281,7 +274,7 @@ export const SearchIcon = (props) => {
   );
 };
 
-export const SaveDashboardDate = (props) => {
+export const SaveDashboardDate = props => {
   return (
     <View
       style={[
@@ -411,7 +404,7 @@ export const CheckRadioButtonItem = ({item, index, onPress, textStyle}) => {
 
 export const EditTicket = () => {
   let navigation = useNavigation();
-  const state = useNavigationState((state) => state);
+  const state = useNavigationState(state => state);
   return (
     <View
       style={[
@@ -570,7 +563,7 @@ const SegmentSelector = ({segmentName, segmentList, onPressHandle}) => {
   );
 };
 
-export const RenderExitAlert = (props) => {
+export const RenderExitAlert = props => {
   return Alert.alert(
     translate('exit_app'),
     translate('exit_message'),
@@ -593,7 +586,7 @@ export const RenderExitAlert = (props) => {
   );
 };
 
-export const CloseLoopTicketsTabs = (props) => (
+export const CloseLoopTicketsTabs = props => (
   <CloseLoopTicketsTab.Navigator
     tabBarOptions={{
       labelStyle: {width: width / 3, fontSize: TextSizes.secondary},
@@ -629,7 +622,7 @@ export const CloseLoopTicketsTabs = (props) => (
   </CloseLoopTicketsTab.Navigator>
 );
 
-export const DateRangeTabStack = (props) => (
+export const DateRangeTabStack = props => (
   <DateRangeTab.Navigator
     tabBarOptions={{
       labelStyle: {
@@ -663,7 +656,7 @@ export const DateRangeTabStack = (props) => (
   </DateRangeTab.Navigator>
 );
 
-export const TicketLogTabStack = (props) => (
+export const TicketLogTabStack = props => (
   <TicketLogTab.Navigator
     tabBarOptions={{
       labelStyle: {width: width / 3, fontSize: TextSizes.semiSecondary},
@@ -703,15 +696,15 @@ export const TicketLogTabStack = (props) => (
   </TicketLogTab.Navigator>
 );
 
-const CommonScreens = (RootStack) => {
+const CommonScreens = RootStack => {
   return [
     <RootStack.Screen
       key={'Date Range'}
       name={translate('date_filter.date_range')}
       component={DateRangeTabStack}
       options={({navigation, route}) => ({
-        headerLeft: (props) => <HeaderBackLeft />,
-        headerRight: (props) => <SaveDashboardDate {...props} route={route} />,
+        headerLeft: props => <HeaderBackLeft />,
+        headerRight: props => <SaveDashboardDate {...props} route={route} />,
       })}
     />,
     <RootStack.Screen
@@ -719,8 +712,8 @@ const CommonScreens = (RootStack) => {
       name={translate('close_loop.ticket_details')}
       component={TicketLogTabStack}
       options={({navigation, route}) => ({
-        headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
-        headerRight: (props) =>
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+        headerRight: props =>
           route.state && route.state.index !== 0 ? <View /> : <EditTicket />,
       })}
     />,
@@ -729,7 +722,7 @@ const CommonScreens = (RootStack) => {
       key={'Feedback Details'}
       component={FeedbackDetails}
       options={({navigation, route}) => ({
-        headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}
     />,
     <RootStack.Screen
@@ -737,7 +730,7 @@ const CommonScreens = (RootStack) => {
       name={translate('close_loop.update_ticket')}
       component={UpdateTicket}
       options={({navigation, route}) => ({
-        headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}
     />,
 

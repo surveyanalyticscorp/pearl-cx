@@ -23,7 +23,7 @@
     "@react-native-firebase/app": "^8.4.6",
     "@react-native-firebase/dynamic-links": "^7.5.10",
     "@react-native-firebase/messaging": "^7.9.2",
-    "@react-navigation/core": "^5.1.0",
+    "@react-navigation/core": "^5.16.1",
     "@react-navigation/drawer": "^5.0.1",
     "@react-navigation/material-top-tabs": "^5.0.1",
     "@react-navigation/native": "^5.7.0",
