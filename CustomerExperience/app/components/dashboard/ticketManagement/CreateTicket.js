@@ -73,12 +73,12 @@ export default function CreateTicket(props) {
   const customerEmail = props.route?.params?.customerEmail;
   const surveyId = props.route?.params?.surveyId ?? null;
 
-  const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
-  const {authToken} = useSelector((state) => state.global);
-  const {owners} = useSelector((state) => state.dashboard.ownerDetails);
+  const segmentDetails = useSelector(state => state.dashboard.segmentDetails);
+  const {authToken} = useSelector(state => state.global);
+  const {owners} = useSelector(state => state.dashboard.ownerDetails);
   const [headerTitle, setHeaderTitle] = useState('Create New Ticket');
   const {feedbackApiKey, emailAddress, firstName, lastName} = useSelector(
-    (state) => state.global.userInfo,
+    state => state.global.userInfo,
   );
   // const [priority, setPriority] = useState('Select');
   const [priorityIndex, setPriorityIndex] = useState(-1);
@@ -146,7 +146,7 @@ export default function CreateTicket(props) {
     issueDate: moment().format(YMDFORMAT),
   });
 
-  const getTicketOwnerList = (segmentId_) => {
+  const getTicketOwnerList = segmentId_ => {
     dispatch(
       getClosedLoopOwnerDetails(authToken, {
         segmentID: segmentId_,
@@ -181,11 +181,11 @@ export default function CreateTicket(props) {
     // />
   );
 
-  const getMaterialIcon = (iconName) => (
+  const getMaterialIcon = iconName => (
     <MaterialIcon name={iconName} size={14} color={Colors.lightBlack} />
   );
 
-  const getMateriaCommunityIcon = (iconName) => (
+  const getMateriaCommunityIcon = iconName => (
     <MaterialCommunityIcon
       name={iconName}
       size={14}
@@ -232,12 +232,12 @@ export default function CreateTicket(props) {
     setShowCalendar(true);
   };
 
-  const setSegmentSelection = (segment_) => {
+  const setSegmentSelection = segment_ => {
     setSegment(segment_.segmentName);
     // setSegmentIndex(index);
-    setSegmentId((prev) => segment_.segmentID);
+    setSegmentId(prev => segment_.segmentID);
 
-    setTicketState((state) => ({
+    setTicketState(state => ({
       ...state,
       currentSegmentId: segment_.segmentID,
     }));
@@ -314,7 +314,7 @@ export default function CreateTicket(props) {
             // console.log(JSON.stringify(item));
             // setPriority(item.title);
 
-            setTicketState((state) => ({
+            setTicketState(state => ({
               ...state,
               priority: item.id,
             }));
@@ -335,9 +335,9 @@ export default function CreateTicket(props) {
             // console.log(JSON.stringify(item));
             setSegment(item.segmentName);
             setSegmentIndex(index);
-            setSegmentId((prev) => item.segmentID);
+            setSegmentId(prev => item.segmentID);
 
-            setTicketState((state) => ({
+            setTicketState(state => ({
               ...state,
               currentSegmentId: item.segmentID,
             }));
@@ -356,7 +356,7 @@ export default function CreateTicket(props) {
           handleOnPress={(item, index) => {
             // console.log(JSON.stringify(item));
             // setStatus(item.title);
-            setTicketState((state) => ({...state, status: item.id}));
+            setTicketState(state => ({...state, status: item.id}));
             setStatusIndex(index);
           }}
         />
@@ -374,7 +374,7 @@ export default function CreateTicket(props) {
             // console.log(JSON.stringify(item));
             setTicketOwner(item.ownerName);
             setTIcketOwnerIndex(index);
-            setTicketState((state) => ({
+            setTicketState(state => ({
               ...state,
               assignToId: item.ownerID,
               ownerId: item.ownerID,
@@ -401,7 +401,7 @@ export default function CreateTicket(props) {
   //   );
   // };
 
-  const renderPriorityHeader = (_title) => {
+  const renderPriorityHeader = _title => {
     return (
       <BottomSheetHeader
         title={'Select Priority'}
@@ -414,7 +414,7 @@ export default function CreateTicket(props) {
     );
   };
 
-  const renderStatusHeader = (_title) => {
+  const renderStatusHeader = _title => {
     return (
       <BottomSheetHeader
         title={'Select Status'}
@@ -427,7 +427,7 @@ export default function CreateTicket(props) {
     );
   };
 
-  const renderSegmentHeader = (_title) => {
+  const renderSegmentHeader = _title => {
     return (
       <BottomSheetHeader
         title={'Select Segment'}
@@ -440,7 +440,7 @@ export default function CreateTicket(props) {
     );
   };
 
-  const renderOwnerHeader = (_title) => {
+  const renderOwnerHeader = _title => {
     return (
       <BottomSheetHeader
         title={'Select Ticket Owner'}
@@ -552,7 +552,7 @@ export default function CreateTicket(props) {
         style={styles.cancelButton}
         onPress={() => {
           console.log('DATE_', JSON.stringify(selectedDate));
-          setTicketState((state) => ({
+          setTicketState(state => ({
             ...state,
             issueDate: moment(selectedDate, DMYFORMAT).format(YMDFORMAT),
           }));
@@ -582,7 +582,7 @@ export default function CreateTicket(props) {
     );
   };
 
-  let setCalendarDate = (date) => {
+  let setCalendarDate = date => {
     let tempDate = moment(date, 'YYYY-MM-DD').format(DMYFORMAT);
     setSelectedDate(tempDate);
   };
@@ -674,10 +674,10 @@ export default function CreateTicket(props) {
               defaultValue={customerName}
               keyboardType="default"
               style={styles.titleText}
-              onChangeText={(text) => {
+              onChangeText={text => {
                 console.log(text);
                 // userInfo.firstName = text;
-                setTicketState((state) => ({...state, firstName: text}));
+                setTicketState(state => ({...state, firstName: text}));
               }}
             />
           </View>
@@ -693,15 +693,15 @@ export default function CreateTicket(props) {
               // defaultValue={value}
               defaultCode="US"
               layout="first"
-              onChangeText={(text) => {
-                // setValue(text);
-                // console.log('PHONE:', text);
-              }}
-              onChangeFormattedText={(text) => {
+              // onChangeText={text => {
+              // setValue(text);
+              // console.log('PHONE:', text);
+              // }}
+              onChangeFormattedText={text => {
                 // setFormattedValue(text);
                 console.log('FORMATTED PHONE:', text);
 
-                setTicketState((state) => ({...state, mobileNumber: text}));
+                setTicketState(state => ({...state, mobileNumber: text}));
                 // userInfo.mobileNumber = text;
               }}
             />
@@ -714,10 +714,10 @@ export default function CreateTicket(props) {
               placeholder="Email"
               keyboardType="email-address"
               style={styles.titleText}
-              onChangeText={(text) => {
+              onChangeText={text => {
                 console.log(text);
                 // userInfo.emailAddress = text;
-                setTicketState((state) => ({...state, emailAddress: text}));
+                setTicketState(state => ({...state, emailAddress: text}));
               }}
             />
           </View>
@@ -766,10 +766,10 @@ export default function CreateTicket(props) {
               multiline
               placeholder="Description"
               style={styles.titleText}
-              onChangeText={(text) => {
+              onChangeText={text => {
                 console.log(text);
                 // userInfo.emailAddress = text;
-                setTicketState((state) => ({...state, comment: text}));
+                setTicketState(state => ({...state, comment: text}));
               }}
             />
           </View>
@@ -868,6 +868,8 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
+    height: MarginConstants.tab4,
+    padding: PaddingConstants.tab1,
   },
   phoneInputTextContainer: {
     backgroundColor: Colors.white,
