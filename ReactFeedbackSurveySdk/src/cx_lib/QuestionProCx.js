@@ -10,8 +10,10 @@ import {
     CX_API_KEY,
     CX_SURVEY_HEADER,
     SURVEY_TYPE,
+    CUSTOM_VAR_INDEX,
     qpString,
-    surveyUrl,
+    getSurveyUrlApi,
+    getCxTransactionSurveyApi
 } from './utils/QpConstant';
 import {postApiCall, getApiCall} from './api/ApiKit';
 import GLOBAL from './utils/global.js';
@@ -35,12 +37,17 @@ export const initQp = async payload => {
                 if (payload.hasOwnProperty('surveyType') || payload.surveyType) {
                     await AsyncStorage.setItem(SURVEY_TYPE, payload.surveyType);
                     delete payload.surveyType;
-                  } else {
+                } else {
                     console.error(`Error in initQp ${qpString.typeRequired}`);
                     GLOBAL.initialized = false;
                     resolve(qpString.typeRequired);
-                  }
+                }
           
+                if (payload.hasOwnProperty('customVarIndex') || payload.customVarIndex) {
+                    await AsyncStorage.setItem(CUSTOM_VAR_INDEX, payload.customVarIndex.toString());
+                    delete payload.customVarIndex;
+                }
+
                 if (payload.hasOwnProperty('themeColorHex') || payload.themeColorHex) {
                     await AsyncStorage.setItem(CX_THEME_COLOR, payload.themeColorHex);
                     delete payload.themeColorHex;
@@ -61,9 +68,9 @@ export const initQp = async payload => {
     });
 };
 
-
 export const getSurveyUrl = async surveyId => {
     let payloadStr = await AsyncStorage.getItem(CX_PAYLOAD);
+    let customVarIndex = await AsyncStorage.getItem(CUSTOM_VAR_INDEX);
 
     let payload = JSON.parse(payloadStr);
     payload = {...payload, surveyID: surveyId};
@@ -72,17 +79,26 @@ export const getSurveyUrl = async surveyId => {
         payload.email = `${makeEmailId(15)}@questionpro.com`;
     }
 
+    if(customVarIndex){
+        let dynamic = 'custom' + customVarIndex;
+        payload = {...payload, [dynamic] : surveyId};
+    }
+
     let apiKey = await AsyncStorage.getItem(CX_API_KEY);
     let type = await AsyncStorage.getItem(SURVEY_TYPE);
     let apiResponse;
     if(type == SurveyType.Feedback){
-        apiResponse = await postApiCall(surveyUrl(apiKey, type, surveyId), payload);
-        console.log('api response: ' + JSON.stringify(apiResponse));
-        return apiResponse.response.SurveyURL;
+        apiResponse = await postApiCall(getCxTransactionSurveyApi(apiKey), payload);
+        if(apiResponse.response && apiResponse.response.surveyURL)
+            return apiResponse.response.surveyURL;
+        else
+            return apiResponse;
     }else{
-        apiResponse = await getApiCall(surveyUrl(apiKey, type, surveyId));
-        console.log('Survey api response: ' + JSON.stringify(apiResponse));
-        return apiResponse.response.url;
+        apiResponse = await getApiCall(getSurveyUrlApi(apiKey, surveyId));
+        if(apiResponse.response && apiResponse.response.surveyURL)
+            return apiResponse.response.url;
+        else
+            return apiResponse;
     }
 };
 
