@@ -276,9 +276,9 @@ const getUnderLineText = (text, type) => {
 
 const ViewResponseDetailsButton = () => {
   const responseDetails = useSelector(
-    (state) => state.response.responseDetailsByResponseDetails,
+    state => state.response.responseDetailsByResponseDetails,
   );
-  const {authToken} = useSelector((state) => state.global);
+  const {authToken} = useSelector(state => state.global);
   const navigation = useNavigation();
   const navigateToFeedbackDetails = () => {
     navigation.navigate(translate('responses.feedback_details'), {
@@ -313,11 +313,11 @@ export default function TicketOverview(props) {
   const [showAssigneeModal, setAssigneeModal] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {authToken} = useSelector((state) => state.global);
+  const {authToken} = useSelector(state => state.global);
   const [currentBS, setCurrentBS] = useState(bottomSheetEnum.status);
-  const {owners} = useSelector((state) => state.dashboard.ownerDetails ?? []);
-  const isLoading = useSelector((state) => state.global.isTicketLoading);
-  const ticketDetails = useSelector((state) => state.dashboard.ticket);
+  const {owners} = useSelector(state => state.dashboard.ownerDetails ?? []);
+  const isLoading = useSelector(state => state.global.isTicketLoading);
+  const ticketDetails = useSelector(state => state.dashboard.ticket);
   const hasPanelMember = hasPanelMemberObj(ticketDetails.panelMember);
   const {
     emailAddress,
@@ -325,7 +325,7 @@ export default function TicketOverview(props) {
     lastName,
     userID,
     feedbackApiKey,
-  } = useSelector((state) => state.global.userInfo);
+  } = useSelector(state => state.global.userInfo);
   // const [selectedSegment, setSelectedSegment] = useState();
   const [statusIndex, setStatusIndex] = useState(
     getStatusIndexById(ticketDetails.status ?? -1),
@@ -344,7 +344,7 @@ export default function TicketOverview(props) {
     getOwnerIndex(owners, ticketDetails.assignToId ?? 0),
   );
 
-  const getTicketOwnerList = (segmentId_) => {
+  const getTicketOwnerList = segmentId_ => {
     dispatch(
       getClosedLoopOwnerDetails(authToken, {
         segmentID: segmentId_,
@@ -352,7 +352,7 @@ export default function TicketOverview(props) {
     );
   };
 
-  const updateTicket = (params) => {
+  const updateTicket = params => {
     let body = {
       ...params,
       userName: `${firstName} ${lastName}`,
@@ -364,7 +364,7 @@ export default function TicketOverview(props) {
       updateClfTicket(authToken, body, ticketDetails.id, feedbackApiKey),
     );
   };
-  const ticketEscalate = (params) => {
+  const ticketEscalate = params => {
     let body = {
       ...params,
       userName: `${firstName} ${lastName}`,
@@ -418,7 +418,7 @@ export default function TicketOverview(props) {
     navigation.dispatch(pushAction);
   };
 
-  const setSegmentSelection = (segment) => {
+  const setSegmentSelection = segment => {
     console.log('TICKET_OVERVIEW', JSON.stringify(segment));
     updateTicket({currentSegmentId: segment.segmentID});
     getTicketOwnerList(segment.segmentID);
@@ -429,7 +429,7 @@ export default function TicketOverview(props) {
     statusBottomSheet.current.snapTo(0);
   };
 
-  const RenderStatusHeader = (_title) => {
+  const RenderStatusHeader = _title => {
     return <BottomSheetHeader title={'Select Status'} onPressClose={closeBS} />;
   };
 
@@ -476,7 +476,7 @@ export default function TicketOverview(props) {
         ref={statusBottomSheet}
         snapPoints={statusBottomSheetSnapPoints}
         initialSnap={statusBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={true}
+        enabledGestureInteraction={false}
         renderContent={renderContent}
         renderHeader={renderHeader}
         callbackNode={fall}
@@ -484,7 +484,7 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderPriorityHeader = (_title) => {
+  const RenderPriorityHeader = _title => {
     return (
       <BottomSheetHeader title={'Select Priority'} onPressClose={closeBS} />
     );
@@ -505,7 +505,7 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderOwnerHeader = (_title) => {
+  const RenderOwnerHeader = _title => {
     return (
       <BottomSheetHeader title={'Select Ticket Owner'} onPressClose={closeBS} />
     );
@@ -566,7 +566,7 @@ export default function TicketOverview(props) {
     statusBottomSheet.current.snapTo(statusBottomSheetSnapPoints.length - 1);
   };
 
-  let getNPSColor = (sentiment) => {
+  let getNPSColor = sentiment => {
     switch (sentiment) {
       case 'Detractor':
         return Colors.detractor2;
@@ -586,8 +586,8 @@ export default function TicketOverview(props) {
   };
 
   const TicketStatusPriorityView = ({ticket}) => {
-    const isEscalated = ticket.status == 2;
-    const segmentName = ticketDetails?.currentSegment?.name ?? '';
+    const isEscalated = ticket.status === 2;
+    const segmentName = ticket?.currentSegment?.name ?? '';
     const statusName =
       ticket !== undefined ? getStatusById(ticket.status) : 'Select status';
 
@@ -666,7 +666,7 @@ export default function TicketOverview(props) {
   const promptSms = () => {
     console.log('SMS');
   };
-  const handleTicketAction = (item) => {
+  const handleTicketAction = item => {
     switch (item.id) {
       case 1:
         navigateToSendEmail();
@@ -690,7 +690,7 @@ export default function TicketOverview(props) {
       <View style={styles.contentContainer}>
         <TicketTakeAction
           data={data}
-          handleOnPress={(item) => handleTicketAction(item)}
+          handleOnPress={item => handleTicketAction(item)}
         />
       </View>
     );
@@ -709,7 +709,7 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderTicketOverView = (props) => (
+  const RenderTicketOverView = props => (
     <View style={styles.container}>
       <Animated.ScrollView
         style={{

@@ -6,13 +6,14 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Pressable,
   Dimensions,
 } from 'react-native';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
 const screen = Dimensions.get('screen');
-const QPButton = (props) => {
+const QPButton = props => {
   let style = props.style ? props.style : styles.button;
   let textStyle = props.textStyle ? props.textStyle : styles.text;
 
@@ -21,14 +22,14 @@ const QPButton = (props) => {
   };
 
   return (
-    <TouchableOpacity
+    <Pressable
       style={[
         style,
         {backgroundColor: props.buttonColor ?? buttonColors.backgroundColor},
       ]}
       onPress={onPress}>
       <Text style={textStyle}>{props.buttonText}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 export default QPButton;

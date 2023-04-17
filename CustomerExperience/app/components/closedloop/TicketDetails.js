@@ -1,5 +1,5 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback} from 'react';
 import {useWindowDimensions} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 
@@ -22,26 +22,19 @@ import {
 } from '../../redux/actions/closedloop.actions';
 
 export default function TicketDetails(props) {
-  const {authToken, isTicketLoading} = useSelector((state) => state.global);
-  const {feedbackApiKey} = useSelector((state) => state.global.userInfo);
+  const {authToken} = useSelector(state => state.global);
+  const {feedbackApiKey} = useSelector(state => state.global.userInfo);
   const ticketItem = props.route.params;
   const dispatch = useDispatch();
 
-  // console.log(`Ticket Detailsssss: ${JSON.stringify(ticketItem)}`);
+  console.log(`Ticket Detailsssss: ${JSON.stringify(ticketItem)}`);
 
   const TicketTabs = createMaterialTopTabNavigator();
 
-  useEffect(() => {
-    props.navigation.setOptions({
-      title: `Ticket #${ticketItem.id}`,
-    });
-  }, [props.navigation]);
-
-  useEffect(() => {
+  const callApis = useCallback(() => {
     dispatch(getRootCauseList(authToken, global.subscriberId));
     dispatch(getActionList(authToken, global.subscriberId));
     dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
-
     if (!StringUtils.isEmptyOrNull(ticketItem.responseId)) {
       dispatch(
         getResponseDetailsByResponseId(authToken, {
@@ -49,7 +42,17 @@ export default function TicketDetails(props) {
         }),
       );
     }
-  }, [ticketItem, authToken]);
+  }, []);
+
+  useEffect(() => {
+    props.navigation.setOptions({
+      title: `Ticket #${ticketItem.id}`,
+    });
+  }, [props.navigation, ticketItem.id]);
+
+  useEffect(() => {
+    callApis();
+  }, []);
 
   const CLFTicketTabStack = () => {
     return (
@@ -95,5 +98,5 @@ export default function TicketDetails(props) {
     );
   };
 
-  return isTicketLoading ? <RenderSpinner /> : <CLFTicketTabStack />;
+  return false ? <RenderSpinner /> : <CLFTicketTabStack />;
 }
