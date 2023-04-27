@@ -6,7 +6,7 @@ import {
   View,
   // FlatList,
   ScrollView,
-  TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
@@ -17,12 +17,10 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 import {FontFamily} from '../../../styles/font.constants';
 
-const ResponseProfile = (props) => {
-  const {panelMember, surveyDetails} = useSelector((state) => state.response);
+const ResponseProfile = props => {
+  const {panelMember, surveyDetails} = useSelector(state => state.response);
   const data = props.route.params.data;
-  const responseTickets = useSelector(
-    (state) => state.response.responseTickets,
-  );
+  const responseTickets = useSelector(state => state.response.responseTickets);
   console.log(`FEEDBACK_DATA_SURVEY: ${JSON.stringify(surveyDetails)}`);
   console.log(`FEEDBACK_DATA_PROFILE: ${JSON.stringify(panelMember)}`);
 
@@ -65,20 +63,20 @@ const ResponseProfile = (props) => {
 
   const RenderPhoneNumber = () => {
     return (
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
           console.log('Phone Number');
         }}
         style={styles.contactBox}>
         <IonIcon name="call" size={12} color={Colors.filterIconColor} />
         <Text style={styles.contactText}>{panelMember.phone ?? 'N/A'}</Text>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
   const RenderEmailAddress = () => {
     return (
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
           console.log('Email Address');
         }}
@@ -87,7 +85,7 @@ const ResponseProfile = (props) => {
         <Text style={styles.contactText}>
           {panelMember.emailAddress ?? 'N/A'}
         </Text>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 

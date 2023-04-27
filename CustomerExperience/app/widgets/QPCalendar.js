@@ -1,5 +1,5 @@
 import React, {useState, useRef} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native';
+import {View, Text, StyleSheet, Pressable, Platform} from 'react-native';
 import {MarginConstants} from '../styles/margin.constants';
 import {Colors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
@@ -12,7 +12,7 @@ import ModalDropdown from './drop-down/ModalDropdown';
 import moment from 'moment';
 import Calendar from './qp-calendar/calendar';
 
-const QPCalendar = (props) => {
+const QPCalendar = props => {
   let ref = useRef(null);
   let [selectedDate, setSelectedDate] = useState(props.selectedDate);
 
@@ -52,8 +52,8 @@ const QPCalendar = (props) => {
 
   let years = getYears();
 
-  let renderDropDown = (selectedValue) => {
-    let index = years.findIndex((item) => item === selectedValue);
+  let renderDropDown = selectedValue => {
+    let index = years.findIndex(item => item === selectedValue);
     return (
       <View>
         <ModalDropdown
@@ -66,7 +66,7 @@ const QPCalendar = (props) => {
           defaultValue={selectedValue}
           renderRow={dropdownRenderRow}
           defaultIndex={index}
-          onSelect={(i) => {
+          onSelect={i => {
             let components = selectedDate.split('-');
             let tempDate = years[i] + '-' + components[1] + '-' + components[2];
             setSelectedDate(tempDate);
@@ -111,7 +111,7 @@ const QPCalendar = (props) => {
     }
   };
 
-  let renderCalendarHeader = (date) => {
+  let renderCalendarHeader = date => {
     let tempDate = moment(selectedDate, 'YYYY-MM-DD').format('YYYY-MMMM-DD');
     let components = tempDate.split('-');
     return (
@@ -123,7 +123,7 @@ const QPCalendar = (props) => {
           {renderDropDown(components[0] + '')}
         </View>
         <View style={styles.calendarArrowView}>
-          <TouchableOpacity
+          <Pressable
             onPress={actionOnLeftArrow}
             hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
             <Icon
@@ -135,8 +135,8 @@ const QPCalendar = (props) => {
                 marginRight: MarginConstants.tab2,
               }}
             />
-          </TouchableOpacity>
-          <TouchableOpacity
+          </Pressable>
+          <Pressable
             onPress={actionOnRightArrow}
             hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
             <Icon
@@ -145,7 +145,7 @@ const QPCalendar = (props) => {
               color={Colors.secondary}
               style={{paddingHorizontal: PaddingConstants.tab1}}
             />
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     );

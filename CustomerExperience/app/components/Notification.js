@@ -5,7 +5,7 @@ import {
   Image,
   FlatList,
   TouchableWithoutFeedback,
-  TouchableOpacity,
+  Pressable,
   Animated,
   Alert,
 } from 'react-native';
@@ -28,13 +28,13 @@ import {clearNotification} from '../redux/actions/notification.actions';
 import {translate} from '../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 
-const Notification = (props) => {
+const Notification = props => {
   let row: Array<any> = [];
   let prevOpenedRow;
 
   let [clearAllAlert, showClearAllAlert] = useState(false);
-  const isLoading = useSelector((state) => state.global.isLoading);
-  const authToken = useSelector((state) => state.global.authToken);
+  const isLoading = useSelector(state => state.global.isLoading);
+  const authToken = useSelector(state => state.global.authToken);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -59,8 +59,8 @@ const Notification = (props) => {
             apiHandler.clearNotification(
               {'Auth-Token': authToken},
               {},
-              (response) => {},
-              (error) => {
+              response => {},
+              error => {
                 showErrorFlashMessage(error.errorAlert);
               },
             );
@@ -86,14 +86,14 @@ const Notification = (props) => {
     apiHandler.clearNotification(
       {'Auth-Token': authToken},
       {id: notification.id},
-      (response) => {},
-      (error) => {
+      response => {},
+      error => {
         showErrorFlashMessage(error.errorAlert);
       },
     );
   };
 
-  let viewTicket = (ticketID) => {
+  let viewTicket = ticketID => {
     props.navigation.navigate(translate('close_loop.ticket_details'), {
       ticketID: ticketID,
       parentRoute: 'Dashboard',
@@ -108,15 +108,13 @@ const Notification = (props) => {
     });
 
     return (
-      <TouchableOpacity
-        onPress={() => clearNotification(item)}
-        activeOpacity={0.5}>
+      <Pressable onPress={() => clearNotification(item)} activeOpacity={0.5}>
         <View style={styles.deleteBox}>
           <Animated.Text style={{transform: [{scale: scale}]}}>
             Deleting
           </Animated.Text>
         </View>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
@@ -130,7 +128,7 @@ const Notification = (props) => {
     );
   };
 
-  let getPriorityColor = (priority) => {
+  let getPriorityColor = priority => {
     switch (priority) {
       case 'critical':
         return priorityColors.critical;
@@ -156,7 +154,7 @@ const Notification = (props) => {
     let priority = 'high';
     return (
       <Swipeable
-        ref={(ref) => (row[index] = ref)}
+        ref={ref => (row[index] = ref)}
         friction={1}
         leftThreshold={40}
         rightThreshold={80}
@@ -191,7 +189,7 @@ const Notification = (props) => {
     );
   };
 
-  let closePreviousOpenRow = (index) => {
+  let closePreviousOpenRow = index => {
     // console.log('onSwipeableWillOpen');
     if (prevOpenedRow && prevOpenedRow !== row[index]) {
       prevOpenedRow.close();
@@ -238,14 +236,14 @@ const Notification = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     notificationLogs: state.notification.notificationLogs,
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  clearNotificationAction: (notification) => {
+const mapDispatchToProps = dispatch => ({
+  clearNotificationAction: notification => {
     dispatch(clearNotification(notification));
   },
 });

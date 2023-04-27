@@ -1,22 +1,14 @@
 import Notification from '../components/Notification';
 // import CreateTicket from '../components/dashboard/components/CreateTicket';
 import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Dimensions, StyleSheet, Text, Pressable, View} from 'react-native';
 import {
   // DrawerActions,
   useNavigation,
   // useNavigationState,
 } from '@react-navigation/native';
 import TicketFilter from '../components/dashboard/components/TicketFilter';
-import React, 
-// {useState} 
-from 'react';
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import CxDashboard from '../components/dashboard/CxDashboard';
 import SearchTicket from '../components/dashboard/components/SearchTicket';
@@ -52,7 +44,7 @@ const DashboardStack = ({navigation, route}) => {
           styles.rightHeaderButton,
           {marginHorizontal: MarginConstants.tab2},
         ]}>
-        <TouchableOpacity
+        <Pressable
           hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
           onPress={() => {
             //alert('open notification screen')
@@ -63,7 +55,7 @@ const DashboardStack = ({navigation, route}) => {
             size={1.1 * Sizes.icons}
             color={Colors.white}
           />
-        </TouchableOpacity>
+        </Pressable>
         {/** show unread/badge icon when notification read/unread status comes*/}
         {notificationCount > 0 ? renderNotificationBadge() : <View />}
       </View>
@@ -91,24 +83,24 @@ const DashboardStack = ({navigation, route}) => {
     );
   };
 
-  const ClearAllButton = (props) => {
+  const ClearAllButton = props => {
     return (
       <View
         style={[
           styles.rightHeaderButton,
           {marginHorizontal: 1.5 * MarginConstants.tab1},
         ]}>
-        <TouchableOpacity
+        <Pressable
           onPress={() => {
             props.route.params.clearAllNotifications();
           }}>
           <Text style={styles.saveText}> Clear All </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     );
   };
 
-  const CloseLoopTicketsTab = (props) => (
+  const CloseLoopTicketsTab = props => (
     <DetractorTicketsTab.Navigator
       tabBarOptions={{
         labelStyle: {width: width / 3, fontSize: TextSizes.secondary},
@@ -144,22 +136,22 @@ const DashboardStack = ({navigation, route}) => {
     </DetractorTicketsTab.Navigator>
   );
 
-  const dashboardStack = (props) => (
+  const dashboardStack = props => (
     <DetractorStack.Navigator>
       <DetractorStack.Screen
         name="Dashboard"
         component={CxDashboard}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <MenuIcon />,
-          headerRight: (props) => <NotificationIcon />,
+          headerLeft: props => <MenuIcon />,
+          headerRight: props => <NotificationIcon />,
         })}
       />
       <DetractorStack.Screen
         name="Closed Loop"
         component={CloseLoopTicketsTab}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
-          headerRight: (props) => <SearchIcon route={'Dashboard'} />,
+          headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+          headerRight: props => <SearchIcon route={'Dashboard'} />,
         })}
       />
       <DetractorStack.Screen
@@ -167,7 +159,7 @@ const DashboardStack = ({navigation, route}) => {
         component={SearchTicket}
         options={({navigation, route}) => ({
           headerShown: false,
-          headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+          headerLeft: props => <HeaderBackLeft {...props} route={route} />,
         })}
       />
       {CommonScreens(DetractorStack)}
@@ -186,24 +178,24 @@ const DashboardStack = ({navigation, route}) => {
         name="Notifications"
         component={Notification}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <HeaderBackLeft />,
-          headerRight: (props) => <ClearAllButton {...props} route={route} />,
+          headerLeft: props => <HeaderBackLeft />,
+          headerRight: props => <ClearAllButton {...props} route={route} />,
         })}
       />
       <DetractorStack.Screen
         name="New Ticket"
         component={CreateTicket}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <View />,
-          headerRight: (props) => <CloseButton />,
+          headerLeft: props => <View />,
+          headerRight: props => <CloseButton />,
         })}
       />
       <DetractorStack.Screen
         name="Filter By"
         component={TicketFilter}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <View />,
-          headerRight: (props) => <CloseButton />,
+          headerLeft: props => <View />,
+          headerRight: props => <CloseButton />,
         })}
       />
     </DetractorStack.Navigator>

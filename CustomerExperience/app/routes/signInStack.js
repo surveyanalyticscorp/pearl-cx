@@ -4,7 +4,7 @@ import Login from '../components/login/Login';
 import ForgotPassword from '../components/login/ForgotPassword';
 import MarketingScreen from '../components/login/MarketingScreen';
 import ResetPassword from '../components/login/ResetPassword';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
@@ -17,14 +17,14 @@ const RootStack = createStackNavigator();
 const stackHeaderProps = (route, navigation) => {
   return (
     <View style={styles.headerButtonStyle}>
-      <TouchableOpacity
+      <Pressable
         buttonStyle={styles.headerButtonStyle}
         onPress={() => {
           const popAction = CommonActions.goBack();
           navigation.dispatch(popAction);
         }}>
         <Icon name="arrow-left" size={20} color={Colors.white} />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
@@ -44,7 +44,7 @@ const SignInStack = ({navigation}) => (
       options={({navigation, route}) => ({
         headerTransparent: true,
         title: '',
-        headerLeft: (props) => {
+        headerLeft: props => {
           return stackHeaderProps(route, navigation);
         },
       })}
@@ -55,7 +55,7 @@ const SignInStack = ({navigation}) => (
       options={({navigation, route}) => ({
         headerTransparent: true,
         title: '',
-        headerLeft: (props) => {
+        headerLeft: props => {
           return stackHeaderProps(route, navigation);
         },
       })}
@@ -66,7 +66,7 @@ const SignInStack = ({navigation}) => (
       options={({navigation, route}) => ({
         headerTransparent: true,
         title: '',
-        headerLeft: (props) => {
+        headerLeft: props => {
           return stackHeaderProps(route, navigation);
         },
       })}

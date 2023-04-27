@@ -52,39 +52,7 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import {isObjectEmpty} from '../../Utils/Utility';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {updateSetTicketEscalation} from '../../redux/actions/closedloop.actions';
-
-const NPSScoreText = ({text}) => {
-  const npsStyles = StyleSheet.create({
-    npsView: {
-      flex: 2,
-      justifyContent: 'flex-start',
-    },
-    npsBackground: {
-      marginStart: MarginConstants.halfTab,
-      padding: PaddingConstants.tab1,
-      backgroundColor: Colors.critical2,
-      borderRadius: 50,
-      height: MarginConstants.tab3,
-      width: MarginConstants.tab3,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    npsImage: {width: 16, height: 16},
-  });
-
-  return (
-    <View style={[npsStyles.npsView, styles.rowContainer]}>
-      <Image
-        style={npsStyles.npsImage}
-        source={require('./../../../assets/images/nps_meter.png')}
-      />
-      <View style={npsStyles.npsBackground}>
-        <Text style={[styles.detailsText, {color: Colors.white}]}>{text}</Text>
-      </View>
-    </View>
-  );
-};
-
+import NPSScoreView from '../view/NPSScoreView';
 const ArrowDownIcon = () => (
   <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.evenDarkerGrey} />
 );
@@ -193,7 +161,7 @@ const DescriptionView = ({ticket}) => {
       {ticket.npsScore && (
         <View style={styles.rowContainer}>
           <Title value={'NPS'} />
-          <NPSScoreText text={ticket.npsScore} />
+          <NPSScoreView text={ticket.npsScore} />
         </View>
       )}
       <View style={styles.columnContainer}>

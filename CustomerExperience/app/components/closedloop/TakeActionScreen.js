@@ -1,9 +1,8 @@
-import React from // {useEffect, useState}
-'react';
+import React from 'react'; // {useEffect, useState}
 import {
   View,
   TouchableWithoutFeedback,
-  TouchableOpacity,
+  Pressable,
   Text,
   // Image,
   StyleSheet,
@@ -38,15 +37,15 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 export default function TakeActionScreen(props) {
   const headerTitle = 'Take Action';
 
-  const getIonIcon = (iconName) => (
+  const getIonIcon = iconName => (
     <IonIcons name={iconName} size={18} color={Colors.lightBlack} />
   );
 
-  const getMaterialIcon = (iconName) => (
+  const getMaterialIcon = iconName => (
     <MaterialIcon name={iconName} size={18} color={Colors.lightBlack} />
   );
 
-  const getMateriaCommunityIcon = (iconName) => (
+  const getMateriaCommunityIcon = iconName => (
     <MaterialCommunityIcon
       name={iconName}
       size={18}
@@ -61,12 +60,12 @@ export default function TakeActionScreen(props) {
         <CloseButton color={Colors.filterIconColor} />
       </View>
 
-      <TouchableOpacity
+      <Pressable
         onPress={() => {}}
         style={[styles.rowContainer, styles.rowItem]}>
         {getMaterialIcon('chat-bubble')}
         <Text style={styles.buttonText}>{'Forward by Email'}</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 }

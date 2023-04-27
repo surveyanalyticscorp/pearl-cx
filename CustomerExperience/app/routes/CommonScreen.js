@@ -2,7 +2,7 @@ import {
   Dimensions,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Pressable,
   View,
   Image,
   Alert,
@@ -74,9 +74,9 @@ export const FabAddButton = props => {
 
   return (
     <View style={fabStyle.fabContainer}>
-      <TouchableOpacity onPress={props.onPress}>
+      <Pressable onPress={props.onPress}>
         <MaterialIcon name="add" size={size - 5} color={Colors.white} />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
@@ -85,13 +85,13 @@ export const MenuIcon = () => {
   let navigation = useNavigation();
   return (
     <View style={styles.rightHeaderButton}>
-      <TouchableOpacity
+      <Pressable
         hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
         onPress={() => {
           navigation.dispatch(DrawerActions.toggleDrawer());
         }}>
         <Icon name="menu" size={Sizes.icons} color="white" />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
@@ -100,7 +100,7 @@ export const HeaderBackLeft = props => {
   const navigation = useNavigation();
   return (
     <View style={styles.leftHeaderButton}>
-      <TouchableOpacity
+      <Pressable
         hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
         onPress={() => {
           if (
@@ -116,7 +116,7 @@ export const HeaderBackLeft = props => {
           }
         }}>
         <Icon name="arrow-left" size={Sizes.icons} color={Colors.white} />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
@@ -128,9 +128,9 @@ export const BottomSheetHeader = props => {
       </View>
       <View style={styles.panelTitleContainer}>
         <Text style={styles.header}>{props.title}</Text>
-        <TouchableOpacity onPress={props.onPressClose}>
+        <Pressable onPress={props.onPressClose}>
           <IonIcons name="close" size={20} color={Colors.filterIconColor} />
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
@@ -217,7 +217,7 @@ export const CloseButton = ({color}) => {
         styles.rightHeaderButton,
         {marginHorizontal: MarginConstants.tab2},
       ]}>
-      <TouchableOpacity
+      <Pressable
         hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
         onPress={() => {
           navigation.goBack();
@@ -227,7 +227,7 @@ export const CloseButton = ({color}) => {
           size={1.1 * Sizes.filterIcon}
           color={iconColor}
         />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
@@ -260,7 +260,7 @@ export const SearchIcon = props => {
         styles.rightHeaderButton,
         {marginHorizontal: MarginConstants.tab2},
       ]}>
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
           // props.route === 'Dashboard'
           //   ? navigation.navigate('Search Ticket')
@@ -269,7 +269,7 @@ export const SearchIcon = props => {
           navigation.navigate('Search Response');
         }}>
         <Icon name={'magnifier'} size={Sizes.icons} color={Colors.white} />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
@@ -281,12 +281,12 @@ export const SaveDashboardDate = props => {
         styles.rightHeaderButton,
         {marginHorizontal: 1.5 * MarginConstants.tab1},
       ]}>
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
           props.route.params.saveRange();
         }}>
         <Text style={styles.saveText}> {translate('date_filter.save')} </Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
@@ -353,7 +353,7 @@ export const RenderSpinner = () => {
 export const CheckBoxItem = ({item, index, onPress, textStyle}) => {
   const _textStyle = textStyle ?? styles.checkBoxText;
   return (
-    <TouchableOpacity onPress={() => onPress(item, index)}>
+    <Pressable onPress={() => onPress(item, index)}>
       <View style={styles.checkBoxRow}>
         {/* <CheckBox
           disabled={false}
@@ -372,14 +372,14 @@ export const CheckBoxItem = ({item, index, onPress, textStyle}) => {
         />
         <Text style={_textStyle}>{item.title}</Text>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
 export const CheckRadioButtonItem = ({item, index, onPress, textStyle}) => {
   const _textStyle = textStyle ?? styles.checkBoxText;
   return (
-    <TouchableOpacity onPress={() => onPress(index)}>
+    <Pressable onPress={() => onPress(index)}>
       <View style={styles.checkBoxRow}>
         {/* <CheckBox
           disabled={false}
@@ -398,7 +398,7 @@ export const CheckRadioButtonItem = ({item, index, onPress, textStyle}) => {
         />
         <Text style={_textStyle}>{item.title}</Text>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -411,7 +411,7 @@ export const EditTicket = () => {
         styles.rightHeaderButton,
         {marginHorizontal: 1.5 * MarginConstants.tab1},
       ]}>
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
           navigation.navigate(translate('close_loop.update_ticket'), {
             parentRoute: state.routeNames[0],
@@ -422,7 +422,7 @@ export const EditTicket = () => {
           size={Sizes.filterIcon}
           color={Colors.white}
         />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
@@ -464,13 +464,12 @@ export const FilterDateBox = ({range, onDateRangeChangeHandler}) => {
   };
 
   return (
-    <TouchableOpacity
-      onPress={() => filterAction(range, onDateRangeChangeHandler)}>
+    <Pressable onPress={() => filterAction(range, onDateRangeChangeHandler)}>
       <View style={styles.filterBox}>
         <GetDateText dateRange={range} />
         <DateIcon />
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -484,9 +483,9 @@ export const Avatar = ({title, style}) => {
 
 export const FilterIcon = ({onPressFilter}) => {
   return (
-    <TouchableOpacity onPress={onPressFilter}>
+    <Pressable onPress={onPressFilter}>
       <IonIcons name="funnel" size={20} color={Colors.lightBlack} />
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -523,7 +522,7 @@ const SegmentSelector = ({segmentName, segmentList, onPressHandle}) => {
   });
   return segmentList && segmentList.length ? (
     <View style={segmentSelectorStyles.container}>
-      <TouchableOpacity
+      <Pressable
         // onPress={() => {
         //   dispatch(setSegmentSelectorOpen(true));
         // }}
@@ -537,7 +536,7 @@ const SegmentSelector = ({segmentName, segmentList, onPressHandle}) => {
             color={Colors.darkGrey}
           />
         </View>
-      </TouchableOpacity>
+      </Pressable>
       {/* <MainDropDown
     options={segmentOptions.map((item) => item.segmentName)}
     defaultText={selectedSegment.segmentName}

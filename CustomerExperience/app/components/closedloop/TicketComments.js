@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {
   View,
-  TouchableOpacity,
+  Pressable,
   Text,
   StyleSheet,
   FlatList,
@@ -39,14 +39,14 @@ const MaterialIconView = ({iconName, color}) => (
 
 const SendButton = ({handleOnSubmit}) => {
   return (
-    <TouchableOpacity onPress={handleOnSubmit}>
+    <Pressable onPress={handleOnSubmit}>
       <MaterialIconView iconName="send" />
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 const CommentItem = ({item}) => {
   return (
-    <TouchableOpacity
+    <Pressable
       style={[
         styles.commentItemView,
         {marginVertical: MarginConstants.halfTab},
@@ -61,7 +61,7 @@ const CommentItem = ({item}) => {
           {getDateTimeAgo(moment.utc(item.createdAt).toDate())}
         </Text>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -76,18 +76,18 @@ const ShowNestedFlatList = ({data}) => {
       inverted={false}
       renderItem={({item}) => <MemoizedCommentItem item={item} />}
       extraData={data}
-      keyExtractor={(item) => item.id.toString()}
+      keyExtractor={item => item.id.toString()}
     />
   );
 };
 
 export default function TicketComments(props) {
-  const {authToken} = useSelector((state) => state.global);
-  const ticketComments = useSelector((state) => state.dashboard.ticketComments);
+  const {authToken} = useSelector(state => state.global);
+  const ticketComments = useSelector(state => state.dashboard.ticketComments);
   const {emailAddress, firstName, lastName, userID} = useSelector(
-    (state) => state.global.userInfo,
+    state => state.global.userInfo,
   );
-  const ticketId = useSelector((state) => state.dashboard.ticket.id);
+  const ticketId = useSelector(state => state.dashboard.ticket.id);
   const dispatch = useDispatch();
 
   const commentState = {
@@ -105,8 +105,8 @@ export default function TicketComments(props) {
     dispatch(getClosedLoopTicketItemComments(authToken, ticketId));
   };
 
-  const wait = (timeout) => {
-    return new Promise((resolve) => {
+  const wait = timeout => {
+    return new Promise(resolve => {
       setTimeout(resolve, timeout);
     });
   };
@@ -126,7 +126,7 @@ export default function TicketComments(props) {
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
         }
         keyboardShouldPersistTaps={'never'}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
         renderItem={({item}) => <MemoizedCommentParentItem item={item} />}
         extraData={data}
         ListFooterComponent={<View style={{margin: MarginConstants.tab4}} />}
@@ -137,7 +137,7 @@ export default function TicketComments(props) {
   const CommentParentItem = ({item}) => {
     const [isCommentBoxVisible, setCommentBoxVisibility] = useState(false);
     const toggleCommentBoxVisibility = () => {
-      setCommentBoxVisibility((isHidden) => !isHidden);
+      setCommentBoxVisibility(isHidden => !isHidden);
     };
     return (
       <ScrollView
@@ -156,7 +156,7 @@ export default function TicketComments(props) {
           </View>
         )}
 
-        <TouchableOpacity
+        <Pressable
           style={{
             marginStart: MarginConstants.tab4,
             marginVertical: MarginConstants.halfTab,
@@ -165,7 +165,7 @@ export default function TicketComments(props) {
           <Text style={[styles.replyText, {color: Colors.accentLight}]}>
             {isCommentBoxVisible ? 'Cancel' : 'Reply'}
           </Text>
-        </TouchableOpacity>
+        </Pressable>
         {isCommentBoxVisible && <CommentBox parentId={item.id} />}
       </ScrollView>
     );
@@ -178,7 +178,7 @@ export default function TicketComments(props) {
 
     console.log('RERENDERED_API_CALL');
 
-    const onChangeCommentHandler = (text) => {
+    const onChangeCommentHandler = text => {
       setCommentText(text);
     };
 
@@ -218,7 +218,7 @@ export default function TicketComments(props) {
             placeholder={placeHolder}
             // onEndEditing={onChangeCommentHandler}
             returnKeyType={'send'}
-            onSubmitEditing={(event) => {
+            onSubmitEditing={event => {
               console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
               onChangeCommentHandler(event.nativeEvent.text);
               handleOnSubmit();

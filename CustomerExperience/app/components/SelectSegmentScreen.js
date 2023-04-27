@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -24,15 +24,15 @@ import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 
-const SelectSegmentScreen = (props) => {
+const SelectSegmentScreen = props => {
   const dispatch = useDispatch();
   let currentSegmentId = props.route.params.currentSegmentId;
   const setSegmentSelection = props.route.params.setSegmentSelection;
   const [isLoading, setLoading] = useState(false);
   const textInputRef = useRef();
-  const authToken = useSelector((state) => state.global.authToken);
-  const ownerID = useSelector((state) => state.global.userInfo.userID);
-  const segmentList = useSelector((state) => state.dashboard.segmentList);
+  const authToken = useSelector(state => state.global.authToken);
+  const ownerID = useSelector(state => state.global.userInfo.userID);
+  const segmentList = useSelector(state => state.dashboard.segmentList);
   const navigation = useNavigation();
   const defaultRequestBody = {
     pageOffset: 0,
@@ -43,7 +43,7 @@ const SelectSegmentScreen = (props) => {
   // const [pageOffset, setPageOffset] = useState(0);
   const [requestBody, setRequestBody] = useState(defaultRequestBody);
   const [searchText, setSearchText] = useState('');
-  const handleSegmentSelectionAction = (item) => {
+  const handleSegmentSelectionAction = item => {
     // setPageOffset(0);
     setRequestBody(defaultRequestBody);
     setSegmentSelection(item);
@@ -58,7 +58,7 @@ const SelectSegmentScreen = (props) => {
 
   const loadMoreData = () => {
     // setPageOffset(pageOffset + 1);
-    setRequestBody((prevState) => ({
+    setRequestBody(prevState => ({
       ...prevState,
       pageOffset: prevState.pageOffset + 1,
     }));
@@ -97,7 +97,7 @@ const SelectSegmentScreen = (props) => {
     );
   };
 
-  const onSearchHandler = (text) => {
+  const onSearchHandler = text => {
     console.log('TEXT_INPUT:', JSON.stringify(textInputRef.current));
 
     setRequestBody({
@@ -138,7 +138,7 @@ const SelectSegmentScreen = (props) => {
             style={[styles.searchInput, {flex: 1}]}
             placeholder="Search segment name here..."
             returnKeyType={'search'}
-            onSubmitEditing={(event) => {
+            onSubmitEditing={event => {
               console.log('KEYBOARD_SEARCH', JSON.stringify(event.nativeEvent));
               onSearchHandler(event.nativeEvent.text);
               // setSearchText(event.nativeEvent.text);
@@ -146,7 +146,7 @@ const SelectSegmentScreen = (props) => {
             }}
           />
           {requestBody.segmentName.length > 0 ? (
-            <TouchableOpacity
+            <Pressable
               style={[styles.searchInput]}
               onPress={clearSearchHandler}>
               <IonIcons
@@ -155,12 +155,12 @@ const SelectSegmentScreen = (props) => {
                 size={20}
                 color={Colors.filterIconColor}
               />
-            </TouchableOpacity>
+            </Pressable>
           ) : (
             <View />
           )}
         </View>
-        {/* <TouchableOpacity
+        {/* <Pressable
           style={[
             styles.searchInput,
             {
@@ -171,18 +171,18 @@ const SelectSegmentScreen = (props) => {
           ]}
           onPress={onSearchHandler}>
           <Text style={{color: Colors.white}}>{'Search'}</Text>
-        </TouchableOpacity> */}
+        </Pressable> */}
       </View>
     );
   };
 
-  const globalSelectSegment = (props) => {
+  const globalSelectSegment = props => {
     return (
       <FlatList
         // ref={flatListRef}
         style={styles.flatList}
         data={segmentList}
-        keyExtractor={(item) => item.segmentID + ''}
+        keyExtractor={item => item.segmentID + ''}
         renderItem={renderRow}
         ItemSeparatorComponent={listItemSeparator}
         ListHeaderComponent={renderSegmentSearch}

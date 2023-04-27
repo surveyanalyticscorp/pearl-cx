@@ -22,19 +22,22 @@ import {
 } from '../../redux/actions/closedloop.actions';
 
 export default function TicketDetails(props) {
-  const {authToken} = useSelector(state => state.global);
+  const {authToken, isTicketLoading} = useSelector(state => state.global);
   const {feedbackApiKey} = useSelector(state => state.global.userInfo);
   const ticketItem = props.route.params;
   const dispatch = useDispatch();
+  const windowDimensions = useWindowDimensions();
 
   console.log(`Ticket Detailsssss: ${JSON.stringify(ticketItem)}`);
 
   const TicketTabs = createMaterialTopTabNavigator();
+  useEffect(() => {
+    dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
+  }, []);
 
   const callApis = useCallback(() => {
     dispatch(getRootCauseList(authToken, global.subscriberId));
     dispatch(getActionList(authToken, global.subscriberId));
-    dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
     if (!StringUtils.isEmptyOrNull(ticketItem.responseId)) {
       dispatch(
         getResponseDetailsByResponseId(authToken, {
@@ -54,49 +57,51 @@ export default function TicketDetails(props) {
     callApis();
   }, []);
 
-  const CLFTicketTabStack = () => {
-    return (
-      <TicketTabs.Navigator
-        tabBarOptions={{
-          labelStyle: {
-            width: useWindowDimensions().width / 4,
-            fontSize: TextSizes.secondary,
-            fontFamily: FontFamily.secondary,
-          },
-          indicatorStyle: {backgroundColor: Colors.accentLight},
-          style: {backgroundColor: Colors.white, width: '100%'},
-          initialLayout: {width: useWindowDimensions().width},
-          tabStyle: {height: 1.2 * PaddingConstants.tab4},
-          activeTintColor: Colors.accentLight,
-          inactiveTintColor: Colors.primary,
-        }}
-        lazy
-        keyboardDismissMode={'auto'}>
-        <TicketTabs.Screen
-          name={translate('close_loop.overview')}
-          component={TicketOverview}
-          initialParams={{screenName: 'Overview'}}
-        />
-        <TicketTabs.Screen
-          name={translate('close_loop.comments')}
-          component={TicketComments}
-          initialParams={{screenName: 'Comments'}}
-        />
-        <TicketTabs.Screen
-          name={translate('responses.activity')}
-          component={TicketActivity}
-          initialParams={{screenName: 'Activity'}}
-        />
+  // const CLFTicketTabStack = () => {
+  return isTicketLoading ? (
+    <RenderSpinner />
+  ) : (
+    <TicketTabs.Navigator
+      tabBarOptions={{
+        labelStyle: {
+          width: windowDimensions.width / 4,
+          fontSize: TextSizes.secondary,
+          fontFamily: FontFamily.secondary,
+        },
+        indicatorStyle: {backgroundColor: Colors.accentLight},
+        style: {backgroundColor: Colors.white, width: '100%'},
+        initialLayout: {width: windowDimensions.width},
+        tabStyle: {height: 1.2 * PaddingConstants.tab4},
+        activeTintColor: Colors.accentLight,
+        inactiveTintColor: Colors.primary,
+      }}
+      lazy
+      keyboardDismissMode={'auto'}>
+      <TicketTabs.Screen
+        name={translate('close_loop.overview')}
+        component={TicketOverview}
+        initialParams={{screenName: 'Overview'}}
+      />
+      <TicketTabs.Screen
+        name={translate('close_loop.comments')}
+        component={TicketComments}
+        initialParams={{screenName: 'Comments'}}
+      />
+      <TicketTabs.Screen
+        name={translate('responses.activity')}
+        component={TicketActivity}
+        initialParams={{screenName: 'Activity'}}
+      />
 
-        <TicketTabs.Screen
-          // name={translate('responses.activity')}
-          name={'Root Cause'}
-          component={TicketRootCause}
-          initialParams={{screenName: 'Root Cause'}}
-        />
-      </TicketTabs.Navigator>
-    );
-  };
-
-  return false ? <RenderSpinner /> : <CLFTicketTabStack />;
+      <TicketTabs.Screen
+        // name={translate('responses.activity')}
+        name={'Root Cause'}
+        component={TicketRootCause}
+        initialParams={{screenName: 'Root Cause'}}
+      />
+    </TicketTabs.Navigator>
+  );
 }
+
+// return false ? <RenderSpinner /> : <CLFTicketTabStack />;
+// }

@@ -1,6 +1,6 @@
 import {
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   View,
   TextInput,
   Text,
@@ -54,7 +54,7 @@ function SearchTicket(props) {
     );
   };
 
-  const renderRow = (rowItem) => {
+  const renderRow = rowItem => {
     let commentText = rowItem.item.comment.replace(/\n/g, ' ');
     return (
       <TicketWidget comment={commentText} item={rowItem.item} {...props} />
@@ -77,7 +77,7 @@ function SearchTicket(props) {
     apiHandler.getCXDetractorTicket(
       props.authToken,
       params,
-      (response) => {
+      response => {
         showLoader && setShowLoader(false);
         if (
           response.body &&
@@ -91,7 +91,7 @@ function SearchTicket(props) {
           pageCount.current = response.body.pageOffset;
         }
       },
-      (error) => {
+      error => {
         showLoader && setShowLoader(false);
       },
     );
@@ -102,7 +102,7 @@ function SearchTicket(props) {
       <View style={{flex: 1, backgroundColor: Colors.white}}>
         <FlatList
           data={responseData}
-          keyExtractor={(item) => item.ticketID + ''}
+          keyExtractor={item => item.ticketID + ''}
           renderItem={renderRow}
           onEndReachedThreshold={0.01}
           refreshing={false}
@@ -137,7 +137,7 @@ function SearchTicket(props) {
     return (
       <TextInput
         style={styles.textInputContainer}
-        onChangeText={(text) => {
+        onChangeText={text => {
           onChangeText(text);
         }}
         onSubmitEditing={() => {
@@ -157,13 +157,13 @@ function SearchTicket(props) {
   let renderHeaderBackLeft = () => {
     return (
       <View style={styles.leftHeaderButton}>
-        <TouchableOpacity
+        <Pressable
           hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
           onPress={() => {
             props.navigation.goBack();
           }}>
           <Icon name="arrow-left" size={Sizes.icons} color={Colors.white} />
-        </TouchableOpacity>
+        </Pressable>
       </View>
     );
   };
@@ -187,7 +187,7 @@ function SearchTicket(props) {
   );
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     isLoading: state.global.isLoading,
     authToken: state.global.authToken,
@@ -196,7 +196,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchTicket);
 

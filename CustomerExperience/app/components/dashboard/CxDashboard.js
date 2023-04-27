@@ -8,7 +8,7 @@ import {
   BackHandler,
   Alert,
   SafeAreaView,
-  TouchableOpacity,
+  Pressable,
   Image,
 } from 'react-native';
 import {showLoading} from '../../redux/actions/index';
@@ -305,7 +305,7 @@ const CxDashboard = props => {
   };
   let renderDetailsInformation = (title, tag, onPressTab) => {
     return (
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
           console.log('tap tap');
           props.navigation.navigate('Responses');
@@ -313,7 +313,7 @@ const CxDashboard = props => {
         <Text style={{textAlign: 'left', color: Colors.accentLight}}>
           {title}
         </Text>
-      </TouchableOpacity>
+      </Pressable>
       //   <View style={dashboardStyles.responseView}>
       //     <Text style={dashboardStyles.responseText}>{count}</Text>
       //     <View style={dashboardStyles.separator} />

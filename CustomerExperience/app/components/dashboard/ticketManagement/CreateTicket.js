@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   View,
   Image,
   Modal,
@@ -536,19 +536,19 @@ export default function CreateTicket(props) {
 
   let renderCancelButton = () => {
     return (
-      <TouchableOpacity
+      <Pressable
         style={styles.cancelButton}
         onPress={() => {
           setShowCalendar(false);
         }}>
         <Text style={styles.buttonText}>Cancel</Text>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
   let renderOkButton = () => {
     return (
-      <TouchableOpacity
+      <Pressable
         style={styles.cancelButton}
         onPress={() => {
           console.log('DATE_', JSON.stringify(selectedDate));
@@ -569,7 +569,7 @@ export default function CreateTicket(props) {
           setShowCalendar(false);
         }}>
         <Text style={styles.buttonText}>Ok</Text>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
@@ -647,15 +647,15 @@ export default function CreateTicket(props) {
             <Text style={styles.headerText}>{headerTitle}</Text>
             <CloseButton color={Colors.filterIconColor} />
           </View>
-          <TouchableOpacity onPress={handleSegmentSelection}>
+          <Pressable onPress={handleSegmentSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               {/* {getIonIcon('star')} */}
               {getSegmentIcon()}
               {/* <TextInput placeholder="Segment" style={styles.titleText} /> */}
               <Text style={styles.titleText}>{segment}</Text>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleDateSelection}>
+          </Pressable>
+          <Pressable onPress={handleDateSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               {getMaterialIcon('date-range')}
               {/* <TextInput placeholder="Date" style={styles.titleText} /> */}
@@ -666,7 +666,7 @@ export default function CreateTicket(props) {
                 )}
               </Text>
             </View>
-          </TouchableOpacity>
+          </Pressable>
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getIonIcon('person')}
             <TextInput
@@ -722,7 +722,7 @@ export default function CreateTicket(props) {
             />
           </View>
 
-          <TouchableOpacity onPress={handlePrioritySelection}>
+          <Pressable onPress={handlePrioritySelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               {getIonIcon(
                 'flag',
@@ -733,9 +733,9 @@ export default function CreateTicket(props) {
               } Priority`}</Text>
               {/* <TextInput placeholder="Priority" style={styles.titleText} /> */}
             </View>
-          </TouchableOpacity>
+          </Pressable>
 
-          <TouchableOpacity onPress={handleStatusSelection}>
+          <Pressable onPress={handleStatusSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               {/* {getIonIcon('search')} */}
               {/* <TextInput placeholder="Status" style={styles.titleText} /> */}
@@ -747,19 +747,19 @@ export default function CreateTicket(props) {
                 getStatusById(ticketState.status) ?? 'New'
               } Status`}</Text>
             </View>
-          </TouchableOpacity>
+          </Pressable>
           {/* <View style={[styles.rowContainer, styles.rowItem]}> */}
           {/* {getIonIcon('eye')} */}
           {/* {getIonIcon('eye-off')} */}
           {/* <TextInput placeholder="Watching" style={styles.titleText} /> */}
           {/* </View> */}
-          <TouchableOpacity onPress={handleOwnerSelection}>
+          <Pressable onPress={handleOwnerSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               {getMateriaCommunityIcon('shield-account')}
               {/* <TextInput placeholder="Ticket Owner" style={styles.titleText} /> */}
               <Text style={styles.titleText}>{`${ticketOwner ?? ''} `}</Text>
             </View>
-          </TouchableOpacity>
+          </Pressable>
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getMaterialIcon('chat-bubble')}
             <TextInput

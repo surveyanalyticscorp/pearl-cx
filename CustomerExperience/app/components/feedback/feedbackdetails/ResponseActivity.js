@@ -6,7 +6,6 @@ import {
   View,
   FlatList,
   ScrollView,
-  // TouchableOpacity,
 } from 'react-native';
 import {Colors, statusColors} from '../../../styles/color.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
@@ -21,10 +20,10 @@ import {Avatar, StatusIcon} from '../../../routes/CommonScreen';
 import moment from 'moment';
 import {DMY_AT_TIME_FORMAT} from '../../../Utils/AppConstants';
 
-const ResponseActivity = (props) => {
+const ResponseActivity = props => {
   let activityData = props.route.params.data;
   const {ticketStatusHistory, ticketLastComment} = useSelector(
-    (state) => state.response,
+    state => state.response,
   );
 
   // console.log(`feedback: ${activityData}`);

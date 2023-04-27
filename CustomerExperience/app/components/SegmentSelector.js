@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, StyleSheet, Platform} from 'react-native';
+import {Text, View, Pressable, StyleSheet, Platform} from 'react-native';
 import {Colors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
@@ -14,17 +14,17 @@ import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../Utils/MultilinguaUtils';
 import {MarginConstants} from '../styles/margin.constants';
 
-const SegmentSelector = (props) => {
+const SegmentSelector = props => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const authToken = useSelector((state) => state.global.authToken);
+  const authToken = useSelector(state => state.global.authToken);
   // const segmentSelectorOpenState = useSelector(
   //   (state) => state.dashboard.isSegmentSelectorOpen,
   // );
   const segmentList = useSelector(
-    (state) => state.dashboard.segmentDetails.segments,
+    state => state.dashboard.segmentDetails.segments,
   );
-  const currentSegment = useSelector((state) => state.dashboard.currentSegment);
+  const currentSegment = useSelector(state => state.dashboard.currentSegment);
 
   useEffect(() => {
     // console.log('SELECTED SEGMENT__', JSON.stringify(currentSegment));
@@ -50,7 +50,7 @@ const SegmentSelector = (props) => {
     navigation.dispatch(pushAction);
   };
 
-  const setSegmentSelection = (segment_) => {
+  const setSegmentSelection = segment_ => {
     dispatch(setSegment(segment_));
   };
 
@@ -67,7 +67,7 @@ const SegmentSelector = (props) => {
 
   return segmentList && segmentList.length > 1 ? (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPressHandle}>
+      <Pressable onPress={onPressHandle}>
         <View style={styles.innerContainer}>
           <SegmentText segmentName={currentSegment.currentSegment ?? ''} />
           <SimpleLineIcon
@@ -76,7 +76,7 @@ const SegmentSelector = (props) => {
             color={Colors.darkGrey}
           />
         </View>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   ) : (
     <SegmentText segmentName={currentSegment.currentSegment} />

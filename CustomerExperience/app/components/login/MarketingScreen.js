@@ -5,7 +5,7 @@ import {
   Platform,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Pressable,
   View,
 } from 'react-native';
 import {Colors, textColors} from '../../styles/color.constants';
@@ -18,7 +18,7 @@ import {FontFamily} from '../../styles/font.constants';
 
 const stringConst = require('../../config/translations/en');
 
-const MarketingScreen = (props) => {
+const MarketingScreen = props => {
   let content = getMarketingScreenContent();
 
   let introPages = [];
@@ -49,11 +49,11 @@ const MarketingScreen = (props) => {
           activeDotColor={Colors.accent}>
           {introPages}
         </Swiper>
-        <TouchableOpacity style={styles.getStartedButton} onPress={onPress}>
+        <Pressable style={styles.getStartedButton} onPress={onPress}>
           <Text style={styles.buttonTextColor}>
             {stringConst.onBoarding.getStarted}
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </SafeAreaView>
     </ImageBackground>
   );

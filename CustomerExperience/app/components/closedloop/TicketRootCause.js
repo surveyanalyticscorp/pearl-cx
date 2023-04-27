@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Platform,
   FlatList,
-  TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -20,9 +20,9 @@ export default function TicketRootCause(props) {
   const ROOT_CAUSES = 'Root Causes';
   const ACTIONS = 'Actions';
   const dispatch = useDispatch();
-  const {authToken} = useSelector((state) => state.global);
+  const {authToken} = useSelector(state => state.global);
   const {ticket, rootCauseList, rootCauseActionList} = useSelector(
-    (state) => state.dashboard,
+    state => state.dashboard,
   );
 
   const hasId = (id, arr) => {
@@ -60,7 +60,7 @@ export default function TicketRootCause(props) {
   console.log('TICKET', JSON.stringify(ticket));
 
   const updateRootCauses = (item, index) => {
-    setRootCauses((prevState) => {
+    setRootCauses(prevState => {
       const temp = [...prevState];
       temp[index].isChecked = !prevState[index].isChecked;
       return temp;
@@ -68,7 +68,7 @@ export default function TicketRootCause(props) {
   };
 
   const updateRootActions = (item, index) => {
-    setRootActions((prevState) => {
+    setRootActions(prevState => {
       const temp = [...prevState];
       temp[index].isChecked = !prevState[index].isChecked;
       return temp;
@@ -143,14 +143,14 @@ export default function TicketRootCause(props) {
       </View>
 
       <View style={styles.buttonView}>
-        <TouchableOpacity onPress={resetSelections} style={styles.button}>
+        <Pressable onPress={resetSelections} style={styles.button}>
           <Text style={[styles.buttonText, styles.resetButton]}> Reset </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </Pressable>
+        <Pressable
           onPress={updateRootCauseAndAction}
           style={[styles.button, {backgroundColor: Colors.accentLight}]}>
           <Text style={[styles.buttonText, styles.updatetButton]}>Update</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );

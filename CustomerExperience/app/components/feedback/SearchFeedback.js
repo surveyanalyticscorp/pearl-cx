@@ -1,6 +1,6 @@
 import {
   StyleSheet,
-  TouchableOpacity,
+  Pressable,
   View,
   TextInput,
   Text,
@@ -26,8 +26,8 @@ import ArrayUtils from '../../Utils/ArrayUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
 
 export default function SearchFeedback(props) {
-  const authToken = useSelector((state) => state.global.authToken);
-  const range = useSelector((state) => state.global.range);
+  const authToken = useSelector(state => state.global.authToken);
+  const range = useSelector(state => state.global.range);
 
   let [searchText, onChangeText] = useState('');
   let [responseData, setResponseData] = useState([]);
@@ -61,7 +61,7 @@ export default function SearchFeedback(props) {
     apiHandler.getFeedbackResponseList(
       authToken,
       data,
-      (response) => {
+      response => {
         showLoader && setShowLoader(false);
         if (
           response.body &&
@@ -76,7 +76,7 @@ export default function SearchFeedback(props) {
           setResponseData(data);
         }
       },
-      (error) => {
+      error => {
         showLoader && setShowLoader(false);
         showErrorFlashMessage(error.message);
       },
@@ -97,7 +97,7 @@ export default function SearchFeedback(props) {
     );
   };
 
-  const _onPressRow = (data) => {
+  const _onPressRow = data => {
     const pushAction = StackActions.push(
       translate('responses.feedback_details'),
       {
@@ -126,7 +126,7 @@ export default function SearchFeedback(props) {
       <View style={[styles.container, {backgroundColor: Colors.white}]}>
         <FlatList
           data={responseData}
-          keyExtractor={(item) => item.responseSetID + ''}
+          keyExtractor={item => item.responseSetID + ''}
           renderItem={renderRow}
           onEndReachedThreshold={0.01}
           refreshing={false}
@@ -152,7 +152,7 @@ export default function SearchFeedback(props) {
     return (
       <TextInput
         style={styles.textInputContainer}
-        onChangeText={(text) => {
+        onChangeText={text => {
           onChangeText(text);
         }}
         onSubmitEditing={() => {
@@ -172,13 +172,13 @@ export default function SearchFeedback(props) {
   let renderHeaderBackLeft = () => {
     return (
       <View style={styles.leftHeaderButton}>
-        <TouchableOpacity
+        <Pressable
           hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
           onPress={() => {
             props.navigation.goBack();
           }}>
           <Icon name="arrow-left" size={Sizes.icons} color={Colors.white} />
-        </TouchableOpacity>
+        </Pressable>
       </View>
     );
   };

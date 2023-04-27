@@ -9,7 +9,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   TouchableNativeFeedback,
-  TouchableOpacity,
+  Pressable,
   TouchableHighlight,
   Modal,
   ActivityIndicator,
@@ -24,7 +24,7 @@ import {Colors} from '../../styles/color.constants';
 
 const TOUCHABLE_ELEMENTS = [
   'TouchableHighlight',
-  'TouchableOpacity',
+  'Pressable',
   'TouchableWithoutFeedback',
   'TouchableNativeFeedback',
 ];
@@ -213,8 +213,8 @@ export default class ModalDropdown extends Component {
     const alignContentForText = isRTL ? 'flex-end' : 'flex-start';
     const alignContentForIcon = isRTL ? 'flex-start' : 'flex-end';
     return (
-      <TouchableOpacity
-        ref={(button) => (this._button = button)}
+      <Pressable
+        ref={button => (this._button = button)}
         disabled={disabled}
         accessible={accessible}
         onPress={this._onButtonPress}
@@ -259,7 +259,7 @@ export default class ModalDropdown extends Component {
             </View>
           </View>
         )}
-      </TouchableOpacity>
+      </Pressable>
     );
   }
 
@@ -270,7 +270,7 @@ export default class ModalDropdown extends Component {
     }
   };
 
-  onLayout = (event) => {
+  onLayout = event => {
     dropDownWidth = event.nativeEvent.layout.width;
   };
 
@@ -390,12 +390,12 @@ export default class ModalDropdown extends Component {
       options,
     } = this.props;
     let index = this.props.options.findIndex(
-      (item) => item === this.props.defaultValue,
+      item => item === this.props.defaultValue,
     );
 
     return (
       <FlatList
-        ref={(ref) => {
+        ref={ref => {
           this.flatListRef = ref;
         }}
         data={options}
@@ -446,7 +446,7 @@ export default class ModalDropdown extends Component {
       accessible,
       onPress: () => this._onRowPress(item, index, separators),
     };
-    if (TOUCHABLE_ELEMENTS.find((name) => name === row.type.displayName)) {
+    if (TOUCHABLE_ELEMENTS.find(name => name === row.type.displayName)) {
       const props = {...row.props};
       props.key = preservedProps.key;
       props.onPress = preservedProps.onPress;
@@ -455,8 +455,8 @@ export default class ModalDropdown extends Component {
         case 'TouchableHighlight': {
           return <TouchableHighlight {...props}>{children}</TouchableHighlight>;
         }
-        case 'TouchableOpacity': {
-          return <TouchableOpacity {...props}>{children}</TouchableOpacity>;
+        case 'Pressable': {
+          return <Pressable {...props}>{children}</Pressable>;
         }
         case 'TouchableWithoutFeedback': {
           return (

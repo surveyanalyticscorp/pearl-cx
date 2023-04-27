@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, FlatList, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, FlatList, Text, StyleSheet, Pressable} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
@@ -28,7 +28,7 @@ const ShowFilterTag = ({handleFilterTag, filterData}) => {
     for (let tag of taglist) {
       if (filterData.hasOwnProperty(tag) && filterData[tag].length > 0) {
         console.log('TAG_ITEM', tag, filterData[tag]);
-        setList((state) => [...state, tag]);
+        setList(state => [...state, tag]);
       }
       //   console.log('TAG', tag);
     }
@@ -45,7 +45,7 @@ const ShowFilterTag = ({handleFilterTag, filterData}) => {
     populateList();
   }, [filterData]);
 
-  const getTagName = (tag) => {
+  const getTagName = tag => {
     // switch (tag) {
     //   case 'assignToId':
     //     return 'Assignee';
@@ -63,7 +63,7 @@ const ShowFilterTag = ({handleFilterTag, filterData}) => {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) => {
             return (
-              <TouchableOpacity
+              <Pressable
                 style={styles.cellStyle}
                 onPress={() => handleFilterTag(item)}>
                 <Text style={styles.labelStyle}>{getTagName(item)}</Text>
@@ -73,7 +73,7 @@ const ShowFilterTag = ({handleFilterTag, filterData}) => {
                   name={'close'}
                   color={Colors.filterIconColor}
                 />
-              </TouchableOpacity>
+              </Pressable>
             );
           }}
         />

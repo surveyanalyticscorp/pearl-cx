@@ -50,9 +50,10 @@ untyped-type-import=warn
 nonstrict-import=warn
 deprecated-type=warn
 unsafe-getters-setters=warn
-
-unnecessary-invariant=warn
-signature-verification-failure=warn
+; unnecessary-invariant=warn
+; signature-verification-failure=warn
+esproposal.optional_chaining=enable
+esproposal.nullish_coalescing=enable
 
 
 [strict]

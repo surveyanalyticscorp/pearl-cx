@@ -3,7 +3,7 @@ import {
   // Dimensions,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Pressable,
   View,
 } from 'react-native';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
@@ -271,7 +271,7 @@ const AppRouter = props => {
           styles.rightHeaderButton,
           {marginHorizontal: MarginConstants.tab2},
         ]}>
-        <TouchableOpacity
+        <Pressable
           hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
           onPress={() => {
             //alert('open notification screen')
@@ -282,7 +282,7 @@ const AppRouter = props => {
             size={1.1 * Sizes.icons}
             color={Colors.white}
           />
-        </TouchableOpacity>
+        </Pressable>
         {/** show unread/badge icon when notification read/unread status comes*/}
         {notificationCount > 0 ? renderNotificationBadge() : <View />}
       </View>
@@ -317,7 +317,7 @@ const AppRouter = props => {
           styles.rightHeaderButton,
           {marginHorizontal: 1.5 * MarginConstants.tab1},
         ]}>
-        <TouchableOpacity
+        <Pressable
           onPress={() => {
             props.route.params.clearAllNotifications();
           }}>
@@ -325,7 +325,7 @@ const AppRouter = props => {
             {' '}
             {translate('dashboard.clear_all')}{' '}
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     );
   };

@@ -30,7 +30,6 @@
     "@react-navigation/stack": "^5.14.5",
     "@redux-saga/testing-utils": "^1.1.3",
     "from": "^0.1.7",
-    "i18n-js": "latest",
     "import": "0.0.6",
     "lodash.memoize": "^4.1.2",
     "moment": "^2.29.1",

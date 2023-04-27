@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   TouchableWithoutFeedback,
-  TouchableOpacity,
+  Pressable,
   Text,
   Image,
 } from 'react-native';
@@ -258,14 +258,14 @@ export default function FeedbackCell(props) {
   const RenderPhoneNumber = () => {
     let phoneNumber = props.item.phone ?? '';
     return phoneNumber.length ? (
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
           console.log('Phone Number');
         }}
         style={styles.contactBox}>
         <IonIcon name="call" size={12} color={Colors.filterIconColor} />
         <Text style={styles.contactText}>{phoneNumber}</Text>
-      </TouchableOpacity>
+      </Pressable>
     ) : (
       <View />
     );
@@ -273,14 +273,14 @@ export default function FeedbackCell(props) {
 
   const RenderEmailAddress = () => {
     return email.length ? (
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
           console.log('Email Address');
         }}
         style={styles.contactBox}>
         <IonIcon name="mail" size={14} color={Colors.filterIconColor} />
         <Text style={styles.contactText}>{email}</Text>
-      </TouchableOpacity>
+      </Pressable>
     ) : (
       <View />
     );

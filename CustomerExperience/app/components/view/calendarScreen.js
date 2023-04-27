@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Modal, Platform, TouchableOpacity, View} from 'react-native';
+import {Modal, Platform, Pressable, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MonthYearSelector from '../../widgets/MonthYearSelector';
 import moment from 'moment';
@@ -8,11 +8,13 @@ import {Colors} from '../../styles/color.constants';
 import SafeAreaView from 'react-native-safe-area-view';
 
 const CalendarScreen = props => {
-
-  const [selectedYear, setSelectedYear] = useState({month: props.selectedDate.month, year: props.selectedDate.year});
+  const [selectedYear, setSelectedYear] = useState({
+    month: props.selectedDate.month,
+    year: props.selectedDate.year,
+  });
   const renderCloseButton = () => {
     return (
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
           props.closeCalendar && props.closeCalendar(false);
         }}
@@ -37,7 +39,7 @@ const CalendarScreen = props => {
             />
           </View>
         </SafeAreaView>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 

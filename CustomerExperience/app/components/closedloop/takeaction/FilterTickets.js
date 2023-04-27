@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {
   View,
-  TouchableOpacity,
+  Pressable,
   Text,
   StyleSheet,
   FlatList,
@@ -51,7 +51,7 @@ const FilterTicket = ({data, onPressHandler}) => {
   };
 
   const selectedStatus = (item, index) => {
-    setStatus((prevState) => {
+    setStatus(prevState => {
       const temp = [...prevState];
       temp[index].isChecked = !prevState[index].isChecked;
       return temp;
@@ -80,7 +80,7 @@ const FilterTicket = ({data, onPressHandler}) => {
   };
 
   const selectedPriority = (item, index) => {
-    setPriority((prevState) => {
+    setPriority(prevState => {
       const temp = [...prevState];
       temp[index].isChecked = !prevState[index].isChecked;
       return temp;
@@ -109,7 +109,7 @@ const FilterTicket = ({data, onPressHandler}) => {
   };
 
   const selectType = (item, index) => {
-    setType((prevState) =>
+    setType(prevState =>
       prevState.map((item, index_, arr) => {
         item.isChecked = index === index_;
         return item;
@@ -235,20 +235,20 @@ const FilterTicket = ({data, onPressHandler}) => {
     );
   };
 
-  const RenderButton = (props) => {
+  const RenderButton = props => {
     return (
-      <TouchableOpacity onPress={props.onPress}>
+      <Pressable onPress={props.onPress}>
         <Text style={props.textStyle ?? styles.clearButtonText}>
           {props.text}
         </Text>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
   // const assigneeCell = ({item, index}) => {
   //   return (
   //     <View style={[styles.assigneeCell, styles.rowContainer]}>
-  //       <TouchableOpacity
+  //       <Pressable
   //         style={styles.rowContainer}
   //         onPress={() => {
   //           // setSelectedManager((state) =>
@@ -261,7 +261,7 @@ const FilterTicket = ({data, onPressHandler}) => {
   //         }}>
   //         <Text style={styles.departmentNameText}>{item.ownerName}</Text>
   //         <IonIcons name="close" size={20} color={Colors.filterIconColor} />
-  //       </TouchableOpacity>
+  //       </Pressable>
   //     </View>
   //   );
   // };

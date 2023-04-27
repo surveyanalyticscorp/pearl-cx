@@ -5,7 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  Pressable,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -36,17 +36,17 @@ export default function RangeCalendar(props) {
   const renderCloseButton = () => {
     return (
       <View style={styles.closeIconContainer}>
-        <TouchableOpacity
+        <Pressable
           onPress={() => {
             props.closeCalendar && props.closeCalendar(false);
           }}>
           <Icon name={'close'} color={Colors.white} size={25} />
-        </TouchableOpacity>
+        </Pressable>
       </View>
     );
   };
 
-  let getFilterText = (type) => {
+  let getFilterText = type => {
     switch (type) {
       case 1:
         return 'Last 30 days';
@@ -59,7 +59,7 @@ export default function RangeCalendar(props) {
     }
   };
 
-  let renderPredefinedDateSelection = (type) => {
+  let renderPredefinedDateSelection = type => {
     let text = getFilterText(type);
     return (
       <View style={styles.preDefinedDateContainer}>
@@ -119,9 +119,9 @@ export default function RangeCalendar(props) {
   let renderPickerFooter = () => {
     return (
       <View style={styles.calendarFooter}>
-        <TouchableOpacity style={styles.okButton} onPress={saveDate}>
+        <Pressable style={styles.okButton} onPress={saveDate}>
           <Text style={[styles.text, {color: Colors.white}]}>OK</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     );
   };

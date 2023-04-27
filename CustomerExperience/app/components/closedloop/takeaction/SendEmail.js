@@ -17,7 +17,7 @@ import Animated from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACTION_EMAIL, ASYNC_USER_CREDENTIALS} from '../../../api/Constant';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Pressable} from 'react-native-gesture-handler';
 import BottomSheet from 'reanimated-bottom-sheet';
 import SelectEmailTemplate from './SelectEmailTemplate';
 import {useDispatch, useSelector} from 'react-redux';
@@ -125,35 +125,33 @@ export default function SendEmail(props) {
   };
   const getSendIcon = () => {
     return (
-      <TouchableOpacity
-        onPress={() => callSendEmailApi()}
-        style={styles.optionIcon}>
+      <Pressable onPress={() => callSendEmailApi()} style={styles.optionIcon}>
         <RenderIonIcon
           name={'send'}
           color={Colors.accentLight}
           style={{transform: [{rotateZ: '-45deg'}]}}
         />
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
   const getAttachmentIcon = () => {
     return (
-      <TouchableOpacity style={styles.optionIcon}>
+      <Pressable style={styles.optionIcon}>
         <RenderIonIcon name={'attach'} />
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
   const getTemplateIcon = () => {
     return (
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
           bs.current.snapTo(0);
         }}
         style={styles.optionIcon}>
         <RenderIonIcon name={'ios-reader'} />
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 

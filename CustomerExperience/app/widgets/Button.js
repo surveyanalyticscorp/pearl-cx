@@ -1,14 +1,7 @@
 import React from 'react';
 
 import {buttonColors, textColors} from '../styles/color.constants';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Pressable,
-  Dimensions,
-} from 'react-native';
+import {Platform, StyleSheet, Text, Pressable, Dimensions} from 'react-native';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';

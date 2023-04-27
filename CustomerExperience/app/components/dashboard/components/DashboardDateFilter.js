@@ -7,7 +7,7 @@ import {
   Text,
   ScrollView,
   TouchableWithoutFeedback,
-  TouchableOpacity,
+  Pressable,
   Modal,
 } from 'react-native';
 import {FontFamily} from '../../../styles/font.constants';
@@ -197,19 +197,19 @@ export default function DashboardDateFilter(props) {
 
   let renderCancelButton = () => {
     return (
-      <TouchableOpacity
+      <Pressable
         style={styles.cancelButton}
         onPress={() => {
           setShowCalendar(false);
         }}>
         <Text style={styles.buttonText}>Cancel</Text>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
   let renderOkButton = () => {
     return (
-      <TouchableOpacity
+      <Pressable
         style={styles.cancelButton}
         onPress={() => {
           //save date
@@ -229,7 +229,7 @@ export default function DashboardDateFilter(props) {
           setShowCalendar(false);
         }}>
         <Text style={styles.buttonText}>Ok</Text>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
