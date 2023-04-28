@@ -12,7 +12,8 @@
     "test:coverage": "jest --coverage",
     "postinstall": "patch-package",
     "check-dependencies": "rnx-align-deps",
-    "fix-dependencies": "rnx-align-deps --write"
+    "fix-dependencies": "rnx-align-deps --write",
+    "ios-pod-reinstall": "cd ios && pod deintegrate && pod cache clean --all && pod install && cd .."
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.3",
