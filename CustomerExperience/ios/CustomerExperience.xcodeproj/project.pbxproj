@@ -33,6 +33,7 @@
 		485BE01DD51E487BBBC4BEA8 /* FiraSans-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80B5364D13CD404E869FFC7F /* FiraSans-HeavyItalic.otf */; };
 		500EBF27D93B4815AE02E4A3 /* FiraSans-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 143FBBAE30FB40689F26E31C /* FiraSans-Medium.otf */; };
 		5390CFB4C5014BC9AC3B315F /* FiraSans-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = DF1A2203B584472B85DF2935 /* FiraSans-Book.otf */; };
+		55BF02B729FBC8000021119F /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BF02B629FBC8000021119F /* File.swift */; };
 		61FE8B12CDDB49F589FAAB8F /* FiraSans-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = C7590CB588724B8AAE7DE099 /* FiraSans-Italic.otf */; };
 		6D92EF011B3A4C72AE04E4A7 /* FiraSans-Ultra.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5E9385DB3C954391B9F39641 /* FiraSans-Ultra.otf */; };
 		6DB92C5B0742478588F31757 /* FiraSans-BookItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 82C6938D84D941A9B7B8FBF8 /* FiraSans-BookItalic.otf */; };
@@ -131,6 +132,8 @@
 		4FE20CD883F3428DADC5DD68 /* FiraSans-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-LightItalic.otf"; path = "../app/config/fonts/FiraSans-LightItalic.otf"; sourceTree = "<group>"; };
 		52BC50D56EBF4C2D9EC22736 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		53C56455A8E24EB98BE56277 /* FiraSans-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-Thin.otf"; path = "../app/config/fonts/FiraSans-Thin.otf"; sourceTree = "<group>"; };
+		55BF02B529FBC8000021119F /* CustomerExperience-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CustomerExperience-Bridging-Header.h"; sourceTree = "<group>"; };
+		55BF02B629FBC8000021119F /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = File.swift; path = CustomerExperience/File.swift; sourceTree = "<group>"; };
 		5AE3CD5D759547B481BF530D /* drawerBanner.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = drawerBanner.png; path = ../app/config/images/drawerBanner.png; sourceTree = "<group>"; };
 		5B6DCE07CE0849E3A2B4EB44 /* FiraSans-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-BoldItalic.otf"; path = "../app/config/fonts/FiraSans-BoldItalic.otf"; sourceTree = "<group>"; };
 		5E9385DB3C954391B9F39641 /* FiraSans-Ultra.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-Ultra.otf"; path = "../app/config/fonts/FiraSans-Ultra.otf"; sourceTree = "<group>"; };
@@ -232,6 +235,8 @@
 				184A468D24BC60670048FF84 /* fonts */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				21E62489254A8290005F1200 /* GoogleService-Info.plist */,
+				55BF02B629FBC8000021119F /* File.swift */,
+				55BF02B529FBC8000021119F /* CustomerExperience-Bridging-Header.h */,
 			);
 			name = CustomerExperience;
 			sourceTree = "<group>";
@@ -481,7 +486,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1430;
 						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -746,6 +751,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				18724D7825FF511E009464D7 /* AppDelegate.m in Sources */,
+				55BF02B729FBC8000021119F /* File.swift in Sources */,
 				18724D7525FF511E009464D7 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -784,6 +790,7 @@
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -810,6 +817,7 @@
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = CustomerExperienceTests/Info.plist;
@@ -864,6 +872,7 @@
 				PRODUCT_NAME = CX;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = QP_CX_Productions;
+				SWIFT_OBJC_BRIDGING_HEADER = "CustomerExperience-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -901,6 +910,7 @@
 				PRODUCT_NAME = CX;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = QP_CX_Productions;
+				SWIFT_OBJC_BRIDGING_HEADER = "CustomerExperience-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
