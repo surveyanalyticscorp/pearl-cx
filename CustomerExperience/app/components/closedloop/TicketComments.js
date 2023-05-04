@@ -232,14 +232,16 @@ export default function TicketComments(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        <ShowFlatList
-          data={ticketComments}
-          onRefresh_={onRefresh}
-          refreshing_={refreshing}
-        />
-      </View>
-      <CommentBox parentId={0} />
+      <KeyboardAvoidingView>
+        <View style={styles.container}>
+          <ShowFlatList
+            data={ticketComments}
+            onRefresh_={onRefresh}
+            refreshing_={refreshing}
+          />
+        </View>
+        <CommentBox parentId={0} />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

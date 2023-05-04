@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   View,
+  Pressable,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -17,7 +18,6 @@ import Animated from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACTION_EMAIL, ASYNC_USER_CREDENTIALS} from '../../../api/Constant';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
-import {Pressable} from 'react-native-gesture-handler';
 import BottomSheet from 'reanimated-bottom-sheet';
 import SelectEmailTemplate from './SelectEmailTemplate';
 import {useDispatch, useSelector} from 'react-redux';
@@ -160,7 +160,7 @@ export default function SendEmail(props) {
       <View style={styles.renderOptionView}>
         {getTemplateIcon()}
         {/* {getAttachmentIcon()} */}
-        {getSendIcon()}
+        {/* {getSendIcon()} */}
       </View>
     );
   };
