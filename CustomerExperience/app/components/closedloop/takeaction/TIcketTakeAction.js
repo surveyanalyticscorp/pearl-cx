@@ -4,17 +4,14 @@ import {
   TouchableWithoutFeedback,
   Text,
   StyleSheet,
-  // Dimensions,
   FlatList,
 } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-// import {CloseButton} from '../../../routes/CommonScreen';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-// import {FlatList, ScrollView} from 'react-native-gesture-handler';
-const TicketTakeAction = (props) => {
+const TicketTakeAction = props => {
   const [data, setData] = useState(props.data);
 
   const renderRow = ({item}) => {
@@ -36,7 +33,7 @@ const TicketTakeAction = (props) => {
     );
   };
 
-  const handleOnPress = (item) => {
+  const handleOnPress = item => {
     // console.log(item.title);
   };
 

@@ -34,7 +34,6 @@ const EmailToFrom = ({title, value}) => {
     <View>
       <View style={styles.rowContainerCenterAlign}>
         <Text style={styles.titleText}>{title}</Text>
-
         <Text style={styles.textInputEmail}>{value}</Text>
       </View>
       <View style={styles.devider} />

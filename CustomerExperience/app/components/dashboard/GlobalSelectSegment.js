@@ -14,8 +14,6 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {PaddingConstants} from '../../styles/padding.constants';
-// import {getSegmentIndex} from '../../Utils/TicketUtils';
-// import {FlatList} from 'react-native-gesture-handler';
 
 const GlobalSelectSegment = ({
   currentSegmentId,
@@ -57,11 +55,11 @@ const GlobalSelectSegment = ({
       <TextInput
         style={styles.searchInput}
         placeholder="Search..."
-        onChangeText={(text) => {
+        onChangeText={text => {
           console.log(text);
           if (text) {
-            setFilteredList((state) =>
-              state.filter((item) =>
+            setFilteredList(state =>
+              state.filter(item =>
                 item.segmentName.toLowerCase().includes(text.toLowerCase()),
               ),
             );

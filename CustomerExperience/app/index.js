@@ -1,4 +1,3 @@
-// import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import React, {Component} from 'react';
 import {store} from './redux/store/store';
 import {Provider} from 'react-redux';
