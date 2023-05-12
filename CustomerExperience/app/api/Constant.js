@@ -7,15 +7,22 @@ export const BASE_URL = 'baseUrl';
 export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
 export const ACTION_EMAIL = 'noreply@InsightsHub.com';
-
-export const IS_DEV_MODE = true;
+// set true for DEV, false for LIVE
+export const IS_DEV_MODE = false;
 
 // export const BASE_URL = 'https://api.questionpro.com/';
-export const DEV_BASE_URL = 'https://qa.questionpro.com';
+
+// uncomment below lines to connect to dev servers
+// export const DEV_BASE_URL = 'https://qa.questionpro.com';
 // export const DEV_BASE_URL = 'https://cxlabs.questionpro.com';
 
-export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
-// export const CLF_BASE_URL = 'https://clf-backend.questionpro.com/api/';
+// for DEV
+// export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';
+
+// for LIVE
+export const CLF_BASE_URL = `https://${
+  IS_DEV_MODE ? 'clfqa' : 'clf'
+}-backend.questionpro.com/api/`;
 
 export const PANEL_AUTH =
   'https://api.questionpro.com/a/nativehtml/panel.auth.PanelRequestHandler';
@@ -66,7 +73,7 @@ export const CX_WELCOME_SCREEN_DATA =
 
 // export const FEEDBACK_API_KEY = 'e8caf096-4f19-4b34-a7cd-4bcaa8197c1d';
 export const FEEDBACK_API_KEY_ENDPOINT = '?feedbackApiKey=';
-export const CLF_GET_TICKET_lIST_SYNC = (feedBackId) =>
+export const CLF_GET_TICKET_lIST_SYNC = feedBackId =>
   `${CLF_BASE_URL}tickets/import/feedback/${feedBackId}/mobile`;
 // export const CLF_GET_TICKET_lIST_SYNC_PREFIX = `${CLF_BASE_URL}/tickets/import/feedback/`;
 // export const CLF_GET_TICKET_lIST_SYNC_POSTFIX = `/mobile`;
