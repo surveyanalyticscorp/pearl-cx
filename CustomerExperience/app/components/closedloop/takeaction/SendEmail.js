@@ -159,7 +159,7 @@ export default function SendEmail(props) {
       <View style={styles.renderOptionView}>
         {getTemplateIcon()}
         {/* {getAttachmentIcon()} */}
-        {/* {getSendIcon()} */}
+        {getSendIcon()}
       </View>
     );
   };
