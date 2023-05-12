@@ -29,7 +29,7 @@
 			<string>Bundle ID</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.questionpro.cx</string>
+				<string>com.questionpro.cxonthego</string>
 			</array>
 		</dict>
 	</array>

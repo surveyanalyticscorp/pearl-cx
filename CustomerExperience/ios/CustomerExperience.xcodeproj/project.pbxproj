@@ -868,7 +868,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.questionpro.cx;
+				PRODUCT_BUNDLE_IDENTIFIER = com.questionpro.cxonthego;
 				PRODUCT_NAME = CX;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = QP_CX_Productions;
@@ -906,7 +906,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.questionpro.cx;
+				PRODUCT_BUNDLE_IDENTIFIER = com.questionpro.cxonthego;
 				PRODUCT_NAME = CX;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = QP_CX_Productions;
