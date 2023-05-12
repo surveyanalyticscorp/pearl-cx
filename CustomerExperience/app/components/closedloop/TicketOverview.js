@@ -210,10 +210,6 @@ const ContactView = ({panelMember}) => {
       ) : (
         <View />
       )}
-      {/* <View style={styles.rowContainer}>
-        {Title('Phone')}
-        {getUnderLineText('+140002031')}
-      </View> */}
     </View>
   );
 };
@@ -235,7 +231,14 @@ const getUnderLineText = (text, type) => {
     // }}
     >
       <View
-        style={[{flex: 2, justifyContent: 'flex-start'}, styles.rowContainer]}>
+        style={[
+          {
+            flex: 2,
+            justifyContent: 'flex-start',
+            flexDirection: 'row',
+            padding: PaddingConstants.tab1,
+          },
+        ]}>
         <Text style={styles.underLineText}>{text}</Text>
       </View>
     </TouchableWithoutFeedback>
@@ -287,13 +290,8 @@ export default function TicketOverview(props) {
   const isLoading = useSelector(state => state.global.isTicketLoading);
   const ticketDetails = useSelector(state => state.dashboard.ticket);
   const hasPanelMember = hasPanelMemberObj(ticketDetails.panelMember);
-  const {
-    emailAddress,
-    firstName,
-    lastName,
-    userID,
-    feedbackApiKey,
-  } = useSelector(state => state.global.userInfo);
+  const {emailAddress, firstName, lastName, userID, feedbackApiKey} =
+    useSelector(state => state.global.userInfo);
   // const [selectedSegment, setSelectedSegment] = useState();
   const [statusIndex, setStatusIndex] = useState(
     getStatusIndexById(ticketDetails.status ?? -1),
@@ -814,7 +812,7 @@ const styles = StyleSheet.create({
   underLineText: {
     fontFamily: FontFamily.regular,
     fontWeight: FontWeight._400,
-    fontSize: TextSizes.primary,
+    fontSize: TextSizes.secondary,
     color: Colors.accentLight,
     textDecorationLine: 'underline',
   },
