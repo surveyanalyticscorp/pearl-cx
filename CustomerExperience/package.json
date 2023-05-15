@@ -13,7 +13,8 @@
     "postinstall": "patch-package",
     "check-dependencies": "rnx-align-deps",
     "fix-dependencies": "rnx-align-deps --write",
-    "ios-pod-reinstall": "cd ios && pod deintegrate && pod cache clean --all && pod install && cd .."
+    "ios-pod-reinstall": "cd ios && pod deintegrate && pod cache clean --all && pod install && cd ..",
+    "gen_android_jsbundle": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.3",

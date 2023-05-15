@@ -40,8 +40,8 @@ export default class WebServiceHandler {
         method: 'GET',
         headers: WebServiceHandler.header(headerParam),
       })
-        .then((response) => response.json())
-        .then((response) => {
+        .then(response => response.json())
+        .then(response => {
           console.log(
             `URL: ${fullUrl}`,
             `Response Data: ${JSON.stringify(response)}`,
@@ -75,8 +75,8 @@ export default class WebServiceHandler {
         headers: WebServiceHandler.header(headerParam),
         body: JSON.stringify(parameter),
       })
-        .then((response) => response.json())
-        .then((response) => {
+        .then(response => response.json())
+        .then(response => {
           console.log(
             `URL: ${fullUrl}`,
             `Response Data: ${JSON.stringify(response)}`,
@@ -109,8 +109,8 @@ export default class WebServiceHandler {
         headers: WebServiceHandler.header(headerParam),
         body: JSON.stringify(parameter),
       })
-        .then((response) => response.json())
-        .then((response) => {
+        .then(response => response.json())
+        .then(response => {
           console.log(
             `URL: ${fullUrl}`,
             `Response Data: ${JSON.stringify(response)}`,
