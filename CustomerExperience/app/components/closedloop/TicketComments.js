@@ -10,6 +10,7 @@ import {
   ScrollView,
   RefreshControl,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../../styles/color.constants';
@@ -121,15 +122,16 @@ export default function TicketComments(props) {
 
     return (
       <FlatList
+        style={{paddingBottom: MarginConstants.tab4 * 2}}
         data={data}
         refreshControl={
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
         }
-        keyboardShouldPersistTaps={'never'}
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => <MemoizedCommentParentItem item={item} />}
         extraData={data}
-        ListFooterComponent={<View style={{margin: MarginConstants.tab4}} />}
+        // ListFooterComponent={<View style={{margin: MarginConstants.tab4}} />}
+        ListFooterComponent={<CommentBox parentId={0} />}
       />
     );
   };
@@ -176,8 +178,6 @@ export default function TicketComments(props) {
     const placeHolder = parentId > 0 ? 'Write a reply' : 'Write a comment';
     const marginForCommentBox = parentId > 0 ? MarginConstants.tab4 : 0;
 
-    console.log('RERENDERED_API_CALL');
-
     const onChangeCommentHandler = text => {
       setCommentText(text);
     };
@@ -202,10 +202,12 @@ export default function TicketComments(props) {
     };
 
     return (
-      <KeyboardAvoidingView
+      <View
         style={[
           styles.commentBoxContainer,
-          {marginStart: marginForCommentBox},
+          {
+            marginStart: marginForCommentBox,
+          },
         ]}>
         <View style={[styles.commentBox, styles.borderStyle]}>
           <MaterialIconView iconName="chat-bubble" />
@@ -226,23 +228,23 @@ export default function TicketComments(props) {
           />
           <SendButton handleOnSubmit={handleOnSubmit} />
         </View>
-      </KeyboardAvoidingView>
+      </View>
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <KeyboardAvoidingView
+        enabled
+        behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 50 : 70}>
         <ShowFlatList
           data={ticketComments}
           onRefresh_={onRefresh}
           refreshing_={refreshing}
         />
-      </View>
-      <KeyboardAvoidingView>
-        <CommentBox parentId={0} />
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 
