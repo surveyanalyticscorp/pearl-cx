@@ -1,5 +1,4 @@
 PODS:
-  - BEMCheckBox (1.4.1)
   - boost (1.76.0)
   - BVLinearGradient (2.6.2):
     - React-Core
@@ -417,9 +416,6 @@ PODS:
     - React
   - RNCAsyncStorage (1.18.1):
     - React-Core
-  - RNCCheckbox (0.5.15):
-    - BEMCheckBox (~> 1.4)
-    - React-Core
   - RNDeviceInfo (5.6.5):
     - React
   - RNFBApp (9.0.0):
@@ -514,7 +510,6 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "ReactNativeART (from `../node_modules/@react-native-community/art`)"
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
-  - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBDynamicLinks (from `../node_modules/@react-native-firebase/dynamic-links`)"
@@ -530,7 +525,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - BEMCheckBox
     - CocoaAsyncSocket
     - Firebase
     - FirebaseCore
@@ -632,8 +626,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/art"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
-  RNCCheckbox:
-    :path: "../node_modules/@react-native-community/checkbox"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
   RNFBApp:
@@ -660,7 +652,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  BEMCheckBox: 5ba6e37ade3d3657b36caecc35c8b75c6c2b1a4e
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
@@ -722,7 +713,6 @@ SPEC CHECKSUMS:
   ReactCommon: 8a7a138ae43c04bb8dd760935589f326ca810484
   ReactNativeART: 78edc68dd4a1e675338cd0cd113319cf3a65f2ab
   RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
-  RNCCheckbox: 43bcc6493611468af0e19f19f029dab3da8561c4
   RNDeviceInfo: c5f8f3a456adcbba405ace475254b08febc4c095
   RNFBApp: 2810471bdc092151f20f16a9f8915b1ad70325b2
   RNFBDynamicLinks: 0a4efd160d293e5087ea41d0898e7693da7db7dc
@@ -737,6 +727,6 @@ SPEC CHECKSUMS:
   Yoga: b316a990bb6d115afa1b436b5626ac7c61717d17
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: cdb43067a7745890295dcd8f3004c6dac21d52af
+PODFILE CHECKSUM: 928223137b938050893924a090c9e32ec592a4f7
 
 COCOAPODS: 1.11.3
