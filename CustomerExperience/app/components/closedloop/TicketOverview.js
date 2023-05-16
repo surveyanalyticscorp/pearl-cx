@@ -158,7 +158,7 @@ const DescriptionView = ({ticket}) => {
       />
       <ShowTitleAndText title={'Created'} subText={createdDate} />
 
-      {ticket.npsScore && (
+      {ticket.npsScore !== null && (
         <View style={styles.rowContainer}>
           <Title value={'NPS'} />
           <NPSScoreView text={ticket.npsScore} />
@@ -690,11 +690,8 @@ export default function TicketOverview(props) {
           <TicketStatusPriorityView ticket={ticketDetails} />
           <DescriptionView ticket={ticketDetails} />
 
-          {/* {hasPanelMember ? ( */}
           <ContactView panelMember={ticketDetails?.panelMember} />
-          {/* ) : (
-            <View />
-          )} */}
+
           <RenderShowAssigneeModal
             showAssigneeModal={showAssigneeModal}
             id={ticketDetails.id}

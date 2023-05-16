@@ -86,7 +86,7 @@ const NPSAndTicketRow = ({nps, ticketId}) => {
     return Colors.detractor2;
   };
 
-  let getNPSScore = (score) => {
+  let GetNPSScore = ({score}) => {
     let textColor = getNPSColor();
     return (
       <Text
@@ -104,16 +104,10 @@ const NPSAndTicketRow = ({nps, ticketId}) => {
 
   return (
     <View style={styles.rowContainer}>
-      <View
-        style={[
-          {
-            flex: 2,
-          },
-
-          styles.rowContainer,
-        ]}>
-        {nps && <NPSIcon />}
-        {nps && getNPSScore(nps)}
+      <View style={[{flex: 2}, styles.rowContainer]}>
+        {nps ? <NPSIcon /> : <View />}
+        {nps ? <GetNPSScore score={nps} /> : <View />}
+        <View />
       </View>
       <View
         style={[{flex: 2, justifyContent: 'flex-end'}, styles.rowContainer]}>
