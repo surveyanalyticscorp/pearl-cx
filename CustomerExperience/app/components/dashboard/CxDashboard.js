@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useReducer, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   FlatList,
   RefreshControl,
@@ -33,11 +33,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
 import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
-import {
-  FabAddButton,
-  FilterDateBox,
-  HeaderFilter,
-} from '../../routes/CommonScreen';
+import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -314,18 +310,6 @@ const CxDashboard = props => {
           {title}
         </Text>
       </Pressable>
-      //   <View style={dashboardStyles.responseView}>
-      //     <Text style={dashboardStyles.responseText}>{count}</Text>
-      //     <View style={dashboardStyles.separator} />
-      //     <View style={dashboardStyles.ticketTypeContainer}>
-      //       <Icon
-      //         name={icon}
-      //         size={Sizes.inlineIcons}
-      //         color={Colors.borderColor}
-      //       />
-      //       <Text style={dashboardStyles.response}>{title}</Text>
-      //     </View>
-      //   </View>
     );
   };
 
@@ -474,6 +458,7 @@ const CxDashboard = props => {
   };
 
   let renderDashboard = () => {
+    console.log('cx_dasboard_render!!!');
     return (
       <SafeAreaView
         forceInset={{bottom: 'never', top: 'never'}}

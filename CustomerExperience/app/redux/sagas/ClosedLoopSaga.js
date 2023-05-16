@@ -242,14 +242,14 @@ export function updateClosedLoopTicket(
     {'Auth-Token': token},
     body,
   )
-    .then((response) => {
+    .then(response => {
       if (StringUtils.isNotEmpty(response.body.Error)) {
         errorCallback(response.body.Error);
       } else {
         successCallback(response.body);
       }
     })
-    .catch((error) => {
+    .catch(error => {
       errorCallback(error.errorAlert);
     });
 }
@@ -265,14 +265,14 @@ export function addClosedLoopTicket(
     {'Auth-Token': token},
     body,
   )
-    .then((response) => {
+    .then(response => {
       if (StringUtils.isNotEmpty(response.body.Error)) {
         errorCallback(response.body.Error);
       } else {
         successCallback(response.body);
       }
     })
-    .catch((error) => {
+    .catch(error => {
       console.log(error);
       errorCallback(error.errorAlert);
     });
@@ -294,10 +294,10 @@ function* syncTickets(action) {
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
     // yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
-    yield put({
-      type: API_ERROR,
-      error: error,
-    });
+    // yield put({
+    //   type: API_ERROR,
+    //   error: error,
+    // });
   }
 }
 export function* watchSyncTickets() {
