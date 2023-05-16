@@ -115,6 +115,8 @@ function IntroPage(props) {
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
+    marginBottom:
+      Platform.OS === 'ios' ? MarginConstants.tab2 : MarginConstants.tab1,
   },
   imageBackgroundContainer: {
     flex: 1,

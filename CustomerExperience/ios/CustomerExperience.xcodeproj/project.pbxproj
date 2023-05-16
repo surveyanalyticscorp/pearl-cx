@@ -848,7 +848,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 01;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 32Y3X84598;
 				ENABLE_BITCODE = NO;
@@ -859,6 +859,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/CustomerExperience/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "CX On The Go";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -872,7 +873,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.questionpro.cxonthego;
 				PRODUCT_NAME = "CX On The Go";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = QP_CX_Productions;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Cx_On_The_Go_Production;
 				SWIFT_OBJC_BRIDGING_HEADER = "CustomerExperience-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -891,12 +892,13 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 01;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 32Y3X84598;
 				INFOPLIST_FILE = "$(SRCROOT)/CustomerExperience/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "CX On The Go";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -911,7 +913,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.questionpro.cxonthego;
 				PRODUCT_NAME = "CX On The Go";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = QP_CX_Productions;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Cx_On_The_Go_Production;
 				SWIFT_OBJC_BRIDGING_HEADER = "CustomerExperience-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
