@@ -8,6 +8,7 @@ import {
   Alert,
   BackHandler,
   TextInput,
+  Keyboard,
 } from 'react-native';
 import FeedbackDetails from '../components/feedback/FeedbackDetails';
 import {
@@ -120,6 +121,10 @@ export const HeaderBackLeft = props => {
     </View>
   );
 };
+
+export const DismissKeyboard = ({children}) => (
+  <Pressable onPress={() => Keyboard.dismiss()}>{children}</Pressable>
+);
 export const BottomSheetHeader = props => {
   return (
     <View style={styles.panelHeaderContainer}>

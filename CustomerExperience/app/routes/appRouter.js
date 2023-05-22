@@ -127,7 +127,7 @@ const AppRouter = props => {
 
     // console.log('Segment List', segmentOptions);
     global.baseUrl = '';
-
+    global.subscriberId = '';
     setGlobalBaseUrl();
     setGlobalSubscriberId();
     const unsubscribeLinks = dynamicLinks().onLink(handleDynamicLink);

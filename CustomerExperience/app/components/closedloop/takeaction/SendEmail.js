@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -6,6 +6,10 @@ import {
   TextInput,
   View,
   Pressable,
+  Keyboard,
+  Platform,
+  ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -41,6 +45,91 @@ const EmailToFrom = ({title, value}) => {
   );
 };
 
+const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
+  return (
+    <View>
+      <View style={styles.rowContainerCenterAlign}>
+        <Text style={styles.titleText}>{'Subject:'}</Text>
+        <TextInput
+          placeholder="Email subject"
+          defaultValue={body.subject ?? ''}
+          style={styles.textInput}
+          onChangeText={onChangeSubject}
+          onFocus={closeBottomSheet}
+        />
+      </View>
+      <View style={styles.devider} />
+    </View>
+  );
+};
+
+const EmailBody = ({
+  refEditor,
+  refToolbar,
+  body,
+  onChangeEmailBody,
+  closeBottomSheet,
+}) => {
+  const scrollRef = React.useRef();
+
+  return (
+    <ScrollView ref={scrollRef} style={styles.textBox}>
+      {/* <KeyboardAvoidingView
+        style={{flex: 1}}
+        enabled
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={12}> */}
+      {/* <TextInput
+    scrollEnabled={true}
+    multiline={true}
+    placeholder="Write email..."
+    style={styles.emailText}
+  /> */}
+      {/* <KeyboardAvoidingView
+  behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+  keyboardVerticalOffset={Platform.OS === 'ios' ? 12 : 0}> */}
+
+      <RichEditor
+        ref={refEditor}
+        onChange={onChangeEmailBody}
+        placeholder="Email body"
+        androidHardwareAccelerationDisabled={true}
+        initialHeight={300}
+        style={styles.textInput}
+        // initialContentHTML={body.emailBody}
+        setContentHTML={body.emailBody}
+        onFocus={closeBottomSheet}
+      />
+      <View style={[styles.rowContainer, {marginBottom: MarginConstants.tab2}]}>
+        <RichToolbar
+          ref={refToolbar}
+          editor={refEditor}
+          selectedIconTint={Colors.accentLight}
+          iconTint={Colors.lightBlack}
+          // editorInitializedCallback={() => updateRichText(emailBody)}
+          actions={[
+            actions.setBold,
+            actions.setItalic,
+            actions.setUnderline,
+            actions.insertBulletsList,
+            actions.insertOrderedList,
+            // actions.insertLink,
+            actions.setStrikethrough,
+            // actions.insertImage,
+            actions.keyboard,
+          ]}
+          style={{
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
+            flex: 2,
+          }}
+        />
+      </View>
+      {/* </KeyboardAvoidingView> */}
+    </ScrollView>
+  );
+};
+
 export default function SendEmail(props) {
   const defaultEmail = useSelector(
     state => state.dashboard.emailData.defaultTemplate,
@@ -62,6 +151,16 @@ export default function SendEmail(props) {
   );
 
   const ticketId = JSON.stringify(props.route.params.ticketId);
+
+  const bs = React.useRef(null);
+  const fall = new Animated.Value(1);
+  const bsSnapPoints = ['33%', '0%'];
+  const [shadow, setShadow] = useState(false);
+
+  const closeBottomSheet = () => {
+    bs.current.snapTo(bsSnapPoints.length - 1);
+  };
+
   useEffect(() => {
     // AsyncStorage.getItem(ASYNC_USER_INFO).then((value) => {
     //   setUserInfo(JSON.parse(value));
@@ -146,7 +245,9 @@ export default function SendEmail(props) {
     return (
       <Pressable
         onPress={() => {
+          richText.current.dismissKeyboard();
           bs.current.snapTo(0);
+          console.log('call');
         }}
         style={styles.optionIcon}>
         <RenderIonIcon name={'ios-reader'} />
@@ -164,6 +265,13 @@ export default function SendEmail(props) {
     );
   };
 
+  const onChangeSubject = text => {
+    setBody(state => ({...state, subject: text}));
+  };
+
+  const onChangeEmailBody = text => {
+    setBody(state => ({...state, emailBody: text}));
+  };
   const handleTemplateSelectAction = item => {
     // setDefaultEmail(item);
     setBody(state => ({
@@ -173,7 +281,7 @@ export default function SendEmail(props) {
     }));
 
     richText.current.setContentHTML(item.templateText);
-    bs.current.snapTo(bsSnapPoints.length - 1);
+    closeBottomSheet();
   };
 
   const renderSelectTemplate = () => {
@@ -191,7 +299,7 @@ export default function SendEmail(props) {
     return (
       <BottomSheetHeader
         title={'Select Template'}
-        onPressClose={() => bs.current.snapTo(bsSnapPoints.length - 1)}
+        onPressClose={closeBottomSheet}
       />
     );
   };
@@ -202,8 +310,6 @@ export default function SendEmail(props) {
       emailAddress: userEmail,
     };
 
-    // console.log('EMAIL_BODY', JSON.stringify(body));
-    // console.log('EMAIL_QUERY', JSON.stringify(queryParam));
     if (StringUtils.isEmpty(body.subject)) {
       showErrorFlashMessage('Empty email subject');
       return;
@@ -215,20 +321,7 @@ export default function SendEmail(props) {
       dispatch(sendEmail(authToken, ticketId, body, queryParam));
       props.navigation.goBack();
     }
-
-    // console.log('EMAIL_PAYLOAD', JSON.stringify(body));
-    // console.log('EMAIL_PAYLOAD', JSON.stringify(ticketId));
-    // console.log('EMAIL_PAYLOAD', JSON.stringify(queryParam));
   };
-
-  const getEmailBodyText = text => {
-    return text;
-  };
-
-  const bs = React.useRef(null);
-  const fall = new Animated.Value(1);
-  const bsSnapPoints = ['33%', '0%'];
-  const [shadow, setShadow] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -239,76 +332,34 @@ export default function SendEmail(props) {
             opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
             color: shadow ? Colors.accent : Colors.borderColor,
           },
-        ]}
-        keyboardDismissMode="none">
-        <RenderHeader />
-        <RenderOptionsView />
-        {/* <RenderToTextInput />
+        ]}>
+        {/* <KeyboardAvoidingView style={{flex: 1}} enabled behavior="padding"> */}
+        <KeyboardAvoidingView
+          style={{flex: 1}}
+          enabled
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 12 : 16}>
+          <RenderHeader />
+          <RenderOptionsView />
+          {/* <RenderToTextInput />
         <RenderFromTextInput /> */}
-        <EmailToFrom title={'To:'} value={body.toEmail} />
-        <EmailToFrom title={'From:'} value={body.fromEmail} />
-        <View>
-          <View style={styles.rowContainerCenterAlign}>
-            <Text style={styles.titleText}>{'Subject:'}</Text>
-            <TextInput
-              placeholder="Email subject"
-              defaultValue={body.subject ?? ''}
-              style={styles.textInput}
-              onChangeText={text => {
-                setBody(state => ({...state, subject: text}));
-              }}
-            />
-          </View>
-          <View style={styles.devider} />
-        </View>
-        <View style={styles.textBox}>
-          <KeyboardAvoidingView>
-            {/* <TextInput
-              scrollEnabled={true}
-              multiline={true}
-              placeholder="Write email..."
-              style={styles.emailText}
-            /> */}
+          <EmailToFrom title={'To:'} value={body.toEmail} />
+          <EmailToFrom title={'From:'} value={body.fromEmail} />
 
-            <RichEditor
-              ref={richText}
-              onChange={text => {
-                setBody(state => ({...state, emailBody: text}));
-              }}
-              placeholder="Email body"
-              androidHardwareAccelerationDisabled={true}
-              initialHeight={300}
-              style={styles.textInput}
-              // initialContentHTML={body.emailBody}
-              setContentHTML={body.emailBody}
-            />
-            <View style={styles.rowContainer}>
-              <RichToolbar
-                ref={richTextToolBar}
-                editor={richText}
-                selectedIconTint={Colors.accentLight}
-                iconTint={Colors.lightBlack}
-                // editorInitializedCallback={() => updateRichText(emailBody)}
-                actions={[
-                  actions.setBold,
-                  actions.setItalic,
-                  actions.setUnderline,
-                  actions.insertBulletsList,
-                  actions.insertOrderedList,
-                  // actions.insertLink,
-                  actions.setStrikethrough,
-                  // actions.insertImage,
-                  // actions.keyboard,
-                ]}
-                style={{
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-start',
-                  flex: 2,
-                }}
-              />
-            </View>
-          </KeyboardAvoidingView>
-        </View>
+          <EmailSubject
+            body={body}
+            closeBottomSheet={closeBottomSheet}
+            onChangeSubject={onChangeSubject}
+          />
+
+          <EmailBody
+            refEditor={richText}
+            refToolbar={richTextToolBar}
+            body={body}
+            onChangeEmailBody={onChangeEmailBody}
+            closeBottomSheet={closeBottomSheet}
+          />
+        </KeyboardAvoidingView>
       </Animated.ScrollView>
 
       <BottomSheet
