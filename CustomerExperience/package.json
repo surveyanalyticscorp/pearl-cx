@@ -50,6 +50,7 @@
     "react-native-gesture-handler": "^1.10.3",
     "react-native-i18n": "^2.0.15",
     "react-native-indicators": "^0.17.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-localize": "^2.0.3",
     "react-native-material-textfield": "git+https://github.com/javarahulsharma/react-native-material-textfield.git",
