@@ -20,13 +20,13 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import {setStatusFilterById} from '../../redux/actions/closedloop.actions';
 import {useDispatch} from 'react-redux';
 
-export const DashboardClosedLoopView = (props) => {
+export const DashboardClosedLoopView = props => {
   return <TicketTabStack {...props} />;
 };
 
 const TicketTab = createMaterialTopTabNavigator();
 
-const TicketTabStack = (props) => (
+const TicketTabStack = props => (
   <TicketTab.Navigator
     tabBarOptions={{
       labelStyle: {
@@ -75,7 +75,7 @@ const TicketTabStack = (props) => (
   </TicketTab.Navigator>
 );
 
-const RenderScene = (props) => {
+const RenderScene = props => {
   const [showPercentageCount, setShowPercentageCount] = useState(false);
 
   console.log(
@@ -128,7 +128,7 @@ const RenderScene = (props) => {
     );
   };
 
-  let getCount = (object) => {
+  let getCount = object => {
     //let name = props.route.name.toLowerCase();
     let index = props.route.params.index;
     // console.log(`index: ${index}`);
@@ -151,7 +151,7 @@ const RenderScene = (props) => {
 
   let RenderCountContainer = () => {
     const toggleSwitch = () =>
-      setShowPercentageCount((previousState) => !previousState);
+      setShowPercentageCount(previousState => !previousState);
     const count = getCount(props.route.params.ticketCount);
     return (
       <View style={[styles.viewCountContainer]}>

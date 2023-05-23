@@ -7,6 +7,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import {FontFamily} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import StringUtils from '../../Utils/StringUtils';
+import {getPriorityById, getStatusById} from '../../Utils/TicketUtils';
 
 const ShowFilterTag = ({handleFilterTag, filterData}) => {
   let taglist = [
@@ -45,12 +46,22 @@ const ShowFilterTag = ({handleFilterTag, filterData}) => {
     populateList();
   }, [filterData]);
 
+  const returnStatusNames = id => ` ${getStatusById(parseInt(id, 10))}`;
+  const returnPriorityNames = id => ` ${getPriorityById(parseInt(id, 10))}`;
   const getTagName = tag => {
     // switch (tag) {
     //   case 'assignToId':
     //     return 'Assignee';
     //   default:
-    return StringUtils.uppercaseFirstChar(tag);
+
+    console.log(`${tag} : ${filterData[tag]}`);
+
+    const names = filterData[tag]
+      .split(',')
+      .map(tag === taglist[0] ? returnStatusNames : returnPriorityNames);
+
+    return `${StringUtils.uppercaseFirstChar(tag)}-${names}`;
+
     // }
   };
 

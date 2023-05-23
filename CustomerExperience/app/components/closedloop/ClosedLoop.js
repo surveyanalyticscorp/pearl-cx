@@ -46,16 +46,16 @@ import {
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
   const itemPerPage = 20;
-  const {statusId} = useSelector((state) => state.global);
+  const {statusId} = useSelector(state => state.global);
 
   const [pageNumber, setPageNumber] = useState(1);
   const {feedbackApiKey, feedbackID, userID} = useSelector(
-    (state) => state.global.userInfo,
+    state => state.global.userInfo,
   );
   // const [isLoading, setLoading] = useState(false);
   const [isPagination, setpagination] = useState(false);
   const {authToken, isTicketLoading, range, subscriberId} = useSelector(
-    (state) => state.global,
+    state => state.global,
   );
   const [filterState, setFilterState] = useState({
     feedbackApiKey: feedbackApiKey,
@@ -73,19 +73,17 @@ export default function ClosedLoop(props) {
     return moment(date, DMYFORMAT).format(YMDFORMAT);
   }
   // const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
-  const ticketList = useSelector((state) => state.dashboard.ticketList);
+  const ticketList = useSelector(state => state.dashboard.ticketList);
 
   const pagerOptions = useSelector(
-    (state) => state.dashboard.ticketDetails.pagerOptions,
+    state => state.dashboard.ticketDetails.pagerOptions,
   );
-  const currentFeedback = useSelector(
-    (state) => state.dashboard.currentFeedback,
-  );
-  const currentSegment = useSelector((state) => state.dashboard.currentSegment);
+  const currentFeedback = useSelector(state => state.dashboard.currentFeedback);
+  const currentSegment = useSelector(state => state.dashboard.currentSegment);
 
   // const [ticketList, setTicketList] = useState([]);
-  const owners = useSelector((state) => state.dashboard.ownerDetails.owners);
-  const keepSyncingTickets = useSelector((state) => state.dashboard.ticketSync);
+  const owners = useSelector(state => state.dashboard.ownerDetails.owners);
+  const keepSyncingTickets = useSelector(state => state.dashboard.ticketSync);
   const [refreshing, setRefreshing] = useState(false);
   const sync = () => {
     dispatch(
@@ -102,12 +100,12 @@ export default function ClosedLoop(props) {
     }
   }, [keepSyncingTickets]);
   const sampleFilterData = () => {
-    const priority = priorityList.map((value) => ({
+    const priority = priorityList.map(value => ({
       ...value,
       isChecked: false,
     }));
-    const status = statusList.map((value) => ({...value, isChecked: false}));
-    const type = ticketTypeList.map((value) => ({...value, isChecked: false}));
+    const status = statusList.map(value => ({...value, isChecked: false}));
+    const type = ticketTypeList.map(value => ({...value, isChecked: false}));
     // const managers = owners.map((value) => ({...value, isChecked: false}));
 
     return {
@@ -121,10 +119,10 @@ export default function ClosedLoop(props) {
   const [filterData, setFilterData] = useState(sampleFilterData());
   // console.log('OWNERS', JSON.stringify(owners));
 
-  const resetFilterState = (range_) => {
+  const resetFilterState = range_ => {
     // setTicketList([]);
     setPageNumber(1);
-    setFilterState((state) => ({
+    setFilterState(state => ({
       ...state,
       pageNumber: pageNumber,
       fromDate: moment(range_.startDate, DMYFORMAT).format(YMDFORMAT),
@@ -132,7 +130,7 @@ export default function ClosedLoop(props) {
     }));
   };
 
-  let getDataOnNewRange = (range_) => {
+  let getDataOnNewRange = range_ => {
     dispatch(setRangeFilter(range_));
     // reset pageNumber, ticket list, range
 
@@ -141,7 +139,7 @@ export default function ClosedLoop(props) {
 
   const filterByStatus = () => {
     if (StringUtils.isNotEmpty(statusId)) {
-      setFilterState((state) => ({
+      setFilterState(state => ({
         ...state,
         status: statusId,
       }));
@@ -180,8 +178,8 @@ export default function ClosedLoop(props) {
   const resetSyncTicket = () => {
     dispatch(clearSyncTicketStatus());
   };
-  const wait = (timeout) => {
-    return new Promise((resolve) => {
+  const wait = timeout => {
+    return new Promise(resolve => {
       setTimeout(resolve, timeout);
     });
   };
@@ -213,11 +211,11 @@ export default function ClosedLoop(props) {
 
   const updateFilterData = () => {
     if (owners && owners.length > 0) {
-      const managers = owners.map((value) => ({...value, isChecked: false}));
+      const managers = owners.map(value => ({...value, isChecked: false}));
 
-      setFilterData((state) => ({...state, managers: managers}));
+      setFilterData(state => ({...state, managers: managers}));
     } else {
-      setFilterData((state) => ({...state, managers: []}));
+      setFilterData(state => ({...state, managers: []}));
     }
     console.log('OWNERS', JSON.stringify(owners));
   };
@@ -246,13 +244,13 @@ export default function ClosedLoop(props) {
   const loadMoreData = () => {
     if (ticketList.length < pagerOptions.totalCount) {
       setpagination(true);
-      setFilterState((state) => ({
+      setFilterState(state => ({
         ...state,
         pageNumber: state.pageNumber + 1,
       }));
     }
   };
-  const getTicketOwnerList = (segmentId_) => {
+  const getTicketOwnerList = segmentId_ => {
     dispatch(
       getClosedLoopOwnerDetails(authToken, {
         segmentID: segmentId_,
@@ -316,16 +314,16 @@ export default function ClosedLoop(props) {
     );
   };
 
-  const getIds = (items) =>
+  const getIds = items =>
     items
-      .filter((item) => item.isChecked === true)
-      .map((id) => id.id)
+      .filter(item => item.isChecked === true)
+      .map(id => id.id)
       .toString();
 
-  const getOwnerIds = (items) =>
+  const getOwnerIds = items =>
     items
-      .filter((item) => item.isChecked === true)
-      .map((owner) => owner.ownerID)
+      .filter(item => item.isChecked === true)
+      .map(owner => owner.ownerID)
       .toString();
 
   const handleAction = (item, action) => {
@@ -344,12 +342,12 @@ export default function ClosedLoop(props) {
     bs.current.snapTo(0);
   };
 
-  const applyFilter = (item) => {
+  const applyFilter = item => {
     setFilterData(item);
 
     console.log('StatusParam: ', JSON.stringify(item));
     // setTicketList([]);
-    setFilterState((state) => ({
+    setFilterState(state => ({
       ...state,
       pageNumber: 1,
       status: getIds(item.status) ?? '',
@@ -377,30 +375,30 @@ export default function ClosedLoop(props) {
   const bsSnapPoints = ['80%', '90%', '0%'];
   const [shadow, setShadow] = useState(false);
 
-  const clearFilterData = (item) => {
-    const priority = priorityList.map((value) => ({
+  const clearFilterData = item => {
+    const priority = priorityList.map(value => ({
       ...value,
       isChecked: false,
     }));
-    const status = statusList.map((value) => ({...value, isChecked: false}));
-    const type = ticketTypeList.map((value) => ({...value, isChecked: false}));
+    const status = statusList.map(value => ({...value, isChecked: false}));
+    const type = ticketTypeList.map(value => ({...value, isChecked: false}));
     // const managers = owners.map((value) => ({...value, isChecked: false}));
 
     switch (item) {
       case 'priority':
-        return priorityList.map((value) => ({
+        return priorityList.map(value => ({
           ...value,
           isChecked: false,
         }));
 
       case 'status':
-        return statusList.map((value) => ({
+        return statusList.map(value => ({
           ...value,
           isChecked: false,
         }));
 
       case 'type':
-        return ticketTypeList.map((value) => ({
+        return ticketTypeList.map(value => ({
           ...value,
           isChecked: false,
         }));
@@ -427,12 +425,12 @@ export default function ClosedLoop(props) {
           {/* <ClosedLoopTicketList /> */}
           <ShowFilterTag
             filterData={filterState}
-            handleFilterTag={(item) => {
-              setFilterState((state) => ({
+            handleFilterTag={item => {
+              setFilterState(state => ({
                 ...state,
                 [item]: '',
               }));
-              setFilterData((state) => ({
+              setFilterData(state => ({
                 ...state,
                 [item]: clearFilterData(item),
               }));
