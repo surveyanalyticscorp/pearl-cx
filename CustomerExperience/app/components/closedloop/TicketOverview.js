@@ -214,6 +214,23 @@ const ContactView = ({panelMember}) => {
   );
 };
 
+const DeleteView = ({onPressDelete}) => {
+  return (
+    <View style={styles.ticketStatusContainer}>
+      {/* <DescriptionHeader text={'Contact'} /> */}
+      <View style={styles.takeActionContainer}>
+        <QPButton
+          testID="DeleteButtonAction"
+          buttonColor={Colors.deleteBackground}
+          style={styles.deleteButton}
+          onPress={onPressDelete}
+          buttonText={'Delete ticket'}
+          textStyle={styles.deleteText}
+        />
+      </View>
+    </View>
+  );
+};
 const getUnderLineText = (text, type) => {
   return (
     <TouchableWithoutFeedback
@@ -691,6 +708,7 @@ export default function TicketOverview(props) {
           <DescriptionView ticket={ticketDetails} />
 
           <ContactView panelMember={ticketDetails?.panelMember} />
+          <DeleteView />
 
           <RenderShowAssigneeModal
             showAssigneeModal={showAssigneeModal}
@@ -838,6 +856,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.filterIconColor,
     marginBottom: MarginConstants.tab2,
   },
+  deleteButton: {
+    height: MarginConstants.tab4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    backgroundColor: Colors.deleteBackground,
+    marginBottom: MarginConstants.tab2,
+  },
   ticketIdView: {
     borderColor: Colors.accentLight,
     borderRadius: 4,
@@ -860,6 +886,11 @@ const styles = StyleSheet.create({
     color: Colors.white,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.largeText,
+  },
+  deleteText: {
+    color: Colors.deleteButtonText,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.primary,
   },
   rowText: {
     color: Colors.primary,

@@ -9,6 +9,8 @@ const Colors = {
   accentLight: '#1b87e6',
   checkboxColor: '#ababab',
   accent: '#1B3380',
+  deleteBackground: '#cc000012',
+  deleteButtonText: '#cc0000',
 
   filterIconColor: '#545E6B',
   accentGradient: 'rgba(239, 246, 252, 1)',
@@ -75,7 +77,7 @@ const buttonColors = {
   negative: Colors.secondary,
 };
 
-const getStatusBorderColor = (_status) => {
+const getStatusBorderColor = _status => {
   switch (_status) {
     case 'open':
       return statusColors.openBorder;
@@ -92,7 +94,7 @@ const getStatusBorderColor = (_status) => {
   }
 };
 
-const getStatusBorderColorbyId = (_status) => {
+const getStatusBorderColorbyId = _status => {
   switch (_status) {
     case 'open':
       return statusColors.openBorder;
@@ -109,7 +111,7 @@ const getStatusBorderColorbyId = (_status) => {
   }
 };
 
-const getStatusFillerColor = (_status) => {
+const getStatusFillerColor = _status => {
   switch (_status) {
     case 'open':
       return statusColors.openFiller;
@@ -125,7 +127,7 @@ const getStatusFillerColor = (_status) => {
       return statusColors.newFiller;
   }
 };
-const getStatusFillerColorbyId = (_status) => {
+const getStatusFillerColorbyId = _status => {
   switch (_status) {
     case 1:
       return statusColors.openFiller;
@@ -144,7 +146,7 @@ const getStatusFillerColorbyId = (_status) => {
   }
 };
 
-const getPriorityBorderColor = (_priority) => {
+const getPriorityBorderColor = _priority => {
   switch (_priority) {
     case 'critical':
       return priorityColors.critical.border;
@@ -159,7 +161,7 @@ const getPriorityBorderColor = (_priority) => {
   }
 };
 
-const getPriorityBorderColorbyId = (_priority) => {
+const getPriorityBorderColorbyId = _priority => {
   switch (_priority) {
     case 3:
       return priorityColors.critical.border;
@@ -174,7 +176,7 @@ const getPriorityBorderColorbyId = (_priority) => {
   }
 };
 
-const getPriorityFillerColor = (_priority) => {
+const getPriorityFillerColor = _priority => {
   switch (_priority) {
     case 'critical':
       return priorityColors.critical.filler;
@@ -189,7 +191,7 @@ const getPriorityFillerColor = (_priority) => {
   }
 };
 
-const getPriorityFillerColorbyId = (_priority) => {
+const getPriorityFillerColorbyId = _priority => {
   switch (_priority) {
     case 3:
       return priorityColors.critical.filler;
