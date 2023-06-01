@@ -1,5 +1,12 @@
 import React, {useState, useCallback} from 'react';
-import {View, Text, StyleSheet, FlatList, RefreshControl} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  Pressable,
+} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
@@ -10,6 +17,17 @@ import moment from 'moment';
 import {NoItemsFound} from '../../routes/CommonScreen';
 import {getDateTimeAgo} from '../../Utils/TimeUtils';
 import {getClosedLoopTicketItemActivity} from '../../redux/actions/dashboard.actions';
+import IonIcons from 'react-native-vector-icons/Ionicons';
+
+const SortingIcon = ({iconName, size, color}) => {
+  return (
+    <IonIcons
+      name={iconName}
+      size={size ?? 16}
+      color={color ?? Colors.filterIconColor}
+    />
+  );
+};
 
 const RenderItem = ({item}) => {
   return (
@@ -39,6 +57,24 @@ const RenderMyItem = ({item}) => {
   );
 };
 
+const SortingView = ({toggleSorting, isInverted}) => {
+  return (
+    <Pressable
+      style={styles.sortingView}
+      onPress={() => {
+        toggleSorting();
+      }}>
+      <Text style={{color: Colors.accent}}>
+        {`Sorted: ${isInverted ? 'Oldest' : 'Latest'}`}
+      </Text>
+      <SortingIcon
+        iconName={isInverted ? 'caret-up' : 'caret-down'}
+        color={Colors.accent}
+      />
+    </Pressable>
+  );
+};
+
 function convertDateTime(dateStr) {
   return getDateTimeAgo(moment.utc(dateStr).toDate());
 }
@@ -46,12 +82,17 @@ function convertDateTime(dateStr) {
 export default function TicketActivity(props) {
   const [refreshing, setRefreshing] = useState(false);
   const dispatch = useDispatch();
-  const {authToken} = useSelector((state) => state.global);
-  const ticketId = useSelector((state) => state.dashboard.ticket.id);
-  const {userID} = useSelector((state) => state.global.userInfo);
+  const {authToken} = useSelector(state => state.global);
+  const ticketId = useSelector(state => state.dashboard.ticket.id);
+  const {userID} = useSelector(state => state.global.userInfo);
+  const [isInverted, setIsInverted] = useState(false);
   const ticketActivityList = useSelector(
-    (state) => state.dashboard.ticketActivity,
+    state => state.dashboard.ticketActivity,
   );
+
+  const toggleSorting = () => {
+    setIsInverted(prev => !prev);
+  };
 
   const makeAPICall = () => {
     dispatch(
@@ -59,8 +100,8 @@ export default function TicketActivity(props) {
     );
   };
 
-  const wait = (timeout) => {
-    return new Promise((resolve) => {
+  const wait = timeout => {
+    return new Promise(resolve => {
       setTimeout(resolve, timeout);
     });
   };
@@ -73,18 +114,20 @@ export default function TicketActivity(props) {
   const getRenderItem = ({item}) => {
     return userID === item.userId ? RenderMyItem({item}) : RenderItem({item});
   };
-
   return (
     <View style={styles.container}>
+      <SortingView toggleSorting={toggleSorting} isInverted={isInverted} />
       <FlatList
         refreshControl={
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
         }
         style={styles.container}
-        data={ticketActivityList}
+        data={
+          isInverted ? ticketActivityList.slice().reverse() : ticketActivityList
+        }
         renderItem={getRenderItem}
         ListEmptyComponent={<NoItemsFound>No Activity...</NoItemsFound>}
-        keyExtractor={(item) => JSON.stringify(item.id)}
+        keyExtractor={item => JSON.stringify(item.id)}
       />
     </View>
   );
@@ -155,5 +198,17 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.mediumText,
     marginStart: MarginConstants.halfTab,
     textAlign: 'right',
+  },
+  sortingView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingHorizontal: PaddingConstants.tab2,
+
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: Colors.white,
+    height: MarginConstants.tab4,
+    width: '100%',
   },
 });
