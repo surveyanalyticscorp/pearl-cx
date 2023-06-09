@@ -303,7 +303,6 @@ const CxDashboard = props => {
     return (
       <Pressable
         onPress={() => {
-          console.log('tap tap');
           props.navigation.navigate('Responses');
         }}>
         <Text style={{textAlign: 'left', color: Colors.accentLight}}>
@@ -458,7 +457,6 @@ const CxDashboard = props => {
   };
 
   let renderDashboard = () => {
-    console.log('cx_dasboard_render!!!');
     return (
       <SafeAreaView
         forceInset={{bottom: 'never', top: 'never'}}

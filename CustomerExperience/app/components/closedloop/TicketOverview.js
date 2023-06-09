@@ -153,10 +153,13 @@ const DescriptionView = ({ticket}) => {
         </TouchableWithoutFeedback>
       </View>
       <ShowTitleAndText
-        title={'Origin Segment'}
+        title={translate('close_loop.origin_segment')}
         subText={ticket?.originSegment?.name ?? ''}
       />
-      <ShowTitleAndText title={'Created'} subText={createdDate} />
+      <ShowTitleAndText
+        title={translate('close_loop.created_on')}
+        subText={createdDate}
+      />
 
       {ticket.npsScore !== null && (
         <View style={styles.rowContainer}>
@@ -280,7 +283,9 @@ const ViewResponseDetailsButton = () => {
   return (
     <View style={[styles.rowContainer, {flexDirection: 'row-reverse'}]}>
       <TouchableWithoutFeedback onPress={navigateToFeedbackDetails}>
-        <Text style={styles.viewResponseDetailsText}>{`View Response >>`}</Text>
+        <Text style={styles.viewResponseDetailsText}>{`${translate(
+          'close_loop.view_response',
+        )} >>`}</Text>
       </TouchableWithoutFeedback>
     </View>
   );
