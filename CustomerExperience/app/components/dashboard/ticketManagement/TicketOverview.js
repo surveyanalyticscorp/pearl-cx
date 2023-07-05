@@ -47,7 +47,7 @@ function TicketOverview(props) {
       .setParams({onBackPress: onBackPress});
   }, []);
 
-  let getIconName = (nps) => {
+  let getIconName = nps => {
     switch (true) {
       case nps <= 6:
         return 'smiley1';
@@ -193,7 +193,7 @@ function TicketOverview(props) {
     apiHandler.getFeedbackResponseList(
       props.authToken,
       data,
-      (response) => {
+      response => {
         if (
           response.body &&
           response.body.allResponses &&
@@ -204,7 +204,7 @@ function TicketOverview(props) {
         }
         setShowLoader(false);
       },
-      (error) => {
+      error => {
         showLoader && setShowLoader(false);
         showErrorFlashMessage(error.message);
       },
@@ -308,7 +308,7 @@ function TicketOverview(props) {
   );
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     ticketDetails: state.dashboard.ticketDetails,
     authToken: state.global.authToken,
@@ -317,7 +317,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   getTicketDetails: (token, params) => {
     dispatch(getDetractorTicketDetails(token, params));
   },

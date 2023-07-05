@@ -355,7 +355,7 @@ export const RenderSpinner = () => {
     </View>
   );
 };
-export const CheckBoxItem = ({item, index, onPress, textStyle}) => {
+export const CheckBoxItem = ({item, title, index, onPress, textStyle}) => {
   const _textStyle = textStyle ?? styles.checkBoxText;
   return (
     <Pressable onPress={() => onPress(item, index)}>
@@ -369,18 +369,27 @@ export const CheckBoxItem = ({item, index, onPress, textStyle}) => {
             // onPress(index);
           }}
         /> */}
-        <IonIcons
-          name={item.isChecked ? 'checkbox' : 'square-outline'}
-          size={24}
-          color={item.isChecked ? Colors.accentLight : Colors.checkboxColor}
-          style={{marginHorizontal: MarginConstants.halfTab}}
-        />
-        <Text style={_textStyle}>{item.title}</Text>
+        <CheckBox isChecked={item.isChecked} />
+        <Text style={_textStyle}>{item.title ? item.title : title}</Text>
       </View>
     </Pressable>
   );
 };
 
+export const CheckBox = ({isChecked, checkedColor, uncheckedColor}) => {
+  return (
+    <IonIcons
+      name={isChecked ? 'checkbox' : 'square-outline'}
+      size={24}
+      color={
+        isChecked
+          ? checkedColor ?? Colors.accentLight
+          : uncheckedColor ?? Colors.checkboxColor
+      }
+      style={{marginHorizontal: MarginConstants.halfTab}}
+    />
+  );
+};
 export const CheckRadioButtonItem = ({item, index, onPress, textStyle}) => {
   const _textStyle = textStyle ?? styles.checkBoxText;
   return (

@@ -8,12 +8,12 @@ export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
 export const ACTION_EMAIL = 'noreply@InsightsHub.com';
 // set true for DEV, false for LIVE
-export const IS_DEV_MODE = false;
+export const IS_DEV_MODE = true;
 
 // export const BASE_URL = 'https://api.questionpro.com/';
 
 // uncomment below lines to connect to dev servers
-// export const DEV_BASE_URL = 'https://qa.questionpro.com';
+export const DEV_BASE_URL = 'https://qa.questionpro.com';
 // export const DEV_BASE_URL = 'https://cxlabs.questionpro.com';
 
 // for DEV
@@ -109,6 +109,13 @@ export const CLF_GET_ROOT_CAUSE_ACTIONS_POSTFIX = '/mobile';
 
 export const CLF_UPDATE_ROOT_CAUSE_PREFIX = `${CLF_BASE_URL}mobile/tickets/`; // ticketId
 export const CLF_UPDATE_ROOT_CAUSE_POSTFIX = '/update-root-causes';
+
+// /mobile/tickets/subscribers/:subscriberId/tickets/:ticketId
+export const CLF_DELETE_TICKET_PREFIX = `${CLF_BASE_URL}mobile/tickets/subscribers/`;
+export const CLF_DELETE_TICKET_POSTFIX = `/tickets/`;
+
+// /mobile/tickets/bulk-delete
+export const CLF_DELETE_TICKETS = `${CLF_BASE_URL}mobile/tickets/bulk-delete`;
 
 export const EMAIL = 'email';
 export const PHONE = 'phone';

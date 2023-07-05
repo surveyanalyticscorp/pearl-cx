@@ -103,7 +103,7 @@ export default function CreateTicket(props) {
   // );
   // const [bottomSheet, setBottomSheet] = useState('priority');
 
-  console.log('DETAILS_OF_PROPS', JSON.stringify(props.route.params));
+  // console.log('DETAILS_OF_PROPS', JSON.stringify(props.route.params));
   const segmentIcon = './../../../../assets/images/segment_icon.png';
   // variables for bottom sheet
   const priorityBottomSheet = React.useRef();
@@ -675,7 +675,7 @@ export default function CreateTicket(props) {
               keyboardType="default"
               style={styles.titleText}
               onChangeText={text => {
-                console.log(text);
+                // console.log(text);
                 // userInfo.firstName = text;
                 setTicketState(state => ({...state, firstName: text}));
               }}
@@ -699,7 +699,7 @@ export default function CreateTicket(props) {
               // }}
               onChangeFormattedText={text => {
                 // setFormattedValue(text);
-                console.log('FORMATTED PHONE:', text);
+                // console.log('FORMATTED PHONE:', text);
 
                 setTicketState(state => ({...state, mobileNumber: text}));
                 // userInfo.mobileNumber = text;
@@ -715,7 +715,7 @@ export default function CreateTicket(props) {
               keyboardType="email-address"
               style={styles.titleText}
               onChangeText={text => {
-                console.log(text);
+                // console.log(text);
                 // userInfo.emailAddress = text;
                 setTicketState(state => ({...state, emailAddress: text}));
               }}
@@ -767,7 +767,7 @@ export default function CreateTicket(props) {
               placeholder="Description"
               style={styles.titleText}
               onChangeText={text => {
-                console.log(text);
+                // console.log(text);
                 // userInfo.emailAddress = text;
                 setTicketState(state => ({...state, comment: text}));
               }}

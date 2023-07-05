@@ -2,6 +2,8 @@ import {getUniqueValues} from '../../Utils/TicketUtils';
 import {
   ACTIONS_RECEIVED,
   CLEAR_TICKET_SYNC,
+  DELETE_TICKET_COMPLETE,
+  DELETE_TICKET_STATUS_RESET,
   GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
   GET_EMAIL_TEMPLATES_RECEIVED,
   GET_TICKET_LIST_SYNC_RECEIVED,
@@ -57,6 +59,7 @@ const initialState = {
   apiCallStatus: {},
   welcomeScreenData: {},
   emailData: {},
+  ticketDeleteStatus: {},
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -279,6 +282,14 @@ const dashboardReducer = (state = initialState, action) => {
       };
     }
 
+    case DELETE_TICKET_COMPLETE: {
+      return {...state, ticketDeleteStatus: action.response};
+    }
+
+    case DELETE_TICKET_STATUS_RESET: {
+      return {...state, ticketDeleteStatus: {}};
+    }
+
     default: {
       return state;
     }
@@ -312,7 +323,7 @@ const getTicketList = (state, ticketDetails_) => {
 
 const getCurrentNPS = (segmentId, npsScoreList) => {
   let index = npsScoreList.findIndex(
-    (element) => element['storeId'] === segmentId,
+    element => element['storeId'] === segmentId,
   );
   return index >= 0 ? npsScoreList[index] : {};
 };

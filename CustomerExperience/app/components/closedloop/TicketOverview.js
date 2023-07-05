@@ -4,6 +4,7 @@ import {
   TouchableWithoutFeedback,
   Text,
   Image,
+  Alert,
   StyleSheet,
   Platform,
   Modal,
@@ -53,6 +54,7 @@ import {isObjectEmpty} from '../../Utils/Utility';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {updateSetTicketEscalation} from '../../redux/actions/closedloop.actions';
 import NPSScoreView from '../view/NPSScoreView';
+import DeleteTicketModal from './DeleteTicketModal';
 const ArrowDownIcon = () => (
   <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.evenDarkerGrey} />
 );
@@ -304,6 +306,8 @@ export default function TicketOverview(props) {
   };
 
   const [showAssigneeModal, setAssigneeModal] = useState(false);
+  const [showTicketDeleteModal, setTicketDeleteModal] = useState(false);
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {authToken} = useSelector(state => state.global);
@@ -327,6 +331,10 @@ export default function TicketOverview(props) {
   // );
   console.log('TTTTT', ticketDetails ?? '');
   console.log({isLoading});
+
+  const onPressDelete = () => {
+    setTicketDeleteModal(true);
+  };
 
   const [ticketOwnerIndex, setTicketOwnerIndex] = useState(
     getOwnerIndex(owners, ticketDetails.assignToId ?? 0),
@@ -684,6 +692,29 @@ export default function TicketOverview(props) {
     );
   };
 
+  let renderDeleteAlert = () => {
+    return Alert.alert(
+      `Ticket No. #${ticketDetails.id}`,
+      `Would you like to delete this ticket?`,
+      [
+        {
+          text: 'Confirm',
+          onPress: () => {
+            // delete API call
+            setTicketDeleteModal(false);
+          },
+        },
+        {
+          text: 'Cancel',
+          onPress: () => {
+            setTicketDeleteModal(false);
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
   const renderHeader = () => {
     return (
       <BottomSheetHeader
@@ -713,13 +744,14 @@ export default function TicketOverview(props) {
           <DescriptionView ticket={ticketDetails} />
 
           <ContactView panelMember={ticketDetails?.panelMember} />
-          <DeleteView />
+          <DeleteView onPressDelete={onPressDelete} />
 
           <RenderShowAssigneeModal
             showAssigneeModal={showAssigneeModal}
             id={ticketDetails.id}
             currentSegment={ticketDetails.currentSegment}
           />
+          {showTicketDeleteModal && renderDeleteAlert()}
         </View>
       </Animated.ScrollView>
       <RenderStatusBottomSheet currentBS_={currentBS} />

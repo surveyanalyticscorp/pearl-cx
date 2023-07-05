@@ -18,7 +18,7 @@ import {
   DMY_AT_TIME_FORMAT,
 } from '../../Utils/AppConstants';
 import {getStatusById, getPriorityById} from '../../Utils/TicketUtils';
-import {RenderStatusIcon} from '../../routes/CommonScreen';
+import {CheckBoxItem, RenderStatusIcon} from '../../routes/CommonScreen';
 import StringUtils from '../../Utils/StringUtils';
 
 const StatusUI = ({status}) => {
@@ -139,7 +139,7 @@ const StatusRow = ({data}) => {
 
 export default function ClosedLoopCell(props) {
   const data = props.data;
-
+  console.log(JSON.stringify(props));
   const OverdueBar = () => {
     const date = moment(data.overdueDate).format(DMY_AT_TIME_FORMAT);
     return (
@@ -149,8 +149,7 @@ export default function ClosedLoopCell(props) {
           size={20}
           color={Colors.overdueTextColor}
         />
-
-        <Text style={styles.overdueText}>{`Alert!  Overdue (${date})`}</Text>
+        <Text style={styles.overdueText}>{`Alert! Overdue (${date})`}</Text>
       </View>
     );
   };
@@ -160,8 +159,22 @@ export default function ClosedLoopCell(props) {
       onPress={() => {
         props.onPressHandler(props.data, props.index);
       }}
+      onLongPress={() => {
+        props.onLongPressHandler(props.data, props.index);
+      }}
       style={[styles.container, {borderTopWidth: data.isOverdue ? 0 : 1}]}>
       <View style={styles.container}>
+        {props.showCheckBox && (
+          <CheckBoxItem
+            item={props.data}
+            index={props.index}
+            isChecked={props.isChecked}
+            title={''}
+            onPress={() => {
+              props.onPressHandler(props.data, props.index);
+            }}
+          />
+        )}
         <View style={styles.ticketContainer}>
           {data.isOverdue && <OverdueBar />}
           <NPSAndTicketRow nps={data.npsScore} ticketId={data.id} />

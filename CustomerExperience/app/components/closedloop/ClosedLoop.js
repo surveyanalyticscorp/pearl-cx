@@ -74,6 +74,8 @@ export default function ClosedLoop(props) {
   }
   // const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
   const ticketList = useSelector(state => state.dashboard.ticketList);
+  const [selectedTickets, setSelectedTickets] = useState([]);
+  const [showCheckBox, setShowCheckBox] = useState(false);
 
   const pagerOptions = useSelector(
     state => state.dashboard.ticketDetails.pagerOptions,
@@ -287,7 +289,10 @@ export default function ClosedLoop(props) {
             <ClosedLoopCell
               data={item}
               index={index}
+              showCheckBox={showCheckBox}
+              isSelected={selectedTickets.includes(item.id)}
               onPressHandler={() => onPressHandler(item, index)}
+              onLongPressHandler={() => onLongPressHandler(item, index)}
             />
           );
         }}
@@ -296,7 +301,34 @@ export default function ClosedLoop(props) {
   };
 
   const onPressHandler = (item, index) => {
+    console.log(`onPressHandler`);
+    if (showCheckBox) {
+      if (selectedTickets.includes(item.id)) {
+        setSelectedTickets(selectedTickets.filter(id => id !== item.id));
+      } else {
+        setSelectedTickets(prevSelectedTickets => [
+          ...prevSelectedTickets,
+          item.id,
+        ]);
+      }
+      return;
+    }
+
     props.navigation.navigate('TicketDetails', item);
+  };
+  const onLongPressHandler = (item, index) => {
+    console.log(`onLongPressHandler`);
+    if (showCheckBox) {
+      setSelectedTickets([]);
+      setShowCheckBox(false);
+      return;
+    }
+    if (selectedTickets.includes(item.id)) {
+      setSelectedTickets(selectedTickets.filter(id => id !== item.id));
+    } else {
+      setSelectedTickets([...selectedTickets, item.id]);
+    }
+    setShowCheckBox(true);
   };
 
   const onFabHandler = () => {

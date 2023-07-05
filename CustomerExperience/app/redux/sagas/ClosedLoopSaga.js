@@ -63,10 +63,13 @@ import {
   CLF_QA_BASE_URL,
   CLF_GET_TICKET_lIST_SYNC,
   ESCALATE,
+  CLF_DELETE_TICKETS,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
   ACTIONS_RECEIVED,
+  DELETE_TICKET,
+  DELETE_TICKET_COMPLETE,
   GET_ACTIONS,
   GET_DEFAULT_EMAIL_TEMPLATE,
   GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
@@ -848,4 +851,31 @@ function* updateRootCauseAndAction(action) {
 }
 export function* watchUpdateRootCause() {
   yield takeLatest(UPDATE_ROOT_CAUSE, updateRootCauseAndAction);
+}
+
+function* deleteTickets(action) {
+  try {
+    const json = yield WebServiceHandler.patch(
+      CLF_DELETE_TICKETS,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+    yield put({
+      type: DELETE_TICKET_COMPLETE,
+      response: json.data,
+    });
+    showSuccessFlashMessage(json.message ?? 'TICKETS DELETED');
+  } catch (error) {
+    showErrorFlashMessage(
+      error.message ?? error.status ?? JSON.stringify(error),
+    );
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchDeleteTickets() {
+  yield takeLatest(DELETE_TICKET, deleteTickets);
 }
