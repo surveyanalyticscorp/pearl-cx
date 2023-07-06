@@ -1,5 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, FlatList, StyleSheet, RefreshControl} from 'react-native';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  TextInput,
+  RefreshControl,
+  Pressable,
+} from 'react-native';
 import ClosedLoopCell from './ClosedloopCell';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../styles/color.constants';
@@ -42,6 +49,33 @@ import {
 // import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
+const SearchIcon = () => {
+  return (
+    <IonIcons
+      name="search"
+      size={MarginConstants.halfTab * 7}
+      color={Colors.lightBlack}
+    />
+  );
+};
+const SearchBox = ({onQuerySubmit, currentText}) => {
+  return (
+    <View style={[styles.searchBox, styles.rowItem]}>
+      <SearchIcon />
+      <TextInput
+        placeholder="Search by ID"
+        style={styles.titleText}
+        returnKeyType={'search'}
+        onSubmitEditing={event => {
+          onQuerySubmit(event.nativeEvent.text);
+
+          // onChangeCommentHandler(event.nativeEvent.text);
+          // handleOnSubmit();
+        }}
+      />
+    </View>
+  );
+};
 
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
@@ -57,6 +91,9 @@ export default function ClosedLoop(props) {
   const {authToken, isTicketLoading, range, subscriberId} = useSelector(
     state => state.global,
   );
+  const [isSearchVisible, setSearchVisibility] = useState(false);
+  const [searchText, setSearchText] = useState('');
+
   const [filterState, setFilterState] = useState({
     feedbackApiKey: feedbackApiKey,
     status: '',
@@ -260,10 +297,6 @@ export default function ClosedLoop(props) {
     );
   };
 
-  const getSearchIcon = () => {
-    return <IonIcons name="search" size={20} color={Colors.lightBlack} />;
-  };
-
   const closedLoopTicketList = () => {
     return (
       <FlatList
@@ -440,6 +473,16 @@ export default function ClosedLoop(props) {
     }
   };
 
+  const submitQuery = useCallback(text => {
+    // submitQuery
+    setSearchText(text);
+    console.log('KEYBOARD_SEARCH', JSON.stringify(text));
+  }, []);
+
+  const toogleSearchView = useCallback(() => {
+    setSearchVisibility(state => !state);
+  }, []);
+
   const RenderClosedLoop = () => {
     return (
       <View style={styles.container}>
@@ -448,11 +491,23 @@ export default function ClosedLoop(props) {
             opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
             flex: 1,
           }}>
-          <HeaderFilter
-            dateRange={range}
-            onPressDateRange={getDataOnNewRange}
-            onPressFilter={openFilter}
-          />
+          <View
+            style={{
+              paddingHorizontal: MarginConstants.halfTab,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              backgroundColor: Colors.white,
+            }}>
+            <HeaderFilter
+              dateRange={range}
+              onPressDateRange={getDataOnNewRange}
+              onPressFilter={openFilter}
+            />
+            <Pressable onPress={() => setSearchVisibility(state => !state)}>
+              <SearchIcon />
+            </Pressable>
+          </View>
 
           {/* <ClosedLoopTicketList /> */}
           <ShowFilterTag
@@ -470,6 +525,9 @@ export default function ClosedLoop(props) {
               console.log(`CLICKED: ${item}`);
             }}
           />
+          {isSearchVisible && (
+            <SearchBox onQuerySubmit={submitQuery} currentText={searchText} />
+          )}
           {closedLoopTicketList()}
           <FabAddButton onPress={onFabHandler} />
 
@@ -523,6 +581,19 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.halfTab,
     marginHorizontal: MarginConstants.tab1,
     backgroundColor: Colors.white,
+  },
+  searchBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.white,
+    marginVertical: MarginConstants.halfTab,
+    paddingHorizontal: MarginConstants.tab1,
+    borderBottomWidth: 0.5,
+    borderColor: Colors.filterIconColor,
+  },
+  searchBoxTextInput: {
+    flex: 1,
+    margin: MarginConstants.halfTab,
   },
 
   filterBox: {

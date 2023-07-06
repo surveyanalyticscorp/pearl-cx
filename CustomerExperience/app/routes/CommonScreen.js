@@ -508,6 +508,7 @@ export const HeaderFilter = ({
   dateRange,
   onPressFilter,
   onPressDateRange,
+  endComponent,
 }) => {
   return (
     <View style={styles.filterAndSearchBox}>
@@ -516,6 +517,7 @@ export const HeaderFilter = ({
         range={dateRange}
         onDateRangeChangeHandler={onPressDateRange}
       />
+      {endComponent}
       {/* <View
         style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
         {getSearchIcon()}

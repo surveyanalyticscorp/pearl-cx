@@ -784,7 +784,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: Colors.white,
   },
-
   container: {
     margin: MarginConstants.halfTab,
     flex: 1,
@@ -792,7 +791,6 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderRadius: 4,
   },
-
   ticketStatusContainer: {
     backgroundColor: Colors.white,
     margin: MarginConstants.tab1,
@@ -800,24 +798,20 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-
     padding: PaddingConstants.tab1,
   },
   columnContainer: {
     alignItems: 'flex-start',
     padding: PaddingConstants.tab1,
   },
-
   statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: PaddingConstants.tab1,
   },
-
   headerText: {
     fontFamily: FontFamily.light,
-
     fontSize: TextSizes.largeText,
     color: Colors.filterIconColor,
   },
@@ -875,7 +869,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.accentLight,
   },
-
   statusText: {
     fontFamily: FontFamily.regular,
     fontWeight: FontWeight._900,
@@ -935,7 +928,6 @@ const styles = StyleSheet.create({
   },
   modelDropdown: {
     minHeight: MarginConstants.tab3,
-
     marginHorizontal: MarginConstants.tab1,
     paddingHorizontal: PaddingConstants.halfTab,
     borderColor: Colors.evenDarkerGrey,
@@ -967,10 +959,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: PaddingConstants.halfTab,
     backgroundColor: Colors.accent,
   },
-
   panelHeaderContainer: {
     flex: 1,
-
     padding: MarginConstants.tab2,
     backgroundColor: Colors.white,
     borderTopStartRadius: 5,
@@ -997,15 +987,12 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     flex: 2,
     flexDirection: 'row',
-
     height: '100%',
     backgroundColor: Colors.white,
     borderColor: Colors.evenDarkerGrey,
-
     borderWidth: 1,
     borderRadius: 3,
   },
-
   dropdownInnerContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -1020,10 +1007,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     height: '100%',
-
     paddingHorizontal: PaddingConstants.tab1,
   },
-
   // dropdownIconTextContainer: {
   //   flex: 1,
   //   flexDirection: 'row',
@@ -1031,7 +1016,6 @@ const styles = StyleSheet.create({
   //   justifyContent: 'flex-start',
   //   height: '100%',
   // },
-
   dropdownContainerText: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.regular,
