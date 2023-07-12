@@ -58,22 +58,36 @@ const SearchIcon = () => {
     />
   );
 };
-const SearchBox = ({onQuerySubmit, currentText}) => {
+const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
+  // const placeHolder = currentText.trim().length > 0 ? currentText :
+  // console.log('STATE_CHANGING, ', JSON.stringify(currentText));
+  // const [text, setText] = useState(currentText);
   return (
     <View style={[styles.searchBox, styles.rowItem]}>
       <SearchIcon />
       <TextInput
+        defaultValue={currentText}
         placeholder="Search by ID"
-        style={styles.titleText}
+        style={[styles.titleText, {flex: 1}]}
         returnKeyType={'search'}
         onSubmitEditing={event => {
           onQuerySubmit(event.nativeEvent.text);
-
-          // onChangeCommentHandler(event.nativeEvent.text);
-          // handleOnSubmit();
         }}
       />
+      <CloseIcon onResetSearch={onResetSearch} />
     </View>
+  );
+};
+
+const CloseIcon = ({onResetSearch}) => {
+  return (
+    <Pressable onPress={onResetSearch}>
+      <IonIcons
+        name="close"
+        size={MarginConstants.halfTab * 6}
+        color={Colors.filterIconColor}
+      />
+    </Pressable>
   );
 };
 
@@ -104,6 +118,7 @@ export default function ClosedLoop(props) {
     fromDate: convertDateToYMDFORMAT(range.startDate),
     toDate: convertDateToYMDFORMAT(range.endDate),
     type: '',
+    search: '',
   });
 
   function convertDateToYMDFORMAT(date) {
@@ -325,13 +340,23 @@ export default function ClosedLoop(props) {
               showCheckBox={showCheckBox}
               isSelected={selectedTickets.includes(item.id)}
               onPressHandler={() => onPressHandler(item, index)}
-              onLongPressHandler={() => onLongPressHandler(item, index)}
+              // onLongPressHandler={() => onLongPressHandler(item, index)}
             />
           );
         }}
       />
     );
   };
+
+  const onResetSearch = useCallback(() => {
+    if (searchText.trim().length > 0) {
+      setSearchText('');
+      setFilterState(prev => ({...prev, search: ''}));
+      console.log('RESET_SEARCH', JSON.stringify(''));
+    } else {
+      setSearchVisibility(false);
+    }
+  }, [searchText]);
 
   const onPressHandler = (item, index) => {
     console.log(`onPressHandler`);
@@ -474,8 +499,8 @@ export default function ClosedLoop(props) {
   };
 
   const submitQuery = useCallback(text => {
-    // submitQuery
     setSearchText(text);
+    setFilterState(prev => ({...prev, search: text}));
     console.log('KEYBOARD_SEARCH', JSON.stringify(text));
   }, []);
 
@@ -504,9 +529,11 @@ export default function ClosedLoop(props) {
               onPressDateRange={getDataOnNewRange}
               onPressFilter={openFilter}
             />
-            <Pressable onPress={() => setSearchVisibility(state => !state)}>
-              <SearchIcon />
-            </Pressable>
+            {!isSearchVisible && (
+              <Pressable onPress={() => setSearchVisibility(true)}>
+                <SearchIcon />
+              </Pressable>
+            )}
           </View>
 
           {/* <ClosedLoopTicketList /> */}
@@ -526,7 +553,11 @@ export default function ClosedLoop(props) {
             }}
           />
           {isSearchVisible && (
-            <SearchBox onQuerySubmit={submitQuery} currentText={searchText} />
+            <SearchBox
+              onResetSearch={onResetSearch}
+              onQuerySubmit={submitQuery}
+              currentText={searchText}
+            />
           )}
           {closedLoopTicketList()}
           <FabAddButton onPress={onFabHandler} />
