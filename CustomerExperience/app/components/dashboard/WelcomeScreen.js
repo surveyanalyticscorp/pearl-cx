@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
-import {StyleSheet, ImageBackground, Text} from 'react-native';
+import {StyleSheet, ImageBackground, Text, Platform} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {View} from 'react-native-animatable';
 import QPButton from '../../widgets/Button';
@@ -9,6 +9,7 @@ import {FontFamily} from '../../styles/font.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {useSelector, useDispatch} from 'react-redux';
 import {
+  callAppLoginCounter,
   getFirstTimeClosedLoopSegmentDetails,
   getWelcomeScreenDataCount,
 } from '../../redux/actions/dashboard.actions';
@@ -23,6 +24,7 @@ import {
 
 export const WelcomeScreen = props => {
   const dispatch = useDispatch();
+  const deviceType = Platform.OS === 'android' ? 0 : 1;
   const {authToken, userInfo} = useSelector(state => state.global);
 
   // const authToken = useSelector((state) => state.global.authToken);
@@ -56,9 +58,16 @@ export const WelcomeScreen = props => {
 
   useEffect(() => {
     // console.log('USER_DATA: ', userInfo, authToken);
-    // console.log('USER_DATA: ', userInfo);
+    console.log('USER_DATA: ', userInfo);
     // dispatch(getClosedLoopSegmentDetails(authToken, {pageOffset: '0'}));
     console.log('SUBSCRIBER_ID', global.subscriberId);
+    dispatch(
+      callAppLoginCounter(authToken, {
+        cxUserId: userInfo.userID,
+        deviceType: deviceType,
+      }),
+    );
+
     dispatch(
       getFirstTimeClosedLoopSegmentDetails(authToken, {pageOffset: '0'}),
     );

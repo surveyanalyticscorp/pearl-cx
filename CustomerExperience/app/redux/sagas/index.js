@@ -1,5 +1,10 @@
 import {all, fork} from 'redux-saga/effects';
-import {watchDataCount, watchGetDashboard} from './dashboardSaga';
+import {
+  watchApploginCount,
+  watchDataCount,
+  watchGetCLFBaseUrl,
+  watchGetDashboard,
+} from './dashboardSaga';
 import {
   watchAuthenticatePanel,
   watchDoLogin,
@@ -81,5 +86,7 @@ export function* rootSaga() {
     fork(watchGetResponseDetailsByResponseId),
     fork(watchGetTicketStatusHistory),
     fork(watchDeleteTickets),
+    fork(watchGetCLFBaseUrl),
+    fork(watchApploginCount),
   ]);
 }

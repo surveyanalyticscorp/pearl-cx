@@ -69,6 +69,8 @@ export const SEGMENT_SELECTOR_OPEN = 'SEGMENT_SELECTOR_OPEN';
 
 export const CLEAR_SEGEMENT_LIST = 'CLEAR_SEGEMENT_LIST';
 
+export const APP_LOGIN_COUNTER = 'APP_LOGIN_COUNTER';
+export const GET_CLF_BASE_URL = 'GET_CLF_BASE_URL';
 export const getDashboardContent = (token, param, segmentId) => ({
   type: GET_DASHBOARD,
   token,
@@ -185,16 +187,28 @@ export const getWelcomeScreenDataCount = (token, param) => ({
   token,
   param,
 });
-export const setSegment = (segment) => ({
+export const setSegment = segment => ({
   type: SEGMENT_SELECTED,
   segment: segment,
 });
 
-export const setSegmentSelectorOpen = (isOpen) => ({
+export const setSegmentSelectorOpen = isOpen => ({
   type: SEGMENT_SELECTOR_OPEN,
   isOpen: isOpen,
 });
 
 export const clearSegmentList = () => ({
   type: CLEAR_SEGEMENT_LIST,
+});
+
+export const callAppLoginCounter = (token, param) => ({
+  type: APP_LOGIN_COUNTER,
+  token,
+  param,
+});
+
+export const getCLFBaseURL = (token, param) => ({
+  type: GET_CLF_BASE_URL,
+  token,
+  param,
 });

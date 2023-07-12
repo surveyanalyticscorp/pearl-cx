@@ -1,6 +1,8 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {
+  CLF_APP_LOGIN_COUNT,
+  CLF_GET_BASE_URL,
   CLF_STATUS_WISE_PRIORITY_ANALYTICS,
   CLF_WELCOME_SCREEN_COUNTS,
   CX_HOME,
@@ -14,7 +16,9 @@ import {
   WANT_TO_RELOAD_DASHBOARD,
 } from '../actions/index';
 import {
+  APP_LOGIN_COUNTER,
   DASHBOARD_RECEIVED,
+  GET_CLF_BASE_URL,
   GET_DASHBOARD,
   GET_WELCOME_SCREEN_DATA,
   WELCOME_SCREEN_DATA_RECIEVED,
@@ -106,4 +110,42 @@ export function* fetchDataCount(action) {
 
 export function* watchDataCount() {
   yield takeLatest(GET_WELCOME_SCREEN_DATA, fetchDataCount);
+}
+
+export function* postApploginCount(action) {
+  try {
+    const clf_response = yield WebServiceHandler.postNew(
+      CLF_APP_LOGIN_COUNT,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+  } catch (error) {
+    showErrorFlashMessage(error.errorAlert);
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchApploginCount() {
+  yield takeLatest(APP_LOGIN_COUNTER, postApploginCount);
+}
+
+export function* getCLFBaseURL(action) {
+  try {
+    const clf_response = yield WebServiceHandler.get(
+      CLF_GET_BASE_URL,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+  } catch (error) {
+    showErrorFlashMessage(error.errorAlert);
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchGetCLFBaseUrl() {
+  yield takeLatest(GET_CLF_BASE_URL, getCLFBaseURL);
 }

@@ -117,6 +117,10 @@ export const CLF_DELETE_TICKET_POSTFIX = `/tickets/`;
 // /mobile/tickets/bulk-delete
 export const CLF_DELETE_TICKETS = `${CLF_BASE_URL}mobile/tickets/bulk-delete`;
 
+export const CLF_APP_LOGIN_COUNT = `${CLF_BASE_URL}app-login-count`;
+// base-url?dataCenter=us
+export const CLF_GET_BASE_URL = `${CLF_BASE_URL}base-url`;
+
 export const EMAIL = 'email';
 export const PHONE = 'phone';
 
