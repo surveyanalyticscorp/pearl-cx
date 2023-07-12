@@ -183,3 +183,7 @@ export const deleteTickets = (token, param) => ({
   token,
   param,
 });
+
+export const resetDeleteTicketStatus = () => ({
+  type: DELETE_TICKET_STATUS_RESET,
+});

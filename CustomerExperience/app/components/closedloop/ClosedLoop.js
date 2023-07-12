@@ -43,6 +43,7 @@ import ShowFilterTag from '../view/ShowFilterTag';
 import StringUtils from '../../Utils/StringUtils';
 import {
   clearSyncTicketStatus,
+  resetDeleteTicketStatus,
   resetStatusId,
   syncTickets,
 } from '../../redux/actions/closedloop.actions';
@@ -139,6 +140,9 @@ export default function ClosedLoop(props) {
   const owners = useSelector(state => state.dashboard.ownerDetails.owners);
   const keepSyncingTickets = useSelector(state => state.dashboard.ticketSync);
   const [refreshing, setRefreshing] = useState(false);
+  const {ticketDeleteStatus} = useSelector(
+    state => state.dashboard.ticketDeleteStatus,
+  );
   const sync = () => {
     dispatch(
       syncTickets(
@@ -148,6 +152,16 @@ export default function ClosedLoop(props) {
       ),
     );
   };
+
+  useEffect(() => {
+    if (
+      ticketDeleteStatus.status &&
+      ticketDeleteStatus.status.trim() === 'success'
+    ) {
+      dispatch(resetDeleteTicketStatus());
+    }
+  }, [ticketDeleteStatus]);
+
   useEffect(() => {
     if (keepSyncingTickets) {
       sync();

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   TouchableWithoutFeedback,
@@ -52,7 +52,10 @@ import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {isObjectEmpty} from '../../Utils/Utility';
 import IonIcons from 'react-native-vector-icons/Ionicons';
-import {updateSetTicketEscalation} from '../../redux/actions/closedloop.actions';
+import {
+  deleteTickets,
+  updateSetTicketEscalation,
+} from '../../redux/actions/closedloop.actions';
 import NPSScoreView from '../view/NPSScoreView';
 import DeleteTicketModal from './DeleteTicketModal';
 const ArrowDownIcon = () => (
@@ -313,6 +316,9 @@ export default function TicketOverview(props) {
   const {authToken} = useSelector(state => state.global);
   const [currentBS, setCurrentBS] = useState(bottomSheetEnum.status);
   const {owners} = useSelector(state => state.dashboard.ownerDetails ?? []);
+  const {ticketDeleteStatus} = useSelector(
+    state => state.dashboard.ticketDeleteStatus,
+  );
   const isLoading = useSelector(state => state.global.isTicketLoading);
   const ticketDetails = useSelector(state => state.dashboard.ticket);
   const hasPanelMember = hasPanelMemberObj(ticketDetails.panelMember);
@@ -339,6 +345,15 @@ export default function TicketOverview(props) {
   const [ticketOwnerIndex, setTicketOwnerIndex] = useState(
     getOwnerIndex(owners, ticketDetails.assignToId ?? 0),
   );
+
+  useEffect(() => {
+    if (
+      ticketDeleteStatus.status &&
+      ticketDeleteStatus.status.trim() === 'success'
+    ) {
+      props.navigation.goBack();
+    }
+  }, []);
 
   const getTicketOwnerList = segmentId_ => {
     dispatch(
@@ -662,7 +677,12 @@ export default function TicketOverview(props) {
   const promptSms = () => {
     console.log('SMS');
   };
-  const handleTicketAction = item => {
+
+  const deleteCurrentTickets = useCallback(text => {
+    dispatch(deleteTickets(authToken, {ticketIds: [ticketDetails.id]}));
+  }, []);
+
+  const handleTicketAction = useCallback(item => {
     switch (item.id) {
       case 1:
         navigateToSendEmail();
@@ -677,7 +697,7 @@ export default function TicketOverview(props) {
         navigateToSendEmail();
         break;
     }
-  };
+  }, []);
 
   const renderTicketTakeAction = () => {
     const data = [{id: 1, title: 'Respond via Email', icon: 'email'}];
@@ -701,6 +721,7 @@ export default function TicketOverview(props) {
           text: 'Confirm',
           onPress: () => {
             // delete API call
+            deleteCurrentTickets();
             setTicketDeleteModal(false);
           },
         },
