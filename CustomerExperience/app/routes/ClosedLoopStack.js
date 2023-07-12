@@ -27,10 +27,11 @@ import SelectEmailTemplate from '../components/closedloop/takeaction/SelectEmail
 import SendEmail from '../components/closedloop/takeaction/SendEmail';
 import FeedbackSorter from '../components/feedback/FeedbackSorter';
 import SegmentSelector from '../components/SegmentSelector';
+import ActionEmailHistory from '../components/closedloop/takeaction/ActionEmailHistory';
 
 const FeedbackStack = createStackNavigator();
 
-const feedbackStack = (props) => (
+const feedbackStack = props => (
   <FeedbackStack.Navigator>
     <FeedbackStack.Screen
       // name={translate('responses.responses')}
@@ -38,8 +39,8 @@ const feedbackStack = (props) => (
       name={translate('dashboard.tickets')}
       component={Feedback}
       options={({navigation, route}) => ({
-        headerLeft: (props) => <MenuIcon />,
-        headerRight: (props) => <SearchIcon route={'Feedback'} />,
+        headerLeft: props => <MenuIcon />,
+        headerRight: props => <SearchIcon route={'Feedback'} />,
       })}
     />
     <FeedbackStack.Screen
@@ -47,7 +48,7 @@ const feedbackStack = (props) => (
       component={SearchFeedback}
       options={({navigation, route}) => ({
         headerShown: false,
-        headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}
     />
     {CommonScreens(FeedbackStack)}
@@ -61,12 +62,10 @@ const ClosedLoopStack = ({navigation}) => {
         name="Closed Loop"
         component={ClosedLoop}
         options={({navigation, route}) => ({
-          headerTitle: (props) => (
-            <SegmentSelector screenName={'Closed Loop'} />
-          ),
+          headerTitle: props => <SegmentSelector screenName={'Closed Loop'} />,
           // headerShown: false,
           // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
-          headerLeft: (props) => <MenuIcon />,
+          headerLeft: props => <MenuIcon />,
         })}
       />
       <FeedbackStack.Screen
@@ -75,8 +74,8 @@ const ClosedLoopStack = ({navigation}) => {
         options={({navigation, route}) => ({
           // headerShown: false,
           title: 'Ticket Details',
-          headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
-          headerRight: (props) => <View />,
+          headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+          headerRight: props => <View />,
           // headerRight: (props) => <EditTicket {...props} route={route} />,
           // headerLeft: (props) => <MenuIcon />,
         })}
@@ -96,8 +95,8 @@ const ClosedLoopStack = ({navigation}) => {
         name={translate('responses.sort_by')}
         component={FeedbackSorter}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <View />,
-          headerRight: (props) => <CloseButton />,
+          headerLeft: props => <View />,
+          headerRight: props => <CloseButton />,
         })}
       />
       <FeedbackStack.Screen
@@ -126,6 +125,18 @@ const ClosedLoopStack = ({navigation}) => {
         component={SendEmail}
         options={({navigation, route}) => ({
           title: 'Send Email',
+          headerShown: false,
+          // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+          // headerRight: (props) => <EditTicket {...props} route={route} />,
+          // headerLeft: (props) => <MenuIcon />,
+        })}
+      />
+
+      <FeedbackStack.Screen
+        name={'actionEmailHistory'}
+        component={ActionEmailHistory}
+        options={({navigation, route}) => ({
+          title: 'Action Email History',
           headerShown: false,
           // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
           // headerRight: (props) => <EditTicket {...props} route={route} />,

@@ -1,16 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Pressable,
-  Keyboard,
-  Platform,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, TextInput, View, Pressable} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -34,6 +23,36 @@ import StringUtils from '../../../Utils/StringUtils';
 import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
 // import {useHeaderHeight} from '@react-navigation/elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
+const RenderHeader = () => {
+  return (
+    <View style={styles.rowContainerHeader}>
+      <Text style={styles.headerText}>Respond Via Email</Text>
+      <CloseButton color={Colors.filterIconColor} />
+    </View>
+  );
+};
+
+const RenderTicketId = ({ticketId}) => {
+  return (
+    <View style={styles.ticketIdView}>
+      <Text style={styles.ticketIdText}>{`Ticket ID #${ticketId}`}</Text>
+    </View>
+  );
+};
+
+const RenderIonIcon = ({name, size, color, style}) => {
+  const color_ = Colors.filterIconColor;
+
+  return (
+    <IonIcons
+      name={name}
+      size={size ?? 24}
+      color={color ?? color_}
+      style={style}
+    />
+  );
+};
 
 const EmailToFrom = ({title, value}) => {
   return (
@@ -62,6 +81,50 @@ const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
       </View>
       <View style={styles.devider} />
     </View>
+  );
+};
+
+const RenderOptionsView = ({
+  onPressTemplate,
+  onPressAttachment,
+  onPressSend,
+}) => {
+  return (
+    <View style={styles.renderOptionView}>
+      {/* {getTemplateIcon()} */}
+      <TemplateIcon onPressTemplate={onPressTemplate} />
+      {/* {getAttachmentIcon()} */}
+      {/* {getSendIcon()} */}
+      <SendIcon onPressSend={onPressSend} />
+    </View>
+  );
+};
+
+const SendIcon = ({onPressSend}) => {
+  return (
+    <Pressable onPress={onPressSend} style={styles.optionIcon}>
+      <RenderIonIcon
+        name={'send'}
+        color={Colors.accentLight}
+        style={{transform: [{rotateZ: '-45deg'}]}}
+      />
+    </Pressable>
+  );
+};
+
+const getAttachmentIcon = () => {
+  return (
+    <Pressable style={styles.optionIcon}>
+      <RenderIonIcon name={'attach'} />
+    </Pressable>
+  );
+};
+
+const TemplateIcon = ({onPressTemplate}) => {
+  return (
+    <Pressable onPress={onPressTemplate} style={styles.optionIcon}>
+      <RenderIonIcon name={'ios-reader'} />
+    </Pressable>
   );
 };
 
@@ -135,6 +198,50 @@ const EmailBody = ({
   );
 };
 
+const ActionHistory = ({onPressActionHistoryItem}) => {
+  return (
+    <View style={styles.actionHistoryContainer}>
+      <Text style={styles.actionHistoryHeader}>Action History</Text>
+
+      <ActionHistoryItem
+        onItemPress={onPressActionHistoryItem}
+        emailSubject={'Sample Email Subject'}
+        senderName={'Amy'}
+        timeStamp={'1 minute Ago'}
+        totalCount={'4'}
+      />
+    </View>
+  );
+};
+
+const ActionHistoryItem = ({
+  emailSubject,
+  onItemPress,
+  senderName,
+  timeStamp,
+  totalCount,
+}) => {
+  return (
+    <Pressable onPress={onItemPress} style={styles.actionHistoryItemContainer}>
+      <Text style={styles.actionHistorySubjectText}>{emailSubject}</Text>
+      <View style={styles.actionHistoryItemDetails}>
+        <Text style={styles.actionHistoryDetailText}>by: </Text>
+        <Text style={[styles.actionHistoryDetailText, {fontStyle: 'italic'}]}>
+          {senderName}
+        </Text>
+
+        <View style={styles.verticalDevider} />
+        <Text style={styles.actionHistoryDetailText}>{timeStamp}</Text>
+        <View style={styles.verticalDevider} />
+        <Text
+          style={
+            styles.actionHistoryDetailText
+          }>{`total actions: ${totalCount}`}</Text>
+      </View>
+    </Pressable>
+  );
+};
+
 export default function SendEmail(props) {
   // const height = useHeaderHeight();
   const defaultEmail = useSelector(
@@ -205,70 +312,23 @@ export default function SendEmail(props) {
   //     emailBody: defaultEmail.templateText,
   //   }));
   // }, [defaultEmail]);
-
-  const RenderHeader = () => {
-    return (
-      <View style={styles.rowContainerHeader}>
-        <Text style={styles.headerText}>Respond Via Email</Text>
-        <CloseButton color={Colors.filterIconColor} />
-      </View>
-    );
+  const onPressActionHistoryItem = () => {
+    console.log('on Press action history Item');
+    props.navigation.navigate('actionEmailHistory', {
+      ticketId: ticketId,
+    });
   };
 
-  const RenderIonIcon = props => {
-    const color = Colors.filterIconColor;
-
-    return (
-      <IonIcons
-        name={props.name}
-        size={props.size ?? 24}
-        color={props.color ?? color}
-        style={props.style}
-      />
-    );
-  };
-  const getSendIcon = () => {
-    return (
-      <Pressable onPress={() => callSendEmailApi()} style={styles.optionIcon}>
-        <RenderIonIcon
-          name={'send'}
-          color={Colors.accentLight}
-          style={{transform: [{rotateZ: '-45deg'}]}}
-        />
-      </Pressable>
-    );
+  const onPressTemplate = () => {
+    richText.current.dismissKeyboard();
+    bs.current.snapTo(0);
+    console.log('call');
   };
 
-  const getAttachmentIcon = () => {
-    return (
-      <Pressable style={styles.optionIcon}>
-        <RenderIonIcon name={'attach'} />
-      </Pressable>
-    );
-  };
+  const onPressAttachment = () => {};
 
-  const getTemplateIcon = () => {
-    return (
-      <Pressable
-        onPress={() => {
-          richText.current.dismissKeyboard();
-          bs.current.snapTo(0);
-          console.log('call');
-        }}
-        style={styles.optionIcon}>
-        <RenderIonIcon name={'ios-reader'} />
-      </Pressable>
-    );
-  };
-
-  const RenderOptionsView = () => {
-    return (
-      <View style={styles.renderOptionView}>
-        {getTemplateIcon()}
-        {/* {getAttachmentIcon()} */}
-        {getSendIcon()}
-      </View>
-    );
+  const onPressSend = () => {
+    callSendEmailApi();
   };
 
   const onChangeSubject = text => {
@@ -350,7 +410,12 @@ export default function SendEmail(props) {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 16}> */}
         <RenderHeader />
-        <RenderOptionsView />
+        <RenderTicketId ticketId={ticketId} />
+        <RenderOptionsView
+          onPressTemplate={onPressTemplate}
+          onPressAttachment={onPressAttachment}
+          onPressSend={onPressSend}
+        />
         {/* <RenderToTextInput />
         <RenderFromTextInput /> */}
         <EmailToFrom title={'To:'} value={body.toEmail} />
@@ -398,6 +463,7 @@ export default function SendEmail(props) {
             flex: 2,
           }}
         />
+        <ActionHistory onPressActionHistoryItem={onPressActionHistoryItem} />
         {/* <EmailBody
           refEditor={richText}
           refToolbar={richTextToolBar}
@@ -511,10 +577,56 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,
   },
+  ticketIdView: {
+    flexDirection: 'row-reverse',
+    padding: PaddingConstants.halfTab,
+    marginHorizontal: MarginConstants.tab1,
+  },
+  ticketIdText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    color: Colors.accentLight,
+  },
+  actionHistoryContainer: {
+    margin: MarginConstants.tab2,
+    paddingTop: PaddingConstants.tab1,
+  },
+
+  actionHistoryItemContainer: {
+    margin: MarginConstants.tab1,
+    paddingTop: PaddingConstants.tab1,
+  },
+  actionHistoryItemDetails: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  actionHistoryHeader: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.largeText,
+    color: Colors.filterIconColor,
+  },
+  actionHistorySubjectText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    color: Colors.filterIconColor,
+  },
+  actionHistoryDetailText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.mediumText,
+    color: Colors.filterIconColor,
+  },
   devider: {
     height: 1,
     flex: 1,
     backgroundColor: Colors.darkGrey,
   },
+  verticalDevider: {
+    width: 1,
+    flexDirection: 'row',
+    backgroundColor: Colors.filterIconColor,
+    marginHorizontal: MarginConstants.tab1,
+    marginVertical: MarginConstants.halfTab,
+  },
+
   contentContainer: {backgroundColor: Colors.white, height: '100%'},
 });
