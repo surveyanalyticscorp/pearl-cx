@@ -59,7 +59,7 @@ const initialState = {
   apiCallStatus: {},
   welcomeScreenData: {},
   emailData: {},
-  ticketDeleteStatus: {},
+  ticketDeleteStatus: {status: 'default'},
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -287,7 +287,7 @@ const dashboardReducer = (state = initialState, action) => {
     }
 
     case DELETE_TICKET_STATUS_RESET: {
-      return {...state, ticketDeleteStatus: {}};
+      return {...state, ticketDeleteStatus: {status: 'default'}};
     }
 
     default: {

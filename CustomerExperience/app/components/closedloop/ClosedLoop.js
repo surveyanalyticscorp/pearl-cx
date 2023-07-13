@@ -140,9 +140,7 @@ export default function ClosedLoop(props) {
   const owners = useSelector(state => state.dashboard.ownerDetails.owners);
   const keepSyncingTickets = useSelector(state => state.dashboard.ticketSync);
   const [refreshing, setRefreshing] = useState(false);
-  const {ticketDeleteStatus} = useSelector(
-    state => state.dashboard.ticketDeleteStatus,
-  );
+  const {ticketDeleteStatus} = useSelector(state => state.dashboard);
   const sync = () => {
     dispatch(
       syncTickets(
@@ -159,6 +157,7 @@ export default function ClosedLoop(props) {
       ticketDeleteStatus.status.trim() === 'success'
     ) {
       dispatch(resetDeleteTicketStatus());
+      onRefresh();
     }
   }, [ticketDeleteStatus]);
 

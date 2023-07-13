@@ -855,14 +855,14 @@ export function* watchUpdateRootCause() {
 
 function* deleteTickets(action) {
   try {
-    const json = yield WebServiceHandler.patch(
+    const json = yield WebServiceHandler.delete(
       CLF_DELETE_TICKETS,
       {'Auth-Token': action.token},
       action.param,
     );
     yield put({
       type: DELETE_TICKET_COMPLETE,
-      response: json.data,
+      response: json,
     });
     showSuccessFlashMessage(json.message ?? 'TICKETS DELETED');
   } catch (error) {

@@ -316,9 +316,7 @@ export default function TicketOverview(props) {
   const {authToken} = useSelector(state => state.global);
   const [currentBS, setCurrentBS] = useState(bottomSheetEnum.status);
   const {owners} = useSelector(state => state.dashboard.ownerDetails ?? []);
-  const {ticketDeleteStatus} = useSelector(
-    state => state.dashboard.ticketDeleteStatus,
-  );
+  const {ticketDeleteStatus} = useSelector(state => state.dashboard);
   const isLoading = useSelector(state => state.global.isTicketLoading);
   const ticketDetails = useSelector(state => state.dashboard.ticket);
   const hasPanelMember = hasPanelMemberObj(ticketDetails.panelMember);
@@ -342,6 +340,10 @@ export default function TicketOverview(props) {
     setTicketDeleteModal(true);
   };
 
+  const goBack = () => {
+    props.navigation.goBack();
+  };
+
   const [ticketOwnerIndex, setTicketOwnerIndex] = useState(
     getOwnerIndex(owners, ticketDetails.assignToId ?? 0),
   );
@@ -351,9 +353,11 @@ export default function TicketOverview(props) {
       ticketDeleteStatus.status &&
       ticketDeleteStatus.status.trim() === 'success'
     ) {
-      props.navigation.goBack();
+      // props.navigation.goBack();
+      goBack();
+      console.log('GO BACK!!!');
     }
-  }, []);
+  }, [ticketDeleteStatus]);
 
   const getTicketOwnerList = segmentId_ => {
     dispatch(
