@@ -123,7 +123,7 @@ export const CLF_GET_BASE_URL = `${CLF_BASE_URL}base-url`;
 
 export const CLF_GET_ACTION_HISTORY_PREFIX = `${CLF_BASE_URL}mobile/tickets/`;
 export const CLF_GET_ACTION_SUMMARY_POSTFIX = `/action-mail`;
-export const CLF_GET_ACTION_DETAILS_POSTFIX = `action-mails`;
+export const CLF_GET_ACTION_DETAILS_POSTFIX = `/action-mails`;
 
 export const EMAIL = 'email';
 export const PHONE = 'phone';

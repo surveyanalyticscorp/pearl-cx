@@ -6,6 +6,7 @@ import {
   View,
   Pressable,
   FlatList,
+  useWindowDimensions,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -30,6 +31,9 @@ import StringUtils from '../../../Utils/StringUtils';
 import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
 // import {useHeaderHeight} from '@react-navigation/elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
+import WebView from 'react-native-webview';
+import RenderHtml from 'react-native-render-html';
 
 const RenderHeader = ({subject}) => {
   return (
@@ -119,127 +123,74 @@ const SendIcon = ({onPressSend}) => {
   );
 };
 
-const getAttachmentIcon = () => {
-  return (
-    <Pressable style={styles.optionIcon}>
-      <RenderIonIcon name={'attach'} />
-    </Pressable>
-  );
-};
-
-const TemplateIcon = ({onPressTemplate}) => {
-  return (
-    <Pressable onPress={onPressTemplate} style={styles.optionIcon}>
-      <RenderIonIcon name={'ios-reader'} />
-    </Pressable>
-  );
-};
-
-const ActionHistory = ({onPressActionHistoryItem}) => {
-  return (
-    <View style={styles.actionHistoryContainer}>
-      <Text style={styles.actionHistoryHeader}>Action History</Text>
-
-      <ActionHistoryItem
-        onItemPress={onPressActionHistoryItem}
-        emailSubject={'Sample Email Subject'}
-        senderName={'Amy'}
-        timeStamp={'1 minute Ago'}
-        totalCount={'4'}
-      />
-    </View>
-  );
-};
-
-const ActionHistoryItem = ({
-  emailBody,
-  onItemPress,
-  senderName,
-  timeStamp,
-  totalCount,
-}) => {
+const ActionHistoryItem = ({item, index}) => {
+  const emailBody = item?.emailBody ?? 'Default email body';
+  const senderName = item?.emailSendBy ?? 'Default sender';
+  // const actionCount = (summary?.data?.totalAction ?? 0).toString();
+  const timeStamp = convertDateTimeAgo(item?.createdAt);
   return (
     <Pressable style={styles.actionHistoryItemContainer}>
       <View style={styles.actionHistoryItemDetails}>
         <Text style={styles.actionHistoryUserNameText}>{senderName}</Text>
         <Text style={styles.actionHistoryDetailText}>{timeStamp}</Text>
       </View>
-      <Text style={styles.actionHistoryEmailBodyText}>{emailBody}</Text>
+      {/* <WebView html={emailBody} /> */}
+      <EmailBody body={emailBody} />
+      {/* <Text style={styles.actionHistoryEmailBodyText}>{emailBody}</Text> */}
     </Pressable>
   );
 };
 
-export default function ActionEmailHistory({subject, ticketId}) {
-  const data = [
-    {
-      emailBody: 'Lets go sfasff sfs fsf s',
-      senderName: 'Kavin',
-      timeStamp: '12 minutes ago',
-    },
-    {
-      emailBody: 'Lets go sfasff sfs fsf s',
-      senderName: 'Kavin',
-      timeStamp: '12 minutes ago',
-    },
-    {
-      emailBody: 'Lets go sfasff sfs fsf s',
-      senderName: 'Kavin',
-      timeStamp: '12 minutes ago',
-    },
-    {
-      emailBody: 'Lets go sfasff sfs fsf s',
-      senderName: 'Kavin',
-      timeStamp: '12 minutes ago',
-    },
-  ];
+const EmailBody = ({body}) => {
+  const {width} = useWindowDimensions();
+  const source = {
+    html: `
+  ${body}`,
+  };
+
+  return (
+    <View>
+      <RenderHtml source={source} contentWidth={width} />
+    </View>
+  );
+};
+export default function ActionEmailHistory({ticketId}) {
+  const {details, summary} = useSelector(
+    state => state.dashboard.ticketActionHistory,
+  );
+
+  if (isObjectEmpty(details)) {
+    return <View />;
+  }
+
+  const emailSubject = summary?.data?.action?.subject ?? 'Default subject';
 
   return (
     <View style={styles.container}>
-      <KeyboardAwareScrollView>
-        <RenderHeader subject={'sample subject'} />
-        <FlatList
-          // refreshControl={
-          //   <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-          // }
-          style={styles.flatList}
-          data={data}
-          // onEndReached={loadMoreData}
-          // onEndReachedThreshold={0.25}
-          // ListFooterComponent={isPagination ? <QPSpinner /> : <View />}
-          // extraData={[ticketList]}
-          // ListEmptyComponent={
-          //   !isTicketLoading && !isPagination ? (
-          //     <NoItemsFound>No tickets found</NoItemsFound>
-          //   ) : (
-          //     <View />
-          //   )
-          // }
+      <RenderHeader subject={emailSubject} />
+      <FlatList
+        // refreshControl={
+        //   <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+        // }
+        style={styles.flatList}
+        data={details.data}
+        // onEndReached={loadMoreData}
+        // onEndReachedThreshold={0.25}
+        // ListFooterComponent={isPagination ? <QPSpinner /> : <View />}
+        // extraData={[ticketList]}
+        // ListEmptyComponent={
+        //   !isTicketLoading && !isPagination ? (
+        //     <NoItemsFound>No tickets found</NoItemsFound>
+        //   ) : (
+        //     <View />
+        //   )
+        // }
 
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => {
-            return (
-              <ActionHistoryItem
-                senderName={item.senderName}
-                emailBody={item.emailBody}
-                timeStamp={item.timeStamp}
-                index={index}
-                //   showCheckBox={showCheckBox}
-                //   isSelected={selectedTickets.includes(item.id)}
-                //   onPressHandler={}
-                //   onLongPressHandler={() => onLongPressHandler(item, index)}
-              />
-            );
-          }}
-        />
-        {/* <RenderTicketId ticketId={ticketId} /> */}
-        {/* <RenderOptionsView
-          onPressTemplate={onPressTemplate}
-          onPressAttachment={onPressAttachment}
-          onPressSend={onPressSend}
-        /> */}
-        {/* <RenderToTextInput />
-        <RenderFromTextInput /> */}
-      </KeyboardAwareScrollView>
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item, index}) => {
+          return <ActionHistoryItem item={item} index={index} />;
+        }}
+      />
     </View>
   );
 }
@@ -251,7 +202,7 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 5,
     borderTopStartRadius: 5,
     marginTop: MarginConstants.tab2,
-    paddingTop: PaddingConstants.tab1,
+    paddingTop: PaddingConstants.halfTab,
   },
 
   innerContainer: {
