@@ -15,7 +15,7 @@ import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import {NoItemsFound} from '../../routes/CommonScreen';
-import {getDateTimeAgo} from '../../Utils/TimeUtils';
+import {convertDateTimeAgo, getDateTimeAgo} from '../../Utils/TimeUtils';
 import {getClosedLoopTicketItemActivity} from '../../redux/actions/dashboard.actions';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 
@@ -38,7 +38,7 @@ const RenderItem = ({item}) => {
       <View style={{marginHorizontal: MarginConstants.tab1}}>
         <Text style={styles.activity}>{item.activityText}</Text>
       </View>
-      <Text style={styles.date}>{convertDateTime(item.createdAt)}</Text>
+      <Text style={styles.date}>{convertDateTimeAgo(item.createdAt)}</Text>
     </View>
   );
 };
@@ -52,7 +52,7 @@ const RenderMyItem = ({item}) => {
       <View style={{marginHorizontal: MarginConstants.tab1}}>
         <Text style={styles.activity}> {item.activityText} </Text>
       </View>
-      <Text style={styles.date}> {convertDateTime(item.createdAt)}</Text>
+      <Text style={styles.date}> {convertDateTimeAgo(item.createdAt)}</Text>
     </View>
   );
 };
@@ -74,10 +74,6 @@ const SortingView = ({toggleSorting, isInverted}) => {
     </Pressable>
   );
 };
-
-function convertDateTime(dateStr) {
-  return getDateTimeAgo(moment.utc(dateStr).toDate());
-}
 
 export default function TicketActivity(props) {
   const [refreshing, setRefreshing] = useState(false);

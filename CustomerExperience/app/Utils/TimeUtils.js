@@ -1,11 +1,19 @@
 import moment from 'moment';
 import {DMY_AT_TIME_FORMAT} from './AppConstants';
+import {isStringNullOrEmpty} from './Utility';
 
 function convertToDateTime(date) {
   return moment(date).local().format(DMY_AT_TIME_FORMAT);
 }
 
-export const getDateTimeAgo = (date) => {
+export function convertDateTimeAgo(dateStr) {
+  if (isStringNullOrEmpty(dateStr)) {
+    return 'N/A';
+  }
+  return getDateTimeAgo(moment.utc(dateStr).toDate());
+}
+
+export const getDateTimeAgo = date => {
   const ONE_MINUTE = 60 * 1000;
   const ONE_HOUR = 60 * ONE_MINUTE;
   const ONE_DAY = 24 * ONE_HOUR;

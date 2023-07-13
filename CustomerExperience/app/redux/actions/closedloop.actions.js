@@ -90,6 +90,14 @@ export const DELETE_TICKET = 'TICKET_DELETE';
 export const DELETE_TICKET_COMPLETE = 'TICKET_DELETE_COMPLETE';
 export const DELETE_TICKET_STATUS_RESET = 'TICKET_DELETE_STATUS_RESET';
 
+export const ACTION_HISTORY_SUMMARY = 'ACTION_HISTORY_SUMMARY';
+export const ACTION_HISTORY_SUMMARY_RECEIVED =
+  'ACTION_HISTORY_SUMMARY_RECEIVED';
+
+export const ACTION_HISTORY_DETAILS = 'ACTION_HISTORY_DETAILS';
+export const ACTION_HISTORY_DETAILS_RECEIVED =
+  'ACTION_HISTORY_DETAILS_RECEIVED';
+
 export const syncTickets = (token, param, feedbackId) => ({
   type: GET_TICKET_LIST_SYNC,
   token,
@@ -186,4 +194,16 @@ export const deleteTickets = (token, param) => ({
 
 export const resetDeleteTicketStatus = () => ({
   type: DELETE_TICKET_STATUS_RESET,
+});
+
+export const getActionHistorySummary = (token, ticketId) => ({
+  type: ACTION_HISTORY_SUMMARY,
+  token,
+  ticketId,
+});
+
+export const getActionHistoryDetails = (token, ticketId) => ({
+  type: ACTION_HISTORY_DETAILS,
+  token,
+  ticketId,
 });

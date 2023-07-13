@@ -64,10 +64,17 @@ import {
   CLF_GET_TICKET_lIST_SYNC,
   ESCALATE,
   CLF_DELETE_TICKETS,
+  CLF_GET_ACTION_HISTORY_PREFIX,
+  CLF_GET_ACTION_SUMMARY_POSTFIX,
+  CLF_GET_ACTION_DETAILS_POSTFIX,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
   ACTIONS_RECEIVED,
+  ACTION_HISTORY_DETAILS,
+  ACTION_HISTORY_DETAILS_RECEIVED,
+  ACTION_HISTORY_SUMMARY,
+  ACTION_HISTORY_SUMMARY_RECEIVED,
   DELETE_TICKET,
   DELETE_TICKET_COMPLETE,
   GET_ACTIONS,
@@ -878,4 +885,54 @@ function* deleteTickets(action) {
 }
 export function* watchDeleteTickets() {
   yield takeLatest(DELETE_TICKET, deleteTickets);
+}
+
+function* fetchActionSummary(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      CLF_GET_ACTION_HISTORY_PREFIX +
+        action.ticketId +
+        CLF_GET_ACTION_SUMMARY_POSTFIX,
+      {'Auth-Token': action.token},
+      {},
+    );
+    yield put({
+      type: ACTION_HISTORY_SUMMARY_RECEIVED,
+      response: json,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchActionSummary() {
+  yield takeLatest(ACTION_HISTORY_SUMMARY, fetchActionSummary);
+}
+
+function* fetchActionDetails(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      CLF_GET_ACTION_HISTORY_PREFIX +
+        action.ticketId +
+        CLF_GET_ACTION_DETAILS_POSTFIX,
+      {'Auth-Token': action.token},
+      {},
+    );
+    yield put({
+      type: ACTION_HISTORY_DETAILS_RECEIVED,
+      response: json,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchActionDetails() {
+  yield takeLatest(ACTION_HISTORY_DETAILS, fetchActionDetails);
 }

@@ -37,6 +37,8 @@ import {
   watchSyncTickets,
   watchTicketEscalation,
   watchDeleteTickets,
+  watchActionSummary,
+  watchActionDetails,
 } from './ClosedLoopSaga';
 import {watchGetNotification} from './notificationSaga';
 import {
@@ -88,5 +90,7 @@ export function* rootSaga() {
     fork(watchDeleteTickets),
     fork(watchGetCLFBaseUrl),
     fork(watchApploginCount),
+    fork(watchActionSummary),
+    fork(watchActionDetails),
   ]);
 }

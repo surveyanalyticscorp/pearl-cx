@@ -1,6 +1,8 @@
 import {getUniqueValues} from '../../Utils/TicketUtils';
 import {
   ACTIONS_RECEIVED,
+  ACTION_HISTORY_DETAILS_RECEIVED,
+  ACTION_HISTORY_SUMMARY_RECEIVED,
   CLEAR_TICKET_SYNC,
   DELETE_TICKET_COMPLETE,
   DELETE_TICKET_STATUS_RESET,
@@ -60,6 +62,7 @@ const initialState = {
   welcomeScreenData: {},
   emailData: {},
   ticketDeleteStatus: {status: 'default'},
+  ticketActionHistory: {summary: {}, details: {}},
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -288,6 +291,26 @@ const dashboardReducer = (state = initialState, action) => {
 
     case DELETE_TICKET_STATUS_RESET: {
       return {...state, ticketDeleteStatus: {status: 'default'}};
+    }
+
+    case ACTION_HISTORY_SUMMARY_RECEIVED: {
+      return {
+        ...state,
+        ticketActionHistory: {
+          ...state.ticketActionHistory,
+          summary: action.response,
+        },
+      };
+    }
+
+    case ACTION_HISTORY_DETAILS_RECEIVED: {
+      return {
+        ...state,
+        ticketActionHistory: {
+          ...state.ticketActionHistory,
+          details: action.response,
+        },
+      };
     }
 
     default: {

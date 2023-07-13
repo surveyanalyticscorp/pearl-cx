@@ -15,6 +15,8 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import SelectEmailTemplate from './SelectEmailTemplate';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  getActionHistoryDetails,
+  getActionHistorySummary,
   getDefaultEmailTemplate,
   getEmailTemplates,
   sendEmail,
@@ -23,6 +25,7 @@ import StringUtils from '../../../Utils/StringUtils';
 import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
 // import {useHeaderHeight} from '@react-navigation/elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 
 const RenderHeader = () => {
   return (
@@ -203,24 +206,22 @@ const ActionHistory = ({onPressActionHistoryItem}) => {
     <View style={styles.actionHistoryContainer}>
       <Text style={styles.actionHistoryHeader}>Action History</Text>
 
-      <ActionHistoryItem
-        onItemPress={onPressActionHistoryItem}
-        emailSubject={'Sample Email Subject'}
-        senderName={'Amy'}
-        timeStamp={'1 minute Ago'}
-        totalCount={'4'}
-      />
+      <ActionHistoryItem onItemPress={onPressActionHistoryItem} />
     </View>
   );
 };
 
-const ActionHistoryItem = ({
-  emailSubject,
-  onItemPress,
-  senderName,
-  timeStamp,
-  totalCount,
-}) => {
+const ActionHistoryItem = ({onItemPress}) => {
+  const {summary} = useSelector(state => state.dashboard.ticketActionHistory);
+
+  if (isObjectEmpty(summary)) {
+    return <View />;
+  }
+
+  const emailSubject = summary?.data?.action?.subject ?? 'Default subject';
+  const senderName = summary?.data?.action?.emailSendBy ?? 'Default sender';
+  const actionCount = (summary?.data?.totalAction ?? 0).toString();
+  const timeStamp = convertDateTimeAgo(summary?.data?.action?.createdAt);
   return (
     <Pressable onPress={onItemPress} style={styles.actionHistoryItemContainer}>
       <Text style={styles.actionHistorySubjectText}>{emailSubject}</Text>
@@ -236,7 +237,7 @@ const ActionHistoryItem = ({
         <Text
           style={
             styles.actionHistoryDetailText
-          }>{`total actions: ${totalCount}`}</Text>
+          }>{`total actions: ${actionCount}`}</Text>
       </View>
     </Pressable>
   );
@@ -303,6 +304,8 @@ export default function SendEmail(props) {
       getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
     );
     dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
+    dispatch(getActionHistorySummary(authToken, ticketId));
+    dispatch(getActionHistoryDetails(authToken, ticketId));
   }, []);
 
   // useEffect(() => {
@@ -385,7 +388,7 @@ export default function SendEmail(props) {
       return;
     } else {
       dispatch(sendEmail(authToken, ticketId, body, queryParam));
-      props.navigation.goBack();
+      // props.navigation.goBack();
     }
   };
 
