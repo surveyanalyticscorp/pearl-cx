@@ -42,7 +42,7 @@ const ActionHistoryItem = ({item, index}) => {
         </View>
       </View>
 
-      <EmailBody style={{margin: MarginConstants.tab1}} body={emailBody} />
+      <EmailBody body={emailBody} />
     </View>
   );
 };
@@ -55,8 +55,8 @@ const EmailBody = ({body}) => {
   };
 
   return (
-    <View>
-      <RenderHtml source={source} contentWidth={width / 0.2} />
+    <View style={{marginHorizontal: MarginConstants.tab2}}>
+      <RenderHtml source={source} contentWidth={width / 0.5} />
     </View>
   );
 };
