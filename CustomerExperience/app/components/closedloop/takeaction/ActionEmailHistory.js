@@ -6,6 +6,7 @@ import {
   Pressable,
   FlatList,
   useWindowDimensions,
+  Alert,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -17,6 +18,7 @@ import {isObjectEmpty} from '../../../Utils/Utility';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import RenderHtml from 'react-native-render-html';
 import {useSelector} from 'react-redux';
+import FaIcon from 'react-native-vector-icons/FontAwesome';
 
 const RenderHeader = ({subject}) => {
   return (
@@ -43,7 +45,46 @@ const ActionHistoryItem = ({item, index}) => {
       </View>
 
       <EmailBody body={emailBody} />
+      {/* {item.attachments.length > 0 && <Attachment data={item.attachments} />} */}
     </View>
+  );
+};
+
+const Attachment = ({data}) => {
+  return (
+    <View>
+      <Text style={styles.attachmentHeaderText}>Attachments</Text>
+      <FlatList
+        data={data}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item, index}) => {
+          return <AttachmentItem item={item} index={index} />;
+        }}
+      />
+    </View>
+  );
+};
+const AttachmentItem = ({item, index}) => {
+  return (
+    <Pressable
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginHorizontal: MarginConstants.tab2,
+      }}>
+      <AttachmentIcon
+        name={'file-photo-o'}
+        size={TextSizes.secondary}
+        color={Colors.accentLight}
+      />
+      <Text style={styles.attachmentText}>{item.fileName}</Text>
+    </Pressable>
+  );
+};
+
+const AttachmentIcon = ({name, size, color}) => {
+  return (
+    <FaIcon name={name} size={size ?? 24} color={color ?? Colors.borderColor} />
   );
 };
 
@@ -117,9 +158,20 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.primary,
     color: Colors.filterIconColor,
   },
+  attachmentHeaderText: {
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.primary,
+    color: Colors.filterIconColor,
+  },
   actionHistoryDetailText: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.mediumText,
     color: Colors.filterIconColor,
+  },
+  attachmentText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    color: Colors.accentLight,
+    marginHorizontal: MarginConstants.halfTab,
   },
 });
