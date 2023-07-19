@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,21 +7,23 @@ import {
   FlatList,
   useWindowDimensions,
   Linking,
-  Alert,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
-import {Avatar, CloseButton} from '../../../routes/CommonScreen';
+import {
+  Avatar,
+  CloseButton,
+  listItemSeparator,
+} from '../../../routes/CommonScreen';
 import {isObjectEmpty} from '../../../Utils/Utility';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import RenderHtml from 'react-native-render-html';
 import {useSelector} from 'react-redux';
 import FaIcon from 'react-native-vector-icons/FontAwesome';
-
-import {useCallback} from 'react';
+import {AttachmentIcon} from '../../../Utils/IconUtils';
 // import {Link} from '@react-navigation/native';
 const RenderHeader = ({subject}) => {
   return (
@@ -79,24 +81,32 @@ const AttachmentItem = ({item, index}) => {
   }, [item.path]);
 
   return (
-    <Pressable
-      onPress={onPress}
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginHorizontal: MarginConstants.tab2,
-      }}>
-      <AttachmentIcon name={'file-photo-o'} />
-      <Text style={styles.attachmentText}>{item.fileName}</Text>
+    <Pressable onPress={onPress} style={styles.attachmentItem}>
+      <AttachmentIcon mimeType={item.mimeType} />
+      <Text numberOfLines={1} style={styles.attachmentText}>
+        {item.fileName}
+      </Text>
     </Pressable>
   );
 };
 
-const AttachmentIcon = ({name, size, color}) => {
-  return (
-    <FaIcon name={name} size={size ?? 12} color={color ?? Colors.accentLight} />
-  );
-};
+// const AttachmentIcon = ({mimeType}) => {
+//   const size = 12;
+//   const color = Colors.accentLight;
+//   if (mimeType.trim().includes('image')) {
+//     return <FaIcon name={'file-photo-o'} size={size} color={color} />;
+//   } else if (mimeType.trim().includes('video')) {
+//     return <FaIcon name={'file-photo-o'} size={size} color={color} />;
+//   } else if (mimeType.trim().includes('text')) {
+//     return <FaIcon name={'file-photo-o'} size={size} color={color} />;
+//   } else if (mimeType.trim().includes('audio')) {
+//     return <FaIcon name={'file-photo-o'} size={size} color={color} />;
+//   } else if (mimeType.trim().includes('image')) {
+//     return <FaIcon name={'file-photo-o'} size={size} color={color} />;
+//   } else {
+//     return <FaIcon name={'file-photo-o'} size={size} color={color} />;
+//   }
+// };
 
 const EmailBody = ({body}) => {
   const {width} = useWindowDimensions();
@@ -106,7 +116,7 @@ const EmailBody = ({body}) => {
   };
 
   return (
-    <View style={{marginHorizontal: MarginConstants.tab2}}>
+    <View style={styles.emailBody}>
       <RenderHtml source={source} contentWidth={width / 0.5} />
     </View>
   );
@@ -131,6 +141,7 @@ export default function ActionEmailHistory(props) {
         renderItem={({item, index}) => {
           return <ActionHistoryItem item={item} index={index} />;
         }}
+        ItemSeparatorComponent={listItemSeparator}
       />
     </View>
   );
@@ -144,6 +155,7 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 5,
     marginTop: MarginConstants.tab2,
     paddingTop: PaddingConstants.halfTab,
+    marginHorizontal: MarginConstants.halfTab,
   },
   rowContainerHeader: {
     flexDirection: 'row',
@@ -184,4 +196,10 @@ const styles = StyleSheet.create({
     color: Colors.accentLight,
     marginHorizontal: MarginConstants.halfTab,
   },
+  attachmentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: MarginConstants.tab2,
+  },
+  emailBody: {marginHorizontal: MarginConstants.tab2},
 });
