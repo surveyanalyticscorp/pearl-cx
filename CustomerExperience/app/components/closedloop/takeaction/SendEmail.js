@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 import {StyleSheet, Text, TextInput, View, Pressable} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -26,6 +26,7 @@ import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
 // import {useHeaderHeight} from '@react-navigation/elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
+import DocumentPicker, {types} from 'react-native-document-picker';
 
 const RenderHeader = () => {
   return (
@@ -96,8 +97,7 @@ const RenderOptionsView = ({
     <View style={styles.renderOptionView}>
       {/* {getTemplateIcon()} */}
       <TemplateIcon onPressTemplate={onPressTemplate} />
-      {/* {getAttachmentIcon()} */}
-      {/* {getSendIcon()} */}
+      <AttachmentIcon onPressAttachment={onPressAttachment} />
       <SendIcon onPressSend={onPressSend} />
     </View>
   );
@@ -115,9 +115,9 @@ const SendIcon = ({onPressSend}) => {
   );
 };
 
-const getAttachmentIcon = () => {
+const AttachmentIcon = ({onPressAttachment}) => {
   return (
-    <Pressable style={styles.optionIcon}>
+    <Pressable onPress={onPressAttachment} style={styles.optionIcon}>
       <RenderIonIcon name={'attach'} />
     </Pressable>
   );
@@ -131,75 +131,75 @@ const TemplateIcon = ({onPressTemplate}) => {
   );
 };
 
-const EmailBody = ({
-  refEditor,
-  refToolbar,
-  body,
-  onChangeEmailBody,
-  closeBottomSheet,
-}) => {
-  const scrollRef = React.useRef();
+// const EmailBody = ({
+//   refEditor,
+//   refToolbar,
+//   body,
+//   onChangeEmailBody,
+//   closeBottomSheet,
+// }) => {
+//   const scrollRef = React.useRef();
 
-  return (
-    <KeyboardAwareScrollView style={styles.textBox}>
-      {/* <KeyboardAvoidingView
-        style={{flex: 1}}
-        enabled
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={12}> */}
-      {/* <TextInput
-    scrollEnabled={true}
-    multiline={true}
-    placeholder="Write email..."
-    style={styles.emailText}
-  /> */}
-      {/* <KeyboardAvoidingView
-  behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-  keyboardVerticalOffset={Platform.OS === 'ios' ? 12 : 0}> */}
+//   return (
+//     <KeyboardAwareScrollView style={styles.textBox}>
+//       {/* <KeyboardAvoidingView
+//         style={{flex: 1}}
+//         enabled
+//         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+//         keyboardVerticalOffset={12}> */}
+//       {/* <TextInput
+//     scrollEnabled={true}
+//     multiline={true}
+//     placeholder="Write email..."
+//     style={styles.emailText}
+//   /> */}
+//       {/* <KeyboardAvoidingView
+//   behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+//   keyboardVerticalOffset={Platform.OS === 'ios' ? 12 : 0}> */}
 
-      <RichEditor
-        ref={refEditor}
-        useContainer
-        disabled={false}
-        initialFocus={false}
-        onChange={onChangeEmailBody}
-        placeholder="Email body"
-        androidHardwareAccelerationDisabled={true}
-        initialHeight={300}
-        style={styles.textInput}
-        // initialContentHTML={body.emailBody}
-        setContentHTML={body.emailBody}
-        onFocus={closeBottomSheet}
-      />
-      <View style={[styles.rowContainer, {marginBottom: MarginConstants.tab2}]}>
-        <RichToolbar
-          ref={refToolbar}
-          editor={refEditor}
-          selectedIconTint={Colors.accentLight}
-          iconTint={Colors.lightBlack}
-          // editorInitializedCallback={() => updateRichText(emailBody)}
-          actions={[
-            actions.setBold,
-            actions.setItalic,
-            actions.setUnderline,
-            actions.insertBulletsList,
-            actions.insertOrderedList,
-            // actions.insertLink,
-            actions.setStrikethrough,
-            // actions.insertImage,
-            actions.keyboard,
-          ]}
-          style={{
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            flex: 2,
-          }}
-        />
-      </View>
-      {/* </KeyboardAvoidingView> */}
-    </KeyboardAwareScrollView>
-  );
-};
+//       <RichEditor
+//         ref={refEditor}
+//         useContainer
+//         disabled={false}
+//         initialFocus={false}
+//         onChange={onChangeEmailBody}
+//         placeholder="Email body"
+//         androidHardwareAccelerationDisabled={true}
+//         initialHeight={300}
+//         style={styles.textInput}
+//         // initialContentHTML={body.emailBody}
+//         setContentHTML={body.emailBody}
+//         onFocus={closeBottomSheet}
+//       />
+//       <View style={[styles.rowContainer, {marginBottom: MarginConstants.tab2}]}>
+//         <RichToolbar
+//           ref={refToolbar}
+//           editor={refEditor}
+//           selectedIconTint={Colors.accentLight}
+//           iconTint={Colors.lightBlack}
+//           // editorInitializedCallback={() => updateRichText(emailBody)}
+//           actions={[
+//             actions.setBold,
+//             actions.setItalic,
+//             actions.setUnderline,
+//             actions.insertBulletsList,
+//             actions.insertOrderedList,
+//             // actions.insertLink,
+//             actions.setStrikethrough,
+//             // actions.insertImage,
+//             actions.keyboard,
+//           ]}
+//           style={{
+//             justifyContent: 'flex-start',
+//             alignItems: 'flex-start',
+//             flex: 2,
+//           }}
+//         />
+//       </View>
+//       {/* </KeyboardAvoidingView> */}
+//     </KeyboardAwareScrollView>
+//   );
+// };
 
 const ActionHistory = ({onPressActionHistoryItem}) => {
   return (
@@ -270,6 +270,7 @@ export default function SendEmail(props) {
   const fall = new Animated.Value(1);
   const bsSnapPoints = ['33%', '0%'];
   const [shadow, setShadow] = useState(false);
+  const [fileResponse, setFileResponse] = useState([]);
 
   const closeBottomSheet = () => {
     bs.current.snapTo(bsSnapPoints.length - 1);
@@ -315,24 +316,41 @@ export default function SendEmail(props) {
   //     emailBody: defaultEmail.templateText,
   //   }));
   // }, [defaultEmail]);
-  const onPressActionHistoryItem = () => {
+  const onPressActionHistoryItem = useCallback(() => {
     console.log('on Press action history Item');
     props.navigation.navigate('actionEmailHistory', {
       ticketId: ticketId,
     });
-  };
+  }, []);
 
-  const onPressTemplate = () => {
+  const onPressTemplate = useCallback(() => {
     richText.current.dismissKeyboard();
     bs.current.snapTo(0);
     console.log('call');
-  };
+  }, []);
 
-  const onPressAttachment = () => {};
+  const onPressAttachment = useCallback(async () => {
+    console.log('Attach items');
 
-  const onPressSend = () => {
+    try {
+      const response = await DocumentPicker.pickMultiple({
+        presentationStyle: 'fullScreen',
+      });
+      setFileResponse(response);
+      console.log(fileResponse.length);
+      console.log(
+        fileResponse[0].name,
+        fileResponse[0].mime,
+        fileResponse[0].uri,
+      );
+    } catch (err) {
+      console.warn(err);
+    }
+  }, []);
+
+  const onPressSend = useCallback(() => {
     callSendEmailApi();
-  };
+  }, []);
 
   const onChangeSubject = text => {
     setBody(state => ({...state, subject: text}));
@@ -455,6 +473,7 @@ export default function SendEmail(props) {
             actions.setUnderline,
             actions.insertBulletsList,
             actions.insertOrderedList,
+
             // actions.insertLink,
             actions.setStrikethrough,
             // actions.insertImage,

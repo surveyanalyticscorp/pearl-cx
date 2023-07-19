@@ -8,7 +8,7 @@ export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
 export const ACTION_EMAIL = 'noreply@InsightsHub.com';
 // set true for DEV, false for LIVE
-export const IS_DEV_MODE = false;
+export const IS_DEV_MODE = true;
 
 // export const BASE_URL = 'https://api.questionpro.com/';
 

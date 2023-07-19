@@ -6,6 +6,7 @@ import {
   Pressable,
   FlatList,
   useWindowDimensions,
+  Linking,
   Alert,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
@@ -20,6 +21,8 @@ import RenderHtml from 'react-native-render-html';
 import {useSelector} from 'react-redux';
 import FaIcon from 'react-native-vector-icons/FontAwesome';
 
+import {useCallback} from 'react';
+// import {Link} from '@react-navigation/native';
 const RenderHeader = ({subject}) => {
   return (
     <View style={styles.rowContainerHeader}>
@@ -45,7 +48,7 @@ const ActionHistoryItem = ({item, index}) => {
       </View>
 
       <EmailBody body={emailBody} />
-      {/* {item.attachments.length > 0 && <Attachment data={item.attachments} />} */}
+      {item.attachments.length > 0 && <Attachment data={item.attachments} />}
     </View>
   );
 };
@@ -64,19 +67,26 @@ const Attachment = ({data}) => {
     </View>
   );
 };
+
 const AttachmentItem = ({item, index}) => {
+  const onPress = useCallback(async () => {
+    const isSupported = await Linking.canOpenURL(item.path);
+    // if (isSupported) {
+    Linking.openURL(item.path);
+    // } else {
+    //   Alert.alert(`Can't open this URL: ${item.path}`);
+    // }
+  }, [item.path]);
+
   return (
     <Pressable
+      onPress={onPress}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
         marginHorizontal: MarginConstants.tab2,
       }}>
-      <AttachmentIcon
-        name={'file-photo-o'}
-        size={TextSizes.secondary}
-        color={Colors.accentLight}
-      />
+      <AttachmentIcon name={'file-photo-o'} />
       <Text style={styles.attachmentText}>{item.fileName}</Text>
     </Pressable>
   );
@@ -84,7 +94,7 @@ const AttachmentItem = ({item, index}) => {
 
 const AttachmentIcon = ({name, size, color}) => {
   return (
-    <FaIcon name={name} size={size ?? 24} color={color ?? Colors.borderColor} />
+    <FaIcon name={name} size={size ?? 12} color={color ?? Colors.accentLight} />
   );
 };
 
