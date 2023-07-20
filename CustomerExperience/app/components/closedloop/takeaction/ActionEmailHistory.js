@@ -7,6 +7,7 @@ import {
   FlatList,
   useWindowDimensions,
   Linking,
+  Platform,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -22,9 +23,11 @@ import {isObjectEmpty} from '../../../Utils/Utility';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import RenderHtml from 'react-native-render-html';
 import {useSelector} from 'react-redux';
-import FaIcon from 'react-native-vector-icons/FontAwesome';
 import {AttachmentIcon} from '../../../Utils/IconUtils';
-// import {Link} from '@react-navigation/native';
+import RNFetchBlob from 'rn-fetch-blob';
+import {getDownloadPermissionAndroid} from '../../../Utils/PermissionUtils';
+import {downloadFile} from '../../../Utils/DownloadUtils';
+
 const RenderHeader = ({subject}) => {
   return (
     <View style={styles.rowContainerHeader}>
@@ -71,8 +74,8 @@ const Attachment = ({data}) => {
 };
 
 const AttachmentItem = ({item, index}) => {
-  const onPress = useCallback(async () => {
-    const isSupported = await Linking.canOpenURL(item.path);
+  const onPressOpenWithBrowser = useCallback(async () => {
+    // const isSupported = await Linking.canOpenURL(item.path);
     // if (isSupported) {
     Linking.openURL(item.path);
     // } else {
@@ -80,8 +83,22 @@ const AttachmentItem = ({item, index}) => {
     // }
   }, [item.path]);
 
+  const onPressDownload = useCallback(async () => {
+    if (Platform.OS === 'android') {
+      getDownloadPermissionAndroid().then(granted => {
+        if (granted) {
+          downloadFile(item.path, item.fileName);
+        }
+      });
+    } else {
+      downloadFile(item.path, item.fileName).then(res => {
+        RNFetchBlob.ios.previewDocument(res.path());
+      });
+    }
+  }, [item.path, item.fileName]);
+
   return (
-    <Pressable onPress={onPress} style={styles.attachmentItem}>
+    <Pressable onPress={onPressDownload} style={styles.attachmentItem}>
       <AttachmentIcon mimeType={item.mimeType} />
       <Text numberOfLines={1} style={styles.attachmentText}>
         {item.fileName}

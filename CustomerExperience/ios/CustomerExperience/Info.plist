@@ -20,6 +20,10 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>To access device files for upload upon user request</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>To access device files for upload upon user request</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
