@@ -8,6 +8,7 @@ import {
   useWindowDimensions,
   Linking,
   Platform,
+  SafeAreaView,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -150,7 +151,7 @@ export default function ActionEmailHistory(props) {
   const emailSubject = summary?.data?.action?.subject ?? 'Default subject';
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <RenderHeader subject={emailSubject} />
       <FlatList
         data={details.data}
@@ -160,7 +161,7 @@ export default function ActionEmailHistory(props) {
         }}
         ItemSeparatorComponent={listItemSeparator}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
