@@ -35,6 +35,7 @@ import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import DocumentPicker, {types} from 'react-native-document-picker';
+import {isNull} from 'lodash';
 
 const RenderHeader = () => {
   return (
@@ -221,8 +222,8 @@ const ActionHistory = ({onPressActionHistoryItem}) => {
 
 const ActionHistoryItem = ({onItemPress}) => {
   const {summary} = useSelector(state => state.dashboard.ticketActionHistory);
-
-  if (isObjectEmpty(summary)) {
+  console.log('SUMMARY OS', JSON.stringify(summary));
+  if (isNull(summary.data.action) || isObjectEmpty(summary.data.action)) {
     return <View />;
   }
 
