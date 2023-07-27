@@ -97,7 +97,7 @@ export const CLF_GET_TICKET_DETAILS = `${CLF_BASE_URL}/mobile/tickets/`;
 // ex: {{BASE_URL}}/mobile/tickets/:ticketId
 
 export const CLF_STATUS_WISE_PRIORITY_ANALYTICS = `${CLF_BASE_URL}/mobile/tickets/status-wise-priority/segments/`;
-export const CLF_WELCOME_SCREEN_COUNTS = `${CLF_BASE_URL}/analytics/status/mobile`;
+export const CLF_WELCOME_SCREEN_COUNTS = '/mobile/tickets/analytics/status';
 
 export const CLF_GET_DEFAULT_EMAIL_TEMPLATE = `${CLF_BASE_URL}/actionTemplate/get-default/mobile`;
 export const CLF_GET_EMAIL_TEMPLATES = `${CLF_BASE_URL}/actionTemplate/mobile`;

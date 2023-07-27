@@ -24,7 +24,11 @@ import {
   WELCOME_SCREEN_DATA_RECIEVED,
 } from '../actions/dashboard.actions';
 import {showErrorFlashMessage} from '../../Utils/Utility';
-import {getBearerToken} from '../../Utils/ApiCallUtils';
+import {
+  getBearerToken,
+  getBearerTokenStatic,
+  getClfUrl,
+} from '../../Utils/ApiCallUtils';
 
 export function* fetchDashboard(action) {
   try {
@@ -80,8 +84,9 @@ export function* fetchDataCount(action) {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
 
     const clf_response = yield WebServiceHandler.get(
-      CLF_WELCOME_SCREEN_COUNTS,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_WELCOME_SCREEN_COUNTS),
+      getBearerTokenStatic(),
+      // {'Auth-Token': action.token},
       action.param,
     );
 
@@ -91,6 +96,10 @@ export function* fetchDataCount(action) {
       {},
     );
 
+    console.log(
+      'WELCOME_SCREEN_DATA_COUNT, clf response',
+      JSON.stringify(clf_response),
+    );
     yield put({
       type: WELCOME_SCREEN_DATA_RECIEVED,
       cxResponse: cx_response,
