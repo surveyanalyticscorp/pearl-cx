@@ -1,4 +1,4 @@
-import {IS_DEV_MODE, DEV_BASE_URL} from '../../api/Constant';
+import {IS_DEV_MODE, DEV_BASE_URL, CLF_BASE_URL} from '../../api/Constant';
 import {
   FILL_USER_INFO,
   IS_LOADING,
@@ -82,7 +82,9 @@ const globalReducer = (state = initialState, action) => {
         userInfo: action.response.body,
         //languageCode: action.response.body.languageCode,
         isLoading: false,
-        clfBaseUrl: action.clfResponse.data.baseUrl,
+        clfBaseUrl: IS_DEV_MODE
+          ? CLF_BASE_URL
+          : action.clfResponse.data.baseUrl,
       };
     }
     case SET_LANGUAGE_INFO: {
@@ -204,7 +206,7 @@ const globalReducer = (state = initialState, action) => {
     case SET_BEARER_TOKEN: {
       return {
         ...state,
-        authToken: action.payload.authToken,
+        bearerToken: action.payload.bearerToken,
       };
     }
     case SET_RANGE_FILTER: {

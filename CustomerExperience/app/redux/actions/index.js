@@ -53,6 +53,11 @@ export const setAuthToken = token => ({
   payload: {authToken: token},
 });
 
+export const setBearerToken = token => ({
+  type: SET_BEARER_TOKEN,
+  payload: {bearerToken: token},
+});
+
 export const setRangeFilter = range => ({
   type: SET_RANGE_FILTER,
   range,

@@ -126,7 +126,7 @@ export const CLF_DELETE_TICKET_POSTFIX = `/tickets/`;
 // /mobile/tickets/bulk-delete
 export const CLF_DELETE_TICKETS = `${CLF_BASE_URL}/mobile/tickets/bulk-delete`;
 
-export const CLF_APP_LOGIN_COUNT = `${CLF_BASE_URL}/app-login-count`;
+export const CLF_APP_LOGIN_COUNT = '/app-login-count';
 
 export const CLF_GET_ACTION_HISTORY_PREFIX = `${CLF_BASE_URL}/mobile/tickets/`;
 export const CLF_GET_ACTION_SUMMARY_POSTFIX = `/action-mail`;

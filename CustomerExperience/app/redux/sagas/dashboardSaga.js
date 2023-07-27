@@ -24,6 +24,7 @@ import {
   WELCOME_SCREEN_DATA_RECIEVED,
 } from '../actions/dashboard.actions';
 import {showErrorFlashMessage} from '../../Utils/Utility';
+import {getBearerToken} from '../../Utils/ApiCallUtils';
 
 export function* fetchDashboard(action) {
   try {
@@ -115,10 +116,12 @@ export function* watchDataCount() {
 export function* postApploginCount(action) {
   try {
     const clf_response = yield WebServiceHandler.postNew(
-      CLF_APP_LOGIN_COUNT,
-      {'Auth-Token': action.token},
+      '' + global.clfBaseUrl + CLF_APP_LOGIN_COUNT,
+      getBearerToken(global.bearerToken),
       action.param,
     );
+
+    console.log('CLF_APP_LOGIN_COUNT', JSON.stringify(clf_response));
   } catch (error) {
     showErrorFlashMessage(error.errorAlert);
     yield put({

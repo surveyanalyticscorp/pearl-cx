@@ -30,7 +30,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const WelcomeScreen = props => {
   const dispatch = useDispatch();
   const deviceType = Platform.OS === 'android' ? 0 : 1;
-  const {authToken, userInfo} = useSelector(state => state.global);
+  const {bearerToken, authToken, userInfo} = useSelector(state => state.global);
 
   // const authToken = useSelector((state) => state.global.authToken);
   // const [subscriberId, setSubscriberId] = useState(state.global.subscriberId);

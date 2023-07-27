@@ -9,7 +9,11 @@ import {
 } from '../../api/Constant';
 // import AppRouter from '../../routes/appRouter';
 import {connect} from 'react-redux';
-import {fillUserInfo, setAuthToken} from '../../redux/actions/index';
+import {
+  fillUserInfo,
+  setAuthToken,
+  setBearerToken,
+} from '../../redux/actions/index';
 import {isStringNullOrEmpty} from '../../Utils/Utility';
 import {DASHBOARD_RANGE} from '../../redux/actions/dashboard.actions';
 import {setLanguageInfo, setRangeFilter} from '../../redux/actions';
@@ -38,6 +42,7 @@ function SplashScreen(props) {
           bearerToken,
         );
         if (!isStringNullOrEmpty(bearerToken)) {
+          props.setBearerToken(bearerToken);
           global.bearerToken = bearerToken;
         }
       });
@@ -58,7 +63,7 @@ function SplashScreen(props) {
         }
         setMoveNext(true);
       });
-    }, 1000);
+    }, 3000);
 
     return () => {
       clearTimeout(splashTimer);
@@ -95,6 +100,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setToken: token => {
     dispatch(setAuthToken(token));
+  },
+  setBearerToken: token => {
+    dispatch(setBearerToken(token));
   },
   setRange: range => {
     dispatch(setRangeFilter(range));
