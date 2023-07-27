@@ -67,6 +67,8 @@ import {
   CLF_GET_ACTION_HISTORY_PREFIX,
   CLF_GET_ACTION_SUMMARY_POSTFIX,
   CLF_GET_ACTION_DETAILS_POSTFIX,
+  CLF_GET_ROOT_CAUSE,
+  CLF_GET_ROOT_CAUSE_ACTIONS,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -101,6 +103,7 @@ import {
   showErrorFlashMessage,
   showSuccessFlashMessage,
 } from '../../Utils/Utility';
+import {getBearerTokenStatic, getClfUrl} from '../../Utils/ApiCallUtils';
 
 function* fetchDetractorTicketDetails(action) {
   try {
@@ -784,10 +787,8 @@ export function* watchGetTicketStatusHistory() {
 function* getRootCauseList(action) {
   try {
     const json = yield WebServiceHandler.get(
-      CLF_GET_ROOT_CAUSE_PREFIX +
-        action.subscriberId +
-        CLF_GET_ROOT_CAUSE_POSTFIX,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_ROOT_CAUSE),
+      getBearerTokenStatic(),
       {},
     );
     yield put({
@@ -809,10 +810,9 @@ export function* watchGetrootCauseList() {
 function* getRootCauseActionList(action) {
   try {
     const json = yield WebServiceHandler.get(
-      CLF_GET_ROOT_CAUSE_ACTIONS_PREFIX +
-        action.subscriberId +
-        CLF_GET_ROOT_CAUSE_ACTIONS_POSTFIX,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_ROOT_CAUSE_ACTIONS),
+      getBearerTokenStatic(),
+
       {},
     );
     yield put({

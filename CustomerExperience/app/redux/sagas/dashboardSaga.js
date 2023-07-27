@@ -40,8 +40,10 @@ export function* fetchDashboard(action) {
     );
 
     const closedloopData = yield WebServiceHandler.get(
-      CLF_STATUS_WISE_PRIORITY_ANALYTICS + JSON.stringify(action.segmentId),
-      {'Auth-Token': action.token},
+      getClfUrl(
+        CLF_STATUS_WISE_PRIORITY_ANALYTICS + JSON.stringify(action.segmentId),
+      ),
+      getBearerTokenStatic(),
       action.param,
     );
 
