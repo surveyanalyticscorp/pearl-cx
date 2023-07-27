@@ -1,7 +1,12 @@
 import {ImageBackground, Image, StyleSheet} from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ASYNC_AUTH_TOKEN, ASYNC_USER_INFO} from '../../api/Constant';
+import {
+  ASYNC_AUTH_TOKEN,
+  ASYNC_BEARER_TOKEN,
+  ASYNC_CLF_BASE_URL,
+  ASYNC_USER_INFO,
+} from '../../api/Constant';
 // import AppRouter from '../../routes/appRouter';
 import {connect} from 'react-redux';
 import {fillUserInfo, setAuthToken} from '../../redux/actions/index';
@@ -17,6 +22,25 @@ function SplashScreen(props) {
 
   useEffect(() => {
     splashTimer = setTimeout(() => {
+      AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {
+        console.log(
+          'Async Storage: saved clf base url from splash screen',
+          clfBase,
+        );
+        if (!isStringNullOrEmpty(clfBase)) {
+          global.clfBaseUrl = clfBase;
+        }
+      });
+
+      AsyncStorage.getItem(ASYNC_BEARER_TOKEN).then(bearerToken => {
+        console.log(
+          'Async Storage: saved bearerToken from splash screen',
+          bearerToken,
+        );
+        if (!isStringNullOrEmpty(bearerToken)) {
+          global.bearerToken = bearerToken;
+        }
+      });
       AsyncStorage.multiGet([
         ASYNC_AUTH_TOKEN,
         ASYNC_USER_INFO,

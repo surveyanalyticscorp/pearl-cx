@@ -15,11 +15,16 @@ import {
 } from '../../redux/actions/dashboard.actions';
 // import QPSpinner from '../../widgets/QPSpinner';
 import {RenderSpinner} from '../../routes/CommonScreen';
-import {SUBSCRIBER_ID} from '../../api/Constant';
+import {
+  ASYNC_BEARER_TOKEN,
+  ASYNC_CLF_BASE_URL,
+  SUBSCRIBER_ID,
+} from '../../api/Constant';
 import {
   getActionList,
   getRootCauseList,
 } from '../../redux/actions/closedloop.actions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = props => {
@@ -55,6 +60,22 @@ export const WelcomeScreen = props => {
   //   setMoveNext(true);
   //   clearTimeout(splashTimer);
   // };
+
+  AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {
+    console.log(
+      'Async Storage: saved clf base url from welcome screen',
+      clfBase,
+    );
+    global.clfBaseUrl = clfBase;
+  });
+
+  AsyncStorage.getItem(ASYNC_BEARER_TOKEN).then(bearerToken => {
+    console.log(
+      'Async Storage: saved bearer token from welcome screen',
+      bearerToken,
+    );
+    global.bearerToken = bearerToken;
+  });
 
   useEffect(() => {
     // console.log('USER_DATA: ', userInfo, authToken);

@@ -8,6 +8,13 @@ import {
   AUTH_UPDATE_PASSWORD,
   ASYNC_USER_CREDENTIALS,
   CX_LOGOUT,
+  CLF_LOGIN,
+  CLF_GET_BASE_URL,
+  ASYNC_AUTH_TOKEN,
+  IS_DEV_MODE,
+  CLF_BASE_URL,
+  ASYNC_BEARER_TOKEN,
+  ASYNC_CLF_BASE_URL,
 } from '../../api/Constant';
 import {API_ERROR, CLEAR_API_ERROR, IS_LOADING} from '../actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,6 +34,8 @@ import {
   LOGOUT_RESPONSE,
   AUTHENTICATE_PANEL,
   AUTHENTICATE_PANEL_RESPONSE,
+  GET_BEARER_TOKEN,
+  GET_BEARER_TOKEN_RESPONSE,
 } from '../actions/login.actions';
 
 export function* doAuthenticatePanel(action) {
@@ -49,18 +58,57 @@ export function* watchAuthenticatePanel() {
 
 export function* doLoginApiCall(action) {
   try {
+    global.clfBaseUrl = '';
+    global.bearerToken = '';
     const response = yield WebServiceHandler.postNew(
       AUTH_LOGIN,
       {},
       action.param,
     );
-    yield put({type: LOGIN_RESPONSE, response: response});
+
+    const clfBaseUrlResponse = yield WebServiceHandler.get(
+      CLF_GET_BASE_URL,
+      // {Authorization: `Bearer ${clfAuthResponse.data.accessToken}`},
+      {},
+      {dataCenter: action.param.dataCenter},
+    );
+    console.log(
+      'AsyncStorage base URL 1: ',
+      JSON.stringify(clfBaseUrlResponse),
+    );
+
     let userData = {
       email: action.param.emailAddress,
       password: action.param.password,
       accessCode: action.param.accessCode,
     };
+
+    // AsyncStorage.setItem(
+    //   ASYNC_CLF_BASE_URL,
+    //   JSON.stringify(clfBaseUrlResponse.data.baseUrl),
+    // ).then();
+    // let clfBase = yield clfBaseUrlResponse.data.baseUrl;
+    // global.clfBaseUrl = clfBase;
+    console.log(
+      'AsyncStorage base URL 2 : ',
+      JSON.stringify(clfBaseUrlResponse),
+    );
+
+    yield put({
+      type: LOGIN_RESPONSE,
+      response: response,
+      clfResponse: clfBaseUrlResponse,
+    });
     AsyncStorage.setItem(ASYNC_USER_CREDENTIALS, JSON.stringify(userData));
+
+    AsyncStorage.setItem(
+      ASYNC_CLF_BASE_URL,
+      JSON.stringify(clfBaseUrlResponse.data.baseUrl),
+    );
+    console.log(
+      'AsyncStorage base URL 3 : ',
+      JSON.stringify(clfBaseUrlResponse),
+    );
   } catch (error) {
     yield put({type: API_ERROR, error: error});
     yield put({
@@ -68,11 +116,43 @@ export function* doLoginApiCall(action) {
       response: {body: {mobileAPIURL: ''}},
     });
     global.baseUrl = '';
+    global.clfBaseUrl = '';
   }
 }
 
 export function* watchDoLogin() {
   yield takeLatest(GET_LOGIN, doLoginApiCall);
+}
+
+function* fetchClfAuth(action) {
+  try {
+    console.log('CALL CLF LOGIN 6');
+
+    const clfAuthResponse = yield WebServiceHandler.postNew(
+      '' + action.param.clfBaseUrl + CLF_LOGIN,
+      {},
+      {
+        emailAddress: action.param.emailAddress,
+        cxUserId: action.param.userID,
+        feedbackId: action.param.feedbackID,
+      },
+    );
+    let bearerToken = clfAuthResponse.data.accessToken;
+
+    global.bearerToken = bearerToken;
+    AsyncStorage.setItem(ASYNC_BEARER_TOKEN, clfAuthResponse.data.accessToken);
+
+    yield put({type: GET_BEARER_TOKEN_RESPONSE, response: clfAuthResponse});
+  } catch (error) {
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+
+export function* watchClfAuth() {
+  yield takeLatest(GET_BEARER_TOKEN, fetchClfAuth);
 }
 
 function* getResetPasswordLink(action) {

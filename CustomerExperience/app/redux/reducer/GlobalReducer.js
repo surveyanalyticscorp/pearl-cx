@@ -16,10 +16,12 @@ import {
   IS_RESPONSE_LOADING,
   IS_TICKET_LOADING,
   IS_SEGMENT_LOADING,
+  SET_BEARER_TOKEN,
 } from '../actions';
 import {SET_TICKET_FILTER_BY_STATUS_ID} from '../actions/closedloop.actions';
 import {
   AUTHENTICATE_PANEL_RESPONSE,
+  GET_BEARER_TOKEN_RESPONSE,
   LOGIN_RESPONSE,
   LOGOUT_RESPONSE,
   UPDATE_PASSWORD_RESPONSE,
@@ -41,12 +43,15 @@ const initialState = {
   wantToReloadDashboard: true,
   isError: false,
   baseUrl: '',
+  clfBaseUrl: '',
   subscriberId: '',
   userInfo: {},
   languageCode: '',
   authToken: '',
+  bearerToken: '',
   errorMessage: '',
   dynamicLink: '',
+  dataCenter: '',
   userDetailsForResetPassword: {},
   validatePasswordLinkResponse: {},
   updatePasswordResponse: {},
@@ -61,16 +66,23 @@ const globalReducer = (state = initialState, action) => {
         ...state,
         baseUrl: IS_DEV_MODE ? DEV_BASE_URL : action.response.body.mobileAPIURL,
         subscriberId: JSON.stringify(action.response.body.userID),
+        dataCenter: action.response.body.dataCenter,
       };
     }
 
     case LOGIN_RESPONSE: {
+      console.log(
+        'LOGIN_RESPONSE, CLF BASE URL',
+        JSON.stringify(action),
+        JSON.stringify(action.clfResponse.data.baseUrl),
+      );
       return {
         ...state,
         authToken: action.response.authToken,
         userInfo: action.response.body,
         //languageCode: action.response.body.languageCode,
         isLoading: false,
+        clfBaseUrl: action.clfResponse.data.baseUrl,
       };
     }
     case SET_LANGUAGE_INFO: {
@@ -188,6 +200,13 @@ const globalReducer = (state = initialState, action) => {
         authToken: action.payload.authToken,
       };
     }
+
+    case SET_BEARER_TOKEN: {
+      return {
+        ...state,
+        authToken: action.payload.authToken,
+      };
+    }
     case SET_RANGE_FILTER: {
       return {
         ...state,
@@ -200,6 +219,12 @@ const globalReducer = (state = initialState, action) => {
         logoutResponse: action.response,
         baseUrl: '',
         subscriberId: '',
+      };
+    }
+    case GET_BEARER_TOKEN_RESPONSE: {
+      return {
+        ...state,
+        bearerToken: action.response.data.accessToken,
       };
     }
     case IS_ERROR: {

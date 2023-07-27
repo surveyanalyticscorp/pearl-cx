@@ -85,6 +85,8 @@ const SettingsStack = createStackNavigator();
 const AppRouter = props => {
   // const {updateSegment} = props;
   const authToken = useSelector(state => state.global.authToken);
+  const bearerToken = useSelector(state => state.global.bearerToken);
+
   const userInfo = useSelector(state => state.global.userInfo);
   const languageCode = useSelector(state => state.global.languageCode);
   const dynamicLink = useSelector(state => state.global.dynamicLink);
@@ -491,7 +493,7 @@ const AppRouter = props => {
       ref={navigationRef}
       fallback={renderSpinner()}
       linking={linking}>
-      {authToken ? (
+      {authToken && bearerToken ? (
         moveNext ? (
           <RenderDrawer />
         ) : (

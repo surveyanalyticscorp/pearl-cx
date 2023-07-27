@@ -22,7 +22,11 @@ import {
   clearUserInfo,
   showLoading,
 } from '../../redux/actions/index';
-import {authenticatePanel, doLogin} from '../../redux/actions/login.actions';
+import {
+  authenticatePanel,
+  doLogin,
+  getClfAuth,
+} from '../../redux/actions/login.actions';
 import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
 import {Colors} from '../../styles/color.constants';
@@ -30,7 +34,12 @@ import QPSpinner from '../../widgets/QPSpinner';
 import SafeAreaView from 'react-native-safe-area-view';
 import {setDynamicLink} from '../../redux/actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ASYNC_PUSH_TOKEN, BASE_URL, SUBSCRIBER_ID} from '../../api/Constant';
+import {
+  ASYNC_CLF_BASE_URL,
+  ASYNC_PUSH_TOKEN,
+  BASE_URL,
+  SUBSCRIBER_ID,
+} from '../../api/Constant';
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 
 const stringConst = require('../../config/translations/en');
@@ -80,6 +89,33 @@ const Login = props => {
     }
   }, [props.baseUrl]);
 
+  useEffect(() => {
+    console.log('CALL CLF LOGIN 1', JSON.stringify(props.clfBaseUrl));
+    if (props.clfBaseUrl && StringUtils.isNotEmpty(props.clfBaseUrl)) {
+      console.log('CALL CLF LOGIN 2');
+
+      AsyncStorage.setItem(ASYNC_CLF_BASE_URL, props.clfBaseUrl);
+      global.clfBaseUrl = props.clfBaseUrl;
+      console.log('CALL CLF LOGIN 3');
+
+      callClfAuth(props.clfBaseUrl);
+    }
+  }, [props.clfBaseUrl]);
+
+  function callClfAuth(clfBaseUrl) {
+    console.log('CALL CLF LOGIN 4');
+
+    const data = {
+      clfBaseUrl,
+      emailAddress: props.userInfo.emailAddress,
+      userID: props.userInfo.userID,
+      feedbackID: props.userInfo.feedbackID,
+    };
+    console.log('CALL CLF LOGIN 5');
+
+    props.getClfAuth(data);
+  }
+
   const onSignInPress = () => {
     Keyboard.dismiss();
     AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(token => {
@@ -118,6 +154,7 @@ const Login = props => {
         sourceMode: 'email',
         udId: DeviceInfo.getUniqueId(),
         pushToken: token,
+        dataCenter: props.dataCenter,
       };
 
       // console.log(`LOGIN DATA: ${JSON.stringify(data)}`);
@@ -308,12 +345,19 @@ const mapStateToProps = state => {
     isError: state.global.isError,
     errorMessage: state.global.errorMessage,
     dynamicLink: state.global.dynamicLink,
+    dataCenter: state.global.dataCenter,
     baseUrl: state.global.baseUrl,
+    clfBaseUrl: state.global.clfBaseUrl,
     subscriberId: state.global.subscriberId,
+    userInfo: state.global.userInfo,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
+  getClfAuth: param => {
+    dispatch(clearError());
+    dispatch(getClfAuth(param));
+  },
   authenticatePanel: param => {
     dispatch(clearError());
     dispatch(authenticatePanel(param));

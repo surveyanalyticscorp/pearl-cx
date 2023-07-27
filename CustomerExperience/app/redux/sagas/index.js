@@ -7,6 +7,7 @@ import {
 } from './dashboardSaga';
 import {
   watchAuthenticatePanel,
+  watchClfAuth,
   watchDoLogin,
   watchForgotPasswordLink,
   watchLogout,
@@ -92,5 +93,6 @@ export function* rootSaga() {
     fork(watchApploginCount),
     fork(watchActionSummary),
     fork(watchActionDetails),
+    fork(watchClfAuth),
   ]);
 }
