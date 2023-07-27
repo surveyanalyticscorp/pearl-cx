@@ -18,6 +18,11 @@ import {
   RESPONSE_DETAILS_BY_RESPONSEID_RECEIVED,
   SURVEY_RESPONSE_DETAILS_RECEIVED,
 } from '../actions/feedback.actions';
+import {
+  getBearerToken,
+  getBearerTokenStatic,
+  getClfUrl,
+} from '../../Utils/ApiCallUtils';
 // import {FEEDBACK_RECEIVED, FEEDBACK_UPDATED, GET_FEEDBACK, UPDATE_FEEDBACK} from '../actions/feedback.actions';
 
 export function* fetchPanelMemberData(action) {
@@ -63,12 +68,14 @@ export function* watchGetSurveyResponseDetails() {
 export function* fetchResponseTickets(action) {
   try {
     const json = yield WebServiceHandler.get(
-      CLF_GET_TICKET_LIST_BY_RESPONSEID +
-        action.feedbackId +
-        '/' +
-        RESPONSES +
-        action.responseId,
-      {'Auth-Token': action.token},
+      getClfUrl(
+        CLF_GET_TICKET_LIST_BY_RESPONSEID +
+          action.feedbackId +
+          '/' +
+          RESPONSES +
+          action.responseId,
+      ),
+      getBearerTokenStatic(),
       action.param,
     );
 

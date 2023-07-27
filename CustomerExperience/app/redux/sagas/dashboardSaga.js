@@ -127,8 +127,8 @@ export function* watchDataCount() {
 export function* postApploginCount(action) {
   try {
     const clf_response = yield WebServiceHandler.postNew(
-      '' + global.clfBaseUrl + CLF_APP_LOGIN_COUNT,
-      getBearerToken(global.bearerToken),
+      getClfUrl(CLF_APP_LOGIN_COUNT),
+      getBearerTokenStatic(),
       action.param,
     );
 

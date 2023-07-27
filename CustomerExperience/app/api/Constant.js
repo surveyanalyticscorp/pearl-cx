@@ -83,32 +83,36 @@ export const CLF_GET_BASE_URL = `${CLF_BASE_URL}/base-url`;
 // export const FEEDBACK_API_KEY = 'e8caf096-4f19-4b34-a7cd-4bcaa8197c1d';
 export const FEEDBACK_API_KEY_ENDPOINT = '?feedbackApiKey=';
 export const CLF_GET_TICKET_lIST_SYNC = feedBackId =>
-  `${CLF_BASE_URL}/tickets/import/feedback/${feedBackId}/mobile`;
+  '/mobile/tickets/import/feedback/${feedBackId}';
 // export const CLF_GET_TICKET_lIST_SYNC_PREFIX = `${CLF_BASE_URL}/tickets/import/feedback/`;
 // export const CLF_GET_TICKET_lIST_SYNC_POSTFIX = `/mobile`;
 
 // /tickets/import/feedback/25697/mobile?subscriberId=4896658&feedbackApiKey=eba03e1f-d8d0-4f1f-8752-70893eac665c
-export const CLF_GET_TICKET_LIST = `${CLF_BASE_URL}/mobile/tickets/feedback/`;
+export const CLF_GET_TICKET_LIST = '/mobile/tickets/feedback/';
+export function getClfTicketListUrl(feedBackId, segmentId) {
+  return CLF_GET_TICKET_LIST + feedBackId + '/' + SEGMENT + segmentId;
+}
 // "ex: {{BASE_URL}}/mobile/tickets/feedback/:feedBackId/segment/:segmentId?fromDate=2022-09-28&toDate=2022-10-28"
-export const CLF_GET_TICKET_LIST_BY_RESPONSEID = `${CLF_BASE_URL}/mobile/tickets/feedbacks/`;
+export const CLF_GET_TICKET_LIST_BY_RESPONSEID = '/mobile/tickets/feedbacks/';
 // ex: {{BASE_URL}}/mobile/tickets/feedbacks/{feedbackId}/responses/{responseId}?feedbackApiKey=95e89018-22a9-4a23-b774-ee0041010813
 
-export const CLF_GET_TICKET_DETAILS = `${CLF_BASE_URL}/mobile/tickets/`;
+export const CLF_GET_TICKET_DETAILS = '/mobile/tickets/';
 // ex: {{BASE_URL}}/mobile/tickets/:ticketId
 
 export const CLF_STATUS_WISE_PRIORITY_ANALYTICS =
   '/mobile/tickets/status-wise-priority/segments/';
 export const CLF_WELCOME_SCREEN_COUNTS = '/mobile/tickets/analytics/status';
 
-export const CLF_GET_DEFAULT_EMAIL_TEMPLATE = `${CLF_BASE_URL}/actionTemplate/get-default/mobile`;
-export const CLF_GET_EMAIL_TEMPLATES = `${CLF_BASE_URL}/actionTemplate/mobile`;
-export const CLF_SEND_EMAIL_PREFIX = `${CLF_BASE_URL}/tickets/`;
-export const CLF_SEND_EMAIL_POSTFIX = '/actionMail/mobile';
+export const CLF_GET_DEFAULT_EMAIL_TEMPLATE =
+  '/mobile/action-template/get-default';
+export const CLF_GET_EMAIL_TEMPLATES = '/mobile/action-template';
+export const CLF_SEND_EMAIL_PREFIX = '/mobile/tickets/'; ///mobile/tickets/:ticketId/actionMail
+export const CLF_SEND_EMAIL_POSTFIX = '/actionMail';
 
-export const CLF_LATEST_COMMENT_BY_TICKET_ID_PREFIX = `${CLF_BASE_URL}/comments/tickets/`;
+export const CLF_LATEST_COMMENT_BY_TICKET_ID_PREFIX = '/mobile/tickets/';
 export const CLF_LATEST_COMMENT_BY_TICKET_ID_POSTFIX = '/latest-comment';
 
-export const CLF_STATUS_HISTORY_BY_PREFIX = `${CLF_BASE_URL}/tickets/`;
+export const CLF_STATUS_HISTORY_BY_PREFIX = '/mobile/tickets/';
 export const CLF_STATUS_HISTORY_BY_POSTFIX = '/last-status-history';
 
 // export const CLF_GET_ROOT_CAUSE_PREFIX = `${CLF_BASE_URL}/rootCause/subscribers/`; // subscriberId
@@ -122,19 +126,19 @@ export const CLF_GET_ROOT_CAUSE = '/mobile/root-cause';
 export const CLF_GET_ROOT_CAUSE_ACTIONS = '/mobile/root-cause-action'; // subscriberId
 // /mobile/root-cause-action
 
-export const CLF_UPDATE_ROOT_CAUSE_PREFIX = `${CLF_BASE_URL}/mobile/tickets/`; // ticketId
+export const CLF_UPDATE_ROOT_CAUSE_PREFIX = '/mobile/tickets/'; // ticketId
 export const CLF_UPDATE_ROOT_CAUSE_POSTFIX = '/update-root-causes';
 
 // /mobile/tickets/subscribers/:subscriberId/tickets/:ticketId
-export const CLF_DELETE_TICKET_PREFIX = `${CLF_BASE_URL}/mobile/tickets/subscribers/`;
-export const CLF_DELETE_TICKET_POSTFIX = `/tickets/`;
+export const CLF_DELETE_TICKET_PREFIX = '/mobile/tickets/subscribers/';
+export const CLF_DELETE_TICKET_POSTFIX = '/tickets/';
 
 // /mobile/tickets/bulk-delete
-export const CLF_DELETE_TICKETS = `${CLF_BASE_URL}/mobile/tickets/bulk-delete`;
+export const CLF_DELETE_TICKETS = '/mobile/tickets/bulk-delete';
 
 export const CLF_APP_LOGIN_COUNT = '/app-login-count';
 
-export const CLF_GET_ACTION_HISTORY_PREFIX = `${CLF_BASE_URL}/mobile/tickets/`;
+export const CLF_GET_ACTION_HISTORY_PREFIX = `/mobile/tickets/`;
 export const CLF_GET_ACTION_SUMMARY_POSTFIX = `/action-mail`;
 export const CLF_GET_ACTION_DETAILS_POSTFIX = `/action-mails`;
 

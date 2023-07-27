@@ -69,6 +69,7 @@ import {
   CLF_GET_ACTION_DETAILS_POSTFIX,
   CLF_GET_ROOT_CAUSE,
   CLF_GET_ROOT_CAUSE_ACTIONS,
+  getClfTicketListUrl,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -296,8 +297,9 @@ function* syncTickets(action) {
     yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
     const response = yield WebServiceHandler.get(
-      CLF_GET_TICKET_lIST_SYNC(action.feedbackId),
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_TICKET_lIST_SYNC(action.feedbackId)),
+      // {'Auth-Token': action.token},
+      getBearerTokenStatic(),
       action.param,
     );
     yield put({
@@ -322,12 +324,8 @@ function* fetchClosedLoopTicketList(action) {
     yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
     const json = yield WebServiceHandler.get(
-      CLF_GET_TICKET_LIST +
-        action.feedbackId +
-        '/' +
-        SEGMENT +
-        action.segmentId,
-      {'Auth-Token': action.token},
+      getClfUrl(getClfTicketListUrl(action.feedbackId, action.segmentId)),
+      getBearerTokenStatic(),
       action.param,
     );
     yield put({
@@ -354,23 +352,25 @@ function* fetchClosedLoopTicketItem(action) {
     yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
     const ticketItem = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS +
-        action.ticketId +
-        FEEDBACK_API_KEY_ENDPOINT +
-        action.feedbackApiKey,
-      {'Auth-Token': action.token},
+      getClfUrl(
+        CLF_GET_TICKET_DETAILS +
+          action.ticketId +
+          FEEDBACK_API_KEY_ENDPOINT +
+          action.feedbackApiKey,
+      ),
+      getBearerTokenStatic(),
       action.param,
     );
 
     const comments = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS),
+      getBearerTokenStatic(),
       action.param,
     );
 
     const ticketActivity = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG),
+      getBearerTokenStatic(),
       action.param,
     );
     yield put({
@@ -400,8 +400,8 @@ export function* watchGetClosedLoopTicketItem() {
 function* fetchClosedLoopTicketComments(action) {
   try {
     const comments = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS),
+      getBearerTokenStatic(),
       action.param,
     );
     yield put({
@@ -430,8 +430,8 @@ function* fetchClosedLoopTicketActivity(action) {
     // yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
     const ticketActivity = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG),
+      getBearerTokenStatic(),
       action.param,
     );
     yield put({
@@ -464,8 +464,8 @@ function* postTicketComment(action) {
     // yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
     const json = yield WebServiceHandler.postNew(
-      CLF_GET_TICKET_DETAILS + COMMNETS,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_TICKET_DETAILS + COMMNETS),
+      getBearerTokenStatic(),
       action.param,
     );
     yield put({
@@ -474,8 +474,8 @@ function* postTicketComment(action) {
     });
 
     const comments = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS),
+      getBearerTokenStatic(),
       action.param,
     );
 
@@ -485,17 +485,19 @@ function* postTicketComment(action) {
     });
 
     const ticketItem = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS +
-        action.ticketId +
-        FEEDBACK_API_KEY_ENDPOINT +
-        action.feedbackApiKey,
-      {'Auth-Token': action.token},
+      getClfUrl(
+        CLF_GET_TICKET_DETAILS +
+          action.ticketId +
+          FEEDBACK_API_KEY_ENDPOINT +
+          action.feedbackApiKey,
+      ),
+      getBearerTokenStatic(),
       action.param,
     );
 
     const ticketActivity = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG),
+      getBearerTokenStatic(),
       action.param,
     );
     yield put({
@@ -529,13 +531,14 @@ export function* watchPostTicketComment() {
 
 function* postCreateClfTicket(action) {
   try {
-    const URL =
+    const URL = getClfUrl(
       CLF_GET_TICKET_DETAILS +
-      FEEDBACK_API_KEY_ENDPOINT +
-      action.feedbackApiKey;
+        FEEDBACK_API_KEY_ENDPOINT +
+        action.feedbackApiKey,
+    );
     const json = yield WebServiceHandler.postNew(
       URL,
-      {'Auth-Token': action.token},
+      getBearerTokenStatic(),
       action.param,
     );
 
@@ -578,22 +581,24 @@ function* patchUpdateClfTicket(action) {
     yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
     const ticketItem = yield WebServiceHandler.patch(
-      CLF_GET_TICKET_DETAILS +
-        action.ticketId +
-        FEEDBACK_API_KEY_ENDPOINT +
-        action.feedbackApiKey,
-      {'Auth-Token': action.token},
+      getClfUrl(
+        CLF_GET_TICKET_DETAILS +
+          action.ticketId +
+          FEEDBACK_API_KEY_ENDPOINT +
+          action.feedbackApiKey,
+      ),
+      getBearerTokenStatic(),
       action.param,
     );
     const comments = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS),
+      getBearerTokenStatic(),
       action.param,
     );
 
     const ticketActivity = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG),
+      getBearerTokenStatic(),
       action.param,
     );
     yield put({
@@ -626,14 +631,14 @@ function* patchTicketEscalation(action) {
     yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
     const ticketItem = yield WebServiceHandler.patch(
-      CLF_GET_TICKET_DETAILS + action.ticketId + ESCALATE,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_TICKET_DETAILS + action.ticketId + ESCALATE),
+      getBearerTokenStatic(),
       action.param,
     );
 
     const ticketActivity = yield WebServiceHandler.get(
-      CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_TICKET_DETAILS + action.ticketId + '/' + ACTIVITY_LOG),
+      getBearerTokenStatic(),
       action.param,
     );
 
@@ -665,8 +670,8 @@ export function* watchTicketEscalation() {
 function* getEmailTemplates(action) {
   try {
     const json = yield WebServiceHandler.get(
-      CLF_GET_EMAIL_TEMPLATES,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_EMAIL_TEMPLATES),
+      getBearerTokenStatic(),
       action.param,
     );
     yield put({
@@ -688,8 +693,8 @@ export function* watchGetEmailTemplates() {
 function* getDefaultEmailTemplate(action) {
   try {
     const json = yield WebServiceHandler.get(
-      CLF_GET_DEFAULT_EMAIL_TEMPLATE,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_GET_DEFAULT_EMAIL_TEMPLATE),
+      getBearerTokenStatic(),
       action.param,
     );
     yield put({
@@ -711,8 +716,10 @@ export function* watchGetDefaultEmailTemplate() {
 function* sendEmail(action) {
   try {
     const json = yield WebServiceHandler.postNew(
-      CLF_SEND_EMAIL_PREFIX + action.ticketId + CLF_SEND_EMAIL_POSTFIX,
-      {'Auth-Token': action.token},
+      getClfUrl(
+        CLF_SEND_EMAIL_PREFIX + action.ticketId + CLF_SEND_EMAIL_POSTFIX,
+      ),
+      getBearerTokenStatic(),
       action.param,
       action.queryParam,
     );
@@ -737,10 +744,12 @@ export function* watchSendEmail() {
 function* getLatestComment(action) {
   try {
     const json = yield WebServiceHandler.get(
-      CLF_LATEST_COMMENT_BY_TICKET_ID_PREFIX +
-        action.ticketId +
-        CLF_LATEST_COMMENT_BY_TICKET_ID_POSTFIX,
-      {'Auth-Token': action.token},
+      getClfUrl(
+        CLF_LATEST_COMMENT_BY_TICKET_ID_PREFIX +
+          action.ticketId +
+          CLF_LATEST_COMMENT_BY_TICKET_ID_POSTFIX,
+      ),
+      getBearerTokenStatic(),
       {},
     );
     yield put({
@@ -762,10 +771,12 @@ export function* watchGetLatestComment() {
 function* getTicketStatusHistory(action) {
   try {
     const json = yield WebServiceHandler.get(
-      CLF_STATUS_HISTORY_BY_PREFIX +
-        action.ticketId +
-        CLF_STATUS_HISTORY_BY_POSTFIX,
-      {'Auth-Token': action.token},
+      getClfUrl(
+        CLF_STATUS_HISTORY_BY_PREFIX +
+          action.ticketId +
+          CLF_STATUS_HISTORY_BY_POSTFIX,
+      ),
+      getBearerTokenStatic(),
       {},
     );
     yield put({
@@ -834,10 +845,12 @@ export function* watchGetrootCauseActionList() {
 function* updateRootCauseAndAction(action) {
   try {
     const json = yield WebServiceHandler.patch(
-      CLF_UPDATE_ROOT_CAUSE_PREFIX +
-        action.ticketId +
-        CLF_UPDATE_ROOT_CAUSE_POSTFIX,
-      {'Auth-Token': action.token},
+      getClfUrl(
+        CLF_UPDATE_ROOT_CAUSE_PREFIX +
+          action.ticketId +
+          CLF_UPDATE_ROOT_CAUSE_POSTFIX,
+      ),
+      getBearerTokenStatic(),
       action.param,
     );
     yield put({
@@ -863,8 +876,8 @@ export function* watchUpdateRootCause() {
 function* deleteTickets(action) {
   try {
     const json = yield WebServiceHandler.delete(
-      CLF_DELETE_TICKETS,
-      {'Auth-Token': action.token},
+      getClfUrl(CLF_DELETE_TICKETS),
+      getBearerTokenStatic(),
       action.param,
     );
     yield put({
@@ -890,10 +903,12 @@ export function* watchDeleteTickets() {
 function* fetchActionSummary(action) {
   try {
     const json = yield WebServiceHandler.get(
-      CLF_GET_ACTION_HISTORY_PREFIX +
-        action.ticketId +
-        CLF_GET_ACTION_SUMMARY_POSTFIX,
-      {'Auth-Token': action.token},
+      getClfUrl(
+        CLF_GET_ACTION_HISTORY_PREFIX +
+          action.ticketId +
+          CLF_GET_ACTION_SUMMARY_POSTFIX,
+      ),
+      getBearerTokenStatic(),
       {},
     );
     yield put({
@@ -915,10 +930,12 @@ export function* watchActionSummary() {
 function* fetchActionDetails(action) {
   try {
     const json = yield WebServiceHandler.get(
-      CLF_GET_ACTION_HISTORY_PREFIX +
-        action.ticketId +
-        CLF_GET_ACTION_DETAILS_POSTFIX,
-      {'Auth-Token': action.token},
+      getClfUrl(
+        CLF_GET_ACTION_HISTORY_PREFIX +
+          action.ticketId +
+          CLF_GET_ACTION_DETAILS_POSTFIX,
+      ),
+      getBearerTokenStatic(),
       {},
     );
     yield put({
