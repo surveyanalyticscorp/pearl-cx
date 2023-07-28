@@ -70,6 +70,7 @@ import {
   CLF_GET_ROOT_CAUSE,
   CLF_GET_ROOT_CAUSE_ACTIONS,
   getClfTicketListUrl,
+  CLF_MEDIA_UPLOAD,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -92,6 +93,9 @@ import {
   GET_TICKET_STATUS_HISTORY,
   GET_TICKET_STATUS_HISTORY_RECEIVED,
   LATEST_COMMENT_RECEIVED,
+  MEDIA_FILE_UPLOAD,
+  MEDIA_FILE_UPLOAD_RESET,
+  MEDIA_FILE_UPLOAD_RESPONSE,
   ROOT_CASUES_RECEIVED,
   ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL,
@@ -721,20 +725,24 @@ function* sendEmail(action) {
       ),
       getBearerTokenStatic(),
       action.param,
-      action.queryParam,
+      {},
     );
     yield put({
       type: SEND_EMAIL_RECEIVED,
       response: json,
     });
+    yield put({
+      type: MEDIA_FILE_UPLOAD_RESET,
+      response: [],
+    });
     showSuccessFlashMessage(json.message);
   } catch (error) {
     showErrorFlashMessage(error.message);
     console.log('ERROR:', JSON.stringify(error));
-    yield put({
-      type: API_ERROR,
-      error: error,
-    });
+    // yield put({
+    //   type: API_ERROR,
+    //   error: error,
+    // });
   }
 }
 export function* watchSendEmail() {
@@ -952,4 +960,27 @@ function* fetchActionDetails(action) {
 }
 export function* watchActionDetails() {
   yield takeLatest(ACTION_HISTORY_DETAILS, fetchActionDetails);
+}
+
+function* uploadMediaFile(action) {
+  try {
+    const json = yield WebServiceHandler.postUploadFile(
+      getClfUrl(CLF_MEDIA_UPLOAD),
+      getBearerTokenStatic(),
+      action.param,
+    );
+    yield put({
+      type: MEDIA_FILE_UPLOAD_RESPONSE,
+      response: json,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    // yield put({
+    //   type: API_ERROR,
+    //   error: error,
+    // });
+  }
+}
+export function* watchUploadFile() {
+  yield takeLatest(MEDIA_FILE_UPLOAD, uploadMediaFile);
 }

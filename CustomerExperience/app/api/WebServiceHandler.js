@@ -13,6 +13,14 @@ export default class WebServiceHandler {
     });
     return headers;
   }
+  static headerFormData(headerParam) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'multipart/form-data');
+    Object.keys(headerParam).forEach(function (key) {
+      headers.append(key, headerParam[key]);
+    });
+    return headers;
+  }
 
   // HTTP request parameter Generator.
   static parameter(parameter) {
@@ -128,7 +136,43 @@ export default class WebServiceHandler {
         });
     });
   }
+  static postUploadFile(url, headerParam, formData, queryParam) {
+    let fullUrl = url.includes('http') ? url : global.baseUrl + url;
+    let headers = WebServiceHandler.headerFormData(headerParam);
+    fullUrl = queryParam
+      ? fullUrl + WebServiceHandler.parameter(queryParam)
+      : fullUrl;
+    console.log(`POST REQUEST Url: ${fullUrl}`);
+    console.log(`HeaderParams: ${JSON.stringify(headers)}`);
+    console.log(`Parameter: ${JSON.stringify(formData)}`);
 
+    return new Promise(function (success, failed) {
+      fetch(fullUrl, {
+        method: 'post',
+        headers: headers,
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(response => {
+          console.log(
+            `URL: ${fullUrl}`,
+            `Response Data: ${JSON.stringify(response)}`,
+          );
+          if (response.statusCode === 200 || response.status === SUCCESS) {
+            success(response);
+          } else {
+            console.log('ERROR', JSON.stringify(response));
+
+            failed(response);
+          }
+        })
+        .catch(function (err) {
+          // console.log('ERROR', JSON.stringify(err));
+
+          failed(err);
+        });
+    });
+  }
   static delete(url, headerParam, parameter) {
     let fullUrl = url.includes('http') ? url : global.baseUrl + url;
     console.log(`POST REQUEST Url: ${fullUrl}`);

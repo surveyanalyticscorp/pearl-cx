@@ -98,6 +98,10 @@ export const ACTION_HISTORY_DETAILS = 'ACTION_HISTORY_DETAILS';
 export const ACTION_HISTORY_DETAILS_RECEIVED =
   'ACTION_HISTORY_DETAILS_RECEIVED';
 
+export const MEDIA_FILE_UPLOAD = 'MEDIA_FILE_UPLOAD';
+export const MEDIA_FILE_UPLOAD_RESPONSE = 'MEDIA_FILE_UPLOAD_RESPONSE';
+export const MEDIA_FILE_UPLOAD_RESET = 'MEDIA_FILE_UPLOAD_RESET';
+
 export const syncTickets = (token, param, feedbackId) => ({
   type: GET_TICKET_LIST_SYNC,
   token,
@@ -121,12 +125,11 @@ export const getEmailTemplates = (token, param) => ({
   param,
 });
 
-export const sendEmail = (token, ticketId, param, queryParam) => ({
+export const sendEmail = (token, ticketId, param) => ({
   type: SEND_EMAIL,
   token,
   ticketId,
   param,
-  queryParam,
 });
 
 // Takes CX Ticket ID
@@ -206,4 +209,14 @@ export const getActionHistoryDetails = (token, ticketId) => ({
   type: ACTION_HISTORY_DETAILS,
   token,
   ticketId,
+});
+
+export const postUploadFile = param => ({
+  type: MEDIA_FILE_UPLOAD,
+  param,
+});
+
+export const resetUploadFilelist = param => ({
+  type: MEDIA_FILE_UPLOAD_RESET,
+  param,
 });

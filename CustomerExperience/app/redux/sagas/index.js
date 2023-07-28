@@ -40,6 +40,7 @@ import {
   watchDeleteTickets,
   watchActionSummary,
   watchActionDetails,
+  watchUploadFile,
 } from './ClosedLoopSaga';
 import {watchGetNotification} from './notificationSaga';
 import {
@@ -94,5 +95,6 @@ export function* rootSaga() {
     fork(watchActionSummary),
     fork(watchActionDetails),
     fork(watchClfAuth),
+    fork(watchUploadFile),
   ]);
 }

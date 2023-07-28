@@ -9,6 +9,8 @@ import {
   GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
   GET_EMAIL_TEMPLATES_RECEIVED,
   GET_TICKET_LIST_SYNC_RECEIVED,
+  MEDIA_FILE_UPLOAD_RESET,
+  MEDIA_FILE_UPLOAD_RESPONSE,
   ROOT_CASUES_RECEIVED,
   ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL_RECEIVED,
@@ -60,7 +62,8 @@ const initialState = {
   ticketSync: true,
   apiCallStatus: {},
   welcomeScreenData: {},
-  emailData: {},
+  emailData: {emailSentResponse: {}},
+  mediaFileList: [],
   ticketDeleteStatus: {status: 'default'},
   ticketActionHistory: {summary: {}, details: {}},
 };
@@ -245,6 +248,20 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         emailData: {...state.emailData, emailSentResponse: action.response},
+      };
+    }
+
+    case MEDIA_FILE_UPLOAD_RESPONSE: {
+      return {
+        ...state,
+        mediaFileList: [...state.mediaFileList, action.response.data],
+      };
+    }
+
+    case MEDIA_FILE_UPLOAD_RESET: {
+      return {
+        ...state,
+        mediaFileList: [],
       };
     }
 

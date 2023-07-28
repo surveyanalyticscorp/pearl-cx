@@ -12,7 +12,7 @@ export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
 export const ACTION_EMAIL = 'noreply@InsightsHub.com';
 // set true for DEV, false for LIVE
-export const IS_DEV_MODE = true;
+export const IS_DEV_MODE = false;
 
 // export const BASE_URL = 'https://api.questionpro.com/';
 
@@ -108,6 +108,8 @@ export const CLF_GET_DEFAULT_EMAIL_TEMPLATE =
 export const CLF_GET_EMAIL_TEMPLATES = '/mobile/action-template';
 export const CLF_SEND_EMAIL_PREFIX = '/mobile/tickets/'; ///mobile/tickets/:ticketId/actionMail
 export const CLF_SEND_EMAIL_POSTFIX = '/actionMail';
+
+export const CLF_MEDIA_UPLOAD = '/mobile/media/upload';
 
 export const CLF_LATEST_COMMENT_BY_TICKET_ID_PREFIX = '/mobile/tickets/';
 export const CLF_LATEST_COMMENT_BY_TICKET_ID_POSTFIX = '/latest-comment';

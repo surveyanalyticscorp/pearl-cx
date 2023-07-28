@@ -7,6 +7,7 @@ import {
   Pressable,
   Platform,
   SafeAreaView,
+  FlatList,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -27,6 +28,7 @@ import {
   getActionHistorySummary,
   getDefaultEmailTemplate,
   getEmailTemplates,
+  postUploadFile,
   sendEmail,
 } from '../../../redux/actions/closedloop.actions';
 import StringUtils from '../../../Utils/StringUtils';
@@ -36,6 +38,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {isNull} from 'lodash';
+import {AttachmentIcon} from '../../../Utils/IconUtils';
 
 const RenderHeader = () => {
   return (
@@ -97,22 +100,63 @@ const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
   );
 };
 
-const RenderOptionsView = ({
-  onPressTemplate,
-  onPressAttachment,
-  onPressSend,
-}) => {
+const RenderOptionsView = ({onPressTemplate, emailBody, onPressSend}) => {
   return (
     <View style={styles.renderOptionView}>
       {/* {getTemplateIcon()} */}
       <TemplateIcon onPressTemplate={onPressTemplate} />
-      <AttachmentIcon onPressAttachment={onPressAttachment} />
-      <SendIcon onPressSend={onPressSend} />
+      <AttachmentUploadIcon />
+      <SendIcon emailBody={emailBody} />
     </View>
   );
 };
 
-const SendIcon = ({onPressSend}) => {
+const SendIcon = ({emailBody}) => {
+  // const {userInfo} = useSelector(state => state.global);
+  const {mediaFileList} = useSelector(state => state.dashboard);
+  const dispatch = useDispatch();
+
+  console.log('EMAIL BODY: 1', JSON.stringify(emailBody));
+  console.log('ATTACHMENTS: 1', JSON.stringify(mediaFileList));
+
+  const callSendEmailApi = () => {
+    let attachments = [];
+    // const queryParam = {
+    //   subscriberId: global.subscriberId,
+    //   emailAddress: userInfo.emailAddress,
+    // };
+    if (mediaFileList.length > 0) {
+      for (let i = 0; i < mediaFileList.length; i++) {
+        attachments[i] = mediaFileList[i].id;
+      }
+    }
+    if (StringUtils.isEmpty(emailBody.subject)) {
+      showErrorFlashMessage('Empty email subject');
+      return;
+    }
+    if (StringUtils.isEmpty(emailBody.emailBody)) {
+      showErrorFlashMessage('Empty email body');
+      return;
+    } else {
+      console.log('EMAIL BODY: 2', JSON.stringify(emailBody));
+      console.log('ATTACHMENTS: 2', JSON.stringify(attachments));
+
+      dispatch(
+        sendEmail(
+          '',
+          emailBody.ticketId,
+          {...emailBody, attachments: attachments},
+          // queryParam,
+        ),
+      );
+      // props.navigation.goBack();
+    }
+  };
+
+  const onPressSend = useCallback(() => {
+    callSendEmailApi();
+  }, [emailBody, mediaFileList]);
+
   return (
     <Pressable onPress={onPressSend} style={styles.optionIcon}>
       <RenderIonIcon
@@ -124,7 +168,34 @@ const SendIcon = ({onPressSend}) => {
   );
 };
 
-const AttachmentIcon = ({onPressAttachment}) => {
+const AttachmentUploadIcon = () => {
+  const dispatch = useDispatch();
+  const onPressAttachment = useCallback(async () => {
+    console.log('Attach items');
+
+    try {
+      const response = await DocumentPicker.pickSingle({
+        presentationStyle: 'fullScreen',
+        type: [DocumentPicker.types.allFiles],
+      });
+
+      console.log(JSON.stringify(response));
+
+      // setFileResponse(response);
+
+      const formData = new FormData();
+      formData.append('mediaType', '1');
+      formData.append('file', {
+        uri: response.uri,
+        type: response.type,
+        name: response.name,
+      });
+      dispatch(postUploadFile(formData));
+    } catch (err) {
+      console.warn(err);
+    }
+  }, []);
+
   return (
     <Pressable onPress={onPressAttachment} style={styles.optionIcon}>
       <RenderIonIcon name={'attach'} />
@@ -219,14 +290,82 @@ const ActionHistory = ({onPressActionHistoryItem}) => {
     </View>
   );
 };
+const AttachmentView = ({onPressActionHistoryItem}) => {
+  const {mediaFileList} = useSelector(state => state.dashboard);
+  console.log(
+    'ATTACHEMENTS_LIST',
+    JSON.stringify(JSON.stringify(mediaFileList)),
+  );
+  return (
+    <View style={styles.attachmentContainer}>
+      <Text style={styles.actionHistoryHeader}>Attachements</Text>
+      <FlatList
+        data={mediaFileList}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item, index}) => {
+          return <AttachmentItem item={item} index={index} />;
+        }}
+      />
+    </View>
+  );
+};
+
+const AttachmentItem = ({item, index}) => {
+  // const onPressOpenWithBrowser = useCallback(async () => {
+  //   // const isSupported = await Linking.canOpenURL(item.path);
+  //   // if (isSupported) {
+  //   Linking.openURL(item.path);
+  //   // } else {
+  //   //   Alert.alert(`Can't open this URL: ${item.path}`);
+  //   // }
+  // }, [item.path]);
+
+  // const onPressDownload = useCallback(async () => {
+  //   if (Platform.OS === 'android') {
+  //     getDownloadPermissionAndroid().then(granted => {
+  //       if (granted) {
+  //         downloadFile(item.path, item.fileName);
+  //       }
+  //     });
+  //   } else {
+  //     downloadFile(item.path, item.fileName).then(res => {
+  //       RNFetchBlob.ios.previewDocument(res.path());
+  //     });
+  //   }
+  // }, [item.path, item.fileName]);
+
+  return (
+    <Pressable style={styles.attachmentItem}>
+      <AttachmentIcon mimeType={item.mimeType} />
+      <Text numberOfLines={1} style={styles.attachmentText}>
+        {item.fileName}
+      </Text>
+    </Pressable>
+  );
+};
+
+const NoActionView = () => {
+  return (
+    <View>
+      <Text style={[styles.actionHistoryDetailText, {fontStyle: 'italic'}]}>
+        No action has taken yet
+      </Text>
+    </View>
+  );
+};
 
 const ActionHistoryItem = ({onItemPress}) => {
   const {summary} = useSelector(state => state.dashboard.ticketActionHistory);
+  const actionDetails = summary?.data?.action ?? null;
   console.log('SUMMARY OS', JSON.stringify(summary));
-  if (isNull(summary.data.action) || isObjectEmpty(summary.data.action)) {
-    return <View />;
-  }
+  // if (isNull(summary.data.action) || isObjectEmpty(summary.data.action)) {
+  //   return (
 
+  //   );
+  // }
+  if (isNull(actionDetails)) {
+    return <NoActionView />;
+  }
   const emailSubject = summary?.data?.action?.subject ?? 'Default subject';
   const senderName = summary?.data?.action?.emailSendBy ?? 'Default sender';
   const actionCount = (summary?.data?.totalAction ?? 0).toString();
@@ -257,23 +396,26 @@ export default function SendEmail(props) {
   const defaultEmail = useSelector(
     state => state.dashboard.emailData.defaultTemplate,
   );
+  const {emailSentResponse} = useSelector(state => state.dashboard.emailData);
+  const ticketId = JSON.stringify(props.route.params.ticketId);
+
   const [body, setBody] = useState({
+    ticketId: JSON.stringify(props.route.params.ticketId),
     subject: '',
     toEmail: props.route.params.toEmail ?? '',
     fromEmail: ACTION_EMAIL,
     emailBody: '',
+    attachments: [],
   });
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const richText = React.useRef();
   const richTextToolBar = React.useRef();
   // const [userInfo, setUserInfo] = useState();
-  const [userEmail, setUserEmail] = useState('');
+  // const [userEmail, setUserEmail] = useState('');
   const templateList = useSelector(
     state => state.dashboard.emailData.emailTemplates,
   );
-
-  const ticketId = JSON.stringify(props.route.params.ticketId);
 
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
@@ -285,15 +427,15 @@ export default function SendEmail(props) {
     bs.current.snapTo(bsSnapPoints.length - 1);
   };
 
-  useEffect(() => {
-    // AsyncStorage.getItem(ASYNC_USER_INFO).then((value) => {
-    //   setUserInfo(JSON.parse(value));
-    //   // console.log('USER_INFO__', value);
-    // });
-    AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then(value => {
-      setUserEmail(JSON.parse(value)?.email);
-    });
-  }, [authToken]);
+  // useEffect(() => {
+  // AsyncStorage.getItem(ASYNC_USER_INFO).then((value) => {
+  //   setUserInfo(JSON.parse(value));
+  //   // console.log('USER_INFO__', value);
+  // });
+  //   AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then(value => {
+  //     setUserEmail(JSON.parse(value)?.email);
+  //   });
+  // }, [authToken]);
 
   useEffect(() => {
     if (!isObjectEmpty(defaultEmail)) {
@@ -309,14 +451,15 @@ export default function SendEmail(props) {
   }, [defaultEmail]);
 
   useEffect(() => {
-    console.log(`EMAIL_DATA: ${authToken} ${global.subscriberId}`);
     dispatch(
       getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
     );
     dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
+  }, []);
+  useEffect(() => {
     dispatch(getActionHistorySummary(authToken, ticketId));
     dispatch(getActionHistoryDetails(authToken, ticketId));
-  }, []);
+  }, [emailSentResponse]);
 
   // useEffect(() => {
   //   setBody((state) => ({
@@ -336,29 +479,6 @@ export default function SendEmail(props) {
     richText.current.dismissKeyboard();
     bs.current.snapTo(0);
     console.log('call');
-  }, []);
-
-  const onPressAttachment = useCallback(async () => {
-    console.log('Attach items');
-
-    try {
-      const response = await DocumentPicker.pickMultiple({
-        presentationStyle: 'fullScreen',
-      });
-      setFileResponse(response);
-      console.log(fileResponse.length);
-      console.log(
-        fileResponse[0].name,
-        fileResponse[0].mime,
-        fileResponse[0].uri,
-      );
-    } catch (err) {
-      console.warn(err);
-    }
-  }, []);
-
-  const onPressSend = useCallback(() => {
-    callSendEmailApi();
   }, []);
 
   const onChangeSubject = text => {
@@ -400,25 +520,6 @@ export default function SendEmail(props) {
     );
   };
 
-  const callSendEmailApi = () => {
-    const queryParam = {
-      subscriberId: global.subscriberId,
-      emailAddress: userEmail,
-    };
-
-    if (StringUtils.isEmpty(body.subject)) {
-      showErrorFlashMessage('Empty email subject');
-      return;
-    }
-    if (StringUtils.isEmpty(body.emailBody)) {
-      showErrorFlashMessage('Empty email body');
-      return;
-    } else {
-      dispatch(sendEmail(authToken, ticketId, body, queryParam));
-      // props.navigation.goBack();
-    }
-  };
-
   return (
     <View style={styles.container}>
       <SafeAreaView>
@@ -444,8 +545,8 @@ export default function SendEmail(props) {
           <RenderTicketId ticketId={ticketId} />
           <RenderOptionsView
             onPressTemplate={onPressTemplate}
-            onPressAttachment={onPressAttachment}
-            onPressSend={onPressSend}
+            // onPressSend={onPressSend}
+            emailBody={body}
           />
           {/* <RenderToTextInput />
         <RenderFromTextInput /> */}
@@ -495,6 +596,8 @@ export default function SendEmail(props) {
               flex: 2,
             }}
           />
+          <AttachmentView />
+
           <ActionHistory onPressActionHistoryItem={onPressActionHistoryItem} />
           {/* <EmailBody
           refEditor={richText}
@@ -624,6 +727,11 @@ const styles = StyleSheet.create({
     paddingTop: PaddingConstants.tab1,
   },
 
+  attachmentContainer: {
+    marginHorizontal: MarginConstants.tab2,
+    paddingTop: PaddingConstants.tab1,
+  },
+
   actionHistoryItemContainer: {
     margin: MarginConstants.tab1,
     paddingTop: PaddingConstants.tab1,
@@ -658,6 +766,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.filterIconColor,
     marginHorizontal: MarginConstants.tab1,
     marginVertical: MarginConstants.halfTab,
+  },
+  attachmentText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    color: Colors.accentLight,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  attachmentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: MarginConstants.tab2,
   },
 
   contentContainer: {backgroundColor: Colors.white, height: '100%'},
