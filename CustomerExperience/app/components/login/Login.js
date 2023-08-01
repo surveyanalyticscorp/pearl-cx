@@ -110,6 +110,7 @@ const Login = props => {
       emailAddress: props.userInfo.emailAddress,
       userID: props.userInfo.userID,
       feedbackID: props.userInfo.feedbackID,
+      feedbackApiKey: props.userInfo.feedbackApiKey,
     };
     console.log('CALL CLF LOGIN 5');
 

@@ -137,6 +137,7 @@ function* fetchClfAuth(action) {
         emailAddress: action.param.emailAddress,
         cxUserId: action.param.userID,
         feedbackId: action.param.feedbackID,
+        feedbackApiKey: action.param.feedbackApiKey,
       },
     );
     let bearerToken = clfAuthResponse.data.accessToken;

@@ -63,7 +63,7 @@ function SplashScreen(props) {
         }
         setMoveNext(true);
       });
-    }, 3000);
+    }, 1000);
 
     return () => {
       clearTimeout(splashTimer);
