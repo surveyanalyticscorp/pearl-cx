@@ -13,12 +13,76 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {CheckBoxItem} from '../../routes/CommonScreen';
+import {CheckBoxItem, CheckRadioButtonItem} from '../../routes/CommonScreen';
 import {updateRootCause} from '../../redux/actions/closedloop.actions';
+
+const RenderRootCauseItem = ({onClickCheckBox, title, data}) => {
+  return (
+    <View style={{marginVertical: MarginConstants.tab2}}>
+      <Text style={styles.titleText}>{title}</Text>
+      <FlatList
+        data={data}
+        keyExtractor={(item, index) => item.id.toString()}
+        numColumns={2}
+        ListEmptyComponent={
+          <Text style={styles.dateText}>{`No ${title} found`} </Text>
+        }
+        renderItem={({item, index}) => (
+          <CheckBoxItem
+            textStyle={styles.optionText}
+            item={item}
+            index={index}
+            onPress={() => onClickCheckBox(title, item, index)}
+          />
+        )}
+      />
+    </View>
+  );
+};
+
+const RenderSegmentItems = ({onClickRadioButton, title, currentSelected}) => {
+  const segments = useSelector(
+    state => state.dashboard.segmentDetails.segments,
+  );
+
+  const segmentList = segments.map(item => ({
+    title: item.segmentName,
+    id: item.segmentID,
+    isChecked: currentSelected === item.segmentID,
+  }));
+
+  console.log('segmentList : ', JSON.stringify(segmentList));
+  // console.log('segments : redux', JSON.stringify(segments));
+
+  return (
+    <View style={{marginVertical: MarginConstants.tab2}}>
+      <Text style={styles.titleText}>{title}</Text>
+      <FlatList
+        data={segmentList}
+        keyExtractor={(item, index) => item.id.toString()}
+        numColumns={2}
+        ListEmptyComponent={
+          <Text style={styles.dateText}>{`No ${title} found`} </Text>
+        }
+        renderItem={({item, index}) => (
+          <CheckRadioButtonItem
+            textStyle={styles.optionText}
+            item={item}
+            index={index}
+            onPress={() => onClickRadioButton(title, item, index)}
+          />
+        )}
+      />
+    </View>
+  );
+};
 
 export default function TicketRootCause(props) {
   const ROOT_CAUSES = 'Root Causes';
   const ACTIONS = 'Actions';
+  const ORIGIN_SEGMENTS = 'Origin Segments';
+  const CURRENT_SEGMENTS = 'Current Segments';
+
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const {ticket, rootCauseList, rootCauseActionList} = useSelector(
@@ -54,10 +118,24 @@ export default function TicketRootCause(props) {
   };
   const [rootCauses, setRootCauses] = useState(getRootCauses());
   const [rootCauseActions, setRootActions] = useState(getRootActions());
+  const [originSegmentId, setOriginSegmentId] = useState(
+    ticket.originSegment.id,
+  );
+  const [currentSegmentId, setcurrentSegmentId] = useState(
+    ticket.currentSegment.id,
+  );
 
   console.log('ROOT_CAUSES', JSON.stringify(rootCauseList));
   console.log('ROOT_CAUSES_ACTIONS', JSON.stringify(rootCauseActionList));
   console.log('TICKET', JSON.stringify(ticket));
+
+  const updateOriginSegment = (item, index) => {
+    setRootCauses(prevState => {
+      const temp = [...prevState];
+      temp[index].isChecked = !prevState[index].isChecked;
+      return temp;
+    });
+  };
 
   const updateRootCauses = (item, index) => {
     setRootCauses(prevState => {
@@ -75,34 +153,21 @@ export default function TicketRootCause(props) {
     });
   };
 
-  const RenderRootCauseItem = ({title, data}) => {
-    return (
-      <View style={{marginVertical: MarginConstants.tab2}}>
-        <Text style={styles.titleText}>{title}</Text>
-        <FlatList
-          data={data}
-          keyExtractor={(item, index) => item.id.toString()}
-          numColumns={2}
-          ListEmptyComponent={
-            <Text style={styles.dateText}>{`No ${title} found`} </Text>
-          }
-          renderItem={({item, index}) => (
-            <CheckBoxItem
-              textStyle={styles.optionText}
-              item={item}
-              index={index}
-              onPress={(item, index) => {
-                if (title === ROOT_CAUSES) {
-                  updateRootCauses(item, index);
-                } else {
-                  updateRootActions(item, index);
-                }
-              }}
-            />
-          )}
-        />
-      </View>
-    );
+  const onClickCheckBox = (title, item, index) => {
+    if (title === ROOT_CAUSES) {
+      updateRootCauses(item, index);
+    } else {
+      updateRootActions(item, index);
+    }
+  };
+
+  const onClickRadioButton = (title, item, index) => {
+    // update segment
+    // if (title === ORIGIN_SEGMENTS) {
+    //   updateRootCauses(item, index);
+    // } else {
+    //   updateRootActions(item, index);
+    // }
   };
 
   const resetSelections = () => {
@@ -131,6 +196,8 @@ export default function TicketRootCause(props) {
       updateRootCause(authToken, JSON.stringify(ticket.id), {
         rootCauses: rootCauseArr,
         rootCauseActions: rootActionArr,
+        currentSegmentId: currentSegmentId,
+        originSegmentId: originSegmentId,
       }),
     );
   };
@@ -138,8 +205,26 @@ export default function TicketRootCause(props) {
   const RenderTicketOverView = () => (
     <View style={styles.rootContainer}>
       <View style={styles.container}>
-        <RenderRootCauseItem title={ROOT_CAUSES} data={rootCauses} />
-        <RenderRootCauseItem title={ACTIONS} data={rootCauseActions} />
+        <RenderRootCauseItem
+          title={ROOT_CAUSES}
+          data={rootCauses}
+          onClickCheckBox={onClickCheckBox}
+        />
+        <RenderRootCauseItem
+          title={ACTIONS}
+          data={rootCauseActions}
+          onClickCheckBox={onClickCheckBox}
+        />
+        <RenderSegmentItems
+          title={ORIGIN_SEGMENTS}
+          onClickRadioButton={onClickRadioButton}
+          currentSelected={ticket.originSegment.id}
+        />
+        <RenderSegmentItems
+          title={CURRENT_SEGMENTS}
+          onClickRadioButton={onClickRadioButton}
+          currentSelected={ticket.currentSegment.id}
+        />
       </View>
 
       <View style={styles.buttonView}>

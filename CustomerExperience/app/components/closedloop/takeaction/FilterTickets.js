@@ -14,8 +14,8 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {CheckBoxItem, CheckRadioButtonItem} from '../../../routes/CommonScreen';
-import IconTextModalDropdown from '../../../widgets/drop-down/IconTextModalDropdown';
-import IonIcons from 'react-native-vector-icons/Ionicons';
+// import IconTextModalDropdown from '../../../widgets/drop-down/IconTextModalDropdown';
+// import IonIcons from 'react-native-vector-icons/Ionicons';
 
 const FilterTicket = ({data, onPressHandler}) => {
   const [status, setStatus] = useState(data.status);
@@ -30,6 +30,13 @@ const FilterTicket = ({data, onPressHandler}) => {
   );
 
   const RenderStatusFilter = () => {
+    const selectedStatus = (item, index) => {
+      setStatus(prevState => {
+        const temp = [...prevState];
+        temp[index].isChecked = !prevState[index].isChecked;
+        return temp;
+      });
+    };
     return (
       <View>
         <Text style={styles.titleText}>Status</Text>
@@ -50,15 +57,14 @@ const FilterTicket = ({data, onPressHandler}) => {
     );
   };
 
-  const selectedStatus = (item, index) => {
-    setStatus(prevState => {
-      const temp = [...prevState];
-      temp[index].isChecked = !prevState[index].isChecked;
-      return temp;
-    });
-  };
-
   const RenderPriorityFilter = () => {
+    const selectedPriority = (item, index) => {
+      setPriority(prevState => {
+        const temp = [...prevState];
+        temp[index].isChecked = !prevState[index].isChecked;
+        return temp;
+      });
+    };
     return (
       <View>
         <Text style={styles.titleText}>Priority</Text>
@@ -77,14 +83,6 @@ const FilterTicket = ({data, onPressHandler}) => {
         />
       </View>
     );
-  };
-
-  const selectedPriority = (item, index) => {
-    setPriority(prevState => {
-      const temp = [...prevState];
-      temp[index].isChecked = !prevState[index].isChecked;
-      return temp;
-    });
   };
 
   const RenderTypeFilter = ({typelist}) => {
