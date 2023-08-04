@@ -7,21 +7,20 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import {FontFamily} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import StringUtils from '../../Utils/StringUtils';
-import {getPriorityById, getStatusById} from '../../Utils/TicketUtils';
+import {
+  getPriorityById,
+  getStatusById,
+  getTicketTypeById,
+} from '../../Utils/TicketUtils';
 
 const ShowFilterTag = ({handleFilterTag, filterData}) => {
+  let [list, setList] = useState([]);
   let taglist = [
     'status',
     'priority',
     'type',
     // 'assignToId'
   ];
-  let [list, setList] = useState([]);
-
-  //   taglistMap.set('status', 'Status');
-  //   taglistMap.set('priority', 'Priority');
-  //   taglistMap.set('type', 'type');
-  //   taglistMap.set('assignToId', 'Assignee');
 
   const populateList = () => {
     console.log('TAG_LIST_FILTERDATA', JSON.stringify(filterData));
@@ -48,17 +47,23 @@ const ShowFilterTag = ({handleFilterTag, filterData}) => {
 
   const returnStatusNames = id => ` ${getStatusById(parseInt(id, 10))}`;
   const returnPriorityNames = id => ` ${getPriorityById(parseInt(id, 10))}`;
+  const returnTypeyNames = id => ` ${getTicketTypeById(parseInt(id, 10))}`;
+
+  const tagObj = {
+    status: returnStatusNames,
+    priority: returnPriorityNames,
+    type: returnTypeyNames,
+  };
+  // let tagMap = new Map();
+  // tagMap.set('status', returnStatusNames);
+  // tagMap.set('priority', returnPriorityNames);
+  // tagMap.set('type', returnTypeyNames);
+
+  // 'assignToId'
+
   const getTagName = tag => {
-    // switch (tag) {
-    //   case 'assignToId':
-    //     return 'Assignee';
-    //   default:
-
     console.log(`${tag} : ${filterData[tag]}`);
-
-    const names = filterData[tag]
-      .split(',')
-      .map(tag === taglist[0] ? returnStatusNames : returnPriorityNames);
+    const names = filterData[tag].split(',').map(tagObj[tag]);
 
     return `${StringUtils.uppercaseFirstChar(tag)}-${names}`;
 

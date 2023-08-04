@@ -26,7 +26,17 @@ export const ticketTypeList = [
   {title: 'Detractor Alert', id: 1},
 ];
 
-export const getStatusById = (statusId) => {
+export const getTicketTypeById = typeId => {
+  let title = ticketTypeList[0].title;
+  ticketTypeList.forEach(element => {
+    if (element.id === typeId) {
+      title = element.title;
+    }
+  });
+  return title;
+};
+
+export const getStatusById = statusId => {
   //   switch (statusId) {
   //     case 0:
   //       return 'New';
@@ -42,7 +52,7 @@ export const getStatusById = (statusId) => {
   //       return 'New';
   //   }
   let title = statusList[0].title;
-  statusList.forEach((element) => {
+  statusList.forEach(element => {
     if (element.id === statusId) {
       title = element.title;
     }
@@ -50,7 +60,7 @@ export const getStatusById = (statusId) => {
   return title;
 };
 
-export const getPriorityById = (priorityId) => {
+export const getPriorityById = priorityId => {
   //   switch (priorityId) {
   //     case 0:
   //       return 'Low';
@@ -64,7 +74,7 @@ export const getPriorityById = (priorityId) => {
   //       return 'Low';
   //   }
   let title = priorityList[0].title;
-  priorityList.forEach((element) => {
+  priorityList.forEach(element => {
     if (element.id === priorityId) {
       console.log(priorityId, element.title);
       title = element.title;
@@ -75,7 +85,7 @@ export const getPriorityById = (priorityId) => {
 
 export const getSegmentNameById = (segmentList, segmentId) => {
   let title = 'Segment';
-  segmentList.forEach((element) => {
+  segmentList.forEach(element => {
     if (element.segmentID === segmentId) {
       title = element.segmentName;
     }
@@ -86,7 +96,7 @@ export const getSegmentNameById = (segmentList, segmentId) => {
 
 export const getOwnerNameById = (owners, ownerId) => {
   let title = 'Owner';
-  owners.forEach((element) => {
+  owners.forEach(element => {
     if (element.ownerID === ownerId) {
       title = element.ownerName;
     }
@@ -95,7 +105,7 @@ export const getOwnerNameById = (owners, ownerId) => {
   return title;
 };
 
-export const getStatusIndexById = (statusId) => {
+export const getStatusIndexById = statusId => {
   let index = -1;
   statusList.forEach((element, i) => {
     if (element.id === statusId) {
@@ -106,7 +116,7 @@ export const getStatusIndexById = (statusId) => {
   return index;
 };
 
-export const getPriorityIndexById = (priorityId) => {
+export const getPriorityIndexById = priorityId => {
   let index = -1;
   statusList.forEach((element, i) => {
     if (element.id === priorityId) {
@@ -129,7 +139,7 @@ export const getSegmentIndex = (segmentlist, segmentId) => {
 
 export const getSegmentBySegmentId = (segmentlist, segmentId) => {
   let item = {};
-  segmentlist.forEach((element) => {
+  segmentlist.forEach(element => {
     if (element.segmentID === segmentId) {
       item = element;
     }
@@ -187,11 +197,11 @@ export function getUniqueValues(arr, key) {
   return distinctPropertyValues;
 }
 
-export const getNameInitials = (title) => {
+export const getNameInitials = title => {
   const nameArray = title.trim().split(/[. ]/);
   return nameArray.length > 1
     ? nameArray
-        .map((item) => item[0].toUpperCase())
+        .map(item => item[0].toUpperCase())
         .join('')
         .slice(0, 2)
     : nameArray[0].length > 1

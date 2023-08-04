@@ -87,12 +87,20 @@ const FilterTicket = ({data, onPressHandler}) => {
     });
   };
 
-  const RenderTypeFilter = () => {
+  const RenderTypeFilter = ({typelist}) => {
+    const selectType = index => {
+      setType(prevState =>
+        prevState.map((item, index_, arr) => {
+          item.isChecked = index === index_;
+          return item;
+        }),
+      );
+    };
     return (
       <View>
         <Text style={styles.titleText}>Type</Text>
         <FlatList
-          data={type}
+          data={typelist}
           keyExtractor={(item, index) => item.toString()}
           numColumns={3}
           renderItem={({item, index}) => (
@@ -105,15 +113,6 @@ const FilterTicket = ({data, onPressHandler}) => {
           )}
         />
       </View>
-    );
-  };
-
-  const selectType = (item, index) => {
-    setType(prevState =>
-      prevState.map((item, index_, arr) => {
-        item.isChecked = index === index_;
-        return item;
-      }),
     );
   };
 
@@ -182,6 +181,7 @@ const FilterTicket = ({data, onPressHandler}) => {
 
     data.status = status;
     data.priority = priority;
+    data.type = type;
     // data.managers = managerlist;
     data.selectedManager = selectedManager;
     onPressHandler(data, 'apply');
@@ -285,7 +285,7 @@ const FilterTicket = ({data, onPressHandler}) => {
       <View style={styles.innerContainer}>
         <RenderStatusFilter />
         <RenderPriorityFilter />
-        {/* <RenderTypeFilter /> */}
+        <RenderTypeFilter typelist={type} />
         {/* <RenderAssigneeDropDown /> */}
         <RenderButtons />
       </View>
