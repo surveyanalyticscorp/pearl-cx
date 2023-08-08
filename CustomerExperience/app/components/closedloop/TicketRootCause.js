@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {CheckBoxItem, CheckRadioButtonItem} from '../../routes/CommonScreen';
 import {updateRootCause} from '../../redux/actions/closedloop.actions';
+import {getClosedLoopTicketItem} from '../../redux/actions/dashboard.actions';
 
 const RenderRootCauseItem = ({onClickCheckBox, title, data}) => {
   return (
@@ -84,6 +85,7 @@ export default function TicketRootCause(props) {
   const CURRENT_SEGMENTS = 'Current Segments';
 
   const dispatch = useDispatch();
+  const {feedbackApiKey} = useSelector(state => state.global.userInfo);
   const {authToken} = useSelector(state => state.global);
   const {ticket, rootCauseList, rootCauseActionList} = useSelector(
     state => state.dashboard,
@@ -129,14 +131,6 @@ export default function TicketRootCause(props) {
   console.log('ROOT_CAUSES_ACTIONS', JSON.stringify(rootCauseActionList));
   console.log('TICKET', JSON.stringify(ticket));
 
-  const updateOriginSegment = (item, index) => {
-    setRootCauses(prevState => {
-      const temp = [...prevState];
-      temp[index].isChecked = !prevState[index].isChecked;
-      return temp;
-    });
-  };
-
   const updateRootCauses = (item, index) => {
     setRootCauses(prevState => {
       const temp = [...prevState];
@@ -163,16 +157,16 @@ export default function TicketRootCause(props) {
 
   const onClickRadioButton = (title, item, index) => {
     // update segment
-    // if (title === ORIGIN_SEGMENTS) {
-    //   updateRootCauses(item, index);
-    // } else {
-    //   updateRootActions(item, index);
-    // }
+    title === ORIGIN_SEGMENTS
+      ? setOriginSegmentId(item.id)
+      : setcurrentSegmentId(item.id);
   };
 
   const resetSelections = () => {
     setRootActions(getRootActions);
     setRootCauses(getRootCauses);
+    setOriginSegmentId(ticket.originSegment.id);
+    setcurrentSegmentId(ticket.currentSegment.id);
   };
 
   const updateRootCauseAndAction = () => {
@@ -193,12 +187,17 @@ export default function TicketRootCause(props) {
     // console.log({rootCauses: rootCauseArr, rootCauseActions: rootActionArr});
 
     dispatch(
-      updateRootCause(authToken, JSON.stringify(ticket.id), {
-        rootCauses: rootCauseArr,
-        rootCauseActions: rootActionArr,
-        currentSegmentId: currentSegmentId,
-        originSegmentId: originSegmentId,
-      }),
+      updateRootCause(
+        authToken,
+        JSON.stringify(ticket.id),
+        {
+          rootCauses: rootCauseArr,
+          rootCauseActions: rootActionArr,
+          currentSegmentId: currentSegmentId,
+          originSegmentId: originSegmentId,
+        },
+        feedbackApiKey,
+      ),
     );
   };
 
@@ -218,12 +217,12 @@ export default function TicketRootCause(props) {
         <RenderSegmentItems
           title={ORIGIN_SEGMENTS}
           onClickRadioButton={onClickRadioButton}
-          currentSelected={ticket.originSegment.id}
+          currentSelected={originSegmentId}
         />
         <RenderSegmentItems
           title={CURRENT_SEGMENTS}
           onClickRadioButton={onClickRadioButton}
-          currentSelected={ticket.currentSegment.id}
+          currentSelected={currentSegmentId}
         />
       </View>
 

@@ -159,11 +159,12 @@ export const getActionList = (token, subscriberId) => ({
   subscriberId,
 });
 
-export const updateRootCause = (token, ticketId, param) => ({
+export const updateRootCause = (token, ticketId, param, feedbackApiKey) => ({
   type: UPDATE_ROOT_CAUSE,
   token,
   ticketId,
   param,
+  feedbackApiKey,
 });
 
 export const setStatusFilterById = statusId => ({

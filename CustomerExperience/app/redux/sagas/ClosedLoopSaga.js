@@ -861,10 +861,26 @@ function* updateRootCauseAndAction(action) {
       getBearerTokenStatic(),
       action.param,
     );
+
+    const ticketItem = yield WebServiceHandler.get(
+      getClfUrl(
+        CLF_GET_TICKET_DETAILS +
+          action.ticketId +
+          FEEDBACK_API_KEY_ENDPOINT +
+          action.feedbackApiKey,
+      ),
+      getBearerTokenStatic(),
+      action.param,
+    );
+
     yield put({
       type: ROOT_CAUSE_UPDATE_RECEIVED,
       response: json.data,
+      ticketData: ticketItem.data,
     });
+
+    fetchClosedLoopTicketItem(action);
+
     showSuccessFlashMessage(json.message ?? 'Updated');
   } catch (error) {
     showErrorFlashMessage(

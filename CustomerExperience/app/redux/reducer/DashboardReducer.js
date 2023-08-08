@@ -282,11 +282,7 @@ const dashboardReducer = (state = initialState, action) => {
     case ROOT_CAUSE_UPDATE_RECEIVED: {
       return {
         ...state,
-        ticket: {
-          ...state.ticket,
-          rootCauses: action.response.rootCauses,
-          rootCauseActions: action.response.rootCauseActions,
-        },
+        ticket: action.ticketData,
       };
     }
 
