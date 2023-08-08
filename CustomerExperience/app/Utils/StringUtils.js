@@ -94,6 +94,10 @@ export default class StringUtils {
     return html;
   }
 
+  static formatCommentToHTML(commentText) {
+    return commentText.replace(/\@\[([^\]]+)\]\(([^\)]+)\)/g, `<b>$1</b>`);
+  }
+
   static removeLines(str) {
     return str.replace(/\s{2,}/g, '');
   }

@@ -11,6 +11,7 @@ import {
   RefreshControl,
   SafeAreaView,
   Platform,
+  useWindowDimensions,
 } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../../styles/color.constants';
@@ -27,6 +28,7 @@ import {
 import moment from 'moment';
 import StringUtils from '../../Utils/StringUtils';
 import {getDateTimeAgo} from '../../Utils/TimeUtils';
+import RenderHTML from 'react-native-render-html';
 
 const MaterialIconView = ({iconName, color}) => (
   <View style={{margin: MarginConstants.halfTab}}>
@@ -45,6 +47,20 @@ const SendButton = ({handleOnSubmit}) => {
     </Pressable>
   );
 };
+
+const CommentText = ({text}) => {
+  const {width} = useWindowDimensions();
+
+  return (
+    <View>
+      <RenderHTML
+        source={{html: StringUtils.formatCommentToHTML(text)}}
+        contentWidth={width / 0.5}
+      />
+    </View>
+  );
+};
+
 const CommentItem = ({item}) => {
   return (
     <Pressable
@@ -57,7 +73,8 @@ const CommentItem = ({item}) => {
       </View>
       <View style={styles.commentTextView}>
         <Text style={[styles.commentByText]}>{item.commentBy.trim()}</Text>
-        <Text style={styles.commentText}>{item.text.trim()}</Text>
+        <CommentText text={item.text.trim()} />
+        {/* <Text style={styles.commentText}>{item.text.trim()}</Text> */}
         <Text style={styles.commentDateText}>
           {getDateTimeAgo(moment.utc(item.createdAt).toDate())}
         </Text>
