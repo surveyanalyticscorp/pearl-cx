@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -15,7 +15,6 @@ import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {CheckBoxItem, CheckRadioButtonItem} from '../../routes/CommonScreen';
 import {updateRootCause} from '../../redux/actions/closedloop.actions';
-import {getClosedLoopTicketItem} from '../../redux/actions/dashboard.actions';
 
 const RenderRootCauseItem = ({onClickCheckBox, title, data}) => {
   return (
