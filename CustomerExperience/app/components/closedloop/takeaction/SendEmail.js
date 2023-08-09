@@ -551,7 +551,7 @@ export default function SendEmail(props) {
           {/* <RenderToTextInput />
         <RenderFromTextInput /> */}
           <EmailToFrom title={'To:'} value={body.toEmail} />
-          <EmailToFrom title={'From:'} value={body.fromEmail} />
+          {/* <EmailToFrom title={'From:'} value={body.fromEmail} /> */}
 
           <EmailSubject
             body={body}
