@@ -21,7 +21,10 @@ const FilterTicket = ({data, onPressHandler}) => {
   const [status, setStatus] = useState(data.status);
   const [priority, setPriority] = useState(data.priority);
   const [type, setType] = useState(data.type);
+  // const [showMyTickets, setShowMyTickets] = useState(data.showMyTickets);
+  // const [hasOwner, setHasOwner] = useState(data.assignToId.length > 0);
   // const [managerlist, setManagerList] = useState(data.managers);
+  const [assignToId, setAssignToId] = useState(data.assignToId);
   console.log('MANAGERS', JSON.stringify(data));
 
   // let [managerlist, setManagerList] = useState(data.managers);
@@ -113,6 +116,22 @@ const FilterTicket = ({data, onPressHandler}) => {
       </View>
     );
   };
+  const RenderShowMyTicketsFilter = ({assignToId, userId}) => {
+    const toggleMyTicketVisibility = index => {
+      setAssignToId(state => (state.length > 0 ? '' : userId));
+    };
+    return (
+      <View>
+        <Text style={styles.titleText}>Show tickets</Text>
+        <CheckBoxItem
+          textStyle={styles.optionText}
+          item={{title: 'Only my tickets', isChecked: assignToId.length > 0}}
+          index={0}
+          onPress={toggleMyTicketVisibility}
+        />
+      </View>
+    );
+  };
 
   // const RenderAssigneeDropDown = () => {
   //   const defaultText = 'Select...';
@@ -182,6 +201,8 @@ const FilterTicket = ({data, onPressHandler}) => {
     data.type = type;
     // data.managers = managerlist;
     data.selectedManager = selectedManager;
+    data.assignToId = assignToId;
+    // data.showMyTickets = showMyTickets;
     onPressHandler(data, 'apply');
   };
 
@@ -284,6 +305,10 @@ const FilterTicket = ({data, onPressHandler}) => {
         <RenderStatusFilter />
         <RenderPriorityFilter />
         <RenderTypeFilter typelist={type} />
+        <RenderShowMyTicketsFilter
+          assignToId={assignToId}
+          userId={data.userId}
+        />
         {/* <RenderAssigneeDropDown /> */}
         <RenderButtons />
       </View>
