@@ -6,6 +6,7 @@ import {
   TextInput,
   RefreshControl,
   Pressable,
+  Platform,
 } from 'react-native';
 import ClosedLoopCell from './ClosedloopCell';
 import IonIcons from 'react-native-vector-icons/Ionicons';
@@ -63,6 +64,7 @@ const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
   // const placeHolder = currentText.trim().length > 0 ? currentText :
   // console.log('STATE_CHANGING, ', JSON.stringify(currentText));
   // const [text, setText] = useState(currentText);
+
   return (
     <View style={[styles.searchBox, styles.rowItem]}>
       <SearchIcon />
@@ -638,6 +640,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     marginVertical: MarginConstants.halfTab,
     paddingHorizontal: MarginConstants.tab1,
+    paddingVertical: Platform.OS === 'ios' ? MarginConstants.tab1 : 0,
     borderBottomWidth: 0.5,
     borderColor: Colors.filterIconColor,
   },
