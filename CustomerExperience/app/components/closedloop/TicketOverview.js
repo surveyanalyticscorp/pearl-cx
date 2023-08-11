@@ -179,7 +179,7 @@ const DescriptionView = ({ticket}) => {
             margin: MarginConstants.halfTab,
             paddingHorizontal: PaddingConstants.halfTab,
           }}>
-          {isObjectEmpty(ticket) ? ticket.comment : ''}
+          {!isObjectEmpty(ticket) ? ticket.comment : ''}
         </Text>
       </View>
       {ticket.responseId && <ViewResponseDetailsButton />}
