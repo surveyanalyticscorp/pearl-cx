@@ -20,6 +20,29 @@ import {
 import {getStatusById, getPriorityById} from '../../Utils/TicketUtils';
 import {CheckBoxItem, RenderStatusIcon} from '../../routes/CommonScreen';
 import StringUtils from '../../Utils/StringUtils';
+import {useSelector} from 'react-redux';
+
+const AssigneeUI = ({assignToId}) => {
+  const owners = useSelector(state => state.dashboard.ownerDetails.owners);
+
+  console.log('OWNERS_', JSON.stringify(owners), JSON.stringify(assignToId));
+  function getAssigneeName(assignToId, owners_) {
+    if (StringUtils.isEmptyOrNull(assignToId)) {
+      return assignToId;
+    }
+    const owner = owners_.find(e => e.ownerID === assignToId);
+    return owner['ownerName'] ?? '';
+  }
+
+  return (
+    <View style={styles.rowContainer}>
+      {/* <StatusIcon borderColor={borderColor} fillerColor={fillerColor} /> */}
+      <Text style={styles.statusText}>
+        {getAssigneeName(assignToId, owners)}
+      </Text>
+    </View>
+  );
+};
 
 const StatusUI = ({status}) => {
   return (
@@ -132,7 +155,8 @@ const StatusRow = ({data}) => {
     <View style={styles.statusContainer}>
       <StatusUI status={data.status} />
       <PriorityUI priority={data.priority} />
-      <UserPic avatarUrl={data.userAvatar} />
+      {/* <UserPic avatarUrl={data.userAvatar} /> */}
+      <AssigneeUI assignToId={data.assignToId} />
     </View>
   );
 };
