@@ -19,14 +19,15 @@ const ShowFilterTag = ({handleFilterTag, filterData}) => {
     'status',
     'priority',
     'type',
-    // 'assignToId'
+    // 'showMyTickets',
+    'assignToId',
   ];
 
   const populateList = () => {
     console.log('TAG_LIST_FILTERDATA', JSON.stringify(filterData));
 
     for (let tag of taglist) {
-      if (filterData.hasOwnProperty(tag) && filterData[tag].length > 0) {
+      if (filterData.hasOwnProperty(tag) && filterData[tag]) {
         console.log('TAG_ITEM', tag, filterData[tag]);
         setList(state => [...state, tag]);
       }
@@ -53,6 +54,7 @@ const ShowFilterTag = ({handleFilterTag, filterData}) => {
     status: returnStatusNames,
     priority: returnPriorityNames,
     type: returnTypeyNames,
+    assignToId: 'My tickets',
   };
   // let tagMap = new Map();
   // tagMap.set('status', returnStatusNames);
@@ -62,6 +64,9 @@ const ShowFilterTag = ({handleFilterTag, filterData}) => {
   // 'assignToId'
 
   const getTagName = tag => {
+    if (tag === 'assignToId') {
+      return tagObj[tag];
+    }
     console.log(`${tag} : ${filterData[tag]}`);
     const names = filterData[tag].split(',').map(tagObj[tag]);
 

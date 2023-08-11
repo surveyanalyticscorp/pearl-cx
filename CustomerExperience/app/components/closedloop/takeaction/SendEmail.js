@@ -88,6 +88,7 @@ const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
       <View style={styles.rowContainerCenterAlign}>
         <Text style={styles.titleText}>{'Subject:'}</Text>
         <TextInput
+          multiline={false}
           placeholder="Email subject"
           defaultValue={body.subject ?? ''}
           style={styles.textInput}
@@ -398,15 +399,15 @@ export default function SendEmail(props) {
   );
   const {emailSentResponse} = useSelector(state => state.dashboard.emailData);
   const ticketId = JSON.stringify(props.route.params.ticketId);
-
-  const [body, setBody] = useState({
+  const sampleEmailBody = {
     ticketId: JSON.stringify(props.route.params.ticketId),
     subject: '',
     toEmail: props.route.params.toEmail ?? '',
-    fromEmail: ACTION_EMAIL,
+    // fromEmail: ACTION_EMAIL,
     emailBody: '',
     attachments: [],
-  });
+  };
+  const [body, setBody] = useState(sampleEmailBody);
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const richText = React.useRef();
@@ -444,9 +445,7 @@ export default function SendEmail(props) {
         emailBody: defaultEmail?.templateText ?? '',
       }));
 
-      richText.current.setContentHTML(
-        defaultEmail?.templateText ?? '(empty body)',
-      );
+      richText.current.setContentHTML(defaultEmail?.templateText ?? '');
     }
   }, [defaultEmail]);
 
@@ -459,6 +458,8 @@ export default function SendEmail(props) {
   useEffect(() => {
     dispatch(getActionHistorySummary(authToken, ticketId));
     dispatch(getActionHistoryDetails(authToken, ticketId));
+    setBody(sampleEmailBody);
+    richText.current.setContentHTML('');
   }, [emailSentResponse]);
 
   // useEffect(() => {
@@ -551,7 +552,7 @@ export default function SendEmail(props) {
           {/* <RenderToTextInput />
         <RenderFromTextInput /> */}
           <EmailToFrom title={'To:'} value={body.toEmail} />
-          <EmailToFrom title={'From:'} value={body.fromEmail} />
+          {/* <EmailToFrom title={'From:'} value={body.fromEmail} /> */}
 
           <EmailSubject
             body={body}

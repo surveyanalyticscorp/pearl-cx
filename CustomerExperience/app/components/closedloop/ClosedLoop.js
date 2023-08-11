@@ -113,7 +113,9 @@ export default function ClosedLoop(props) {
     feedbackApiKey: feedbackApiKey,
     status: '',
     priority: '',
+    // showMyTickets: true,
     assignToId: JSON.stringify(userID),
+    userId: JSON.stringify(userID),
     pageNumber: pageNumber,
     perPage: itemPerPage,
     fromDate: convertDateToYMDFORMAT(range.startDate),
@@ -174,12 +176,17 @@ export default function ClosedLoop(props) {
     const status = statusList.map(value => ({...value, isChecked: false}));
     const type = ticketTypeList.map(value => ({...value, isChecked: false}));
     // const managers = owners.map((value) => ({...value, isChecked: false}));
-
+    // const showMyTickets = true;
+    const assignToId = JSON.stringify(userID);
+    const userId = JSON.stringify(userID);
     return {
       priority: priority,
       status: status,
       managers: [],
       type: type,
+      assignToId,
+      userId,
+      // showMyTickets: showMyTickets,
     };
   };
 
@@ -284,7 +291,7 @@ export default function ClosedLoop(props) {
     } else {
       setFilterData(state => ({...state, managers: []}));
     }
-    console.log('OWNERS', JSON.stringify(owners));
+    // console.log('OWNERS', JSON.stringify(owners));
   };
   // useEffect(() => {}, []);
 
@@ -365,14 +372,14 @@ export default function ClosedLoop(props) {
     if (searchText.trim().length > 0) {
       setSearchText('');
       setFilterState(prev => ({...prev, search: ''}));
-      console.log('RESET_SEARCH', JSON.stringify(''));
+      // console.log('RESET_SEARCH', JSON.stringify(''));
     } else {
       setSearchVisibility(false);
     }
   }, [searchText]);
 
   const onPressHandler = (item, index) => {
-    console.log(`onPressHandler`);
+    // console.log(`onPressHandler`);
     if (showCheckBox) {
       if (selectedTickets.includes(item.id)) {
         setSelectedTickets(selectedTickets.filter(id => id !== item.id));
@@ -388,7 +395,7 @@ export default function ClosedLoop(props) {
     props.navigation.navigate('TicketDetails', item);
   };
   const onLongPressHandler = (item, index) => {
-    console.log(`onLongPressHandler`);
+    // console.log(`onLongPressHandler`);
     if (showCheckBox) {
       setSelectedTickets([]);
       setShowCheckBox(false);
@@ -448,18 +455,19 @@ export default function ClosedLoop(props) {
   const applyFilter = item => {
     setFilterData(item);
 
-    console.log('StatusParam: ', JSON.stringify(item));
+    // console.log('StatusParam: ', JSON.stringify(item));
     // setTicketList([]);
     setFilterState(state => ({
       ...state,
       pageNumber: 1,
       status: getIds(item.status) ?? '',
       priority: getIds(item.priority) ?? '',
-      assignToId: getOwnerIds(item.managers) ?? '',
+      assignToId: item.assignToId,
       type: getIds(item.type) ?? '',
+      // showMyTickets: item.showMyTickets,
     }));
 
-    console.log('Apply filter');
+    // console.log('Apply filter');
     closeFilter();
   };
 
@@ -514,7 +522,7 @@ export default function ClosedLoop(props) {
   const submitQuery = useCallback(text => {
     setSearchText(text);
     setFilterState(prev => ({...prev, search: text}));
-    console.log('KEYBOARD_SEARCH', JSON.stringify(text));
+    // console.log('KEYBOARD_SEARCH', JSON.stringify(text));
   }, []);
 
   const toogleSearchView = useCallback(() => {
@@ -561,8 +569,6 @@ export default function ClosedLoop(props) {
                 ...state,
                 [item]: clearFilterData(item),
               }));
-
-              console.log(`CLICKED: ${item}`);
             }}
           />
           {isSearchVisible && (
