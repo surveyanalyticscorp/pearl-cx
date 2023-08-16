@@ -53,7 +53,10 @@
     "no_notification_to_display": "No hay notificaciones para mostrar",
     "new_responses": "New Responses",
     "new_tickets": "New Tickets",
-    "overdues": "Overdues"
+    "overdues": "Overdues",
+    "view_responses": "View Responses",
+    "total": "Total",
+    "cx_tickets": "CX tickets"
   },
   "close_loop": {
     "close_loop": "Cerrar bucle",
@@ -90,6 +93,50 @@
     "submit": "Enviar",
     "update": "Actualizar"
   },
+
+  "ticket_list": {
+    "alert": "Alert!",
+    "anonymous": "anonymous",
+    "overdue": "overdue"
+  },
+  "ticket_overview": {
+    "take_action": "Take Action",
+    "description": "Description",
+    "ticket_id": "Ticket Id",
+    "filter_ticket": "Filter ticket",
+    "delete_ticket": "Delete ticket",
+    "select_status": "Select status",
+    "select_priority": "Select priority",
+    "Select_ticket_owner": "Select ticket owner",
+    "assigned_to": "Assigned to",
+    "contact": "Contact"
+  },
+  "comment": {
+    "Comments": "Comments",
+    "reply": "reply",
+    "write_a_comment": "Write a comment"
+  },
+  "activity": {
+    "activity": "Activity",
+    "sorted_by": "Sorted by",
+    "latest": "Latest",
+    "oldest": "Oldest",
+    "you": "You"
+  },
+  "root_cause": {
+    "root_cause": "Root cause",
+    "actions": "Actions",
+    "update": "update",
+    "reset": "reset"
+  },
+  "action_email": {
+    "respond_via_email": "Respond via Email",
+    "send_email": "Send email",
+    "subject": "Subject",
+    "email_body": "email body",
+    "to": "To",
+    "from": "From"
+  },
   "responses": {
     "responses": "Respuestas",
     "detractor": "Detractor",
@@ -107,7 +154,17 @@
     "activity": "Actividad",
     "view_ticket": "Ver boleto",
     "create_ticket": "Crear Ticket",
-    "new_ticket": "Nueva entrada"
+    "new_ticket": "Nueva entrada",
+    "response_id": "Response ID"
+  },
+  "profile": {
+    "surveys": "Surveys",
+    "profile_details": "Profile details",
+    "name": "Name",
+    "contact_information": "Contact information",
+    "date": "Date",
+    "survey_completed": "Survey completed",
+    "account_details": "Account details"
   },
   "settings": {
     "settings": "Ajustes",
@@ -125,6 +182,11 @@
     "last_month": "El mes pasado",
     "last_3_months": "Últimos 3 meses",
     "last_6_months": "Últimos 6 meses"
+  },
+  "select_segment": {
+    "search_segment_name": "Search segment name here...",
+    "select_segment": "Select segment",
+    "business_unit": "Business unit"
   },
   "filter_by": "Filtrado por",
   "logout": "Cerrar sesión",
