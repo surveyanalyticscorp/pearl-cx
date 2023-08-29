@@ -230,7 +230,7 @@ const AppRouter = props => {
 
   useEffect(() => {
     console.log(`Language Code: `, languageCode);
-    setI18nConfig('pt');
+    setI18nConfig(languageCode);
   }, [languageCode]);
 
   const setGlobalBaseUrl = () => {
