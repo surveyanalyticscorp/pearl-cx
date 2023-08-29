@@ -38,7 +38,7 @@ import {
   statusList,
   ticketTypeList,
 } from '../../Utils/TicketUtils';
-// import {translate} from '../../Utils/MultilinguaUtils';
+import {translate} from '../../Utils/MultilinguaUtils';
 import QPSpinner from '../../widgets/QPSpinner';
 import ShowFilterTag from '../view/ShowFilterTag';
 import StringUtils from '../../Utils/StringUtils';
@@ -70,7 +70,7 @@ const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
       <SearchIcon />
       <TextInput
         defaultValue={currentText}
-        placeholder="Search by ID"
+        placeholder={translate('ticket_search_hint')}
         style={[styles.titleText, {flex: 1}]}
         returnKeyType={'search'}
         onSubmitEditing={event => {
@@ -476,7 +476,7 @@ export default function ClosedLoop(props) {
   const renderFilterHeader = () => {
     return (
       <BottomSheetHeader
-        title={'Ticket Filter'}
+        title={translate('ticket_overview.filter_ticket')}
         onPressClose={() => closeFilter()}
       />
     );

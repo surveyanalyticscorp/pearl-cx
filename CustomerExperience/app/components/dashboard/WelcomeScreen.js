@@ -25,6 +25,7 @@ import {
   getRootCauseList,
 } from '../../redux/actions/closedloop.actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {translate} from '../../Utils/MultilinguaUtils';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = props => {
@@ -129,7 +130,9 @@ export const WelcomeScreen = props => {
     return (
       <CustomBackground>
         <View style={styles.backgroundContainer}>
-          <Text style={styles.welcomeText}>Welcome back</Text>
+          <Text style={styles.welcomeText}>
+            {translate('onBoarding.welcomeBack')}
+          </Text>
           <Text style={styles.nameText}>
             {(userInfo?.firstName === undefined ? '' : userInfo?.firstName) +
               ' ' +
@@ -138,19 +141,19 @@ export const WelcomeScreen = props => {
 
           <View style={styles.responseContainer}>
             <RenderCountItem
-              title={'New Responses'}
+              title={translate('dashboard.new_responses')}
               data={welcomeScreenData?.cxData?.body?.newResponses ?? 0}
               style={styles.responseBox}
             />
           </View>
           <View style={styles.ticketAndOverdueContainer}>
             <RenderCountItem
-              title={'New Tickets'}
+              title={translate('dashboard.new_tickets')}
               data={welcomeScreenData?.clfData?.data[0]?.value ?? 0}
               style={styles.ticketBox}
             />
             <RenderCountItem
-              title={'Overdues'}
+              title={translate('dashboard.overdues')}
               data={welcomeScreenData?.clfData?.data[1]?.value ?? 0}
               style={styles.ticketBox}
             />
@@ -158,7 +161,7 @@ export const WelcomeScreen = props => {
         </View>
         <View>
           <QPButton
-            buttonText="SKIP"
+            buttonText={translate('onBoarding.skip')}
             buttonColor={Colors.accentLight}
             onPress={props.skipHandler}
           />

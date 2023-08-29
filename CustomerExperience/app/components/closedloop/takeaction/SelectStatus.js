@@ -18,7 +18,7 @@ import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 // import IonIcon from 'react-native-vector-icons/Ionicons';
 import StatusItem from './StatusItem';
-const SelectStatus = (props) => {
+const SelectStatus = props => {
   const [data, setData] = useState(props.data);
   // const [selectedIndex, setSelectedIndex] = useState();
 

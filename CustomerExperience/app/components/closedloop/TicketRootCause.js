@@ -15,6 +15,7 @@ import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {CheckBoxItem, CheckRadioButtonItem} from '../../routes/CommonScreen';
 import {updateRootCause} from '../../redux/actions/closedloop.actions';
+import {translate} from '../../Utils/MultilinguaUtils';
 
 const RenderRootCauseItem = ({onClickCheckBox, title, data}) => {
   return (
@@ -78,10 +79,10 @@ const RenderSegmentItems = ({onClickRadioButton, title, currentSelected}) => {
 };
 
 export default function TicketRootCause(props) {
-  const ROOT_CAUSES = 'Root Causes';
-  const ACTIONS = 'Actions';
-  const ORIGIN_SEGMENTS = 'Origin Segments';
-  const CURRENT_SEGMENTS = 'Current Segments';
+  const ROOT_CAUSES = translate('root_cause.root_cause');
+  const ACTIONS = translate('root_cause.actions');
+  const ORIGIN_SEGMENTS = translate('close_loop.origin_segment');
+  const CURRENT_SEGMENTS = translate('close_loop.current_segment');
 
   const dispatch = useDispatch();
   const {feedbackApiKey} = useSelector(state => state.global.userInfo);

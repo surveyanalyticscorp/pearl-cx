@@ -23,6 +23,7 @@ import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import {translate} from '../Utils/MultilinguaUtils';
 
 const SelectSegmentScreen = props => {
   const dispatch = useDispatch();
@@ -136,7 +137,7 @@ const SelectSegmentScreen = props => {
             ref={textInputRef}
             defaultValue={requestBody.segmentName}
             style={[styles.searchInput, {flex: 1}]}
-            placeholder="Search segment name here..."
+            placeholder={translate('select_segment.search_segment_name')}
             returnKeyType={'search'}
             onSubmitEditing={event => {
               console.log('KEYBOARD_SEARCH', JSON.stringify(event.nativeEvent));
@@ -208,7 +209,9 @@ const SelectSegmentScreen = props => {
               justifyContent: 'space-between',
             },
           ]}>
-          <Text style={styles.headerText}>{'Select Segment'}</Text>
+          <Text style={styles.headerText}>
+            {translate('select_segment.select_segment')}
+          </Text>
           <CloseButton color={Colors.filterIconColor} />
         </View>
 

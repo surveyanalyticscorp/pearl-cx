@@ -84,7 +84,7 @@ const TakeActionButton = ({onTakeActionHandler, hasPanelMember}) => {
         }
         style={styles.takeActionButton}
         onPress={onTakeActionHandler}
-        buttonText={'Take Action'}
+        buttonText={translate('ticket_overview.take_action')}
         textStyle={styles.takeActionText}
       />
     </View>
@@ -148,7 +148,7 @@ const DescriptionView = ({ticket}) => {
   return (
     <View style={styles.ticketStatusContainer}>
       <View style={styles.rowContainer}>
-        <DescriptionHeader text={'Description'} />
+        <DescriptionHeader text={translate('ticket_overview.description')} />
         <TouchableWithoutFeedback>
           <View style={styles.ticketIdView}>
             <Text style={styles.ticketIdText}>
@@ -173,7 +173,7 @@ const DescriptionView = ({ticket}) => {
         </View>
       )}
       <View style={styles.columnContainer}>
-        <Title value={'Description'} />
+        <Title value={translate('ticket_overview.description')} />
         <Text
           style={{
             margin: MarginConstants.halfTab,
@@ -190,7 +190,7 @@ const DescriptionView = ({ticket}) => {
 const ContactView = ({panelMember}) => {
   return (
     <View style={styles.ticketStatusContainer}>
-      <DescriptionHeader text={'Contact'} />
+      <DescriptionHeader text={translate('ticket_overview.contact')} />
       <View style={styles.rowContainer}>
         <Text
           style={{
@@ -198,12 +198,12 @@ const ContactView = ({panelMember}) => {
             fontSize: TextSizes.largeText,
             fontWeight: 'bold',
           }}>
-          {panelMember?.name ?? 'anonymous'}
+          {panelMember?.name ?? translate('ticket_list.anonymous')}
         </Text>
       </View>
       {panelMember?.email ? (
         <View style={styles.rowContainer}>
-          <Title value={'Email'} />
+          <Title value={translate('responses.email')} />
           {getUnderLineText(panelMember.email ?? '', EMAIL)}
         </View>
       ) : (
@@ -211,7 +211,7 @@ const ContactView = ({panelMember}) => {
       )}
       {panelMember?.phone ? (
         <View style={styles.rowContainer}>
-          <Title value={'Phone'} />
+          <Title value={translate('create_new_ticket.phone_number')} />
 
           {getUnderLineText(panelMember.phone ?? '', PHONE)}
         </View>
@@ -232,7 +232,7 @@ const DeleteView = ({onPressDelete}) => {
           buttonColor={Colors.deleteBackground}
           style={styles.deleteButton}
           onPress={onPressDelete}
-          buttonText={'Delete ticket'}
+          buttonText={translate('ticket_overview.delete_ticket')}
           textStyle={styles.deleteText}
         />
       </View>
@@ -445,7 +445,12 @@ export default function TicketOverview(props) {
   };
 
   const RenderStatusHeader = _title => {
-    return <BottomSheetHeader title={'Select Status'} onPressClose={closeBS} />;
+    return (
+      <BottomSheetHeader
+        title={translate('ticket_overview.select_status')}
+        onPressClose={closeBS}
+      />
+    );
   };
 
   const RenderStatusSelectContent = () => {
@@ -501,7 +506,10 @@ export default function TicketOverview(props) {
 
   const RenderPriorityHeader = _title => {
     return (
-      <BottomSheetHeader title={'Select Priority'} onPressClose={closeBS} />
+      <BottomSheetHeader
+        title={translate('ticket_overview.select_priority')}
+        onPressClose={closeBS}
+      />
     );
   };
 
@@ -522,7 +530,10 @@ export default function TicketOverview(props) {
 
   const RenderOwnerHeader = _title => {
     return (
-      <BottomSheetHeader title={'Select Ticket Owner'} onPressClose={closeBS} />
+      <BottomSheetHeader
+        title={translate('ticket_overview.select_ticket_owner')}
+        onPressClose={closeBS}
+      />
     );
   };
 
@@ -550,14 +561,16 @@ export default function TicketOverview(props) {
             <Text
               style={
                 styles.modalHeaderText
-              }>{`Assign User to Ticket #${id}`}</Text>
+              }>{`Assign user to ticket #${id}`}</Text>
             <TouchableWithoutFeedback onPress={() => setAssigneeModal(false)}>
               <IonIcons name="close" size={20} color={Colors.white} />
             </TouchableWithoutFeedback>
           </View>
           <View style={{marginVertical: MarginConstants.tab2}}>
             <DescriptionHeader
-              text={`Current Segment: ${currentSegment?.name ?? ''}`}
+              text={`${translate('close_loop.current_segment')}: ${
+                currentSegment?.name ?? ''
+              }`}
             />
           </View>
           <View style={styles.contentContainer}>
@@ -604,12 +617,14 @@ export default function TicketOverview(props) {
     const isEscalated = ticket.status === 2;
     const segmentName = ticket?.currentSegment?.name ?? '';
     const statusName =
-      ticket !== undefined ? getStatusById(ticket.status) : 'Select status';
+      ticket !== undefined
+        ? getStatusById(ticket.status)
+        : translate('close_loop.current_segment');
 
     const priorityName =
       ticket !== undefined
         ? getPriorityById(ticket.priority)
-        : 'Select priority';
+        : translate('ticket_overview.select_priority');
     const ownerName =
       ticket !== undefined
         ? // ? ticketDetails.assignToId
@@ -618,12 +633,12 @@ export default function TicketOverview(props) {
     return (
       <View style={styles.ticketStatusContainer}>
         <View style={styles.rowContainer}>
-          <Title value={'Current Segment'} />
+          <Title value={translate('close_loop.current_segment')} />
           <RenderDropDownButton text={segmentName} />
         </View>
 
         <View style={styles.rowContainer}>
-          <Title value={'Ticket Status'} />
+          <Title value={translate('ticket_overview.select_status')} />
           <RenderDropDownButton
             text={statusName}
             handleOnPress={handleStatusSelection}
@@ -638,7 +653,7 @@ export default function TicketOverview(props) {
         </View>
 
         <View style={styles.rowContainer}>
-          <Title value={'Priority'} />
+          <Title value={translate('close_loop.priority')} />
           <RenderDropDownButton
             text={priorityName}
             handleOnPress={handlePrioritySelection}
@@ -653,7 +668,7 @@ export default function TicketOverview(props) {
         </View>
 
         <View style={styles.rowContainer}>
-          <Title value={'Assigned to'} />
+          <Title value={translate('ticket_overview.assigned_to')} />
 
           <RenderDropDownButton
             text={ownerName}
@@ -704,7 +719,13 @@ export default function TicketOverview(props) {
   }, []);
 
   const renderTicketTakeAction = () => {
-    const data = [{id: 1, title: 'Respond via Email', icon: 'email'}];
+    const data = [
+      {
+        id: 1,
+        title: translate('action_email.respond_via_email'),
+        icon: 'email',
+      },
+    ];
 
     return (
       <View style={styles.contentContainer}>
@@ -743,7 +764,7 @@ export default function TicketOverview(props) {
   const renderHeader = () => {
     return (
       <BottomSheetHeader
-        title={'Take Action'}
+        title={translate('ticket_overview.take_action')}
         onPressClose={() =>
           actionBottomSheet.current.snapTo(
             actionBottomSheetSnapPoints.length - 1,

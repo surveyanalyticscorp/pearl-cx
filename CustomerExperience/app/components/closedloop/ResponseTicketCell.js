@@ -47,7 +47,7 @@ export default function ResponseTicketCell(props) {
     return <Text style={styles.idText}>{`Ticket ID #${data.id}`} </Text>;
   };
 
-  let getNPSIcon = (sentiment) => {
+  let getNPSIcon = sentiment => {
     let icon;
     switch (sentiment) {
       case 'Detractor':
@@ -64,7 +64,7 @@ export default function ResponseTicketCell(props) {
     return <Image source={icon} style={{width: 16, height: 16}} />;
   };
 
-  let getNPSColor = (sentiment) => {
+  let getNPSColor = sentiment => {
     switch (sentiment) {
       case 'Detractor':
         return Colors.detractor2;
@@ -132,7 +132,7 @@ export default function ResponseTicketCell(props) {
     );
   };
 
-  const getStatusUI = (status) => {
+  const getStatusUI = status => {
     const borderColor = getStatusBorderColorbyId(status);
     const fillerColor = getStatusFillerColorbyId(status);
 
@@ -156,7 +156,7 @@ export default function ResponseTicketCell(props) {
     );
   };
 
-  const getPriorityUI = (priority) => {
+  const getPriorityUI = priority => {
     const priorityColor = getPriorityBorderColorbyId(priority);
     const priorityText = getPriorityById(priority);
     return (
@@ -169,7 +169,7 @@ export default function ResponseTicketCell(props) {
     );
   };
 
-  const getUserPic = (avatarUrl) => {
+  const getUserPic = avatarUrl => {
     return (
       <View>
         <Image

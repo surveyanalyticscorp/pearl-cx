@@ -14,6 +14,7 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {CheckBoxItem, CheckRadioButtonItem} from '../../../routes/CommonScreen';
+import {translate} from '../../../Utils/MultilinguaUtils';
 // import IconTextModalDropdown from '../../../widgets/drop-down/IconTextModalDropdown';
 // import IonIcons from 'react-native-vector-icons/Ionicons';
 
@@ -42,7 +43,7 @@ const FilterTicket = ({data, onPressHandler}) => {
     };
     return (
       <View>
-        <Text style={styles.titleText}>Status</Text>
+        <Text style={styles.titleText}>{translate('close_loop.status')}</Text>
         <FlatList
           data={status}
           keyExtractor={(item, index) => item.toString()}
@@ -70,7 +71,7 @@ const FilterTicket = ({data, onPressHandler}) => {
     };
     return (
       <View>
-        <Text style={styles.titleText}>Priority</Text>
+        <Text style={styles.titleText}>{translate('close_loop.priority')}</Text>
         <FlatList
           data={priority}
           keyExtractor={(item, index) => item.toString()}
@@ -125,7 +126,10 @@ const FilterTicket = ({data, onPressHandler}) => {
         <Text style={styles.titleText}>Show tickets</Text>
         <CheckBoxItem
           textStyle={styles.optionText}
-          item={{title: 'Only my tickets', isChecked: assignToId.length > 0}}
+          item={{
+            title: translate('only_my_tickets'),
+            isChecked: assignToId.length > 0,
+          }}
           index={0}
           onPress={toggleMyTicketVisibility}
         />

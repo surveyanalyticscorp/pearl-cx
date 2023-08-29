@@ -14,6 +14,7 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {PaddingConstants} from '../../styles/padding.constants';
+import {translate} from '../../Utils/MultilinguaUtils';
 
 const GlobalSelectSegment = ({
   currentSegmentId,
@@ -54,7 +55,7 @@ const GlobalSelectSegment = ({
     <View style={styles.container}>
       <TextInput
         style={styles.searchInput}
-        placeholder="Search..."
+        placeholder={translate('search')}
         onChangeText={text => {
           console.log(text);
           if (text) {

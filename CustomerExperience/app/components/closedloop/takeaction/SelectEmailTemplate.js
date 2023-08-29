@@ -12,7 +12,7 @@ import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-const SelectEmailTemplate = (props) => {
+const SelectEmailTemplate = props => {
   const renderRow = ({item}) => {
     return (
       <TouchableWithoutFeedback onPress={() => handleOnPress(item)}>
@@ -23,7 +23,7 @@ const SelectEmailTemplate = (props) => {
     );
   };
 
-  const handleOnPress = (item) => {
+  const handleOnPress = item => {
     props.handleOnPress(item);
   };
 

@@ -31,7 +31,7 @@ export default function FeedbackCell(props) {
     } else if (!StringUtils.isEmpty(email.trim())) {
       return email;
     } else {
-      return 'anonymous';
+      return translate('ticket_list.anonymous');
     }
   }
   let disable = props.origin === 'Detail';
@@ -114,7 +114,7 @@ export default function FeedbackCell(props) {
   let getUserName = () => {
     return (
       <Text style={styles.userNameText}>
-        {name.length > 1 ? name : 'anonymous'}
+        {name.length > 1 ? name : translate('ticket_list.anonymous')}
       </Text>
     );
   };
@@ -291,7 +291,7 @@ export default function FeedbackCell(props) {
 
     return (
       <View style={{marginVertical: MarginConstants.tab1}}>
-        <Text style={styles.secondaryTitle}>Date</Text>
+        <Text style={styles.secondaryTitle}>{translate('responses.date')}</Text>
         <Text style={styles.secondaryText}>{date}</Text>
       </View>
     );

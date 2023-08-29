@@ -160,7 +160,9 @@ const RenderScene = props => {
             height: MarginConstants.tab4,
             justifyContent: 'center',
           }}>
-          <Text style={styles.countText}>{`${count.totalTickets} total`}</Text>
+          <Text style={styles.countText}>{`${count.totalTickets} ${translate(
+            'dashboard.total',
+          )}`}</Text>
         </View>
         <View
           style={{

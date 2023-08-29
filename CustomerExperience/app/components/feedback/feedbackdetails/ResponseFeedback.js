@@ -12,7 +12,7 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import {FontFamily, FontWeight} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 
-const ResponseFeedback = (props) => {
+const ResponseFeedback = props => {
   const listData = props.route.params.listData;
 
   const rowSeparator = () => {
@@ -23,7 +23,7 @@ const ResponseFeedback = (props) => {
     return (
       <View style={styles.itemRow}>
         <Text style={styles.question}> {item.question}</Text>
-        <Text style={styles.answer}> >> {item.answer}</Text>
+        <Text style={styles.answer}> {`>> ${item.answer}`}</Text>
       </View>
     );
   };
@@ -33,7 +33,7 @@ const ResponseFeedback = (props) => {
       <FlatList
         style={styles.flatlist}
         data={listData}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
         renderItem={renderRow}
         onEndReachedThreshold={0}
         refreshing={false}

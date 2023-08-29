@@ -12,7 +12,7 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {RenderStatusIcon} from '../../../routes/CommonScreen';
 
-const StatusItem = (props) => {
+const StatusItem = props => {
   const index = props.index;
   const title = props.item.title;
 

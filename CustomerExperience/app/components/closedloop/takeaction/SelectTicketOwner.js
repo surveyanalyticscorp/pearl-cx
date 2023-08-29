@@ -18,6 +18,7 @@ import {listItemSeparator, SearchTextInput} from '../../../routes/CommonScreen';
 import StringUtils from '../../../Utils/StringUtils';
 import {NoItemsFound} from '../../../routes/CommonScreen';
 import QPButton from '../../../widgets/Button';
+import {translate} from '../../../Utils/MultilinguaUtils';
 
 const SelectTicketOwner = props => {
   const [data, setData] = useState(props.data);
@@ -68,7 +69,7 @@ const SelectTicketOwner = props => {
     <View style={styles.container}>
       <SearchTextInput
         ref={textInputRef}
-        placeholder={'Search...'}
+        placeholder={translate('search')}
         returnKeyType={'search'}
         onChangeText={filterOwnerList}
       />
@@ -87,7 +88,7 @@ const SelectTicketOwner = props => {
         buttonColor={Colors.accentLight}
         style={styles.takeActionButton}
         onPress={() => props.handleOnPress(selectedItem, selectedIndex)}
-        buttonText={'Select'}
+        buttonText={translate('select')}
         textStyle={styles.takeActionText}
       />
     </View>

@@ -1,32 +1,32 @@
 {
   "translation_for": "Spanish",
   "onBoarding": {
-    "getStarted": "Get Started",
-    "marketing_title_1": "Connect and engage with your customers. Anytime, anywhere",
-    "marketing_desc_1": "Communicate with customers or prospects through a wide selection of feedback channels at every touchpoint anywhere, no matter the device.",
-    "marketing_title_2": "Take full control of your customer’s journey",
-    "marketing_desc_2": "Analyze your customer’s 360 experience and quickly identify actionable insights and trends.",
-    "marketing_title_3": "Manage real-time analytics in one dashboard",
-    "marketing_desc_3": "Easily monitor your business with the role-based, customizable dashboard from anywhere.",
-    "marketing_title_4": "Make immediate business decisions",
-    "marketing_desc_4": "Prioritize actions quickly based on customer data to excel their expectations with our closed-loop feedback system with real-time alerts.",
-    "marketing_title_5": "Fuel growth organically",
-    "marketing_desc_5": "Identify your best customers and help them become your brand ambassadors through social referrals with our unique Promoter Amplification system.",
+    "getStarted": "Comenzar",
+    "marketing_title_1": "Conéctate y participa con tus clientes. En cualquier momento, en cualquier lugar",
+    "marketing_desc_1": "Comunícate con clientes o prospectos a través de una amplia selección de canales de retroalimentación en cada punto de contacto, sin importar el dispositivo",
+    "marketing_title_2": "Toma el control total del ciclo de tus clientes",
+    "marketing_desc_2": "Analiza la experiencia completa de tus clientes e identifica rápidamente información y tendencias accionables",
+    "marketing_title_3": "Gestiona análisis en tiempo real en un solo dashboard",
+    "marketing_desc_3": "Monitorea fácilmente tu negocio con un dashboard basado en roles y personalizable desde cualquier lugar",
+    "marketing_title_4": "Toma decisiones de negocio inmediatas",
+    "marketing_desc_4": "Prioriza rápidamente acciones, basadas en datos de clientes para superar sus expectativas con nuestro sistema de retroalimentación de bucle cerrado y alertas en tiempo real",
+    "marketing_title_5": "Fuel grImpulsa el crecimiento orgánicamente",
+    "marketing_desc_5": "Identifica a tus mejores clientes y ayúdalos a convertirse en embajadores de tu marca a través de referencias sociales con nuestro exclusivo sistema de Amplificación de Promotores",
 
-    "invalidEmail": "Please enter valid email address",
-    "invalidPassword": "Please enter valid password",
-    "invalidCompanyCode": "Please enter valid company code",
-    "signIn": "Sign In",
-    "email": "Email Address",
-    "password": "Password",
-    "companyCode": "Company Code",
-    "forgotPassword": "Forgot Password?",
-    "resetPassword": "Reset Password",
-    "forgotPasswordMessage": "Please enter the details below and hit Reset Password button to reset your password.",
-    "passwordNotMatching": "Password and Confirm password not matching",
-    "resetPasswordMessage": "Please enter the new password and hit the Update button to change your password.",
-    "welcomeBack": "Welcome back",
-    "skip": "Skip"
+    "invalidEmail": "Por favor, ingresa una dirección de correo electrónico válida",
+    "invalidPassword": "Por favor, ingresa una contraseña válida",
+    "invalidCompanyCode": "Por favor, ingresa un código de empresa válido",
+    "signIn": "Iniciar sesión",
+    "email": "Dirección de correo electrónico",
+    "password": "Contraseña",
+    "companyCode": "Código de empresa",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "resetPassword": "Restablecer contraseña",
+    "forgotPasswordMessage": "Ingresa los detalles a continuación y presiona el botón Restablecer contraseña para restablecer tu contraseña.",
+    "passwordNotMatching": "La contraseña y la confirmación de contraseña no coinciden",
+    "resetPasswordMessage": "Ingresa la nueva contraseña y presiona el botón Actualizar para cambiar tu contraseña.",
+    "welcomeBack": "Bienvenido de nuevo",
+    "skip": "Omitir"
   },
   "dashboard": {
     "dashboard": "Tablero",
@@ -51,12 +51,12 @@
     "clear_all_notification": "Borrar todas las notificaciones",
     "are_you_sure": "Estas seguro?",
     "no_notification_to_display": "No hay notificaciones para mostrar",
-    "new_responses": "New Responses",
-    "new_tickets": "New Tickets",
+    "new_responses": "Nuevas respuestas",
+    "new_tickets": "Nuevas tickets",
     "overdues": "Overdues",
-    "view_responses": "View Responses",
+    "view_responses": "Ver respuestas",
     "total": "Total",
-    "cx_tickets": "CX tickets"
+    "cx_tickets": "Tickets de CX"
   },
   "close_loop": {
     "close_loop": "Cerrar bucle",
@@ -93,49 +93,54 @@
     "submit": "Enviar",
     "update": "Actualizar"
   },
-
   "ticket_list": {
-    "alert": "Alert!",
-    "anonymous": "anonymous",
-    "overdue": "overdue"
+    "alert": "¡Alerta!",
+    "anonymous": "anónimo",
+    "overdue": "vencido"
   },
   "ticket_overview": {
-    "take_action": "Take Action",
-    "description": "Description",
-    "ticket_id": "Ticket Id",
-    "filter_ticket": "Filter ticket",
-    "delete_ticket": "Delete ticket",
-    "select_status": "Select status",
-    "select_priority": "Select priority",
-    "Select_ticket_owner": "Select ticket owner",
-    "assigned_to": "Assigned to",
-    "contact": "Contact"
+    "take_action": "Tomar acción",
+    "description": "Descripción",
+    "ticket_id": "ID del ticket",
+    "filter_ticket": "Filtrar ticket",
+    "delete_ticket": "Eliminar ticket",
+    "select_status": "Seleccionar estado",
+    "select_priority": "Seleccionar prioridad",
+    "Select_ticket_owner": "Seleccionar propietario del ticket",
+    "assigned_to": "Asignado a",
+    "contact": "Contacto"
   },
   "comment": {
-    "Comments": "Comments",
-    "reply": "reply",
-    "write_a_comment": "Write a comment"
+    "Comments": "Comentarios",
+    "reply": "responder",
+    "write_a_comment": "Escribir un comentario",
+    "write_a_reply": "Write a reply"
   },
   "activity": {
-    "activity": "Activity",
-    "sorted_by": "Sorted by",
-    "latest": "Latest",
-    "oldest": "Oldest",
-    "you": "You"
+    "activity": "Actividad",
+    "sorted_by": "Ordenado por",
+    "latest": "Más reciente",
+    "oldest": "Más antiguo",
+    "you": "Tú"
   },
   "root_cause": {
-    "root_cause": "Root cause",
-    "actions": "Actions",
-    "update": "update",
-    "reset": "reset"
+    "root_cause": "Causa raíz",
+    "actions": "Acciones",
+    "update": "actualizar",
+    "reset": "reiniciar"
   },
   "action_email": {
-    "respond_via_email": "Respond via Email",
-    "send_email": "Send email",
-    "subject": "Subject",
-    "email_body": "email body",
-    "to": "To",
-    "from": "From"
+    "respond_via_email": "Responder por correo electrónico",
+    "send_email": "Enviar correo electrónico",
+    "subject": "Asunto",
+    "email_body": "Cuerpo del correo electrónico",
+    "to": "Para",
+    "from": "De"
+  },
+  "create_new_ticket": {
+    "create_new_ticket": "Crear nuevo ticket",
+    "customer_name": "Nombre del cliente",
+    "phone_number": "Número de teléfono"
   },
   "responses": {
     "responses": "Respuestas",
@@ -155,16 +160,16 @@
     "view_ticket": "Ver boleto",
     "create_ticket": "Crear Ticket",
     "new_ticket": "Nueva entrada",
-    "response_id": "Response ID"
+    "response_id": "ID de respuesta"
   },
   "profile": {
-    "surveys": "Surveys",
-    "profile_details": "Profile details",
-    "name": "Name",
-    "contact_information": "Contact information",
-    "date": "Date",
-    "survey_completed": "Survey completed",
-    "account_details": "Account details"
+    "surveys": "Encuestas",
+    "profile_details": "Detalles del perfil",
+    "name": "Nombre",
+    "contact_information": "Información de contacto",
+    "date": "Fecha",
+    "survey_completed": "Encuesta completada",
+    "account_details": "Detalles de la cuenta"
   },
   "settings": {
     "settings": "Ajustes",
@@ -184,9 +189,9 @@
     "last_6_months": "Últimos 6 meses"
   },
   "select_segment": {
-    "search_segment_name": "Search segment name here...",
-    "select_segment": "Select segment",
-    "business_unit": "Business unit"
+    "search_segment_name": "Buscar nombre de segmento aquí...",
+    "select_segment": "Seleccionar segmento",
+    "business_unit": "Unidad de negocio"
   },
   "filter_by": "Filtrado por",
   "logout": "Cerrar sesión",
@@ -194,5 +199,26 @@
   "yes": "sí",
   "no": "No",
   "exit_app": "Salir de la aplicación",
-  "exit_message": "Estas seguro?"
+  "exit_message": "Estas seguro?",
+  "cancel": "cancel",
+  "no_items_found": "No items found",
+  "no_activity": "No activity...",
+  "confirm": "Confirm",
+  "apply": "Apply",
+  "close": "Close",
+  "clear": "Clear",
+  "apply_fliter": "Apply filter",
+  "search": "Search",
+  "select": "Select",
+  "only_my_tickets": "Only my tickets",
+  "ticket_search_hint": "Search by ID, name, email",
+  "segment_not_selected": "Segment not selected",
+  "issue_date_not_selected": "Issue date not selected",
+  "enter_customer_name": "Enter customer name",
+  "enter_an_email": "Enter an email",
+  "enter_an_valid_email": "Enter an valid email",
+  "priority_not_selected": "Priority not selected",
+  "status_not_selected": "Status not selected",
+  "select_a_ticket_owner": "Select a ticket owner",
+  "add_description": "Add description"
 }

@@ -19,6 +19,7 @@ import StringUtils from '../../../Utils/StringUtils';
 import {Avatar, StatusIcon} from '../../../routes/CommonScreen';
 import moment from 'moment';
 import {DMY_AT_TIME_FORMAT} from '../../../Utils/AppConstants';
+import {translate} from '../../../Utils/MultilinguaUtils';
 
 const ResponseActivity = props => {
   let activityData = props.route.params.data;
@@ -39,7 +40,9 @@ const ResponseActivity = props => {
   const RenderSurveyComplete = ({children}) => {
     return (
       <View style={styles.surveyDateBox}>
-        <Text style={styles.secondaryTitle}>Survey Completed</Text>
+        <Text style={styles.secondaryTitle}>
+          {translate('profile.survey_completed')}
+        </Text>
         <Text style={styles.secondaryText}>{children}</Text>
       </View>
     );

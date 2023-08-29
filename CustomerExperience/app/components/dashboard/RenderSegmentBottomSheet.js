@@ -12,6 +12,7 @@ import GlobalSelectSegment from './GlobalSelectSegment';
 import {getSegmentIndex} from '../../Utils/TicketUtils';
 import {Colors} from '../../styles/color.constants';
 import {useEffect} from 'react';
+import {translate} from '../../Utils/MultilinguaUtils';
 
 const RenderSegmentBottomSheet = ({callbackNode}) => {
   const dispatch = useDispatch();
@@ -20,13 +21,13 @@ const RenderSegmentBottomSheet = ({callbackNode}) => {
   const bsSnapPoints = ['50%', '0%'];
 
   const isSegmentSelectorOpen = useSelector(
-    (state) => state.dashboard.isSegmentSelectorOpen,
+    state => state.dashboard.isSegmentSelectorOpen,
   );
 
   const segmentList_ = useSelector(
-    (state) => state.dashboard.segmentDetails.segments,
+    state => state.dashboard.segmentDetails.segments,
   );
-  const currentSegment = useSelector((state) => state.dashboard.currentSegment);
+  const currentSegment = useSelector(state => state.dashboard.currentSegment);
 
   //   let segmentId = useSelector(
   //     (state) => state.dashboard.currentSegment.currentSegmentID,
@@ -41,7 +42,7 @@ const RenderSegmentBottomSheet = ({callbackNode}) => {
   const renderSelectSegmentHeader = () => {
     return (
       <BottomSheetHeader
-        title={'Select Segment'}
+        title={translate('select_segment.select_segment')}
         onPressClose={() => {
           dispatch(setSegmentSelectorOpen(false));
         }}
@@ -49,7 +50,7 @@ const RenderSegmentBottomSheet = ({callbackNode}) => {
     );
   };
 
-  const renderSelectSegment = (props) => {
+  const renderSelectSegment = props => {
     // {
     //   console.log('SEGMENT_LIST: ', JSON.stringify(segmentList), segmentId);
     // }
@@ -66,13 +67,13 @@ const RenderSegmentBottomSheet = ({callbackNode}) => {
               currentSegment.currentSegmentID,
             ) ?? 0
           }
-          handleOnPress={(item) => handleSegmentSelectionAction(item)}
+          handleOnPress={item => handleSegmentSelectionAction(item)}
         />
       </View>
     );
   };
 
-  const handleSegmentSelectionAction = (item) => {
+  const handleSegmentSelectionAction = item => {
     dispatch(setSegment(item));
     dispatch(setSegmentSelectorOpen(false));
   };

@@ -14,7 +14,7 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 
-const SelectSegment = (props) => {
+const SelectSegment = props => {
   const [data, setData] = useState(props.data);
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
 

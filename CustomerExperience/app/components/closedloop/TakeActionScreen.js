@@ -1,18 +1,5 @@
-import React from 'react'; // {useEffect, useState}
-import {
-  View,
-  TouchableWithoutFeedback,
-  Pressable,
-  Text,
-  // Image,
-  StyleSheet,
-  // ScrollView,
-  // Platform,
-  // FlatList,
-  // SafeAreaView,
-  // TextInput,
-  // LogBox,
-} from 'react-native';
+import React from 'react';
+import {View, Pressable, Text, StyleSheet} from 'react-native';
 // import StringUtils from '../../Utils/StringUtils';
 // import ArrayUtils from '../../Utils/ArrayUtils';
 // import Icon from 'react-native-vector-icons/SimpleLineIcons';
@@ -34,9 +21,8 @@ import {CloseButton} from '../../routes/CommonScreen';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {translate} from '../../Utils/MultilinguaUtils';
 export default function TakeActionScreen(props) {
-  const headerTitle = 'Take Action';
-
   const getIonIcon = iconName => (
     <IonIcons name={iconName} size={18} color={Colors.lightBlack} />
   );
@@ -56,7 +42,9 @@ export default function TakeActionScreen(props) {
   return (
     <View style={styles.container}>
       <View style={styles.rowContainer}>
-        <Text style={[styles.headerText, {flex: 1}]}>{'Take Action'}</Text>
+        <Text style={[styles.headerText, {flex: 1}]}>
+          {translate('ticket_overview.take_action')}
+        </Text>
         <CloseButton color={Colors.filterIconColor} />
       </View>
 

@@ -15,7 +15,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 import QPCalendar from '../../../widgets/QPCalendar';
 
-const SelectDate = (props) => {
+const SelectDate = props => {
   const [data, setData] = useState(props.data);
   const [selectedDate, setSelectedDate] = useState(props.selectedDate);
 

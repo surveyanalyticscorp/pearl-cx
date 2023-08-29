@@ -29,6 +29,7 @@ import moment from 'moment';
 import StringUtils from '../../Utils/StringUtils';
 import {getDateTimeAgo} from '../../Utils/TimeUtils';
 import RenderHTML from 'react-native-render-html';
+import {translate} from '../../Utils/MultilinguaUtils';
 
 const MaterialIconView = ({iconName, color}) => (
   <View style={{margin: MarginConstants.halfTab}}>
@@ -182,7 +183,9 @@ export default function TicketComments(props) {
           }}
           onPress={toggleCommentBoxVisibility}>
           <Text style={[styles.replyText, {color: Colors.accentLight}]}>
-            {isCommentBoxVisible ? 'Cancel' : 'Reply'}
+            {isCommentBoxVisible
+              ? translate('cancel')
+              : translate('comment.reply')}
           </Text>
         </Pressable>
         {isCommentBoxVisible && <CommentBox parentId={item.id} />}
@@ -192,7 +195,10 @@ export default function TicketComments(props) {
 
   const CommentBox = ({parentId}) => {
     const [commentText, setCommentText] = useState('');
-    const placeHolder = parentId > 0 ? 'Write a reply' : 'Write a comment';
+    const placeHolder =
+      parentId > 0
+        ? translate('comment.write_a_reply')
+        : translate('comment.write_a_comment');
     const marginForCommentBox = parentId > 0 ? MarginConstants.tab4 : 0;
 
     const onChangeCommentHandler = text => {

@@ -15,7 +15,7 @@ export default function FeedbackSorter(props) {
   ];
   let index =
     radio_props.findIndex(
-      (item) => item.label === props.route.params.selectedSorter,
+      item => item.label === props.route.params.selectedSorter,
     ) || 0;
   return (
     <SafeAreaView forceInset={{bottom: 'never'}} style={styles.safeArea}>
@@ -27,7 +27,7 @@ export default function FeedbackSorter(props) {
           <RadioForm
             radio_props={radio_props}
             initial={index}
-            onPress={(value) => {
+            onPress={value => {
               props.route.params.setSorter(radio_props[value].label, value);
               props.navigation.goBack();
             }}

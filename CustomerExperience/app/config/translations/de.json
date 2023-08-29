@@ -93,7 +93,6 @@
     "submit": "einreichen",
     "update": "Aktualisieren"
   },
-
   "ticket_list": {
     "alert": "Warnung!",
     "anonymous": "Anonym",
@@ -114,7 +113,8 @@
   "comment": {
     "Comments": "Kommentare",
     "reply": "Antwort",
-    "write_a_comment": "Einen Kommentar schreiben"
+    "write_a_comment": "Einen Kommentar schreiben",
+    "write_a_reply": "Write a reply"
   },
   "activity": {
     "activity": "Aktivität",
@@ -138,9 +138,9 @@
     "from": "Von"
   },
   "create_new_ticket": {
-    "Create new ticket": "Create new ticket",
-    "Customer name": "Customer name",
-    "Phone number": "Phone number"
+    "create_new_ticket": "Neues Ticket erstellen",
+    "customer_name": "Name des Kunden",
+    "phone_number": "Rufnummer"
   },
   "responses": {
     "responses": "Antworten",
@@ -163,15 +163,14 @@
     "response_id": "Response ID"
   },
   "profile": {
-    "surveys": "Surveys",
-    "profile_details": "Profile details",
+    "surveys": "Umfragen",
+    "profile_details": "Profil-Details",
     "name": "Name",
-    "contact_information": "Contact information",
-    "date": "Date",
-    "survey_completed": "Survey completed",
-    "account_details": "Account details"
+    "contact_information": "Kontaktinformationen",
+    "date": "Datum",
+    "survey_completed": "Umfrage abgeschlossen",
+    "account_details": "Konto-Informationen"
   },
-
   "settings": {
     "settings": "die Einstellungen",
     "account_details": "Kontodetails"
@@ -200,5 +199,26 @@
   "yes": "Ja",
   "no": "Nein",
   "exit_app": "App beenden",
-  "exit_message": "Bist du sicher?"
+  "exit_message": "Bist du sicher?",
+  "cancel": "cancel",
+  "no_items_found": "No items found",
+  "no_activity": "No activity...",
+  "confirm": "Confirm",
+  "apply": "Apply",
+  "close": "Close",
+  "clear": "Clear",
+  "apply_fliter": "Apply filter",
+  "search": "Search",
+  "select": "Select",
+  "only_my_tickets": "Only my tickets",
+  "ticket_search_hint": "Search by ID, name, email",
+  "segment_not_selected": "Segment not selected",
+  "issue_date_not_selected": "Issue date not selected",
+  "enter_customer_name": "Enter customer name",
+  "enter_an_email": "Enter an email",
+  "enter_an_valid_email": "Enter an valid email",
+  "priority_not_selected": "Priority not selected",
+  "status_not_selected": "Status not selected",
+  "select_a_ticket_owner": "Select a ticket owner",
+  "add_description": "Add description"
 }

@@ -35,14 +35,12 @@ import {useIsFocused} from '@react-navigation/native';
 
 export default function FeedbackDetails(props) {
   const dispatch = useDispatch();
-  const authToken = useSelector((state) => state.global.authToken);
+  const authToken = useSelector(state => state.global.authToken);
   const {feedbackApiKey, feedbackID} = useSelector(
-    (state) => state.global.userInfo,
+    state => state.global.userInfo,
   );
   const isFocused = useIsFocused();
-  const responseTickets = useSelector(
-    (state) => state.response.responseTickets,
-  );
+  const responseTickets = useSelector(state => state.response.responseTickets);
   const data = props.route.params.data;
   const isFromFeedback = props.route.params.isFromFeedback;
 
@@ -88,7 +86,7 @@ export default function FeedbackDetails(props) {
     dispatch(getTicketStatusHistory(authToken, `${item.id}`));
   };
 
-  const onPressViewTicket = (item) => {
+  const onPressViewTicket = item => {
     props.navigation.navigate('TicketDetails', item);
   };
 
@@ -158,7 +156,7 @@ export default function FeedbackDetails(props) {
 
 const DetailsTab = createMaterialTopTabNavigator();
 
-const FeedbackDetailsTabStack = (props) => (
+const FeedbackDetailsTabStack = props => (
   <DetailsTab.Navigator
     tabBarOptions={{
       labelStyle: {
@@ -204,7 +202,7 @@ const FeedbackDetailsTabStack = (props) => (
   </DetailsTab.Navigator>
 );
 
-const renderScene = (props) => {
+const renderScene = props => {
   return (
     <QPWebView
       authToken={props.route.params.token}

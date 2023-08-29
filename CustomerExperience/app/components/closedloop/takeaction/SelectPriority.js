@@ -18,7 +18,7 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {listItemSeparator} from '../../../routes/CommonScreen';
 
-const SelectPriority = (props) => {
+const SelectPriority = props => {
   const [data, setData] = useState(props.data);
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
 

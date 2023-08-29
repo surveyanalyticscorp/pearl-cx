@@ -76,16 +76,19 @@ export default function CreateTicket(props) {
   const segmentDetails = useSelector(state => state.dashboard.segmentDetails);
   const {authToken} = useSelector(state => state.global);
   const {owners} = useSelector(state => state.dashboard.ownerDetails);
-  const [headerTitle, setHeaderTitle] = useState('Create New Ticket');
   const {feedbackApiKey, emailAddress, firstName, lastName} = useSelector(
     state => state.global.userInfo,
   );
   // const [priority, setPriority] = useState('Select');
   const [priorityIndex, setPriorityIndex] = useState(-1);
-  const [segment, setSegment] = useState('Select Segment');
+  const [segment, setSegment] = useState(
+    translate('select_segment.select_segment'),
+  );
   const [segmentIndex, setSegmentIndex] = useState(-1);
   const [segmentId, setSegmentId] = useState(segmentDetails.currentSegmentID);
-  const [ticketOwner, setTicketOwner] = useState('Select Ticket Owner');
+  const [ticketOwner, setTicketOwner] = useState(
+    translate('ticket_overview.Select_ticket_owner'),
+  );
   const [ticketOwnerIndex, setTIcketOwnerIndex] = useState(-1);
   // const [status, setStatus] = useState('Select');
   const [statusIndex, setStatusIndex] = useState(-1);
@@ -263,42 +266,42 @@ export default function CreateTicket(props) {
 
   const isValid = () => {
     if (!ticketState.currentSegmentId) {
-      setValidation('Segment not selected');
+      setValidation(translate('segment_not_selected'));
       return false;
     }
     if (!ticketState.issueDate) {
-      setValidation('Issue date not selected');
+      setValidation(translate('issue_date_not_selected'));
       return false;
     }
     if (!ticketState.firstName) {
-      setValidation('Enter customer name');
+      setValidation(translate('enter_customer_name'));
       return false;
     }
     if (!ticketState.emailAddress) {
-      setValidation('Enter an email');
+      setValidation(translate('enter_an_email'));
       return false;
     }
     if (ticketState.emailAddress && !validateEmail(ticketState.emailAddress)) {
-      setValidation('Enter an valid email');
+      setValidation(translate('enter_an_valid_email'));
       return false;
     }
     if (ticketState.priority === null || ticketState.priority === undefined) {
-      setValidation('Priority not selected');
+      setValidation(translate('priority_not_selected'));
       return false;
     }
     if (ticketState.status === null || ticketState.status === undefined) {
       console.log(ticketState.status);
-      setValidation('Status not selected');
+      setValidation(translate('status_not_selected'));
       return false;
     }
 
     if (!ticketState.assignToId) {
-      setValidation('Select a ticket owner');
+      setValidation(translate('select_a_ticket_owner'));
       return false;
     }
 
     if (!ticketState.comment) {
-      setValidation('Add description');
+      setValidation(translate('add_description'));
       return false;
     }
     return true;
@@ -404,7 +407,7 @@ export default function CreateTicket(props) {
   const renderPriorityHeader = _title => {
     return (
       <BottomSheetHeader
-        title={'Select Priority'}
+        title={translate('ticket_overview.select_priority')}
         onPressClose={() =>
           priorityBottomSheet.current.snapTo(
             priorityBottomSheetSnapPoints.length - 1,
@@ -417,7 +420,7 @@ export default function CreateTicket(props) {
   const renderStatusHeader = _title => {
     return (
       <BottomSheetHeader
-        title={'Select Status'}
+        title={translate('ticket_overview.select_status')}
         onPressClose={() =>
           statusBottomSheet.current.snapTo(
             statusBottomSheetSnapPoints.length - 1,
@@ -430,7 +433,7 @@ export default function CreateTicket(props) {
   const renderSegmentHeader = _title => {
     return (
       <BottomSheetHeader
-        title={'Select Segment'}
+        title={translate('select_segment.select_segment')}
         onPressClose={() =>
           segmentBottomSheet.current.snapTo(
             segmentBottomSheetSnapPoints.length - 1,
@@ -443,7 +446,7 @@ export default function CreateTicket(props) {
   const renderOwnerHeader = _title => {
     return (
       <BottomSheetHeader
-        title={'Select Ticket Owner'}
+        title={translate('ticket_overview.Select_ticket_owner')}
         onPressClose={() =>
           ownerBottomSheet.current.snapTo(ownerBottomSheetSnapPoints.length - 1)
         }
@@ -644,7 +647,9 @@ export default function CreateTicket(props) {
         <ScrollView style={styles.container}>
           <View
             style={[styles.rowContainer, {justifyContent: 'space-between'}]}>
-            <Text style={styles.headerText}>{headerTitle}</Text>
+            <Text style={styles.headerText}>
+              {translate('create_new_ticket.create_new_ticket')}
+            </Text>
             <CloseButton color={Colors.filterIconColor} />
           </View>
           <Pressable onPress={handleSegmentSelection}>
@@ -670,7 +675,7 @@ export default function CreateTicket(props) {
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getIonIcon('person')}
             <TextInput
-              placeholder="Customer Name"
+              placeholder={translate('create_new_ticket.customer_name')}
               defaultValue={customerName}
               keyboardType="default"
               style={styles.titleText}
@@ -764,7 +769,7 @@ export default function CreateTicket(props) {
             {getMaterialIcon('chat-bubble')}
             <TextInput
               multiline
-              placeholder="Description"
+              placeholder={translate('ticket_overview.description')}
               style={styles.titleText}
               onChangeText={text => {
                 // console.log(text);
@@ -786,7 +791,7 @@ export default function CreateTicket(props) {
               <QPButton
                 onPress={handleCreateTicket}
                 buttonColor={Colors.accentLight}
-                buttonText={'Create Ticket'}
+                buttonText={translate('create_new_ticket.create_new_ticket')}
                 textStyle={styles.qpButtonTextStyles}
                 style={styles.buttonStyle}
               />

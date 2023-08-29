@@ -21,6 +21,8 @@ import {getStatusById, getPriorityById} from '../../Utils/TicketUtils';
 import {CheckBoxItem, RenderStatusIcon} from '../../routes/CommonScreen';
 import StringUtils from '../../Utils/StringUtils';
 import {useSelector} from 'react-redux';
+import {translate} from '../../Utils/MultilinguaUtils';
+import {over} from 'lodash';
 
 const AssigneeUI = ({assignToId}) => {
   const owners = useSelector(state => state.dashboard.ownerDetails.owners);
@@ -163,9 +165,13 @@ const StatusRow = ({data}) => {
 
 export default function ClosedLoopCell(props) {
   const data = props.data;
+
   console.log(JSON.stringify(props));
   const OverdueBar = () => {
     const date = moment(data.overdueDate).format(DMY_AT_TIME_FORMAT);
+    const overDueMessage = `${translate('ticket_list.alert')} ${translate(
+      'ticket_list.overdue',
+    )} ${date}`;
     return (
       <View style={styles.overdueContainer}>
         <IonIcons
@@ -173,7 +179,7 @@ export default function ClosedLoopCell(props) {
           size={20}
           color={Colors.overdueTextColor}
         />
-        <Text style={styles.overdueText}>{`Alert! Overdue (${date})`}</Text>
+        <Text style={styles.overdueText}>{overDueMessage}</Text>
       </View>
     );
   };
@@ -207,7 +213,7 @@ export default function ClosedLoopCell(props) {
             name={
               (!StringUtils.isEmpty(data?.panelMember?.name)
                 ? data?.panelMember?.name
-                : data.panelMember?.email) ?? 'anonymous'
+                : data.panelMember?.email) ?? translate('ticket_list.anonymous')
             }
             issueDate={data.issueDate}
           />

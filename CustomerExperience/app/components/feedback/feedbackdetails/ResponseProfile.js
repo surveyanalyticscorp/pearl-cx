@@ -16,6 +16,7 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 import {FontFamily} from '../../../styles/font.constants';
+import {translate} from '../../../Utils/MultilinguaUtils';
 
 const ResponseProfile = props => {
   const {panelMember, surveyDetails} = useSelector(state => state.response);
@@ -28,7 +29,9 @@ const ResponseProfile = props => {
     const color = Colors.accent;
     return (
       <View style={[styles.counterView, {borderColor: color}]}>
-        <Text style={[styles.counterTitle, {color: color}]}>Surveys</Text>
+        <Text style={[styles.counterTitle, {color: color}]}>
+          {translate('dashboard.surveys')}
+        </Text>
         <Text style={[styles.counterText, {backgroundColor: color}]}>
           {children}
         </Text>
@@ -40,7 +43,10 @@ const ResponseProfile = props => {
     const color = Colors.accentLight;
     return (
       <View style={[styles.counterView, {borderColor: color}]}>
-        <Text style={[styles.counterTitle, {color: color}]}>Tickets</Text>
+        <Text style={[styles.counterTitle, {color: color}]}>
+          {' '}
+          {translate('dashboard.tickets')}
+        </Text>
         <Text style={[styles.counterText, {backgroundColor: color}]}>
           {children}
         </Text>
@@ -92,7 +98,7 @@ const ResponseProfile = props => {
   const RenderNameDetails = () => {
     return (
       <View style={{marginVertical: MarginConstants.tab1}}>
-        <Text style={styles.secondaryTitle}>Name</Text>
+        <Text style={styles.secondaryTitle}>{translate('profile.name')}</Text>
         <Text style={styles.secondaryText}>{panelMember.name ?? 'N/A'}</Text>
       </View>
     );
@@ -101,7 +107,9 @@ const ResponseProfile = props => {
   const RenderContactDetails = () => {
     return (
       <View style={{marginVertical: MarginConstants.tab2}}>
-        <Text style={styles.secondaryTitle}>Contact Information</Text>
+        <Text style={styles.secondaryTitle}>
+          {translate('profile.contact_information')}
+        </Text>
         <RenderPhoneNumber />
         <RenderEmailAddress />
       </View>
@@ -110,7 +118,7 @@ const ResponseProfile = props => {
   const RenderDateDetails = () => {
     return (
       <View style={{marginVertical: MarginConstants.tab1}}>
-        <Text style={styles.secondaryTitle}>Date</Text>
+        <Text style={styles.secondaryTitle}>{translate('profile.date')}</Text>
         <Text style={styles.secondaryText}>
           {data.surveyTakenDate ?? 'N/A'}
         </Text>
@@ -121,7 +129,9 @@ const ResponseProfile = props => {
   const ProfileDetails = () => {
     return (
       <View style={{margin: MarginConstants.tab2}}>
-        <Text style={styles.profileHeader}>Profile Details</Text>
+        <Text style={styles.profileHeader}>
+          {translate('profile.profile_details')}
+        </Text>
         <View style={styles.border} />
 
         <View style={{marginHorizontal: MarginConstants.tab2}}>

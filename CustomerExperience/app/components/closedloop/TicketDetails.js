@@ -80,24 +80,24 @@ export default function TicketDetails(props) {
       <TicketTabs.Screen
         name={translate('close_loop.overview')}
         component={TicketOverview}
-        initialParams={{screenName: 'Overview'}}
+        initialParams={{screenName: translate('close_loop.overview')}}
       />
       <TicketTabs.Screen
         name={translate('close_loop.comments')}
         component={TicketComments}
-        initialParams={{screenName: 'Comments'}}
+        initialParams={{screenName: translate('close_loop.comments')}}
       />
       <TicketTabs.Screen
         name={translate('responses.activity')}
         component={TicketActivity}
-        initialParams={{screenName: 'Activity'}}
+        initialParams={{screenName: translate('responses.activity')}}
       />
 
       <TicketTabs.Screen
         // name={translate('responses.activity')}
-        name={'Root Cause'}
+        name={translate('root_cause.root_cause')}
         component={TicketRootCause}
-        initialParams={{screenName: 'Root Cause'}}
+        initialParams={{screenName: translate('root_cause.root_cause')}}
       />
     </TicketTabs.Navigator>
   );

@@ -14,6 +14,7 @@ const translationGetters = {
   fr: () => require('../config/translations/fr.json'),
   de: () => require('../config/translations/de.json'),
   es: () => require('../config/translations/es.json'),
+  pt: () => require('../config/translations/pt.json'),
 };
 
 export const translate = memoize(

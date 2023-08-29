@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  Pressable,
-  View,
-  Image,
-  Modal,
-  SafeAreaView,
-} from 'react-native';
+import {Platform, StyleSheet, Text, View, Modal} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 

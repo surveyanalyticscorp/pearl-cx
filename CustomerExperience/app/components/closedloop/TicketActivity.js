@@ -13,11 +13,11 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
-import moment from 'moment';
 import {NoItemsFound} from '../../routes/CommonScreen';
-import {convertDateTimeAgo, getDateTimeAgo} from '../../Utils/TimeUtils';
+import {convertDateTimeAgo} from '../../Utils/TimeUtils';
 import {getClosedLoopTicketItemActivity} from '../../redux/actions/dashboard.actions';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import {translate} from '../../Utils/MultilinguaUtils';
 
 const SortingIcon = ({iconName, size, color}) => {
   return (
@@ -33,7 +33,9 @@ const RenderItem = ({item}) => {
   return (
     <View style={styles.renderItemContainerStyle}>
       <View style={styles.renderItemStyle}>
-        <Text style={styles.userName}>{item.userName ?? 'anonymous'}</Text>
+        <Text style={styles.userName}>
+          {item.userName ?? translate('ticket_list.anonymous')}
+        </Text>
       </View>
       <View style={{marginHorizontal: MarginConstants.tab1}}>
         <Text style={styles.activity}>{item.activityText}</Text>
@@ -47,7 +49,7 @@ const RenderMyItem = ({item}) => {
   return (
     <View style={styles.myRenderItemContainerStyle}>
       <View style={styles.myRenderItemStyle}>
-        <Text style={styles.userName}>{'You'}</Text>
+        <Text style={styles.userName}>{translate('activity.you')}</Text>
       </View>
       <View style={{marginHorizontal: MarginConstants.tab1}}>
         <Text style={styles.activity}> {item.activityText} </Text>
@@ -65,7 +67,11 @@ const SortingView = ({toggleSorting, isInverted}) => {
         toggleSorting();
       }}>
       <Text style={{color: Colors.accent}}>
-        {`Sorted: ${isInverted ? 'Oldest' : 'Latest'}`}
+        {`Sorted: ${
+          isInverted
+            ? translate('activity.oldest')
+            : translate('activity.latest')
+        }`}
       </Text>
       <SortingIcon
         iconName={isInverted ? 'caret-up' : 'caret-down'}

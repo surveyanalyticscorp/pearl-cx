@@ -39,6 +39,7 @@ import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {isNull} from 'lodash';
 import {AttachmentIcon} from '../../../Utils/IconUtils';
+import {translate} from '../../../Utils/MultilinguaUtils';
 
 const RenderHeader = () => {
   return (
@@ -52,7 +53,9 @@ const RenderHeader = () => {
 const RenderTicketId = ({ticketId}) => {
   return (
     <View style={styles.ticketIdView}>
-      <Text style={styles.ticketIdText}>{`Ticket ID #${ticketId}`}</Text>
+      <Text style={styles.ticketIdText}>{`${translate(
+        'ticket_overview.ticket_id',
+      )} #${ticketId}`}</Text>
     </View>
   );
 };
@@ -86,7 +89,9 @@ const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
   return (
     <View>
       <View style={styles.rowContainerCenterAlign}>
-        <Text style={styles.titleText}>{'Subject:'}</Text>
+        <Text style={styles.titleText}>{`${translate(
+          'action_email.subject',
+        )}:`}</Text>
         <TextInput
           multiline={false}
           placeholder="Email subject"
@@ -551,7 +556,10 @@ export default function SendEmail(props) {
           />
           {/* <RenderToTextInput />
         <RenderFromTextInput /> */}
-          <EmailToFrom title={'To:'} value={body.toEmail} />
+          <EmailToFrom
+            title={translate('action_email.to')}
+            value={body.toEmail}
+          />
           {/* <EmailToFrom title={'From:'} value={body.fromEmail} /> */}
 
           <EmailSubject
@@ -565,7 +573,7 @@ export default function SendEmail(props) {
             disabled={false}
             initialFocus={false}
             onChange={onChangeEmailBody}
-            placeholder="Email body"
+            placeholder={translate('action_email.email_body')}
             androidHardwareAccelerationDisabled={true}
             initialHeight={300}
             style={styles.textInput}
