@@ -134,8 +134,8 @@ android {
         applicationId "com.questionpro.cxonthego"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 07
-        versionName "1.5"
+        versionCode 8
+        versionName "1.6"
         multiDexEnabled true
     }
     splits {
