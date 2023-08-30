@@ -139,6 +139,7 @@ const SelectSegmentScreen = props => {
             style={[styles.searchInput, {flex: 1}]}
             placeholder={translate('select_segment.search_segment_name')}
             returnKeyType={'search'}
+            placeholderTextColor={Colors.borderColor}
             onSubmitEditing={event => {
               console.log('KEYBOARD_SEARCH', JSON.stringify(event.nativeEvent));
               onSearchHandler(event.nativeEvent.text);
@@ -200,15 +201,7 @@ const SelectSegmentScreen = props => {
   return (
     <View style={styles.rootContainer}>
       <View style={styles.container}>
-        <View
-          style={[
-            styles.rowContainer,
-            {
-              maxHeight: MarginConstants.tab4,
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            },
-          ]}>
+        <View style={styles.headerRow}>
           <Text style={styles.headerText}>
             {translate('select_segment.select_segment')}
           </Text>
@@ -251,6 +244,7 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.largeText,
     padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,
+    textAlign: 'center',
   },
 
   innerContainer: {
@@ -259,8 +253,7 @@ const styles = StyleSheet.create({
   },
   headerRow: {
     flexDirection: 'row',
-    alignItems: 'baseline',
-
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   row: {

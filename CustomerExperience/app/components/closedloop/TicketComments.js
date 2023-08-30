@@ -238,6 +238,7 @@ export default function TicketComments(props) {
           <TextInput
             defaultValue={commentText}
             multiline
+            placeholderTextColor={Colors.borderColor}
             style={[styles.container, styles.commentText]}
             onChangeText={onChangeCommentHandler}
             placeholder={placeHolder}

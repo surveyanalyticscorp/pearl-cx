@@ -64,6 +64,7 @@ const QPTextField = props => {
         textColor={props.textColor || Colors.primary}
         baseColor={props.baseColor || Colors.primary}
         label={label}
+        placeholderTextColor={Colors.borderColor}
         defaultValue={defaultValue}
         secureTextEntry={secureText}
         keyboardType={keyboardType}

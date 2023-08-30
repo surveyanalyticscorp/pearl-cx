@@ -95,6 +95,7 @@ const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
         <TextInput
           multiline={false}
           placeholder="Email subject"
+          placeholderTextColor={Colors.borderColor}
           defaultValue={body.subject ?? ''}
           style={styles.textInput}
           onChangeText={onChangeSubject}
@@ -574,6 +575,7 @@ export default function SendEmail(props) {
             initialFocus={false}
             onChange={onChangeEmailBody}
             placeholder={translate('action_email.email_body')}
+            placeholderTextColor={Colors.borderColor}
             androidHardwareAccelerationDisabled={true}
             initialHeight={300}
             style={styles.textInput}

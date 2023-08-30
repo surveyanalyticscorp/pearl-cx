@@ -676,6 +676,7 @@ export default function CreateTicket(props) {
             {getIonIcon('person')}
             <TextInput
               placeholder={translate('create_new_ticket.customer_name')}
+              placeholderTextColor={Colors.borderColor}
               defaultValue={customerName}
               keyboardType="default"
               style={styles.titleText}
@@ -694,6 +695,7 @@ export default function CreateTicket(props) {
               codeTextStyle={styles.phoneInputCodeText}
               textContainerStyle={styles.phoneInputTextContainer}
               textInputStyle={styles.phoneInputTextInputStyle}
+              textInputProps={{placeholderTextColor: Colors.borderColor}}
               ref={phoneInput}
               // defaultValue={value}
               defaultCode="US"
@@ -715,6 +717,7 @@ export default function CreateTicket(props) {
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getIonIcon('mail')}
             <TextInput
+              placeholderTextColor={Colors.borderColor}
               defaultValue={customerEmail}
               placeholder="Email"
               keyboardType="email-address"
@@ -768,6 +771,7 @@ export default function CreateTicket(props) {
           <View style={[styles.rowContainer, styles.rowItem]}>
             {getMaterialIcon('chat-bubble')}
             <TextInput
+              placeholderTextColor={Colors.borderColor}
               multiline
               placeholder={translate('ticket_overview.description')}
               style={styles.titleText}
