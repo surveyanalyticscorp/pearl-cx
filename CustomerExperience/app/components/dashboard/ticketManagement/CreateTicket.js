@@ -87,7 +87,7 @@ export default function CreateTicket(props) {
   const [segmentIndex, setSegmentIndex] = useState(-1);
   const [segmentId, setSegmentId] = useState(segmentDetails.currentSegmentID);
   const [ticketOwner, setTicketOwner] = useState(
-    translate('ticket_overview.Select_ticket_owner'),
+    translate('ticket_overview.select_ticket_owner'),
   );
   const [ticketOwnerIndex, setTIcketOwnerIndex] = useState(-1);
   // const [status, setStatus] = useState('Select');

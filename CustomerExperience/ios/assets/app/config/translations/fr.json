@@ -106,7 +106,7 @@
     "delete_ticket": "Delete ticket",
     "select_status": "Select status",
     "select_priority": "Select priority",
-    "Select_ticket_owner": "Select ticket owner",
+    "select_ticket_owner": "Select ticket owner",
     "assigned_to": "Assigned to",
     "contact": "Contact"
   },

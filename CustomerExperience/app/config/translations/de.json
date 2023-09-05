@@ -106,7 +106,7 @@
     "delete_ticket": "Ticket löschen",
     "select_status": "Status auswählen",
     "select_priority": "Priorität wählen",
-    "Select_ticket_owner": "Ticketbesitzer auswählen",
+    "select_ticket_owner": "Ticketbesitzer auswählen",
     "assigned_to": "Zugewiesen an",
     "contact": "Kontakt"
   },

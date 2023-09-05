@@ -18,7 +18,12 @@ const QPButton = props => {
     <Pressable
       style={[
         style,
-        {backgroundColor: props.buttonColor ?? buttonColors.backgroundColor},
+        {
+          backgroundColor:
+            props.buttonColor ??
+            style.backgroundColor ??
+            buttonColors.backgroundColor,
+        },
       ]}
       onPress={onPress}>
       <Text style={textStyle}>{props.buttonText}</Text>

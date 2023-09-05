@@ -46,7 +46,11 @@ export default function FeedbackDetails(props) {
 
   const [selectedTicketId, setSelectedTicket] = useState(0);
   console.log('RESPONSE_DATA', JSON.stringify(props.route.params.data));
-
+  useEffect(() => {
+    props.navigation.setOptions({
+      title: `Response #${data.responseSetID}`,
+    });
+  }, [props.navigation, data.responseSetID]);
   // dispatch(
   //   getPanelMemberDetails(authToken, {panelMemberID: data.panelMemberID}),
   // );

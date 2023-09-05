@@ -34,6 +34,8 @@ import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
 import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
 import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
+import QPButton from '../../widgets/Button';
+import {buttonStyles} from '../../styles/button.styles';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -237,11 +239,7 @@ const CxDashboard = props => {
                 zIndex: 99,
                 marginTop: MarginConstants.tab1,
               }}>
-              {renderDetailsInformation(
-                'View Responses',
-                'viewDetails',
-                tag => {},
-              )}
+              {renderDetailsInformation()}
             </View>
           </View>
         </View>
@@ -299,16 +297,26 @@ const CxDashboard = props => {
 
     return <Image source={icon} style={{width: 12, height: 12}} />;
   };
-  let renderDetailsInformation = (title, tag, onPressTab) => {
+  const navigateToResponses = () => {
+    props.navigation.navigate('Responses');
+  };
+  let renderDetailsInformation = () => {
     return (
-      <Pressable
-        onPress={() => {
-          props.navigation.navigate('Responses');
-        }}>
-        <Text style={{textAlign: 'left', color: Colors.accentLight}}>
-          {title}
-        </Text>
-      </Pressable>
+      <QPButton
+        testID="DeleteButtonAction"
+        style={buttonStyles.textButton}
+        onPress={navigateToResponses}
+        buttonText={translate('dashboard.view_responses')}
+        textStyle={buttonStyles.textButtonText}
+      />
+      // <Pressable
+      //   onPress={() => {
+      //     props.navigation.navigate('Responses');
+      //   }}>
+      //   <Text style={{textAlign: 'left', color: Colors.accentLight}}>
+      //     {title}
+      //   </Text>
+      // </Pressable>
     );
   };
 

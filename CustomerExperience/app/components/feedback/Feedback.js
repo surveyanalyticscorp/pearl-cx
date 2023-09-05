@@ -36,7 +36,7 @@ const FormContext = React.createContext();
 
 function Feedback(props) {
   let dispatch = useDispatch();
-  let currentSegment = useSelector((state) => state.dashboard.currentSegment);
+  let currentSegment = useSelector(state => state.dashboard.currentSegment);
   let [feedbackData, setFeedbackData] = useState([]);
   let [ticketStatus, setTicketStatus] = useState([]);
   let [pageOffset, setPageOffset] = useState(0);
@@ -68,7 +68,7 @@ function Feedback(props) {
       apiHandler.getFeedbackResponseList(
         props.authToken,
         data,
-        (response) => {
+        response => {
           let data = pageOffset === 0 ? [] : [...feedbackData];
           data = [...data, ...response.body.allResponses];
           data = [...new Set(data)];
@@ -78,7 +78,7 @@ function Feedback(props) {
           showLoader && setShowLoader(false);
           pagination && setPagination(false);
         },
-        (error) => {
+        error => {
           setShowLoader(false);
           props.setError(error);
           showErrorFlashMessage(error.message);
@@ -156,7 +156,7 @@ function Feedback(props) {
     );
   };
 
-  const dateRangeHandler = (range_) => {
+  const dateRangeHandler = range_ => {
     dispatch(setRangeFilter(range_));
     setFeedbackData([]);
     setPageOffset(0);
@@ -192,6 +192,8 @@ function Feedback(props) {
           dateRange={props.range}
           onPressDateRange={dateRangeHandler}
           onPressFilter={filterHandler}
+          hasSortIcon={true}
+          hasFilterIcon={false}
         />
         <View
           style={{
@@ -273,7 +275,7 @@ const FeedbackTabStack = () => (
   </FeedbackTab.Navigator>
 );
 
-const RenderFeedbackScene = (props) => {
+const RenderFeedbackScene = props => {
   const dispatch = useDispatch();
   const feedbackForm = useContext(FormContext);
   let [list, setList] = useState(feedbackForm.feedbackData);
@@ -302,7 +304,7 @@ const RenderFeedbackScene = (props) => {
     }
   }, [feedbackForm.sortingText]);
 
-  const _onPressRow = (data) => {
+  const _onPressRow = data => {
     props.navigation.navigate(translate('responses.feedback_details'), {
       data: data,
       isFromFeedback: true,
@@ -369,7 +371,7 @@ const RenderFeedbackScene = (props) => {
     } else {
       let data = [
         ...feedbackForm.feedbackData.filter(
-          (res) => res.sentiment === props.route.params.screenName,
+          res => res.sentiment === props.route.params.screenName,
         ),
       ];
       setList(data);
@@ -392,7 +394,7 @@ const RenderFeedbackScene = (props) => {
         <FlatList
           data={list}
           renderItem={_renderRow}
-          keyExtractor={(item) => item.responseSetID + ''}
+          keyExtractor={item => item.responseSetID + ''}
           onEndReachedThreshold={0.25}
           onEndReached={feedbackForm.onFeedbackEndReached}
           refreshing={false}
@@ -414,7 +416,7 @@ const RenderFeedbackScene = (props) => {
   return renderFeedbackList();
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     isError: state.global.isError,
     errorMessage: state.global.errorMessage,
@@ -423,14 +425,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  setError: (error) => {
+const mapDispatchToProps = dispatch => ({
+  setError: error => {
     dispatch(setError(error));
   },
   clearError: () => {
     dispatch(clearError(false));
   },
-  setRange: (range) => {
+  setRange: range => {
     dispatch(setRangeFilter(range));
   },
 });

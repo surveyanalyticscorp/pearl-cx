@@ -19,6 +19,8 @@ import {StackActions} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {setStatusFilterById} from '../../redux/actions/closedloop.actions';
 import {useDispatch} from 'react-redux';
+import QPButton from '../../widgets/Button';
+import {buttonStyles} from '../../styles/button.styles';
 
 export const DashboardClosedLoopView = props => {
   return <TicketTabStack {...props} />;
@@ -77,6 +79,7 @@ const TicketTabStack = props => (
 
 const RenderScene = props => {
   const [showPercentageCount, setShowPercentageCount] = useState(false);
+  const dispatch = useDispatch();
 
   console.log(
     `Ticket Count: ${JSON.stringify(props.route.params.ticketCount)}`,
@@ -187,31 +190,46 @@ const RenderScene = props => {
   };
 
   let RenderViewTicketsContainer = () => {
-    const dispatch = useDispatch();
+    const navigateToCLosedLoop = () => {
+      dispatch(
+        setStatusFilterById(JSON.stringify(props.route.params.index - 1)),
+      );
+      props.navigation.navigate('ClosedLoop');
+    };
     return (
       <View style={styles.viewTicketsContainer}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            // const pushAction = StackActions.push(
-            //   translate('close_loop.close_loop'),
-            //   {
-            //     screen: props.route.name,
-            //   },
-            // );
-            // props.navigation.dispatch(pushAction);
-            // props.navigation.navigate('ClosedLoop', {
-            //   screen: 'Closed Loop',
-            //   params: {index: JSON.stringify(props.route.params.index - 1)},
-            // });
-            dispatch(
-              setStatusFilterById(JSON.stringify(props.route.params.index - 1)),
-            );
-            props.navigation.navigate('ClosedLoop');
-          }}>
+        {/* <TouchableWithoutFeedback
+          onPress={navigateToCLosedLoop}
+          // () => {
+          // const pushAction = StackActions.push(
+          //   translate('close_loop.close_loop'),
+          //   {
+          //     screen: props.route.name,
+          //   },
+          // );
+          // props.navigation.dispatch(pushAction);
+          // props.navigation.navigate('ClosedLoop', {
+          //   screen: 'Closed Loop',
+          //   params: {index: JSON.stringify(props.route.params.index - 1)},
+          // });
+          // dispatch(
+          //   setStatusFilterById(JSON.stringify(props.route.params.index - 1)),
+          // );
+          // props.navigation.navigate('ClosedLoop');
+          // }
+          // }
+        >
           <Text style={styles.viewTicketsText}>
             {translate('dashboard.view_tickets')}
           </Text>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback> */}
+        <QPButton
+          testID="DeleteButtonAction"
+          style={buttonStyles.textButton}
+          onPress={navigateToCLosedLoop}
+          buttonText={translate('dashboard.view_tickets')}
+          textStyle={buttonStyles.textButtonText}
+        />
       </View>
     );
   };

@@ -502,9 +502,17 @@ export const FilterIcon = ({onPressFilter}) => {
     </Pressable>
   );
 };
+export const SortIcon = ({onPressFilter}) => {
+  return (
+    <Pressable onPress={onPressFilter}>
+      <MaterialIcon name="sort" size={24} color={Colors.lightBlack} />
+    </Pressable>
+  );
+};
 
 export const HeaderFilter = ({
   hasFilterIcon = true,
+  hasSortIcon = false,
   dateRange,
   onPressFilter,
   onPressDateRange,
@@ -513,6 +521,8 @@ export const HeaderFilter = ({
   return (
     <View style={styles.filterAndSearchBox}>
       {hasFilterIcon && <FilterIcon onPressFilter={onPressFilter} />}
+      {hasSortIcon && <SortIcon onPressFilter={onPressFilter} />}
+
       <FilterDateBox
         range={dateRange}
         onDateRangeChangeHandler={onPressDateRange}
@@ -737,6 +747,7 @@ const CommonScreens = RootStack => {
       key={'Feedback Details'}
       component={FeedbackDetails}
       options={({navigation, route}) => ({
+        title: translate('close_loop.view_response'),
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}
     />,

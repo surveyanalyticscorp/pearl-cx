@@ -58,6 +58,7 @@ import {
 } from '../../redux/actions/closedloop.actions';
 import NPSScoreView from '../view/NPSScoreView';
 import DeleteTicketModal from './DeleteTicketModal';
+import {buttonStyles} from '../../styles/button.styles';
 const ArrowDownIcon = () => (
   <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.evenDarkerGrey} />
 );
@@ -230,10 +231,10 @@ const DeleteView = ({onPressDelete}) => {
         <QPButton
           testID="DeleteButtonAction"
           buttonColor={Colors.deleteBackground}
-          style={styles.deleteButton}
+          style={buttonStyles.deleteButton}
           onPress={onPressDelete}
           buttonText={translate('ticket_overview.delete_ticket')}
-          textStyle={styles.deleteText}
+          textStyle={buttonStyles.deleteButtonText}
         />
       </View>
     </View>

@@ -15,6 +15,9 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {CheckBoxItem, CheckRadioButtonItem} from '../../../routes/CommonScreen';
 import {translate} from '../../../Utils/MultilinguaUtils';
+import QPButton from '../../../widgets/Button';
+import {buttonStyles} from '../../../styles/button.styles';
+import {textStyles} from '../../../styles/text.styles';
 // import IconTextModalDropdown from '../../../widgets/drop-down/IconTextModalDropdown';
 // import IonIcons from 'react-native-vector-icons/Ionicons';
 
@@ -50,7 +53,7 @@ const FilterTicket = ({data, onPressHandler}) => {
           numColumns={3}
           renderItem={({item, index}) => (
             <CheckBoxItem
-              textStyle={styles.optionText}
+              textStyle={textStyles.optionText}
               item={item}
               index={index}
               onPress={selectedStatus}
@@ -78,7 +81,7 @@ const FilterTicket = ({data, onPressHandler}) => {
           numColumns={3}
           renderItem={({item, index}) => (
             <CheckBoxItem
-              textStyle={styles.optionText}
+              textStyle={textStyles.optionText}
               item={item}
               index={index}
               onPress={selectedPriority}
@@ -107,7 +110,7 @@ const FilterTicket = ({data, onPressHandler}) => {
           numColumns={3}
           renderItem={({item, index}) => (
             <CheckRadioButtonItem
-              textStyle={styles.optionText}
+              textStyle={textStyles.optionText}
               item={item}
               index={index}
               onPress={selectType}
@@ -125,7 +128,7 @@ const FilterTicket = ({data, onPressHandler}) => {
       <View>
         <Text style={styles.titleText}>Show tickets</Text>
         <CheckBoxItem
-          textStyle={styles.optionText}
+          textStyle={textStyles.optionText}
           item={{
             title: translate('only_my_tickets'),
             isChecked: assignToId.length > 0,
@@ -238,33 +241,22 @@ const FilterTicket = ({data, onPressHandler}) => {
           styles.rowContainer,
           {marginVertical: MarginConstants.tab4, justifyContent: 'flex-end'},
         ]}>
-        <RenderButton
+        <QPButton
+          style={{...buttonStyles.outlineButton, margin: MarginConstants.tab2}}
+          buttonColor={Colors.white}
           onPress={onCancelHandler}
-          textStyle={styles.clearButtonText}
-          text={'Close'}
+          textStyle={buttonStyles.outlineButtonText}
+          buttonText={'Close'}
         />
-        {/* <RenderButton
-          onPress={onClearHandler}
-          textStyle={styles.clearButtonText}
-          text={'Clear filter'}
-        /> */}
 
-        <RenderButton
+        <QPButton
+          style={{...buttonStyles.primaryButton, margin: MarginConstants.tab2}}
+          buttonColor={Colors.accentLight}
           onPress={onApplyFilterHandler}
-          textStyle={styles.fiiledButtonText}
-          text={'Apply Filter'}
+          textStyle={buttonStyles.primaryButtonText}
+          buttonText={'Apply'}
         />
       </View>
-    );
-  };
-
-  const RenderButton = props => {
-    return (
-      <Pressable onPress={props.onPress}>
-        <Text style={props.textStyle ?? styles.clearButtonText}>
-          {props.text}
-        </Text>
-      </Pressable>
     );
   };
 
@@ -353,12 +345,12 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,
   },
-  optionText: {
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.secondary,
-    marginHorizontal: MarginConstants.halfTab,
-    color: Colors.filterIconColor,
-  },
+  // optionText: {
+  //   fontFamily: FontFamily.regular,
+  //   fontSize: TextSizes.secondary,
+  //   marginHorizontal: MarginConstants.halfTab,
+  //   color: Colors.filterIconColor,
+  // },
 
   fiiledButtonText: {
     fontFamily: FontFamily.regular,
@@ -378,7 +370,6 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.regular,
     marginHorizontal: MarginConstants.halfTab,
     color: Colors.filterIconColor,
-
     paddingVertical: MarginConstants.tab1,
     paddingHorizontal: MarginConstants.tab2,
     borderRadius: 4,
