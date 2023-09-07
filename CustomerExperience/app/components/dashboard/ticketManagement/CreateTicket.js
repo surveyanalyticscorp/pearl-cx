@@ -66,6 +66,27 @@ import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import StringUtils from '../../../Utils/StringUtils';
 import {debounce} from '../../../Utils/TimeOutUtil';
+import {buttonStyles} from '../../../styles/button.styles';
+
+const RenderCreateTicketButton = ({handleCreateTicket}) => {
+  return (
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'stretch',
+        justifyContent: 'center',
+        marginVertical: MarginConstants.tab3,
+        marginHorizontal: MarginConstants.tab1,
+      }}>
+      <QPButton
+        onPress={handleCreateTicket}
+        buttonText={translate('create_new_ticket.create_new_ticket')}
+        textStyle={buttonStyles.primaryButtonText}
+        style={{...buttonStyles.primaryButton}}
+      />
+    </View>
+  );
+};
 
 export default function CreateTicket(props) {
   const responseId = props.route?.params?.responseId ?? null;
@@ -446,7 +467,7 @@ export default function CreateTicket(props) {
   const renderOwnerHeader = _title => {
     return (
       <BottomSheetHeader
-        title={translate('ticket_overview.Select_ticket_owner')}
+        title={translate('ticket_overview.select_ticket_owner')}
         onPressClose={() =>
           ownerBottomSheet.current.snapTo(ownerBottomSheetSnapPoints.length - 1)
         }
@@ -635,6 +656,12 @@ export default function CreateTicket(props) {
     );
   };
 
+  let getTicketOwnerTextStyle = ticketOwnerIndex_ => {
+    return ticketOwnerIndex_ < 0 ? styles.palceholderText : styles.titleText;
+  };
+  let getSegmentTextStyle = segment_ => {
+    return segmentIndex < 0 ? styles.palceholderText : styles.titleText;
+  };
   return (
     <View style={styles.rootContainer}>
       <Animated.View
@@ -657,7 +684,7 @@ export default function CreateTicket(props) {
               {/* {getIonIcon('star')} */}
               {getSegmentIcon()}
               {/* <TextInput placeholder="Segment" style={styles.titleText} /> */}
-              <Text style={styles.titleText}>{segment}</Text>
+              <Text style={getSegmentTextStyle(segmentIndex)}>{segment}</Text>
             </View>
           </Pressable>
           <Pressable onPress={handleDateSelection}>
@@ -691,11 +718,14 @@ export default function CreateTicket(props) {
             {getIonIcon('call')}
             {/* <TextInput placeholder="Phone" style={styles.titleText} /> */}
             <PhoneInput
+              placeholder={translate('create_new_ticket.phone_number')}
               containerStyle={styles.phoneInputContainer}
               codeTextStyle={styles.phoneInputCodeText}
               textContainerStyle={styles.phoneInputTextContainer}
               textInputStyle={styles.phoneInputTextInputStyle}
-              textInputProps={{placeholderTextColor: Colors.borderColor}}
+              textInputProps={{
+                placeholderTextColor: Colors.borderColor,
+              }}
               ref={phoneInput}
               // defaultValue={value}
               defaultCode="US"
@@ -765,7 +795,9 @@ export default function CreateTicket(props) {
             <View style={[styles.rowContainer, styles.rowItem]}>
               {getMateriaCommunityIcon('shield-account')}
               {/* <TextInput placeholder="Ticket Owner" style={styles.titleText} /> */}
-              <Text style={styles.titleText}>{`${ticketOwner ?? ''} `}</Text>
+              <Text style={getTicketOwnerTextStyle(ticketOwnerIndex)}>{`${
+                ticketOwner ?? ''
+              }`}</Text>
             </View>
           </Pressable>
           <View style={[styles.rowContainer, styles.rowItem]}>
@@ -782,7 +814,7 @@ export default function CreateTicket(props) {
               }}
             />
           </View>
-          <View style={[styles.rowContainer, styles.rowButton]}>
+          <View style={[styles.rowContainer]}>
             {showLoading ? (
               <View
                 style={[
@@ -792,13 +824,7 @@ export default function CreateTicket(props) {
                 <QPSpinner spinnerColor={Colors.white} />
               </View>
             ) : (
-              <QPButton
-                onPress={handleCreateTicket}
-                buttonColor={Colors.accentLight}
-                buttonText={translate('create_new_ticket.create_new_ticket')}
-                textStyle={styles.qpButtonTextStyles}
-                style={styles.buttonStyle}
-              />
+              <RenderCreateTicketButton />
             )}
           </View>
         </ScrollView>
@@ -849,6 +875,13 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
     padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,
+  },
+  palceholderText: {
+    flex: 1,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    padding: PaddingConstants.tab1,
+    color: Colors.borderColor,
   },
   rowItem: {
     margin: MarginConstants.tab1,
@@ -944,5 +977,12 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     textAlign: 'center',
+  },
+  createTicketButtonStyle: {
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+    marginVertical: MarginConstants.tab3,
+    marginHorizontal: MarginConstants.tab1,
   },
 });

@@ -3,7 +3,6 @@ import {
   View,
   TouchableWithoutFeedback,
   Text,
-  Image,
   Alert,
   StyleSheet,
   Platform,
@@ -22,7 +21,6 @@ import Animated from 'react-native-reanimated';
 import TicketTakeAction from './takeaction/TIcketTakeAction';
 import {
   BottomSheetHeader,
-  CloseButton,
   RenderPriorityIcon,
   RenderSpinner,
   RenderStatusIcon,
@@ -83,10 +81,10 @@ const TakeActionButton = ({onTakeActionHandler, hasPanelMember}) => {
         buttonColor={
           hasPanelMember ? Colors.accentLight : Colors.filterIconColor
         }
-        style={styles.takeActionButton}
+        style={buttonStyles.primaryButton}
         onPress={onTakeActionHandler}
         buttonText={translate('ticket_overview.take_action')}
-        textStyle={styles.takeActionText}
+        textStyle={buttonStyles.primaryButtonText}
       />
     </View>
   );
@@ -834,9 +832,6 @@ const styles = StyleSheet.create({
   container: {
     margin: MarginConstants.halfTab,
     flex: 1,
-    // borderColor: Colors.evenDarkerGrey,
-    // borderWidth: 1,
-    // borderRadius: 4,
   },
   ticketStatusContainer: {
     backgroundColor: Colors.white,
@@ -849,12 +844,6 @@ const styles = StyleSheet.create({
   },
   columnContainer: {
     alignItems: 'flex-start',
-    padding: PaddingConstants.tab1,
-  },
-  statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
     padding: PaddingConstants.tab1,
   },
   headerText: {
@@ -888,12 +877,6 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
   },
-  dateText: {
-    fontFamily: FontFamily.regular,
-    fontWeight: FontWeight._400,
-    fontSize: 16,
-    color: Colors.primary,
-  },
 
   detailsText: {
     fontFamily: FontFamily.regular,
@@ -916,30 +899,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.accentLight,
   },
-  statusText: {
-    fontFamily: FontFamily.regular,
-    fontWeight: FontWeight._900,
-    fontSize: 16,
-    color: Colors.lightBlack,
-  },
+
   takeActionContainer: {
     padding: PaddingConstants.tab1,
     margin: MarginConstants.tab1,
-  },
-  takeActionButton: {
-    height: MarginConstants.tab4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Colors.filterIconColor,
-    marginBottom: MarginConstants.tab2,
-  },
-  deleteButton: {
-    height: MarginConstants.tab4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
-    backgroundColor: Colors.deleteBackground,
-    marginBottom: MarginConstants.tab2,
   },
   ticketIdView: {
     borderColor: Colors.accentLight,
@@ -959,77 +922,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     margin: MarginConstants.tab1,
   },
-  takeActionText: {
-    color: Colors.white,
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.largeText,
-  },
-  deleteText: {
-    color: Colors.deleteButtonText,
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.primary,
-  },
-  rowText: {
-    color: Colors.primary,
-    fontSize: TextSizes.secondary,
-  },
-  modelDropdown: {
-    minHeight: MarginConstants.tab3,
-    marginHorizontal: MarginConstants.tab1,
-    paddingHorizontal: PaddingConstants.halfTab,
-    borderColor: Colors.evenDarkerGrey,
-    borderWidth: 1,
-    borderRadius: 4,
-    width: '100%',
-  },
-  dropdownText: {
-    flex: 1,
-    color: Colors.secondary,
-    marginVertical: MarginConstants.tab1,
-    marginHorizontal: MarginConstants.halfTab,
-    fontSize: Platform.isPad
-      ? TextSizes.primary
-      : Platform.OS === 'android'
-      ? TextSizes.primary
-      : TextSizes.secondary,
-    textAlign: 'left',
-    paddingLeft: MarginConstants.halfTab,
-    paddingRight: MarginConstants.tab3,
-    textAlignVertical: 'center',
-    alignSelf: 'center',
-    borderColor: Colors.darkerGrey,
-  },
-  dropdownRow: {
-    flexDirection: 'row',
-    minHeight: MarginConstants.tab4,
-    alignItems: 'center',
-    paddingHorizontal: PaddingConstants.halfTab,
-    backgroundColor: Colors.accent,
-  },
-  panelHeaderContainer: {
-    flex: 1,
-    padding: MarginConstants.tab2,
-    backgroundColor: Colors.white,
-    borderTopStartRadius: 5,
-    borderTopEndRadius: 5,
-  },
-  panelHandleContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: MarginConstants.tab2,
-  },
-  panelHandle: {
-    height: 4,
-    width: 80,
-    backgroundColor: Colors.filterIconColor,
-  },
-  header: {
-    marginHorizontal: MarginConstants.tab2,
-    fontFamily: FontFamily.bold,
-    fontSize: TextSizes.largeText,
-    marginVertical: MarginConstants.tab1,
-    color: Colors.filterIconColor,
-  },
   contentContainer: {backgroundColor: Colors.white, height: '100%'},
   dropdownContainer: {
     flex: 2,
@@ -1048,21 +940,6 @@ const styles = StyleSheet.create({
     height: '100%',
     paddingHorizontal: PaddingConstants.halfTab,
   },
-  SegmentDropDownInnerContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    height: '100%',
-    paddingHorizontal: PaddingConstants.tab1,
-  },
-  // dropdownIconTextContainer: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'flex-start',
-  //   height: '100%',
-  // },
   dropdownContainerText: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.regular,

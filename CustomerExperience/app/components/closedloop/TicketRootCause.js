@@ -6,6 +6,7 @@ import {
   Platform,
   FlatList,
   Pressable,
+  ScrollView,
 } from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -16,6 +17,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {CheckBoxItem, CheckRadioButtonItem} from '../../routes/CommonScreen';
 import {updateRootCause} from '../../redux/actions/closedloop.actions';
 import {translate} from '../../Utils/MultilinguaUtils';
+import QPButton from '../../widgets/Button';
+import {buttonStyles} from '../../styles/button.styles';
+import {textStyles} from '../../styles/text.styles';
 
 const RenderRootCauseItem = ({onClickCheckBox, title, data}) => {
   return (
@@ -24,13 +28,13 @@ const RenderRootCauseItem = ({onClickCheckBox, title, data}) => {
       <FlatList
         data={data}
         keyExtractor={(item, index) => item.id.toString()}
-        numColumns={2}
+        numColumns={1}
         ListEmptyComponent={
           <Text style={styles.dateText}>{`No ${title} found`} </Text>
         }
         renderItem={({item, index}) => (
           <CheckBoxItem
-            textStyle={styles.optionText}
+            textStyle={textStyles.optionText}
             item={item}
             index={index}
             onPress={() => onClickCheckBox(title, item, index)}
@@ -61,13 +65,13 @@ const RenderSegmentItems = ({onClickRadioButton, title, currentSelected}) => {
       <FlatList
         data={segmentList}
         keyExtractor={(item, index) => item.id.toString()}
-        numColumns={2}
+        numColumns={1}
         ListEmptyComponent={
           <Text style={styles.dateText}>{`No ${title} found`} </Text>
         }
         renderItem={({item, index}) => (
           <CheckRadioButtonItem
-            textStyle={styles.optionText}
+            textStyle={textStyles.optionText}
             item={item}
             index={index}
             onPress={() => onClickRadioButton(title, item, index)}
@@ -203,7 +207,7 @@ export default function TicketRootCause(props) {
 
   const RenderTicketOverView = () => (
     <View style={styles.rootContainer}>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <RenderRootCauseItem
           title={ROOT_CAUSES}
           data={rootCauses}
@@ -224,17 +228,36 @@ export default function TicketRootCause(props) {
           onClickRadioButton={onClickRadioButton}
           currentSelected={currentSegmentId}
         />
-      </View>
+      </ScrollView>
 
       <View style={styles.buttonView}>
-        <Pressable onPress={resetSelections} style={styles.button}>
+        <QPButton
+          testID="RootCasueResetButton"
+          style={{
+            ...buttonStyles.textButton,
+            marginHorizontal: MarginConstants.tab4,
+          }}
+          onPress={resetSelections}
+          buttonText={translate('root_cause.reset')}
+          textStyle={buttonStyles.textButtonTextPrimary}
+        />
+
+        <QPButton
+          testID="RootCauseUpdateButton"
+          style={buttonStyles.primaryButton}
+          onPress={updateRootCauseAndAction}
+          buttonText={translate('close_loop.update')}
+          textStyle={buttonStyles.primaryButtonText}
+        />
+
+        {/* <Pressable onPress={resetSelections} style={styles.button}>
           <Text style={[styles.buttonText, styles.resetButton]}> Reset </Text>
         </Pressable>
         <Pressable
           onPress={updateRootCauseAndAction}
           style={[styles.button, {backgroundColor: Colors.accentLight}]}>
           <Text style={[styles.buttonText, styles.updatetButton]}>Update</Text>
-        </Pressable>
+        </Pressable> */}
       </View>
     </View>
   );
@@ -250,7 +273,6 @@ const styles = StyleSheet.create({
 
     backgroundColor: Colors.white,
     padding: PaddingConstants.tab1,
-    justifyContent: 'space-between',
   },
 
   container: {

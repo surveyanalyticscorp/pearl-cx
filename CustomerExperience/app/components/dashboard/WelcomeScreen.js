@@ -26,6 +26,7 @@ import {
 } from '../../redux/actions/closedloop.actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {translate} from '../../Utils/MultilinguaUtils';
+import {buttonStyles} from '../../styles/button.styles';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = props => {
@@ -159,11 +160,13 @@ export const WelcomeScreen = props => {
             />
           </View>
         </View>
-        <View>
+        <View style={styles.skipButtonView}>
           <QPButton
             buttonText={translate('onBoarding.skip')}
             buttonColor={Colors.accentLight}
             onPress={props.skipHandler}
+            textStyle={buttonStyles.primaryButtonText}
+            style={buttonStyles.primaryButton}
           />
         </View>
       </CustomBackground>
@@ -245,12 +248,8 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 
-  skipButton: {
-    fontSize: TextSizes.largeText,
-    fontWeight: '500',
-    color: Colors.white,
-    backgroundColor: Colors.accent,
+  skipButtonView: {
     width: '90%',
-    margin: 16,
+    marginVertical: MarginConstants.tab2,
   },
 });
