@@ -140,7 +140,6 @@ export default function TicketComments(props) {
 
     return (
       <FlatList
-        style={{paddingBottom: MarginConstants.tab4 * 2}}
         data={data}
         refreshControl={
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
@@ -149,7 +148,7 @@ export default function TicketComments(props) {
         renderItem={({item}) => <MemoizedCommentParentItem item={item} />}
         extraData={data}
         // ListFooterComponent={<View style={{margin: MarginConstants.tab4}} />}
-        ListFooterComponent={<CommentBox parentId={0} />}
+        // ListFooterComponent={<CommentBox parentId={0} />}
       />
     );
   };
@@ -238,6 +237,7 @@ export default function TicketComments(props) {
           <TextInput
             defaultValue={commentText}
             multiline
+            maxLength={240}
             placeholderTextColor={Colors.borderColor}
             style={[styles.container, styles.commentText]}
             onChangeText={onChangeCommentHandler}
@@ -267,6 +267,8 @@ export default function TicketComments(props) {
           onRefresh_={onRefresh}
           refreshing_={refreshing}
         />
+
+        <CommentBox parentId={0} />
       </KeyboardAvoidingView>
     </View>
   );
@@ -275,6 +277,7 @@ export default function TicketComments(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-between',
     backgroundColor: Colors.white,
   },
   commentFooter: {
@@ -289,7 +292,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     backgroundColor: Colors.white,
-    marginHorizontal: MarginConstants.halfTab,
+    marginHorizontal: MarginConstants.tab2,
   },
 
   borderStyle: {borderColor: Colors.darkerGrey, borderWidth: 1},
