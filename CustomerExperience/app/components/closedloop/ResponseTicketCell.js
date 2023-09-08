@@ -191,15 +191,14 @@ export default function ResponseTicketCell(props) {
         <PriorityUI priority={data.priority} />
         {/* {getPriorityUI(data.priority)} */}
         {/* {getUserPic(data.userAvatar)} */}
-        <TouchableWithoutFeedback
+        {/* <TouchableWithoutFeedback
           hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
           onPress={() => {
             props.onPressViewTicket(props.item);
           }}>
-          <Text style={styles.viewTicketsText}>
-            {translate('responses.view_ticket')}
-          </Text>
-        </TouchableWithoutFeedback>
+          <Text style={styles.viewTicketsText}></Text>
+        </TouchableWithoutFeedback> */}
+        <View />
       </View>
     );
   };

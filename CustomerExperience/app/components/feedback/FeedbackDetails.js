@@ -53,9 +53,13 @@ export const ShowResponseTicketList = props => {
     responseTickets && responseTickets.data && responseTickets.data.length > 0;
 
   const onTapHandler = (item, index) => {
-    console.log('TICKET_ITEM: ', JSON.stringify(item));
-    dispatch(getLatestComment(authToken, `${item.id}`));
-    dispatch(getTicketStatusHistory(authToken, `${item.id}`));
+    // console.log('TICKET_ITEM: ', JSON.stringify(item));
+    // dispatch(getLatestComment(authToken, `${item.id}`));
+    // dispatch(getTicketStatusHistory(authToken, `${item.id}`));
+    props.navigation.navigate('TicketDetails', {
+      ticketItem: item,
+      prevScreen: translate('dashboard.responses'),
+    });
   };
 
   const onPressViewTicket = item => {
