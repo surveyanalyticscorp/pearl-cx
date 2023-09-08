@@ -211,8 +211,8 @@ const CxDashboard = props => {
             data={victoryPieData}
             width={5 * MarginConstants.tab4}
             height={6 * MarginConstants.tab4}
-            innerRadius={2.3 * MarginConstants.tab4}
-            radius={2.1 * MarginConstants.tab4}
+            innerRadius={2.4 * MarginConstants.tab4}
+            radius={2.0 * MarginConstants.tab4}
             style={{
               labels: {
                 fill: 'transparent',

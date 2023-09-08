@@ -21,6 +21,7 @@ import {setStatusFilterById} from '../../redux/actions/closedloop.actions';
 import {useDispatch} from 'react-redux';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
+import {textStyles} from '../../styles/text.styles';
 
 export const DashboardClosedLoopView = props => {
   return <TicketTabStack {...props} />;
@@ -35,6 +36,7 @@ const TicketTabStack = props => (
         width: useWindowDimensions().width / 4,
         fontSize: TextSizes.secondary,
         fontFamily: FontFamily.regular,
+        textTransform: 'none',
       },
       indicatorStyle: {backgroundColor: Colors.accentLight},
       style: {backgroundColor: Colors.white, width: '100%'},
@@ -70,7 +72,7 @@ const TicketTabStack = props => (
       initialParams={{index: 4, ticketCount: props.ticketCount}}
     /> */}
     <TicketTab.Screen
-      name={'RESOLVED'}
+      name={translate('dashboard.resolved')}
       component={RenderScene}
       initialParams={{index: 4, ticketCount: props.ticketCount}}
     />
@@ -108,8 +110,8 @@ const RenderScene = props => {
             data={dataScale}
             width={5 * MarginConstants.tab4}
             height={6 * MarginConstants.tab4}
-            innerRadius={2.3 * MarginConstants.tab4}
-            radius={2.1 * MarginConstants.tab4}
+            innerRadius={2.2 * MarginConstants.tab4}
+            radius={1.8 * MarginConstants.tab4}
             style={{
               labels: {
                 fill: 'transparent',
@@ -163,9 +165,9 @@ const RenderScene = props => {
             height: MarginConstants.tab4,
             justifyContent: 'center',
           }}>
-          <Text style={styles.countText}>{`${count.totalTickets} ${translate(
-            'dashboard.total',
-          )}`}</Text>
+          <Text style={textStyles.secondaryText}>{`${
+            count.totalTickets
+          } ${translate('dashboard.total')}`}</Text>
         </View>
         <View
           style={{
@@ -174,7 +176,7 @@ const RenderScene = props => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <Text style={styles.countText}>Count</Text>
+          <Text style={textStyles.secondaryText}>Count</Text>
           <Switch
             trackColor={{true: Colors.accent, false: Colors.darkGrey}}
             thumbColor={Colors.white}
@@ -183,7 +185,7 @@ const RenderScene = props => {
             value={showPercentageCount}
             style={styles.switch}
           />
-          <Text style={styles.countText}>Percentage</Text>
+          <Text style={textStyles.secondaryText}>Percentage</Text>
         </View>
       </View>
     );
@@ -299,8 +301,9 @@ const RenderScene = props => {
 
   return (
     <View style={styles.container}>
-      {renderDonutChart()}
       <RenderCountContainer />
+      {renderDonutChart()}
+
       <RenderViewTicketsContainer />
     </View>
   );
@@ -339,7 +342,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '80%',
     marginHorizontal: MarginConstants.tab3,
-    marginTop: MarginConstants.halfTab,
+    marginTop: MarginConstants.tab3,
     // backgroundColor: Colors.accentLight,
   },
   viewCountContainer: {
@@ -382,8 +385,9 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontSize: TextSizes.secondary,
     fontFamily: FontFamily.semiBold,
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: 2,
+    width: MarginConstants.tab3 * 2,
   },
   ticketStatusView: {
     width: 2 * MarginConstants.tab4,
