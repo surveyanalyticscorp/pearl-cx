@@ -17,8 +17,12 @@ import {
   FullMonthDateYearFormat,
   DMY_AT_TIME_FORMAT,
 } from '../../Utils/AppConstants';
-import {getStatusById, getPriorityById} from '../../Utils/TicketUtils';
-import {CheckBoxItem, RenderStatusIcon} from '../../routes/CommonScreen';
+import {
+  CheckBoxItem,
+  PriorityUI,
+  RenderStatusIcon,
+  StatusUI,
+} from '../../routes/CommonScreen';
 import StringUtils from '../../Utils/StringUtils';
 import {useSelector} from 'react-redux';
 import {translate} from '../../Utils/MultilinguaUtils';
@@ -46,27 +50,16 @@ const AssigneeUI = ({assignToId}) => {
   );
 };
 
-const StatusUI = ({status}) => {
-  return (
-    <View style={styles.rowContainer}>
-      <RenderStatusIcon size={16} title={getStatusById(status)} />
+// const StatusUI = ({status}) => {
+//   return (
+//     <View style={styles.rowContainer}>
+//       <RenderStatusIcon size={16} title={getStatusById(status)} />
 
-      {/* <StatusIcon borderColor={borderColor} fillerColor={fillerColor} /> */}
-      <Text style={styles.statusText}>{getStatusById(status)}</Text>
-    </View>
-  );
-};
-
-const PriorityUI = ({priority}) => {
-  const priorityColor = getPriorityBorderColorbyId(priority);
-  const priorityText = getPriorityById(priority);
-  return (
-    <View style={styles.rowContainer}>
-      <IonIcons name="flag" size={20} color={priorityColor} />
-      <Text style={[{marginStart: 4}, styles.detailsText]}>{priorityText}</Text>
-    </View>
-  );
-};
+//       {/* <StatusIcon borderColor={borderColor} fillerColor={fillerColor} /> */}
+//       <Text style={styles.statusText}>{getStatusById(status)}</Text>
+//     </View>
+//   );
+// };
 
 const UserPic = ({avatarUrl}) => {
   return (

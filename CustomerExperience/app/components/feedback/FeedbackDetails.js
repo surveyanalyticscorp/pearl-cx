@@ -5,6 +5,7 @@ import {
   View,
   FlatList,
   BackHandler,
+  ScrollView,
 } from 'react-native';
 import FeedbackCell from './FeedbackCells';
 import {Colors} from '../../styles/color.constants';
@@ -33,18 +34,72 @@ import {
 } from '../../redux/actions/closedloop.actions';
 import {useIsFocused} from '@react-navigation/native';
 
+const RenderWebView = props => {
+  return (
+    <QPWebView
+      child={<ShowResponseTicketList {...props} />}
+      authToken={props.route.params.token}
+      uri={props.route.params.url}
+    />
+  );
+};
+export const ShowResponseTicketList = props => {
+  const [selectedTicketId, setSelectedTicket] = useState(0);
+  const dispatch = useDispatch();
+  const responseTickets = useSelector(state => state.response.responseTickets);
+  const authToken = useSelector(state => state.global.authToken);
+
+  const hasTickets =
+    responseTickets && responseTickets.data && responseTickets.data.length > 0;
+
+  const onTapHandler = (item, index) => {
+    console.log('TICKET_ITEM: ', JSON.stringify(item));
+    dispatch(getLatestComment(authToken, `${item.id}`));
+    dispatch(getTicketStatusHistory(authToken, `${item.id}`));
+  };
+
+  const onPressViewTicket = item => {
+    props.navigation.navigate('TicketDetails', {
+      ticketItem: item,
+      prevScreen: translate('dashboard.responses'),
+    });
+  };
+
+  return hasTickets ? (
+    <FlatList
+      lazy
+      style={styles.flatlist}
+      data={responseTickets.data}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({item, index}) => {
+        return (
+          <ResponseTicketCell
+            data={item}
+            index={index}
+            selectedTicketId={selectedTicketId}
+            onPressHandler={() => onTapHandler(item, index)}
+            onPressViewTicket={() => onPressViewTicket(item)}
+          />
+        );
+      }}
+    />
+  ) : (
+    <View />
+  );
+};
+
 export default function FeedbackDetails(props) {
   const dispatch = useDispatch();
+  const responseTickets = useSelector(state => state.response.responseTickets);
+
   const authToken = useSelector(state => state.global.authToken);
   const {feedbackApiKey, feedbackID} = useSelector(
     state => state.global.userInfo,
   );
   const isFocused = useIsFocused();
-  const responseTickets = useSelector(state => state.response.responseTickets);
   const data = props.route.params.data;
   const isFromFeedback = props.route.params.isFromFeedback;
 
-  const [selectedTicketId, setSelectedTicket] = useState(0);
   console.log('RESPONSE_DATA', JSON.stringify(props.route.params.data));
   useEffect(() => {
     props.navigation.setOptions({
@@ -84,16 +139,6 @@ export default function FeedbackDetails(props) {
     }
   }, [responseTickets]);
 
-  const onTapHandler = (item, index) => {
-    console.log('TICKET_ITEM: ', JSON.stringify(item));
-    dispatch(getLatestComment(authToken, `${item.id}`));
-    dispatch(getTicketStatusHistory(authToken, `${item.id}`));
-  };
-
-  const onPressViewTicket = item => {
-    props.navigation.navigate('TicketDetails', item);
-  };
-
   // const onPressHandler = (item, index) => {
   //   props.navigation.navigate('TicketDetails', item);
   // };
@@ -104,49 +149,21 @@ export default function FeedbackDetails(props) {
   //   }),
   // );
 
-  const ShowTicketList = () => {
-    const hasTickets =
-      responseTickets &&
-      responseTickets.data &&
-      responseTickets.data.length > 0;
-
-    return hasTickets ? (
-      <FlatList
-        lazy
-        style={styles.flatlist}
-        data={responseTickets.data}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => {
-          return (
-            <ResponseTicketCell
-              data={item}
-              index={index}
-              selectedTicketId={selectedTicketId}
-              onPressHandler={() => onTapHandler(item, index)}
-              onPressViewTicket={() => onPressViewTicket(item)}
-            />
-          );
-        }}
-      />
-    ) : (
-      <View />
-    );
-  };
-
   return (
     <View style={styles.container}>
-      <FeedbackDetailsTabStack {...props} />
-      {isFromFeedback && (
-        <FeedbackCell
-          item={props.route.params.data}
-          origin="Detail"
-          hasTicket={responseTickets.data?.length > 0}
-          ticketStatuses={props.route.params.ticketStatus}
-          parentRoute={props.route.params.parentRoute}
-          {...props}
-        />
-      )}
-      {isFromFeedback && <ShowTicketList />}
+      {/* {isFromFeedback && ( */}
+      <FeedbackCell
+        item={props.route.params.data}
+        origin="Detail"
+        hasTicket={responseTickets.data?.length > 0}
+        ticketStatuses={props.route.params.ticketStatus}
+        parentRoute={props.route.params.parentRoute}
+        {...props}
+      />
+      {/* )} */}
+      <FeedbackDetailsTabStack isFromFeedback={isFromFeedback} {...props} />
+
+      {/* {isFromFeedback && <ShowResponseTicketList />} */}
       {/** enable it when email functionality */}
       {/*<ActionButton*/}
       {/*buttonColor= {Colors.accent}*/}
@@ -179,10 +196,12 @@ const FeedbackDetailsTabStack = props => (
     keyboardDismissMode={'auto'}>
     <DetailsTab.Screen
       name={translate('responses.feedback')}
-      component={renderScene}
+      component={RenderWebView}
       initialParams={{
         token: props.route.params.token,
         url: props.route.params.data.responseDataURL,
+        data: props.route.params.data,
+        isFromFeedback: props.isFromFeedback,
       }}
     />
     <DetailsTab.Screen
@@ -192,6 +211,7 @@ const FeedbackDetailsTabStack = props => (
         token: props.route.params.token,
         url: props.route.params.data.memberProfileURL,
         data: props.route.params.data,
+        isFromFeedback: props.isFromFeedback,
       }}
     />
     <DetailsTab.Screen
@@ -201,6 +221,7 @@ const FeedbackDetailsTabStack = props => (
         token: props.route.params.token,
         url: props.route.params.data.activityURL,
         data: props.route.params.data,
+        isFromFeedback: props.isFromFeedback,
       }}
     />
   </DetailsTab.Navigator>
@@ -223,8 +244,6 @@ const styles = StyleSheet.create({
 
   flatlist: {
     backgroundColor: Colors.grey,
-    flex: 1,
-    maxHeight: '50%',
     paddingTop: 5,
   },
 });

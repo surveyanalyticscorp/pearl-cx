@@ -20,8 +20,10 @@ import {Avatar, StatusIcon} from '../../../routes/CommonScreen';
 import moment from 'moment';
 import {DMY_AT_TIME_FORMAT} from '../../../Utils/AppConstants';
 import {translate} from '../../../Utils/MultilinguaUtils';
+import {ShowResponseTicketList} from '../FeedbackDetails';
 
 const ResponseActivity = props => {
+  let isFromFeedback = props.route.params.data.isFromFeedback;
   let activityData = props.route.params.data;
   const {ticketStatusHistory, ticketLastComment} = useSelector(
     state => state.response,
@@ -169,10 +171,9 @@ const ResponseActivity = props => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.container}>
-        <RenderSurveyDetails />
-        <RenderActivityDetails />
-      </View>
+      <RenderSurveyDetails />
+      <RenderActivityDetails />
+      <ShowResponseTicketList {...props} />
     </ScrollView>
   );
 };

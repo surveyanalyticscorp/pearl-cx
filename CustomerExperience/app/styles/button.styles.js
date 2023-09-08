@@ -58,7 +58,7 @@ export const buttonStyles = StyleSheet.create({
   textButtonText: {
     color: Colors.accentLight,
     fontFamily: FontFamily.regular,
-    fontSize: TextSizes.secondary,
+    fontSize: Platform.OS === 'ios' ? TextSizes.primary : TextSizes.secondary,
   },
   textButtonTextPrimary: {
     color: Colors.accentLight,

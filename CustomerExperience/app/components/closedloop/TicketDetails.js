@@ -24,12 +24,13 @@ import {
 export default function TicketDetails(props) {
   const {authToken, isTicketLoading} = useSelector(state => state.global);
   const {feedbackApiKey} = useSelector(state => state.global.userInfo);
-  const ticketItem = props.route.params;
+  const ticketItem = props.route.params.ticketItem;
+  const prevScreen = props.route.params.prevScreen;
+
   const dispatch = useDispatch();
   const windowDimensions = useWindowDimensions();
 
   console.log(`Ticket Detailsssss: ${JSON.stringify(ticketItem)}`);
-
   const TicketTabs = createMaterialTopTabNavigator();
   useEffect(() => {
     dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
@@ -80,12 +81,18 @@ export default function TicketDetails(props) {
       <TicketTabs.Screen
         name={translate('close_loop.overview')}
         component={TicketOverview}
-        initialParams={{screenName: translate('close_loop.overview')}}
+        initialParams={{
+          screenName: translate('close_loop.overview'),
+          prevScreen: prevScreen,
+        }}
       />
       <TicketTabs.Screen
         name={translate('close_loop.comments')}
         component={TicketComments}
-        initialParams={{screenName: translate('close_loop.comments')}}
+        initialParams={{
+          screenName: translate('close_loop.comments'),
+          prevScreen: prevScreen,
+        }}
       />
       <TicketTabs.Screen
         name={translate('responses.activity')}

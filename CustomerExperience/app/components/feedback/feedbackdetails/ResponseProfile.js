@@ -17,6 +17,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 import {FontFamily} from '../../../styles/font.constants';
 import {translate} from '../../../Utils/MultilinguaUtils';
+import {ShowResponseTicketList} from '../FeedbackDetails';
 
 const ResponseProfile = props => {
   const {panelMember, surveyDetails} = useSelector(state => state.response);
@@ -148,6 +149,7 @@ const ResponseProfile = props => {
       <View style={styles.container}>
         <RenderCounter />
         <ProfileDetails />
+        <ShowResponseTicketList {...props} />
       </View>
     </ScrollView>
   );

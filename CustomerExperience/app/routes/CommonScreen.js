@@ -47,7 +47,12 @@ import {SEGMENT_SELECTOR} from '../api/Constant';
 import SelectSegmentScreen from '../components/SelectSegmentScreen';
 import moment from 'moment';
 import {DMYFORMAT, HalfMonthDateYearFormat} from '../Utils/AppConstants';
-import {getNameInitials} from '../Utils/TicketUtils';
+import {
+  getNameInitials,
+  getPriorityById,
+  getStatusById,
+} from '../Utils/TicketUtils';
+import {textStyles} from '../styles/text.styles';
 
 // import CheckBox from '@react-native-community/checkbox';
 
@@ -188,6 +193,16 @@ export const RenderStatusIcon = ({size, title, style}) => {
   );
 };
 
+export const StatusUI = ({status}) => {
+  return (
+    <View style={styles.statusContainer}>
+      <RenderStatusIcon size={16} title={getStatusById(status)} />
+
+      {/* <StatusIcon borderColor={borderColor} fillerColor={fillerColor} /> */}
+      <Text style={textStyles.secondaryText}>{getStatusById(status)}</Text>
+    </View>
+  );
+};
 export const RenderPriorityIcon = props => {
   return (
     // <View
@@ -213,6 +228,18 @@ export const RenderPriorityIcon = props => {
   );
 };
 
+export const PriorityUI = ({priority}) => {
+  const priorityColor = getPriorityBorderColorbyId(priority);
+  const priorityText = getPriorityById(priority);
+  return (
+    <View style={styles.statusContainer}>
+      <IonIcons name="flag" size={20} color={priorityColor} />
+      <Text style={[{marginStart: 4}, textStyles.secondaryText]}>
+        {priorityText}
+      </Text>
+    </View>
+  );
+};
 export const CloseButton = ({color}) => {
   let navigation = useNavigation();
   const iconColor = !color ? Colors.white : color;
@@ -800,6 +827,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderTopStartRadius: 8,
     borderTopEndRadius: 8,
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: PaddingConstants.tab1,
+    paddingVertical: PaddingConstants.halfTab,
   },
   panelHandleContainer: {
     alignItems: 'center',

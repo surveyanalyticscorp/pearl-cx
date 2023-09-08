@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
 
   skipButtonView: {
     width: '90%',
-    marginVertical: MarginConstants.tab2,
+    marginBottom:
+      Platform.OS === 'ios' ? MarginConstants.tab4 : MarginConstants.tab2,
   },
 });

@@ -28,6 +28,7 @@ import moment from 'moment';
 import {FullMonthDateYearFormat} from '../../Utils/AppConstants';
 import {getStatusById, getPriorityById} from '../../Utils/TicketUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
+import {PriorityUI, StatusUI} from '../../routes/CommonScreen';
 export default function ResponseTicketCell(props) {
   const data = props.data;
 
@@ -185,8 +186,10 @@ export default function ResponseTicketCell(props) {
   const getStatusRow = () => {
     return (
       <View style={styles.statusContainer}>
-        {getStatusUI(data.status)}
-        {getPriorityUI(data.priority)}
+        {/* {getStatusUI(data.status)} */}
+        <StatusUI status={data.status} />
+        <PriorityUI priority={data.priority} />
+        {/* {getPriorityUI(data.priority)} */}
         {/* {getUserPic(data.userAvatar)} */}
         <TouchableWithoutFeedback
           hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
@@ -223,6 +226,7 @@ export default function ResponseTicketCell(props) {
 const styles = StyleSheet.create({
   container: {
     margin: MarginConstants.tab1,
+    padding: PaddingConstants.halfTab,
     borderColor: Colors.evenDarkerGrey,
     borderWidth: 1,
     borderRadius: 5,

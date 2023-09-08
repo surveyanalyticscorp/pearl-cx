@@ -394,7 +394,10 @@ export default function ClosedLoop(props) {
       return;
     }
 
-    props.navigation.navigate('TicketDetails', item);
+    props.navigation.navigate('TicketDetails', {
+      ticketItem: item,
+      prevScreen: translate('dashboard.closed_loop'),
+    });
   };
   const onLongPressHandler = (item, index) => {
     // console.log(`onLongPressHandler`);

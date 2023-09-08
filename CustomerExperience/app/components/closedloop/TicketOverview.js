@@ -139,7 +139,7 @@ const RenderDropDownButton = ({
     </View>
   );
 };
-const DescriptionView = ({ticket}) => {
+const DescriptionView = ({ticket, showResponseButton}) => {
   const createdDate =
     ticket !== undefined
       ? moment(ticket.issueDate).format(FullMonthDateYearFormat)
@@ -181,7 +181,7 @@ const DescriptionView = ({ticket}) => {
           {!isObjectEmpty(ticket) ? ticket.comment : ''}
         </Text>
       </View>
-      {ticket.responseId && <ViewResponseDetailsButton />}
+      {ticket.responseId && showResponseButton && <ViewResponseDetailsButton />}
     </View>
   );
 };
@@ -286,11 +286,19 @@ const ViewResponseDetailsButton = () => {
   };
   return (
     <View style={[styles.rowContainer, {flexDirection: 'row-reverse'}]}>
-      <TouchableWithoutFeedback onPress={navigateToFeedbackDetails}>
-        <Text style={styles.viewResponseDetailsText}>{`${translate(
+      <QPButton
+        testID="responseButtonTest"
+        style={buttonStyles.textButton}
+        onPress={navigateToFeedbackDetails}
+        buttonText={`${translate('close_loop.view_response')} >>`}
+        textStyle={buttonStyles.textButtonText}
+      />
+
+      {/* <TouchableWithoutFeedback onPress={navigateToFeedbackDetails}>
+        <Text style={ styles.viewResponseDetailsText}>{`${translate(
           'close_loop.view_response',
         )} >>`}</Text>
-      </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback> */}
     </View>
   );
 };
@@ -306,6 +314,8 @@ export default function TicketOverview(props) {
     owners: 'owners',
     segment: 'segment',
   };
+  const isFromClosedLoopScreen =
+    translate('dashboard.closed_loop') === props.route.params.prevScreen;
 
   const [showAssigneeModal, setAssigneeModal] = useState(false);
   const [showTicketDeleteModal, setTicketDeleteModal] = useState(false);
@@ -322,6 +332,7 @@ export default function TicketOverview(props) {
   const {emailAddress, firstName, lastName, userID, feedbackApiKey} =
     useSelector(state => state.global.userInfo);
   // const [selectedSegment, setSelectedSegment] = useState();
+
   const [statusIndex, setStatusIndex] = useState(
     getStatusIndexById(ticketDetails.status ?? -1),
   );
@@ -334,7 +345,6 @@ export default function TicketOverview(props) {
   // );
   console.log('TTTTT', ticketDetails ?? '');
   console.log({isLoading});
-
   const onPressDelete = () => {
     setTicketDeleteModal(true);
   };
@@ -637,7 +647,7 @@ export default function TicketOverview(props) {
         </View>
 
         <View style={styles.rowContainer}>
-          <Title value={translate('ticket_overview.select_status')} />
+          <Title value={translate('close_loop.status')} />
           <RenderDropDownButton
             text={statusName}
             handleOnPress={handleStatusSelection}
@@ -667,7 +677,7 @@ export default function TicketOverview(props) {
         </View>
 
         <View style={styles.rowContainer}>
-          <Title value={translate('ticket_overview.assigned_to')} />
+          <Title value={`${translate('ticket_overview.assigned_to')}:`} />
 
           <RenderDropDownButton
             text={ownerName}
@@ -786,7 +796,10 @@ export default function TicketOverview(props) {
           />
           {/* {ticketStatusPriorityView()} */}
           <TicketStatusPriorityView ticket={ticketDetails} />
-          <DescriptionView ticket={ticketDetails} />
+          <DescriptionView
+            ticket={ticketDetails}
+            showResponseButton={isFromClosedLoopScreen}
+          />
 
           <ContactView panelMember={ticketDetails?.panelMember} />
           <DeleteView onPressDelete={onPressDelete} />

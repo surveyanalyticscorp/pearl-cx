@@ -49,6 +49,12 @@ export const textStyles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.largeText,
   },
+  secondaryText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    marginHorizontal: MarginConstants.halfTab,
+    color: Colors.filterIconColor,
+  },
   optionText: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.primary,
