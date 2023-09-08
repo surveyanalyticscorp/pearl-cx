@@ -107,7 +107,8 @@ export default function FeedbackDetails(props) {
   console.log('RESPONSE_DATA', JSON.stringify(props.route.params.data));
   useEffect(() => {
     props.navigation.setOptions({
-      title: `Response #${data.responseSetID}`,
+      // title: `Response #${data.responseSetID}`,
+      title: 'Response details',
     });
   }, [props.navigation, data.responseSetID]);
   // dispatch(
