@@ -366,6 +366,9 @@ const styles = StyleSheet.create({
     margin: MarginConstants.tab1,
     padding: PaddingConstants.halfTab,
     backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: Colors.evenDarkerGrey,
   },
   upperContainer: {
     flexDirection: 'column',
