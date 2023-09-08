@@ -8,7 +8,7 @@ import {
   ScrollView,
   Pressable,
 } from 'react-native';
-import {Colors} from '../../../styles/color.constants';
+import {Colors, buttonColors} from '../../../styles/color.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 // import {FontFamily} from '../../../styles/font.constants';
@@ -18,6 +18,7 @@ import {useSelector} from 'react-redux';
 import {FontFamily} from '../../../styles/font.constants';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {ShowResponseTicketList} from '../FeedbackDetails';
+import {textStyles} from '../../../styles/text.styles';
 
 const ResponseProfile = props => {
   const {panelMember, surveyDetails} = useSelector(state => state.response);
@@ -76,7 +77,9 @@ const ResponseProfile = props => {
         }}
         style={styles.contactBox}>
         <IonIcon name="call" size={12} color={Colors.filterIconColor} />
-        <Text style={styles.contactText}>{panelMember.phone ?? 'N/A'}</Text>
+        <Text style={textStyles.secondaryTextAccentColor}>
+          {panelMember.phone ?? 'N/A'}
+        </Text>
       </Pressable>
     );
   };
@@ -89,7 +92,7 @@ const ResponseProfile = props => {
         }}
         style={styles.contactBox}>
         <IonIcon name="mail" size={14} color={Colors.filterIconColor} />
-        <Text style={styles.contactText}>
+        <Text style={textStyles.secondaryTextAccentColor}>
           {panelMember.emailAddress ?? 'N/A'}
         </Text>
       </Pressable>
@@ -99,8 +102,12 @@ const ResponseProfile = props => {
   const RenderNameDetails = () => {
     return (
       <View style={{marginVertical: MarginConstants.tab1}}>
-        <Text style={styles.secondaryTitle}>{translate('profile.name')}</Text>
-        <Text style={styles.secondaryText}>{panelMember.name ?? 'N/A'}</Text>
+        <Text style={textStyles.secondaryTextBold}>
+          {translate('profile.name')}
+        </Text>
+        <Text style={textStyles.secondaryText}>
+          {panelMember.name ?? 'N/A'}
+        </Text>
       </View>
     );
   };
@@ -108,7 +115,7 @@ const ResponseProfile = props => {
   const RenderContactDetails = () => {
     return (
       <View style={{marginVertical: MarginConstants.tab2}}>
-        <Text style={styles.secondaryTitle}>
+        <Text style={textStyles.secondaryTextBold}>
           {translate('profile.contact_information')}
         </Text>
         <RenderPhoneNumber />
@@ -119,8 +126,10 @@ const ResponseProfile = props => {
   const RenderDateDetails = () => {
     return (
       <View style={{marginVertical: MarginConstants.tab1}}>
-        <Text style={styles.secondaryTitle}>{translate('profile.date')}</Text>
-        <Text style={styles.secondaryText}>
+        <Text style={textStyles.secondaryTextBold}>
+          {translate('profile.date')}
+        </Text>
+        <Text style={textStyles.secondaryText}>
           {data.surveyTakenDate ?? 'N/A'}
         </Text>
       </View>
@@ -187,8 +196,6 @@ const styles = StyleSheet.create({
   },
   counterTitle: {
     fontSize: TextSizes.secondary,
-    fontWeight: 'bold',
-
     textAlign: 'center',
     flex: 1,
     padding: PaddingConstants.halfTab,
@@ -203,7 +210,6 @@ const styles = StyleSheet.create({
   },
   counterText: {
     fontSize: TextSizes.secondary,
-    fontWeight: '900',
     color: Colors.white,
     backgroundColor: Colors.accent,
     textAlign: 'center',
@@ -227,8 +233,9 @@ const styles = StyleSheet.create({
   contactBox: {
     flexDirection: 'row',
     marginVertical: MarginConstants.halfTab,
-
-    alignItems: 'baseline',
+    paddingHorizontal: PaddingConstants.halfTab,
+    alignItems: 'center',
+    alignContent: 'center',
   },
 
   contactText: {
