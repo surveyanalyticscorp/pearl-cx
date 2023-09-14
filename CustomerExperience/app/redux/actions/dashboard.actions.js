@@ -71,6 +71,11 @@ export const CLEAR_SEGEMENT_LIST = 'CLEAR_SEGEMENT_LIST';
 
 export const APP_LOGIN_COUNTER = 'APP_LOGIN_COUNTER';
 export const GET_CLF_BASE_URL = 'GET_CLF_BASE_URL';
+
+export const GET_PARENT_COMMENT = 'GET_PARENT_COMMENT';
+export const SET_PARENT_COMMENT = 'SET_PARENT_COMMENT';
+export const RESET_PARENT_COMMENT = 'RESET_PARENT_COMMENT';
+
 export const getDashboardContent = (token, param, segmentId) => ({
   type: GET_DASHBOARD,
   token,
@@ -165,6 +170,15 @@ export const postAddTicketComment = (token, param, ticketId) => ({
   token,
   param,
   ticketId,
+});
+
+export const setParentComment = comment => ({
+  type: SET_PARENT_COMMENT,
+  parentComment: comment,
+});
+
+export const resetParentComment = () => ({
+  type: RESET_PARENT_COMMENT,
 });
 
 export const createClfTicket = (token, param, feedbackApiKey) => ({

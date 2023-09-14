@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Platform,
   ScrollView,
@@ -258,7 +258,7 @@ export default function CreateTicket(props) {
 
   const setSegmentSelection = segment_ => {
     setSegment(segment_.segmentName);
-    // setSegmentIndex(index);
+    setSegmentIndex(0);
     setSegmentId(prev => segment_.segmentID);
 
     setTicketState(state => ({
@@ -656,12 +656,20 @@ export default function CreateTicket(props) {
     );
   };
 
-  let getTicketOwnerTextStyle = ticketOwnerIndex_ => {
-    return ticketOwnerIndex_ < 0 ? styles.palceholderText : styles.titleText;
-  };
-  let getSegmentTextStyle = segment_ => {
-    return segmentIndex < 0 ? styles.palceholderText : styles.titleText;
-  };
+  let getTicketOwnerTextStyle = useCallback(
+    ticketOwnerIndex_ => {
+      return ticketOwnerIndex_ < 0 ? styles.palceholderText : styles.titleText;
+    },
+    [ticketOwner],
+  );
+
+  const getSegmentTextStyle = useCallback(
+    segment_ => {
+      return segment_ < 0 ? styles.palceholderText : styles.titleText;
+    },
+    [segmentId],
+  );
+
   return (
     <View style={styles.rootContainer}>
       <Animated.View
@@ -684,7 +692,14 @@ export default function CreateTicket(props) {
               {/* {getIonIcon('star')} */}
               {getSegmentIcon()}
               {/* <TextInput placeholder="Segment" style={styles.titleText} /> */}
-              <Text style={getSegmentTextStyle(segmentIndex)}>{segment}</Text>
+              <Text
+                style={
+                  segment === translate('select_segment.select_segment')
+                    ? styles.palceholderText
+                    : styles.titleText
+                }>
+                {segment}
+              </Text>
             </View>
           </Pressable>
           <Pressable onPress={handleDateSelection}>
@@ -795,9 +810,13 @@ export default function CreateTicket(props) {
             <View style={[styles.rowContainer, styles.rowItem]}>
               {getMateriaCommunityIcon('shield-account')}
               {/* <TextInput placeholder="Ticket Owner" style={styles.titleText} /> */}
-              <Text style={getTicketOwnerTextStyle(ticketOwnerIndex)}>{`${
-                ticketOwner ?? ''
-              }`}</Text>
+              <Text
+                style={
+                  ticketOwner ===
+                  translate('ticket_overview.select_ticket_owner')
+                    ? styles.palceholderText
+                    : styles.titleText
+                }>{`${ticketOwner ?? ''}`}</Text>
             </View>
           </Pressable>
           <View style={[styles.rowContainer, styles.rowItem]}>
@@ -824,7 +843,9 @@ export default function CreateTicket(props) {
                 <QPSpinner spinnerColor={Colors.white} />
               </View>
             ) : (
-              <RenderCreateTicketButton />
+              <RenderCreateTicketButton
+                handleCreateTicket={handleCreateTicket}
+              />
             )}
           </View>
         </ScrollView>

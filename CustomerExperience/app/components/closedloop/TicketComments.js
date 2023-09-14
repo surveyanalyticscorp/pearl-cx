@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
   Pressable,
@@ -24,12 +24,15 @@ import {Avatar} from '../../routes/CommonScreen';
 import {
   getClosedLoopTicketItemComments,
   postAddTicketComment,
+  resetParentComment,
+  setParentComment,
 } from '../../redux/actions/dashboard.actions';
 import moment from 'moment';
 import StringUtils from '../../Utils/StringUtils';
 import {getDateTimeAgo} from '../../Utils/TimeUtils';
 import RenderHTML from 'react-native-render-html';
 import {translate} from '../../Utils/MultilinguaUtils';
+import {backgroundColor} from '../../widgets/qp-calendar/style';
 
 const MaterialIconView = ({iconName, color}) => (
   <View style={{margin: MarginConstants.halfTab}}>
@@ -62,7 +65,7 @@ const CommentText = ({text}) => {
   );
 };
 
-const CommentItem = ({item}) => {
+const CommentItem = ({item, isSelected = false}) => {
   return (
     <Pressable
       style={[
@@ -72,7 +75,10 @@ const CommentItem = ({item}) => {
       <View style={styles.commentUserView}>
         <Avatar title={item.commentBy} />
       </View>
-      <View style={styles.commentTextView}>
+      <View
+        style={
+          isSelected ? styles.commentSelectedTextView : styles.commentTextView
+        }>
         <Text style={[styles.commentByText]}>{item.commentBy.trim()}</Text>
         <CommentText text={item.text.trim()} />
         {/* <Text style={styles.commentText}>{item.text.trim()}</Text> */}
@@ -84,30 +90,109 @@ const CommentItem = ({item}) => {
   );
 };
 
-const ShowNestedFlatList = ({data}) => {
+const ShowNestedFlatList = ({data, isSelected}) => {
   const MemoizedCommentItem = React.memo(CommentItem);
 
   return (
     <FlatList
-      style={[styles.container, {marginStart: MarginConstants.tab2}]}
+      style={[
+        styles.container,
+        {
+          marginStart: MarginConstants.tab2,
+        },
+      ]}
       data={data}
       initialNumToRender={4}
       inverted={false}
-      renderItem={({item}) => <MemoizedCommentItem item={item} />}
+      renderItem={({item}) => (
+        <MemoizedCommentItem item={item} isSelected={isSelected} />
+      )}
       extraData={data}
       keyExtractor={item => item.id.toString()}
     />
   );
 };
 
-export default function TicketComments(props) {
+const CommentParentItem = ({item}) => {
+  // const [isCommentBoxVisible, setCommentBoxVisibility] = useState(false);
+  const {parentComment} = useSelector(state => state.dashboard);
+  const isSelected = parentComment.id === item.id;
+  const dispatch = useDispatch();
+  const toggleCommentBoxVisibility = () => {
+    // setCommentBoxVisibility(isHidden => !isHidden);
+    dispatch(
+      setParentComment(
+        parentComment.isFocused
+          ? {id: 0, isFocused: false}
+          : {...item, isFocused: true},
+      ),
+    );
+  };
+
+  // useEffect(() => {
+  //   dispatch(
+  //     setParentComment(
+  //       isCommentBoxVisible
+  //         ? {...item, isFocused: true}
+  //         : {id: 0, isFocused: false},
+  //     ),
+  //   );
+  // }, [isCommentBoxVisible]);
+  return (
+    <ScrollView
+      style={{
+        margin: MarginConstants.tab1,
+        padding: PaddingConstants.halfTab,
+        borderWidth: 1,
+        borderColor: isSelected ? Colors.darkGrey : Colors.transparent,
+      }}>
+      <CommentItem item={item} isSelected={isSelected} />
+      {item.children.length > 0 && (
+        <View
+          style={{
+            marginStart: MarginConstants.tab2,
+            marginTop: MarginConstants.halfTab,
+          }}>
+          <ShowNestedFlatList data={item.children} isSelected={isSelected} />
+        </View>
+      )}
+
+      <Pressable
+        style={{
+          marginStart: MarginConstants.tab4,
+          marginVertical: MarginConstants.halfTab,
+        }}
+        onPress={toggleCommentBoxVisibility}>
+        <Text style={[styles.replyText, {color: Colors.accentLight}]}>
+          {isSelected ? translate('cancel') : translate('comment.reply')}
+        </Text>
+      </Pressable>
+      {/* {isCommentBoxVisible && <CommentBox parentId={item.id} />} */}
+    </ScrollView>
+  );
+};
+
+const CommentBox = () => {
   const {authToken} = useSelector(state => state.global);
-  const ticketComments = useSelector(state => state.dashboard.ticketComments);
+  const ticketId = useSelector(state => state.dashboard.ticket.id);
+  const dispatch = useDispatch();
+  const textInputRef = useRef();
+  const {parentComment} = useSelector(state => state.dashboard);
   const {emailAddress, firstName, lastName, userID} = useSelector(
     state => state.global.userInfo,
   );
-  const ticketId = useSelector(state => state.dashboard.ticket.id);
-  const dispatch = useDispatch();
+  const [commentText, setCommentText] = useState('');
+  const placeHolder =
+    parentComment.id > 0
+      ? translate('comment.write_a_reply')
+      : translate('comment.write_a_comment');
+  // const marginForCommentBox = parentId > 0 ? MarginConstants.tab4 : 0;
+
+  useEffect(() => {
+    if (parentComment.isFocused) {
+      textInputRef.current.focus();
+    }
+  }, [parentComment]);
 
   const commentState = {
     commentBy: `${firstName} ${lastName}`.trim(),
@@ -115,9 +200,86 @@ export default function TicketComments(props) {
     userEmailAddress: `${emailAddress}`,
     userId: userID,
     ticketId: ticketId,
-    parentId: 0,
+    parentId: parentComment.id,
     subscriberId: global.subscriberId,
   };
+
+  const onChangeCommentHandler = text => {
+    setCommentText(text);
+  };
+
+  const handleOnSubmit = () => {
+    if (StringUtils.isEmptyOrNull(commentText) || commentText.length === 0) {
+      return;
+    }
+    console.log(
+      JSON.stringify({COMMENT_STATE: commentState, text: commentText}),
+    );
+
+    dispatch(
+      postAddTicketComment(
+        authToken,
+        {...commentState, text: commentText, parentId: parentComment.id},
+        ticketId,
+      ),
+    );
+    dispatch(resetParentComment());
+    setCommentText('');
+  };
+
+  return (
+    <View style={styles.commentBoxContainer}>
+      <View style={[styles.commentBox, styles.borderStyle]}>
+        <MaterialIconView iconName="chat-bubble" />
+        {console.log('KEYBOARD')}
+        <TextInput
+          ref={textInputRef}
+          defaultValue={commentText}
+          multiline
+          maxLength={240}
+          placeholderTextColor={Colors.borderColor}
+          style={[styles.container, styles.commentText]}
+          onChangeText={onChangeCommentHandler}
+          placeholder={placeHolder}
+          // onEndEditing={onChangeCommentHandler}
+          returnKeyType={'send'}
+          onSubmitEditing={event => {
+            console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
+            onChangeCommentHandler(event.nativeEvent.text);
+            handleOnSubmit();
+          }}
+        />
+        <SendButton handleOnSubmit={handleOnSubmit} />
+      </View>
+    </View>
+  );
+};
+
+const ShowFlatList = ({data, onRefresh_, refreshing_}) => {
+  const ticketComments = useSelector(state => state.dashboard.ticketComments);
+
+  const MemoizedCommentParentItem = React.memo(CommentParentItem);
+
+  return (
+    <FlatList
+      data={ticketComments}
+      refreshControl={
+        <RefreshControl onRefresh={onRefresh_} refreshing={refreshing_} />
+      }
+      keyExtractor={item => item.id.toString()}
+      renderItem={({item}) => <MemoizedCommentParentItem item={item} />}
+      extraData={data}
+      // ListFooterComponent={<View style={{margin: MarginConstants.tab4}} />}
+      // ListFooterComponent={<CommentBox />}
+    />
+  );
+};
+export default function TicketComments(props) {
+  const {authToken} = useSelector(state => state.global);
+
+  const ticketId = useSelector(state => state.dashboard.ticket.id);
+  const dispatch = useDispatch();
+
   const [refreshing, setRefreshing] = useState(false);
 
   const makeAPICall = () => {
@@ -135,140 +297,17 @@ export default function TicketComments(props) {
     wait(500).then(() => setRefreshing(false));
   }, []);
 
-  const ShowFlatList = ({data}) => {
-    const MemoizedCommentParentItem = React.memo(CommentParentItem);
-
-    return (
-      <FlatList
-        data={data}
-        refreshControl={
-          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-        }
-        keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => <MemoizedCommentParentItem item={item} />}
-        extraData={data}
-        // ListFooterComponent={<View style={{margin: MarginConstants.tab4}} />}
-        // ListFooterComponent={<CommentBox parentId={0} />}
-      />
-    );
-  };
-
-  const CommentParentItem = ({item}) => {
-    const [isCommentBoxVisible, setCommentBoxVisibility] = useState(false);
-    const toggleCommentBoxVisibility = () => {
-      setCommentBoxVisibility(isHidden => !isHidden);
-    };
-    return (
-      <ScrollView
-        style={{
-          margin: MarginConstants.tab1,
-          padding: PaddingConstants.halfTab,
-        }}>
-        <CommentItem item={item} />
-        {item.children.length > 0 && (
-          <View
-            style={{
-              marginStart: MarginConstants.tab2,
-              marginTop: MarginConstants.halfTab,
-            }}>
-            <ShowNestedFlatList data={item.children} />
-          </View>
-        )}
-
-        <Pressable
-          style={{
-            marginStart: MarginConstants.tab4,
-            marginVertical: MarginConstants.halfTab,
-          }}
-          onPress={toggleCommentBoxVisibility}>
-          <Text style={[styles.replyText, {color: Colors.accentLight}]}>
-            {isCommentBoxVisible
-              ? translate('cancel')
-              : translate('comment.reply')}
-          </Text>
-        </Pressable>
-        {isCommentBoxVisible && <CommentBox parentId={item.id} />}
-      </ScrollView>
-    );
-  };
-
-  const CommentBox = ({parentId}) => {
-    const [commentText, setCommentText] = useState('');
-    const placeHolder =
-      parentId > 0
-        ? translate('comment.write_a_reply')
-        : translate('comment.write_a_comment');
-    const marginForCommentBox = parentId > 0 ? MarginConstants.tab4 : 0;
-
-    const onChangeCommentHandler = text => {
-      setCommentText(text);
-    };
-
-    const handleOnSubmit = () => {
-      if (StringUtils.isEmptyOrNull(commentText) || commentText.length === 0) {
-        return;
-      }
-      console.log(
-        JSON.stringify({COMMENT_STATE: commentState, text: commentText}),
-      );
-
-      dispatch(
-        postAddTicketComment(
-          authToken,
-          {...commentState, text: commentText, parentId: parentId},
-          ticketId,
-        ),
-      );
-
-      setCommentText('');
-    };
-
-    return (
-      <View
-        style={[
-          styles.commentBoxContainer,
-          {
-            marginStart: marginForCommentBox,
-          },
-        ]}>
-        <View style={[styles.commentBox, styles.borderStyle]}>
-          <MaterialIconView iconName="chat-bubble" />
-          {console.log('KEYBOARD')}
-          <TextInput
-            defaultValue={commentText}
-            multiline
-            maxLength={240}
-            placeholderTextColor={Colors.borderColor}
-            style={[styles.container, styles.commentText]}
-            onChangeText={onChangeCommentHandler}
-            placeholder={placeHolder}
-            // onEndEditing={onChangeCommentHandler}
-            returnKeyType={'send'}
-            onSubmitEditing={event => {
-              console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
-              onChangeCommentHandler(event.nativeEvent.text);
-              handleOnSubmit();
-            }}
-          />
-          <SendButton handleOnSubmit={handleOnSubmit} />
-        </View>
-      </View>
-    );
-  };
-
   return (
     <View style={styles.container}>
+      <ShowFlatList onRefresh_={onRefresh} refreshing_={refreshing} />
+
       <KeyboardAvoidingView
         enabled
         behavior={Platform.OS === 'ios' ? 'position' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 50 : 70}>
-        <ShowFlatList
-          data={ticketComments}
-          onRefresh_={onRefresh}
-          refreshing_={refreshing}
-        />
-
-        <CommentBox parentId={0} />
+        keyboardVerticalOffset={
+          Platform.OS === 'ios' ? 50 : MarginConstants.tab4 * 40
+        }>
+        <CommentBox />
       </KeyboardAvoidingView>
     </View>
   );
@@ -326,6 +365,15 @@ const styles = StyleSheet.create({
     marginEnd: MarginConstants.halfTab,
 
     backgroundColor: Colors.darkerGrey,
+    padding: PaddingConstants.halfTab,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+  },
+  commentSelectedTextView: {
+    flex: 1,
+    marginEnd: MarginConstants.halfTab,
+
+    backgroundColor: Colors.darkGrey,
     padding: PaddingConstants.halfTab,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,

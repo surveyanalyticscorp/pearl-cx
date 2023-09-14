@@ -37,6 +37,10 @@ import {
   UPDATE_CLF_TICKET_RECIEVED,
   WELCOME_SCREEN_DATA_RECIEVED,
   CLEAR_SEGEMENT_LIST,
+  SET_COMMENT_PARENT_ID,
+  RESET_COMMENT_PARENT_ID,
+  SET_PARENT_COMMENT,
+  RESET_PARENT_COMMENT,
 } from '../actions/dashboard.actions';
 
 const initialState = {
@@ -66,6 +70,7 @@ const initialState = {
   mediaFileList: [],
   ticketDeleteStatus: {status: 'default'},
   ticketActionHistory: {summary: {}, details: {}},
+  parentComment: {id: 0, isFocused: false},
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -323,6 +328,18 @@ const dashboardReducer = (state = initialState, action) => {
           ...state.ticketActionHistory,
           details: action.response,
         },
+      };
+    }
+    case SET_PARENT_COMMENT: {
+      return {
+        ...state,
+        parentComment: action.parentComment,
+      };
+    }
+    case RESET_PARENT_COMMENT: {
+      return {
+        ...state,
+        parentComment: {id: 0, isFocused: false},
       };
     }
 
