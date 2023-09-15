@@ -27,6 +27,7 @@ import CommonScreens, {
   MenuIcon,
   SearchIcon,
 } from './CommonScreen';
+import {translate} from '../Utils/MultilinguaUtils';
 
 const DetractorStack = createStackNavigator();
 const DetractorTicketsTab = createMaterialTopTabNavigator();
@@ -60,6 +61,17 @@ const DashboardStack = ({navigation, route}) => {
         {notificationCount > 0 ? renderNotificationBadge() : <View />}
       </View>
     );
+  };
+  const configAnimation = {
+    animation: 'spring',
+    config: {
+      stiffness: 1000,
+      damping: 500,
+      mass: 3,
+      overshootClamping: true,
+      restDisplacementThreshold: 0.01,
+      restSpeedThreshold: 0.01,
+    },
   };
 
   let renderNotificationBadge = () => {
@@ -183,9 +195,13 @@ const DashboardStack = ({navigation, route}) => {
         })}
       />
       <DetractorStack.Screen
-        name="New Ticket"
+        name={translate('responses.new_ticket')}
         component={CreateTicket}
         options={({navigation, route}) => ({
+          transitionSpec: {
+            open: configAnimation,
+            close: configAnimation,
+          },
           headerLeft: props => <View />,
           headerRight: props => <CloseButton />,
         })}

@@ -298,12 +298,12 @@ const CxDashboard = props => {
     return <Image source={icon} style={{width: 12, height: 12}} />;
   };
   const navigateToResponses = () => {
-    props.navigation.navigate('Responses');
+    props.navigation.navigate('dashboard_to_responses');
   };
   let renderDetailsInformation = () => {
     return (
       <QPButton
-        testID="DeleteButtonAction"
+        testID="dashboardToResponseButton"
         style={buttonStyles.textButton}
         onPress={navigateToResponses}
         buttonText={translate('dashboard.view_responses')}
@@ -511,7 +511,7 @@ const CxDashboard = props => {
   };
 
   let onFabPressHandler = () => {
-    props.navigation.navigate('New Ticket');
+    props.navigation.navigate(translate('responses.new_ticket'));
   };
 
   return renderDashboard();

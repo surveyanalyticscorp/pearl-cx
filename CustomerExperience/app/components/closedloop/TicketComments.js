@@ -9,7 +9,6 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   RefreshControl,
-  SafeAreaView,
   Platform,
   useWindowDimensions,
 } from 'react-native';
@@ -32,7 +31,6 @@ import StringUtils from '../../Utils/StringUtils';
 import {getDateTimeAgo} from '../../Utils/TimeUtils';
 import RenderHTML from 'react-native-render-html';
 import {translate} from '../../Utils/MultilinguaUtils';
-import {backgroundColor} from '../../widgets/qp-calendar/style';
 
 const MaterialIconView = ({iconName, color}) => (
   <View style={{margin: MarginConstants.halfTab}}>

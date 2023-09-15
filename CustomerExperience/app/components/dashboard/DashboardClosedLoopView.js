@@ -82,10 +82,8 @@ const TicketTabStack = props => (
 const RenderScene = props => {
   const [showPercentageCount, setShowPercentageCount] = useState(false);
   const dispatch = useDispatch();
-
-  console.log(
-    `Ticket Count: ${JSON.stringify(props.route.params.ticketCount)}`,
-  );
+  const screenName = props.route.name ?? '';
+  // console.log(`Ticket Count: ${JSON.stringify(props.route.name)}`);
 
   let renderDonutChart = () => {
     let count = getCount(props.route.params.ticketCount);
@@ -196,7 +194,8 @@ const RenderScene = props => {
       dispatch(
         setStatusFilterById(JSON.stringify(props.route.params.index - 1)),
       );
-      props.navigation.navigate('ClosedLoop');
+      // props.navigation.navigate('ClosedLoop');
+      props.navigation.navigate('dashboard_to_closed_loop');
     };
     return (
       <View style={styles.viewTicketsContainer}>
@@ -226,10 +225,10 @@ const RenderScene = props => {
           </Text>
         </TouchableWithoutFeedback> */}
         <QPButton
-          testID="DeleteButtonAction"
+          testID="ViewTicketsButton"
           style={buttonStyles.textButton}
           onPress={navigateToCLosedLoop}
-          buttonText={translate('dashboard.view_tickets')}
+          buttonText={`${translate('dashboard.view_tickets')} : ${screenName}`}
           textStyle={buttonStyles.textButtonText}
         />
       </View>

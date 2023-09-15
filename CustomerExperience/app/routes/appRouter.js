@@ -73,6 +73,8 @@ import {setI18nConfig, translate} from '../Utils/MultilinguaUtils';
 // } from '../redux/actions/dashboard.actions';
 import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
 import SegmentSelector from '../components/SegmentSelector';
+import Feedback from '../components/feedback/Feedback';
+import ClosedLoop from '../components/closedloop/ClosedLoop';
 // import SearchStack from './SearchStack';
 // import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
@@ -368,13 +370,51 @@ const AppRouter = props => {
           headerLeft: props => <HeaderBackLeft {...props} route={route} />,
         })}
       />
-      <DetractorStack.Screen
+      {/* <DetractorStack.Screen
         name={translate('responses.new_ticket')}
         component={CreateTicket}
         options={({navigation, route}) => ({
           // headerLeft: (props) => <View />,
           // headerRight: (props) => <CloseButton />,
-          headerShown: false,
+          headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+
+          headerShown: true,
+        })}
+      /> */}
+      <DetractorStack.Screen
+        name={'dashboard_to_responses'}
+        component={Feedback}
+        options={({navigation, route}) => ({
+          // title: 'Responses',
+          // headerLeft: (props) => <View />,
+          // headerRight: (props) => <CloseButton />,
+          headerTitle: props => {
+            return (
+              <SegmentSelector
+                screenName={'Responses'}
+                navigation={navigation}
+              />
+            );
+          },
+          headerShown: true,
+        })}
+      />
+      <DetractorStack.Screen
+        name={'dashboard_to_closed_loop'}
+        component={ClosedLoop}
+        options={({navigation, route}) => ({
+          // title: 'Responses',
+          // headerLeft: (props) => <View />,
+          // headerRight: (props) => <CloseButton />,
+          headerTitle: props => {
+            return (
+              <SegmentSelector
+                screenName={'Closed loop'}
+                navigation={navigation}
+              />
+            );
+          },
+          headerShown: true,
         })}
       />
       {CommonScreens(DetractorStack)}

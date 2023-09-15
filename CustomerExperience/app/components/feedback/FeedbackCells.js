@@ -221,7 +221,7 @@ export default function FeedbackCell(props) {
           // props.navigation.navigate(translate('responses.new_ticket'), {
           //   parentRoute: translate('responses.responses'),
           // });
-          props.navigation.navigate('New Ticket', {
+          props.navigation.navigate(translate('responses.new_ticket'), {
             responseId: props.item.responseSetID,
             customerName: name,
             customerEmail: email,

@@ -415,7 +415,7 @@ export default function ClosedLoop(props) {
   };
 
   const onFabHandler = () => {
-    props.navigation.navigate('New Ticket');
+    props.navigation.navigate(translate('responses.new_ticket'));
   };
 
   const renderFilterContent = () => {
