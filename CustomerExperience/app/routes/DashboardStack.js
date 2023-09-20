@@ -194,7 +194,7 @@ const DashboardStack = ({navigation, route}) => {
           headerRight: props => <ClearAllButton {...props} route={route} />,
         })}
       />
-      <DetractorStack.Screen
+      {/* <DetractorStack.Screen
         name={translate('responses.new_ticket')}
         component={CreateTicket}
         options={({navigation, route}) => ({
@@ -205,7 +205,7 @@ const DashboardStack = ({navigation, route}) => {
           headerLeft: props => <View />,
           headerRight: props => <CloseButton />,
         })}
-      />
+      /> */}
       <DetractorStack.Screen
         name="Filter By"
         component={TicketFilter}

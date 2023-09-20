@@ -30,6 +30,7 @@ import {TextSizes} from '../styles/textsize.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import DashboardDateFilter from '../components/dashboard/components/DashboardDateFilter';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {TransitionPresets} from '@react-navigation/stack';
 import TicketOverview from '../components/dashboard/ticketManagement/TicketOverview';
 import TicketComments from '../components/dashboard/ticketManagement/TicketComments';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
@@ -53,6 +54,7 @@ import {
   getStatusById,
 } from '../Utils/TicketUtils';
 import {textStyles} from '../styles/text.styles';
+import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
 
 // import CheckBox from '@react-native-community/checkbox';
 
@@ -794,6 +796,23 @@ const CommonScreens = RootStack => {
       options={({navigation, route}) => ({
         headerShown: false,
         // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+      })}
+    />,
+    <RootStack.Screen
+      key={translate('responses.new_ticket')}
+      name={translate('responses.new_ticket')}
+      component={CreateTicket}
+      options={({navigation, route}) => ({
+        // headerLeft: (props) => <View />,
+        // headerRight: (props) => <CloseButton />,
+        headerShown: false,
+        // gestureDirection: 'vertical',
+        gestureEnabled: true,
+        ...TransitionPresets.ModalPresentationIOS,
+        // transitionSpec: {
+        //   open: TransitionSpecs.FadeInFromBottomAndroidSpec,
+        //   close: TransitionSpecs.TransitionIOSSpec,
+        // },
       })}
     />,
   ];

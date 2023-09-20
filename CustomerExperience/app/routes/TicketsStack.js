@@ -16,7 +16,7 @@ import {translate} from '../Utils/MultilinguaUtils';
 
 const FeedbackStack = createStackNavigator();
 
-const feedbackStack = (props) => (
+const feedbackStack = props => (
   <FeedbackStack.Navigator>
     <FeedbackStack.Screen
       // name={translate('responses.responses')}
@@ -24,8 +24,8 @@ const feedbackStack = (props) => (
       name={translate('dashboard.tickets')}
       component={Feedback}
       options={({navigation, route}) => ({
-        headerLeft: (props) => <MenuIcon />,
-        headerRight: (props) => <SearchIcon route={'Feedback'} />,
+        headerLeft: props => <MenuIcon />,
+        headerRight: props => <SearchIcon route={'Feedback'} />,
       })}
     />
     <FeedbackStack.Screen
@@ -33,7 +33,7 @@ const feedbackStack = (props) => (
       component={SearchFeedback}
       options={({navigation, route}) => ({
         headerShown: false,
-        headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}
     />
     {CommonScreens(FeedbackStack)}
@@ -53,11 +53,11 @@ const TicketsStack = ({navigation}) => {
         name={translate('responses.sort_by')}
         component={FeedbackSorter}
         options={({navigation, route}) => ({
-          headerLeft: (props) => <View />,
-          headerRight: (props) => <CloseButton />,
+          headerLeft: props => <View />,
+          headerRight: props => <CloseButton />,
         })}
       />
-      <FeedbackStack.Screen
+      {/* <FeedbackStack.Screen
         name={translate('responses.new_ticket')}
         component={CreateTicket}
         options={({navigation, route}) => ({
@@ -65,7 +65,7 @@ const TicketsStack = ({navigation}) => {
           // headerRight: (props) => <CloseButton />,
           headerShown: false,
         })}
-      />
+      /> */}
     </FeedbackStack.Navigator>
   );
 };

@@ -18,14 +18,14 @@ import TicketDetails from '../components/closedloop/TicketDetails';
 
 const FeedbackStack = createStackNavigator();
 
-const feedbackStack = (props) => (
+const feedbackStack = props => (
   <FeedbackStack.Navigator>
     <FeedbackStack.Screen
       name={translate('responses.responses')}
       component={Feedback}
       options={({navigation, route}) => ({
-        headerLeft: (props) => <MenuIcon />,
-        headerTitle: (props) => (
+        headerLeft: props => <MenuIcon />,
+        headerTitle: props => (
           <SegmentSelector screenName={translate('responses.responses')} />
         ),
         // headerRight: (props) => <SearchIcon route={'Feedback'} />,
@@ -37,11 +37,11 @@ const feedbackStack = (props) => (
       component={SearchFeedback}
       options={({navigation, route}) => ({
         headerShown: false,
-        headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}
     />
 
-    <FeedbackStack.Screen
+    {/* <FeedbackStack.Screen
       name={translate('responses.new_ticket')}
       component={CreateTicket}
       options={({navigation, route}) => ({
@@ -49,7 +49,7 @@ const feedbackStack = (props) => (
         // headerRight: (props) => <CloseButton />,
         headerShown: false,
       })}
-    />
+    /> */}
 
     <FeedbackStack.Screen
       name={'TicketDetails'}
@@ -57,8 +57,8 @@ const feedbackStack = (props) => (
       options={({navigation, route}) => ({
         // headerShown: false,
         title: 'Ticket Details',
-        headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
-        headerRight: (props) => <View />,
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+        headerRight: props => <View />,
         // headerRight: (props) => <EditTicket {...props} route={route} />,
         // headerLeft: (props) => <MenuIcon />,
       })}
@@ -78,18 +78,18 @@ const ResponsesStack = ({navigation}) => (
       name={translate('responses.sort_by')}
       component={FeedbackSorter}
       options={({navigation, route}) => ({
-        headerLeft: (props) => <View />,
-        headerRight: (props) => <CloseButton />,
+        headerLeft: props => <View />,
+        headerRight: props => <CloseButton />,
       })}
     />
-    <FeedbackStack.Screen
+    {/* <FeedbackStack.Screen
       name={translate('responses.new_ticket')}
       component={CreateTicket}
       headerShown={false}
       options={({navigation, route}) => ({
         headerShown: false,
       })}
-    />
+    /> */}
   </FeedbackStack.Navigator>
 );
 

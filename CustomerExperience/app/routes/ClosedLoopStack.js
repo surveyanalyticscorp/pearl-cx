@@ -57,7 +57,7 @@ const feedbackStack = props => (
 
 const ClosedLoopStack = ({navigation}) => {
   return (
-    <FeedbackStack.Navigator>
+    <FeedbackStack.Navigator mode="modal">
       <FeedbackStack.Screen
         name="Closed Loop"
         component={ClosedLoop}
@@ -99,8 +99,7 @@ const ClosedLoopStack = ({navigation}) => {
           headerRight: props => <CloseButton />,
         })}
       />
-      <FeedbackStack.Screen
-        mode="modal"
+      {/* <FeedbackStack.Screen
         name={translate('responses.new_ticket')}
         component={CreateTicket}
         options={({navigation, route}) => ({
@@ -108,7 +107,7 @@ const ClosedLoopStack = ({navigation}) => {
           // headerLeft: (props) => <View />,
           // headerRight: (props) => <CloseButton />,
         })}
-      />
+      /> */}
       <FeedbackStack.Screen
         name={'SelectEmailTemplate'}
         component={SelectEmailTemplate}

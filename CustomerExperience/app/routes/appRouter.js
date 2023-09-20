@@ -7,7 +7,11 @@ import {
   View,
 } from 'react-native';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  TransitionSpecs,
+  TransitionPresets,
+} from '@react-navigation/stack';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
@@ -75,6 +79,7 @@ import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
 import SegmentSelector from '../components/SegmentSelector';
 import Feedback from '../components/feedback/Feedback';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
+import {ModalStackScreen} from './ModalStack';
 // import SearchStack from './SearchStack';
 // import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
@@ -487,6 +492,7 @@ const AppRouter = props => {
   const RenderDrawer = () => {
     return (
       <Drawer.Navigator
+        mode={'modal'}
         drawerStyle={styles.drawerStyle}
         drawerContent={props => <DrawerContent {...props} />}>
         <Drawer.Screen name="Dashboard" component={dashboardModalStack} />
@@ -498,6 +504,22 @@ const AppRouter = props => {
           name={translate('settings.settings')}
           component={settingStack}
         />
+        {/* <Drawer.Screen
+          name={translate('responses.new_ticket')}
+          component={CreateTicket}
+          options={({navigation, route}) => ({
+            // headerLeft: (props) => <View />,
+            // headerRight: (props) => <CloseButton />,
+            headerShown: true,
+            // gestureDirection: 'vertical',
+            gestureEnabled: false,
+            // ...TransitionPresets.ModalPresentationIOS,
+            // transitionSpec: {
+            //   open: TransitionSpecs.FadeInFromBottomAndroidSpec,
+            //   close: TransitionSpecs.TransitionIOSSpec,
+            // },
+          })}
+        /> */}
       </Drawer.Navigator>
     );
   };

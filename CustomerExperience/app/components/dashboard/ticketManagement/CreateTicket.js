@@ -90,8 +90,8 @@ const RenderCreateTicketButton = ({handleCreateTicket}) => {
 
 export default function CreateTicket(props) {
   const responseId = props.route?.params?.responseId ?? null;
-  const customerName = props.route?.params?.customerName;
-  const customerEmail = props.route?.params?.customerEmail;
+  const customerName = props.route?.params?.customerName ?? '';
+  const customerEmail = props.route?.params?.customerEmail ?? '';
   const surveyId = props.route?.params?.surveyId ?? null;
 
   const segmentDetails = useSelector(state => state.dashboard.segmentDetails);
