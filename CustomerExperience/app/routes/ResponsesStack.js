@@ -1,7 +1,7 @@
 import FeedbackSorter from '../components/feedback/FeedbackSorter';
 import {View} from 'react-native';
 // import CreateTicket from '../components/dashboard/components/CreateTicket';
-import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
+// import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Feedback from '../components/feedback/Feedback';

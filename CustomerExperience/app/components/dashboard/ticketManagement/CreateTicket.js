@@ -64,8 +64,8 @@ import {
 } from '../../../Utils/Utility';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
-import StringUtils from '../../../Utils/StringUtils';
-import {debounce} from '../../../Utils/TimeOutUtil';
+// import StringUtils from '../../../Utils/StringUtils';
+// import {debounce} from '../../../Utils/TimeOutUtil';
 import {buttonStyles} from '../../../styles/button.styles';
 
 const RenderCreateTicketButton = ({handleCreateTicket}) => {
@@ -82,7 +82,154 @@ const RenderCreateTicketButton = ({handleCreateTicket}) => {
         onPress={handleCreateTicket}
         buttonText={translate('create_new_ticket.create_new_ticket')}
         textStyle={buttonStyles.primaryButtonText}
-        style={{...buttonStyles.primaryButton}}
+        style={buttonStyles.primaryButton}
+      />
+    </View>
+  );
+};
+
+const RenderMaterialIcon = ({iconName}) => (
+  <MaterialIcon name={iconName} size={14} color={Colors.lightBlack} />
+);
+
+const RenderIonIcon = ({iconName, iconColor}) => (
+  <IonIcons name={iconName} size={14} color={iconColor ?? Colors.lightBlack} />
+);
+
+const SegmentIcon = () => {
+  const segmentIcon = './../../../../assets/images/segment_icon.png';
+
+  return (
+    <Image
+      // source={require('./../../../assets/images/segment_icon.png')}
+      source={require(segmentIcon)}
+      style={styles.image}
+    />
+  );
+};
+
+const RenderMateriaCommunityIcon = ({iconName}) => (
+  <MaterialCommunityIcon name={iconName} size={14} color={Colors.lightBlack} />
+);
+const RenderTextInput = ({
+  multiline = false,
+  defaultValue = '',
+  placeholder,
+  keyboardType = 'default',
+  setValue,
+}) => {
+  return (
+    <TextInput
+      placeholderTextColor={Colors.borderColor}
+      multiline={multiline}
+      defaultValue={defaultValue ?? ''}
+      placeholder={placeholder}
+      keyboardType={keyboardType}
+      style={styles.titleText}
+      onEndEditing={value => {
+        console.log('TEXT_INPUT', value.nativeEvent.text);
+        setValue(value.nativeEvent.text);
+      }}
+    />
+  );
+};
+const RenderEmailAddressInput = ({defaultValue, setTicketState}) => {
+  const setEmailAddress = text => {
+    setTicketState(state => ({
+      ...state,
+      emailAddress: text,
+    }));
+  };
+  return (
+    <View style={[styles.rowContainer, styles.rowItem]}>
+      <RenderIonIcon iconName={'mail'} />
+      <RenderTextInput
+        defaultValue={defaultValue}
+        placeholder={'Email'}
+        keyboardType={'email-address'}
+        setValue={setEmailAddress}
+      />
+    </View>
+  );
+};
+const RenderDescriptionInput = ({defaultValue, setTicketState}) => {
+  const setDescription = text => {
+    setTicketState(state => ({
+      ...state,
+      comment: text,
+    }));
+  };
+  return (
+    <View style={[styles.rowContainer, styles.rowItem]}>
+      <RenderMaterialIcon iconName={'chat-bubble'} />
+      <RenderTextInput
+        defaultValue={defaultValue}
+        multiline={true}
+        placeholder={translate('ticket_overview.description')}
+        setValue={setDescription}
+      />
+    </View>
+  );
+};
+const RenderPhoneInput = ({defaultValue, setTicketState}) => {
+  const [text, setText] = useState('');
+  const phoneInput = React.useRef();
+  const setPhoneNumber = () => {
+    console.log('TEXT_INPUT', text);
+    setTicketState(state => ({
+      ...state,
+      mobileNumber: text,
+    }));
+  };
+  return (
+    <View style={[styles.rowContainer, styles.rowItem]}>
+      <RenderIonIcon iconName={'call'} />
+      <PhoneInput
+        placeholder={translate('create_new_ticket.phone_number')}
+        containerStyle={styles.phoneInputContainer}
+        codeTextStyle={styles.phoneInputCodeText}
+        textContainerStyle={styles.phoneInputTextContainer}
+        textInputStyle={styles.phoneInputTextInputStyle}
+        textInputProps={{
+          placeholderTextColor: Colors.borderColor,
+          onEndEditing: function (value) {
+            setPhoneNumber();
+          },
+        }}
+        ref={phoneInput}
+        // defaultValue={value}
+        defaultCode="US"
+        layout="first"
+        // onChangeText={text => {
+        // setValue(text);
+        // console.log('PHONE:', text);
+        // }}
+        onChangeFormattedText={text => {
+          // setFormattedValue(text);
+          setText(text);
+          console.log('FORMATTED PHONE:', text);
+          // setTicketState(state => ({...state, mobileNumber: text}));
+          // userInfo.mobileNumber = text;
+        }}
+      />
+    </View>
+  );
+};
+const RenderCustomerNameInput = ({defaultValue, setTicketState}) => {
+  const setCustomerName = text => {
+    setTicketState(state => ({
+      ...state,
+      firstName: text,
+    }));
+  };
+  return (
+    <View style={[styles.rowContainer, styles.rowItem]}>
+      <RenderIonIcon iconName={'person'} />
+      <RenderTextInput
+        defaultValue={defaultValue}
+        multiline={true}
+        placeholder={translate('create_new_ticket.customer_name')}
+        setValue={setCustomerName}
       />
     </View>
   );
@@ -128,14 +275,12 @@ export default function CreateTicket(props) {
   // const [bottomSheet, setBottomSheet] = useState('priority');
 
   // console.log('DETAILS_OF_PROPS', JSON.stringify(props.route.params));
-  const segmentIcon = './../../../../assets/images/segment_icon.png';
   // variables for bottom sheet
   const priorityBottomSheet = React.useRef();
   const statusBottomSheet = React.useRef();
   const segmentBottomSheet = React.useRef();
   const ownerBottomSheet = React.useRef();
   // const calendarBottomSheet = React.useRef();
-  const phoneInput = React.useRef();
 
   const fall = new Animated.Value(1);
   const priorityBottomSheetSnapPoints = ['45%', '0%'];
@@ -184,39 +329,6 @@ export default function CreateTicket(props) {
     getTicketOwnerList(segmentId);
   }, [segmentId]);
 
-  const getIonIcon = (iconName, iconColor) => (
-    <IonIcons
-      name={iconName}
-      size={14}
-      color={iconColor ?? Colors.lightBlack}
-    />
-  );
-
-  const getSegmentIcon = () => (
-    <Image
-      // source={require('./../../../assets/images/segment_icon.png')}
-      source={require(segmentIcon)}
-      style={styles.image}
-    />
-    // <IonIcons
-    //   name={iconName}
-    //   size={14}
-    //   color={iconColor ?? Colors.lightBlack}
-    // />
-  );
-
-  const getMaterialIcon = iconName => (
-    <MaterialIcon name={iconName} size={14} color={Colors.lightBlack} />
-  );
-
-  const getMateriaCommunityIcon = iconName => (
-    <MaterialCommunityIcon
-      name={iconName}
-      size={14}
-      color={Colors.lightBlack}
-    />
-  );
-
   const closeAllBottomSheet = () => {
     priorityBottomSheet.current.snapTo(
       priorityBottomSheetSnapPoints.length - 1,
@@ -225,11 +337,17 @@ export default function CreateTicket(props) {
   };
 
   const handleStatusSelection = () => {
+    priorityBottomSheet.current.snapTo(
+      priorityBottomSheetSnapPoints.length - 1,
+    );
     // open status selection bottom sheet
     statusBottomSheet.current.snapTo(0);
   };
 
   const handlePrioritySelection = () => {
+    // closeAllBottomSheet();
+    statusBottomSheet.current.snapTo(statusBottomSheetSnapPoints.length - 1);
+
     // open priority selection bottom sheet
     priorityBottomSheet.current.snapTo(0);
   };
@@ -246,6 +364,7 @@ export default function CreateTicket(props) {
   };
 
   const handleOwnerSelection = () => {
+    closeAllBottomSheet();
     // open owner selection bottom sheet
     ownerBottomSheet.current.snapTo(0);
   };
@@ -689,9 +808,8 @@ export default function CreateTicket(props) {
           </View>
           <Pressable onPress={handleSegmentSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
-              {/* {getIonIcon('star')} */}
-              {getSegmentIcon()}
-              {/* <TextInput placeholder="Segment" style={styles.titleText} /> */}
+              <SegmentIcon />
+
               <Text
                 style={
                   segment === translate('select_segment.select_segment')
@@ -704,7 +822,7 @@ export default function CreateTicket(props) {
           </Pressable>
           <Pressable onPress={handleDateSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
-              {getMaterialIcon('date-range')}
+              <RenderMaterialIcon iconName={'date-range'} />
               {/* <TextInput placeholder="Date" style={styles.titleText} /> */}
               <Text style={styles.titleText}>
                 {console.log('SELECTED_DATE', selectedDate)}
@@ -714,80 +832,29 @@ export default function CreateTicket(props) {
               </Text>
             </View>
           </Pressable>
-          <View style={[styles.rowContainer, styles.rowItem]}>
-            {getIonIcon('person')}
-            <TextInput
-              placeholder={translate('create_new_ticket.customer_name')}
-              placeholderTextColor={Colors.borderColor}
-              defaultValue={customerName}
-              keyboardType="default"
-              style={styles.titleText}
-              onChangeText={text => {
-                // console.log(text);
-                // userInfo.firstName = text;
-                setTicketState(state => ({...state, firstName: text}));
-              }}
-            />
-          </View>
-          <View style={[styles.rowContainer, styles.rowItem]}>
-            {getIonIcon('call')}
-            {/* <TextInput placeholder="Phone" style={styles.titleText} /> */}
-            <PhoneInput
-              placeholder={translate('create_new_ticket.phone_number')}
-              containerStyle={styles.phoneInputContainer}
-              codeTextStyle={styles.phoneInputCodeText}
-              textContainerStyle={styles.phoneInputTextContainer}
-              textInputStyle={styles.phoneInputTextInputStyle}
-              textInputProps={{
-                placeholderTextColor: Colors.borderColor,
-              }}
-              ref={phoneInput}
-              // defaultValue={value}
-              defaultCode="US"
-              layout="first"
-              // onChangeText={text => {
-              // setValue(text);
-              // console.log('PHONE:', text);
-              // }}
-              onChangeFormattedText={text => {
-                // setFormattedValue(text);
-                // console.log('FORMATTED PHONE:', text);
+          <RenderCustomerNameInput
+            defaultValue={customerName}
+            setTicketState={setTicketState}
+          />
+          <RenderPhoneInput setTicketState={setTicketState} />
 
-                setTicketState(state => ({...state, mobileNumber: text}));
-                // userInfo.mobileNumber = text;
-              }}
-            />
-          </View>
-
-          <View style={[styles.rowContainer, styles.rowItem]}>
-            {getIonIcon('mail')}
-            <TextInput
-              placeholderTextColor={Colors.borderColor}
-              defaultValue={customerEmail}
-              placeholder="Email"
-              keyboardType="email-address"
-              style={styles.titleText}
-              onChangeText={text => {
-                // console.log(text);
-                // userInfo.emailAddress = text;
-                setTicketState(state => ({...state, emailAddress: text}));
-              }}
-            />
-          </View>
-
+          <RenderEmailAddressInput
+            defaultValue={customerEmail}
+            setTicketState={setTicketState}
+          />
           <Pressable onPress={handlePrioritySelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
-              {getIonIcon(
-                'flag',
-                getPriorityBorderColorbyId(ticketState.priority),
-              )}
+              <RenderIonIcon
+                iconName={'flag'}
+                iconColor={getPriorityBorderColorbyId(ticketState.priority)}
+              />
+
               <Text style={styles.titleText}>{`${
                 getPriorityById(ticketState.priority) ?? 'Unassigned'
               } Priority`}</Text>
               {/* <TextInput placeholder="Priority" style={styles.titleText} /> */}
             </View>
           </Pressable>
-
           <Pressable onPress={handleStatusSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               {/* {getIonIcon('search')} */}
@@ -808,7 +875,7 @@ export default function CreateTicket(props) {
           {/* </View> */}
           <Pressable onPress={handleOwnerSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
-              {getMateriaCommunityIcon('shield-account')}
+              <RenderMateriaCommunityIcon iconName={'shield-account'} />
               {/* <TextInput placeholder="Ticket Owner" style={styles.titleText} /> */}
               <Text
                 style={
@@ -819,20 +886,7 @@ export default function CreateTicket(props) {
                 }>{`${ticketOwner ?? ''}`}</Text>
             </View>
           </Pressable>
-          <View style={[styles.rowContainer, styles.rowItem]}>
-            {getMaterialIcon('chat-bubble')}
-            <TextInput
-              placeholderTextColor={Colors.borderColor}
-              multiline
-              placeholder={translate('ticket_overview.description')}
-              style={styles.titleText}
-              onChangeText={text => {
-                // console.log(text);
-                // userInfo.emailAddress = text;
-                setTicketState(state => ({...state, comment: text}));
-              }}
-            />
-          </View>
+          <RenderDescriptionInput setTicketState={setTicketState} />
           <View style={[styles.rowContainer]}>
             {showLoading ? (
               <View

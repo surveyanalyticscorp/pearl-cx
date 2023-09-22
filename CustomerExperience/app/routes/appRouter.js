@@ -504,22 +504,6 @@ const AppRouter = props => {
           name={translate('settings.settings')}
           component={settingStack}
         />
-        {/* <Drawer.Screen
-          name={translate('responses.new_ticket')}
-          component={CreateTicket}
-          options={({navigation, route}) => ({
-            // headerLeft: (props) => <View />,
-            // headerRight: (props) => <CloseButton />,
-            headerShown: true,
-            // gestureDirection: 'vertical',
-            gestureEnabled: false,
-            // ...TransitionPresets.ModalPresentationIOS,
-            // transitionSpec: {
-            //   open: TransitionSpecs.FadeInFromBottomAndroidSpec,
-            //   close: TransitionSpecs.TransitionIOSSpec,
-            // },
-          })}
-        /> */}
       </Drawer.Navigator>
     );
   };
