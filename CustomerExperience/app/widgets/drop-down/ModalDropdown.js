@@ -199,14 +199,8 @@ export default class ModalDropdown extends Component {
   }
 
   _renderButton() {
-    const {
-      disabled,
-      accessible,
-      children,
-      textStyle,
-      arrowIconColor,
-      isRTL,
-    } = this.props;
+    const {disabled, accessible, children, textStyle, arrowIconColor, isRTL} =
+      this.props;
     const {buttonText, showDropdown} = this.state;
     const arrowIcon = showDropdown ? 'arrow-up' : 'arrow-down';
     const arrowColor = arrowIconColor || Colors.accent;

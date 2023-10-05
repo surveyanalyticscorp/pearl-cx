@@ -22,9 +22,11 @@ import {useDispatch} from 'react-redux';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
 import {textStyles} from '../../styles/text.styles';
+import {ClosedLoopDashboard} from './ClosedLoopDashboard';
 
 export const DashboardClosedLoopView = props => {
-  return <TicketTabStack {...props} />;
+  // return <TicketTabStack {...props} />;
+  return <ClosedLoopDashboard {...props} />;
 };
 
 const TicketTab = createMaterialTopTabNavigator();

@@ -1,3 +1,5 @@
+import StringUtils from './StringUtils';
+
 export const priorityList = [
   {title: 'Low', id: 0},
   {title: 'Medium', id: 1},
@@ -156,6 +158,41 @@ export const getOwnerIndex = (ownerlist, ownnerId) => {
   });
   return index_;
 };
+
+export function getDashboardStatusList(ticketCount) {
+  const getAll = getAllTicketCount(ticketCount);
+
+  let temp = [];
+  Object.keys(ticketCount).forEach(value => {
+    if (ticketCount.hasOwnProperty(value)) {
+      temp.push({
+        label: StringUtils.uppercaseFirstCharRestLowercase(value),
+        value: value.toLowerCase(),
+        count: ticketCount[value],
+      });
+    }
+  });
+
+  temp.push({
+    label: 'All',
+    value: 'all',
+    count: getAll,
+  });
+  return temp;
+}
+
+export function getAllTicketCount(ticketCount_) {
+  const totalCount = Object.values(ticketCount_).reduce((total, current) => {
+    let temp = {};
+    Object.keys(current).forEach(key => {
+      if (current.hasOwnProperty(key)) {
+        temp = {...temp, [key]: total[key] + current[key]};
+      }
+    });
+    return temp;
+  });
+  return totalCount;
+}
 // const statusList = {
 //   'NEW' : 0,
 //   'OPEN' : 1,
