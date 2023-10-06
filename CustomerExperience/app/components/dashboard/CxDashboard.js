@@ -36,11 +36,168 @@ import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
 import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
+// import ChartView from 'react-native-highcharts';
+// import ChartView from 'react-native-highcharts-wrapper';
 
 const wait = timeout => {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
   });
+};
+
+const options = {
+  global: {
+    useUTC: false,
+  },
+  lang: {
+    decimalPoint: ',',
+    thousandsSep: '.',
+  },
+};
+const getGuageConfig = () => {
+  let Highcharts = 'Highcharts';
+  return {
+    chart: {
+      type: 'gauge',
+      plotBackgroundColor: null,
+      plotBackgroundImage: null,
+      plotBorderWidth: 0,
+      plotShadow: false,
+      height: '80%',
+    },
+
+    title: {
+      text: 'Speedometer',
+    },
+
+    pane: {
+      startAngle: -90,
+      endAngle: 89.9,
+      background: null,
+      center: ['50%', '75%'],
+      size: '110%',
+    },
+
+    // the value axis
+    yAxis: {
+      min: -100,
+      max: 100,
+      tickPixelInterval: 72,
+      tickPosition: 'inside',
+      tickColor: '#FFFFFF',
+      tickLength: 20,
+      tickWidth: 2,
+      minorTickInterval: null,
+      labels: {
+        distance: 20,
+        style: {
+          fontSize: '14px',
+        },
+      },
+      lineWidth: 0,
+      plotBands: [
+        {
+          from: 50,
+          to: 100,
+          color: '#55BF3B', // green
+          thickness: 20,
+        },
+        {
+          from: 50,
+          to: 0,
+          color: '#DDDF0D', // yellow
+          thickness: 20,
+        },
+        {
+          from: -100,
+          to: 0,
+          color: '#DF5353', // red
+          thickness: 20,
+        },
+      ],
+    },
+
+    series: [
+      {
+        name: 'Speed',
+        data: [80],
+        tooltip: {
+          valueSuffix: ' km/h',
+        },
+        dataLabels: {
+          format: '{y} NPS',
+          borderWidth: 0,
+          color: '#333333',
+          style: {
+            fontSize: '16px',
+          },
+        },
+        dial: {
+          radius: '80%',
+          backgroundColor: 'gray',
+          baseWidth: 12,
+          baseLength: '0%',
+          rearLength: '0%',
+        },
+        pivot: {
+          backgroundColor: 'gray',
+          radius: 6,
+        },
+      },
+    ],
+  };
+};
+
+const getTrimmedNoOfResponses = responseCount => {
+  let numberOfResponses = responseCount ? responseCount : 0;
+
+  if (numberOfResponses >= 10000) {
+    numberOfResponses =
+      Math.round(numberOfResponses / 1000).toFixed(
+        numberOfResponses > 10000 ? 0 : 1,
+      ) + 'K';
+  } else if (numberOfResponses >= 1000) {
+    numberOfResponses = (numberOfResponses / 1000).toFixed(1) + 'K';
+  }
+  return numberOfResponses;
+};
+const RenderDetailsInformation = props => {
+  const navigateToResponses = () => {
+    props.navigation.navigate('dashboard_to_responses');
+  };
+
+  return (
+    <QPButton
+      testID="dashboardToResponseButton"
+      style={buttonStyles.textButton}
+      onPress={navigateToResponses}
+      buttonText={translate('dashboard.view_responses')}
+      textStyle={buttonStyles.textButtonText}
+    />
+    // <Pressable
+    //   onPress={() => {
+    //     props.navigation.navigate('Responses');
+    //   }}>
+    //   <Text style={{textAlign: 'left', color: Colors.accentLight}}>
+    //     {title}
+    //   </Text>
+    // </Pressable>
+  );
+};
+const RenderSegmentDashboardData = props => {
+  console.log('NPS OBJECT', JSON.stringify(props.currentNPSData.NPSScore));
+  let data = props.currentNPSData?.NPSScore;
+  // ?? props.dashboardData.primaryStoreNPS;
+  let responses = props.currentNPSData?.NPSScore?.totalResponses ?? 0;
+  // ??
+  // props.dashboardData.primaryStoreNPS.totalResponses;
+  let responseCount = getTrimmedNoOfResponses(responses);
+
+  return (
+    <View style={dashboardStyles.chartContainer}>
+      {/* <ChartView config={getGuageConfig()} style={{height: 100}} gauge={true} /> */}
+    </View>
+  );
 };
 
 const CxDashboard = props => {
@@ -239,16 +396,16 @@ const CxDashboard = props => {
                 zIndex: 99,
                 marginTop: MarginConstants.tab1,
               }}>
-              {renderDetailsInformation()}
+              <RenderDetailsInformation {...props} />
             </View>
           </View>
         </View>
-        {renderDonutInfoContainer(responseCount)}
+        <RenderDonutInfoContainer responseCount={responseCount} />
       </View>
     );
   };
 
-  let renderDonutInfoContainer = responseCount => {
+  let RenderDonutInfoContainer = ({responseCount}) => {
     return (
       <View style={dashboardStyles.donutInfoContainer}>
         {renderDonutInformation(
@@ -297,28 +454,6 @@ const CxDashboard = props => {
 
     return <Image source={icon} style={{width: 12, height: 12}} />;
   };
-  const navigateToResponses = () => {
-    props.navigation.navigate('dashboard_to_responses');
-  };
-  let renderDetailsInformation = () => {
-    return (
-      <QPButton
-        testID="dashboardToResponseButton"
-        style={buttonStyles.textButton}
-        onPress={navigateToResponses}
-        buttonText={translate('dashboard.view_responses')}
-        textStyle={buttonStyles.textButtonText}
-      />
-      // <Pressable
-      //   onPress={() => {
-      //     props.navigation.navigate('Responses');
-      //   }}>
-      //   <Text style={{textAlign: 'left', color: Colors.accentLight}}>
-      //     {title}
-      //   </Text>
-      // </Pressable>
-    );
-  };
 
   let getClosedLoopView = () => {
     return (
@@ -329,20 +464,6 @@ const CxDashboard = props => {
         />
       </View>
     );
-  };
-
-  const getTrimmedNoOfResponses = responseCount => {
-    let numberOfResponses = responseCount ? responseCount : 0;
-
-    if (numberOfResponses >= 10000) {
-      numberOfResponses =
-        Math.round(numberOfResponses / 1000).toFixed(
-          numberOfResponses > 10000 ? 0 : 1,
-        ) + 'K';
-    } else if (numberOfResponses >= 1000) {
-      numberOfResponses = (numberOfResponses / 1000).toFixed(1) + 'K';
-    }
-    return numberOfResponses;
   };
 
   let renderNoDataFound = () => {
@@ -454,6 +575,7 @@ const CxDashboard = props => {
               props.dashboardData.primaryStoreName,
           )}
           {renderDonutChart()}
+          {/* <RenderSegmentDashboardData {...props} /> */}
           {renderSegmentTitle(translate('dashboard.closed_loop'))}
           {getClosedLoopView()}
           {/* {renderSegmentTitle(translate('dashboard.comparison'))}
