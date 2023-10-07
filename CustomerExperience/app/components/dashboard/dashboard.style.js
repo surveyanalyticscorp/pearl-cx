@@ -24,14 +24,14 @@ export const dashboardStyles = StyleSheet.create({
     fontSize: TextSizes.secondary,
   },
   responseText: {
-    color: Colors.primary,
+    color: Colors.filterIconColor,
     fontFamily: FontFamily.bold,
-    fontSize: TextSizes.largeText,
+    fontSize: TextSizes.secondary,
     textAlign: 'center',
   },
   response: {
     fontSize: TextSizes.secondary,
-    color: Colors.secondary,
+    color: Colors.filterIconColor,
     fontFamily: FontFamily.light,
     textAlign: 'center',
     paddingHorizontal: PaddingConstants.tab1,
@@ -71,8 +71,6 @@ export const dashboardStyles = StyleSheet.create({
   },
   responseView: {
     justifyContent: 'center',
-    paddingLeft: PaddingConstants.tab2,
-    paddingVertical: PaddingConstants.halfTab,
   },
   loading: {
     position: 'absolute',
@@ -140,7 +138,7 @@ export const dashboardStyles = StyleSheet.create({
   },
   separator: {
     marginHorizontal: MarginConstants.tab2,
-    marginVertical: MarginConstants.tab1,
+    marginVertical: MarginConstants.halfTab,
     height: 0.5,
     backgroundColor: Colors.borderColor,
   },
@@ -166,20 +164,20 @@ export const dashboardStyles = StyleSheet.create({
   npsView: {
     position: 'absolute',
     left: '10%',
-    top: DeviceInfo.isTablet() ? '15%' : '20%',
+    top: DeviceInfo.isTablet() ? '20%' : '25%',
     width: 5 * MarginConstants.tab4,
 
     paddingHorizontal: PaddingConstants.halfTab,
   },
   npsPercentText: {
     color: Colors.primary,
-    fontSize: 1.2 * TextSizes.donutPercentText,
+    fontSize: TextSizes.donutPercentText,
     fontFamily: FontFamily.bold,
     textAlign: 'center',
   },
   npsText: {
     color: Colors.primary,
-    fontSize: TextSizes.primary,
+    fontSize: TextSizes.secondary,
     fontFamily: FontFamily.semiBold,
     textAlign: 'center',
   },
@@ -193,8 +191,8 @@ export const dashboardStyles = StyleSheet.create({
   chartContainer: {
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 8
-      : MarginConstants.tab4 * 7,
+      ? MarginConstants.tab4 * 6
+      : MarginConstants.tab4 * 5,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'flex-start',

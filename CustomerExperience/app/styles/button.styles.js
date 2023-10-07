@@ -64,6 +64,20 @@ export const buttonStyles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.primary,
   },
+  outlinePrimaryButtonMedium: {
+    height: MarginConstants.tab4,
+    paddingHorizontal: MarginConstants.tab1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.white,
+    borderColor: Colors.accentLight,
+    borderWidth: 1,
+  },
+  outlinePrimaryButtonMediumText: {
+    color: Colors.accentLight,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+  },
 
   textButton: {
     height: MarginConstants.tab4,

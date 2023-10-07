@@ -38,6 +38,7 @@ import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
 // import ChartView from 'react-native-highcharts';
 // import ChartView from 'react-native-highcharts-wrapper';
+import GaugeChart from 'react-gauge-chart';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -169,10 +170,10 @@ const RenderDetailsInformation = props => {
   return (
     <QPButton
       testID="dashboardToResponseButton"
-      style={buttonStyles.textButton}
+      style={buttonStyles.outlinePrimaryButtonMedium}
       onPress={navigateToResponses}
       buttonText={translate('dashboard.view_responses')}
-      textStyle={buttonStyles.textButtonText}
+      textStyle={buttonStyles.outlinePrimaryButtonMediumText}
     />
     // <Pressable
     //   onPress={() => {
@@ -195,7 +196,16 @@ const RenderSegmentDashboardData = props => {
 
   return (
     <View style={dashboardStyles.chartContainer}>
+      <GaugeChart
+        id="gauge-chart6"
+        animate={false}
+        nrOfLevels={15}
+        percent={0.56}
+        needleColor="#345243"
+      />
+
       {/* <ChartView config={getGuageConfig()} style={{height: 100}} gauge={true} /> */}
+      {/* <GaugeChart id="gauge-chart1" /> */}
     </View>
   );
 };
@@ -362,77 +372,92 @@ const CxDashboard = props => {
         ? [Colors.promoter2, Colors.passive2, Colors.detractor2]
         : [Colors.darkGrey];
     return (
-      <View style={dashboardStyles.chartContainer}>
-        <View style={dashboardStyles.donut}>
-          <VictoryPie
-            data={victoryPieData}
-            width={5 * MarginConstants.tab4}
-            height={6 * MarginConstants.tab4}
-            innerRadius={2.4 * MarginConstants.tab4}
-            radius={2.0 * MarginConstants.tab4}
-            style={{
-              labels: {
-                fill: 'transparent',
-              },
-            }}
-            colorScale={victoryPieColorScale}
-            endAngle={-90}
-            startAngle={90}
-          />
-          <View style={dashboardStyles.npsView}>
-            <Text style={[dashboardStyles.npsPercentText]}>
-              {data?.npsPercentage ?? 0}
-            </Text>
-            <Text style={[dashboardStyles.npsText]}>NPS</Text>
-            <View style={[dashboardStyles.emptySeparator]}></View>
-            {/* api data missing */}
-            {/* <Text style={[dashboardStyles.detailsText]}>Company NPS 32</Text>
-            <Text style={[dashboardStyles.detailsText]}>Your YTD NPS 27</Text> */}
-            {/* translation missing */}
+      <View style={dashboardStyles.container}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            backgroundColor: Colors.white,
+            marginHorizontal: MarginConstants.tab2,
+          }}>
+          <RenderDonutInfoContainer responseCount={responseCount} />
+          <RenderDetailsInformation {...props} />
+        </View>
 
-            <HorizontalScaleBar value={data?.npsPercentage ?? 0} />
-            <View
+        <View style={dashboardStyles.chartContainer}>
+          <View style={dashboardStyles.donut}>
+            <VictoryPie
+              data={victoryPieData}
+              width={5 * MarginConstants.tab4}
+              height={6 * MarginConstants.tab4}
+              innerRadius={2.4 * MarginConstants.tab4}
+              radius={2.0 * MarginConstants.tab4}
               style={{
-                zIndex: 99,
-                marginTop: MarginConstants.tab1,
-              }}>
-              <RenderDetailsInformation {...props} />
+                labels: {
+                  fill: 'transparent',
+                },
+              }}
+              colorScale={victoryPieColorScale}
+              endAngle={-90}
+              startAngle={90}
+            />
+            <View style={dashboardStyles.npsView}>
+              <Text style={[dashboardStyles.npsPercentText]}>
+                {data?.npsPercentage ?? 0}
+              </Text>
+              <Text style={[dashboardStyles.npsText]}>NPS</Text>
+              <View style={[dashboardStyles.emptySeparator]}></View>
+              {/* api data missing */}
+              {/* <Text style={[dashboardStyles.detailsText]}>Company NPS 32</Text>
+            <Text style={[dashboardStyles.detailsText]}>Your YTD NPS 27</Text> */}
+              {/* translation missing */}
+
+              {/* <HorizontalScaleBar value={data?.npsPercentage ?? 0} /> */}
+              <View
+                style={{
+                  zIndex: 99,
+                  marginTop: MarginConstants.tab1,
+                }}></View>
             </View>
           </View>
         </View>
-        <RenderDonutInfoContainer responseCount={responseCount} />
       </View>
     );
   };
 
   let RenderDonutInfoContainer = ({responseCount}) => {
+    const responseIcon = require('./../../../assets/images/responses_icon.png');
+    const surveyIcon = require('./../../../assets/images/surveys_icon.png');
     return (
-      <View style={dashboardStyles.donutInfoContainer}>
-        {renderDonutInformation(
-          'check-square',
-          translate('dashboard.surveys'),
-          props.dashboardData.surveyCount,
-        )}
-        {renderDonutInformation(
-          'th-large',
-          translate('dashboard.responses'),
-          responseCount,
-        )}
+      <View
+        style={[dashboardStyles.donutInfoContainer, {flexDirection: 'row'}]}>
+        <RenderDonutInformation
+          icon={surveyIcon}
+          title={translate('dashboard.surveys')}
+          count={props.dashboardData.surveyCount}
+        />
+        <RenderDonutInformation
+          icon={responseIcon}
+          title={translate('dashboard.responses')}
+          count={responseCount}
+        />
       </View>
     );
   };
 
-  let renderDonutInformation = (icon, title, count) => {
+  let RenderDonutInformation = ({icon, title, count}) => {
     return (
       <View style={dashboardStyles.responseView}>
         <Text style={dashboardStyles.responseText}>{count}</Text>
         <View style={dashboardStyles.separator} />
         <View style={dashboardStyles.ticketTypeContainer}>
-          <Icon
+          <Image source={icon} style={{width: 16, height: 16}} />
+          {/* <Icon
             name={icon}
             size={Sizes.inlineIcons}
             color={Colors.borderColor}
-          />
+          /> */}
           <Text style={dashboardStyles.response}>{title}</Text>
         </View>
       </View>

@@ -276,12 +276,36 @@ export const RenderDropDown = ({
   setCurrentStatus,
   statusList,
 }) => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [isOpen, setOpen] = useState(false);
+
   const [currentValue, setCurrentValue] = useState(currentStatus.value);
+  const [statusIndex, setStatusIndex] = useState(0);
   console.log('CUreent status', JSON.stringify(currentStatus));
   const setDropdownValue = item => {
     console.log('DROPDOWN VALUE: ', item);
     setCurrentStatus(item);
+    console.log(
+      'Index',
+      statusList.findIndex(obj => obj.value === item.value),
+    );
+    setStatusIndex(statusList.findIndex(obj => obj.value === item.value));
+  };
+
+  // function getIndexFromStatusList( statusValue, statusList){
+  //  return statusList.findIndex( (obj) => (s === statusValue) return index});
+  // }
+
+  const navigateToCLosedLoop = () => {
+    if (statusIndex !== statusList.length - 1) {
+      dispatch(setStatusFilterById(statusIndex.toString()));
+    } else {
+      dispatch(setStatusFilterById(''));
+    }
+
+    // props.navigation.navigate('ClosedLoop');
+    navigation.navigate('dashboard_to_closed_loop');
   };
 
   // function dropdownRenderRow(rowData, rowID, highlighted) {
@@ -299,7 +323,7 @@ export const RenderDropDown = ({
         justifyContent: 'space-between',
         alignItems: 'flex-end',
         marginHorizontal: MarginConstants.tab2,
-        marginTop: MarginConstants.tab3,
+        marginTop: MarginConstants.tab1,
       }}>
       <View
         style={{
@@ -309,9 +333,10 @@ export const RenderDropDown = ({
           style={{
             borderColor: Colors.transparent,
             maxWidth: MarginConstants.tab4 * 4,
-            height: MarginConstants.tab4,
+
             borderBottomColor: Colors.darkGrey,
             borderRadius: 0,
+            position: 'relative',
           }}
           items={statusList}
           open={isOpen}
@@ -329,10 +354,10 @@ export const RenderDropDown = ({
 
       <QPButton
         testID="ViewTicketsButton"
-        style={buttonStyles.outlinePrimaryButton}
-        onPress={() => {}}
+        style={buttonStyles.outlinePrimaryButtonMedium}
+        onPress={navigateToCLosedLoop}
         buttonText={`${translate('dashboard.view_tickets')}`}
-        textStyle={buttonStyles.outlinePrimaryButtonText}
+        textStyle={buttonStyles.outlinePrimaryButtonMediumText}
       />
       {/* <RenderViewTicketsContainer /> */}
     </View>
