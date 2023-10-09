@@ -347,7 +347,7 @@ export const RenderDropDown = ({
           onSelectItem={setDropdownValue}
           setValue={setCurrentValue}
           labelStyle={{color: Colors.accentLight}}
-          listItemLabelStyle={{color: Colors.accentLight}}
+          listItemLabelStyle={{color: Colors.filterIconColor}}
           value={currentValue}
         />
       </View>
