@@ -177,6 +177,13 @@ export const StatusIcon = ({
   );
 };
 
+export const ResponsesIcon = ({size = 12}) => (
+  <Image
+    // source={require('./../../../assets/images/responses_icon.png')}
+    source={require('./../../assets/images/responses_icon.png')}
+    style={{width: size, height: size}}
+  />
+);
 export const RenderStatusIcon = ({size, title, style}) => {
   return (
     <View

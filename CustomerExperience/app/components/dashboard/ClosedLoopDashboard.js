@@ -324,6 +324,7 @@ export const RenderDropDown = ({
         alignItems: 'flex-end',
         marginHorizontal: MarginConstants.tab2,
         marginTop: MarginConstants.tab1,
+        zIndex: 100,
       }}>
       <View
         style={{
@@ -348,7 +349,6 @@ export const RenderDropDown = ({
           labelStyle={{color: Colors.accentLight}}
           listItemLabelStyle={{color: Colors.accentLight}}
           value={currentValue}
-          zIndex={1000}
         />
       </View>
 

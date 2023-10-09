@@ -1,3 +1,5 @@
+import React, {Image} from 'react';
+import {RenderStatusIcon, ResponsesIcon} from '../routes/CommonScreen';
 import StringUtils from './StringUtils';
 
 export const priorityList = [
@@ -169,6 +171,7 @@ export function getDashboardStatusList(ticketCount) {
         label: StringUtils.uppercaseFirstCharRestLowercase(value),
         value: value.toLowerCase(),
         count: ticketCount[value],
+        icon: () => <RenderStatusIcon title={value} />,
       });
     }
   });
@@ -177,6 +180,7 @@ export function getDashboardStatusList(ticketCount) {
     label: 'All',
     value: 'all',
     count: getAll,
+    icon: () => <ResponsesIcon />,
   });
   return temp;
 }
