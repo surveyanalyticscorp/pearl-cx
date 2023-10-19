@@ -185,21 +185,17 @@ export const ResponsesIcon = ({size = 12}) => (
   />
 );
 export const RenderStatusIcon = ({size, title, style}) => {
-  return (
-    <View
-      style={[
-        {
-          borderRadius: 50,
-          borderWidth: 1,
-          borderColor: getStatusBorderColor(title.toLowerCase()),
-          backgroundColor: getStatusFillerColor(title.toLowerCase()),
-          height: size ?? 14,
-          width: size ?? 14,
-        },
-        style,
-      ]}
-    />
-  );
+  const statusStyle = {
+    ...style,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: getStatusBorderColor(title.toLowerCase()),
+    backgroundColor: getStatusFillerColor(title.toLowerCase()),
+    height: size ?? 14,
+    width: size ?? 14,
+  };
+
+  return <View style={statusStyle} />;
 };
 
 export const StatusUI = ({status}) => {
@@ -531,17 +527,17 @@ export const Avatar = ({title, style}) => {
   );
 };
 
-export const FilterIcon = ({onPressFilter}) => {
+export const FilterIcon = ({onPressFilter, size}) => {
   return (
     <Pressable onPress={onPressFilter}>
-      <IonIcons name="funnel" size={20} color={Colors.lightBlack} />
+      <IonIcons name="funnel" size={20 ?? size} color={Colors.lightBlack} />
     </Pressable>
   );
 };
-export const SortIcon = ({onPressFilter}) => {
+export const SortIcon = ({onPressFilter, size}) => {
   return (
     <Pressable onPress={onPressFilter}>
-      <MaterialIcon name="sort" size={24} color={Colors.lightBlack} />
+      <MaterialIcon name="sort" size={size ?? 24} color={Colors.lightBlack} />
     </Pressable>
   );
 };

@@ -36,117 +36,20 @@ import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
 import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
+// import HighchartsReactNative from '@highcharts/highcharts-react-native';
 // import ChartView from 'react-native-highcharts';
 // import ChartView from 'react-native-highcharts-wrapper';
-import GaugeChart from 'react-gauge-chart';
+// import GaugeChart from 'react-gauge-chart';
+// import RNSpeedometer from 'react-native-speedometer';
+import AMCharts from 'react-native-amcharts';
+import {GaugeChart} from './GaugeChart';
+import {PaddingConstants} from '../../styles/padding.constants';
+import {textStyles} from '../../styles/text.styles';
 
 const wait = timeout => {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
   });
-};
-
-const options = {
-  global: {
-    useUTC: false,
-  },
-  lang: {
-    decimalPoint: ',',
-    thousandsSep: '.',
-  },
-};
-const getGuageConfig = () => {
-  let Highcharts = 'Highcharts';
-  return {
-    chart: {
-      type: 'gauge',
-      plotBackgroundColor: null,
-      plotBackgroundImage: null,
-      plotBorderWidth: 0,
-      plotShadow: false,
-      height: '80%',
-    },
-
-    title: {
-      text: 'Speedometer',
-    },
-
-    pane: {
-      startAngle: -90,
-      endAngle: 89.9,
-      background: null,
-      center: ['50%', '75%'],
-      size: '110%',
-    },
-
-    // the value axis
-    yAxis: {
-      min: -100,
-      max: 100,
-      tickPixelInterval: 72,
-      tickPosition: 'inside',
-      tickColor: '#FFFFFF',
-      tickLength: 20,
-      tickWidth: 2,
-      minorTickInterval: null,
-      labels: {
-        distance: 20,
-        style: {
-          fontSize: '14px',
-        },
-      },
-      lineWidth: 0,
-      plotBands: [
-        {
-          from: 50,
-          to: 100,
-          color: '#55BF3B', // green
-          thickness: 20,
-        },
-        {
-          from: 50,
-          to: 0,
-          color: '#DDDF0D', // yellow
-          thickness: 20,
-        },
-        {
-          from: -100,
-          to: 0,
-          color: '#DF5353', // red
-          thickness: 20,
-        },
-      ],
-    },
-
-    series: [
-      {
-        name: 'Speed',
-        data: [80],
-        tooltip: {
-          valueSuffix: ' km/h',
-        },
-        dataLabels: {
-          format: '{y} NPS',
-          borderWidth: 0,
-          color: '#333333',
-          style: {
-            fontSize: '16px',
-          },
-        },
-        dial: {
-          radius: '80%',
-          backgroundColor: 'gray',
-          baseWidth: 12,
-          baseLength: '0%',
-          rearLength: '0%',
-        },
-        pivot: {
-          backgroundColor: 'gray',
-          radius: 6,
-        },
-      },
-    ],
-  };
 };
 
 const getTrimmedNoOfResponses = responseCount => {
@@ -162,6 +65,44 @@ const getTrimmedNoOfResponses = responseCount => {
   }
   return numberOfResponses;
 };
+
+function RenderDonutInformation({icon, title, count}) {
+  return (
+    <View style={dashboardStyles.responseView}>
+      <Text style={dashboardStyles.responseText}>{count}</Text>
+      <View style={dashboardStyles.separator} />
+      <View style={dashboardStyles.ticketTypeContainer}>
+        <Image source={icon} style={{width: 16, height: 16}} />
+        {/* <Icon
+          name={icon}
+          size={Sizes.inlineIcons}
+          color={Colors.borderColor}
+        /> */}
+        <Text style={dashboardStyles.response}>{title}</Text>
+      </View>
+    </View>
+  );
+}
+
+function RenderDonutInfoContainer({responseCount, surveyCount}) {
+  const responseIcon = require('./../../../assets/images/responses_icon.png');
+  const surveyIcon = require('./../../../assets/images/surveys_icon.png');
+  return (
+    <View style={[dashboardStyles.donutInfoContainer, {flexDirection: 'row'}]}>
+      <RenderDonutInformation
+        icon={surveyIcon}
+        title={translate('dashboard.surveys')}
+        count={surveyCount}
+      />
+      <RenderDonutInformation
+        icon={responseIcon}
+        title={translate('dashboard.responses')}
+        count={responseCount}
+      />
+    </View>
+  );
+}
+
 const RenderDetailsInformation = props => {
   const navigateToResponses = () => {
     props.navigation.navigate('dashboard_to_responses');
@@ -175,40 +116,72 @@ const RenderDetailsInformation = props => {
       buttonText={translate('dashboard.view_responses')}
       textStyle={buttonStyles.outlinePrimaryButtonMediumText}
     />
-    // <Pressable
-    //   onPress={() => {
-    //     props.navigation.navigate('Responses');
-    //   }}>
-    //   <Text style={{textAlign: 'left', color: Colors.accentLight}}>
-    //     {title}
-    //   </Text>
-    // </Pressable>
   );
 };
 const RenderSegmentDashboardData = props => {
   console.log('NPS OBJECT', JSON.stringify(props.currentNPSData.NPSScore));
-  let data = props.currentNPSData?.NPSScore;
+  const data = props.currentNPSData?.NPSScore;
+  const {npsPercentage, benchmarkScore} = props.currentNPSData?.NPSScore;
+  const surveyCount = useSelector(
+    state => state.dashboard.dashboardData.surveyCount,
+  );
   // ?? props.dashboardData.primaryStoreNPS;
   let responses = props.currentNPSData?.NPSScore?.totalResponses ?? 0;
   // ??
   // props.dashboardData.primaryStoreNPS.totalResponses;
   let responseCount = getTrimmedNoOfResponses(responses);
-
+  // const surveyCount = props?.dashboardData?.surveyCount ?? 0;
+  console.log('Gauge DATA', npsPercentage, benchmarkScore);
   return (
     <View style={dashboardStyles.chartContainer}>
-      <GaugeChart
-        id="gauge-chart6"
-        animate={false}
-        nrOfLevels={15}
-        percent={0.56}
-        needleColor="#345243"
-      />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          backgroundColor: Colors.white,
+          marginHorizontal: MarginConstants.tab2,
+        }}>
+        <RenderDonutInfoContainer
+          responseCount={responseCount}
+          surveyCount={surveyCount}
+        />
+        <RenderDetailsInformation {...props} />
+      </View>
+      {/* <GaugeChart npsScore={npsPercentage} benchmark={benchmarkScore} /> */}
 
-      {/* <ChartView config={getGuageConfig()} style={{height: 100}} gauge={true} /> */}
-      {/* <GaugeChart id="gauge-chart1" /> */}
+      <DashboardGuageChart
+        npsScore={npsPercentage}
+        benchmark={benchmarkScore}
+      />
     </View>
   );
 };
+
+const Benchmark = ({benchmark}) => {
+  return (
+    <View style={{alignItems: 'center'}}>
+      <Text style={textStyles.optionText}>{benchmark}</Text>
+      <Text style={textStyles.secondaryText}>{`Benchmark`}</Text>
+    </View>
+  );
+};
+
+function DashboardGuageChart({npsScore, benchmark}) {
+  return (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: PaddingConstants.halfTab,
+      }}>
+      <GaugeChart npsScore={npsScore} benchmark={benchmark} />
+      <Benchmark benchmark={benchmark} />
+    </View>
+  );
+}
 
 const CxDashboard = props => {
   let isFocused = useDispatch();
@@ -426,43 +399,6 @@ const CxDashboard = props => {
     );
   };
 
-  let RenderDonutInfoContainer = ({responseCount}) => {
-    const responseIcon = require('./../../../assets/images/responses_icon.png');
-    const surveyIcon = require('./../../../assets/images/surveys_icon.png');
-    return (
-      <View
-        style={[dashboardStyles.donutInfoContainer, {flexDirection: 'row'}]}>
-        <RenderDonutInformation
-          icon={surveyIcon}
-          title={translate('dashboard.surveys')}
-          count={props.dashboardData.surveyCount}
-        />
-        <RenderDonutInformation
-          icon={responseIcon}
-          title={translate('dashboard.responses')}
-          count={responseCount}
-        />
-      </View>
-    );
-  };
-
-  let RenderDonutInformation = ({icon, title, count}) => {
-    return (
-      <View style={dashboardStyles.responseView}>
-        <Text style={dashboardStyles.responseText}>{count}</Text>
-        <View style={dashboardStyles.separator} />
-        <View style={dashboardStyles.ticketTypeContainer}>
-          <Image source={icon} style={{width: 16, height: 16}} />
-          {/* <Icon
-            name={icon}
-            size={Sizes.inlineIcons}
-            color={Colors.borderColor}
-          /> */}
-          <Text style={dashboardStyles.response}>{title}</Text>
-        </View>
-      </View>
-    );
-  };
   let getNPSIcon = sentiment => {
     let icon;
     switch (sentiment) {
@@ -599,8 +535,8 @@ const CxDashboard = props => {
             props.segment.currentSegment ??
               props.dashboardData.primaryStoreName,
           )}
-          {renderDonutChart()}
-          {/* <RenderSegmentDashboardData {...props} /> */}
+          {/* {renderDonutChart()} */}
+          <RenderSegmentDashboardData {...props} />
           {renderSegmentTitle(translate('dashboard.closed_loop'))}
           {getClosedLoopView()}
           {/* {renderSegmentTitle(translate('dashboard.comparison'))}

@@ -64,6 +64,7 @@
 		DF343EB6899149E69DF42E72 /* ms_full_growth.png in Resources */ = {isa = PBXBuildFile; fileRef = E4AB1745A29B4785874CD9D9 /* ms_full_growth.png */; };
 		EA9653C1ADB8499E9B10B386 /* ms_drive_business_decisions.png in Resources */ = {isa = PBXBuildFile; fileRef = DEAC833BA07148768F4285F7 /* ms_drive_business_decisions.png */; };
 		FCA37EA71CC04EA7B3B66F6A /* FiraSans-TwoItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 652640ACD55F4B3B8D3B614F /* FiraSans-TwoItalic.otf */; };
+		BA1637A3E3C14924BED0E9EC /* cx-logo_2.png in Resources */ = {isa = PBXBuildFile; fileRef = E83E06A931004EE3AEB66608 /* cx-logo_2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -175,6 +176,7 @@
 		ED41243E04054C9998952FF4 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		F60F3D6B088D4529AF8CEF47 /* FiraSans-ExtraBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-ExtraBold.otf"; path = "../app/config/fonts/FiraSans-ExtraBold.otf"; sourceTree = "<group>"; };
 		FEB8A2E51C3F407EAB129084 /* FiraSans-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-Regular.otf"; path = "../app/config/fonts/FiraSans-Regular.otf"; sourceTree = "<group>"; };
+		E83E06A931004EE3AEB66608 /* cx-logo_2.png */ = {isa = PBXFileReference; name = "cx-logo_2.png"; path = "../app/config/images/cx-logo_2.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -333,6 +335,7 @@
 				69C1D2EF55EC4136AE3A74E7 /* notification_comment.png */,
 				BF2D2AC81E584D478C77763C /* notification_ticket_blue.png */,
 				DF77864B3FCC4EC2A3BA863C /* notification_ticket.png */,
+				E83E06A931004EE3AEB66608 /* cx-logo_2.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -583,6 +586,7 @@
 				A6B486D947674E77A23FA166 /* notification_comment.png in Resources */,
 				0C2E03C01E3E4BFFA7462C5E /* notification_ticket_blue.png in Resources */,
 				17DEF122B389418CBE0E2FCE /* notification_ticket.png in Resources */,
+				BA1637A3E3C14924BED0E9EC /* cx-logo_2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

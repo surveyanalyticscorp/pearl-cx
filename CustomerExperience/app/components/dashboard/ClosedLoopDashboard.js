@@ -334,7 +334,6 @@ export const RenderDropDown = ({
           style={{
             borderColor: Colors.transparent,
             maxWidth: MarginConstants.tab4 * 4,
-
             borderBottomColor: Colors.darkGrey,
             borderRadius: 0,
             position: 'relative',

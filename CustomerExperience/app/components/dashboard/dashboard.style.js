@@ -7,6 +7,11 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import DeviceInfo from 'react-native-device-info';
 
 export const dashboardStyles = StyleSheet.create({
+  highchart: {
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    flex: 1,
+  },
   container: {
     flex: 1,
   },
@@ -191,9 +196,9 @@ export const dashboardStyles = StyleSheet.create({
   chartContainer: {
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 6
-      : MarginConstants.tab4 * 5,
-    flexDirection: 'row',
+      ? MarginConstants.tab4 * 9
+      : MarginConstants.tab4 * 7,
+    flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'flex-start',
     marginHorizontal: MarginConstants.tab2,
