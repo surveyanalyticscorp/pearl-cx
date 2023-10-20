@@ -81,6 +81,14 @@ export const textStyles = StyleSheet.create({
     color: Colors.filterIconColor,
     fontWeight: 'bold',
   },
+
+  npsScoreTextBold: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.donutPercentText,
+    marginHorizontal: MarginConstants.halfTab,
+    color: Colors.filterIconColor,
+    fontWeight: 'bold',
+  },
 });
 // primaryButton: {
 //   margin: MarginConstants.halfTab,

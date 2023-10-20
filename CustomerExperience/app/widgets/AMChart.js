@@ -8,9 +8,7 @@ const AMCharts = props => {
                                 name="viewport"
                                 content="width=device-width, initial-scale=${
                                   props?.initialScale ?? 1
-                                }, user-scalable=1,  maximum-scale=${
-    props?.maximumScale ?? 1
-  }"
+                                }, user-scalable=1"
                             />
                             <style media="screen" type="text/css">
                                 .container {

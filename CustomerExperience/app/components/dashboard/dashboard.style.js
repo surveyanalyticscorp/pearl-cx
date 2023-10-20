@@ -196,10 +196,10 @@ export const dashboardStyles = StyleSheet.create({
   chartContainer: {
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 9
-      : MarginConstants.tab4 * 7,
+      ? MarginConstants.tab4 * 10
+      : MarginConstants.tab4 * 8,
     flexDirection: 'column',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     alignItems: 'flex-start',
     marginHorizontal: MarginConstants.tab2,
     borderBottomEndRadius: 5,

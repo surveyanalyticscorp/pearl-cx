@@ -36,7 +36,8 @@ export default function FeedbackCell(props) {
   }
   let disable = props.origin === 'Detail';
   let hasTicket = props.hasTicket;
-  // const name = showName(props.item);
+  // const name =
+  //   'myhousehasfourinteresting_weareall_going_to_cox_bazzar@yup-asdfghjkli.com';
   const name = showName(props.item);
   const email = props.item.emailAddress ?? '';
   const surveyID = props.item.surveyID;
@@ -111,15 +112,26 @@ export default function FeedbackCell(props) {
   //     );
   //   };
 
-  let getUserName = () => {
+  let UserName = ({name, isDisabled}) => {
+    const charLength = 24;
+    const shortenedString =
+      name && name.length > charLength
+        ? name.slice(0, charLength) + '...' // If longer than 12 characters, slice and add ellipsis
+        : name;
     return (
-      <Text style={styles.userNameText}>
-        {name.length > 1 ? name : translate('ticket_list.anonymous')}
+      <Text
+        numberOfLines={isDisabled ? 4 : 1}
+        style={[styles.userNameText, {maxWidth: '90%'}]}>
+        {name.length > 1
+          ? isDisabled
+            ? name
+            : shortenedString
+          : translate('ticket_list.anonymous')}
       </Text>
     );
   };
 
-  let getNPSScore = () => {
+  let NPSScore = ({answerText}) => {
     let textColor = getNPSColor();
     return (
       <Text
@@ -129,14 +141,14 @@ export default function FeedbackCell(props) {
           fontWeight: FontWeight.bold,
           color: textColor,
         }}>
-        {props.item.answerText}
+        {answerText}
       </Text>
     );
   };
 
-  let getNPSIcon = () => {
+  let NPSIcon = ({sentiment}) => {
     let icon;
-    switch (props.item.sentiment) {
+    switch (sentiment) {
       case 'Detractor':
         icon = require('./../../../assets/images/detractor.png');
         break;
@@ -156,7 +168,7 @@ export default function FeedbackCell(props) {
     );
   };
 
-  let getDate = () => {
+  let Date = ({surveyTakenDate}) => {
     return (
       <Text style={[styles.subtitleText, {marginHorizontal: 12}]}>
         {surveyTakenDate}
@@ -313,14 +325,14 @@ export default function FeedbackCell(props) {
         <View style={styles.responseContainer}>
           {/* {renderNPSView()} */}
 
-          <View style={styles.rowContainer}>
-            {getNPSIcon()}
-            {getNPSScore()}
-            {getUserName()}
+          <View style={[styles.rowContainer, {maxWidth: '70%'}]}>
+            <NPSIcon sentiment={props.item.sentiment} />
+            <NPSScore answerText={props.item.answerText} />
+            <UserName name={name} isDisabled={disable} />
           </View>
 
           <View style={styles.dateAndArrowIconContainer}>
-            {getDate()}
+            <Date surveyTakenDate={surveyTakenDate} />
             {!disable && (
               <Icon
                 name="arrow-right"
@@ -467,7 +479,7 @@ const styles = StyleSheet.create({
   },
   userNameText: {
     marginHorizontal: MarginConstants.tab1,
-    fontSize: TextSizes.primary,
+    fontSize: TextSizes.secondary,
     fontWeight: FontWeight.bold,
     color: Colors.accent,
   },

@@ -160,9 +160,34 @@ const RenderSegmentDashboardData = props => {
 
 const Benchmark = ({benchmark}) => {
   return (
-    <View style={{alignItems: 'center'}}>
-      <Text style={textStyles.optionText}>{benchmark}</Text>
+    <View
+      style={{
+        alignItems: 'center',
+        marginHorizontal: MarginConstants.tab1,
+        marginBottom: MarginConstants.tab4,
+      }}>
+      <Text style={textStyles.optionTextBold}>{benchmark}</Text>
       <Text style={textStyles.secondaryText}>{`Benchmark`}</Text>
+    </View>
+  );
+};
+
+const NPSLabel = ({npsScore, benchmark}) => {
+  return (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        height: '100%',
+      }}>
+      <GaugeChart npsScore={npsScore} benchmark={benchmark} />
+
+      <Text style={textStyles.optionTextBold}>{npsScore ?? 0}</Text>
+      <Text style={textStyles.secondaryText}>NPS</Text>
+      {/* <Text style={textStyles.optionTextBold}>{npsScore}</Text>
+      <Text style={textStyles.optionText}>NPS</Text> */}
     </View>
   );
 };
@@ -175,9 +200,9 @@ function DashboardGuageChart({npsScore, benchmark}) {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: PaddingConstants.halfTab,
       }}>
-      <GaugeChart npsScore={npsScore} benchmark={benchmark} />
+      <NPSLabel npsScore={npsScore} benchmark={benchmark} />
+      {/* <GaugeChart npsScore={npsScore} benchmark={benchmark} /> */}
       <Benchmark benchmark={benchmark} />
     </View>
   );

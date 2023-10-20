@@ -72,7 +72,7 @@ export const GaugeChart = ({npsScore, benchmark}) => {
   const guage_ = {
     // Set inner radius
     innerRadius: -30,
-
+    bottomText: 'Bottom',
     // Create axis
     xAxes: [
       {
@@ -118,28 +118,28 @@ export const GaugeChart = ({npsScore, benchmark}) => {
     hands: [
       {
         type: 'ClockHand',
-        value: npsScore,
-        fill: Colors.filterIconColor,
-        stroke: Colors.filterIconColor,
-        innerRadius: '10%',
-        radius: '85%',
-        startWidth: 10,
-        endWidth: 0.1,
+        value: benchmark,
+        fill: Colors.borderColor,
+        stroke: Colors.borderColor,
+        innerRadius: '00%',
+        radius: '100%',
+        startWidth: 0.01,
+        endWidth: 0.01,
         pin: {
           disabled: true,
         },
       },
       {
         type: 'ClockHand',
-        value: benchmark,
-        fill: Colors.borderColor,
-        stroke: Colors.borderColor,
-        innerRadius: '0%',
-        radius: '100%',
-        startWidth: 0.01,
-        endWidth: 0.01,
+        value: npsScore,
+        fill: Colors.filterIconColor,
+        stroke: Colors.filterIconColor,
+        innerRadius: '00%',
+        radius: '85%',
+        startWidth: 10,
+        endWidth: 0.1,
         pin: {
-          disabled: true,
+          disabled: false,
         },
       },
     ],
@@ -158,8 +158,8 @@ export const GaugeChart = ({npsScore, benchmark}) => {
 const styles = StyleSheet.create({
   chartContainer: {
     zIndex: 10,
-    height: '70%',
-    width: '70%',
-    margin: MarginConstants.tab1,
+    height: '60%',
+    width: '80%',
+    margin: 0,
   },
 });
