@@ -18,7 +18,7 @@ import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
 import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
-import Icon from 'react-native-vector-icons/FontAwesome';
+// import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -36,14 +36,7 @@ import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
 import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
-// import HighchartsReactNative from '@highcharts/highcharts-react-native';
-// import ChartView from 'react-native-highcharts';
-// import ChartView from 'react-native-highcharts-wrapper';
-// import GaugeChart from 'react-gauge-chart';
-// import RNSpeedometer from 'react-native-speedometer';
-import AMCharts from 'react-native-amcharts';
 import {GaugeChart} from './GaugeChart';
-import {PaddingConstants} from '../../styles/padding.constants';
 import {textStyles} from '../../styles/text.styles';
 
 const wait = timeout => {
