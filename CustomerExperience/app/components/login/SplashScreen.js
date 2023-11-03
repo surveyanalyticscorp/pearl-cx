@@ -2,13 +2,15 @@ import {ImageBackground, Image, StyleSheet} from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
+  ACCESS_CODE,
   ASYNC_AUTH_TOKEN,
   ASYNC_BEARER_TOKEN,
   ASYNC_CLF_BASE_URL,
   ASYNC_USER_INFO,
+  BASE_URL,
 } from '../../api/Constant';
 // import AppRouter from '../../routes/appRouter';
-import {connect} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import {
   fillUserInfo,
   setAuthToken,
@@ -19,16 +21,58 @@ import {DASHBOARD_RANGE} from '../../redux/actions/dashboard.actions';
 import {setLanguageInfo, setRangeFilter} from '../../redux/actions';
 import {WelcomeScreen} from '../dashboard/WelcomeScreen';
 import AppRouter from '../../routes/appRouter';
+import {
+  SET_ACCESS_CODE,
+  authenticatePanel,
+  setAccessCode,
+  setBaseUrl,
+  updateBaseUrl,
+} from '../../redux/actions/login.actions';
+import StringUtils from '../../Utils/StringUtils';
 
 function SplashScreen(props) {
   let [moveNext, setMoveNext] = useState(false);
   let splashTimer = useRef(null);
+  const dispatch = useDispatch();
+
+  const setGlobalBaseUrl = () => {
+    AsyncStorage.getItem(BASE_URL).then(baseUrl => {
+      // console.log(`subscriber ID from async storage: ${subscriberId}`);
+
+      //console.log(`Base url from async storage: ${baseUrl}`);
+      if (baseUrl) {
+        global.baseUrl = baseUrl;
+        dispatch(setBaseUrl(baseUrl));
+      }
+    });
+  };
+
+  const setAuthAccessCode = () => {
+    AsyncStorage.getItem(ACCESS_CODE).then(accessCode => {
+      // console.log(`subscriber ID from async storage: ${subscriberId}`);
+      //console.log(`Base url from async storage: ${baseUrl}`);
+      if (accessCode && accessCode.length > 0) {
+        dispatch(setAccessCode(accessCode));
+        dispatch(authenticatePanel({accessCode: accessCode}));
+      }
+    });
+  };
 
   useEffect(() => {
     splashTimer = setTimeout(() => {
       AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {
         console.log(
           'Async Storage: saved clf base url from splash screen',
+          clfBase,
+        );
+        if (!isStringNullOrEmpty(clfBase)) {
+          global.clfBaseUrl = clfBase;
+        }
+      });
+
+      AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {
+        console.log(
+          'Async Storage: saved base url from splash screen',
           clfBase,
         );
         if (!isStringNullOrEmpty(clfBase)) {
@@ -57,6 +101,8 @@ function SplashScreen(props) {
         props.setToken(token);
         if (!isStringNullOrEmpty(userInfo)) {
           props.saveUserInfo(JSON.parse(userInfo));
+          // setGlobalBaseUrl();
+          setAuthAccessCode();
         }
         if (!isStringNullOrEmpty(dashboardRange)) {
           props.setRange(JSON.parse(dashboardRange));

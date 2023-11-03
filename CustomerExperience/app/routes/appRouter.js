@@ -80,6 +80,7 @@ import SegmentSelector from '../components/SegmentSelector';
 import Feedback from '../components/feedback/Feedback';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
 import {ModalStackScreen} from './ModalStack';
+import {authenticatePanel} from '../redux/actions/login.actions';
 // import SearchStack from './SearchStack';
 // import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
@@ -248,6 +249,7 @@ const AppRouter = props => {
       if (baseUrl) {
         global.baseUrl = baseUrl;
         setBaseUrl(baseUrl);
+        // dispatch(setBaseUrl(baseUrl));
       }
     });
   };

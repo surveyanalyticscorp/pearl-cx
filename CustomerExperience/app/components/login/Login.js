@@ -35,12 +35,14 @@ import SafeAreaView from 'react-native-safe-area-view';
 import {setDynamicLink} from '../../redux/actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
+  ACCESS_CODE,
   ASYNC_CLF_BASE_URL,
   ASYNC_PUSH_TOKEN,
   BASE_URL,
   SUBSCRIBER_ID,
 } from '../../api/Constant';
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
+import {translate} from '../../Utils/MultilinguaUtils';
 
 const stringConst = require('../../config/translations/en');
 
@@ -80,6 +82,8 @@ const Login = props => {
     if (props.baseUrl && StringUtils.isNotEmpty(props.baseUrl)) {
       AsyncStorage.setItem(BASE_URL, props.baseUrl).then();
       AsyncStorage.setItem(SUBSCRIBER_ID, props.subscriberId).then();
+      AsyncStorage.setItem(ACCESS_CODE, props.accessCode).then();
+
       global.baseUrl = props.baseUrl;
       global.subscriberId = props.subscriberId;
       console.log('BASEURL', props.baseUrl);
@@ -132,9 +136,13 @@ const Login = props => {
   };
 
   let getApiValidationErrorMessage = () => {
-    return props.errorMessage.errorAlert
-      ? props.errorMessage.errorAlert
-      : props.errorMessage.validationErrors[0].error;
+    console.log('getApiValidationErrorMessage', JSON.stringify(props));
+    if (props.errorMessage.errorAlert) {
+      return props.errorMessage?.errorAlert
+        ? props.errorMessage?.errorAlert
+        : props.errorMessage?.validationErrors[0]?.error;
+    }
+    return 'Error';
   };
 
   let authenticateAccessCode = () => {
@@ -351,6 +359,7 @@ const mapStateToProps = state => {
     clfBaseUrl: state.global.clfBaseUrl,
     subscriberId: state.global.subscriberId,
     userInfo: state.global.userInfo,
+    accessCode: state.global.accessCode,
   };
 };
 

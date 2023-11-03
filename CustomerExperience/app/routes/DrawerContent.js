@@ -21,8 +21,12 @@ import {clearUserInfo} from '../redux/actions';
 import {doLogout} from '../redux/actions/login.actions';
 import {connect} from 'react-redux';
 import {
+  ACCESS_CODE,
+  ASYNC_AUTH_TOKEN,
+  ASYNC_BEARER_TOKEN,
   ASYNC_PUSH_TOKEN,
   ASYNC_USER_CREDENTIALS,
+  ASYNC_USER_INFO,
   BASE_URL,
 } from '../api/Constant';
 import {Sizes} from '../styles/Size.constant';
@@ -237,7 +241,15 @@ const DrawerContent = props => {
     props.logoutUser(props.authToken, params);
     setLoading(true);
     Notifications.removeAllDeliveredNotifications();
-    AsyncStorage.setItem(BASE_URL, '').then(() => {
+
+    let removeAsyncData = [
+      [BASE_URL, ''],
+      [ASYNC_AUTH_TOKEN, ''],
+      [ASYNC_BEARER_TOKEN, ''],
+      [ACCESS_CODE, ''],
+      [ASYNC_USER_INFO, {}],
+    ];
+    AsyncStorage.multiSet(removeAsyncData).then(() => {
       global.baseUrl = '';
     });
   };

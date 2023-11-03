@@ -2,6 +2,10 @@ export const GET_LOGIN = 'GET_LOGIN';
 export const LOGIN_RESPONSE = 'LOGIN_RESPONSE';
 export const AUTHENTICATE_PANEL = 'AUTHENTICATE_PANEL';
 export const AUTHENTICATE_PANEL_RESPONSE = 'AUTHENTICATE_PANEL_RESPONSE';
+export const UPDATE_BASE_URL = 'UPDATE_BASE_URL';
+export const SET_BASE_URL = 'SET_BASE_URL';
+export const SET_ACCESS_CODE = 'SET_ACCESS_CODE';
+export const UPDATE_BASE_CLF_URL = 'UPDATE_BASE_CLF_URL';
 export const LOGOUT = 'LOGOUT';
 export const LOGOUT_RESPONSE = 'LOGOUT_RESPONSE';
 export const GET_RESET_PASSWORD_LINK = 'GET_RESET_PASSWORD_LINK';
@@ -40,6 +44,26 @@ export const updatePassword = param => ({
 
 export const validateResetPasswordLink = param => ({
   type: VALIDATE_RESET_PASSWORD_LINK,
+  param,
+});
+
+export const setBaseUrl = baseUrl => ({
+  type: SET_BASE_URL,
+  baseUrl: baseUrl,
+});
+
+export const setAccessCode = accessCode => ({
+  type: SET_ACCESS_CODE,
+  accessCode: accessCode,
+});
+
+export const updateBaseUrl = param => ({
+  type: UPDATE_BASE_URL,
+  param,
+});
+
+export const updateClfBaseUrl = param => ({
+  type: UPDATE_BASE_CLF_URL,
   param,
 });
 

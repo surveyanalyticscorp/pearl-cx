@@ -1,4 +1,9 @@
-import {IS_DEV_MODE, DEV_BASE_URL, CLF_BASE_URL} from '../../api/Constant';
+import {
+  IS_DEV_MODE,
+  DEV_BASE_URL,
+  CLF_BASE_URL,
+  BASE_URL_MID_FIX,
+} from '../../api/Constant';
 import {
   FILL_USER_INFO,
   IS_LOADING,
@@ -24,6 +29,10 @@ import {
   GET_BEARER_TOKEN_RESPONSE,
   LOGIN_RESPONSE,
   LOGOUT_RESPONSE,
+  SET_ACCESS_CODE,
+  SET_BASE_URL,
+  UPDATE_BASE_CLF_URL,
+  UPDATE_BASE_URL,
   UPDATE_PASSWORD_RESPONSE,
   VALIDATE_RESET_PASSWORD_LINK_RESPONSE,
 } from '../actions/login.actions';
@@ -44,6 +53,7 @@ const initialState = {
   isError: false,
   baseUrl: '',
   clfBaseUrl: '',
+  accessCode: '',
   subscriberId: '',
   userInfo: {},
   languageCode: '',
@@ -64,12 +74,44 @@ const globalReducer = (state = initialState, action) => {
     case AUTHENTICATE_PANEL_RESPONSE: {
       return {
         ...state,
-        baseUrl: IS_DEV_MODE ? DEV_BASE_URL : action.response.body.mobileAPIURL,
+        baseUrl:
+          (IS_DEV_MODE ? DEV_BASE_URL : action.response.body.mobileAPIURL) +
+          (action.hasMidFix ? BASE_URL_MID_FIX : ''),
         subscriberId: JSON.stringify(action.response.body.userID),
         dataCenter: action.response.body.dataCenter,
+        accessCode: action.response.body.accessCode,
+      };
+    }
+    case UPDATE_BASE_URL: {
+      console.log('UPDATE_BASE_URL', JSON.stringify(action));
+      return {
+        ...state,
+        baseUrl: action.hasMidFix
+          ? state.baseUrl + BASE_URL_MID_FIX
+          : state.baseUrl,
+      };
+    }
+    case SET_BASE_URL: {
+      console.log('SET_BASE_URL', JSON.stringify(action));
+      return {
+        ...state,
+        baseUrl: action.baseUrl,
       };
     }
 
+    case SET_ACCESS_CODE: {
+      console.log('SET_ACCESS_CODE', JSON.stringify(action));
+      return {
+        ...state,
+        accessCode: action.accessCode,
+      };
+    }
+    case UPDATE_BASE_CLF_URL: {
+      return {
+        ...state,
+        clfBaseUrl: action.clfBaseUrl,
+      };
+    }
     case LOGIN_RESPONSE: {
       console.log(
         'LOGIN_RESPONSE, CLF BASE URL',
@@ -221,6 +263,9 @@ const globalReducer = (state = initialState, action) => {
         logoutResponse: action.response,
         baseUrl: '',
         subscriberId: '',
+        accessCode: '',
+        bearerToken: '',
+        authToken: '',
       };
     }
     case GET_BEARER_TOKEN_RESPONSE: {

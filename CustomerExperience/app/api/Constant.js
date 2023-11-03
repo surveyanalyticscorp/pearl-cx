@@ -7,7 +7,7 @@ export const ASYNC_RESET_CREDENTIALS = 'resetCredentials';
 export const ASYNC_PUSH_TOKEN = 'pushtoken';
 export const BASE_URL = 'baseUrl';
 export const ASYNC_CLF_BASE_URL = 'clfBaseUrl';
-
+export const ACCESS_CODE = 'ACCESS_CODE';
 export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
 export const ACTION_EMAIL = 'noreply@InsightsHub.com';
@@ -28,50 +28,46 @@ export const CLF_BASE_URL = `https://${
   IS_DEV_MODE ? 'clfqa' : 'clf'
 }-backend.questionpro.com/api`;
 
-export const PANEL_AUTH =
-  'https://api.questionpro.com/a/nativehtml/panel.auth.PanelRequestHandler';
-export const AUTH_LOGIN = '/a/nativehtml/cx.auth.CXLogin';
-export const CX_LOGOUT = '/a/nativehtml/cx.auth.CXLogout';
+export const INIT_BASE = 'https://api.questionpro.com';
+export const BASE_URL_MID_FIX = '/a/nativehtml';
+export const PANEL_AUTH = '/panel.auth.PanelRequestHandler';
+export const PANEL_AUTH_v2 =
+  'https://api.questionpro.com/panel.auth.PanelRequestHandler';
+export const AUTH_LOGIN = '/cx.auth.CXLogin';
+export const CX_LOGOUT = '/cx.auth.CXLogout';
 
-export const CX_GET_RESET_PASSWORD_LINK =
-  '/a/nativehtml/cx.auth.CXForgotPasswordLink';
-export const CX_VALIDATE_PASSWORD_LINK =
-  '/a/nativehtml/cx.auth.ValidatePasswordLinkExpiry';
-export const AUTH_UPDATE_PASSWORD = '/a/nativehtml/cx.auth.CXUpdatePassword';
+export const CX_GET_RESET_PASSWORD_LINK = '/cx.auth.CXForgotPasswordLink';
+export const CX_VALIDATE_PASSWORD_LINK = '/cx.auth.ValidatePasswordLinkExpiry';
+export const AUTH_UPDATE_PASSWORD = '/cx.auth.CXUpdatePassword';
 
-export const CX_HOME = '/a/nativehtml/cx.CXHome';
-export const CX_DETRACTOR_TICKETS = '/a/nativehtml/cx.CXDetractorTicket';
-export const CX_GET_ALL_RESPONSE = '/a/nativehtml/cx.CXGetAllResponses';
+export const CX_HOME = '/cx.CXHome';
+export const CX_DETRACTOR_TICKETS = '/cx.CXDetractorTicket';
+export const CX_GET_ALL_RESPONSE = '/cx.CXGetAllResponses';
 
-export const CX_GET_PANEL_MEMBER = '/a/nativehtml/cx.CXPanelMemberProfile';
-export const CX_RESPONSE_TICKET_DETAILS = '/a/nativehtml/cx.CXTicketDetails';
-export const CX_RESPONSE_SURVEY_DETAILS =
-  '/a/nativehtml/cx.SurveyResponseDetails';
+export const CX_GET_PANEL_MEMBER = '/cx.CXPanelMemberProfile';
+export const CX_RESPONSE_TICKET_DETAILS = '/cx.CXTicketDetails';
+export const CX_RESPONSE_SURVEY_DETAILS = '/cx.SurveyResponseDetails';
 export const CX_RESPONSE_DETAILS_BY_RESPONSEID =
-  '/a/nativehtml/cx.CXGetResponseByResponseSetID';
+  '/cx.CXGetResponseByResponseSetID';
 
 //export const CX_ADD_UPDATE_TICKET = 'a/nativehtml/cx.CXAddOrUpdateTicket';
 
 export const CX_GET_CLOSED_LOOP_TICKET_DETAILS =
-  '/a/nativehtml/cx.closedloop.CXGetTicketDetails';
+  '/cx.closedloop.CXGetTicketDetails';
 // export const CX_GET_CLOSED_LOOP_SEGMENT_DETAILS =
-//   '/a/nativehtml/cx.closedloop.CXGetSegmentByStatus';
+//   '/cx.closedloop.CXGetSegmentByStatus';
 export const CX_GET_CLOSED_LOOP_SEGMENT_DETAILS =
-  '/a/nativehtml/cx.closedloop.CXGetAllSegment';
+  '/cx.closedloop.CXGetAllSegment';
 export const CX_GET_CLOSED_LOOP_OWNER_DETAILS =
-  '/a/nativehtml/cx.closedloop.CXGetOwnerBySegment';
+  '/cx.closedloop.CXGetOwnerBySegment';
 export const CX_GET_CLOSED_LOOP_SEGMENT_AND_OWNER_BY_FEEDBACK =
-  '/a/nativehtml/cx.closedloop.CXGetSegmentAndOwnerByFeedback';
-export const CX_UPDATE_CLOSED_LOOP_TICKET =
-  '/a/nativehtml/cx.closedloop.CXUpdateTicket';
-export const CX_ADD_CLOSED_LOOP_TICKET = '/a/nativehtml/cx.CXAddTicket';
+  '/cx.closedloop.CXGetSegmentAndOwnerByFeedback';
+export const CX_UPDATE_CLOSED_LOOP_TICKET = '/cx.closedloop.CXUpdateTicket';
+export const CX_ADD_CLOSED_LOOP_TICKET = '/cx.CXAddTicket';
 
-export const CX_GET_NOTIFICATION_LIST =
-  '/a/nativehtml/cx.CXGetNotificationLogs';
-export const CX_CLEAR_NOTIFICATION_LOGS =
-  '/a/nativehtml/cx.CXClearNotificationLogs';
-export const CX_WELCOME_SCREEN_DATA =
-  '/a/nativehtml/cx.CXWelcomeScreenDataCount';
+export const CX_GET_NOTIFICATION_LIST = '/cx.CXGetNotificationLogs';
+export const CX_CLEAR_NOTIFICATION_LOGS = '/cx.CXClearNotificationLogs';
+export const CX_WELCOME_SCREEN_DATA = '/cx.CXWelcomeScreenDataCount';
 
 // CLF 3.0 APIs
 
@@ -203,49 +199,49 @@ export const CLF_BASE_URL = `https://${
 }-backend.questionpro.com/api`;
 
 export const PANEL_AUTH =
-  'https://api.questionpro.com/a/nativehtml/panel.auth.PanelRequestHandler';
-export const AUTH_LOGIN = '/a/nativehtml/cx.auth.CXLogin';
-export const CX_LOGOUT = '/a/nativehtml/cx.auth.CXLogout';
+  'https://api.questionpro.com/panel.auth.PanelRequestHandler';
+export const AUTH_LOGIN = '/cx.auth.CXLogin';
+export const CX_LOGOUT = '/cx.auth.CXLogout';
 
 export const CX_GET_RESET_PASSWORD_LINK =
-  '/a/nativehtml/cx.auth.CXForgotPasswordLink';
+  '/cx.auth.CXForgotPasswordLink';
 export const CX_VALIDATE_PASSWORD_LINK =
-  '/a/nativehtml/cx.auth.ValidatePasswordLinkExpiry';
-export const AUTH_UPDATE_PASSWORD = '/a/nativehtml/cx.auth.CXUpdatePassword';
+  '/cx.auth.ValidatePasswordLinkExpiry';
+export const AUTH_UPDATE_PASSWORD = '/cx.auth.CXUpdatePassword';
 
-export const CX_HOME = '/a/nativehtml/cx.CXHome';
-export const CX_DETRACTOR_TICKETS = '/a/nativehtml/cx.CXDetractorTicket';
-export const CX_GET_ALL_RESPONSE = '/a/nativehtml/cx.CXGetAllResponses';
+export const CX_HOME = '/cx.CXHome';
+export const CX_DETRACTOR_TICKETS = '/cx.CXDetractorTicket';
+export const CX_GET_ALL_RESPONSE = '/cx.CXGetAllResponses';
 
-export const CX_GET_PANEL_MEMBER = '/a/nativehtml/cx.CXPanelMemberProfile';
-export const CX_RESPONSE_TICKET_DETAILS = '/a/nativehtml/cx.CXTicketDetails';
+export const CX_GET_PANEL_MEMBER = '/cx.CXPanelMemberProfile';
+export const CX_RESPONSE_TICKET_DETAILS = '/cx.CXTicketDetails';
 export const CX_RESPONSE_SURVEY_DETAILS =
-  '/a/nativehtml/cx.SurveyResponseDetails';
+  '/cx.SurveyResponseDetails';
 export const CX_RESPONSE_DETAILS_BY_RESPONSEID =
-  '/a/nativehtml/cx.CXGetResponseByResponseSetID';
+  '/cx.CXGetResponseByResponseSetID';
 
 //export const CX_ADD_UPDATE_TICKET = 'a/nativehtml/cx.CXAddOrUpdateTicket';
 
 export const CX_GET_CLOSED_LOOP_TICKET_DETAILS =
-  '/a/nativehtml/cx.closedloop.CXGetTicketDetails';
+  '/cx.closedloop.CXGetTicketDetails';
 // export const CX_GET_CLOSED_LOOP_SEGMENT_DETAILS =
-//   '/a/nativehtml/cx.closedloop.CXGetSegmentByStatus';
+//   '/cx.closedloop.CXGetSegmentByStatus';
 export const CX_GET_CLOSED_LOOP_SEGMENT_DETAILS =
-  '/a/nativehtml/cx.closedloop.CXGetAllSegment';
+  '/cx.closedloop.CXGetAllSegment';
 export const CX_GET_CLOSED_LOOP_OWNER_DETAILS =
-  '/a/nativehtml/cx.closedloop.CXGetOwnerBySegment';
+  '/cx.closedloop.CXGetOwnerBySegment';
 export const CX_GET_CLOSED_LOOP_SEGMENT_AND_OWNER_BY_FEEDBACK =
-  '/a/nativehtml/cx.closedloop.CXGetSegmentAndOwnerByFeedback';
+  '/cx.closedloop.CXGetSegmentAndOwnerByFeedback';
 export const CX_UPDATE_CLOSED_LOOP_TICKET =
-  '/a/nativehtml/cx.closedloop.CXUpdateTicket';
-export const CX_ADD_CLOSED_LOOP_TICKET = '/a/nativehtml/cx.CXAddTicket';
+  '/cx.closedloop.CXUpdateTicket';
+export const CX_ADD_CLOSED_LOOP_TICKET = '/cx.CXAddTicket';
 
 export const CX_GET_NOTIFICATION_LIST =
-  '/a/nativehtml/cx.CXGetNotificationLogs';
+  '/cx.CXGetNotificationLogs';
 export const CX_CLEAR_NOTIFICATION_LOGS =
-  '/a/nativehtml/cx.CXClearNotificationLogs';
+  '/cx.CXClearNotificationLogs';
 export const CX_WELCOME_SCREEN_DATA =
-  '/a/nativehtml/cx.CXWelcomeScreenDataCount';
+  '/cx.CXWelcomeScreenDataCount';
 
 // CLF 3.0 APIs
 

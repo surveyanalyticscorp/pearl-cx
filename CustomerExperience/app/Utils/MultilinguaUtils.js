@@ -30,8 +30,8 @@ export const setI18nConfig = (languageTag, isRTL = false) => {
     languageTag = 'en';
   }
 
-  console.log(`LANG TAG: ${languageTag}`);
-  console.log(`LANG TAG: ${JSON.stringify(translationGetters[languageTag]())}`);
+  // console.log(`LANG TAG: ${languageTag}`);
+  // console.log(`LANG TAG: ${JSON.stringify(translationGetters[languageTag]())}`);
 
   // clear translation cache
   translate.cache.clear();

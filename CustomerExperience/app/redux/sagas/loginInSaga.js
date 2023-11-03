@@ -1,7 +1,8 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {
-  PANEL_AUTH,
+  PANEL_AUTH_v1,
+  PANEL_AUTH_v2,
   AUTH_LOGIN,
   CX_GET_RESET_PASSWORD_LINK,
   CX_VALIDATE_PASSWORD_LINK,
@@ -15,6 +16,9 @@ import {
   CLF_BASE_URL,
   ASYNC_BEARER_TOKEN,
   ASYNC_CLF_BASE_URL,
+  INIT_BASE,
+  PANEL_AUTH,
+  BASE_URL_MID_FIX,
 } from '../../api/Constant';
 import {API_ERROR, CLEAR_API_ERROR, IS_LOADING} from '../actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -39,16 +43,38 @@ import {
 } from '../actions/login.actions';
 
 export function* doAuthenticatePanel(action) {
+  let url = INIT_BASE + PANEL_AUTH;
   try {
-    const response = yield WebServiceHandler.postNew(
-      PANEL_AUTH,
-      {},
-      action.param,
-    );
-
-    yield put({type: AUTHENTICATE_PANEL_RESPONSE, response: response});
+    const response = yield WebServiceHandler.postNew(url, {}, action.param);
+    yield put({
+      type: AUTHENTICATE_PANEL_RESPONSE,
+      hasMidFix: false,
+      response: response,
+    });
   } catch (error) {
-    yield put({type: API_ERROR, error: error});
+    if (error.status === 404 && !error.url.includes(BASE_URL_MID_FIX)) {
+      try {
+        yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
+
+        const response = yield WebServiceHandler.postNew(
+          INIT_BASE + BASE_URL_MID_FIX + PANEL_AUTH,
+          {},
+          action.param,
+        );
+
+        yield put({
+          type: AUTHENTICATE_PANEL_RESPONSE,
+          hasMidFix: true,
+          response: response,
+        });
+      } catch (error_) {
+        console.log('Error: inner catch block', JSON.stringify(error));
+        yield put({type: API_ERROR, error: error_});
+      }
+    } else {
+      console.log('Error: first catch block', JSON.stringify(error));
+      yield put({type: API_ERROR, error: error});
+    }
   }
 }
 
@@ -61,7 +87,7 @@ export function* doLoginApiCall(action) {
     global.clfBaseUrl = '';
     global.bearerToken = '';
     const response = yield WebServiceHandler.postNew(
-      AUTH_LOGIN,
+      BASE_URL_MID_FIX + AUTH_LOGIN,
       {},
       action.param,
     );
@@ -240,6 +266,8 @@ function* doLogoutAction(action) {
     // showErrorFlashMessage(error.message);
     // yield put({type: API_ERROR, error: error.message});
     yield put({type: LOGOUT_RESPONSE, response: ''});
+  } finally {
+    yield put({type: CLEAR_API_ERROR, payload: {isLoading: false}});
   }
 }
 
