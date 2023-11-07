@@ -519,7 +519,7 @@ const AppRouter = props => {
     if (welcomeScreenData) {
       splashTimer.current = setTimeout(() => {
         setMoveNext(true);
-      }, 3000);
+      }, 5000);
       return () => {
         clearTimeout(splashTimer.current);
       };

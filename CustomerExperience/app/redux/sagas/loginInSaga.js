@@ -265,9 +265,10 @@ function* doLogoutAction(action) {
   } catch (error) {
     // showErrorFlashMessage(error.message);
     // yield put({type: API_ERROR, error: error.message});
-    yield put({type: LOGOUT_RESPONSE, response: ''});
+    yield put({type: LOGOUT_RESPONSE, response: {}});
   } finally {
     yield put({type: CLEAR_API_ERROR, payload: {isLoading: false}});
+    yield put({type: LOGOUT_RESPONSE, response: {}});
   }
 }
 

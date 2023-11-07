@@ -7,15 +7,14 @@ similarity index 100%
 rename from node_modules/react-native/ReactCommon/hermes/inspector/tools/msggen/.npmignore
 rename to node_modules/react-native/ReactCommon/hermes/inspector/tools/msggen/.gitignore
 diff --git a/node_modules/react-native/react.gradle b/node_modules/react-native/react.gradle
-index b841e16..9940491 100644
+index b841e16..6a857cf 100644
 --- a/node_modules/react-native/react.gradle
 +++ b/node_modules/react-native/react.gradle
-@@ -139,7 +139,22 @@ afterEvaluate {
-                 jsIntermediateSourceMapsDir.mkdirs()
+@@ -140,6 +140,22 @@ afterEvaluate {
                  jsSourceMapsDir.deleteDir()
                  jsSourceMapsDir.mkdirs()
--            }
-+            }doLast {
+             }
++            doLast {
 +def moveFunc = { resSuffix ->
 +File originalDir = file("${resourcesDir}/drawable-${resSuffix}");
 +if (originalDir.exists()) {

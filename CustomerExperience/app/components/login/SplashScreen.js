@@ -39,7 +39,7 @@ function SplashScreen(props) {
     AsyncStorage.getItem(BASE_URL).then(baseUrl => {
       // console.log(`subscriber ID from async storage: ${subscriberId}`);
 
-      //console.log(`Base url from async storage: ${baseUrl}`);
+      console.log(`Base url from Splash Screen async storage: ${baseUrl}`);
       if (baseUrl) {
         global.baseUrl = baseUrl;
         dispatch(setBaseUrl(baseUrl));
@@ -47,16 +47,16 @@ function SplashScreen(props) {
     });
   };
 
-  const setAuthAccessCode = () => {
-    AsyncStorage.getItem(ACCESS_CODE).then(accessCode => {
-      // console.log(`subscriber ID from async storage: ${subscriberId}`);
-      //console.log(`Base url from async storage: ${baseUrl}`);
-      if (accessCode && accessCode.length > 0) {
-        dispatch(setAccessCode(accessCode));
-        dispatch(authenticatePanel({accessCode: accessCode}));
-      }
-    });
-  };
+  // const setAuthAccessCode = () => {
+  //   AsyncStorage.getItem(ACCESS_CODE).then(accessCode => {
+  //     // console.log(`subscriber ID from async storage: ${subscriberId}`);
+  //     //console.log(`Base url from async storage: ${baseUrl}`);
+  //     if (accessCode && accessCode.length > 0) {
+  //       dispatch(setAccessCode(accessCode));
+  //       dispatch(authenticatePanel({accessCode: accessCode}));
+  //     }
+  //   });
+  // };
 
   useEffect(() => {
     splashTimer = setTimeout(() => {
@@ -101,8 +101,8 @@ function SplashScreen(props) {
         props.setToken(token);
         if (!isStringNullOrEmpty(userInfo)) {
           props.saveUserInfo(JSON.parse(userInfo));
-          // setGlobalBaseUrl();
-          setAuthAccessCode();
+          setGlobalBaseUrl();
+          // setAuthAccessCode();
         }
         if (!isStringNullOrEmpty(dashboardRange)) {
           props.setRange(JSON.parse(dashboardRange));

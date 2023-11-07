@@ -1,6 +1,7 @@
 import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {
+  BASE_URL_MID_FIX,
   CLF_APP_LOGIN_COUNT,
   CLF_GET_BASE_URL,
   CLF_STATUS_WISE_PRIORITY_ANALYTICS,
@@ -10,6 +11,7 @@ import {
 } from '../../api/Constant';
 import {
   API_ERROR,
+  CLEAR_API_ERROR,
   IS_ERROR,
   IS_LOADING,
   SET_LANGUAGE_INFO,
@@ -29,6 +31,7 @@ import {
   getBearerTokenStatic,
   getClfUrl,
 } from '../../Utils/ApiCallUtils';
+import {SET_BASE_URL} from '../actions/login.actions';
 
 export function* fetchDashboard(action) {
   try {
@@ -102,21 +105,70 @@ export function* fetchDataCount(action) {
       'WELCOME_SCREEN_DATA_COUNT, clf response',
       JSON.stringify(clf_response),
     );
+
+    console.log(
+      'WELCOME_SCREEN_DATA_COUNT, cx response',
+      JSON.stringify(cx_response),
+    );
     yield put({
       type: WELCOME_SCREEN_DATA_RECIEVED,
       cxResponse: cx_response,
       clfResponse: clf_response,
     });
-
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
-    yield put({type: IS_LOADING, payload: {isLoading: false}});
+    if (error.status === 404 && !error.url.includes(BASE_URL_MID_FIX)) {
+      try {
+        yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
 
-    showErrorFlashMessage(error.errorAlert);
-    yield put({
-      type: API_ERROR,
-      error: error,
-    });
+        const clf_response = yield WebServiceHandler.get(
+          getClfUrl(CLF_WELCOME_SCREEN_COUNTS),
+          getBearerTokenStatic(),
+          // {'Auth-Token': action.token},
+          action.param,
+        );
+
+        const cx_response = yield WebServiceHandler.postNew(
+          BASE_URL_MID_FIX + CX_WELCOME_SCREEN_DATA,
+          {'Auth-Token': action.token},
+          {},
+        );
+
+        console.log(
+          'WELCOME_SCREEN_DATA_COUNT, clf response',
+          JSON.stringify(clf_response),
+        );
+
+        console.log(
+          'WELCOME_SCREEN_DATA_COUNT, cx response',
+          JSON.stringify(cx_response),
+        );
+
+        yield put({
+          type: SET_BASE_URL,
+          baseUrl: global.baseUrl + BASE_URL_MID_FIX,
+        });
+
+        yield put({
+          type: WELCOME_SCREEN_DATA_RECIEVED,
+          cxResponse: cx_response,
+          clfResponse: clf_response,
+        });
+      } catch (error_) {
+        console.log('Error: inner catch block', JSON.stringify(error));
+        yield put({type: API_ERROR, error: error_});
+      }
+    } else {
+      console.log('Error: first catch block', JSON.stringify(error));
+      yield put({type: API_ERROR, error: error});
+    }
+
+    // showErrorFlashMessage(error.errorAlert);
+    // yield put({
+    //   type: API_ERROR,
+    //   error: error,
+    // });
+  } finally {
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
   }
 }
 

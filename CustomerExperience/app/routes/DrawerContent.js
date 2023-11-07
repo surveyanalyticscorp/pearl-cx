@@ -242,16 +242,20 @@ const DrawerContent = props => {
     setLoading(true);
     Notifications.removeAllDeliveredNotifications();
 
-    let removeAsyncData = [
-      [BASE_URL, ''],
-      [ASYNC_AUTH_TOKEN, ''],
-      [ASYNC_BEARER_TOKEN, ''],
-      [ACCESS_CODE, ''],
-      [ASYNC_USER_INFO, {}],
-    ];
-    AsyncStorage.multiSet(removeAsyncData).then(() => {
+    // let removeAsyncData = [
+    //   [BASE_URL, ''],
+    //   [ASYNC_AUTH_TOKEN, ''],
+    //   [ASYNC_BEARER_TOKEN, ''],
+    //   [ACCESS_CODE, ''],
+    //   [ASYNC_USER_INFO, {}],
+    // ];
+    AsyncStorage.setItem(BASE_URL, '').then(() => {
       global.baseUrl = '';
     });
+    AsyncStorage.setItem(ASYNC_AUTH_TOKEN, '').then();
+    AsyncStorage.setItem(ASYNC_BEARER_TOKEN, '').then();
+    AsyncStorage.setItem(ACCESS_CODE, '').then();
+    AsyncStorage.setItem(ASYNC_USER_INFO, '').then();
   };
 
   let renderAppVersion = () => {

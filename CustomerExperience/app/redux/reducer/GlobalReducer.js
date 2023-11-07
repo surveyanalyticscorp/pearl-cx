@@ -93,6 +93,7 @@ const globalReducer = (state = initialState, action) => {
     }
     case SET_BASE_URL: {
       console.log('SET_BASE_URL', JSON.stringify(action));
+      globalReducer.baseUrl = action.baseUrl;
       return {
         ...state,
         baseUrl: action.baseUrl,

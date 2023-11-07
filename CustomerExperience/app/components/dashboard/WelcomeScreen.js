@@ -18,6 +18,7 @@ import {RenderSpinner} from '../../routes/CommonScreen';
 import {
   ASYNC_BEARER_TOKEN,
   ASYNC_CLF_BASE_URL,
+  BASE_URL,
   SUBSCRIBER_ID,
 } from '../../api/Constant';
 import {
@@ -27,12 +28,15 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {buttonStyles} from '../../styles/button.styles';
+import StringUtils from '../../Utils/StringUtils';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
 export const WelcomeScreen = props => {
   const dispatch = useDispatch();
   const deviceType = Platform.OS === 'android' ? 0 : 1;
-  const {bearerToken, authToken, userInfo} = useSelector(state => state.global);
+  const {baseUrl, bearerToken, authToken, userInfo} = useSelector(
+    state => state.global,
+  );
 
   // const authToken = useSelector((state) => state.global.authToken);
   // const [subscriberId, setSubscriberId] = useState(state.global.subscriberId);
@@ -63,6 +67,22 @@ export const WelcomeScreen = props => {
   //   clearTimeout(splashTimer);
   // };
 
+  const setGlobalBaseUrl = baseUrl_ => {
+    if (!StringUtils.isEmptyOrNull(baseUrl_) && global.baseUrl !== baseUrl_) {
+      global.baseUrl = baseUrl_;
+      AsyncStorage.setItem(BASE_URL, baseUrl_).then();
+    }
+  };
+
+  const getWelcomeScreenData = () => {
+    dispatch(
+      getWelcomeScreenDataCount(authToken, {
+        subscriberId: global.subscriberId,
+        assignToId: userInfo.userID,
+      }),
+    );
+  };
+
   AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {
     console.log(
       'Async Storage: saved clf base url from welcome screen',
@@ -71,42 +91,54 @@ export const WelcomeScreen = props => {
     global.clfBaseUrl = clfBase;
   });
 
-  AsyncStorage.getItem(ASYNC_BEARER_TOKEN).then(bearerToken => {
+  AsyncStorage.getItem(ASYNC_BEARER_TOKEN).then(bearerToken_ => {
     console.log(
       'Async Storage: saved bearer token from welcome screen',
-      bearerToken,
+      bearerToken_,
     );
-    global.bearerToken = bearerToken;
+    global.bearerToken = bearerToken_;
   });
 
   useEffect(() => {
+    if (authToken) {
+      getWelcomeScreenData();
+    }
+  }, [authToken]);
+
+  useEffect(() => {
+    setGlobalBaseUrl(baseUrl);
+  }, [baseUrl]);
+
+  useEffect(() => {
+    if (
+      welcomeScreenData?.cxData &&
+      welcomeScreenData?.clfData &&
+      !StringUtils.isEmptyOrNull(baseUrl)
+    ) {
+      getInitData(authToken);
+    }
+  }, [baseUrl, welcomeScreenData?.cxData, welcomeScreenData?.clfData]);
+
+  const getInitData = authToken_ => {
     // console.log('USER_DATA: ', userInfo, authToken);
     console.log('USER_DATA: ', userInfo);
     // dispatch(getClosedLoopSegmentDetails(authToken, {pageOffset: '0'}));
     console.log('SUBSCRIBER_ID', global.subscriberId);
     dispatch(
-      callAppLoginCounter(authToken, {
+      callAppLoginCounter(authToken_, {
         cxUserId: userInfo.userID,
         deviceType: deviceType,
       }),
     );
 
     dispatch(
-      getFirstTimeClosedLoopSegmentDetails(authToken, {pageOffset: '0'}),
+      getFirstTimeClosedLoopSegmentDetails(authToken_, {pageOffset: '0'}),
     );
-
-    dispatch(
-      getWelcomeScreenDataCount(authToken, {
-        subscriberId: global.subscriberId,
-        assignToId: userInfo.userID,
-      }),
-    );
-    dispatch(getRootCauseList(authToken, global.subscriberId));
-    dispatch(getActionList(authToken, global.subscriberId));
+    dispatch(getRootCauseList(authToken_, global.subscriberId));
+    dispatch(getActionList(authToken_, global.subscriberId));
     // dispatch(getClosedLoopAllOwnersDetails(authToken));
     // dispatch(getClosedLoopOwnerDetails(authToken));
-  }, [authToken]);
-
+  };
   const CustomBackground = ({children}) => {
     return (
       <ImageBackground
