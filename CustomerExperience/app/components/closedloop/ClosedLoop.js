@@ -544,7 +544,7 @@ export default function ClosedLoop(props) {
           }}>
           <View
             style={{
-              paddingHorizontal: MarginConstants.halfTab,
+              paddingHorizontal: MarginConstants.tab1,
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -556,7 +556,9 @@ export default function ClosedLoop(props) {
               onPressFilter={openFilter}
             />
             {!isSearchVisible && (
-              <Pressable onPress={() => setSearchVisibility(true)}>
+              <Pressable
+                style={{marginHorizontal: MarginConstants.tab1}}
+                onPress={() => setSearchVisibility(true)}>
                 <SearchIcon />
               </Pressable>
             )}

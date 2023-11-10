@@ -527,16 +527,16 @@ export const Avatar = ({title, style}) => {
   );
 };
 
-export const FilterIcon = ({onPressFilter, size}) => {
+export const FilterIcon = ({onPressFilter, size, style}) => {
   return (
-    <Pressable onPress={onPressFilter}>
+    <Pressable style={style} onPress={onPressFilter}>
       <IonIcons name="funnel" size={20 ?? size} color={Colors.lightBlack} />
     </Pressable>
   );
 };
-export const SortIcon = ({onPressFilter, size}) => {
+export const SortIcon = ({onPressFilter, size, style}) => {
   return (
-    <Pressable onPress={onPressFilter}>
+    <Pressable style={style} onPress={onPressFilter}>
       <MaterialIcon name="sort" size={size ?? 24} color={Colors.lightBlack} />
     </Pressable>
   );
@@ -552,7 +552,12 @@ export const HeaderFilter = ({
 }) => {
   return (
     <View style={styles.filterAndSearchBox}>
-      {hasFilterIcon && <FilterIcon onPressFilter={onPressFilter} />}
+      {hasFilterIcon && (
+        <FilterIcon
+          style={{marginHorizontal: MarginConstants.tab1}}
+          onPressFilter={onPressFilter}
+        />
+      )}
       {hasSortIcon && <SortIcon onPressFilter={onPressFilter} />}
 
       <FilterDateBox
