@@ -20,6 +20,7 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
 import {textStyles} from '../../styles/text.styles';
+import StringUtils from '../../Utils/StringUtils';
 
 const RenderRootCauseItem = ({onClickCheckBox, title, data}) => {
   return (
@@ -238,7 +239,9 @@ export default function TicketRootCause(props) {
             marginHorizontal: MarginConstants.tab4,
           }}
           onPress={resetSelections}
-          buttonText={translate('root_cause.reset')}
+          buttonText={StringUtils.uppercaseFirstCharRestLowercase(
+            translate('root_cause.reset'),
+          )}
           textStyle={buttonStyles.textButtonTextPrimary}
         />
 
