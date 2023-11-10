@@ -100,16 +100,15 @@ const DescriptionHeader = ({text}) => {
 
 const ShowText = ({text}) => {
   return (
-    <View
-      style={[{flex: 2, justifyContent: 'flex-start'}, styles.rowContainer]}>
-      <Text style={styles.detailsText}>{text}</Text>
+    <View style={[{flex: 2}, styles.rowContainer]}>
+      <Text style={styles.showText}>{text}</Text>
     </View>
   );
 };
 
 const ShowTitleAndText = ({title, subText}) => {
   return (
-    <View style={styles.rowContainer}>
+    <View style={styles.titleTextContainer}>
       <Title value={title} />
       <ShowText text={subText} />
     </View>
@@ -171,16 +170,11 @@ const DescriptionView = ({ticket, showResponseButton}) => {
           <NPSScoreView text={ticket.npsScore} />
         </View>
       )}
-      <View style={styles.columnContainer}>
-        <Title value={translate('ticket_overview.description')} />
-        <Text
-          style={{
-            margin: MarginConstants.halfTab,
-            paddingHorizontal: PaddingConstants.halfTab,
-          }}>
-          {!isObjectEmpty(ticket) ? ticket.comment : ''}
-        </Text>
-      </View>
+      <ShowTitleAndText
+        title={`${translate('ticket_overview.description')}:`}
+        subText={!isObjectEmpty(ticket) ? ticket.comment : ''}
+      />
+
       {ticket.responseId && showResponseButton && <ViewResponseDetailsButton />}
     </View>
   );
@@ -188,8 +182,10 @@ const DescriptionView = ({ticket, showResponseButton}) => {
 
 const ContactView = ({panelMember}) => {
   return (
-    <View style={styles.ticketStatusContainer}>
+    <View
+      style={[styles.ticketStatusContainer, {padding: PaddingConstants.tab1}]}>
       <DescriptionHeader text={translate('ticket_overview.contact')} />
+
       <View style={styles.rowContainer}>
         <Text
           style={{
@@ -201,19 +197,28 @@ const ContactView = ({panelMember}) => {
         </Text>
       </View>
       {panelMember?.email ? (
-        <View style={styles.rowContainer}>
-          <Title value={translate('responses.email')} />
-          {getUnderLineText(panelMember.email ?? '', EMAIL)}
-        </View>
+        <TitleAndUnderLineText
+          title={translate('responses.email')}
+          underlineText={panelMember.email ?? ''}
+          type={EMAIL}
+        />
       ) : (
+        // <View style={styles.rowContainer}>
+        //   <Title value={translate('responses.email')} />
+        //   {getUnderLineText(panelMember.email ?? '', EMAIL)}
+        // </View>
         <View />
       )}
       {panelMember?.phone ? (
-        <View style={styles.rowContainer}>
-          <Title value={translate('create_new_ticket.phone_number')} />
-
-          {getUnderLineText(panelMember.phone ?? '', PHONE)}
-        </View>
+        // <View style={styles.rowContainer}>
+        //   <Title value={translate('create_new_ticket.phone_number')} />
+        //   {getUnderLineText(panelMember.phone ?? '', PHONE)}
+        // </View>
+        <TitleAndUnderLineText
+          title={translate('create_new_ticket.phone_number')}
+          underlineText={panelMember.phone ?? ''}
+          type={PHONE}
+        />
       ) : (
         <View />
       )}
@@ -238,7 +243,7 @@ const DeleteView = ({onPressDelete}) => {
     </View>
   );
 };
-const getUnderLineText = (text, type) => {
+const UnderLineText = ({text, type}) => {
   return (
     <TouchableWithoutFeedback
     // onPress={() => {
@@ -266,6 +271,15 @@ const getUnderLineText = (text, type) => {
         <Text style={styles.underLineText}>{text}</Text>
       </View>
     </TouchableWithoutFeedback>
+  );
+};
+
+const TitleAndUnderLineText = ({title, underlineText, type}) => {
+  return (
+    <View style={styles.titleAndUnderlineContainer}>
+      <Title value={title} />
+      <UnderLineText text={underlineText} type={type} />
+    </View>
   );
 };
 
@@ -853,6 +867,16 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: PaddingConstants.halfTab,
+  },
+  titleAndUnderlineContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  titleTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
     padding: PaddingConstants.tab1,
   },
   columnContainer: {
@@ -877,6 +901,12 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   titleText: {
+    fontFamily: FontFamily.regular,
+    fontWeight: FontWeight._500,
+    fontSize: TextSizes.secondary,
+    color: Colors.filterIconColor,
+  },
+  showText: {
     fontFamily: FontFamily.regular,
     fontWeight: FontWeight._500,
     fontSize: TextSizes.secondary,
@@ -914,7 +944,8 @@ const styles = StyleSheet.create({
   },
 
   takeActionContainer: {
-    padding: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.halfTab,
+    paddingVertical: PaddingConstants.tab1,
     margin: MarginConstants.tab1,
   },
   ticketIdView: {
@@ -927,6 +958,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.medium,
     fontSize: TextSizes.primary,
     color: Colors.accentLight,
+    padding: PaddingConstants.halfTab,
   },
   viewResponseDetailsText: {
     fontFamily: FontFamily.medium,

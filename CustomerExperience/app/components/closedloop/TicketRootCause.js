@@ -4,10 +4,12 @@ import {
   Text,
   StyleSheet,
   Platform,
-  FlatList,
+  // FlatList,
   Pressable,
-  ScrollView,
+  // ScrollView,
 } from 'react-native';
+
+import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
@@ -24,25 +26,25 @@ import StringUtils from '../../Utils/StringUtils';
 
 const RenderRootCauseItem = ({onClickCheckBox, title, data}) => {
   return (
-    <View style={{marginVertical: MarginConstants.tab2}}>
-      <Text style={styles.titleText}>{title}</Text>
-      <FlatList
-        data={data}
-        keyExtractor={(item, index) => item.id.toString()}
-        numColumns={1}
-        ListEmptyComponent={
-          <Text style={styles.dateText}>{`No ${title} found`} </Text>
-        }
-        renderItem={({item, index}) => (
-          <CheckBoxItem
-            textStyle={textStyles.optionText}
-            item={item}
-            index={index}
-            onPress={() => onClickCheckBox(title, item, index)}
-          />
-        )}
-      />
-    </View>
+    <FlatList
+      ListHeaderComponent={<Text style={styles.titleText}>{title}</Text>}
+      style={{marginVertical: MarginConstants.tab2}}
+      nestedScrollEnabled={true}
+      data={data}
+      keyExtractor={(item, index) => item.id.toString()}
+      numColumns={1}
+      ListEmptyComponent={
+        <Text style={styles.dateText}>{`No ${title} found`} </Text>
+      }
+      renderItem={({item, index}) => (
+        <CheckBoxItem
+          textStyle={textStyles.optionText}
+          item={item}
+          index={index}
+          onPress={() => onClickCheckBox(title, item, index)}
+        />
+      )}
+    />
   );
 };
 
@@ -61,25 +63,25 @@ const RenderSegmentItems = ({onClickRadioButton, title, currentSelected}) => {
   // console.log('segments : redux', JSON.stringify(segments));
 
   return (
-    <View style={{marginVertical: MarginConstants.tab2}}>
-      <Text style={styles.titleText}>{title}</Text>
-      <FlatList
-        data={segmentList}
-        keyExtractor={(item, index) => item.id.toString()}
-        numColumns={1}
-        ListEmptyComponent={
-          <Text style={styles.dateText}>{`No ${title} found`} </Text>
-        }
-        renderItem={({item, index}) => (
-          <CheckRadioButtonItem
-            textStyle={textStyles.optionText}
-            item={item}
-            index={index}
-            onPress={() => onClickRadioButton(title, item, index)}
-          />
-        )}
-      />
-    </View>
+    <FlatList
+      ListHeaderComponent={<Text style={styles.titleText}>{title}</Text>}
+      style={{marginVertical: MarginConstants.tab2}}
+      nestedScrollEnabled={true}
+      data={segmentList}
+      keyExtractor={(item, index) => item.id.toString()}
+      numColumns={1}
+      ListEmptyComponent={
+        <Text style={styles.dateText}>{`No ${title} found`} </Text>
+      }
+      renderItem={({item, index}) => (
+        <CheckRadioButtonItem
+          textStyle={textStyles.optionText}
+          item={item}
+          index={index}
+          onPress={() => onClickRadioButton(title, item, index)}
+        />
+      )}
+    />
   );
 };
 
