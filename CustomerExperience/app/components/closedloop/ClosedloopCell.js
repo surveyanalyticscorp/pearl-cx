@@ -77,7 +77,7 @@ const UserPic = ({avatarUrl}) => {
 const TicketID = ({ticketId}) => {
   return (
     <View style={{flexDirection: 'row'}}>
-      <Text style={styles.idTitleText}>{`Ticket ID`} </Text>
+      {/* <Text style={styles.idTitleText}>{`Ticket ID`} </Text> */}
       <Text style={styles.idText}>{`#${ticketId}`} </Text>
     </View>
   );
