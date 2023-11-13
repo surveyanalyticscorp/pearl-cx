@@ -42,7 +42,6 @@ const AssigneeUI = ({assignToId}) => {
 
   return (
     <View style={styles.rowContainer}>
-      {/* <StatusIcon borderColor={borderColor} fillerColor={fillerColor} /> */}
       <Text style={styles.statusText}>
         {getAssigneeName(assignToId, owners)}
       </Text>
@@ -77,7 +76,6 @@ const UserPic = ({avatarUrl}) => {
 const TicketID = ({ticketId}) => {
   return (
     <View style={{flexDirection: 'row'}}>
-      {/* <Text style={styles.idTitleText}>{`Ticket ID`} </Text> */}
       <Text style={styles.idText}>{`#${ticketId}`} </Text>
     </View>
   );
@@ -150,7 +148,6 @@ const StatusRow = ({data}) => {
     <View style={styles.statusContainer}>
       <StatusUI status={data.status} />
       <PriorityUI priority={data.priority} />
-      {/* <UserPic avatarUrl={data.userAvatar} /> */}
       <AssigneeUI assignToId={data.assignToId} />
     </View>
   );

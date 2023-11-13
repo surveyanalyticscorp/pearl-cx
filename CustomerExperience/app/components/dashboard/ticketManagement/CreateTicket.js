@@ -798,6 +798,19 @@ export default function CreateTicket(props) {
             opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
           },
         ]}>
+        <View
+          style={{
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              height: MarginConstants.halfTab,
+              width: '33%',
+
+              backgroundColor: Colors.darkGrey,
+            }}
+          />
+        </View>
         <ScrollView style={styles.container}>
           <View
             style={[styles.rowContainer, {justifyContent: 'space-between'}]}>
