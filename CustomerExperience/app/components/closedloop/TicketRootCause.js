@@ -24,6 +24,13 @@ import {buttonStyles} from '../../styles/button.styles';
 import {textStyles} from '../../styles/text.styles';
 import StringUtils from '../../Utils/StringUtils';
 
+const NoDataFound = ({dataText}) => {
+  return (
+    <Text style={styles.dateText}>
+      {StringUtils.uppercaseFirstCharRestLowercase(`No ${dataText} found`)}
+    </Text>
+  );
+};
 const RenderRootCauseItem = ({onClickCheckBox, title, data}) => {
   return (
     <FlatList
@@ -33,9 +40,7 @@ const RenderRootCauseItem = ({onClickCheckBox, title, data}) => {
       data={data}
       keyExtractor={(item, index) => item.id.toString()}
       numColumns={1}
-      ListEmptyComponent={
-        <Text style={styles.dateText}>{`No ${title} found`} </Text>
-      }
+      ListEmptyComponent={<NoDataFound dataText={title} />}
       renderItem={({item, index}) => (
         <CheckBoxItem
           textStyle={textStyles.optionText}
@@ -70,9 +75,7 @@ const RenderSegmentItems = ({onClickRadioButton, title, currentSelected}) => {
       data={segmentList}
       keyExtractor={(item, index) => item.id.toString()}
       numColumns={1}
-      ListEmptyComponent={
-        <Text style={styles.dateText}>{`No ${title} found`} </Text>
-      }
+      ListEmptyComponent={<NoDataFound dataText={title} />}
       renderItem={({item, index}) => (
         <CheckRadioButtonItem
           textStyle={textStyles.optionText}

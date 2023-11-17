@@ -67,12 +67,13 @@ export default function TicketDetails(props) {
         labelStyle: {
           width: windowDimensions.width / 4,
           fontSize: TextSizes.secondary,
-          fontFamily: FontFamily.secondary,
+          fontFamily: FontFamily.regular,
+          textTransform: 'none',
         },
         indicatorStyle: {backgroundColor: Colors.accentLight},
         style: {backgroundColor: Colors.white, width: '100%'},
         initialLayout: {width: windowDimensions.width},
-        tabStyle: {height: 1.2 * PaddingConstants.tab4},
+        tabStyle: {height: 1.3 * PaddingConstants.tab4},
         activeTintColor: Colors.accentLight,
         inactiveTintColor: Colors.primary,
       }}
@@ -85,6 +86,7 @@ export default function TicketDetails(props) {
           screenName: translate('close_loop.overview'),
           prevScreen: prevScreen,
         }}
+        op
       />
       <TicketTabs.Screen
         name={translate('close_loop.comments')}
