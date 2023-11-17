@@ -26,8 +26,8 @@ export const statusListForCreateTicket = [
 ];
 
 export const ticketTypeList = [
-  {title: 'Manual Ticket', id: 0},
-  {title: 'Detractor Alert', id: 1},
+  {title: 'Manual ticket', id: 0},
+  {title: 'Detractor alert', id: 1},
 ];
 
 export const getTicketTypeById = typeId => {

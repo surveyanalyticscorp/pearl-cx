@@ -241,13 +241,13 @@ const FilterTicket = ({data, onPressHandler}) => {
           styles.rowContainer,
           {marginVertical: MarginConstants.tab4, justifyContent: 'flex-end'},
         ]}>
-        <QPButton
+        {/* <QPButton
           style={{...buttonStyles.outlineButton, margin: MarginConstants.tab2}}
           buttonColor={Colors.white}
           onPress={onCancelHandler}
           textStyle={buttonStyles.outlineButtonText}
           buttonText={'Close'}
-        />
+        /> */}
 
         <QPButton
           style={{...buttonStyles.primaryButton, margin: MarginConstants.tab2}}

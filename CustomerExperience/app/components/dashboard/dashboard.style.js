@@ -108,7 +108,7 @@ export const dashboardStyles = StyleSheet.create({
     color: Colors.white,
     backgroundColor: Colors.accent,
     fontFamily: FontFamily.regular,
-    fontSize: TextSizes.largeText,
+    fontSize: TextSizes.primary,
   },
 
   dashboardTitleContainer: {
