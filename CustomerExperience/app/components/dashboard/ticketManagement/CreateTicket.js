@@ -27,6 +27,8 @@ import {
   CloseButton,
   BottomSheetHeader,
   RenderStatusIcon,
+  GestureHandleBar,
+  PageHeaderText,
 } from '../../../routes/CommonScreen';
 import QPSpinner from '../../../widgets/QPSpinner';
 import QPButton from '../../../widgets/Button';
@@ -798,27 +800,19 @@ export default function CreateTicket(props) {
             opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
           },
         ]}>
-        <View
-          style={{
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              height: MarginConstants.halfTab,
-              width: '33%',
-
-              backgroundColor: Colors.darkGrey,
-            }}
-          />
-        </View>
+        <GestureHandleBar />
         <ScrollView style={styles.container}>
-          <View
+          {/* <View
             style={[styles.rowContainer, {justifyContent: 'space-between'}]}>
             <Text style={styles.headerText}>
               {translate('create_new_ticket.create_new_ticket')}
             </Text>
             <CloseButton color={Colors.filterIconColor} />
-          </View>
+          </View> */}
+          <PageHeaderText
+            text={translate('create_new_ticket.create_new_ticket')}
+            hasCloseButton
+          />
           <Pressable onPress={handleSegmentSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               <SegmentIcon />

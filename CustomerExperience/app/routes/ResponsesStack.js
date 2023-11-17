@@ -15,6 +15,7 @@ import CommonScreens, {
 import {translate} from '../Utils/MultilinguaUtils';
 import SegmentSelector from '../components/SegmentSelector';
 import TicketDetails from '../components/closedloop/TicketDetails';
+import {TransitionPresets} from '@react-navigation/stack';
 
 const FeedbackStack = createStackNavigator();
 
@@ -78,9 +79,22 @@ const ResponsesStack = ({navigation}) => (
       name={translate('responses.sort_by')}
       component={FeedbackSorter}
       options={({navigation, route}) => ({
-        headerLeft: props => <View />,
-        headerRight: props => <CloseButton />,
+        // headerLeft: (props) => <View />,
+        // headerRight: (props) => <CloseButton />,
+        headerShown: false,
+        // gestureDirection: 'vertical',
+        gestureEnabled: true,
+        ...TransitionPresets.ModalPresentationIOS,
+        // transitionSpec: {
+        //   open: TransitionSpecs.FadeInFromBottomAndroidSpec,
+        //   close: TransitionSpecs.TransitionIOSSpec,
+        // },
       })}
+
+      // options={({navigation, route}) => ({
+      //   headerLeft: props => <View />,
+      //   headerRight: props => <CloseButton />,
+      // })}
     />
     {/* <FeedbackStack.Screen
       name={translate('responses.new_ticket')}

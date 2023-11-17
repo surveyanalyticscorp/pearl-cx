@@ -147,7 +147,7 @@
     "detractor": "Detractor",
     "passive": "Passive",
     "promoter": "Promoter",
-    "sort_by": "Sort By",
+    "sort_by": "Sort by",
     "date": "Date",
     "score": "Score",
     "email": "Email",
@@ -157,7 +157,7 @@
     "feedback": "Feedback",
     "profile": "Profile",
     "activity": "Activity",
-    "view_ticket": "View tTicket",
+    "view_ticket": "View ticket",
     "create_ticket": "Create ticket",
     "new_ticket": "New ticket",
     "response_id": "Response ID"
@@ -176,7 +176,7 @@
     "account_details": "Account details"
   },
   "date_filter": {
-    "date_range": "Date Range",
+    "date_range": "Date range",
     "save": "Save",
     "month": "Month",
     "custom": "Custom",
@@ -193,7 +193,7 @@
     "select_segment": "Select segment",
     "business_unit": "Business unit"
   },
-  "filter_by": "Filter By",
+  "filter_by": "Filter by",
   "logout": "Logout",
   "logout_confirmation_message": "Are you sure you want to logout?",
   "yes": "Yes",

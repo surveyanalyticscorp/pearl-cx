@@ -5,6 +5,7 @@ import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {translate} from '../../Utils/MultilinguaUtils';
+import {GestureHandleBar, PageHeaderText} from '../../routes/CommonScreen';
 
 export default function FeedbackSorter(props) {
   let radio_props = [
@@ -24,6 +25,11 @@ export default function FeedbackSorter(props) {
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps={'handled'}>
         <View style={styles.container}>
+          <GestureHandleBar />
+          <PageHeaderText
+            text={translate('responses.sort_by')}
+            hasCloseButton
+          />
           <RadioForm
             radio_props={radio_props}
             initial={index}

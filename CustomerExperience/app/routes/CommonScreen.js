@@ -89,6 +89,35 @@ export const FabAddButton = props => {
   );
 };
 
+export const GestureHandleBar = () => {
+  return (
+    <View
+      style={{
+        alignItems: 'center',
+      }}>
+      <View
+        style={{
+          height: MarginConstants.halfTab,
+          width: '33%',
+          backgroundColor: Colors.darkGrey,
+        }}
+      />
+    </View>
+  );
+};
+
+export const PageHeaderText = ({text, hasCloseButton = false}) => {
+  return (
+    <View style={styles.pageHeaderStyle}>
+      <Text style={styles.headerText}>{text}</Text>
+      {hasCloseButton ? (
+        <CloseButton color={Colors.filterIconColor} />
+      ) : (
+        <View />
+      )}
+    </View>
+  );
+};
 export const MenuIcon = () => {
   let navigation = useNavigation();
   return (
@@ -894,6 +923,17 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
     fontFamily: FontFamily.regular,
   },
+  headerText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.largeText,
+    padding: PaddingConstants.tab1,
+    color: Colors.filterIconColor,
+  },
+  pageHeaderStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
   filterBox: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -909,7 +949,7 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
     paddingVertical: PaddingConstants.halfTab,
-    paddingHorizontal: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.halfTab,
 
     backgroundColor: Colors.white,
   },

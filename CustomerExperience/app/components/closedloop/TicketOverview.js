@@ -147,13 +147,13 @@ const DescriptionView = ({ticket, showResponseButton}) => {
     <View style={styles.ticketStatusContainer}>
       <View style={styles.rowContainer}>
         <DescriptionHeader text={translate('ticket_overview.description')} />
-        <TouchableWithoutFeedback>
+        {/* <TouchableWithoutFeedback>
           <View style={styles.ticketIdView}>
             <Text style={styles.ticketIdText}>
               {`Ticket ID #${ticket !== undefined ? ticket.id : ''}`}
             </Text>
           </View>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback> */}
       </View>
       <ShowTitleAndText
         title={translate('close_loop.origin_segment')}
