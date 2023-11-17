@@ -561,12 +561,12 @@ function* postCreateClfTicket(action) {
     //   type: CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED,
     //   response: json_,
     // });
-
     yield put({
       type: WANT_TO_RELOAD_DASHBOARD,
       payload: {wantToReload: true},
     });
     yield put({type: IS_LOADING, payload: {isLoading: false}});
+    showSuccessFlashMessage(json.message);
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
     yield put({type: IS_LOADING, payload: {isLoading: false}});

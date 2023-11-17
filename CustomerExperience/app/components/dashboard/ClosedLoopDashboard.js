@@ -63,7 +63,6 @@ const RenderDonutChart = ({count, showPercentageCount}) => {
         <View style={styles.npsView}>
           {/* <Text style={[styles.npsPercentText]}>{count.totalTickets}</Text> */}
           <Text style={[styles.npsText]}>CX</Text>
-
           <Text style={[styles.npsText]}>{translate('dashboard.tickets')}</Text>
         </View>
       </View>

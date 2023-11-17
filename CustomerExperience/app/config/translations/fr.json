@@ -91,7 +91,8 @@
     "type_a_comment": "Tapez un commentaire",
     "no_comments": "Sans commentaires",
     "submit": "Soumettre",
-    "update": "Mettre à jour"
+    "update": "Mettre à jour",
+    "copied_success": "Ticket id copied to clipboard"
   },
   "ticket_list": {
     "alert": "Alert!",

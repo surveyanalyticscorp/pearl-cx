@@ -30,7 +30,7 @@
   },
   "dashboard": {
     "dashboard": "Instrumententafel",
-    "closed_loop": "Closed Loop",
+    "closed_loop": "Closed loop",
     "comparison": "Vergleich",
     "surveys": "Umfragen",
     "responses": "Antworten",
@@ -91,7 +91,8 @@
     "type_a_comment": "Geben Sie einen Kommentar ein",
     "no_comments": "Keine Kommentare",
     "submit": "einreichen",
-    "update": "Aktualisieren"
+    "update": "Aktualisieren",
+    "copied_success": "Ticket id copied to clipboard"
   },
   "ticket_list": {
     "alert": "Warnung!",

@@ -62,7 +62,9 @@ const ClosedLoopStack = ({navigation}) => {
         name="Closed Loop"
         component={ClosedLoop}
         options={({navigation, route}) => ({
-          headerTitle: props => <SegmentSelector screenName={'Closed Loop'} />,
+          headerTitle: props => (
+            <SegmentSelector screenName={translate('dashboard.closed_loop')} />
+          ),
           // headerShown: false,
           // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
           headerLeft: props => <MenuIcon />,
@@ -84,7 +86,7 @@ const ClosedLoopStack = ({navigation}) => {
         name={'TicketTakeAction'}
         component={TicketTakeAction}
         options={({navigation, route}) => ({
-          title: 'Take Action ',
+          title: 'Take action ',
           headerShown: false,
           // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
           // headerRight: (props) => <EditTicket {...props} route={route} />,
@@ -112,7 +114,7 @@ const ClosedLoopStack = ({navigation}) => {
         name={'SelectEmailTemplate'}
         component={SelectEmailTemplate}
         options={({navigation, route}) => ({
-          title: 'Select Template',
+          title: 'Select template',
           headerShown: false,
           // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
           // headerRight: (props) => <EditTicket {...props} route={route} />,
@@ -123,7 +125,7 @@ const ClosedLoopStack = ({navigation}) => {
         name={'sendEmail'}
         component={SendEmail}
         options={({navigation, route}) => ({
-          title: 'Send Email',
+          title: 'Send email',
           headerShown: false,
           // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
           // headerRight: (props) => <EditTicket {...props} route={route} />,
@@ -135,7 +137,7 @@ const ClosedLoopStack = ({navigation}) => {
         name={'actionEmailHistory'}
         component={ActionEmailHistory}
         options={({navigation, route}) => ({
-          title: 'Action Email History',
+          title: 'Action email history',
           headerShown: false,
           // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
           // headerRight: (props) => <EditTicket {...props} route={route} />,

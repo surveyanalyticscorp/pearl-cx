@@ -30,7 +30,7 @@
   },
   "dashboard": {
     "dashboard": "Dashboard",
-    "closed_loop": "Closed Loop",
+    "closed_loop": "Closed loop",
     "comparison": "Comparison",
     "surveys": "Surveys",
     "responses": "Responses",
@@ -91,7 +91,8 @@
     "type_a_comment": "Type a comment",
     "no_comments": "No comments",
     "submit": "Submit",
-    "update": "Update"
+    "update": "Update",
+    "copied_success": "Ticket id copied to clipboard"
   },
   "ticket_list": {
     "alert": "Alert!",

@@ -91,7 +91,8 @@
     "type_a_comment": "Tapez un commentaire",
     "no_comments": "Sans commentaires",
     "submit": "Soumettre",
-    "update": "Mettre à jour"
+    "update": "Mettre à jour",
+    "copied_success": "Ticket id copied to clipboard"
   },
   "ticket_list": {
     "alert": "Alert!",
@@ -99,7 +100,7 @@
     "overdue": "overdue"
   },
   "ticket_overview": {
-    "take_action": "Take action",
+    "take_action": "Take ction",
     "description": "Description",
     "ticket_id": "Ticket Id",
     "filter_ticket": "Filter ticket",

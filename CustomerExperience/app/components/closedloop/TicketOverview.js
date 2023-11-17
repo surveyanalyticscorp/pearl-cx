@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Platform,
   Modal,
+  Pressable,
 } from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -48,7 +49,10 @@ import SelectTicketOwner from './takeaction/SelectTicketOwner';
 import {EMAIL, PHONE} from '../../api/Constant';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
-import {isObjectEmpty} from '../../Utils/Utility';
+import {
+  isObjectEmpty,
+  showSuccesfullyCopiedFlashMessage,
+} from '../../Utils/Utility';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {
   deleteTickets,
@@ -57,10 +61,34 @@ import {
 import NPSScoreView from '../view/NPSScoreView';
 import DeleteTicketModal from './DeleteTicketModal';
 import {buttonStyles} from '../../styles/button.styles';
+import Clipboard from '@react-native-clipboard/clipboard';
+import {FaIcon} from '../../Utils/IconUtils';
+
 const ArrowDownIcon = () => (
   <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.evenDarkerGrey} />
 );
 
+const CopyTicketIdButton = ({ticket}) => {
+  const onPress = () => {
+    Clipboard.setString(JSON.stringify(ticket.id));
+    showSuccesfullyCopiedFlashMessage(
+      translate('close_loop.copied_success'),
+      Colors.accentGradient,
+      Colors.filterIconColor,
+    );
+  };
+
+  return (
+    <Pressable onPress={onPress}>
+      <View style={styles.ticketIdView}>
+        <Text style={styles.ticketIdText}>
+          {`#${ticket !== undefined ? ticket.id : ''}`}
+        </Text>
+        <FaIcon name={'copy'} color={Colors.accentLight} size={12} />
+      </View>
+    </Pressable>
+  );
+};
 const Title = ({value}) => {
   return (
     <View style={[{flex: 1}, styles.rowContainer]}>
@@ -147,13 +175,7 @@ const DescriptionView = ({ticket, showResponseButton}) => {
     <View style={styles.ticketStatusContainer}>
       <View style={styles.rowContainer}>
         <DescriptionHeader text={translate('ticket_overview.description')} />
-        {/* <TouchableWithoutFeedback>
-          <View style={styles.ticketIdView}>
-            <Text style={styles.ticketIdText}>
-              {`Ticket ID #${ticket !== undefined ? ticket.id : ''}`}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback> */}
+        <CopyTicketIdButton ticket={ticket} />
       </View>
       <ShowTitleAndText
         title={translate('close_loop.origin_segment')}
@@ -949,9 +971,8 @@ const styles = StyleSheet.create({
     margin: MarginConstants.tab1,
   },
   ticketIdView: {
-    borderColor: Colors.accentLight,
-    borderRadius: 4,
-    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: PaddingConstants.halfTab,
   },
   ticketIdText: {

@@ -27,7 +27,7 @@ const SegmentSelector = props => {
   const currentSegment = useSelector(state => state.dashboard.currentSegment);
 
   useEffect(() => {
-    // console.log('SELECTED SEGMENT__', JSON.stringify(currentSegment));
+    console.log('SELECTED SEGMENT__', JSON.stringify(props));
 
     if (currentSegment.currentSegmentID) {
       dispatch(
