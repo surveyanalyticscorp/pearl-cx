@@ -31,6 +31,8 @@ import StringUtils from '../../Utils/StringUtils';
 import {getDateTimeAgo} from '../../Utils/TimeUtils';
 import RenderHTML from 'react-native-render-html';
 import {translate} from '../../Utils/MultilinguaUtils';
+import {MAX_COMMENT_LENGTH} from '../../api/Constant';
+import {event} from 'react-native-reanimated';
 
 const MaterialIconView = ({iconName, color}) => (
   <View style={{margin: MarginConstants.halfTab}}>
@@ -60,6 +62,19 @@ const CommentText = ({text}) => {
         contentWidth={width / 0.5}
       />
     </View>
+  );
+};
+
+const TextLengthCount = ({textLength, maxCountLength}) => {
+  return textLength > 0 ? (
+    <Text
+      style={
+        textLength === maxCountLength
+          ? styles.commentLengthLimitText
+          : styles.commentLengthText
+      }>{`${textLength}/${maxCountLength}`}</Text>
+  ) : (
+    <View />
   );
 };
 
@@ -180,6 +195,10 @@ const CommentBox = () => {
     state => state.global.userInfo,
   );
   const [commentText, setCommentText] = useState('');
+  const [textInputHeight, setTextInputHeight] = useState(0);
+  const userInfo = useSelector(state => state.global);
+
+  console.log('USER_INFO', JSON.stringify(userInfo));
   const placeHolder =
     parentComment.id > 0
       ? translate('comment.write_a_reply')
@@ -226,26 +245,61 @@ const CommentBox = () => {
   };
 
   return (
-    <View style={styles.commentBoxContainer}>
-      <View style={[styles.commentBox, styles.borderStyle]}>
+    <View
+      style={[
+        styles.commentBoxContainer,
+        {height: textInputHeight + MarginConstants.tab1},
+      ]}>
+      <View
+        style={[
+          styles.commentBox,
+          styles.borderStyle,
+          {alignItems: textInputHeight < 48 ? 'center' : 'flex-end'},
+        ]}>
         <MaterialIconView iconName="chat-bubble" />
         {console.log('KEYBOARD')}
         <TextInput
           ref={textInputRef}
           defaultValue={commentText}
           multiline
-          maxLength={240}
+          maxLength={MAX_COMMENT_LENGTH}
           placeholderTextColor={Colors.borderColor}
-          style={[styles.container, styles.commentText]}
+          style={[
+            {
+              height: Math.max(36, textInputHeight),
+
+              justifyContent: 'space-between',
+              backgroundColor: Colors.white,
+            },
+            styles.commentText,
+          ]}
           onChangeText={onChangeCommentHandler}
           placeholder={placeHolder}
+          // onChange={e => {
+          //   // setTextInputHeight(e.nativeEvent.contentSize.height);
+          //   console.log(
+          //     'EVENT',
+          //     JSON.stringify(e.nativeEvent.),
+          //   );
+          // }}
           // onEndEditing={onChangeCommentHandler}
+          onContentSizeChange={event => {
+            console.log(
+              'EVENT',
+              JSON.stringify(event.nativeEvent.contentSize.height),
+            );
+            setTextInputHeight(event.nativeEvent.contentSize.height);
+          }}
           returnKeyType={'send'}
           onSubmitEditing={event => {
             console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
             onChangeCommentHandler(event.nativeEvent.text);
             handleOnSubmit();
           }}
+        />
+        <TextLengthCount
+          textLength={commentText.length}
+          maxCountLength={MAX_COMMENT_LENGTH}
         />
         <SendButton handleOnSubmit={handleOnSubmit} />
       </View>
@@ -314,6 +368,7 @@ export default function TicketComments(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
     justifyContent: 'space-between',
     backgroundColor: Colors.white,
   },
@@ -326,7 +381,7 @@ const styles = StyleSheet.create({
   },
   commentBox: {
     flexDirection: 'row',
-    alignItems: 'center',
+
     flex: 1,
     backgroundColor: Colors.white,
     marginHorizontal: MarginConstants.tab2,
@@ -389,7 +444,21 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
   },
+  commentLengthText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.semiMediumText,
+    color: Colors.filterIconColor,
+  },
+  commentLengthLimitText: {
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.semiMediumText,
+    color: Colors.deleteButtonText,
+  },
   commentByText: {
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
     fontFamily: FontFamily.semiBold,
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,

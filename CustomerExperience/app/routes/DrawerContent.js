@@ -391,7 +391,8 @@ const styles = StyleSheet.create({
   drawerVersionContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    marginBottom: Platform.OS === 'ios' ? MarginConstants.tab2 : 0,
+    marginBottom:
+      Platform.OS === 'ios' ? MarginConstants.tab4 : MarginConstants.tab3,
   },
   drawerVersionText: {
     marginHorizontal: MarginConstants.tab1,

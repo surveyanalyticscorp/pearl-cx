@@ -11,6 +11,8 @@ export const ACCESS_CODE = 'ACCESS_CODE';
 export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
 export const ACTION_EMAIL = 'noreply@InsightsHub.com';
+
+export const MAX_COMMENT_LENGTH = 240;
 // set true for DEV, false for LIVE
 export const IS_DEV_MODE = false;
 
