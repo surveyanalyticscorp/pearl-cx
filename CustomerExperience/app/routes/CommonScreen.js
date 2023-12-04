@@ -556,10 +556,14 @@ export const Avatar = ({title, style}) => {
   );
 };
 
-export const FilterIcon = ({onPressFilter, size, style}) => {
+export const FilterIcon = ({onPressFilter, size, style, color}) => {
   return (
     <Pressable style={style} onPress={onPressFilter}>
-      <IonIcons name="funnel" size={20 ?? size} color={Colors.lightBlack} />
+      <IonIcons
+        name="funnel"
+        size={size ?? 20}
+        color={color ?? Colors.lightBlack}
+      />
     </Pressable>
   );
 };

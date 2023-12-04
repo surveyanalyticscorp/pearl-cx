@@ -13,11 +13,12 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {NoItemsFound} from '../../routes/CommonScreen';
+import {FilterIcon, NoItemsFound} from '../../routes/CommonScreen';
 import {convertDateTimeAgo} from '../../Utils/TimeUtils';
 import {getClosedLoopTicketItemActivity} from '../../redux/actions/dashboard.actions';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {translate} from '../../Utils/MultilinguaUtils';
+import {buttonStyles} from '../../styles/button.styles';
 
 const SortingIcon = ({iconName, size, color}) => {
   return (
@@ -31,16 +32,18 @@ const SortingIcon = ({iconName, size, color}) => {
 
 const RenderItem = ({item}) => {
   return (
-    <View style={styles.renderItemContainerStyle}>
-      <View style={styles.renderItemStyle}>
+    // <View style={styles.renderItemContainerStyle}>
+    //   <View style={styles.renderItemStyle}>
+    <View style={styles.myRenderItemContainerStyle}>
+      <View style={styles.myRenderItemStyle}>
         <Text style={styles.userName}>
           {item.userName ?? translate('ticket_list.anonymous')}
         </Text>
+        <Text style={styles.date}>{convertDateTimeAgo(item.createdAt)}</Text>
       </View>
       <View style={{marginHorizontal: MarginConstants.tab1}}>
         <Text style={styles.activity}>{item.activityText}</Text>
       </View>
-      <Text style={styles.date}>{convertDateTimeAgo(item.createdAt)}</Text>
     </View>
   );
 };
@@ -62,21 +65,36 @@ const RenderMyItem = ({item}) => {
 const SortingView = ({toggleSorting, isInverted}) => {
   return (
     <Pressable
-      style={styles.sortingView}
+      // style={styles.sortingView}
+      style={[
+        buttonStyles.textButton,
+        {
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: Colors.white,
+          padding: PaddingConstants.tab1,
+          margin: MarginConstants.tab1,
+        },
+      ]}
       onPress={() => {
         toggleSorting();
       }}>
-      <Text style={{color: Colors.accent}}>
-        {`Sorted: ${
+      <FilterIcon
+        style={{marginHorizontal: MarginConstants.halfTab}}
+        color={Colors.accentLight}
+      />
+      <Text style={buttonStyles.textButtonText}>
+        {`Sorted by ${
           isInverted
-            ? translate('activity.oldest')
-            : translate('activity.latest')
+            ? translate('activity.oldest').toLocaleLowerCase()
+            : translate('activity.latest').toLocaleLowerCase()
         }`}
       </Text>
-      <SortingIcon
+      {/* <SortingIcon
         iconName={isInverted ? 'caret-up' : 'caret-down'}
         color={Colors.accent}
-      />
+      /> */}
     </Pressable>
   );
 };
@@ -114,11 +132,14 @@ export default function TicketActivity(props) {
   }, []);
 
   const getRenderItem = ({item}) => {
-    return userID === item.userId ? RenderMyItem({item}) : RenderItem({item});
+    // return userID === item.userId ? RenderMyItem({item}) : RenderItem({item});
+    return RenderItem({item});
   };
   return (
-    <View style={styles.container}>
-      <SortingView toggleSorting={toggleSorting} isInverted={isInverted} />
+    <View style={[styles.container, {margin: MarginConstants.tab1}]}>
+      <View style={styles.sortingView}>
+        <SortingView toggleSorting={toggleSorting} isInverted={isInverted} />
+      </View>
       <FlatList
         refreshControl={
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
@@ -160,10 +181,11 @@ const styles = StyleSheet.create({
   myRenderItemStyle: {
     flex: 1,
     flexDirection: 'row',
-
     justifyContent: 'space-between',
     backgroundColor: Colors.white,
     paddingVertical: PaddingConstants.halfTab,
+    marginBottom: MarginConstants.tab1,
+    marginHorizontal: MarginConstants.tab1,
   },
 
   myRenderItemContainerStyle: {
@@ -183,9 +205,8 @@ const styles = StyleSheet.create({
   },
   userName: {
     color: Colors.accent,
-    fontWeight: FontWeight.bold,
-    fontSize: TextSizes.semiSecondary,
-    marginHorizontal: MarginConstants.halfTab,
+    fontWeight: FontWeight.normal,
+    fontSize: TextSizes.secondary,
   },
   activity: {
     color: Colors.filterIconColor,
@@ -195,7 +216,7 @@ const styles = StyleSheet.create({
   },
   date: {
     flex: 1,
-    color: Colors.filterIconColor,
+    color: Colors.evenDarkerGrey,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.mediumText,
     marginStart: MarginConstants.halfTab,
@@ -205,12 +226,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingHorizontal: PaddingConstants.tab2,
-
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
-    borderColor: Colors.white,
-    height: MarginConstants.tab4,
-    width: '100%',
+    marginBottom: MarginConstants.halfTab,
   },
 });

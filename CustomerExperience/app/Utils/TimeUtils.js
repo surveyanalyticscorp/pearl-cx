@@ -1,9 +1,10 @@
 import moment from 'moment';
-import {DMY_AT_TIME_FORMAT} from './AppConstants';
+import {DMY_AT_TIME_FORMAT, HalfMonthDateYearFormat} from './AppConstants';
 import {isStringNullOrEmpty} from './Utility';
 
 function convertToDateTime(date) {
-  return moment(date).local().format(DMY_AT_TIME_FORMAT);
+  // return moment(date).local().format(DMY_AT_TIME_FORMAT);
+  return moment(date).local().format(HalfMonthDateYearFormat);
 }
 
 export function convertDateTimeAgo(dateStr) {

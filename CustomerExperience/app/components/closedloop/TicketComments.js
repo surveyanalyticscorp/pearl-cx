@@ -390,7 +390,10 @@ const styles = StyleSheet.create({
   borderStyle: {borderColor: Colors.darkerGrey, borderWidth: 1},
   commentBoxContainer: {
     minHeight: MarginConstants.tab2 * 3,
-    marginVertical: MarginConstants.tab1,
+
+    marginTop: MarginConstants.tab1,
+    marginBottom:
+      Platform.OS === 'ios' ? MarginConstants.tab2 * 3 : MarginConstants.tab1,
   },
 
   commentUserView: {

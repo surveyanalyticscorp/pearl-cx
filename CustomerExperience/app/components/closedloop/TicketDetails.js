@@ -97,13 +97,13 @@ export default function TicketDetails(props) {
         }}
       />
       <TicketTabs.Screen
-        name={translate('responses.activity')}
+        // name={translate('responses.activity')}
+        name={'Activity log'}
         component={TicketActivity}
-        initialParams={{screenName: translate('responses.activity')}}
+        initialParams={{screenName: 'Activity log'}}
       />
 
       <TicketTabs.Screen
-        // name={translate('responses.activity')}
         name={translate('root_cause.root_cause')}
         component={TicketRootCause}
         initialParams={{screenName: translate('root_cause.root_cause')}}
