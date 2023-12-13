@@ -33,7 +33,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
 import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
-import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
+import {
+  FabAddButton,
+  HeaderFilter,
+  RenderSegmentTitle,
+} from '../../routes/CommonScreen';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
 import {GaugeChart} from './GaugeChart';
@@ -59,6 +63,22 @@ const getTrimmedNoOfResponses = responseCount => {
   return numberOfResponses;
 };
 
+const NavigateToResponses = props => {
+  const navigateToResponses = () => {
+    props.navigation.navigate('dashboard_to_responses');
+  };
+
+  return (
+    <QPButton
+      testID="dashboardToResponseButton"
+      style={buttonStyles.textButton}
+      onPress={navigateToResponses}
+      buttonText={translate('dashboard.view_responses')}
+      textStyle={buttonStyles.textButtonText}
+    />
+  );
+};
+
 function RenderDonutInformation({icon, title, count}) {
   return (
     <View style={dashboardStyles.responseView}>
@@ -81,7 +101,14 @@ function RenderDonutInfoContainer({responseCount, surveyCount}) {
   const responseIcon = require('./../../../assets/images/responses_icon.png');
   const surveyIcon = require('./../../../assets/images/surveys_icon.png');
   return (
-    <View style={[dashboardStyles.donutInfoContainer, {flexDirection: 'row'}]}>
+    <View
+      style={[
+        {
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+        },
+      ]}>
       <RenderDonutInformation
         icon={surveyIcon}
         title={translate('dashboard.surveys')}
@@ -96,21 +123,6 @@ function RenderDonutInfoContainer({responseCount, surveyCount}) {
   );
 }
 
-const RenderDetailsInformation = props => {
-  const navigateToResponses = () => {
-    props.navigation.navigate('dashboard_to_responses');
-  };
-
-  return (
-    <QPButton
-      testID="dashboardToResponseButton"
-      style={buttonStyles.outlinePrimaryButtonMedium}
-      onPress={navigateToResponses}
-      buttonText={translate('dashboard.view_responses')}
-      textStyle={buttonStyles.outlinePrimaryButtonMediumText}
-    />
-  );
-};
 const RenderSegmentDashboardData = props => {
   console.log('NPS OBJECT', JSON.stringify(props.currentNPSData.NPSScore));
   const data = props.currentNPSData?.NPSScore;
@@ -126,21 +138,23 @@ const RenderSegmentDashboardData = props => {
   // const surveyCount = props?.dashboardData?.surveyCount ?? 0;
   console.log('Gauge DATA', npsPercentage, benchmarkScore);
   return (
-    <View style={dashboardStyles.chartContainer}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-around',
-          backgroundColor: Colors.white,
-          marginHorizontal: MarginConstants.tab2,
-        }}>
-        <RenderDonutInfoContainer
-          responseCount={responseCount}
-          surveyCount={surveyCount}
-        />
-        <RenderDetailsInformation {...props} />
-      </View>
+    <View
+      style={{
+        ...dashboardStyles.chartContainer,
+      }}>
+      <RenderSegmentTitle
+        text={
+          props.segment.currentSegment ?? props.dashboardData.primaryStoreName
+        }
+        child={<NavigateToResponses />}
+      />
+
+      <RenderDonutInfoContainer
+        responseCount={responseCount}
+        surveyCount={surveyCount}
+      />
+      {/* <RenderDetailsInformation {...props} /> */}
+
       {/* <GaugeChart npsScore={npsPercentage} benchmark={benchmarkScore} /> */}
 
       <DashboardGuageChart
@@ -189,14 +203,14 @@ function DashboardGuageChart({npsScore, benchmark}) {
   return (
     <View
       style={{
-        flex: 1,
+        flex: 4,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
       }}>
       <NPSLabel npsScore={npsScore} benchmark={benchmark} />
       {/* <GaugeChart npsScore={npsScore} benchmark={benchmark} /> */}
-      <Benchmark benchmark={benchmark} />
+      {/* <Benchmark benchmark={benchmark} /> */}
     </View>
   );
 }
@@ -373,7 +387,7 @@ const CxDashboard = props => {
             marginHorizontal: MarginConstants.tab2,
           }}>
           <RenderDonutInfoContainer responseCount={responseCount} />
-          <RenderDetailsInformation {...props} />
+          {/* <RenderDetailsInformation {...props} /> */}
         </View>
 
         <View style={dashboardStyles.chartContainer}>
@@ -508,20 +522,21 @@ const CxDashboard = props => {
     );
   };
 
-  let renderSegmentTitle = text => {
-    return (
-      <View style={dashboardStyles.dashboardTitleContainer}>
-        <Text style={dashboardStyles.dashboardTitle}>{text}</Text>
-      </View>
-    );
-  };
-  let renderWelcomeMessage = text => {
-    return (
-      <View style={dashboardStyles.dashboardTitleContainer}>
-        <Text style={dashboardStyles.dashboardTitle}>{text}</Text>
-      </View>
-    );
-  };
+  // let RenderSegmentTitle = ({text, child}) => {
+  //   return (
+  //     <View style={dashboardStyles.dashboardTitleContainer}>
+  //       <Text style={dashboardStyles.dashboardTitle}>{text}</Text>
+  //       {child}
+  //     </View>
+  //   );
+  // };
+  // let renderWelcomeMessage = text => {
+  //   return (
+  //     <View style={dashboardStyles.dashboardTitleContainer}>
+  //       <Text style={dashboardStyles.dashboardTitle}>{text}</Text>
+  //     </View>
+  //   );
+  // };
 
   let renderDashboardContent = () => {
     if (
@@ -532,7 +547,7 @@ const CxDashboard = props => {
       const segmentOptions = ['Main Segment', 'Child Segment'];
       return (
         <SafeAreaView>
-          <View
+          {/* <View
             style={{
               flex: 1,
               marginHorizontal: 16,
@@ -547,15 +562,18 @@ const CxDashboard = props => {
                 flexDirection: 'column',
                 alignContent: 'flex-end',
               }}></View>
-          </View>
+          </View> */}
 
-          {renderSegmentTitle(
-            props.segment.currentSegment ??
-              props.dashboardData.primaryStoreName,
-          )}
+          {/* <RenderSegmentTitle
+            text={
+              props.segment.currentSegment ??
+              props.dashboardData.primaryStoreName
+            }
+          /> */}
           {/* {renderDonutChart()} */}
           <RenderSegmentDashboardData {...props} />
-          {renderSegmentTitle(translate('dashboard.closed_loop'))}
+          {/* <RenderSegmentTitle text={translate('dashboard.closed_loop')} /> */}
+
           {getClosedLoopView()}
           {/* {renderSegmentTitle(translate('dashboard.comparison'))}
           {renderStoreNPSList()} */}

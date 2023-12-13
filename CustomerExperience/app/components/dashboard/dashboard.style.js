@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {FontFamily} from '../../styles/font.constants';
+import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import DeviceInfo from 'react-native-device-info';
 
@@ -105,21 +105,23 @@ export const dashboardStyles = StyleSheet.create({
 
   dashboardTitle: {
     // color: Colors.primary,
-    color: Colors.white,
-    backgroundColor: Colors.accent,
-    fontFamily: FontFamily.regular,
+    color: Colors.accent,
+    backgroundColor: Colors.white,
+    fontFamily: FontFamily.medium,
+    fontWeight: FontWeight._500,
     fontSize: TextSizes.primary,
   },
 
   dashboardTitleContainer: {
     borderTopStartRadius: 5,
     borderTopEndRadius: 5,
-
-    backgroundColor: Colors.accent,
-    marginTop: MarginConstants.tab2,
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: Colors.white,
     marginHorizontal: MarginConstants.tab2,
     paddingVertical: PaddingConstants.tab1,
-    paddingHorizontal: MarginConstants.tab2,
   },
   closedLoopView: {
     justifyContent: 'center',
@@ -200,10 +202,9 @@ export const dashboardStyles = StyleSheet.create({
       : MarginConstants.tab4 * 8,
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    marginTop: MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab2,
-    borderBottomEndRadius: 5,
-    borderBottomStartRadius: 5,
+    borderRadius: 5,
   },
   donut: {
     marginTop: MarginConstants.tab1,

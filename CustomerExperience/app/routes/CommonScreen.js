@@ -55,7 +55,6 @@ import {
 } from '../Utils/TicketUtils';
 import {textStyles} from '../styles/text.styles';
 import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
-
 // import CheckBox from '@react-native-community/checkbox';
 
 const DateRangeTab = createMaterialTopTabNavigator();
@@ -85,6 +84,37 @@ export const FabAddButton = props => {
       <Pressable onPress={props.onPress}>
         <MaterialIcon name="add" size={size - 5} color={Colors.white} />
       </Pressable>
+    </View>
+  );
+};
+
+export const IconButton = ({
+  buttonStyle,
+  textStyle,
+  leftIcon,
+  rightIcon,
+  onPress,
+  buttonText,
+}) => {
+  return (
+    <Pressable style={buttonStyle} onPress={onPress}>
+      {leftIcon}
+      <Text style={textStyle}>{buttonText}</Text>
+      {rightIcon}
+    </Pressable>
+  );
+};
+
+export const RenderSegmentTitle = ({text, child}) => {
+  return (
+    <View style={[dashboardStyles.dashboardTitleContainer]}>
+      <Text
+        numberOfLines={1}
+        ellipsizeMode="tail"
+        style={dashboardStyles.dashboardTitle}>
+        {text}
+      </Text>
+      {child}
     </View>
   );
 };
@@ -206,11 +236,14 @@ export const StatusIcon = ({
   );
 };
 
-export const ResponsesIcon = ({size = 12}) => (
+export const ResponsesIcon = ({
+  size = 12,
+  tintColor = Colors.filterIconColor,
+}) => (
   <Image
     // source={require('./../../../assets/images/responses_icon.png')}
     source={require('./../../assets/images/responses_icon.png')}
-    style={{width: size, height: size}}
+    style={{width: size, height: size, tintColor: tintColor}}
   />
 );
 export const RenderStatusIcon = ({size, title, style}) => {
@@ -224,6 +257,9 @@ export const RenderStatusIcon = ({size, title, style}) => {
     width: size ?? 14,
   };
 
+  if (title === 'all') {
+    return <ResponsesIcon size={14} tintColor={Colors.accentLight} />;
+  }
   return <View style={statusStyle} />;
 };
 

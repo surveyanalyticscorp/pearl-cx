@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import {Colors} from '../../styles/color.constants';
-import {FontFamily} from '../../styles/font.constants';
+import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -27,6 +27,12 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
 import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
 import {getDashboardStatusList} from '../../Utils/TicketUtils';
+import {
+  IconButton,
+  RenderSegmentTitle,
+  RenderStatusIcon,
+} from '../../routes/CommonScreen';
+import {filter} from 'lodash';
 
 const RenderDonutChart = ({count, showPercentageCount}) => {
   // let count = getCount(props.route.params.ticketCount);
@@ -46,6 +52,10 @@ const RenderDonutChart = ({count, showPercentageCount}) => {
       : [{y: 100, x: ''}];
   return (
     <View style={styles.chartContainer}>
+      <RenderDonutInfoViewContainer
+        priorities={count}
+        showPercentageCount={showPercentageCount}
+      />
       <View style={styles.donut}>
         <VictoryPie
           data={dataScale}
@@ -60,16 +70,12 @@ const RenderDonutChart = ({count, showPercentageCount}) => {
           }}
           colorScale={victoryPieColorScale}
         />
-        <View style={styles.npsView}>
-          {/* <Text style={[styles.npsPercentText]}>{count.totalTickets}</Text> */}
+        {/* <View style={styles.npsView}>
+          <Text style={[styles.npsPercentText]}>{count.totalTickets}</Text>
           <Text style={[styles.npsText]}>CX</Text>
           <Text style={[styles.npsText]}>{translate('dashboard.tickets')}</Text>
-        </View>
+        </View> */}
       </View>
-      <RenderDonutInfoViewContainer
-        priorities={count}
-        showPercentageCount={showPercentageCount}
-      />
     </View>
   );
 };
@@ -77,7 +83,8 @@ const RenderDonutChart = ({count, showPercentageCount}) => {
 let RenderDonutInfoViewContainer = ({priorities, showPercentageCount}) => {
   // let priorities = getCount(props.route.params.ticketCount);
   return (
-    <View style={{paddingTop: 2 * PaddingConstants.tab4}}>
+    <View>
+      <RenderTicketTotalView totalCount={priorities.totalTickets} />
       <RenderTicketView
         totalTickets={priorities.totalTickets}
         count={priorities.critical}
@@ -172,10 +179,18 @@ const RenderTicketView = ({
       <View
         style={[styles.ticketStatusIndicatorView, {backgroundColor: bgColor}]}
       />
+      <Text style={styles.ticketText}>{ticketCount}</Text>
       <View style={[styles.ticketStatusView]}>
         <Text style={[styles.ticketStatusText]}>{status}</Text>
       </View>
-      <Text style={styles.ticketText}>{ticketCount}</Text>
+    </View>
+  );
+};
+
+const RenderTicketTotalView = ({totalCount}) => {
+  return (
+    <View style={styles.donutInfoContainer}>
+      <Text style={[styles.ticketTotalText]}>{`${totalCount} in total`}</Text>
     </View>
   );
 };
@@ -270,6 +285,70 @@ let RenderViewTicketsContainer = ({statusId}) => {
   );
 };
 
+const ViewTicketsButton = ({statusIndex, statusList}) => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const navigateToCLosedLoop = () => {
+    if (statusIndex !== statusList.length - 1) {
+      dispatch(setStatusFilterById(statusIndex.toString()));
+    } else {
+      dispatch(setStatusFilterById(''));
+    }
+
+    // props.navigation.navigate('ClosedLoop');
+    navigation.navigate('dashboard_to_closed_loop');
+  };
+
+  return (
+    <QPButton
+      testID="ViewTicketsButton"
+      style={buttonStyles.textButton}
+      onPress={navigateToCLosedLoop}
+      buttonText={`${translate('dashboard.view_tickets')}`}
+      textStyle={buttonStyles.textButtonText}
+    />
+  );
+};
+
+const RenderStatusFilterButton = (currentStatus, onPress) => {
+  // <QPButton
+  //   testID="StatusFilterButton"
+  //   style={{
+  //     ...buttonStyles.outlinePrimaryButtonMedium,
+  //     marginHorizontal: MarginConstants.tab2,
+  //     maxWidth: MarginConstants.tab4 * 4,
+  //   }}
+  //   onPress={() => {}}
+  //   buttonText={`${translate('dashboard.view_tickets')}`}
+  //   textStyle={buttonStyles.outlinePrimaryButtonMediumText}
+  // />
+  return (
+    <IconButton
+      buttonStyle={{
+        ...buttonStyles.outlinePrimaryButtonMedium,
+        marginHorizontal: MarginConstants.tab2,
+        maxWidth: MarginConstants.tab4 * 3,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      onPress={() => {
+        console.log(JSON.stringify(currentStatus));
+      }}
+      leftIcon={
+        <RenderStatusIcon
+          title={currentStatus.currentStatus.value.toLowerCase()}
+        />
+      }
+      buttonText={currentStatus.currentStatus.label}
+      textStyle={{
+        ...buttonStyles.outlinePrimaryButtonMediumText,
+        marginHorizontal: MarginConstants.halfTab,
+      }}
+    />
+  );
+};
 export const RenderDropDown = ({
   currentStatus,
   setCurrentStatus,
@@ -305,6 +384,15 @@ export const RenderDropDown = ({
 
     // props.navigation.navigate('ClosedLoop');
     navigation.navigate('dashboard_to_closed_loop');
+    return (
+      <QPButton
+        testID="ViewTicketsButton"
+        style={buttonStyles.outlinePrimaryButtonMedium}
+        onPress={navigateToCLosedLoop}
+        buttonText={`${translate('dashboard.view_tickets')}`}
+        textStyle={buttonStyles.outlinePrimaryButtonMediumText}
+      />
+    );
   };
 
   // function dropdownRenderRow(rowData, rowID, highlighted) {
@@ -350,13 +438,13 @@ export const RenderDropDown = ({
         />
       </View>
 
-      <QPButton
+      {/* <QPButton
         testID="ViewTicketsButton"
         style={buttonStyles.outlinePrimaryButtonMedium}
         onPress={navigateToCLosedLoop}
         buttonText={`${translate('dashboard.view_tickets')}`}
         textStyle={buttonStyles.outlinePrimaryButtonMediumText}
-      />
+      /> */}
       {/* <RenderViewTicketsContainer /> */}
     </View>
   );
@@ -435,7 +523,9 @@ export const ClosedLoopDashboard = props => {
   //   {label: 'All', value: 'all', count: getAllTicketCount(ticketCount)},
   // ];
 
-  const [selectedCurrentStatus, setCurrentStatus] = useState(statusList[0]);
+  const [selectedCurrentStatus, setCurrentStatus] = useState(
+    statusList[statusList.length - 1],
+  );
   // const screenName = props.route.name ?? '';
   // console.log(`Ticket Count: ${JSON.stringify(ticketCount.ticketCount)}`);
 
@@ -459,11 +549,23 @@ export const ClosedLoopDashboard = props => {
 
   return (
     <View style={styles.container}>
-      <RenderDropDown
+      <RenderSegmentTitle
+        text={translate('dashboard.closed_loop')}
+        child={
+          <ViewTicketsButton
+            statusIndex={statusList.findIndex(
+              obj => obj.value === selectedCurrentStatus.value,
+            )}
+            statusList={statusList}
+          />
+        }
+      />
+      <RenderStatusFilterButton currentStatus={selectedCurrentStatus} />
+      {/* <RenderDropDown
         currentStatus={selectedCurrentStatus}
         setCurrentStatus={setCurrentStatus}
         statusList={statusList}
-      />
+      /> */}
 
       <RenderCountContainer
         count={selectedCurrentStatus.count}
@@ -483,17 +585,17 @@ export const ClosedLoopDashboard = props => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: MarginConstants.tab2,
     width: '100%',
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
       ? MarginConstants.tab4 * 11
       : MarginConstants.tab4 * 10,
     justifyContent: 'flex-start',
-    alignItems: 'center',
-    borderBottomEndRadius: 5,
-    borderBottomStartRadius: 5,
+    borderRadius: 5,
   },
   chartContainer: {
+    flex: 7,
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
       ? MarginConstants.tab4 * 6
@@ -501,9 +603,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    marginHorizontal: MarginConstants.tab2,
   },
   donut: {
-    marginTop: MarginConstants.tab4,
+    marginTop: 0,
+    backgroundColor: Colors.white,
   },
   donutInfoContainer: {
     flexDirection: 'row',
@@ -555,18 +659,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   ticketText: {
-    color: Colors.primary,
+    color: Colors.filterIconColor,
     fontSize: TextSizes.secondary,
-    fontFamily: FontFamily.semiBold,
-    textAlign: 'left',
+    fontFamily: FontFamily.secondary,
+    fontWeight: FontWeight._400,
+    textAlign: 'center',
     marginBottom: 2,
-    width: MarginConstants.tab3 * 2,
+    maxWidth: MarginConstants.tab3 * 2,
+    minWidth: MarginConstants.tab4,
+    marginHorizontal: MarginConstants.halfTab,
   },
   ticketStatusView: {
-    width: 2 * MarginConstants.tab4,
+    width: 2 * MarginConstants.tab3,
     paddingVertical: 2,
     alignItems: 'flex-start',
-    marginHorizontal: MarginConstants.halfTab,
   },
   ticketStatusIndicatorView: {
     width: MarginConstants.tab2,
@@ -576,13 +682,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   ticketStatusText: {
-    color: Colors.filterIconColor,
+    fontFamily: FontFamily.semiBold,
     fontSize: TextSizes.secondary,
+    fontWeight: FontWeight._600,
+    color: Colors.filterIconColor,
+  },
+  ticketTotalText: {
     fontFamily: FontFamily.regular,
+    fontSize: TextSizes.primary,
+    fontWeight: FontWeight._800,
+    color: Colors.filterIconColor,
   },
   countText: {
-    fontFamily: FontFamily.medium,
-    fontSize: TextSizes.semiSecondary,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    fontWeight: FontWeight.bold,
     color: Colors.filterIconColor,
   },
   switch: {
