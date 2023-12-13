@@ -14,6 +14,26 @@ import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../Utils/MultilinguaUtils';
 import {MarginConstants} from '../styles/margin.constants';
 
+const SegmentText = ({screenName, segmentName}) => {
+  // const title = `${screenName ? screenName + ':' : ''} ${
+  //   segmentName ?? ''
+  // }`;
+
+  return (
+    <View style={styles.container}>
+      <Text numberOfLines={1} ellipsizeMode="tail" style={styles.appbarTitle}>
+        {screenName}
+      </Text>
+      <Text
+        numberOfLines={1}
+        ellipsizeMode="tail"
+        style={styles.appbarSegmentName}>
+        {segmentName}
+      </Text>
+    </View>
+  );
+};
+
 const SegmentSelector = props => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -54,14 +74,6 @@ const SegmentSelector = props => {
     dispatch(setSegment(segment_));
   };
 
-  const SegmentText = ({segmentName}) => {
-    const title = `${props.screenName ? props.screenName + ':' : ''} ${
-      segmentName ?? ''
-    }`;
-
-    return <Text style={styles.appbarTitle}>{title}</Text>;
-  };
-
   // console.log('SEGMENT_SELECTOR_VIEW');
   // return <SegmentText segmentName={currentSegment.currentSegment} />;
 
@@ -69,7 +81,10 @@ const SegmentSelector = props => {
     <View style={styles.container}>
       <Pressable onPress={onPressHandle}>
         <View style={styles.innerContainer}>
-          <SegmentText segmentName={currentSegment.currentSegment ?? ''} />
+          <SegmentText
+            screenName={props.screenName}
+            segmentName={currentSegment.currentSegment ?? ''}
+          />
           <SimpleLineIcon
             name={'arrow-down'}
             size={15}
@@ -79,17 +94,28 @@ const SegmentSelector = props => {
       </Pressable>
     </View>
   ) : (
-    <SegmentText segmentName={currentSegment.currentSegment} />
+    <SegmentText
+      screenName={props.screenName}
+      segmentName={currentSegment.currentSegment}
+    />
   );
 };
 
 const styles = StyleSheet.create({
   container: {flex: 1},
   appbarTitle: {
+    flex: 1,
     fontSize: TextSizes.primary,
     color: Colors.white,
-    marginEnd: Platform.OS === 'ios' ? MarginConstants.tab1 : 0,
+    marginEnd: MarginConstants.tab3,
   },
+
+  appbarSegmentName: {
+    fontSize: TextSizes.secondary,
+    color: Colors.white,
+    marginEnd: MarginConstants.tab3,
+  },
+
   innerContainer: {
     alignContent: 'center',
     flexDirection: 'row',

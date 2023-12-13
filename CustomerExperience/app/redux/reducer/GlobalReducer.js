@@ -263,6 +263,7 @@ const globalReducer = (state = initialState, action) => {
         ...state,
         logoutResponse: action.response,
         baseUrl: '',
+        clfBaseUrl: '',
         subscriberId: '',
         accessCode: '',
         bearerToken: '',

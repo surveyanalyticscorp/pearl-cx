@@ -989,8 +989,7 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
     paddingVertical: PaddingConstants.halfTab,
-    paddingHorizontal: PaddingConstants.halfTab,
-
+    paddingHorizontal: PaddingConstants.tab2,
     backgroundColor: Colors.white,
   },
 

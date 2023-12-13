@@ -24,6 +24,7 @@ import {
   ACCESS_CODE,
   ASYNC_AUTH_TOKEN,
   ASYNC_BEARER_TOKEN,
+  ASYNC_CLF_BASE_URL,
   ASYNC_PUSH_TOKEN,
   ASYNC_USER_CREDENTIALS,
   ASYNC_USER_INFO,
@@ -239,7 +240,7 @@ const DrawerContent = props => {
       udid: DeviceInfo.getUniqueId(),
     };
     props.logoutUser(props.authToken, params);
-    setLoading(true);
+    // setLoading(true);
     Notifications.removeAllDeliveredNotifications();
 
     // let removeAsyncData = [
@@ -252,6 +253,10 @@ const DrawerContent = props => {
     AsyncStorage.setItem(BASE_URL, '').then(() => {
       global.baseUrl = '';
     });
+    AsyncStorage.setItem(ASYNC_CLF_BASE_URL, '').then(() => {
+      global.clfBaseUrl = '';
+    });
+
     AsyncStorage.setItem(ASYNC_AUTH_TOKEN, '').then();
     AsyncStorage.setItem(ASYNC_BEARER_TOKEN, '').then();
     AsyncStorage.setItem(ACCESS_CODE, '').then();
