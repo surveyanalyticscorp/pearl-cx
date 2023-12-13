@@ -250,7 +250,11 @@ const FilterTicket = ({data, onPressHandler}) => {
         /> */}
 
         <QPButton
-          style={{...buttonStyles.primaryButton, margin: MarginConstants.tab2}}
+          style={{
+            ...buttonStyles.primaryButton,
+            flex: 1,
+            margin: MarginConstants.tab2,
+          }}
           buttonColor={Colors.accentLight}
           onPress={onApplyFilterHandler}
           textStyle={buttonStyles.primaryButtonText}
