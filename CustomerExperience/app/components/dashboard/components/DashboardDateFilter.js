@@ -25,10 +25,18 @@ import {DASHBOARD_RANGE} from '../../../redux/actions/dashboard.actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import QPCalendar from '../../../widgets/QPCalendar';
 import StringUtils from '../../../Utils/StringUtils';
-import {StackActions} from '@react-navigation/native';
+import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
+import {
+  BottomSheetHeader,
+  SaveDashboardDate,
+} from '../../../routes/CommonScreen';
+import {useDispatch, useSelector} from 'react-redux';
+import {setRangeFilter} from '../../../redux/actions';
 
 export default function DashboardDateFilter(props) {
+  const dispatch = useDispatch();
+
   const LAST_30_DAYS = 1;
   const THIS_MONTH = 2;
   const LAST_MONTH = 3;
@@ -37,23 +45,27 @@ export default function DashboardDateFilter(props) {
   const CUSTOM_DATE_RANGE = 6;
 
   let routeName = props.route.name;
-  let [selectedRange, setSelectedRange] = useState(props.route.params.range);
-  let [selectedType, setSelectedType] = useState(
-    props.route.params.range.type || 1,
+  const currentSelectedRange = useSelector(state => state.global.range);
+
+  const [selectedRange, setSelectedRange] = useState(currentSelectedRange);
+  const [selectedType, setSelectedType] = useState(
+    currentSelectedRange.type || 1,
   );
   let [startDateSelected, setStartDateSelected] = useState(false);
   let [showCalendar, setShowCalendar] = useState(false);
   let [customDate, setCustomDate] = useState('');
   let [validationError, setValidationError] = useState('');
 
-  let saveRange = () => {
+  const saveRange = () => {
     let tempEnd = moment(selectedRange.endDate, DMYFORMAT).format(YMDFORMAT);
     let tempStart = moment(selectedRange.startDate, DMYFORMAT).format(
       YMDFORMAT,
     );
 
     if (moment(tempEnd).isSameOrAfter(tempStart)) {
-      props.route.params.setRange(selectedRange);
+      dispatch(setRangeFilter(selectedRange));
+      // props.route.params.setRange(selectedRange);
+
       AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(selectedRange));
       props.navigation.dispatch(StackActions.popToTop());
     } else {
@@ -329,11 +341,40 @@ export default function DashboardDateFilter(props) {
     );
   };
 
+  const RenderDateList = () => {
+    const navigation = useNavigation();
+    return (
+      <ScrollView style={styles.scrollContainer}>
+        <BottomSheetHeader
+          title={translate('date_filter.date_range')}
+          onPressClose={() => {
+            navigation.goBack();
+          }}
+        />
+        <View style={styles.container}>
+          {renderMonthRow(LAST_30_DAYS)}
+          {renderMonthRow(THIS_MONTH)}
+          {renderMonthRow(LAST_MONTH)}
+          {renderMonthRow(LAST_3_MONTHS)}
+          {renderMonthRow(LAST_6_MONTHS)}
+          {StringUtils.isNotEmpty(validationError) && renderValidationError()}
+          {renderStartDateRow(true, selectedRange.startDate)}
+          {renderStartDateRow(false, selectedRange.endDate)}
+          <SaveDashboardDate saveRange={saveRange} />
+
+          {showCalendar && renderCalendarViewOnModal()}
+        </View>
+      </ScrollView>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      {routeName === translate('date_filter.month')
+      {/* {routeName === translate('date_filter.month')
         ? renderMonthView()
         : renderCustomView()}
+       */}
+      <RenderDateList />
     </SafeAreaView>
   );
 }

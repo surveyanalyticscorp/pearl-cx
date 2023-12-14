@@ -385,7 +385,7 @@ export const SaveDashboardDate = props => {
       ]}>
       <Pressable
         onPress={() => {
-          props.route.params.saveRange();
+          props.saveRange();
         }}>
         <Text style={styles.saveText}> {translate('date_filter.save')} </Text>
       </Pressable>
@@ -832,9 +832,15 @@ const CommonScreens = RootStack => {
     <RootStack.Screen
       key={'Date Range'}
       name={translate('date_filter.date_range')}
-      component={DateRangeTabStack}
+      // component={DateRangeTabStack}
+      component={DashboardDateFilter}
       options={({navigation, route}) => ({
-        headerLeft: props => <HeaderBackLeft />,
+        headerShown: false,
+        // gestureDirection: 'vertical',
+        gestureEnabled: true,
+        ...TransitionPresets.ModalPresentationIOS,
+
+        // headerLeft: props => <HeaderBackLeft />,
         headerRight: props => <SaveDashboardDate {...props} route={route} />,
       })}
     />,
@@ -909,7 +915,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   saveText: {
-    color: Colors.white,
+    color: Colors.primary,
     textAlignVertical: 'center',
     fontSize: TextSizes.primary,
     fontFamily: FontFamily.regular,
