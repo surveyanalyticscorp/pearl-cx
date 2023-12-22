@@ -16,7 +16,7 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {listItemSeparator} from '../../../routes/CommonScreen';
+import {ListItemSeparator} from '../../../routes/CommonScreen';
 
 const SelectPriority = props => {
   const [data, setData] = useState(props.data);
@@ -65,7 +65,7 @@ const SelectPriority = props => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
-        ItemSeparatorComponent={listItemSeparator}
+        ItemSeparatorComponent={ListItemSeparator}
       />
     </View>
   );

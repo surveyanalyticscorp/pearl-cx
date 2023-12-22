@@ -6,7 +6,7 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
-import {listItemSeparator} from '../../../routes/CommonScreen';
+import {ListItemSeparator} from '../../../routes/CommonScreen';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -38,7 +38,7 @@ const SelectEmailTemplate = props => {
         data={props.data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
-        ItemSeparatorComponent={listItemSeparator}
+        ItemSeparatorComponent={ListItemSeparator}
       />
     </View>
   );

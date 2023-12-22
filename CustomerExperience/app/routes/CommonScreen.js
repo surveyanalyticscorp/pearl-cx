@@ -55,6 +55,8 @@ import {
 } from '../Utils/TicketUtils';
 import {textStyles} from '../styles/text.styles';
 import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
+import {buttonStyles} from '../styles/button.styles';
+import {backgroundColor} from '../widgets/qp-calendar/style';
 // import CheckBox from '@react-native-community/checkbox';
 
 const DateRangeTab = createMaterialTopTabNavigator();
@@ -120,18 +122,19 @@ export const RenderSegmentTitle = ({text, child}) => {
 };
 
 export const GestureHandleBar = () => {
+  const handlerStyle = StyleSheet.create({
+    container: {
+      alignItems: 'center',
+    },
+    handler: {
+      height: MarginConstants.halfTab,
+      width: '33%',
+      backgroundColor: Colors.darkGrey,
+    },
+  });
   return (
-    <View
-      style={{
-        alignItems: 'center',
-      }}>
-      <View
-        style={{
-          height: MarginConstants.halfTab,
-          width: '33%',
-          backgroundColor: Colors.darkGrey,
-        }}
-      />
+    <View style={handlerStyle.container}>
+      <View style={handlerStyle.handler} />
     </View>
   );
 };
@@ -207,8 +210,10 @@ export const BottomSheetHeader = props => {
   );
 };
 
-export const listItemSeparator = () => {
-  return <View style={{height: 0.5, backgroundColor: Colors.darkGrey}} />;
+export const ListItemSeparator = ({style}) => {
+  return (
+    <View style={{height: 0.5, backgroundColor: Colors.darkGrey, ...style}} />
+  );
 };
 
 export const StatusIcon = ({
@@ -242,7 +247,7 @@ export const ResponsesIcon = ({
 }) => (
   <Image
     // source={require('./../../../assets/images/responses_icon.png')}
-    source={require('./../../assets/images/responses_icon.png')}
+    source={require('./../../assets/images/total_responses_icon.png')}
     style={{width: size, height: size, tintColor: tintColor}}
   />
 );
@@ -257,7 +262,7 @@ export const RenderStatusIcon = ({size, title, style}) => {
     width: size ?? 14,
   };
 
-  if (title === 'all') {
+  if (title.toLowerCase() === 'all') {
     return <ResponsesIcon size={14} tintColor={Colors.accentLight} />;
   }
   return <View style={statusStyle} />;
@@ -380,14 +385,14 @@ export const SaveDashboardDate = props => {
   return (
     <View
       style={[
-        styles.rightHeaderButton,
-        {marginHorizontal: 1.5 * MarginConstants.tab1},
+        buttonStyles.primaryButton,
+        {marginHorizontal: MarginConstants.tab1},
       ]}>
       <Pressable
         onPress={() => {
           props.saveRange();
         }}>
-        <Text style={styles.saveText}> {translate('date_filter.save')} </Text>
+        <Text style={buttonStyles.primaryButtonText}>{`Apply`}</Text>
       </Pressable>
     </View>
   );
@@ -487,6 +492,23 @@ export const CheckBox = ({isChecked, checkedColor, uncheckedColor}) => {
     />
   );
 };
+
+export const RadioButtonCheckbox = ({
+  isChecked,
+  checkedColor = Colors.accentLight,
+  uncheckedColor = Colors.checkboxColor,
+  size,
+  style,
+}) => {
+  return (
+    <IonIcons
+      name={isChecked ? 'radio-button-on' : 'radio-button-off'}
+      size={size ?? 24}
+      color={isChecked ? checkedColor : uncheckedColor}
+      style={{marginHorizontal: MarginConstants.halfTab, ...style}}
+    />
+  );
+};
 export const CheckRadioButtonItem = ({item, index, onPress, textStyle}) => {
   const _textStyle = textStyle ?? styles.checkBoxText;
   return (
@@ -501,12 +523,14 @@ export const CheckRadioButtonItem = ({item, index, onPress, textStyle}) => {
             // onPress(index);
           }}
         /> */}
-        <IonIcons
+        {/* <IonIcons
           name={item.isChecked ? 'radio-button-on' : 'radio-button-off'}
           size={24}
           color={item.isChecked ? Colors.accentLight : Colors.checkboxColor}
           style={{marginHorizontal: MarginConstants.halfTab}}
-        />
+        /> */}
+
+        <RadioButtonCheckbox isChecked={item.isChecked} />
         <Text style={_textStyle}>{item.title}</Text>
       </View>
     </Pressable>

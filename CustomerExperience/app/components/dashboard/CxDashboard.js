@@ -98,7 +98,7 @@ function RenderDonutInformation({icon, title, count}) {
 }
 
 function RenderDonutInfoContainer({responseCount, surveyCount}) {
-  const responseIcon = require('./../../../assets/images/responses_icon.png');
+  const responseIcon = require('./../../../assets/images/total_responses_icon.png');
   const surveyIcon = require('./../../../assets/images/surveys_icon.png');
   return (
     <View
@@ -199,11 +199,21 @@ const NPSLabel = ({npsScore, benchmark}) => {
   );
 };
 
+const RenderNoDataFound = () => {
+  return (
+    <View style={dashboardStyles.emptyView}>
+      <Text style={dashboardStyles.emptyText}>
+        {translate('dashboard.no_segment_found')}
+      </Text>
+    </View>
+  );
+};
+
 function DashboardGuageChart({npsScore, benchmark}) {
   return (
     <View
       style={{
-        flex: 4,
+        flex: 5,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -214,6 +224,17 @@ function DashboardGuageChart({npsScore, benchmark}) {
     </View>
   );
 }
+
+const ClosedLoopView = props => {
+  return (
+    <View style={dashboardStyles.closedLoopView}>
+      <DashboardClosedLoopView
+        // ticketCount={props.dashboardData.detractorTicketsCount}
+        ticketCount={props.ticketCount}
+      />
+    </View>
+  );
+};
 
 const CxDashboard = props => {
   let isFocused = useDispatch();
@@ -448,27 +469,6 @@ const CxDashboard = props => {
     return <Image source={icon} style={{width: 12, height: 12}} />;
   };
 
-  let getClosedLoopView = () => {
-    return (
-      <View style={dashboardStyles.closedLoopView}>
-        <DashboardClosedLoopView
-          // ticketCount={props.dashboardData.detractorTicketsCount}
-          ticketCount={props.ticketCount}
-        />
-      </View>
-    );
-  };
-
-  let renderNoDataFound = () => {
-    return (
-      <View style={dashboardStyles.emptyView}>
-        <Text style={dashboardStyles.emptyText}>
-          {translate('dashboard.no_segment_found')}
-        </Text>
-      </View>
-    );
-  };
-
   let renderRow = storeItem => {
     return (
       <View
@@ -513,7 +513,7 @@ const CxDashboard = props => {
             renderItem={renderRow}
             onEndReachedThreshold={0.01}
             refreshing={false}
-            ListEmptyComponent={renderNoDataFound}
+            ListEmptyComponent={<RenderNoDataFound />}
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={renderListHeader}
           />
@@ -574,7 +574,7 @@ const CxDashboard = props => {
           <RenderSegmentDashboardData {...props} />
           {/* <RenderSegmentTitle text={translate('dashboard.closed_loop')} /> */}
 
-          {getClosedLoopView()}
+          <ClosedLoopView {...props} />
           {/* {renderSegmentTitle(translate('dashboard.comparison'))}
           {renderStoreNPSList()} */}
         </SafeAreaView>

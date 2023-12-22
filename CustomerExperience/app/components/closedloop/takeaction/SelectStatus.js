@@ -6,7 +6,7 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
-import {listItemSeparator} from '../../../routes/CommonScreen';
+import {ListItemSeparator} from '../../../routes/CommonScreen';
 import {
   Colors,
   // getStatusBorderColor,
@@ -18,18 +18,25 @@ import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 // import IonIcon from 'react-native-vector-icons/Ionicons';
 import StatusItem from './StatusItem';
-const SelectStatus = props => {
-  const [data, setData] = useState(props.data);
-  // const [selectedIndex, setSelectedIndex] = useState();
+import QPButton from '../../../widgets/Button';
+import {buttonStyles} from '../../../styles/button.styles';
 
+const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
+  // const [data, setData] = useState(data);
+  const [currentIndex, setIndex] = useState(selectedIndex);
+  const [currentItem, setItem] = useState(data[selectedIndex]);
+  // const [selectedIndex, setSelectedIndex] = useState();
+  console.log('Abul data', JSON.stringify(data));
   const renderRow = ({item, index}) => {
     return (
       <StatusItem
         item={item}
-        selectedIndex={props.selectedIndex}
+        selectedIndex={currentIndex}
         index={index}
         onPressHandler={() => {
-          props.handleOnPress(item, index);
+          // props.handleOnPress(item, index);
+          setIndex(index);
+          setItem(item);
         }}
       />
     );
@@ -42,7 +49,19 @@ const SelectStatus = props => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
-        ItemSeparatorComponent={listItemSeparator}
+        ItemSeparatorComponent={
+          <ListItemSeparator style={{marginHorizontal: MarginConstants.tab2}} />
+        }
+        ListFooterComponent={
+          <QPButton
+            buttonColor={Colors.accentLight}
+            testID="ApplyButton"
+            style={[buttonStyles.primaryButton, {margin: MarginConstants.tab2}]}
+            onPress={() => handleOnPress(currentItem, currentIndex)}
+            buttonText={'Apply'}
+            textStyle={buttonStyles.primaryButtonText}
+          />
+        }
       />
     </View>
   );

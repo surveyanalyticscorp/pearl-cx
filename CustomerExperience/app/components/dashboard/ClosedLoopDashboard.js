@@ -26,13 +26,19 @@ import {textStyles} from '../../styles/text.styles';
 import DropDownPicker from 'react-native-dropdown-picker';
 import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
 import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
-import {getDashboardStatusList} from '../../Utils/TicketUtils';
 import {
+  getDashboardStatusList,
+  getDashboardStatusListForBottomList,
+  statusListDashboardClosedLoopFilter,
+} from '../../Utils/TicketUtils';
+import {
+  BottomSheetHeader,
   IconButton,
   RenderSegmentTitle,
   RenderStatusIcon,
 } from '../../routes/CommonScreen';
-import {filter} from 'lodash';
+import BottomSheet from 'reanimated-bottom-sheet';
+import SelectStatus from '../closedloop/takeaction/SelectStatus';
 
 const RenderDonutChart = ({count, showPercentageCount}) => {
   // let count = getCount(props.route.params.ticketCount);
@@ -211,7 +217,7 @@ const RenderCountContainer = ({
           justifyContent: 'center',
         }}>
         <Text style={textStyles.secondaryText}>{`${
-          count.totalTickets
+          count.totalTickets ?? 0
         } ${translate('dashboard.total')}`}</Text>
       </View>
       <View
@@ -285,15 +291,15 @@ let RenderViewTicketsContainer = ({statusId}) => {
   );
 };
 
-const ViewTicketsButton = ({statusIndex, statusList}) => {
+const ViewTicketsButton = ({statusIndex}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const navigateToCLosedLoop = () => {
-    if (statusIndex !== statusList.length - 1) {
-      dispatch(setStatusFilterById(statusIndex.toString()));
-    } else {
+    if (statusIndex === 0) {
       dispatch(setStatusFilterById(''));
+    } else {
+      dispatch(setStatusFilterById(JSON.stringify(statusIndex - 1)));
     }
 
     // props.navigation.navigate('ClosedLoop');
@@ -311,7 +317,8 @@ const ViewTicketsButton = ({statusIndex, statusList}) => {
   );
 };
 
-const RenderStatusFilterButton = (currentStatus, onPress) => {
+const RenderStatusFilterButton = ({currentStatus, onPress}) => {
+  console.log('ABUL', JSON.stringify(currentStatus));
   // <QPButton
   //   testID="StatusFilterButton"
   //   style={{
@@ -333,15 +340,9 @@ const RenderStatusFilterButton = (currentStatus, onPress) => {
         alignItems: 'center',
         justifyContent: 'center',
       }}
-      onPress={() => {
-        console.log(JSON.stringify(currentStatus));
-      }}
-      leftIcon={
-        <RenderStatusIcon
-          title={currentStatus.currentStatus.value.toLowerCase()}
-        />
-      }
-      buttonText={currentStatus.currentStatus.label}
+      onPress={onPress}
+      leftIcon={<RenderStatusIcon title={currentStatus.title.toLowerCase()} />}
+      buttonText={currentStatus.title}
       textStyle={{
         ...buttonStyles.outlinePrimaryButtonMediumText,
         marginHorizontal: MarginConstants.halfTab,
@@ -505,8 +506,51 @@ export const RenderDropDown = ({
 export const ClosedLoopDashboard = props => {
   const [showPercentageCount, setShowPercentageCount] = useState(false);
   console.log(`Ticket Count: ${JSON.stringify(props.ticketCount)}`);
+  const statusBottomSheetRef = React.useRef();
+  const statusBottomSheetSnapPoints = ['75%', '0%'];
+  const statusList = getDashboardStatusListForBottomList(props.ticketCount);
+  const [statusIndex, setStatusIndex] = useState(0);
+  const [selectedCurrentStatus, setCurrentStatus] = useState(statusList[0]);
+  const handleStatusSelection = () => {
+    // open status selection bottom sheet
+    statusBottomSheetRef.current.snapTo(0);
+  };
+  const closeStatusSelection = () => {
+    // open status selection bottom sheet
+    statusBottomSheetRef.current.snapTo(statusBottomSheetSnapPoints.length - 1);
+  };
 
-  const statusList = getDashboardStatusList(props.ticketCount);
+  const renderStatusSelectContent = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <SelectStatus
+          data={statusList}
+          selectedIndex={statusIndex}
+          handleOnPress={(item, index) => {
+            // console.log(JSON.stringify(item));
+            // setStatus(item.title);
+            setStatusIndex(index);
+            setCurrentStatus(item);
+            closeStatusSelection();
+          }}
+        />
+      </View>
+    );
+  };
+
+  const renderStatusHeader = _title => {
+    return (
+      <BottomSheetHeader
+        title={translate('ticket_overview.select_status')}
+        onPressClose={() =>
+          statusBottomSheetRef.current.snapTo(
+            statusBottomSheetSnapPoints.length - 1,
+          )
+        }
+      />
+    );
+  };
+
   // const items = [
   //   {label: 'New', value: 'new', count: ticketCount.NEW ?? ticketCount.new},
   //   {label: 'Open', value: 'open', count: ticketCount.OPEN ?? ticketCount.open},
@@ -523,9 +567,6 @@ export const ClosedLoopDashboard = props => {
   //   {label: 'All', value: 'all', count: getAllTicketCount(ticketCount)},
   // ];
 
-  const [selectedCurrentStatus, setCurrentStatus] = useState(
-    statusList[statusList.length - 1],
-  );
   // const screenName = props.route.name ?? '';
   // console.log(`Ticket Count: ${JSON.stringify(ticketCount.ticketCount)}`);
 
@@ -551,34 +592,37 @@ export const ClosedLoopDashboard = props => {
     <View style={styles.container}>
       <RenderSegmentTitle
         text={translate('dashboard.closed_loop')}
-        child={
-          <ViewTicketsButton
-            statusIndex={statusList.findIndex(
-              obj => obj.value === selectedCurrentStatus.value,
-            )}
-            statusList={statusList}
-          />
-        }
+        child={<ViewTicketsButton statusIndex={statusIndex} />}
       />
-      <RenderStatusFilterButton currentStatus={selectedCurrentStatus} />
+
+      <RenderStatusFilterButton
+        currentStatus={selectedCurrentStatus}
+        onPress={handleStatusSelection}
+      />
       {/* <RenderDropDown
         currentStatus={selectedCurrentStatus}
         setCurrentStatus={setCurrentStatus}
         statusList={statusList}
       /> */}
-
-      <RenderCountContainer
+      {/* <RenderCountContainer
         count={selectedCurrentStatus.count}
         setShowPercentageCount={setShowPercentageCount}
         showPercentageCount={showPercentageCount}
-      />
+      /> */}
       <RenderDonutChart
         count={selectedCurrentStatus.count}
         showPercentageCount={showPercentageCount}
       />
       {/* {renderDonutChart()} */}
-
       {/* <RenderViewTicketsContainer /> */}
+      <BottomSheet
+        ref={statusBottomSheetRef}
+        snapPoints={statusBottomSheetSnapPoints}
+        initialSnap={statusBottomSheetSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderStatusSelectContent}
+        renderHeader={renderStatusHeader}
+      />
     </View>
   );
 };
@@ -739,4 +783,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: PaddingConstants.halfTab,
     backgroundColor: Colors.accent,
   },
+  contentContainer: {backgroundColor: Colors.white, height: '100%'},
 });

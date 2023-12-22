@@ -158,7 +158,7 @@ const RenderDropDownButton = ({
           <View style={styles.dropdownInnerContainer}>
             <Text style={styles.dropdownContainerText}>{text}</Text>
           </View>
-          {hasArrowDownIcon && <ArrowDownIcon />}
+          {hasArrowDownIcon ? <ArrowDownIcon /> : <View />}
         </View>
 
         {/* <IonIcons name="down-arrow" /> */}
@@ -186,18 +186,24 @@ const DescriptionView = ({ticket, showResponseButton}) => {
         subText={createdDate}
       />
 
-      {ticket.npsScore !== null && (
+      {ticket.npsScore !== null ? (
         <View style={styles.rowContainer}>
           <Title value={'NPS'} />
-          <NPSScoreView text={ticket.npsScore} />
+          <NPSScoreView text={ticket?.npsScore} />
         </View>
+      ) : (
+        <View />
       )}
       <ShowTitleAndText
         title={`${translate('ticket_overview.description')}:`}
         subText={!isObjectEmpty(ticket) ? ticket.comment : ''}
       />
 
-      {ticket.responseId && showResponseButton && <ViewResponseDetailsButton />}
+      {ticket.responseId && showResponseButton ? (
+        <ViewResponseDetailsButton />
+      ) : (
+        <View />
+      )}
     </View>
   );
 };
@@ -845,7 +851,7 @@ export default function TicketOverview(props) {
             id={ticketDetails.id}
             currentSegment={ticketDetails.currentSegment}
           />
-          {showTicketDeleteModal && renderDeleteAlert()}
+          {showTicketDeleteModal ?? renderDeleteAlert()}
         </View>
       </Animated.ScrollView>
       <RenderStatusBottomSheet currentBS_={currentBS} />

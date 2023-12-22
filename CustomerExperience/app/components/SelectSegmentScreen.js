@@ -14,7 +14,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getClosedLoopSegmentDetails} from '../redux/actions/dashboard.actions';
 import {
   CloseButton,
-  listItemSeparator,
+  ListItemSeparator,
   NoItemsFound,
 } from '../routes/CommonScreen';
 import {Colors} from '../styles/color.constants';
@@ -186,7 +186,7 @@ const SelectSegmentScreen = props => {
         data={segmentList}
         keyExtractor={item => item.segmentID + ''}
         renderItem={renderRow}
-        ItemSeparatorComponent={listItemSeparator}
+        ItemSeparatorComponent={ListItemSeparator}
         ListHeaderComponent={renderSegmentSearch}
         onEndReached={loadMoreData}
         onEndReachedThreshold={0.25}

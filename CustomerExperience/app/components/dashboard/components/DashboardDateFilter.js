@@ -179,7 +179,6 @@ export default function DashboardDateFilter(props) {
           <View style={styles.monthRow}>
             <View>
               <Text style={styles.dateTitle}>{title}</Text>
-              <Text style={styles.rangeTitle}>{''}</Text>
             </View>
             {selectedType === type && (
               <View style={styles.checkIcon}>
@@ -391,6 +390,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.white,
     paddingTop: PaddingConstants.halfTab,
+    paddingHorizontal: PaddingConstants.tab1,
   },
   dateTitle: {
     color: Colors.primary,
@@ -407,6 +407,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.borderColor,
     height: 0.5,
     marginHorizontal: MarginConstants.tab2,
+    marginBottom: MarginConstants.tab2,
   },
   monthRow: {
     marginHorizontal: MarginConstants.tab2,

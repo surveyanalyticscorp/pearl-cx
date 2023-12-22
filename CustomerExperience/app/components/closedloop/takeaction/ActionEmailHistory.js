@@ -18,7 +18,7 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import {
   Avatar,
   CloseButton,
-  listItemSeparator,
+  ListItemSeparator,
 } from '../../../routes/CommonScreen';
 import {isObjectEmpty} from '../../../Utils/Utility';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
@@ -159,7 +159,7 @@ export default function ActionEmailHistory(props) {
         renderItem={({item, index}) => {
           return <ActionHistoryItem item={item} index={index} />;
         }}
-        ItemSeparatorComponent={listItemSeparator}
+        ItemSeparatorComponent={ListItemSeparator}
       />
     </SafeAreaView>
   );

@@ -13,7 +13,7 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {listItemSeparator, SearchTextInput} from '../../../routes/CommonScreen';
+import {ListItemSeparator, SearchTextInput} from '../../../routes/CommonScreen';
 // import {PaddingConstants} from '../../../styles/padding.constants';
 import StringUtils from '../../../Utils/StringUtils';
 import {NoItemsFound} from '../../../routes/CommonScreen';
@@ -78,7 +78,7 @@ const SelectTicketOwner = props => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
-        ItemSeparatorComponent={listItemSeparator}
+        ItemSeparatorComponent={ListItemSeparator}
         ListEmptyComponent={
           <NoItemsFound>No Assignee/Owner found</NoItemsFound>
         }

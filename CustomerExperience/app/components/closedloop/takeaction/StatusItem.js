@@ -10,21 +10,21 @@ import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {RenderStatusIcon} from '../../../routes/CommonScreen';
+import {
+  CheckBox,
+  CheckBoxItem,
+  RadioButtonCheckbox,
+  RenderStatusIcon,
+} from '../../../routes/CommonScreen';
 
-const StatusItem = props => {
-  const index = props.index;
-  const title = props.item.title;
+const StatusItem = ({index, item, selectedIndex, onPressHandler}) => {
+  const title = item.title;
 
   return (
-    <TouchableWithoutFeedback
-      onPress={props.onPressHandler}
-      style={styles.container}>
+    <TouchableWithoutFeedback onPress={onPressHandler} style={styles.container}>
       <View style={styles.container}>
-        <RenderStatusIcon title={title} />
-        <Text style={styles.title}>{title}</Text>
-
-        {props.selectedIndex === index ? (
+        <RadioButtonCheckbox size={18} isChecked={index === selectedIndex} />
+        {/* {props.selectedIndex === index ? (
           <IonIcon
             style={{marginHorizontal: MarginConstants.halfTab}}
             name={'checkmark'}
@@ -33,7 +33,10 @@ const StatusItem = props => {
           />
         ) : (
           <View />
-        )}
+        )} */}
+
+        <Text style={styles.title}>{title}</Text>
+        <RenderStatusIcon size={18} title={title} />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -48,11 +51,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: MarginConstants.tab1,
     padding: MarginConstants.tab1,
+    marginTop: MarginConstants.tab2,
   },
   title: {
     flex: 1,
-    fontFamily: FontFamily.medium,
-    fontSize: TextSizes.secondary,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.primary,
     marginStart: MarginConstants.halfTab,
     color: Colors.filterIconColor,
   },

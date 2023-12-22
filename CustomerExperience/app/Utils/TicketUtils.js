@@ -17,6 +17,16 @@ export const statusList = [
   {title: 'Resolved', id: 3},
 ];
 
+export const statusListDashboardClosedLoopFilter = [
+  {title: 'All', id: 0},
+
+  {title: 'New', id: 1},
+  {title: 'Open', id: 2},
+  {title: 'Escalated', id: 3},
+  // {title: 'Overdue', id: 3},
+  {title: 'Resolved', id: 4},
+];
+
 export const statusListForCreateTicket = [
   {title: 'New', id: 0},
   {title: 'Open', id: 1},
@@ -182,6 +192,36 @@ export function getDashboardStatusList(ticketCount) {
     count: getAll,
     icon: () => <ResponsesIcon />,
   });
+  return temp;
+}
+
+export function getDashboardStatusListForBottomList(ticketCount) {
+  const getAll = getAllTicketCount(ticketCount);
+
+  let temp = [];
+
+  temp.push({
+    label: 'All',
+    title: 'All',
+    value: 'all',
+    id: 0,
+    count: getAll,
+    icon: () => <ResponsesIcon />,
+  });
+
+  Object.keys(ticketCount).forEach((value, index) => {
+    if (ticketCount.hasOwnProperty(value)) {
+      temp.push({
+        label: StringUtils.uppercaseFirstCharRestLowercase(value),
+        title: StringUtils.uppercaseFirstCharRestLowercase(value),
+        value: value.toLowerCase(),
+        count: ticketCount[value],
+        id: index + 1, // incresed ID value to acomodate all object
+        icon: () => <RenderStatusIcon title={value} />,
+      });
+    }
+  });
+
   return temp;
 }
 

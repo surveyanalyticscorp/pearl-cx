@@ -118,9 +118,9 @@ export const dashboardStyles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: Colors.white,
-    marginHorizontal: MarginConstants.tab2,
+    paddingHorizontal: MarginConstants.tab2,
     paddingVertical: PaddingConstants.tab1,
   },
   closedLoopView: {

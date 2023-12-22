@@ -7,7 +7,7 @@ import {
   FlatList,
   TextInput,
 } from 'react-native';
-import {listItemSeparator} from '../../routes/CommonScreen';
+import {ListItemSeparator} from '../../routes/CommonScreen';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -75,7 +75,7 @@ const GlobalSelectSegment = ({
           data={filteredList}
           keyExtractor={(item, index) => item.segmentName}
           renderItem={renderRow}
-          ItemSeparatorComponent={listItemSeparator}
+          ItemSeparatorComponent={ListItemSeparator}
           onEndReached={loadMoreData}
           onEndReachedThreshold={0}
           extraData={[filteredList]}
