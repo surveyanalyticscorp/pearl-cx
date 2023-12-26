@@ -212,7 +212,7 @@ export const BottomSheetHeader = props => {
 
 export const ListItemSeparator = ({style}) => {
   return (
-    <View style={{height: 0.5, backgroundColor: Colors.darkGrey, ...style}} />
+    <View style={{...style, height: 0.5, backgroundColor: Colors.darkGrey}} />
   );
 };
 

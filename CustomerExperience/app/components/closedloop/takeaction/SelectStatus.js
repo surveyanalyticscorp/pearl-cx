@@ -20,6 +20,9 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import StatusItem from './StatusItem';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
+const statusListItemSeparator = () => (
+  <ListItemSeparator style={{marginHorizontal: MarginConstants.tab1}} />
+);
 
 const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
   // const [data, setData] = useState(data);
@@ -49,9 +52,7 @@ const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
-        ItemSeparatorComponent={
-          <ListItemSeparator style={{marginHorizontal: MarginConstants.tab2}} />
-        }
+        ItemSeparatorComponent={statusListItemSeparator}
         ListFooterComponent={
           <QPButton
             buttonColor={Colors.accentLight}

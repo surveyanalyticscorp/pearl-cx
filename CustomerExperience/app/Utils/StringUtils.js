@@ -98,6 +98,31 @@ export default class StringUtils {
     return commentText.replace(/\@\[([^\]]+)\]\(([^\)]+)\)/g, `<b>$1</b>`);
   }
 
+  static getWords(text) {
+    var specialPattern = /@\[[^\]]+\]\(\d+\)/g;
+
+    // Extract all occurrences of the special pattern and store them in an array
+    var specialMatches = text.match(specialPattern) || [];
+
+    // Replace all occurrences of the special pattern with a placeholder
+    var textWithoutSpecialPattern = text.replace(specialPattern, 'PLACEHOLDER');
+
+    // Use a regular expression to split the text into words
+    var words = textWithoutSpecialPattern.split(/\s+/);
+
+    // Replace the placeholders with the original special pattern in the words array
+    words = words.map(function (word) {
+      return word === 'PLACEHOLDER' ? specialMatches.shift() : word;
+    });
+
+    // Filter out empty strings (occurs when there are consecutive spaces)
+    words = words.filter(function (word) {
+      return word.length > 0;
+    });
+
+    // Return the count of words
+    return words;
+  }
   static removeLines(str) {
     return str.replace(/\s{2,}/g, '');
   }

@@ -34,6 +34,16 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import {MAX_COMMENT_LENGTH} from '../../api/Constant';
 import {event} from 'react-native-reanimated';
 
+function getFoldedText(text) {
+  //
+  const MAX_WORD_LENGTH = 10;
+  if (StringUtils.getWords(text).length > MAX_WORD_LENGTH) {
+    return `${StringUtils.getWords(text).slice(0, MAX_WORD_LENGTH).join(' ')}
+      <span><b> ...see more</b></span>`;
+  }
+  return text;
+}
+
 const MaterialIconView = ({iconName, color}) => (
   <View style={{margin: MarginConstants.halfTab}}>
     <MaterialIcon
@@ -79,12 +89,17 @@ const TextLengthCount = ({textLength, maxCountLength}) => {
 };
 
 const CommentItem = ({item, isSelected = false}) => {
+  const [isFolded, setFolded] = useState(true);
+
   return (
     <Pressable
       style={[
         styles.commentItemView,
         {marginVertical: MarginConstants.halfTab},
-      ]}>
+      ]}
+      onPress={() => {
+        setFolded(state => !state);
+      }}>
       <View style={styles.commentUserView}>
         <Avatar title={item.commentBy} />
       </View>
@@ -93,7 +108,9 @@ const CommentItem = ({item, isSelected = false}) => {
           isSelected ? styles.commentSelectedTextView : styles.commentTextView
         }>
         <Text style={[styles.commentByText]}>{item.commentBy.trim()}</Text>
-        <CommentText text={item.text.trim()} />
+        <CommentText
+          text={isFolded ? getFoldedText(item.text.trim()) : item.text.trim()}
+        />
         {/* <Text style={styles.commentText}>{item.text.trim()}</Text> */}
         <Text style={styles.commentDateText}>
           {getDateTimeAgo(moment.utc(item.createdAt).toDate())}
