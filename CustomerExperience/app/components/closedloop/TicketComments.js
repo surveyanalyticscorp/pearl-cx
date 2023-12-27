@@ -44,11 +44,11 @@ function getFoldedText(text) {
   return text;
 }
 
-const MaterialIconView = ({iconName, color}) => (
+const MaterialIconView = ({iconName, color, size}) => (
   <View style={{margin: MarginConstants.halfTab}}>
     <MaterialIcon
       name={iconName}
-      size={24}
+      size={size ?? 24}
       color={color ?? Colors.filterIconColor}
     />
   </View>
@@ -64,11 +64,21 @@ const SendButton = ({handleOnSubmit}) => {
 
 const CommentText = ({text}) => {
   const {width} = useWindowDimensions();
+  console.log('HTML comment', text);
+  console.log(
+    'HTML text',
+    JSON.stringify(StringUtils.formatCommentToHTML(text)),
+  );
 
   return (
     <View>
       <RenderHTML
-        source={{html: StringUtils.formatCommentToHTML(text)}}
+        source={{
+          html: `
+          <span style="font-size: 100%; ">${StringUtils.formatCommentToHTML(
+            text,
+          )}</span>`,
+        }}
         contentWidth={width / 0.5}
       />
     </View>

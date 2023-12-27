@@ -6,7 +6,11 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
-import {ListItemSeparator} from '../../../routes/CommonScreen';
+import {
+  CheckRadioButtonItem,
+  ListItemSeparator,
+  RadioButtonCheckbox,
+} from '../../../routes/CommonScreen';
 import {
   Colors,
   // getStatusBorderColor,
@@ -20,27 +24,37 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import StatusItem from './StatusItem';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
-const statusListItemSeparator = () => (
+const itemSeparator = () => (
   <ListItemSeparator style={{marginHorizontal: MarginConstants.tab1}} />
 );
 
-const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
+const SelectSorting = ({data, selectedIndex, handleOnPress}) => {
   // const [data, setData] = useState(data);
   const [currentIndex, setIndex] = useState(selectedIndex);
   const [currentItem, setItem] = useState(data[selectedIndex]);
   // const [selectedIndex, setSelectedIndex] = useState();
   const renderRow = ({item, index}) => {
     return (
-      <StatusItem
-        item={item}
-        selectedIndex={currentIndex}
+      <CheckRadioButtonItem
+        item={{...item, isChecked: currentIndex === index}}
         index={index}
-        onPressHandler={() => {
-          // props.handleOnPress(item, index);
-          setIndex(index);
-          setItem(item);
+        onPress={index_ => {
+          // handleOnPress(item, index);
+
+          setIndex(index_);
+          setItem(data[index_]);
         }}
       />
+      // <StatusItem
+      //   item={item}
+      //   selectedIndex={currentIndex}
+      //   index={index}
+      //   onPressHandler={() => {
+      //     // props.handleOnPress(item, index);
+      //     setIndex(index);
+      //     setItem(item);
+      //   }}
+      // />
     );
   };
 
@@ -51,7 +65,7 @@ const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
-        ItemSeparatorComponent={statusListItemSeparator}
+        ItemSeparatorComponent={itemSeparator}
         ListFooterComponent={
           <QPButton
             buttonColor={Colors.accentLight}
@@ -67,7 +81,7 @@ const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
   );
 };
 
-export default SelectStatus;
+export default SelectSorting;
 
 const styles = StyleSheet.create({
   container: {

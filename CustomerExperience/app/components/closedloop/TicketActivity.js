@@ -6,6 +6,7 @@ import {
   FlatList,
   RefreshControl,
   Pressable,
+  ScrollView,
 } from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -13,12 +14,19 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {FilterIcon, NoItemsFound} from '../../routes/CommonScreen';
+import {
+  BottomSheetHeader,
+  FilterIcon,
+  NoItemsFound,
+} from '../../routes/CommonScreen';
 import {convertDateTimeAgo} from '../../Utils/TimeUtils';
 import {getClosedLoopTicketItemActivity} from '../../redux/actions/dashboard.actions';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {buttonStyles} from '../../styles/button.styles';
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
+import SelectSorting from './takeaction/SelectSorting';
 
 const SortingIcon = ({iconName, size, color}) => {
   return (
@@ -62,7 +70,7 @@ const RenderMyItem = ({item}) => {
   );
 };
 
-const SortingView = ({toggleSorting, isInverted}) => {
+const SortingView = ({onPress, text}) => {
   return (
     <Pressable
       // style={styles.sortingView}
@@ -77,19 +85,18 @@ const SortingView = ({toggleSorting, isInverted}) => {
           margin: MarginConstants.tab1,
         },
       ]}
-      onPress={() => {
-        toggleSorting();
-      }}>
+      onPress={onPress}>
       <FilterIcon
         style={{marginHorizontal: MarginConstants.halfTab}}
         color={Colors.accentLight}
       />
       <Text style={buttonStyles.textButtonText}>
-        {`Sorted by ${
+        {/* {`Sorted by ${
           isInverted
             ? translate('activity.oldest').toLocaleLowerCase()
             : translate('activity.latest').toLocaleLowerCase()
-        }`}
+        }`} */}
+        {text}
       </Text>
       {/* <SortingIcon
         iconName={isInverted ? 'caret-up' : 'caret-down'}
@@ -100,18 +107,64 @@ const SortingView = ({toggleSorting, isInverted}) => {
 };
 
 export default function TicketActivity(props) {
+  const sortingList = [
+    {id: 0, title: translate('activity.latest').toLocaleLowerCase()},
+    {id: 1, title: translate('activity.oldest').toLocaleLowerCase()},
+  ];
+  const [currentSortingIndex, setCurrentIndex] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const ticketId = useSelector(state => state.dashboard.ticket.id);
   const {userID} = useSelector(state => state.global.userInfo);
-  const [isInverted, setIsInverted] = useState(false);
   const ticketActivityList = useSelector(
     state => state.dashboard.ticketActivity,
   );
 
-  const toggleSorting = () => {
-    setIsInverted(prev => !prev);
+  // sorting bottom sheet stuff
+  const fall = new Animated.Value(1);
+  const sortingBottomSheet = React.useRef();
+  const sortingBottomSheetSnapPoints = ['45%', '0%'];
+
+  const openSortingBottomSheet = () => {
+    sortingBottomSheet.current.snapTo(0);
+  };
+  const closeSortingBottomSheet = () => {
+    sortingBottomSheet.current.snapTo(sortingBottomSheetSnapPoints.length - 1);
+  };
+
+  function getTicketActivityList(list, item) {
+    console.log(JSON.stringify(item));
+    switch (item.id) {
+      case 1:
+        return list.slice().reverse();
+      default:
+        return list;
+    }
+  }
+
+  const renderSortingHeader = _title => {
+    return (
+      <BottomSheetHeader
+        title={translate('activity.sorted_by')}
+        onPressClose={closeSortingBottomSheet}
+      />
+    );
+  };
+
+  const renderSortingSelectContent = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <SelectSorting
+          data={sortingList}
+          selectedIndex={currentSortingIndex}
+          handleOnPress={(item, index) => {
+            setCurrentIndex(index);
+            closeSortingBottomSheet();
+          }}
+        />
+      </View>
+    );
   };
 
   const makeAPICall = () => {
@@ -137,20 +190,41 @@ export default function TicketActivity(props) {
   };
   return (
     <View style={[styles.container, {margin: MarginConstants.tab1}]}>
-      <View style={styles.sortingView}>
-        <SortingView toggleSorting={toggleSorting} isInverted={isInverted} />
-      </View>
-      <FlatList
-        refreshControl={
-          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-        }
-        style={styles.container}
-        data={
-          isInverted ? ticketActivityList.slice().reverse() : ticketActivityList
-        }
-        renderItem={getRenderItem}
-        ListEmptyComponent={<NoItemsFound>No Activity...</NoItemsFound>}
-        keyExtractor={item => JSON.stringify(item.id)}
+      <Animated.View
+        style={[
+          styles.container,
+          {
+            opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+          },
+        ]}>
+        <View style={styles.sortingView}>
+          <SortingView
+            onPress={openSortingBottomSheet}
+            text={sortingList[currentSortingIndex].title}
+          />
+        </View>
+        <FlatList
+          refreshControl={
+            <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+          }
+          style={styles.container}
+          data={getTicketActivityList(
+            ticketActivityList,
+            sortingList[currentSortingIndex],
+          )}
+          renderItem={getRenderItem}
+          ListEmptyComponent={<NoItemsFound>No Activity...</NoItemsFound>}
+          keyExtractor={item => JSON.stringify(item.id)}
+        />
+      </Animated.View>
+      <BottomSheet
+        ref={sortingBottomSheet}
+        snapPoints={sortingBottomSheetSnapPoints}
+        initialSnap={sortingBottomSheetSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderSortingSelectContent}
+        renderHeader={renderSortingHeader}
+        callbackNode={fall}
       />
     </View>
   );
@@ -228,4 +302,5 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginBottom: MarginConstants.halfTab,
   },
+  contentContainer: {backgroundColor: Colors.white, height: '100%'},
 });
