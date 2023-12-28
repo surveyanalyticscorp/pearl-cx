@@ -75,9 +75,10 @@ const RenderCreateTicketButton = ({handleCreateTicket}) => {
     <View
       style={{
         flex: 1,
+        flexDirection: 'column-reverse',
         alignItems: 'stretch',
         justifyContent: 'center',
-        marginVertical: MarginConstants.tab3,
+        marginTop: 2 * MarginConstants.tab4,
         marginHorizontal: MarginConstants.tab1,
       }}>
       <QPButton
@@ -233,6 +234,26 @@ const RenderCustomerNameInput = ({defaultValue, setTicketState}) => {
         placeholder={translate('create_new_ticket.customer_name')}
         setValue={setCustomerName}
       />
+    </View>
+  );
+};
+
+const CreateTicketButton = ({showLoading, onPress}) => {
+  return (
+    <View>
+      {showLoading ? (
+        <View
+          style={[
+            styles.buttonStyle,
+            {
+              backgroundColor: Colors.accentLight,
+            },
+          ]}>
+          <QPSpinner spinnerColor={Colors.white} />
+        </View>
+      ) : (
+        <RenderCreateTicketButton handleCreateTicket={onPress} />
+      )}
     </View>
   );
 };
@@ -801,7 +822,7 @@ export default function CreateTicket(props) {
           },
         ]}>
         <GestureHandleBar />
-        <ScrollView style={styles.container}>
+        <ScrollView style={[styles.container]}>
           {/* <View
             style={[styles.rowContainer, {justifyContent: 'space-between'}]}>
             <Text style={styles.headerText}>
@@ -813,102 +834,93 @@ export default function CreateTicket(props) {
             text={translate('create_new_ticket.create_new_ticket')}
             hasCloseButton
           />
-          <Pressable onPress={handleSegmentSelection}>
-            <View style={[styles.rowContainer, styles.rowItem]}>
-              <SegmentIcon />
+          <View style={{flex: 1}}>
+            <Pressable onPress={handleSegmentSelection}>
+              <View style={[styles.rowContainer, styles.rowItem]}>
+                <SegmentIcon />
 
-              <Text
-                style={
-                  segment === translate('select_segment.select_segment')
-                    ? styles.palceholderText
-                    : styles.titleText
-                }>
-                {segment}
-              </Text>
-            </View>
-          </Pressable>
-          <Pressable onPress={handleDateSelection}>
-            <View style={[styles.rowContainer, styles.rowItem]}>
-              <RenderMaterialIcon iconName={'date-range'} />
-              {/* <TextInput placeholder="Date" style={styles.titleText} /> */}
-              <Text style={styles.titleText}>
-                {console.log('SELECTED_DATE', selectedDate)}
-                {moment(selectedDate, DMYFORMAT).format(
-                  FullMonthDateYearFormat,
-                )}
-              </Text>
-            </View>
-          </Pressable>
-          <RenderCustomerNameInput
-            defaultValue={customerName}
-            setTicketState={setTicketState}
-          />
-          <RenderPhoneInput setTicketState={setTicketState} />
-
-          <RenderEmailAddressInput
-            defaultValue={customerEmail}
-            setTicketState={setTicketState}
-          />
-          <Pressable onPress={handlePrioritySelection}>
-            <View style={[styles.rowContainer, styles.rowItem]}>
-              <RenderIonIcon
-                iconName={'flag'}
-                iconColor={getPriorityBorderColorbyId(ticketState.priority)}
-              />
-
-              <Text style={styles.titleText}>{`${
-                getPriorityById(ticketState.priority) ?? 'Unassigned'
-              } Priority`}</Text>
-              {/* <TextInput placeholder="Priority" style={styles.titleText} /> */}
-            </View>
-          </Pressable>
-          <Pressable onPress={handleStatusSelection}>
-            <View style={[styles.rowContainer, styles.rowItem]}>
-              {/* {getIonIcon('search')} */}
-              {/* <TextInput placeholder="Status" style={styles.titleText} /> */}
-              <RenderStatusIcon
-                title={getStatusById(ticketState.status) ?? 'New'}
-                size={14}
-              />
-              <Text style={styles.titleText}>{`${
-                getStatusById(ticketState.status) ?? 'New'
-              } Status`}</Text>
-            </View>
-          </Pressable>
-          {/* <View style={[styles.rowContainer, styles.rowItem]}> */}
-          {/* {getIonIcon('eye')} */}
-          {/* {getIonIcon('eye-off')} */}
-          {/* <TextInput placeholder="Watching" style={styles.titleText} /> */}
-          {/* </View> */}
-          <Pressable onPress={handleOwnerSelection}>
-            <View style={[styles.rowContainer, styles.rowItem]}>
-              <RenderMateriaCommunityIcon iconName={'shield-account'} />
-              {/* <TextInput placeholder="Ticket Owner" style={styles.titleText} /> */}
-              <Text
-                style={
-                  ticketOwner ===
-                  translate('ticket_overview.select_ticket_owner')
-                    ? styles.palceholderText
-                    : styles.titleText
-                }>{`${ticketOwner ?? ''}`}</Text>
-            </View>
-          </Pressable>
-          <RenderDescriptionInput setTicketState={setTicketState} />
-          <View style={[styles.rowContainer]}>
-            {showLoading ? (
-              <View
-                style={[
-                  styles.buttonStyle,
-                  {backgroundColor: Colors.accentLight},
-                ]}>
-                <QPSpinner spinnerColor={Colors.white} />
+                <Text
+                  style={
+                    segment === translate('select_segment.select_segment')
+                      ? styles.palceholderText
+                      : styles.titleText
+                  }>
+                  {segment}
+                </Text>
               </View>
-            ) : (
-              <RenderCreateTicketButton
-                handleCreateTicket={handleCreateTicket}
-              />
-            )}
+            </Pressable>
+            <Pressable onPress={handleDateSelection}>
+              <View style={[styles.rowContainer, styles.rowItem]}>
+                <RenderMaterialIcon iconName={'date-range'} />
+                {/* <TextInput placeholder="Date" style={styles.titleText} /> */}
+                <Text style={styles.titleText}>
+                  {console.log('SELECTED_DATE', selectedDate)}
+                  {moment(selectedDate, DMYFORMAT).format(
+                    FullMonthDateYearFormat,
+                  )}
+                </Text>
+              </View>
+            </Pressable>
+            <RenderCustomerNameInput
+              defaultValue={customerName}
+              setTicketState={setTicketState}
+            />
+            <RenderPhoneInput setTicketState={setTicketState} />
+
+            <RenderEmailAddressInput
+              defaultValue={customerEmail}
+              setTicketState={setTicketState}
+            />
+            <Pressable onPress={handlePrioritySelection}>
+              <View style={[styles.rowContainer, styles.rowItem]}>
+                <RenderIonIcon
+                  iconName={'flag'}
+                  iconColor={getPriorityBorderColorbyId(ticketState.priority)}
+                />
+
+                <Text style={styles.titleText}>{`${
+                  getPriorityById(ticketState.priority) ?? 'Unassigned'
+                } Priority`}</Text>
+                {/* <TextInput placeholder="Priority" style={styles.titleText} /> */}
+              </View>
+            </Pressable>
+            <Pressable onPress={handleStatusSelection}>
+              <View style={[styles.rowContainer, styles.rowItem]}>
+                {/* {getIonIcon('search')} */}
+                {/* <TextInput placeholder="Status" style={styles.titleText} /> */}
+                <RenderStatusIcon
+                  title={getStatusById(ticketState.status) ?? 'New'}
+                  size={14}
+                />
+                <Text style={styles.titleText}>{`${
+                  getStatusById(ticketState.status) ?? 'New'
+                } Status`}</Text>
+              </View>
+            </Pressable>
+            {/* <View style={[styles.rowContainer, styles.rowItem]}> */}
+            {/* {getIonIcon('eye')} */}
+            {/* {getIonIcon('eye-off')} */}
+            {/* <TextInput placeholder="Watching" style={styles.titleText} /> */}
+            {/* </View> */}
+            <Pressable onPress={handleOwnerSelection}>
+              <View style={[styles.rowContainer, styles.rowItem]}>
+                <RenderMateriaCommunityIcon iconName={'shield-account'} />
+                {/* <TextInput placeholder="Ticket Owner" style={styles.titleText} /> */}
+                <Text
+                  style={
+                    ticketOwner ===
+                    translate('ticket_overview.select_ticket_owner')
+                      ? styles.palceholderText
+                      : styles.titleText
+                  }>{`${ticketOwner ?? ''}`}</Text>
+              </View>
+            </Pressable>
+            <RenderDescriptionInput setTicketState={setTicketState} />
           </View>
+          <CreateTicketButton
+            onPress={handleCreateTicket}
+            showLoading={showLoading}
+          />
         </ScrollView>
       </Animated.View>
       <RenderPriorityBottomSheet />
@@ -927,9 +939,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderTopStartRadius: 8,
     borderTopEndRadius: 8,
-    marginHorizontal: MarginConstants.tab1,
-    marginTop:
-      Platform.OS === 'ios' ? MarginConstants.tab4 : MarginConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab1,
+    paddingTop:
+      Platform.OS === 'ios' ? PaddingConstants.tab4 : MarginConstants.tab1,
   },
   container: {
     flex: 1,
