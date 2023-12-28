@@ -89,14 +89,10 @@ const SortingView = ({onPress, text}) => {
       <FilterIcon
         style={{marginHorizontal: MarginConstants.halfTab}}
         color={Colors.accentLight}
+        size={16}
       />
       <Text style={buttonStyles.textButtonText}>
-        {/* {`Sorted by ${
-          isInverted
-            ? translate('activity.oldest').toLocaleLowerCase()
-            : translate('activity.latest').toLocaleLowerCase()
-        }`} */}
-        {text}
+        {`${translate('activity.sorted_by')} ${text}`}
       </Text>
       {/* <SortingIcon
         iconName={isInverted ? 'caret-up' : 'caret-down'}

@@ -57,6 +57,7 @@ import {textStyles} from '../styles/text.styles';
 import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
 import {buttonStyles} from '../styles/button.styles';
 import {backgroundColor} from '../widgets/qp-calendar/style';
+import StringUtils from '../Utils/StringUtils';
 // import CheckBox from '@react-native-community/checkbox';
 
 const DateRangeTab = createMaterialTopTabNavigator();
@@ -509,11 +510,17 @@ export const RadioButtonCheckbox = ({
     />
   );
 };
-export const CheckRadioButtonItem = ({item, index, onPress, textStyle}) => {
+export const CheckRadioButtonItem = ({
+  item,
+  index,
+  onPress,
+  textStyle,
+  checkBoxRowStyle,
+}) => {
   const _textStyle = textStyle ?? styles.checkBoxText;
   return (
     <Pressable onPress={() => onPress(index)}>
-      <View style={styles.checkBoxRow}>
+      <View style={checkBoxRowStyle ?? styles.checkBoxRow}>
         {/* <CheckBox
           disabled={false}
           value={item.isChecked}
@@ -531,7 +538,9 @@ export const CheckRadioButtonItem = ({item, index, onPress, textStyle}) => {
         /> */}
 
         <RadioButtonCheckbox isChecked={item.isChecked} />
-        <Text style={_textStyle}>{item.title}</Text>
+        <Text style={_textStyle}>
+          {StringUtils.uppercaseFirstCharRestLowercase(item.title)}
+        </Text>
       </View>
     </Pressable>
   );
@@ -619,10 +628,19 @@ export const Avatar = ({title, style}) => {
 export const FilterIcon = ({onPressFilter, size, style, color}) => {
   return (
     <Pressable style={style} onPress={onPressFilter}>
-      <IonIcons
+      {/* <IonIcons
         name="funnel"
         size={size ?? 20}
         color={color ?? Colors.lightBlack}
+      /> */}
+      <Image
+        // source={require('./../../../assets/images/responses_icon.png')}
+        source={require('./../../assets/images/filter_icon.png')}
+        style={{
+          width: size ?? 22,
+          height: size ?? 22,
+          tintColor: color ?? Colors.filterIconColor,
+        }}
       />
     </Pressable>
   );
@@ -647,8 +665,9 @@ export const HeaderFilter = ({
     <View style={styles.filterAndSearchBox}>
       {hasFilterIcon && (
         <FilterIcon
-          style={{marginHorizontal: MarginConstants.tab1}}
+          style={{marginEnd: MarginConstants.halfTab}}
           onPressFilter={onPressFilter}
+          size={22}
         />
       )}
       {hasSortIcon && <SortIcon onPressFilter={onPressFilter} />}
@@ -979,6 +998,7 @@ const styles = StyleSheet.create({
     marginHorizontal: MarginConstants.tab2,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.largeText,
+    fontWeight: FontWeight.bold,
     marginVertical: MarginConstants.halfTab,
     color: Colors.filterIconColor,
   },
