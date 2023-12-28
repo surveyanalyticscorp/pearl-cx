@@ -977,7 +977,7 @@ const styles = StyleSheet.create({
   },
   header: {
     marginHorizontal: MarginConstants.tab2,
-    fontFamily: FontFamily.bold,
+    fontFamily: FontFamily.regular,
     fontSize: TextSizes.largeText,
     marginVertical: MarginConstants.halfTab,
     color: Colors.filterIconColor,

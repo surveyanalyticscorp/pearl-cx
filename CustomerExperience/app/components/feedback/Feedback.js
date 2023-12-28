@@ -27,10 +27,18 @@ import {Sizes} from '../../styles/Size.constant';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {dashboardStyles} from '../dashboard/dashboard.style';
 import {translate} from '../../Utils/MultilinguaUtils';
-import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
+import {
+  BottomSheetHeader,
+  FabAddButton,
+  HeaderFilter,
+} from '../../routes/CommonScreen';
 import Animated from 'react-native-reanimated';
 import {useIsFocused} from '@react-navigation/native';
 import {clearResponseData} from '../../redux/actions/feedback.actions';
+import SelectSorting from '../closedloop/takeaction/SelectSorting';
+import BottomSheet from 'reanimated-bottom-sheet';
+import {last} from 'lodash';
+
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
 
@@ -44,9 +52,54 @@ function Feedback(props) {
   let [showLoader, setShowLoader] = useState(false);
 
   let [sortingText, setSortingText] = useState({label: 'Date', index: 0});
+
   let prevRangeRef = usePrevious(props.range);
   let sortingAttribute = ['Date', 'Score', 'Segment', 'Email'];
 
+  const sortingList = [
+    {id: 0, title: 'Date'},
+    {id: 1, title: 'Score'},
+    {id: 2, title: 'Segment'},
+    {id: 3, title: 'Email'},
+  ];
+  const [currentSortingIndex, setCurrentIndex] = useState(0);
+
+  // sorting bottom sheet stuff
+  const fall = new Animated.Value(1);
+  const sortingBottomSheet = React.useRef();
+  const sortingBottomSheetSnapPoints = ['45%', '0%'];
+
+  const openSortingBottomSheet = () => {
+    sortingBottomSheet.current.snapTo(0);
+  };
+  const closeSortingBottomSheet = () => {
+    sortingBottomSheet.current.snapTo(sortingBottomSheetSnapPoints.length - 1);
+  };
+
+  const renderSortingHeader = _title => {
+    return (
+      <BottomSheetHeader
+        title={translate('responses.sort_by')}
+        onPressClose={closeSortingBottomSheet}
+      />
+    );
+  };
+
+  const renderSortingSelectContent = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <SelectSorting
+          data={sortingList}
+          selectedIndex={currentSortingIndex}
+          handleOnPress={(item, index) => {
+            // setCurrentIndex(index);
+            setSortText(sortingList[index].title, index);
+            closeSortingBottomSheet();
+          }}
+        />
+      </View>
+    );
+  };
   let getFeedbackData = () => {
     /**
      * To avoid multiple API calls for each tab
@@ -164,10 +217,11 @@ function Feedback(props) {
   };
 
   const filterHandler = () => {
-    props.navigation.navigate(translate('responses.sort_by'), {
-      setSorter: setSortText,
-      selectedSorter: sortingText.label,
-    });
+    // props.navigation.navigate(translate('responses.sort_by'), {
+    //   setSorter: setSortText,
+    //   selectedSorter: sortingText.label,
+    // });
+    openSortingBottomSheet();
   };
 
   const renderFeedbackView = () => {
@@ -175,7 +229,12 @@ function Feedback(props) {
       <SafeAreaView
         forceInset={{top: 'never', bottom: 'never'}}
         style={styles.safeAreaView}>
-        {/* <FilterHeader
+        <Animated.View
+          style={[
+            styles.safeAreaView,
+            {opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))},
+          ]}>
+          {/* <FilterHeader
           actionOnArrowClick={() => {
             setFeedbackData([]);
             setPageOffset(0);
@@ -188,20 +247,20 @@ function Feedback(props) {
           }}
           {...props}
         /> */}
-        <HeaderFilter
-          dateRange={props.range}
-          onPressDateRange={dateRangeHandler}
-          onPressFilter={filterHandler}
-          hasSortIcon={true}
-          hasFilterIcon={false}
-        />
-        <View
-          style={{
-            marginHorizontal: '0%',
-            marginVertical: '0%',
-            backgroundColor: Colors.fullTransparent,
-          }}>
-          {/* <MainDropDown
+          <HeaderFilter
+            dateRange={props.range}
+            onPressDateRange={dateRangeHandler}
+            onPressFilter={filterHandler}
+            hasSortIcon={true}
+            hasFilterIcon={false}
+          />
+          <View
+            style={{
+              marginHorizontal: '0%',
+              marginVertical: '0%',
+              backgroundColor: Colors.fullTransparent,
+            }}>
+            {/* <MainDropDown
             header={''}
             options={segmentOptions}
             defaultText={segmentOptions[0]}
@@ -209,22 +268,32 @@ function Feedback(props) {
               console.log(`Selected : ${segmentOptions[index]}`);
             }}
           /> */}
-        </View>
-        <FormContext.Provider
-          value={{
-            ticketStatus: ticketStatus,
-            feedbackData: feedbackData,
-            onFeedbackEndReached: onEndReached,
-            onRefresh: onRefresh,
-            range: props.range,
-            token: props.authToken,
-            sortingText: sortingText.label,
-            setSortingText: setSortText,
-          }}>
-          {/* <FeedbackTabStack /> */}
-          <RenderFeedbackScene {...props} />
-        </FormContext.Provider>
-        {showLoader && renderSpinner()}
+          </View>
+          <FormContext.Provider
+            value={{
+              ticketStatus: ticketStatus,
+              feedbackData: feedbackData,
+              onFeedbackEndReached: onEndReached,
+              onRefresh: onRefresh,
+              range: props.range,
+              token: props.authToken,
+              sortingText: sortingText.label,
+              setSortingText: setSortText,
+            }}>
+            {/* <FeedbackTabStack /> */}
+            <RenderFeedbackScene {...props} />
+          </FormContext.Provider>
+          {showLoader && renderSpinner()}
+        </Animated.View>
+        <BottomSheet
+          ref={sortingBottomSheet}
+          snapPoints={sortingBottomSheetSnapPoints}
+          initialSnap={sortingBottomSheetSnapPoints.length - 1}
+          enabledGestureInteraction={true}
+          renderContent={renderSortingSelectContent}
+          renderHeader={renderSortingHeader}
+          callbackNode={fall}
+        />
       </SafeAreaView>
     );
   };
@@ -282,7 +351,6 @@ const RenderFeedbackScene = props => {
   let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);
   let prevSortRef = usePrevious(feedbackForm.sortingText);
   //let [exitAlert, showExitAlert] = useState(false);
-  const fall = new Animated.Value(1);
   // const {authToken, range, isLoading} = useSelector((state) => state.global);
   const isFocused = useIsFocused();
 
@@ -479,5 +547,11 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.primary,
     textAlign: 'center',
     paddingHorizontal: PaddingConstants.halfTab,
+  },
+  contentContainer: {
+    backgroundColor: Colors.white,
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
+    height: '100%',
   },
 });

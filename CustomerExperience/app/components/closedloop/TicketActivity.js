@@ -121,6 +121,16 @@ export default function TicketActivity(props) {
     state => state.dashboard.ticketActivity,
   );
 
+  function getTicketActivityList(list, item) {
+    console.log(JSON.stringify(item));
+    switch (item.id) {
+      case 1:
+        return list.slice().reverse();
+      default:
+        return list;
+    }
+  }
+
   // sorting bottom sheet stuff
   const fall = new Animated.Value(1);
   const sortingBottomSheet = React.useRef();
@@ -132,16 +142,6 @@ export default function TicketActivity(props) {
   const closeSortingBottomSheet = () => {
     sortingBottomSheet.current.snapTo(sortingBottomSheetSnapPoints.length - 1);
   };
-
-  function getTicketActivityList(list, item) {
-    console.log(JSON.stringify(item));
-    switch (item.id) {
-      case 1:
-        return list.slice().reverse();
-      default:
-        return list;
-    }
-  }
 
   const renderSortingHeader = _title => {
     return (
