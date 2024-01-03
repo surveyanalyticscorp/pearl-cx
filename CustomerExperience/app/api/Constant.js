@@ -80,8 +80,8 @@ export const CLF_GET_BASE_URL = `${CLF_BASE_URL}/base-url`;
 
 // export const FEEDBACK_API_KEY = 'e8caf096-4f19-4b34-a7cd-4bcaa8197c1d';
 export const FEEDBACK_API_KEY_ENDPOINT = '?feedbackApiKey=';
-export const CLF_GET_TICKET_lIST_SYNC = feedBackId =>
-  '/mobile/tickets/import/feedback/${feedBackId}';
+export const syncTicketList = feedBackId =>
+  `/mobile/tickets/import/feedback/${feedBackId}`;
 // export const CLF_GET_TICKET_lIST_SYNC_PREFIX = `${CLF_BASE_URL}/tickets/import/feedback/`;
 // export const CLF_GET_TICKET_lIST_SYNC_POSTFIX = `/mobile`;
 

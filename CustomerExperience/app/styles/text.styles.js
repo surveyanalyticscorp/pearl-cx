@@ -6,6 +6,55 @@ import {Colors} from './color.constants';
 
 let {width} = Dimensions.get('window');
 const isIos = Platform.OS === 'ios';
+
+export const baseTextStyles = StyleSheet.create({
+  donutPercentRegularText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.donutPercentText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  extraLargeRegularText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.extraLargeText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  largeRegularText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.largeText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  primaryRegularText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.primary,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  secondaryRegularText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  semiSecondaryRegularText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.semiSecondary,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  semiMediumRegularText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.semiMediumText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  mediumRegularText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.mediumText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  smallRegularText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.smallText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+});
+
 export const textStyles = StyleSheet.create({
   primaryButton: {
     height: MarginConstants.tab4,
@@ -31,8 +80,7 @@ export const textStyles = StyleSheet.create({
   },
   outlineButtonText: {
     color: Colors.filterIconColor,
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.largeText,
+    ...baseTextStyles.largeRegularText,
   },
 
   transparentButton: {
@@ -46,24 +94,20 @@ export const textStyles = StyleSheet.create({
   },
   transparentButtonText: {
     color: Colors.filterIconColor,
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.largeText,
+    ...baseTextStyles.largeRegularText,
   },
   secondaryText: {
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.secondary,
+    ...baseTextStyles.secondaryRegularText,
     marginHorizontal: MarginConstants.halfTab,
     color: Colors.filterIconColor,
   },
   secondaryTextAccentColor: {
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.secondary,
+    ...baseTextStyles.secondaryRegularText,
     marginHorizontal: MarginConstants.halfTab,
     color: Colors.accentLight,
   },
   secondaryTextBold: {
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.secondary,
+    ...baseTextStyles.secondaryRegularText,
     marginHorizontal: MarginConstants.halfTab,
     color: Colors.filterIconColor,
     fontWeight: 'bold',

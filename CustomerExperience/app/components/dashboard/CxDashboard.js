@@ -79,6 +79,46 @@ const NavigateToResponses = props => {
   );
 };
 
+let getNPSColor = nps => {
+  if (nps < 0) {
+    return Colors.detractor2;
+  } else if (nps >= 0 && nps <= 50) {
+    return Colors.passive2;
+  } else {
+    return Colors.promoter2;
+  }
+};
+
+const NPS = ({nps, benchmark}) => {
+  return (
+    <View style={dashboardStyles.squareView}>
+      <View
+        style={[
+          dashboardStyles.roundSquareShape,
+          {backgroundColor: getNPSColor(nps)},
+        ]}
+      />
+      <Text style={textStyles.primaryRegularText}>NPS</Text>
+
+      <Text style={textStyles.secondaryText}>{nps}</Text>
+    </View>
+  );
+};
+
+const Benchmark = ({nps, benchmark}) => {
+  return (
+    <View style={dashboardStyles.squareView}>
+      <View
+        style={[
+          dashboardStyles.roundSquareShape,
+          {backgroundColor: getNPSColor(benchmark)},
+        ]}
+      />
+      <Text style={textStyles.secondaryText}>{benchmark}</Text>
+    </View>
+  );
+};
+
 function RenderDonutInformation({icon, title, count}) {
   return (
     <View style={dashboardStyles.responseView}>
@@ -165,7 +205,7 @@ const RenderSegmentDashboardData = props => {
   );
 };
 
-const Benchmark = ({benchmark}) => {
+const RenderBenchmark = ({benchmark}) => {
   return (
     <View
       style={{
@@ -190,9 +230,10 @@ const NPSLabel = ({npsScore, benchmark}) => {
         height: '100%',
       }}>
       <GaugeChart npsScore={npsScore} benchmark={benchmark} />
-
-      <Text style={textStyles.optionTextBold}>{npsScore ?? 0}</Text>
-      <Text style={textStyles.secondaryText}>NPS</Text>
+      <NPS nps={npsScore} benchmark={benchmark} />
+      <Benchmark nps={npsScore} benchmark={benchmark} />
+      {/* <Text style={textStyles.optionTextBold}>{npsScore ?? 0}</Text>
+      <Text style={textStyles.secondaryText}>NPS</Text> */}
       {/* <Text style={textStyles.optionTextBold}>{npsScore}</Text>
       <Text style={textStyles.optionText}>NPS</Text> */}
     </View>
@@ -219,6 +260,7 @@ function DashboardGuageChart({npsScore, benchmark}) {
         justifyContent: 'space-between',
       }}>
       <NPSLabel npsScore={npsScore} benchmark={benchmark} />
+
       {/* <GaugeChart npsScore={npsScore} benchmark={benchmark} /> */}
       {/* <Benchmark benchmark={benchmark} /> */}
     </View>

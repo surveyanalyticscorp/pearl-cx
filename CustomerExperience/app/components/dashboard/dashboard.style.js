@@ -240,4 +240,16 @@ export const dashboardStyles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: PaddingConstants.halfTab,
   },
+  squareView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: MarginConstants.halfTab,
+  },
+  roundSquareShape: {
+    borderRadius: 2,
+    width: 1.2 * MarginConstants.tab1,
+    height: 1.2 * MarginConstants.tab1,
+    alignSelf: 'auto',
+  },
 });

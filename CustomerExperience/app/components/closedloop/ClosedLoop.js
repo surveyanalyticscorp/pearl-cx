@@ -146,13 +146,16 @@ export default function ClosedLoop(props) {
   const [refreshing, setRefreshing] = useState(false);
   const {ticketDeleteStatus} = useSelector(state => state.dashboard);
   const sync = () => {
-    dispatch(
-      syncTickets(
-        authToken,
-        {subscriberId: subscriberId, feedbackApiKey: feedbackApiKey},
-        feedbackID,
-      ),
-    );
+    console.log('SYNC_API, api called');
+    if (!isTicketLoading) {
+      dispatch(
+        syncTickets(
+          authToken,
+          {subscriberId: subscriberId, feedbackApiKey: feedbackApiKey},
+          feedbackID,
+        ),
+      );
+    }
   };
 
   useEffect(() => {
@@ -167,6 +170,8 @@ export default function ClosedLoop(props) {
 
   useEffect(() => {
     if (keepSyncingTickets) {
+      console.log('SYNC_API, when keeSyncingChanged');
+
       sync();
     }
   }, [keepSyncingTickets]);
@@ -235,8 +240,8 @@ export default function ClosedLoop(props) {
   }, [currentSegment]);
 
   const makeAPICall = () => {
-    // setLoading(true);
-    if (keepSyncingTickets) {
+    console.log('SYNC_API, when makeAPICall called');
+    if (keepSyncingTickets && !isTicketLoading) {
       sync();
     }
 

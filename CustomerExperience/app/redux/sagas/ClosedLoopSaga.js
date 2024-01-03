@@ -61,7 +61,7 @@ import {
   CLF_UPDATE_ROOT_CAUSE_POSTFIX,
   CLF_BASE_URL,
   CLF_QA_BASE_URL,
-  CLF_GET_TICKET_lIST_SYNC,
+  syncTicketList,
   ESCALATE,
   CLF_DELETE_TICKETS,
   CLF_GET_ACTION_HISTORY_PREFIX,
@@ -301,7 +301,7 @@ function* syncTickets(action) {
     yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
     const response = yield WebServiceHandler.get(
-      getClfUrl(CLF_GET_TICKET_lIST_SYNC(action.feedbackId)),
+      getClfUrl(syncTicketList(action.feedbackId)),
       // {'Auth-Token': action.token},
       getBearerTokenStatic(),
       action.param,
