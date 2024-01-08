@@ -118,7 +118,7 @@ export const dashboardStyles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     backgroundColor: Colors.white,
     paddingHorizontal: MarginConstants.tab2,
     paddingVertical: PaddingConstants.tab1,
@@ -248,8 +248,9 @@ export const dashboardStyles = StyleSheet.create({
   },
   roundSquareShape: {
     borderRadius: 2,
-    width: 1.2 * MarginConstants.tab1,
-    height: 1.2 * MarginConstants.tab1,
+    width: 8,
+    height: 8,
     alignSelf: 'auto',
+    marginHorizontal: MarginConstants.halfTab,
   },
 });

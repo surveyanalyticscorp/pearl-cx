@@ -39,6 +39,7 @@ import {
 } from '../../routes/CommonScreen';
 import BottomSheet from 'reanimated-bottom-sheet';
 import SelectStatus from '../closedloop/takeaction/SelectStatus';
+import Animated from 'react-native-reanimated';
 
 const RenderDonutChart = ({count, showPercentageCount}) => {
   // let count = getCount(props.route.params.ticketCount);
@@ -503,6 +504,65 @@ export const RenderDropDown = ({
   /* </View> */
 }
 
+export const StatusDashboardBottomSheet = ({fall}) => {
+  const statusBottomSheetRef = React.useRef();
+  const statusBottomSheetSnapPoints = ['75%', '0%'];
+  const statusList = getDashboardStatusListForBottomList(props.ticketCount);
+  const [statusIndex, setStatusIndex] = useState(0);
+  const [selectedCurrentStatus, setCurrentStatus] = useState(statusList[0]);
+
+  const handleStatusSelection = () => {
+    // open status selection bottom sheet
+    statusBottomSheetRef.current.snapTo(0);
+  };
+  const closeStatusSelection = () => {
+    // open status selection bottom sheet
+    statusBottomSheetRef.current.snapTo(statusBottomSheetSnapPoints.length - 1);
+  };
+
+  const renderStatusSelectContent = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <SelectStatus
+          data={statusList}
+          selectedIndex={statusIndex}
+          handleOnPress={(item, index) => {
+            // console.log(JSON.stringify(item));
+            // setStatus(item.title);
+            setStatusIndex(index);
+            setCurrentStatus(item);
+            closeStatusSelection();
+          }}
+        />
+      </View>
+    );
+  };
+
+  const renderStatusHeader = _title => {
+    return (
+      <BottomSheetHeader
+        title={translate('ticket_overview.select_status')}
+        onPressClose={() =>
+          statusBottomSheetRef.current.snapTo(
+            statusBottomSheetSnapPoints.length - 1,
+          )
+        }
+      />
+    );
+  };
+  return (
+    <BottomSheet
+      ref={statusBottomSheetRef}
+      snapPoints={statusBottomSheetSnapPoints}
+      initialSnap={statusBottomSheetSnapPoints.length - 1}
+      enabledGestureInteraction={true}
+      renderContent={renderStatusSelectContent}
+      renderHeader={renderStatusHeader}
+      callbackNode={fall}
+    />
+  );
+};
+
 export const ClosedLoopDashboard = props => {
   const [showPercentageCount, setShowPercentageCount] = useState(false);
   console.log(`Ticket Count: ${JSON.stringify(props.ticketCount)}`);
@@ -511,6 +571,8 @@ export const ClosedLoopDashboard = props => {
   const statusList = getDashboardStatusListForBottomList(props.ticketCount);
   const [statusIndex, setStatusIndex] = useState(0);
   const [selectedCurrentStatus, setCurrentStatus] = useState(statusList[0]);
+
+  const fall = new Animated.Value(1);
   const handleStatusSelection = () => {
     // open status selection bottom sheet
     statusBottomSheetRef.current.snapTo(0);
@@ -615,6 +677,7 @@ export const ClosedLoopDashboard = props => {
       />
       {/* {renderDonutChart()} */}
       {/* <RenderViewTicketsContainer /> */}
+
       <BottomSheet
         ref={statusBottomSheetRef}
         snapPoints={statusBottomSheetSnapPoints}
@@ -622,6 +685,7 @@ export const ClosedLoopDashboard = props => {
         enabledGestureInteraction={true}
         renderContent={renderStatusSelectContent}
         renderHeader={renderStatusHeader}
+        callbackNode={fall}
       />
     </View>
   );

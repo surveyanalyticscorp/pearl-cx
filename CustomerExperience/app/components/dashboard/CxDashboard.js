@@ -36,12 +36,15 @@ import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
 import {
   FabAddButton,
   HeaderFilter,
+  IndicatorIcon,
   RenderSegmentTitle,
 } from '../../routes/CommonScreen';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
 import {GaugeChart} from './GaugeChart';
-import {textStyles} from '../../styles/text.styles';
+import {baseTextStyles, textStyles} from '../../styles/text.styles';
+import {FontWeight} from '../../styles/font.constants';
+import Animated, {color} from 'react-native-reanimated';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -89,18 +92,75 @@ let getNPSColor = nps => {
   }
 };
 
+const ScoreIndicatorIcon = ({diff}) => {
+  return diff === 0 ? (
+    <View />
+  ) : (
+    <IndicatorIcon
+      name={diff < 0 ? 'caret-down-sharp' : 'caret-up-sharp'}
+      color={diff < 0 ? Colors.detractor2 : Colors.promoter2}
+    />
+  );
+};
+
+const DottedLine = ({
+  width = 1.2 * MarginConstants.tab1,
+  color = Colors.evenDarkerGrey,
+  borderStyle = 'dotted',
+}) => {
+  // borderStyles  'dotted', 'dashed', solid
+  return (
+    <View
+      style={{
+        borderStyle: borderStyle,
+        borderWidth: 1,
+        borderRadius: 1,
+        width: width,
+        height: 0,
+        borderColor: color,
+        alignSelf: 'auto',
+        marginHorizontal: MarginConstants.halfTab,
+        marginTop: 1,
+      }}
+    />
+  );
+};
+
 const NPS = ({nps, benchmark}) => {
   return (
     <View style={dashboardStyles.squareView}>
-      <View
-        style={[
-          dashboardStyles.roundSquareShape,
-          {backgroundColor: getNPSColor(nps)},
-        ]}
-      />
-      <Text style={textStyles.primaryRegularText}>NPS</Text>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <View
+          style={[
+            dashboardStyles.roundSquareShape,
+            {backgroundColor: getNPSColor(nps)},
+          ]}
+        />
+        <DottedLine borderStyle="solid" />
+      </View>
 
-      <Text style={textStyles.secondaryText}>{nps}</Text>
+      <Text
+        style={[
+          baseTextStyles.secondaryRegularText,
+          {fontWeight: FontWeight.bold},
+        ]}>
+        NPS:
+      </Text>
+      <Text
+        style={[
+          textStyles.secondaryText,
+          {fontWeight: FontWeight.bold, color: getNPSColor(nps)},
+        ]}>
+        {nps}
+      </Text>
+      <Text
+        style={[
+          baseTextStyles.semiSecondaryRegularText,
+          {color: Colors.evenDarkerGrey},
+        ]}>
+        {`${parseFloat(nps - benchmark).toFixed(2)}`}
+      </Text>
+      <ScoreIndicatorIcon diff={nps - benchmark} />
     </View>
   );
 };
@@ -108,13 +168,21 @@ const NPS = ({nps, benchmark}) => {
 const Benchmark = ({nps, benchmark}) => {
   return (
     <View style={dashboardStyles.squareView}>
-      <View
+      <View>
+        <View
+          style={[
+            dashboardStyles.roundSquareShape,
+            {backgroundColor: getNPSColor(benchmark)},
+          ]}
+        />
+        <DottedLine />
+      </View>
+
+      <Text
         style={[
-          dashboardStyles.roundSquareShape,
-          {backgroundColor: getNPSColor(benchmark)},
-        ]}
-      />
-      <Text style={textStyles.secondaryText}>{benchmark}</Text>
+          baseTextStyles.secondaryRegularText,
+          {color: Colors.filterIconColor},
+        ]}>{`Benchmark: ${benchmark}`}</Text>
     </View>
   );
 };
@@ -273,9 +341,55 @@ const ClosedLoopView = props => {
       <DashboardClosedLoopView
         // ticketCount={props.dashboardData.detractorTicketsCount}
         ticketCount={props.ticketCount}
+        {...props}
       />
     </View>
   );
+};
+
+let RenderDashboardContent = props => {
+  if (
+    !props.isError &&
+    !props.isLoading &&
+    !isObjectEmpty(props.dashboardData)
+  ) {
+    const segmentOptions = ['Main Segment', 'Child Segment'];
+    return (
+      <SafeAreaView>
+        {/* <View
+          style={{
+            flex: 1,
+            marginHorizontal: 16,
+            marginVertical: 8,
+            flexDirection: 'row',
+          }}>
+          <View
+            style={{
+              flex: 1,
+              marginHorizontal: 16,
+
+              flexDirection: 'column',
+              alignContent: 'flex-end',
+            }}></View>
+        </View> */}
+
+        {/* <RenderSegmentTitle
+          text={
+            props.segment.currentSegment ??
+            props.dashboardData.primaryStoreName
+          }
+        /> */}
+        {/* {renderDonutChart()} */}
+        <RenderSegmentDashboardData {...props} />
+        {/* <RenderSegmentTitle text={translate('dashboard.closed_loop')} /> */}
+
+        <ClosedLoopView {...props} />
+        {/* {renderSegmentTitle(translate('dashboard.comparison'))}
+        {renderStoreNPSList()} */}
+      </SafeAreaView>
+    );
+  }
+  return <View style={dashboardStyles.container} />;
 };
 
 const CxDashboard = props => {
@@ -290,7 +404,6 @@ const CxDashboard = props => {
     state => state.dashboard.currentSegment.currentSegmentID,
   );
   const {range, wantToReload} = props;
-
   useEffect(() => {
     if (isFocused) {
       getDashboardData();
@@ -580,52 +693,7 @@ const CxDashboard = props => {
   //   );
   // };
 
-  let renderDashboardContent = () => {
-    if (
-      !props.isError &&
-      !props.isLoading &&
-      !isObjectEmpty(props.dashboardData)
-    ) {
-      const segmentOptions = ['Main Segment', 'Child Segment'];
-      return (
-        <SafeAreaView>
-          {/* <View
-            style={{
-              flex: 1,
-              marginHorizontal: 16,
-              marginVertical: 8,
-              flexDirection: 'row',
-            }}>
-            <View
-              style={{
-                flex: 1,
-                marginHorizontal: 16,
-
-                flexDirection: 'column',
-                alignContent: 'flex-end',
-              }}></View>
-          </View> */}
-
-          {/* <RenderSegmentTitle
-            text={
-              props.segment.currentSegment ??
-              props.dashboardData.primaryStoreName
-            }
-          /> */}
-          {/* {renderDonutChart()} */}
-          <RenderSegmentDashboardData {...props} />
-          {/* <RenderSegmentTitle text={translate('dashboard.closed_loop')} /> */}
-
-          <ClosedLoopView {...props} />
-          {/* {renderSegmentTitle(translate('dashboard.comparison'))}
-          {renderStoreNPSList()} */}
-        </SafeAreaView>
-      );
-    }
-    return <View style={dashboardStyles.container} />;
-  };
-
-  let renderDashboard = () => {
+  let RenderDashboard = () => {
     return (
       <SafeAreaView
         forceInset={{bottom: 'never', top: 'never'}}
@@ -638,6 +706,7 @@ const CxDashboard = props => {
           callDataAPI={() => {}}
           {...props}
         /> */}
+
         <HeaderFilter
           hasFilterIcon={false}
           dateRange={range}
@@ -650,7 +719,7 @@ const CxDashboard = props => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
           <View style={dashboardStyles.container}>
-            {renderDashboardContent()}
+            <RenderDashboardContent {...props} />
             {renderSpinner()}
             {exitAlert && renderExitAlert()}
           </View>
@@ -675,7 +744,7 @@ const CxDashboard = props => {
     props.navigation.navigate(translate('responses.new_ticket'));
   };
 
-  return renderDashboard();
+  return <RenderDashboard />;
 };
 
 const mapStateToProps = state => {

@@ -253,7 +253,6 @@ const FilterTicket = ({data, onPressHandler}) => {
           style={{
             ...buttonStyles.primaryButton,
             flex: 1,
-            margin: MarginConstants.tab2,
           }}
           buttonColor={Colors.accentLight}
           onPress={onApplyFilterHandler}
@@ -334,7 +333,7 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    paddingHorizontal: PaddingConstants.tab1,
+    paddingHorizontal: 24,
   },
   assigneeCell: {
     borderWidth: 1,

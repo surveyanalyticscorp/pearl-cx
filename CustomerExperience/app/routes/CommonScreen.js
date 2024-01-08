@@ -152,6 +152,11 @@ export const PageHeaderText = ({text, hasCloseButton = false}) => {
     </View>
   );
 };
+
+export const IndicatorIcon = ({name, color, size = 12}) => {
+  return <IonIcons name={name} color={color} size={size} />;
+};
+
 export const MenuIcon = () => {
   let navigation = useNavigation();
   return (
@@ -968,7 +973,8 @@ const styles = StyleSheet.create({
   panelHeaderContainer: {
     flex: 1,
 
-    padding: MarginConstants.tab1,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     backgroundColor: Colors.white,
     borderTopStartRadius: 8,
     borderTopEndRadius: 8,
@@ -995,7 +1001,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darkGrey,
   },
   header: {
-    marginHorizontal: MarginConstants.tab2,
+    marginEnd: MarginConstants.tab2,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.largeText,
     fontWeight: FontWeight.bold,
