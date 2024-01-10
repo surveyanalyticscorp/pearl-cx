@@ -34,6 +34,7 @@ import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
 import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
 import {
+  BottomSheetHeader,
   FabAddButton,
   HeaderFilter,
   IndicatorIcon,
@@ -44,7 +45,12 @@ import {buttonStyles} from '../../styles/button.styles';
 import {GaugeChart} from './GaugeChart';
 import {baseTextStyles, textStyles} from '../../styles/text.styles';
 import {FontWeight} from '../../styles/font.constants';
+import BottomSheet from 'reanimated-bottom-sheet';
+
 import Animated, {color} from 'react-native-reanimated';
+import {StatusDashboardBottomSheet} from './ClosedLoopDashboard';
+import SelectStatus from '../closedloop/takeaction/SelectStatus';
+import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -190,10 +196,12 @@ const Benchmark = ({nps, benchmark}) => {
 function RenderDonutInformation({icon, title, count}) {
   return (
     <View style={dashboardStyles.responseView}>
-      <Text style={dashboardStyles.responseText}>{count}</Text>
-      <View style={dashboardStyles.separator} />
+      {/* <View style={dashboardStyles.separator} /> */}
       <View style={dashboardStyles.ticketTypeContainer}>
-        <Image source={icon} style={{width: 16, height: 16}} />
+        <Image
+          source={icon}
+          style={{tintColor: Colors.evenDarkerGrey, width: 16, height: 16}}
+        />
         {/* <Icon
           name={icon}
           size={Sizes.inlineIcons}
@@ -201,6 +209,7 @@ function RenderDonutInformation({icon, title, count}) {
         /> */}
         <Text style={dashboardStyles.response}>{title}</Text>
       </View>
+      <Text style={dashboardStyles.responseText}>{count}</Text>
     </View>
   );
 }
@@ -400,6 +409,15 @@ const CxDashboard = props => {
   let [exitAlert, showExitAlert] = useState(false);
   let [lastLoginArray, setLastLoginArray] = useState([]);
 
+  const statusBottomSheetRef = React.useRef();
+  const statusBottomSheetSnapPoints = ['55%', '0%'];
+  const fall = new Animated.Value(1);
+
+  const openStatusBS = () => {
+    statusBottomSheetRef.current.snapTo(0);
+
+    console.log('OPEN BOTTOMSHEET');
+  };
   let segmentId = useSelector(
     state => state.dashboard.currentSegment.currentSegmentID,
   );
@@ -706,26 +724,39 @@ const CxDashboard = props => {
           callDataAPI={() => {}}
           {...props}
         /> */}
+        <Animated.View
+          style={[
+            dashboardStyles.container,
+            {
+              opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+              zIndex: 1,
+            },
+          ]}>
+          <HeaderFilter
+            hasFilterIcon={false}
+            dateRange={range}
+            onPressDateRange={onDateRangeChangeHandler}
+          />
 
-        <HeaderFilter
-          hasFilterIcon={false}
-          dateRange={range}
-          onPressDateRange={onDateRangeChangeHandler}
-        />
-
-        <ScrollView
-          contentContainerStyle={dashboardStyles.scrollView}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }>
-          <View style={dashboardStyles.container}>
-            <RenderDashboardContent {...props} />
-            {renderSpinner()}
-            {exitAlert && renderExitAlert()}
-          </View>
-        </ScrollView>
-
+          <ScrollView
+            contentContainerStyle={dashboardStyles.scrollView}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
+            <View style={dashboardStyles.container}>
+              <RenderDashboardContent openStatusBS={openStatusBS} {...props} />
+              {renderSpinner()}
+              {exitAlert && renderExitAlert()}
+            </View>
+          </ScrollView>
+        </Animated.View>
         <FabAddButton onPress={onFabPressHandler} />
+        <StatusDashboardBottomSheet
+          ref={statusBottomSheetRef}
+          snapPoints={statusBottomSheetSnapPoints}
+          fall={fall}
+          ticketCount={props.ticketCount}
+        />
       </SafeAreaView>
     );
   };

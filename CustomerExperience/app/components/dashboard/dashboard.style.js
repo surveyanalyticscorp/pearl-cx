@@ -76,6 +76,7 @@ export const dashboardStyles = StyleSheet.create({
   },
   responseView: {
     justifyContent: 'center',
+    marginBottom: MarginConstants.tab1,
   },
   loading: {
     position: 'absolute',
@@ -158,7 +159,7 @@ export const dashboardStyles = StyleSheet.create({
   ticketTypeContainer: {
     flexDirection: 'row',
     marginHorizontal: MarginConstants.tab1,
-    marginBottom: MarginConstants.tab2,
+
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -253,4 +254,5 @@ export const dashboardStyles = StyleSheet.create({
     alignSelf: 'auto',
     marginHorizontal: MarginConstants.halfTab,
   },
+  contentContainer: {backgroundColor: Colors.white, height: '100%'},
 });

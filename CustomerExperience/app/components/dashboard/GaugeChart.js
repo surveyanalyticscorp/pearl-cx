@@ -100,7 +100,7 @@ export const GaugeChart = ({npsScore, benchmark}) => {
 
 const styles = StyleSheet.create({
   chartContainer: {
-    zIndex: 10,
+    zIndex: 0,
     height: '60%',
     width: '80%',
     margin: 0,

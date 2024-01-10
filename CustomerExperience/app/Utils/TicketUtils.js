@@ -196,6 +196,9 @@ export function getDashboardStatusList(ticketCount) {
 }
 
 export function getDashboardStatusListForBottomList(ticketCount) {
+  if (!ticketCount) {
+    return [];
+  }
   const getAll = getAllTicketCount(ticketCount);
 
   let temp = [];

@@ -76,6 +76,8 @@ export const GET_PARENT_COMMENT = 'GET_PARENT_COMMENT';
 export const SET_PARENT_COMMENT = 'SET_PARENT_COMMENT';
 export const RESET_PARENT_COMMENT = 'RESET_PARENT_COMMENT';
 
+export const SET_FILTER_BY_STATUS_ID = 'SET_FILTER_BY_STATUS_ID';
+
 export const getDashboardContent = (token, param, segmentId) => ({
   type: GET_DASHBOARD,
   token,
@@ -225,4 +227,9 @@ export const getCLFBaseURL = (token, param) => ({
   type: GET_CLF_BASE_URL,
   token,
   param,
+});
+
+export const setStatusIndex = currentStatusIndex => ({
+  type: SET_FILTER_BY_STATUS_ID,
+  currentStatusIndex,
 });

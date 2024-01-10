@@ -56,7 +56,10 @@ const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
           <QPButton
             buttonColor={Colors.accentLight}
             testID="ApplyButton"
-            style={[buttonStyles.primaryButton, {margin: MarginConstants.tab2}]}
+            style={[
+              buttonStyles.primaryButton,
+              {marginVertical: MarginConstants.tab2},
+            ]}
             onPress={() => handleOnPress(currentItem, currentIndex)}
             buttonText={'Apply'}
             textStyle={buttonStyles.primaryButtonText}

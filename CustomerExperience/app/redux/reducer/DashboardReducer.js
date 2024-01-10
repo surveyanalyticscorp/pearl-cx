@@ -41,6 +41,7 @@ import {
   RESET_COMMENT_PARENT_ID,
   SET_PARENT_COMMENT,
   RESET_PARENT_COMMENT,
+  SET_FILTER_BY_STATUS_ID,
 } from '../actions/dashboard.actions';
 
 const initialState = {
@@ -71,6 +72,7 @@ const initialState = {
   ticketDeleteStatus: {status: 'default'},
   ticketActionHistory: {summary: {}, details: {}},
   parentComment: {id: 0, isFocused: false},
+  currentStatusIndexForFilter: 0,
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -340,6 +342,13 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         parentComment: {id: 0, isFocused: false},
+      };
+    }
+
+    case SET_FILTER_BY_STATUS_ID: {
+      return {
+        ...state,
+        currentStatusIndexForFilter: action.currentStatusIndex,
       };
     }
 
