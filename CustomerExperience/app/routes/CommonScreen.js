@@ -247,12 +247,21 @@ export const StatusIcon = ({
   );
 };
 
+export const CalendarIcon = ({
+  size = 12,
+  tintColor = Colors.filterIconColor,
+}) => (
+  <Image
+    source={require('./../../assets/images/date_filter_icon.png')}
+    style={{width: size, height: size, tintColor: tintColor}}
+  />
+);
+
 export const ResponsesIcon = ({
   size = 12,
   tintColor = Colors.filterIconColor,
 }) => (
   <Image
-    // source={require('./../../../assets/images/responses_icon.png')}
     source={require('./../../assets/images/total_responses_icon.png')}
     style={{width: size, height: size, tintColor: tintColor}}
   />
@@ -576,19 +585,18 @@ export const EditTicket = () => {
   );
 };
 
+export const DateIcon = () => {
+  return (
+    <IonIcons
+      style={{margin: MarginConstants.halfTab}}
+      name="calendar"
+      size={20}
+      color={Colors.lightBlack}
+    />
+  );
+};
 export const FilterDateBox = ({range, onDateRangeChangeHandler}) => {
   const navigation = useNavigation();
-
-  const DateIcon = () => {
-    return (
-      <IonIcons
-        style={{margin: MarginConstants.halfTab}}
-        name="calendar"
-        size={20}
-        color={Colors.lightBlack}
-      />
-    );
-  };
 
   const GetDateText = ({dateRange}) => {
     const sDate = moment(dateRange.startDate, DMYFORMAT).format(
@@ -616,7 +624,8 @@ export const FilterDateBox = ({range, onDateRangeChangeHandler}) => {
     <Pressable onPress={() => filterAction(range, onDateRangeChangeHandler)}>
       <View style={styles.filterBox}>
         <GetDateText dateRange={range} />
-        <DateIcon />
+
+        <CalendarIcon size={16} />
       </View>
     </Pressable>
   );
