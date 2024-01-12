@@ -48,17 +48,12 @@ import {
   resetStatusId,
   syncTickets,
 } from '../../redux/actions/closedloop.actions';
+import {baseTextStyles} from '../../styles/text.styles';
 // import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 const SearchIcon = () => {
-  return (
-    <IonIcons
-      name="search"
-      size={MarginConstants.halfTab * 7}
-      color={Colors.lightBlack}
-    />
-  );
+  return <IonIcons name="search" size={20} color={Colors.lightBlack} />;
 };
 const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
   // const placeHolder = currentText.trim().length > 0 ? currentText :
@@ -66,12 +61,15 @@ const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
   // const [text, setText] = useState(currentText);
 
   return (
-    <View style={[styles.searchBox, styles.rowItem]}>
+    <View style={[styles.searchBox]}>
       <SearchIcon />
       <TextInput
         defaultValue={currentText}
         placeholder={translate('ticket_search_hint')}
-        style={[styles.titleText, {flex: 1}]}
+        style={[
+          baseTextStyles.mediumRegularText,
+          {flex: 1, height: 36, margin: 0, color: Colors.filterIconColor},
+        ]}
         returnKeyType={'search'}
         onSubmitEditing={event => {
           onQuerySubmit(event.nativeEvent.text);
@@ -561,28 +559,20 @@ export default function ClosedLoop(props) {
             opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
             flex: 1,
           }}>
-          <View
-            style={{
-              paddingHorizontal: MarginConstants.tab1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              backgroundColor: Colors.white,
-            }}>
-            <HeaderFilter
-              dateRange={range}
-              onPressDateRange={getDataOnNewRange}
-              onPressFilter={openFilter}
-              filterCount={getFilterCount(filterState)}
-            />
-            {/* {!isSearchVisible && (
+          <HeaderFilter
+            style={{justifyContent: 'space-between'}}
+            dateRange={range}
+            onPressDateRange={getDataOnNewRange}
+            onPressFilter={openFilter}
+            filterCount={getFilterCount(filterState)}
+          />
+          {/* {!isSearchVisible && (
               <Pressable
                 style={{marginHorizontal: MarginConstants.tab1}}
                 onPress={() => setSearchVisibility(true)}>
                 <SearchIcon />
               </Pressable>
             )} */}
-          </View>
 
           {/* <ClosedLoopTicketList /> */}
           {/* <ShowFilterTag
@@ -670,13 +660,9 @@ const styles = StyleSheet.create({
     marginVertical: MarginConstants.halfTab,
     marginHorizontal: MarginConstants.tab2,
     paddingHorizontal: MarginConstants.tab1,
-    paddingVertical: Platform.OS === 'ios' ? MarginConstants.tab1 : 0,
+    paddingVertical: Platform.OS === 'ios' ? MarginConstants.halfTab : 0,
     borderBottomWidth: 0.5,
     borderColor: Colors.filterIconColor,
-  },
-  searchBoxTextInput: {
-    flex: 1,
-    margin: MarginConstants.halfTab,
   },
 
   filterBox: {

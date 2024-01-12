@@ -595,22 +595,27 @@ export const DateIcon = () => {
     />
   );
 };
+
+const DateText = ({dateRange}) => {
+  const sDate = moment(dateRange.startDate, DMYFORMAT).format(
+    HalfMonthDateYearFormat,
+  );
+  const eDate = moment(dateRange.endDate, DMYFORMAT).format(
+    HalfMonthDateYearFormat,
+  );
+  return (
+    <Text
+      style={[
+        baseTextStyles.secondaryRegularText,
+        {marginHorizontal: MarginConstants.halfTab, color: Colors.lightBlack},
+      ]}>
+      {`${sDate} - ${eDate}`}
+    </Text>
+  );
+};
+
 export const FilterDateBox = ({range, onDateRangeChangeHandler}) => {
   const navigation = useNavigation();
-
-  const GetDateText = ({dateRange}) => {
-    const sDate = moment(dateRange.startDate, DMYFORMAT).format(
-      HalfMonthDateYearFormat,
-    );
-    const eDate = moment(dateRange.endDate, DMYFORMAT).format(
-      HalfMonthDateYearFormat,
-    );
-    return (
-      <Text style={{margin: MarginConstants.halfTab, color: Colors.lightBlack}}>
-        {`${sDate} - ${eDate}`}
-      </Text>
-    );
-  };
 
   let filterAction = (range_, callBackHandler) => {
     const pushAction = StackActions.push(translate('date_filter.date_range'), {
@@ -623,8 +628,7 @@ export const FilterDateBox = ({range, onDateRangeChangeHandler}) => {
   return (
     <Pressable onPress={() => filterAction(range, onDateRangeChangeHandler)}>
       <View style={styles.filterBox}>
-        <GetDateText dateRange={range} />
-
+        <DateText dateRange={range} />
         <CalendarIcon size={16} />
       </View>
     </Pressable>
@@ -709,11 +713,17 @@ export const HeaderFilter = ({
   onPressDateRange,
   filterCount,
   endComponent,
+  style,
 }) => {
   console.log('FILTER_STATE_COUNT', JSON.stringify(filterCount));
   return (
-    <View style={styles.filterAndSearchBox}>
-      {hasSortIcon && <SortIcon onPressFilter={onPressFilter} />}
+    <View style={[styles.filterAndSearchBox, {...style}]}>
+      {hasSortIcon && (
+        <SortIcon
+          style={{marginEnd: MarginConstants.tab1}}
+          onPressFilter={onPressFilter}
+        />
+      )}
 
       <FilterDateBox
         range={dateRange}
@@ -1078,17 +1088,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 2,
     borderWidth: 1,
-    borderColor: Colors.borderColor,
-    padding: PaddingConstants.tab1,
-    margin: MarginConstants.tab1,
+    borderColor: Colors.evenDarkerGrey,
+    paddingVertical: PaddingConstants.tab1,
+    marginVertical: MarginConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab1,
   },
   filterAndSearchBox: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: PaddingConstants.halfTab,
-    paddingHorizontal: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab2,
     backgroundColor: Colors.white,
   },
 
