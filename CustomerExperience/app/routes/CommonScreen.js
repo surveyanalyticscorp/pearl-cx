@@ -53,7 +53,7 @@ import {
   getPriorityById,
   getStatusById,
 } from '../Utils/TicketUtils';
-import {textStyles} from '../styles/text.styles';
+import {baseTextStyles, textStyles} from '../styles/text.styles';
 import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
 import {buttonStyles} from '../styles/button.styles';
 import {backgroundColor} from '../widgets/qp-calendar/style';
@@ -630,7 +630,13 @@ export const Avatar = ({title, style}) => {
   );
 };
 
-export const FilterIcon = ({onPressFilter, size, style, color}) => {
+export const FilterIcon = ({
+  onPressFilter,
+  size,
+  style,
+  color,
+  endComponent,
+}) => {
   return (
     <Pressable style={style} onPress={onPressFilter}>
       {/* <IonIcons
@@ -647,6 +653,7 @@ export const FilterIcon = ({onPressFilter, size, style, color}) => {
           tintColor: color ?? Colors.filterIconColor,
         }}
       />
+      {endComponent}
     </Pressable>
   );
 };
@@ -657,6 +664,33 @@ export const SortIcon = ({onPressFilter, size, style}) => {
     </Pressable>
   );
 };
+const FilterCountText = ({filterCount}) => {
+  return (
+    <Text
+      style={[
+        baseTextStyles.secondaryRegularText,
+        {
+          color: filterCount > 0 ? Colors.accentLight : Colors.filterIconColor,
+          marginEnd: MarginConstants.tab1,
+        },
+      ]}>{`Filters (${filterCount ?? 0})`}</Text>
+  );
+};
+
+export const RenderFilterCount = ({filterCount, onPressFilter}) => {
+  return (
+    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+      <Pressable style={{flexDirection: 'row'}} onPress={onPressFilter}>
+        <FilterIcon
+          size={22}
+          color={filterCount > 0 ? Colors.accentLight : Colors.filterIconColor}
+        />
+
+        <FilterCountText filterCount={filterCount} />
+      </Pressable>
+    </View>
+  );
+};
 
 export const HeaderFilter = ({
   hasFilterIcon = true,
@@ -664,23 +698,24 @@ export const HeaderFilter = ({
   dateRange,
   onPressFilter,
   onPressDateRange,
+  filterCount,
   endComponent,
 }) => {
+  console.log('FILTER_STATE_COUNT', JSON.stringify(filterCount));
   return (
     <View style={styles.filterAndSearchBox}>
-      {hasFilterIcon && (
-        <FilterIcon
-          style={{marginEnd: MarginConstants.halfTab}}
-          onPressFilter={onPressFilter}
-          size={22}
-        />
-      )}
       {hasSortIcon && <SortIcon onPressFilter={onPressFilter} />}
 
       <FilterDateBox
         range={dateRange}
         onDateRangeChangeHandler={onPressDateRange}
       />
+      {hasFilterIcon && (
+        <RenderFilterCount
+          filterCount={filterCount}
+          onPressFilter={onPressFilter}
+        />
+      )}
       {endComponent}
       {/* <View
         style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
@@ -1042,10 +1077,9 @@ const styles = StyleSheet.create({
   },
   filterAndSearchBox: {
     flexDirection: 'row',
-
     alignItems: 'center',
     paddingVertical: PaddingConstants.halfTab,
-    paddingHorizontal: PaddingConstants.tab2,
+    paddingHorizontal: PaddingConstants.tab1,
     backgroundColor: Colors.white,
   },
 

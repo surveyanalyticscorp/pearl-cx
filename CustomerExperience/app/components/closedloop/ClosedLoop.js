@@ -40,7 +40,7 @@ import {
 } from '../../Utils/TicketUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
 import QPSpinner from '../../widgets/QPSpinner';
-import ShowFilterTag from '../view/ShowFilterTag';
+import ShowFilterTag, {taglist} from '../view/ShowFilterTag';
 import StringUtils from '../../Utils/StringUtils';
 import {
   clearSyncTicketStatus,
@@ -77,7 +77,7 @@ const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
           onQuerySubmit(event.nativeEvent.text);
         }}
       />
-      <CloseIcon onResetSearch={onResetSearch} />
+      {/* <CloseIcon onResetSearch={onResetSearch} /> */}
     </View>
   );
 };
@@ -539,6 +539,20 @@ export default function ClosedLoop(props) {
     setSearchVisibility(state => !state);
   }, []);
 
+  const getFilterCount = filterState => {
+    let count = 0;
+    for (let tag of taglist) {
+      if (filterState.hasOwnProperty(tag) && filterState[tag]) {
+        console.log('TAG_ITEM_COUNT', tag, filterState[tag]);
+        if (filterState[tag].length > 0) {
+          count++;
+        }
+      }
+    }
+
+    return count;
+  };
+
   const RenderClosedLoop = () => {
     return (
       <View style={styles.container}>
@@ -559,18 +573,19 @@ export default function ClosedLoop(props) {
               dateRange={range}
               onPressDateRange={getDataOnNewRange}
               onPressFilter={openFilter}
+              filterCount={getFilterCount(filterState)}
             />
-            {!isSearchVisible && (
+            {/* {!isSearchVisible && (
               <Pressable
                 style={{marginHorizontal: MarginConstants.tab1}}
                 onPress={() => setSearchVisibility(true)}>
                 <SearchIcon />
               </Pressable>
-            )}
+            )} */}
           </View>
 
           {/* <ClosedLoopTicketList /> */}
-          <ShowFilterTag
+          {/* <ShowFilterTag
             filterData={filterState}
             handleFilterTag={item => {
               setFilterState(state => ({
@@ -582,8 +597,8 @@ export default function ClosedLoop(props) {
                 [item]: clearFilterData(item),
               }));
             }}
-          />
-          {isSearchVisible && (
+          /> */}
+          {true && (
             <SearchBox
               onResetSearch={onResetSearch}
               onQuerySubmit={submitQuery}
@@ -634,7 +649,11 @@ export default function ClosedLoop(props) {
 const styles = StyleSheet.create({
   container: {flex: 1},
 
-  flatList: {flex: 1, paddingBottom: MarginConstants.halfTab},
+  flatList: {
+    flex: 1,
+    marginHorizontal: MarginConstants.tab1,
+    padding: MarginConstants.halfTab,
+  },
 
   filterAndSearchBox: {
     flexDirection: 'row',
@@ -649,6 +668,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.white,
     marginVertical: MarginConstants.halfTab,
+    marginHorizontal: MarginConstants.tab2,
     paddingHorizontal: MarginConstants.tab1,
     paddingVertical: Platform.OS === 'ios' ? MarginConstants.tab1 : 0,
     borderBottomWidth: 0.5,

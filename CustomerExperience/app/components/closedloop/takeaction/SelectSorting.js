@@ -93,12 +93,11 @@ const styles = StyleSheet.create({
   },
   flatList: {
     flex: 1,
-    marginTop: 0,
   },
   row: {
     flexDirection: 'row',
-    marginTop: MarginConstants.tab2,
-    marginBottom: MarginConstants.halfTab,
+    paddingVertical: MarginConstants.tab1,
+    marginBottom: MarginConstants.tab1,
   },
   title: {
     flex: 1,

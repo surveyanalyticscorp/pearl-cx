@@ -13,15 +13,16 @@ import {
   getTicketTypeById,
 } from '../../Utils/TicketUtils';
 
+export const taglist = [
+  'status',
+  'priority',
+  'type',
+  // 'showMyTickets',
+  'assignToId',
+];
+
 const ShowFilterTag = ({handleFilterTag, filterData}) => {
   let [list, setList] = useState([]);
-  let taglist = [
-    'status',
-    'priority',
-    'type',
-    // 'showMyTickets',
-    'assignToId',
-  ];
 
   const populateList = () => {
     console.log('TAG_LIST_FILTERDATA', JSON.stringify(filterData));
@@ -74,7 +75,6 @@ const ShowFilterTag = ({handleFilterTag, filterData}) => {
 
     // }
   };
-
   return (
     <View style={styles.container}>
       {list.length > 0 && (
