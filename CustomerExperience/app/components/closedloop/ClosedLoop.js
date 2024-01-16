@@ -67,8 +67,8 @@ const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
         defaultValue={currentText}
         placeholder={translate('ticket_search_hint')}
         style={[
-          baseTextStyles.mediumRegularText,
-          {flex: 1, height: 36, margin: 0, color: Colors.filterIconColor},
+          baseTextStyles.secondaryRegularText,
+          {flex: 1, height: 42, margin: 0, color: Colors.filterIconColor},
         ]}
         returnKeyType={'search'}
         onSubmitEditing={event => {
@@ -657,7 +657,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.white,
-    marginVertical: MarginConstants.halfTab,
+    marginVertical: MarginConstants.tab1,
     marginHorizontal: MarginConstants.tab2,
     paddingHorizontal: MarginConstants.tab1,
     paddingVertical: Platform.OS === 'ios' ? MarginConstants.halfTab : 0,
