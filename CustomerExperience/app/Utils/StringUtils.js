@@ -98,6 +98,20 @@ export default class StringUtils {
     return commentText.replace(/\@\[([^\]]+)\]\(([^\)]+)\)/g, `<b>$1</b>`);
   }
 
+  static formatActivityToHTML(activityText, wordsToBold) {
+    let tempText = activityText;
+    wordsToBold.forEach(word => {
+      tempText = tempText.replace(
+        new RegExp(`\\b${word}\\b`, 'g'),
+        `<b>${word}</b>`,
+      );
+    });
+    return tempText;
+    // const pattern = new RegExp(`(${wordsToBold.join('|')})`, 'g');
+
+    // return activityText.replace(pattern, `<b>$1</b>`);
+  }
+
   static getWords(text) {
     var specialPattern = /@\[[^\]]+\]\(\d+\)/g;
 

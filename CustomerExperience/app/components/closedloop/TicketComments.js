@@ -29,10 +29,11 @@ import {
 import moment from 'moment';
 import StringUtils from '../../Utils/StringUtils';
 import {getDateTimeAgo} from '../../Utils/TimeUtils';
-import RenderHTML from 'react-native-render-html';
+import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {MAX_COMMENT_LENGTH} from '../../api/Constant';
 import {event} from 'react-native-reanimated';
+import {baseTextStyles} from '../../styles/text.styles';
 
 function getFoldedText(text) {
   //
@@ -64,6 +65,8 @@ const SendButton = ({handleOnSubmit}) => {
 
 const CommentText = ({text}) => {
   const {width} = useWindowDimensions();
+  const systemFonts = [...defaultSystemFonts, FontFamily.regular];
+
   console.log('HTML comment', text);
   console.log(
     'HTML text',
@@ -80,6 +83,13 @@ const CommentText = ({text}) => {
           )}</span>`,
         }}
         contentWidth={width / 0.5}
+        systemFonts={systemFonts}
+        tagsStyles={{
+          span: {
+            color: Colors.filterIconColor,
+            ...baseTextStyles.secondaryRegularText,
+          },
+        }}
       />
     </View>
   );

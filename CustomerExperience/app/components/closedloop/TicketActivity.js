@@ -7,6 +7,7 @@ import {
   RefreshControl,
   Pressable,
   ScrollView,
+  useWindowDimensions,
 } from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -27,7 +28,53 @@ import {buttonStyles} from '../../styles/button.styles';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import SelectSorting from './takeaction/SelectSorting';
+import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
+import StringUtils from '../../Utils/StringUtils';
+import {baseTextStyles} from '../../styles/text.styles';
 
+const ActivityText = ({text}) => {
+  const wordsToBold = [
+    'HIGH',
+    'LOW',
+    'CRITICAL',
+    'MEDIUM',
+    'NEW',
+    'OPEN',
+    'RESOLVED',
+    'ESCALATED',
+    'overdue',
+  ];
+  const systemFonts = [...defaultSystemFonts, FontFamily.regular];
+
+  const {width} = useWindowDimensions();
+  console.log('HTML activity', text);
+  // console.log(
+  //   'HTML text activity',
+  //   JSON.stringify(StringUtils.formatActivityToHTML(text)),
+  // );
+
+  return (
+    <View>
+      <RenderHTML
+        source={{
+          html: `
+            <span>${StringUtils.formatActivityToHTML(
+              text,
+              wordsToBold,
+            )}</span>`,
+        }}
+        contentWidth={width / 0.5}
+        systemFonts={systemFonts}
+        tagsStyles={{
+          span: {
+            color: Colors.filterIconColor,
+            ...baseTextStyles.secondaryRegularText,
+          },
+        }}
+      />
+    </View>
+  );
+};
 const SortingIcon = ({iconName, size, color}) => {
   return (
     <IonIcons
@@ -50,7 +97,8 @@ const RenderItem = ({item}) => {
         <Text style={styles.date}>{convertDateTimeAgo(item.createdAt)}</Text>
       </View>
       <View style={{marginHorizontal: MarginConstants.tab1}}>
-        <Text style={styles.activity}>{item.activityText}</Text>
+        {/* <Text style={styles.activity}>{item.activityText}</Text> */}
+        <ActivityText text={item.activityText} />
       </View>
     </View>
   );
@@ -282,6 +330,18 @@ const styles = StyleSheet.create({
     color: Colors.filterIconColor,
     fontSize: TextSizes.semiSecondary,
     fontWeight: FontWeight._400,
+    flex: 1,
+  },
+  normalText: {
+    color: Colors.filterIconColor,
+    fontSize: TextSizes.semiSecondary,
+    fontWeight: FontWeight._400,
+    flex: 1,
+  },
+  boldText: {
+    color: Colors.filterIconColor,
+    fontSize: TextSizes.semiSecondary,
+    fontWeight: FontWeight.bold,
     flex: 1,
   },
   date: {
