@@ -62,6 +62,7 @@ const AMCharts = props => {
   return (
     <View style={[fileStyle.chartContainer, props?.style]}>
       <WebView
+        androidLayerType={'hardware'}
         startInLoadingState={true}
         style={props?.webViewStyle}
         javaScriptEnabled

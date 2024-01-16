@@ -254,5 +254,12 @@ export const dashboardStyles = StyleSheet.create({
     alignSelf: 'auto',
     marginHorizontal: MarginConstants.halfTab,
   },
+  npsLabelStyle: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    height: '100%',
+  },
   contentContainer: {backgroundColor: Colors.white, height: '100%'},
 });

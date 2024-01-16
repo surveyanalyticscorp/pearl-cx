@@ -298,14 +298,7 @@ const RenderBenchmark = ({benchmark}) => {
 
 const NPSLabel = ({npsScore, benchmark}) => {
   return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        height: '100%',
-      }}>
+    <View style={dashboardStyles.npsLabelStyle}>
       <GaugeChart npsScore={npsScore} benchmark={benchmark} />
       <NPS nps={npsScore} benchmark={benchmark} />
       <Benchmark nps={npsScore} benchmark={benchmark} />
@@ -729,7 +722,6 @@ const CxDashboard = props => {
             dashboardStyles.container,
             {
               opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-              zIndex: 1,
             },
           ]}>
           <HeaderFilter
