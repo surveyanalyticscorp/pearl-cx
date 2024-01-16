@@ -37,12 +37,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   ACCESS_CODE,
   ASYNC_CLF_BASE_URL,
+  ASYNC_LOGIN_EXPIRE_DATE,
   ASYNC_PUSH_TOKEN,
   BASE_URL,
   SUBSCRIBER_ID,
 } from '../../api/Constant';
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
+import {getExpireDate} from '../../Utils/TimeUtils';
 
 const stringConst = require('../../config/translations/en');
 
@@ -83,6 +85,7 @@ const Login = props => {
       AsyncStorage.setItem(BASE_URL, props.baseUrl).then();
       AsyncStorage.setItem(SUBSCRIBER_ID, props.subscriberId).then();
       AsyncStorage.setItem(ACCESS_CODE, props.accessCode).then();
+      AsyncStorage.setItem(ASYNC_LOGIN_EXPIRE_DATE, getExpireDate());
 
       global.baseUrl = props.baseUrl;
       global.subscriberId = props.subscriberId;
@@ -99,6 +102,7 @@ const Login = props => {
       console.log('CALL CLF LOGIN 2');
 
       AsyncStorage.setItem(ASYNC_CLF_BASE_URL, props.clfBaseUrl);
+
       global.clfBaseUrl = props.clfBaseUrl;
       console.log('CALL CLF LOGIN 3');
 

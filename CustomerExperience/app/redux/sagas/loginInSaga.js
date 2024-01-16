@@ -87,7 +87,7 @@ export function* doLoginApiCall(action) {
     global.clfBaseUrl = '';
     global.bearerToken = '';
     const response = yield WebServiceHandler.postNew(
-      BASE_URL_MID_FIX + AUTH_LOGIN,
+      AUTH_LOGIN,
       {},
       action.param,
     );

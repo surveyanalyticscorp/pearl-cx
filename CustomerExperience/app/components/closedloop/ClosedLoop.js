@@ -53,7 +53,7 @@ import {baseTextStyles} from '../../styles/text.styles';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
 const SearchIcon = () => {
-  return <IonIcons name="search" size={20} color={Colors.lightBlack} />;
+  return <IonIcons name="search" size={20} color={Colors.evenDarkerGrey} />;
 };
 const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
   // const placeHolder = currentText.trim().length > 0 ? currentText :

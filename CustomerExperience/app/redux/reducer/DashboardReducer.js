@@ -42,6 +42,8 @@ import {
   SET_PARENT_COMMENT,
   RESET_PARENT_COMMENT,
   SET_FILTER_BY_STATUS_ID,
+  SET_TOKEN_EXPIRED,
+  SET_TOKEN_EXPIRE_DATE,
 } from '../actions/dashboard.actions';
 
 const initialState = {
@@ -73,6 +75,8 @@ const initialState = {
   ticketActionHistory: {summary: {}, details: {}},
   parentComment: {id: 0, isFocused: false},
   currentStatusIndexForFilter: 0,
+  isTokenExpired: false,
+  expirationDate: '',
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -349,6 +353,21 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         currentStatusIndexForFilter: action.currentStatusIndex,
+      };
+    }
+
+    case SET_TOKEN_EXPIRED: {
+      return {
+        ...state,
+
+        isTokenExpired: action.isTokenExpired,
+      };
+    }
+    case SET_TOKEN_EXPIRE_DATE: {
+      return {
+        ...state,
+
+        expirationDate: action.date,
       };
     }
 

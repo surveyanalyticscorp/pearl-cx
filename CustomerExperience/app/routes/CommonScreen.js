@@ -58,6 +58,7 @@ import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket'
 import {buttonStyles} from '../styles/button.styles';
 import {backgroundColor} from '../widgets/qp-calendar/style';
 import StringUtils from '../Utils/StringUtils';
+import {color} from 'react-native-reanimated';
 // import CheckBox from '@react-native-community/checkbox';
 
 const DateRangeTab = createMaterialTopTabNavigator();
@@ -289,7 +290,7 @@ export const StatusUI = ({status}) => {
       <RenderStatusIcon size={16} title={getStatusById(status)} />
 
       {/* <StatusIcon borderColor={borderColor} fillerColor={fillerColor} /> */}
-      <Text style={textStyles.secondaryText}>{getStatusById(status)}</Text>
+      <Text style={styles.statusText}>{getStatusById(status)}</Text>
     </View>
   );
 };
@@ -324,9 +325,7 @@ export const PriorityUI = ({priority}) => {
   return (
     <View style={styles.statusContainer}>
       <IonIcons name="flag" size={20} color={priorityColor} />
-      <Text style={[{marginStart: 4}, textStyles.secondaryText]}>
-        {priorityText}
-      </Text>
+      <Text style={styles.statusText}>{priorityText}</Text>
     </View>
   );
 };
@@ -638,7 +637,9 @@ export const FilterDateBox = ({range, onDateRangeChangeHandler}) => {
 export const Avatar = ({title, style}) => {
   return (
     <View style={[styles.avatarView, {...style}]}>
-      <Text style={styles.avatarText}>{getNameInitials(title ?? 'NA')}</Text>
+      <Text style={[baseTextStyles.mediumRegularText, {color: Colors.white}]}>
+        {getNameInitials(title ?? 'NA')}
+      </Text>
     </View>
   );
 };
@@ -664,6 +665,29 @@ export const FilterIcon = ({
           width: size ?? 22,
           height: size ?? 22,
           tintColor: color ?? Colors.filterIconColor,
+        }}
+      />
+      {endComponent}
+    </Pressable>
+  );
+};
+
+export const ExclaimationIcon = ({
+  onPress,
+  size,
+  style,
+  color,
+  endComponent,
+}) => {
+  return (
+    <Pressable style={style} onPress={onPress}>
+      <Image
+        // source={require('./../../../assets/images/responses_icon.png')}
+        source={require('./../../assets/images/exclaimation_icon.png')}
+        style={{
+          width: size ?? 22,
+          height: size ?? 22,
+          tintColor: color ?? Colors.critical,
         }}
       />
       {endComponent}
@@ -1104,18 +1128,19 @@ const styles = StyleSheet.create({
   },
 
   avatarView: {
+    flexDirection: 'row',
     borderRadius: 50,
     height: MarginConstants.tab3,
     width: MarginConstants.tab3,
-    backgroundColor: Colors.borderColor,
+    backgroundColor: Colors.textAvatarBackground,
     marginHorizontal: MarginConstants.halfTab,
     alignItems: 'center',
+
     justifyContent: 'center',
   },
-  avatarText: {
-    color: Colors.white,
-    fontFamily: FontFamily.regular,
-    fontWeight: FontWeight._600,
-    fontSize: TextSizes.secondary,
+
+  statusText: {
+    ...baseTextStyles.secondaryRegularText,
+    color: Colors.filterIconColor,
   },
 });

@@ -1,6 +1,7 @@
 import moment from 'moment';
 import {DMY_AT_TIME_FORMAT, HalfMonthDateYearFormat} from './AppConstants';
 import {isStringNullOrEmpty} from './Utility';
+import {TOKEN_VALIDATION_DURATION} from '../api/Constant';
 
 function convertToDateTime(date) {
   // return moment(date).local().format(DMY_AT_TIME_FORMAT);
@@ -36,3 +37,15 @@ export const getDateTimeAgo = date => {
     return convertToDateTime(date);
   }
 };
+
+export function getExpireDate() {
+  let today = new Date();
+  let nextExpireDate = new Date(today);
+  nextExpireDate.setDate(nextExpireDate.getDate() + TOKEN_VALIDATION_DURATION);
+  console.log(
+    'LOGIN EXPIRE DATE',
+    JSON.stringify(today),
+    JSON.stringify(nextExpireDate),
+  );
+  return nextExpireDate.toISOString();
+}

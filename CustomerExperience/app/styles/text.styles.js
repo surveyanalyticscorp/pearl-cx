@@ -53,6 +53,51 @@ export const baseTextStyles = StyleSheet.create({
     fontSize: TextSizes.smallText,
     marginHorizontal: MarginConstants.halfTab,
   },
+  donutPercentMediumText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.donutPercentText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  extraLargeMediumText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.extraLargeText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  largeMediumText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.largeText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  primaryMediumText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.primary,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  secondaryMediumText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.secondary,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  semiSecondaryMediumText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.semiSecondary,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  semiMediumMediumText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.semiMediumText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  mediumMediumText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.mediumText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  smallMediumText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.smallText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
 });
 
 export const textStyles = StyleSheet.create({

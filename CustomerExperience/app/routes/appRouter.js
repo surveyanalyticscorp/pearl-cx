@@ -23,6 +23,7 @@ import {isStringNullOrEmpty} from '../Utils/Utility';
 import {
   ASYNC_AUTH_TOKEN,
   ASYNC_LAST_LOGIN,
+  ASYNC_LOGIN_EXPIRE_DATE,
   // ASYNC_PUSH_TOKEN,
   ASYNC_USER_INFO,
   BASE_URL,
@@ -81,6 +82,8 @@ import Feedback from '../components/feedback/Feedback';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
 import {ModalStackScreen} from './ModalStack';
 import {authenticatePanel} from '../redux/actions/login.actions';
+import moment from 'moment';
+import {setTokenExpired} from '../redux/actions/dashboard.actions';
 // import SearchStack from './SearchStack';
 // import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
@@ -104,6 +107,7 @@ const AppRouter = props => {
   let [isAppActive, setAppActiveState] = useState(false);
   let [baseUrl, setBaseUrl] = useState(undefined);
   let [subscriberId, setSubscriberId] = useState(undefined);
+  const isTokenExpired = useSelector(state => state.dashboard.isTokenExpired);
 
   let [lastLoginArray, setLastLoginArray] = useState([]);
 
@@ -136,6 +140,7 @@ const AppRouter = props => {
     // }));
 
     // console.log('Segment List', segmentOptions);
+
     global.baseUrl = '';
     global.subscriberId = '';
     setGlobalBaseUrl();
@@ -203,22 +208,26 @@ const AppRouter = props => {
     if (!isStringNullOrEmpty(authToken)) {
       let lastLogin = lastLoginArray;
       let today = new Date();
+
       lastLogin.push(today);
 
       // setSegmentOptions(['Main Segment', 'Child Segment']);
 
-      // AsyncStorage.getItem(ASYNC_LAST_LOGIN).then((req) => {
-      //   lastLoginArray = JSON.parse(req);
-      //   if (lastLoginArray.length >= 2) {
-      //     let today = new Date();
-      //     lastLoginArray.push(today);
-      //     let newArray = lastLoginArray.slice(
-      //       lastLoginArray.length - 2,
-      //       lastLoginArray.length,
-      //     );
-      //     lastLoginArray = newArray;
-      //   }
-      // }.catch((error) => console.log(`async storage error: ${error}`);));
+      // AsyncStorage.getItem(ASYNC_LAST_LOGIN)
+      //   .then(req => {
+      //     lastLoginArray = JSON.parse(req);
+      //     if (lastLoginArray.length >= 2) {
+      //       let today = new Date();
+      //       lastLoginArray.push(today);
+      //       let newArray = lastLoginArray.slice(
+      //         lastLoginArray.length - 2,
+      //         lastLoginArray.length,
+      //       );
+      //       lastLoginArray = newArray;
+      //     }
+      //   })
+      //   .catch(error => console.log(`async storage error: ${error}`));
+
       console.log(`LAST_LOGIN: ${lastLoginArray}`);
       let data = [
         [ASYNC_AUTH_TOKEN, authToken],
@@ -535,13 +544,15 @@ const AppRouter = props => {
     }
   };
 
+  console.log('LAST LOGIN DATA', JSON.stringify(lastLoginArray));
+
   return (
     <NavigationContainer
       theme={MyTheme}
       ref={navigationRef}
       fallback={renderSpinner()}
       linking={linking}>
-      {authToken && bearerToken ? (
+      {!isTokenExpired && authToken && bearerToken ? (
         moveNext ? (
           <RenderDrawer />
         ) : (

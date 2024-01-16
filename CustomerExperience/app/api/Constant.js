@@ -10,7 +10,9 @@ export const ASYNC_CLF_BASE_URL = 'clfBaseUrl';
 export const ACCESS_CODE = 'ACCESS_CODE';
 export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
+export const ASYNC_LOGIN_EXPIRE_DATE = 'expiredLoginDate';
 export const ACTION_EMAIL = 'noreply@InsightsHub.com';
+export const TOKEN_VALIDATION_DURATION = 6;
 
 export const MAX_COMMENT_LENGTH = 240;
 // set true for DEV, false for LIVE
@@ -344,3 +346,5 @@ export const EMAIL_PATTERN =
 
 export const SEGMENT_SELECTOR = 'segmentSelector';
 */
+export const fakeBearerToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTc2NTIsIm9yZ0lkIjo1MjAwODgxLCJjeFVzZXJJZCI6OTc2NTIsImZpcnN0TmFtZSI6IkFubW9sIiwibGFzdE5hbWUiOiIiLCJlbWFpbEFkZHJlc3MiOiJhbm1vbC5zYWhldHlhKzIxQHF1ZXN0aW9ucHJvLmNvbSIsImZlZWRiYWNrSWQiOjM1MDkwLCJmZWVkYmFja05hbWUiOiJMaXZlIFN1cnZleXMiLCJzdWJzY3JpYmVySWQiOjUzMzEzNjMsInN1YnNjcmliZXJFbWFpbEFkZHJlc3MiOiJhbm1vbC5zYWhldHlhKzIxQHF1ZXN0aW9ucHJvLmNvbSIsInJvbGUiOjAsImFwcFR5cGUiOjEsImlhdCI6MTcwNDg2Mjg5MSwiZXhwIjoxNzA1Mjk0ODkxfQ.2Cfya0yVMHPItA_cElgi3NgSHgNf-sPQC2R1cGItvL4';

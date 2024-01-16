@@ -116,6 +116,7 @@ export function* fetchDataCount(action) {
       clfResponse: clf_response,
     });
   } catch (error) {
+    console.log('mobileAccessToken in SAGA: ', JSON.stringify(error));
     if (error.status === 404 && !error.url.includes(BASE_URL_MID_FIX)) {
       try {
         yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});

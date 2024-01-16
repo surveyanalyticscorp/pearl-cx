@@ -6,6 +6,7 @@ import {
   ASYNC_AUTH_TOKEN,
   ASYNC_BEARER_TOKEN,
   ASYNC_CLF_BASE_URL,
+  ASYNC_LOGIN_EXPIRE_DATE,
   ASYNC_USER_INFO,
   BASE_URL,
 } from '../../api/Constant';
@@ -17,7 +18,10 @@ import {
   setBearerToken,
 } from '../../redux/actions/index';
 import {isStringNullOrEmpty} from '../../Utils/Utility';
-import {DASHBOARD_RANGE} from '../../redux/actions/dashboard.actions';
+import {
+  DASHBOARD_RANGE,
+  setTokenExpired,
+} from '../../redux/actions/dashboard.actions';
 import {setLanguageInfo, setRangeFilter} from '../../redux/actions';
 import {WelcomeScreen} from '../dashboard/WelcomeScreen';
 import AppRouter from '../../routes/appRouter';
@@ -29,6 +33,7 @@ import {
   updateBaseUrl,
 } from '../../redux/actions/login.actions';
 import StringUtils from '../../Utils/StringUtils';
+import moment from 'moment';
 
 function SplashScreen(props) {
   let [moveNext, setMoveNext] = useState(false);
@@ -60,6 +65,17 @@ function SplashScreen(props) {
 
   useEffect(() => {
     splashTimer = setTimeout(() => {
+      AsyncStorage.getItem(ASYNC_LOGIN_EXPIRE_DATE).then(expireDate => {
+        const today = new Date();
+        if (expireDate && moment(today).isAfter(moment(expireDate))) {
+          dispatch(setTokenExpired(true));
+          console.log('EXPIRED!');
+        } else {
+          dispatch(setTokenExpired(false));
+          console.log('not EXPIRED');
+        }
+      });
+
       AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {
         console.log(
           'Async Storage: saved clf base url from splash screen',

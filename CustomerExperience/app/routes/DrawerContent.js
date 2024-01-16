@@ -19,12 +19,13 @@ import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {clearUserInfo} from '../redux/actions';
 import {doLogout} from '../redux/actions/login.actions';
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import {
   ACCESS_CODE,
   ASYNC_AUTH_TOKEN,
   ASYNC_BEARER_TOKEN,
   ASYNC_CLF_BASE_URL,
+  ASYNC_LOGIN_EXPIRE_DATE,
   ASYNC_PUSH_TOKEN,
   ASYNC_USER_CREDENTIALS,
   ASYNC_USER_INFO,
@@ -40,11 +41,24 @@ import {DrawerActions} from '@react-navigation/native';
 import QPSpinner from '../widgets/QPSpinner';
 import {Notifications} from 'react-native-notifications';
 import {translate} from '../Utils/MultilinguaUtils';
+import moment from 'moment';
+import {setTokenExpired} from '../redux/actions/dashboard.actions';
 
 const DrawerContent = props => {
   const [userCredentials, setUserCredentials] = useState('');
   const [logoutAlert, setLogoutAlert] = useState(false);
   const [loading, setLoading] = useState(false);
+  // const expirationDate = useSelector(state => state.dashboard.expirationDate);
+  const isTokenExpired = useSelector(state => state.dashboard.isTokenExpired);
+
+  useEffect(() => {
+    if (isTokenExpired) {
+      console.log('EXPIRED!');
+      logoutAction();
+    } else {
+      console.log('not EXPIRED');
+    }
+  }, [isTokenExpired]);
 
   useEffect(() => {
     let hasValue = true;
@@ -261,6 +275,9 @@ const DrawerContent = props => {
     AsyncStorage.setItem(ASYNC_BEARER_TOKEN, '').then();
     AsyncStorage.setItem(ACCESS_CODE, '').then();
     AsyncStorage.setItem(ASYNC_USER_INFO, '').then();
+    AsyncStorage.setItem(ASYNC_LOGIN_EXPIRE_DATE, '').then(() => {
+      setTokenExpired(false);
+    });
   };
 
   let renderAppVersion = () => {
@@ -350,6 +367,9 @@ const mapDispatchToProps = dispatch => ({
   },
   clearUserData: () => {
     dispatch(clearUserInfo());
+  },
+  setTokenExpired: isExpired => {
+    dispatch(setTokenExpired(isExpired));
   },
 });
 
