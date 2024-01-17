@@ -49,7 +49,10 @@ class CxApp extends Component {
         <SafeAreaProvider>
           <StatusBar barStyle={'light-content'} />
           {this.state.styleBuilt ? <SplashScreen /> : <View />}
-          <FlashMessage position="top" />
+          <FlashMessage
+            style={{borderRadius: 4}}
+            position={{top: 16, left: 16, right: 16}}
+          />
         </SafeAreaProvider>
       </Provider>
     );
