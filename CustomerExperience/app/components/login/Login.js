@@ -7,7 +7,7 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState, useCallback} from 'react';
 import DeviceInfo from 'react-native-device-info';
 import {
   isStringNullOrEmpty,
@@ -48,6 +48,23 @@ import {getExpireDate} from '../../Utils/TimeUtils';
 
 const stringConst = require('../../config/translations/en');
 
+const RenderSpinnerLoginButton = ({isLoading, onPress}) => {
+  return isLoading ? (
+    <View style={loginStyles.signInButton}>
+      <QPSpinner spinnerColor={Colors.white} />
+    </View>
+  ) : (
+    <QPButton
+      testID="SignInButton"
+      style={loginStyles.signInButton}
+      buttonColor={Colors.accentLight}
+      onPress={onPress}
+      buttonText={stringConst.onBoarding.signIn}
+      textStyle={loginStyles.signInText}
+    />
+  );
+};
+
 const Login = props => {
   let timer = useRef(null);
   let textFieldTimer = useRef(null);
@@ -70,6 +87,7 @@ const Login = props => {
   }, []);
 
   useEffect(() => {
+    console.log('VALIDATION MSG', validation);
     if (StringUtils.isNotEmpty(validation) || props.isError) {
       let message = props.isError ? getApiValidationErrorMessage() : validation;
       showErrorFlashMessage(message);
@@ -97,22 +115,16 @@ const Login = props => {
   }, [props.baseUrl]);
 
   useEffect(() => {
-    console.log('CALL CLF LOGIN 1', JSON.stringify(props.clfBaseUrl));
     if (props.clfBaseUrl && StringUtils.isNotEmpty(props.clfBaseUrl)) {
-      console.log('CALL CLF LOGIN 2');
-
       AsyncStorage.setItem(ASYNC_CLF_BASE_URL, props.clfBaseUrl);
 
       global.clfBaseUrl = props.clfBaseUrl;
-      console.log('CALL CLF LOGIN 3');
 
       callClfAuth(props.clfBaseUrl);
     }
   }, [props.clfBaseUrl]);
 
   function callClfAuth(clfBaseUrl) {
-    console.log('CALL CLF LOGIN 4');
-
     const data = {
       clfBaseUrl,
       emailAddress: props.userInfo.emailAddress,
@@ -120,7 +132,6 @@ const Login = props => {
       feedbackID: props.userInfo.feedbackID,
       feedbackApiKey: props.userInfo.feedbackApiKey,
     };
-    console.log('CALL CLF LOGIN 5');
 
     props.getClfAuth(data);
   }
@@ -149,13 +160,13 @@ const Login = props => {
     return 'Error';
   };
 
-  let authenticateAccessCode = () => {
-    console.log('authenticateAccessCode', checkValidation(), props.baseUrl);
+  const authenticateAccessCode = useCallback(() => {
+    // console.log('authenticateAccessCode', checkValidation(), props.baseUrl);
 
-    if (checkValidation() && StringUtils.isEmpty(props.baseUrl)) {
+    if (StringUtils.isEmpty(props.baseUrl) && checkValidation()) {
       props.authenticatePanel({accessCode: userData.accessCode});
     }
-  };
+  }, [userData.accessCode, props.authenticatePanel, props.baseUrl]);
 
   let loginAction = token => {
     if (checkValidation()) {
@@ -181,24 +192,34 @@ const Login = props => {
     }
   };
 
-  const checkValidation = () => {
+  const checkValidation = useCallback(() => {
     // console.log('Validate email: ' + validateEmail(userData.email));
+    console.log('VALIDATION MSG', 'checkValidation 1', validation);
+
     if (!validateEmail(userData.email)) {
       setValidation(stringConst.onBoarding.invalidEmail);
+      console.log('VALIDATION MSG', 'checkValidation email', validation);
+
       return false;
     }
     if (isStringNullOrEmpty(userData.password)) {
       setValidation(stringConst.onBoarding.invalidPassword);
+      console.log('VALIDATION MSG', 'checkValidation password', validation);
+
       return false;
     }
 
     if (isStringNullOrEmpty(userData.accessCode)) {
       setValidation(stringConst.onBoarding.invalidCompanyCode);
+      console.log('VALIDATION MSG', 'checkValidation accessCode', validation);
+
       return false;
     }
     setValidation('');
+    console.log('VALIDATION MSG', 'checkValidation return', validation);
+
     return true;
-  };
+  }, [validation, userData.email, userData.password, userData.accessCode]);
 
   const onForgotPasswordPress = () => {
     props.clearError();
@@ -236,26 +257,9 @@ const Login = props => {
     }
   };
 
-  const handleSubmit = text => {
-    authenticateAccessCode();
-  };
-
-  let renderSpinnerLoginButton = () => {
-    return props.isLoading ? (
-      <View style={loginStyles.signInButton}>
-        <QPSpinner spinnerColor={Colors.white} />
-      </View>
-    ) : (
-      <QPButton
-        testID="SignInButton"
-        style={loginStyles.signInButton}
-        buttonColor={Colors.accentLight}
-        onPress={authenticateAccessCode}
-        buttonText={stringConst.onBoarding.signIn}
-        textStyle={loginStyles.signInText}
-      />
-    );
-  };
+  // const handleSubmit = text => {
+  //   authenticateAccessCode();
+  // };
 
   const renderSignTextFieldAndButton = () => {
     return (
@@ -279,6 +283,7 @@ const Login = props => {
                 source={require('../../config/images/cx-logo.png')}
               />
             </View>
+
             <QPTextField
               secureText={false}
               testID="emailTextField"
@@ -315,7 +320,7 @@ const Login = props => {
               label={stringConst.onBoarding.companyCode}
               style={loginStyles.emailInput}
               onChange={handleAccessCode}
-              onEndEdit={handleSubmit}
+              onEndEdit={handleAccessCode}
               onSubmitEditing={() => {
                 textFieldTimer = setTimeout(() => {
                   Keyboard.dismiss();
@@ -326,7 +331,10 @@ const Login = props => {
             />
           </View>
         </KeyboardAvoidingView>
-        {renderSpinnerLoginButton()}
+        <RenderSpinnerLoginButton
+          isLoading={props.isLoading}
+          onPress={authenticateAccessCode}
+        />
         <QPButton
           style={loginStyles.forgotPswdButton}
           buttonColor={Colors.fullTransparent}
