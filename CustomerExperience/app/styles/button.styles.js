@@ -16,6 +16,16 @@ export const buttonStyles = StyleSheet.create({
     borderColor: Colors.accentLight,
     borderWidth: 1,
   },
+  primaryButtonRadius: {
+    height: MarginConstants.tab4,
+    paddingHorizontal: MarginConstants.tab2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.accentLight,
+    borderColor: Colors.accentLight,
+    borderWidth: 1,
+    borderRadius: 2,
+  },
   primaryButtonText: {
     color: Colors.white,
     fontFamily: FontFamily.regular,

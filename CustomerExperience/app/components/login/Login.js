@@ -58,9 +58,10 @@ const RenderSpinnerLoginButton = ({isLoading, onPress}) => {
       testID="SignInButton"
       style={loginStyles.signInButton}
       buttonColor={Colors.accentLight}
-      onPress={() => {
-        showErrorFlashMessage('This is a custom error msg!');
-      }}
+      // onPress={() => {
+      //   showErrorFlashMessage('This is a custom error msg!');
+      // }}
+      onPress={onPress}
       buttonText={stringConst.onBoarding.signIn}
       textStyle={loginStyles.signInText}
     />

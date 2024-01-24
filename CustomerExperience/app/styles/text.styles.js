@@ -8,6 +8,52 @@ let {width} = Dimensions.get('window');
 const isIos = Platform.OS === 'ios';
 
 export const baseTextStyles = StyleSheet.create({
+  donutPercentLightText: {
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.donutPercentText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  extraLargeLightText: {
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.extraLargeText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  largeLightText: {
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.largeText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  primaryLightText: {
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.primary,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  secondaryLightText: {
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.secondary,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  semiSecondaryLightText: {
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.semiSecondary,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  semiMediumLightText: {
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.semiMediumText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  mediumLightText: {
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.mediumText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+  smallLightText: {
+    fontFamily: FontFamily.light,
+    fontSize: TextSizes.smallText,
+    marginHorizontal: MarginConstants.halfTab,
+  },
+
   donutPercentRegularText: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.donutPercentText,

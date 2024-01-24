@@ -22,6 +22,7 @@ import Animated from 'react-native-reanimated';
 import TicketTakeAction from './takeaction/TIcketTakeAction';
 import {
   BottomSheetHeader,
+  CopyIcon,
   RenderPriorityIcon,
   RenderSpinner,
   RenderStatusIcon,
@@ -63,6 +64,8 @@ import DeleteTicketModal from './DeleteTicketModal';
 import {buttonStyles} from '../../styles/button.styles';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {FaIcon} from '../../Utils/IconUtils';
+import {baseTextStyles} from '../../styles/text.styles';
+import StringUtils from '../../Utils/StringUtils';
 
 const ArrowDownIcon = () => (
   <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.evenDarkerGrey} />
@@ -81,19 +84,13 @@ const CopyTicketIdButton = ({ticket}) => {
   return (
     <Pressable onPress={onPress}>
       <View style={styles.ticketIdView}>
-        <Text style={styles.ticketIdText}>
+        {/* <Text style={styles.ticketIdText}>
           {`#${ticket !== undefined ? ticket.id : ''}`}
-        </Text>
-        <FaIcon name={'copy'} color={Colors.accentLight} size={12} />
+        </Text> */}
+        {/* <FaIcon name={'copy'} color={Colors.accentLight} size={16} /> */}
+        <CopyIcon size={16} tintColor={Colors.accentLight} />
       </View>
     </Pressable>
-  );
-};
-const Title = ({value}) => {
-  return (
-    <View style={[{flex: 1}, styles.rowContainer]}>
-      <Text style={styles.titleText}>{value}</Text>
-    </View>
   );
 };
 
@@ -125,24 +122,50 @@ const DescriptionHeader = ({text}) => {
     </View>
   );
 };
-
-const ShowText = ({text}) => {
+const Title = ({value}) => {
   return (
-    <View style={[{flex: 2}, styles.rowContainer]}>
-      <Text style={styles.showText}>{text}</Text>
-    </View>
+    <Text
+      style={[styles.titleText, {flex: 2, padding: PaddingConstants.halfTab}]}>
+      {value}
+    </Text>
+  );
+};
+const ShowText = ({style, text, isHighlighted = false}) => {
+  return (
+    <Text
+      style={[
+        style,
+        styles.showText,
+        {
+          flex: 3,
+          color: isHighlighted ? Colors.accentLight : Colors.filterIconColor,
+        },
+      ]}>
+      {text}
+    </Text>
   );
 };
 
-const ShowTitleAndText = ({title, subText}) => {
+const ShowTitleAndText = ({title, subText, isSubtextHighlighted}) => {
   return (
     <View style={styles.titleTextContainer}>
       <Title value={title} />
-      <ShowText text={subText} />
+      <ShowText text={subText} isHighlighted={isSubtextHighlighted} />
     </View>
   );
 };
-
+const ShowDescription = ({title, subText, isSubtextHighlighted}) => {
+  return (
+    <View style={styles.descriptionTextContainer}>
+      <Title value={title} />
+      <ShowText
+        style={{paddingHorizontal: PaddingConstants.tab1}}
+        text={subText}
+        isHighlighted={isSubtextHighlighted}
+      />
+    </View>
+  );
+};
 const RenderDropDownButton = ({
   text,
   frontIcon,
@@ -174,7 +197,7 @@ const DescriptionView = ({ticket, showResponseButton}) => {
   return (
     <View style={styles.ticketStatusContainer}>
       <View style={styles.rowContainer}>
-        <DescriptionHeader text={translate('ticket_overview.description')} />
+        <DescriptionHeader text={'Details'} />
         <CopyTicketIdButton ticket={ticket} />
       </View>
       <ShowTitleAndText
@@ -182,11 +205,15 @@ const DescriptionView = ({ticket, showResponseButton}) => {
         subText={ticket?.originSegment?.name ?? ''}
       />
       <ShowTitleAndText
+        title={translate('close_loop.current_segment')}
+        subText={ticket?.currentSegment?.name ?? ''}
+      />
+      <ShowTitleAndText
         title={translate('close_loop.created_on')}
         subText={createdDate}
       />
 
-      {ticket.npsScore !== null ? (
+      {!StringUtils.isEmptyOrNull(ticket?.npsScore) ? (
         <View style={styles.rowContainer}>
           <Title value={'NPS'} />
           <NPSScoreView text={ticket?.npsScore} />
@@ -194,10 +221,10 @@ const DescriptionView = ({ticket, showResponseButton}) => {
       ) : (
         <View />
       )}
-      <ShowTitleAndText
+      {/* <ShowTitleAndText
         title={`${translate('ticket_overview.description')}:`}
         subText={!isObjectEmpty(ticket) ? ticket.comment : ''}
-      />
+      /> */}
 
       {ticket.responseId && showResponseButton ? (
         <ViewResponseDetailsButton />
@@ -208,67 +235,75 @@ const DescriptionView = ({ticket, showResponseButton}) => {
   );
 };
 
-const ContactView = ({panelMember}) => {
+const ContactView = ({
+  panelMember,
+  description,
+  hasPanelMember,
+  onTakeActionHandler,
+}) => {
   return (
-    <View
-      style={[styles.ticketStatusContainer, {padding: PaddingConstants.tab1}]}>
+    <View style={[styles.ticketStatusContainer]}>
       <DescriptionHeader text={translate('ticket_overview.contact')} />
 
-      <View style={styles.rowContainer}>
-        <Text
-          style={{
-            color: Colors.accent,
-            fontSize: TextSizes.largeText,
-            fontWeight: 'bold',
-          }}>
-          {panelMember?.name ?? translate('ticket_list.anonymous')}
-        </Text>
-      </View>
-      {panelMember?.email ? (
-        <TitleAndUnderLineText
-          title={translate('responses.email')}
-          underlineText={panelMember.email ?? ''}
-          type={EMAIL}
-        />
-      ) : (
-        // <View style={styles.rowContainer}>
-        //   <Title value={translate('responses.email')} />
-        //   {getUnderLineText(panelMember.email ?? '', EMAIL)}
-        // </View>
-        <View />
-      )}
-      {panelMember?.phone ? (
-        // <View style={styles.rowContainer}>
-        //   <Title value={translate('create_new_ticket.phone_number')} />
-        //   {getUnderLineText(panelMember.phone ?? '', PHONE)}
-        // </View>
-        <TitleAndUnderLineText
-          title={translate('create_new_ticket.phone_number')}
-          underlineText={panelMember.phone ?? ''}
-          type={PHONE}
+      <ShowTitleAndText
+        title={`${'Name'}`}
+        subText={
+          panelMember?.name?.length > 0
+            ? panelMember.name
+            : translate('ticket_list.anonymous')
+        }
+      />
+      {panelMember?.email?.length > 0 ? (
+        <ShowTitleAndText
+          title={`${translate('responses.email')}`}
+          subText={panelMember?.email}
+          isSubtextHighlighted={true}
         />
       ) : (
         <View />
       )}
+      {panelMember?.phone?.length > 0 ? (
+        <ShowTitleAndText
+          title={`${translate('create_new_ticket.phone_number')}`}
+          subText={panelMember?.phone}
+          isSubtextHighlighted={true}
+        />
+      ) : (
+        <View />
+      )}
+      {description?.length > 0 ? (
+        <ShowDescription
+          title={`${translate('ticket_overview.description')}:`}
+          subText={description}
+        />
+      ) : (
+        <View />
+      )}
+      <TakeActionButton
+        hasPanelMember={hasPanelMember}
+        onTakeActionHandler={onTakeActionHandler}
+      />
     </View>
   );
 };
 
 const DeleteView = ({onPressDelete}) => {
   return (
-    <View style={styles.ticketStatusContainer}>
-      {/* <DescriptionHeader text={'Contact'} /> */}
-      <View style={styles.takeActionContainer}>
-        <QPButton
-          testID="DeleteButtonAction"
-          buttonColor={Colors.deleteBackground}
-          style={buttonStyles.deleteButton}
-          onPress={onPressDelete}
-          buttonText={translate('ticket_overview.delete_ticket')}
-          textStyle={buttonStyles.deleteButtonText}
-        />
-      </View>
-    </View>
+    <QPButton
+      testID="DeleteButtonAction"
+      buttonColor={Colors.white}
+      style={[
+        buttonStyles.deleteButton,
+        {borderRadius: 2, margin: MarginConstants.tab1},
+      ]}
+      onPress={onPressDelete}
+      buttonText={translate('ticket_overview.delete_ticket')}
+      textStyle={buttonStyles.deleteButtonText}
+    />
+    // <View style={styles.ticketStatusContainer}>
+    //   {/* <DescriptionHeader text={'Contact'} /> */}
+
+    // </View>
   );
 };
 const UnderLineText = ({text, type}) => {
@@ -349,6 +384,27 @@ function hasPanelMemberObj(obj) {
   return obj !== null && obj !== undefined && !isObjectEmpty(obj);
 }
 
+const ShowTitleAndDropdown = ({
+  title,
+  currentItemName,
+  onPress,
+  hasArrowDownIcon = false,
+  frontIcon,
+  isDisabled = false,
+}) => {
+  return (
+    <View style={styles.titleAndDropdownContainer}>
+      <Title value={title} />
+      <RenderDropDownButton
+        text={currentItemName}
+        handleOnPress={onPress}
+        hasArrowDownIcon={hasArrowDownIcon}
+        frontIcon={frontIcon}
+      />
+    </View>
+  );
+};
+
 export default function TicketOverview(props) {
   const bottomSheetEnum = {
     status: 'status',
@@ -389,6 +445,7 @@ export default function TicketOverview(props) {
   console.log({isLoading});
   const onPressDelete = () => {
     setTicketDeleteModal(true);
+    console.log('DELETE');
   };
 
   const goBack = () => {
@@ -456,6 +513,16 @@ export default function TicketOverview(props) {
   const statusBottomSheetSnapPoints = ['45', '0'];
 
   const fall = new Animated.Value(1);
+
+  const opacity = Animated.interpolate(fall, {
+    inputRange: [0, 1],
+    outputRange: [0.3, 1],
+  });
+
+  const colorTint = Animated.interpolate(fall, {
+    inputRange: [0, 1],
+    outputRange: ['rgba(255, 255, 255, 0)', 'rgba(255, 0, 0, 0.3)'], // Adjust colors as needed
+  });
 
   const onTakeActionHandler = () => {
     if (hasPanelMember) {
@@ -547,7 +614,6 @@ export default function TicketOverview(props) {
         ref={statusBottomSheet}
         snapPoints={statusBottomSheetSnapPoints}
         initialSnap={statusBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={false}
         renderContent={renderContent}
         renderHeader={renderHeader}
         callbackNode={fall}
@@ -681,53 +747,41 @@ export default function TicketOverview(props) {
         ? // ? ticketDetails.assignToId
           getOwnerNameById(owners, ticket.assignToId)
         : 'Select owner';
+
     return (
       <View style={styles.ticketStatusContainer}>
-        <View style={styles.rowContainer}>
-          <Title value={translate('close_loop.current_segment')} />
-          <RenderDropDownButton text={segmentName} />
-        </View>
+        <ShowTitleAndDropdown
+          title={translate('close_loop.current_segment')}
+          currentItemName={statusName}
+          onPress={handleStatusSelection}
+          hasArrowDownIcon
+          frontIcon={
+            <RenderStatusIcon
+              style={{margin: MarginConstants.halfTab}}
+              title={statusName}
+            />
+          }
+        />
+        <ShowTitleAndDropdown
+          title={translate('close_loop.priority')}
+          currentItemName={priorityName}
+          onPress={handlePrioritySelection}
+          hasArrowDownIcon
+          frontIcon={
+            <RenderPriorityIcon
+              style={{margin: MarginConstants.halfTab}}
+              title={priorityName}
+            />
+          }
+        />
 
-        <View style={styles.rowContainer}>
-          <Title value={translate('close_loop.status')} />
-          <RenderDropDownButton
-            text={statusName}
-            handleOnPress={handleStatusSelection}
-            hasArrowDownIcon={true}
-            frontIcon={
-              <RenderStatusIcon
-                style={{margin: MarginConstants.halfTab}}
-                title={statusName}
-              />
-            }
-          />
-        </View>
-
-        <View style={styles.rowContainer}>
-          <Title value={translate('close_loop.priority')} />
-          <RenderDropDownButton
-            text={priorityName}
-            handleOnPress={handlePrioritySelection}
-            hasArrowDownIcon={true}
-            frontIcon={
-              <RenderPriorityIcon
-                style={{margin: MarginConstants.halfTab}}
-                title={priorityName}
-              />
-            }
-          />
-        </View>
-
-        <View style={styles.rowContainer}>
-          <Title value={`${translate('ticket_overview.assigned_to')}:`} />
-
-          <RenderDropDownButton
-            text={ownerName}
-            handleOnPress={isEscalated ? () => {} : handleOwnerSelection}
-            hasArrowDownIcon={!isEscalated}
-            isDisabled={isEscalated}
-          />
-        </View>
+        <ShowTitleAndDropdown
+          title={translate('ticket_overview.assigned_to')}
+          currentItemName={ownerName}
+          onPress={isEscalated ? () => {} : handleOwnerSelection}
+          hasArrowDownIcon={!isEscalated}
+          isDisabled={isEscalated}
+        />
       </View>
     );
   };
@@ -808,7 +862,7 @@ export default function TicketOverview(props) {
           },
         },
       ],
-      {cancelable: false},
+      {cancelable: true},
     );
   };
 
@@ -832,10 +886,6 @@ export default function TicketOverview(props) {
           opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
         }}>
         <View style={styles.container}>
-          <TakeActionButton
-            hasPanelMember={hasPanelMember}
-            onTakeActionHandler={onTakeActionHandler}
-          />
           {/* {ticketStatusPriorityView()} */}
           <TicketStatusPriorityView ticket={ticketDetails} />
           <DescriptionView
@@ -843,17 +893,25 @@ export default function TicketOverview(props) {
             showResponseButton={isFromClosedLoopScreen}
           />
 
-          <ContactView panelMember={ticketDetails?.panelMember} />
+          <ContactView
+            panelMember={ticketDetails?.panelMember}
+            description={ticketDetails?.comment ? ticketDetails?.comment : ''}
+            hasPanelMember={hasPanelMember}
+            onTakeActionHandler={onTakeActionHandler}
+          />
           <DeleteView onPressDelete={onPressDelete} />
-
+          {/* <TakeActionButton
+            hasPanelMember={hasPanelMember}
+            onTakeActionHandler={onTakeActionHandler}
+          /> */}
           <RenderShowAssigneeModal
             showAssigneeModal={showAssigneeModal}
             id={ticketDetails.id}
             currentSegment={ticketDetails.currentSegment}
           />
-          {showTicketDeleteModal ?? renderDeleteAlert()}
         </View>
       </Animated.ScrollView>
+      {showTicketDeleteModal ? renderDeleteAlert() : <View />}
       <RenderStatusBottomSheet currentBS_={currentBS} />
       {/* <RenderPriorityBottomSheet />
       <RenderSegmentBottomSheet />
@@ -862,7 +920,6 @@ export default function TicketOverview(props) {
         ref={actionBottomSheet}
         snapPoints={actionBottomSheetSnapPoints}
         initialSnap={actionBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={true}
         renderContent={renderTicketTakeAction}
         renderHeader={renderHeader}
         callbackNode={fall}
@@ -891,10 +948,15 @@ const styles = StyleSheet.create({
   ticketStatusContainer: {
     backgroundColor: Colors.white,
     margin: MarginConstants.tab1,
+    padding: PaddingConstants.tab2,
+    borderRadius: 4,
   },
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: PaddingConstants.halfTab,
+  },
+  titleAndDropdownContainer: {
     padding: PaddingConstants.halfTab,
   },
   titleAndUnderlineContainer: {
@@ -903,18 +965,21 @@ const styles = StyleSheet.create({
   },
   titleTextContainer: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    padding: PaddingConstants.tab1,
+    padding: PaddingConstants.halfTab,
+  },
+  descriptionTextContainer: {
+    alignItems: 'flex-start',
+    padding: PaddingConstants.halfTab,
   },
   columnContainer: {
     alignItems: 'flex-start',
     padding: PaddingConstants.tab1,
   },
   headerText: {
-    fontFamily: FontFamily.light,
-    fontSize: TextSizes.largeText,
-    color: Colors.filterIconColor,
+    ...baseTextStyles.largeMediumText,
+    color: Colors.accent,
   },
   modalHeader: {
     justifyContent: 'space-between',
@@ -929,16 +994,14 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   titleText: {
-    fontFamily: FontFamily.regular,
-    fontWeight: FontWeight._500,
-    fontSize: TextSizes.secondary,
+    ...baseTextStyles.secondaryRegularText,
     color: Colors.filterIconColor,
+    padding: PaddingConstants.halfTab,
+    alignItems: 'flex-start',
   },
   showText: {
-    fontFamily: FontFamily.regular,
-    fontWeight: FontWeight._500,
-    fontSize: TextSizes.secondary,
-    color: Colors.filterIconColor,
+    ...baseTextStyles.primaryLightText,
+    alignItems: 'flex-start',
   },
 
   departmentNameText: {
@@ -994,15 +1057,18 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     margin: MarginConstants.tab1,
   },
-  contentContainer: {backgroundColor: Colors.white, height: '100%'},
+  contentContainer: {
+    backgroundColor: Colors.white,
+    paddingHorizontal: 24,
+    height: '100%',
+  },
   dropdownContainer: {
     flex: 2,
     flexDirection: 'row',
     height: '100%',
     backgroundColor: Colors.white,
-    borderColor: Colors.evenDarkerGrey,
+    borderColor: Colors.darkGrey,
     borderWidth: 1,
-    borderRadius: 3,
   },
   dropdownInnerContainer: {
     flex: 1,

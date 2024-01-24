@@ -248,6 +248,13 @@ export const StatusIcon = ({
   );
 };
 
+export const CopyIcon = ({size = 12, tintColor = Colors.filterIconColor}) => (
+  <Image
+    source={require('./../../assets/images/copy_icon.png')}
+    style={{width: size, height: size, tintColor: tintColor}}
+  />
+);
+
 export const CalendarIcon = ({
   size = 12,
   tintColor = Colors.filterIconColor,
