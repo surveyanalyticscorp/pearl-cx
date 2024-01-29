@@ -49,6 +49,7 @@ import {
   syncTickets,
 } from '../../redux/actions/closedloop.actions';
 import {baseTextStyles} from '../../styles/text.styles';
+import {useNavigation} from '@react-navigation/core';
 // import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
@@ -94,6 +95,7 @@ const CloseIcon = ({onResetSearch}) => {
 
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const itemPerPage = 20;
   const {statusId} = useSelector(state => state.global);
 
@@ -397,7 +399,7 @@ export default function ClosedLoop(props) {
       return;
     }
 
-    props.navigation.navigate('TicketDetails', {
+    navigation.navigate('TicketDetails', {
       ticketItem: item,
       prevScreen: translate('dashboard.closed_loop'),
     });
@@ -418,7 +420,7 @@ export default function ClosedLoop(props) {
   };
 
   const onFabHandler = () => {
-    props.navigation.navigate(translate('responses.new_ticket'));
+    navigation.navigate(translate('responses.new_ticket'));
   };
 
   const renderFilterContent = () => {

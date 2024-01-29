@@ -322,9 +322,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   userName: {
+    ...baseTextStyles.primaryRegularText,
     color: Colors.accent,
-    fontWeight: FontWeight.normal,
-    fontSize: TextSizes.secondary,
   },
   activity: {
     color: Colors.filterIconColor,

@@ -51,6 +51,7 @@ import Animated, {color} from 'react-native-reanimated';
 import {StatusDashboardBottomSheet} from './ClosedLoopDashboard';
 import SelectStatus from '../closedloop/takeaction/SelectStatus';
 import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
+import {useNavigation} from '@react-navigation/core';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -73,8 +74,9 @@ const getTrimmedNoOfResponses = responseCount => {
 };
 
 const NavigateToResponses = props => {
+  let navigation = useNavigation();
   const navigateToResponses = () => {
-    props.navigation.navigate('dashboard_to_responses');
+    navigation.navigate('dashboard_to_responses');
   };
 
   return (

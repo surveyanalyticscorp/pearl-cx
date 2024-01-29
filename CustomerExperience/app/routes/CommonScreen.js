@@ -59,6 +59,7 @@ import {buttonStyles} from '../styles/button.styles';
 import {backgroundColor} from '../widgets/qp-calendar/style';
 import StringUtils from '../Utils/StringUtils';
 import {color} from 'react-native-reanimated';
+import ClosedLoopStack from './ClosedLoopStack';
 // import CheckBox from '@react-native-community/checkbox';
 
 const DateRangeTab = createMaterialTopTabNavigator();
@@ -978,7 +979,7 @@ const CommonScreens = RootStack => {
       })}
     />,
     <RootStack.Screen
-      key={'Ticket Details'}
+      key={'TicketDetails'}
       name={translate('close_loop.ticket_details')}
       component={TicketLogTabStack}
       options={({navigation, route}) => ({
@@ -987,6 +988,7 @@ const CommonScreens = RootStack => {
           route.state && route.state.index !== 0 ? <View /> : <EditTicket />,
       })}
     />,
+
     <RootStack.Screen
       name={translate('responses.feedback_details')}
       key={'Feedback Details'}
