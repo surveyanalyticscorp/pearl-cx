@@ -108,7 +108,7 @@
     "select_status": "Select status",
     "select_priority": "Select priority",
     "select_ticket_owner": "Select ticket owner",
-    "assigned_to": "Assigned to",
+    "assigned_to": "Assigned to:",
     "contact": "Contact"
   },
   "comment": {

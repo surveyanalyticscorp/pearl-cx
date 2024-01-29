@@ -736,7 +736,7 @@ export default function TicketOverview(props) {
     const statusName =
       ticket !== undefined
         ? getStatusById(ticket.status)
-        : translate('close_loop.current_segment');
+        : translate('close_loop.status');
 
     const priorityName =
       ticket !== undefined
@@ -751,7 +751,7 @@ export default function TicketOverview(props) {
     return (
       <View style={styles.ticketStatusContainer}>
         <ShowTitleAndDropdown
-          title={translate('close_loop.current_segment')}
+          title={translate('close_loop.status')}
           currentItemName={statusName}
           onPress={handleStatusSelection}
           hasArrowDownIcon
