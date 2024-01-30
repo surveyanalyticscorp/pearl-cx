@@ -3,6 +3,7 @@ import {
   DEV_BASE_URL,
   CLF_BASE_URL,
   BASE_URL_MID_FIX,
+  BASE_URL_NEW_MID_FIX,
 } from '../../api/Constant';
 import {
   FILL_USER_INFO,
@@ -76,7 +77,7 @@ const globalReducer = (state = initialState, action) => {
         ...state,
         baseUrl:
           (IS_DEV_MODE ? DEV_BASE_URL : action.response.body.mobileAPIURL) +
-          (action.hasMidFix ? BASE_URL_MID_FIX : ''),
+          (action.hasMidFix ? BASE_URL_MID_FIX : BASE_URL_NEW_MID_FIX),
         subscriberId: JSON.stringify(action.response.body.userID),
         dataCenter: action.response.body.dataCenter,
         accessCode: action.response.body.accessCode,
@@ -87,7 +88,7 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         baseUrl: action.hasMidFix
-          ? state.baseUrl + BASE_URL_MID_FIX
+          ? state.baseUrl + BASE_URL_NEW_MID_FIX
           : state.baseUrl,
       };
     }

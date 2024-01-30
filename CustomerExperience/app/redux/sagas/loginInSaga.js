@@ -19,6 +19,7 @@ import {
   INIT_BASE,
   PANEL_AUTH,
   BASE_URL_MID_FIX,
+  BASE_URL_NEW_MID_FIX,
 } from '../../api/Constant';
 import {API_ERROR, CLEAR_API_ERROR, IS_LOADING} from '../actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -43,16 +44,23 @@ import {
 } from '../actions/login.actions';
 
 export function* doAuthenticatePanel(action) {
-  let url = INIT_BASE + PANEL_AUTH;
+  let url = INIT_BASE + BASE_URL_NEW_MID_FIX + PANEL_AUTH;
   try {
     const response = yield WebServiceHandler.postNew(url, {}, action.param);
+
+    console.log(`LOGIN RESPONSE: ${JSON.stringify(response)}`);
+
     yield put({
       type: AUTHENTICATE_PANEL_RESPONSE,
       hasMidFix: false,
       response: response,
     });
   } catch (error) {
-    if (error.status === 404 && !error.url.includes(BASE_URL_MID_FIX)) {
+    // if (error.status === 404 && !error.url.includes(BASE_URL_MID_FIX)) {
+    if (
+      error?.status?.code === 5 &&
+      !error?.status?.url?.includes(BASE_URL_MID_FIX)
+    ) {
       try {
         yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
 
