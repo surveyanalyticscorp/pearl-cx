@@ -820,7 +820,6 @@ export default function CreateTicket(props) {
             opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
           },
         ]}>
-        <GestureHandleBar />
         <ScrollView style={[styles.container]}>
           {/* <View
             style={[styles.rowContainer, {justifyContent: 'space-between'}]}>
@@ -829,6 +828,7 @@ export default function CreateTicket(props) {
             </Text>
             <CloseButton color={Colors.filterIconColor} />
           </View> */}
+          <GestureHandleBar />
           <PageHeaderText
             text={translate('create_new_ticket.create_new_ticket')}
             hasCloseButton
@@ -936,20 +936,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     height: '80%',
-
     borderTopStartRadius: 8,
     borderTopEndRadius: 8,
-    paddingHorizontal: PaddingConstants.tab1,
-    paddingTop:
-      Platform.OS === 'ios' ? PaddingConstants.tab4 : MarginConstants.tab1,
+    paddingHorizontal: 0,
+    paddingTop: Platform.OS === 'ios' ? PaddingConstants.tab4 : 0,
   },
   container: {
     flex: 1,
     backgroundColor: Colors.white,
     borderTopStartRadius: 8,
     borderTopEndRadius: 8,
+    padding: PaddingConstants.halfTab,
 
-    marginTop: MarginConstants.tab1,
+    marginTop: MarginConstants.halfTab,
   },
 
   rowContainer: {
