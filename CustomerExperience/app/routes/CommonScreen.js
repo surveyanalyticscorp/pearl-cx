@@ -405,18 +405,16 @@ export const SearchIcon = props => {
 
 export const SaveDashboardDate = props => {
   return (
-    <View
+    <Pressable
       style={[
         buttonStyles.primaryButton,
         {marginHorizontal: MarginConstants.tab1},
-      ]}>
-      <Pressable
-        onPress={() => {
-          props.saveRange();
-        }}>
-        <Text style={buttonStyles.primaryButtonText}>{`Apply`}</Text>
-      </Pressable>
-    </View>
+      ]}
+      onPress={() => {
+        props.saveRange();
+      }}>
+      <Text style={buttonStyles.primaryButtonText}>{`Apply`}</Text>
+    </Pressable>
   );
 };
 
@@ -966,8 +964,8 @@ const CommonScreens = RootStack => {
     <RootStack.Screen
       key={'Date Range'}
       name={translate('date_filter.date_range')}
-      // component={DateRangeTabStack}
-      component={DashboardDateFilter}
+      component={DateRangeTabStack}
+      // component={DashboardDateFilter}
       options={({navigation, route}) => ({
         headerShown: false,
         // gestureDirection: 'vertical',

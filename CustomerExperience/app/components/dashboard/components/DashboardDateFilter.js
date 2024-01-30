@@ -344,12 +344,12 @@ export default function DashboardDateFilter(props) {
     const navigation = useNavigation();
     return (
       <ScrollView style={styles.scrollContainer}>
-        <BottomSheetHeader
+        {/* <BottomSheetHeader
           title={translate('date_filter.date_range')}
           onPressClose={() => {
             navigation.goBack();
           }}
-        />
+        /> */}
         <View style={styles.container}>
           {renderMonthRow(LAST_30_DAYS)}
           {renderMonthRow(THIS_MONTH)}
@@ -369,11 +369,12 @@ export default function DashboardDateFilter(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* {routeName === translate('date_filter.month')
+      {routeName === translate('date_filter.month')
         ? renderMonthView()
         : renderCustomView()}
-       */}
-      <RenderDateList />
+
+      {/* <RenderDateList /> */}
+      <SaveDashboardDate saveRange={saveRange} />
     </SafeAreaView>
   );
 }
@@ -389,7 +390,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingTop: PaddingConstants.halfTab,
+    paddingVertical: PaddingConstants.halfTab,
     paddingHorizontal: PaddingConstants.tab1,
   },
   dateTitle: {

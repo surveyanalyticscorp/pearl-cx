@@ -69,17 +69,16 @@ import {translate} from '../../../Utils/MultilinguaUtils';
 // import StringUtils from '../../../Utils/StringUtils';
 // import {debounce} from '../../../Utils/TimeOutUtil';
 import {buttonStyles} from '../../../styles/button.styles';
+import {backgroundColor} from '../../../widgets/qp-calendar/style';
 
 const RenderCreateTicketButton = ({handleCreateTicket}) => {
   return (
     <View
       style={{
         flex: 1,
-        flexDirection: 'column-reverse',
         alignItems: 'stretch',
         justifyContent: 'center',
-        marginTop: 2 * MarginConstants.tab4,
-        marginHorizontal: MarginConstants.tab1,
+        margin: MarginConstants.tab1,
       }}>
       <QPButton
         onPress={handleCreateTicket}
@@ -834,89 +833,88 @@ export default function CreateTicket(props) {
             text={translate('create_new_ticket.create_new_ticket')}
             hasCloseButton
           />
-          <View style={{flex: 1}}>
-            <Pressable onPress={handleSegmentSelection}>
-              <View style={[styles.rowContainer, styles.rowItem]}>
-                <SegmentIcon />
 
-                <Text
-                  style={
-                    segment === translate('select_segment.select_segment')
-                      ? styles.palceholderText
-                      : styles.titleText
-                  }>
-                  {segment}
-                </Text>
-              </View>
-            </Pressable>
-            <Pressable onPress={handleDateSelection}>
-              <View style={[styles.rowContainer, styles.rowItem]}>
-                <RenderMaterialIcon iconName={'date-range'} />
-                {/* <TextInput placeholder="Date" style={styles.titleText} /> */}
-                <Text style={styles.titleText}>
-                  {console.log('SELECTED_DATE', selectedDate)}
-                  {moment(selectedDate, DMYFORMAT).format(
-                    FullMonthDateYearFormat,
-                  )}
-                </Text>
-              </View>
-            </Pressable>
-            <RenderCustomerNameInput
-              defaultValue={customerName}
-              setTicketState={setTicketState}
-            />
-            <RenderPhoneInput setTicketState={setTicketState} />
+          <Pressable onPress={handleSegmentSelection}>
+            <View style={[styles.rowContainer, styles.rowItem]}>
+              <SegmentIcon />
 
-            <RenderEmailAddressInput
-              defaultValue={customerEmail}
-              setTicketState={setTicketState}
-            />
-            <Pressable onPress={handlePrioritySelection}>
-              <View style={[styles.rowContainer, styles.rowItem]}>
-                <RenderIonIcon
-                  iconName={'flag'}
-                  iconColor={getPriorityBorderColorbyId(ticketState.priority)}
-                />
+              <Text
+                style={
+                  segment === translate('select_segment.select_segment')
+                    ? styles.palceholderText
+                    : styles.titleText
+                }>
+                {segment}
+              </Text>
+            </View>
+          </Pressable>
+          <Pressable onPress={handleDateSelection}>
+            <View style={[styles.rowContainer, styles.rowItem]}>
+              <RenderMaterialIcon iconName={'date-range'} />
+              {/* <TextInput placeholder="Date" style={styles.titleText} /> */}
+              <Text style={styles.titleText}>
+                {console.log('SELECTED_DATE', selectedDate)}
+                {moment(selectedDate, DMYFORMAT).format(
+                  FullMonthDateYearFormat,
+                )}
+              </Text>
+            </View>
+          </Pressable>
+          <RenderCustomerNameInput
+            defaultValue={customerName}
+            setTicketState={setTicketState}
+          />
+          <RenderPhoneInput setTicketState={setTicketState} />
 
-                <Text style={styles.titleText}>{`${
-                  getPriorityById(ticketState.priority) ?? 'Unassigned'
-                } Priority`}</Text>
-                {/* <TextInput placeholder="Priority" style={styles.titleText} /> */}
-              </View>
-            </Pressable>
-            <Pressable onPress={handleStatusSelection}>
-              <View style={[styles.rowContainer, styles.rowItem]}>
-                {/* {getIonIcon('search')} */}
-                {/* <TextInput placeholder="Status" style={styles.titleText} /> */}
-                <RenderStatusIcon
-                  title={getStatusById(ticketState.status) ?? 'New'}
-                  size={14}
-                />
-                <Text style={styles.titleText}>{`${
-                  getStatusById(ticketState.status) ?? 'New'
-                } Status`}</Text>
-              </View>
-            </Pressable>
-            {/* <View style={[styles.rowContainer, styles.rowItem]}> */}
-            {/* {getIonIcon('eye')} */}
-            {/* {getIonIcon('eye-off')} */}
-            {/* <TextInput placeholder="Watching" style={styles.titleText} /> */}
-            {/* </View> */}
-            <Pressable onPress={handleOwnerSelection}>
-              <View style={[styles.rowContainer, styles.rowItem]}>
-                <RenderMateriaCommunityIcon iconName={'shield-account'} />
-                {/* <TextInput placeholder="Ticket Owner" style={styles.titleText} /> */}
-                <Text
-                  style={
-                    ticketOwner ===
-                    translate('ticket_overview.select_ticket_owner')
-                      ? styles.palceholderText
-                      : styles.titleText
-                  }>{`${ticketOwner ?? ''}`}</Text>
-              </View>
-            </Pressable>
-            <RenderDescriptionInput setTicketState={setTicketState} />
-          </View>
+          <RenderEmailAddressInput
+            defaultValue={customerEmail}
+            setTicketState={setTicketState}
+          />
+          <Pressable onPress={handlePrioritySelection}>
+            <View style={[styles.rowContainer, styles.rowItem]}>
+              <RenderIonIcon
+                iconName={'flag'}
+                iconColor={getPriorityBorderColorbyId(ticketState.priority)}
+              />
+
+              <Text style={styles.titleText}>{`${
+                getPriorityById(ticketState.priority) ?? 'Unassigned'
+              } Priority`}</Text>
+              {/* <TextInput placeholder="Priority" style={styles.titleText} /> */}
+            </View>
+          </Pressable>
+          <Pressable onPress={handleStatusSelection}>
+            <View style={[styles.rowContainer, styles.rowItem]}>
+              {/* {getIonIcon('search')} */}
+              {/* <TextInput placeholder="Status" style={styles.titleText} /> */}
+              <RenderStatusIcon
+                title={getStatusById(ticketState.status) ?? 'New'}
+                size={14}
+              />
+              <Text style={styles.titleText}>{`${
+                getStatusById(ticketState.status) ?? 'New'
+              } Status`}</Text>
+            </View>
+          </Pressable>
+          {/* <View style={[styles.rowContainer, styles.rowItem]}> */}
+          {/* {getIonIcon('eye')} */}
+          {/* {getIonIcon('eye-off')} */}
+          {/* <TextInput placeholder="Watching" style={styles.titleText} /> */}
+          {/* </View> */}
+          <Pressable onPress={handleOwnerSelection}>
+            <View style={[styles.rowContainer, styles.rowItem]}>
+              <RenderMateriaCommunityIcon iconName={'shield-account'} />
+              {/* <TextInput placeholder="Ticket Owner" style={styles.titleText} /> */}
+              <Text
+                style={
+                  ticketOwner ===
+                  translate('ticket_overview.select_ticket_owner')
+                    ? styles.palceholderText
+                    : styles.titleText
+                }>{`${ticketOwner ?? ''}`}</Text>
+            </View>
+          </Pressable>
+          <RenderDescriptionInput setTicketState={setTicketState} />
           <CreateTicketButton
             onPress={handleCreateTicket}
             showLoading={showLoading}
@@ -936,7 +934,9 @@ export default function CreateTicket(props) {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: Colors.white,
+    justifyContent: 'flex-end',
+    height: '80%',
+
     borderTopStartRadius: 8,
     borderTopEndRadius: 8,
     paddingHorizontal: PaddingConstants.tab1,

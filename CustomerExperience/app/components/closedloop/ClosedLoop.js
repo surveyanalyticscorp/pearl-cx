@@ -233,7 +233,7 @@ export default function ClosedLoop(props) {
 
   useEffect(() => {
     makeAPICall();
-  }, [filterState]);
+  }, [filterState, range]);
 
   useEffect(() => {
     resetFilterState(range);
