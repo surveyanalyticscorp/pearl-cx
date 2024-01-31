@@ -4,11 +4,16 @@ import {Provider} from 'react-redux';
 import FlashMessage from 'react-native-flash-message';
 import SplashScreen from './components/login/SplashScreen';
 import {NetworkMonitor} from 'react-native-redux-connectivity';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import {enableScreens} from 'react-native-screens';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as globalVariables from '../app/styles/globalStyleVariables';
 import {View, Platform, StatusBar} from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+
 // import codePush from 'react-native-code-push';
 
 // import Siren from 'react-native-siren';
@@ -19,6 +24,23 @@ const defaultOptions = {
   title: 'Questionpro CX has a new update!',
   forceUpgrade: false,
   message: 'Do you want to update the app?',
+};
+
+const CustomFlashMessage = () => {
+  const insets = useSafeAreaInsets();
+  return (
+    <FlashMessage
+      style={{borderRadius: 4, justifyContent: 'center'}}
+      animated
+      position={{
+        // top: DeviceInfo.hasDynamicIsland() ? (DeviceInfo.hasNotch() ? 59 : ) : 0,
+        top: insets.top,
+        left: 8,
+        right: 8,
+        // bottom: 0,
+      }}
+    />
+  );
 };
 
 class CxApp extends Component {
@@ -49,10 +71,7 @@ class CxApp extends Component {
         <SafeAreaProvider>
           <StatusBar barStyle={'light-content'} />
           {this.state.styleBuilt ? <SplashScreen /> : <View />}
-          <FlashMessage
-          // style={{borderRadius: 4}}
-          // position={{top: 16, left: 16, right: 16}}
-          />
+          <CustomFlashMessage />
         </SafeAreaProvider>
       </Provider>
     );
