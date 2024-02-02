@@ -56,33 +56,11 @@ export function* doAuthenticatePanel(action) {
       response: response,
     });
   } catch (error) {
-    // if (error.status === 404 && !error.url.includes(BASE_URL_MID_FIX)) {
-    if (
-      error?.status?.code === 5 &&
-      !error?.status?.url?.includes(BASE_URL_MID_FIX)
-    ) {
-      try {
-        yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
-
-        const response = yield WebServiceHandler.postNew(
-          INIT_BASE + BASE_URL_MID_FIX + PANEL_AUTH,
-          {},
-          action.param,
-        );
-
-        yield put({
-          type: AUTHENTICATE_PANEL_RESPONSE,
-          hasMidFix: true,
-          response: response,
-        });
-      } catch (error_) {
-        console.log('Error: inner catch block', JSON.stringify(error));
-        yield put({type: API_ERROR, error: error_});
-      }
-    } else {
-      console.log('Error: first catch block', JSON.stringify(error));
-      yield put({type: API_ERROR, error: error});
-    }
+    showErrorFlashMessage(error.errorAlert);
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
   }
 }
 

@@ -33,7 +33,7 @@ export const CLF_BASE_URL = `https://${
 }-backend.questionpro.com/api`;
 
 export const INIT_BASE = 'https://api.questionpro.com';
-export const BASE_URL_MID_FIX = '/a/nativehtml';
+// export const BASE_URL_MID_FIX = '/a/nativehtml';
 export const BASE_URL_NEW_MID_FIX = '/a/api/nativehtml';
 
 export const PANEL_AUTH = '/panel.auth.PanelRequestHandler';

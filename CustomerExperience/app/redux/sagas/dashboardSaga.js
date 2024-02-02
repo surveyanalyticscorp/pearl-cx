@@ -116,58 +116,11 @@ export function* fetchDataCount(action) {
       clfResponse: clf_response,
     });
   } catch (error) {
-    console.log('mobileAccessToken in SAGA: ', JSON.stringify(error));
-    if (error.status === 404 && !error.url.includes(BASE_URL_MID_FIX)) {
-      try {
-        yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
-
-        const clf_response = yield WebServiceHandler.get(
-          getClfUrl(CLF_WELCOME_SCREEN_COUNTS),
-          getBearerTokenStatic(),
-          // {'Auth-Token': action.token},
-          action.param,
-        );
-
-        const cx_response = yield WebServiceHandler.postNew(
-          BASE_URL_MID_FIX + CX_WELCOME_SCREEN_DATA,
-          {'Auth-Token': action.token},
-          {},
-        );
-
-        console.log(
-          'WELCOME_SCREEN_DATA_COUNT, clf response',
-          JSON.stringify(clf_response),
-        );
-
-        console.log(
-          'WELCOME_SCREEN_DATA_COUNT, cx response',
-          JSON.stringify(cx_response),
-        );
-
-        yield put({
-          type: SET_BASE_URL,
-          baseUrl: global.baseUrl + BASE_URL_MID_FIX,
-        });
-
-        yield put({
-          type: WELCOME_SCREEN_DATA_RECIEVED,
-          cxResponse: cx_response,
-          clfResponse: clf_response,
-        });
-      } catch (error_) {
-        console.log('Error: inner catch block', JSON.stringify(error));
-        yield put({type: API_ERROR, error: error_});
-      }
-    } else {
-      console.log('Error: first catch block', JSON.stringify(error));
-      yield put({type: API_ERROR, error: error});
-    }
-
-    // showErrorFlashMessage(error.errorAlert);
-    // yield put({
-    //   type: API_ERROR,
-    //   error: error,
-    // });
+    showErrorFlashMessage(error.errorAlert);
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
   } finally {
     yield put({type: IS_LOADING, payload: {isLoading: false}});
   }

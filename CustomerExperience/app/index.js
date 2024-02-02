@@ -30,13 +30,13 @@ const CustomFlashMessage = () => {
   const insets = useSafeAreaInsets();
   return (
     <FlashMessage
-      style={{borderRadius: 4}}
+      // style={{borderRadius: 4}}
       animated
       position={{
         // top: DeviceInfo.hasDynamicIsland() ? (DeviceInfo.hasNotch() ? 59 : ) : 0,
         top: insets.top,
-        left: 8,
-        right: 8,
+        // left: 0,
+        // right: 0,
         // bottom: 0,
       }}
     />

@@ -77,7 +77,7 @@ const globalReducer = (state = initialState, action) => {
         ...state,
         baseUrl:
           (IS_DEV_MODE ? DEV_BASE_URL : action.response.body.mobileAPIURL) +
-          (action.hasMidFix ? BASE_URL_MID_FIX : BASE_URL_NEW_MID_FIX),
+          BASE_URL_NEW_MID_FIX,
         subscriberId: JSON.stringify(action.response.body.userID),
         dataCenter: action.response.body.dataCenter,
         accessCode: action.response.body.accessCode,
