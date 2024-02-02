@@ -16,12 +16,17 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {ListItemSeparator} from '../../../routes/CommonScreen';
+import {ApplyButton, ListItemSeparator} from '../../../routes/CommonScreen';
+import {baseTextStyles} from '../../../styles/text.styles';
 
-const SelectPriority = props => {
-  const [data, setData] = useState(props.data);
-  const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
+const SelectPriority = ({data, selectedIndex, handleOnPress}) => {
+  const [currentIndex, setIndex] = useState(selectedIndex);
+  const [currentItem, setItem] = useState(data[selectedIndex]);
+  // const [selectedIndex, setSelectedIndex] = useState(selectedIndex);
 
+  const onApplyPress = () => {
+    handleOnPress(currentItem, currentIndex);
+  };
   const renderRow = ({item, index}) => {
     const borderColor = getPriorityBorderColor(item.title.toLowerCase());
     const backgroundColor = getPriorityFillerColor(item.title.toLowerCase());
@@ -30,8 +35,10 @@ const SelectPriority = props => {
       <TouchableWithoutFeedback
         onPress={
           () => {
-            props.handleOnPress(item, index);
-            setSelectedIndex(index);
+            setIndex(index);
+            setItem(item);
+            // handleOnPress(item, index);
+            // setSelectedIndex(index);
           }
           // handleOnPress(item)
         }>
@@ -43,7 +50,7 @@ const SelectPriority = props => {
             color={borderColor}
           />
           <Text style={styles.title}>{item.title}</Text>
-          {selectedIndex === index ? (
+          {currentIndex === index ? (
             <IonIcon
               style={{marginHorizontal: MarginConstants.halfTab}}
               name={'checkmark'}
@@ -61,11 +68,11 @@ const SelectPriority = props => {
   return (
     <View style={styles.container}>
       <FlatList
-        style={styles.flatList}
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
         ItemSeparatorComponent={ListItemSeparator}
+        ListFooterComponent={<ApplyButton onPress={onApplyPress} />}
       />
     </View>
   );
@@ -81,14 +88,13 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    margin: MarginConstants.tab1,
+    marginVertical: MarginConstants.tab1,
 
-    padding: MarginConstants.tab1,
+    paddingVertical: MarginConstants.tab1,
   },
   title: {
     flex: 1,
-    fontFamily: FontFamily.medium,
-    fontSize: TextSizes.secondary,
+    ...baseTextStyles.primaryRegularText,
     marginStart: MarginConstants.halfTab,
     color: Colors.filterIconColor,
   },

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
-import {ListItemSeparator} from '../../../routes/CommonScreen';
+import {ApplyButton, ListItemSeparator} from '../../../routes/CommonScreen';
 import {
   Colors,
   // getStatusBorderColor,
@@ -29,6 +29,11 @@ const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
   const [currentIndex, setIndex] = useState(selectedIndex);
   const [currentItem, setItem] = useState(data[selectedIndex]);
   // const [selectedIndex, setSelectedIndex] = useState();
+
+  const onApplyPress = () => {
+    handleOnPress(currentItem, currentIndex);
+  };
+
   const renderRow = ({item, index}) => {
     return (
       <StatusItem
@@ -52,19 +57,7 @@ const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
         ItemSeparatorComponent={statusListItemSeparator}
-        ListFooterComponent={
-          <QPButton
-            buttonColor={Colors.accentLight}
-            testID="ApplyButton"
-            style={[
-              buttonStyles.primaryButton,
-              {marginVertical: MarginConstants.tab2},
-            ]}
-            onPress={() => handleOnPress(currentItem, currentIndex)}
-            buttonText={'Apply'}
-            textStyle={buttonStyles.primaryButtonText}
-          />
-        }
+        ListFooterComponent={<ApplyButton onPress={onApplyPress} />}
       />
     </View>
   );

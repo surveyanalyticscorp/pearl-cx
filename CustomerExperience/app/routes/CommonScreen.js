@@ -60,6 +60,7 @@ import {backgroundColor} from '../widgets/qp-calendar/style';
 import StringUtils from '../Utils/StringUtils';
 import {color} from 'react-native-reanimated';
 import ClosedLoopStack from './ClosedLoopStack';
+import QPButton from '../widgets/Button';
 // import CheckBox from '@react-native-community/checkbox';
 
 const DateRangeTab = createMaterialTopTabNavigator();
@@ -470,6 +471,16 @@ export const NoItemsFound = ({children}) => {
   );
 };
 
+export const ApplyButton = ({onPress}) => (
+  <QPButton
+    buttonColor={Colors.accentLight}
+    testID="ApplyButton"
+    style={[buttonStyles.primaryButton, {marginVertical: MarginConstants.tab2}]}
+    onPress={onPress}
+    buttonText={'Apply'}
+    textStyle={buttonStyles.primaryButtonText}
+  />
+);
 export const RenderSpinner = () => {
   return (
     <View style={dashboardStyles.loading}>
