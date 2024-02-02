@@ -948,7 +948,7 @@ const styles = StyleSheet.create({
   ticketStatusContainer: {
     backgroundColor: Colors.white,
     margin: MarginConstants.tab1,
-    padding: PaddingConstants.tab2,
+    padding: PaddingConstants.tab1,
     borderRadius: 4,
   },
   rowContainer: {
