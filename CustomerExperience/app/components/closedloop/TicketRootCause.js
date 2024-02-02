@@ -53,7 +53,12 @@ const RenderRootCauseItem = ({onClickCheckBox, title, data}) => {
   );
 };
 
-const RenderSegmentItems = ({onClickRadioButton, title, currentSelected}) => {
+const RenderSegmentItems = ({
+  onClickRadioButton,
+  title,
+  currentSelected,
+  isCurrentSegment = true,
+}) => {
   const segments = useSelector(
     state => state.dashboard.segmentDetails.segments,
   );
@@ -70,7 +75,10 @@ const RenderSegmentItems = ({onClickRadioButton, title, currentSelected}) => {
   return (
     <FlatList
       ListHeaderComponent={<Text style={styles.titleText}>{title}</Text>}
-      style={{marginVertical: MarginConstants.tab2}}
+      style={{
+        marginVertical: MarginConstants.tab2,
+        opacity: isCurrentSegment ? 1 : 0.6,
+      }}
       nestedScrollEnabled={true}
       data={segmentList}
       keyExtractor={(item, index) => item.id.toString()}
@@ -81,7 +89,9 @@ const RenderSegmentItems = ({onClickRadioButton, title, currentSelected}) => {
           textStyle={textStyles.optionText}
           item={item}
           index={index}
-          onPress={() => onClickRadioButton(title, item, index)}
+          onPress={() =>
+            isCurrentSegment ? onClickRadioButton(title, item, index) : () => {}
+          }
         />
       )}
     />
@@ -228,6 +238,7 @@ export default function TicketRootCause(props) {
           title={ORIGIN_SEGMENTS}
           onClickRadioButton={onClickRadioButton}
           currentSelected={originSegmentId}
+          isCurrentSegment={false}
         />
         <RenderSegmentItems
           title={CURRENT_SEGMENTS}
