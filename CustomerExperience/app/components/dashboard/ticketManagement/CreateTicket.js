@@ -812,7 +812,9 @@ export default function CreateTicket(props) {
   );
 
   return (
-    <View style={styles.rootContainer}>
+    <View
+      forceInset={{bottom: 'never', top: 'never'}}
+      style={styles.rootContainer}>
       <Animated.View
         style={[
           styles.container,
@@ -926,7 +928,7 @@ export default function CreateTicket(props) {
       <RenderSegmentBottomSheet />
       <RenderOwnerBottomSheet />
       {/* <RenderCalenderBottomSheet /> */}
-      {showCalendar && renderCalendarViewOnModal()}
+      {showCalendar ? renderCalendarViewOnModal() : <View />}
     </View>
   );
 }
@@ -934,7 +936,7 @@ export default function CreateTicket(props) {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
+
     height: '80%',
     borderTopStartRadius: 8,
     borderTopEndRadius: 8,
@@ -996,7 +998,11 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 2,
   },
-  contentContainer: {backgroundColor: Colors.white, height: '100%'},
+  contentContainer: {
+    backgroundColor: Colors.white,
+    height: '100%',
+    paddingHorizontal: 24,
+  },
 
   phoneInputContainer: {height: MarginConstants.tab4},
   phoneInputCodeText: {

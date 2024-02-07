@@ -708,9 +708,12 @@ const CxDashboard = props => {
 
   let RenderDashboard = () => {
     return (
-      <SafeAreaView
+      <View
         forceInset={{bottom: 'never', top: 'never'}}
-        style={dashboardStyles.container}>
+        style={[
+          dashboardStyles.container,
+          {paddingBottom: MarginConstants.tab1},
+        ]}>
         {/* <StatusBar barStyle={'light-content'} /> */}
         {/* <FilterHeader
           actionOnArrowClick={() => {
@@ -722,6 +725,7 @@ const CxDashboard = props => {
         <Animated.View
           style={[
             dashboardStyles.container,
+
             {
               opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
             },
@@ -745,13 +749,14 @@ const CxDashboard = props => {
           </ScrollView>
         </Animated.View>
         <FabAddButton onPress={onFabPressHandler} />
+
         <StatusDashboardBottomSheet
           ref={statusBottomSheetRef}
           snapPoints={statusBottomSheetSnapPoints}
           fall={fall}
           ticketCount={props.ticketCount}
         />
-      </SafeAreaView>
+      </View>
     );
   };
 

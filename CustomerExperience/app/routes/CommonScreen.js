@@ -9,6 +9,7 @@ import {
   BackHandler,
   TextInput,
   Keyboard,
+  Platform,
 } from 'react-native';
 import FeedbackDetails from '../components/feedback/FeedbackDetails';
 import {
@@ -74,7 +75,7 @@ export const FabAddButton = props => {
   let fabStyle = StyleSheet.create({
     fabContainer: {
       position: 'absolute',
-      bottom: 24,
+      bottom: Platform.OS === 'ios' ? 36 : 24,
       right: 24,
       width: size,
       height: size,

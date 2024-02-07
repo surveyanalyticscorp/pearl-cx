@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors, textColors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
@@ -14,6 +14,10 @@ export const dashboardStyles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  containerIOS: {
+    flex: 1,
+    marginBottom: Platform.OS === 'ios' ? MarginConstants.tab4 : 0,
   },
   scrollView: {
     flexGrow: 1,

@@ -20,7 +20,7 @@ const SegmentText = ({screenName, segmentName}) => {
   // }`;
 
   return (
-    <View style={styles.container}>
+    <View style={{width: '100%', flexDirection: 'column'}}>
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.appbarTitle}>
         {screenName}
       </Text>
@@ -78,22 +78,17 @@ const SegmentSelector = props => {
   // return <SegmentText segmentName={currentSegment.currentSegment} />;
 
   return segmentList && segmentList.length > 1 ? (
-    <View style={styles.container}>
-      <Pressable onPress={onPressHandle}>
-        <View style={styles.innerContainer}>
-          <SegmentText
-            screenName={props.screenName}
-            segmentName={currentSegment.currentSegment ?? ''}
-          />
-          <SimpleLineIcon
-            name={'arrow-down'}
-            size={15}
-            color={Colors.darkGrey}
-          />
-        </View>
-      </Pressable>
-    </View>
+    // <View style={styles.container}>
+    <Pressable style={styles.innerContainer} onPress={onPressHandle}>
+      <SegmentText
+        screenName={props.screenName}
+        segmentName={currentSegment.currentSegment ?? ''}
+      />
+
+      <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.darkGrey} />
+    </Pressable>
   ) : (
+    // </View>
     <SegmentText
       screenName={props.screenName}
       segmentName={currentSegment.currentSegment}
@@ -104,7 +99,6 @@ const SegmentSelector = props => {
 const styles = StyleSheet.create({
   container: {flex: 1},
   appbarTitle: {
-    flex: 1,
     fontSize: TextSizes.primary,
     color: Colors.white,
     marginEnd: MarginConstants.tab3,
@@ -117,10 +111,12 @@ const styles = StyleSheet.create({
   },
 
   innerContainer: {
-    alignContent: 'center',
+    flex: 1,
+    width: Platform.OS === 'ios' ? '100%' : '96%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+
+    justifyContent: 'space-between',
   },
 });
 
