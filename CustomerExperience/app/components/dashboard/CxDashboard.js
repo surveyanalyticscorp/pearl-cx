@@ -228,11 +228,11 @@ function RenderDonutInfoContainer({responseCount, surveyCount}) {
           justifyContent: 'space-around',
         },
       ]}>
-      <RenderDonutInformation
+      {/* <RenderDonutInformation
         icon={surveyIcon}
         title={translate('dashboard.surveys')}
         count={surveyCount}
-      />
+      /> */}
       <RenderDonutInformation
         icon={responseIcon}
         title={translate('dashboard.responses')}
