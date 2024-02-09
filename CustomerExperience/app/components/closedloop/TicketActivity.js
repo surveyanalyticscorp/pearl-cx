@@ -346,8 +346,7 @@ const styles = StyleSheet.create({
   date: {
     flex: 1,
     color: Colors.evenDarkerGrey,
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.mediumText,
+    ...baseTextStyles.secondaryRegularText,
     marginStart: MarginConstants.halfTab,
     textAlign: 'right',
   },

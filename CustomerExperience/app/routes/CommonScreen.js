@@ -294,9 +294,9 @@ export const RenderStatusIcon = ({size, title, style}) => {
   return <View style={statusStyle} />;
 };
 
-export const StatusUI = ({status}) => {
+export const StatusUI = ({style, status}) => {
   return (
-    <View style={styles.statusContainer}>
+    <View style={[styles.statusContainer, {...style}]}>
       <RenderStatusIcon size={16} title={getStatusById(status)} />
 
       {/* <StatusIcon borderColor={borderColor} fillerColor={fillerColor} /> */}
@@ -329,11 +329,11 @@ export const RenderPriorityIcon = props => {
   );
 };
 
-export const PriorityUI = ({priority}) => {
+export const PriorityUI = ({style, priority}) => {
   const priorityColor = getPriorityBorderColorbyId(priority);
   const priorityText = getPriorityById(priority);
   return (
-    <View style={styles.statusContainer}>
+    <View style={[styles.statusContainer, {...style}]}>
       <IonIcons name="flag" size={20} color={priorityColor} />
       <Text style={styles.statusText}>{priorityText}</Text>
     </View>
@@ -1079,6 +1079,7 @@ const styles = StyleSheet.create({
   statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: PaddingConstants.tab1,
     paddingVertical: PaddingConstants.halfTab,
   },
