@@ -12,7 +12,10 @@ import {
   Image,
 } from 'react-native';
 import {showLoading} from '../../redux/actions/index';
-import {getDashboardContent} from '../../redux/actions/dashboard.actions';
+import {
+  getDashboardContent,
+  toggleCsatView,
+} from '../../redux/actions/dashboard.actions';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
@@ -52,6 +55,7 @@ import {StatusDashboardBottomSheet} from './ClosedLoopDashboard';
 import SelectStatus from '../closedloop/takeaction/SelectStatus';
 import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
 import {useNavigation} from '@react-navigation/core';
+import {PaddingConstants} from '../../styles/padding.constants';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -217,6 +221,7 @@ function RenderDonutInformation({icon, title, count}) {
 }
 
 function RenderDonutInfoContainer() {
+  const dispatch = useDispatch();
   const responses = useSelector(
     state => state.currentNPSData?.NPSScore?.totalResponses,
   );
@@ -224,28 +229,46 @@ function RenderDonutInfoContainer() {
     state => state.dashboard.dashboardData.surveyCount,
   );
   const responseCount = getTrimmedNoOfResponses(responses);
-
+  const {isCsatViewTopBox} = useSelector(state => state.dashboard);
   const responseIcon = require('./../../../assets/images/total_responses_icon.png');
   const surveyIcon = require('./../../../assets/images/surveys_icon.png');
 
+  const toggleView = () => {
+    dispatch(toggleCsatView(!isCsatViewTopBox));
+  };
   return (
     <View
       style={[
         {
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'space-around',
+          justifyContent: 'space-between',
+          paddingHorizontal: PaddingConstants.tab2,
         },
       ]}>
-      <RenderDonutInformation
+      {/* <RenderDonutInformation
         icon={surveyIcon}
         title={translate('dashboard.surveys')}
         count={surveyCount}
-      />
+      /> */}
       <RenderDonutInformation
         icon={responseIcon}
         title={translate('dashboard.responses')}
         count={responseCount}
+      />
+      <QPButton
+        testID="ViewTicketsButton"
+        style={[
+          buttonStyles.outlinePrimaryButtonMedium,
+          {
+            backgroundColor: Colors.white,
+            width: 2.4 * MarginConstants.tab4,
+          },
+        ]}
+        buttonColor={Colors.white}
+        onPress={toggleView}
+        buttonText={isCsatViewTopBox ? 'Mean CSAT' : 'Top Box'}
+        textStyle={buttonStyles.outlinePrimaryButtonMediumText}
       />
     </View>
   );
@@ -419,75 +442,60 @@ const ImageLabel = ({x, y, datum}) => {
         width: 20,
         height: 20,
         position: 'absolute',
-        left: x - 5,
+        bottom: 0,
+        left: x - 8,
+        right: 0,
         top: y - 30,
       }}
     />
   );
 };
 
-const RenderDonutChart = () => {
-  const data = useSelector(state => state.dashboard.currentNPSData.NPSScore);
-  let responseCount = getTrimmedNoOfResponses(data?.totalResponses ?? 0);
-  let victoryPieData = [
+const getCsatData = score => {
+  const positive = score;
+  const negative = 100 - score;
+
+  return [
     {
-      y: 40,
-      x: 'promoter',
+      y: positive,
+      x: 'positive',
       imageSource: require('../../../assets/images/promoter.png'),
     },
     {
-      y: 20,
-      x: 'passive',
-      imageSource: require('../../../assets/images/passive.png'),
-    },
-    {
-      y: 40,
-      x: 'detractor',
+      y: 1,
+      x: 'negative',
       imageSource: require('../../../assets/images/detractor.png'),
     },
-  ];
-  // let victoryPieData =
-  //   responseCount !== 0
-  //     ? [
-  //         {
-  //           y: data.promoterFormattedPercent,
-  //           x: '',
-  //         },
-  //         {
-  //           y: data.passiveFormattedPercent,
-  //           x: '',
-  //         },
-  //         {
-  //           y: data.detractorFormattedPercent,
-  //           x: '',
-  //         },
-  //       ]
-  //     : [
-  //         {y: 100, x: ''}, //for empty nps chart
-  //       ];
-  let victoryPieColorScale = [
-    Colors.promoter2,
-    Colors.passive2,
-    Colors.detractor2,
-  ];
-  // let victoryPieColorScale =
-  //   responseCount !== 0
-  //     ? [Colors.promoter2, Colors.passive2, Colors.detractor2]
-  //     : [Colors.darkGrey];
 
+    // {
+    //   y: 40,
+    //   x: 'passive',
+    //   imageSource: require('../../../assets/images/passive.png'),
+    // },
+  ];
+};
+
+const RenderDonutChart = () => {
+  const {csatScore, csatMeanAverage} = useSelector(
+    state => state.dashboard.currentNPSData.NPSScore,
+  );
+  const {isCsatViewTopBox} = useSelector(state => state.dashboard);
+
+  let victoryPieColorScale = [Colors.promoter2, Colors.detractor2];
+
+  console.log('DASHBOARD_SEGMENT', JSON.stringify(csatScore, csatMeanAverage));
   return (
     <View
       style={{
         alignItems: 'center',
         justifyContent: 'center',
-
+        flexDirection: 'column',
         top: MarginConstants.tab4,
       }}>
       <VictoryPie
-        data={victoryPieData}
+        data={getCsatData(csatScore)}
         height={5 * MarginConstants.tab4}
-        width={6 * MarginConstants.tab4}
-        labelPlacement={'vertical'}
+        width={5 * MarginConstants.tab4}
         innerRadius={2.4 * MarginConstants.tab4}
         radius={2.0 * MarginConstants.tab4}
         labelComponent={<ImageLabel />}
@@ -495,11 +503,38 @@ const RenderDonutChart = () => {
           labels: {
             fill: 'black',
           },
+          alignSelf: true,
         }}
         colorScale={victoryPieColorScale}
         endAngle={-90}
         startAngle={90}
       />
+      <Text
+        style={[
+          baseTextStyles.donutPercentRegularText,
+          {
+            position: 'absolute',
+            alignItems: 'center',
+            alignSelf: 'center',
+            top: 0.9 * MarginConstants.tab4,
+            color: Colors.filterIconColor,
+          },
+        ]}>
+        {isCsatViewTopBox ? `${csatScore}%` : `${csatMeanAverage}`}
+      </Text>
+      <Text
+        style={[
+          baseTextStyles.largeRegularText,
+          {
+            position: 'absolute',
+            alignItems: 'center',
+            alignSelf: 'center',
+            top: 1.9 * MarginConstants.tab4,
+            color: Colors.filterIconColor,
+          },
+        ]}>
+        {isCsatViewTopBox ? 'Top Box' : 'Mean CSAT'}
+      </Text>
     </View>
   );
 };
