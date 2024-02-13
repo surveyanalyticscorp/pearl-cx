@@ -16,7 +16,7 @@ export const TOKEN_VALIDATION_DURATION = 6;
 
 export const MAX_COMMENT_LENGTH = 240;
 // set true for DEV, false for LIVE
-export const IS_DEV_MODE = true;
+export const IS_DEV_MODE = false;
 
 // export const BASE_URL = 'https://api.questionpro.com/';
 

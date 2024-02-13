@@ -206,7 +206,7 @@ export const dashboardStyles = StyleSheet.create({
       ? MarginConstants.tab4 * 10
       : MarginConstants.tab4 * 8,
     flexDirection: 'column',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     marginTop: MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab2,
     borderRadius: 5,
@@ -214,6 +214,7 @@ export const dashboardStyles = StyleSheet.create({
   donut: {
     marginTop: MarginConstants.tab1,
     paddingHorizontal: PaddingConstants.tab2,
+    backgroundColor: Colors.accent,
   },
   donutInfoContainer: {
     marginVertical: MarginConstants.tab1,
