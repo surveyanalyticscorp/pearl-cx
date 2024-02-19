@@ -262,4 +262,11 @@ export default class StringUtils {
   static getStringFromNumber(number) {
     return number.toString();
   }
+
+  static floatTo2DecimalPointString(number) {
+    if (number % 1 === 0) {
+      return number;
+    }
+    return parseFloat(number).toFixed(2);
+  }
 }

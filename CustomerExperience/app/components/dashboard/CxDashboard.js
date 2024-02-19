@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   Pressable,
   Image,
+  StyleSheet,
 } from 'react-native';
 import {showLoading} from '../../redux/actions/index';
 import {
@@ -223,7 +224,7 @@ function RenderDonutInformation({icon, title, count}) {
 function RenderDonutInfoContainer() {
   const dispatch = useDispatch();
   const responses = useSelector(
-    state => state.currentNPSData?.NPSScore?.totalResponses,
+    state => state.dashboard.currentNPSData?.NPSScore?.totalResponses,
   );
   const surveyCount = useSelector(
     state => state.dashboard.dashboardData.surveyCount,
@@ -432,56 +433,82 @@ let RenderDashboardContent = props => {
   return <View style={dashboardStyles.container} />;
 };
 
-const ImageLabel = ({x, y, datum}) => {
+const ImageLabel = props => {
+  const {x, y, index, datum} = props;
+  console.log('VICTORY_PIE', JSON.stringify(props));
+
+  const style_ = StyleSheet.create({
+    imageLabel: {
+      width: 20,
+      height: 20,
+      position: 'absolute',
+      left: x - 5,
+      top: y - 20,
+    },
+  });
+
   return datum.y === 0 ? (
     <View />
   ) : (
-    <Image
-      source={datum.imageSource}
-      style={{
-        width: 20,
-        height: 20,
-        position: 'absolute',
-        bottom: 0,
-        left: x - 8,
-        right: 0,
-        top: y - 30,
-      }}
-    />
+    <Image source={datum.imageSource} style={style_.imageLabel} />
   );
 };
 
-const getCsatData = score => {
-  const positive = score;
-  const negative = 100 - score;
+const getCsatData = (positive, neutral, negative) => {
+  // const data = [
+  //   {a: 1, b: 2, c: 97},
+  //   {a: 45, b: 45, c: 10},
+  //   {a: 55, b: 0, c: 45},
+  //   {a: 25, b: 75, c: 10},
+  //   {a: 40, b: 60, c: 10},
+  //   {a: 50, b: 50, c: 0},
+  //   {a: 50, b: 0, c: 50},
+  //   {a: 10, b: 30, c: 60},
+  //   {a: 82, b: 18, c: 10},
+  //   {a: 95, b: 5, c: 10},
+  //   {a: 0, b: 100, c: 10},
+  // ];
+  // const chartData = data[1];
+  // const positive = chartData.a;
+  // const negative = chartData.c;
+  // const neutral = chartData.b;
+  // const positive = score;
+  // const negative = 100 - score;
 
   return [
     {
-      y: positive,
+      y: StringUtils.floatTo2DecimalPointString(positive),
       x: 'positive',
-      imageSource: require('../../../assets/images/promoter.png'),
+      imageSource: require('../../../assets/images/csat_positive.png'),
     },
     {
-      y: 1,
-      x: 'negative',
-      imageSource: require('../../../assets/images/detractor.png'),
+      y: StringUtils.floatTo2DecimalPointString(neutral),
+      x: 'passive',
+      imageSource: require('../../../assets/images/csat_neutral.png'),
     },
-
-    // {
-    //   y: 40,
-    //   x: 'passive',
-    //   imageSource: require('../../../assets/images/passive.png'),
-    // },
+    {
+      y: StringUtils.floatTo2DecimalPointString(negative),
+      x: 'negative',
+      imageSource: require('../../../assets/images/csat_negative.png'),
+    },
   ];
 };
 
 const RenderDonutChart = () => {
-  const {csatScore, csatMeanAverage} = useSelector(
-    state => state.dashboard.currentNPSData.NPSScore,
-  );
+  const {
+    promoterPercent,
+    passivePercent,
+    detractorPercent,
+    csatScore,
+    csatMeanAverage,
+  } = useSelector(state => state.dashboard.currentNPSData.NPSScore);
   const {isCsatViewTopBox} = useSelector(state => state.dashboard);
 
-  let victoryPieColorScale = [Colors.promoter2, Colors.detractor2];
+  let victoryPieColorScale = [
+    Colors.promoter2,
+    Colors.passive2,
+    Colors.detractor2,
+  ];
 
   console.log('DASHBOARD_SEGMENT', JSON.stringify(csatScore, csatMeanAverage));
   return (
@@ -493,7 +520,7 @@ const RenderDonutChart = () => {
         top: MarginConstants.tab4,
       }}>
       <VictoryPie
-        data={getCsatData(csatScore)}
+        data={getCsatData(promoterPercent, passivePercent, detractorPercent)}
         height={5 * MarginConstants.tab4}
         width={5 * MarginConstants.tab4}
         innerRadius={2.4 * MarginConstants.tab4}
@@ -520,7 +547,9 @@ const RenderDonutChart = () => {
             color: Colors.filterIconColor,
           },
         ]}>
-        {isCsatViewTopBox ? `${csatScore}%` : `${csatMeanAverage}`}
+        {isCsatViewTopBox
+          ? `${StringUtils.floatTo2DecimalPointString(csatScore)}%`
+          : `${StringUtils.floatTo2DecimalPointString(csatMeanAverage)}`}
       </Text>
       <Text
         style={[
@@ -718,7 +747,7 @@ const CxDashboard = props => {
             backgroundColor: Colors.white,
             marginHorizontal: MarginConstants.tab2,
           }}>
-          <RenderDonutInfoContainer responseCount={responseCount} />
+          <RenderDonutInfoContainer />
           {/* <RenderDetailsInformation {...props} /> */}
         </View>
 
