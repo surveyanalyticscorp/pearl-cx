@@ -221,8 +221,73 @@ function RenderDonutInformation({icon, title, count}) {
   );
 }
 
-function RenderDonutInfoContainer() {
+const CSATChart = () => {
+  const {promoterPercent, passivePercent, detractorPercent} = useSelector(
+    state => state.dashboard.currentNPSData.NPSScore,
+  );
+
+  let victoryPieColorScale = [
+    Colors.promoter2,
+    Colors.passive2,
+    Colors.detractor2,
+  ];
+
+  return (
+    <VictoryPie
+      data={getCsatData(promoterPercent, passivePercent, detractorPercent)}
+      height={5 * MarginConstants.tab4}
+      width={5 * MarginConstants.tab4}
+      innerRadius={2.4 * MarginConstants.tab4}
+      radius={2.0 * MarginConstants.tab4}
+      labelRadius={2.9 * MarginConstants.tab4}
+      labelComponent={<ImageLabel />}
+      padAngle={2}
+      colorScale={victoryPieColorScale}
+      endAngle={-90}
+      startAngle={90}
+    />
+  );
+};
+
+const CSATScoreLabel = () => {
+  const {csatScore, csatMeanAverage} = useSelector(
+    state => state.dashboard.currentNPSData.NPSScore,
+  );
+  const {isCsatViewTopBox} = useSelector(state => state.dashboard);
+
+  return (
+    <Text style={dashboardStyles.csatScoreLabel}>
+      {isCsatViewTopBox
+        ? `${StringUtils.floatTo2DecimalPointString(csatMeanAverage)}`
+        : `${StringUtils.floatTo2DecimalPointString(csatScore)}%`}
+    </Text>
+  );
+};
+
+const CaretDownIcon = ({height = 8, width = 12}) => {
+  const caretDownIcon = require('./../../../assets/images/caret_down.png');
+
+  return (
+    <Image source={caretDownIcon} style={{height: height, width: width}} />
+  );
+};
+const CSATToggleButton = () => {
   const dispatch = useDispatch();
+  const {isCsatViewTopBox} = useSelector(state => state.dashboard);
+  const label = isCsatViewTopBox ? 'Mean CSAT' : 'Top Box';
+  const toggleView = () => {
+    dispatch(toggleCsatView(!isCsatViewTopBox));
+  };
+
+  return (
+    <Pressable style={dashboardStyles.csatToggleButton} onPress={toggleView}>
+      <Text style={dashboardStyles.csatToggleButtonText}>{label}</Text>
+      <CaretDownIcon />
+    </Pressable>
+  );
+};
+
+function RenderDonutInfoContainer() {
   const responses = useSelector(
     state => state.dashboard.currentNPSData?.NPSScore?.totalResponses,
   );
@@ -230,20 +295,16 @@ function RenderDonutInfoContainer() {
     state => state.dashboard.dashboardData.surveyCount,
   );
   const responseCount = getTrimmedNoOfResponses(responses);
-  const {isCsatViewTopBox} = useSelector(state => state.dashboard);
   const responseIcon = require('./../../../assets/images/total_responses_icon.png');
   const surveyIcon = require('./../../../assets/images/surveys_icon.png');
 
-  const toggleView = () => {
-    dispatch(toggleCsatView(!isCsatViewTopBox));
-  };
   return (
     <View
       style={[
         {
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          justifyContent: 'center',
           paddingHorizontal: PaddingConstants.tab2,
         },
       ]}>
@@ -257,20 +318,7 @@ function RenderDonutInfoContainer() {
         title={translate('dashboard.responses')}
         count={responseCount}
       />
-      <QPButton
-        testID="ViewTicketsButton"
-        style={[
-          buttonStyles.outlinePrimaryButtonMedium,
-          {
-            backgroundColor: Colors.white,
-            width: 2.4 * MarginConstants.tab4,
-          },
-        ]}
-        buttonColor={Colors.white}
-        onPress={toggleView}
-        buttonText={isCsatViewTopBox ? 'Mean CSAT' : 'Top Box'}
-        textStyle={buttonStyles.outlinePrimaryButtonMediumText}
-      />
+      {/* <CSATToggleButton /> */}
     </View>
   );
 }
@@ -279,8 +327,7 @@ const RenderSegmentDashboardData = props => {
   console.log('NPS OBJECT', JSON.stringify(props.currentNPSData.NPSScore));
   const data = props.currentNPSData?.NPSScore;
   const {npsPercentage, benchmarkScore} = props.currentNPSData?.NPSScore;
-  // const {scoringModel} = useSelector(state => state.dashboard);
-  const scoringModel = 1;
+  const {scoringModel} = useSelector(state => state.dashboard);
 
   // ?? props.dashboardData.primaryStoreNPS;
   // let responses = props.currentNPSData?.NPSScore?.totalResponses ?? 0;
@@ -312,7 +359,7 @@ const RenderSegmentDashboardData = props => {
           benchmark={benchmarkScore}
         />
       ) : (
-        <RenderDonutChart />
+        <RenderCSATChart />
       )}
     </View>
   );
@@ -438,23 +485,32 @@ const ImageLabel = props => {
   console.log('VICTORY_PIE', JSON.stringify(props));
 
   const style_ = StyleSheet.create({
-    imageLabel: {
+    labelContainer: {
       width: 20,
       height: 20,
       position: 'absolute',
-      left: x - 5,
-      top: y - 20,
+      left: x - 10,
+      top: y - 10,
+    },
+    imageLabel: {
+      width: 20,
+      height: 20,
+
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 
   return datum.y === 0 ? (
     <View />
   ) : (
-    <Image source={datum.imageSource} style={style_.imageLabel} />
+    <View style={style_.labelContainer}>
+      <Image source={datum.imageSource} style={style_.imageLabel} />
+    </View>
   );
 };
 
-const getCsatData = (positive, neutral, negative) => {
+function getCsatData(positive, neutral, negative) {
   // const data = [
   //   {a: 1, b: 2, c: 97},
   //   {a: 45, b: 45, c: 10},
@@ -468,12 +524,6 @@ const getCsatData = (positive, neutral, negative) => {
   //   {a: 95, b: 5, c: 10},
   //   {a: 0, b: 100, c: 10},
   // ];
-  // const chartData = data[1];
-  // const positive = chartData.a;
-  // const negative = chartData.c;
-  // const neutral = chartData.b;
-  // const positive = score;
-  // const negative = 100 - score;
 
   return [
     {
@@ -483,7 +533,7 @@ const getCsatData = (positive, neutral, negative) => {
     },
     {
       y: StringUtils.floatTo2DecimalPointString(neutral),
-      x: 'passive',
+      x: 'neutral',
       imageSource: require('../../../assets/images/csat_neutral.png'),
     },
     {
@@ -492,78 +542,14 @@ const getCsatData = (positive, neutral, negative) => {
       imageSource: require('../../../assets/images/csat_negative.png'),
     },
   ];
-};
+}
 
-const RenderDonutChart = () => {
-  const {
-    promoterPercent,
-    passivePercent,
-    detractorPercent,
-    csatScore,
-    csatMeanAverage,
-  } = useSelector(state => state.dashboard.currentNPSData.NPSScore);
-  const {isCsatViewTopBox} = useSelector(state => state.dashboard);
-
-  let victoryPieColorScale = [
-    Colors.promoter2,
-    Colors.passive2,
-    Colors.detractor2,
-  ];
-
-  console.log('DASHBOARD_SEGMENT', JSON.stringify(csatScore, csatMeanAverage));
+const RenderCSATChart = () => {
   return (
-    <View
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        top: MarginConstants.tab4,
-      }}>
-      <VictoryPie
-        data={getCsatData(promoterPercent, passivePercent, detractorPercent)}
-        height={5 * MarginConstants.tab4}
-        width={5 * MarginConstants.tab4}
-        innerRadius={2.4 * MarginConstants.tab4}
-        radius={2.0 * MarginConstants.tab4}
-        labelComponent={<ImageLabel />}
-        style={{
-          labels: {
-            fill: 'black',
-          },
-          alignSelf: true,
-        }}
-        colorScale={victoryPieColorScale}
-        endAngle={-90}
-        startAngle={90}
-      />
-      <Text
-        style={[
-          baseTextStyles.donutPercentRegularText,
-          {
-            position: 'absolute',
-            alignItems: 'center',
-            alignSelf: 'center',
-            top: 0.9 * MarginConstants.tab4,
-            color: Colors.filterIconColor,
-          },
-        ]}>
-        {isCsatViewTopBox
-          ? `${StringUtils.floatTo2DecimalPointString(csatScore)}%`
-          : `${StringUtils.floatTo2DecimalPointString(csatMeanAverage)}`}
-      </Text>
-      <Text
-        style={[
-          baseTextStyles.largeRegularText,
-          {
-            position: 'absolute',
-            alignItems: 'center',
-            alignSelf: 'center',
-            top: 1.9 * MarginConstants.tab4,
-            color: Colors.filterIconColor,
-          },
-        ]}>
-        {isCsatViewTopBox ? 'Top Box' : 'Mean CSAT'}
-      </Text>
+    <View style={dashboardStyles.csatContainer}>
+      <CSATChart />
+      <CSATScoreLabel />
+      <CSATToggleButton />
     </View>
   );
 };
@@ -644,11 +630,11 @@ const CxDashboard = props => {
   }, [comparision]);
 
   useEffect(() => {
-    if (props.dashboardData.detractorTicketsCount) {
+    if (props.dashboardData.primaryStoreNPS) {
       props.showLoading(false);
       setRefreshing(false);
     }
-  }, [props.dashboardData.detractorTicketsCount]);
+  }, [props.dashboardData.primaryStoreNPS]);
 
   const onDateRangeChangeHandler = range_ => {
     props.setRange(range_);

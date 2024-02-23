@@ -54,6 +54,15 @@ export const buttonStyles = StyleSheet.create({
     borderColor: Colors.filterIconColor,
     borderWidth: 1,
   },
+  outlineGreyButton: {
+    height: MarginConstants.tab4,
+    paddingHorizontal: MarginConstants.tab2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.white,
+    borderColor: Colors.darkGrey,
+    borderWidth: 1,
+  },
   outlineButtonText: {
     color: Colors.filterIconColor,
     fontFamily: FontFamily.regular,
