@@ -164,7 +164,7 @@ const NPS = ({nps, benchmark}) => {
           textStyles.secondaryText,
           {fontWeight: FontWeight.bold, color: getNPSColor(nps)},
         ]}>
-        {nps}
+        {StringUtils.floatTo2DecimalPointString(nps)}
       </Text>
       <Text
         style={[
@@ -324,10 +324,9 @@ function RenderDonutInfoContainer() {
 }
 
 const RenderSegmentDashboardData = props => {
-  console.log('NPS OBJECT', JSON.stringify(props.currentNPSData.NPSScore));
-  const data = props.currentNPSData?.NPSScore;
+  // console.log('NPS OBJECT', JSON.stringify(props.currentNPSData.NPSScore));
   const {npsPercentage, benchmarkScore} = props.currentNPSData?.NPSScore;
-  const {scoringModel} = useSelector(state => state.dashboard);
+  const {scoringModel} = useSelector(state => state.dashboard?.dashboardData);
 
   // ?? props.dashboardData.primaryStoreNPS;
   // let responses = props.currentNPSData?.NPSScore?.totalResponses ?? 0;
@@ -353,13 +352,13 @@ const RenderSegmentDashboardData = props => {
       {/* <RenderDetailsInformation {...props} /> */}
 
       {/* <GaugeChart npsScore={npsPercentage} benchmark={benchmarkScore} /> */}
-      {scoringModel === 0 ? (
+      {scoringModel && scoringModel === 1 ? (
+        <RenderCSATChart />
+      ) : (
         <DashboardGuageChart
           npsScore={npsPercentage}
           benchmark={benchmarkScore}
         />
-      ) : (
-        <RenderCSATChart />
       )}
     </View>
   );
@@ -950,7 +949,7 @@ const mapStateToProps = state => {
     eDate: state.global.range.endDate,
     wantToReload: state.global.wantToReloadDashboard,
     segment: state.dashboard.currentSegment,
-    scoringModel: state.dashboard.scoringModel,
+    // scoringModel: state.dashboard.scoringModel,
     // isSegmentSelectorOpen: state.dashboard.isSegmentSelectorOpen,
     segmentList: state.dashboard.segmentDetails.segments,
   };
