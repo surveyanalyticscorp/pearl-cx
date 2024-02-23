@@ -44,6 +44,7 @@ import {
   SET_FILTER_BY_STATUS_ID,
   SET_TOKEN_EXPIRED,
   SET_TOKEN_EXPIRE_DATE,
+  IS_CSAT_VIEW_TOP_BOX,
 } from '../actions/dashboard.actions';
 
 const initialState = {
@@ -77,6 +78,7 @@ const initialState = {
   currentStatusIndexForFilter: 0,
   isTokenExpired: false,
   expirationDate: '',
+  isCsatViewTopBox: true,
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -368,6 +370,12 @@ const dashboardReducer = (state = initialState, action) => {
         ...state,
 
         expirationDate: action.date,
+      };
+    }
+    case IS_CSAT_VIEW_TOP_BOX: {
+      return {
+        ...state,
+        isCsatViewTopBox: action.isTopBoxView,
       };
     }
 

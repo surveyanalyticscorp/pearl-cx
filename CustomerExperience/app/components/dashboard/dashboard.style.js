@@ -5,6 +5,8 @@ import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import DeviceInfo from 'react-native-device-info';
+import {baseTextStyles, textStyles} from '../../styles/text.styles';
+import {buttonStyles} from '../../styles/button.styles';
 
 export const dashboardStyles = StyleSheet.create({
   highchart: {
@@ -206,7 +208,7 @@ export const dashboardStyles = StyleSheet.create({
       ? MarginConstants.tab4 * 10
       : MarginConstants.tab4 * 8,
     flexDirection: 'column',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     marginTop: MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab2,
     borderRadius: 5,
@@ -214,6 +216,7 @@ export const dashboardStyles = StyleSheet.create({
   donut: {
     marginTop: MarginConstants.tab1,
     paddingHorizontal: PaddingConstants.tab2,
+    backgroundColor: Colors.accent,
   },
   donutInfoContainer: {
     marginVertical: MarginConstants.tab1,
@@ -266,4 +269,34 @@ export const dashboardStyles = StyleSheet.create({
     height: '100%',
   },
   contentContainer: {backgroundColor: Colors.white, height: '100%'},
+  csatContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    top: MarginConstants.tab3,
+  },
+  csatScoreLabel: {
+    ...baseTextStyles.donutPercentRegularText,
+    position: 'absolute',
+    alignItems: 'center',
+    alignSelf: 'center',
+    top: 1.5 * MarginConstants.tab4,
+    color: Colors.filterIconColor,
+  },
+  csatToggleButton: {
+    ...buttonStyles.outlineGreyButton,
+    backgroundColor: Colors.white,
+    width: 3.5 * MarginConstants.tab4,
+    position: 'absolute',
+    alignItems: 'center',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    top: 2.8 * MarginConstants.tab4,
+    zIndex: 100,
+  },
+  csatToggleButtonText: {
+    ...baseTextStyles.secondaryRegularText,
+    color: Colors.filterIconColor,
+  },
 });

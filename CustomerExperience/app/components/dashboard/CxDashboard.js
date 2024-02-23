@@ -10,9 +10,13 @@ import {
   SafeAreaView,
   Pressable,
   Image,
+  StyleSheet,
 } from 'react-native';
 import {showLoading} from '../../redux/actions/index';
-import {getDashboardContent} from '../../redux/actions/dashboard.actions';
+import {
+  getDashboardContent,
+  toggleCsatView,
+} from '../../redux/actions/dashboard.actions';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
@@ -22,7 +26,7 @@ import QPSpinner from '../../widgets/QPSpinner';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {MarginConstants} from '../../styles/margin.constants';
-import {VictoryPie} from 'victory-native';
+import {VictoryLabel, VictoryPie} from 'victory-native';
 import {Sizes} from '../../styles/Size.constant';
 import StringUtils from '../../Utils/StringUtils';
 import {getSelectedRange} from '../../Utils/DateFilterUtility';
@@ -52,6 +56,7 @@ import {StatusDashboardBottomSheet} from './ClosedLoopDashboard';
 import SelectStatus from '../closedloop/takeaction/SelectStatus';
 import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
 import {useNavigation} from '@react-navigation/core';
+import {PaddingConstants} from '../../styles/padding.constants';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -159,7 +164,7 @@ const NPS = ({nps, benchmark}) => {
           textStyles.secondaryText,
           {fontWeight: FontWeight.bold, color: getNPSColor(nps)},
         ]}>
-        {nps}
+        {StringUtils.floatTo2DecimalPointString(nps)}
       </Text>
       <Text
         style={[
@@ -216,44 +221,118 @@ function RenderDonutInformation({icon, title, count}) {
   );
 }
 
-function RenderDonutInfoContainer({responseCount, surveyCount}) {
+const CSATChart = () => {
+  const {promoterPercent, passivePercent, detractorPercent} = useSelector(
+    state => state.dashboard.currentNPSData.NPSScore,
+  );
+
+  let victoryPieColorScale = [
+    Colors.promoter2,
+    Colors.passive2,
+    Colors.detractor2,
+  ];
+
+  return (
+    <VictoryPie
+      data={getCsatData(promoterPercent, passivePercent, detractorPercent)}
+      height={5 * MarginConstants.tab4}
+      width={5 * MarginConstants.tab4}
+      innerRadius={2.4 * MarginConstants.tab4}
+      radius={2.0 * MarginConstants.tab4}
+      labelRadius={2.9 * MarginConstants.tab4}
+      labelComponent={<ImageLabel />}
+      padAngle={2}
+      colorScale={victoryPieColorScale}
+      endAngle={-90}
+      startAngle={90}
+    />
+  );
+};
+
+const CSATScoreLabel = () => {
+  const {csatScore, csatMeanAverage} = useSelector(
+    state => state.dashboard.currentNPSData.NPSScore,
+  );
+  const {isCsatViewTopBox} = useSelector(state => state.dashboard);
+
+  return (
+    <Text style={dashboardStyles.csatScoreLabel}>
+      {isCsatViewTopBox
+        ? `${StringUtils.floatTo2DecimalPointString(csatMeanAverage)}`
+        : `${StringUtils.floatTo2DecimalPointString(csatScore)}%`}
+    </Text>
+  );
+};
+
+const CaretDownIcon = ({height = 8, width = 12}) => {
+  const caretDownIcon = require('./../../../assets/images/caret_down.png');
+
+  return (
+    <Image source={caretDownIcon} style={{height: height, width: width}} />
+  );
+};
+const CSATToggleButton = () => {
+  const dispatch = useDispatch();
+  const {isCsatViewTopBox} = useSelector(state => state.dashboard);
+  const label = isCsatViewTopBox ? 'Mean CSAT' : 'Top Box';
+  const toggleView = () => {
+    dispatch(toggleCsatView(!isCsatViewTopBox));
+  };
+
+  return (
+    <Pressable style={dashboardStyles.csatToggleButton} onPress={toggleView}>
+      <Text style={dashboardStyles.csatToggleButtonText}>{label}</Text>
+      <CaretDownIcon />
+    </Pressable>
+  );
+};
+
+function RenderDonutInfoContainer() {
+  const responses = useSelector(
+    state => state.dashboard.currentNPSData?.NPSScore?.totalResponses,
+  );
+  const surveyCount = useSelector(
+    state => state.dashboard.dashboardData.surveyCount,
+  );
+  const responseCount = getTrimmedNoOfResponses(responses);
   const responseIcon = require('./../../../assets/images/total_responses_icon.png');
   const surveyIcon = require('./../../../assets/images/surveys_icon.png');
+
   return (
     <View
       style={[
         {
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'space-around',
+          justifyContent: 'center',
+          paddingHorizontal: PaddingConstants.tab2,
         },
       ]}>
-      <RenderDonutInformation
+      {/* <RenderDonutInformation
         icon={surveyIcon}
         title={translate('dashboard.surveys')}
         count={surveyCount}
-      />
+      /> */}
       <RenderDonutInformation
         icon={responseIcon}
         title={translate('dashboard.responses')}
         count={responseCount}
       />
+      {/* <CSATToggleButton /> */}
     </View>
   );
 }
 
 const RenderSegmentDashboardData = props => {
-  console.log('NPS OBJECT', JSON.stringify(props.currentNPSData.NPSScore));
-  const data = props.currentNPSData?.NPSScore;
+  // console.log('NPS OBJECT', JSON.stringify(props.currentNPSData.NPSScore));
   const {npsPercentage, benchmarkScore} = props.currentNPSData?.NPSScore;
-  const surveyCount = useSelector(
-    state => state.dashboard.dashboardData.surveyCount,
-  );
+  const {scoringModel} = useSelector(state => state.dashboard?.dashboardData);
+
   // ?? props.dashboardData.primaryStoreNPS;
-  let responses = props.currentNPSData?.NPSScore?.totalResponses ?? 0;
+  // let responses = props.currentNPSData?.NPSScore?.totalResponses ?? 0;
   // ??
   // props.dashboardData.primaryStoreNPS.totalResponses;
-  let responseCount = getTrimmedNoOfResponses(responses);
+  // let responseCount = getTrimmedNoOfResponses(responses);
   // const surveyCount = props?.dashboardData?.surveyCount ?? 0;
   console.log('Gauge DATA', npsPercentage, benchmarkScore);
   return (
@@ -268,18 +347,19 @@ const RenderSegmentDashboardData = props => {
         child={<NavigateToResponses />}
       />
 
-      <RenderDonutInfoContainer
-        responseCount={responseCount}
-        surveyCount={surveyCount}
-      />
+      <RenderDonutInfoContainer />
+
       {/* <RenderDetailsInformation {...props} /> */}
 
       {/* <GaugeChart npsScore={npsPercentage} benchmark={benchmarkScore} /> */}
-
-      <DashboardGuageChart
-        npsScore={npsPercentage}
-        benchmark={benchmarkScore}
-      />
+      {scoringModel && scoringModel === 1 ? (
+        <RenderCSATChart />
+      ) : (
+        <DashboardGuageChart
+          npsScore={npsPercentage}
+          benchmark={benchmarkScore}
+        />
+      )}
     </View>
   );
 };
@@ -358,6 +438,7 @@ let RenderDashboardContent = props => {
     !isObjectEmpty(props.dashboardData)
   ) {
     const segmentOptions = ['Main Segment', 'Child Segment'];
+
     return (
       <SafeAreaView>
         {/* <View
@@ -384,7 +465,9 @@ let RenderDashboardContent = props => {
           }
         /> */}
         {/* {renderDonutChart()} */}
+
         <RenderSegmentDashboardData {...props} />
+
         {/* <RenderSegmentTitle text={translate('dashboard.closed_loop')} /> */}
 
         <ClosedLoopView {...props} />
@@ -394,6 +477,80 @@ let RenderDashboardContent = props => {
     );
   }
   return <View style={dashboardStyles.container} />;
+};
+
+const ImageLabel = props => {
+  const {x, y, index, datum} = props;
+  console.log('VICTORY_PIE', JSON.stringify(props));
+
+  const style_ = StyleSheet.create({
+    labelContainer: {
+      width: 20,
+      height: 20,
+      position: 'absolute',
+      left: x - 10,
+      top: y - 10,
+    },
+    imageLabel: {
+      width: 20,
+      height: 20,
+
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
+
+  return datum.y === 0 ? (
+    <View />
+  ) : (
+    <View style={style_.labelContainer}>
+      <Image source={datum.imageSource} style={style_.imageLabel} />
+    </View>
+  );
+};
+
+function getCsatData(positive, neutral, negative) {
+  // const data = [
+  //   {a: 1, b: 2, c: 97},
+  //   {a: 45, b: 45, c: 10},
+  //   {a: 55, b: 0, c: 45},
+  //   {a: 25, b: 75, c: 10},
+  //   {a: 40, b: 60, c: 10},
+  //   {a: 50, b: 50, c: 0},
+  //   {a: 50, b: 0, c: 50},
+  //   {a: 10, b: 30, c: 60},
+  //   {a: 82, b: 18, c: 10},
+  //   {a: 95, b: 5, c: 10},
+  //   {a: 0, b: 100, c: 10},
+  // ];
+
+  return [
+    {
+      y: StringUtils.floatTo2DecimalPointString(positive),
+      x: 'positive',
+      imageSource: require('../../../assets/images/csat_positive.png'),
+    },
+    {
+      y: StringUtils.floatTo2DecimalPointString(neutral),
+      x: 'neutral',
+      imageSource: require('../../../assets/images/csat_neutral.png'),
+    },
+    {
+      y: StringUtils.floatTo2DecimalPointString(negative),
+      x: 'negative',
+      imageSource: require('../../../assets/images/csat_negative.png'),
+    },
+  ];
+}
+
+const RenderCSATChart = () => {
+  return (
+    <View style={dashboardStyles.csatContainer}>
+      <CSATChart />
+      <CSATScoreLabel />
+      <CSATToggleButton />
+    </View>
+  );
 };
 
 const CxDashboard = props => {
@@ -472,11 +629,11 @@ const CxDashboard = props => {
   }, [comparision]);
 
   useEffect(() => {
-    if (props.dashboardData.detractorTicketsCount) {
+    if (props.dashboardData.primaryStoreNPS) {
       props.showLoading(false);
       setRefreshing(false);
     }
-  }, [props.dashboardData.detractorTicketsCount]);
+  }, [props.dashboardData.primaryStoreNPS]);
 
   const onDateRangeChangeHandler = range_ => {
     props.setRange(range_);
@@ -575,7 +732,7 @@ const CxDashboard = props => {
             backgroundColor: Colors.white,
             marginHorizontal: MarginConstants.tab2,
           }}>
-          <RenderDonutInfoContainer responseCount={responseCount} />
+          <RenderDonutInfoContainer />
           {/* <RenderDetailsInformation {...props} /> */}
         </View>
 
@@ -792,6 +949,7 @@ const mapStateToProps = state => {
     eDate: state.global.range.endDate,
     wantToReload: state.global.wantToReloadDashboard,
     segment: state.dashboard.currentSegment,
+    // scoringModel: state.dashboard.scoringModel,
     // isSegmentSelectorOpen: state.dashboard.isSegmentSelectorOpen,
     segmentList: state.dashboard.segmentDetails.segments,
   };

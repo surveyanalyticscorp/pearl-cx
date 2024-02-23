@@ -16,13 +16,14 @@ export const TOKEN_VALIDATION_DURATION = 6;
 
 export const MAX_COMMENT_LENGTH = 240;
 // set true for DEV, false for LIVE
-export const IS_DEV_MODE = false;
+export const IS_DEV_MODE = true;
 
 // export const BASE_URL = 'https://api.questionpro.com/';
 
 // uncomment below lines to connect to dev servers
-export const DEV_BASE_URL = 'https://qa.questionpro.com';
+// export const DEV_BASE_URL = 'https://qa.questionpro.com';
 // export const DEV_BASE_URL = 'https://cxlabs.questionpro.com';
+export const DEV_BASE_URL = 'https://cxlabs3.questionpro.com/a/nativehtml';
 
 // for DEV
 // export const CLF_BASE_URL = 'https://clfqa-backend.questionpro.com/api/';

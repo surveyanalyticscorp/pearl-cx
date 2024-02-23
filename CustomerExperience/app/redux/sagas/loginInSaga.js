@@ -20,6 +20,7 @@ import {
   PANEL_AUTH,
   BASE_URL_MID_FIX,
   BASE_URL_NEW_MID_FIX,
+  DEV_BASE_URL,
 } from '../../api/Constant';
 import {API_ERROR, CLEAR_API_ERROR, IS_LOADING} from '../actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -44,7 +45,9 @@ import {
 } from '../actions/login.actions';
 
 export function* doAuthenticatePanel(action) {
-  let url = INIT_BASE + BASE_URL_NEW_MID_FIX + PANEL_AUTH;
+  let url =
+    (IS_DEV_MODE ? DEV_BASE_URL : INIT_BASE + BASE_URL_NEW_MID_FIX) +
+    PANEL_AUTH;
   try {
     const response = yield WebServiceHandler.postNew(url, {}, action.param);
 

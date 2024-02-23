@@ -75,9 +75,9 @@ const globalReducer = (state = initialState, action) => {
     case AUTHENTICATE_PANEL_RESPONSE: {
       return {
         ...state,
-        baseUrl:
-          (IS_DEV_MODE ? DEV_BASE_URL : action.response.body.mobileAPIURL) +
-          BASE_URL_NEW_MID_FIX,
+        baseUrl: IS_DEV_MODE
+          ? DEV_BASE_URL
+          : action.response.body.mobileAPIURL + BASE_URL_NEW_MID_FIX,
         subscriberId: JSON.stringify(action.response.body.userID),
         dataCenter: action.response.body.dataCenter,
         accessCode: action.response.body.accessCode,
@@ -87,9 +87,7 @@ const globalReducer = (state = initialState, action) => {
       console.log('UPDATE_BASE_URL', JSON.stringify(action));
       return {
         ...state,
-        baseUrl: action.hasMidFix
-          ? state.baseUrl + BASE_URL_NEW_MID_FIX
-          : state.baseUrl,
+        baseUrl: state.baseUrl,
       };
     }
     case SET_BASE_URL: {

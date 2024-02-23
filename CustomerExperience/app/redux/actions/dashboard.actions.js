@@ -79,7 +79,7 @@ export const RESET_PARENT_COMMENT = 'RESET_PARENT_COMMENT';
 export const SET_FILTER_BY_STATUS_ID = 'SET_FILTER_BY_STATUS_ID';
 export const SET_TOKEN_EXPIRED = 'SET_TOKEN_EXPIRED';
 export const SET_TOKEN_EXPIRE_DATE = 'SET_TOKEN_EXPIRE_DATE';
-
+export const IS_CSAT_VIEW_TOP_BOX = 'IS_CSAT_VIEW_TOP_BOX';
 export const getDashboardContent = (token, param, segmentId) => ({
   type: GET_DASHBOARD,
   token,
@@ -240,7 +240,13 @@ export const setTokenExpired = isExpired => ({
   type: SET_TOKEN_EXPIRED,
   isTokenExpired: isExpired,
 });
+
 export const setExpirationDate = date => ({
   type: SET_TOKEN_EXPIRE_DATE,
   date: date,
+});
+
+export const toggleCsatView = isTopBoxView => ({
+  type: IS_CSAT_VIEW_TOP_BOX,
+  isTopBoxView: isTopBoxView,
 });
