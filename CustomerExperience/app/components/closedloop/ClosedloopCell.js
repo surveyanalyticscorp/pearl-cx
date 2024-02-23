@@ -105,19 +105,25 @@ const TicketID = ({ticketId}) => {
   return <Text style={styles.idText}>{`#${ticketId}`} </Text>;
 };
 
-const NameANdDateRow = ({name, issueDate}) => {
+const Name = ({name}) => {
+  return (
+    <Text style={[baseTextStyles.primaryMediumText, {color: Colors.accent}]}>
+      {name}
+    </Text>
+  );
+};
+
+const Date = ({issueDate}) => {
   const date = moment(issueDate).format(HalfMonthDateYearFormat);
+  return <Text style={styles.ticketDateText}>{`${date ?? ' '}`}</Text>;
+};
+
+const NameANdDateRow = ({name, issueDate}) => {
   // console.log('USERDATA', JSON.stringify(data));
   return (
     <View style={styles.nameAndDateContainer}>
-      <Text style={[baseTextStyles.primaryMediumText, {color: Colors.accent}]}>
-        {name}
-      </Text>
-      <Text
-        style={[
-          baseTextStyles.secondaryRegularText,
-          {color: Colors.evenDarkerGrey},
-        ]}>{`${date ?? ' '}`}</Text>
+      <Name name={name} />
+      <Date issueDate={issueDate} />
     </View>
   );
 };
@@ -148,13 +154,14 @@ const GetNPSScore = ({score}) => {
 };
 
 const TicketNPSScore = ({nps}) => {
-  return nps ? (
+  console.log('NPS_SCORE_UPDATE', nps);
+  return nps === null ? (
+    <View />
+  ) : (
     <View style={styles.npsContainer}>
       <GetNPSScore score={nps} />
       <NPSIcon />
     </View>
-  ) : (
-    <View style={styles.npsEmptyContainer} />
   );
 };
 const TicketIdAndOverdueRow = ({data}) => {
@@ -180,12 +187,19 @@ const TicketDetails = ({comment}) => {
 };
 
 const StatusRow = ({data}) => {
-  const {status, priority, nps} = data;
+  const {status, priority, npsScore} = data;
+
+  const style_ = StyleSheet.create({
+    priorityStyle: {
+      flex: 1,
+      justifyContent: npsScore !== null ? 'center' : 'flex-end',
+    },
+  });
   return (
     <View style={styles.statusContainer}>
       <StatusUI status={status} />
-      <PriorityUI style={{flex: 1}} priority={priority} />
-      <TicketNPSScore nps={nps} />
+      <PriorityUI style={style_.priorityStyle} priority={priority} />
+      <TicketNPSScore nps={npsScore} />
     </View>
   );
 };
@@ -295,7 +309,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: PaddingConstants.tab1,
-    paddingVertical: PaddingConstants.halfTab,
+    paddingVertical: PaddingConstants.tab2,
   },
   npsContainer: {
     flexDirection: 'row',
@@ -329,6 +343,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: PaddingConstants.tab2,
     padding: PaddingConstants.tab1,
   },
   userNameText: {
@@ -342,9 +357,13 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
     color: Colors.primary,
   },
+  ticketDateText: {
+    ...baseTextStyles.semiSecondaryRegularText,
+    color: Colors.evenDarkerGrey,
+  },
 
   detailsText: {
-    ...baseTextStyles.secondaryRegularText,
+    ...baseTextStyles.semiSecondaryRegularText,
     color: Colors.filterIconColor,
   },
 
