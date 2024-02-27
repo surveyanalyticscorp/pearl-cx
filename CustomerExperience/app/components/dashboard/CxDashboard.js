@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {
-  FlatList,
   RefreshControl,
   ScrollView,
   Text,
@@ -8,26 +7,17 @@ import {
   BackHandler,
   Alert,
   SafeAreaView,
-  Pressable,
-  Image,
-  StyleSheet,
 } from 'react-native';
 import {showLoading} from '../../redux/actions/index';
-import {
-  getDashboardContent,
-  toggleCsatView,
-} from '../../redux/actions/dashboard.actions';
+import {getDashboardContent} from '../../redux/actions/dashboard.actions';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';
 import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
 import {MarginConstants} from '../../styles/margin.constants';
-import {VictoryLabel, VictoryPie} from 'victory-native';
-import {Sizes} from '../../styles/Size.constant';
 import StringUtils from '../../Utils/StringUtils';
 import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import {setRangeFilter} from '../../redux/actions';
@@ -36,35 +26,15 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
-import HorizontalScaleBar from '../../widgets/HorizontalScaleBar';
-import {
-  BottomSheetHeader,
-  FabAddButton,
-  HeaderFilter,
-  IndicatorIcon,
-} from '../../routes/CommonScreen';
-import QPButton from '../../widgets/Button';
-import {buttonStyles} from '../../styles/button.styles';
-import {GaugeChart} from './GaugeChart';
-import {baseTextStyles, textStyles} from '../../styles/text.styles';
+import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
+import NpsGaugeChart from '../../widgets/dashboardWidget/NpsGaugeChart';
+import {baseTextStyles} from '../../styles/text.styles';
 import {FontWeight} from '../../styles/font.constants';
-import BottomSheet from 'reanimated-bottom-sheet';
-
-import Animated, {color} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import {StatusDashboardBottomSheet} from './ClosedLoopDashboard';
-import SelectStatus from '../closedloop/takeaction/SelectStatus';
-import {
-  getDashboardStatusListForBottomList,
-  getTrimmedNoOfResponses,
-} from '../../Utils/TicketUtils';
-import {useNavigation} from '@react-navigation/core';
-import {PaddingConstants} from '../../styles/padding.constants';
-
 import ScoreIndicatorIcon from '../../widgets/dashboardWidget/ScoreIndicatorIcon';
 import DottedLine from '../../widgets/dashboardWidget/DottedLine';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
-import RenderInfo from '../../widgets/dashboardWidget/RenderInfo';
-import CaretDownIcon from '../../widgets/IconWidget/CaretDownIcon';
 import CsatToggleButton from '../../widgets/dashboardWidget/CsatToggleButton';
 import CsatScoreLabel from '../../widgets/dashboardWidget/CsatScoreLabel';
 import CsatChart from '../../widgets/dashboardWidget/CsatChart';
@@ -102,22 +72,28 @@ const NPSIcon = ({nps}) => {
   );
 };
 
-const NPS = ({nps, benchmark}) => {
+const NpsScoreView = () => {
+  const {npsPercentage, benchmarkScore} = useSelector(
+    state => state.dashboard.currentNPSData?.NPSScore,
+  );
+
   return (
     <View style={dashboardStyles.squareView}>
-      <NPSIcon nps={nps} />
+      <NPSIcon nps={npsPercentage} />
       <TextLabel text={'NPS:'} fontWeight={FontWeight.bold} />
       <TextLabel
-        text={StringUtils.floatTo2DecimalPointString(nps)}
+        text={StringUtils.floatTo2DecimalPointString(npsPercentage)}
         fontWeight={FontWeight.bold}
-        color={getNPSColor(nps)}
+        color={getNPSColor(npsPercentage)}
       />
       <TextLabel
-        text={`${parseFloat(nps - benchmark).toFixed(2)}`}
+        text={`${StringUtils.floatTo2DecimalPointString(
+          npsPercentage - benchmarkScore,
+        )}`}
         baseTextStyle={baseTextStyles.semiSecondaryRegularText}
         color={Colors.evenDarkerGrey}
       />
-      <ScoreIndicatorIcon diff={nps - benchmark} />
+      <ScoreIndicatorIcon diff={npsPercentage - benchmarkScore} />
     </View>
   );
 };
@@ -135,11 +111,14 @@ const BenchmarkIcon = ({benchmark}) => {
     </View>
   );
 };
-const Benchmark = ({benchmark}) => {
+const BenchmarkView = () => {
+  const {benchmarkScore} = useSelector(
+    state => state.dashboard.currentNPSData?.NPSScore,
+  );
   return (
     <View style={dashboardStyles.squareView}>
-      <BenchmarkIcon benchmark={benchmark} />
-      <TextLabel text={`Benchmark: ${benchmark}`} />
+      <BenchmarkIcon benchmark={benchmarkScore} />
+      <TextLabel text={`Benchmark: ${benchmarkScore}`} />
     </View>
   );
 };
@@ -162,7 +141,7 @@ const RenderSegmentDashboardData = () => {
       {scoringModel && scoringModel === 1 ? (
         <RenderCSATChart />
       ) : (
-        <DashboardGuageChart />
+        <RenderNPSChart />
       )}
     </View>
   );
@@ -182,20 +161,12 @@ const RenderSegmentDashboardData = () => {
 //   );
 // };
 
-const NPSLabel = () => {
-  const {npsPercentage, benchmarkScore} = useSelector(
-    state => state.dashboard.currentNPSData?.NPSScore,
-  );
-
+const NPSView = () => {
   return (
-    <View style={dashboardStyles.npsLabelStyle}>
-      <GaugeChart npsScore={npsPercentage} benchmark={benchmarkScore} />
-      <NPS nps={npsPercentage} benchmark={benchmarkScore} />
-      <Benchmark benchmark={benchmarkScore} />
-      {/* <Text style={textStyles.optionTextBold}>{npsScore ?? 0}</Text>
-      <Text style={textStyles.secondaryText}>NPS</Text> */}
-      {/* <Text style={textStyles.optionTextBold}>{npsScore}</Text>
-      <Text style={textStyles.optionText}>NPS</Text> */}
+    <View style={dashboardStyles.npsViewContainer}>
+      <NpsGaugeChart />
+      <NpsScoreView />
+      <BenchmarkView />
     </View>
   );
 };
@@ -210,19 +181,10 @@ const RenderNoDataFound = () => {
   );
 };
 
-function DashboardGuageChart() {
+function RenderNPSChart() {
   return (
-    <View
-      style={{
-        flex: 5,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}>
-      <NPSLabel />
-
-      {/* <GaugeChart npsScore={npsScore} benchmark={benchmark} /> */}
-      {/* <Benchmark benchmark={benchmark} /> */}
+    <View style={dashboardStyles.renderNpsChartContainer}>
+      <NPSView />
     </View>
   );
 }

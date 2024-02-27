@@ -261,7 +261,7 @@ export const dashboardStyles = StyleSheet.create({
     alignSelf: 'auto',
     marginHorizontal: MarginConstants.halfTab,
   },
-  npsLabelStyle: {
+  npsViewContainer: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
@@ -304,5 +304,11 @@ export const dashboardStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: PaddingConstants.tab2,
+  },
+  renderNpsChartContainer: {
+    flex: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

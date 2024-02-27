@@ -1,14 +1,15 @@
 import React from 'react';
 // import AMCharts from 'react-native-amcharts';
-import AMCharts from '../../widgets/AMChart';
-import {Text, StyleSheet} from 'react-native';
-import {PaddingConstants} from '../../styles/padding.constants';
-import {View} from 'react-native-animatable';
-import {MarginConstants} from '../../styles/margin.constants';
+import AMCharts from '../AMChart';
+import {StyleSheet} from 'react-native';
 import {Colors} from '../../styles/color.constants';
+import {useSelector} from 'react-redux';
 
-export const GaugeChart = ({npsScore, benchmark}) => {
-  console.log('Gauge', npsScore, benchmark);
+const NpsGaugeChart = () => {
+  const {npsPercentage, benchmarkScore} = useSelector(
+    state => state.dashboard.currentNPSData?.NPSScore,
+  );
+  console.log('Gauge', npsPercentage, benchmarkScore);
 
   const chartType = 'GaugeChart';
 
@@ -61,7 +62,7 @@ export const GaugeChart = ({npsScore, benchmark}) => {
     hands: [
       {
         type: 'ClockHand',
-        value: benchmark,
+        value: benchmarkScore,
         fill: Colors.borderColor,
         stroke: Colors.borderColor,
         innerRadius: '00%',
@@ -74,7 +75,7 @@ export const GaugeChart = ({npsScore, benchmark}) => {
       },
       {
         type: 'ClockHand',
-        value: npsScore,
+        value: npsPercentage,
         fill: Colors.filterIconColor,
         stroke: Colors.filterIconColor,
         innerRadius: '00%',
@@ -106,3 +107,5 @@ const styles = StyleSheet.create({
     margin: 0,
   },
 });
+
+export default NpsGaugeChart;
