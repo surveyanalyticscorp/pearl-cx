@@ -1,7 +1,6 @@
 const json = {
   uniqueAPICallIdentifier: 0,
   body: {
-    pageOffset: '0',
     count: 5,
     feedbackID: 27233,
     currentSegment: 'Main Segment',
@@ -18,30 +17,28 @@ const json = {
             ownerID: 220520,
           },
         ],
-        segments: [
+      },
+      {
+        parentSegmentID: 191074,
+        segmentID: 211423,
+        segmentName: 'Office',
+        segmentCode: 'S2',
+        owners: [
           {
-            parentSegmentID: 191074,
-            segmentID: 211423,
-            segmentName: 'Office',
-            segmentCode: 'S2',
-            owners: [
-              {
-                ownerName: 'Mehedi Hasan',
-                ownerID: 220520,
-              },
-            ],
+            ownerName: 'Mehedi Hasan',
+            ownerID: 220520,
           },
+        ],
+      },
+      {
+        parentSegmentID: 191074,
+        segmentID: 211424,
+        segmentName: 'Home',
+        segmentCode: 'S3',
+        owners: [
           {
-            parentSegmentID: 191074,
-            segmentID: 211424,
-            segmentName: 'Home',
-            segmentCode: 'S3',
-            owners: [
-              {
-                ownerName: 'Mehedi Hasan',
-                ownerID: 220520,
-              },
-            ],
+            ownerName: 'Farhan Hasan',
+            ownerID: 220524,
           },
         ],
       },

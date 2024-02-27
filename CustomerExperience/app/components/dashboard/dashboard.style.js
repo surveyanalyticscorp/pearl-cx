@@ -291,7 +291,7 @@ export const dashboardStyles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     top: 2.8 * MarginConstants.tab4,
     zIndex: 100,
   },

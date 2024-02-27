@@ -17,7 +17,7 @@ const CsatToggleButton = () => {
   return (
     <Pressable style={dashboardStyles.csatToggleButton} onPress={toggleView}>
       <TextLabel text={label} />
-      <CaretDownIcon />
+      {/* <CaretDownIcon /> */}
     </Pressable>
   );
 };
