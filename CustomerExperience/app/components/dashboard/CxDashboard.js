@@ -116,29 +116,6 @@ const ScoreIndicatorIcon = ({diff}) => {
   );
 };
 
-const DottedLine = ({
-  width = 1.2 * MarginConstants.tab1,
-  color = Colors.evenDarkerGrey,
-  borderStyle = 'dotted',
-}) => {
-  // borderStyles  'dotted', 'dashed', solid
-  return (
-    <View
-      style={{
-        borderStyle: borderStyle,
-        borderWidth: 1,
-        borderRadius: 1,
-        width: width,
-        height: 0,
-        borderColor: color,
-        alignSelf: 'auto',
-        marginHorizontal: MarginConstants.halfTab,
-        marginTop: 1,
-      }}
-    />
-  );
-};
-
 const NPS = ({nps, benchmark}) => {
   return (
     <View style={dashboardStyles.squareView}>
@@ -323,42 +300,25 @@ function RenderDonutInfoContainer() {
   );
 }
 
-const RenderSegmentDashboardData = props => {
-  // console.log('NPS OBJECT', JSON.stringify(props.currentNPSData.NPSScore));
-  const {npsPercentage, benchmarkScore} = props.currentNPSData?.NPSScore;
-  const {scoringModel} = useSelector(state => state.dashboard?.dashboardData);
+const RenderSegmentDashboardData = () => {
+  const {scoringModel, primaryStoreName} = useSelector(
+    state => state.dashboard?.dashboardData,
+  );
 
-  // ?? props.dashboardData.primaryStoreNPS;
-  // let responses = props.currentNPSData?.NPSScore?.totalResponses ?? 0;
-  // ??
-  // props.dashboardData.primaryStoreNPS.totalResponses;
-  // let responseCount = getTrimmedNoOfResponses(responses);
-  // const surveyCount = props?.dashboardData?.surveyCount ?? 0;
-  console.log('Gauge DATA', npsPercentage, benchmarkScore);
+  const currentSegmentName = useSelector(
+    state => state.dashboard?.currentSegment?.currentSegment,
+  );
   return (
-    <View
-      style={{
-        ...dashboardStyles.chartContainer,
-      }}>
+    <View style={dashboardStyles.chartContainer}>
       <RenderSegmentTitle
-        text={
-          props.segment.currentSegment ?? props.dashboardData.primaryStoreName
-        }
+        text={currentSegmentName ?? primaryStoreName}
         child={<NavigateToResponses />}
       />
-
       <RenderDonutInfoContainer />
-
-      {/* <RenderDetailsInformation {...props} /> */}
-
-      {/* <GaugeChart npsScore={npsPercentage} benchmark={benchmarkScore} /> */}
       {scoringModel && scoringModel === 1 ? (
         <RenderCSATChart />
       ) : (
-        <DashboardGuageChart
-          npsScore={npsPercentage}
-          benchmark={benchmarkScore}
-        />
+        <DashboardGuageChart />
       )}
     </View>
   );
@@ -378,12 +338,16 @@ const RenderBenchmark = ({benchmark}) => {
   );
 };
 
-const NPSLabel = ({npsScore, benchmark}) => {
+const NPSLabel = () => {
+  const {npsPercentage, benchmarkScore} = useSelector(
+    state => state.dashboard.currentNPSData?.NPSScore,
+  );
+
   return (
     <View style={dashboardStyles.npsLabelStyle}>
-      <GaugeChart npsScore={npsScore} benchmark={benchmark} />
-      <NPS nps={npsScore} benchmark={benchmark} />
-      <Benchmark nps={npsScore} benchmark={benchmark} />
+      <GaugeChart npsScore={npsPercentage} benchmark={benchmarkScore} />
+      <NPS nps={npsPercentage} benchmark={benchmarkScore} />
+      <Benchmark nps={npsPercentage} benchmark={benchmarkScore} />
       {/* <Text style={textStyles.optionTextBold}>{npsScore ?? 0}</Text>
       <Text style={textStyles.secondaryText}>NPS</Text> */}
       {/* <Text style={textStyles.optionTextBold}>{npsScore}</Text>
@@ -402,7 +366,7 @@ const RenderNoDataFound = () => {
   );
 };
 
-function DashboardGuageChart({npsScore, benchmark}) {
+function DashboardGuageChart() {
   return (
     <View
       style={{
@@ -411,7 +375,7 @@ function DashboardGuageChart({npsScore, benchmark}) {
         alignItems: 'center',
         justifyContent: 'space-between',
       }}>
-      <NPSLabel npsScore={npsScore} benchmark={benchmark} />
+      <NPSLabel />
 
       {/* <GaugeChart npsScore={npsScore} benchmark={benchmark} /> */}
       {/* <Benchmark benchmark={benchmark} /> */}
@@ -437,42 +401,10 @@ let RenderDashboardContent = props => {
     !props.isLoading &&
     !isObjectEmpty(props.dashboardData)
   ) {
-    const segmentOptions = ['Main Segment', 'Child Segment'];
-
     return (
       <SafeAreaView>
-        {/* <View
-          style={{
-            flex: 1,
-            marginHorizontal: 16,
-            marginVertical: 8,
-            flexDirection: 'row',
-          }}>
-          <View
-            style={{
-              flex: 1,
-              marginHorizontal: 16,
-
-              flexDirection: 'column',
-              alignContent: 'flex-end',
-            }}></View>
-        </View> */}
-
-        {/* <RenderSegmentTitle
-          text={
-            props.segment.currentSegment ??
-            props.dashboardData.primaryStoreName
-          }
-        /> */}
-        {/* {renderDonutChart()} */}
-
-        <RenderSegmentDashboardData {...props} />
-
-        {/* <RenderSegmentTitle text={translate('dashboard.closed_loop')} /> */}
-
+        <RenderSegmentDashboardData />
         <ClosedLoopView {...props} />
-        {/* {renderSegmentTitle(translate('dashboard.comparison'))}
-        {renderStoreNPSList()} */}
       </SafeAreaView>
     );
   }
@@ -510,20 +442,6 @@ const ImageLabel = props => {
 };
 
 function getCsatData(positive, neutral, negative) {
-  // const data = [
-  //   {a: 1, b: 2, c: 97},
-  //   {a: 45, b: 45, c: 10},
-  //   {a: 55, b: 0, c: 45},
-  //   {a: 25, b: 75, c: 10},
-  //   {a: 40, b: 60, c: 10},
-  //   {a: 50, b: 50, c: 0},
-  //   {a: 50, b: 0, c: 50},
-  //   {a: 10, b: 30, c: 60},
-  //   {a: 82, b: 18, c: 10},
-  //   {a: 95, b: 5, c: 10},
-  //   {a: 0, b: 100, c: 10},
-  // ];
-
   return [
     {
       y: StringUtils.floatTo2DecimalPointString(positive),
@@ -676,6 +594,7 @@ const CxDashboard = props => {
   };
 
   let getDashboardData = () => {
+    console.log('REFRESH!!!!');
     let data = {
       startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
       endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
