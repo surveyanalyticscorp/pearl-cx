@@ -42,7 +42,6 @@ import {
   FabAddButton,
   HeaderFilter,
   IndicatorIcon,
-  RenderSegmentTitle,
 } from '../../routes/CommonScreen';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
@@ -54,45 +53,29 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import Animated, {color} from 'react-native-reanimated';
 import {StatusDashboardBottomSheet} from './ClosedLoopDashboard';
 import SelectStatus from '../closedloop/takeaction/SelectStatus';
-import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
+import {
+  getDashboardStatusListForBottomList,
+  getTrimmedNoOfResponses,
+} from '../../Utils/TicketUtils';
 import {useNavigation} from '@react-navigation/core';
 import {PaddingConstants} from '../../styles/padding.constants';
+
+import ScoreIndicatorIcon from '../../widgets/dashboardWidget/ScoreIndicatorIcon';
+import DottedLine from '../../widgets/dashboardWidget/DottedLine';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
+import RenderInfo from '../../widgets/dashboardWidget/RenderInfo';
+import CaretDownIcon from '../../widgets/IconWidget/CaretDownIcon';
+import CsatToggleButton from '../../widgets/dashboardWidget/CsatToggleButton';
+import CsatScoreLabel from '../../widgets/dashboardWidget/CsatScoreLabel';
+import CsatChart from '../../widgets/dashboardWidget/CsatChart';
+import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTitle';
+import ResponsesButton from '../../widgets/dashboardWidget/ResponsesButton';
+import RenderInfoContainer from '../../widgets/dashboardWidget/RenderInfoContainer';
 
 const wait = timeout => {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
   });
-};
-
-const getTrimmedNoOfResponses = responseCount => {
-  let numberOfResponses = responseCount ? responseCount : 0;
-
-  if (numberOfResponses >= 10000) {
-    numberOfResponses =
-      Math.round(numberOfResponses / 1000).toFixed(
-        numberOfResponses > 10000 ? 0 : 1,
-      ) + 'K';
-  } else if (numberOfResponses >= 1000) {
-    numberOfResponses = (numberOfResponses / 1000).toFixed(1) + 'K';
-  }
-  return numberOfResponses;
-};
-
-const NavigateToResponses = props => {
-  let navigation = useNavigation();
-  const navigateToResponses = () => {
-    navigation.navigate('dashboard_to_responses');
-  };
-
-  return (
-    <QPButton
-      testID="dashboardToResponseButton"
-      style={buttonStyles.textButton}
-      onPress={navigateToResponses}
-      buttonText={translate('dashboard.view_responses')}
-      textStyle={buttonStyles.textButtonText}
-    />
-  );
 };
 
 let getNPSColor = nps => {
@@ -105,200 +88,61 @@ let getNPSColor = nps => {
   }
 };
 
-const ScoreIndicatorIcon = ({diff}) => {
-  return diff === 0 ? (
-    <View />
-  ) : (
-    <IndicatorIcon
-      name={diff < 0 ? 'caret-down-sharp' : 'caret-up-sharp'}
-      color={diff < 0 ? Colors.detractor2 : Colors.promoter2}
-    />
+const NPSIcon = ({nps}) => {
+  return (
+    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      <View
+        style={[
+          dashboardStyles.roundSquareShape,
+          {backgroundColor: getNPSColor(nps)},
+        ]}
+      />
+      <DottedLine borderStyle="solid" />
+    </View>
   );
 };
 
 const NPS = ({nps, benchmark}) => {
   return (
     <View style={dashboardStyles.squareView}>
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <View
-          style={[
-            dashboardStyles.roundSquareShape,
-            {backgroundColor: getNPSColor(nps)},
-          ]}
-        />
-        <DottedLine borderStyle="solid" />
-      </View>
-
-      <Text
-        style={[
-          baseTextStyles.secondaryRegularText,
-          {fontWeight: FontWeight.bold},
-        ]}>
-        NPS:
-      </Text>
-      <Text
-        style={[
-          textStyles.secondaryText,
-          {fontWeight: FontWeight.bold, color: getNPSColor(nps)},
-        ]}>
-        {StringUtils.floatTo2DecimalPointString(nps)}
-      </Text>
-      <Text
-        style={[
-          baseTextStyles.semiSecondaryRegularText,
-          {color: Colors.evenDarkerGrey},
-        ]}>
-        {`${parseFloat(nps - benchmark).toFixed(2)}`}
-      </Text>
+      <NPSIcon nps={nps} />
+      <TextLabel text={'NPS:'} fontWeight={FontWeight.bold} />
+      <TextLabel
+        text={StringUtils.floatTo2DecimalPointString(nps)}
+        fontWeight={FontWeight.bold}
+        color={getNPSColor(nps)}
+      />
+      <TextLabel
+        text={`${parseFloat(nps - benchmark).toFixed(2)}`}
+        baseTextStyle={baseTextStyles.semiSecondaryRegularText}
+        color={Colors.evenDarkerGrey}
+      />
       <ScoreIndicatorIcon diff={nps - benchmark} />
     </View>
   );
 };
 
-const Benchmark = ({nps, benchmark}) => {
+const BenchmarkIcon = ({benchmark}) => {
+  return (
+    <View>
+      <View
+        style={[
+          dashboardStyles.roundSquareShape,
+          {backgroundColor: getNPSColor(benchmark)},
+        ]}
+      />
+      <DottedLine />
+    </View>
+  );
+};
+const Benchmark = ({benchmark}) => {
   return (
     <View style={dashboardStyles.squareView}>
-      <View>
-        <View
-          style={[
-            dashboardStyles.roundSquareShape,
-            {backgroundColor: getNPSColor(benchmark)},
-          ]}
-        />
-        <DottedLine />
-      </View>
-
-      <Text
-        style={[
-          baseTextStyles.secondaryRegularText,
-          {color: Colors.filterIconColor},
-        ]}>{`Benchmark: ${benchmark}`}</Text>
+      <BenchmarkIcon benchmark={benchmark} />
+      <TextLabel text={`Benchmark: ${benchmark}`} />
     </View>
   );
 };
-
-function RenderDonutInformation({icon, title, count}) {
-  return (
-    <View style={dashboardStyles.responseView}>
-      {/* <View style={dashboardStyles.separator} /> */}
-      <View style={dashboardStyles.ticketTypeContainer}>
-        <Image
-          source={icon}
-          style={{tintColor: Colors.evenDarkerGrey, width: 16, height: 16}}
-        />
-        {/* <Icon
-          name={icon}
-          size={Sizes.inlineIcons}
-          color={Colors.borderColor}
-        /> */}
-        <Text style={dashboardStyles.response}>{title}</Text>
-      </View>
-      <Text style={dashboardStyles.responseText}>{count}</Text>
-    </View>
-  );
-}
-
-const CSATChart = () => {
-  const {promoterPercent, passivePercent, detractorPercent} = useSelector(
-    state => state.dashboard.currentNPSData.NPSScore,
-  );
-
-  let victoryPieColorScale = [
-    Colors.promoter2,
-    Colors.passive2,
-    Colors.detractor2,
-  ];
-
-  return (
-    <VictoryPie
-      data={getCsatData(promoterPercent, passivePercent, detractorPercent)}
-      height={5 * MarginConstants.tab4}
-      width={5 * MarginConstants.tab4}
-      innerRadius={2.4 * MarginConstants.tab4}
-      radius={2.0 * MarginConstants.tab4}
-      labelRadius={2.9 * MarginConstants.tab4}
-      labelComponent={<ImageLabel />}
-      padAngle={2}
-      colorScale={victoryPieColorScale}
-      endAngle={-90}
-      startAngle={90}
-    />
-  );
-};
-
-const CSATScoreLabel = () => {
-  const {csatScore, csatMeanAverage} = useSelector(
-    state => state.dashboard.currentNPSData.NPSScore,
-  );
-  const {isCsatViewTopBox} = useSelector(state => state.dashboard);
-
-  return (
-    <Text style={dashboardStyles.csatScoreLabel}>
-      {isCsatViewTopBox
-        ? `${StringUtils.floatTo2DecimalPointString(csatMeanAverage)}`
-        : `${StringUtils.floatTo2DecimalPointString(csatScore)}%`}
-    </Text>
-  );
-};
-
-const CaretDownIcon = ({height = 8, width = 12}) => {
-  const caretDownIcon = require('./../../../assets/images/caret_down.png');
-
-  return (
-    <Image source={caretDownIcon} style={{height: height, width: width}} />
-  );
-};
-const CSATToggleButton = () => {
-  const dispatch = useDispatch();
-  const {isCsatViewTopBox} = useSelector(state => state.dashboard);
-  const label = isCsatViewTopBox ? 'Mean CSAT' : 'Top Box';
-  const toggleView = () => {
-    dispatch(toggleCsatView(!isCsatViewTopBox));
-  };
-
-  return (
-    <Pressable style={dashboardStyles.csatToggleButton} onPress={toggleView}>
-      <Text style={dashboardStyles.csatToggleButtonText}>{label}</Text>
-      <CaretDownIcon />
-    </Pressable>
-  );
-};
-
-function RenderDonutInfoContainer() {
-  const responses = useSelector(
-    state => state.dashboard.currentNPSData?.NPSScore?.totalResponses,
-  );
-  const surveyCount = useSelector(
-    state => state.dashboard.dashboardData.surveyCount,
-  );
-  const responseCount = getTrimmedNoOfResponses(responses);
-  const responseIcon = require('./../../../assets/images/total_responses_icon.png');
-  const surveyIcon = require('./../../../assets/images/surveys_icon.png');
-
-  return (
-    <View
-      style={[
-        {
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingHorizontal: PaddingConstants.tab2,
-        },
-      ]}>
-      {/* <RenderDonutInformation
-        icon={surveyIcon}
-        title={translate('dashboard.surveys')}
-        count={surveyCount}
-      /> */}
-      <RenderDonutInformation
-        icon={responseIcon}
-        title={translate('dashboard.responses')}
-        count={responseCount}
-      />
-      {/* <CSATToggleButton /> */}
-    </View>
-  );
-}
 
 const RenderSegmentDashboardData = () => {
   const {scoringModel, primaryStoreName} = useSelector(
@@ -310,11 +154,11 @@ const RenderSegmentDashboardData = () => {
   );
   return (
     <View style={dashboardStyles.chartContainer}>
-      <RenderSegmentTitle
+      <DashboardWidgetTitle
         text={currentSegmentName ?? primaryStoreName}
-        child={<NavigateToResponses />}
+        child={<ResponsesButton />}
       />
-      <RenderDonutInfoContainer />
+      <RenderInfoContainer />
       {scoringModel && scoringModel === 1 ? (
         <RenderCSATChart />
       ) : (
@@ -324,19 +168,19 @@ const RenderSegmentDashboardData = () => {
   );
 };
 
-const RenderBenchmark = ({benchmark}) => {
-  return (
-    <View
-      style={{
-        alignItems: 'center',
-        marginHorizontal: MarginConstants.tab1,
-        marginBottom: MarginConstants.tab4,
-      }}>
-      <Text style={textStyles.optionTextBold}>{benchmark}</Text>
-      <Text style={textStyles.secondaryText}>{`Benchmark`}</Text>
-    </View>
-  );
-};
+// const RenderBenchmark = ({benchmark}) => {
+//   return (
+//     <View
+//       style={{
+//         alignItems: 'center',
+//         marginHorizontal: MarginConstants.tab1,
+//         marginBottom: MarginConstants.tab4,
+//       }}>
+//       <Text style={textStyles.optionTextBold}>{benchmark}</Text>
+//       <Text style={textStyles.secondaryText}>{`Benchmark`}</Text>
+//     </View>
+//   );
+// };
 
 const NPSLabel = () => {
   const {npsPercentage, benchmarkScore} = useSelector(
@@ -347,7 +191,7 @@ const NPSLabel = () => {
     <View style={dashboardStyles.npsLabelStyle}>
       <GaugeChart npsScore={npsPercentage} benchmark={benchmarkScore} />
       <NPS nps={npsPercentage} benchmark={benchmarkScore} />
-      <Benchmark nps={npsPercentage} benchmark={benchmarkScore} />
+      <Benchmark benchmark={benchmarkScore} />
       {/* <Text style={textStyles.optionTextBold}>{npsScore ?? 0}</Text>
       <Text style={textStyles.secondaryText}>NPS</Text> */}
       {/* <Text style={textStyles.optionTextBold}>{npsScore}</Text>
@@ -411,62 +255,12 @@ let RenderDashboardContent = props => {
   return <View style={dashboardStyles.container} />;
 };
 
-const ImageLabel = props => {
-  const {x, y, index, datum} = props;
-  console.log('VICTORY_PIE', JSON.stringify(props));
-
-  const style_ = StyleSheet.create({
-    labelContainer: {
-      width: 20,
-      height: 20,
-      position: 'absolute',
-      left: x - 10,
-      top: y - 10,
-    },
-    imageLabel: {
-      width: 20,
-      height: 20,
-
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  });
-
-  return datum.y === 0 ? (
-    <View />
-  ) : (
-    <View style={style_.labelContainer}>
-      <Image source={datum.imageSource} style={style_.imageLabel} />
-    </View>
-  );
-};
-
-function getCsatData(positive, neutral, negative) {
-  return [
-    {
-      y: StringUtils.floatTo2DecimalPointString(positive),
-      x: 'positive',
-      imageSource: require('../../../assets/images/csat_positive.png'),
-    },
-    {
-      y: StringUtils.floatTo2DecimalPointString(neutral),
-      x: 'neutral',
-      imageSource: require('../../../assets/images/csat_neutral.png'),
-    },
-    {
-      y: StringUtils.floatTo2DecimalPointString(negative),
-      x: 'negative',
-      imageSource: require('../../../assets/images/csat_negative.png'),
-    },
-  ];
-}
-
 const RenderCSATChart = () => {
   return (
     <View style={dashboardStyles.csatContainer}>
-      <CSATChart />
-      <CSATScoreLabel />
-      <CSATToggleButton />
+      <CsatChart />
+      <CsatScoreLabel />
+      <CsatToggleButton />
     </View>
   );
 };
@@ -606,112 +400,22 @@ const CxDashboard = props => {
     }
   };
 
-  const RenderHorizontalBarView = () => {
-    return <HorizontalScaleBar value={'40'} />;
-  };
+  // let getNPSIcon = sentiment => {
+  //   let icon;
+  //   switch (sentiment) {
+  //     case 'Detractor':
+  //       icon = require('./../../../assets/images/detractor.png');
+  //       break;
+  //     case 'Passive':
+  //       icon = require('./../../../assets/images/passive.png');
+  //       break;
+  //     default:
+  //       icon = require('./../../../assets/images/promoter.png');
+  //       break;
+  //   }
 
-  const renderDonutChart = () => {
-    console.log('NPS OBJECT', JSON.stringify(props.currentNPSData.NPSScore));
-    let data = props.currentNPSData?.NPSScore;
-    // ?? props.dashboardData.primaryStoreNPS;
-    let responses = props.currentNPSData?.NPSScore?.totalResponses ?? 0;
-    // ??
-    // props.dashboardData.primaryStoreNPS.totalResponses;
-    let responseCount = getTrimmedNoOfResponses(responses);
-    let victoryPieData =
-      responseCount !== 0
-        ? [
-            {
-              y: data.promoterFormattedPercent,
-              x: '',
-            },
-            {
-              y: data.passiveFormattedPercent,
-              x: '',
-            },
-            {
-              y: data.detractorFormattedPercent,
-              x: '',
-            },
-          ]
-        : [
-            {y: 100, x: ''}, //for empty nps chart
-          ];
-    let victoryPieColorScale =
-      responseCount !== 0
-        ? [Colors.promoter2, Colors.passive2, Colors.detractor2]
-        : [Colors.darkGrey];
-    return (
-      <View style={dashboardStyles.container}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-around',
-            backgroundColor: Colors.white,
-            marginHorizontal: MarginConstants.tab2,
-          }}>
-          <RenderDonutInfoContainer />
-          {/* <RenderDetailsInformation {...props} /> */}
-        </View>
-
-        <View style={dashboardStyles.chartContainer}>
-          <View style={dashboardStyles.donut}>
-            <VictoryPie
-              data={victoryPieData}
-              width={5 * MarginConstants.tab4}
-              height={6 * MarginConstants.tab4}
-              innerRadius={2.4 * MarginConstants.tab4}
-              radius={2.0 * MarginConstants.tab4}
-              style={{
-                labels: {
-                  fill: 'transparent',
-                },
-              }}
-              colorScale={victoryPieColorScale}
-              endAngle={-90}
-              startAngle={90}
-            />
-            <View style={dashboardStyles.npsView}>
-              <Text style={[dashboardStyles.npsPercentText]}>
-                {data?.npsPercentage ?? 0}
-              </Text>
-              <Text style={[dashboardStyles.npsText]}>NPS</Text>
-              <View style={[dashboardStyles.emptySeparator]}></View>
-              {/* api data missing */}
-              {/* <Text style={[dashboardStyles.detailsText]}>Company NPS 32</Text>
-            <Text style={[dashboardStyles.detailsText]}>Your YTD NPS 27</Text> */}
-              {/* translation missing */}
-
-              {/* <HorizontalScaleBar value={data?.npsPercentage ?? 0} /> */}
-              <View
-                style={{
-                  zIndex: 99,
-                  marginTop: MarginConstants.tab1,
-                }}></View>
-            </View>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
-  let getNPSIcon = sentiment => {
-    let icon;
-    switch (sentiment) {
-      case 'Detractor':
-        icon = require('./../../../assets/images/detractor.png');
-        break;
-      case 'Passive':
-        icon = require('./../../../assets/images/passive.png');
-        break;
-      default:
-        icon = require('./../../../assets/images/promoter.png');
-        break;
-    }
-
-    return <Image source={icon} style={{width: 12, height: 12}} />;
-  };
+  //   return <Image source={icon} style={{width: 12, height: 12}} />;
+  // };
 
   let renderRow = storeItem => {
     return (
@@ -744,27 +448,27 @@ const CxDashboard = props => {
     );
   };
 
-  let renderStoreNPSList = () => {
-    let list = props.dashboardData.storeNPSList;
-    return (
-      <View style={dashboardStyles.listViewContainer}>
-        <View style={dashboardStyles.list}>
-          <FlatList
-            data={list.sort(
-              (a, b) => b.NPSScore.npsPercentage - a.NPSScore.npsPercentage,
-            )}
-            keyExtractor={(item, index) => index + ''}
-            renderItem={renderRow}
-            onEndReachedThreshold={0.01}
-            refreshing={false}
-            ListEmptyComponent={<RenderNoDataFound />}
-            showsVerticalScrollIndicator={false}
-            ListHeaderComponent={renderListHeader}
-          />
-        </View>
-      </View>
-    );
-  };
+  // let renderStoreNPSList = () => {
+  //   let list = props.dashboardData.storeNPSList;
+  //   return (
+  //     <View style={dashboardStyles.listViewContainer}>
+  //       <View style={dashboardStyles.list}>
+  //         <FlatList
+  //           data={list.sort(
+  //             (a, b) => b.NPSScore.npsPercentage - a.NPSScore.npsPercentage,
+  //           )}
+  //           keyExtractor={(item, index) => index + ''}
+  //           renderItem={renderRow}
+  //           onEndReachedThreshold={0.01}
+  //           refreshing={false}
+  //           ListEmptyComponent={<RenderNoDataFound />}
+  //           showsVerticalScrollIndicator={false}
+  //           ListHeaderComponent={renderListHeader}
+  //         />
+  //       </View>
+  //     </View>
+  //   );
+  // };
 
   // let RenderSegmentTitle = ({text, child}) => {
   //   return (

@@ -34,7 +34,6 @@ import {
 import {
   BottomSheetHeader,
   IconButton,
-  RenderSegmentTitle,
   RenderStatusIcon,
 } from '../../routes/CommonScreen';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -42,6 +41,7 @@ import SelectStatus from '../closedloop/takeaction/SelectStatus';
 import Animated from 'react-native-reanimated';
 import {State} from 'react-native-gesture-handler';
 import {setStatusIndex} from '../../redux/actions/dashboard.actions';
+import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTitle';
 
 const RenderDonutChart = ({count, showPercentageCount}) => {
   // let count = getCount(props.route.params.ticketCount);
@@ -462,7 +462,7 @@ export const ClosedLoopDashboard = props => {
 
   return (
     <View style={styles.container}>
-      <RenderSegmentTitle
+      <DashboardWidgetTitle
         text={translate('dashboard.closed_loop')}
         child={<ViewTicketsButton statusIndex={statusIndex} />}
       />

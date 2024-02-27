@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {MarginConstants} from '../styles/margin.constants';
-import {Colors} from '../styles/color.constants';
+import {MarginConstants} from '../../styles/margin.constants';
+import {Colors} from '../../styles/color.constants';
 
 const DottedLine = ({
   width = 1.2 * MarginConstants.tab1,
@@ -12,7 +12,7 @@ const DottedLine = ({
   return (
     <View
       style={[
-        ...styles.dottedLine,
+        styles.dottedLine,
         {borderStyle: borderStyle, width: width, borderColor: color},
       ]}
     />

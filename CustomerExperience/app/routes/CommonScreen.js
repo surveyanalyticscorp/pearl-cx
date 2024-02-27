@@ -112,20 +112,6 @@ export const IconButton = ({
   );
 };
 
-export const RenderSegmentTitle = ({text, child}) => {
-  return (
-    <View style={[dashboardStyles.dashboardTitleContainer]}>
-      <Text
-        numberOfLines={1}
-        ellipsizeMode="tail"
-        style={dashboardStyles.dashboardTitle}>
-        {text}
-      </Text>
-      {child}
-    </View>
-  );
-};
-
 export const GestureHandleBar = () => {
   const handlerStyle = StyleSheet.create({
     container: {

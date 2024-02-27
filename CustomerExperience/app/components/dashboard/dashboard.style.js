@@ -299,4 +299,10 @@ export const dashboardStyles = StyleSheet.create({
     ...baseTextStyles.secondaryRegularText,
     color: Colors.filterIconColor,
   },
+  renderInfoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: PaddingConstants.tab2,
+  },
 });

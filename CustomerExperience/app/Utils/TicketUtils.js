@@ -292,3 +292,17 @@ export const getNameInitials = title => {
     ? nameArray[0].slice(0, 2)
     : nameArray[0];
 };
+
+export const getTrimmedNoOfResponses = responseCount => {
+  let numberOfResponses = responseCount ? responseCount : 0;
+
+  if (numberOfResponses >= 10000) {
+    numberOfResponses =
+      Math.round(numberOfResponses / 1000).toFixed(
+        numberOfResponses > 10000 ? 0 : 1,
+      ) + 'K';
+  } else if (numberOfResponses >= 1000) {
+    numberOfResponses = (numberOfResponses / 1000).toFixed(1) + 'K';
+  }
+  return numberOfResponses;
+};
