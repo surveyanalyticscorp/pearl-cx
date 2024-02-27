@@ -1,80 +1,24 @@
 import React, {useState, useCallback} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  RefreshControl,
-  Pressable,
-  ScrollView,
-  useWindowDimensions,
-} from 'react-native';
+import {View, Text, StyleSheet, FlatList, RefreshControl} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {FontFamily, FontWeight} from '../../styles/font.constants';
+import {FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  BottomSheetHeader,
-  FilterIcon,
-  NoItemsFound,
-} from '../../routes/CommonScreen';
+import {BottomSheetHeader, NoItemsFound} from '../../routes/CommonScreen';
 import {convertDateTimeAgo} from '../../Utils/TimeUtils';
 import {getClosedLoopTicketItemActivity} from '../../redux/actions/dashboard.actions';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {translate} from '../../Utils/MultilinguaUtils';
-import {buttonStyles} from '../../styles/button.styles';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import SelectSorting from './takeaction/SelectSorting';
-import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
-import StringUtils from '../../Utils/StringUtils';
 import {baseTextStyles} from '../../styles/text.styles';
+import ActivityText from '../../widgets/closedloopWidget/ActivityText';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
+import SortingToggleButton from '../../widgets/closedloopWidget/SortingToggleButton';
 
-const ActivityText = ({text}) => {
-  const wordsToBold = [
-    'HIGH',
-    'LOW',
-    'CRITICAL',
-    'MEDIUM',
-    'NEW',
-    'OPEN',
-    'RESOLVED',
-    'ESCALATED',
-    'overdue',
-  ];
-  const systemFonts = [...defaultSystemFonts, FontFamily.regular];
-
-  const {width} = useWindowDimensions();
-  console.log('HTML activity', text);
-  // console.log(
-  //   'HTML text activity',
-  //   JSON.stringify(StringUtils.formatActivityToHTML(text)),
-  // );
-
-  return (
-    <View>
-      <RenderHTML
-        source={{
-          html: `
-            <span>${StringUtils.formatActivityToHTML(
-              text,
-              wordsToBold,
-            )}</span>`,
-        }}
-        contentWidth={width / 0.5}
-        systemFonts={systemFonts}
-        tagsStyles={{
-          span: {
-            color: Colors.filterIconColor,
-            ...baseTextStyles.secondaryRegularText,
-          },
-        }}
-      />
-    </View>
-  );
-};
 const SortingIcon = ({iconName, size, color}) => {
   return (
     <IonIcons
@@ -85,68 +29,28 @@ const SortingIcon = ({iconName, size, color}) => {
   );
 };
 
+const ActivityDateLabel = ({date}) => {
+  return <Text style={styles.date}>{convertDateTimeAgo(date)}</Text>;
+};
+
 const RenderItem = ({item}) => {
   return (
     // <View style={styles.renderItemContainerStyle}>
     //   <View style={styles.renderItemStyle}>
     <View style={styles.myRenderItemContainerStyle}>
       <View style={styles.myRenderItemStyle}>
-        <Text style={styles.userName}>
-          {item.userName ?? translate('ticket_list.anonymous')}
-        </Text>
-        <Text style={styles.date}>{convertDateTimeAgo(item.createdAt)}</Text>
+        <TextLabel
+          baseTextStyle={baseTextStyles.primaryRegularText}
+          color={Colors.accent}
+          text={item.userName ?? translate('ticket_list.anonymous')}
+        />
+        <ActivityDateLabel date={item.createdAt} />
       </View>
       <View style={{marginHorizontal: MarginConstants.tab1}}>
         {/* <Text style={styles.activity}>{item.activityText}</Text> */}
         <ActivityText text={item.activityText} />
       </View>
     </View>
-  );
-};
-
-const RenderMyItem = ({item}) => {
-  return (
-    <View style={styles.myRenderItemContainerStyle}>
-      <View style={styles.myRenderItemStyle}>
-        <Text style={styles.userName}>{translate('activity.you')}</Text>
-      </View>
-      <View style={{marginHorizontal: MarginConstants.tab1}}>
-        <Text style={styles.activity}> {item.activityText} </Text>
-      </View>
-      <Text style={styles.date}> {convertDateTimeAgo(item.createdAt)}</Text>
-    </View>
-  );
-};
-
-const SortingView = ({onPress, text}) => {
-  return (
-    <Pressable
-      // style={styles.sortingView}
-      style={[
-        buttonStyles.textButton,
-        {
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: Colors.white,
-          padding: PaddingConstants.tab1,
-          margin: MarginConstants.tab1,
-        },
-      ]}
-      onPress={onPress}>
-      <FilterIcon
-        style={{marginHorizontal: MarginConstants.halfTab}}
-        color={Colors.accentLight}
-        size={16}
-      />
-      <Text style={buttonStyles.textButtonText}>
-        {`${translate('activity.sorted_by')} ${text}`}
-      </Text>
-      {/* <SortingIcon
-        iconName={isInverted ? 'caret-up' : 'caret-down'}
-        color={Colors.accent}
-      /> */}
-    </Pressable>
   );
 };
 
@@ -242,7 +146,7 @@ export default function TicketActivity(props) {
           },
         ]}>
         <View style={styles.sortingView}>
-          <SortingView
+          <SortingToggleButton
             onPress={openSortingBottomSheet}
             text={sortingList[currentSortingIndex].title}
           />

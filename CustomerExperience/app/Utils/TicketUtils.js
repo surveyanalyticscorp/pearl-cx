@@ -2,6 +2,18 @@ import React, {Image} from 'react';
 import {RenderStatusIcon, ResponsesIcon} from '../routes/CommonScreen';
 import StringUtils from './StringUtils';
 
+export const wordsToBold = [
+  'HIGH',
+  'LOW',
+  'CRITICAL',
+  'MEDIUM',
+  'NEW',
+  'OPEN',
+  'RESOLVED',
+  'ESCALATED',
+  'overdue',
+];
+
 export const priorityList = [
   {title: 'Low', id: 0},
   {title: 'Medium', id: 1},
