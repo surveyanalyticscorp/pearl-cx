@@ -17,7 +17,8 @@
     "gen_android_jsbundle": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "reset_": "rm -rf node_modules && yarn cache clean && yarn",
     "clean_": "yarn cache clean",
-    "ios-pod-install": "cd ios && arch -x86_64 pod install && cd .."
+    "ios-pod-install": "cd ios && arch -x86_64 pod install && cd ..",
+    "test:unit": "jest --testPathPattern=app/testcases/unit_test"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.3",
@@ -128,7 +129,10 @@
     "testEnvironment": "jsdom",
     "setupFiles": [
       "./setupTests.js"
-    ]
+    ],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
   },
   "rnpm": {
     "assets": [

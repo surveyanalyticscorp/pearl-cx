@@ -269,4 +269,43 @@ export default class StringUtils {
     }
     return parseFloat(number).toFixed(2);
   }
+
+  static formattedCount(count, minCompareValue, notion) {
+    const formatted = (count / minCompareValue).toFixed(1);
+    return formatted.endsWith('.0')
+      ? Math.floor(formatted) + notion
+      : formatted + notion;
+  }
+
+  static getTrimmedNoOfResponses(responseCount) {
+    let ONE_THOUSAND = 1000;
+    let ONE_MILLION = 1000000;
+    let ONE_BILLION = 1000000000;
+    let ONE_THOUSAND_BILLION = 1000000000000;
+
+    // let numberOfResponses = responseCount ? responseCount : 0;
+
+    // if (numberOfResponses >= 10000) {
+    //   numberOfResponses =
+    //     Math.round(numberOfResponses / 1000).toFixed(
+    //       numberOfResponses > 10000 ? 0 : 1,
+    //     ) + 'K';
+    // } else if (numberOfResponses >= 1000) {
+    //   numberOfResponses = (numberOfResponses / 1000).toFixed(1) + 'K';
+    // }
+    // return numberOfResponses;
+
+    if (isNaN(responseCount) || responseCount < 0) return '0';
+    if (responseCount < ONE_THOUSAND) {
+      return responseCount.toString();
+    } else if (responseCount < ONE_MILLION) {
+      return this.formattedCount(responseCount, ONE_THOUSAND, 'K');
+    } else if (responseCount < ONE_BILLION) {
+      return this.formattedCount(responseCount, ONE_MILLION, 'M');
+    } else if (responseCount < ONE_THOUSAND_BILLION) {
+      return this.formattedCount(responseCount, ONE_BILLION, 'B');
+    } else {
+      return responseCount.toString();
+    }
+  }
 }

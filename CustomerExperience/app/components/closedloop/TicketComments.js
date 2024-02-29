@@ -32,7 +32,7 @@ import {getDateTimeAgo} from '../../Utils/TimeUtils';
 import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {MAX_COMMENT_LENGTH} from '../../api/Constant';
-import {event} from 'react-native-reanimated';
+import Animated, {event} from 'react-native-reanimated';
 import {baseTextStyles} from '../../styles/text.styles';
 
 function getFoldedText(text) {
@@ -293,7 +293,7 @@ const CommentBox = () => {
           styles.borderStyle,
           {alignItems: textInputHeight < 48 ? 'center' : 'flex-end'},
         ]}>
-        <MaterialIconView iconName="chat-bubble" />
+        {/* <MaterialIconView iconName="chat-bubble" /> */}
         {console.log('KEYBOARD')}
         <TextInput
           ref={textInputRef}
@@ -304,9 +304,8 @@ const CommentBox = () => {
           style={[
             {
               height: Math.max(36, textInputHeight),
-
               justifyContent: 'space-between',
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.grey,
             },
             styles.commentText,
           ]}
@@ -338,8 +337,8 @@ const CommentBox = () => {
           textLength={commentText.length}
           maxCountLength={MAX_COMMENT_LENGTH}
         />
-        <SendButton handleOnSubmit={handleOnSubmit} />
       </View>
+      <SendButton handleOnSubmit={handleOnSubmit} />
     </View>
   );
 };
@@ -387,7 +386,7 @@ export default function TicketComments(props) {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container]}>
       <ShowFlatList onRefresh_={onRefresh} refreshing_={refreshing} />
 
       <KeyboardAvoidingView
@@ -398,7 +397,7 @@ export default function TicketComments(props) {
         }>
         <CommentBox />
       </KeyboardAvoidingView>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -420,17 +419,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
 
     flex: 1,
-    backgroundColor: Colors.white,
-    marginHorizontal: MarginConstants.tab2,
+    backgroundColor: Colors.grey,
+    marginHorizontal: MarginConstants.halfTab,
   },
 
   borderStyle: {borderColor: Colors.darkerGrey, borderWidth: 1},
   commentBoxContainer: {
     minHeight: MarginConstants.tab2 * 3,
-
+    flexDirection: 'row',
+    alignItems: 'flex-end',
     marginTop: MarginConstants.tab1,
     marginBottom:
       Platform.OS === 'ios' ? MarginConstants.tab2 * 3 : MarginConstants.tab1,
+    marginHorizontal: MarginConstants.tab2,
   },
 
   commentUserView: {

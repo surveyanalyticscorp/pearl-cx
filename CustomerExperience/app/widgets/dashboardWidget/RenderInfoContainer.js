@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
-import {getTrimmedNoOfResponses} from '../../Utils/TicketUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
 import RenderInfo from './RenderInfo';
 import style from '../qp-calendar/calendar/header/style';
 import {dashboardStyles} from '../../components/dashboard/dashboard.style';
+import StringUtils from '../../Utils/StringUtils';
 
 const RenderInfoContainer = () => {
   const responses = useSelector(
@@ -14,7 +14,7 @@ const RenderInfoContainer = () => {
   const surveyCount = useSelector(
     state => state.dashboard.dashboardData.surveyCount,
   );
-  const responseCount = getTrimmedNoOfResponses(responses);
+  const responseCount = StringUtils.getTrimmedNoOfResponses(responses);
   const responseIcon = require('./../../../assets/images/total_responses_icon.png');
   const surveyIcon = require('./../../../assets/images/surveys_icon.png');
 
