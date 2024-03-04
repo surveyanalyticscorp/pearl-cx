@@ -283,18 +283,6 @@ export default class StringUtils {
     let ONE_BILLION = 1000000000;
     let ONE_THOUSAND_BILLION = 1000000000000;
 
-    // let numberOfResponses = responseCount ? responseCount : 0;
-
-    // if (numberOfResponses >= 10000) {
-    //   numberOfResponses =
-    //     Math.round(numberOfResponses / 1000).toFixed(
-    //       numberOfResponses > 10000 ? 0 : 1,
-    //     ) + 'K';
-    // } else if (numberOfResponses >= 1000) {
-    //   numberOfResponses = (numberOfResponses / 1000).toFixed(1) + 'K';
-    // }
-    // return numberOfResponses;
-
     if (isNaN(responseCount) || responseCount < 0) return '0';
     if (responseCount < ONE_THOUSAND) {
       return responseCount.toString();

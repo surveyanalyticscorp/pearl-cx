@@ -3,7 +3,9 @@ import 'react-native';
 import 'react-native-mock-render/mock';
 import {JSDOM} from 'jsdom';
 import {configure} from 'enzyme';
+import jest from 'jest';
 import Adapter from 'enzyme-adapter-react-16';
+
 global.document = new JSDOM();
 global.window = document.defaultView;
 global.fetch = require('jest-fetch-mock');

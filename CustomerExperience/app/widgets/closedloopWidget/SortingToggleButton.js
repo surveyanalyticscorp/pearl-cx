@@ -5,7 +5,6 @@ import {buttonStyles} from '../../styles/button.styles';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
 import {translate} from '../../Utils/MultilinguaUtils';
-import TextLabel from '../TextLabel/TextLabel';
 import {PaddingConstants} from '../../styles/padding.constants';
 const SortingToggleButton = ({onPress, text}) => {
   return (

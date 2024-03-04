@@ -4,7 +4,7 @@ import QPButton from '../Button';
 import {buttonStyles} from '../../styles/button.styles';
 import {translate} from '../../Utils/MultilinguaUtils';
 
-const ResponsesButton = props => {
+const ResponsesButton = () => {
   let navigation = useNavigation();
   const navigateToResponses = () => {
     navigation.navigate('dashboard_to_responses');

@@ -34,7 +34,7 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import {MAX_COMMENT_LENGTH} from '../../api/Constant';
 import Animated, {event} from 'react-native-reanimated';
 import {baseTextStyles} from '../../styles/text.styles';
-
+import SendButton from '../../widgets/SendButton';
 function getFoldedText(text) {
   //
   const MAX_WORD_LENGTH = 10;
@@ -55,10 +55,17 @@ const MaterialIconView = ({iconName, color, size}) => (
   </View>
 );
 
-const SendButton = ({handleOnSubmit}) => {
+const CommentCancelReplyButton = ({isSelected, toggle}) => {
   return (
-    <Pressable onPress={handleOnSubmit}>
-      <MaterialIconView iconName="send" />
+    <Pressable
+      style={{
+        marginStart: MarginConstants.tab4,
+        marginVertical: MarginConstants.halfTab,
+      }}
+      onPress={toggle}>
+      <Text style={[styles.replyText, {color: Colors.accentLight}]}>
+        {isSelected ? translate('cancel') : translate('comment.reply')}
+      </Text>
     </Pressable>
   );
 };
@@ -94,6 +101,104 @@ const CommentText = ({text}) => {
     </View>
   );
 };
+
+const CommentParentItemContainer = ({isSelected, children}) => {
+  return (
+    <ScrollView
+      style={[
+        styles.commentParentItemContainer,
+        {borderColor: isSelected ? Colors.darkGrey : Colors.transparent},
+      ]}>
+      {children}
+    </ScrollView>
+  );
+};
+const CommentBoxParentContainer = ({
+  textInputHeight,
+  UIalignItems,
+  children,
+}) => {
+  return (
+    <View
+      style={[
+        styles.commentBoxContainer,
+        {
+          height: textInputHeight + MarginConstants.tab1,
+          alignItems: UIalignItems,
+        },
+      ]}>
+      {children}
+    </View>
+  );
+};
+
+const CommentBoxChildContainer = ({UIalignItems, children}) => {
+  return (
+    <View
+      style={[
+        styles.commentBox,
+        styles.borderStyle,
+        {
+          alignItems: UIalignItems,
+        },
+      ]}>
+      {children}
+    </View>
+  );
+};
+
+const CommentTextInput = React.forwardRef(
+  (
+    {
+      defaultValue,
+      textInputHeight,
+      setTextInputHeight,
+      onChangeHandler,
+      hasParentId,
+    },
+    ref,
+  ) => {
+    const placeHolder =
+      // parentComment.id > 0
+      hasParentId
+        ? translate('comment.write_a_reply')
+        : translate('comment.write_a_comment');
+
+    return (
+      <TextInput
+        ref={ref}
+        defaultValue={defaultValue}
+        multiline
+        maxLength={MAX_COMMENT_LENGTH}
+        placeholderTextColor={Colors.borderColor}
+        style={[
+          {
+            height: Math.max(36, textInputHeight),
+            justifyContent: 'space-between',
+            backgroundColor: Colors.grey,
+          },
+          styles.commentText,
+        ]}
+        onChangeText={onChangeHandler}
+        placeholder={placeHolder}
+        onEndEditing={onChangeHandler}
+        onContentSizeChange={event_ => {
+          console.log(
+            'EVENT',
+            JSON.stringify(event_.nativeEvent.contentSize.height),
+          );
+          setTextInputHeight(event_.nativeEvent.contentSize.height);
+        }}
+        returnKeyType={'default'}
+        onSubmitEditing={event => {
+          console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
+          onChangeHandler(event.nativeEvent.text);
+          // handleOnSubmit();
+        }}
+      />
+    );
+  },
+);
 
 const TextLengthCount = ({textLength, maxCountLength}) => {
   return textLength > 0 ? (
@@ -179,25 +284,10 @@ const CommentParentItem = ({item}) => {
     );
   };
 
-  // useEffect(() => {
-  //   dispatch(
-  //     setParentComment(
-  //       isCommentBoxVisible
-  //         ? {...item, isFocused: true}
-  //         : {id: 0, isFocused: false},
-  //     ),
-  //   );
-  // }, [isCommentBoxVisible]);
   return (
-    <ScrollView
-      style={{
-        margin: MarginConstants.tab1,
-        padding: PaddingConstants.halfTab,
-        borderWidth: 1,
-        borderColor: isSelected ? Colors.darkGrey : Colors.transparent,
-      }}>
+    <CommentParentItemContainer isSelected={isSelected}>
       <CommentItem item={item} isSelected={isSelected} />
-      {item.children.length > 0 && (
+      {item.children.length > 0 ? (
         <View
           style={{
             marginStart: MarginConstants.tab2,
@@ -205,20 +295,14 @@ const CommentParentItem = ({item}) => {
           }}>
           <ShowNestedFlatList data={item.children} isSelected={isSelected} />
         </View>
+      ) : (
+        <View />
       )}
-
-      <Pressable
-        style={{
-          marginStart: MarginConstants.tab4,
-          marginVertical: MarginConstants.halfTab,
-        }}
-        onPress={toggleCommentBoxVisibility}>
-        <Text style={[styles.replyText, {color: Colors.accentLight}]}>
-          {isSelected ? translate('cancel') : translate('comment.reply')}
-        </Text>
-      </Pressable>
-      {/* {isCommentBoxVisible && <CommentBox parentId={item.id} />} */}
-    </ScrollView>
+      <CommentCancelReplyButton
+        isSelected={isSelected}
+        toggle={toggleCommentBoxVisibility}
+      />
+    </CommentParentItemContainer>
   );
 };
 
@@ -234,12 +318,9 @@ const CommentBox = () => {
   const [commentText, setCommentText] = useState('');
   const [textInputHeight, setTextInputHeight] = useState(0);
   const userInfo = useSelector(state => state.global);
-
+  const UIalignItems = textInputHeight < 48 ? 'center' : 'flex-end';
   console.log('USER_INFO', JSON.stringify(userInfo));
-  const placeHolder =
-    parentComment.id > 0
-      ? translate('comment.write_a_reply')
-      : translate('comment.write_a_comment');
+
   // const marginForCommentBox = parentId > 0 ? MarginConstants.tab4 : 0;
 
   useEffect(() => {
@@ -282,64 +363,27 @@ const CommentBox = () => {
   };
 
   return (
-    <View
-      style={[
-        styles.commentBoxContainer,
-        {height: textInputHeight + MarginConstants.tab1},
-      ]}>
-      <View
-        style={[
-          styles.commentBox,
-          styles.borderStyle,
-          {alignItems: textInputHeight < 48 ? 'center' : 'flex-end'},
-        ]}>
+    <CommentBoxParentContainer
+      textInputHeight={textInputHeight}
+      UIalignItems={UIalignItems}>
+      <CommentBoxChildContainer UIalignItems={UIalignItems}>
         {/* <MaterialIconView iconName="chat-bubble" /> */}
         {console.log('KEYBOARD')}
-        <TextInput
+        <CommentTextInput
           ref={textInputRef}
           defaultValue={commentText}
-          multiline
-          maxLength={MAX_COMMENT_LENGTH}
-          placeholderTextColor={Colors.borderColor}
-          style={[
-            {
-              height: Math.max(36, textInputHeight),
-              justifyContent: 'space-between',
-              backgroundColor: Colors.grey,
-            },
-            styles.commentText,
-          ]}
-          onChangeText={onChangeCommentHandler}
-          placeholder={placeHolder}
-          // onChange={e => {
-          //   // setTextInputHeight(e.nativeEvent.contentSize.height);
-          //   console.log(
-          //     'EVENT',
-          //     JSON.stringify(e.nativeEvent.),
-          //   );
-          // }}
-          // onEndEditing={onChangeCommentHandler}
-          onContentSizeChange={event => {
-            console.log(
-              'EVENT',
-              JSON.stringify(event.nativeEvent.contentSize.height),
-            );
-            setTextInputHeight(event.nativeEvent.contentSize.height);
-          }}
-          returnKeyType={'send'}
-          onSubmitEditing={event => {
-            console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
-            onChangeCommentHandler(event.nativeEvent.text);
-            handleOnSubmit();
-          }}
+          textInputHeight={textInputHeight}
+          setTextInputHeight={setTextInputHeight}
+          onChangeHandler={onChangeCommentHandler}
+          hasParentId={parentComment.id > 0}
         />
         <TextLengthCount
           textLength={commentText.length}
           maxCountLength={MAX_COMMENT_LENGTH}
         />
-      </View>
+      </CommentBoxChildContainer>
       <SendButton handleOnSubmit={handleOnSubmit} />
-    </View>
+    </CommentBoxParentContainer>
   );
 };
 
@@ -430,7 +474,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginTop: MarginConstants.tab1,
     marginBottom:
-      Platform.OS === 'ios' ? MarginConstants.tab2 * 3 : MarginConstants.tab1,
+      Platform.OS === 'ios' ? MarginConstants.tab2 * 3 : MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab2,
   },
 
@@ -523,5 +567,10 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.mediumText,
     color: Colors.primary,
+  },
+  commentParentItemContainer: {
+    margin: MarginConstants.tab1,
+    padding: PaddingConstants.halfTab,
+    borderWidth: 1,
   },
 });

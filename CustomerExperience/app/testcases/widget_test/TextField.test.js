@@ -5,6 +5,8 @@ import configureStore from 'redux-mock-store';
 import QPTextField from '../../widgets/TextField';
 import '../../../setupTests';
 
+jest.mock('react-native-vector-icons/MaterialIcons');
+
 it('should render correctly <QPTextField> component', () => {
   const mockStore = configureStore();
   const store = mockStore({});
