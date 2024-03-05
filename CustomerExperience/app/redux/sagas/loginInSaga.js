@@ -250,6 +250,7 @@ function* doLogoutAction(action) {
       {'Auth-Token': action.token},
       action.param,
     );
+    console.log('CX_LOGOUT_RESPONSE', JSON.stringify(response));
     yield put({type: LOGOUT_RESPONSE, response: response});
   } catch (error) {
     // showErrorFlashMessage(error.message);
@@ -257,7 +258,7 @@ function* doLogoutAction(action) {
     yield put({type: LOGOUT_RESPONSE, response: {}});
   } finally {
     yield put({type: CLEAR_API_ERROR, payload: {isLoading: false}});
-    yield put({type: LOGOUT_RESPONSE, response: {}});
+    // yield put({type: LOGOUT_RESPONSE, response: {}});
   }
 }
 

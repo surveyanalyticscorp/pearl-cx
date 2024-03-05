@@ -32,13 +32,23 @@ import {
   setBaseUrl,
   updateBaseUrl,
 } from '../../redux/actions/login.actions';
-import StringUtils from '../../Utils/StringUtils';
 import moment from 'moment';
 
 function SplashScreen(props) {
   let [moveNext, setMoveNext] = useState(false);
   let splashTimer = useRef(null);
   const dispatch = useDispatch();
+
+  const validateExpireDate = expireDate => {
+    const today = new Date();
+    if (expireDate && moment(today).isAfter(moment(expireDate))) {
+      dispatch(setTokenExpired(true));
+      console.log('EXPIRED!');
+    } else {
+      dispatch(setTokenExpired(false));
+      console.log('not EXPIRED');
+    }
+  };
 
   const setGlobalBaseUrl = () => {
     AsyncStorage.getItem(BASE_URL).then(baseUrl => {
@@ -64,16 +74,9 @@ function SplashScreen(props) {
   // };
 
   useEffect(() => {
-    splashTimer = setTimeout(() => {
+    splashTimer.current = setTimeout(() => {
       AsyncStorage.getItem(ASYNC_LOGIN_EXPIRE_DATE).then(expireDate => {
-        const today = new Date();
-        if (expireDate && moment(today).isAfter(moment(expireDate))) {
-          dispatch(setTokenExpired(true));
-          console.log('EXPIRED!');
-        } else {
-          dispatch(setTokenExpired(false));
-          console.log('not EXPIRED');
-        }
+        validateExpireDate(expireDate);
       });
 
       AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {
@@ -128,7 +131,7 @@ function SplashScreen(props) {
     }, 1000);
 
     return () => {
-      clearTimeout(splashTimer);
+      clearTimeout(splashTimer.current);
     };
   }, []);
 

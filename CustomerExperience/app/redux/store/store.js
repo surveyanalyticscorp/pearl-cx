@@ -4,6 +4,7 @@ import {createLogger} from 'redux-logger';
 
 import createSagaMiddleware from 'redux-saga';
 import {rootSaga} from '../sagas/index';
+import {composeWithDevTools} from '@redux-devtools/extension';
 
 const enhancerList = [];
 const devToolsExtension = window && window.__REDUX_DEVTOOLS_EXTENSION__;
@@ -18,7 +19,11 @@ const composedEnhancer = compose(
 );
 
 // Redux: Store
-const store = createStore(rootReducer, {}, composedEnhancer);
+const store = createStore(
+  rootReducer,
+  {},
+  composeWithDevTools(composedEnhancer),
+);
 
 // Middleware: Redux Saga
 sagaMiddleware.run(rootSaga);
