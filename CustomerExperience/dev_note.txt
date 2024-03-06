@@ -6,3 +6,5 @@
 
 
 # "react-native-siren": "0.0.3" was removed from the package
+
+# node version '16.15.0'

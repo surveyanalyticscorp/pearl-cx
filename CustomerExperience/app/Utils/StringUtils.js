@@ -143,7 +143,7 @@ export default class StringUtils {
 
   static convertStringToNumberElseReturnZero(str) {
     try {
-      return convertStringToNumber(str);
+      return this.convertStringToNumber(str);
     } catch (e) {
       return 0;
     }
@@ -152,7 +152,7 @@ export default class StringUtils {
   static getShortTextTruncateMiddle(str, MAX_LENGTH = 30) {
     const MIN_LENGTH = 10;
     const ELLIPSIS_LENGTH = 3;
-    if (isEmpty(str)) {
+    if (this.isEmpty(str)) {
       return str;
     }
 
@@ -173,7 +173,7 @@ export default class StringUtils {
   }
 
   static getShortTextTruncateEnd(str, lengthLimit) {
-    if (isEmpty(str)) {
+    if (this.isEmpty(str)) {
       return str;
     }
 
@@ -209,7 +209,7 @@ export default class StringUtils {
     for (let i = 0; i < obj[property].length; i++) {
       let item = obj[property][i];
 
-      itemsTextSeparatedByNewLine += emptyIfUndefined(item.text);
+      itemsTextSeparatedByNewLine += this.emptyIfUndefined(item.text);
       const isNotLastItem = i != lastItemIndex;
       itemsTextSeparatedByNewLine += isNotLastItem ? '\n' : '';
     }
@@ -228,7 +228,7 @@ export default class StringUtils {
   }
 
   static addCssClassToTargetMacSafariBrowser(cssClass) {
-    return cssClass + (isSafariBrowserOnMacOS() ? ' mac-safari' : '');
+    return cssClass + (this.isSafariBrowserOnMacOS() ? ' mac-safari' : '');
   }
 
   static removeSpecialCharacters(text) {
@@ -244,7 +244,7 @@ export default class StringUtils {
   }
 
   static getPlainTextWithoutSpecialCharacters(text) {
-    return convertToPlainText(removeSpecialCharacters(text));
+    return this.convertToPlainText(this.removeSpecialCharacters(text));
   }
 
   static removeNewLines(text) {

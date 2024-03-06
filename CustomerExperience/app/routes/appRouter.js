@@ -402,7 +402,7 @@ const AppRouter = props => {
         component={Feedback}
         options={({navigation, route}) => ({
           // title: 'Responses',
-          // headerLeft: (props) => <View />,
+          headerLeft: props => <HeaderBackLeft {...props} route={route} />,
           // headerRight: (props) => <CloseButton />,
           headerTitle: props => {
             return (
@@ -420,7 +420,7 @@ const AppRouter = props => {
         component={ClosedLoop}
         options={({navigation, route}) => ({
           // title: 'Responses',
-          // headerLeft: (props) => <View />,
+          headerLeft: props => <HeaderBackLeft {...props} route={route} />,
           // headerRight: (props) => <CloseButton />,
           headerTitle: props => {
             return (
