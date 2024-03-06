@@ -62,6 +62,7 @@ import StringUtils from '../Utils/StringUtils';
 import {color} from 'react-native-reanimated';
 import ClosedLoopStack from './ClosedLoopStack';
 import QPButton from '../widgets/Button';
+import TicketDetails from '../components/closedloop/TicketDetails';
 // import CheckBox from '@react-native-community/checkbox';
 
 const DateRangeTab = createMaterialTopTabNavigator();
@@ -976,12 +977,15 @@ const CommonScreens = RootStack => {
     />,
     <RootStack.Screen
       key={'TicketDetails'}
-      name={translate('close_loop.ticket_details')}
-      component={TicketLogTabStack}
+      name={'TicketDetails'}
+      component={TicketDetails}
       options={({navigation, route}) => ({
+        // headerShown: false,
+        title: 'Ticket Details',
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
-        headerRight: props =>
-          route.state && route.state.index !== 0 ? <View /> : <EditTicket />,
+        headerRight: props => <View />,
+        // headerRight: (props) => <EditTicket {...props} route={route} />,
+        // headerLeft: (props) => <MenuIcon />,
       })}
     />,
 
