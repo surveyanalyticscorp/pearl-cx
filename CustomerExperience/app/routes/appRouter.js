@@ -370,14 +370,14 @@ const AppRouter = props => {
           // headerRight: (props) => <SearchIcon route={'Dashboard'} />,
         })}
       />
-      <DetractorStack.Screen
+      {/* <DetractorStack.Screen
         name={translate('close_loop.close_loop')}
         component={CloseLoopTicketsTabs}
         options={({navigation, route}) => ({
           headerLeft: props => <HeaderBackLeft {...props} route={route} />,
           headerRight: props => <SearchIcon route={'Dashboard'} />,
         })}
-      />
+      /> */}
       <DetractorStack.Screen
         name="Search Ticket"
         component={SearchTicket}

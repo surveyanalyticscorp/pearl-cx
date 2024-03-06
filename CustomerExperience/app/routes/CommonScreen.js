@@ -63,6 +63,11 @@ import {color} from 'react-native-reanimated';
 import ClosedLoopStack from './ClosedLoopStack';
 import QPButton from '../widgets/Button';
 import TicketDetails from '../components/closedloop/TicketDetails';
+import TicketTakeAction from '../components/closedloop/takeaction/TIcketTakeAction';
+import FeedbackSorter from '../components/feedback/FeedbackSorter';
+import SelectEmailTemplate from '../components/closedloop/takeaction/SelectEmailTemplate';
+import SendEmail from '../components/closedloop/takeaction/SendEmail';
+import ActionEmailHistory from '../components/closedloop/takeaction/ActionEmailHistory';
 // import CheckBox from '@react-native-community/checkbox';
 
 const DateRangeTab = createMaterialTopTabNavigator();
@@ -1031,6 +1036,54 @@ const CommonScreens = RootStack => {
         //   open: TransitionSpecs.FadeInFromBottomAndroidSpec,
         //   close: TransitionSpecs.TransitionIOSSpec,
         // },
+      })}
+    />,
+
+    ///// closed loop things
+
+    <RootStack.Screen
+      name={'TicketTakeAction'}
+      component={TicketTakeAction}
+      options={({navigation, route}) => ({
+        title: 'Take action ',
+        headerShown: false,
+        // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
+        // headerRight: (props) => <EditTicket {...props} route={route} />,
+        // headerLeft: (props) => <MenuIcon />,
+      })}
+    />,
+    <RootStack.Screen
+      name={translate('responses.sort_by')}
+      component={FeedbackSorter}
+      options={({navigation, route}) => ({
+        headerLeft: props => <View />,
+        headerRight: props => <CloseButton />,
+      })}
+    />,
+
+    <RootStack.Screen
+      name={'SelectEmailTemplate'}
+      component={SelectEmailTemplate}
+      options={({navigation, route}) => ({
+        title: 'Select template',
+        headerShown: false,
+      })}
+    />,
+    <RootStack.Screen
+      name={'sendEmail'}
+      component={SendEmail}
+      options={({navigation, route}) => ({
+        title: 'Send email',
+        headerShown: false,
+      })}
+    />,
+
+    <RootStack.Screen
+      name={'actionEmailHistory'}
+      component={ActionEmailHistory}
+      options={({navigation, route}) => ({
+        title: 'Action email history',
+        headerShown: false,
       })}
     />,
   ];
