@@ -165,95 +165,20 @@ const DashboardStack = ({navigation, route}) => {
           headerRight: props => <NotificationIcon />,
         })}
       />
-      <DetractorStack.Screen
+      {/* <DetractorStack.Screen
         name="Closed Loop"
         component={ClosedLoop}
         options={({navigation, route}) => ({
           headerLeft: props => <HeaderBackLeft {...props} route={route} />,
           headerRight: props => <SearchIcon route={'Dashboard'} />,
         })}
-      />
+      /> */}
       <DetractorStack.Screen
         name="Search Ticket"
         component={SearchTicket}
         options={({navigation, route}) => ({
           headerShown: false,
           headerLeft: props => <HeaderBackLeft {...props} route={route} />,
-        })}
-      />
-
-      <DetractorStack.Screen
-        name={'TicketDetails'}
-        component={TicketDetails}
-        options={({navigation, route}) => ({
-          // headerShown: false,
-          title: 'Ticket Details',
-          headerLeft: props => <HeaderBackLeft {...props} route={route} />,
-          headerRight: props => <View />,
-          // headerRight: (props) => <EditTicket {...props} route={route} />,
-          // headerLeft: (props) => <MenuIcon />,
-        })}
-      />
-      <DetractorStack.Screen
-        name={'TicketTakeAction'}
-        component={TicketTakeAction}
-        options={({navigation, route}) => ({
-          title: 'Take action ',
-          headerShown: false,
-          // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
-          // headerRight: (props) => <EditTicket {...props} route={route} />,
-          // headerLeft: (props) => <MenuIcon />,
-        })}
-      />
-      <DetractorStack.Screen
-        name={translate('responses.sort_by')}
-        component={FeedbackSorter}
-        options={({navigation, route}) => ({
-          headerLeft: props => <View />,
-          headerRight: props => <CloseButton />,
-        })}
-      />
-      {/* <FeedbackStack.Screen
-        name={translate('responses.new_ticket')}
-        component={CreateTicket}
-        options={({navigation, route}) => ({
-          headerShown: false,
-          // headerLeft: (props) => <View />,
-          // headerRight: (props) => <CloseButton />,
-        })}
-      /> */}
-      <DetractorStack.Screen
-        name={'SelectEmailTemplate'}
-        component={SelectEmailTemplate}
-        options={({navigation, route}) => ({
-          title: 'Select template',
-          headerShown: false,
-          // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
-          // headerRight: (props) => <EditTicket {...props} route={route} />,
-          // headerLeft: (props) => <MenuIcon />,
-        })}
-      />
-      <DetractorStack.Screen
-        name={'sendEmail'}
-        component={SendEmail}
-        options={({navigation, route}) => ({
-          title: 'Send email',
-          headerShown: false,
-          // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
-          // headerRight: (props) => <EditTicket {...props} route={route} />,
-          // headerLeft: (props) => <MenuIcon />,
-        })}
-      />
-
-      <DetractorStack.Screen
-        name={'actionEmailHistory'}
-        component={ActionEmailHistory}
-        options={({navigation, route}) => ({
-          title: 'Action email history',
-          headerShown: false,
-          // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
-          // headerRight: (props) => <EditTicket {...props} route={route} />,
-          // headerLeft: (props) => <MenuIcon />,
         })}
       />
 

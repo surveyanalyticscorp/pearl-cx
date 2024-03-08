@@ -205,8 +205,8 @@ export const dashboardStyles = StyleSheet.create({
   chartContainer: {
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 10
-      : MarginConstants.tab4 * 8,
+      ? MarginConstants.tab4 * 10.5
+      : MarginConstants.tab4 * 8.5,
     flexDirection: 'column',
     justifyContent: 'center',
     marginTop: MarginConstants.tab2,
@@ -306,9 +306,28 @@ export const dashboardStyles = StyleSheet.create({
     paddingHorizontal: PaddingConstants.tab2,
   },
   renderNpsChartContainer: {
-    flex: 5,
+    flex: 6,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
   },
+  npsLegendContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  legendIcon: {
+    width: MarginConstants.tab1 * 1.5,
+    height: MarginConstants.tab1 * 1.5,
+    borderRadius: 2,
+    alignItems: 'center',
+    margin: MarginConstants.halfTab,
+  },
+  legendItemView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: MarginConstants.tab1,
+  },
+  npsIcon: {justifyContent: 'center', alignItems: 'center'},
 });

@@ -7,6 +7,7 @@ import {
   BackHandler,
   Alert,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import {showLoading} from '../../redux/actions/index';
 import {getDashboardContent} from '../../redux/actions/dashboard.actions';
@@ -41,6 +42,7 @@ import CsatChart from '../../widgets/dashboardWidget/CsatChart';
 import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTitle';
 import ResponsesButton from '../../widgets/dashboardWidget/ResponsesButton';
 import RenderInfoContainer from '../../widgets/dashboardWidget/RenderInfoContainer';
+import style from '../../widgets/qp-calendar/calendar/header/style';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -60,7 +62,7 @@ let getNPSColor = nps => {
 
 const NPSIcon = ({nps}) => {
   return (
-    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+    <View style={dashboardStyles.npsIcon}>
       <View
         style={[
           dashboardStyles.roundSquareShape,
@@ -147,26 +149,66 @@ const RenderSegmentDashboardData = () => {
   );
 };
 
-// const RenderBenchmark = ({benchmark}) => {
-//   return (
-//     <View
-//       style={{
-//         alignItems: 'center',
-//         marginHorizontal: MarginConstants.tab1,
-//         marginBottom: MarginConstants.tab4,
-//       }}>
-//       <Text style={textStyles.optionTextBold}>{benchmark}</Text>
-//       <Text style={textStyles.secondaryText}>{`Benchmark`}</Text>
-//     </View>
-//   );
-// };
+const LegendScoreView = ({count, percentage, backgroundColor}) => {
+  return (
+    <View style={dashboardStyles.legendItemView}>
+      <View
+        style={{
+          ...dashboardStyles.legendIcon,
+          backgroundColor: backgroundColor,
+        }}
+      />
+      <Text
+        style={{
+          ...baseTextStyles.secondaryRegularText,
+          fontWeight: FontWeight.bold,
+        }}>
+        {count}
+      </Text>
+      <Text style={baseTextStyles.secondaryRegularText}>
+        {`(${StringUtils.floatTo2DecimalPointString(percentage)}%)`}
+      </Text>
+    </View>
+  );
+};
 
+const NPSLegendView = () => {
+  const {
+    promoters,
+    passive,
+    detractors,
+    promoterPercent,
+    passivePercent,
+    detractorPercent,
+  } = useSelector(state => state.dashboard.currentNPSData?.NPSScore);
+
+  return (
+    <View style={dashboardStyles.npsLegendContainer}>
+      <LegendScoreView
+        count={detractors}
+        percentage={detractorPercent}
+        backgroundColor={Colors.detractor2}
+      />
+      <LegendScoreView
+        count={passive}
+        percentage={passivePercent}
+        backgroundColor={Colors.passive2}
+      />
+      <LegendScoreView
+        count={promoters}
+        percentage={promoterPercent}
+        backgroundColor={Colors.promoter2}
+      />
+    </View>
+  );
+};
 const NPSView = () => {
   return (
     <View style={dashboardStyles.npsViewContainer}>
       <NpsGaugeChart />
       <NpsScoreView />
       <BenchmarkView />
+      <NPSLegendView />
     </View>
   );
 };

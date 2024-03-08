@@ -4,14 +4,26 @@ import AMCharts from '../AMChart';
 import {StyleSheet} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {useSelector} from 'react-redux';
+import {generatedAxisRanges} from '../../Utils/NPSChartUtils';
+import {TextSizes} from '../../styles/textsize.constants';
 
 const NpsGaugeChart = () => {
-  const {npsPercentage, benchmarkScore} = useSelector(
-    state => state.dashboard.currentNPSData?.NPSScore,
-  );
-  console.log('Gauge', npsPercentage, benchmarkScore);
+  const {
+    promoterPercent,
+    passivePercent,
+    detractorPercent,
+    npsPercentage,
+    benchmarkScore,
+  } = useSelector(state => state.dashboard.currentNPSData?.NPSScore);
+  // console.log('Gauge', npsPercentage, benchmarkScore);
 
   const chartType = 'GaugeChart';
+
+  const axisRanges = generatedAxisRanges([
+    {value: detractorPercent, fillColor: Colors.detractor2},
+    {value: passivePercent, fillColor: Colors.passive2},
+    {value: promoterPercent, fillColor: Colors.promoter2},
+  ]);
 
   const guage_ = {
     // Set inner radius
@@ -24,37 +36,21 @@ const NpsGaugeChart = () => {
         min: -100,
         max: 100,
         strictMinMax: true,
-
+        renderer: {
+          minGridDistance: 200,
+          inside: false,
+          labels: {
+            template: {
+              fontFamily: 'Fira Sans, Arial, Helvetica, sans-serif', // Fallback fonts
+              fontSize: TextSizes.primary,
+              // "font-weight": "bold",
+              // color: Colors.accentLight,
+              fill: Colors.filterIconColor,
+            },
+          },
+        },
         // Add ranges
-        axisRanges: [
-          {
-            value: -100,
-            endValue: 0,
-            axisFill: {
-              fillOpacity: 1,
-              fill: Colors.detractor2,
-              zIndex: -1,
-            },
-          },
-          {
-            value: 0,
-            endValue: 50,
-            axisFill: {
-              fillOpacity: 1,
-              fill: Colors.passive2,
-              zIndex: -1,
-            },
-          },
-          {
-            value: 50,
-            endValue: 100,
-            axisFill: {
-              fillOpacity: 1,
-              fill: Colors.promoter2,
-              zIndex: -1,
-            },
-          },
-        ],
+        axisRanges: axisRanges,
       },
     ],
 
