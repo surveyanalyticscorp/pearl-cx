@@ -42,7 +42,7 @@ import CsatChart from '../../widgets/dashboardWidget/CsatChart';
 import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTitle';
 import ResponsesButton from '../../widgets/dashboardWidget/ResponsesButton';
 import RenderInfoContainer from '../../widgets/dashboardWidget/RenderInfoContainer';
-import style from '../../widgets/qp-calendar/calendar/header/style';
+import LegendScoreView from '../../widgets/dashboardWidget/LegendScoreView';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -133,12 +133,13 @@ const RenderSegmentDashboardData = () => {
   const currentSegmentName = useSelector(
     state => state.dashboard?.currentSegment?.currentSegment,
   );
+
+  const title = `${currentSegmentName ?? primaryStoreName} ${
+    scoringModel === 1 ? 'CSAT' : 'NPS'
+  }`;
   return (
     <View style={dashboardStyles.chartContainer}>
-      <DashboardWidgetTitle
-        text={currentSegmentName ?? primaryStoreName}
-        child={<ResponsesButton />}
-      />
+      <DashboardWidgetTitle text={title} child={<ResponsesButton />} />
       <RenderInfoContainer />
       {scoringModel && scoringModel === 1 ? (
         <RenderCSATChart />
@@ -149,28 +150,28 @@ const RenderSegmentDashboardData = () => {
   );
 };
 
-const LegendScoreView = ({count, percentage, backgroundColor}) => {
-  return (
-    <View style={dashboardStyles.legendItemView}>
-      <View
-        style={{
-          ...dashboardStyles.legendIcon,
-          backgroundColor: backgroundColor,
-        }}
-      />
-      <Text
-        style={{
-          ...baseTextStyles.secondaryRegularText,
-          fontWeight: FontWeight.bold,
-        }}>
-        {count}
-      </Text>
-      <Text style={baseTextStyles.secondaryRegularText}>
-        {`(${StringUtils.floatTo2DecimalPointString(percentage)}%)`}
-      </Text>
-    </View>
-  );
-};
+// const LegendScoreView = ({count, percentage, backgroundColor}) => {
+//   return (
+//     <View style={dashboardStyles.legendItemView}>
+//       <View
+//         style={{
+//           ...dashboardStyles.legendIcon,
+//           backgroundColor: backgroundColor,
+//         }}
+//       />
+//       <Text
+//         style={{
+//           ...baseTextStyles.secondaryRegularText,
+//           fontWeight: FontWeight.bold,
+//         }}>
+//         {count}
+//       </Text>
+//       <Text style={baseTextStyles.secondaryRegularText}>
+//         {`(${StringUtils.floatTo2DecimalPointString(percentage)}%)`}
+//       </Text>
+//     </View>
+//   );
+// };
 
 const NPSLegendView = () => {
   const {
@@ -185,16 +186,19 @@ const NPSLegendView = () => {
   return (
     <View style={dashboardStyles.npsLegendContainer}>
       <LegendScoreView
+        title={'Detractors'}
         count={detractors}
         percentage={detractorPercent}
         backgroundColor={Colors.detractor2}
       />
       <LegendScoreView
+        title={'Passive'}
         count={passive}
         percentage={passivePercent}
         backgroundColor={Colors.passive2}
       />
       <LegendScoreView
+        title={'Promoters'}
         count={promoters}
         percentage={promoterPercent}
         backgroundColor={Colors.promoter2}

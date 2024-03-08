@@ -129,6 +129,7 @@ export const dashboardStyles = StyleSheet.create({
     backgroundColor: Colors.white,
     paddingHorizontal: MarginConstants.tab2,
     paddingVertical: PaddingConstants.tab1,
+    maxHeight: MarginConstants.tab4 * 1.5,
   },
   closedLoopView: {
     justifyContent: 'center',
@@ -205,8 +206,8 @@ export const dashboardStyles = StyleSheet.create({
   chartContainer: {
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 10.5
-      : MarginConstants.tab4 * 8.5,
+      ? MarginConstants.tab4 * 15
+      : MarginConstants.tab4 * 13,
     flexDirection: 'column',
     justifyContent: 'center',
     marginTop: MarginConstants.tab2,
@@ -306,28 +307,33 @@ export const dashboardStyles = StyleSheet.create({
     paddingHorizontal: PaddingConstants.tab2,
   },
   renderNpsChartContainer: {
-    flex: 6,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
   },
   npsLegendContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
+    flex: 1,
+    width: '100%',
+    marginBottom: MarginConstants.tab2,
   },
   legendIcon: {
     width: MarginConstants.tab1 * 1.5,
     height: MarginConstants.tab1 * 1.5,
     borderRadius: 2,
     alignItems: 'center',
-    margin: MarginConstants.halfTab,
+    marginEnd: MarginConstants.halfTab,
   },
   legendItemView: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: MarginConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab2,
   },
+
   npsIcon: {justifyContent: 'center', alignItems: 'center'},
 });
