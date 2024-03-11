@@ -1042,6 +1042,7 @@ const CommonScreens = RootStack => {
     ///// closed loop things
 
     <RootStack.Screen
+      key={'TicketTakeAction'}
       name={'TicketTakeAction'}
       component={TicketTakeAction}
       options={({navigation, route}) => ({
@@ -1053,6 +1054,7 @@ const CommonScreens = RootStack => {
       })}
     />,
     <RootStack.Screen
+      key={translate('responses.sort_by')}
       name={translate('responses.sort_by')}
       component={FeedbackSorter}
       options={({navigation, route}) => ({
@@ -1062,6 +1064,7 @@ const CommonScreens = RootStack => {
     />,
 
     <RootStack.Screen
+      key={'SelectEmailTemplate'}
       name={'SelectEmailTemplate'}
       component={SelectEmailTemplate}
       options={({navigation, route}) => ({
@@ -1070,6 +1073,7 @@ const CommonScreens = RootStack => {
       })}
     />,
     <RootStack.Screen
+      key={'sendEmail'}
       name={'sendEmail'}
       component={SendEmail}
       options={({navigation, route}) => ({
@@ -1079,6 +1083,7 @@ const CommonScreens = RootStack => {
     />,
 
     <RootStack.Screen
+      key={'actionEmailHistory'}
       name={'actionEmailHistory'}
       component={ActionEmailHistory}
       options={({navigation, route}) => ({

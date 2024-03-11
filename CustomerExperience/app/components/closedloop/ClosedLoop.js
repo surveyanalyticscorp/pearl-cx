@@ -97,7 +97,8 @@ export default function ClosedLoop(props) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const itemPerPage = 20;
-  const {statusId} = useSelector(state => state.global);
+  const statusId = useSelector(state => state.global.statusId);
+  console.log('STATUS_ID_FILTER', statusId);
 
   const [pageNumber, setPageNumber] = useState(1);
   const {feedbackApiKey, feedbackID, userID} = useSelector(
@@ -125,6 +126,8 @@ export default function ClosedLoop(props) {
     type: '',
     search: '',
   });
+
+  console.log('STATUS_ID_FILTER_useeffect', JSON.stringify(filterState));
 
   function convertDateToYMDFORMAT(date) {
     return moment(date, DMYFORMAT).format(YMDFORMAT);
@@ -218,17 +221,43 @@ export default function ClosedLoop(props) {
     resetFilterState(range_);
   };
 
-  const filterByStatus = () => {
-    if (StringUtils.isNotEmpty(statusId)) {
-      setFilterState(state => ({
-        ...state,
-        status: statusId,
-      }));
-      dispatch(resetStatusId());
-    }
+  function setStatusToFilter(data, statusId_) {
+    let arr = [];
+    data.map(value => {
+      console.log(value);
+      arr.push({...value, isChecked: value.id === statusId_});
+    });
+    return arr;
+  }
+
+  const filterByStatus = statusId_ => {
+    let tempStatusData = [];
+
+    filterData.status.map(value => {
+      console.log('STATUS_ID_FILTER', 'STATUS OBJECT', JSON.stringify(value));
+      tempStatusData.push({
+        ...value,
+        isChecked: value.id === parseInt(statusId_),
+      });
+    });
+
+    setFilterState(state => ({
+      ...state,
+      status: statusId_,
+    }));
+    setFilterData(state => ({
+      ...state,
+      status: tempStatusData,
+    }));
+    // dispatch(resetStatusId());
+    console.log('STATUS_ID_FILTER', JSON.stringify(filterState));
+    console.log('STATUS_ID_FILTER', 'STATUS ID', statusId_);
+    console.log('STATUS_ID_FILTER', 'TEMP STATUS DATA', tempStatusData);
   };
   useEffect(() => {
-    filterByStatus();
+    if (statusId) {
+      filterByStatus(statusId);
+    }
   }, [statusId]);
 
   useEffect(() => {

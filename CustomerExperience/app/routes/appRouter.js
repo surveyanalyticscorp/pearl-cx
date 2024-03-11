@@ -398,6 +398,7 @@ const AppRouter = props => {
         })}
       /> */}
       <DetractorStack.Screen
+        key={'dashboard_to_responses'}
         name={'dashboard_to_responses'}
         component={Feedback}
         options={({navigation, route}) => ({
@@ -416,6 +417,7 @@ const AppRouter = props => {
         })}
       />
       <DetractorStack.Screen
+        key={'dashboard_to_closed_loop'}
         name={'dashboard_to_closed_loop'}
         component={ClosedLoop}
         options={({navigation, route}) => ({

@@ -10,7 +10,10 @@ import {
   StyleSheet,
 } from 'react-native';
 import {showLoading} from '../../redux/actions/index';
-import {getDashboardContent} from '../../redux/actions/dashboard.actions';
+import {
+  getDashboardContent,
+  getFirstTimeClosedLoopSegmentDetails,
+} from '../../redux/actions/dashboard.actions';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {Colors} from '../../styles/color.constants';

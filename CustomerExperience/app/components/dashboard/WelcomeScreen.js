@@ -101,6 +101,7 @@ export const WelcomeScreen = props => {
 
   useEffect(() => {
     if (authToken) {
+      getSegmentData();
       getWelcomeScreenData();
     }
   }, [authToken]);
@@ -119,6 +120,12 @@ export const WelcomeScreen = props => {
     }
   }, [baseUrl, welcomeScreenData?.cxData, welcomeScreenData?.clfData]);
 
+  const getSegmentData = () => {
+    dispatch(
+      getFirstTimeClosedLoopSegmentDetails(authToken, {pageOffset: '0'}),
+    );
+  };
+
   const getInitData = authToken_ => {
     // console.log('USER_DATA: ', userInfo, authToken);
     console.log('USER_DATA: ', userInfo);
@@ -131,9 +138,6 @@ export const WelcomeScreen = props => {
       }),
     );
 
-    dispatch(
-      getFirstTimeClosedLoopSegmentDetails(authToken_, {pageOffset: '0'}),
-    );
     dispatch(getRootCauseList(authToken_, global.subscriberId));
     dispatch(getActionList(authToken_, global.subscriberId));
     // dispatch(getClosedLoopAllOwnersDetails(authToken));
