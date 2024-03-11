@@ -52,7 +52,7 @@ const feedbackStack = props => (
       })}
     /> */}
 
-    <FeedbackStack.Screen
+    {/* <FeedbackStack.Screen
       name={'TicketDetails'}
       component={TicketDetails}
       options={({navigation, route}) => ({
@@ -63,7 +63,7 @@ const feedbackStack = props => (
         // headerRight: (props) => <EditTicket {...props} route={route} />,
         // headerLeft: (props) => <MenuIcon />,
       })}
-    />
+    /> */}
     {CommonScreens(FeedbackStack)}
   </FeedbackStack.Navigator>
 );

@@ -138,7 +138,12 @@ const RenderSegmentDashboardData = () => {
     scoringModel === 1 ? 'CSAT' : 'NPS'
   }`;
   return (
-    <View style={dashboardStyles.chartContainer}>
+    <View
+      style={
+        scoringModel === 1
+          ? dashboardStyles.csatChartContainer
+          : dashboardStyles.chartContainer
+      }>
       <DashboardWidgetTitle text={title} child={<ResponsesButton />} />
       <RenderInfoContainer />
       {scoringModel && scoringModel === 1 ? (
@@ -173,7 +178,7 @@ const RenderSegmentDashboardData = () => {
 //   );
 // };
 
-const NPSLegendView = () => {
+const ChartLegendView = () => {
   const {
     promoters,
     passive,
@@ -183,22 +188,23 @@ const NPSLegendView = () => {
     detractorPercent,
   } = useSelector(state => state.dashboard.currentNPSData?.NPSScore);
 
+  const {scoringModel} = useSelector(state => state.dashboard?.dashboardData);
   return (
     <View style={dashboardStyles.npsLegendContainer}>
       <LegendScoreView
-        title={'Detractors'}
+        title={scoringModel === 1 ? 'Negatives' : 'Detractors'}
         count={detractors}
         percentage={detractorPercent}
         backgroundColor={Colors.detractor2}
       />
       <LegendScoreView
-        title={'Passive'}
+        title={scoringModel === 1 ? 'Neutral' : 'Passive'}
         count={passive}
         percentage={passivePercent}
         backgroundColor={Colors.passive2}
       />
       <LegendScoreView
-        title={'Promoters'}
+        title={scoringModel === 1 ? 'Positives' : 'Promoters'}
         count={promoters}
         percentage={promoterPercent}
         backgroundColor={Colors.promoter2}
@@ -206,13 +212,14 @@ const NPSLegendView = () => {
     </View>
   );
 };
+
 const NPSView = () => {
   return (
     <View style={dashboardStyles.npsViewContainer}>
       <NpsGaugeChart />
       <NpsScoreView />
       <BenchmarkView />
-      <NPSLegendView />
+      <ChartLegendView />
     </View>
   );
 };
@@ -269,6 +276,7 @@ const RenderCSATChart = () => {
       <CsatChart />
       <CsatScoreLabel />
       <CsatToggleButton />
+      <ChartLegendView />
     </View>
   );
 };
@@ -295,10 +303,10 @@ const CxDashboard = props => {
   );
   const {range, wantToReload} = props;
   useEffect(() => {
-    if (isFocused) {
+    if (segmentId) {
       getDashboardData();
     }
-  }, [isFocused]);
+  }, [segmentId]);
 
   const onRefresh = useCallback(() => {
     getDashboardData();

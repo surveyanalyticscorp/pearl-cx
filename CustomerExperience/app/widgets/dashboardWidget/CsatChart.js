@@ -12,19 +12,21 @@ const CsatChart = () => {
   );
 
   function getCsatData(positive, neutral, negative) {
+    console.log('positive', StringUtils.floatTo2DecimalPointString(positive));
+
     return [
       {
-        y: StringUtils.floatTo2DecimalPointString(positive),
+        y: positive,
         x: 'positive',
         imageSource: require('../../../assets/images/csat_positive.png'),
       },
       {
-        y: StringUtils.floatTo2DecimalPointString(neutral),
+        y: neutral,
         x: 'neutral',
         imageSource: require('../../../assets/images/csat_neutral.png'),
       },
       {
-        y: StringUtils.floatTo2DecimalPointString(negative),
+        y: negative,
         x: 'negative',
         imageSource: require('../../../assets/images/csat_negative.png'),
       },

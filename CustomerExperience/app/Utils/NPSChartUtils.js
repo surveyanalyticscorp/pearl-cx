@@ -5,6 +5,21 @@ export const generateAxisRangeHelperObject = (parcent, fillColor) => {
 export const generatedAxisRanges = data => {
   let axisRanges = [];
   let startingAxis = -100;
+
+  if (data.length === 1) {
+    return [
+      {
+        value: startingAxis,
+        endValue: 100,
+        axisFill: {
+          fillOpacity: 1,
+          fill: data[0].fillColor,
+          zIndex: 1,
+        },
+      },
+    ];
+  }
+
   data.forEach(element => {
     if (element.value > 0) {
       const angle = element.value * (180 / 100);

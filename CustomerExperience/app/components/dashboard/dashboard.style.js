@@ -206,10 +206,21 @@ export const dashboardStyles = StyleSheet.create({
   chartContainer: {
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 15
-      : MarginConstants.tab4 * 13,
+      ? MarginConstants.tab4 * 13
+      : MarginConstants.tab4 * 11,
     flexDirection: 'column',
     justifyContent: 'center',
+    marginTop: MarginConstants.tab2,
+    marginHorizontal: MarginConstants.tab2,
+    borderRadius: 5,
+  },
+  csatChartContainer: {
+    backgroundColor: Colors.white,
+    height: DeviceInfo.isTablet()
+      ? MarginConstants.tab4 * 13
+      : MarginConstants.tab4 * 11,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     marginTop: MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab2,
     borderRadius: 5,
@@ -271,9 +282,11 @@ export const dashboardStyles = StyleSheet.create({
   },
   contentContainer: {backgroundColor: Colors.white, height: '100%'},
   csatContainer: {
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     flexDirection: 'column',
+    height: '90%',
     top: MarginConstants.tab3,
   },
   csatScoreLabel: {
@@ -315,9 +328,9 @@ export const dashboardStyles = StyleSheet.create({
   npsLegendContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flex: 1,
-    width: '100%',
+    maxHeight: '25%',
     marginBottom: MarginConstants.tab2,
   },
   legendIcon: {

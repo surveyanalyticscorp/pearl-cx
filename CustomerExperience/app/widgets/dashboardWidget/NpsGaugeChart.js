@@ -9,6 +9,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 
 const NpsGaugeChart = () => {
   const {
+    totalResponses,
     promoterPercent,
     passivePercent,
     detractorPercent,
@@ -19,15 +20,19 @@ const NpsGaugeChart = () => {
 
   const chartType = 'GaugeChart';
 
-  const axisRanges = generatedAxisRanges([
-    {value: detractorPercent, fillColor: Colors.detractor2},
-    {value: passivePercent, fillColor: Colors.passive2},
-    {value: promoterPercent, fillColor: Colors.promoter2},
-  ]);
+  const axisRanges = generatedAxisRanges(
+    totalResponses > 0
+      ? [
+          {value: detractorPercent, fillColor: Colors.detractor2},
+          {value: passivePercent, fillColor: Colors.passive2},
+          {value: promoterPercent, fillColor: Colors.promoter2},
+        ]
+      : [{value: 0, fillColor: Colors.darkGrey}],
+  );
 
   const guage_ = {
     // Set inner radius
-    innerRadius: -30,
+    innerRadius: -40,
     bottomText: 'Bottom',
     // Create axis
     xAxes: [
@@ -42,8 +47,8 @@ const NpsGaugeChart = () => {
           labels: {
             template: {
               fontFamily: 'Fira Sans, Arial, Helvetica, sans-serif', // Fallback fonts
-              fontSize: TextSizes.primary,
-              // "font-weight": "bold",
+              fontSize: TextSizes.extraLargeText,
+              fontWeight: 'bold',
               // color: Colors.accentLight,
               fill: Colors.filterIconColor,
             },
@@ -66,7 +71,7 @@ const NpsGaugeChart = () => {
         startWidth: 0.01,
         endWidth: 0.01,
         pin: {
-          disabled: true,
+          disabled: false,
         },
       },
       {
@@ -75,7 +80,7 @@ const NpsGaugeChart = () => {
         fill: Colors.filterIconColor,
         stroke: Colors.filterIconColor,
         innerRadius: '00%',
-        radius: '85%',
+        radius: '100%',
         startWidth: 10,
         endWidth: 0.1,
         pin: {
@@ -98,8 +103,8 @@ const NpsGaugeChart = () => {
 const styles = StyleSheet.create({
   chartContainer: {
     zIndex: 0,
-    height: '60%',
-    width: '80%',
+    height: '50%',
+    width: '70%',
     margin: 0,
   },
 });

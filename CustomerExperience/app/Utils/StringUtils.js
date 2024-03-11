@@ -270,6 +270,13 @@ export default class StringUtils {
     return parseFloat(number).toFixed(2);
   }
 
+  static floatTo2DecimalPoint(number) {
+    if (number % 1 === 0) {
+      return number;
+    }
+    return parseFloat(parseFloat(number).toFixed(2));
+  }
+
   static formattedCount(count, minCompareValue, notion) {
     const formatted = (count / minCompareValue).toFixed(1);
     return formatted.endsWith('.0')
