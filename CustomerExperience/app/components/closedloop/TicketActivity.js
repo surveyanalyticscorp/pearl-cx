@@ -40,7 +40,7 @@ const RenderItem = ({item}) => {
     <View style={styles.myRenderItemContainerStyle}>
       <View style={styles.myRenderItemStyle}>
         <TextLabel
-          baseTextStyle={baseTextStyles.primaryRegularText}
+          baseTextStyle={baseTextStyles.secondaryRegularText}
           color={Colors.accent}
           text={item.userName ?? translate('ticket_list.anonymous')}
         />
@@ -70,7 +70,7 @@ export default function TicketActivity(props) {
   );
 
   function getTicketActivityList(list, item) {
-    console.log(JSON.stringify(item));
+    // console.log(JSON.stringify(item));
     switch (item.id) {
       case 1:
         return list.slice().reverse();
@@ -131,6 +131,34 @@ export default function TicketActivity(props) {
     makeAPICall();
     wait(500).then(() => setRefreshing(false));
   }, []);
+
+  console.log(
+    'Padding half, tab1, tab2, tab3, tab4',
+    PaddingConstants.halfTab,
+    PaddingConstants.tab1,
+    PaddingConstants.tab2,
+    PaddingConstants.tab3,
+    PaddingConstants.tab4,
+  );
+  console.log(
+    'Margin half, tab1, tab2, tab3, tab4',
+    MarginConstants.halfTab,
+    MarginConstants.tab1,
+    MarginConstants.tab2,
+    MarginConstants.tab3,
+    MarginConstants.tab4,
+  );
+  console.log(
+    `TextSizes.donutPercentText: ${TextSizes.donutPercentText}`,
+    `TextSizes.extraLargeText: ${TextSizes.extraLargeText}`,
+    `TextSizes.largeText: ${TextSizes.largeText}`,
+    `TextSizes.primary: ${TextSizes.primary}`,
+    `TextSizes.secondary: ${TextSizes.secondary}`,
+    `TextSizes.semiSecondary: ${TextSizes.semiSecondary}`,
+    `TextSizes.semiMediumText: ${TextSizes.semiMediumText}`,
+    `TextSizes.mediumText: ${TextSizes.mediumText}`,
+    `TextSizes.smallText: ${TextSizes.smallText}`,
+  );
 
   const getRenderItem = ({item}) => {
     // return userID === item.userId ? RenderMyItem({item}) : RenderItem({item});
@@ -214,7 +242,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: Colors.white,
-    padding: PaddingConstants.halfTab,
+    padding: PaddingConstants.tab1 * 2,
     margin: MarginConstants.tab1,
     borderRadius: 5,
   },
@@ -250,7 +278,7 @@ const styles = StyleSheet.create({
   date: {
     flex: 1,
     color: Colors.evenDarkerGrey,
-    ...baseTextStyles.secondaryRegularText,
+    ...baseTextStyles.semiSecondaryRegularText,
     marginStart: MarginConstants.halfTab,
     textAlign: 'right',
   },

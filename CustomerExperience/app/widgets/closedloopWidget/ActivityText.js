@@ -11,7 +11,7 @@ const ActivityText = ({text}) => {
   const systemFonts = [...defaultSystemFonts, FontFamily.regular];
 
   const {width} = useWindowDimensions();
-  console.log('HTML activity', text);
+  // console.log('HTML activity', text);
   // console.log(
   //   'HTML text activity',
   //   JSON.stringify(StringUtils.formatActivityToHTML(text)),
@@ -32,7 +32,7 @@ const ActivityText = ({text}) => {
         tagsStyles={{
           span: {
             color: Colors.filterIconColor,
-            ...baseTextStyles.secondaryRegularText,
+            ...baseTextStyles.semiSecondaryRegularText,
           },
         }}
       />
