@@ -250,9 +250,6 @@ export default function ClosedLoop(props) {
       status: tempStatusData,
     }));
     // dispatch(resetStatusId());
-    console.log('STATUS_ID_FILTER', JSON.stringify(filterState));
-    console.log('STATUS_ID_FILTER', 'STATUS ID', statusId_);
-    console.log('STATUS_ID_FILTER', 'TEMP STATUS DATA', tempStatusData);
   };
   useEffect(() => {
     if (statusId) {

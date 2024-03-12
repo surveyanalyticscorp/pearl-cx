@@ -301,6 +301,12 @@ const CxDashboard = props => {
 
     console.log('OPEN BOTTOMSHEET');
   };
+
+  const getSegmentData = () => {
+    isFocused(
+      getFirstTimeClosedLoopSegmentDetails(props.authToken, {pageOffset: '0'}),
+    );
+  };
   let segmentId = useSelector(
     state => state.dashboard.currentSegment.currentSegmentID,
   );
@@ -313,6 +319,9 @@ const CxDashboard = props => {
 
   const onRefresh = useCallback(() => {
     getDashboardData();
+    if (!segmentId) {
+      getSegmentData();
+    }
     wait(500).then();
   }, [segmentId]);
 

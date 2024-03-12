@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Pressable,
   Modal,
+  Platform,
 } from 'react-native';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -390,7 +391,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingVertical: PaddingConstants.halfTab,
+    paddingVertical:
+      Platform.OS === 'ios' ? PaddingConstants.tab3 : PaddingConstants.tab2,
     paddingHorizontal: PaddingConstants.tab1,
   },
   dateTitle: {

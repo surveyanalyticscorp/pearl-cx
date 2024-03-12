@@ -437,7 +437,7 @@ export default function TicketComments(props) {
         enabled
         behavior={Platform.OS === 'ios' ? 'position' : 'height'}
         keyboardVerticalOffset={
-          Platform.OS === 'ios' ? 50 : MarginConstants.tab4 * 40
+          Platform.OS === 'ios' ? 130 : MarginConstants.tab4 * 40
         }>
         <CommentBox />
       </KeyboardAvoidingView>
