@@ -1,22 +1,13 @@
 import React, {useState} from 'react';
-import {
-  useWindowDimensions,
-  StyleSheet,
-  View,
-  Text,
-  TouchableWithoutFeedback,
-  Switch,
-  Platform,
-} from 'react-native';
+import {StyleSheet, View, Text, Switch, Platform} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {MarginConstants} from '../../styles/margin.constants';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {PaddingConstants} from '../../styles/padding.constants';
 import DeviceInfo from 'react-native-device-info';
 import {VictoryPie} from 'victory-native';
-import {StackActions, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {setStatusFilterById} from '../../redux/actions/closedloop.actions';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,13 +15,7 @@ import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
 import {textStyles} from '../../styles/text.styles';
 import DropDownPicker from 'react-native-dropdown-picker';
-import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
-import IconTextModalDropdown from '../../widgets/drop-down/IconTextModalDropdown';
-import {
-  getDashboardStatusList,
-  getDashboardStatusListForBottomList,
-  statusListDashboardClosedLoopFilter,
-} from '../../Utils/TicketUtils';
+import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
 import {
   BottomSheetHeader,
   IconButton,
@@ -38,8 +23,7 @@ import {
 } from '../../routes/CommonScreen';
 import BottomSheet from 'reanimated-bottom-sheet';
 import SelectStatus from '../closedloop/takeaction/SelectStatus';
-import Animated from 'react-native-reanimated';
-import {State} from 'react-native-gesture-handler';
+
 import {setStatusIndex} from '../../redux/actions/dashboard.actions';
 import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTitle';
 
@@ -79,11 +63,6 @@ const RenderDonutChart = ({count, showPercentageCount}) => {
           }}
           colorScale={victoryPieColorScale}
         />
-        {/* <View style={styles.npsView}>
-          <Text style={[styles.npsPercentText]}>{count.totalTickets}</Text>
-          <Text style={[styles.npsText]}>CX</Text>
-          <Text style={[styles.npsText]}>{translate('dashboard.tickets')}</Text>
-        </View> */}
       </View>
     </View>
   );
@@ -126,35 +105,6 @@ let RenderDonutInfoViewContainer = ({priorities, showPercentageCount}) => {
         textColor={Colors.white}
         showPercentageCount={showPercentageCount}
       />
-
-      {/* {renderTicketView(
-        priorities.totalTickets,
-        priorities.critical,
-        Colors.critical2,
-        translate('dashboard.critical'),
-        Colors.white,
-      )}
-      {renderTicketView(
-        priorities.totalTickets,
-        priorities.high,
-        Colors.high2,
-        translate('dashboard.high'),
-        Colors.white,
-      )}
-      {renderTicketView(
-        priorities.totalTickets,
-        priorities.medium,
-        Colors.medium2,
-        translate('dashboard.medium'),
-        Colors.primary,
-      )}
-      {renderTicketView(
-        priorities.totalTickets,
-        priorities.low,
-        Colors.low2,
-        translate('dashboard.low'),
-        Colors.white,
-      )} */}
     </View>
   );
 };
@@ -175,15 +125,6 @@ const RenderTicketView = ({
     : `${count}`;
 
   return (
-    // <View style={styles.donutInfoContainer}>
-    //   <Text style={styles.ticketText}>{count}</Text>
-    //   <View style={[styles.ticketStatusView, {backgroundColor: bgColor}]}>
-    //     <Text style={[styles.ticketStatusText, {color: textColor}]}>
-    //       {status}
-    //     </Text>
-    //   </View>
-    // </View>
-
     <View style={styles.donutInfoContainer}>
       <View
         style={[styles.ticketStatusIndicatorView, {backgroundColor: bgColor}]}
@@ -211,7 +152,6 @@ const RenderCountContainer = ({
 }) => {
   console.log(`COUNT: ${JSON.stringify(count)}`);
   const toggleSwitch = () => setShowPercentageCount(!showPercentageCount);
-  // const count = getCount(props.route.params.ticketCount);
   return (
     <View style={[styles.viewCountContainer]}>
       <View
@@ -448,8 +388,6 @@ export const StatusDashboardBottomSheet = React.forwardRef(
 );
 
 export const ClosedLoopDashboard = props => {
-  const [showPercentageCount, setShowPercentageCount] = useState(false);
-
   const statusIndex = useSelector(
     state => state.dashboard.currentStatusIndexForFilter,
   );
@@ -472,30 +410,8 @@ export const ClosedLoopDashboard = props => {
       />
       <RenderDonutChart
         count={statusList[statusIndex].count}
-        showPercentageCount={showPercentageCount}
+        showPercentageCount={false}
       />
-      {/* --------- unused codes --------- */}
-      {/* <RenderDropDown
-        currentStatus={selectedCurrentStatus}
-        setCurrentStatus={setCurrentStatus}
-        statusList={statusList}
-      /> */}
-      {/* <RenderCountContainer
-        count={selectedCurrentStatus.count}
-        setShowPercentageCount={setShowPercentageCount}
-        showPercentageCount={showPercentageCount}
-      /> */}
-      {/* {renderDonutChart()} */}
-      {/* <RenderViewTicketsContainer /> */}
-      {/* <BottomSheet
-        ref={statusBottomSheetRef}
-        snapPoints={statusBottomSheetSnapPoints}
-        initialSnap={statusBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderStatusSelectContent}
-        renderHeader={renderStatusHeader}
-        callbackNode={fall}
-      /> */}
     </View>
   );
 };

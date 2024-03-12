@@ -7,7 +7,6 @@ import {
   BackHandler,
   Alert,
   SafeAreaView,
-  StyleSheet,
 } from 'react-native';
 import {showLoading} from '../../redux/actions/index';
 import {
@@ -158,29 +157,6 @@ const RenderSegmentDashboardData = () => {
   );
 };
 
-// const LegendScoreView = ({count, percentage, backgroundColor}) => {
-//   return (
-//     <View style={dashboardStyles.legendItemView}>
-//       <View
-//         style={{
-//           ...dashboardStyles.legendIcon,
-//           backgroundColor: backgroundColor,
-//         }}
-//       />
-//       <Text
-//         style={{
-//           ...baseTextStyles.secondaryRegularText,
-//           fontWeight: FontWeight.bold,
-//         }}>
-//         {count}
-//       </Text>
-//       <Text style={baseTextStyles.secondaryRegularText}>
-//         {`(${StringUtils.floatTo2DecimalPointString(percentage)}%)`}
-//       </Text>
-//     </View>
-//   );
-// };
-
 const ChartLegendView = () => {
   const {
     promoters,
@@ -285,7 +261,7 @@ const RenderCSATChart = () => {
 };
 
 const CxDashboard = props => {
-  let isFocused = useDispatch();
+  let dispatch = useDispatch();
 
   let [refreshing, setRefreshing] = useState(false);
   let [comparision, setComparision] = useState(false);
@@ -298,12 +274,10 @@ const CxDashboard = props => {
 
   const openStatusBS = () => {
     statusBottomSheetRef.current.snapTo(0);
-
-    console.log('OPEN BOTTOMSHEET');
   };
 
   const getSegmentData = () => {
-    isFocused(
+    dispatch(
       getFirstTimeClosedLoopSegmentDetails(props.authToken, {pageOffset: '0'}),
     );
   };
@@ -356,9 +330,7 @@ const CxDashboard = props => {
       if (JSON.parse(lastLogin) !== null) {
         setLastLoginArray(JSON.parse(lastLogin));
       }
-    } catch (e) {
-      // console.log(`LAST LOGIN ASYNC ERROR: ${JSON.stringify(e)}`);
-    }
+    } catch (e) {}
   };
   /////////////////////////////////////////////
   useEffect(() => {
@@ -416,7 +388,6 @@ const CxDashboard = props => {
   };
 
   let getDashboardData = () => {
-    console.log('REFRESH!!!!');
     let data = {
       startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
       endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
@@ -428,92 +399,6 @@ const CxDashboard = props => {
     }
   };
 
-  // let getNPSIcon = sentiment => {
-  //   let icon;
-  //   switch (sentiment) {
-  //     case 'Detractor':
-  //       icon = require('./../../../assets/images/detractor.png');
-  //       break;
-  //     case 'Passive':
-  //       icon = require('./../../../assets/images/passive.png');
-  //       break;
-  //     default:
-  //       icon = require('./../../../assets/images/promoter.png');
-  //       break;
-  //   }
-
-  //   return <Image source={icon} style={{width: 12, height: 12}} />;
-  // };
-
-  let renderRow = storeItem => {
-    return (
-      <View
-        style={[
-          dashboardStyles.row,
-          {
-            backgroundColor:
-              storeItem.item.storeName === props.dashboardData.primaryStoreName
-                ? Colors.accentGradient
-                : Colors.white,
-          },
-        ]}>
-        <Text style={dashboardStyles.productText}>
-          {storeItem.item.storeName}
-        </Text>
-        <Text style={dashboardStyles.productText}>
-          {storeItem.item.NPSScore.npsPercentage}
-        </Text>
-      </View>
-    );
-  };
-
-  let renderListHeader = () => {
-    return (
-      <View style={dashboardStyles.productHeaderView}>
-        <Text style={dashboardStyles.listTitle}>Segment</Text>
-        <Text style={dashboardStyles.listTitle}>NPS</Text>
-      </View>
-    );
-  };
-
-  // let renderStoreNPSList = () => {
-  //   let list = props.dashboardData.storeNPSList;
-  //   return (
-  //     <View style={dashboardStyles.listViewContainer}>
-  //       <View style={dashboardStyles.list}>
-  //         <FlatList
-  //           data={list.sort(
-  //             (a, b) => b.NPSScore.npsPercentage - a.NPSScore.npsPercentage,
-  //           )}
-  //           keyExtractor={(item, index) => index + ''}
-  //           renderItem={renderRow}
-  //           onEndReachedThreshold={0.01}
-  //           refreshing={false}
-  //           ListEmptyComponent={<RenderNoDataFound />}
-  //           showsVerticalScrollIndicator={false}
-  //           ListHeaderComponent={renderListHeader}
-  //         />
-  //       </View>
-  //     </View>
-  //   );
-  // };
-
-  // let RenderSegmentTitle = ({text, child}) => {
-  //   return (
-  //     <View style={dashboardStyles.dashboardTitleContainer}>
-  //       <Text style={dashboardStyles.dashboardTitle}>{text}</Text>
-  //       {child}
-  //     </View>
-  //   );
-  // };
-  // let renderWelcomeMessage = text => {
-  //   return (
-  //     <View style={dashboardStyles.dashboardTitleContainer}>
-  //       <Text style={dashboardStyles.dashboardTitle}>{text}</Text>
-  //     </View>
-  //   );
-  // };
-
   let RenderDashboard = () => {
     return (
       <View
@@ -522,14 +407,6 @@ const CxDashboard = props => {
           dashboardStyles.container,
           {paddingBottom: MarginConstants.tab1},
         ]}>
-        {/* <StatusBar barStyle={'light-content'} /> */}
-        {/* <FilterHeader
-          actionOnArrowClick={() => {
-            setComparision(true);
-          }}
-          callDataAPI={() => {}}
-          {...props}
-        /> */}
         <Animated.View
           style={[
             dashboardStyles.container,

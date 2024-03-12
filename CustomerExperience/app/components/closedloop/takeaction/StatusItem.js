@@ -16,26 +16,21 @@ import {
   RadioButtonCheckbox,
   RenderStatusIcon,
 } from '../../../routes/CommonScreen';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import {baseTextStyles} from '../../../styles/text.styles';
 
 const StatusItem = ({index, item, selectedIndex, onPressHandler}) => {
-  const title = item.title;
+  const {title} = item;
 
   return (
     <TouchableWithoutFeedback onPress={onPressHandler} style={styles.container}>
       <View style={styles.container}>
         <RadioButtonCheckbox size={18} isChecked={index === selectedIndex} />
-        {/* {props.selectedIndex === index ? (
-          <IonIcon
-            style={{marginHorizontal: MarginConstants.halfTab}}
-            name={'checkmark'}
-            size={20}
-            color={Colors.filterIconColor}
-          />
-        ) : (
-          <View />
-        )} */}
-
-        <Text style={styles.title}>{title}</Text>
+        <TextLabel
+          text={title}
+          baseTextStyle={baseTextStyles.primaryRegularText}
+          style={{flex: 1}}
+        />
         <RenderStatusIcon size={18} title={title} />
       </View>
     </TouchableWithoutFeedback>
