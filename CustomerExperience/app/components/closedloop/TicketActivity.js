@@ -34,6 +34,7 @@ const ActivityDateLabel = ({date}) => {
 };
 
 const RenderItem = ({item}) => {
+  const {userName, createdAt, activityText} = item;
   return (
     // <View style={styles.renderItemContainerStyle}>
     //   <View style={styles.renderItemStyle}>
@@ -42,13 +43,13 @@ const RenderItem = ({item}) => {
         <TextLabel
           baseTextStyle={baseTextStyles.secondaryRegularText}
           color={Colors.accent}
-          text={item.userName ?? translate('ticket_list.anonymous')}
+          text={userName ?? translate('ticket_list.anonymous')}
         />
-        <ActivityDateLabel date={item.createdAt} />
+        <ActivityDateLabel date={createdAt} />
       </View>
       <View style={{marginHorizontal: MarginConstants.tab1}}>
         {/* <Text style={styles.activity}>{item.activityText}</Text> */}
-        <ActivityText text={item.activityText} />
+        <ActivityText text={activityText} />
       </View>
     </View>
   );
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: Colors.white,
-    padding: PaddingConstants.tab1 * 2,
+    padding: MarginConstants.tab1_2x,
     margin: MarginConstants.tab1,
     borderRadius: 5,
   },

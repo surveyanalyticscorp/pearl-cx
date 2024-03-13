@@ -6,16 +6,13 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import {Colors, getPriorityBorderColorbyId} from '../../styles/color.constants';
+import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
-import {FontFamily, FontWeight} from '../../styles/font.constants';
-import IonIcons from 'react-native-vector-icons/Ionicons';
+import {FontFamily} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import moment from 'moment';
 import {
-  FullMonthDateYearFormat,
-  DMY_AT_TIME_FORMAT,
   HalfMonthDateYearFormat,
   DMY_AT_TIME__SHORT_FORMAT,
 } from '../../Utils/AppConstants';
@@ -25,14 +22,15 @@ import {
   ExclaimationIcon,
   ListItemSeparator,
   PriorityUI,
-  RenderStatusIcon,
   StatusUI,
 } from '../../routes/CommonScreen';
 import StringUtils from '../../Utils/StringUtils';
 import {useSelector} from 'react-redux';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {baseTextStyles} from '../../styles/text.styles';
-
+import {ChildContainer, ParentContainer} from '../../widgets/ParentContainer';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
+import AssigneeUI from './takeaction/closedLoopCell/AssigneeUI';
 const OverdueAlert = () => {
   return (
     <ExclaimationIcon
@@ -55,39 +53,6 @@ const OverdueAlert = () => {
   );
 };
 
-const AssigneeUI = ({assignToId}) => {
-  const owners = useSelector(state => state.dashboard.ownerDetails.owners);
-
-  console.log('OWNERS_', JSON.stringify(owners), JSON.stringify(assignToId));
-  function getAssigneeName(assignToId, owners_) {
-    if (StringUtils.isEmptyOrNull(assignToId)) {
-      return assignToId;
-    }
-    const owner = owners_.find(e => e.ownerID === assignToId);
-    return owner['ownerName'] ?? '';
-  }
-
-  const title = getAssigneeName(assignToId, owners);
-
-  return (
-    <View style={styles.rowContainer}>
-      <Avatar title={title} />
-      {/* <Text style={styles.statusText}>{title}</Text> */}
-    </View>
-  );
-};
-
-// const StatusUI = ({status}) => {
-//   return (
-//     <View style={styles.rowContainer}>
-//       <RenderStatusIcon size={16} title={getStatusById(status)} />
-
-//       {/* <StatusIcon borderColor={borderColor} fillerColor={fillerColor} /> */}
-//       <Text style={styles.statusText}>{getStatusById(status)}</Text>
-//     </View>
-//   );
-// };
-
 const UserPic = ({avatarUrl}) => {
   return (
     <View>
@@ -101,28 +66,25 @@ const UserPic = ({avatarUrl}) => {
   );
 };
 
-const TicketID = ({ticketId}) => {
-  return <Text style={styles.idText}>{`#${ticketId}`} </Text>;
-};
-
-const Name = ({name}) => {
-  return (
-    <Text style={[baseTextStyles.primaryMediumText, {color: Colors.accent}]}>
-      {name}
-    </Text>
-  );
-};
-
 const Date = ({issueDate}) => {
   const date = moment(issueDate).format(HalfMonthDateYearFormat);
-  return <Text style={styles.ticketDateText}>{`${date ?? ' '}`}</Text>;
+  return (
+    <TextLabel
+      baseTextStyle={baseTextStyles.semiSecondaryRegularText}
+      color={Colors.evenDarkerGrey}
+      style={styles.ticketDateText}>{`${date ?? ' '}`}</TextLabel>
+  );
 };
 
 const NameANdDateRow = ({name, issueDate}) => {
   // console.log('USERDATA', JSON.stringify(data));
   return (
     <View style={styles.nameAndDateContainer}>
-      <Name name={name} />
+      <TextLabel
+        text={name}
+        baseTextStyle={baseTextStyles.primaryMediumText}
+        color={Colors.accent}
+      />
       <Date issueDate={issueDate} />
     </View>
   );
@@ -140,16 +102,20 @@ const NPSIcon = () => {
 const GetNPSScore = ({score}) => {
   let textColor = getNPSColor();
   return (
-    <Text
-      style={[
-        styles.npsText,
-        {
-          color: textColor,
-          marginHorizontal: MarginConstants.tab1,
-        },
-      ]}>
-      {score}
-    </Text>
+    // <Text
+    //   style={[
+    //     styles.npsText,
+    //     {
+    //       color: textColor,
+    //       marginHorizontal: MarginConstants.tab1,
+    //     },
+    //   ]}>
+    //   {score}
+    // </Text>
+    <TextLabel
+      baseTextStyle={baseTextStyles.primaryRegularText}
+      color={textColor}
+    />
   );
 };
 
@@ -164,12 +130,15 @@ const TicketNPSScore = ({nps}) => {
     </View>
   );
 };
-const TicketIdAndOverdueRow = ({data}) => {
+const TicketIdAndAssigneeRow = ({data}) => {
   const {id, isOverdue, assignToId} = data;
   return (
     <View style={styles.ticketIdContainer}>
-      <TicketID ticketId={id} />
-
+      <TextLabel
+        text={`#${id}`}
+        baseTextStyle={baseTextStyles.primaryRegularText}
+        color={Colors.accentLight}
+      />
       <AssigneeUI assignToId={assignToId} />
       {/* {isOverdue ? <OverdueAlert /> : <View />} */}
     </View>
@@ -197,7 +166,10 @@ const StatusRow = ({data}) => {
   });
   return (
     <View style={styles.statusContainer}>
-      <StatusUI status={status} />
+      <StatusUI
+        style={{marginStart: MarginConstants.halfTab}}
+        status={status}
+      />
       <PriorityUI style={style_.priorityStyle} priority={priority} />
       <TicketNPSScore nps={npsScore} />
     </View>
@@ -211,20 +183,19 @@ const OverdueBar = ({overdueDate}) => {
   )} ${date}`;
   return (
     <View style={styles.overdueContainer}>
-      {/* <IonIcons
-        name="notifications-sharp"
-        size={20}
-        color={Colors.overdueTextColor}
-      /> */}
       <ExclaimationIcon
         size={16}
         color={Colors.white}
         style={styles.rowContainer}
         endComponent={
-          <Text style={styles.overdueText}>{`Ticket overdue`}</Text>
+          <TextLabel
+            text={`Ticket overdue`}
+            color={Colors.white}
+            style={styles.overdueText}
+          />
         }
       />
-      <Text style={styles.overdueText}>{date}</Text>
+      <TextLabel text={date} color={Colors.white} style={styles.overdueText} />
     </View>
   );
 };
@@ -271,16 +242,24 @@ export default function ClosedLoopCell({
           ) : (
             <View />
           )}
-          <StatusRow data={data} />
-          <ListItemSeparator style={{marginHorizontal: MarginConstants.tab1}} />
+          <ChildContainer>
+            <StatusRow data={data} />
+            <ListItemSeparator
+              style={{marginHorizontal: MarginConstants.halfTab}}
+            />
+          </ChildContainer>
 
-          <NameANdDateRow
-            name={name}
-            issueDate={data?.issueDate}
-            nps={data?.npsScore}
-          />
-          <TicketDetails comment={data?.comment} />
-          <TicketIdAndOverdueRow data={data} />
+          <ChildContainer>
+            <NameANdDateRow
+              name={name}
+              issueDate={data?.issueDate}
+              nps={data?.npsScore}
+            />
+            <TicketDetails comment={data?.comment} />
+          </ChildContainer>
+          <ChildContainer style={{marginBottom: 0}}>
+            <TicketIdAndAssigneeRow data={data} />
+          </ChildContainer>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -302,14 +281,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: PaddingConstants.tab1,
-    paddingVertical: PaddingConstants.halfTab,
   },
   nameAndDateContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: PaddingConstants.tab1,
-    paddingVertical: PaddingConstants.tab2,
+    paddingBottom: PaddingConstants.halfTab,
   },
   npsContainer: {
     flexDirection: 'row',
@@ -317,6 +295,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingHorizontal: PaddingConstants.tab1,
     paddingVertical: PaddingConstants.halfTab,
+    marginEnd: MarginConstants.halfTab,
   },
   npsEmptyContainer: {
     flexDirection: 'row',
@@ -331,7 +310,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: PaddingConstants.tab1,
-    paddingTop: PaddingConstants.tab1,
+    marginBottom: MarginConstants.halfTab,
   },
 
   ticketContainer: {
@@ -343,8 +322,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: PaddingConstants.tab2,
-    padding: PaddingConstants.tab1,
+    paddingBottom: PaddingConstants.halfTab,
   },
   userNameText: {
     fontFamily: FontFamily.medium,
@@ -382,11 +360,11 @@ const styles = StyleSheet.create({
   statusText: {
     ...baseTextStyles.mediumRegularText,
     color: Colors.lightBlack,
-    marginHorizontal: 4,
+    marginHorizontal: MarginConstants.halfTab,
   },
   npsText: {
     ...baseTextStyles.primaryRegularText,
-    marginHorizontal: 4,
+    marginHorizontal: MarginConstants.halfTab,
   },
   overdueContainer: {
     flex: 1,
@@ -399,7 +377,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.overdueAlertColor,
   },
   overdueText: {
-    ...baseTextStyles.secondaryRegularText,
-    color: Colors.white,
+    paddingHorizontal: PaddingConstants.halfTab,
   },
 });

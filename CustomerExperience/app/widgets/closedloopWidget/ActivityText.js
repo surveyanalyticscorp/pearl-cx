@@ -32,7 +32,7 @@ const ActivityText = ({text}) => {
         tagsStyles={{
           span: {
             color: Colors.filterIconColor,
-            ...baseTextStyles.semiSecondaryRegularText,
+            ...baseTextStyles.semiSecondaryMediumText,
           },
         }}
       />
