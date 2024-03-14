@@ -66,6 +66,8 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import {FaIcon} from '../../Utils/IconUtils';
 import {baseTextStyles} from '../../styles/text.styles';
 import StringUtils from '../../Utils/StringUtils';
+import {ChildContainer} from '../../widgets/ParentContainer';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
 
 const ArrowDownIcon = () => (
   <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.evenDarkerGrey} />
@@ -117,15 +119,21 @@ const TakeActionButton = ({onTakeActionHandler, hasPanelMember}) => {
 
 const DescriptionHeader = ({text}) => {
   return (
-    <View style={[{flex: 1}, styles.rowContainer]}>
-      <Text style={styles.headerText}>{text}</Text>
-    </View>
+    <TextLabel
+      style={{flex: 1}}
+      text={text}
+      baseTextStyle={baseTextStyles.largeMediumText}
+      color={Colors.accent}
+    />
   );
 };
 const Title = ({value}) => {
   return (
     <Text
-      style={[styles.titleText, {flex: 2, padding: PaddingConstants.halfTab}]}>
+      style={[
+        styles.titleText,
+        {paddingBottom: PaddingConstants.halfTab, flex: 2},
+      ]}>
       {value}
     </Text>
   );
@@ -149,8 +157,17 @@ const ShowText = ({style, text, isHighlighted = false}) => {
 const ShowTitleAndText = ({title, subText, isSubtextHighlighted}) => {
   return (
     <View style={styles.titleTextContainer}>
-      <Title value={title} />
-      <ShowText text={subText} isHighlighted={isSubtextHighlighted} />
+      <TextLabel text={title} style={{flex: 2}} />
+      {/* <Title value={title} /> */}
+      <TextLabel
+        text={subText}
+        baseTextStyle={baseTextStyles.secondaryLightText}
+        color={
+          isSubtextHighlighted ? Colors.accentLight : Colors.filterIconColor
+        }
+        style={{flex: 3}}
+      />
+      {/* <ShowText text={subText} isHighlighted={isSubtextHighlighted} /> */}
     </View>
   );
 };
@@ -158,11 +175,7 @@ const ShowDescription = ({title, subText, isSubtextHighlighted}) => {
   return (
     <View style={styles.descriptionTextContainer}>
       <Title value={title} />
-      <ShowText
-        style={{paddingHorizontal: PaddingConstants.tab1}}
-        text={subText}
-        isHighlighted={isSubtextHighlighted}
-      />
+      <ShowText text={subText} isHighlighted={isSubtextHighlighted} />
     </View>
   );
 };
@@ -200,31 +213,29 @@ const DescriptionView = ({ticket, showResponseButton}) => {
         <DescriptionHeader text={'Details'} />
         <CopyTicketIdButton ticket={ticket} />
       </View>
-      <ShowTitleAndText
-        title={translate('close_loop.origin_segment')}
-        subText={ticket?.originSegment?.name ?? ''}
-      />
-      <ShowTitleAndText
-        title={translate('close_loop.current_segment')}
-        subText={ticket?.currentSegment?.name ?? ''}
-      />
-      <ShowTitleAndText
-        title={translate('close_loop.created_on')}
-        subText={createdDate}
-      />
+      <ChildContainer style={{paddingHorizontal: 0}}>
+        <ShowTitleAndText
+          title={translate('close_loop.origin_segment')}
+          subText={ticket?.originSegment?.name ?? ''}
+        />
+        <ShowTitleAndText
+          title={translate('close_loop.current_segment')}
+          subText={ticket?.currentSegment?.name ?? ''}
+        />
+        <ShowTitleAndText
+          title={translate('close_loop.created_on')}
+          subText={createdDate}
+        />
 
-      {!StringUtils.isEmptyOrNull(ticket?.npsScore) ? (
-        <View style={styles.rowContainer}>
-          <Title value={'NPS'} />
-          <NPSScoreView text={ticket?.npsScore} />
-        </View>
-      ) : (
-        <View />
-      )}
-      {/* <ShowTitleAndText
-        title={`${translate('ticket_overview.description')}:`}
-        subText={!isObjectEmpty(ticket) ? ticket.comment : ''}
-      /> */}
+        {!StringUtils.isEmptyOrNull(ticket?.npsScore) ? (
+          <View style={styles.rowContainer}>
+            <Title value={'NPS'} />
+            <NPSScoreView text={ticket?.npsScore} />
+          </View>
+        ) : (
+          <View />
+        )}
+      </ChildContainer>
 
       {ticket.responseId && showResponseButton ? (
         <ViewResponseDetailsButton />
@@ -244,41 +255,43 @@ const ContactView = ({
   return (
     <View style={[styles.ticketStatusContainer]}>
       <DescriptionHeader text={translate('ticket_overview.contact')} />
-
-      <ShowTitleAndText
-        title={`${'Name'}`}
-        subText={
-          panelMember?.name?.length > 0
-            ? panelMember.name
-            : translate('ticket_list.anonymous')
-        }
-      />
-      {panelMember?.email?.length > 0 ? (
+      <ChildContainer style={{paddingHorizontal: 0}}>
         <ShowTitleAndText
-          title={`${translate('responses.email')}`}
-          subText={panelMember?.email}
-          isSubtextHighlighted={true}
+          title={`${'Name'}`}
+          subText={
+            panelMember?.name?.length > 0
+              ? panelMember.name
+              : translate('ticket_list.anonymous')
+          }
         />
-      ) : (
-        <View />
-      )}
-      {panelMember?.phone?.length > 0 ? (
-        <ShowTitleAndText
-          title={`${translate('create_new_ticket.phone_number')}`}
-          subText={panelMember?.phone}
-          isSubtextHighlighted={true}
-        />
-      ) : (
-        <View />
-      )}
-      {description?.length > 0 ? (
-        <ShowDescription
-          title={`${translate('ticket_overview.description')}:`}
-          subText={description}
-        />
-      ) : (
-        <View />
-      )}
+        {panelMember?.email?.length > 0 ? (
+          <ShowTitleAndText
+            title={`${translate('responses.email')}`}
+            subText={panelMember?.email}
+            isSubtextHighlighted={true}
+          />
+        ) : (
+          <View />
+        )}
+        {panelMember?.phone?.length > 0 ? (
+          <ShowTitleAndText
+            title={`${translate('create_new_ticket.phone_number')}`}
+            subText={panelMember?.phone}
+            isSubtextHighlighted={true}
+          />
+        ) : (
+          <View />
+        )}
+        {description?.length > 0 ? (
+          <ShowTitleAndText
+            title={`${translate('ticket_overview.description')}:`}
+            subText={''}
+          />
+        ) : (
+          <View />
+        )}
+        {description?.length > 0 ? <TextLabel text={description} /> : <View />}
+      </ChildContainer>
       <TakeActionButton
         hasPanelMember={hasPanelMember}
         onTakeActionHandler={onTakeActionHandler}
@@ -750,38 +763,43 @@ export default function TicketOverview(props) {
 
     return (
       <View style={styles.ticketStatusContainer}>
-        <ShowTitleAndDropdown
-          title={translate('close_loop.status')}
-          currentItemName={statusName}
-          onPress={handleStatusSelection}
-          hasArrowDownIcon
-          frontIcon={
-            <RenderStatusIcon
-              style={{margin: MarginConstants.halfTab}}
-              title={statusName}
-            />
-          }
-        />
-        <ShowTitleAndDropdown
-          title={translate('close_loop.priority')}
-          currentItemName={priorityName}
-          onPress={handlePrioritySelection}
-          hasArrowDownIcon
-          frontIcon={
-            <RenderPriorityIcon
-              style={{margin: MarginConstants.halfTab}}
-              title={priorityName}
-            />
-          }
-        />
-
-        <ShowTitleAndDropdown
-          title={translate('ticket_overview.assigned_to')}
-          currentItemName={ownerName}
-          onPress={isEscalated ? () => {} : handleOwnerSelection}
-          hasArrowDownIcon={!isEscalated}
-          isDisabled={isEscalated}
-        />
+        <ChildContainer>
+          <ShowTitleAndDropdown
+            title={translate('close_loop.status')}
+            currentItemName={statusName}
+            onPress={handleStatusSelection}
+            hasArrowDownIcon
+            frontIcon={
+              <RenderStatusIcon
+                style={{margin: MarginConstants.halfTab}}
+                title={statusName}
+              />
+            }
+          />
+        </ChildContainer>
+        <ChildContainer>
+          <ShowTitleAndDropdown
+            title={translate('close_loop.priority')}
+            currentItemName={priorityName}
+            onPress={handlePrioritySelection}
+            hasArrowDownIcon
+            frontIcon={
+              <RenderPriorityIcon
+                style={{margin: MarginConstants.halfTab}}
+                title={priorityName}
+              />
+            }
+          />
+        </ChildContainer>
+        <ChildContainer>
+          <ShowTitleAndDropdown
+            title={translate('ticket_overview.assigned_to')}
+            currentItemName={ownerName}
+            onPress={isEscalated ? () => {} : handleOwnerSelection}
+            hasArrowDownIcon={!isEscalated}
+            isDisabled={isEscalated}
+          />
+        </ChildContainer>
       </View>
     );
   };
@@ -947,18 +965,17 @@ const styles = StyleSheet.create({
   },
   ticketStatusContainer: {
     backgroundColor: Colors.white,
-    margin: MarginConstants.tab1,
-    padding: PaddingConstants.tab1,
+    marginHorizontal: MarginConstants.tab1,
+    marginTop: MarginConstants.tab1,
+    marginBottom: MarginConstants.halfTab,
+    padding: PaddingConstants.tab1_2x,
     borderRadius: 4,
   },
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: PaddingConstants.halfTab,
   },
-  titleAndDropdownContainer: {
-    padding: PaddingConstants.halfTab,
-  },
+  titleAndDropdownContainer: {},
   titleAndUnderlineContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -967,7 +984,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: PaddingConstants.halfTab,
+    marginVertical: MarginConstants.halfTab,
   },
   descriptionTextContainer: {
     alignItems: 'flex-start',
@@ -996,7 +1013,7 @@ const styles = StyleSheet.create({
   titleText: {
     ...baseTextStyles.secondaryRegularText,
     color: Colors.filterIconColor,
-    padding: PaddingConstants.halfTab,
+    paddingHorizontal: PaddingConstants.halfTab,
     alignItems: 'flex-start',
   },
   showText: {
@@ -1035,9 +1052,7 @@ const styles = StyleSheet.create({
   },
 
   takeActionContainer: {
-    paddingHorizontal: PaddingConstants.halfTab,
-    paddingVertical: PaddingConstants.tab1,
-    margin: MarginConstants.tab1,
+    paddingTop: PaddingConstants.tab1,
   },
   ticketIdView: {
     flexDirection: 'row',

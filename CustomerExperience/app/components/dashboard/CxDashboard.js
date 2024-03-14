@@ -330,7 +330,9 @@ const CxDashboard = props => {
       if (JSON.parse(lastLogin) !== null) {
         setLastLoginArray(JSON.parse(lastLogin));
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log(`LAST LOGIN ASYNC ERROR: ${JSON.stringify(e)}`);
+    }
   };
   /////////////////////////////////////////////
   useEffect(() => {

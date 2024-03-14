@@ -26,7 +26,7 @@ const npsStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: PaddingConstants.tab1,
+    padding: PaddingConstants.halfTab,
   },
   npsBackground: {
     marginStart: MarginConstants.halfTab,
