@@ -35,6 +35,7 @@ import {MAX_COMMENT_LENGTH} from '../../api/Constant';
 import Animated, {event} from 'react-native-reanimated';
 import {baseTextStyles} from '../../styles/text.styles';
 import SendButton from '../../widgets/SendButton';
+import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
 function getFoldedText(text) {
   //
   const MAX_WORD_LENGTH = 10;
@@ -382,6 +383,7 @@ const CommentBox = () => {
           maxCountLength={MAX_COMMENT_LENGTH}
         />
       </CommentBoxChildContainer>
+      <HorizontalSpaceBox />
       <SendButton handleOnSubmit={handleOnSubmit} />
     </CommentBoxParentContainer>
   );

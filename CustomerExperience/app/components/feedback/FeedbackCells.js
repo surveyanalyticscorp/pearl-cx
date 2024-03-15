@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  TouchableWithoutFeedback,
-  Pressable,
-  Text,
-  Image,
-} from 'react-native';
+import {View, TouchableWithoutFeedback, Pressable, Text} from 'react-native';
 import {StyleSheet} from 'react-native';
 import StringUtils from '../../Utils/StringUtils';
 import ArrayUtils from '../../Utils/ArrayUtils';
@@ -17,8 +11,12 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {Sizes} from '../../styles/Size.constant';
-// import moment from 'moment';
 import {translate} from '../../Utils/MultilinguaUtils';
+import NPSIcon from '../../widgets/NPSIcon';
+import NPSAnswerText from '../../widgets/NPSAnswerText';
+import {HorizontalSpaceBox, VerticalSpaceBox} from '../../widgets/SpaceBox';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
+import {baseTextStyles} from '../../styles/text.styles';
 // import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 // import {backgroundColor} from '../../widgets/qp-calendar/style';
 // import style from '../../widgets/qp-calendar/calendar/header/style';
@@ -36,8 +34,6 @@ export default function FeedbackCell(props) {
   }
   let disable = props.origin === 'Detail';
   let hasTicket = props.hasTicket;
-  // const name =
-  //   'myhousehasfourinteresting_weareall_going_to_cox_bazzar@yup-asdfghjkli.com';
   const name = showName(props.item);
   const email = props.item.emailAddress ?? '';
   const surveyID = props.item.surveyID;
@@ -46,7 +42,6 @@ export default function FeedbackCell(props) {
   );
 
   let [feedbackTapped, setTapped] = useState(false);
-  //let surveyTakenDate = moment(props.item.surveyTakenDate).fromNow();
   let surveyTakenDate = props.item.surveyTakenDate;
 
   useEffect(() => {
@@ -71,47 +66,6 @@ export default function FeedbackCell(props) {
     return '';
   };
 
-  let renderTopSegmentView = () => {
-    let status = getTicketStatus();
-    return (
-      <View style={styles.topSegmentContainer}>
-        <Text style={styles.segmentText}>{props.item.businessUnitName}</Text>
-        <Text style={styles.segmentText}>{status}</Text>
-      </View>
-    );
-  };
-
-  let getNPSColor = () => {
-    switch (props.item.sentiment) {
-      case 'Detractor':
-        return Colors.detractor2;
-      case 'Passive':
-        return Colors.passive2;
-      default:
-        return Colors.promoter2;
-    }
-  };
-
-  //   let renderNPSView = () => {
-  //     let color = getNPSColor();
-  //     return (
-  //       <View style={[styles.npsContainer, {backgroundColor: color}]}>
-  //         <Text
-  //           style={[
-  //             styles.npsText,
-  //             {
-  //               color:
-  //                 props.item.sentiment === 'Passive'
-  //                   ? Colors.primary
-  //                   : Colors.white,
-  //             },
-  //           ]}>
-  //           {props.item.answerText}
-  //         </Text>
-  //       </View>
-  //     );
-  //   };
-
   let UserName = ({name, isDisabled}) => {
     const charLength = 24;
     const shortenedString =
@@ -131,87 +85,25 @@ export default function FeedbackCell(props) {
     );
   };
 
-  let NPSScore = ({answerText}) => {
-    let textColor = getNPSColor();
+  let Date = ({surveyTakenDate}) => {
     return (
-      <Text
-        style={{
-          marginHorizontal: MarginConstants.tab1,
-          fontSize: TextSizes.primary,
-          fontWeight: FontWeight.bold,
-          color: textColor,
-        }}>
-        {answerText}
-      </Text>
-    );
-  };
-
-  let NPSIcon = ({sentiment}) => {
-    let icon;
-    switch (sentiment) {
-      case 'Detractor':
-        icon = require('./../../../assets/images/detractor.png');
-        break;
-      case 'Passive':
-        icon = require('./../../../assets/images/passive.png');
-        break;
-      default:
-        icon = require('./../../../assets/images/promoter.png');
-        break;
-    }
-
-    return (
-      <Image
-        source={icon}
-        style={{width: TextSizes.primary, height: TextSizes.primary}}
+      <TextLabel
+        text={surveyTakenDate}
+        baseTextStyle={baseTextStyles.semiSecondaryRegularText}
+        color={Colors.evenDarkerGrey}
       />
     );
   };
 
-  let Date = ({surveyTakenDate}) => {
-    return (
-      <Text style={[styles.subtitleText, {marginHorizontal: 12}]}>
-        {surveyTakenDate}
-      </Text>
-    );
-  };
-
-  let getResponseId = () => {
-    const responseId = props.item.responseSetID;
-
+  let ResponseId = ({responseSetID}) => {
     return (
       <View style={styles.responseIdContainer}>
-        <Text style={styles.subtitleText}>{`${translate(
-          'close_loop.response_id',
-        )} ${responseId}`}</Text>
+        <TextLabel
+          style={{marginHorizontal: 0}}
+          text={`${translate('close_loop.response_id')} ${responseSetID}`}
+        />
       </View>
     );
-  };
-
-  let renderRespondentDetails = () => {
-    const userName =
-      (props.item.firstName ? props.item.firstName + ' ' : '') +
-      '' +
-      (props.item.lastName ? props.item.lastName : '');
-    const email = StringUtils.isNotEmpty(props.item.textResultValue)
-      ? props.item.textResultValue
-      : props.item.emailAddress;
-    return (
-      <View style={styles.respondentContainer}>
-        <Text style={styles.titleText}>{userName}</Text>
-        <Text style={styles.subtitleText} numberOfLines={3}>
-          {email}
-        </Text>
-        <Text style={styles.subtitleText}>{surveyTakenDate}</Text>
-      </View>
-    );
-  };
-
-  let renderCreateOrViewTicketButton = () => {
-    return renderCreateOrViewTicket();
-    //   <View style={{padding: 4, backgroundColor: Colors.primary}}>
-
-    //   </View>
   };
 
   const RenderIsNewResponse = () => {
@@ -224,15 +116,10 @@ export default function FeedbackCell(props) {
   };
 
   let renderCreateOrViewTicket = () => {
-    // let status = getTicketStatus();
-    // return StringUtils.isEmpty(status) ? (
     return !hasTicket ? (
       <TouchableWithoutFeedback
         hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
         onPress={() => {
-          // props.navigation.navigate(translate('responses.new_ticket'), {
-          //   parentRoute: translate('responses.responses'),
-          // });
           props.navigation.navigate(translate('responses.new_ticket'), {
             responseId: props.item.responseSetID,
             customerName: name,
@@ -245,15 +132,6 @@ export default function FeedbackCell(props) {
         </Text>
       </TouchableWithoutFeedback>
     ) : (
-      // <TouchableWithoutFeedback
-      //   hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
-      //   onPress={() => {
-      //     // setTapped(true);
-      //   }}>
-      //   <Text style={styles.viewTicketsText}>
-      //     {translate('responses.view_ticket')}
-      //   </Text>
-      // </TouchableWithoutFeedback>
       <View />
     );
   };
@@ -309,15 +187,6 @@ export default function FeedbackCell(props) {
     );
   };
 
-  const RenderInfo = () => {
-    return (
-      <View style={{marginHorizontal: MarginConstants.tab1}}>
-        <RenderContactDetails />
-        <RenderDateDetails />
-      </View>
-    );
-  };
-
   let renderResponseContainer = () => {
     let flag = props.parentRoute === translate('responses.responses');
     return (
@@ -327,7 +196,12 @@ export default function FeedbackCell(props) {
 
           <View style={[styles.rowContainer, {maxWidth: '70%'}]}>
             <NPSIcon sentiment={props.item.sentiment} />
-            <NPSScore answerText={props.item.answerText} />
+            <HorizontalSpaceBox />
+            <NPSAnswerText
+              sentiment={props.item.sentiment}
+              answerText={props.item.answerText}
+            />
+            <HorizontalSpaceBox />
             <UserName name={name} isDisabled={disable} />
           </View>
 
@@ -342,15 +216,11 @@ export default function FeedbackCell(props) {
             )}
           </View>
         </View>
-
-        {/* {renderRespondentDetails()} */}
-        {/* {getResponseId()}
-        {disable && flag && renderCreateOrViewTicket()} */}
+        <VerticalSpaceBox multiplyBy={2} />
         <View style={styles.responseIdAndTicketRowContainer}>
-          {getResponseId()}
+          <ResponseId responseSetID={props.item.responseSetID} />
           {disable && flag && renderCreateOrViewTicket()}
         </View>
-        {/* {disable && flag && RenderInfo()} */}
       </View>
     );
   };
@@ -363,10 +233,7 @@ export default function FeedbackCell(props) {
       disabled={disable}>
       <View style={styles.rowContainer}>
         <RenderIsNewResponse />
-        <View style={styles.container}>
-          {/* {renderTopSegmentView()} */}
-          {renderResponseContainer()}
-        </View>
+        <View style={styles.container}>{renderResponseContainer()}</View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -376,7 +243,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: MarginConstants.tab1,
-    padding: PaddingConstants.halfTab,
+    padding: PaddingConstants.tab1_2x,
     backgroundColor: Colors.white,
     borderWidth: 1,
     borderRadius: 4,
@@ -392,51 +259,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  topSegmentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: PaddingConstants.tab1,
-  },
-  segmentText: {
-    color: Colors.primary,
-    fontSize: TextSizes.secondary,
-    fontFamily: FontFamily.regular,
-    textAlign: 'center',
-  },
+
   responseContainer: {
     flexDirection: 'row',
-    padding: PaddingConstants.tab1,
+
     alignItems: 'center',
   },
-  npsText: {
-    fontSize: TextSizes.largeText,
-    fontFamily: FontFamily.regular,
-    textAlign: 'center',
-  },
-  npsContainer: {
-    borderRadius: MarginConstants.tab4,
-    width: 1.2 * MarginConstants.tab4,
-    height: 1.2 * MarginConstants.tab4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: PaddingConstants.tab1,
-  },
-  respondentContainer: {
-    paddingHorizontal: PaddingConstants.tab2,
-    flex: 1,
-  },
+
   responseIdContainer: {
-    paddingHorizontal: PaddingConstants.tab2,
     flex: 1,
   },
-  titleText: {
-    color: Colors.primary,
-    fontSize: TextSizes.secondary,
-    textAlign: 'left',
-    fontFamily: FontFamily.semiBold,
-    marginVertical: MarginConstants.halfTab / 2,
-    paddingBottom: 2,
-  },
+
   subtitleText: {
     color: Colors.secondary,
     fontSize: TextSizes.secondary,
@@ -478,17 +311,16 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   userNameText: {
-    marginHorizontal: MarginConstants.tab1,
-    fontSize: TextSizes.secondary,
+    fontSize: TextSizes.primary,
+    fontFamily: FontFamily.medium,
     fontWeight: FontWeight.bold,
     color: Colors.accent,
+    textAlign: 'center',
   },
   responseIdAndTicketRowContainer: {
     flexDirection: 'row',
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
-    padding: PaddingConstants.halfTab,
-    margin: MarginConstants.halfTab,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   dateAndArrowIconContainer: {
