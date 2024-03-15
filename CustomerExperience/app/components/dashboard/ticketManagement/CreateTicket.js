@@ -70,6 +70,7 @@ import {translate} from '../../../Utils/MultilinguaUtils';
 // import {debounce} from '../../../Utils/TimeOutUtil';
 import {buttonStyles} from '../../../styles/button.styles';
 import {backgroundColor} from '../../../widgets/qp-calendar/style';
+import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 
 const RenderCreateTicketButton = ({handleCreateTicket}) => {
   return (
@@ -811,31 +812,23 @@ export default function CreateTicket(props) {
     [segmentId],
   );
 
+  const VerticalSpace = () => (
+    <VerticalSpaceBox marginVertical={MarginConstants.halfTab} />
+  );
+
   return (
     <View
       forceInset={{bottom: 'never', top: 'never'}}
       style={styles.rootContainer}>
-      <Animated.View
+      <Animated.ScrollView
         style={[
           styles.container,
           {
             opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+            marginHorizontal: MarginConstants.tab1_2x,
           },
         ]}>
-        <ScrollView style={[styles.container]}>
-          {/* <View
-            style={[styles.rowContainer, {justifyContent: 'space-between'}]}>
-            <Text style={styles.headerText}>
-              {translate('create_new_ticket.create_new_ticket')}
-            </Text>
-            <CloseButton color={Colors.filterIconColor} />
-          </View> */}
-          <GestureHandleBar />
-          <PageHeaderText
-            text={translate('create_new_ticket.create_new_ticket')}
-            hasCloseButton
-          />
-
+        <View style={styles.innerContainer}>
           <Pressable onPress={handleSegmentSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               <SegmentIcon />
@@ -850,6 +843,8 @@ export default function CreateTicket(props) {
               </Text>
             </View>
           </Pressable>
+          <VerticalSpace />
+
           <Pressable onPress={handleDateSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               <RenderMaterialIcon iconName={'date-range'} />
@@ -862,16 +857,23 @@ export default function CreateTicket(props) {
               </Text>
             </View>
           </Pressable>
+          <VerticalSpace />
+
           <RenderCustomerNameInput
             defaultValue={customerName}
             setTicketState={setTicketState}
           />
+          <VerticalSpace />
+
           <RenderPhoneInput setTicketState={setTicketState} />
+          <VerticalSpace />
 
           <RenderEmailAddressInput
             defaultValue={customerEmail}
             setTicketState={setTicketState}
           />
+          <VerticalSpace />
+
           <Pressable onPress={handlePrioritySelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               <RenderIonIcon
@@ -885,6 +887,8 @@ export default function CreateTicket(props) {
               {/* <TextInput placeholder="Priority" style={styles.titleText} /> */}
             </View>
           </Pressable>
+          <VerticalSpace />
+
           <Pressable onPress={handleStatusSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               {/* {getIonIcon('search')} */}
@@ -898,11 +902,8 @@ export default function CreateTicket(props) {
               } Status`}</Text>
             </View>
           </Pressable>
-          {/* <View style={[styles.rowContainer, styles.rowItem]}> */}
-          {/* {getIonIcon('eye')} */}
-          {/* {getIonIcon('eye-off')} */}
-          {/* <TextInput placeholder="Watching" style={styles.titleText} /> */}
-          {/* </View> */}
+          <VerticalSpace />
+
           <Pressable onPress={handleOwnerSelection}>
             <View style={[styles.rowContainer, styles.rowItem]}>
               <RenderMateriaCommunityIcon iconName={'shield-account'} />
@@ -916,13 +917,19 @@ export default function CreateTicket(props) {
                 }>{`${ticketOwner ?? ''}`}</Text>
             </View>
           </Pressable>
+          <VerticalSpace />
           <RenderDescriptionInput setTicketState={setTicketState} />
+          {/* <View style={{marginVertical: MarginConstants.tab1_2x}} /> */}
+          <VerticalSpace />
+          <VerticalSpace />
+
           <CreateTicketButton
             onPress={handleCreateTicket}
             showLoading={showLoading}
           />
-        </ScrollView>
-      </Animated.View>
+          <VerticalSpace />
+        </View>
+      </Animated.ScrollView>
       <RenderPriorityBottomSheet />
       <RenderStatusBottomSheet />
       <RenderSegmentBottomSheet />
@@ -945,18 +952,18 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  innerContainer: {
+    flex: 1,
+    borderRadius: 8,
     backgroundColor: Colors.white,
-    borderTopStartRadius: 8,
-    borderTopEndRadius: 8,
-    padding: PaddingConstants.halfTab,
-
-    marginTop: MarginConstants.halfTab,
+    padding: PaddingConstants.tab1,
+    marginVertical: MarginConstants.tab1_2x,
   },
 
   rowContainer: {
     flex: 1,
     flexDirection: 'row',
-    // backgroundColor: Colors.accentLight,
   },
   headerText: {
     fontFamily: FontFamily.medium,

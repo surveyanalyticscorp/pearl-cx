@@ -32,7 +32,7 @@ const QPTextField = props => {
   let returnKey = props.returnKey ? props.returnKey : 'next';
   let label = props.label ? props.label : '';
   let defaultValue = props.defaultValue ? props.defaultValue : '';
-  let style = [props.style, {paddingVertical: 0}];
+  let style = [props?.style, {paddingVertical: 0}];
   let icon = secureText ? 'visibility-off' : 'visibility';
 
   let renderVisibility = () => {

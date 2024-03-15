@@ -10,7 +10,6 @@ import {
 import {
   CheckRadioButtonItem,
   ListItemSeparator,
-  RadioButtonCheckbox,
 } from '../../../routes/CommonScreen';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -18,14 +17,8 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
-const itemSeparator = () => (
-  <ListItemSeparator
-    style={{
-      marginBottom: MarginConstants.tab1,
-      marginHorizontal: MarginConstants.tab1,
-    }}
-  />
-);
+import {baseTextStyles} from '../../../styles/text.styles';
+const itemSeparator = () => <ListItemSeparator />;
 
 const SelectSorting = ({data, selectedIndex, handleOnPress}) => {
   // const [data, setData] = useState(data);
@@ -36,7 +29,7 @@ const SelectSorting = ({data, selectedIndex, handleOnPress}) => {
     return (
       <CheckRadioButtonItem
         checkBoxRowStyle={styles.row}
-        textStyle={styles.textStyle}
+        textStyle={baseTextStyles.primaryRegularText}
         item={{...item, isChecked: currentIndex === index}}
         index={index}
         onPress={index_ => {
@@ -97,17 +90,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     paddingVertical: MarginConstants.tab1,
-    marginBottom: MarginConstants.tab1,
-  },
-  title: {
-    flex: 1,
-    fontFamily: FontFamily.medium,
-    fontSize: TextSizes.secondary,
-    marginStart: MarginConstants.halfTab,
-    color: Colors.filterIconColor,
-  },
-  textStyle: {
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.primary,
+    marginTop: MarginConstants.tab1,
   },
 });

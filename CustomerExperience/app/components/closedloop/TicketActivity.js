@@ -18,6 +18,7 @@ import {baseTextStyles} from '../../styles/text.styles';
 import ActivityText from '../../widgets/closedloopWidget/ActivityText';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
 import SortingToggleButton from '../../widgets/closedloopWidget/SortingToggleButton';
+import {ChildContainer, ParentContainer} from '../../widgets/ParentContainer';
 
 const SortingIcon = ({iconName, size, color}) => {
   return (
@@ -29,29 +30,24 @@ const SortingIcon = ({iconName, size, color}) => {
   );
 };
 
-const ActivityDateLabel = ({date}) => {
-  return <Text style={styles.date}>{convertDateTimeAgo(date)}</Text>;
-};
-
 const RenderItem = ({item}) => {
   const {userName, createdAt, activityText} = item;
   return (
-    // <View style={styles.renderItemContainerStyle}>
-    //   <View style={styles.renderItemStyle}>
-    <View style={styles.myRenderItemContainerStyle}>
-      <View style={styles.myRenderItemStyle}>
+    <ParentContainer style={styles.myRenderItemContainerStyle}>
+      <ChildContainer style={{...styles.myRenderItemStyle, marginTop: 0}}>
         <TextLabel
-          baseTextStyle={baseTextStyles.secondaryRegularText}
           color={Colors.accent}
           text={userName ?? translate('ticket_list.anonymous')}
         />
-        <ActivityDateLabel date={createdAt} />
-      </View>
-      <View style={{marginHorizontal: MarginConstants.tab1}}>
-        {/* <Text style={styles.activity}>{item.activityText}</Text> */}
-        <ActivityText text={activityText} />
-      </View>
-    </View>
+        <TextLabel
+          color={Colors.evenDarkerGrey}
+          baseTextStyle={baseTextStyles.semiSecondaryRegularText}
+          text={convertDateTimeAgo(createdAt)}
+        />
+      </ChildContainer>
+
+      <ActivityText text={activityText} />
+    </ParentContainer>
   );
 };
 
@@ -233,18 +229,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: Colors.white,
-    paddingVertical: PaddingConstants.halfTab,
-    marginBottom: MarginConstants.tab1,
-    marginHorizontal: MarginConstants.tab1,
   },
 
   myRenderItemContainerStyle: {
-    flex: 1,
     justifyContent: 'center',
     backgroundColor: Colors.white,
-    padding: MarginConstants.tab1_2x,
-    margin: MarginConstants.tab1,
+    marginTop: MarginConstants.tab1,
     borderRadius: 5,
   },
   renderItemContainerStyle: {

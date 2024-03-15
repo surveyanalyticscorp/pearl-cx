@@ -3,6 +3,7 @@ import {$rem} from './globalStyleVariables';
 const factor = 0.5;
 
 export const MarginConstants = {
+  quarterTab: (factor * $rem) / 4,
   halfTab: (factor * $rem) / 2,
   halfTab_3x: 3 * ((factor * $rem) / 2),
   halfTab_5x: 5 * ((factor * $rem) / 2),

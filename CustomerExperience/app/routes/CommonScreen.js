@@ -1028,10 +1028,12 @@ const CommonScreens = RootStack => {
       options={({navigation, route}) => ({
         // headerLeft: (props) => <View />,
         // headerRight: (props) => <CloseButton />,
-        headerShown: false,
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+        headerShown: true,
+        title: 'New ticket',
         // gestureDirection: 'vertical',
-        gestureEnabled: true,
-        ...TransitionPresets.ModalPresentationIOS,
+        // gestureEnabled: true,
+        // ...TransitionPresets.ModalPresentationIOS,
         // transitionSpec: {
         //   open: TransitionSpecs.FadeInFromBottomAndroidSpec,
         //   close: TransitionSpecs.TransitionIOSSpec,
@@ -1109,7 +1111,7 @@ const styles = StyleSheet.create({
   },
   saveText: {
     color: Colors.primary,
-    textAlignVertical: 'center',
+    textAlign: 'center',
     fontSize: TextSizes.primary,
     fontFamily: FontFamily.regular,
     paddingTop: 5,
@@ -1161,7 +1163,7 @@ const styles = StyleSheet.create({
   },
   checkBoxText: {
     color: Colors.filterIconColor,
-    textAlignVertical: 'center',
+    textAlign: 'center',
     fontSize: TextSizes.secondary,
     fontFamily: FontFamily.regular,
   },
