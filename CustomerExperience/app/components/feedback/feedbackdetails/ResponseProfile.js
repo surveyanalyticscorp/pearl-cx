@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   },
   contactBox: {
     flexDirection: 'row',
-    marginVertical: MarginConstants.halfTab,
+    marginTop: MarginConstants.halfTab,
     paddingHorizontal: PaddingConstants.halfTab,
     alignItems: 'center',
     alignContent: 'center',

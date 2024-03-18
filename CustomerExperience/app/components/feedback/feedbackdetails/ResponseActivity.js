@@ -21,6 +21,9 @@ import moment from 'moment';
 import {DMY_AT_TIME_FORMAT} from '../../../Utils/AppConstants';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {ShowResponseTicketList} from '../FeedbackDetails';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import {baseTextStyles} from '../../../styles/text.styles';
+import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 
 const ResponseActivity = props => {
   let isFromFeedback = props.route.params.data.isFromFeedback;
@@ -39,28 +42,36 @@ const ResponseActivity = props => {
       </View>
     );
   };
-  const RenderSurveyComplete = ({children}) => {
+  const RenderSurveyComplete = ({surveyTaken}) => {
     return (
-      <View style={styles.surveyDateBox}>
-        <Text style={styles.secondaryTitle}>
-          {translate('profile.survey_completed')}
-        </Text>
-        <Text style={styles.secondaryText}>{children}</Text>
+      <View
+        style={[
+          styles.cardContainer,
+          {justifyContent: 'space-between', alignItems: 'center'},
+        ]}>
+        <TextLabel
+          text={translate('profile.survey_completed')}
+          baseTextStyle={baseTextStyles.secondaryRegularText}
+          color={Colors.filterIconColor}
+        />
+        <TextLabel
+          text={surveyTaken}
+          baseTextStyle={baseTextStyles.semiSecondaryRegularText}
+          color={Colors.filterIconColor}
+        />
+
+        <Text style={styles.secondaryText}>{}</Text>
       </View>
     );
   };
 
-  const RenderSurveyDetails = () => {
-    return (
-      <View style={[styles.innerContainer, {justifyContent: 'center'}]}>
-        {/* <RenderSurveySent>{'N/A'}</RenderSurveySent>
-        <View style={styles.border} /> */}
-        <RenderSurveyComplete>
-          {activityData.surveyTakenDate}
-        </RenderSurveyComplete>
-      </View>
-    );
-  };
+  // const RenderSurveyDetails = ({text}) => {
+  //   return (
+  //     <View style={[styles.innerContainer, {justifyContent: 'center'}]}>
+  //       <RenderSurveyComplete text={activityData.surveyTakenDate} />
+  //     </View>
+  //   );
+  // };
 
   const RenderStatusCell = ({item}) => {
     let borderColor = statusColors.newBorder;
@@ -122,25 +133,35 @@ const ResponseActivity = props => {
       <View>
         <View style={styles.statusRow}>
           <Avatar title={commentBy} />
-          <Text style={styles.secondaryTitle}>
-            {(commentBy ?? 'N/A').trim()}
-          </Text>
+          <TextLabel
+            text={(commentBy ?? 'N/A').trim()}
+            baseTextStyle={baseTextStyles.secondaryRegularText}
+            color={Colors.filterIconColor}
+            fontWeight={FontWeight.bold}
+          />
         </View>
-
-        <Text style={styles.commentHeaderText}>
-          {`Last comment: ${moment
+        <VerticalSpaceBox />
+        <TextLabel
+          text={`Last comment: ${moment
             .utc(createdAt)
             .local()
             .format(DMY_AT_TIME_FORMAT)}`}
-        </Text>
-        <Text style={styles.mediumText}>{text ?? 'N/A'}</Text>
+          baseTextStyle={baseTextStyles.smallRegularText}
+          color={Colors.filterIconColor}
+        />
+        <VerticalSpaceBox />
+        <TextLabel
+          text={text ?? 'N/A'}
+          baseTextStyle={baseTextStyles.secondaryRegularText}
+          color={Colors.filterIconColor}
+        />
       </View>
     );
   };
 
   const RenderActivityDetails = () => {
     return (
-      <View style={styles.innerContainer}>
+      <View style={styles.cardContainer}>
         <View>
           {ticketLastComment && <CommentSection {...ticketLastComment} />}
           {ticketStatusHistory && ticketStatusHistory.length > 0 ? (
@@ -171,7 +192,7 @@ const ResponseActivity = props => {
 
   return (
     <ScrollView style={styles.container}>
-      <RenderSurveyDetails />
+      <RenderSurveyComplete surveyTaken={activityData.surveyTakenDate} />
       <RenderActivityDetails />
       <ShowResponseTicketList {...props} />
     </ScrollView>
@@ -183,6 +204,7 @@ export default ResponseActivity;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: PaddingConstants.tab1,
   },
   border: {
     backgroundColor: Colors.darkGrey,
@@ -195,7 +217,6 @@ const styles = StyleSheet.create({
   statusRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: MarginConstants.halfTab,
   },
   separator: {
     alignItems: 'center',
@@ -209,6 +230,16 @@ const styles = StyleSheet.create({
     borderColor: Colors.darkGrey,
     borderWidth: 1,
     margin: MarginConstants.tab1,
+  },
+  cardContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    borderRadius: 4,
+    backgroundColor: Colors.white,
+    borderColor: Colors.darkGrey,
+    borderWidth: 1,
+    padding: PaddingConstants.tab1_2x,
+    marginTop: MarginConstants.tab1,
   },
 
   counterView: {
