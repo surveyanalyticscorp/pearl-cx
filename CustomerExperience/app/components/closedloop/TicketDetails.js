@@ -36,9 +36,9 @@ export default function TicketDetails(props) {
     dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
   }, []);
 
-  const callApis = useCallback(() => {
-    dispatch(getRootCauseList(authToken, global.subscriberId));
-    dispatch(getActionList(authToken, global.subscriberId));
+  const callApis = useCallback(authToken_ => {
+    dispatch(getRootCauseList(authToken_, global.subscriberId));
+    dispatch(getActionList(authToken_, global.subscriberId));
     if (!StringUtils.isEmptyOrNull(ticketItem.responseId)) {
       dispatch(
         getResponseDetailsByResponseId(authToken, {
@@ -55,8 +55,11 @@ export default function TicketDetails(props) {
   }, [props.navigation, ticketItem.id]);
 
   useEffect(() => {
-    callApis();
-  }, []);
+    if (authToken) {
+      callApis(authToken);
+      console.log('root API calls!');
+    }
+  }, [authToken]);
 
   // const CLFTicketTabStack = () => {
   return isTicketLoading ? (

@@ -38,34 +38,9 @@ export const WelcomeScreen = props => {
     state => state.global,
   );
 
-  // const authToken = useSelector((state) => state.global.authToken);
-  // const [subscriberId, setSubscriberId] = useState(state.global.subscriberId);
-  // const segmentDetails = useSelector((state) => state.dashboard.segmentDetails);
   const welcomeScreenData = useSelector(
     state => state.dashboard.welcomeScreenData,
   );
-  // console.log('WELCOME_SCREEN', JSON.stringify(cxData));
-  // console.log('WELCOME_SCREEN', JSON.stringify(welcomeScreenData));
-
-  // const user = ;
-
-  // let [moveNext, setMoveNext] = useState(false);
-  // let splashTimer = useRef(null);
-
-  // useEffect(() => {
-  //   splashTimer = setTimeout(() => {
-  //     setMoveNext(true);
-  //   }, 3000);
-
-  //   return () => {
-  //     clearTimeout(splashTimer);
-  //   };
-  // }, []);
-
-  // const onSkipHandler = () => {
-  //   setMoveNext(true);
-  //   clearTimeout(splashTimer);
-  // };
 
   const setGlobalBaseUrl = baseUrl_ => {
     if (!StringUtils.isEmptyOrNull(baseUrl_) && global.baseUrl !== baseUrl_) {
@@ -132,14 +107,14 @@ export const WelcomeScreen = props => {
     // dispatch(getClosedLoopSegmentDetails(authToken, {pageOffset: '0'}));
     console.log('SUBSCRIBER_ID', global.subscriberId);
     dispatch(
-      callAppLoginCounter(authToken_, {
+      callAppLoginCounter(bearerToken, {
         cxUserId: userInfo.userID,
         deviceType: deviceType,
       }),
     );
 
-    dispatch(getRootCauseList(authToken_, global.subscriberId));
-    dispatch(getActionList(authToken_, global.subscriberId));
+    // dispatch(getRootCauseList(authToken_, global.subscriberId));
+    // dispatch(getActionList(authToken_, global.subscriberId));
     // dispatch(getClosedLoopAllOwnersDetails(authToken));
     // dispatch(getClosedLoopOwnerDetails(authToken));
   };

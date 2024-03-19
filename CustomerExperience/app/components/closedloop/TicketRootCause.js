@@ -17,12 +17,17 @@ import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {CheckBoxItem, CheckRadioButtonItem} from '../../routes/CommonScreen';
-import {updateRootCause} from '../../redux/actions/closedloop.actions';
+import {
+  getActionList,
+  getRootCauseList,
+  updateRootCause,
+} from '../../redux/actions/closedloop.actions';
 import {translate} from '../../Utils/MultilinguaUtils';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
 import {textStyles} from '../../styles/text.styles';
 import StringUtils from '../../Utils/StringUtils';
+import {useEffect} from 'react';
 
 const NoDataFound = ({dataText}) => {
   return (
@@ -110,6 +115,11 @@ export default function TicketRootCause(props) {
   const {ticket, rootCauseList, rootCauseActionList} = useSelector(
     state => state.dashboard,
   );
+
+  // useEffect(() => {
+  //   dispatch(getRootCauseList(authToken, global.subscriberId));
+  //   dispatch(getActionList(authToken, global.subscriberId));
+  // }, [authToken]);
 
   const hasId = (id, arr) => {
     for (let i = 0; i < arr.length; i++) {
