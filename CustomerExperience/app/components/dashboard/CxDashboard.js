@@ -169,7 +169,12 @@ const ChartLegendView = () => {
 
   const {scoringModel} = useSelector(state => state.dashboard?.dashboardData);
   return (
-    <View style={dashboardStyles.npsLegendContainer}>
+    <View
+      style={
+        scoringModel === 1
+          ? dashboardStyles.csatLegendContainer
+          : dashboardStyles.npsLegendContainer
+      }>
       <LegendScoreView
         title={scoringModel === 1 ? 'Negatives' : 'Detractors'}
         count={detractors}

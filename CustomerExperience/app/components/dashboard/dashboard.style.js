@@ -217,8 +217,8 @@ export const dashboardStyles = StyleSheet.create({
   csatChartContainer: {
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 13
-      : MarginConstants.tab4 * 11,
+      ? MarginConstants.tab1_4x * 14
+      : MarginConstants.tab1_4x * 13,
     flexDirection: 'column',
     justifyContent: 'flex-start',
     marginTop: MarginConstants.tab2,
@@ -325,6 +325,19 @@ export const dashboardStyles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
   },
+  csatLegendContainer: {
+    position: 'absolute',
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    top:
+      MarginConstants.tab1_16x +
+      MarginConstants.tab1_4x +
+      MarginConstants.tab1_2x,
+    width: '100%',
+  },
+
   npsLegendContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
