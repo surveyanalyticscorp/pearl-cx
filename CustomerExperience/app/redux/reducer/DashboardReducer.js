@@ -45,6 +45,7 @@ import {
   SET_TOKEN_EXPIRED,
   SET_TOKEN_EXPIRE_DATE,
   IS_CSAT_VIEW_TOP_BOX,
+  SET_MOVE_NEXT,
 } from '../actions/dashboard.actions';
 
 const initialState = {
@@ -79,6 +80,7 @@ const initialState = {
   isTokenExpired: false,
   expirationDate: '',
   isCsatViewTopBox: true,
+  skipWelcome: false,
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -376,6 +378,12 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         isCsatViewTopBox: action.isTopBoxView,
+      };
+    }
+    case SET_MOVE_NEXT: {
+      return {
+        ...state,
+        skipWelcome: action.doesMoveNext,
       };
     }
 

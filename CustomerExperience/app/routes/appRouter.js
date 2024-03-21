@@ -108,6 +108,7 @@ const AppRouter = props => {
   let [baseUrl, setBaseUrl] = useState(undefined);
   let [subscriberId, setSubscriberId] = useState(undefined);
   const isTokenExpired = useSelector(state => state.dashboard.isTokenExpired);
+  const skipWelcome = useSelector(state => state.dashboard.skipWelcome);
 
   let [lastLoginArray, setLastLoginArray] = useState([]);
 
@@ -236,7 +237,7 @@ const AppRouter = props => {
       ];
       AsyncStorage.multiSet(data, error => {});
     }
-    setMoveNext(state => !authToken);
+    // setMoveNext(state => !authToken);
   }, [authToken]);
 
   useEffect(() => {
@@ -521,30 +522,30 @@ const AppRouter = props => {
     );
   };
 
-  let [moveNext, setMoveNext] = useState(false);
-  let splashTimer = useRef(null);
-  const welcomeScreenData = useSelector(
-    state => state.dashboard.welcomeScreenData,
-  );
-  useEffect(() => {
-    if (welcomeScreenData) {
-      splashTimer.current = setTimeout(() => {
-        setMoveNext(true);
-      }, 5000);
-      return () => {
-        clearTimeout(splashTimer.current);
-      };
-    }
-  }, [moveNext, welcomeScreenData]);
+  // let [moveNext, setMoveNext] = useState(false);
+  // let splashTimer = useRef(null);
+  // const welcomeScreenData = useSelector(
+  //   state => state.dashboard.welcomeScreenData,
+  // );
+  // useEffect(() => {
+  //   if (welcomeScreenData) {
+  //     splashTimer.current = setTimeout(() => {
+  //       setMoveNext(true);
+  //     }, 5000);
+  //     return () => {
+  //       clearTimeout(splashTimer.current);
+  //     };
+  //   }
+  // }, [moveNext, welcomeScreenData]);
 
-  const onSkipHandler = () => {
-    console.log('SKIP!!');
-    setMoveNext(true);
+  // const onSkipHandler = () => {
+  //   console.log('SKIP!!');
+  //   setMoveNext(true);
 
-    if (splashTimer.current) {
-      clearTimeout(splashTimer.current);
-    }
-  };
+  //   if (splashTimer.current) {
+  //     clearTimeout(splashTimer.current);
+  //   }
+  // };
 
   console.log('LAST LOGIN DATA', JSON.stringify(lastLoginArray));
 
@@ -555,10 +556,10 @@ const AppRouter = props => {
       fallback={renderSpinner()}
       linking={linking}>
       {!isTokenExpired && authToken && bearerToken ? (
-        moveNext ? (
+        skipWelcome ? (
           <RenderDrawer />
         ) : (
-          <WelcomeScreen skipHandler={onSkipHandler} />
+          <WelcomeScreen />
         )
       ) : (
         <SignInStack />

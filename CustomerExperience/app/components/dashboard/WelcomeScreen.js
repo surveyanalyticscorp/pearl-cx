@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StyleSheet, ImageBackground, Text, Platform} from 'react-native';
 import {Colors} from '../../styles/color.constants';
@@ -12,6 +12,7 @@ import {
   callAppLoginCounter,
   getFirstTimeClosedLoopSegmentDetails,
   getWelcomeScreenDataCount,
+  setMoveNext,
 } from '../../redux/actions/dashboard.actions';
 // import QPSpinner from '../../widgets/QPSpinner';
 import {RenderSpinner} from '../../routes/CommonScreen';
@@ -31,166 +32,196 @@ import {buttonStyles} from '../../styles/button.styles';
 import StringUtils from '../../Utils/StringUtils';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
-export const WelcomeScreen = props => {
-  const dispatch = useDispatch();
-  const deviceType = Platform.OS === 'android' ? 0 : 1;
-  const {baseUrl, bearerToken, authToken, userInfo} = useSelector(
-    state => state.global,
+const RenderCountItem = ({style, title, data}) => {
+  return (
+    <View style={styles.ticketBox}>
+      <Text style={styles.titleText}>{data}</Text>
+      <Text style={styles.valueText}>{title}</Text>
+    </View>
   );
+};
 
-  const welcomeScreenData = useSelector(
+const RenderCountData = () => {
+  const {cxData, clfData} = useSelector(
     state => state.dashboard.welcomeScreenData,
   );
 
+  return (
+    <View>
+      <View style={styles.responseContainer}>
+        <RenderCountItem
+          title={translate('dashboard.new_responses')}
+          data={cxData?.body?.newResponses ?? 0}
+          style={styles.responseBox}
+        />
+      </View>
+      <View style={styles.ticketAndOverdueContainer}>
+        <RenderCountItem
+          title={translate('dashboard.new_tickets')}
+          data={clfData?.data[0]?.value ?? 0}
+          style={styles.ticketBox}
+        />
+        <RenderCountItem
+          title={translate('dashboard.overdues')}
+          data={clfData?.data[1]?.value ?? 0}
+          style={styles.ticketBox}
+        />
+      </View>
+    </View>
+  );
+};
+const CustomBackground = ({children}) => {
+  return (
+    <ImageBackground
+      resizeMode={'cover'}
+      source={require('../../config/images/background1.png')}
+      style={styles.backgroundContainer}>
+      {children}
+    </ImageBackground>
+  );
+};
+
+const SkipButton = () => {
+  const dispatch = useDispatch();
+  // let [moveNext, setMoveNext] = useState(false);
+  let splashTimer = useRef(null);
+  const welcomeScreenData = useSelector(
+    state => state.dashboard.welcomeScreenData,
+  );
+  useEffect(() => {
+    if (welcomeScreenData) {
+      splashTimer.current = setTimeout(() => {
+        dispatch(setMoveNext(true));
+      }, 5000);
+      return () => {
+        clearTimeout(splashTimer.current);
+      };
+    }
+  }, [welcomeScreenData]);
+
+  const onSkipHandler = () => {
+    console.log('SKIP!!');
+    dispatch(setMoveNext(true));
+
+    if (splashTimer.current) {
+      clearTimeout(splashTimer.current);
+    }
+  };
+
+  return (
+    <View style={styles.skipButtonView}>
+      <QPButton
+        buttonText={translate('onBoarding.skip')}
+        buttonColor={Colors.accentLight}
+        onPress={onSkipHandler}
+        textStyle={buttonStyles.primaryButtonText}
+        style={buttonStyles.primaryButton}
+      />
+    </View>
+  );
+};
+
+const RenderWelcomeScreen = () => {
+  const {userInfo} = useSelector(state => state.global);
+  return (
+    <View style={styles.backgroundContainer}>
+      <View style={styles.backgroundContainer}>
+        <Text style={styles.welcomeText}>
+          {translate('onBoarding.welcomeBack')}
+        </Text>
+        <Text style={styles.nameText}>
+          {(userInfo?.firstName === undefined ? '' : userInfo?.firstName) +
+            ' ' +
+            (userInfo?.lastName === undefined ? '' : userInfo?.lastName)}
+        </Text>
+
+        <RenderCountData />
+      </View>
+      <SkipButton />
+    </View>
+  );
+};
+
+const LoadWelcomeScreen = () => {
+  const {cxData, clfData} = useSelector(
+    state => state.dashboard.welcomeScreenData,
+  );
+
+  return (
+    <CustomBackground>
+      {cxData && clfData ? <RenderWelcomeScreen /> : <RenderSpinner />}
+    </CustomBackground>
+  );
+};
+export const WelcomeScreen = () => {
+  const dispatch = useDispatch();
+  const deviceType = Platform.OS === 'android' ? 0 : 1;
+  const {baseUrl, authToken, userInfo} = useSelector(state => state.global);
+
   const setGlobalBaseUrl = baseUrl_ => {
+    AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {
+      console.log(
+        'Async Storage: saved clf base url from welcome screen',
+        clfBase,
+      );
+      global.clfBaseUrl = clfBase;
+    });
+
+    AsyncStorage.getItem(ASYNC_BEARER_TOKEN).then(bearerToken_ => {
+      console.log(
+        'Async Storage: saved bearer token from welcome screen',
+        bearerToken_,
+      );
+      global.bearerToken = bearerToken_;
+    });
+
     if (!StringUtils.isEmptyOrNull(baseUrl_) && global.baseUrl !== baseUrl_) {
       global.baseUrl = baseUrl_;
       AsyncStorage.setItem(BASE_URL, baseUrl_).then();
     }
   };
 
-  const getWelcomeScreenData = () => {
+  const getWelcomeScreenData = authToken_ => {
     dispatch(
-      getWelcomeScreenDataCount(authToken, {
+      getWelcomeScreenDataCount(authToken_, {
         subscriberId: global.subscriberId,
         assignToId: userInfo.userID,
       }),
     );
   };
 
-  AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {
-    console.log(
-      'Async Storage: saved clf base url from welcome screen',
-      clfBase,
-    );
-    global.clfBaseUrl = clfBase;
-  });
-
-  AsyncStorage.getItem(ASYNC_BEARER_TOKEN).then(bearerToken_ => {
-    console.log(
-      'Async Storage: saved bearer token from welcome screen',
-      bearerToken_,
-    );
-    global.bearerToken = bearerToken_;
-  });
-
-  useEffect(() => {
-    if (authToken) {
-      getSegmentData();
-      getWelcomeScreenData();
-    }
-  }, [authToken]);
-
-  useEffect(() => {
-    setGlobalBaseUrl(baseUrl);
-  }, [baseUrl]);
-
-  useEffect(() => {
-    if (
-      welcomeScreenData?.cxData &&
-      welcomeScreenData?.clfData &&
-      !StringUtils.isEmptyOrNull(baseUrl)
-    ) {
-      getInitData(authToken);
-    }
-  }, [baseUrl, welcomeScreenData?.cxData, welcomeScreenData?.clfData]);
-
-  const getSegmentData = () => {
+  const getSegmentData = authToken_ => {
     dispatch(
-      getFirstTimeClosedLoopSegmentDetails(authToken, {pageOffset: '0'}),
+      getFirstTimeClosedLoopSegmentDetails(authToken_, {pageOffset: '0'}),
     );
   };
 
-  const getInitData = authToken_ => {
-    // console.log('USER_DATA: ', userInfo, authToken);
+  const getInitData = () => {
     console.log('USER_DATA: ', userInfo);
-    // dispatch(getClosedLoopSegmentDetails(authToken, {pageOffset: '0'}));
     console.log('SUBSCRIBER_ID', global.subscriberId);
     dispatch(
-      callAppLoginCounter(bearerToken, {
+      callAppLoginCounter('', {
         cxUserId: userInfo.userID,
         deviceType: deviceType,
       }),
     );
-
-    // dispatch(getRootCauseList(authToken_, global.subscriberId));
-    // dispatch(getActionList(authToken_, global.subscriberId));
-    // dispatch(getClosedLoopAllOwnersDetails(authToken));
-    // dispatch(getClosedLoopOwnerDetails(authToken));
-  };
-  const CustomBackground = ({children}) => {
-    return (
-      <ImageBackground
-        resizeMode={'cover'}
-        source={require('../../config/images/background1.png')}
-        style={styles.backgroundContainer}>
-        {children}
-      </ImageBackground>
-    );
   };
 
-  const RenderCountItem = ({style, title, data}) => {
-    return (
-      <View style={styles.ticketBox}>
-        <Text style={styles.titleText}>{data}</Text>
-        <Text style={styles.valueText}>{title}</Text>
-      </View>
-    );
-  };
+  useEffect(() => {
+    if (StringUtils.isNotEmpty(baseUrl)) {
+      setGlobalBaseUrl(baseUrl);
+    }
+  }, [baseUrl]);
 
-  const RenderWelcomeScreen = () => {
-    return (
-      <CustomBackground>
-        <View style={styles.backgroundContainer}>
-          <Text style={styles.welcomeText}>
-            {translate('onBoarding.welcomeBack')}
-          </Text>
-          <Text style={styles.nameText}>
-            {(userInfo?.firstName === undefined ? '' : userInfo?.firstName) +
-              ' ' +
-              (userInfo?.lastName === undefined ? '' : userInfo?.lastName)}
-          </Text>
+  useEffect(() => {
+    if (authToken) {
+      getSegmentData(authToken);
+      getWelcomeScreenData(authToken);
+      getInitData();
+    }
+  }, [authToken]);
 
-          <View style={styles.responseContainer}>
-            <RenderCountItem
-              title={translate('dashboard.new_responses')}
-              data={welcomeScreenData?.cxData?.body?.newResponses ?? 0}
-              style={styles.responseBox}
-            />
-          </View>
-          <View style={styles.ticketAndOverdueContainer}>
-            <RenderCountItem
-              title={translate('dashboard.new_tickets')}
-              data={welcomeScreenData?.clfData?.data[0]?.value ?? 0}
-              style={styles.ticketBox}
-            />
-            <RenderCountItem
-              title={translate('dashboard.overdues')}
-              data={welcomeScreenData?.clfData?.data[1]?.value ?? 0}
-              style={styles.ticketBox}
-            />
-          </View>
-        </View>
-        <View style={styles.skipButtonView}>
-          <QPButton
-            buttonText={translate('onBoarding.skip')}
-            buttonColor={Colors.accentLight}
-            onPress={props.skipHandler}
-            textStyle={buttonStyles.primaryButtonText}
-            style={buttonStyles.primaryButton}
-          />
-        </View>
-      </CustomBackground>
-    );
-  };
-
-  return welcomeScreenData.cxData && welcomeScreenData.clfData ? (
-    <RenderWelcomeScreen />
-  ) : (
-    <CustomBackground>
-      <RenderSpinner />
-    </CustomBackground>
-  );
+  return <LoadWelcomeScreen />;
 };
 
 const styles = StyleSheet.create({
@@ -198,12 +229,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
   },
   welcomeText: {
     fontSize: TextSizes.largeText,
     fontFamily: FontFamily.semiBold,
     color: Colors.accent,
     width: '80%',
+    textAlign: 'center',
   },
   nameText: {
     fontSize: TextSizes.extraLargeText,
@@ -211,6 +244,7 @@ const styles = StyleSheet.create({
     color: Colors.accent,
     width: '80%',
     marginBottom: MarginConstants.tab2,
+    textAlign: 'center',
   },
   titleText: {
     fontSize: TextSizes.largeText,

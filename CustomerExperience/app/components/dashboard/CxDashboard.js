@@ -266,10 +266,10 @@ const RenderCSATChart = () => {
 };
 
 const CxDashboard = props => {
-  let dispatch = useDispatch();
+  console.log('CX DASHBOARD SCREEN RENDER');
 
+  let dispatch = useDispatch();
   let [refreshing, setRefreshing] = useState(false);
-  let [comparision, setComparision] = useState(false);
   let [exitAlert, showExitAlert] = useState(false);
   let [lastLoginArray, setLastLoginArray] = useState([]);
 
@@ -289,14 +289,12 @@ const CxDashboard = props => {
   let segmentId = useSelector(
     state => state.dashboard.currentSegment.currentSegmentID,
   );
-  const {range, wantToReload} = props;
-  useEffect(() => {
-    if (segmentId) {
-      getDashboardData();
-    }
-  }, [segmentId]);
+  const range = props.range;
+  const wantToReload = props.wantToReload;
 
   const onRefresh = useCallback(() => {
+    console.log('CALL DASHBOARD from RELOAD');
+
     getDashboardData();
     if (!segmentId) {
       getSegmentData();
@@ -306,8 +304,8 @@ const CxDashboard = props => {
 
   useEffect(() => {
     if (
-      StringUtils.isEmpty(props.range.startDate) &&
-      StringUtils.isEmpty(props.range.endDate)
+      StringUtils.isEmpty(range.startDate) &&
+      StringUtils.isEmpty(range.endDate)
     ) {
       let selectedRange = getSelectedRange({type: 1});
       props.setRange({
@@ -316,6 +314,7 @@ const CxDashboard = props => {
         endDate: selectedRange.endDate,
       });
     }
+    console.log('CALL DASHBOARD from range, wantToReload, segmentId');
 
     getDashboardData();
   }, [range, wantToReload, segmentId]); //props.navigation
@@ -339,13 +338,6 @@ const CxDashboard = props => {
       console.log(`LAST LOGIN ASYNC ERROR: ${JSON.stringify(e)}`);
     }
   };
-  /////////////////////////////////////////////
-  useEffect(() => {
-    if (comparision) {
-      getDashboardData();
-      setComparision(false);
-    }
-  }, [comparision]);
 
   useEffect(() => {
     if (props.dashboardData.primaryStoreNPS) {
@@ -395,6 +387,7 @@ const CxDashboard = props => {
   };
 
   let getDashboardData = () => {
+    console.log('CALL DASHBOARD');
     let data = {
       startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
       endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
@@ -473,38 +466,31 @@ const mapStateToProps = state => {
   return {
     dashboardData: state.dashboard.dashboardData,
     ticketCount: state.dashboard.dashBoardTicketCount,
-    currentNPSData: state.dashboard.currentNPSData,
-    userInfo: state.global.userInfo,
     isLoading: state.global.isLoading,
     isError: state.global.isError,
     errorMessage: state.global.errorMessage,
     authToken: state.global.authToken,
     range: state.global.range,
-    sDate: state.global.range.startDate,
-    eDate: state.global.range.endDate,
+
     wantToReload: state.global.wantToReloadDashboard,
-    segment: state.dashboard.currentSegment,
-    // scoringModel: state.dashboard.scoringModel,
-    // isSegmentSelectorOpen: state.dashboard.isSegmentSelectorOpen,
+
     segmentList: state.dashboard.segmentDetails.segments,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  updateSegment: segment => {
-    dispatch({
-      type: SEGMENT_SELECTED,
-      payload: segment,
-    });
-  },
+  // updateSegment: segment => {
+  //   dispatch({
+  //     type: SEGMENT_SELECTED,
+  //     payload: segment,
+  //   });
+  // },
 
   getDashboardContent: (token, data, segmentId) => {
     dispatch(showLoading(true));
     dispatch(getDashboardContent(token, data, segmentId));
   },
-  // getSegmentDetails: (token, data) => {
-  //   dispatch(getClosedLoopSegmentDetails(token, data));
-  // },
+
   showLoading: flag => {
     dispatch(showLoading(flag));
   },
