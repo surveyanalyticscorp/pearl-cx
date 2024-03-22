@@ -28,9 +28,9 @@ import StringUtils from '../../Utils/StringUtils';
 import {useSelector} from 'react-redux';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {baseTextStyles} from '../../styles/text.styles';
-import {ChildContainer, ParentContainer} from '../../widgets/ParentContainer';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
 import AssigneeUI from './takeaction/closedLoopCell/AssigneeUI';
+import {VerticalSpaceBox} from '../../widgets/SpaceBox';
 const OverdueAlert = () => {
   return (
     <ExclaimationIcon
@@ -72,7 +72,8 @@ const Date = ({issueDate}) => {
     <TextLabel
       baseTextStyle={baseTextStyles.semiSecondaryRegularText}
       color={Colors.evenDarkerGrey}
-      style={styles.ticketDateText}>{`${date ?? ' '}`}</TextLabel>
+      text={`${date ?? ''}`}
+    />
   );
 };
 
@@ -147,7 +148,7 @@ const TicketIdAndAssigneeRow = ({data}) => {
 
 const TicketDetails = ({comment}) => {
   return (
-    <View style={styles.rowContainer}>
+    <View style={styles.ticketDetailsContainer}>
       <Text style={styles.detailsText} numberOfLines={3} ellipsizeMode="tail">
         {comment}
       </Text>
@@ -242,24 +243,23 @@ export default function ClosedLoopCell({
           ) : (
             <View />
           )}
-          <ChildContainer>
-            <StatusRow data={data} />
-            <ListItemSeparator
-              style={{marginHorizontal: MarginConstants.halfTab}}
-            />
-          </ChildContainer>
+          <VerticalSpaceBox />
+          <StatusRow data={data} />
+          <VerticalSpaceBox />
+          <ListItemSeparator
+            style={{marginHorizontal: MarginConstants.tab1_2x}}
+          />
+          <VerticalSpaceBox multiplyBy={2} />
+          <NameANdDateRow
+            name={name}
+            issueDate={data?.issueDate}
+            nps={data?.npsScore}
+          />
 
-          <ChildContainer>
-            <NameANdDateRow
-              name={name}
-              issueDate={data?.issueDate}
-              nps={data?.npsScore}
-            />
-            <TicketDetails comment={data?.comment} />
-          </ChildContainer>
-          <ChildContainer style={{marginBottom: 0}}>
-            <TicketIdAndAssigneeRow data={data} />
-          </ChildContainer>
+          <TicketDetails comment={data?.comment} />
+          <VerticalSpaceBox multiplyBy={2} />
+          <TicketIdAndAssigneeRow data={data} />
+          <VerticalSpaceBox />
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -277,6 +277,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     paddingBottom: PaddingConstants.tab1,
   },
+  ticketDetailsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: PaddingConstants.tab1_2x,
+  },
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -286,7 +291,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab1_2x,
     paddingBottom: PaddingConstants.halfTab,
   },
   npsContainer: {
@@ -309,8 +314,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: PaddingConstants.tab1,
-    marginBottom: MarginConstants.halfTab,
+    paddingHorizontal: PaddingConstants.tab1_2x,
   },
 
   ticketContainer: {
@@ -322,7 +326,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: PaddingConstants.halfTab,
+    paddingHorizontal: PaddingConstants.tab1,
   },
   userNameText: {
     fontFamily: FontFamily.medium,
