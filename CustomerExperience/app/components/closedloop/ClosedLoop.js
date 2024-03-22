@@ -67,6 +67,7 @@ const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
       <TextInput
         defaultValue={currentText}
         placeholder={translate('ticket_search_hint')}
+        placeholderTextColor={Colors.evenDarkerGrey}
         style={[
           baseTextStyles.secondaryRegularText,
           {flex: 1, height: 42, margin: 0, color: Colors.filterIconColor},
