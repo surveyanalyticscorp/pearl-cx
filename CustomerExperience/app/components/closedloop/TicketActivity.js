@@ -19,6 +19,7 @@ import ActivityText from '../../widgets/closedloopWidget/ActivityText';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
 import SortingToggleButton from '../../widgets/closedloopWidget/SortingToggleButton';
 import {ChildContainer, ParentContainer} from '../../widgets/ParentContainer';
+import {HorizontalSpaceBox, VerticalSpaceBox} from '../../widgets/SpaceBox';
 
 const SortingIcon = ({iconName, size, color}) => {
   return (
@@ -33,8 +34,8 @@ const SortingIcon = ({iconName, size, color}) => {
 const RenderItem = ({item}) => {
   const {userName, createdAt, activityText} = item;
   return (
-    <ParentContainer style={styles.myRenderItemContainerStyle}>
-      <ChildContainer style={{...styles.myRenderItemStyle, marginTop: 0}}>
+    <View style={styles.myRenderItemContainerStyle}>
+      <View style={{...styles.myRenderItemStyle, marginTop: 0}}>
         <TextLabel
           color={Colors.accent}
           text={userName ?? translate('ticket_list.anonymous')}
@@ -44,10 +45,10 @@ const RenderItem = ({item}) => {
           baseTextStyle={baseTextStyles.semiSecondaryRegularText}
           text={convertDateTimeAgo(createdAt)}
         />
-      </ChildContainer>
-
+      </View>
+      <VerticalSpaceBox />
       <ActivityText text={activityText} />
-    </ParentContainer>
+    </View>
   );
 };
 
@@ -236,6 +237,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     marginTop: MarginConstants.tab1,
     borderRadius: 5,
+    padding: MarginConstants.tab1_2x,
   },
   renderItemContainerStyle: {
     flex: 1,

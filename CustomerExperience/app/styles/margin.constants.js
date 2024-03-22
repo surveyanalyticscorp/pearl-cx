@@ -4,11 +4,11 @@ const factor = 0.5;
 
 export const MarginConstants = {
   quarterTab: (factor * $rem) / 4,
-  halfTab: (factor * $rem) / 2,
+  halfTab: (factor * $rem) / 2, // 4px
   halfTab_3x: 3 * ((factor * $rem) / 2),
   halfTab_5x: 5 * ((factor * $rem) / 2),
-  tab1: factor * $rem,
-  tab1_2x: factor * $rem * 2,
+  tab1: factor * $rem, // 8px
+  tab1_2x: factor * $rem * 2, // 16px
   tab1_3x: factor * $rem * 3,
   tab1_4x: factor * $rem * 4,
   tab1_5x: factor * $rem * 5,
