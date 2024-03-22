@@ -6,6 +6,8 @@ import {Colors} from '../../styles/color.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {FontWeight} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
+import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
 const NPSScoreView = ({text}) => {
   return (
     <View style={npsStyles.npsView}>
@@ -13,6 +15,7 @@ const NPSScoreView = ({text}) => {
         style={npsStyles.npsImage}
         source={require('./../../../assets/images/nps_meter.png')}
       />
+      <HorizontalSpaceBox />
       <View style={npsStyles.npsBackground}>
         <Text style={npsStyles.npsText}>{text}</Text>
       </View>
@@ -22,28 +25,26 @@ const NPSScoreView = ({text}) => {
 
 const npsStyles = StyleSheet.create({
   npsView: {
-    flex: 2,
+    flex: 3,
     justifyContent: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: PaddingConstants.halfTab,
   },
   npsBackground: {
-    marginStart: MarginConstants.halfTab,
     backgroundColor: Colors.critical2,
-    borderRadius: 50,
-    height: MarginConstants.tab3,
-    width: MarginConstants.tab3,
+    borderRadius: MarginConstants.tab1_4x,
+    height: MarginConstants.tab1_4x,
+    width: MarginConstants.tab1_4x,
     alignItems: 'center',
     justifyContent: 'center',
   },
   npsText: {
     fontFamily: FontFamily.regular,
     fontWeight: FontWeight._400,
-    fontSize: TextSizes.primary,
+    fontSize: TextSizes.secondary,
     color: Colors.white,
   },
-  npsImage: {width: 16, height: 16},
+  npsImage: {width: 22, height: 22},
 });
 
 export default NPSScoreView;

@@ -229,7 +229,7 @@ const DescriptionView = ({ticket, showResponseButton}) => {
 
         {!StringUtils.isEmptyOrNull(ticket?.npsScore) ? (
           <View style={styles.rowContainer}>
-            <Title value={'NPS'} />
+            <TextLabel text={'NPS:'} style={{flex: 2}} />
             <NPSScoreView text={ticket?.npsScore} />
           </View>
         ) : (
@@ -1013,7 +1013,7 @@ const styles = StyleSheet.create({
   titleText: {
     ...baseTextStyles.secondaryRegularText,
     color: Colors.filterIconColor,
-    paddingHorizontal: PaddingConstants.halfTab,
+
     alignItems: 'flex-start',
   },
   showText: {
