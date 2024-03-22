@@ -520,7 +520,7 @@ export default function ClosedLoop(props) {
   // variables for bottom sheet
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
-  const bsSnapPoints = ['80%', '90%', '0%'];
+  const bsSnapPoints = ['65%', '90%', '0%'];
   const [shadow, setShadow] = useState(false);
 
   const clearFilterData = item => {
@@ -626,25 +626,8 @@ export default function ClosedLoop(props) {
           )}
           {closedLoopTicketList()}
           <FabAddButton onPress={onFabHandler} />
-
-          {/* <TicketTakeAction /> */}
-          {/* <TicketDetails /> */}
-          {/* <TicketOverview /> */}
-          {/* <TicketComments /> */}
-          {/* <TicketActivity /> */}
-          {/* <CreateTicket /> */}
-          {/* <SendEmail /> */}
-          {/* <TakeActionScreen /> */}
-          {/* <FilterTicket
-    data={filterData}
-    onPressHandler={(item, action) => handleAction(item, action)}
-  /> */}
         </Animated.View>
-        {/* <RenderSegmentBottomSheet
-        // ref={bs}
-        // snapPoints={bsSnapPoints}
-        callbackNode={fall}
-      /> */}
+
         <BottomSheet
           ref={bs}
           snapPoints={bsSnapPoints}

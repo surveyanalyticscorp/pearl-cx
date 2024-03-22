@@ -18,6 +18,7 @@ import {translate} from '../../../Utils/MultilinguaUtils';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
 import {textStyles} from '../../../styles/text.styles';
+import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 // import IconTextModalDropdown from '../../../widgets/drop-down/IconTextModalDropdown';
 // import IonIcons from 'react-native-vector-icons/Ionicons';
 
@@ -45,9 +46,10 @@ const FilterTicket = ({data, onPressHandler}) => {
       });
     };
     return (
-      <View>
+      <View style={styles.sectionContainer}>
         <Text style={styles.titleText}>{translate('close_loop.status')}</Text>
         <FlatList
+          style={styles.flatList}
           data={status}
           keyExtractor={(item, index) => item.toString()}
           numColumns={3}
@@ -73,7 +75,7 @@ const FilterTicket = ({data, onPressHandler}) => {
       });
     };
     return (
-      <View>
+      <View style={styles.sectionContainer}>
         <Text style={styles.titleText}>{translate('close_loop.priority')}</Text>
         <FlatList
           data={priority}
@@ -102,7 +104,7 @@ const FilterTicket = ({data, onPressHandler}) => {
       );
     };
     return (
-      <View>
+      <View style={styles.sectionContainer}>
         <Text style={styles.titleText}>Type</Text>
         <FlatList
           data={typelist}
@@ -125,7 +127,7 @@ const FilterTicket = ({data, onPressHandler}) => {
       setAssignToId(state => (state.length > 0 ? '' : userId));
     };
     return (
-      <View>
+      <View style={styles.sectionContainer}>
         <Text style={styles.titleText}>Show tickets</Text>
         <CheckBoxItem
           textStyle={textStyles.optionText}
@@ -239,7 +241,10 @@ const FilterTicket = ({data, onPressHandler}) => {
       <View
         style={[
           styles.rowContainer,
-          {marginVertical: MarginConstants.tab4, justifyContent: 'flex-end'},
+          {
+            paddingHorizontal: PaddingConstants.tab1_2x,
+            justifyContent: 'flex-end',
+          },
         ]}>
         {/* <QPButton
           style={{...buttonStyles.outlineButton, margin: MarginConstants.tab2}}
@@ -302,12 +307,16 @@ const FilterTicket = ({data, onPressHandler}) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
         <RenderStatusFilter />
+        <VerticalSpaceBox multiplyBy={2} />
         <RenderPriorityFilter />
+        <VerticalSpaceBox multiplyBy={2} />
         <RenderTypeFilter typelist={type} />
+        <VerticalSpaceBox multiplyBy={2} />
         <RenderShowMyTicketsFilter
           assignToId={assignToId}
           userId={data.userId}
         />
+        <VerticalSpaceBox multiplyBy={2} />
         {/* <RenderAssigneeDropDown /> */}
         <RenderButtons />
       </View>
@@ -326,6 +335,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
+  sectionContainer: {
+    paddingHorizontal: PaddingConstants.tab1,
+  },
   checkBoxRow: {
     flexDirection: 'row',
     padding: PaddingConstants.halfTab,
@@ -333,8 +345,9 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    paddingHorizontal: 24,
+    paddingHorizontal: PaddingConstants.tab1_2x,
   },
+
   assigneeCell: {
     borderWidth: 1,
     borderRadius: 2,
@@ -345,7 +358,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontFamily: FontFamily.medium,
     fontSize: TextSizes.primary,
-    padding: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab1,
     color: Colors.filterIconColor,
   },
   // optionText: {
