@@ -1,54 +1,34 @@
 import React, {useState} from 'react';
-import {
-  View,
-  // TouchableWithoutFeedback,
-  // Text,
-  StyleSheet,
-  FlatList,
-  SafeAreaView,
-} from 'react-native';
+import {StyleSheet, FlatList, SafeAreaView} from 'react-native';
 import {
   CheckRadioButtonItem,
   ListItemSeparator,
 } from '../../../routes/CommonScreen';
 import {Colors} from '../../../styles/color.constants';
-import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
-import {TextSizes} from '../../../styles/textsize.constants';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
 import {baseTextStyles} from '../../../styles/text.styles';
 const itemSeparator = () => <ListItemSeparator />;
 
 const SelectSorting = ({data, selectedIndex, handleOnPress}) => {
-  // const [data, setData] = useState(data);
   const [currentIndex, setIndex] = useState(selectedIndex);
   const [currentItem, setItem] = useState(data[selectedIndex]);
-  // const [selectedIndex, setSelectedIndex] = useState();
   const renderRow = ({item, index}) => {
     return (
       <CheckRadioButtonItem
         checkBoxRowStyle={styles.row}
-        textStyle={baseTextStyles.primaryRegularText}
+        textStyle={[
+          baseTextStyles.primaryRegularText,
+          {color: Colors.filterIconColor},
+        ]}
         item={{...item, isChecked: currentIndex === index}}
         index={index}
         onPress={index_ => {
-          // handleOnPress(item, index);
-
           setIndex(index_);
           setItem(data[index_]);
         }}
       />
-      // <StatusItem
-      //   item={item}
-      //   selectedIndex={currentIndex}
-      //   index={index}
-      //   onPressHandler={() => {
-      //     // props.handleOnPress(item, index);
-      //     setIndex(index);
-      //     setItem(item);
-      //   }}
-      // />
     );
   };
 
