@@ -308,19 +308,19 @@ const CommentParentItem = ({item}) => {
 };
 
 const CommentBox = () => {
-  const {authToken} = useSelector(state => state.global);
+  const authToken = useSelector(state => state.global.authToken);
   const ticketId = useSelector(state => state.dashboard.ticket.id);
   const dispatch = useDispatch();
   const textInputRef = useRef();
-  const {parentComment} = useSelector(state => state.dashboard);
+  const parentComment = useSelector(state => state.dashboard.parentComment);
   const {emailAddress, firstName, lastName, userID} = useSelector(
     state => state.global.userInfo,
   );
   const [commentText, setCommentText] = useState('');
   const [textInputHeight, setTextInputHeight] = useState(0);
-  const userInfo = useSelector(state => state.global);
+  // const userInfo = useSelector(state => state.global.userInfo);
   const UIalignItems = textInputHeight < 48 ? 'center' : 'flex-end';
-  console.log('USER_INFO', JSON.stringify(userInfo));
+  // console.log('USER_INFO', JSON.stringify(userInfo));
 
   // const marginForCommentBox = parentId > 0 ? MarginConstants.tab4 : 0;
 
@@ -409,7 +409,7 @@ const ShowFlatList = ({data, onRefresh_, refreshing_}) => {
   );
 };
 export default function TicketComments(props) {
-  const {authToken} = useSelector(state => state.global);
+  const authToken = useSelector(state => state.global);
 
   const ticketId = useSelector(state => state.dashboard.ticket.id);
   const dispatch = useDispatch();
@@ -535,6 +535,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.semiMediumText,
     color: Colors.filterIconColor,
+    padding: PaddingConstants.halfTab,
   },
   commentLengthLimitText: {
     alignItems: 'flex-end',
@@ -542,6 +543,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.semiMediumText,
     color: Colors.deleteButtonText,
+    padding: PaddingConstants.halfTab,
   },
   commentByText: {
     alignItems: 'flex-end',

@@ -121,7 +121,6 @@ const GetNPSScore = ({score}) => {
 };
 
 const TicketNPSScore = ({nps}) => {
-  console.log('NPS_SCORE_UPDATE', nps);
   return nps === null ? (
     <View />
   ) : (

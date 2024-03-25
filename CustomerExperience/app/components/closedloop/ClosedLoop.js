@@ -128,7 +128,7 @@ export default function ClosedLoop(props) {
     search: '',
   });
 
-  console.log('STATUS_ID_FILTER_useeffect', JSON.stringify(filterState));
+  // console.log('STATUS_ID_FILTER_useeffect', JSON.stringify(filterState));
 
   function convertDateToYMDFORMAT(date) {
     return moment(date, DMYFORMAT).format(YMDFORMAT);
@@ -150,7 +150,7 @@ export default function ClosedLoop(props) {
   const [refreshing, setRefreshing] = useState(false);
   const {ticketDeleteStatus} = useSelector(state => state.dashboard);
   const sync = () => {
-    console.log('SYNC_API, api called');
+    // console.log('SYNC_API, api called');
     if (!isTicketLoading) {
       dispatch(
         syncTickets(
@@ -174,7 +174,7 @@ export default function ClosedLoop(props) {
 
   useEffect(() => {
     if (keepSyncingTickets) {
-      console.log('SYNC_API, when keeSyncingChanged');
+      // console.log('SYNC_API, when keeSyncingChanged');
 
       sync();
     }
@@ -225,7 +225,7 @@ export default function ClosedLoop(props) {
   function setStatusToFilter(data, statusId_) {
     let arr = [];
     data.map(value => {
-      console.log(value);
+      // console.log(value);
       arr.push({...value, isChecked: value.id === statusId_});
     });
     return arr;
@@ -235,7 +235,7 @@ export default function ClosedLoop(props) {
     let tempStatusData = [];
 
     filterData.status.map(value => {
-      console.log('STATUS_ID_FILTER', 'STATUS OBJECT', JSON.stringify(value));
+      // console.log('STATUS_ID_FILTER', 'STATUS OBJECT', JSON.stringify(value));
       tempStatusData.push({
         ...value,
         isChecked: value.id === parseInt(statusId_),
@@ -267,7 +267,7 @@ export default function ClosedLoop(props) {
   }, [currentSegment]);
 
   const makeAPICall = () => {
-    console.log('SYNC_API, when makeAPICall called');
+    // console.log('SYNC_API, when makeAPICall called');
     if (keepSyncingTickets && !isTicketLoading) {
       sync();
     }
@@ -570,7 +570,7 @@ export default function ClosedLoop(props) {
     let count = 0;
     for (let tag of taglist) {
       if (filterState.hasOwnProperty(tag) && filterState[tag]) {
-        console.log('TAG_ITEM_COUNT', tag, filterState[tag]);
+        // console.log('TAG_ITEM_COUNT', tag, filterState[tag]);
         if (filterState[tag].length > 0) {
           count++;
         }
