@@ -49,7 +49,7 @@ import {
   syncTickets,
 } from '../../redux/actions/closedloop.actions';
 import {baseTextStyles} from '../../styles/text.styles';
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/native';
 // import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();

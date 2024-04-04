@@ -1,4 +1,4 @@
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import QPButton from '../Button';
 import {buttonStyles} from '../../styles/button.styles';
