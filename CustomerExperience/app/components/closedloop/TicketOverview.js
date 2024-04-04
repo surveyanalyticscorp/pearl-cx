@@ -375,13 +375,16 @@ const ViewResponseDetailsButton = () => {
     });
   };
   return (
-    <View style={[styles.rowContainer, {flexDirection: 'row-reverse'}]}>
+    <View style={[styles.rowContainer]}>
       <QPButton
         testID="responseButtonTest"
         style={buttonStyles.textButton}
         onPress={navigateToFeedbackDetails}
-        buttonText={`${translate('close_loop.view_response')} >>`}
-        textStyle={buttonStyles.textButtonText}
+        buttonText={`${translate('close_loop.view_response')}`}
+        textStyle={[
+          baseTextStyles.secondaryRegularText,
+          {color: Colors.accentLight},
+        ]}
       />
 
       {/* <TouchableWithoutFeedback onPress={navigateToFeedbackDetails}>
