@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   myRenderItemContainerStyle: {
     justifyContent: 'center',
     backgroundColor: Colors.white,
-    marginTop: MarginConstants.tab1,
+    margin: MarginConstants.tab1,
     borderRadius: 5,
     padding: MarginConstants.tab1_2x,
   },
