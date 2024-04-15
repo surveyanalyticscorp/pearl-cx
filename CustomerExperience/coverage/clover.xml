@@ -1,7 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1712575297825" clover="3.2.0">
-  <project timestamp="1712575297825" name="All files">
-    <metrics statements="146" coveredstatements="13" conditionals="59" coveredconditionals="11" methods="37" coveredmethods="2" elements="242" coveredelements="26" complexity="0" loc="146" ncloc="146" packages="1" files="1" classes="1"/>
+<coverage generated="1713168845352" clover="3.2.0">
+  <project timestamp="1713168845352" name="All files">
+    <metrics statements="180" coveredstatements="18" conditionals="81" coveredconditionals="15" methods="47" coveredmethods="3" elements="308" coveredelements="36" complexity="0" loc="180" ncloc="180" packages="1" files="2" classes="2"/>
+    <file name="ArrayUtils.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/Utils/ArrayUtils.js">
+      <metrics statements="34" coveredstatements="5" conditionals="22" coveredconditionals="4" methods="10" coveredmethods="1"/>
+      <line num="3" count="6" type="cond" truecount="2" falsecount="0"/>
+      <line num="4" count="5" type="stmt"/>
+      <line num="5" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="6" count="3" type="stmt"/>
+      <line num="10" count="3" type="stmt"/>
+      <line num="13" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="16" count="0" type="stmt"/>
+      <line num="20" count="0" type="stmt"/>
+      <line num="24" count="0" type="stmt"/>
+      <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="26" count="0" type="stmt"/>
+      <line num="27" count="0" type="stmt"/>
+      <line num="30" count="0" type="stmt"/>
+      <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="35" count="0" type="stmt"/>
+      <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="37" count="0" type="stmt"/>
+      <line num="41" count="0" type="stmt"/>
+      <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="46" count="0" type="stmt"/>
+      <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="48" count="0" type="stmt"/>
+      <line num="49" count="0" type="stmt"/>
+      <line num="53" count="0" type="stmt"/>
+      <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="57" count="0" type="stmt"/>
+      <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="59" count="0" type="stmt"/>
+      <line num="60" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="64" count="0" type="stmt"/>
+      <line num="68" count="0" type="stmt"/>
+      <line num="69" count="0" type="stmt"/>
+      <line num="70" count="0" type="stmt"/>
+      <line num="72" count="0" type="stmt"/>
+    </file>
     <file name="StringUtils.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/Utils/StringUtils.js">
       <metrics statements="146" coveredstatements="13" conditionals="59" coveredconditionals="11" methods="37" coveredmethods="2"/>
       <line num="3" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -134,8 +171,8 @@
       <line num="274" count="0" type="cond" truecount="0" falsecount="2"/>
       <line num="275" count="0" type="stmt"/>
       <line num="277" count="0" type="stmt"/>
-      <line num="281" count="14" type="stmt"/>
-      <line num="282" count="14" type="cond" truecount="2" falsecount="0"/>
+      <line num="281" count="18" type="stmt"/>
+      <line num="282" count="18" type="cond" truecount="2" falsecount="0"/>
       <line num="288" count="18" type="stmt"/>
       <line num="289" count="18" type="stmt"/>
       <line num="290" count="18" type="stmt"/>
