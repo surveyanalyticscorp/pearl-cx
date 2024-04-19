@@ -401,7 +401,7 @@ export const ClosedLoopDashboard = props => {
   return (
     <View style={styles.container}>
       <DashboardWidgetTitle
-        text={translate('dashboard.closed_loop')}
+        text={'Closedloop'}
         child={<ViewTicketsButton statusIndex={statusIndex} />}
       />
       <RenderStatusFilterButton

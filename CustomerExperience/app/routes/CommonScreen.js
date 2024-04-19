@@ -1120,8 +1120,8 @@ const styles = StyleSheet.create({
   panelHeaderContainer: {
     flex: 1,
 
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    paddingVertical: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab1_3x,
     backgroundColor: Colors.white,
     borderTopStartRadius: 8,
     borderTopEndRadius: 8,
@@ -1142,6 +1142,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'baseline',
+    paddingVertical: PaddingConstants.tab1,
   },
   panelHandle: {
     height: 4,

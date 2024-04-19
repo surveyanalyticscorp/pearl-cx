@@ -78,7 +78,7 @@ const NPSIcon = ({nps}) => {
 
 const NpsScoreView = () => {
   const {npsPercentage, benchmarkScore} = useSelector(
-    state => state.dashboard.currentNPSData?.NPSScore,
+    state => state.dashboard?.currentNPSData?.NPSScore,
   );
 
   return (

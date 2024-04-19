@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, useWindowDimensions} from 'react-native';
+import {useWindowDimensions} from 'react-native';
 import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
 import {FontFamily} from '../../styles/font.constants';
 import StringUtils from '../../Utils/StringUtils';
@@ -9,7 +9,11 @@ import {wordsToBold} from '../../Utils/TicketUtils';
 import {PaddingConstants} from '../../styles/padding.constants';
 
 const ActivityText = ({text}) => {
-  const systemFonts = [...defaultSystemFonts, FontFamily.regular];
+  const systemFonts = [
+    ...defaultSystemFonts,
+    FontFamily.regular,
+    FontFamily.medium,
+  ];
 
   const {width} = useWindowDimensions();
   // console.log('HTML activity', text);
@@ -33,7 +37,7 @@ const ActivityText = ({text}) => {
         span: {
           paddingBottom: PaddingConstants.halfTab,
           color: Colors.filterIconColor,
-          ...baseTextStyles.semiSecondaryMediumText,
+          ...baseTextStyles.semiSecondaryRegularText,
         },
       }}
     />

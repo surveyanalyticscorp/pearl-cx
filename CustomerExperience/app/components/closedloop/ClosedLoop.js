@@ -520,7 +520,7 @@ export default function ClosedLoop(props) {
   // variables for bottom sheet
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
-  const bsSnapPoints = ['65%', '90%', '0%'];
+  const bsSnapPoints = ['65%', '0%'];
   const [shadow, setShadow] = useState(false);
 
   const clearFilterData = item => {

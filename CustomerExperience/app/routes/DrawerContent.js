@@ -135,9 +135,7 @@ const DrawerContent = props => {
               source={require('./../../assets/images/closed_loop.png')}
               style={[styles.rowIcon, {height: 24, width: 24}]}
             />
-            <Text style={styles.labelStyle}>
-              {translate('dashboard.closed_loop')}
-            </Text>
+            <Text style={styles.labelStyle}>{'Closedloop'}</Text>
           </View>
         </TouchableWithoutFeedback>
         {/* 
