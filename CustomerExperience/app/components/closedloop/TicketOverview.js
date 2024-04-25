@@ -5,7 +5,6 @@ import {
   Text,
   Alert,
   StyleSheet,
-  Platform,
   Modal,
   Pressable,
 } from 'react-native';
@@ -47,7 +46,6 @@ import {
 import SelectStatus from './takeaction/SelectStatus';
 import SelectPriority from './takeaction/SelectPriority';
 import SelectTicketOwner from './takeaction/SelectTicketOwner';
-import {EMAIL, PHONE} from '../../api/Constant';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {
@@ -60,10 +58,8 @@ import {
   updateSetTicketEscalation,
 } from '../../redux/actions/closedloop.actions';
 import NPSScoreView from '../view/NPSScoreView';
-import DeleteTicketModal from './DeleteTicketModal';
 import {buttonStyles} from '../../styles/button.styles';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {FaIcon} from '../../Utils/IconUtils';
 import {baseTextStyles} from '../../styles/text.styles';
 import StringUtils from '../../Utils/StringUtils';
 import {ChildContainer} from '../../widgets/ParentContainer';
@@ -86,10 +82,6 @@ const CopyTicketIdButton = ({ticket}) => {
   return (
     <Pressable onPress={onPress}>
       <View style={styles.ticketIdView}>
-        {/* <Text style={styles.ticketIdText}>
-          {`#${ticket !== undefined ? ticket.id : ''}`}
-        </Text> */}
-        {/* <FaIcon name={'copy'} color={Colors.accentLight} size={16} /> */}
         <CopyIcon size={16} tintColor={Colors.accentLight} />
       </View>
     </Pressable>
@@ -167,7 +159,6 @@ const ShowTitleAndText = ({title, subText, isSubtextHighlighted}) => {
         }
         style={{flex: 3}}
       />
-      {/* <ShowText text={subText} isHighlighted={isSubtextHighlighted} /> */}
     </View>
   );
 };
@@ -313,15 +304,11 @@ const DeleteView = ({onPressDelete}) => {
       buttonText={translate('ticket_overview.delete_ticket')}
       textStyle={buttonStyles.deleteButtonText}
     />
-    // <View style={styles.ticketStatusContainer}>
-    //   {/* <DescriptionHeader text={'Contact'} /> */}
-
-    // </View>
   );
 };
 const UnderLineText = ({text, type}) => {
   return (
-    <TouchableWithoutFeedback
+    // <TouchableWithoutFeedback
     // onPress={() => {
     //   console.log(text);
 
@@ -334,19 +321,19 @@ const UnderLineText = ({text, type}) => {
     //       break;
     //   }
     // }}
-    >
-      <View
-        style={[
-          {
-            flex: 2,
-            justifyContent: 'flex-start',
-            flexDirection: 'row',
-            padding: PaddingConstants.tab1,
-          },
-        ]}>
-        <Text style={styles.underLineText}>{text}</Text>
-      </View>
-    </TouchableWithoutFeedback>
+    // >
+    <View
+      style={[
+        {
+          flex: 2,
+          justifyContent: 'flex-start',
+          flexDirection: 'row',
+          padding: PaddingConstants.tab1,
+        },
+      ]}>
+      <Text style={styles.underLineText}>{text}</Text>
+    </View>
+    // </TouchableWithoutFeedback>
   );
 };
 

@@ -119,11 +119,13 @@ const BenchmarkView = () => {
   const {benchmarkScore} = useSelector(
     state => state.dashboard.currentNPSData?.NPSScore,
   );
-  return (
+  return benchmarkScore !== 0 ? (
     <View style={dashboardStyles.squareView}>
       <BenchmarkIcon benchmark={benchmarkScore} />
       <TextLabel text={`Benchmark: ${benchmarkScore}`} />
     </View>
+  ) : (
+    <View style={dashboardStyles.emptyBenchmarkView} />
   );
 };
 

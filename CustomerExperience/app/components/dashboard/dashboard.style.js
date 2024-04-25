@@ -266,6 +266,12 @@ export const dashboardStyles = StyleSheet.create({
     alignItems: 'center',
     margin: MarginConstants.halfTab,
   },
+  emptyBenchmarkView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: MarginConstants.tab1_2x,
+  },
   roundSquareShape: {
     borderRadius: 2,
     width: 8,

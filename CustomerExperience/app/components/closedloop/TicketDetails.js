@@ -22,8 +22,12 @@ import {
 } from '../../redux/actions/closedloop.actions';
 
 export default function TicketDetails(props) {
-  const {authToken, isTicketLoading} = useSelector(state => state.global);
-  const {feedbackApiKey} = useSelector(state => state.global.userInfo);
+  const authToken = useSelector(state => state.global.authToken);
+  const isTicketLoading = useSelector(state => state.global.isTicketLoading);
+
+  const feedbackApiKey = useSelector(
+    state => state.global.userInfo.feedbackApiKey,
+  );
   const ticketItem = props.route.params.ticketItem;
   const prevScreen = props.route.params.prevScreen;
 

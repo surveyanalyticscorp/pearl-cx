@@ -16,7 +16,6 @@ const NpsGaugeChart = () => {
     npsPercentage,
     benchmarkScore,
   } = useSelector(state => state.dashboard.currentNPSData?.NPSScore);
-  // console.log('Gauge', npsPercentage, benchmarkScore);
 
   const chartType = 'GaugeChart';
 
@@ -29,6 +28,40 @@ const NpsGaugeChart = () => {
         ]
       : [{value: 0, fillColor: Colors.darkGrey}],
   );
+  const populateHands = (nps, benchmark) => {
+    let hands = [];
+    if (benchmark !== 0) {
+      hands.push({
+        type: 'ClockHand',
+        value: benchmark,
+        fill: Colors.borderColor,
+        stroke: Colors.borderColor,
+        innerRadius: '00%',
+        radius: '100%',
+        startWidth: 0.01,
+        endWidth: 0.01,
+        pin: {
+          disabled: false,
+        },
+      });
+    }
+
+    hands.push({
+      type: 'ClockHand',
+      value: nps,
+      fill: Colors.filterIconColor,
+      stroke: Colors.filterIconColor,
+      innerRadius: '00%',
+      radius: '100%',
+      startWidth: 10,
+      endWidth: 0.1,
+      pin: {
+        disabled: false,
+      },
+    });
+
+    return hands;
+  };
 
   const guage_ = {
     // Set inner radius
@@ -60,34 +93,7 @@ const NpsGaugeChart = () => {
     ],
 
     // Add hands
-    hands: [
-      {
-        type: 'ClockHand',
-        value: benchmarkScore,
-        fill: Colors.borderColor,
-        stroke: Colors.borderColor,
-        innerRadius: '00%',
-        radius: '100%',
-        startWidth: 0.01,
-        endWidth: 0.01,
-        pin: {
-          disabled: false,
-        },
-      },
-      {
-        type: 'ClockHand',
-        value: npsPercentage,
-        fill: Colors.filterIconColor,
-        stroke: Colors.filterIconColor,
-        innerRadius: '00%',
-        radius: '100%',
-        startWidth: 10,
-        endWidth: 0.1,
-        pin: {
-          disabled: false,
-        },
-      },
-    ],
+    hands: populateHands(npsPercentage, benchmarkScore),
   };
 
   return (

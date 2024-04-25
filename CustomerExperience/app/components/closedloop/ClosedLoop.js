@@ -50,6 +50,7 @@ import {
 } from '../../redux/actions/closedloop.actions';
 import {baseTextStyles} from '../../styles/text.styles';
 import {useNavigation} from '@react-navigation/native';
+// import {getHeightPercentage} from '../../Utils/DimentionUtils';
 // import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
 
 // const ClosedLoopTab = createMaterialTopTabNavigator();
@@ -520,7 +521,8 @@ export default function ClosedLoop(props) {
   // variables for bottom sheet
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
-  const bsSnapPoints = ['65%', '0%'];
+
+  const bsSnapPoints = ['62%', '0%'];
   const [shadow, setShadow] = useState(false);
 
   const clearFilterData = item => {

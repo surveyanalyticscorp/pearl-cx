@@ -1,17 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  // Dimensions,
-  StyleSheet,
-  Text,
-  Pressable,
-  View,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, Pressable, View} from 'react-native';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import {
-  createStackNavigator,
-  TransitionSpecs,
-  TransitionPresets,
-} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
@@ -23,18 +13,12 @@ import {isStringNullOrEmpty} from '../Utils/Utility';
 import {
   ASYNC_AUTH_TOKEN,
   ASYNC_LAST_LOGIN,
-  ASYNC_LOGIN_EXPIRE_DATE,
-  // ASYNC_PUSH_TOKEN,
   ASYNC_USER_INFO,
   BASE_URL,
   SUBSCRIBER_ID,
 } from '../api/Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  // connect,
-  useSelector,
-  useDispatch,
-} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import AppSettings from '../components/settings/AppSettings';
@@ -51,50 +35,26 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import {Notifications} from 'react-native-notifications';
 import Notification from '../components/Notification';
-// import CreateTicket from '../components/dashboard/components/CreateTicket';
-import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
 import SearchTicket from '../components/dashboard/components/SearchTicket';
 import TicketFilter from '../components/dashboard/components/TicketFilter';
 import {getNotification} from '../redux/actions/notification.actions';
 import ResponsesStack from './ResponsesStack';
-// import TicketsStack from './TicketsStack';
 import ClosedLoopStack from './ClosedLoopStack';
-import {
-  CloseButton,
-  CloseLoopTicketsTabs,
-  HeaderBackLeft,
-  MenuIcon,
-  SearchIcon,
-} from './CommonScreen';
+import {CloseButton, HeaderBackLeft, MenuIcon} from './CommonScreen';
 import CommonScreens from './CommonScreen';
 import {navigationRef} from './RootNavigation';
 import {setI18nConfig, translate} from '../Utils/MultilinguaUtils';
-// import MainDropDown from '../widgets/drop-down/MainDropDown';
-// import {
-//   getClosedLoopOwnerDetails,
-//   SEGMENT_SELECTED,
-//   setSegment,
-//   setSegmentSelectorOpen,
-// } from '../redux/actions/dashboard.actions';
+
 import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
 import SegmentSelector from '../components/SegmentSelector';
 import Feedback from '../components/feedback/Feedback';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
-import {ModalStackScreen} from './ModalStack';
-import {authenticatePanel} from '../redux/actions/login.actions';
-import moment from 'moment';
-import {setTokenExpired} from '../redux/actions/dashboard.actions';
-// import SearchStack from './SearchStack';
-// import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-
-// import {connect} from 'react-redux';
 
 const Drawer = createDrawerNavigator();
 const DetractorStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
 
 const AppRouter = props => {
-  // const {updateSegment} = props;
   const authToken = useSelector(state => state.global.authToken);
   const bearerToken = useSelector(state => state.global.bearerToken);
 
@@ -121,27 +81,7 @@ const AppRouter = props => {
     ],
   };
 
-  // useEffect(() => {
-  //   console.log('SELECTED SEGMENT__', JSON.stringify(currentSegment));
-
-  //   if (currentSegment.currentSegmentID) {
-  //     dispatch(
-  //       getClosedLoopOwnerDetails(authToken, {
-  //         segmentID: currentSegment.currentSegmentID,
-  //       }),
-  //     );
-  //   }
-  // }, [currentSegment]);
-
   useEffect(() => {
-    // setSegmentOptions((segments) => segmentDetails?.segments ?? []);
-    // setSelectedSegment((segment) => ({
-    //   segmentName: segmentDetails.currentSegment,
-    //   segmentID: segmentDetails.currentSegmentID,
-    // }));
-
-    // console.log('Segment List', segmentOptions);
-
     global.baseUrl = '';
     global.subscriberId = '';
     setGlobalBaseUrl();
@@ -178,7 +118,6 @@ const AppRouter = props => {
       unsubscribeLinks();
       unsubscribeNotifications();
     };
-    // }, [segmentDetails]);
   }, []);
 
   useEffect(() => {
@@ -209,25 +148,7 @@ const AppRouter = props => {
     if (!isStringNullOrEmpty(authToken)) {
       let lastLogin = lastLoginArray;
       let today = new Date();
-
       lastLogin.push(today);
-
-      // setSegmentOptions(['Main Segment', 'Child Segment']);
-
-      // AsyncStorage.getItem(ASYNC_LAST_LOGIN)
-      //   .then(req => {
-      //     lastLoginArray = JSON.parse(req);
-      //     if (lastLoginArray.length >= 2) {
-      //       let today = new Date();
-      //       lastLoginArray.push(today);
-      //       let newArray = lastLoginArray.slice(
-      //         lastLoginArray.length - 2,
-      //         lastLoginArray.length,
-      //       );
-      //       lastLoginArray = newArray;
-      //     }
-      //   })
-      //   .catch(error => console.log(`async storage error: ${error}`));
 
       console.log(`LAST_LOGIN: ${lastLoginArray}`);
       let data = [
@@ -237,7 +158,6 @@ const AppRouter = props => {
       ];
       AsyncStorage.multiSet(data, error => {});
     }
-    // setMoveNext(state => !authToken);
   }, [authToken]);
 
   useEffect(() => {
@@ -253,13 +173,9 @@ const AppRouter = props => {
 
   const setGlobalBaseUrl = () => {
     AsyncStorage.getItem(BASE_URL).then(baseUrl => {
-      // console.log(`subscriber ID from async storage: ${subscriberId}`);
-
-      //console.log(`Base url from async storage: ${baseUrl}`);
       if (baseUrl) {
         global.baseUrl = baseUrl;
         setBaseUrl(baseUrl);
-        // dispatch(setBaseUrl(baseUrl));
       }
     });
   };
@@ -271,7 +187,6 @@ const AppRouter = props => {
         global.subscriberId = subscriberId;
         console.log(`subscriber ID from global: ${global.subscriberId}`);
 
-        // setBaseUrl(baseUrl);
         setSubscriberId(subscriberId);
       }
     });
@@ -295,7 +210,6 @@ const AppRouter = props => {
         <Pressable
           hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
           onPress={() => {
-            //alert('open notification screen')
             navigation.navigate('Notifications');
           }}>
           <FontIcon
@@ -304,7 +218,7 @@ const AppRouter = props => {
             color={Colors.white}
           />
         </Pressable>
-        {/** show unread/badge icon when notification read/unread status comes*/}
+
         {notificationCount > 0 ? renderNotificationBadge() : <View />}
       </View>
     );
@@ -367,18 +281,9 @@ const AppRouter = props => {
           },
 
           headerLeft: props => <MenuIcon />,
-          // headerRight: (props) => <NotificationIcon />,
-          // headerRight: (props) => <SearchIcon route={'Dashboard'} />,
         })}
       />
-      {/* <DetractorStack.Screen
-        name={translate('close_loop.close_loop')}
-        component={CloseLoopTicketsTabs}
-        options={({navigation, route}) => ({
-          headerLeft: props => <HeaderBackLeft {...props} route={route} />,
-          headerRight: props => <SearchIcon route={'Dashboard'} />,
-        })}
-      /> */}
+
       <DetractorStack.Screen
         name="Search Ticket"
         component={SearchTicket}
@@ -387,25 +292,14 @@ const AppRouter = props => {
           headerLeft: props => <HeaderBackLeft {...props} route={route} />,
         })}
       />
-      {/* <DetractorStack.Screen
-        name={translate('responses.new_ticket')}
-        component={CreateTicket}
-        options={({navigation, route}) => ({
-          // headerLeft: (props) => <View />,
-          // headerRight: (props) => <CloseButton />,
-          headerLeft: props => <HeaderBackLeft {...props} route={route} />,
 
-          headerShown: true,
-        })}
-      /> */}
       <DetractorStack.Screen
         key={'dashboard_to_responses'}
         name={'dashboard_to_responses'}
         component={Feedback}
         options={({navigation, route}) => ({
-          // title: 'Responses',
           headerLeft: props => <HeaderBackLeft {...props} route={route} />,
-          // headerRight: (props) => <CloseButton />,
+
           headerTitle: props => {
             return (
               <SegmentSelector
@@ -422,9 +316,8 @@ const AppRouter = props => {
         name={'dashboard_to_closed_loop'}
         component={ClosedLoop}
         options={({navigation, route}) => ({
-          // title: 'Responses',
           headerLeft: props => <HeaderBackLeft {...props} route={route} />,
-          // headerRight: (props) => <CloseButton />,
+
           headerTitle: props => {
             return (
               <SegmentSelector
@@ -456,15 +349,7 @@ const AppRouter = props => {
           headerRight: props => <ClearAllButton {...props} route={route} />,
         })}
       />
-      {/* <DetractorStack.Screen
-        name={translate('responses.new_ticket')}
-        component={CreateTicket}
-        options={({navigation, route}) => ({
-          // headerLeft: (props) => <View />,
-          // headerRight: (props) => <CloseButton />,
-          headerShown: false,
-        })}
-      /> */}
+
       <DetractorStack.Screen
         name={translate('filter_by')}
         component={TicketFilter}
@@ -522,31 +407,6 @@ const AppRouter = props => {
     );
   };
 
-  // let [moveNext, setMoveNext] = useState(false);
-  // let splashTimer = useRef(null);
-  // const welcomeScreenData = useSelector(
-  //   state => state.dashboard.welcomeScreenData,
-  // );
-  // useEffect(() => {
-  //   if (welcomeScreenData) {
-  //     splashTimer.current = setTimeout(() => {
-  //       setMoveNext(true);
-  //     }, 5000);
-  //     return () => {
-  //       clearTimeout(splashTimer.current);
-  //     };
-  //   }
-  // }, [moveNext, welcomeScreenData]);
-
-  // const onSkipHandler = () => {
-  //   console.log('SKIP!!');
-  //   setMoveNext(true);
-
-  //   if (splashTimer.current) {
-  //     clearTimeout(splashTimer.current);
-  //   }
-  // };
-
   console.log('LAST LOGIN DATA', JSON.stringify(lastLoginArray));
 
   return (
@@ -567,27 +427,6 @@ const AppRouter = props => {
     </NavigationContainer>
   );
 };
-
-// function mapStateToProps(state) {
-//   return {
-//     segment: state.segment,
-//   };
-// }
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     updateSegment: (segmentName) =>
-//       dispatch({type: SEGMENT_SELECTED, payload: segmentName}),
-//   };
-
-// return {
-//   setSegment: (segment) =>
-//   console.log(`call segment ${segment}`)
-//     dispatch({type: SEGMENT_SELECTED, payload: segment}),
-// };
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(AppRouter);
 
 export default AppRouter;
 
