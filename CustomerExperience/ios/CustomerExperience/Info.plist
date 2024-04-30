@@ -20,10 +20,6 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>NSDocumentsFolderUsageDescription</key>
-	<string>To access device files for upload upon user request</string>
-	<key>NSDownloadsFolderUsageDescription</key>
-	<string>To access device files for upload upon user request</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -64,8 +60,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>To access device files for upload upon user request</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>To access device files for upload upon user request</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>
@@ -132,7 +132,7 @@
 	<key>UIRequiresFullScreen</key>
 	<true/>
 	<key>UIStatusBarStyle</key>
-	<string/>
+	<string></string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

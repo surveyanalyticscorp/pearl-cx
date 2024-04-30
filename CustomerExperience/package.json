@@ -11,8 +11,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "postinstall": "patch-package",
-    "check-dependencies": "rnx-align-deps",
-    "fix-dependencies": "rnx-align-deps --write",
+    "check-deps": "rnx-align-deps",
+    "fix-deps": "rnx-align-deps --write",
     "ios-pod-reinstall": "cd ios && pod deintegrate && pod cache clean --all && arch -x86_64 pod install && cd ..",
     "gen_android_debug_bundle": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "reset_": "rm -rf node_modules && yarn cache clean && yarn",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.3",
-    "@react-native-async-storage/async-storage": "^1.15.9",
+    "@react-native-async-storage/async-storage": "1.15.16",
     "@react-native-clipboard/clipboard": "1.11.2",
     "@react-native-community/art": "^1.2.0",
     "@react-native-community/netinfo": "^7.0.0",
@@ -53,7 +53,7 @@
     "prop-types": "latest",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-native": "^0.66.0",
+    "react-native": "0.67.1",
     "react-native-action-button": "^2.8.5",
     "react-native-animatable": "^1.3.3",
     "react-native-device-info": "10.3.0",
@@ -142,7 +142,7 @@
     "kitType": "app",
     "alignDeps": {
       "requirements": [
-        "react-native@0.66"
+        "react-native@0.67"
       ],
       "capabilities": [
         "animation",
