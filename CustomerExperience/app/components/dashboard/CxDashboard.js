@@ -80,24 +80,31 @@ const NpsScoreView = () => {
   const {npsPercentage, benchmarkScore} = useSelector(
     state => state.dashboard?.currentNPSData?.NPSScore,
   );
+  const hasBenchmark = benchmarkScore && benchmarkScore !== 0;
 
   return (
     <View style={dashboardStyles.squareView}>
       <NPSIcon nps={npsPercentage} />
       <TextLabel text={'NPS:'} fontWeight={FontWeight.bold} />
       <TextLabel
-        text={StringUtils.floatTo2DecimalPointString(npsPercentage)}
+        text={StringUtils.floatToDecimal(npsPercentage)}
         fontWeight={FontWeight.bold}
         color={getNPSColor(npsPercentage)}
       />
-      <TextLabel
-        text={`${StringUtils.floatTo2DecimalPointString(
-          npsPercentage - benchmarkScore,
-        )}`}
-        baseTextStyle={baseTextStyles.semiSecondaryRegularText}
-        color={Colors.evenDarkerGrey}
-      />
-      <ScoreIndicatorIcon diff={npsPercentage - benchmarkScore} />
+      {hasBenchmark ? (
+        <TextLabel
+          text={`${StringUtils.floatToDecimal(npsPercentage - benchmarkScore)}`}
+          baseTextStyle={baseTextStyles.semiSecondaryRegularText}
+          color={Colors.evenDarkerGrey}
+        />
+      ) : (
+        <View />
+      )}
+      {hasBenchmark ? (
+        <ScoreIndicatorIcon diff={npsPercentage - benchmarkScore} />
+      ) : (
+        <View />
+      )}
     </View>
   );
 };

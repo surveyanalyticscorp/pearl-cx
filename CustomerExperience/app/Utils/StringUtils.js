@@ -277,6 +277,13 @@ export default class StringUtils {
     return parseFloat(parseFloat(number).toFixed(2));
   }
 
+  static floatToDecimal(number) {
+    if (number % 1 === 0) {
+      return number;
+    }
+    return Math.round(parseFloat(number).toFixed(2));
+  }
+
   static formattedCount(count, minCompareValue, notion) {
     const formatted = (count / minCompareValue).toFixed(1);
     return formatted.endsWith('.0')
@@ -294,11 +301,11 @@ export default class StringUtils {
     if (responseCount < ONE_THOUSAND) {
       return responseCount.toString();
     } else if (responseCount < ONE_MILLION) {
-      return this.formattedCount(responseCount, ONE_THOUSAND, 'K');
+      return this.formattedCount(responseCount, ONE_THOUSAND, 'k');
     } else if (responseCount < ONE_BILLION) {
-      return this.formattedCount(responseCount, ONE_MILLION, 'M');
+      return this.formattedCount(responseCount, ONE_MILLION, 'm');
     } else if (responseCount < ONE_THOUSAND_BILLION) {
-      return this.formattedCount(responseCount, ONE_BILLION, 'B');
+      return this.formattedCount(responseCount, ONE_BILLION, 'b');
     } else {
       return responseCount.toString();
     }

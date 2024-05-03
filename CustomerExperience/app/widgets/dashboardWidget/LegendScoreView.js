@@ -37,7 +37,7 @@ const LegendScoreView = ({title, count, percentage, backgroundColor}) => {
           fontWeight={FontWeight.bold}
         />
         <TextLabel
-          text={`(${StringUtils.floatTo2DecimalPointString(percentage)}%)`}
+          text={`(${StringUtils.floatToDecimal(percentage)}%)`}
           baseTextStyle={baseTextStyles.secondaryRegularText}
         />
       </LegendContainer>
