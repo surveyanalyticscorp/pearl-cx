@@ -1120,11 +1120,11 @@ const styles = StyleSheet.create({
   panelHeaderContainer: {
     flex: 1,
 
-    paddingVertical: PaddingConstants.tab1,
+    paddingVertical: PaddingConstants.tab1_2x,
     paddingHorizontal: PaddingConstants.tab1_3x,
     backgroundColor: Colors.white,
-    borderTopStartRadius: 8,
-    borderTopEndRadius: 8,
+    borderTopStartRadius: MarginConstants.tab1,
+    borderTopEndRadius: MarginConstants.tab1,
   },
   statusContainer: {
     flexDirection: 'row',

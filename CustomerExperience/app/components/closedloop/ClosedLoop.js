@@ -522,7 +522,7 @@ export default function ClosedLoop(props) {
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
 
-  const bsSnapPoints = ['62%', '0%'];
+  const bsSnapPoints = ['64%', '0%'];
   const [shadow, setShadow] = useState(false);
 
   const clearFilterData = item => {
