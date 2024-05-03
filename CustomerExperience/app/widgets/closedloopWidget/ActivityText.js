@@ -37,7 +37,7 @@ const ActivityText = ({text}) => {
         span: {
           paddingBottom: PaddingConstants.halfTab,
           color: Colors.filterIconColor,
-          ...baseTextStyles.semiSecondaryRegularText,
+          ...baseTextStyles.semiSecondaryRegular2Text,
         },
       }}
     />

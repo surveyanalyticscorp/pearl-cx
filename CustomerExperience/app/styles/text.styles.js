@@ -79,6 +79,11 @@ export const baseTextStyles = StyleSheet.create({
     fontSize: TextSizes.secondary,
     marginHorizontal: MarginConstants.halfTab,
   },
+  semiSecondaryRegular2Text: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.semiSecondary2,
+    marginHorizontal: MarginConstants.halfTab,
+  },
   semiSecondaryRegularText: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.semiSecondary,
