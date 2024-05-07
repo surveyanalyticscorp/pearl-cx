@@ -301,11 +301,11 @@ export default class StringUtils {
     if (responseCount < ONE_THOUSAND) {
       return responseCount.toString();
     } else if (responseCount < ONE_MILLION) {
-      return this.formattedCount(responseCount, ONE_THOUSAND, 'k');
+      return this.formattedCount(responseCount, ONE_THOUSAND, 'K');
     } else if (responseCount < ONE_BILLION) {
-      return this.formattedCount(responseCount, ONE_MILLION, 'm');
+      return this.formattedCount(responseCount, ONE_MILLION, 'M');
     } else if (responseCount < ONE_THOUSAND_BILLION) {
-      return this.formattedCount(responseCount, ONE_BILLION, 'b');
+      return this.formattedCount(responseCount, ONE_BILLION, 'B');
     } else {
       return responseCount.toString();
     }
