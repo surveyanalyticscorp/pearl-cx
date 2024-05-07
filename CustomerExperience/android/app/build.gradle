@@ -134,10 +134,10 @@ android {
         applicationId "com.questionpro.cxonthego"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 17
-        versionName "1.7.8"
+        versionCode 18
+        versionName "1.7.9"
         multiDexEnabled true
-    }
+    }   
     splits {
         abi {
             reset()
