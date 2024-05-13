@@ -12,7 +12,7 @@ export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
 export const ASYNC_LOGIN_EXPIRE_DATE = 'expiredLoginDate';
 export const ACTION_EMAIL = 'noreply@InsightsHub.com';
-export const TOKEN_VALIDATION_DURATION = 6;
+export const TOKEN_VALIDATION_DURATION = 5;
 
 export const MAX_COMMENT_LENGTH = 240;
 // set true for DEV, false for LIVE
