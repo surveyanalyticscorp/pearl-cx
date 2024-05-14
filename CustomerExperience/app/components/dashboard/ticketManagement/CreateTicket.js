@@ -193,6 +193,8 @@ const RenderPhoneInput = ({defaultValue, setTicketState}) => {
         codeTextStyle={styles.phoneInputCodeText}
         textContainerStyle={styles.phoneInputTextContainer}
         textInputStyle={styles.phoneInputTextInputStyle}
+        // flagButtonStyle={{borderColor: Colors.accent, borderWidth: 1}}
+        countryPickerButtonStyle={styles.phoneInputCountryPickerButtonStyle}
         textInputProps={{
           placeholderTextColor: Colors.borderColor,
           onEndEditing: function (value) {
@@ -202,7 +204,7 @@ const RenderPhoneInput = ({defaultValue, setTicketState}) => {
         ref={phoneInput}
         // defaultValue={value}
         defaultCode="US"
-        layout="first"
+        layout="second"
         // onChangeText={text => {
         // setValue(text);
         // console.log('PHONE:', text);
@@ -1031,8 +1033,16 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
-    padding: PaddingConstants.tab1,
+    paddingVertical: PaddingConstants.tab1,
+    paddingStart: 0,
+    paddingEnd: PaddingConstants.tab1,
     color: Colors.filterIconColor,
+  },
+  phoneInputCountryPickerButtonStyle: {
+    borderColor: Colors.darkGrey,
+    borderWidth: 1,
+    padding: 0,
+    marginStart: MarginConstants.tab1,
   },
   image: {width: 14, height: 14},
 
