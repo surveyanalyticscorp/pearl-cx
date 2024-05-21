@@ -1,3 +1,4 @@
+import ArrayUtils from '../../Utils/ArrayUtils';
 import {
   GET_TICKET_STATUS_HISTORY_RECEIVED,
   LATEST_COMMENT_RECEIVED,
@@ -8,6 +9,9 @@ import {
   PANEL_MEMBER_RECEIVED,
   SURVEY_RESPONSE_DETAILS_RECEIVED,
   RESPONSE_DETAILS_BY_RESPONSEID_RECEIVED,
+  SET_RESPONSE_READ_LIST,
+  SET_ALL_RESPONSES,
+  ADD_TO_RESPONSE_READ_LIST,
 } from '../actions/feedback.actions';
 
 const initialState = {
@@ -17,6 +21,8 @@ const initialState = {
   ticketStatusHistory: {},
   ticketLastComment: {},
   responseDetailsByResponseDetails: {},
+  allResponses: [],
+  responseReadList: [],
 };
 
 const feedbackReducer = (state = initialState, action) => {
@@ -69,11 +75,53 @@ const feedbackReducer = (state = initialState, action) => {
         ticketLastComment: action.response,
       };
     }
-
+    case SET_RESPONSE_READ_LIST: {
+      return {
+        ...state,
+        responseReadList: action.responseReadList,
+        allResponses: getAllResponses(
+          state.allResponses,
+          state.responseReadList,
+        ),
+      };
+    }
+    case ADD_TO_RESPONSE_READ_LIST: {
+      let newResponseReadList = [
+        ...new Set([...state.responseReadList, action.responseSetID].sort()),
+      ];
+      return {
+        ...state,
+        responseReadList: newResponseReadList,
+        allResponses: getAllResponses(state.allResponses, newResponseReadList),
+      };
+    }
+    case SET_ALL_RESPONSES: {
+      return {
+        ...state,
+        allResponses: getAllResponses(
+          action.allResponses,
+          state.responseReadList,
+        ),
+      };
+    }
     default: {
       return state;
     }
   }
 };
+
+function getAllResponses(allresponses, responseReadList) {
+  let temp = [];
+  if (allresponses) {
+    allresponses.map(item => {
+      temp.push({
+        ...item,
+        read: ArrayUtils.containsElement(responseReadList, item.responseSetID),
+      });
+    });
+  }
+
+  return temp;
+}
 
 export default feedbackReducer;

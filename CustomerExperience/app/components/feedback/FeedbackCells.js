@@ -17,37 +17,261 @@ import NPSAnswerText from '../../widgets/NPSAnswerText';
 import {HorizontalSpaceBox, VerticalSpaceBox} from '../../widgets/SpaceBox';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
 import {baseTextStyles} from '../../styles/text.styles';
-// import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
-// import {backgroundColor} from '../../widgets/qp-calendar/style';
-// import style from '../../widgets/qp-calendar/calendar/header/style';
-export default function FeedbackCell(props) {
-  function showName(item) {
-    let name = `${item.firstName ?? ''} ${item.lastName ?? ''}`;
-    let email = item.emailAddress ?? '';
-    if (!StringUtils.isEmpty(name.trim())) {
-      return name.trim();
-    } else if (!StringUtils.isEmpty(email.trim())) {
-      return email;
-    } else {
-      return translate('ticket_list.anonymous');
-    }
+import {useAsyncStorage} from '@react-native-async-storage/async-storage';
+import {ASYNC_RESPONSES_WITH_CX_MANAGER} from '../../api/Constant'; // import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+
+const RenderDateDetails = ({date}) => {
+  // let date = props.item.surveyTakenDate ?? '';
+
+  return (
+    <View style={{marginVertical: MarginConstants.tab1}}>
+      <Text style={styles.secondaryTitle}>{translate('responses.date')}</Text>
+      <Text style={styles.secondaryText}>{date}</Text>
+    </View>
+  );
+};
+
+const RenderEmailAddress = ({email}) => {
+  return email.length ? (
+    <Pressable
+      onPress={() => {
+        console.log('Email Address');
+      }}
+      style={styles.contactBox}>
+      <IonIcon name="mail" size={14} color={Colors.filterIconColor} />
+      <Text style={styles.contactText}>{email}</Text>
+    </Pressable>
+  ) : (
+    <View />
+  );
+};
+const RenderContactDetails = () => {
+  return (
+    <View style={{marginVertical: MarginConstants.tab2}}>
+      <Text style={styles.secondaryTitle}>Contact Information</Text>
+      <RenderPhoneNumber />
+      <RenderEmailAddress />
+    </View>
+  );
+};
+function showName(item) {
+  let name = `${item.firstName ?? ''} ${item.lastName ?? ''}`;
+  let email = item.emailAddress ?? '';
+  if (!StringUtils.isEmpty(name.trim())) {
+    return name.trim();
+  } else if (!StringUtils.isEmpty(email.trim())) {
+    return email;
+  } else {
+    return translate('ticket_list.anonymous');
   }
-  let disable = props.origin === 'Detail';
-  let hasTicket = props.hasTicket;
-  const name = showName(props.item);
-  const email = props.item.emailAddress ?? '';
-  const surveyID = props.item.surveyID;
-  let [isNewResponse, setNewResponse] = useState(
-    props.item.ticketStatus === -1,
+}
+
+let UserName = ({name, isDisabled}) => {
+  const charLength = 24;
+  const shortenedString =
+    name && name.length > charLength
+      ? name.slice(0, charLength) + '...' // If longer than 12 characters, slice and add ellipsis
+      : name;
+  return (
+    <Text
+      numberOfLines={isDisabled ? 4 : 1}
+      style={[styles.userNameText, {maxWidth: '90%'}]}>
+      {name.length > 1
+        ? isDisabled
+          ? name
+          : shortenedString
+        : translate('ticket_list.anonymous')}
+    </Text>
+  );
+};
+let Date = ({surveyTakenDate}) => {
+  return (
+    <TextLabel
+      text={surveyTakenDate}
+      baseTextStyle={baseTextStyles.semiSecondaryRegularText}
+      color={Colors.evenDarkerGrey}
+    />
+  );
+};
+
+let ResponseId = ({responseSetID}) => {
+  return (
+    <View style={styles.responseIdContainer}>
+      <TextLabel
+        style={{marginHorizontal: 0}}
+        text={`${translate('close_loop.response_id')} ${responseSetID}`}
+      />
+    </View>
+  );
+};
+
+const RenderPhoneNumber = ({phoneNumber}) => {
+  // let phoneNumber = props.item.phone ?? '';
+  return phoneNumber.length ? (
+    <Pressable
+      onPress={() => {
+        console.log('Phone Number');
+      }}
+      style={styles.contactBox}>
+      <IonIcon name="call" size={12} color={Colors.filterIconColor} />
+      <Text style={styles.contactText}>{phoneNumber}</Text>
+    </Pressable>
+  ) : (
+    <View />
+  );
+};
+let RenderCreateOrViewTicket = ({hasTicket, onPress}) => {
+  return !hasTicket ? (
+    <TouchableWithoutFeedback
+      hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+      onPress={onPress}>
+      <Text style={styles.viewTicketsText}>
+        {translate('responses.create_ticket')}
+      </Text>
+    </TouchableWithoutFeedback>
+  ) : (
+    <View />
+  );
+};
+
+let RenderResponseContainer = ({
+  item,
+  parentRoute,
+  origin,
+  hasTicket,
+  navigation,
+}) => {
+  let flag = parentRoute === translate('responses.responses');
+  let disable = origin === 'Detail';
+
+  let {
+    surveyTakenDate,
+    emailAddress,
+    answerText,
+    sentiment,
+    responseSetID,
+    surveyID,
+  } = item;
+
+  const navigateToNewTicket = () => {
+    navigation.navigate(translate('responses.new_ticket'), {
+      responseId: responseSetID,
+      customerName: showName(item) ?? '',
+      customerEmail: emailAddress ?? '',
+      surveyId: surveyID ?? '',
+    });
+  };
+  return (
+    <View style={styles.upperContainer}>
+      <View style={styles.responseContainer}>
+        {/* {renderNPSView()} */}
+
+        <View style={[styles.rowContainer, {maxWidth: '70%'}]}>
+          <NPSIcon sentiment={sentiment} />
+          <HorizontalSpaceBox />
+          <NPSAnswerText sentiment={sentiment} answerText={answerText} />
+          <HorizontalSpaceBox />
+          <UserName name={showName(item)} isDisabled={disable} />
+        </View>
+
+        <View style={styles.dateAndArrowIconContainer}>
+          <Date surveyTakenDate={surveyTakenDate} />
+          {!disable && (
+            <Icon
+              name="arrow-right"
+              size={Sizes.icons}
+              color={Colors.secondary}
+            />
+          )}
+        </View>
+      </View>
+      <VerticalSpaceBox multiplyBy={2} />
+      <View style={styles.responseIdAndTicketRowContainer}>
+        <ResponseId responseSetID={responseSetID} />
+        {disable && flag && (
+          <RenderCreateOrViewTicket
+            hasTicket={hasTicket}
+            onPress={navigateToNewTicket}
+          />
+        )}
+      </View>
+    </View>
+  );
+};
+const ResponseItemButton = ({
+  children,
+  responseSetID,
+  isDisabled,
+  onSelect,
+}) => {
+  const {setItem} = useAsyncStorage(ASYNC_RESPONSES_WITH_CX_MANAGER);
+
+  const responseReadList = useSelector(
+    state => state.response.responseReadList,
+  );
+  const asyncSetResponseId = async () => {
+    try {
+      if (!ArrayUtils.containsElement(responseReadList, responseSetID)) {
+        await setItem(
+          JSON.stringify([...new Set([...responseReadList, responseSetID])]),
+        );
+      }
+    } catch (e) {
+      console.log(
+        'ASYNC SET ITEM',
+        'CATCH',
+        e,
+        `${[...responseReadList, responseSetID]}`,
+      );
+    }
+  };
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => {
+        onSelect();
+        asyncSetResponseId();
+      }}
+      disabled={isDisabled}>
+      {children}
+    </TouchableWithoutFeedback>
+  );
+};
+const RenderIsNewResponse = ({read, disable, responseSetID}) => {
+  let color = Colors.fullTransparent;
+  let responseReadList = useSelector(state => state.response.responseReadList);
+  console.log(
+    'RenderIsNewResponse read',
+    read,
+    responseSetID,
+    responseReadList,
   );
 
+  color =
+    responseReadList && !responseReadList.includes(responseSetID)
+      ? Colors.accentLight
+      : Colors.fullTransparent;
+
+  return (
+    !disable && (
+      <View style={[styles.unreadIndicator, {backgroundColor: color}]} />
+    )
+  );
+};
+export default function FeedbackCell(props) {
+  const {responseSetID} = props.item;
+  const {index} = props;
+  // const responseReadList = useSelector(
+  //   state => state.response.responseReadList,
+  // );
+  // const allResponses = useSelector(state => state.response.allResponses);
+
   let [feedbackTapped, setTapped] = useState(false);
-  let surveyTakenDate = props.item.surveyTakenDate;
+  let disable = props.origin === 'Detail';
 
   useEffect(() => {
     if (feedbackTapped) {
       setTapped(false);
-      console.log('feedback tapped');
       props.navigation.navigate(translate('close_loop.ticket_details'), {
         ticketID: props.item.ticketID,
         parentRoute: 'Responses',
@@ -55,187 +279,26 @@ export default function FeedbackCell(props) {
     }
   }, [feedbackTapped]);
 
-  let getTicketStatus = () => {
-    if (props.item.ticketStatus !== -1) {
-      return ArrayUtils.getMatchingObject(
-        props.ticketStatuses,
-        'id',
-        props.item.ticketStatus,
-      ).text;
-    }
-    return '';
-  };
-
-  let UserName = ({name, isDisabled}) => {
-    const charLength = 24;
-    const shortenedString =
-      name && name.length > charLength
-        ? name.slice(0, charLength) + '...' // If longer than 12 characters, slice and add ellipsis
-        : name;
-    return (
-      <Text
-        numberOfLines={isDisabled ? 4 : 1}
-        style={[styles.userNameText, {maxWidth: '90%'}]}>
-        {name.length > 1
-          ? isDisabled
-            ? name
-            : shortenedString
-          : translate('ticket_list.anonymous')}
-      </Text>
-    );
-  };
-
-  let Date = ({surveyTakenDate}) => {
-    return (
-      <TextLabel
-        text={surveyTakenDate}
-        baseTextStyle={baseTextStyles.semiSecondaryRegularText}
-        color={Colors.evenDarkerGrey}
-      />
-    );
-  };
-
-  let ResponseId = ({responseSetID}) => {
-    return (
-      <View style={styles.responseIdContainer}>
-        <TextLabel
-          style={{marginHorizontal: 0}}
-          text={`${translate('close_loop.response_id')} ${responseSetID}`}
-        />
-      </View>
-    );
-  };
-
-  const RenderIsNewResponse = () => {
-    let color = isNewResponse ? Colors.accentLight : Colors.fullTransparent;
-    return (
-      !disable && (
-        <View style={[styles.unreadIndicator, {backgroundColor: color}]} />
-      )
-    );
-  };
-
-  let renderCreateOrViewTicket = () => {
-    return !hasTicket ? (
-      <TouchableWithoutFeedback
-        hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
-        onPress={() => {
-          props.navigation.navigate(translate('responses.new_ticket'), {
-            responseId: props.item.responseSetID,
-            customerName: name,
-            customerEmail: email,
-            surveyId: surveyID,
-          });
-        }}>
-        <Text style={styles.viewTicketsText}>
-          {translate('responses.create_ticket')}
-        </Text>
-      </TouchableWithoutFeedback>
-    ) : (
-      <View />
-    );
-  };
-  const RenderContactDetails = () => {
-    return (
-      <View style={{marginVertical: MarginConstants.tab2}}>
-        <Text style={styles.secondaryTitle}>Contact Information</Text>
-        <RenderPhoneNumber />
-        <RenderEmailAddress />
-      </View>
-    );
-  };
-
-  const RenderPhoneNumber = () => {
-    let phoneNumber = props.item.phone ?? '';
-    return phoneNumber.length ? (
-      <Pressable
-        onPress={() => {
-          console.log('Phone Number');
-        }}
-        style={styles.contactBox}>
-        <IonIcon name="call" size={12} color={Colors.filterIconColor} />
-        <Text style={styles.contactText}>{phoneNumber}</Text>
-      </Pressable>
-    ) : (
-      <View />
-    );
-  };
-
-  const RenderEmailAddress = () => {
-    return email.length ? (
-      <Pressable
-        onPress={() => {
-          console.log('Email Address');
-        }}
-        style={styles.contactBox}>
-        <IonIcon name="mail" size={14} color={Colors.filterIconColor} />
-        <Text style={styles.contactText}>{email}</Text>
-      </Pressable>
-    ) : (
-      <View />
-    );
-  };
-
-  const RenderDateDetails = () => {
-    let date = props.item.surveyTakenDate ?? '';
-
-    return (
-      <View style={{marginVertical: MarginConstants.tab1}}>
-        <Text style={styles.secondaryTitle}>{translate('responses.date')}</Text>
-        <Text style={styles.secondaryText}>{date}</Text>
-      </View>
-    );
-  };
-
-  let renderResponseContainer = () => {
-    let flag = props.parentRoute === translate('responses.responses');
-    return (
-      <View style={styles.upperContainer}>
-        <View style={styles.responseContainer}>
-          {/* {renderNPSView()} */}
-
-          <View style={[styles.rowContainer, {maxWidth: '70%'}]}>
-            <NPSIcon sentiment={props.item.sentiment} />
-            <HorizontalSpaceBox />
-            <NPSAnswerText
-              sentiment={props.item.sentiment}
-              answerText={props.item.answerText}
-            />
-            <HorizontalSpaceBox />
-            <UserName name={name} isDisabled={disable} />
-          </View>
-
-          <View style={styles.dateAndArrowIconContainer}>
-            <Date surveyTakenDate={surveyTakenDate} />
-            {!disable && (
-              <Icon
-                name="arrow-right"
-                size={Sizes.icons}
-                color={Colors.secondary}
-              />
-            )}
-          </View>
-        </View>
-        <VerticalSpaceBox multiplyBy={2} />
-        <View style={styles.responseIdAndTicketRowContainer}>
-          <ResponseId responseSetID={props.item.responseSetID} />
-          {disable && flag && renderCreateOrViewTicket()}
-        </View>
-      </View>
-    );
-  };
-
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        props.onSelect();
-      }}
-      disabled={disable}>
+    <ResponseItemButton
+      responseSetID={responseSetID}
+      isDisabled={disable}
+      onSelect={props.onSelect}>
       <View style={styles.rowContainer}>
-        <RenderIsNewResponse />
-        <View style={styles.container}>{renderResponseContainer()}</View>
+        <RenderIsNewResponse
+          // read={responseReadList ? responseReadList[index] : true}
+          // read={
+          //   disable ? true : allResponses ? allResponses[index]?.read : true
+          // }
+          read={props.item.read}
+          responseSetID={props.item.responseSetID}
+          disable={disable}
+        />
+        <View style={styles.container}>
+          <RenderResponseContainer {...props} />
+        </View>
       </View>
-    </TouchableWithoutFeedback>
+    </ResponseItemButton>
   );
 }
 

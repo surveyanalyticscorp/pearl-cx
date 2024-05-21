@@ -25,6 +25,7 @@ import {
   getPanelMemberDetails,
   getResponseTickets,
   getSurveyResponseDetails,
+  setResponseReadList,
 } from '../../redux/actions/feedback.actions';
 import ClosedLoopCell from '../closedloop/ClosedloopCell';
 import ResponseTicketCell from '../closedloop/ResponseTicketCell';
@@ -33,6 +34,10 @@ import {
   getTicketStatusHistory,
 } from '../../redux/actions/closedloop.actions';
 import {useIsFocused} from '@react-navigation/native';
+import AsyncStorage, {
+  useAsyncStorage,
+} from '@react-native-async-storage/async-storage';
+import {ASYNC_RESPONSES_WITH_CX_MANAGER} from '../../api/Constant';
 
 const RenderWebView = props => {
   return (
@@ -103,6 +108,7 @@ export default function FeedbackDetails(props) {
   const isFocused = useIsFocused();
   const data = props.route.params.data;
   const isFromFeedback = props.route.params.isFromFeedback;
+  const {getItem} = useAsyncStorage(ASYNC_RESPONSES_WITH_CX_MANAGER);
 
   console.log('RESPONSE_DATA', JSON.stringify(props.route.params.data));
   useEffect(() => {
@@ -111,17 +117,28 @@ export default function FeedbackDetails(props) {
       title: 'Response details',
     });
   }, [props.navigation, data.responseSetID]);
-  // dispatch(
-  //   getPanelMemberDetails(authToken, {panelMemberID: data.panelMemberID}),
-  // );
 
-  // dispatch(
-  //   getResponseTickets(authToken, feedbackID, data.responseSetID, {
-  //     feedbackApiKey: feedbackApiKey,
-  //   }),
-  // );
+  const asyncGetResponseIDs = async () => {
+    try {
+      let resIds = JSON.parse(await getItem());
+      console.log(
+        ASYNC_RESPONSES_WITH_CX_MANAGER,
+        'RESPONSEIDssss',
+        JSON.stringify(resIds),
+      );
 
+      dispatch(setResponseReadList(resIds !== null ? resIds : []));
+      console.log(
+        ASYNC_RESPONSES_WITH_CX_MANAGER,
+        'RESPONSE IDs',
+        resIds !== null ? resIds : [],
+      );
+    } catch (e) {
+      console.log(ASYNC_RESPONSES_WITH_CX_MANAGER, 'CATCH', e);
+    }
+  };
   useEffect(() => {
+    asyncGetResponseIDs();
     dispatch(
       getPanelMemberDetails(authToken, {panelMemberID: data.panelMemberID}),
     );

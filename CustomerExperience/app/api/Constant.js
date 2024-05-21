@@ -12,6 +12,8 @@ export const SUBSCRIBER_ID = 'subscriberId';
 export const ASYNC_LAST_LOGIN = 'lastLogin';
 export const ASYNC_LOGIN_EXPIRE_DATE = 'expiredLoginDate';
 export const ACTION_EMAIL = 'noreply@InsightsHub.com';
+export const ASYNC_RESPONSES_WITH_CX_MANAGER = 'ASYNC_RESPONSES';
+
 export const TOKEN_VALIDATION_DURATION = 5;
 
 export const MAX_COMMENT_LENGTH = 240;

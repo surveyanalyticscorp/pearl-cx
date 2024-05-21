@@ -34,18 +34,27 @@ import {
 } from '../../routes/CommonScreen';
 import Animated from 'react-native-reanimated';
 import {useIsFocused} from '@react-navigation/native';
-import {clearResponseData} from '../../redux/actions/feedback.actions';
+import {
+  clearResponseData,
+  getSetResponseReadList,
+  setAllResponses,
+  setResponseReadList,
+} from '../../redux/actions/feedback.actions';
 import SelectSorting from '../closedloop/takeaction/SelectSorting';
 import BottomSheet from 'reanimated-bottom-sheet';
 import {last} from 'lodash';
-
+import {useAsyncStorage} from '@react-native-async-storage/async-storage';
+import {ASYNC_RESPONSES_WITH_CX_MANAGER} from '../../api/Constant';
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
 
 function Feedback(props) {
   let dispatch = useDispatch();
+  const {getItem} = useAsyncStorage(ASYNC_RESPONSES_WITH_CX_MANAGER);
+  const allResponses = useSelector(state => state.response.allResponses);
+
   let currentSegment = useSelector(state => state.dashboard.currentSegment);
-  let [feedbackData, setFeedbackData] = useState([]);
+  let [feedbackData, setFeedbackData] = useState(allResponses);
   let [ticketStatus, setTicketStatus] = useState([]);
   let [pageOffset, setPageOffset] = useState(0);
   let [pagination, setPagination] = useState(false);
@@ -68,6 +77,27 @@ function Feedback(props) {
   const fall = new Animated.Value(1);
   const sortingBottomSheet = React.useRef();
   const sortingBottomSheetSnapPoints = ['45%', '0%'];
+
+  const asyncGetResponseIDs = async () => {
+    console.log('asyncGetResponseIDs');
+    try {
+      let resIds = JSON.parse(await getItem());
+      console.log(
+        ASYNC_RESPONSES_WITH_CX_MANAGER,
+        'RESPONSEIDssss',
+        JSON.stringify(resIds),
+      );
+
+      dispatch(setResponseReadList(resIds !== null ? resIds : []));
+      console.log(
+        ASYNC_RESPONSES_WITH_CX_MANAGER,
+        'RESPONSE IDs',
+        resIds !== null ? resIds : [],
+      );
+    } catch (e) {
+      console.log(ASYNC_RESPONSES_WITH_CX_MANAGER, 'CATCH', e);
+    }
+  };
 
   const openSortingBottomSheet = () => {
     sortingBottomSheet.current.snapTo(0);
@@ -100,10 +130,12 @@ function Feedback(props) {
       </View>
     );
   };
+
   let getFeedbackData = () => {
     /**
      * To avoid multiple API calls for each tab
      * */
+    asyncGetResponseIDs();
     if (showLoader || pagination) {
       const data = {
         pageOffset: pageOffset,
@@ -125,8 +157,11 @@ function Feedback(props) {
           let data = pageOffset === 0 ? [] : [...feedbackData];
           data = [...data, ...response.body.allResponses];
           data = [...new Set(data)];
+
           setTicketStatus(response.body.cxTicketStatusValues);
+          ///
           setFeedbackData(data);
+          // dispatch(setAllResponses(data));
           // console.log('pageOffset data count ' + data.length);
           showLoader && setShowLoader(false);
           pagination && setPagination(false);
@@ -217,10 +252,6 @@ function Feedback(props) {
   };
 
   const filterHandler = () => {
-    // props.navigation.navigate(translate('responses.sort_by'), {
-    //   setSorter: setSortText,
-    //   selectedSorter: sortingText.label,
-    // });
     openSortingBottomSheet();
   };
 
@@ -347,7 +378,10 @@ const FeedbackTabStack = () => (
 const RenderFeedbackScene = props => {
   const dispatch = useDispatch();
   const feedbackForm = useContext(FormContext);
+  const allResponses = useSelector(state => state.response.allResponses);
   let [list, setList] = useState(feedbackForm.feedbackData);
+  // let [list, setList] = useState(allResponses);
+
   let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);
   let prevSortRef = usePrevious(feedbackForm.sortingText);
   //let [exitAlert, showExitAlert] = useState(false);
@@ -373,6 +407,7 @@ const RenderFeedbackScene = props => {
   }, [feedbackForm.sortingText]);
 
   const _onPressRow = data => {
+    console.log('ON_PRESS', JSON.stringify());
     props.navigation.navigate(translate('responses.feedback_details'), {
       data: data,
       isFromFeedback: true,
@@ -408,14 +443,16 @@ const RenderFeedbackScene = props => {
     );
   };
 
-  const _renderRow = ({item}) => {
+  const _renderRow = ({item, index}) => {
     // console.log(`Feed back item: ${JSON.stringify(item)}`);
 
     return (
       <FeedbackCell
         item={item}
+        index={index}
         onSelect={() => _onPressRow(item)}
         origin="List"
+        readlist={allResponses}
         ticketStatuses={feedbackForm.ticketStatus}
         {...props}
       />
@@ -432,23 +469,26 @@ const RenderFeedbackScene = props => {
     );
   };
 
-  let getData = () => {
-    if (props.route.params.screenName === 'All') {
-      let data = [...feedbackForm.feedbackData];
-      setList(data);
-    } else {
-      let data = [
-        ...feedbackForm.feedbackData.filter(
-          res => res.sentiment === props.route.params.screenName,
-        ),
-      ];
-      setList(data);
-    }
-  };
+  // let getData = () => {
+  //   if (props.route.params.screenName === 'All') {
+  //     let data = [...feedbackForm.feedbackData];
+  //     setList(data);
+  //   } else {
+  //     let data = [
+  //       ...feedbackForm.feedbackData.filter(
+  //         res => res.sentiment === props.route.params.screenName,
+  //       ),
+  //     ];
+  //     setList(data);
+  //   }
+  // };
 
   let getAllData = () => {
     // let data = [...];
+
     setList(feedbackForm.feedbackData);
+
+    // setList(allResponses);
   };
 
   const onFabHandler = () => {
@@ -456,7 +496,7 @@ const RenderFeedbackScene = props => {
   };
 
   let renderFeedbackList = () => {
-    console.log('RERENDER_RESPONSES!!!');
+    console.log('RERENDER_RESPONSES!!!', JSON.stringify(list));
     return (
       <View style={dashboardStyles.container}>
         <FlatList
