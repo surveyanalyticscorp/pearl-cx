@@ -15,7 +15,7 @@ export const ACTION_EMAIL = 'noreply@InsightsHub.com';
 export const ASYNC_RESPONSES_WITH_CX_MANAGER = 'ASYNC_RESPONSES';
 
 export const TOKEN_VALIDATION_DURATION = 5;
-
+export const RESPONSE_READ_UNREAD_FEATURE_ACTIVATION_DATE = 'Apr 15 2024';
 export const MAX_COMMENT_LENGTH = 240;
 // set true for DEV, false for LIVE
 export const IS_DEV_MODE = false;

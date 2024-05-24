@@ -50,6 +50,9 @@ import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTit
 import ResponsesButton from '../../widgets/dashboardWidget/ResponsesButton';
 import RenderInfoContainer from '../../widgets/dashboardWidget/RenderInfoContainer';
 import LegendScoreView from '../../widgets/dashboardWidget/LegendScoreView';
+import AsyncStorageData, {
+  asyncRemoveResponseReadList,
+} from '../../Utils/AsyncUtil';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -414,16 +417,8 @@ const CxDashboard = props => {
   };
 
   let RenderDashboard = () => {
-    const {removeItem} = useAsyncStorage(ASYNC_RESPONSES_WITH_CX_MANAGER);
-    const asyncSetResponseId = async () => {
-      try {
-        await removeItem();
-      } catch (e) {
-        console.log('ERROR_ASYNC', e);
-      }
-    };
-
-    asyncSetResponseId();
+    // asyncRemoveResponseReadList();
+    // new AsyncStorageData(ASYNC_RESPONSES_WITH_CX_MANAGER).removeData();
     return (
       <View
         forceInset={{bottom: 'never', top: 'never'}}

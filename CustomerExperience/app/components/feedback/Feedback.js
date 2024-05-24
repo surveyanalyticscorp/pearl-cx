@@ -45,6 +45,7 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import {last} from 'lodash';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {ASYNC_RESPONSES_WITH_CX_MANAGER} from '../../api/Constant';
+import AsyncStorageData from '../../Utils/AsyncUtil';
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
 
@@ -79,21 +80,10 @@ function Feedback(props) {
   const sortingBottomSheetSnapPoints = ['45%', '0%'];
 
   const asyncGetResponseIDs = async () => {
-    console.log('asyncGetResponseIDs');
     try {
       let resIds = JSON.parse(await getItem());
-      console.log(
-        ASYNC_RESPONSES_WITH_CX_MANAGER,
-        'RESPONSEIDssss',
-        JSON.stringify(resIds),
-      );
 
       dispatch(setResponseReadList(resIds !== null ? resIds : []));
-      console.log(
-        ASYNC_RESPONSES_WITH_CX_MANAGER,
-        'RESPONSE IDs',
-        resIds !== null ? resIds : [],
-      );
     } catch (e) {
       console.log(ASYNC_RESPONSES_WITH_CX_MANAGER, 'CATCH', e);
     }

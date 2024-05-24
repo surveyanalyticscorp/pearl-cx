@@ -18,8 +18,13 @@ import {HorizontalSpaceBox, VerticalSpaceBox} from '../../widgets/SpaceBox';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
 import {baseTextStyles} from '../../styles/text.styles';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
-import {ASYNC_RESPONSES_WITH_CX_MANAGER} from '../../api/Constant'; // import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {
+  ASYNC_RESPONSES_WITH_CX_MANAGER,
+  RESPONSE_READ_UNREAD_FEATURE_ACTIVATION_DATE,
+} from '../../api/Constant'; // import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
+import moment from 'moment';
+import AsyncStorageData from '../../Utils/AsyncUtil';
 
 const RenderDateDetails = ({date}) => {
   // let date = props.item.surveyTakenDate ?? '';
@@ -205,27 +210,18 @@ const ResponseItemButton = ({
   isDisabled,
   onSelect,
 }) => {
-  const {setItem} = useAsyncStorage(ASYNC_RESPONSES_WITH_CX_MANAGER);
-
   const responseReadList = useSelector(
     state => state.response.responseReadList,
   );
-  const asyncSetResponseId = async () => {
-    try {
-      if (!ArrayUtils.containsElement(responseReadList, responseSetID)) {
-        await setItem(
-          JSON.stringify([...new Set([...responseReadList, responseSetID])]),
-        );
-      }
-    } catch (e) {
-      console.log(
-        'ASYNC SET ITEM',
-        'CATCH',
-        e,
-        `${[...responseReadList, responseSetID]}`,
-      );
+  const asyncSetResponseId = () => {
+    if (!ArrayUtils.containsElement(responseReadList, responseSetID)) {
+      const storage = new AsyncStorageData(ASYNC_RESPONSES_WITH_CX_MANAGER);
+      storage.setDataAsString([
+        ...new Set([...responseReadList, responseSetID]),
+      ]);
     }
   };
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -237,18 +233,20 @@ const ResponseItemButton = ({
     </TouchableWithoutFeedback>
   );
 };
-const RenderIsNewResponse = ({read, disable, responseSetID}) => {
+const RenderIsNewResponse = ({surveyTakenDate, disable, responseSetID}) => {
   let color = Colors.fullTransparent;
   let responseReadList = useSelector(state => state.response.responseReadList);
   console.log(
-    'RenderIsNewResponse read',
-    read,
+    'RenderIsNewResponse',
+
     responseSetID,
     responseReadList,
   );
 
   color =
-    responseReadList && !responseReadList.includes(responseSetID)
+    responseReadList &&
+    !responseReadList.includes(responseSetID) &&
+    isSurveyTakenAfterJuneFirst(surveyTakenDate)
       ? Colors.accentLight
       : Colors.fullTransparent;
 
@@ -259,16 +257,9 @@ const RenderIsNewResponse = ({read, disable, responseSetID}) => {
   );
 };
 export default function FeedbackCell(props) {
-  const {responseSetID} = props.item;
-  const {index} = props;
-  // const responseReadList = useSelector(
-  //   state => state.response.responseReadList,
-  // );
-  // const allResponses = useSelector(state => state.response.allResponses);
-
+  const {responseSetID, surveyTakenDate} = props.item;
   let [feedbackTapped, setTapped] = useState(false);
   let disable = props.origin === 'Detail';
-
   useEffect(() => {
     if (feedbackTapped) {
       setTapped(false);
@@ -286,12 +277,8 @@ export default function FeedbackCell(props) {
       onSelect={props.onSelect}>
       <View style={styles.rowContainer}>
         <RenderIsNewResponse
-          // read={responseReadList ? responseReadList[index] : true}
-          // read={
-          //   disable ? true : allResponses ? allResponses[index]?.read : true
-          // }
-          read={props.item.read}
-          responseSetID={props.item.responseSetID}
+          responseSetID={responseSetID}
+          surveyTakenDate={surveyTakenDate}
           disable={disable}
         />
         <View style={styles.container}>
@@ -302,6 +289,15 @@ export default function FeedbackCell(props) {
   );
 }
 
+function isSurveyTakenAfterJuneFirst(surveyTakenDate) {
+  const specificDate = moment(
+    RESPONSE_READ_UNREAD_FEATURE_ACTIVATION_DATE,
+    'MMM DD YYYY',
+  );
+  const parsedDate = moment(surveyTakenDate, 'MMM DD YYYY');
+  console.log(moment(parsedDate).isAfter(specificDate));
+  return moment(parsedDate).isAfter(specificDate);
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
