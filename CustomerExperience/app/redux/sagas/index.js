@@ -44,6 +44,7 @@ import {
 } from './ClosedLoopSaga';
 import {watchGetNotification} from './notificationSaga';
 import {
+  watchFetchAllResponses,
   watchGetPanelMember,
   watchGetResponseDetailsByResponseId,
   watchGetResponseTickets,
@@ -96,5 +97,6 @@ export function* rootSaga() {
     fork(watchActionDetails),
     fork(watchClfAuth),
     fork(watchUploadFile),
+    fork(watchFetchAllResponses),
   ]);
 }

@@ -2,6 +2,7 @@ import {takeLatest, put} from 'redux-saga/effects';
 import WebServiceHandler from '../../api/WebServiceHandler';
 import {
   CLF_GET_TICKET_LIST_BY_RESPONSEID,
+  CX_GET_ALL_RESPONSE,
   CX_GET_PANEL_MEMBER,
   CX_RESPONSE_DETAILS_BY_RESPONSEID,
   CX_RESPONSE_SURVEY_DETAILS,
@@ -9,6 +10,8 @@ import {
 } from '../../api/Constant';
 import {API_ERROR} from '../actions/index';
 import {
+  FETCH_ALL_RESPONSES,
+  FETCH_ALL_RESPONSES_RECEIVED,
   GET_PANEL_MEMBER,
   GET_RESPONSE_DETAILS_BY_RESPONSEID,
   GET_RESPONSE_TICKETS,
@@ -115,6 +118,32 @@ export function* watchGetResponseDetailsByResponseId() {
     GET_RESPONSE_DETAILS_BY_RESPONSEID,
     fetchResponseByResponseId,
   );
+}
+
+export function* fetchAllResponses(action) {
+  try {
+    const json = yield WebServiceHandler.postNew(
+      CX_GET_ALL_RESPONSE,
+      {'Auth-Token': action.token},
+      action.param,
+    );
+
+    yield put({
+      type: FETCH_ALL_RESPONSES_RECEIVED,
+      allResponses: json.body.allResponses,
+      pageOffset: action.param.pageOffset ? action.param.pageOffset : 0,
+    });
+    action.onSuccess({statusCode: json.statusCode});
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+  } catch (error) {
+    // yield put({type: IS_LOADING, payload: {isLoading: false}});
+    yield put({type: API_ERROR, error: error});
+    action.onError({error: error});
+  }
+}
+
+export function* watchFetchAllResponses() {
+  yield takeLatest(FETCH_ALL_RESPONSES, fetchAllResponses);
 }
 
 // export function* updateFetchFeedback(action) {

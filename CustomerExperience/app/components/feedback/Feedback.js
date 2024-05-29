@@ -36,8 +36,10 @@ import Animated from 'react-native-reanimated';
 import {useIsFocused} from '@react-navigation/native';
 import {
   clearResponseData,
+  fetchAllResponses,
   getSetResponseReadList,
   setAllResponses,
+  setAllResponsesEmpty,
   setResponseReadList,
 } from '../../redux/actions/feedback.actions';
 import SelectSorting from '../closedloop/takeaction/SelectSorting';
@@ -46,6 +48,8 @@ import {last} from 'lodash';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {ASYNC_RESPONSES_WITH_CX_MANAGER} from '../../api/Constant';
 import AsyncStorageData from '../../Utils/AsyncUtil';
+import Responses from './Responses';
+import NoResponsesFound from './NoResponsesFound';
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
 
@@ -82,6 +86,7 @@ function Feedback(props) {
   const asyncGetResponseIDs = async () => {
     try {
       let resIds = JSON.parse(await getItem());
+      console.log(ASYNC_RESPONSES_WITH_CX_MANAGER, 'data', resIds);
 
       dispatch(setResponseReadList(resIds !== null ? resIds : []));
     } catch (e) {
@@ -121,6 +126,16 @@ function Feedback(props) {
     );
   };
 
+  const onSuccess = success => {
+    setShowLoader(false);
+    setPagination(false);
+  };
+  const onError = error => {
+    setShowLoader(false);
+    setPagination(false);
+
+    console.log('FEEDBACK/Responses list data error', JSON.stringify(error));
+  };
   let getFeedbackData = () => {
     /**
      * To avoid multiple API calls for each tab
@@ -140,28 +155,30 @@ function Feedback(props) {
 
         JSON.stringify(data),
       );
-      apiHandler.getFeedbackResponseList(
-        props.authToken,
-        data,
-        response => {
-          let data = pageOffset === 0 ? [] : [...feedbackData];
-          data = [...data, ...response.body.allResponses];
-          data = [...new Set(data)];
 
-          setTicketStatus(response.body.cxTicketStatusValues);
-          ///
-          setFeedbackData(data);
-          // dispatch(setAllResponses(data));
-          // console.log('pageOffset data count ' + data.length);
-          showLoader && setShowLoader(false);
-          pagination && setPagination(false);
-        },
-        error => {
-          setShowLoader(false);
-          props.setError(error);
-          showErrorFlashMessage(error.message);
-        },
-      );
+      dispatch(fetchAllResponses(props.authToken, data, onSuccess, onError));
+      // apiHandler.getFeedbackResponseList(
+      //   props.authToken,
+      //   data,
+      //   response => {
+      //     let data = pageOffset === 0 ? [] : [...feedbackData];
+      //     data = [...data, ...response.body.allResponses];
+      //     data = [...new Set(data)];
+
+      //     setTicketStatus(response.body.cxTicketStatusValues);
+      //     ///
+      //     setFeedbackData(data);
+      //     dispatch(setAllResponses(data));
+      //     // console.log('pageOffset data count ' + data.length);
+      //     showLoader && setShowLoader(false);
+      //     pagination && setPagination(false);
+      //   },
+      //   error => {
+      //     setShowLoader(false);
+      //     props.setError(error);
+      //     showErrorFlashMessage(error.message);
+      //   },
+      // );
     }
   };
 
@@ -171,7 +188,7 @@ function Feedback(props) {
 
   useEffect(() => {
     if (pageOffset === 0) {
-      ArrayUtils.isNotEmpty(feedbackData) && setFeedbackData([]);
+      ArrayUtils.isNotEmpty(allResponses) && dispatch(setAllResponsesEmpty());
     } else {
       getFeedbackData();
     }
@@ -183,13 +200,12 @@ function Feedback(props) {
 
   useEffect(() => {
     console.log('CURRENT_SEGMENT: ', JSON.stringify(currentSegment));
+    setShowLoader(true);
     if (prevRangeRef && prevRangeRef !== props.range) {
       if (pageOffset === 0) {
-        setFeedbackData([]);
-        setShowLoader(true);
+        dispatch(setAllResponsesEmpty());
       } else {
         setPageOffset(0);
-        setShowLoader(true);
       }
     }
   }, [props.range]);
@@ -205,20 +221,22 @@ function Feedback(props) {
   }, [currentSegment]);
 
   useEffect(() => {
-    pagination && setPageOffset(pageOffset + 1);
+    getFeedbackData();
   }, [pagination]);
 
   let onEndReached = () => {
-    !pagination && setPagination(true);
+    setPagination(state => !state);
+    setPageOffset(pageOffset + 1);
+    // !pagination && setPagination(true);
   };
 
   let onRefresh = () => {
+    setShowLoader(true);
     if (pageOffset === 0) {
-      setFeedbackData([]);
-      setShowLoader(true);
+      // setFeedbackData([]);
+      dispatch(setAllResponsesEmpty());
     } else {
       setPageOffset(0);
-      setShowLoader(true);
     }
   };
 
@@ -236,7 +254,8 @@ function Feedback(props) {
 
   const dateRangeHandler = range_ => {
     dispatch(setRangeFilter(range_));
-    setFeedbackData([]);
+    // setFeedbackData([]);
+    dispatch(setAllResponsesEmpty());
     setPageOffset(0);
     setShowLoader(true);
   };
@@ -293,7 +312,7 @@ function Feedback(props) {
           <FormContext.Provider
             value={{
               ticketStatus: ticketStatus,
-              feedbackData: feedbackData,
+              feedbackData: [],
               onFeedbackEndReached: onEndReached,
               onRefresh: onRefresh,
               range: props.range,
@@ -302,7 +321,8 @@ function Feedback(props) {
               setSortingText: setSortText,
             }}>
             {/* <FeedbackTabStack /> */}
-            <RenderFeedbackScene {...props} />
+            {/* <RenderFeedbackScene {...props} /> */}
+            <Responses onRefresh={onRefresh} onEndReached={onEndReached} />
           </FormContext.Provider>
           {showLoader && renderSpinner()}
         </Animated.View>
@@ -496,7 +516,7 @@ const RenderFeedbackScene = props => {
           onEndReachedThreshold={0.25}
           onEndReached={feedbackForm.onFeedbackEndReached}
           refreshing={false}
-          ListEmptyComponent={renderNoDataFound}
+          ListEmptyComponent={<NoResponsesFound />}
           onRefresh={feedbackForm.onRefresh}
           extraData={[list]}
           contentContainerStyle={styles.container}

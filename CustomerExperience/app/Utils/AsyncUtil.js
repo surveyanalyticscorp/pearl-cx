@@ -37,15 +37,6 @@ export default class AsyncStorageData {
       console.log('ERROR_ASYNC_SET_DATA_AS_STRING', e);
     }
   }
-
-  async getDataAsParsed() {
-    try {
-      return await JSON.parse(AsyncStorage.getItem(this.key));
-    } catch (e) {
-      console.log('ERROR_ASYNC_GET_DATA_AS_PARSED', e);
-      return null;
-    }
-  }
 }
 
 // import { useState, useEffect, useCallback } from 'react';

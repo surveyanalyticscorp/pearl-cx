@@ -50,9 +50,7 @@ import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTit
 import ResponsesButton from '../../widgets/dashboardWidget/ResponsesButton';
 import RenderInfoContainer from '../../widgets/dashboardWidget/RenderInfoContainer';
 import LegendScoreView from '../../widgets/dashboardWidget/LegendScoreView';
-import AsyncStorageData, {
-  asyncRemoveResponseReadList,
-} from '../../Utils/AsyncUtil';
+import AsyncStorageData from '../../Utils/AsyncUtil';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -236,9 +234,13 @@ const RenderNoDataFound = () => {
 };
 
 function RenderNPSChart() {
+  const NPSScore = useSelector(
+    state => state.dashboard.currentNPSData?.NPSScore,
+  );
+
   return (
     <View style={dashboardStyles.renderNpsChartContainer}>
-      <NPSView />
+      {NPSScore ? <NPSView /> : <View />}
     </View>
   );
 }
@@ -272,13 +274,18 @@ let RenderDashboardContent = props => {
 };
 
 const RenderCSATChart = () => {
-  return (
+  const NPSScore = useSelector(
+    state => state.dashboard.currentNPSData?.NPSScore,
+  );
+  return NPSScore ? (
     <View style={dashboardStyles.csatContainer}>
       <CsatChart />
       <CsatScoreLabel />
       <CsatToggleButton />
       <ChartLegendView />
     </View>
+  ) : (
+    <View />
   );
 };
 
@@ -417,8 +424,8 @@ const CxDashboard = props => {
   };
 
   let RenderDashboard = () => {
-    // asyncRemoveResponseReadList();
     // new AsyncStorageData(ASYNC_RESPONSES_WITH_CX_MANAGER).removeData();
+
     return (
       <View
         forceInset={{bottom: 'never', top: 'never'}}

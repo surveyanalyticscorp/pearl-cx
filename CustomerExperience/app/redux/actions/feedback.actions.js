@@ -10,9 +10,15 @@ export const RESPONSE_DETAILS_BY_RESPONSEID_RECEIVED =
 export const SET_RESPONSE_READ_LIST = 'SET_RESPONSE_READ_LIST';
 export const ADD_TO_RESPONSE_READ_LIST = 'ADD_TO_RESPONSE_READ_LIST';
 export const SET_ALL_RESPONSES = 'SET_ALL_RESPONSES';
+export const SET_ALL_RESPONSES_EMPTY = 'SET_ALL_RESPONSES_EMPTY';
+
+export const FETCH_ALL_RESPONSES = 'FETCH_ALL_RESPONSES';
+export const FETCH_ALL_RESPONSES_RECEIVED = 'FETCH_ALL_RESPONSES_RECEIVED';
+
 export const CLEAR_ALL_RESPONSE_DATA = 'CLEAR_ALL_RESPONSE_DATA';
 export const GET_RESPONSE_TICKETS = 'GET_RESPONSE_TICKETS';
 export const GET_RESPONSE_TICKETS_RECEIVED = 'GET_RESPONSE_TICKETS_RECEIVED';
+export const IS_RESPONSE_LIST_LOADING = 'IS_RESPONSE_LIST_LOADING';
 
 export const getPanelMemberDetails = (token, param) => ({
   type: GET_PANEL_MEMBER,
@@ -54,9 +60,25 @@ export const addToResponseReadList = responseSetID => ({
   responseSetID: responseSetID,
 });
 
+export const fetchAllResponses = (token, param, onSuccess, onError) => ({
+  type: FETCH_ALL_RESPONSES,
+  token,
+  param,
+  onSuccess,
+  onError,
+});
 export const setAllResponses = responses => ({
   type: SET_ALL_RESPONSES,
   allResponses: responses,
+});
+
+export const setAllResponsesEmpty = () => ({
+  type: SET_ALL_RESPONSES_EMPTY,
+});
+
+export const isResponseLoading = isLoading => ({
+  type: IS_RESPONSE_LIST_LOADING,
+  isLoading: isLoading,
 });
 
 //

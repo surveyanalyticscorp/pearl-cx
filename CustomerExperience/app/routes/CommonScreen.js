@@ -749,7 +749,6 @@ export const HeaderFilter = ({
   endComponent,
   style,
 }) => {
-  console.log('FILTER_STATE_COUNT', JSON.stringify(filterCount));
   return (
     <View style={[styles.filterAndSearchBox, {...style}]}>
       {hasSortIcon && (

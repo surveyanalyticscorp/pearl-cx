@@ -39,11 +39,7 @@ const RenderDateDetails = ({date}) => {
 
 const RenderEmailAddress = ({email}) => {
   return email.length ? (
-    <Pressable
-      onPress={() => {
-        console.log('Email Address');
-      }}
-      style={styles.contactBox}>
+    <Pressable onPress={() => {}} style={styles.contactBox}>
       <IonIcon name="mail" size={14} color={Colors.filterIconColor} />
       <Text style={styles.contactText}>{email}</Text>
     </Pressable>
@@ -114,11 +110,7 @@ let ResponseId = ({responseSetID}) => {
 const RenderPhoneNumber = ({phoneNumber}) => {
   // let phoneNumber = props.item.phone ?? '';
   return phoneNumber.length ? (
-    <Pressable
-      onPress={() => {
-        console.log('Phone Number');
-      }}
-      style={styles.contactBox}>
+    <Pressable onPress={() => {}} style={styles.contactBox}>
       <IonIcon name="call" size={12} color={Colors.filterIconColor} />
       <Text style={styles.contactText}>{phoneNumber}</Text>
     </Pressable>
@@ -209,12 +201,21 @@ const ResponseItemButton = ({
   responseSetID,
   isDisabled,
   onSelect,
+  surveyTakenDate,
 }) => {
   const responseReadList = useSelector(
     state => state.response.responseReadList,
   );
   const asyncSetResponseId = () => {
-    if (!ArrayUtils.containsElement(responseReadList, responseSetID)) {
+    console.log(
+      'WWWWWW',
+      surveyTakenDate,
+      isSurveyTakenAfterJuneFirst(surveyTakenDate),
+    );
+    if (
+      isSurveyTakenAfterJuneFirst(surveyTakenDate) &&
+      !ArrayUtils.containsElement(responseReadList, responseSetID)
+    ) {
       const storage = new AsyncStorageData(ASYNC_RESPONSES_WITH_CX_MANAGER);
       storage.setDataAsString([
         ...new Set([...responseReadList, responseSetID]),
@@ -233,20 +234,16 @@ const ResponseItemButton = ({
     </TouchableWithoutFeedback>
   );
 };
-const RenderIsNewResponse = ({surveyTakenDate, disable, responseSetID}) => {
+const RenderIsNewResponse = ({
+  surveyTakenDate,
+  disable,
+  responseSetID,
+  read,
+}) => {
   let color = Colors.fullTransparent;
-  let responseReadList = useSelector(state => state.response.responseReadList);
-  console.log(
-    'RenderIsNewResponse',
-
-    responseSetID,
-    responseReadList,
-  );
 
   color =
-    responseReadList &&
-    !responseReadList.includes(responseSetID) &&
-    isSurveyTakenAfterJuneFirst(surveyTakenDate)
+    !read && isSurveyTakenAfterJuneFirst(surveyTakenDate)
       ? Colors.accentLight
       : Colors.fullTransparent;
 
@@ -257,7 +254,7 @@ const RenderIsNewResponse = ({surveyTakenDate, disable, responseSetID}) => {
   );
 };
 export default function FeedbackCell(props) {
-  const {responseSetID, surveyTakenDate} = props.item;
+  const {responseSetID, surveyTakenDate, read} = props.item;
   let [feedbackTapped, setTapped] = useState(false);
   let disable = props.origin === 'Detail';
   useEffect(() => {
@@ -273,10 +270,12 @@ export default function FeedbackCell(props) {
   return (
     <ResponseItemButton
       responseSetID={responseSetID}
+      surveyTakenDate={surveyTakenDate}
       isDisabled={disable}
       onSelect={props.onSelect}>
       <View style={styles.rowContainer}>
         <RenderIsNewResponse
+          read={read}
           responseSetID={responseSetID}
           surveyTakenDate={surveyTakenDate}
           disable={disable}
@@ -295,7 +294,6 @@ function isSurveyTakenAfterJuneFirst(surveyTakenDate) {
     'MMM DD YYYY',
   );
   const parsedDate = moment(surveyTakenDate, 'MMM DD YYYY');
-  console.log(moment(parsedDate).isAfter(specificDate));
   return moment(parsedDate).isAfter(specificDate);
 }
 const styles = StyleSheet.create({

@@ -50,9 +50,9 @@ const RenderWebView = props => {
 };
 export const ShowResponseTicketList = props => {
   const [selectedTicketId, setSelectedTicket] = useState(0);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const responseTickets = useSelector(state => state.response.responseTickets);
-  const authToken = useSelector(state => state.global.authToken);
+  // const authToken = useSelector(state => state.global.authToken);
 
   const hasTickets =
     responseTickets && responseTickets.data && responseTickets.data.length > 0;

@@ -20,7 +20,7 @@ const NpsGaugeChart = () => {
   const chartType = 'GaugeChart';
 
   const axisRanges = generatedAxisRanges(
-    totalResponses > 0
+    (totalResponses ?? 0) > 0
       ? [
           {value: detractorPercent, fillColor: Colors.detractor2},
           {value: passivePercent, fillColor: Colors.passive2},

@@ -3,14 +3,14 @@ import {View, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {translate} from '../../Utils/MultilinguaUtils';
 import RenderInfo from './RenderInfo';
-import style from '../qp-calendar/calendar/header/style';
 import {dashboardStyles} from '../../components/dashboard/dashboard.style';
 import StringUtils from '../../Utils/StringUtils';
 
 const RenderInfoContainer = () => {
-  const responses = useSelector(
-    state => state.dashboard.currentNPSData?.NPSScore?.totalResponses,
-  );
+  const responses =
+    useSelector(
+      state => state.dashboard.currentNPSData?.NPSScore?.totalResponses,
+    ) ?? 0;
   const surveyCount = useSelector(
     state => state.dashboard.dashboardData.surveyCount,
   );

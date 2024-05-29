@@ -1,4 +1,5 @@
 import ArrayUtils from '../../Utils/ArrayUtils';
+import {getUniqueValues} from '../../Utils/TicketUtils';
 import {
   GET_TICKET_STATUS_HISTORY_RECEIVED,
   LATEST_COMMENT_RECEIVED,
@@ -12,6 +13,8 @@ import {
   SET_RESPONSE_READ_LIST,
   SET_ALL_RESPONSES,
   ADD_TO_RESPONSE_READ_LIST,
+  FETCH_ALL_RESPONSES_RECEIVED,
+  SET_ALL_RESPONSES_EMPTY,
 } from '../actions/feedback.actions';
 
 const initialState = {
@@ -55,6 +58,8 @@ const feedbackReducer = (state = initialState, action) => {
         ticketStatusHistory: {},
         ticketLastComment: {},
         responseDetailsByResponseDetails: {},
+        allResponses: [],
+        responseReadList: [],
       };
     }
     case GET_TICKET_STATUS_HISTORY_RECEIVED: {
@@ -102,6 +107,26 @@ const feedbackReducer = (state = initialState, action) => {
           action.allResponses,
           state.responseReadList,
         ),
+      };
+    }
+    case FETCH_ALL_RESPONSES_RECEIVED: {
+      let allResponses =
+        action.pageOffset === 0
+          ? action.allResponses
+          : getUniqueValues(
+              [...state.allResponses, ...action.allResponses],
+              'responseSetID',
+            );
+      return {
+        ...state,
+        allResponses: getAllResponses(allResponses, state.responseReadList),
+      };
+    }
+
+    case SET_ALL_RESPONSES_EMPTY: {
+      return {
+        ...state,
+        allResponses: [],
       };
     }
     default: {
