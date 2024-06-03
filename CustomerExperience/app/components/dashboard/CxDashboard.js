@@ -424,8 +424,6 @@ const CxDashboard = props => {
   };
 
   let RenderDashboard = () => {
-    // new AsyncStorageData(ASYNC_RESPONSES_WITH_CX_MANAGER).removeData();
-
     return (
       <View
         forceInset={{bottom: 'never', top: 'never'}}

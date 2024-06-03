@@ -365,6 +365,7 @@ export const dashboardStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: PaddingConstants.tab2,
+    paddingVertical: Platform.OS === 'ios' ? PaddingConstants.halfTab : 0,
   },
 
   npsIcon: {justifyContent: 'center', alignItems: 'center'},
