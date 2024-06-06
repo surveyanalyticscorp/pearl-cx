@@ -5,6 +5,7 @@ import {FontWeight} from '../../styles/font.constants';
 import {baseTextStyles} from '../../styles/text.styles';
 import StringUtils from '../../Utils/StringUtils';
 import TextLabel from '../TextLabel/TextLabel';
+import {MarginConstants} from '../../styles/margin.constants';
 
 const LegendContainer = ({justifyContent = 'flex-start', children}) => {
   return (
@@ -35,10 +36,12 @@ const LegendScoreView = ({title, count, percentage, backgroundColor}) => {
           text={count ?? ''}
           baseTextStyle={baseTextStyles.secondaryRegularText}
           fontWeight={FontWeight.bold}
+          style={styles.countText}
         />
         <TextLabel
           text={`(${StringUtils.floatToDecimal(percentage)}%)`}
           baseTextStyle={baseTextStyles.secondaryRegularText}
+          style={styles.parcentageText}
         />
       </LegendContainer>
     </View>
@@ -50,6 +53,14 @@ const styles = StyleSheet.create({
     flex: 2,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  parcentageText: {
+    textAlign: 'right',
+    width: '28%',
+  },
+  countText: {
+    textAlign: 'right',
+    width: 'auto',
   },
 });
 export default LegendScoreView;
