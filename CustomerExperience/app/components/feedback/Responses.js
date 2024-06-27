@@ -9,7 +9,7 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import NoResponsesFound from './NoResponsesFound';
 
-const Responses = ({onRefresh, onEndReached}) => {
+const Responses = ({onRefresh, onEndReached, isLoading}) => {
   const navigation = useNavigation();
   const allResponses = useSelector(state => state.response.allResponses);
   const authToken = useSelector(state => state.global.authToken);
@@ -41,7 +41,11 @@ const Responses = ({onRefresh, onEndReached}) => {
         onEndReachedThreshold={0.25}
         onEndReached={onEndReached}
         refreshing={false}
-        ListEmptyComponent={<NoResponsesFound />}
+        ListEmptyComponent={
+          <NoResponsesFound
+            text={isLoading ? 'Loading responses' : 'No responses found'}
+          />
+        }
         onRefresh={onRefresh}
         extraData={[allResponses]}
         contentContainerStyle={styles.container}

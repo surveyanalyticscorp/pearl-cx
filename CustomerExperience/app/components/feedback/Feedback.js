@@ -148,7 +148,7 @@ function Feedback(props) {
         storeId: currentSegment.currentSegmentID,
         startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
         endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
-        filterText: sortingAttribute[sortingText.index].toLowerCase(),
+        filterText: sortingText.label.toLowerCase(),
       };
       console.log(
         'SEGMENT_ON_RESPONSE:',
@@ -215,10 +215,12 @@ function Feedback(props) {
     //   setFeedbackData([]);
     //   setShowLoader(true);
     // } else {
+    dispatch(setAllResponsesEmpty());
+
     setPageOffset(0);
     setShowLoader(true);
     // }
-  }, [currentSegment]);
+  }, [currentSegment, sortingText.label]);
 
   useEffect(() => {
     getFeedbackData();
@@ -319,10 +321,15 @@ function Feedback(props) {
               token: props.authToken,
               sortingText: sortingText.label,
               setSortingText: setSortText,
+              isLoading: showLoader,
             }}>
             {/* <FeedbackTabStack /> */}
             {/* <RenderFeedbackScene {...props} /> */}
-            <Responses onRefresh={onRefresh} onEndReached={onEndReached} />
+            <Responses
+              onRefresh={onRefresh}
+              isLoading={showLoader}
+              onEndReached={onEndReached}
+            />
           </FormContext.Provider>
           {showLoader && renderSpinner()}
         </Animated.View>

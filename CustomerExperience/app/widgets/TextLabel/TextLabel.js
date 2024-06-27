@@ -11,6 +11,7 @@ const TextLabel = ({
   color,
   baseTextStyle,
   style,
+  children,
 }) => {
   const fontWeight_ =
     fontWeight ?? Platform.OS === 'ios' ? FontWeight._400 : FontWeight._500;
@@ -25,7 +26,7 @@ const TextLabel = ({
         fontWeight: fontWeight_,
         color: color_,
       }}>
-      {text}
+      {text || children}
     </Text>
   );
 };

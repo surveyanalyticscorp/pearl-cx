@@ -2,14 +2,13 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {MarginConstants} from '../../styles/margin.constants';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
 
-const NoResponsesFound = () => {
+const NoResponsesFound = ({text}) => {
   return (
     <View style={styles.emptyView}>
-      <Text style={styles.emptyText}>
-        {/* {translate('responses.no_feedback_received')} */}
-        {'No responses found'}
-      </Text>
+      <TextLabel>{text}</TextLabel>
+      {/* {translate('responses.no_feedback_received')} */}
     </View>
   );
 };
