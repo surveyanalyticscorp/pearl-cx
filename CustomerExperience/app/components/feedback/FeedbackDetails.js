@@ -113,8 +113,8 @@ export default function FeedbackDetails(props) {
   console.log('RESPONSE_DATA', JSON.stringify(props.route.params.data));
   useEffect(() => {
     props.navigation.setOptions({
-      // title: `Response #${data.responseSetID}`,
-      title: 'Response details',
+      title: `Response #${data.responseSetID}`,
+      // title: 'Response details',
     });
   }, [props.navigation, data.responseSetID]);
 
@@ -174,14 +174,14 @@ export default function FeedbackDetails(props) {
   return (
     <View style={styles.container}>
       {/* {isFromFeedback && ( */}
-      <FeedbackCell
+      {/* <FeedbackCell
         item={props.route.params.data}
         origin="Detail"
         hasTicket={responseTickets.data?.length > 0}
         ticketStatuses={props.route.params.ticketStatus}
         parentRoute={props.route.params.parentRoute}
         {...props}
-      />
+      /> */}
       {/* )} */}
       <FeedbackDetailsTabStack isFromFeedback={isFromFeedback} {...props} />
 
