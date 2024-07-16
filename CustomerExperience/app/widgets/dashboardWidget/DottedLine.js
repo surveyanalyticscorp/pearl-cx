@@ -12,10 +12,12 @@ const DottedLine = ({
   return (
     <View
       testID="dotted-line"
-      style={[
-        styles.dottedLine,
-        {borderStyle: borderStyle, width: width, borderColor: color},
-      ]}
+      style={{
+        ...styles.dottedLine,
+        borderStyle: borderStyle,
+        width: width,
+        borderColor: color,
+      }}
     />
   );
 };
