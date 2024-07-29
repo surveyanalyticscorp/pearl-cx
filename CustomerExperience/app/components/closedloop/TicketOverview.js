@@ -14,7 +14,6 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import QPButton from '../../widgets/Button';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
@@ -64,10 +63,7 @@ import {baseTextStyles} from '../../styles/text.styles';
 import StringUtils from '../../Utils/StringUtils';
 import {ChildContainer} from '../../widgets/ParentContainer';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
-
-const ArrowDownIcon = () => (
-  <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.evenDarkerGrey} />
-);
+import ShowTitleAndDropdown from '../closedloop/ui/ShowTitleAndDropdown';
 
 const CopyTicketIdButton = ({ticket}) => {
   const onPress = () => {
@@ -86,10 +82,6 @@ const CopyTicketIdButton = ({ticket}) => {
       </View>
     </Pressable>
   );
-};
-
-const TicketID = ({children}) => {
-  return <Text style={styles.idText}>{`ID ${children}`} </Text>;
 };
 
 const TakeActionButton = ({onTakeActionHandler, hasPanelMember}) => {
@@ -162,37 +154,7 @@ const ShowTitleAndText = ({title, subText, isSubtextHighlighted}) => {
     </View>
   );
 };
-const ShowDescription = ({title, subText, isSubtextHighlighted}) => {
-  return (
-    <View style={styles.descriptionTextContainer}>
-      <Title value={title} />
-      <ShowText text={subText} isHighlighted={isSubtextHighlighted} />
-    </View>
-  );
-};
-const RenderDropDownButton = ({
-  text,
-  frontIcon,
-  handleOnPress,
-  hasArrowDownIcon = false,
-  isDisabled = false,
-}) => {
-  return (
-    <View style={[styles.dropdownContainer, {opacity: isDisabled ? 0.6 : 1}]}>
-      <TouchableWithoutFeedback onPress={handleOnPress}>
-        <View style={styles.dropdownInnerContainer}>
-          {frontIcon}
-          <View style={styles.dropdownInnerContainer}>
-            <Text style={styles.dropdownContainerText}>{text}</Text>
-          </View>
-          {hasArrowDownIcon ? <ArrowDownIcon /> : <View />}
-        </View>
 
-        {/* <IonIcons name="down-arrow" /> */}
-      </TouchableWithoutFeedback>
-    </View>
-  );
-};
 const DescriptionView = ({ticket, showResponseButton}) => {
   const createdDate =
     ticket !== undefined
@@ -387,27 +349,6 @@ function hasPanelMemberObj(obj) {
   return obj !== null && obj !== undefined && !isObjectEmpty(obj);
 }
 
-const ShowTitleAndDropdown = ({
-  title,
-  currentItemName,
-  onPress,
-  hasArrowDownIcon = false,
-  frontIcon,
-  isDisabled = false,
-}) => {
-  return (
-    <View style={styles.titleAndDropdownContainer}>
-      <Title value={title} />
-      <RenderDropDownButton
-        text={currentItemName}
-        handleOnPress={onPress}
-        hasArrowDownIcon={hasArrowDownIcon}
-        frontIcon={frontIcon}
-      />
-    </View>
-  );
-};
-
 export default function TicketOverview(props) {
   const bottomSheetEnum = {
     status: 'status',
@@ -513,7 +454,7 @@ export default function TicketOverview(props) {
   const actionBottomSheet = React.useRef();
   const statusBottomSheet = React.useRef();
   const actionBottomSheetSnapPoints = ['33%', '0%'];
-  const statusBottomSheetSnapPoints = ['45', '0'];
+  const statusBottomSheetSnapPoints = ['50', '0'];
 
   const fall = new Animated.Value(1);
 
@@ -753,43 +694,39 @@ export default function TicketOverview(props) {
 
     return (
       <View style={styles.ticketStatusContainer}>
-        <ChildContainer>
-          <ShowTitleAndDropdown
-            title={translate('close_loop.status')}
-            currentItemName={statusName}
-            onPress={handleStatusSelection}
-            hasArrowDownIcon
-            frontIcon={
-              <RenderStatusIcon
-                style={{margin: MarginConstants.halfTab}}
-                title={statusName}
-              />
-            }
-          />
-        </ChildContainer>
-        <ChildContainer>
-          <ShowTitleAndDropdown
-            title={translate('close_loop.priority')}
-            currentItemName={priorityName}
-            onPress={handlePrioritySelection}
-            hasArrowDownIcon
-            frontIcon={
-              <RenderPriorityIcon
-                style={{margin: MarginConstants.halfTab}}
-                title={priorityName}
-              />
-            }
-          />
-        </ChildContainer>
-        <ChildContainer>
-          <ShowTitleAndDropdown
-            title={translate('ticket_overview.assigned_to')}
-            currentItemName={ownerName}
-            onPress={isEscalated ? () => {} : handleOwnerSelection}
-            hasArrowDownIcon={!isEscalated}
-            isDisabled={isEscalated}
-          />
-        </ChildContainer>
+        <ShowTitleAndDropdown
+          title={translate('close_loop.status')}
+          currentItemName={statusName}
+          onPress={handleStatusSelection}
+          hasArrowDownIcon
+          frontIcon={
+            <RenderStatusIcon
+              style={{margin: MarginConstants.halfTab}}
+              title={statusName}
+            />
+          }
+        />
+
+        <ShowTitleAndDropdown
+          title={translate('close_loop.priority')}
+          currentItemName={priorityName}
+          onPress={handlePrioritySelection}
+          hasArrowDownIcon
+          frontIcon={
+            <RenderPriorityIcon
+              style={{margin: MarginConstants.halfTab}}
+              title={priorityName}
+            />
+          }
+        />
+
+        <ShowTitleAndDropdown
+          title={translate('ticket_overview.assigned_to')}
+          currentItemName={ownerName}
+          onPress={isEscalated ? () => {} : handleOwnerSelection}
+          hasArrowDownIcon={!isEscalated}
+          isDisabled={isEscalated}
+        />
       </View>
     );
   };

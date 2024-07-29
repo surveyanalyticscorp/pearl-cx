@@ -24,11 +24,8 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
-  CloseButton,
   BottomSheetHeader,
   RenderStatusIcon,
-  GestureHandleBar,
-  PageHeaderText,
 } from '../../../routes/CommonScreen';
 import QPSpinner from '../../../widgets/QPSpinner';
 import QPButton from '../../../widgets/Button';
@@ -47,15 +44,12 @@ import {
   createClfTicket,
   getClosedLoopOwnerDetails,
 } from '../../../redux/actions/dashboard.actions';
-// import {showLoading} from '../../../redux/actions';
 import SelectSegment from '../../closedloop/takeaction/SelectSegment';
 import SelectTicketOwner from '../../closedloop/takeaction/SelectTicketOwner';
-// import SelectDate from '../../closedloop/takeaction/SelectDate';
 import moment from 'moment';
 import {
   DMYFORMAT,
   FullMonthDateYearFormat,
-  // HalfMonthDateYearFormat,
   YMDFORMAT,
 } from '../../../Utils/AppConstants';
 import QPCalendar from '../../../widgets/QPCalendar';
@@ -66,11 +60,15 @@ import {
 } from '../../../Utils/Utility';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
-// import StringUtils from '../../../Utils/StringUtils';
-// import {debounce} from '../../../Utils/TimeOutUtil';
 import {buttonStyles} from '../../../styles/button.styles';
-import {backgroundColor} from '../../../widgets/qp-calendar/style';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
+import ShowTitleAndDropdown from '../../closedloop/ui/ShowTitleAndDropdown';
+import DateFilterIcon from '../../../widgets/IconWidget/DateFilterIcon';
+import PersonIcon from '../../../widgets/IconWidget/PersonIcon';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import IconAndTitleText from '../../closedloop/ui/IconAndTitleText';
+import StatusIcon from '../../../widgets/IconWidget/StatusIcon';
+import RenderPhoneInput from '../../closedloop/ui/RenderPhoneInput';
 
 const RenderCreateTicketButton = ({handleCreateTicket}) => {
   return (
@@ -79,7 +77,7 @@ const RenderCreateTicketButton = ({handleCreateTicket}) => {
         flex: 1,
         alignItems: 'stretch',
         justifyContent: 'center',
-        margin: MarginConstants.tab1,
+        marginVertical: MarginConstants.tab1,
       }}>
       <QPButton
         onPress={handleCreateTicket}
@@ -124,11 +122,11 @@ const RenderTextInput = ({
   return (
     <TextInput
       placeholderTextColor={Colors.borderColor}
+      selectionColor={Colors.accentLight}
       multiline={multiline}
       defaultValue={defaultValue ?? ''}
-      placeholder={placeholder}
       keyboardType={keyboardType}
-      style={styles.titleText}
+      style={{...styles.titleText, backgroundColor: Colors.settingsBackground}}
       onEndEditing={value => {
         console.log('TEXT_INPUT', value.nativeEvent.text);
         setValue(value.nativeEvent.text);
@@ -144,8 +142,11 @@ const RenderEmailAddressInput = ({defaultValue, setTicketState}) => {
     }));
   };
   return (
-    <View style={[styles.rowContainer, styles.rowItem]}>
-      <RenderIonIcon iconName={'mail'} />
+    <View>
+      <IconAndTitleText
+        icon={<RenderIonIcon iconName={'mail'} />}
+        title={'Email'}
+      />
       <RenderTextInput
         defaultValue={defaultValue}
         placeholder={'Email'}
@@ -163,63 +164,20 @@ const RenderDescriptionInput = ({defaultValue, setTicketState}) => {
     }));
   };
   return (
-    <View style={[styles.rowContainer, styles.rowItem]}>
-      <RenderMaterialIcon iconName={'chat-bubble'} />
+    <View>
+      <IconAndTitleText
+        icon={<RenderMaterialIcon iconName={'chat-bubble'} />}
+        title={translate('ticket_overview.description')}
+      />
       <RenderTextInput
         defaultValue={defaultValue}
         multiline={true}
-        placeholder={translate('ticket_overview.description')}
         setValue={setDescription}
       />
     </View>
   );
 };
-const RenderPhoneInput = ({defaultValue, setTicketState}) => {
-  const [text, setText] = useState('');
-  const phoneInput = React.useRef();
-  const setPhoneNumber = () => {
-    console.log('TEXT_INPUT', text);
-    setTicketState(state => ({
-      ...state,
-      mobileNumber: text,
-    }));
-  };
-  return (
-    <View style={[styles.rowContainer, styles.rowItem]}>
-      <RenderIonIcon iconName={'call'} />
-      <PhoneInput
-        placeholder={translate('create_new_ticket.phone_number')}
-        containerStyle={styles.phoneInputContainer}
-        codeTextStyle={styles.phoneInputCodeText}
-        textContainerStyle={styles.phoneInputTextContainer}
-        textInputStyle={styles.phoneInputTextInputStyle}
-        // flagButtonStyle={{borderColor: Colors.accent, borderWidth: 1}}
-        countryPickerButtonStyle={styles.phoneInputCountryPickerButtonStyle}
-        textInputProps={{
-          placeholderTextColor: Colors.borderColor,
-          onEndEditing: function (value) {
-            setPhoneNumber();
-          },
-        }}
-        ref={phoneInput}
-        // defaultValue={value}
-        defaultCode="US"
-        layout="second"
-        // onChangeText={text => {
-        // setValue(text);
-        // console.log('PHONE:', text);
-        // }}
-        onChangeFormattedText={text => {
-          // setFormattedValue(text);
-          setText(text);
-          console.log('FORMATTED PHONE:', text);
-          // setTicketState(state => ({...state, mobileNumber: text}));
-          // userInfo.mobileNumber = text;
-        }}
-      />
-    </View>
-  );
-};
+
 const RenderCustomerNameInput = ({defaultValue, setTicketState}) => {
   const setCustomerName = text => {
     setTicketState(state => ({
@@ -228,8 +186,11 @@ const RenderCustomerNameInput = ({defaultValue, setTicketState}) => {
     }));
   };
   return (
-    <View style={[styles.rowContainer, styles.rowItem]}>
-      <RenderIonIcon iconName={'person'} />
+    <View>
+      <IconAndTitleText
+        icon={<PersonIcon size={12} />}
+        title={'Customer name'}
+      />
       <RenderTextInput
         defaultValue={defaultValue}
         multiline={true}
@@ -308,7 +269,7 @@ export default function CreateTicket(props) {
   // const calendarBottomSheet = React.useRef();
 
   const fall = new Animated.Value(1);
-  const priorityBottomSheetSnapPoints = ['45%', '0%'];
+  const priorityBottomSheetSnapPoints = ['50%', '0%'];
   const statusBottomSheetSnapPoints = ['45%', '0%'];
   const segmentBottomSheetSnapPoints = ['45%', '0%'];
   const ownerBottomSheetSnapPoints = ['45%', '0%'];
@@ -831,34 +792,25 @@ export default function CreateTicket(props) {
           },
         ]}>
         <View style={styles.innerContainer}>
-          <Pressable onPress={handleSegmentSelection}>
-            <View style={[styles.rowContainer, styles.rowItem]}>
-              <SegmentIcon />
-
-              <Text
-                style={
-                  segment === translate('select_segment.select_segment')
-                    ? styles.palceholderText
-                    : styles.titleText
-                }>
-                {segment}
-              </Text>
-            </View>
-          </Pressable>
+          <VerticalSpace />
+          <ShowTitleAndDropdown
+            titleIcon={<SegmentIcon />}
+            title={'Select Segment'}
+            currentItemName={segment}
+            onPress={handleSegmentSelection}
+            hasArrowDownIcon
+          />
           <VerticalSpace />
 
-          <Pressable onPress={handleDateSelection}>
-            <View style={[styles.rowContainer, styles.rowItem]}>
-              <RenderMaterialIcon iconName={'date-range'} />
-              {/* <TextInput placeholder="Date" style={styles.titleText} /> */}
-              <Text style={styles.titleText}>
-                {console.log('SELECTED_DATE', selectedDate)}
-                {moment(selectedDate, DMYFORMAT).format(
-                  FullMonthDateYearFormat,
-                )}
-              </Text>
-            </View>
-          </Pressable>
+          <ShowTitleAndDropdown
+            titleIcon={<DateFilterIcon size={12} />}
+            title={'Select date'}
+            currentItemName={moment(selectedDate, DMYFORMAT).format(
+              FullMonthDateYearFormat,
+            )}
+            onPress={handleDateSelection}
+            hasArrowDownIcon={false}
+          />
           <VerticalSpace />
 
           <RenderCustomerNameInput
@@ -866,59 +818,65 @@ export default function CreateTicket(props) {
             setTicketState={setTicketState}
           />
           <VerticalSpace />
-
+          <VerticalSpace />
           <RenderPhoneInput setTicketState={setTicketState} />
           <VerticalSpace />
-
+          <VerticalSpace />
           <RenderEmailAddressInput
             defaultValue={customerEmail}
             setTicketState={setTicketState}
           />
           <VerticalSpace />
+          <VerticalSpace />
 
-          <Pressable onPress={handlePrioritySelection}>
-            <View style={[styles.rowContainer, styles.rowItem]}>
+          <ShowTitleAndDropdown
+            titleIcon={
+              <RenderIonIcon
+                iconName={'flag'}
+                iconColor={Colors.filterIconColor}
+              />
+            }
+            title={'Select Priority'}
+            currentItemName={`${
+              getPriorityById(ticketState.priority) ?? 'Unassigned'
+            }`}
+            onPress={handlePrioritySelection}
+            frontIcon={
               <RenderIonIcon
                 iconName={'flag'}
                 iconColor={getPriorityBorderColorbyId(ticketState.priority)}
               />
-
-              <Text style={styles.titleText}>{`${
-                getPriorityById(ticketState.priority) ?? 'Unassigned'
-              } Priority`}</Text>
-              {/* <TextInput placeholder="Priority" style={styles.titleText} /> */}
-            </View>
-          </Pressable>
+            }
+            hasArrowDownIcon
+          />
           <VerticalSpace />
 
-          <Pressable onPress={handleStatusSelection}>
-            <View style={[styles.rowContainer, styles.rowItem]}>
-              {/* {getIonIcon('search')} */}
-              {/* <TextInput placeholder="Status" style={styles.titleText} /> */}
+          <ShowTitleAndDropdown
+            titleIcon={<StatusIcon size={12} />}
+            title={'Select status'}
+            currentItemName={`${
+              getStatusById(ticketState.status) ?? 'New'
+            } Status`}
+            onPress={handleStatusSelection}
+            frontIcon={
               <RenderStatusIcon
                 title={getStatusById(ticketState.status) ?? 'New'}
                 size={14}
               />
-              <Text style={styles.titleText}>{`${
-                getStatusById(ticketState.status) ?? 'New'
-              } Status`}</Text>
-            </View>
-          </Pressable>
+            }
+            hasArrowDownIcon
+          />
           <VerticalSpace />
 
-          <Pressable onPress={handleOwnerSelection}>
-            <View style={[styles.rowContainer, styles.rowItem]}>
+          <ShowTitleAndDropdown
+            titleIcon={
               <RenderMateriaCommunityIcon iconName={'shield-account'} />
-              {/* <TextInput placeholder="Ticket Owner" style={styles.titleText} /> */}
-              <Text
-                style={
-                  ticketOwner ===
-                  translate('ticket_overview.select_ticket_owner')
-                    ? styles.palceholderText
-                    : styles.titleText
-                }>{`${ticketOwner ?? ''}`}</Text>
-            </View>
-          </Pressable>
+            }
+            title={translate('ticket_overview.select_ticket_owner')}
+            currentItemName={`${ticketOwner ?? ''}`}
+            onPress={handleOwnerSelection}
+            hasArrowDownIcon
+          />
           <VerticalSpace />
           <RenderDescriptionInput setTicketState={setTicketState} />
           {/* <View style={{marginVertical: MarginConstants.tab1_2x}} /> */}
@@ -959,7 +917,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 8,
     backgroundColor: Colors.white,
-    padding: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab1_2x,
+    paddingVertical: PaddingConstants.tab1,
     marginVertical: MarginConstants.tab1_2x,
   },
 
@@ -967,6 +926,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
+
   headerText: {
     fontFamily: FontFamily.medium,
     fontSize: TextSizes.largeText,
@@ -1002,8 +962,8 @@ const styles = StyleSheet.create({
   buttonStyle: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: MarginConstants.tab2,
-    padding: MarginConstants.tab1,
+    marginVertical: MarginConstants.tab1,
+    paddingVertical: MarginConstants.tab1,
     flex: 1,
     borderRadius: 2,
   },
@@ -1011,38 +971,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     height: '100%',
     paddingHorizontal: 24,
-  },
-
-  phoneInputContainer: {height: MarginConstants.tab4},
-  phoneInputCodeText: {
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.secondary,
-    color: Colors.filterIconColor,
-    height: MarginConstants.tab4,
-    padding: PaddingConstants.tab1,
-  },
-  phoneInputTextContainer: {
-    backgroundColor: Colors.white,
-    flex: 1,
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.secondary,
-    color: Colors.filterIconColor,
-  },
-  phoneInputTextInputStyle: {
-    height: MarginConstants.tab4,
-    flex: 1,
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.secondary,
-    paddingVertical: PaddingConstants.tab1,
-    paddingStart: 0,
-    paddingEnd: PaddingConstants.tab1,
-    color: Colors.filterIconColor,
-  },
-  phoneInputCountryPickerButtonStyle: {
-    borderColor: Colors.darkGrey,
-    borderWidth: 1,
-    padding: 0,
-    marginStart: MarginConstants.tab1,
   },
   image: {width: 14, height: 14},
 

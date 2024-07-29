@@ -876,7 +876,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/CustomerExperience/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "CX On The Go";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -921,7 +921,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/CustomerExperience/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "CX On The Go";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
