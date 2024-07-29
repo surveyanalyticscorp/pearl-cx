@@ -11,6 +11,9 @@ import {PaddingConstants} from '../styles/padding.constants';
 import {CommonActions} from '@react-navigation/native';
 import {Colors} from '../styles/color.constants';
 import {View} from 'react-native-animatable';
+import {ASYNC_LOGGED_IN_ALREADY} from '../api/Constant';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useSelector} from 'react-redux';
 
 const RootStack = createStackNavigator();
 
@@ -29,50 +32,59 @@ const stackHeaderProps = (route, navigation) => {
   );
 };
 
-const SignInStack = ({navigation}) => (
-  <RootStack.Navigator>
-    <RootStack.Screen
-      name="MarketingScreen"
-      component={MarketingScreen}
-      options={({route}) => ({
-        headerShown: false,
-      })}
-    />
-    <RootStack.Screen
-      name="Login"
-      component={Login}
-      options={({navigation, route}) => ({
-        headerTransparent: true,
-        title: '',
-        headerLeft: props => {
-          return stackHeaderProps(route, navigation);
-        },
-      })}
-    />
-    <RootStack.Screen
-      name="ForgotPassword"
-      component={ForgotPassword}
-      options={({navigation, route}) => ({
-        headerTransparent: true,
-        title: '',
-        headerLeft: props => {
-          return stackHeaderProps(route, navigation);
-        },
-      })}
-    />
-    <RootStack.Screen
-      name="ResetPassword"
-      component={ResetPassword}
-      options={({navigation, route}) => ({
-        headerTransparent: true,
-        title: '',
-        headerLeft: props => {
-          return stackHeaderProps(route, navigation);
-        },
-      })}
-    />
-  </RootStack.Navigator>
-);
+const SignInStack = ({navigation}) => {
+  const isFirstTime = useSelector(state => state.global.isFirstTime);
+
+  console.log('isFirstTime', isFirstTime);
+  return (
+    <RootStack.Navigator>
+      {isFirstTime && (
+        <RootStack.Screen
+          name="MarketingScreen"
+          component={MarketingScreen}
+          options={({route}) => ({
+            headerShown: false,
+          })}
+        />
+      )}
+      <RootStack.Screen
+        name="Login"
+        component={Login}
+        options={({navigation, route}) => ({
+          headerTransparent: true,
+          title: '',
+          headerLeft: props => {
+            return isFirstTime && stackHeaderProps(route, navigation);
+          },
+          headerShown: isFirstTime,
+        })}
+      />
+
+      <RootStack.Screen
+        name="ForgotPassword"
+        component={ForgotPassword}
+        options={({navigation, route}) => ({
+          headerTransparent: true,
+          title: '',
+          headerLeft: props => {
+            return stackHeaderProps(route, navigation);
+          },
+        })}
+      />
+      <RootStack.Screen
+        name="ResetPassword"
+        component={ResetPassword}
+        options={({navigation, route}) => ({
+          headerTransparent: true,
+          title: '',
+          headerLeft: props => {
+            return stackHeaderProps(route, navigation);
+          },
+        })}
+      />
+    </RootStack.Navigator>
+  );
+};
 
 export default SignInStack;
 

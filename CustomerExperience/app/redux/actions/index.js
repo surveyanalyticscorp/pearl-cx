@@ -17,6 +17,7 @@ export const SET_USER_DETAILS_FOR_RESET_PASSWORD =
 export const SET_DYNAMIC_LINK = 'SET_DYNAMIC_LINK';
 export const WANT_TO_RELOAD_DASHBOARD = 'WANT_TO_RELOAD_DASHBOARD';
 export const SET_LANGUAGE_INFO = 'SET_LANGUAGE_INFO';
+export const SET_IS_FIRST_TIME = 'SET_IS_FIRST_TIME';
 
 export const showLoading = (isLoading = true) => ({
   type: IS_LOADING,
@@ -61,6 +62,11 @@ export const setBearerToken = token => ({
 export const setRangeFilter = range => ({
   type: SET_RANGE_FILTER,
   range,
+});
+
+export const setIsFirstTime = isFirstTime => ({
+  type: SET_IS_FIRST_TIME,
+  isFirstTime,
 });
 
 export const setError = error => ({

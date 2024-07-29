@@ -6,6 +6,7 @@ import {
   ASYNC_AUTH_TOKEN,
   ASYNC_BEARER_TOKEN,
   ASYNC_CLF_BASE_URL,
+  ASYNC_LOGGED_IN_ALREADY,
   ASYNC_LOGIN_EXPIRE_DATE,
   ASYNC_USER_INFO,
   BASE_URL,
@@ -17,6 +18,7 @@ import {
   fillUserInfo,
   setAuthToken,
   setBearerToken,
+  setIsFirstTime,
 } from '../../redux/actions/index';
 import {isStringNullOrEmpty} from '../../Utils/Utility';
 import {
@@ -114,10 +116,12 @@ function SplashScreen(props) {
         ASYNC_AUTH_TOKEN,
         ASYNC_USER_INFO,
         DASHBOARD_RANGE,
+        ASYNC_LOGGED_IN_ALREADY,
       ]).then(response => {
         let token = response[0][1];
         let userInfo = response[1][1];
         let dashboardRange = response[2][1];
+        let loggedInAlready = response[3][1];
         props.setToken(token);
         if (!isStringNullOrEmpty(userInfo)) {
           props.saveUserInfo(JSON.parse(userInfo));
@@ -127,6 +131,12 @@ function SplashScreen(props) {
         if (!isStringNullOrEmpty(dashboardRange)) {
           props.setRange(JSON.parse(dashboardRange));
         }
+        console.log(
+          'loggedInAlready',
+          JSON.stringify(loggedInAlready),
+          loggedInAlready !== 'true',
+        );
+        dispatch(setIsFirstTime(loggedInAlready !== 'true'));
         setMoveNext(true);
       });
     }, 1000);

@@ -23,6 +23,7 @@ import {
   IS_TICKET_LOADING,
   IS_SEGMENT_LOADING,
   SET_BEARER_TOKEN,
+  SET_IS_FIRST_TIME,
 } from '../actions';
 import {SET_TICKET_FILTER_BY_STATUS_ID} from '../actions/closedloop.actions';
 import {
@@ -50,6 +51,7 @@ const initialState = {
   isSegmentLoading: false,
   isPagination: false,
   statusId: '',
+  isFirstTime: true,
   wantToReloadDashboard: true,
   isError: false,
   baseUrl: '',
@@ -110,6 +112,13 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         clfBaseUrl: action.clfBaseUrl,
+      };
+    }
+
+    case SET_IS_FIRST_TIME: {
+      return {
+        ...state,
+        isFirstTime: action.isFirstTime,
       };
     }
     case LOGIN_RESPONSE: {

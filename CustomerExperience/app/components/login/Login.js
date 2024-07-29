@@ -107,7 +107,6 @@ const Login = props => {
       AsyncStorage.setItem(SUBSCRIBER_ID, props.subscriberId).then();
       AsyncStorage.setItem(ACCESS_CODE, props.accessCode).then();
       AsyncStorage.setItem(ASYNC_LOGIN_EXPIRE_DATE, getExpireDate());
-
       global.baseUrl = props.baseUrl;
       global.subscriberId = props.subscriberId;
       console.log('BASEURL', props.baseUrl);

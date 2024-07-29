@@ -15,6 +15,7 @@ import Swiper from 'react-native-swiper';
 import SafeAreaView from 'react-native-safe-area-view';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {FontFamily} from '../../styles/font.constants';
+import {StackActions} from '@react-navigation/native';
 
 const stringConst = require('../../config/translations/en');
 
@@ -31,7 +32,9 @@ const MarketingScreen = props => {
   }
 
   const onPress = () => {
-    props.navigation.navigate('Login');
+    // props.navigation.navigate('Login');
+    const pushAction = StackActions.push('Login');
+    props.navigation.dispatch(pushAction);
   };
 
   return (

@@ -13,6 +13,7 @@ export const ASYNC_LAST_LOGIN = 'lastLogin';
 export const ASYNC_LOGIN_EXPIRE_DATE = 'expiredLoginDate';
 export const ACTION_EMAIL = 'noreply@InsightsHub.com';
 export const ASYNC_RESPONSES_WITH_CX_MANAGER = 'ASYNC_RESPONSES';
+export const ASYNC_LOGGED_IN_ALREADY = 'loogedInAlready';
 
 export const TOKEN_VALIDATION_DURATION = 5;
 export const RESPONSE_READ_UNREAD_FEATURE_ACTIVATION_DATE = 'Jun 1 2024';

@@ -19,6 +19,7 @@ import {RenderSpinner} from '../../routes/CommonScreen';
 import {
   ASYNC_BEARER_TOKEN,
   ASYNC_CLF_BASE_URL,
+  ASYNC_LOGGED_IN_ALREADY,
   BASE_URL,
   SUBSCRIBER_ID,
 } from '../../api/Constant';
@@ -30,6 +31,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {buttonStyles} from '../../styles/button.styles';
 import StringUtils from '../../Utils/StringUtils';
+import {setIsFirstTime} from '../../redux/actions';
 // import CreateTicket from './ticketManagement/CreateTicket';
 
 const RenderCountItem = ({style, title, data}) => {
@@ -159,6 +161,8 @@ export const WelcomeScreen = () => {
   const {baseUrl, authToken, userInfo} = useSelector(state => state.global);
 
   const setGlobalBaseUrl = baseUrl_ => {
+    AsyncStorage.setItem(ASYNC_LOGGED_IN_ALREADY, 'true');
+    dispatch(setIsFirstTime(false));
     AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {
       console.log(
         'Async Storage: saved clf base url from welcome screen',
