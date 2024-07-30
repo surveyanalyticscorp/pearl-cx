@@ -269,8 +269,14 @@ export default function CreateTicket(props) {
   // const calendarBottomSheet = React.useRef();
 
   const fall = new Animated.Value(1);
-  const priorityBottomSheetSnapPoints = ['50%', '0%'];
-  const statusBottomSheetSnapPoints = ['45%', '0%'];
+  const priorityBottomSheetSnapPoints = [
+    Platform.OS === 'ios' ? '45%' : '50%',
+    '0%',
+  ];
+  const statusBottomSheetSnapPoints = [
+    Platform.OS === 'ios' ? '40%' : '45%',
+    '0%',
+  ];
   const segmentBottomSheetSnapPoints = ['45%', '0%'];
   const ownerBottomSheetSnapPoints = ['45%', '0%'];
   // const calenderBottomSheetSnapPoints = ['45%', '0%'];
@@ -908,7 +914,7 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 8,
     borderTopEndRadius: 8,
     paddingHorizontal: 0,
-    paddingTop: Platform.OS === 'ios' ? PaddingConstants.tab4 : 0,
+    paddingTop: Platform.OS === 'ios' ? PaddingConstants.tab1 : 0,
   },
   container: {
     flex: 1,
@@ -939,6 +945,7 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
     padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,
+    height: MarginConstants.tab1_4x,
   },
   palceholderText: {
     flex: 1,

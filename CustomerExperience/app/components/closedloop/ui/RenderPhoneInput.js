@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import PhoneInput from 'react-native-phone-number-input';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Platform} from 'react-native';
 import IconAndTitleText from './IconAndTitleText';
 import {Colors} from '../../../styles/color.constants';
 import {translate} from '../../../Utils/MultilinguaUtils';
@@ -67,14 +67,16 @@ export default RenderPhoneInput;
 
 const styles = StyleSheet.create({
   phoneInputContainer: {
-    height: MarginConstants.tab1_6x,
+    height:
+      Platform.OS === 'ios' ? MarginConstants.tab1_4x : MarginConstants.tab1_6x,
     width: '100%',
   },
   phoneInputCodeText: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
-    height: MarginConstants.tab4,
+    height:
+      Platform.OS === 'ios' ? MarginConstants.tab1_4x : MarginConstants.tab4,
     padding: PaddingConstants.tab1,
   },
   phoneInputTextContainer: {
@@ -86,7 +88,7 @@ const styles = StyleSheet.create({
     marginStart: MarginConstants.tab1,
   },
   phoneInputTextInputStyle: {
-    height: MarginConstants.tab4,
+    height: MarginConstants.tab1_4x,
     flex: 1,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
