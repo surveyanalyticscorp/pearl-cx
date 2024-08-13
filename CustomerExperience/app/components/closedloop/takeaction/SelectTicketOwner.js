@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   takeActionButton: {
     height: MarginConstants.tab4,
-    marginHorizontal: MarginConstants.tab2,
+    marginHorizontal: MarginConstants.halfTab,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.filterIconColor,

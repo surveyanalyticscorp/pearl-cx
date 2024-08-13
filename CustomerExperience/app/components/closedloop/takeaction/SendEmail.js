@@ -547,6 +547,20 @@ export default function SendEmail(props) {
           closeBottomSheet={closeBottomSheet}
           onChangeSubject={onChangeSubject}
         />
+        <RichEditor
+          ref={richText}
+          useContainer
+          disabled={false}
+          initialFocus={false}
+          onChange={onChangeEmailBody}
+          placeholder={translate('action_email.email_body')}
+          placeholderTextColor={Colors.borderColor}
+          androidHardwareAccelerationDisabled={true}
+          initialHeight={300}
+          style={styles.textInput}
+          setContentHTML={body.emailBody}
+          onFocus={closeBottomSheet}
+        />
         <RichToolbar
           ref={richTextToolBar}
           editor={richText}
@@ -566,20 +580,6 @@ export default function SendEmail(props) {
             alignItems: 'flex-start',
             flex: 2,
           }}
-        />
-        <RichEditor
-          ref={richText}
-          useContainer
-          disabled={false}
-          initialFocus={false}
-          onChange={onChangeEmailBody}
-          placeholder={translate('action_email.email_body')}
-          placeholderTextColor={Colors.borderColor}
-          androidHardwareAccelerationDisabled={true}
-          initialHeight={300}
-          style={styles.textInput}
-          setContentHTML={body.emailBody}
-          onFocus={closeBottomSheet}
         />
 
         <AttachmentView />
