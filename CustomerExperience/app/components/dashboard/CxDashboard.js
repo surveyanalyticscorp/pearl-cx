@@ -316,13 +316,21 @@ const CxDashboard = props => {
   const range = props.range;
   const wantToReload = props.wantToReload;
 
-  const onRefresh = useCallback(() => {
-    console.log('CALL DASHBOARD from RELOAD');
-
+  const loadDashboardData = segmentId => {
     getDashboardData();
     if (!segmentId) {
       getSegmentData();
     }
+  };
+
+  useEffect(() => {
+    loadDashboardData(segmentId);
+  }, [segmentId]);
+
+  const onRefresh = useCallback(() => {
+    console.log('CALL DASHBOARD from RELOAD');
+
+    loadDashboardData(segmentId);
     wait(500).then();
   }, [segmentId]);
 

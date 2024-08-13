@@ -305,7 +305,7 @@ const AttachmentView = ({onPressActionHistoryItem}) => {
   );
   return (
     <View style={styles.attachmentContainer}>
-      <Text style={styles.actionHistoryHeader}>Attachements</Text>
+      <Text style={styles.actionHistoryHeader}>Attachments</Text>
       <FlatList
         data={mediaFileList}
         keyExtractor={(item, index) => index.toString()}
@@ -529,98 +529,63 @@ export default function SendEmail(props) {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView>
-        <KeyboardAwareScrollView>
-          {/* <Animated.ScrollView
-        style={[
-          styles.innerContainer,
-          {
-            opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-            color: shadow ? Colors.accent : Colors.borderColor,
-          },
-        ]}> */}
-          {/* <KeyboardAvoidingView
-          style={{flex: 1}}
-          enabled
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={-900}> */}
-          {/* <KeyboardAvoidingView
-          enabled
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 16}> */}
-          <RenderHeader />
-          <RenderTicketId ticketId={ticketId} />
-          <RenderOptionsView
-            onPressTemplate={onPressTemplate}
-            // onPressSend={onPressSend}
-            emailBody={body}
-          />
-          {/* <RenderToTextInput />
-        <RenderFromTextInput /> */}
-          <EmailToFrom
-            title={translate('action_email.to')}
-            value={body.toEmail}
-          />
-          {/* <EmailToFrom title={'From:'} value={body.fromEmail} /> */}
+      <KeyboardAwareScrollView enableOnAndroid={true}>
+        <RenderHeader />
+        <RenderTicketId ticketId={ticketId} />
+        <RenderOptionsView
+          onPressTemplate={onPressTemplate}
+          // onPressSend={onPressSend}
+          emailBody={body}
+        />
 
-          <EmailSubject
-            body={body}
-            closeBottomSheet={closeBottomSheet}
-            onChangeSubject={onChangeSubject}
-          />
-          <RichEditor
-            ref={richText}
-            useContainer
-            disabled={false}
-            initialFocus={false}
-            onChange={onChangeEmailBody}
-            placeholder={translate('action_email.email_body')}
-            placeholderTextColor={Colors.borderColor}
-            androidHardwareAccelerationDisabled={true}
-            initialHeight={300}
-            style={styles.textInput}
-            // initialContentHTML={body.emailBody}
-            setContentHTML={body.emailBody}
-            onFocus={closeBottomSheet}
-          />
-          <RichToolbar
-            ref={richTextToolBar}
-            editor={richText}
-            selectedIconTint={Colors.accentLight}
-            iconTint={Colors.lightBlack}
-            // editorInitializedCallback={() => updateRichText(emailBody)}
-            actions={[
-              actions.setBold,
-              actions.setItalic,
-              actions.setUnderline,
-              actions.insertBulletsList,
-              actions.insertOrderedList,
-
-              // actions.insertLink,
-              actions.setStrikethrough,
-              // actions.insertImage,
-              actions.keyboard,
-            ]}
-            style={{
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              flex: 2,
-            }}
-          />
-          <AttachmentView />
-
-          <ActionHistory onPressActionHistoryItem={onPressActionHistoryItem} />
-          {/* <EmailBody
-          refEditor={richText}
-          refToolbar={richTextToolBar}
+        <EmailToFrom
+          title={translate('action_email.to')}
+          value={body.toEmail}
+        />
+        <EmailSubject
           body={body}
-          onChangeEmailBody={onChangeEmailBody}
           closeBottomSheet={closeBottomSheet}
-        /> */}
-          {/* </KeyboardAvoidingView> */}
-          {/* </Animated.ScrollView> */}
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
+          onChangeSubject={onChangeSubject}
+        />
+        <RichToolbar
+          ref={richTextToolBar}
+          editor={richText}
+          selectedIconTint={Colors.accentLight}
+          iconTint={Colors.lightBlack}
+          actions={[
+            actions.setBold,
+            actions.setItalic,
+            actions.setUnderline,
+            actions.insertBulletsList,
+            actions.insertOrderedList,
+            actions.setStrikethrough,
+            actions.keyboard,
+          ]}
+          style={{
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
+            flex: 2,
+          }}
+        />
+        <RichEditor
+          ref={richText}
+          useContainer
+          disabled={false}
+          initialFocus={false}
+          onChange={onChangeEmailBody}
+          placeholder={translate('action_email.email_body')}
+          placeholderTextColor={Colors.borderColor}
+          androidHardwareAccelerationDisabled={true}
+          initialHeight={300}
+          style={styles.textInput}
+          setContentHTML={body.emailBody}
+          onFocus={closeBottomSheet}
+        />
+
+        <AttachmentView />
+        <ActionHistory onPressActionHistoryItem={onPressActionHistoryItem} />
+      </KeyboardAwareScrollView>
+
       <BottomSheet
         ref={bs}
         snapPoints={bsSnapPoints}
