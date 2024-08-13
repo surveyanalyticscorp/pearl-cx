@@ -26,6 +26,7 @@ import {
   getBearerTokenStatic,
   getClfUrl,
 } from '../../Utils/ApiCallUtils';
+import {showErrorFlashMessage} from '../../Utils/Utility';
 // import {FEEDBACK_RECEIVED, FEEDBACK_UPDATED, GET_FEEDBACK, UPDATE_FEEDBACK} from '../actions/feedback.actions';
 
 export function* fetchPanelMemberData(action) {
@@ -39,6 +40,8 @@ export function* fetchPanelMemberData(action) {
     yield put({type: PANEL_MEMBER_RECEIVED, response: json});
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
+    showErrorFlashMessage(error.errorAlert || 'Error occurred');
+
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({type: API_ERROR, error: error});
   }
@@ -59,6 +62,8 @@ export function* fetchSurveyResponseDetails(action) {
     yield put({type: SURVEY_RESPONSE_DETAILS_RECEIVED, response: json});
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
+    showErrorFlashMessage(error.errorAlert || 'Error occurred');
+
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({type: API_ERROR, error: error});
   }
@@ -85,6 +90,8 @@ export function* fetchResponseTickets(action) {
     yield put({type: GET_RESPONSE_TICKETS_RECEIVED, response: json});
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
+    showErrorFlashMessage(error.errorAlert || 'Error occurred');
+
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({type: API_ERROR, error: error});
   }
@@ -108,6 +115,8 @@ export function* fetchResponseByResponseId(action) {
     });
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
+    showErrorFlashMessage(error.errorAlert || 'Error occurred');
+
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({type: API_ERROR, error: error});
   }
@@ -136,6 +145,8 @@ export function* fetchAllResponses(action) {
     action.onSuccess({statusCode: json.statusCode});
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
   } catch (error) {
+    showErrorFlashMessage(error.errorAlert || 'Error occurred');
+
     // yield put({type: IS_LOADING, payload: {isLoading: false}});
     yield put({type: API_ERROR, error: error});
     action.onError({error: error});

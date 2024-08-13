@@ -1,0 +1,179 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  style={
+    [
+      undefined,
+      {
+        "paddingVertical": 0,
+      },
+    ]
+  }
+>
+  <View
+    onResponderRelease={[Function]}
+    onStartShouldSetResponder={[Function]}
+    pointerEvents="auto"
+  >
+    <View
+      collapsable={false}
+      style={
+        {
+          "alignItems": "flex-end",
+          "flexDirection": "row",
+          "height": 70,
+          "paddingBottom": 8,
+          "paddingLeft": 0,
+          "paddingRight": 0,
+          "paddingTop": 16,
+        }
+      }
+    >
+      <View
+        pointerEvents="none"
+        style={
+          {
+            "bottom": 0,
+            "left": 0,
+            "overflow": "hidden",
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+          }
+        }
+      >
+        <View
+          collapsable={false}
+          style={
+            {
+              "borderColor": "rgba(112, 112, 112, 1)",
+              "borderStyle": "solid",
+              "borderWidth": 0.5,
+              "bottom": 0,
+              "left": -3,
+              "position": "absolute",
+              "right": -3,
+              "top": -3,
+            }
+          }
+        />
+      </View>
+      <View
+        style={
+          {
+            "alignSelf": "stretch",
+            "flex": 1,
+          }
+        }
+      >
+        <View
+          collapsable={false}
+          style={
+            {
+              "left": "-100%",
+              "paddingLeft": "50%",
+              "position": "absolute",
+              "top": 0,
+              "transform": [
+                {
+                  "scale": 1,
+                },
+                {
+                  "translateY": 23.5,
+                },
+                {
+                  "translateX": 0,
+                },
+              ],
+              "width": "200%",
+            }
+          }
+        >
+          <Text
+            collapsable={false}
+            numberOfLines={1}
+            style={
+              {
+                "color": "rgba(112, 112, 112, 1)",
+                "fontSize": 18,
+                "includeFontPadding": false,
+                "lineHeight": 18,
+                "textAlign": "left",
+                "textAlignVertical": "top",
+              }
+            }
+          >
+            
+          </Text>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "flex-end",
+              "flex": 1,
+              "flexDirection": "row",
+            }
+          }
+        >
+          <TextInput
+            autoCapitalize="none"
+            autoCorrect={false}
+            disableFullscreenUI={true}
+            editable={true}
+            keyboardType="default"
+            onBlur={[Function]}
+            onChange={[Function]}
+            onChangeText={[Function]}
+            onContentSizeChange={[Function]}
+            onEndEditing={[Function]}
+            onFocus={[Function]}
+            onSubmitEditing={[Function]}
+            placeholderTextColor="#A2A6A9"
+            returnKeyType="next"
+            selectionColor="#1B3380"
+            style={
+              [
+                {
+                  "flex": 1,
+                  "includeFontPadding": false,
+                  "margin": 0,
+                  "padding": 0,
+                  "paddingTop": 0,
+                  "textAlign": "left",
+                  "textAlignVertical": "top",
+                  "top": 2,
+                },
+                {
+                  "color": "#707070",
+                  "fontSize": 18,
+                  "height": 27,
+                },
+                undefined,
+              ]
+            }
+            underlineColorAndroid="transparent"
+            value=""
+          />
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        [
+          {
+            "alignItems": "flex-start",
+            "flexDirection": "row",
+            "justifyContent": "flex-end",
+          },
+          {
+            "minHeight": 8,
+            "paddingLeft": 0,
+            "paddingRight": 0,
+          },
+        ]
+      }
+    />
+  </View>
+</View>
+`;

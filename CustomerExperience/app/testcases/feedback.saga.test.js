@@ -135,3 +135,283 @@
 //     expect(generator.next().done).toBeTruthy();
 //   });
 // });
+
+import {runSaga} from 'redux-saga';
+import {put, takeLatest} from 'redux-saga/effects';
+
+import {
+  API_ERROR,
+  IS_ERROR,
+  IS_LOADING,
+  SET_LANGUAGE_INFO,
+  WANT_TO_RELOAD_DASHBOARD,
+} from '../redux/actions';
+import {
+  FETCH_ALL_RESPONSES,
+  FETCH_ALL_RESPONSES_RECEIVED,
+  GET_PANEL_MEMBER,
+  GET_RESPONSE_DETAILS_BY_RESPONSEID,
+  GET_RESPONSE_TICKETS,
+  GET_RESPONSE_TICKETS_RECEIVED,
+  GET_SURVEY_RESPONSE_DETAILS,
+  PANEL_MEMBER_RECEIVED,
+  RESPONSE_DETAILS_BY_RESPONSEID_RECEIVED,
+  SURVEY_RESPONSE_DETAILS_RECEIVED,
+} from '../redux/actions/feedback.actions';
+import {
+  fetchPanelMemberData,
+  fetchSurveyResponseDetails,
+  fetchResponseTickets,
+  fetchResponseByResponseId,
+  fetchAllResponses,
+} from '../redux/sagas/feedbackSaga';
+import WebServiceHandler from '../api/WebServiceHandler';
+import {showErrorFlashMessage} from '../Utils/Utility';
+import {getBearerTokenStatic, getClfUrl} from '../Utils/ApiCallUtils';
+
+jest.mock('../api/WebServiceHandler');
+jest.mock('../Utils/Utility', () => ({
+  showErrorFlashMessage: jest.fn(),
+}));
+jest.mock('../Utils/ApiCallUtils', () => ({
+  getBearerTokenStatic: jest.fn(),
+  getClfUrl: jest.fn(url => url),
+}));
+
+describe('Feedback Sagas', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('fetchPanelMemberData saga - success', async () => {
+    const dispatched = [];
+    const mockResponse = {};
+
+    WebServiceHandler.postNew.mockResolvedValue(mockResponse);
+
+    await runSaga(
+      {
+        dispatch: action => dispatched.push(action),
+      },
+      fetchPanelMemberData,
+      {
+        token: 'dummy-token',
+        param: {},
+      },
+    ).toPromise();
+
+    expect(dispatched).toEqual([
+      {type: PANEL_MEMBER_RECEIVED, response: mockResponse},
+    ]);
+  });
+
+  it('fetchPanelMemberData saga - failure', async () => {
+    const dispatched = [];
+    const mockError = {errorAlert: 'Error occurred'};
+
+    WebServiceHandler.postNew.mockRejectedValue(mockError);
+
+    await runSaga(
+      {
+        dispatch: action => dispatched.push(action),
+      },
+      fetchPanelMemberData,
+      {
+        token: 'dummy-token',
+        param: {},
+      },
+    ).toPromise();
+
+    expect(showErrorFlashMessage).toHaveBeenCalledWith(mockError.errorAlert);
+    expect(dispatched).toEqual([{type: API_ERROR, error: mockError}]);
+  });
+
+  it('fetchSurveyResponseDetails saga - success', async () => {
+    const dispatched = [];
+    const mockResponse = {};
+
+    WebServiceHandler.postNew.mockResolvedValue(mockResponse);
+
+    await runSaga(
+      {
+        dispatch: action => dispatched.push(action),
+      },
+      fetchSurveyResponseDetails,
+      {
+        token: 'dummy-token',
+        param: {},
+      },
+    ).toPromise();
+
+    expect(dispatched).toEqual([
+      {type: SURVEY_RESPONSE_DETAILS_RECEIVED, response: mockResponse},
+    ]);
+  });
+
+  it('fetchSurveyResponseDetails saga - failure', async () => {
+    const dispatched = [];
+    const mockError = {errorAlert: 'Error occurred'};
+
+    WebServiceHandler.postNew.mockRejectedValue(mockError);
+
+    await runSaga(
+      {
+        dispatch: action => dispatched.push(action),
+      },
+      fetchSurveyResponseDetails,
+      {
+        token: 'dummy-token',
+        param: {},
+      },
+    ).toPromise();
+
+    expect(showErrorFlashMessage).toHaveBeenCalledWith(mockError.errorAlert);
+    expect(dispatched).toEqual([{type: API_ERROR, error: mockError}]);
+  });
+
+  it('fetchResponseTickets saga - success', async () => {
+    const dispatched = [];
+    const mockResponse = {};
+
+    WebServiceHandler.get.mockResolvedValue(mockResponse);
+
+    await runSaga(
+      {
+        dispatch: action => dispatched.push(action),
+      },
+      fetchResponseTickets,
+      {
+        feedbackId: 'feedback-id',
+        responseId: 'response-id',
+        param: {},
+      },
+    ).toPromise();
+
+    expect(dispatched).toEqual([
+      {type: GET_RESPONSE_TICKETS_RECEIVED, response: mockResponse},
+    ]);
+  });
+
+  it('fetchResponseTickets saga - failure', async () => {
+    const dispatched = [];
+    const mockError = {errorAlert: 'Error occurred'};
+
+    WebServiceHandler.get.mockRejectedValue(mockError);
+
+    await runSaga(
+      {
+        dispatch: action => dispatched.push(action),
+      },
+      fetchResponseTickets,
+      {
+        feedbackId: 'feedback-id',
+        responseId: 'response-id',
+        param: {},
+      },
+    ).toPromise();
+
+    expect(showErrorFlashMessage).toHaveBeenCalledWith(mockError.errorAlert);
+    expect(dispatched).toEqual([{type: API_ERROR, error: mockError}]);
+  });
+
+  it('fetchResponseByResponseId saga - success', async () => {
+    const dispatched = [];
+    const mockResponse = {body: {response: {}}};
+
+    WebServiceHandler.postNew.mockResolvedValue(mockResponse);
+
+    await runSaga(
+      {
+        dispatch: action => dispatched.push(action),
+      },
+      fetchResponseByResponseId,
+      {
+        token: 'dummy-token',
+        param: {},
+      },
+    ).toPromise();
+
+    expect(dispatched).toEqual([
+      {
+        type: RESPONSE_DETAILS_BY_RESPONSEID_RECEIVED,
+        data: mockResponse.body.response,
+      },
+    ]);
+  });
+
+  it('fetchResponseByResponseId saga - failure', async () => {
+    const dispatched = [];
+    const mockError = {errorAlert: 'Error occurred'};
+
+    WebServiceHandler.postNew.mockRejectedValue(mockError);
+
+    await runSaga(
+      {
+        dispatch: action => dispatched.push(action),
+      },
+      fetchResponseByResponseId,
+      {
+        token: 'dummy-token',
+        param: {},
+      },
+    ).toPromise();
+
+    expect(showErrorFlashMessage).toHaveBeenCalledWith(mockError.errorAlert);
+    expect(dispatched).toEqual([{type: API_ERROR, error: mockError}]);
+  });
+
+  it('fetchAllResponses saga - success', async () => {
+    const dispatched = [];
+    const mockResponse = {body: {allResponses: []}, statusCode: 200};
+    const onSuccess = jest.fn();
+    const onError = jest.fn();
+
+    WebServiceHandler.postNew.mockResolvedValue(mockResponse);
+
+    await runSaga(
+      {
+        dispatch: action => dispatched.push(action),
+      },
+      fetchAllResponses,
+      {
+        token: 'dummy-token',
+        param: {},
+        onSuccess,
+        onError,
+      },
+    ).toPromise();
+
+    expect(dispatched).toEqual([
+      {type: FETCH_ALL_RESPONSES_RECEIVED, allResponses: [], pageOffset: 0},
+    ]);
+    expect(onSuccess).toHaveBeenCalledWith({
+      statusCode: mockResponse.statusCode,
+    });
+  });
+
+  it('fetchAllResponses saga - failure', async () => {
+    const dispatched = [];
+    const mockError = {errorAlert: 'Error occurred'};
+    const onSuccess = jest.fn();
+    const onError = jest.fn();
+
+    WebServiceHandler.postNew.mockRejectedValue(mockError);
+
+    await runSaga(
+      {
+        dispatch: action => dispatched.push(action),
+      },
+      fetchAllResponses,
+      {
+        token: 'dummy-token',
+        param: {},
+        onSuccess,
+        onError,
+      },
+    ).toPromise();
+
+    expect(showErrorFlashMessage).toHaveBeenCalledWith(mockError.errorAlert);
+    expect(dispatched).toEqual([{type: API_ERROR, error: mockError}]);
+    expect(onError).toHaveBeenCalledWith({error: mockError});
+  });
+});

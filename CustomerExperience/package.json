@@ -7,9 +7,9 @@
     "clean-android": "cd android && ./gradlew clean && cd ..",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "test": "jest",
+    "test": "jest -u",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage --watchAll",
+    "test:coverage": "jest --coverage",
     "postinstall": "patch-package",
     "check-deps": "rnx-align-deps",
     "fix-deps": "rnx-align-deps --write",
@@ -21,7 +21,8 @@
     "jest:clear": "jest --clearCache",
     "test:unit": "jest --testPathPattern=app/testcases/unit_test",
     "test:widget": "jest --testPathPattern=app/testcases/widget_test",
-    "test:component": "jest --testPathPattern=app/testcases/component_test -u"
+    "test:component": "jest --testPathPattern=app/testcases/component_test -u",
+    "test:singleFile": "jest --testPathPattern=app/redux/actions/feedback.actions.test.js -u"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.3",

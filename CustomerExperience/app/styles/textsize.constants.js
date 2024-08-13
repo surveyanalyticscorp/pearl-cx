@@ -1,6 +1,6 @@
-import DeviceInfo from 'react-native-device-info';
+import {Platform} from 'react-native';
 import {$rem} from './globalStyleVariables';
-const factor = DeviceInfo.isTablet() ? 0.8 : 1;
+const factor = Platform.isPad ? 0.8 : 1;
 export const TextSizes = {
   donutPercentText: 2.2 * $rem * factor,
   extraLargeText: 1.8 * $rem * factor,
