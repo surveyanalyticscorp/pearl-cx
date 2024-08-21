@@ -25,6 +25,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import moment from 'moment';
 import AsyncStorageData from '../../Utils/AsyncUtil';
+import {backgroundColor} from '../../widgets/qp-calendar/style';
 
 const RenderDateDetails = ({date}) => {
   // let date = props.item.surveyTakenDate ?? '';
@@ -149,6 +150,7 @@ let RenderResponseContainer = ({
     sentiment,
     responseSetID,
     surveyID,
+    read,
   } = item;
 
   const navigateToNewTicket = () => {
@@ -186,6 +188,9 @@ let RenderResponseContainer = ({
       <VerticalSpaceBox multiplyBy={2} />
       <View style={styles.responseIdAndTicketRowContainer}>
         <ResponseId responseSetID={responseSetID} />
+        {!read && isSurveyTakenAfterJuneFirst(surveyTakenDate) && (
+          <NewResponse />
+        )}
         {disable && flag && (
           <RenderCreateOrViewTicket
             hasTicket={hasTicket}
@@ -253,6 +258,22 @@ const RenderIsNewResponse = ({
     )
   );
 };
+
+export const NewResponse = () => {
+  return (
+    <TextLabel
+      color={Colors.white}
+      style={{
+        paddingHorizontal: PaddingConstants.tab1,
+        paddingVertical: PaddingConstants.halfTab,
+
+        backgroundColor: Colors.accentLight,
+        borderRadius: MarginConstants.tab1,
+      }}>
+      New
+    </TextLabel>
+  );
+};
 export default function FeedbackCell(props) {
   const {responseSetID, surveyTakenDate, read} = props.item;
   let [feedbackTapped, setTapped] = useState(false);
@@ -274,12 +295,12 @@ export default function FeedbackCell(props) {
       isDisabled={disable}
       onSelect={props.onSelect}>
       <View style={styles.rowContainer}>
-        <RenderIsNewResponse
+        {/* <RenderIsNewResponse
           read={read}
           responseSetID={responseSetID}
           surveyTakenDate={surveyTakenDate}
           disable={disable}
-        />
+        /> */}
         <View style={styles.container}>
           <RenderResponseContainer {...props} />
         </View>
@@ -303,8 +324,8 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.tab1_2x,
     backgroundColor: Colors.white,
     borderWidth: 1,
+    borderColor: Colors.darkGrey,
     borderRadius: 4,
-    borderColor: Colors.evenDarkerGrey,
   },
   upperContainer: {
     flexDirection: 'column',
