@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
     height:
-      Platform.OS === 'ios' ? MarginConstants.tab1_4x : MarginConstants.tab4,
+      Platform.OS === 'ios' ? MarginConstants.tab1_4x : MarginConstants.tab5,
     padding: PaddingConstants.tab1,
   },
   phoneInputTextContainer: {
@@ -88,14 +88,14 @@ const styles = StyleSheet.create({
     marginStart: MarginConstants.tab1,
   },
   phoneInputTextInputStyle: {
-    height: MarginConstants.tab1_4x,
-    flex: 1,
+    height: MarginConstants.tab1_5x,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     paddingVertical: PaddingConstants.tab1,
     paddingStart: 0,
     paddingEnd: PaddingConstants.tab1,
     color: Colors.filterIconColor,
+    selectionColor: Colors.accentLight,
   },
   phoneInputCountryPickerButtonStyle: {
     borderColor: Colors.darkGrey,

@@ -1,6 +1,8 @@
 import React from 'react';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Colors} from '../styles/color.constants';
 
 export const FaIcon = ({name, size, color, style}) => {
@@ -17,6 +19,28 @@ export const FaIcon = ({name, size, color, style}) => {
 export const IonIcon = ({name, size, color, style}) => {
   return (
     <IonIcons
+      name={name}
+      size={size ?? 24}
+      color={color ?? Colors.borderColor}
+      style={style}
+    />
+  );
+};
+
+export const MaterialIcons = ({name, size, color, style}) => {
+  return (
+    <MaterialIcon
+      name={name}
+      size={size ?? 24}
+      color={color ?? Colors.borderColor}
+      style={style}
+    />
+  );
+};
+
+export const MaterialCommunityIcons = ({name, size, color, style}) => {
+  return (
+    <MaterialCommunityIcon
       name={name}
       size={size ?? 24}
       color={color ?? Colors.borderColor}

@@ -28,7 +28,6 @@ import {
   RenderStatusIcon,
 } from '../../../routes/CommonScreen';
 import QPSpinner from '../../../widgets/QPSpinner';
-import QPButton from '../../../widgets/Button';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import SelectPriority from '../../closedloop/takeaction/SelectPriority';
@@ -69,32 +68,11 @@ import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import IconAndTitleText from '../../closedloop/ui/IconAndTitleText';
 import StatusIcon from '../../../widgets/IconWidget/StatusIcon';
 import RenderPhoneInput from '../../closedloop/ui/RenderPhoneInput';
-
-const RenderCreateTicketButton = ({handleCreateTicket}) => {
-  return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'stretch',
-        justifyContent: 'center',
-        marginVertical: MarginConstants.tab1,
-      }}>
-      <QPButton
-        onPress={handleCreateTicket}
-        buttonText={translate('create_new_ticket.create_new_ticket')}
-        textStyle={buttonStyles.primaryButtonText}
-        style={buttonStyles.primaryButton}
-      />
-    </View>
-  );
-};
+import RenderCreateTicketButton from './RenderCreateTicketButton';
+import {IonIcon, MaterialIcons} from '../../../Utils/IconUtils';
 
 const RenderMaterialIcon = ({iconName}) => (
   <MaterialIcon name={iconName} size={14} color={Colors.lightBlack} />
-);
-
-const RenderIonIcon = ({iconName, iconColor}) => (
-  <IonIcons name={iconName} size={14} color={iconColor ?? Colors.lightBlack} />
 );
 
 const SegmentIcon = () => {
@@ -147,7 +125,9 @@ const RenderEmailAddressInput = ({defaultValue, setTicketState}) => {
   return (
     <View>
       <IconAndTitleText
-        icon={<RenderIonIcon iconName={'mail'} />}
+        icon={
+          <IonIcon name={'mail'} size={14} color={Colors.filterIconColor} />
+        }
         title={'Email'}
       />
       <RenderTextInput
@@ -169,7 +149,13 @@ const RenderDescriptionInput = ({defaultValue, setTicketState}) => {
   return (
     <View>
       <IconAndTitleText
-        icon={<RenderMaterialIcon iconName={'chat-bubble'} />}
+        icon={
+          <MaterialIcons
+            name={'chat-bubble'}
+            size={14}
+            color={Colors.filterIconColor}
+          />
+        }
         title={translate('ticket_overview.description')}
       />
       <RenderTextInput
@@ -196,7 +182,6 @@ const RenderCustomerNameInput = ({defaultValue, setTicketState}) => {
       />
       <RenderTextInput
         defaultValue={defaultValue}
-        multiline={true}
         placeholder={translate('create_new_ticket.customer_name')}
         setValue={setCustomerName}
       />
@@ -840,10 +825,7 @@ export default function CreateTicket(props) {
 
           <ShowTitleAndDropdown
             titleIcon={
-              <RenderIonIcon
-                iconName={'flag'}
-                iconColor={Colors.filterIconColor}
-              />
+              <IonIcon name={'flag'} size={14} color={Colors.filterIconColor} />
             }
             title={'Select Priority'}
             currentItemName={`${
@@ -851,9 +833,10 @@ export default function CreateTicket(props) {
             }`}
             onPress={handlePrioritySelection}
             frontIcon={
-              <RenderIonIcon
-                iconName={'flag'}
-                iconColor={getPriorityBorderColorbyId(ticketState.priority)}
+              <IonIcon
+                name={'flag'}
+                size={14}
+                color={getPriorityBorderColorbyId(ticketState.priority)}
               />
             }
             hasArrowDownIcon
