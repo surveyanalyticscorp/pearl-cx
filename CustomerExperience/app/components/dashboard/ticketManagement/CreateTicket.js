@@ -126,7 +126,10 @@ const RenderTextInput = ({
       multiline={multiline}
       defaultValue={defaultValue ?? ''}
       keyboardType={keyboardType}
-      style={{...styles.titleText, backgroundColor: Colors.settingsBackground}}
+      style={{
+        ...styles.descriptionInputText,
+        backgroundColor: Colors.settingsBackground,
+      }}
       onEndEditing={value => {
         console.log('TEXT_INPUT', value.nativeEvent.text);
         setValue(value.nativeEvent.text);
@@ -946,6 +949,14 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,
     height: MarginConstants.tab1_4x,
+  },
+  descriptionInputText: {
+    flex: 1,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    paddingHorizontal: PaddingConstants.tab1,
+
+    color: Colors.filterIconColor,
   },
   palceholderText: {
     flex: 1,

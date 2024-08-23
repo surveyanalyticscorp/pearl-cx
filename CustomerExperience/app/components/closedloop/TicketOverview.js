@@ -1001,7 +1001,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     backgroundColor: Colors.white,
-    paddingHorizontal: 24,
+    paddingHorizontal: PaddingConstants.tab1,
     height: '100%',
   },
   dropdownContainer: {
