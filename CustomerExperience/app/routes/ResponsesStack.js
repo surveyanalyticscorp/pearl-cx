@@ -6,12 +6,9 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Feedback from '../components/feedback/Feedback';
 import SearchFeedback from '../components/feedback/SearchFeedback';
-import CommonScreens, {
-  CloseButton,
-  HeaderBackLeft,
-  MenuIcon,
-  // SearchIcon,
-} from './CommonScreen';
+import CommonScreens from './CommonScreen';
+import HeaderBackLeft from './commonUI/HeaderBackLeft';
+import MenuIcon from './commonUI/MenuIcon';
 import {translate} from '../Utils/MultilinguaUtils';
 import SegmentSelector from '../components/SegmentSelector';
 import TicketDetails from '../components/closedloop/TicketDetails';

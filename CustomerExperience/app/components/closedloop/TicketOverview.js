@@ -18,13 +18,14 @@ import QPButton from '../../widgets/Button';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import TicketTakeAction from './takeaction/TIcketTakeAction';
+
+import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
 import {
-  BottomSheetHeader,
-  CopyIcon,
-  RenderPriorityIcon,
   RenderSpinner,
+  RenderPriorityIcon,
   RenderStatusIcon,
-} from '../../routes/CommonScreen';
+} from '../../routes/commonUI/CommonUI';
+import {CopyIcon} from '../../routes/commonUI/CommonUI';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getOwnerIndex,
@@ -104,6 +105,7 @@ const TakeActionButton = ({onTakeActionHandler, hasPanelMember}) => {
 const DescriptionHeader = ({text}) => {
   return (
     <TextLabel
+      testID="description-header"
       style={{flex: 1}}
       text={text}
       baseTextStyle={baseTextStyles.largeMediumText}
@@ -629,6 +631,7 @@ export default function TicketOverview(props) {
           </View>
           <View style={{marginVertical: MarginConstants.tab2}}>
             <DescriptionHeader
+              testID="DescriptionHeader"
               text={`${translate('close_loop.current_segment')}: ${
                 currentSegment?.name ?? ''
               }`}

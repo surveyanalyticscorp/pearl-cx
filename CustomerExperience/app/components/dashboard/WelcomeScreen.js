@@ -15,7 +15,7 @@ import {
   setMoveNext,
 } from '../../redux/actions/dashboard.actions';
 // import QPSpinner from '../../widgets/QPSpinner';
-import {RenderSpinner} from '../../routes/CommonScreen';
+import {RenderSpinner} from '../../routes/commonUI/CommonUI';
 import {
   ASYNC_BEARER_TOKEN,
   ASYNC_CLF_BASE_URL,

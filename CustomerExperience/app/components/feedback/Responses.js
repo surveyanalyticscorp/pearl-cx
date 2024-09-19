@@ -2,7 +2,7 @@ import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {dashboardStyles} from '../dashboard/dashboard.style';
-import FeedbackCell from './FeedbackCells';
+import FeedbackCell from './feedbackCell/FeedbackCells';
 import {useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {PaddingConstants} from '../../styles/padding.constants';

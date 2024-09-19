@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import FeedbackCell from './FeedbackCells';
+
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
 import {clearError, setError, setRangeFilter} from '../../redux/actions';
@@ -27,11 +27,9 @@ import {Sizes} from '../../styles/Size.constant';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {dashboardStyles} from '../dashboard/dashboard.style';
 import {translate} from '../../Utils/MultilinguaUtils';
-import {
-  BottomSheetHeader,
-  FabAddButton,
-  HeaderFilter,
-} from '../../routes/CommonScreen';
+import {HeaderFilter} from '../../routes/commonUI/CommonUI';
+import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
+import FabAddButton from '../../routes/commonUI/FabAddButton';
 import Animated from 'react-native-reanimated';
 import {useIsFocused} from '@react-navigation/native';
 import {
@@ -47,9 +45,9 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import {last} from 'lodash';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {ASYNC_RESPONSES_WITH_CX_MANAGER} from '../../api/Constant';
-import AsyncStorageData from '../../Utils/AsyncUtil';
 import Responses from './Responses';
 import NoResponsesFound from './NoResponsesFound';
+import FeedbackCell from './feedbackCell/FeedbackCells';
 const FeedbackTab = createMaterialTopTabNavigator();
 const FormContext = React.createContext();
 

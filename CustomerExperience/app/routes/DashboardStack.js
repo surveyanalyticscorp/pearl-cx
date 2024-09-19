@@ -21,12 +21,10 @@ import {MarginConstants} from '../styles/margin.constants';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 import {FontFamily} from '../styles/font.constants';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import CommonScreens, {
-  CloseButton,
-  HeaderBackLeft,
-  MenuIcon,
-  SearchIcon,
-} from './CommonScreen';
+import CommonScreens from './CommonScreen';
+import {CloseButton, SearchIcon} from './commonUI/CommonUI';
+import HeaderBackLeft from '@react-navigation/stack';
+import MenuIcon from './commonUI/MenuIcon';
 import {translate} from '../Utils/MultilinguaUtils';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
 import ActionEmailHistory from '../components/closedloop/takeaction/ActionEmailHistory';

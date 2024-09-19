@@ -5,51 +5,55 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Colors} from '../styles/color.constants';
 
-export const FaIcon = ({name, size, color, style}) => {
+export const FaIcon = ({name, size, color, style, testID}) => {
   return (
     <FontAwesomeIcon
       name={name}
       size={size ?? 24}
       color={color ?? Colors.borderColor}
       style={style}
+      testID={testID}
     />
   );
 };
 
-export const IonIcon = ({name, size, color, style}) => {
+export const IonIcon = ({name, size, color, style, testID}) => {
   return (
     <IonIcons
       name={name}
       size={size ?? 24}
       color={color ?? Colors.borderColor}
       style={style}
+      testID={testID}
     />
   );
 };
 
-export const MaterialIcons = ({name, size, color, style}) => {
+export const MaterialIcons = ({name, size, color, style, testID}) => {
   return (
     <MaterialIcon
       name={name}
       size={size ?? 24}
       color={color ?? Colors.borderColor}
       style={style}
+      testID={testID}
     />
   );
 };
 
-export const MaterialCommunityIcons = ({name, size, color, style}) => {
+export const MaterialCommunityIcons = ({name, size, color, style, testID}) => {
   return (
     <MaterialCommunityIcon
       name={name}
       size={size ?? 24}
       color={color ?? Colors.borderColor}
       style={style}
+      testID={testID}
     />
   );
 };
 
-function getMimeIconName(key) {
+export function getMimeIconName(key) {
   const map = new Map();
   // Image types
   map.image = 'file-photo-o';
@@ -132,7 +136,7 @@ function getMimeIconName(key) {
   return map[key] ?? map.file;
 }
 
-export const AttachmentIcon = ({mimeType}) => {
+export const AttachmentIcon = ({mimeType, testID}) => {
   const size = 12;
   const color = Colors.accentLight;
   return (
@@ -140,6 +144,7 @@ export const AttachmentIcon = ({mimeType}) => {
       name={getMimeIconName(mimeType)}
       size={size}
       color={color}
+      testID={testID}
     />
   );
 };

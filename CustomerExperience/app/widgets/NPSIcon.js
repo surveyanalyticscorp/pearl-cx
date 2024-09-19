@@ -14,7 +14,11 @@ const NPSIcon = ({sentiment, size}) => {
   }
 
   return (
-    <Image source={getIcon(sentiment)} style={{width: size_, height: size_}} />
+    <Image
+      testID="nps-icon"
+      source={getIcon(sentiment)}
+      style={{width: size_, height: size_}}
+    />
   );
 };
 

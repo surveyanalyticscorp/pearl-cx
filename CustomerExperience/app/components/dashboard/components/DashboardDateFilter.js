@@ -28,10 +28,8 @@ import QPCalendar from '../../../widgets/QPCalendar';
 import StringUtils from '../../../Utils/StringUtils';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
-import {
-  BottomSheetHeader,
-  SaveDashboardDate,
-} from '../../../routes/CommonScreen';
+import {SaveDashboardDate} from '../../../routes/commonUI/CommonUI';
+import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
 import {useDispatch, useSelector} from 'react-redux';
 import {setRangeFilter} from '../../../redux/actions';
 

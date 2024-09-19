@@ -10,9 +10,7 @@ import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {useSelector} from 'react-redux';
 
 const SelectSegment = props => {
   const [data, setData] = useState(props.data);
@@ -21,6 +19,7 @@ const SelectSegment = props => {
   const renderRow = ({item, index}) => {
     return (
       <TouchableWithoutFeedback
+        testID="select-segment-button"
         onPress={
           () => {
             props.handleOnPress(item, index);
@@ -32,6 +31,7 @@ const SelectSegment = props => {
           <Text style={styles.title}>{item.segmentName}</Text>
           {selectedIndex === index ? (
             <IonIcon
+              testID={`checkmark-icon-${index}`}
               style={{marginHorizontal: MarginConstants.halfTab}}
               name={'checkmark'}
               size={20}

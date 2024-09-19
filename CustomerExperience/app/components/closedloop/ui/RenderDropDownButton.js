@@ -16,7 +16,9 @@ const RenderDropDownButton = ({
 }) => {
   return (
     <View style={[styles.dropdownContainer, {opacity: isDisabled ? 0.6 : 1}]}>
-      <TouchableWithoutFeedback onPress={handleOnPress}>
+      <TouchableWithoutFeedback
+        testID={`${text}-dropdown`}
+        onPress={handleOnPress}>
         <View style={styles.dropdownInnerContainer}>
           {frontIcon}
           <View style={styles.dropdownInnerContainer}>

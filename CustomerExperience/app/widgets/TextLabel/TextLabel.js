@@ -12,6 +12,7 @@ const TextLabel = ({
   baseTextStyle,
   style,
   children,
+  testID = 'text-label',
 }) => {
   const fontWeight_ =
     fontWeight ?? Platform.OS === 'ios' ? FontWeight._400 : FontWeight._500;
@@ -20,6 +21,7 @@ const TextLabel = ({
   return (
     <Text
       numberOfLines={numberOfLines}
+      testID={testID}
       style={{
         ...style,
         ...baseTextStyle_,

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {Colors} from '../../styles/color.constants';
-import {IndicatorIcon} from '../../routes/CommonScreen';
+import IndicatorIcon from '../../routes/commonUI/IndicatorIcon';
 const ScoreIndicatorIcon = ({diff}) => {
   return diff === 0 ? (
     <View />

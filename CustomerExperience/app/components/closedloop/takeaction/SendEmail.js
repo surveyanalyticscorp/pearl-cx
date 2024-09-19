@@ -15,7 +15,8 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import IonIcons from 'react-native-vector-icons/Ionicons';
-import {BottomSheetHeader, CloseButton} from '../../../routes/CommonScreen';
+import {CloseButton} from '../../../routes/commonUI/CommonUI';
+import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
 import Animated from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ACTION_EMAIL, ASYNC_USER_CREDENTIALS} from '../../../api/Constant';
@@ -398,7 +399,7 @@ const ActionHistoryItem = ({onItemPress}) => {
   );
 };
 
-export default function SendEmail(props) {
+const SendEmail = props => {
   // const height = useHeaderHeight();
   const defaultEmail = useSelector(
     state => state.dashboard.emailData.defaultTemplate,
@@ -597,7 +598,9 @@ export default function SendEmail(props) {
       />
     </View>
   );
-}
+};
+
+export default SendEmail;
 
 const styles = StyleSheet.create({
   container: {

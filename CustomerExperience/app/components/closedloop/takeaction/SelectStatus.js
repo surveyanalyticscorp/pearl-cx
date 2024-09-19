@@ -1,34 +1,19 @@
 import React, {useState} from 'react';
-import {
-  View,
-  // TouchableWithoutFeedback,
-  // Text,
-  StyleSheet,
-  FlatList,
-} from 'react-native';
-import {ApplyButton, ListItemSeparator} from '../../../routes/CommonScreen';
-import {
-  Colors,
-  // getStatusBorderColor,
-  // getStatusFillerColor,
-} from '../../../styles/color.constants';
+import {View, StyleSheet, FlatList} from 'react-native';
+import {ApplyButton} from '../../../routes/commonUI/CommonUI';
+import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
+import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-// import IonIcon from 'react-native-vector-icons/Ionicons';
 import StatusItem from './StatusItem';
-import QPButton from '../../../widgets/Button';
-import {buttonStyles} from '../../../styles/button.styles';
 const statusListItemSeparator = () => (
   <ListItemSeparator style={{marginHorizontal: MarginConstants.tab1}} />
 );
 
 const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
-  // const [data, setData] = useState(data);
   const [currentIndex, setIndex] = useState(selectedIndex);
   const [currentItem, setItem] = useState(data[selectedIndex]);
-  // const [selectedIndex, setSelectedIndex] = useState();
 
   const onApplyPress = () => {
     handleOnPress(currentItem, currentIndex);

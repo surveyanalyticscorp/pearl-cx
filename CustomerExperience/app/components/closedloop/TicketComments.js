@@ -19,7 +19,7 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {Avatar} from '../../routes/CommonScreen';
+import {Avatar} from '../../routes/commonUI/CommonUI';
 import {
   getClosedLoopTicketItemComments,
   postAddTicketComment,
@@ -32,7 +32,7 @@ import {getDateTimeAgo} from '../../Utils/TimeUtils';
 import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {MAX_COMMENT_LENGTH} from '../../api/Constant';
-import Animated, {event} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import {baseTextStyles} from '../../styles/text.styles';
 import SendButton from '../../widgets/SendButton';
 import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
@@ -45,16 +45,6 @@ function getFoldedText(text) {
   }
   return text;
 }
-
-const MaterialIconView = ({iconName, color, size}) => (
-  <View style={{margin: MarginConstants.halfTab}}>
-    <MaterialIcon
-      name={iconName}
-      size={size ?? 24}
-      color={color ?? Colors.filterIconColor}
-    />
-  </View>
-);
 
 const CommentCancelReplyButton = ({isSelected, toggle}) => {
   return (
@@ -368,7 +358,6 @@ const CommentBox = () => {
       textInputHeight={textInputHeight}
       UIalignItems={UIalignItems}>
       <CommentBoxChildContainer UIalignItems={UIalignItems}>
-        {/* <MaterialIconView iconName="chat-bubble" /> */}
         {console.log('KEYBOARD')}
         <CommentTextInput
           ref={textInputRef}
@@ -432,7 +421,7 @@ export default function TicketComments(props) {
   }, []);
 
   return (
-    <Animated.View style={[styles.container]}>
+    <Animated.View testID={'ticket-comments'} style={[styles.container]}>
       <ShowFlatList onRefresh_={onRefresh} refreshing_={refreshing} />
 
       <KeyboardAvoidingView

@@ -14,8 +14,9 @@ import {
   CheckBox,
   CheckBoxItem,
   RadioButtonCheckbox,
-  RenderStatusIcon,
-} from '../../../routes/CommonScreen';
+} from '../../../routes/commonUI/CommonUI';
+
+import {RenderStatusIcon} from '../../../routes/commonUI/CommonUI';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import {baseTextStyles} from '../../../styles/text.styles';
 
@@ -23,7 +24,10 @@ const StatusItem = ({index, item, selectedIndex, onPressHandler}) => {
   const {title} = item;
 
   return (
-    <TouchableWithoutFeedback onPress={onPressHandler} style={styles.container}>
+    <TouchableWithoutFeedback
+      testID="status-item-button"
+      onPress={onPressHandler}
+      style={styles.container}>
       <View style={styles.container}>
         <RadioButtonCheckbox size={18} isChecked={index === selectedIndex} />
         <TextLabel

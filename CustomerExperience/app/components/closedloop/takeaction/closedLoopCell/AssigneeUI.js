@@ -3,25 +3,20 @@ import {View} from 'react-native';
 import StringUtils from '../../../../Utils/StringUtils';
 import {useSelector} from 'react-redux';
 import {closedLoopStyles} from '../../closeloop.style';
-import {Avatar} from '../../../../routes/CommonScreen';
+import {Avatar} from '../../../../routes/commonUI/CommonUI';
 
 const AssigneeUI = ({assignToId}) => {
   const owners = useSelector(state => state.dashboard.ownerDetails.owners);
 
   // console.log('OWNERS_', JSON.stringify(owners), JSON.stringify(assignToId));
-  function getAssigneeName(assignToId, owners_) {
-    if (StringUtils.isEmptyOrNull(assignToId)) {
-      return assignToId;
-    }
-    const owner = owners_.find(e => e.ownerID === assignToId);
-    return owner['ownerName'] ?? '';
+  function getAssigneeName(assignToId_, owners_) {
+    const owner = owners_.find(({ownerID}) => ownerID === assignToId_);
+    return owner ? owner['ownerName'] : 'Not Available';
   }
-
-  const title = getAssigneeName(assignToId, owners);
 
   return (
     <View style={closedLoopStyles.AssigneeUI}>
-      <Avatar title={title} />
+      <Avatar title={getAssigneeName(assignToId, owners)} />
       {/* <Text style={styles.statusText}>{title}</Text> */}
     </View>
   );

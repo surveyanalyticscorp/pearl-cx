@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, Pressable} from 'react-native';
-import {FilterIcon} from '../../routes/CommonScreen';
+import {FilterIcon} from '../../routes/commonUI/CommonUI';
 import {buttonStyles} from '../../styles/button.styles';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';

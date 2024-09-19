@@ -11,43 +11,35 @@ import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-const TicketTakeAction = props => {
-  const [data, setData] = useState(props.data);
-
-  const renderRow = ({item}) => {
+const TicketTakeAction = ({data, handleOnPress}) => {
+  const renderRow = ({item, index}) => {
     return (
       <TouchableWithoutFeedback
-        onPress={() =>
-          // handleOnPress(item)
-          props.handleOnPress(item)
-        }>
+        testID={`row-touchable-${index}`} // Added testID for TouchableWithoutFeedback
+        onPress={() => handleOnPress(item)}>
         <View style={styles.row}>
           <MaterialIcon
             name={item.icon}
             size={20}
             color={Colors.filterIconColor}
+            testID={`row-icon-${index}`} // Added testID for MaterialIcon
           />
-          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.title} testID={`row-title-${index}`}>
+            {item.title}
+          </Text>
         </View>
       </TouchableWithoutFeedback>
     );
   };
 
-  const handleOnPress = item => {
-    // console.log(item.title);
-  };
-
   return (
-    <View style={styles.container}>
-      {/* <View style={styles.headerRow}>
-        <Text style={styles.header}>Take Action</Text>
-        <CloseButton color={Colors.filterIconColor} />
-      </View> */}
+    <View testID="take-action-container" style={styles.container}>
       <FlatList
         style={styles.flatList}
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
+        testID="take-action-flatlist" // Added testID for FlatList
       />
     </View>
   );

@@ -16,6 +16,7 @@ export default function QPSpinner(props) {
   return (
     <View style={{alignItems: 'center', justifyContent: 'center'}}>
       <Animatable.View
+        testID="QPSpinner"
         useNativeDriver={true}
         animation={animationType || 'fadeIn'}
         style={[styles.defaultSpinnerContainerStyle, customSpinnerStyle]}>

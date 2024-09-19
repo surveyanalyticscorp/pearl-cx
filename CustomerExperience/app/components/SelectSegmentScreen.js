@@ -12,11 +12,8 @@ import {
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getClosedLoopSegmentDetails} from '../redux/actions/dashboard.actions';
-import {
-  CloseButton,
-  ListItemSeparator,
-  NoItemsFound,
-} from '../routes/CommonScreen';
+import {CloseButton, NoItemsFound} from '../routes/commonUI/CommonUI';
+import ListItemSeparator from '../routes/commonUI/ListItemSeparator';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
 import {MarginConstants} from '../styles/margin.constants';

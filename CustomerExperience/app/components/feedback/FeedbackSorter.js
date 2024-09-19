@@ -5,8 +5,8 @@ import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {translate} from '../../Utils/MultilinguaUtils';
-import {GestureHandleBar, PageHeaderText} from '../../routes/CommonScreen';
-
+import GestureHandleBar from '../../routes/commonUI/GestureHandleBar';
+import PageHeaderText from '../../routes/commonUI/PageHeaderText';
 export default function FeedbackSorter(props) {
   let radio_props = [
     {label: translate('responses.date'), value: 0},

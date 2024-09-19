@@ -5,7 +5,7 @@ import {Colors} from '../../styles/color.constants';
 
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import {RenderSpinner} from '../../routes/CommonScreen';
+import {RenderSpinner} from '../../routes/commonUI/CommonUI';
 import {translate} from '../../Utils/MultilinguaUtils';
 import TicketOverview from './TicketOverview';
 import TicketComments from './TicketComments';
@@ -87,6 +87,7 @@ export default function TicketDetails(props) {
       lazy
       keyboardDismissMode={'auto'}>
       <TicketTabs.Screen
+        testID={'ticket-overview'}
         name={translate('close_loop.overview')}
         component={TicketOverview}
         initialParams={{
@@ -96,6 +97,7 @@ export default function TicketDetails(props) {
         op
       />
       <TicketTabs.Screen
+        testID={'ticket-comments'}
         name={translate('close_loop.comments')}
         component={TicketComments}
         initialParams={{
@@ -105,12 +107,14 @@ export default function TicketDetails(props) {
       />
       <TicketTabs.Screen
         // name={translate('responses.activity')}
+        testID={'ticket-activity'}
         name={'Activity log'}
         component={TicketActivity}
         initialParams={{screenName: 'Activity log'}}
       />
 
       <TicketTabs.Screen
+        testID={'ticket-root-cause'}
         name={translate('root_cause.root_cause')}
         component={TicketRootCause}
         initialParams={{screenName: translate('root_cause.root_cause')}}

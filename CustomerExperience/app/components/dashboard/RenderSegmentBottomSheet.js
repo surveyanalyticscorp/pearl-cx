@@ -1,6 +1,6 @@
 import React from 'react';
 import {KeyboardAvoidingView, View} from 'react-native';
-import {BottomSheetHeader} from '../../routes/CommonScreen';
+import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
 import BottomSheet from 'reanimated-bottom-sheet';
 // import Animated from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';

@@ -1,109 +1,22 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-  // FlatList,
-  Pressable,
-  // ScrollView,
-} from 'react-native';
+import {View, StyleSheet, Platform} from 'react-native';
 
-import {FlatList, ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {CheckBoxItem, CheckRadioButtonItem} from '../../routes/CommonScreen';
-import {
-  getActionList,
-  getRootCauseList,
-  updateRootCause,
-} from '../../redux/actions/closedloop.actions';
+
+import {updateRootCause} from '../../redux/actions/closedloop.actions';
 import {translate} from '../../Utils/MultilinguaUtils';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
-import {textStyles} from '../../styles/text.styles';
 import StringUtils from '../../Utils/StringUtils';
-import {useEffect} from 'react';
-
-const NoDataFound = ({dataText}) => {
-  return (
-    <Text style={styles.dateText}>
-      {StringUtils.uppercaseFirstCharRestLowercase(`No ${dataText} found`)}
-    </Text>
-  );
-};
-const RenderRootCauseItem = ({onClickCheckBox, title, data}) => {
-  return (
-    <FlatList
-      ListHeaderComponent={<Text style={styles.titleText}>{title}</Text>}
-      style={{marginVertical: MarginConstants.tab2}}
-      nestedScrollEnabled={true}
-      data={data}
-      keyExtractor={(item, index) => item.id.toString()}
-      numColumns={1}
-      ListEmptyComponent={<NoDataFound dataText={title} />}
-      renderItem={({item, index}) => (
-        <CheckBoxItem
-          textStyle={textStyles.optionText}
-          item={item}
-          index={index}
-          onPress={() => onClickCheckBox(title, item, index)}
-        />
-      )}
-    />
-  );
-};
-
-const RenderSegmentItems = ({
-  onClickRadioButton,
-  title,
-  currentSelected,
-  isCurrentSegment = true,
-}) => {
-  const segments = useSelector(
-    state => state.dashboard.segmentDetails.segments,
-  );
-
-  const segmentList = segments.map(item => ({
-    title: item.segmentName,
-    id: item.segmentID,
-    isChecked: currentSelected === item.segmentID,
-  }));
-
-  console.log('segmentList : ', JSON.stringify(segmentList));
-  // console.log('segments : redux', JSON.stringify(segments));
-
-  return (
-    <FlatList
-      ListHeaderComponent={<Text style={styles.titleText}>{title}</Text>}
-      style={{
-        marginVertical: MarginConstants.tab2,
-        opacity: isCurrentSegment ? 1 : 0.6,
-      }}
-      nestedScrollEnabled={true}
-      data={segmentList}
-      keyExtractor={(item, index) => item.id.toString()}
-      numColumns={1}
-      ListEmptyComponent={<NoDataFound dataText={title} />}
-      renderItem={({item, index}) => (
-        <CheckRadioButtonItem
-          textStyle={textStyles.optionText}
-          item={item}
-          index={index}
-          onPress={() =>
-            isCurrentSegment ? onClickRadioButton(title, item, index) : () => {}
-          }
-        />
-      )}
-    />
-  );
-};
-
-export default function TicketRootCause(props) {
+import RenderRootCauseItem from './RenderRootCauseItem';
+import RenderSegmentItem from './RenderSegmentItem';
+const TicketRootCause = props => {
   const ROOT_CAUSES = translate('root_cause.root_cause');
   const ACTIONS = translate('root_cause.actions');
   const ORIGIN_SEGMENTS = translate('close_loop.origin_segment');
@@ -116,12 +29,9 @@ export default function TicketRootCause(props) {
     state => state.dashboard,
   );
 
-  // useEffect(() => {
-  //   dispatch(getRootCauseList(authToken, global.subscriberId));
-  //   dispatch(getActionList(authToken, global.subscriberId));
-  // }, [authToken]);
-
-  const hasId = (id, arr) => {
+  console.log('ROOT_CAUSES', JSON.stringify(rootCauseList));
+  console.log('ROOT_CAUSES_ACTIONS', JSON.stringify(rootCauseActionList));
+  const hasId = (id, arr = []) => {
     for (let i = 0; i < arr.length; i++) {
       if (id === arr[i].id) {
         return true;
@@ -214,8 +124,6 @@ export default function TicketRootCause(props) {
       }
     }
 
-    // console.log({rootCauses: rootCauseArr, rootCauseActions: rootActionArr});
-
     dispatch(
       updateRootCause(
         authToken,
@@ -231,8 +139,8 @@ export default function TicketRootCause(props) {
     );
   };
 
-  const RenderTicketOverView = () => (
-    <View style={styles.rootContainer}>
+  return (
+    <View testID="root-cause-view" style={styles.rootContainer}>
       <ScrollView style={styles.container}>
         <RenderRootCauseItem
           title={ROOT_CAUSES}
@@ -244,13 +152,13 @@ export default function TicketRootCause(props) {
           data={rootCauseActions}
           onClickCheckBox={onClickCheckBox}
         />
-        <RenderSegmentItems
+        <RenderSegmentItem
           title={ORIGIN_SEGMENTS}
           onClickRadioButton={onClickRadioButton}
           currentSelected={originSegmentId}
           isCurrentSegment={false}
         />
-        <RenderSegmentItems
+        <RenderSegmentItem
           title={CURRENT_SEGMENTS}
           onClickRadioButton={onClickRadioButton}
           currentSelected={currentSegmentId}
@@ -278,22 +186,12 @@ export default function TicketRootCause(props) {
           buttonText={translate('close_loop.update')}
           textStyle={buttonStyles.primaryButtonText}
         />
-
-        {/* <Pressable onPress={resetSelections} style={styles.button}>
-          <Text style={[styles.buttonText, styles.resetButton]}> Reset </Text>
-        </Pressable>
-        <Pressable
-          onPress={updateRootCauseAndAction}
-          style={[styles.button, {backgroundColor: Colors.accentLight}]}>
-          <Text style={[styles.buttonText, styles.updatetButton]}>Update</Text>
-        </Pressable> */}
       </View>
     </View>
   );
+};
 
-  return <RenderTicketOverView />;
-  // return isLoading ? <RenderSpinner /> : <TempUI />;
-}
+export default TicketRootCause;
 
 const styles = StyleSheet.create({
   rootContainer: {

@@ -15,12 +15,13 @@ import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {
-  BottomSheetHeader,
-  FabAddButton,
   HeaderFilter,
   NoItemsFound,
   RenderSpinner,
-} from '../../routes/CommonScreen';
+} from '../../routes/commonUI/CommonUI';
+
+import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
+import FabAddButton from '../../routes/commonUI/FabAddButton';
 import FilterTicket from './takeaction/FilterTickets';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';

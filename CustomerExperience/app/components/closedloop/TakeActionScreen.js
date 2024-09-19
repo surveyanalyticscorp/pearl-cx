@@ -1,38 +1,17 @@
 import React from 'react';
 import {View, Pressable, Text, StyleSheet} from 'react-native';
-// import StringUtils from '../../Utils/StringUtils';
-// import ArrayUtils from '../../Utils/ArrayUtils';
-// import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import {
-  Colors,
-  // statusColors
-} from '../../styles/color.constants';
+import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
-// import {Sizes} from '../../styles/Size.constant';
-// import moment from 'moment';
-// import {translate} from '../../Utils/MultilinguaUtils';
-// import QPButton from '../../widgets/Button';
-// import ModalDropdown from '../../widgets/drop-down/ModalDropdown';
-// import {backgroundColor} from '../../widgets/qp-calendar/style';
-import {CloseButton} from '../../routes/CommonScreen';
-import IonIcons from 'react-native-vector-icons/Ionicons';
+import {CloseButton} from '../../routes/commonUI/CommonUI';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {translate} from '../../Utils/MultilinguaUtils';
-export default function TakeActionScreen(props) {
-  const getIonIcon = iconName => (
-    <IonIcons name={iconName} size={18} color={Colors.lightBlack} />
-  );
-
+export default function TakeActionScreen({onPress}) {
   const getMaterialIcon = iconName => (
-    <MaterialIcon name={iconName} size={18} color={Colors.lightBlack} />
-  );
-
-  const getMateriaCommunityIcon = iconName => (
-    <MaterialCommunityIcon
+    <MaterialIcon
+      testID="MaterialIcon"
       name={iconName}
       size={18}
       color={Colors.lightBlack}
@@ -49,7 +28,8 @@ export default function TakeActionScreen(props) {
       </View>
 
       <Pressable
-        onPress={() => {}}
+        testID="button"
+        onPress={onPress}
         style={[styles.rowContainer, styles.rowItem]}>
         {getMaterialIcon('chat-bubble')}
         <Text style={styles.buttonText}>{'Forward by Email'}</Text>
@@ -67,8 +47,6 @@ const styles = StyleSheet.create({
   rowContainer: {
     flex: 1,
     flexDirection: 'row',
-
-    // backgroundColor: Colors.accentLight,
   },
   headerText: {
     fontFamily: FontFamily.medium,

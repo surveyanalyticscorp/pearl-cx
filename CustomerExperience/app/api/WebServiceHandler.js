@@ -76,7 +76,7 @@ export default class WebServiceHandler {
     console.log(`GET REQUEST Url: ${fullUrl}`);
     console.log(`HeaderParams: ${JSON.stringify(headerParam)}`);
     console.log(`Parameter: ${JSON.stringify(parameter)}`);
-    return this.makeApiCall('GET', fullUrl, headerParam, parameter, '');
+    return this.makeApiCall('GET', fullUrl, headerParam, parameter, null);
     // return new Promise(function (success, failed) {
     //   let URL = fullUrl + WebServiceHandler.parameter(parameter);
     //   fetch(URL, {

@@ -5,18 +5,16 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  TextInput,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {ListItemSeparator, SearchTextInput} from '../../../routes/CommonScreen';
-// import {PaddingConstants} from '../../../styles/padding.constants';
+import {SearchTextInput} from '../../../routes/commonUI/CommonUI';
+import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
 import StringUtils from '../../../Utils/StringUtils';
-import {NoItemsFound} from '../../../routes/CommonScreen';
+import {NoItemsFound} from '../../../routes/commonUI/CommonUI';
 import QPButton from '../../../widgets/Button';
 import {translate} from '../../../Utils/MultilinguaUtils';
 

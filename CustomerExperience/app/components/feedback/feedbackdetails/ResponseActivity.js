@@ -16,7 +16,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 import {FontWeight} from '../../../styles/font.constants';
 import StringUtils from '../../../Utils/StringUtils';
-import {Avatar, StatusIcon} from '../../../routes/CommonScreen';
+import {StatusIcon, Avatar} from '../../../routes/commonUI/CommonUI';
 import moment from 'moment';
 import {DMY_AT_TIME_FORMAT} from '../../../Utils/AppConstants';
 import {translate} from '../../../Utils/MultilinguaUtils';

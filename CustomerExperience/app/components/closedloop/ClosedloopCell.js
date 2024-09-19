@@ -20,10 +20,10 @@ import {
   Avatar,
   CheckBoxItem,
   ExclaimationIcon,
-  ListItemSeparator,
   PriorityUI,
   StatusUI,
-} from '../../routes/CommonScreen';
+} from '../../routes/commonUI/CommonUI';
+import ListItemSeparator from '../../routes/commonUI/ListItemSeparator';
 import StringUtils from '../../Utils/StringUtils';
 import {useSelector} from 'react-redux';
 import {translate} from '../../Utils/MultilinguaUtils';
@@ -31,6 +31,7 @@ import {baseTextStyles} from '../../styles/text.styles';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
 import AssigneeUI from './takeaction/closedLoopCell/AssigneeUI';
 import {VerticalSpaceBox} from '../../widgets/SpaceBox';
+import OverdueBar from './takeaction/closedLoopCell/OverdueBar';
 const OverdueAlert = () => {
   return (
     <ExclaimationIcon
@@ -103,16 +104,6 @@ const NPSIcon = () => {
 const GetNPSScore = ({score}) => {
   let textColor = getNPSColor();
   return (
-    // <Text
-    //   style={[
-    //     styles.npsText,
-    //     {
-    //       color: textColor,
-    //       marginHorizontal: MarginConstants.tab1,
-    //     },
-    //   ]}>
-    //   {score}
-    // </Text>
     <TextLabel
       baseTextStyle={baseTextStyles.primaryRegularText}
       color={textColor}
@@ -176,30 +167,6 @@ const StatusRow = ({data}) => {
   );
 };
 
-const OverdueBar = ({overdueDate}) => {
-  const date = moment(overdueDate).format(DMY_AT_TIME__SHORT_FORMAT);
-  const overDueMessage = `${translate('ticket_list.alert')} ${translate(
-    'ticket_list.overdue',
-  )} ${date}`;
-  return (
-    <View style={styles.overdueContainer}>
-      <ExclaimationIcon
-        size={16}
-        color={Colors.white}
-        style={styles.rowContainer}
-        endComponent={
-          <TextLabel
-            text={`Ticket overdue`}
-            color={Colors.white}
-            style={styles.overdueText}
-          />
-        }
-      />
-      <TextLabel text={date} color={Colors.white} style={styles.overdueText} />
-    </View>
-  );
-};
-
 export default function ClosedLoopCell({
   data,
   index,
@@ -217,6 +184,7 @@ export default function ClosedLoopCell({
 
   return (
     <TouchableWithoutFeedback
+      testID="closedloop-cell"
       onPress={() => {
         onPressHandler(data, index);
       }}
@@ -227,6 +195,7 @@ export default function ClosedLoopCell({
       <View style={styles.container}>
         {showCheckBox && (
           <CheckBoxItem
+            testID="checkbox"
             item={data}
             index={index}
             isChecked={isChecked}
@@ -368,18 +337,5 @@ const styles = StyleSheet.create({
   npsText: {
     ...baseTextStyles.primaryRegularText,
     marginHorizontal: MarginConstants.halfTab,
-  },
-  overdueContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: PaddingConstants.tab1,
-    borderTopStartRadius: 4,
-    borderTopEndRadius: 4,
-    backgroundColor: Colors.overdueAlertColor,
-  },
-  overdueText: {
-    paddingHorizontal: PaddingConstants.halfTab,
   },
 });

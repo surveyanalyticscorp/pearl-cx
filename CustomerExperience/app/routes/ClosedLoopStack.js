@@ -10,15 +10,15 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Feedback from '../components/feedback/Feedback';
 import SearchFeedback from '../components/feedback/SearchFeedback';
 import CommonScreens, {
-  CloseButton,
   DateRangeTabStack,
   // CloseButton,
   // EditTicket,
-  HeaderBackLeft,
-  MenuIcon,
   SaveDashboardDate,
   SearchIcon,
 } from './CommonScreen';
+import {CloseButton} from './commonUI/CommonUI';
+import HeaderBackLeft from './commonUI/HeaderBackLeft';
+import MenuIcon from './commonUI/MenuIcon';
 import {translate} from '../Utils/MultilinguaUtils';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
 import TicketDetails from '../components/closedloop/TicketDetails';

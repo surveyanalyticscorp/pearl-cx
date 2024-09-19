@@ -91,7 +91,7 @@ export function addNotificationListeners() {
   );
 }
 
-function actionOnNotification(ticketId, timeOut) {
+export function actionOnNotification(ticketId, timeOut) {
   setTimeout(() => {
     RootNagation.navigate(translate('close_loop.ticket_details'), {
       ticketID: ticketId,

@@ -13,7 +13,10 @@ import {FontFamily} from '../../../styles/font.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import {CheckBoxItem, CheckRadioButtonItem} from '../../../routes/CommonScreen';
+import {
+  CheckBoxItem,
+  CheckRadioButtonItem,
+} from '../../../routes/commonUI/CommonUI';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
@@ -46,7 +49,7 @@ const FilterTicket = ({data, onPressHandler}) => {
       });
     };
     return (
-      <View style={styles.sectionContainer}>
+      <View testID="render-status" style={styles.sectionContainer}>
         <Text style={styles.titleText}>{translate('close_loop.status')}</Text>
         <FlatList
           style={styles.flatList}
@@ -75,7 +78,7 @@ const FilterTicket = ({data, onPressHandler}) => {
       });
     };
     return (
-      <View style={styles.sectionContainer}>
+      <View testID="render-priority" style={styles.sectionContainer}>
         <Text style={styles.titleText}>{translate('close_loop.priority')}</Text>
         <FlatList
           data={priority}
@@ -104,7 +107,7 @@ const FilterTicket = ({data, onPressHandler}) => {
       );
     };
     return (
-      <View style={styles.sectionContainer}>
+      <View testID="render-ticket-type" style={styles.sectionContainer}>
         <Text style={styles.titleText}>Type</Text>
         <FlatList
           data={typelist}
@@ -127,7 +130,7 @@ const FilterTicket = ({data, onPressHandler}) => {
       setAssignToId(state => (state.length > 0 ? '' : userId));
     };
     return (
-      <View style={styles.sectionContainer}>
+      <View testID="render-show-tickets" style={styles.sectionContainer}>
         <Text style={styles.titleText}>Show tickets</Text>
         <CheckBoxItem
           textStyle={textStyles.optionText}

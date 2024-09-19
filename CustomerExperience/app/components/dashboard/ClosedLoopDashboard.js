@@ -16,11 +16,9 @@ import {buttonStyles} from '../../styles/button.styles';
 import {textStyles} from '../../styles/text.styles';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
-import {
-  BottomSheetHeader,
-  IconButton,
-  RenderStatusIcon,
-} from '../../routes/CommonScreen';
+import {RenderStatusIcon} from '../../routes/commonUI/CommonUI';
+import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
+import IconButton from '../../routes/commonUI/IconButton';
 import BottomSheet from 'reanimated-bottom-sheet';
 import SelectStatus from '../closedloop/takeaction/SelectStatus';
 

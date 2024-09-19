@@ -10,8 +10,9 @@ export default class ArrayUtils {
     return null;
   }
   static isNotEmpty(array) {
-    return array && array.length > 0;
+    return Array.isArray(array) && array.length > 0;
   }
+
   static isEmpty(array) {
     return !this.isNotEmpty(array);
   }
@@ -66,7 +67,7 @@ export default class ArrayUtils {
 
   static mereArraysFromObjectValues(object) {
     let array = [];
-    Object.keys(object).forEach((key) => {
+    Object.keys(object).forEach(key => {
       array = [...array, ...object[key]];
     });
     return array;

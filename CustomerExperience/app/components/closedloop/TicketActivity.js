@@ -1,15 +1,15 @@
 import React, {useState, useCallback} from 'react';
-import {View, Text, StyleSheet, FlatList, RefreshControl} from 'react-native';
+import {View, StyleSheet, FlatList, RefreshControl} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
-import {BottomSheetHeader, NoItemsFound} from '../../routes/CommonScreen';
+import {NoItemsFound} from '../../routes/commonUI/CommonUI';
+import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
 import {convertDateTimeAgo} from '../../Utils/TimeUtils';
 import {getClosedLoopTicketItemActivity} from '../../redux/actions/dashboard.actions';
-import IonIcons from 'react-native-vector-icons/Ionicons';
 import {translate} from '../../Utils/MultilinguaUtils';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -18,18 +18,7 @@ import {baseTextStyles} from '../../styles/text.styles';
 import ActivityText from '../../widgets/closedloopWidget/ActivityText';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
 import SortingToggleButton from '../../widgets/closedloopWidget/SortingToggleButton';
-import {ChildContainer, ParentContainer} from '../../widgets/ParentContainer';
-import {HorizontalSpaceBox, VerticalSpaceBox} from '../../widgets/SpaceBox';
-
-const SortingIcon = ({iconName, size, color}) => {
-  return (
-    <IonIcons
-      name={iconName}
-      size={size ?? 16}
-      color={color ?? Colors.filterIconColor}
-    />
-  );
-};
+import {VerticalSpaceBox} from '../../widgets/SpaceBox';
 
 const RenderItem = ({item}) => {
   const {userName, createdAt, activityText} = item;
@@ -62,7 +51,7 @@ export default function TicketActivity(props) {
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const ticketId = useSelector(state => state.dashboard.ticket.id);
-  const {userID} = useSelector(state => state.global.userInfo);
+  // const {userID} = useSelector(state => state.global.userInfo);
   const ticketActivityList = useSelector(
     state => state.dashboard.ticketActivity,
   );
@@ -165,6 +154,7 @@ export default function TicketActivity(props) {
   return (
     <View style={[styles.container, {margin: MarginConstants.tab1}]}>
       <Animated.View
+        testID="animated-view"
         style={[
           styles.container,
           {
@@ -178,6 +168,7 @@ export default function TicketActivity(props) {
           />
         </View>
         <FlatList
+          testID="flatlist-activity"
           refreshControl={
             <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
           }

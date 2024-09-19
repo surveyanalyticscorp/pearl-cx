@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/129</span>
+                <span class='fraction'>0/133</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/126</span>
+                <span class='fraction'>0/130</span>
             </div>
         
             
@@ -589,7 +589,15 @@
 <a name='L524'></a><a href='#L524'>524</a>
 <a name='L525'></a><a href='#L525'>525</a>
 <a name='L526'></a><a href='#L526'>526</a>
-<a name='L527'></a><a href='#L527'>527</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L527'></a><a href='#L527'>527</a>
+<a name='L528'></a><a href='#L528'>528</a>
+<a name='L529'></a><a href='#L529'>529</a>
+<a name='L530'></a><a href='#L530'>530</a>
+<a name='L531'></a><a href='#L531'>531</a>
+<a name='L532'></a><a href='#L532'>532</a>
+<a name='L533'></a><a href='#L533'>533</a>
+<a name='L534'></a><a href='#L534'>534</a>
+<a name='L535'></a><a href='#L535'>535</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -909,11 +917,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1151,7 +1167,8 @@ import {
   ASYNC_RESPONSES_WITH_CX_MANAGER,
 } from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
-import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
+import {HeaderFilter} from '../../routes/commonUI/CommonUI';
+import FabAddButton from '../../routes/commonUI/FabAddButton';
 import NpsGaugeChart from '../../widgets/dashboardWidget/NpsGaugeChart';
 import {baseTextStyles} from '../../styles/text.styles';
 import {FontWeight} from '../../styles/font.constants';
@@ -1167,7 +1184,6 @@ import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTit
 import ResponsesButton from '../../widgets/dashboardWidget/ResponsesButton';
 import RenderInfoContainer from '../../widgets/dashboardWidget/RenderInfoContainer';
 import LegendScoreView from '../../widgets/dashboardWidget/LegendScoreView';
-import AsyncStorageData from '../../Utils/AsyncUtil';
 &nbsp;
 const wait = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >ti</span>meout =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  return new Promise(<span class="fstat-no" title="function not covered" >re</span>solve =&gt; {</span>
@@ -1433,13 +1449,21 @@ const CxDashboard = <span class="cstat-no" title="statement not covered" ><span 
   const range = <span class="cstat-no" title="statement not covered" >props.range;</span>
   const wantToReload = <span class="cstat-no" title="statement not covered" >props.wantToReload;</span>
 &nbsp;
-  const onRefresh = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    console.log('CALL DASHBOARD from RELOAD');</span>
-&nbsp;
+  const loadDashboardData = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >se</span>gmentId =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    getDashboardData();</span>
 <span class="cstat-no" title="statement not covered" >    if (!segmentId) {</span>
 <span class="cstat-no" title="statement not covered" >      getSegmentData();</span>
     }
+  };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    loadDashboardData(segmentId);</span>
+  }, [segmentId]);
+&nbsp;
+  const onRefresh = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    console.log('CALL DASHBOARD from RELOAD');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    loadDashboardData(segmentId);</span>
 <span class="cstat-no" title="statement not covered" >    wait(500).then();</span>
   }, [segmentId]);
 &nbsp;
@@ -1648,7 +1672,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(CxDashboard);
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-07T10:14:04.650Z
+                at 2024-09-13T12:15:58.901Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

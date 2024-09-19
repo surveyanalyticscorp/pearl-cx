@@ -6,6 +6,7 @@ import {MarginConstants} from '../../styles/margin.constants';
 export default function DeleteTicketModal({showModal, setShowModal, ticketId}) {
   return (
     <Modal
+      testID="Modal"
       animationType={'fade'}
       transparent={true}
       onRequestClose={() => {

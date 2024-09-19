@@ -13,10 +13,9 @@ import {
 } from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
-import {TextSizes} from '../../../styles/textsize.constants';
-// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {ApplyButton, ListItemSeparator} from '../../../routes/CommonScreen';
+import {ApplyButton} from '../../../routes/commonUI/CommonUI';
+import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
 import {baseTextStyles} from '../../../styles/text.styles';
 
 const SelectPriority = ({data, selectedIndex, handleOnPress}) => {
@@ -33,6 +32,7 @@ const SelectPriority = ({data, selectedIndex, handleOnPress}) => {
 
     return (
       <TouchableWithoutFeedback
+        testID="priority-row"
         onPress={
           () => {
             setIndex(index);
@@ -52,6 +52,7 @@ const SelectPriority = ({data, selectedIndex, handleOnPress}) => {
           <Text style={styles.title}>{item.title}</Text>
           {currentIndex === index ? (
             <IonIcon
+              testID={`checkmark-icon-${index}`}
               style={{marginHorizontal: MarginConstants.halfTab}}
               name={'checkmark'}
               size={20}

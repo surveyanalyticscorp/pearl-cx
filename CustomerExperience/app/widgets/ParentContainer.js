@@ -5,11 +5,21 @@ import {MarginConstants} from '../styles/margin.constants';
 import {Colors} from '../styles/color.constants';
 
 export const ParentContainer = ({children, style}) => {
-  return <View style={{...styles.parentContainer, ...style}}>{children}</View>;
+  return (
+    <View
+      testID="parent-container"
+      style={{...styles.parentContainer, ...style}}>
+      {children}
+    </View>
+  );
 };
 
 export const ChildContainer = ({children, style}) => {
-  return <View style={{...styles.childContainer, ...style}}>{children}</View>;
+  return (
+    <View testID="child-container" style={{...styles.childContainer, ...style}}>
+      {children}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

@@ -34,7 +34,8 @@ import {
   ASYNC_RESPONSES_WITH_CX_MANAGER,
 } from '../../api/Constant';
 import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
-import {FabAddButton, HeaderFilter} from '../../routes/CommonScreen';
+import {HeaderFilter} from '../../routes/commonUI/CommonUI';
+import FabAddButton from '../../routes/commonUI/FabAddButton';
 import NpsGaugeChart from '../../widgets/dashboardWidget/NpsGaugeChart';
 import {baseTextStyles} from '../../styles/text.styles';
 import {FontWeight} from '../../styles/font.constants';
@@ -50,7 +51,6 @@ import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTit
 import ResponsesButton from '../../widgets/dashboardWidget/ResponsesButton';
 import RenderInfoContainer from '../../widgets/dashboardWidget/RenderInfoContainer';
 import LegendScoreView from '../../widgets/dashboardWidget/LegendScoreView';
-import AsyncStorageData from '../../Utils/AsyncUtil';
 
 const wait = timeout => {
   return new Promise(resolve => {

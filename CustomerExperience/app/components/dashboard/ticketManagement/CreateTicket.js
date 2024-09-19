@@ -15,18 +15,14 @@ import {
   Colors,
   getPriorityBorderColorbyId,
 } from '../../../styles/color.constants';
-import PhoneInput from 'react-native-phone-number-input';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
-import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  BottomSheetHeader,
-  RenderStatusIcon,
-} from '../../../routes/CommonScreen';
+import {RenderStatusIcon} from '../../../routes/commonUI/CommonUI';
+import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
 import QPSpinner from '../../../widgets/QPSpinner';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
@@ -93,14 +89,12 @@ const RenderMateriaCommunityIcon = ({iconName}) => (
 const RenderTextInput = ({
   multiline = false,
   defaultValue = '',
-  placeholder,
   keyboardType = 'default',
   setValue,
 }) => {
   return (
     <TextInput
       placeholderTextColor={Colors.borderColor}
-      selectionColor={Colors.accentLight}
       multiline={multiline}
       defaultValue={defaultValue ?? ''}
       keyboardType={keyboardType}

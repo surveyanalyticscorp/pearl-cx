@@ -7,7 +7,7 @@ import {
   BackHandler,
   ScrollView,
 } from 'react-native';
-import FeedbackCell from './FeedbackCells';
+import FeedbackCell from './feedbackCell/FeedbackCells';
 import {Colors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import QPWebView from '../../widgets/QPWebView';

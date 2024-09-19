@@ -7,7 +7,7 @@ import {
   FlatList,
   TextInput,
 } from 'react-native';
-import {ListItemSeparator} from '../../routes/CommonScreen';
+import ListItemSeparator from '../../routes/commonUI/ListItemSeparator';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {MarginConstants} from '../../styles/margin.constants';

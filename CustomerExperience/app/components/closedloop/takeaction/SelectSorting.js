@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, FlatList, SafeAreaView} from 'react-native';
-import {
-  CheckRadioButtonItem,
-  ListItemSeparator,
-} from '../../../routes/CommonScreen';
+import {CheckRadioButtonItem} from '../../../routes/commonUI/CommonUI';
+import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
 import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import QPButton from '../../../widgets/Button';

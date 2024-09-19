@@ -12,22 +12,7 @@ import {useEffect} from 'react';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../Utils/MultilinguaUtils';
 import {MarginConstants} from '../styles/margin.constants';
-
-const SegmentText = ({screenName, segmentName}) => {
-  return (
-    <View style={{width: '100%', flexDirection: 'column'}}>
-      <Text numberOfLines={1} ellipsizeMode="tail" style={styles.appbarTitle}>
-        {screenName}
-      </Text>
-      <Text
-        numberOfLines={1}
-        ellipsizeMode="tail"
-        style={styles.appbarSegmentName}>
-        {segmentName}
-      </Text>
-    </View>
-  );
-};
+import SegmentText from './SegmentText';
 
 const SegmentSelector = props => {
   const dispatch = useDispatch();
@@ -83,17 +68,6 @@ const SegmentSelector = props => {
 
 const styles = StyleSheet.create({
   container: {flex: 1},
-  appbarTitle: {
-    fontSize: TextSizes.primary,
-    color: Colors.white,
-    marginEnd: MarginConstants.tab3,
-  },
-
-  appbarSegmentName: {
-    fontSize: TextSizes.secondary,
-    color: Colors.white,
-    marginEnd: MarginConstants.tab3,
-  },
 
   innerContainer: {
     flex: 1,

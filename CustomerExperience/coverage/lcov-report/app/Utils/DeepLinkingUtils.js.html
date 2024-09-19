@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -117,38 +117,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -164,38 +164,38 @@ import {validateResetPasswordLink} from '../redux/actions/login.actions';
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 // import {BASE_URL} from "../api/Constant";
 &nbsp;
-const getResetPasswordURLComponents = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >li</span>nk =&gt; {</span>
-  const route = <span class="cstat-no" title="statement not covered" >link.replace(/.*?:\/\//g, '');</span>
-  const path = <span class="cstat-no" title="statement not covered" >route.match(/\/([^\/]+)\/?$/)[1];</span>
-  let components = <span class="cstat-no" title="statement not covered" >path.replace('resetpassword?', '').split('&amp;');</span>
-  let accessCode = <span class="cstat-no" title="statement not covered" >components[0].split('=')[1];</span>
-  let email = <span class="cstat-no" title="statement not covered" >components[1].split('=')[1];</span>
-  let timestamp = <span class="cstat-no" title="statement not covered" >components[2].split('=')[1];</span>
-<span class="cstat-no" title="statement not covered" >  return {email: email, accessCode: accessCode, timestamp: timestamp};</span>
+export const getResetPasswordURLComponents = link =&gt; {
+  const route = link.replace(/.*?:\/\//g, '');
+  const path = route.match(/\/([^\/]+)\/?$/)[1];
+  let components = path.replace('resetpassword?', '').split('&amp;');
+  let accessCode = components[0].split('=')[1];
+  let email = components[1].split('=')[1];
+  let timestamp = components[2].split('=')[1];
+  return {email: email, accessCode: accessCode, timestamp: timestamp};
 };
 &nbsp;
-export const handleResetPasswordLink = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
+export const handleResetPasswordLink = (
   dynamicLink,
   ref,
   authToken,
   dispatch,
 ) =&gt; {
-<span class="cstat-no" title="statement not covered" >  if (StringUtils.isNotEmpty(dynamicLink)) {</span>
-<span class="cstat-no" title="statement not covered" >    if (</span>
+  if (StringUtils.isNotEmpty(dynamicLink)) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (
       dynamicLink.includes(
         'resetpassword',
       ) /*&amp;&amp; isStringNullOrEmpty(authToken)*/
     ) {
-      let components = <span class="cstat-no" title="statement not covered" >getResetPasswordURLComponents(dynamicLink);</span>
-<span class="cstat-no" title="statement not covered" >      if (ref.current?.getCurrentRoute().name === 'ForgotPassword') {</span>
-        let data = <span class="cstat-no" title="statement not covered" >{</span>
+      let components = getResetPasswordURLComponents(dynamicLink);
+      if (ref.current?.getCurrentRoute().name === 'ForgotPassword') {
+        let data = {
           emailAddress: components.email,
           accessCode: components.accessCode,
           timestamp: components.timestamp.replace('+', ' '),
         };
-<span class="cstat-no" title="statement not covered" >        dispatch(validateResetPasswordLink(data));</span>
+        dispatch(validateResetPasswordLink(data));
       } else {
-<span class="cstat-no" title="statement not covered" >        ref.current?.navigate('ForgotPassword', {</span>
+        ref.current?.navigate('ForgotPassword', {
           email: components.email,
           accessCode: components.accessCode,
           timestamp: components.timestamp,
@@ -211,7 +211,7 @@ export const handleResetPasswordLink = <span class="cstat-no" title="statement n
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-07T10:14:04.650Z
+                at 2024-09-13T12:15:58.901Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

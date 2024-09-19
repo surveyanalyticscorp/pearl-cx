@@ -1,5 +1,5 @@
 import React, {Image} from 'react';
-import {RenderStatusIcon, ResponsesIcon} from '../routes/CommonScreen';
+import {ResponsesIcon, RenderStatusIcon} from '../routes/commonUI/CommonUI';
 import StringUtils from './StringUtils';
 
 export const wordsToBold = [
@@ -144,7 +144,7 @@ export const getStatusIndexById = statusId => {
 
 export const getPriorityIndexById = priorityId => {
   let index = -1;
-  statusList.forEach((element, i) => {
+  priorityList.forEach((element, i) => {
     if (element.id === priorityId) {
       index = i;
     }

@@ -15,11 +15,8 @@ import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
-import {
-  Avatar,
-  CloseButton,
-  ListItemSeparator,
-} from '../../../routes/CommonScreen';
+import {Avatar, CloseButton} from '../../../routes/commonUI/CommonUI';
+import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
 import {isObjectEmpty} from '../../../Utils/Utility';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import RenderHtml from 'react-native-render-html';
@@ -99,7 +96,10 @@ const AttachmentItem = ({item, index}) => {
   }, [item.path, item.fileName]);
 
   return (
-    <Pressable onPress={onPressDownload} style={styles.attachmentItem}>
+    <Pressable
+      testID="attachment-button"
+      onPress={onPressDownload}
+      style={styles.attachmentItem}>
       <AttachmentIcon mimeType={item.mimeType} />
       <Text numberOfLines={1} style={styles.attachmentText}>
         {item.fileName}

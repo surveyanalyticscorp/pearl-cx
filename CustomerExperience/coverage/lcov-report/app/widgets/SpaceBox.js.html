@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -90,47 +90,47 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">73x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">73x</span>
+<span class="cline-any cline-yes">73x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 import {View} from 'react-native';
 import {MarginConstants} from '../styles/margin.constants';
 &nbsp;
-export const VerticalSpaceBox = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span>style, marginVertical, multiplyBy = <span class="branch-0 cbranch-no" title="branch not covered" >1}</span>) =&gt; {</span>
-  const marginVertical_ = <span class="cstat-no" title="statement not covered" >marginVertical</span>
-    ? marginVertical * multiplyBy
+export const VerticalSpaceBox = ({style, marginVertical, multiplyBy = 1}) =&gt; {
+  const marginVertical_ = marginVertical
+    ? <span class="branch-0 cbranch-no" title="branch not covered" >marginVertical * multiplyBy</span>
     : MarginConstants.halfTab * multiplyBy;
-  const style_ = <span class="cstat-no" title="statement not covered" >{marginVertical: marginVertical_, ...style};</span>
-<span class="cstat-no" title="statement not covered" >  return &lt;View style={style_} /&gt;;</span>
+  const style_ = {marginVertical: marginVertical_, ...style};
+  return &lt;View style={style_} /&gt;;
 };
 &nbsp;
-export const HorizontalSpaceBox = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
+export const HorizontalSpaceBox = ({
   style,
   marginHorizontal,
-  multiplyBy = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
+  multiplyBy = 1,
 }) =&gt; {
-  const marginHorizontal_ = <span class="cstat-no" title="statement not covered" >marginHorizontal</span>
-    ? marginHorizontal * multiplyBy
+  const marginHorizontal_ = marginHorizontal
+    ? <span class="branch-0 cbranch-no" title="branch not covered" >marginHorizontal * multiplyBy</span>
     : MarginConstants.halfTab * multiplyBy;
-  const style_ = <span class="cstat-no" title="statement not covered" >{marginHorizontal: marginHorizontal_, ...style};</span>
-<span class="cstat-no" title="statement not covered" >  return &lt;View style={style_} /&gt;;</span>
+  const style_ = {marginHorizontal: marginHorizontal_, ...style};
+  return &lt;View style={style_} /&gt;;
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -139,7 +139,7 @@ export const HorizontalSpaceBox = <span class="cstat-no" title="statement not co
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-07T10:14:04.650Z
+                at 2024-09-13T12:15:58.901Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

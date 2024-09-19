@@ -16,6 +16,7 @@ const QPButton = props => {
 
   return (
     <Pressable
+      testID={props.testID ?? 'QPButton'}
       style={[
         style,
         {

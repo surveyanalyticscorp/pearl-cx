@@ -16,7 +16,7 @@ import {useSelector} from 'react-redux';
 import {MarginConstants} from '../../styles/margin.constants';
 import QPSpinner from '../../widgets/QPSpinner';
 import {StackActions} from '@react-navigation/native';
-import FeedbackCell from './FeedbackCells';
+import FeedbackCell from './feedbackCell/FeedbackCells';
 import {TextSizes} from '../../styles/textsize.constants';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';

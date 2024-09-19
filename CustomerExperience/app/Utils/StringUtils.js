@@ -217,20 +217,6 @@ export default class StringUtils {
     return itemsTextSeparatedByNewLine;
   }
 
-  static isSafariBrowserOnMacOS() {
-    return (
-      navigator != null &&
-      navigator.userAgent != null &&
-      navigator.userAgent.indexOf('Safari') != -1 &&
-      navigator.userAgent.indexOf('Chrome') == -1 &&
-      navigator.userAgent.indexOf('Mac') > 0
-    );
-  }
-
-  static addCssClassToTargetMacSafariBrowser(cssClass) {
-    return cssClass + (this.isSafariBrowserOnMacOS() ? ' mac-safari' : '');
-  }
-
   static removeSpecialCharacters(text) {
     return text.replace(/['"?]/g, '');
   }
