@@ -4,8 +4,10 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 
-const NewResponseDot = ({isNewResponse = false}) => (
-  <View testID="new-response-dot-container" style={styles.containerStyle}>
+const NewResponseDot = ({style, isNewResponse = false}) => (
+  <View
+    testID="new-response-dot-container"
+    style={{...styles.containerStyle, ...style}}>
     <View
       testID="new-response-dot-indicator"
       style={{
@@ -19,17 +21,11 @@ const NewResponseDot = ({isNewResponse = false}) => (
 );
 
 const styles = StyleSheet.create({
-  containerStyle: {
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    height: '100%',
-    paddingVertical: PaddingConstants.tab1,
-  },
+  containerStyle: {},
   unreadIndicator: {
     height: 8,
     width: 8,
     borderRadius: 25,
-    marginHorizontal: MarginConstants.tab1,
   },
 });
 

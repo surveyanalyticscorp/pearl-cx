@@ -17,47 +17,15 @@ import NPSAnswerText from '../../../widgets/NPSAnswerText';
 import {HorizontalSpaceBox, VerticalSpaceBox} from '../../../widgets/SpaceBox';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import {baseTextStyles} from '../../../styles/text.styles';
-import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {
   ASYNC_RESPONSES_WITH_CX_MANAGER,
   RESPONSE_READ_UNREAD_FEATURE_ACTIVATION_DATE,
-} from '../../../api/Constant'; // import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+} from '../../../api/Constant';
+import {useSelector} from 'react-redux';
 import moment from 'moment';
 import AsyncStorageData from '../../../Utils/AsyncUtil';
-import {backgroundColor} from '../../../widgets/qp-calendar/style';
 import NewResponseDot from './NewResponseDot';
 
-const RenderDateDetails = ({date}) => {
-  // let date = props.item.surveyTakenDate ?? '';
-
-  return (
-    <View style={{marginVertical: MarginConstants.tab1}}>
-      <Text style={styles.secondaryTitle}>{translate('responses.date')}</Text>
-      <Text style={styles.secondaryText}>{date}</Text>
-    </View>
-  );
-};
-
-const RenderEmailAddress = ({email}) => {
-  return email.length ? (
-    <Pressable onPress={() => {}} style={styles.contactBox}>
-      <IonIcon name="mail" size={14} color={Colors.filterIconColor} />
-      <Text style={styles.contactText}>{email}</Text>
-    </Pressable>
-  ) : (
-    <View />
-  );
-};
-const RenderContactDetails = () => {
-  return (
-    <View style={{marginVertical: MarginConstants.tab2}}>
-      <Text style={styles.secondaryTitle}>Contact Information</Text>
-      <RenderPhoneNumber />
-      <RenderEmailAddress />
-    </View>
-  );
-};
 function showName(item) {
   let name = `${item.firstName ?? ''} ${item.lastName ?? ''}`;
   let email = item.emailAddress ?? '';
@@ -70,7 +38,7 @@ function showName(item) {
   }
 }
 
-let UserName = ({name, isDisabled}) => {
+const UserName = ({name, isDisabled}) => {
   const charLength = 24;
   const shortenedString =
     name && name.length > charLength
@@ -88,38 +56,21 @@ let UserName = ({name, isDisabled}) => {
     </Text>
   );
 };
-let Date = ({surveyTakenDate}) => {
-  return (
-    <TextLabel
-      text={surveyTakenDate}
-      baseTextStyle={baseTextStyles.semiSecondaryRegularText}
-      color={Colors.evenDarkerGrey}
-    />
-  );
+const Date = ({surveyTakenDate}) => {
+  return <TextLabel text={surveyTakenDate} />;
 };
 
-let ResponseId = ({responseSetID}) => {
+const ResponseId = ({responseSetID}) => {
   return (
     <View style={styles.responseIdContainer}>
       <TextLabel
-        style={{marginHorizontal: 0}}
+        color={Colors.evenDarkerGrey}
         text={`${translate('close_loop.response_id')} ${responseSetID}`}
       />
     </View>
   );
 };
 
-const RenderPhoneNumber = ({phoneNumber}) => {
-  // let phoneNumber = props.item.phone ?? '';
-  return phoneNumber.length ? (
-    <Pressable onPress={() => {}} style={styles.contactBox}>
-      <IonIcon name="call" size={12} color={Colors.filterIconColor} />
-      <Text style={styles.contactText}>{phoneNumber}</Text>
-    </Pressable>
-  ) : (
-    <View />
-  );
-};
 let RenderCreateOrViewTicket = ({hasTicket, onPress}) => {
   return !hasTicket ? (
     <TouchableWithoutFeedback
@@ -168,9 +119,12 @@ let RenderResponseContainer = ({
       <View style={styles.responseContainer}>
         {/* {renderNPSView()} */}
 
-        <View style={[styles.rowContainer, {maxWidth: '70%'}]}>
+        <View
+          style={[
+            styles.rowContainer,
+            {marginStart: MarginConstants.halfTab, maxWidth: '70%'},
+          ]}>
           <NPSIcon sentiment={sentiment} />
-          <HorizontalSpaceBox />
           <NPSAnswerText sentiment={sentiment} answerText={answerText} />
           <HorizontalSpaceBox />
           <UserName name={showName(item)} isDisabled={disable} />
@@ -178,16 +132,15 @@ let RenderResponseContainer = ({
 
         <View style={styles.dateAndArrowIconContainer}>
           <Date surveyTakenDate={surveyTakenDate} />
-          {!disable && (
+          {/* {!disable && (
             <Icon
               name="arrow-right"
               size={Sizes.icons}
               color={Colors.secondary}
             />
-          )}
+          )} */}
         </View>
       </View>
-      <VerticalSpaceBox multiplyBy={2} />
       <View style={styles.responseIdAndTicketRowContainer}>
         <ResponseId responseSetID={responseSetID} />
         {/* {!read && isSurveyTakenAfterJuneFirst(surveyTakenDate) && (
@@ -284,7 +237,13 @@ export default function FeedbackCell(props) {
       isDisabled={disable}
       onSelect={props.onSelect}>
       <View style={styles.cellContainer}>
-        <NewResponseDot isNewResponse={isNewResponse} />
+        <NewResponseDot
+          style={{
+            marginTop: MarginConstants.tab1,
+            marginEnd: MarginConstants.halfTab,
+          }}
+          isNewResponse={isNewResponse}
+        />
 
         {/* <RenderIsNewResponse
           read={read}
@@ -321,12 +280,12 @@ const styles = StyleSheet.create({
   cellContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
-    margin: MarginConstants.tab1,
+    marginVertical: MarginConstants.tab1,
+    marginHorizontal: MarginConstants.tab1_2x,
     paddingVertical: PaddingConstants.tab1_2x,
-    paddingHorizontal: PaddingConstants.tab1,
-
+    paddingHorizontal: PaddingConstants.tab1_2x,
     backgroundColor: Colors.white,
     borderWidth: 1,
     borderColor: Colors.darkGrey,
@@ -398,7 +357,7 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.primary,
     fontFamily: FontFamily.medium,
     fontWeight: FontWeight.bold,
-    color: Colors.accent,
+    color: Colors.filterIconColor,
     textAlign: 'center',
   },
   responseIdAndTicketRowContainer: {
