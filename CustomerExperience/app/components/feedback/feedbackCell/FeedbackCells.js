@@ -38,7 +38,7 @@ function showName(item) {
   }
 }
 
-const UserName = ({name, isDisabled}) => {
+const UserName = ({isNewResponse, name, isDisabled}) => {
   const charLength = 24;
   const shortenedString =
     name && name.length > charLength
@@ -47,7 +47,12 @@ const UserName = ({name, isDisabled}) => {
   return (
     <Text
       numberOfLines={isDisabled ? 4 : 1}
-      style={[styles.userNameText, {maxWidth: '90%'}]}>
+      style={{
+        ...styles.userNameText,
+        maxWidth: '100%',
+        fontWeight: isNewResponse ? FontWeight._900 : FontWeight._100,
+      }}
+      testID="user-name">
       {name.length > 1
         ? isDisabled
           ? name
@@ -91,6 +96,7 @@ let RenderResponseContainer = ({
   origin,
   hasTicket,
   navigation,
+  isNewResponse,
 }) => {
   let flag = parentRoute === translate('responses.responses');
   let disable = origin === 'Detail';
@@ -120,14 +126,25 @@ let RenderResponseContainer = ({
         {/* {renderNPSView()} */}
 
         <View
-          style={[
-            styles.rowContainer,
-            {marginStart: MarginConstants.halfTab, maxWidth: '70%'},
-          ]}>
+          style={{
+            ...styles.rowContainer,
+            marginStart: MarginConstants.halfTab,
+            maxWidth: '70%',
+          }}>
+          <NewResponseDot
+            style={{
+              marginEnd: MarginConstants.tab1,
+            }}
+            isNewResponse={isNewResponse}
+          />
           <NPSIcon sentiment={sentiment} />
           <NPSAnswerText sentiment={sentiment} answerText={answerText} />
           <HorizontalSpaceBox />
-          <UserName name={showName(item)} isDisabled={disable} />
+          <UserName
+            isNewResponse={isNewResponse}
+            name={showName(item)}
+            isDisabled={disable}
+          />
         </View>
 
         <View style={styles.dateAndArrowIconContainer}>
@@ -237,14 +254,6 @@ export default function FeedbackCell(props) {
       isDisabled={disable}
       onSelect={props.onSelect}>
       <View style={styles.cellContainer}>
-        <NewResponseDot
-          style={{
-            marginTop: MarginConstants.tab1,
-            marginEnd: MarginConstants.halfTab,
-          }}
-          isNewResponse={isNewResponse}
-        />
-
         {/* <RenderIsNewResponse
           read={read}
           responseSetID={responseSetID}
@@ -252,7 +261,7 @@ export default function FeedbackCell(props) {
           disable={disable}
         /> */}
         <View style={styles.container}>
-          <RenderResponseContainer {...props} />
+          <RenderResponseContainer {...props} isNewResponse={isNewResponse} />
         </View>
       </View>
     </ResponseItemButton>
@@ -287,9 +296,7 @@ const styles = StyleSheet.create({
     paddingVertical: PaddingConstants.tab1_2x,
     paddingHorizontal: PaddingConstants.tab1_2x,
     backgroundColor: Colors.white,
-    borderWidth: 1,
-    borderColor: Colors.darkGrey,
-    borderRadius: 4,
+    borderRadius: 2,
   },
 
   rowContainer: {
@@ -355,12 +362,12 @@ const styles = StyleSheet.create({
   },
   userNameText: {
     fontSize: TextSizes.primary,
-    fontFamily: FontFamily.medium,
-    fontWeight: FontWeight.bold,
+    fontFamily: FontFamily.regular,
     color: Colors.filterIconColor,
     textAlign: 'center',
   },
   responseIdAndTicketRowContainer: {
+    marginStart: MarginConstants.tab1_2x,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
