@@ -39,7 +39,9 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     flex: 2,
     flexDirection: 'row',
-    height: '100%',
+    maxHeight: MarginConstants.tab1_5x,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: Colors.white,
     borderColor: Colors.darkGrey,
     borderWidth: 1,

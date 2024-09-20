@@ -55,7 +55,6 @@ import {
 } from '../../../Utils/Utility';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
-import {buttonStyles} from '../../../styles/button.styles';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 import ShowTitleAndDropdown from '../../closedloop/ui/ShowTitleAndDropdown';
 import DateFilterIcon from '../../../widgets/IconWidget/DateFilterIcon';
@@ -99,7 +98,7 @@ const RenderTextInput = ({
       defaultValue={defaultValue ?? ''}
       keyboardType={keyboardType}
       style={{
-        ...styles.descriptionInputText,
+        ...(multiline ? styles.descriptionInputText : styles.textInputText),
         backgroundColor: Colors.settingsBackground,
       }}
       onEndEditing={value => {
@@ -780,7 +779,20 @@ export default function CreateTicket(props) {
           },
         ]}>
         <View style={styles.innerContainer}>
-          <VerticalSpace />
+          <VerticalSpaceBox multiplyBy={2} />
+          <RenderCustomerNameInput
+            defaultValue={customerName}
+            setTicketState={setTicketState}
+          />
+          <VerticalSpaceBox multiplyBy={2} />
+
+          <RenderPhoneInput setTicketState={setTicketState} />
+          <VerticalSpaceBox multiplyBy={4} />
+          <RenderEmailAddressInput
+            defaultValue={customerEmail}
+            setTicketState={setTicketState}
+          />
+          <VerticalSpaceBox multiplyBy={2} />
           <ShowTitleAndDropdown
             titleIcon={<SegmentIcon />}
             title={'Select Segment'}
@@ -788,8 +800,7 @@ export default function CreateTicket(props) {
             onPress={handleSegmentSelection}
             hasArrowDownIcon
           />
-          <VerticalSpace />
-
+          <VerticalSpaceBox multiplyBy={2} />
           <ShowTitleAndDropdown
             titleIcon={<DateFilterIcon size={12} />}
             title={'Select date'}
@@ -799,23 +810,7 @@ export default function CreateTicket(props) {
             onPress={handleDateSelection}
             hasArrowDownIcon={false}
           />
-          <VerticalSpace />
-
-          <RenderCustomerNameInput
-            defaultValue={customerName}
-            setTicketState={setTicketState}
-          />
-          <VerticalSpace />
-          <VerticalSpace />
-          <RenderPhoneInput setTicketState={setTicketState} />
-          <VerticalSpace />
-          <VerticalSpace />
-          <RenderEmailAddressInput
-            defaultValue={customerEmail}
-            setTicketState={setTicketState}
-          />
-          <VerticalSpace />
-          <VerticalSpace />
+          <VerticalSpaceBox multiplyBy={2} />
 
           <ShowTitleAndDropdown
             titleIcon={
@@ -835,7 +830,7 @@ export default function CreateTicket(props) {
             }
             hasArrowDownIcon
           />
-          <VerticalSpace />
+          <VerticalSpaceBox multiplyBy={2} />
 
           <ShowTitleAndDropdown
             titleIcon={<StatusIcon size={12} />}
@@ -852,7 +847,7 @@ export default function CreateTicket(props) {
             }
             hasArrowDownIcon
           />
-          <VerticalSpace />
+          <VerticalSpaceBox multiplyBy={2} />
 
           <ShowTitleAndDropdown
             titleIcon={
@@ -863,12 +858,10 @@ export default function CreateTicket(props) {
             onPress={handleOwnerSelection}
             hasArrowDownIcon
           />
-          <VerticalSpace />
+          <VerticalSpaceBox multiplyBy={2} />
           <RenderDescriptionInput setTicketState={setTicketState} />
           {/* <View style={{marginVertical: MarginConstants.tab1_2x}} /> */}
-          <VerticalSpace />
-          <VerticalSpace />
-
+          <VerticalSpaceBox multiplyBy={4} />
           <CreateTicketButton
             onPress={handleCreateTicket}
             showLoading={showLoading}
@@ -929,8 +922,21 @@ const styles = StyleSheet.create({
   },
   descriptionInputText: {
     flex: 1,
+    textAlignVertical: 'top',
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
+    padding: PaddingConstants.tab1,
+    height: MarginConstants.tab1_16x,
+    paddingHorizontal: PaddingConstants.tab1,
+
+    color: Colors.filterIconColor,
+  },
+  textInputText: {
+    flex: 1,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    padding: PaddingConstants.tab1,
+    maxHeight: MarginConstants.tab1_5x,
     paddingHorizontal: PaddingConstants.tab1,
 
     color: Colors.filterIconColor,

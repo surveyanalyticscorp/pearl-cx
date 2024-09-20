@@ -11,7 +11,7 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily} from '../../../styles/font.constants';
 
 const RenderPhoneInput = ({defaultValue, setTicketState}) => {
-  const [text, setText] = useState('');
+  const [text, setText] = useState(' ');
   const phoneInput = React.useRef();
   const setPhoneNumber = () => {
     console.log('TEXT_INPUT', text);
@@ -30,7 +30,7 @@ const RenderPhoneInput = ({defaultValue, setTicketState}) => {
       />
 
       <PhoneInput
-        placeholder=" "
+        placeholder={text}
         containerStyle={styles.phoneInputContainer}
         codeTextStyle={styles.phoneInputCodeText}
         textContainerStyle={styles.phoneInputTextContainer}
@@ -46,7 +46,7 @@ const RenderPhoneInput = ({defaultValue, setTicketState}) => {
         ref={phoneInput}
         // defaultValue={value}
         defaultCode="US"
-        layout="second"
+        layout="first"
         // onChangeText={text => {
         // setValue(text);
         // console.log('PHONE:', text);
@@ -67,40 +67,39 @@ export default RenderPhoneInput;
 
 const styles = StyleSheet.create({
   phoneInputContainer: {
-    height:
-      Platform.OS === 'ios' ? MarginConstants.tab1_4x : MarginConstants.tab1_6x,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: MarginConstants.tab1_5x,
     width: '100%',
   },
   phoneInputCodeText: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
-    height:
-      Platform.OS === 'ios' ? MarginConstants.tab1_4x : MarginConstants.tab5,
-    padding: PaddingConstants.tab1,
+    paddingVertical: 0,
+    marginVertical: 0,
   },
   phoneInputTextContainer: {
+    textAlignVertical: 'center',
     backgroundColor: Colors.settingsBackground,
-    flex: 1,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
-    marginStart: MarginConstants.tab1,
+    paddingVertical: 0,
+    marginVertical: 0,
   },
   phoneInputTextInputStyle: {
-    height: MarginConstants.tab1_5x,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
-    paddingVertical: PaddingConstants.tab1,
-    paddingStart: 0,
-    paddingEnd: PaddingConstants.tab1,
     color: Colors.filterIconColor,
-    selectionColor: Colors.accentLight,
+    height: MarginConstants.tab1_5x,
+    paddingVertical: 0,
+    marginVertical: 0,
   },
   phoneInputCountryPickerButtonStyle: {
-    borderColor: Colors.darkGrey,
-    borderWidth: 1,
-    padding: 0,
-    marginStart: MarginConstants.tab1,
+    backgroundColor: Colors.settingsBackground,
+    paddingVertical: 0,
+    marginVertical: 0,
   },
 });
