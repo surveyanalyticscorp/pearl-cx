@@ -1,22 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {
-  useWindowDimensions,
-  StyleSheet,
-  View,
-  FlatList,
-  BackHandler,
-  ScrollView,
-} from 'react-native';
-import FeedbackCell from './feedbackCell/FeedbackCells';
+import {useWindowDimensions, StyleSheet, View, FlatList} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import QPWebView from '../../widgets/QPWebView';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-// import ActionButton from 'react-native-action-button';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import {translate} from '../../Utils/MultilinguaUtils';
-// import ResponseFeedback from './feedbackdetails/ResponseFeedback';
 import ResponseProfile from './feedbackdetails/ResponseProfile';
 import ResponseActivity from './feedbackdetails/ResponseActivity';
 import {FontFamily} from '../../styles/font.constants';
@@ -24,10 +14,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   getPanelMemberDetails,
   getResponseTickets,
-  getSurveyResponseDetails,
   setResponseReadList,
 } from '../../redux/actions/feedback.actions';
-import ClosedLoopCell from '../closedloop/ClosedloopCell';
 import ResponseTicketCell from '../closedloop/ResponseTicketCell';
 import {
   getLatestComment,
@@ -50,17 +38,12 @@ const RenderWebView = props => {
 };
 export const ShowResponseTicketList = props => {
   const [selectedTicketId, setSelectedTicket] = useState(0);
-  // const dispatch = useDispatch();
   const responseTickets = useSelector(state => state.response.responseTickets);
-  // const authToken = useSelector(state => state.global.authToken);
 
   const hasTickets =
     responseTickets && responseTickets.data && responseTickets.data.length > 0;
 
   const onTapHandler = (item, index) => {
-    // console.log('TICKET_ITEM: ', JSON.stringify(item));
-    // dispatch(getLatestComment(authToken, `${item.id}`));
-    // dispatch(getTicketStatusHistory(authToken, `${item.id}`));
     props.navigation.navigate('TicketDetails', {
       ticketItem: item,
       prevScreen: translate('dashboard.responses'),
@@ -76,6 +59,7 @@ export const ShowResponseTicketList = props => {
 
   return hasTickets ? (
     <FlatList
+      testID="flatlist-feedback"
       lazy
       style={styles.flatlist}
       data={responseTickets.data}
@@ -161,38 +145,9 @@ export default function FeedbackDetails(props) {
     }
   }, [responseTickets]);
 
-  // const onPressHandler = (item, index) => {
-  //   props.navigation.navigate('TicketDetails', item);
-  // };
-  // dispatch(
-  //   getSurveyResponseDetails(authToken, {
-  //     surveyID: data.surveyID,
-  //     responseID: data.responseSetID,
-  //   }),
-  // );
-
   return (
-    <View style={styles.container}>
-      {/* {isFromFeedback && ( */}
-      {/* <FeedbackCell
-        item={props.route.params.data}
-        origin="Detail"
-        hasTicket={responseTickets.data?.length > 0}
-        ticketStatuses={props.route.params.ticketStatus}
-        parentRoute={props.route.params.parentRoute}
-        {...props}
-      /> */}
-      {/* )} */}
+    <View testID="feedback-details" style={styles.container}>
       <FeedbackDetailsTabStack isFromFeedback={isFromFeedback} {...props} />
-
-      {/* {isFromFeedback && <ShowResponseTicketList />} */}
-      {/** enable it when email functionality */}
-      {/*<ActionButton*/}
-      {/*buttonColor= {Colors.accent}*/}
-      {/*buttonTextStyle={{fontSize: TextSizes.donutPercentText}}*/}
-      {/*onPress={() => { alert("open email screen")}}*/}
-      {/*renderIcon={() => {return <Icon size={30} name="email" color={Colors.white} />}}*/}
-      {/*/>*/}
     </View>
   );
 }
@@ -201,6 +156,7 @@ const DetailsTab = createMaterialTopTabNavigator();
 
 const FeedbackDetailsTabStack = props => (
   <DetailsTab.Navigator
+    testID="tab-navigator"
     tabBarOptions={{
       labelStyle: {
         width: useWindowDimensions().width / 3,
@@ -248,15 +204,6 @@ const FeedbackDetailsTabStack = props => (
     />
   </DetailsTab.Navigator>
 );
-
-const renderScene = props => {
-  return (
-    <QPWebView
-      authToken={props.route.params.token}
-      uri={props.route.params.url}
-    />
-  );
-};
 
 const styles = StyleSheet.create({
   container: {

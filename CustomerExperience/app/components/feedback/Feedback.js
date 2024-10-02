@@ -35,8 +35,6 @@ import {useIsFocused} from '@react-navigation/native';
 import {
   clearResponseData,
   fetchAllResponses,
-  getSetResponseReadList,
-  setAllResponses,
   setAllResponsesEmpty,
   setResponseReadList,
 } from '../../redux/actions/feedback.actions';
@@ -115,7 +113,6 @@ function Feedback(props) {
           data={sortingList}
           selectedIndex={currentSortingIndex}
           handleOnPress={(item, index) => {
-            // setCurrentIndex(index);
             setSortText(sortingList[index].title, index);
             closeSortingBottomSheet();
           }}
@@ -155,28 +152,6 @@ function Feedback(props) {
       );
 
       dispatch(fetchAllResponses(props.authToken, data, onSuccess, onError));
-      // apiHandler.getFeedbackResponseList(
-      //   props.authToken,
-      //   data,
-      //   response => {
-      //     let data = pageOffset === 0 ? [] : [...feedbackData];
-      //     data = [...data, ...response.body.allResponses];
-      //     data = [...new Set(data)];
-
-      //     setTicketStatus(response.body.cxTicketStatusValues);
-      //     ///
-      //     setFeedbackData(data);
-      //     dispatch(setAllResponses(data));
-      //     // console.log('pageOffset data count ' + data.length);
-      //     showLoader && setShowLoader(false);
-      //     pagination && setPagination(false);
-      //   },
-      //   error => {
-      //     setShowLoader(false);
-      //     props.setError(error);
-      //     showErrorFlashMessage(error.message);
-      //   },
-      // );
     }
   };
 
@@ -209,15 +184,10 @@ function Feedback(props) {
   }, [props.range]);
 
   useEffect(() => {
-    // if (pageOffset === 0) {
-    //   setFeedbackData([]);
-    //   setShowLoader(true);
-    // } else {
     dispatch(setAllResponsesEmpty());
 
     setPageOffset(0);
     setShowLoader(true);
-    // }
   }, [currentSegment, sortingText.label]);
 
   useEffect(() => {
@@ -227,13 +197,11 @@ function Feedback(props) {
   let onEndReached = () => {
     setPagination(state => !state);
     setPageOffset(pageOffset + 1);
-    // !pagination && setPagination(true);
   };
 
   let onRefresh = () => {
     setShowLoader(true);
     if (pageOffset === 0) {
-      // setFeedbackData([]);
       dispatch(setAllResponsesEmpty());
     } else {
       setPageOffset(0);
@@ -264,280 +232,64 @@ function Feedback(props) {
     openSortingBottomSheet();
   };
 
-  const renderFeedbackView = () => {
-    return (
-      <SafeAreaView
-        forceInset={{top: 'never', bottom: 'never'}}
-        style={styles.safeAreaView}>
-        <Animated.View
-          style={[
-            styles.safeAreaView,
-            {opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))},
-          ]}>
-          {/* <FilterHeader
-          actionOnArrowClick={() => {
-            setFeedbackData([]);
-            setPageOffset(0);
-            setShowLoader(true);
-          }}
-          callDataAPI={() => {
-            setFeedbackData([]);
-            setPageOffset(0);
-            setShowLoader(true);
-          }}
-          {...props}
-        /> */}
-          <HeaderFilter
-            dateRange={props.range}
-            onPressDateRange={dateRangeHandler}
-            onPressFilter={filterHandler}
-            hasSortIcon={true}
-            hasFilterIcon={false}
-          />
-          <View
-            style={{
-              marginHorizontal: '0%',
-              marginVertical: '0%',
-              backgroundColor: Colors.fullTransparent,
-            }}>
-            {/* <MainDropDown
-            header={''}
-            options={segmentOptions}
-            defaultText={segmentOptions[0]}
-            onSelection={(index) => {
-              console.log(`Selected : ${segmentOptions[index]}`);
-            }}
-          /> */}
-          </View>
-          <FormContext.Provider
-            value={{
-              ticketStatus: ticketStatus,
-              feedbackData: [],
-              onFeedbackEndReached: onEndReached,
-              onRefresh: onRefresh,
-              range: props.range,
-              token: props.authToken,
-              sortingText: sortingText.label,
-              setSortingText: setSortText,
-              isLoading: showLoader,
-            }}>
-            {/* <FeedbackTabStack /> */}
-            {/* <RenderFeedbackScene {...props} /> */}
-            <Responses
-              onRefresh={onRefresh}
-              isLoading={showLoader}
-              onEndReached={onEndReached}
-            />
-          </FormContext.Provider>
-          {showLoader && renderSpinner()}
-        </Animated.View>
-        <BottomSheet
-          ref={sortingBottomSheet}
-          snapPoints={sortingBottomSheetSnapPoints}
-          initialSnap={sortingBottomSheetSnapPoints.length - 1}
-          enabledGestureInteraction={true}
-          renderContent={renderSortingSelectContent}
-          renderHeader={renderSortingHeader}
-          callbackNode={fall}
+  return (
+    <SafeAreaView
+      testID="safe-area-view"
+      forceInset={{top: 'never', bottom: 'never'}}
+      style={styles.safeAreaView}>
+      <Animated.View
+        style={[
+          styles.safeAreaView,
+          {opacity: Animated.add(0.3, Animated.multiply(fall, 1.0))},
+        ]}>
+        <HeaderFilter
+          testID="header-filter"
+          dateRange={props.range}
+          onPressDateRange={dateRangeHandler}
+          onPressFilter={filterHandler}
+          hasSortIcon={true}
+          hasFilterIcon={false}
         />
-      </SafeAreaView>
-    );
-  };
-  return renderFeedbackView();
-}
-
-const FeedbackTabStack = () => (
-  <FeedbackTab.Navigator
-    tabBarOptions={{
-      scrollEnabled: true,
-      labelStyle: {
-        width: useWindowDimensions().width / 3,
-        fontSize: TextSizes.semiSecondary,
-        fontFamily: FontFamily.semiSecondary,
-      },
-      indicatorStyle: {backgroundColor: Colors.accentLight},
-      style: {backgroundColor: Colors.white, width: '100%'},
-      initialLayout: {width: useWindowDimensions().width},
-      tabStyle: {height: 1.2 * PaddingConstants.tab4},
-      activeTintColor: Colors.accentLight,
-      inactiveTintColor: Colors.primary,
-    }}
-    lazy
-    keyboardDismissMode={'auto'}>
-    <FeedbackTab.Screen
-      name={translate('close_loop.all')}
-      component={RenderFeedbackScene}
-      initialParams={{screenName: 'All'}}
-    />
-    {/* <FeedbackTab.Screen
-      name={translate('responses.detractor')}
-      component={RenderFeedbackScene}
-      initialParams={{screenName: 'Detractor'}}
-      options={{tabBarLabel: 'Child Segment 1'}}
-    />
-    <FeedbackTab.Screen
-      name={translate('responses.passive')}
-      component={RenderFeedbackScene}
-      initialParams={{screenName: 'Passive'}}
-      options={{tabBarLabel: 'Child Segment 2'}}
-    />
-    <FeedbackTab.Screen
-      name={translate('responses.promoter')}
-      component={RenderFeedbackScene}
-      initialParams={{screenName: 'Promoter'}}
-      options={{tabBarLabel: 'Child Segment 3', title: 'Dummy 3'}}
-    /> */}
-  </FeedbackTab.Navigator>
-);
-
-const RenderFeedbackScene = props => {
-  const dispatch = useDispatch();
-  const feedbackForm = useContext(FormContext);
-  const allResponses = useSelector(state => state.response.allResponses);
-  let [list, setList] = useState(feedbackForm.feedbackData);
-  // let [list, setList] = useState(allResponses);
-
-  let prevFeedbackRef = usePrevious(feedbackForm.feedbackData);
-  let prevSortRef = usePrevious(feedbackForm.sortingText);
-  //let [exitAlert, showExitAlert] = useState(false);
-  // const {authToken, range, isLoading} = useSelector((state) => state.global);
-  const isFocused = useIsFocused();
-
-  useEffect(() => {
-    if (isFocused) {
-      dispatch(clearResponseData());
-    }
-  }, [isFocused]);
-  useEffect(() => {
-    if (prevFeedbackRef !== feedbackForm.feedbackData) {
-      // getData();
-      getAllData();
-    }
-  }, [feedbackForm.feedbackData]);
-
-  useEffect(() => {
-    if (prevSortRef !== feedbackForm.sortingText) {
-      feedbackForm.onRefresh();
-    }
-  }, [feedbackForm.sortingText]);
-
-  const _onPressRow = data => {
-    console.log('ON_PRESS', JSON.stringify());
-    props.navigation.navigate(translate('responses.feedback_details'), {
-      data: data,
-      isFromFeedback: true,
-      ticketStatus: feedbackForm.ticketStatus,
-      token: feedbackForm.token,
-      parentRoute: translate('responses.responses'),
-    });
-  };
-
-  let setResponseSorter = (value, index) => {
-    feedbackForm.setSortingText(value, index);
-  };
-
-  let renderResponseFilterView = () => {
-    return (
-      <TouchableWithoutFeedback
-        onPress={() => {
-          props.navigation.navigate(translate('responses.sort_by'), {
-            setSorter: setResponseSorter,
-            selectedSorter: feedbackForm.sortingText,
-          });
-        }}
-        hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-        <View style={styles.filterView}>
-          <Icon
-            name={'swap-vertical'}
-            size={1.2 * Sizes.filterIcon}
-            color={Colors.primary}
+        <View
+          style={{
+            marginHorizontal: '0%',
+            marginVertical: '0%',
+            backgroundColor: Colors.fullTransparent,
+          }}></View>
+        <FormContext.Provider
+          value={{
+            ticketStatus: ticketStatus,
+            feedbackData: [],
+            onFeedbackEndReached: onEndReached,
+            onRefresh: onRefresh,
+            range: props.range,
+            token: props.authToken,
+            sortingText: sortingText.label,
+            setSortingText: setSortText,
+            isLoading: showLoader,
+          }}>
+          <Responses
+            testID={'responses-component'}
+            onRefresh={onRefresh}
+            isLoading={showLoader}
+            onEndReached={onEndReached}
           />
-          <Text style={styles.filterText}>{feedbackForm.sortingText}</Text>
-        </View>
-      </TouchableWithoutFeedback>
-    );
-  };
-
-  const _renderRow = ({item, index}) => {
-    // console.log(`Feed back item: ${JSON.stringify(item)}`);
-
-    return (
-      <FeedbackCell
-        item={item}
-        index={index}
-        onSelect={() => _onPressRow(item)}
-        origin="List"
-        readlist={allResponses}
-        ticketStatuses={feedbackForm.ticketStatus}
-        {...props}
+        </FormContext.Provider>
+        {showLoader && renderSpinner()}
+      </Animated.View>
+      <BottomSheet
+        testID="sorting-bottom-sheet"
+        ref={sortingBottomSheet}
+        snapPoints={sortingBottomSheetSnapPoints}
+        initialSnap={sortingBottomSheetSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderSortingSelectContent}
+        renderHeader={renderSortingHeader}
+        callbackNode={fall}
       />
-    );
-  };
-
-  const renderNoDataFound = () => {
-    return (
-      <View style={styles.emptyView}>
-        <Text style={styles.emptyText}>
-          {translate('responses.no_feedback_received')}
-        </Text>
-      </View>
-    );
-  };
-
-  // let getData = () => {
-  //   if (props.route.params.screenName === 'All') {
-  //     let data = [...feedbackForm.feedbackData];
-  //     setList(data);
-  //   } else {
-  //     let data = [
-  //       ...feedbackForm.feedbackData.filter(
-  //         res => res.sentiment === props.route.params.screenName,
-  //       ),
-  //     ];
-  //     setList(data);
-  //   }
-  // };
-
-  let getAllData = () => {
-    // let data = [...];
-
-    setList(feedbackForm.feedbackData);
-
-    // setList(allResponses);
-  };
-
-  const onFabHandler = () => {
-    props.navigation.navigate(translate('responses.new_ticket'));
-  };
-
-  let renderFeedbackList = () => {
-    console.log('RERENDER_RESPONSES!!!', JSON.stringify(list));
-    return (
-      <View style={dashboardStyles.container}>
-        <FlatList
-          data={list}
-          renderItem={_renderRow}
-          keyExtractor={item => item.responseSetID + ''}
-          onEndReachedThreshold={0.25}
-          onEndReached={feedbackForm.onFeedbackEndReached}
-          refreshing={false}
-          ListEmptyComponent={<NoResponsesFound />}
-          onRefresh={feedbackForm.onRefresh}
-          extraData={[list]}
-          contentContainerStyle={styles.container}
-          ListFooterComponent={() => (
-            <View style={{paddingBottom: PaddingConstants.tab2}} />
-          )}
-          // ListHeaderComponent={renderResponseFilterView}
-        />
-        <FabAddButton onPress={onFabHandler} />
-        {/* <RenderSegmentBottomSheet callbackNode={fall} /> */}
-      </View>
-    );
-  };
-
-  return renderFeedbackList();
-};
+    </SafeAreaView>
+  );
+}
 
 const mapStateToProps = state => {
   return {

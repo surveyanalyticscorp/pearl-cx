@@ -108,13 +108,13 @@ export function* doLoginApiCall(action) {
       'AsyncStorage base URL 2 : ',
       JSON.stringify(clfBaseUrlResponse),
     );
+    AsyncStorage.setItem(ASYNC_USER_CREDENTIALS, JSON.stringify(userData));
 
     yield put({
       type: LOGIN_RESPONSE,
       response: response,
       clfResponse: clfBaseUrlResponse,
     });
-    AsyncStorage.setItem(ASYNC_USER_CREDENTIALS, JSON.stringify(userData));
 
     AsyncStorage.setItem(
       ASYNC_CLF_BASE_URL,
@@ -141,7 +141,7 @@ export function* watchDoLogin() {
   yield takeLatest(GET_LOGIN, doLoginApiCall);
 }
 
-function* fetchClfAuth(action) {
+export function* fetchClfAuth(action) {
   try {
     console.log('CALL CLF LOGIN 6');
 
@@ -173,7 +173,7 @@ export function* watchClfAuth() {
   yield takeLatest(GET_BEARER_TOKEN, fetchClfAuth);
 }
 
-function* getResetPasswordLink(action) {
+export function* getResetPasswordLink(action) {
   try {
     const response = yield WebServiceHandler.postNew(
       CX_GET_RESET_PASSWORD_LINK,
@@ -193,7 +193,7 @@ export function* watchForgotPasswordLink() {
   yield takeLatest(GET_RESET_PASSWORD_LINK, getResetPasswordLink);
 }
 
-function* validateResetPasswordLink(action) {
+export function* validateResetPasswordLink(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
     const response = yield WebServiceHandler.postNew(
@@ -218,7 +218,7 @@ export function* watchValidatePasswordLink() {
   yield takeLatest(VALIDATE_RESET_PASSWORD_LINK, validateResetPasswordLink);
 }
 
-function* updatePasswordApiCall(action) {
+export function* updatePasswordApiCall(action) {
   try {
     yield put({type: CLEAR_API_ERROR, payload: {isLoading: true}});
     const response = yield WebServiceHandler.postNew(
@@ -243,7 +243,7 @@ export function* watchUpdatePassword() {
   yield takeLatest(UPDATE_PASSWORD, updatePasswordApiCall);
 }
 
-function* doLogoutAction(action) {
+export function* doLogoutAction(action) {
   try {
     const response = yield WebServiceHandler.postNew(
       CX_LOGOUT,

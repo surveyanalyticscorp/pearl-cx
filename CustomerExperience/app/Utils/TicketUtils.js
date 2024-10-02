@@ -282,11 +282,12 @@ export function getAllTicketCount(ticketCount_) {
 export function getUniqueValues(arr, key) {
   const unique = [];
   const distinctPropertyValues = [];
-
-  for (let i = 0; i < arr.length; i++) {
-    if (!unique[arr[i][key]]) {
-      distinctPropertyValues.push(arr[i]);
-      unique[arr[i][key]] = 1;
+  if (arr) {
+    for (let i = 0; i < arr.length; i++) {
+      if (!unique[arr[i][key]]) {
+        distinctPropertyValues.push(arr[i]);
+        unique[arr[i][key]] = 1;
+      }
     }
   }
 

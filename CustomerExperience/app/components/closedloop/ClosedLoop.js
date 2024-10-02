@@ -79,20 +79,7 @@ const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
           onQuerySubmit(event.nativeEvent.text);
         }}
       />
-      {/* <CloseIcon onResetSearch={onResetSearch} /> */}
     </View>
-  );
-};
-
-const CloseIcon = ({onResetSearch}) => {
-  return (
-    <Pressable onPress={onResetSearch}>
-      <IonIcons
-        name="close"
-        size={MarginConstants.halfTab * 6}
-        color={Colors.filterIconColor}
-      />
-    </Pressable>
   );
 };
 
@@ -585,7 +572,7 @@ export default function ClosedLoop(props) {
 
   const RenderClosedLoop = () => {
     return (
-      <View style={styles.container}>
+      <View testID="closed-loop-container" style={styles.container}>
         <Animated.View
           style={{
             opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
@@ -598,28 +585,7 @@ export default function ClosedLoop(props) {
             onPressFilter={openFilter}
             filterCount={getFilterCount(filterState)}
           />
-          {/* {!isSearchVisible && (
-              <Pressable
-                style={{marginHorizontal: MarginConstants.tab1}}
-                onPress={() => setSearchVisibility(true)}>
-                <SearchIcon />
-              </Pressable>
-            )} */}
 
-          {/* <ClosedLoopTicketList /> */}
-          {/* <ShowFilterTag
-            filterData={filterState}
-            handleFilterTag={item => {
-              setFilterState(state => ({
-                ...state,
-                [item]: '',
-              }));
-              setFilterData(state => ({
-                ...state,
-                [item]: clearFilterData(item),
-              }));
-            }}
-          /> */}
           {true && (
             <SearchBox
               onResetSearch={onResetSearch}

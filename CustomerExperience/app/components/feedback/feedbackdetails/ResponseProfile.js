@@ -72,6 +72,7 @@ const ResponseProfile = props => {
   const RenderPhoneNumber = () => {
     return (
       <Pressable
+        testID="phone-number"
         onPress={() => {
           console.log('Phone Number');
         }}
@@ -87,6 +88,7 @@ const ResponseProfile = props => {
   const RenderEmailAddress = () => {
     return (
       <Pressable
+        testID="email-address"
         onPress={() => {
           console.log('Email Address');
         }}
@@ -101,7 +103,9 @@ const ResponseProfile = props => {
 
   const RenderNameDetails = () => {
     return (
-      <View style={{marginVertical: MarginConstants.tab1}}>
+      <View
+        testID="name-details"
+        style={{marginVertical: MarginConstants.tab1}}>
         <Text style={textStyles.secondaryTextBold}>
           {translate('profile.name')}
         </Text>

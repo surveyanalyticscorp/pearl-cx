@@ -1,0 +1,179 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterHeader matches snapshot 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "backgroundColor": "#1B3380",
+      "flexDirection": "row",
+      "height": 48.75,
+      "justifyContent": "space-between",
+      "paddingLeft": 19.25,
+    }
+  }
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      {
+        "flexDirection": "row",
+        "marginRight": 7.5,
+      }
+    }
+    testID="filter-calendar"
+  >
+    <Text
+      allowFontScaling={false}
+      style={
+        [
+          {
+            "color": "#ffffff",
+            "fontSize": 18,
+          },
+          undefined,
+          {
+            "fontFamily": "simple-line-icons",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          {},
+        ]
+      }
+    >
+      
+    </Text>
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "marginHorizontal": 17.5,
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "color": "#ffffff",
+            "fontFamily": "FiraSans-Regular",
+            "fontSize": 15,
+          }
+        }
+      >
+        Sep 18, 2024
+         - 
+      </Text>
+      <Text
+        style={
+          {
+            "color": "#ffffff",
+            "fontFamily": "FiraSans-Regular",
+            "fontSize": 15,
+          }
+        }
+      >
+        Sep 25, 2024
+      </Text>
+    </View>
+  </View>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "justifyContent": "space-around",
+        "marginRight": 7.5,
+        "paddingHorizontal": 17.5,
+      }
+    }
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={false}
+      focusable={true}
+      hitSlop={
+        {
+          "bottom": 10,
+          "left": 10,
+          "right": 10,
+          "top": 10,
+        }
+      }
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        [
+          {
+            "color": "#ffffff",
+            "fontSize": 15,
+          },
+          {
+            "marginRight": 17.5,
+          },
+          {
+            "fontFamily": "simple-line-icons",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          {},
+        ]
+      }
+      testID="left-arrow"
+    >
+      
+    </Text>
+    <Text
+      accessible={true}
+      allowFontScaling={false}
+      focusable={true}
+      hitSlop={
+        {
+          "bottom": 10,
+          "left": 10,
+          "right": 10,
+          "top": 10,
+        }
+      }
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        [
+          {
+            "color": "#ffffff",
+            "fontSize": 15,
+          },
+          undefined,
+          {
+            "fontFamily": "simple-line-icons",
+            "fontStyle": "normal",
+            "fontWeight": "normal",
+          },
+          {},
+        ]
+      }
+      testID="right-arrow"
+    >
+      
+    </Text>
+  </View>
+</View>
+`;

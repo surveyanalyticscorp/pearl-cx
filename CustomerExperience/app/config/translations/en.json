@@ -131,7 +131,7 @@
     "reset": "reset"
   },
   "action_email": {
-    "respond_via_email": "Respond via Email",
+    "respond_via_email": "Respond via email",
     "send_email": "Send email",
     "subject": "Subject",
     "email_body": "email body",

@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: MarginConstants.tab1,
   },
   flatList: {
     marginHorizontal: MarginConstants.tab2,

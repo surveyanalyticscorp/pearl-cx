@@ -1,16 +1,8 @@
-import React, {useState} from 'react';
-import {
-  // useWindowDimensions,
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  ScrollView,
-} from 'react-native';
+import React from 'react';
+import {StyleSheet, Text, View, FlatList, ScrollView} from 'react-native';
 import {Colors, statusColors} from '../../../styles/color.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
-// import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
@@ -26,22 +18,11 @@ import {baseTextStyles} from '../../../styles/text.styles';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 
 const ResponseActivity = props => {
-  let isFromFeedback = props.route.params.data.isFromFeedback;
   let activityData = props.route.params.data;
   const {ticketStatusHistory, ticketLastComment} = useSelector(
     state => state.response,
   );
 
-  // console.log(`feedback: ${activityData}`);
-
-  const RenderSurveySent = ({children}) => {
-    return (
-      <View style={styles.surveyDateBox}>
-        <Text style={styles.secondaryTitle}>Survey Sent</Text>
-        <Text style={styles.secondaryText}>{children}</Text>
-      </View>
-    );
-  };
   const RenderSurveyComplete = ({surveyTaken}) => {
     return (
       <View
@@ -64,14 +45,6 @@ const ResponseActivity = props => {
       </View>
     );
   };
-
-  // const RenderSurveyDetails = ({text}) => {
-  //   return (
-  //     <View style={[styles.innerContainer, {justifyContent: 'center'}]}>
-  //       <RenderSurveyComplete text={activityData.surveyTakenDate} />
-  //     </View>
-  //   );
-  // };
 
   const RenderStatusCell = ({item}) => {
     let borderColor = statusColors.newBorder;

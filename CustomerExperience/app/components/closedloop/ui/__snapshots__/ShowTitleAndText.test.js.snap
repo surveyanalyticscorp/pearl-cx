@@ -1,0 +1,297 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ShowTitleAndText renders correctly 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "marginVertical": 3.75,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "flex": 2,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  />
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "flex": 3,
+        "fontFamily": "FiraSans-Light",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  />
+</View>
+`;
+
+exports[`ShowTitleAndText renders correctly with isSubtextHighlighted 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "marginVertical": 3.75,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "flex": 2,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  />
+  <Text
+    style={
+      {
+        "color": "#1b87e6",
+        "flex": 3,
+        "fontFamily": "FiraSans-Light",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  />
+</View>
+`;
+
+exports[`ShowTitleAndText renders correctly with subText 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "marginVertical": 3.75,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "flex": 2,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  />
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "flex": 3,
+        "fontFamily": "FiraSans-Light",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    subText
+  </Text>
+</View>
+`;
+
+exports[`ShowTitleAndText renders correctly with title 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "marginVertical": 3.75,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "flex": 2,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    title
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "flex": 3,
+        "fontFamily": "FiraSans-Light",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  />
+</View>
+`;
+
+exports[`ShowTitleAndText renders correctly with title and subText 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "marginVertical": 3.75,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "flex": 2,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    title
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "flex": 3,
+        "fontFamily": "FiraSans-Light",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    subText
+  </Text>
+</View>
+`;
+
+exports[`ShowTitleAndText renders correctly with title, subText and isSubtextHighlighted 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "marginVertical": 3.75,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "flex": 2,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    title
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#1b87e6",
+        "flex": 3,
+        "fontFamily": "FiraSans-Light",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    subText
+  </Text>
+</View>
+`;
+
+exports[`ShowTitleAndText should render correctly with title, subText and isSubtextHighlighted 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "justifyContent": "space-between",
+      "marginVertical": 3.75,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "flex": 2,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    title
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#1b87e6",
+        "flex": 3,
+        "fontFamily": "FiraSans-Light",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    subText
+  </Text>
+</View>
+`;

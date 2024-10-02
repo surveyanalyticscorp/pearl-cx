@@ -15,7 +15,6 @@ import {
   ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL_RECEIVED,
   TICKET_ESCALATION_RECIEVED,
-  UPDATE_TICKET_ESCALATION,
 } from '../actions/closedloop.actions';
 import {
   CLEAR_CLOSED_LOOP_TICKET_DETAILS,
@@ -30,15 +29,12 @@ import {
   CREATE_CLF_TICKET_RECIEVED,
   DASHBOARD_RECEIVED,
   FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
-  GET_FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS,
   REMOVE_CLOSED_LOOP_TICKET_ITEM,
   SEGMENT_SELECTED,
   SEGMENT_SELECTOR_OPEN,
   UPDATE_CLF_TICKET_RECIEVED,
   WELCOME_SCREEN_DATA_RECIEVED,
   CLEAR_SEGEMENT_LIST,
-  SET_COMMENT_PARENT_ID,
-  RESET_COMMENT_PARENT_ID,
   SET_PARENT_COMMENT,
   RESET_PARENT_COMMENT,
   SET_FILTER_BY_STATUS_ID,
@@ -179,7 +175,7 @@ const dashboardReducer = (state = initialState, action) => {
         ownerDetails: {},
         ticket: {},
         ticketComments: [],
-        ticketActivity: {},
+        ticketActivity: [],
         apiCallStatus: {},
       };
     }

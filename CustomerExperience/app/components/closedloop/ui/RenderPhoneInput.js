@@ -6,11 +6,10 @@ import {Colors} from '../../../styles/color.constants';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {MarginConstants} from '../../../styles/margin.constants';
-import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily} from '../../../styles/font.constants';
 
-const RenderPhoneInput = ({defaultValue, setTicketState}) => {
+const RenderPhoneInput = ({setTicketState}) => {
   const [text, setText] = useState(' ');
   const phoneInput = React.useRef();
   const setPhoneNumber = () => {

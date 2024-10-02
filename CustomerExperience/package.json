@@ -22,8 +22,9 @@
     "test:unit": "jest --testPathPattern=app/testcases/unit_test",
     "test:widget": "jest --testPathPattern=app/testcases/widget_test",
     "test:component": "jest --testPathPattern=app/testcases/component_test -u",
-    "test:singleFile": "jest --testPathPattern=app/components/closedloop/TicketActivity.test.js -u",
-    "test:singleFileCoverage": "jest --coverage --testPathPattern=app/components/closedloop/TicketActivity.test.js -u"
+    "test:singleFile": "jest --testPathPattern=app/redux/sagas/ClosedLoopSaga.test.js -u",
+    "test:singleFileCoverageOld": "jest --coverage --testPathPattern=app/redux/sagas/ClosedLoopSaga.test.js -u",
+    "test:singleFileCoverage": "jest --collectCoverageFrom=\"<rootDir>/app/**/*.{js,jsx}\" --testPathPattern=app/redux/sagas/ClosedLoopSaga.test.js -u"
   },
   "dependencies": {
     "@gregfrench/react-native-wheel-picker": "^1.2.3",

@@ -21,12 +21,12 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 jest.mock('react-native-notifications');
 jest.mock('react-native-device-info');
 
-jest.mock('@react-native-async-storage/async-storage', () =>
-  require('./__mocks__/async-storage'),
-);
-jest.mock('react-native-reanimated', () =>
-  require('react-native-reanimated/mock'),
-);
+// jest.mock('@react-native-async-storage/async-storage', () =>
+//   require('./__mocks__/async-storage'),
+// );
+// jest.mock('react-native-reanimated', () =>
+//   require('react-native-reanimated/mock'),
+// );
 // jest.mock('rn-fetch-blob', () => require('./__mocks__/rn-fetch-blob.js'));
 
 NativeModules.ReactNativeReanimated = {
@@ -47,13 +47,13 @@ jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
 
 fetchMock.enableMocks();
 
-jest.mock('reanimated-bottom-sheet', () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      snapTo: jest.fn(),
-    };
-  });
-});
+// jest.mock('reanimated-bottom-sheet', () => {
+//   return jest.fn().mockImplementation(() => {
+//     return {
+//       snapTo: jest.fn(),
+//     };
+//   });
+// });
 
 Object.keys(document.defaultView).forEach(property => {
   if (typeof global[property] === 'undefined') {

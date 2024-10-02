@@ -1,0 +1,521 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IconAndTitleText renders correctly 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "paddingBottom": 7.5,
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      [
+        {
+          "color": "#fff",
+          "fontSize": 14,
+        },
+        undefined,
+        {
+          "fontFamily": "Material Icons",
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        {},
+      ]
+    }
+  >
+    
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    Create new ticket
+  </Text>
+</View>
+`;
+
+exports[`IconAndTitleText renders correctly with custom color 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "paddingBottom": 7.5,
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      [
+        {
+          "color": "#fff",
+          "fontSize": 14,
+        },
+        undefined,
+        {
+          "fontFamily": "Material Icons",
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        {},
+      ]
+    }
+  >
+    
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    Create new ticket
+  </Text>
+</View>
+`;
+
+exports[`IconAndTitleText renders correctly with custom font size 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "paddingBottom": 7.5,
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      [
+        {
+          "color": "#fff",
+          "fontSize": 14,
+        },
+        undefined,
+        {
+          "fontFamily": "Material Icons",
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        {},
+      ]
+    }
+  >
+    
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    Create new ticket
+  </Text>
+</View>
+`;
+
+exports[`IconAndTitleText renders correctly with custom font weight 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "paddingBottom": 7.5,
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      [
+        {
+          "color": "#fff",
+          "fontSize": 14,
+        },
+        undefined,
+        {
+          "fontFamily": "Material Icons",
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        {},
+      ]
+    }
+  >
+    
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    Create new ticket
+  </Text>
+</View>
+`;
+
+exports[`IconAndTitleText renders correctly with custom icon and title color 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "paddingBottom": 7.5,
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      [
+        {
+          "color": "#fff",
+          "fontSize": 14,
+        },
+        undefined,
+        {
+          "fontFamily": "Material Icons",
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        {},
+      ]
+    }
+  >
+    
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    Create new ticket
+  </Text>
+</View>
+`;
+
+exports[`IconAndTitleText renders correctly with custom icon and title font size 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "paddingBottom": 7.5,
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      [
+        {
+          "color": "#fff",
+          "fontSize": 14,
+        },
+        undefined,
+        {
+          "fontFamily": "Material Icons",
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        {},
+      ]
+    }
+  >
+    
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    Create new ticket
+  </Text>
+</View>
+`;
+
+exports[`IconAndTitleText renders correctly with custom icon and title font weight 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "paddingBottom": 7.5,
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      [
+        {
+          "color": "#fff",
+          "fontSize": 14,
+        },
+        undefined,
+        {
+          "fontFamily": "Material Icons",
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        {},
+      ]
+    }
+  >
+    
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    Create new ticket
+  </Text>
+</View>
+`;
+
+exports[`IconAndTitleText renders correctly with custom icon color 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "paddingBottom": 7.5,
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      [
+        {
+          "color": "#fff",
+          "fontSize": 14,
+        },
+        undefined,
+        {
+          "fontFamily": "Material Icons",
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        {},
+      ]
+    }
+  >
+    
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    Create new ticket
+  </Text>
+</View>
+`;
+
+exports[`IconAndTitleText renders correctly with custom title color 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "paddingBottom": 7.5,
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      [
+        {
+          "color": "#fff",
+          "fontSize": 14,
+        },
+        undefined,
+        {
+          "fontFamily": "Material Icons",
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        {},
+      ]
+    }
+  >
+    
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    Create new ticket
+  </Text>
+</View>
+`;
+
+exports[`IconAndTitleText renders correctly with no icon 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "paddingBottom": 7.5,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  >
+    Create new ticket
+  </Text>
+</View>
+`;
+
+exports[`IconAndTitleText renders correctly with no icon and no title 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "paddingBottom": 7.5,
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  />
+</View>
+`;
+
+exports[`IconAndTitleText renders correctly with no title 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "paddingBottom": 7.5,
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      [
+        {
+          "color": "#fff",
+          "fontSize": 14,
+        },
+        undefined,
+        {
+          "fontFamily": "Material Icons",
+          "fontStyle": "normal",
+          "fontWeight": "normal",
+        },
+        {},
+      ]
+    }
+  >
+    
+  </Text>
+  <Text
+    style={
+      {
+        "color": "#545E6B",
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 15,
+        "fontWeight": "400",
+        "marginHorizontal": 3.75,
+      }
+    }
+    testID="text-label"
+  />
+</View>
+`;

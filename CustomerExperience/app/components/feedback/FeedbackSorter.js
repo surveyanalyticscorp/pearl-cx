@@ -31,6 +31,7 @@ export default function FeedbackSorter(props) {
             hasCloseButton
           />
           <RadioForm
+            testID="radio-button"
             radio_props={radio_props}
             initial={index}
             onPress={value => {

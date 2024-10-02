@@ -255,6 +255,17 @@ const priorityColors = {
   },
 };
 
+export function getNPSColor(sentiment) {
+  switch (sentiment) {
+    case 'Detractor':
+      return Colors.detractor2;
+    case 'Passive':
+      return Colors.passive2;
+    default:
+      return Colors.promoter2;
+  }
+}
+
 export const PROGRESS_COLOR_INCOMPLETE = '#DD4F43';
 export const PROGRESS_COLOR_TERMINATED = '#FFCE42';
 

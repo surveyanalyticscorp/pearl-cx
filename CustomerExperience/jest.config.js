@@ -33,14 +33,27 @@ module.exports = {
       '<rootDir>/__mocks__/react-native-gesture-handler.js',
     '^@react-native-firebase/messaging$':
       '<rootDir>/__mocks__/@react-native-firebase/messaging.js',
+    '^@react-navigation/native$':
+      '<rootDir>/__mocks__/react-navigation-native.js',
+    '^@react-native-async-storage/async-storage$':
+      '<rootDir>/__mocks__/async-storage.js',
     // '^reanimated-bottom-sheet$':
     //   '<rootDir>/__mocks__/@reanimated-bottom-sheet.js',
   },
   coveragePathIgnorePatterns: [
-    'app/components/dashboard',
+    'app/components/Notification.js',
+    'app/components/feedback/feedbackdetails/ResponseFeedback.js',
+    'app/components/feedback/SearchFeedback.js',
+    'app/components/login',
     'app/index.js',
     '/node_modules/',
     '/android/',
     '/ios/',
+    // 'app/widgets/qp-calendar',
+    // 'app/widgets/dashboardWidgets',
+    // 'app/widgets/dialog',
+    // 'app/widgets/drop-down',
+    // 'app/widgets/iconWidget',
+    // 'app/components/dashboard',
   ],
 };

@@ -15,7 +15,7 @@ import {Sizes} from '../styles/Size.constant';
 import DeviceInfo from 'react-native-device-info';
 import {translate} from '../Utils/MultilinguaUtils';
 
-const FilterHeader = (props) => {
+const FilterHeader = props => {
   let startDate = moment(props.range.startDate, DMYFORMAT).format(
     HalfMonthDateYearFormat,
   );
@@ -23,7 +23,7 @@ const FilterHeader = (props) => {
     HalfMonthDateYearFormat,
   );
 
-  let getDataOnNewRange = (range) => {
+  let getDataOnNewRange = range => {
     props.setRange(range);
     props.callDataAPI();
   };
@@ -84,7 +84,7 @@ const FilterHeader = (props) => {
 
   return (
     <View style={styles.filterHeader}>
-      <TouchableWithoutFeedback onPress={filterAction}>
+      <TouchableWithoutFeedback testID="filter-calendar" onPress={filterAction}>
         <View style={styles.filterLeftView}>
           <LineIcon name={'calendar'} size={Sizes.icons} color={Colors.white} />
           <View style={styles.filterCalendarView}>
@@ -95,6 +95,7 @@ const FilterHeader = (props) => {
       </TouchableWithoutFeedback>
       <View style={styles.filterArrowIconView}>
         <TouchableWithoutFeedback
+          testID="left-arrow"
           hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
           onPress={reduceRange}>
           <LineIcon
@@ -105,6 +106,7 @@ const FilterHeader = (props) => {
           />
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
+          testID="right-arrow"
           hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
           onPress={addRange}>
           <LineIcon
@@ -118,14 +120,14 @@ const FilterHeader = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     range: state.global.range,
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  setRange: (range) => {
+const mapDispatchToProps = dispatch => ({
+  setRange: range => {
     dispatch(setRangeFilter(range));
   },
 });

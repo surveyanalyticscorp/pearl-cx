@@ -43,14 +43,14 @@ const feedbackStack = props => (
         headerRight: props => <SearchIcon route={'Feedback'} />,
       })}
     />
-    <FeedbackStack.Screen
+    {/* <FeedbackStack.Screen
       name="Search Response"
       component={SearchFeedback}
       options={({navigation, route}) => ({
         headerShown: false,
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}
-    />
+    /> */}
     {CommonScreens(FeedbackStack)}
   </FeedbackStack.Navigator>
 );

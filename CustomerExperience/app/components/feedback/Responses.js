@@ -9,7 +9,7 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import NoResponsesFound from './NoResponsesFound';
 
-const Responses = ({onRefresh, onEndReached, isLoading}) => {
+const Responses = ({onRefresh, onEndReached, isLoading, testID}) => {
   const navigation = useNavigation();
   const allResponses = useSelector(state => state.response.allResponses);
   const authToken = useSelector(state => state.global.authToken);
@@ -33,8 +33,11 @@ const Responses = ({onRefresh, onEndReached, isLoading}) => {
   };
 
   return (
-    <View style={dashboardStyles.container}>
+    <View
+      testID={testID ?? 'responses-component'}
+      style={dashboardStyles.container}>
       <FlatList
+        testID={'flatlist-feedback'}
         data={allResponses}
         renderItem={rowItem}
         keyExtractor={item => item.responseSetID + ''}

@@ -1,5 +1,5 @@
 // __mocks__/react-native-reanimated.js
-import {Animated} from 'react-native';
+import {Animated, View} from 'react-native';
 
 export const Easing = {
   linear: jest.fn(),
@@ -20,6 +20,7 @@ export const FadeInUp = {
 export const timing = Animated.timing;
 
 export default {
+  View: View,
   Value: Animated.Value,
   timing: Animated.timing,
   Easing: Easing,

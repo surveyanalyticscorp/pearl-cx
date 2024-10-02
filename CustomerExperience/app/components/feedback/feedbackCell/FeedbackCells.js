@@ -1,22 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {View, TouchableWithoutFeedback, Pressable, Text} from 'react-native';
+import {View, TouchableWithoutFeedback, Text} from 'react-native';
 import {StyleSheet} from 'react-native';
 import StringUtils from '../../../Utils/StringUtils';
 import ArrayUtils from '../../../Utils/ArrayUtils';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import IonIcon from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../../styles/font.constants';
-import {Sizes} from '../../../styles/Size.constant';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import NPSIcon from '../../../widgets/NPSIcon';
 import NPSAnswerText from '../../../widgets/NPSAnswerText';
-import {HorizontalSpaceBox, VerticalSpaceBox} from '../../../widgets/SpaceBox';
+import {HorizontalSpaceBox} from '../../../widgets/SpaceBox';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
-import {baseTextStyles} from '../../../styles/text.styles';
 import {
   ASYNC_RESPONSES_WITH_CX_MANAGER,
   RESPONSE_READ_UNREAD_FEATURE_ACTIVATION_DATE,
@@ -67,7 +63,7 @@ const Date = ({surveyTakenDate}) => {
 
 const ResponseId = ({responseSetID}) => {
   return (
-    <View style={styles.responseIdContainer}>
+    <View style={styles.responseIdContainer} testID="response-id">
       <TextLabel
         color={Colors.evenDarkerGrey}
         text={`${translate('close_loop.response_id')} ${responseSetID}`}
@@ -108,7 +104,6 @@ let RenderResponseContainer = ({
     sentiment,
     responseSetID,
     surveyID,
-    read,
   } = item;
 
   const navigateToNewTicket = () => {
@@ -121,7 +116,7 @@ let RenderResponseContainer = ({
   };
 
   return (
-    <View style={styles.upperContainer}>
+    <View testID="response-container" style={styles.upperContainer}>
       <View style={styles.responseContainer}>
         {/* {renderNPSView()} */}
 
@@ -202,6 +197,7 @@ const ResponseItemButton = ({
 
   return (
     <TouchableWithoutFeedback
+      testID="feedback-cell"
       onPress={() => {
         onSelect();
         asyncSetResponseId();
@@ -209,25 +205,6 @@ const ResponseItemButton = ({
       disabled={isDisabled}>
       {children}
     </TouchableWithoutFeedback>
-  );
-};
-const RenderIsNewResponse = ({
-  surveyTakenDate,
-  disable,
-  responseSetID,
-  read,
-}) => {
-  let color = Colors.fullTransparent;
-
-  color =
-    !read && isSurveyTakenAfterJuneFirst(surveyTakenDate)
-      ? Colors.accentLight
-      : Colors.fullTransparent;
-
-  return (
-    !disable && (
-      <View style={[styles.unreadIndicator, {backgroundColor: color}]} />
-    )
   );
 };
 
@@ -244,7 +221,7 @@ export default function FeedbackCell(props) {
         parentRoute: 'Responses',
       });
     }
-  }, [feedbackTapped]);
+  }, [feedbackTapped, props.item.ticketID, props.navigation]);
   const isNewResponse = !read && isSurveyTakenAfterJuneFirst(surveyTakenDate);
 
   return (
@@ -252,7 +229,8 @@ export default function FeedbackCell(props) {
       responseSetID={responseSetID}
       surveyTakenDate={surveyTakenDate}
       isDisabled={disable}
-      onSelect={props.onSelect}>
+      onSelect={props.onSelect}
+      testID="feedback-cell">
       <View style={styles.cellContainer}>
         {/* <RenderIsNewResponse
           read={read}
@@ -261,7 +239,11 @@ export default function FeedbackCell(props) {
           disable={disable}
         /> */}
         <View style={styles.container}>
-          <RenderResponseContainer {...props} isNewResponse={isNewResponse} />
+          <RenderResponseContainer
+            {...props}
+            isNewResponse={isNewResponse}
+            testID="response-container"
+          />
         </View>
       </View>
     </ResponseItemButton>

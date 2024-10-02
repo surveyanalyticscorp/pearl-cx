@@ -77,30 +77,6 @@ export default class WebServiceHandler {
     console.log(`HeaderParams: ${JSON.stringify(headerParam)}`);
     console.log(`Parameter: ${JSON.stringify(parameter)}`);
     return this.makeApiCall('GET', fullUrl, headerParam, parameter, null);
-    // return new Promise(function (success, failed) {
-    //   let URL = fullUrl + WebServiceHandler.parameter(parameter);
-    //   fetch(URL, {
-    //     method: 'GET',
-    //     headers: WebServiceHandler.header(headerParam),
-    //   })
-    //     .then(response => response.json())
-    //     .then(response => {
-    //       console.log(
-    //         `URL: ${fullUrl}`,
-    //         `Response Data: ${JSON.stringify(response)}`,
-    //       );
-    //       if (response.statusCode === 200 || response.status === SUCCESS) {
-    //         success(response);
-    //       } else {
-    //         console.log('ERROR', JSON.stringify(response));
-
-    //         failed(response);
-    //       }
-    //     })
-    //     .catch(function (err) {
-    //       failed(err);
-    //     });
-    // });
   }
 
   static postNew(url, headerParam, parameter, queryParam) {
@@ -119,32 +95,6 @@ export default class WebServiceHandler {
       queryParam,
       JSON.stringify(parameter),
     );
-    // return new Promise(function (success, failed) {
-    //   fetch(fullUrl, {
-    //     method: 'POST',
-    //     headers: WebServiceHandler.header(headerParam),
-    //     body: JSON.stringify(parameter),
-    //   })
-    //     .then(response => response.json())
-    //     .then(response => {
-    //       console.log(
-    //         `URL: ${fullUrl}`,
-    //         `Response Data: ${JSON.stringify(response)}`,
-    //       );
-    //       if (response.statusCode === 200 || response.status === SUCCESS) {
-    //         success(response);
-    //       } else {
-    //         console.log('ERROR', JSON.stringify(response));
-
-    //         failed(response);
-    //       }
-    //     })
-    //     .catch(function (err) {
-    //       // console.log('ERROR', JSON.stringify(err));
-
-    //       failed(err);
-    //     });
-    // });
   }
 
   static patch(url, headerParam, parameter) {

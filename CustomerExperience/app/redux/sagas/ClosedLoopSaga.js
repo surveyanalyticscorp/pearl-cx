@@ -38,8 +38,6 @@ import {
   CX_GET_CLOSED_LOOP_SEGMENT_DETAILS,
   CX_GET_CLOSED_LOOP_TICKET_DETAILS,
   CX_UPDATE_CLOSED_LOOP_TICKET,
-  CLF_GET_TICKET_LIST,
-  SEGMENT,
   CLF_GET_TICKET_DETAILS,
   COMMNETS,
   ACTIVITY_LOG,
@@ -53,14 +51,8 @@ import {
   CLF_LATEST_COMMENT_BY_TICKET_ID_PREFIX,
   CLF_STATUS_HISTORY_BY_PREFIX,
   CLF_STATUS_HISTORY_BY_POSTFIX,
-  CLF_GET_ROOT_CAUSE_PREFIX,
-  CLF_GET_ROOT_CAUSE_POSTFIX,
-  CLF_GET_ROOT_CAUSE_ACTIONS_PREFIX,
-  CLF_GET_ROOT_CAUSE_ACTIONS_POSTFIX,
   CLF_UPDATE_ROOT_CAUSE_PREFIX,
   CLF_UPDATE_ROOT_CAUSE_POSTFIX,
-  CLF_BASE_URL,
-  CLF_QA_BASE_URL,
   syncTicketList,
   ESCALATE,
   CLF_DELETE_TICKETS,
@@ -110,7 +102,7 @@ import {
 } from '../../Utils/Utility';
 import {getBearerTokenStatic, getClfUrl} from '../../Utils/ApiCallUtils';
 
-function* fetchDetractorTicketDetails(action) {
+export function* fetchDetractorTicketDetails(action) {
   try {
     yield put({type: IS_LOADING, payload: {isLoading: true}});
     const json = yield WebServiceHandler.postNew(
@@ -136,7 +128,7 @@ export function* watchGetDetractorTicketDetail() {
   yield takeLatest(GET_CLOSED_LOOP_TICKET_DETAILS, fetchDetractorTicketDetails);
 }
 
-function* fetchFirstTimeClosedLoopSegmentDetails(action) {
+export function* fetchFirstTimeClosedLoopSegmentDetails(action) {
   try {
     const json = yield WebServiceHandler.postNew(
       CX_GET_CLOSED_LOOP_SEGMENT_DETAILS,
@@ -166,7 +158,7 @@ export function* watchGetFirstTimeClosedLoopSegmentDetails() {
   );
 }
 
-function* fetchClosedLoopSegmentDetails(action) {
+export function* fetchClosedLoopSegmentDetails(action) {
   try {
     // yield put({type: IS_LOADING, payload: {isLoading: true}});
 
@@ -196,7 +188,7 @@ export function* watchGetClosedLoopSegmentDetails() {
   );
 }
 
-function* fetchClosedLoopOwnerDetails(action) {
+export function* fetchClosedLoopOwnerDetails(action) {
   try {
     const json = yield WebServiceHandler.postNew(
       CX_GET_CLOSED_LOOP_OWNER_DETAILS,
@@ -221,7 +213,7 @@ export function* watchGetClosedLoopOwnerDetails() {
   yield takeLatest(GET_CLOSED_LOOP_OWNER_DETAILS, fetchClosedLoopOwnerDetails);
 }
 
-function* fetchClosedLoopAllOwners(action) {
+export function* fetchClosedLoopAllOwners(action) {
   try {
     const json = yield WebServiceHandler.postNew(
       CX_GET_CLOSED_LOOP_SEGMENT_AND_OWNER_BY_FEEDBACK,
@@ -296,7 +288,7 @@ export function addClosedLoopTicket(
     });
 }
 
-function* syncTickets(action) {
+export function* syncTickets(action) {
   try {
     yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
@@ -322,7 +314,7 @@ function* syncTickets(action) {
 export function* watchSyncTickets() {
   yield takeLatest(GET_TICKET_LIST_SYNC, syncTickets);
 }
-function* fetchClosedLoopTicketList(action) {
+export function* fetchClosedLoopTicketList(action) {
   try {
     // yield put({type: IS_LOADING, payload: {isLoading: true}});
     yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
@@ -350,7 +342,7 @@ export function* watchGetClosedLoopTicketList() {
   yield takeLatest(GET_CLOSED_LOOP_TICKET_LIST, fetchClosedLoopTicketList);
 }
 
-function* fetchClosedLoopTicketItem(action) {
+export function* fetchClosedLoopTicketItem(action) {
   try {
     // yield put({type: IS_LOADING, payload: {isLoading: true}});
     yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
@@ -401,7 +393,7 @@ export function* watchGetClosedLoopTicketItem() {
   yield takeLatest(GET_CLOSED_LOOP_TICKET_ITEM, fetchClosedLoopTicketItem);
 }
 
-function* fetchClosedLoopTicketComments(action) {
+export function* fetchClosedLoopTicketComments(action) {
   try {
     const comments = yield WebServiceHandler.get(
       getClfUrl(CLF_GET_TICKET_DETAILS + action.ticketId + '/' + COMMNETS),
@@ -429,7 +421,7 @@ export function* watchGetClosedLoopTicketComments() {
   );
 }
 
-function* fetchClosedLoopTicketActivity(action) {
+export function* fetchClosedLoopTicketActivity(action) {
   try {
     // yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
@@ -462,7 +454,7 @@ export function* watchGetClosedLoopTicketActivity() {
   );
 }
 
-function* postTicketComment(action) {
+export function* postTicketComment(action) {
   try {
     console.log('TICKET_COMENTS', JSON.stringify(action));
     // yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
@@ -533,7 +525,7 @@ export function* watchPostTicketComment() {
   yield takeLatest(ADD_CLOSED_LOOP_TICKET_ITEM_COMMENTS, postTicketComment);
 }
 
-function* postCreateClfTicket(action) {
+export function* postCreateClfTicket(action) {
   try {
     const URL = getClfUrl(
       CLF_GET_TICKET_DETAILS +
@@ -580,7 +572,7 @@ export function* watchPostCreateTicket() {
   yield takeLatest(CREATE_CLF_TICKET, postCreateClfTicket);
 }
 
-function* patchUpdateClfTicket(action) {
+export function* patchUpdateClfTicket(action) {
   try {
     yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
@@ -630,7 +622,7 @@ export function* watchPatchUpdateTicket() {
   yield takeLatest(UPDATE_CLF_TICKET, patchUpdateClfTicket);
 }
 
-function* patchTicketEscalation(action) {
+export function* patchTicketEscalation(action) {
   try {
     yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
@@ -671,7 +663,7 @@ export function* watchTicketEscalation() {
   yield takeLatest(UPDATE_TICKET_ESCALATION, patchTicketEscalation);
 }
 
-function* getEmailTemplates(action) {
+export function* getEmailTemplates(action) {
   try {
     const json = yield WebServiceHandler.get(
       getClfUrl(CLF_GET_EMAIL_TEMPLATES),
@@ -694,7 +686,7 @@ export function* watchGetEmailTemplates() {
   yield takeLatest(GET_EMAIL_TEMPLATES, getEmailTemplates);
 }
 
-function* getDefaultEmailTemplate(action) {
+export function* getDefaultEmailTemplate(action) {
   try {
     const json = yield WebServiceHandler.get(
       getClfUrl(CLF_GET_DEFAULT_EMAIL_TEMPLATE),
@@ -717,7 +709,7 @@ export function* watchGetDefaultEmailTemplate() {
   yield takeLatest(GET_DEFAULT_EMAIL_TEMPLATE, getDefaultEmailTemplate);
 }
 
-function* sendEmail(action) {
+export function* sendEmail(action) {
   try {
     const json = yield WebServiceHandler.postNew(
       getClfUrl(
@@ -749,7 +741,7 @@ export function* watchSendEmail() {
   yield takeLatest(SEND_EMAIL, sendEmail);
 }
 
-function* getLatestComment(action) {
+export function* getLatestComment(action) {
   try {
     const json = yield WebServiceHandler.get(
       getClfUrl(
@@ -776,7 +768,7 @@ export function* watchGetLatestComment() {
   yield takeLatest(GET_LATEST_COMMENT, getLatestComment);
 }
 
-function* getTicketStatusHistory(action) {
+export function* getTicketStatusHistory(action) {
   try {
     const json = yield WebServiceHandler.get(
       getClfUrl(
@@ -803,7 +795,7 @@ export function* watchGetTicketStatusHistory() {
   yield takeLatest(GET_TICKET_STATUS_HISTORY, getTicketStatusHistory);
 }
 
-function* getRootCauseList(action) {
+export function* getRootCauseList(action) {
   try {
     const json = yield WebServiceHandler.get(
       getClfUrl(CLF_GET_ROOT_CAUSE),
@@ -826,7 +818,7 @@ export function* watchGetrootCauseList() {
   yield takeLatest(GET_ROOT_CASUES, getRootCauseList);
 }
 
-function* getRootCauseActionList(action) {
+export function* getRootCauseActionList(action) {
   try {
     const json = yield WebServiceHandler.get(
       getClfUrl(CLF_GET_ROOT_CAUSE_ACTIONS),
@@ -850,7 +842,7 @@ export function* watchGetrootCauseActionList() {
   yield takeLatest(GET_ACTIONS, getRootCauseActionList);
 }
 
-function* updateRootCauseAndAction(action) {
+export function* updateRootCauseAndAction(action) {
   try {
     const json = yield WebServiceHandler.patch(
       getClfUrl(
@@ -897,7 +889,7 @@ export function* watchUpdateRootCause() {
   yield takeLatest(UPDATE_ROOT_CAUSE, updateRootCauseAndAction);
 }
 
-function* deleteTickets(action) {
+export function* deleteTickets(action) {
   try {
     const json = yield WebServiceHandler.delete(
       getClfUrl(CLF_DELETE_TICKETS),
@@ -924,7 +916,7 @@ export function* watchDeleteTickets() {
   yield takeLatest(DELETE_TICKET, deleteTickets);
 }
 
-function* fetchActionSummary(action) {
+export function* fetchActionSummary(action) {
   try {
     const json = yield WebServiceHandler.get(
       getClfUrl(
@@ -951,7 +943,7 @@ export function* watchActionSummary() {
   yield takeLatest(ACTION_HISTORY_SUMMARY, fetchActionSummary);
 }
 
-function* fetchActionDetails(action) {
+export function* fetchActionDetails(action) {
   try {
     const json = yield WebServiceHandler.get(
       getClfUrl(
@@ -978,7 +970,7 @@ export function* watchActionDetails() {
   yield takeLatest(ACTION_HISTORY_DETAILS, fetchActionDetails);
 }
 
-function* uploadMediaFile(action) {
+export function* uploadMediaFile(action) {
   try {
     const json = yield WebServiceHandler.postUploadFile(
       getClfUrl(CLF_MEDIA_UPLOAD),
