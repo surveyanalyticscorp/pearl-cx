@@ -65,6 +65,8 @@ const Colors = {
   positivePassive: '#E8E8E8',
   overdueBackgroundColor: '#FFBABA',
   overdueTextColor: '#D8000C',
+  toastSuccessTextColor: '#227700',
+  toastSuccessBackgroundColor: '#DFF2BF',
 };
 
 const textColors = {

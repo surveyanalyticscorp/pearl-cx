@@ -48,10 +48,7 @@ import SelectPriority from './takeaction/SelectPriority';
 import SelectTicketOwner from './takeaction/SelectTicketOwner';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
-import {
-  isObjectEmpty,
-  showSuccesfullyCopiedFlashMessage,
-} from '../../Utils/Utility';
+import {isObjectEmpty, showSuccessFlashMessage} from '../../Utils/Utility';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {
   deleteTickets,
@@ -69,11 +66,7 @@ import ShowTitleAndDropdown from '../closedloop/ui/ShowTitleAndDropdown';
 const CopyTicketIdButton = ({ticket}) => {
   const onPress = () => {
     Clipboard.setString(JSON.stringify(ticket.id));
-    showSuccesfullyCopiedFlashMessage(
-      translate('close_loop.copied_success'),
-      Colors.accentGradient,
-      Colors.filterIconColor,
-    );
+    showSuccessFlashMessage(translate('close_loop.copied_success'));
   };
 
   return (

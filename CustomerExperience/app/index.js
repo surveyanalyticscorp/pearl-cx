@@ -13,6 +13,9 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import * as globalVariables from '../app/styles/globalStyleVariables';
 import {View, Platform, StatusBar} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import {MarginConstants} from './styles/margin.constants';
+import Toast from 'react-native-toast-message';
+import toastConfig from './config/toastConfig';
 
 // import codePush from 'react-native-code-push';
 
@@ -31,10 +34,14 @@ const CustomFlashMessage = () => {
   return (
     <FlashMessage
       // style={{borderRadius: 4}}
-      animated
+      animated={true}
       position={{
         // top: DeviceInfo.hasDynamicIsland() ? (DeviceInfo.hasNotch() ? 59 : ) : 0,
-        top: insets.top,
+        top: insets.top + MarginConstants.tab1_2x,
+        left: insets.left + MarginConstants.tab1_2x,
+        right: insets.right + MarginConstants.tab1_2x,
+
+        // top: 0,
         // left: 0,
         // right: 0,
         // bottom: 0,
@@ -71,7 +78,8 @@ class CxApp extends Component {
         <SafeAreaProvider>
           <StatusBar barStyle={'light-content'} />
           {this.state.styleBuilt ? <SplashScreen /> : <View />}
-          <CustomFlashMessage />
+          {/* <CustomFlashMessage /> */}
+          <Toast config={toastConfig} />
         </SafeAreaProvider>
       </Provider>
     );
