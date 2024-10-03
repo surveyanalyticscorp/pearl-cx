@@ -17,6 +17,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import {ApplyButton} from '../../../routes/commonUI/CommonUI';
 import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
 import {baseTextStyles} from '../../../styles/text.styles';
+import {PaddingConstants} from '../../../styles/padding.constants';
 
 const SelectPriority = ({data, selectedIndex, handleOnPress}) => {
   const [currentIndex, setIndex] = useState(selectedIndex);
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
+    padding: PaddingConstants.tab1_2x,
   },
   row: {
     flexDirection: 'row',

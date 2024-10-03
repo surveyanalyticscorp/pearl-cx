@@ -17,6 +17,7 @@ import StringUtils from '../../../Utils/StringUtils';
 import {NoItemsFound} from '../../../routes/commonUI/CommonUI';
 import QPButton from '../../../widgets/Button';
 import {translate} from '../../../Utils/MultilinguaUtils';
+import {PaddingConstants} from '../../../styles/padding.constants';
 
 const SelectTicketOwner = props => {
   const [data, setData] = useState(props.data);
@@ -99,12 +100,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
+    paddingHorizontal: PaddingConstants.tab1_2x,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    margin: MarginConstants.tab1,
-    padding: MarginConstants.tab1,
+    marginVertical: MarginConstants.tab1,
+    paddingVertical: MarginConstants.tab1,
   },
   takeActionText: {
     color: Colors.white,

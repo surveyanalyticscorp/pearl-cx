@@ -23,10 +23,10 @@ const TextLabel = ({
       numberOfLines={numberOfLines}
       testID={testID}
       style={{
-        ...style,
         ...baseTextStyle_,
         fontWeight: fontWeight_,
         color: color_,
+        ...style,
       }}>
       {text || children}
     </Text>

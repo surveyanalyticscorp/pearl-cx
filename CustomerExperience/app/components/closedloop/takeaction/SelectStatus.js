@@ -7,6 +7,7 @@ import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import StatusItem from './StatusItem';
+import {PaddingConstants} from '../../../styles/padding.constants';
 const statusListItemSeparator = () => (
   <ListItemSeparator style={{marginHorizontal: MarginConstants.tab1}} />
 );
@@ -54,6 +55,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
+    paddingHorizontal: PaddingConstants.tab1_2x,
   },
   row: {
     flexDirection: 'row',

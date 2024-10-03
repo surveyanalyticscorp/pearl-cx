@@ -567,19 +567,6 @@ export default function CreateTicket(props) {
     );
   };
 
-  // const renderCalenderHeader = (_title) => {
-  //   return (
-  //     <BottomSheetHeader
-  //       title={'Select Issue date'}
-  //       onPressClose={() =>
-  //         calendarBottomSheet.current.snapTo(
-  //           calenderBottomSheetSnapPoints.length - 1,
-  //         )
-  //       }
-  //     />
-  //   );
-  // };
-
   const RenderPriorityBottomSheet = () => {
     return (
       <BottomSheet
@@ -636,20 +623,6 @@ export default function CreateTicket(props) {
     );
   };
 
-  // const RenderCalenderBottomSheet = () => {
-  //   return (
-  //     <BottomSheet
-  //       ref={calendarBottomSheet}
-  //       snapPoints={calenderBottomSheetSnapPoints}
-  //       initialSnap={calenderBottomSheetSnapPoints.length - 1}
-  //       enabledGestureInteraction={false}
-  //       renderContent={renderDateSelectContent}
-  //       renderHeader={renderCalenderHeader}
-  //       callbackNode={fall}
-  //     />
-  //   );
-  // };
-
   let renderCancelButton = () => {
     return (
       <Pressable
@@ -672,16 +645,7 @@ export default function CreateTicket(props) {
             ...state,
             issueDate: moment(selectedDate, DMYFORMAT).format(YMDFORMAT),
           }));
-          //save date
-          // if (startDateSelected) {
-          //   setSelectedRange({
-          //     ...selectedRange,
-          //     type: 6,
-          //     startDate: customDate,
-          //   });
-          // } else {
-          //   setSelectedRange({...selectedRange, type: 6, endDate: customDate});
-          // }
+
           setShowCalendar(false);
         }}>
         <Text style={styles.buttonText}>Ok</Text>
@@ -704,10 +668,6 @@ export default function CreateTicket(props) {
   };
 
   let renderCalendar = () => {
-    // let date = startDateSelected
-    //   ? selectedRange.startDate
-    //   : selectedRange.endDate;
-    // let selectedDate = moment(date, DMYFORMAT).format('YYYY-MM-DD');
     let currentDate = moment().format('YYYY-MM-DD');
     let currentYear = moment().year();
     let minYear = parseInt(currentYear) - 4;
@@ -747,20 +707,6 @@ export default function CreateTicket(props) {
       </Modal>
     );
   };
-
-  let getTicketOwnerTextStyle = useCallback(
-    ticketOwnerIndex_ => {
-      return ticketOwnerIndex_ < 0 ? styles.palceholderText : styles.titleText;
-    },
-    [ticketOwner],
-  );
-
-  const getSegmentTextStyle = useCallback(
-    segment_ => {
-      return segment_ < 0 ? styles.palceholderText : styles.titleText;
-    },
-    [segmentId],
-  );
 
   const VerticalSpace = () => (
     <VerticalSpaceBox marginVertical={MarginConstants.halfTab} />
@@ -971,7 +917,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     backgroundColor: Colors.white,
     height: '100%',
-    paddingHorizontal: 24,
   },
   image: {width: 14, height: 14},
 

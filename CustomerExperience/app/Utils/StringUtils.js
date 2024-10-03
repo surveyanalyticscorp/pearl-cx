@@ -296,4 +296,14 @@ export default class StringUtils {
       return responseCount.toString();
     }
   }
+
+  static truncateFileName = (fileName, maxLength = 30) => {
+    if (fileName.length <= maxLength) {
+      return fileName;
+    }
+
+    const start = fileName.slice(0, 11); // Take first 6 characters
+    const end = fileName.slice(-16); // Take last 12 characters
+    return `${start}...${end}`;
+  };
 }

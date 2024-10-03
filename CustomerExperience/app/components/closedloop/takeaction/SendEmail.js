@@ -45,7 +45,7 @@ import {translate} from '../../../Utils/MultilinguaUtils';
 const RenderHeader = () => {
   return (
     <View style={styles.rowContainerHeader}>
-      <Text style={styles.headerText}>Respond Via Email</Text>
+      <Text style={styles.headerText}>Respond via email</Text>
       <CloseButton color={Colors.filterIconColor} />
     </View>
   );
@@ -219,80 +219,10 @@ const TemplateIcon = ({onPressTemplate}) => {
   );
 };
 
-// const EmailBody = ({
-//   refEditor,
-//   refToolbar,
-//   body,
-//   onChangeEmailBody,
-//   closeBottomSheet,
-// }) => {
-//   const scrollRef = React.useRef();
-
-//   return (
-//     <KeyboardAwareScrollView style={styles.textBox}>
-//       {/* <KeyboardAvoidingView
-//         style={{flex: 1}}
-//         enabled
-//         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-//         keyboardVerticalOffset={12}> */}
-//       {/* <TextInput
-//     scrollEnabled={true}
-//     multiline={true}
-//     placeholder="Write email..."
-//     style={styles.emailText}
-//   /> */}
-//       {/* <KeyboardAvoidingView
-//   behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-//   keyboardVerticalOffset={Platform.OS === 'ios' ? 12 : 0}> */}
-
-//       <RichEditor
-//         ref={refEditor}
-//         useContainer
-//         disabled={false}
-//         initialFocus={false}
-//         onChange={onChangeEmailBody}
-//         placeholder="Email body"
-//         androidHardwareAccelerationDisabled={true}
-//         initialHeight={300}
-//         style={styles.textInput}
-//         // initialContentHTML={body.emailBody}
-//         setContentHTML={body.emailBody}
-//         onFocus={closeBottomSheet}
-//       />
-//       <View style={[styles.rowContainer, {marginBottom: MarginConstants.tab2}]}>
-//         <RichToolbar
-//           ref={refToolbar}
-//           editor={refEditor}
-//           selectedIconTint={Colors.accentLight}
-//           iconTint={Colors.lightBlack}
-//           // editorInitializedCallback={() => updateRichText(emailBody)}
-//           actions={[
-//             actions.setBold,
-//             actions.setItalic,
-//             actions.setUnderline,
-//             actions.insertBulletsList,
-//             actions.insertOrderedList,
-//             // actions.insertLink,
-//             actions.setStrikethrough,
-//             // actions.insertImage,
-//             actions.keyboard,
-//           ]}
-//           style={{
-//             justifyContent: 'flex-start',
-//             alignItems: 'flex-start',
-//             flex: 2,
-//           }}
-//         />
-//       </View>
-//       {/* </KeyboardAvoidingView> */}
-//     </KeyboardAwareScrollView>
-//   );
-// };
-
 const ActionHistory = ({onPressActionHistoryItem}) => {
   return (
     <View style={styles.actionHistoryContainer}>
-      <Text style={styles.actionHistoryHeader}>Action History</Text>
+      <Text style={styles.actionHistoryHeader}>Action history</Text>
 
       <ActionHistoryItem onItemPress={onPressActionHistoryItem} />
     </View>
@@ -346,7 +276,8 @@ const AttachmentItem = ({item, index}) => {
     <Pressable style={styles.attachmentItem}>
       <AttachmentIcon mimeType={item.mimeType} />
       <Text numberOfLines={1} style={styles.attachmentText}>
-        {item.fileName}
+        {/* {item.fileName} */}
+        {StringUtils.truncateFileName(item.fileName)}
       </Text>
     </Pressable>
   );
@@ -574,7 +505,7 @@ const SendEmail = props => {
             actions.insertBulletsList,
             actions.insertOrderedList,
             actions.setStrikethrough,
-            actions.keyboard,
+            // actions.keyboard,
           ]}
           style={{
             justifyContent: 'flex-start',
@@ -755,7 +686,6 @@ const styles = StyleSheet.create({
   attachmentItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: MarginConstants.tab2,
   },
 
   contentContainer: {backgroundColor: Colors.white, height: '100%'},

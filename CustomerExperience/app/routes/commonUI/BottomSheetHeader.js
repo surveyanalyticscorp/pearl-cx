@@ -6,18 +6,25 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
 
 let {width} = Dimensions.get('window');
 
-const BottomSheetHeader = props => {
+const PanelHandler = () => {
   return (
-    <View style={styles.panelHeaderContainer}>
-      <View style={styles.panelHandleContainer}>
-        <View style={styles.panelHandle} />
-      </View>
+    <View testID="panelHandler" style={styles.panelHandleContainer}>
+      <View style={styles.panelHandle} />
+    </View>
+  );
+};
+const BottomSheetHeader = ({title, onPressClose}) => {
+  return (
+    <View testID="bottomSheetHeader" style={styles.panelHeaderContainer}>
+      <PanelHandler />
       <View style={styles.panelTitleContainer}>
-        <Text style={styles.header}>{props.title}</Text>
-        <Pressable onPress={props.onPressClose}>
+        <TextLabel text={title} style={styles.header} />
+        {/* <Text style={styles.header}>{title}</Text> */}
+        <Pressable onPress={onPressClose}>
           <IonIcons name="close" size={20} color={Colors.filterIconColor} />
         </Pressable>
       </View>
