@@ -461,62 +461,64 @@ const SendEmail = props => {
 
   return (
     <View style={styles.container}>
-      <KeyboardAwareScrollView enableOnAndroid={true}>
-        <RenderHeader />
-        <RenderTicketId ticketId={ticketId} />
-        <RenderOptionsView
-          onPressTemplate={onPressTemplate}
-          // onPressSend={onPressSend}
-          emailBody={body}
-        />
+      <SafeAreaView>
+        <KeyboardAwareScrollView enableOnAndroid={true}>
+          <RenderHeader />
+          <RenderTicketId ticketId={ticketId} />
+          <RenderOptionsView
+            onPressTemplate={onPressTemplate}
+            // onPressSend={onPressSend}
+            emailBody={body}
+          />
 
-        <EmailToFrom
-          title={translate('action_email.to')}
-          value={body.toEmail}
-        />
-        <EmailSubject
-          body={body}
-          closeBottomSheet={closeBottomSheet}
-          onChangeSubject={onChangeSubject}
-        />
-        <RichEditor
-          ref={richText}
-          useContainer
-          disabled={false}
-          initialFocus={false}
-          onChange={onChangeEmailBody}
-          placeholder={translate('action_email.email_body')}
-          placeholderTextColor={Colors.borderColor}
-          androidHardwareAccelerationDisabled={true}
-          initialHeight={300}
-          style={styles.textInput}
-          setContentHTML={body.emailBody}
-          onFocus={closeBottomSheet}
-        />
-        <RichToolbar
-          ref={richTextToolBar}
-          editor={richText}
-          selectedIconTint={Colors.accentLight}
-          iconTint={Colors.lightBlack}
-          actions={[
-            actions.setBold,
-            actions.setItalic,
-            actions.setUnderline,
-            actions.insertBulletsList,
-            actions.insertOrderedList,
-            actions.setStrikethrough,
-            // actions.keyboard,
-          ]}
-          style={{
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            flex: 2,
-          }}
-        />
+          <EmailToFrom
+            title={translate('action_email.to')}
+            value={body.toEmail}
+          />
+          <EmailSubject
+            body={body}
+            closeBottomSheet={closeBottomSheet}
+            onChangeSubject={onChangeSubject}
+          />
+          <RichEditor
+            ref={richText}
+            useContainer
+            disabled={false}
+            initialFocus={false}
+            onChange={onChangeEmailBody}
+            placeholder={translate('action_email.email_body')}
+            placeholderTextColor={Colors.borderColor}
+            androidHardwareAccelerationDisabled={true}
+            initialHeight={300}
+            style={styles.textInput}
+            setContentHTML={body.emailBody}
+            onFocus={closeBottomSheet}
+          />
+          <RichToolbar
+            ref={richTextToolBar}
+            editor={richText}
+            selectedIconTint={Colors.accentLight}
+            iconTint={Colors.lightBlack}
+            actions={[
+              actions.setBold,
+              actions.setItalic,
+              actions.setUnderline,
+              actions.insertBulletsList,
+              actions.insertOrderedList,
+              actions.setStrikethrough,
+              // actions.keyboard,
+            ]}
+            style={{
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              flex: 2,
+            }}
+          />
 
-        <AttachmentView />
-        <ActionHistory onPressActionHistoryItem={onPressActionHistoryItem} />
-      </KeyboardAwareScrollView>
+          <AttachmentView />
+          <ActionHistory onPressActionHistoryItem={onPressActionHistoryItem} />
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
 
       <BottomSheet
         ref={bs}
