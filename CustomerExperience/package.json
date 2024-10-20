@@ -79,7 +79,7 @@
     "redux-thunk": "^2.3.0",
     "tslib": "^2.0.3",
     "typescript": "^3.8.3",
-    "victory-native": "^35.0.1",
+    "victory-native": "^40.0.0",
     "xdate": "^0.8.2"
   },
   "devDependencies": {
