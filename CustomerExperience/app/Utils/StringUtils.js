@@ -306,4 +306,37 @@ export default class StringUtils {
     const end = fileName.slice(-16); // Take last 12 characters
     return `${start}...${end}`;
   };
+
+  static reformatName(user) {
+    // Split firstName by any non-alphabetical characters and trim any spaces
+    let firstName = user.firstName.trim().split(/[^\w]+/)[0];
+    let lastName =
+      user.firstName.trim().split(/[^\w]+/)[1] || user.lastName.trim();
+
+    // Capitalize the first letter of both first and last name
+    firstName =
+      firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+    lastName =
+      lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase();
+
+    return `${firstName} ${lastName}`;
+  }
+  static reformatComplexName(name) {
+    // Split the name by non-alphabet characters, excluding hyphens
+    let nameParts = name.trim().split(/[^a-zA-Z-]+/);
+
+    // Capitalize the first letter of each part, keeping hyphenated names intact
+    nameParts = nameParts.map(part =>
+      part
+        .split('-')
+        .map(
+          subPart =>
+            subPart.charAt(0).toUpperCase() + subPart.slice(1).toLowerCase(),
+        )
+        .join('-'),
+    );
+
+    // Join the name parts back into a full name
+    return nameParts.join(' ');
+  }
 }

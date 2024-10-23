@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Modal, Platform, Pressable, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import MonthYearSelector from '../../widgets/MonthYearSelector';
+// import MonthYearSelector from '../../widgets/MonthYearSelector';
 import moment from 'moment';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
@@ -65,7 +65,7 @@ const CalendarScreen = props => {
               },
             ]}>
             {renderCloseButton()}
-            <MonthYearSelector
+            {/* <MonthYearSelector
               month={selectedYear.month}
               year={selectedYear.year}
               minYear={2010}
@@ -78,7 +78,7 @@ const CalendarScreen = props => {
               onCancel={() => {
                 props.closeCalendar && props.closeCalendar(false);
               }}
-            />
+            /> */}
           </View>
         </SafeAreaView>
       </Modal>

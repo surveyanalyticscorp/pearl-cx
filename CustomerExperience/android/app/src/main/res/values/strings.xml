@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">CX On The Go</string>
-    <!-- <string name="codePush_production_key">iv6s72-8hbsnujs55hjRA2INCCXI_wauBr6fP</string>
-    <string name="codePush_staging_key">UxDtWvFSE3SiEcz0gEsZOvZpF186PUku9eXXt</string>
-    <string moduleConfig="true" name="CodePushDeploymentKey">@string/codePush_production_key</string> -->
+    <string name="app_name" translatable="false">CX On The Go</string>
+<!--    <string name="codePush_production_key">iv6s72-8hbsnujs55hjRA2INCCXI_wauBr6fP</string>-->
+<!--    <string name="codePush_staging_key">UxDtWvFSE3SiEcz0gEsZOvZpF186PUku9eXXt</string>-->
+<!--    <string moduleConfig="true" name="CodePushDeploymentKey">@string/codePush_production_key</string>-->
 </resources>

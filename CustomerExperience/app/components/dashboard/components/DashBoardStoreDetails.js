@@ -16,8 +16,8 @@ import {Colors} from '../../../styles/color.constants';
 import Pie from 'react-native-pie';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {apiHandler} from '../../../api/ApiHandler';
-import {showMessage} from 'react-native-flash-message';
 import QPSpinner from '../../../widgets/QPSpinner';
+import {showErrorFlashMessage} from '../../../Utils/Utility';
 
 class DashBoardStoreDetails extends Component {
   constructor(props) {
@@ -37,14 +37,14 @@ class DashBoardStoreDetails extends Component {
       apiHandler.getCXDashBoard(
         this.props.authToken,
         this.props.route.params.data,
-        (response) => {
+        response => {
           this.storeData = response;
           this.props.navigation.setParams({
             name: response.body.primaryStoreName,
           });
           this.setState({callApi: false});
         },
-        (error) => {
+        error => {
           this.setState({isLoading: false});
           this.setState({isError: true});
         },
@@ -54,13 +54,8 @@ class DashBoardStoreDetails extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.isError) {
-      showMessage({
-        message: 'There was an error completing this request!',
-        type: 'danger',
-        icon: 'auto',
-        backgroundColor: Colors.red,
-        color: Colors.white,
-      });
+      showErrorFlashMessage('There was an error completing this request!');
+
       let timer = setTimeout(() => {
         this.setState({isError: false});
       }, 1000);
@@ -73,8 +68,8 @@ class DashBoardStoreDetails extends Component {
   getTrimmedNoOfResponses = () => {
     let numberOfResponsesNumber = 0;
     if (this.storeData.body.primaryStoreNPS.totalResponses) {
-      numberOfResponsesNumber = this.storeData.body.primaryStoreNPS
-        .totalResponses;
+      numberOfResponsesNumber =
+        this.storeData.body.primaryStoreNPS.totalResponses;
     }
     let numberOfResponses = numberOfResponsesNumber + '';
 
@@ -213,7 +208,7 @@ class DashBoardStoreDetails extends Component {
     );
   };
 
-  renderRow = (storeItem) => {
+  renderRow = storeItem => {
     let name = storeItem.item.filterName
       ? storeItem.item.filterName
       : storeItem.item.storeName;
@@ -254,7 +249,7 @@ class DashBoardStoreDetails extends Component {
         </View>
         <FlatList
           data={list}
-          keyExtractor={(item) => item.filterName}
+          keyExtractor={item => item.filterName}
           renderItem={this.renderRow}
           onEndReachedThreshold={0.01}
           refreshing={false}
@@ -313,14 +308,14 @@ class DashBoardStoreDetails extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     userInfo: state.global.userInfo,
     authToken: state.global.authToken,
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   cleanError: () => {
     dispatch(clearError(false));
   },

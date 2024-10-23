@@ -1,4 +1,5 @@
-import React from 'react';
+import * as React from 'react';
+
 import {StyleSheet, View, Text, Pressable} from 'react-native';
 import {baseTextStyles} from '../styles/text.styles';
 import {Colors} from '../styles/color.constants';
@@ -10,13 +11,25 @@ import {IonIcon} from '../Utils/IconUtils';
 const TrailingIcon = ({onPress, testID, color}) => {
   return (
     <Pressable onPress={onPress}>
-      <IonIcon testID={testID} name="close-outline" size={16} color={color} />
+      <IonIcon
+        testID={testID}
+        name="close-outline"
+        size={MarginConstants.tab1_4x}
+        color={color}
+      />
     </Pressable>
   );
 };
 
 const LeadingIcon = ({name, testID, color}) => {
-  return <IonIcon testID={testID} name={name} size={16} color={color} />;
+  return (
+    <IonIcon
+      testID={testID}
+      name={name}
+      size={MarginConstants.tab1_4x}
+      color={color}
+    />
+  );
 };
 const CustomErrorToast = ({text1, props}) => {
   return (

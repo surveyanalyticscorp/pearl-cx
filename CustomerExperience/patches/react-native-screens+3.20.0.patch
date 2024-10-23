@@ -8984,7 +8984,7 @@ index 0000000..fb7b263
 --- /dev/null
 +++ b/node_modules/react-native-screens/android/build/kotlin/compileDebugKotlin/caches-jvm/jvm/kotlin/proto.tab.values.s
 @@ -0,0 +1 @@
-+ÐÓ
++ï¿½ï¿½
 \ No newline at end of file
 diff --git a/node_modules/react-native-screens/android/build/kotlin/compileDebugKotlin/caches-jvm/jvm/kotlin/proto.tab_i b/node_modules/react-native-screens/android/build/kotlin/compileDebugKotlin/caches-jvm/jvm/kotlin/proto.tab_i
 new file mode 100644
@@ -9173,7 +9173,7 @@ index 0000000..398a5c2
 --- /dev/null
 +++ b/node_modules/react-native-screens/android/build/kotlin/compileDebugKotlin/caches-jvm/lookups/lookups.tab.values.s
 @@ -0,0 +1 @@
-+à€
++ï¿½ï¿½
 \ No newline at end of file
 diff --git a/node_modules/react-native-screens/android/build/kotlin/compileDebugKotlin/caches-jvm/lookups/lookups.tab_i b/node_modules/react-native-screens/android/build/kotlin/compileDebugKotlin/caches-jvm/lookups/lookups.tab_i
 new file mode 100644

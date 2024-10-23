@@ -1,4 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import * as React from 'react';
+import {useEffect, useCallback, useState} from 'react';
+
 import {StyleSheet, Text, Pressable, View} from 'react-native';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -9,7 +11,7 @@ import DrawerContent from '../routes/DrawerContent';
 import CxDashboard from '../components/dashboard/CxDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import SignInStack from './signInStack';
-import {isStringNullOrEmpty} from '../Utils/Utility';
+import {isStringNullOrEmpty, showSuccessFlashMessage} from '../Utils/Utility';
 import {
   ASYNC_AUTH_TOKEN,
   ASYNC_LAST_LOGIN,
@@ -51,6 +53,8 @@ import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
 import SegmentSelector from '../components/SegmentSelector';
 import Feedback from '../components/feedback/Feedback';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
+import {syncTickets} from '../redux/actions/closedloop.actions';
+import StringUtils from '../Utils/StringUtils';
 
 const Drawer = createDrawerNavigator();
 const DetractorStack = createStackNavigator();
@@ -71,10 +75,32 @@ const AppRouter = props => {
   let [subscriberId, setSubscriberId] = useState(undefined);
   const isTokenExpired = useSelector(state => state.dashboard.isTokenExpired);
   const skipWelcome = useSelector(state => state.dashboard.skipWelcome);
-
+  const {feedbackApiKey, feedbackID} = useSelector(
+    state => state.global.userInfo,
+  );
   let [lastLoginArray, setLastLoginArray] = useState([]);
 
   const dispatch = useDispatch();
+
+  const startSyncingTickets = (subscriberId_ = global.subscriberId) => {
+    console.log(
+      'GET_TICKET_LIST_SYNC_RECEIVED: ',
+      'subscriberId',
+      subscriberId_,
+    );
+
+    if (!StringUtils.isEmptyOrNull(subscriberId_)) {
+      console.log('GET_TICKET_LIST_SYNC_RECEIVED: ', 'dispatched');
+
+      dispatch(
+        syncTickets(
+          authToken,
+          {subscriberId: subscriberId_, feedbackApiKey: feedbackApiKey},
+          feedbackID,
+        ),
+      );
+    }
+  };
 
   const linking = {
     prefixes: [
@@ -190,6 +216,7 @@ const AppRouter = props => {
         console.log(`subscriber ID from global: ${global.subscriberId}`);
 
         setSubscriberId(subscriberId);
+        startSyncingTickets(subscriberId);
       }
     });
   };

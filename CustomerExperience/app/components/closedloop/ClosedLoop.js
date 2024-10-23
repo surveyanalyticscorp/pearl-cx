@@ -135,7 +135,7 @@ export default function ClosedLoop(props) {
 
   // const [ticketList, setTicketList] = useState([]);
   const owners = useSelector(state => state.dashboard.ownerDetails.owners);
-  const keepSyncingTickets = useSelector(state => state.dashboard.ticketSync);
+  // const keepSyncingTickets = useSelector(state => state.dashboard.ticketSync);
   const [refreshing, setRefreshing] = useState(false);
   const {ticketDeleteStatus} = useSelector(state => state.dashboard);
   const sync = () => {
@@ -161,13 +161,13 @@ export default function ClosedLoop(props) {
     }
   }, [ticketDeleteStatus]);
 
-  useEffect(() => {
-    if (keepSyncingTickets) {
-      // console.log('SYNC_API, when keeSyncingChanged');
+  // useEffect(() => {
+  //   if (keepSyncingTickets) {
+  //     // console.log('SYNC_API, when keeSyncingChanged');
 
-      sync();
-    }
-  }, [keepSyncingTickets]);
+  //     sync();
+  //   }
+  // }, [keepSyncingTickets]);
   const sampleFilterData = () => {
     const priority = priorityList.map(value => ({
       ...value,
@@ -257,9 +257,9 @@ export default function ClosedLoop(props) {
 
   const makeAPICall = () => {
     // console.log('SYNC_API, when makeAPICall called');
-    if (keepSyncingTickets && !isTicketLoading) {
-      sync();
-    }
+    // if (keepSyncingTickets && !isTicketLoading) {
+    //   sync();
+    // }
 
     let filterObj = {
       ...filterState,
@@ -272,9 +272,9 @@ export default function ClosedLoop(props) {
     // dispatch(clearSyncTicketStatus());
   };
 
-  const resetSyncTicket = () => {
-    dispatch(clearSyncTicketStatus());
-  };
+  // const resetSyncTicket = () => {
+  //   dispatch(clearSyncTicketStatus());
+  // };
   const wait = timeout => {
     return new Promise(resolve => {
       setTimeout(resolve, timeout);
@@ -285,7 +285,7 @@ export default function ClosedLoop(props) {
     // setTicketList([]);
     resetFilterState(range);
     setRefreshing(true);
-    resetSyncTicket();
+    // resetSyncTicket();
     makeAPICall();
     wait(500).then(() => setRefreshing(false));
   }, []);

@@ -7,8 +7,6 @@ import {
   Text,
   ScrollView,
   TouchableWithoutFeedback,
-  Pressable,
-  Modal,
   Platform,
 } from 'react-native';
 import {FontFamily} from '../../../styles/font.constants';
@@ -24,14 +22,13 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {DASHBOARD_RANGE} from '../../../redux/actions/dashboard.actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import QPCalendar from '../../../widgets/QPCalendar';
 import StringUtils from '../../../Utils/StringUtils';
-import {StackActions, useNavigation} from '@react-navigation/native';
+import {StackActions} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {SaveDashboardDate} from '../../../routes/commonUI/CommonUI';
-import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
 import {useDispatch, useSelector} from 'react-redux';
 import {setRangeFilter} from '../../../redux/actions';
+import RenderDatePickerModal from '../../RenderDatePickerModal';
 
 export default function DashboardDateFilter(props) {
   const dispatch = useDispatch();
@@ -205,101 +202,22 @@ export default function DashboardDateFilter(props) {
     );
   };
 
-  let renderCancelButton = () => {
-    return (
-      <Pressable
-        style={styles.cancelButton}
-        onPress={() => {
-          setShowCalendar(false);
-        }}>
-        <Text style={styles.buttonText}>Cancel</Text>
-      </Pressable>
-    );
-  };
-
-  let renderOkButton = () => {
-    return (
-      <Pressable
-        style={styles.cancelButton}
-        onPress={() => {
-          //save date
-          if (startDateSelected) {
-            setSelectedRange({
-              ...selectedRange,
-              type: CUSTOM_DATE_RANGE,
-              startDate: customDate,
-            });
-          } else {
-            setSelectedRange({
-              ...selectedRange,
-              type: CUSTOM_DATE_RANGE,
-              endDate: customDate,
-            });
-          }
-          setShowCalendar(false);
-        }}>
-        <Text style={styles.buttonText}>Ok</Text>
-      </Pressable>
-    );
-  };
-
-  let renderCalendarFooter = () => {
-    return (
-      <View style={styles.calendarFooter}>
-        {renderCancelButton()}
-        {renderOkButton()}
-      </View>
-    );
-  };
-
-  let setCalendarDate = date => {
-    let tempDate = moment(date, 'YYYY-MM-DD').format(DMYFORMAT);
-    setCustomDate(tempDate);
-  };
-
-  let renderCalendar = () => {
-    let date = startDateSelected
-      ? selectedRange.startDate
-      : selectedRange.endDate;
-    let selectedDate = moment(date, DMYFORMAT).format('YYYY-MM-DD');
-    let currentDate = moment().format('YYYY-MM-DD');
-    let currentYear = moment().year();
-    let minYear = parseInt(currentYear) - 4;
-    return (
-      <View style={styles.calendarContainer}>
-        <View style={styles.calendarBox}>
-          <QPCalendar
-            {...props}
-            selectDate={setCalendarDate}
-            selectedDate={selectedDate}
-            minimumDate={minYear + '-01-01'}
-            maximumDate={currentDate}
-            minYear={minYear}
-            maxYear={currentYear}
-          />
-        </View>
-        {renderCalendarFooter()}
-      </View>
-    );
-  };
-
-  let renderCalendarViewOnModal = () => {
-    return (
-      <Modal
-        animationType={'fade'}
-        transparent={true}
-        onRequestClose={() => {}}
-        visible={showCalendar}
-        supportedOrientations={['portrait']}>
-        <View style={styles.modalContainer}>
-          <SafeAreaView style={{flex: 1}}>
-            <ScrollView style={styles.scrollContainer}>
-              {renderCalendar()}
-            </ScrollView>
-          </SafeAreaView>
-        </View>
-      </Modal>
-    );
+  let setCalendarDate = (isStartDate, date) => {
+    let tempDate = moment(date).format(DMYFORMAT);
+    // setCustomDate(tempDate);
+    if (isStartDate) {
+      setSelectedRange({
+        ...selectedRange,
+        type: CUSTOM_DATE_RANGE,
+        startDate: tempDate,
+      });
+    } else {
+      setSelectedRange({
+        ...selectedRange,
+        type: CUSTOM_DATE_RANGE,
+        endDate: tempDate,
+      });
+    }
   };
 
   let renderStartDateRow = (isStartDate, displayDate) => {
@@ -334,35 +252,14 @@ export default function DashboardDateFilter(props) {
         {StringUtils.isNotEmpty(validationError) && renderValidationError()}
         {renderStartDateRow(true, selectedRange.startDate)}
         {renderStartDateRow(false, selectedRange.endDate)}
-        {showCalendar && renderCalendarViewOnModal()}
+        <RenderDatePickerModal
+          isOpen={showCalendar}
+          setOpen={setShowCalendar}
+          currentDate={customDate}
+          setDate={setCalendarDate}
+          isStartDate={startDateSelected}
+        />
       </View>
-    );
-  };
-
-  const RenderDateList = () => {
-    const navigation = useNavigation();
-    return (
-      <ScrollView style={styles.scrollContainer}>
-        {/* <BottomSheetHeader
-          title={translate('date_filter.date_range')}
-          onPressClose={() => {
-            navigation.goBack();
-          }}
-        /> */}
-        <View style={styles.container}>
-          {renderMonthRow(LAST_30_DAYS)}
-          {renderMonthRow(THIS_MONTH)}
-          {renderMonthRow(LAST_MONTH)}
-          {renderMonthRow(LAST_3_MONTHS)}
-          {renderMonthRow(LAST_6_MONTHS)}
-          {StringUtils.isNotEmpty(validationError) && renderValidationError()}
-          {renderStartDateRow(true, selectedRange.startDate)}
-          {renderStartDateRow(false, selectedRange.endDate)}
-          <SaveDashboardDate saveRange={saveRange} />
-
-          {showCalendar && renderCalendarViewOnModal()}
-        </View>
-      </ScrollView>
     );
   };
 
@@ -372,7 +269,6 @@ export default function DashboardDateFilter(props) {
         ? renderMonthView()
         : renderCustomView()}
 
-      {/* <RenderDateList /> */}
       <SaveDashboardDate saveRange={saveRange} />
     </SafeAreaView>
   );

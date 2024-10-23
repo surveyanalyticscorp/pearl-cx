@@ -290,13 +290,27 @@ export function addClosedLoopTicket(
 
 export function* syncTickets(action) {
   try {
-    yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
+    // yield put({type: IS_TICKET_LOADING, payload: {isLoading: true}});
 
-    const response = yield WebServiceHandler.get(
-      getClfUrl(syncTicketList(action.feedbackId)),
-      // {'Auth-Token': action.token},
-      getBearerTokenStatic(),
-      action.param,
+    let hasNextCall = true;
+    let response = {};
+    while (hasNextCall) {
+      response = yield WebServiceHandler.get(
+        getClfUrl(syncTicketList(action.feedbackId)),
+        // {'Auth-Token': action.token},
+        getBearerTokenStatic(),
+        action.param,
+      );
+      hasNextCall = response?.hasNext ?? false;
+      console.log('GET_TICKET_LIST_SYNC_RECEIVED: ', JSON.stringify(response));
+      if (!hasNextCall) {
+        break;
+      }
+    }
+    console.log(
+      'GET_TICKET_LIST_SYNC_RECEIVED: ',
+      'Break',
+      JSON.stringify(response),
     );
     yield put({
       type: GET_TICKET_LIST_SYNC_RECEIVED,

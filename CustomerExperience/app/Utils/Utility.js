@@ -1,5 +1,4 @@
 import React, {useEffect, useRef} from 'react';
-import {showMessage} from 'react-native-flash-message';
 import {Colors} from '../styles/color.constants';
 import {EMAIL_PATTERN} from '../api/Constant';
 import Toast from 'react-native-toast-message';

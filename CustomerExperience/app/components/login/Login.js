@@ -46,6 +46,7 @@ import {
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {getExpireDate} from '../../Utils/TimeUtils';
+import {retry} from 'redux-saga/effects';
 
 const stringConst = require('../../config/translations/en');
 
@@ -91,7 +92,12 @@ const Login = props => {
     console.log('VALIDATION MSG', validation);
     if (StringUtils.isNotEmpty(validation) || props.isError) {
       let message = props.isError ? getApiValidationErrorMessage() : validation;
-      showErrorFlashMessage(message);
+      const loginError = 'Invalid email/password combination.';
+      const customeErrorMessage = 'Invalid credentials. Please try again';
+      showErrorFlashMessage(
+        message === loginError ? customeErrorMessage : message,
+      );
+      // showSuccessFlashMessage('Logged in!');
       props.clearUserInfo();
       timer = setTimeout(() => {
         setValidation('');

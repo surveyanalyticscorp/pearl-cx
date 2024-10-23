@@ -37,7 +37,7 @@ target 'CustomerExperience' do
   # pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   # pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  # pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
   # pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
   # pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
@@ -51,7 +51,9 @@ target 'CustomerExperience' do
   use_react_native!(
     :path => config[:reactNativePath],
     # to enable hermes on iOS, change `false` to `true` and then install pods
-    :hermes_enabled => false
+    :hermes_enabled => false,
+    :fabric_enabled => false # Set to true if you are using the new Fabric architecture
+
   )  
   # Enables Flipper.
   #
@@ -60,6 +62,7 @@ target 'CustomerExperience' do
   use_flipper!()
 
   pod 'RNI18n', :path => '../node_modules/react-native-i18n'
+
 
   post_install do |installer|
   ## Fix for XCode 12.5

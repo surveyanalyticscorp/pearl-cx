@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/12</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -178,22 +178,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -208,7 +203,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -221,8 +221,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -233,7 +233,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -282,17 +282,17 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily} from '../../../styles/font.constants';
 &nbsp;
-const RenderPhoneInput = ({setTicketState}) =&gt; {
-  const [text, setText] = useState(' ');
-  const phoneInput = React.useRef();
-  const setPhoneNumber = () =&gt; {
-    console.log('TEXT_INPUT', text);
-    setTicketState(state =&gt; ({
+const RenderPhoneInput = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span>setTicketState}) =&gt; {</span>
+  const [text, setText] = <span class="cstat-no" title="statement not covered" >useState(' ');</span>
+  const phoneInput = <span class="cstat-no" title="statement not covered" >React.useRef();</span>
+  const setPhoneNumber = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    console.log('TEXT_INPUT', text);</span>
+<span class="cstat-no" title="statement not covered" >    setTicketState(<span class="fstat-no" title="function not covered" >st</span>ate =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
       ...state,
       mobileNumber: text,
     }));
   };
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;View&gt;
       &lt;IconAndTitleText
         icon={
@@ -311,8 +311,8 @@ const RenderPhoneInput = ({setTicketState}) =&gt; {
         countryPickerButtonStyle={styles.phoneInputCountryPickerButtonStyle}
         textInputProps={{
           placeholderTextColor: Colors.borderColor,
-          onEndEditing: function (value) {
-            setPhoneNumber();
+          onEndEditing: <span class="fstat-no" title="function not covered" >fu</span>nction (value) {
+<span class="cstat-no" title="statement not covered" >            setPhoneNumber();</span>
           },
         }}
         ref={phoneInput}
@@ -323,10 +323,10 @@ const RenderPhoneInput = ({setTicketState}) =&gt; {
         // setValue(text);
         // console.log('PHONE:', text);
         // }}
-        onChangeFormattedText={text =&gt; {
+        onChangeFormattedText={<span class="fstat-no" title="function not covered" >te</span>xt =&gt; {
           // setFormattedValue(text);
-          setText(text);
-          console.log('FORMATTED PHONE:', text);
+<span class="cstat-no" title="statement not covered" >          setText(text);</span>
+<span class="cstat-no" title="statement not covered" >          console.log('FORMATTED PHONE:', text);</span>
           // setTicketState(state =&gt; ({...state, mobileNumber: text}));
           // userInfo.mobileNumber = text;
         }}
@@ -337,7 +337,7 @@ const RenderPhoneInput = ({setTicketState}) =&gt; {
 &nbsp;
 export default RenderPhoneInput;
 &nbsp;
-const styles = StyleSheet.create({
+const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
   phoneInputContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-01T10:28:37.955Z
+                at 2024-10-14T10:09:50.820Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

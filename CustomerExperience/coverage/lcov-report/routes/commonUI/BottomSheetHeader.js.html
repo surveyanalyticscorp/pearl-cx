@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/4</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/4</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -125,7 +125,14 @@
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -134,9 +141,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -151,8 +166,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -195,18 +209,25 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
 &nbsp;
-let {width} = Dimensions.get('window');
+let {width} = <span class="cstat-no" title="statement not covered" >Dimensions.get('window');</span>
 &nbsp;
-const BottomSheetHeader = <span class="fstat-no" title="function not covered" >pr</span>ops =&gt; {
+const PanelHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;View style={styles.panelHeaderContainer}&gt;
-      &lt;View style={styles.panelHandleContainer}&gt;
-        &lt;View style={styles.panelHandle} /&gt;
-      &lt;/View&gt;
+    &lt;View testID="panelHandler" style={styles.panelHandleContainer}&gt;
+      &lt;View style={styles.panelHandle} /&gt;
+    &lt;/View&gt;
+  );
+};
+const BottomSheetHeader = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span>title, onPressClose}) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;View testID="bottomSheetHeader" style={styles.panelHeaderContainer}&gt;
+      &lt;PanelHandler /&gt;
       &lt;View style={styles.panelTitleContainer}&gt;
-        &lt;Text style={styles.header}&gt;{props.title}&lt;/Text&gt;
-        &lt;Pressable onPress={props.onPressClose}&gt;
+        &lt;TextLabel text={title} style={styles.header} /&gt;
+        {/* &lt;Text style={styles.header}&gt;{title}&lt;/Text&gt; */}
+        &lt;Pressable onPress={onPressClose}&gt;
           &lt;IonIcons name="close" size={20} color={Colors.filterIconColor} /&gt;
         &lt;/Pressable&gt;
       &lt;/View&gt;
@@ -214,7 +235,7 @@ const BottomSheetHeader = <span class="fstat-no" title="function not covered" >p
   );
 };
 &nbsp;
-const styles = StyleSheet.create({
+const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
   panelHeaderContainer: {
     flex: 1,
     paddingVertical: PaddingConstants.tab1_2x,
@@ -256,7 +277,7 @@ export default BottomSheetHeader;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-01T10:28:37.955Z
+                at 2024-10-14T10:09:50.820Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

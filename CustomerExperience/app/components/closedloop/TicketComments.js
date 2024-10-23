@@ -206,7 +206,6 @@ const TextLengthCount = ({textLength, maxCountLength}) => {
 
 const CommentItem = ({item, isSelected = false}) => {
   const [isFolded, setFolded] = useState(true);
-
   return (
     <Pressable
       style={[
@@ -217,17 +216,18 @@ const CommentItem = ({item, isSelected = false}) => {
         setFolded(state => !state);
       }}>
       <View style={styles.commentUserView}>
-        <Avatar title={item.commentBy} />
+        <Avatar title={StringUtils.reformatComplexName(item.commentBy)} />
       </View>
       <View
         style={
           isSelected ? styles.commentSelectedTextView : styles.commentTextView
         }>
-        <Text style={[styles.commentByText]}>{item.commentBy.trim()}</Text>
+        <Text style={[styles.commentByText]}>
+          {StringUtils.reformatComplexName(item.commentBy.trim())}
+        </Text>
         <CommentText
           text={isFolded ? getFoldedText(item.text.trim()) : item.text.trim()}
         />
-        {/* <Text style={styles.commentText}>{item.text.trim()}</Text> */}
         <Text style={styles.commentDateText}>
           {getDateTimeAgo(moment.utc(item.createdAt).toDate())}
         </Text>
@@ -321,7 +321,7 @@ const CommentBox = () => {
   }, [parentComment]);
 
   const commentState = {
-    commentBy: `${firstName} ${lastName}`.trim(),
+    commentBy: `${firstName} ${lastName}`.trim(), //mehedi.hasan
     userName: `${firstName} ${lastName}`.trim(),
     userEmailAddress: `${emailAddress}`,
     userId: userID,

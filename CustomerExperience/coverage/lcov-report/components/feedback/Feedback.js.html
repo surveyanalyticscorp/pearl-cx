@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/100</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.2% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/96</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
@@ -475,8 +475,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -720,8 +720,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -729,7 +729,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -743,7 +743,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -839,8 +839,8 @@ import {ASYNC_RESPONSES_WITH_CX_MANAGER} from '../../api/Constant';
 import Responses from './Responses';
 import NoResponsesFound from './NoResponsesFound';
 import FeedbackCell from './feedbackCell/FeedbackCells';
-const FeedbackTab = createMaterialTopTabNavigator();
-const FormContext = React.createContext();
+const FeedbackTab = <span class="cstat-no" title="statement not covered" >createMaterialTopTabNavigator();</span>
+const FormContext = <span class="cstat-no" title="statement not covered" >React.createContext();</span>
 &nbsp;
 function <span class="fstat-no" title="function not covered" >Feedback(</span>props) {
   let dispatch = <span class="cstat-no" title="statement not covered" >useDispatch();</span>
@@ -1084,7 +1084,7 @@ function <span class="fstat-no" title="function not covered" >Feedback(</span>pr
   );
 }
 &nbsp;
-const mapStateToProps = <span class="fstat-no" title="function not covered" >st</span>ate =&gt; {
+const mapStateToProps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >st</span>ate =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  return {</span>
     isError: state.global.isError,
     errorMessage: state.global.errorMessage,
@@ -1093,7 +1093,7 @@ const mapStateToProps = <span class="fstat-no" title="function not covered" >st<
   };
 };
 &nbsp;
-const mapDispatchToProps = <span class="fstat-no" title="function not covered" >di</span>spatch =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+const mapDispatchToProps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >di</span>spatch =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   setError: <span class="fstat-no" title="function not covered" >er</span>ror =&gt; {
 <span class="cstat-no" title="statement not covered" >    dispatch(setError(error));</span>
   },
@@ -1107,7 +1107,7 @@ const mapDispatchToProps = <span class="fstat-no" title="function not covered" >
 &nbsp;
 export default connect(mapStateToProps, mapDispatchToProps)(Feedback);
 &nbsp;
-const styles = StyleSheet.create({
+const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
   safeAreaView: {
     flex: 1,
   },
@@ -1162,7 +1162,7 @@ const styles = StyleSheet.create({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-01T10:28:37.955Z
+                at 2024-10-14T10:09:50.820Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

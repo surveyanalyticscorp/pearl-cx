@@ -88,7 +88,7 @@ const RenderMateriaCommunityIcon = ({iconName}) => (
 const RenderTextInput = ({
   multiline = false,
   defaultValue = '',
-  keyboardType = 'default',
+  keyboardType,
   setValue,
 }) => {
   return (
@@ -96,7 +96,7 @@ const RenderTextInput = ({
       placeholderTextColor={Colors.borderColor}
       multiline={multiline}
       defaultValue={defaultValue ?? ''}
-      keyboardType={keyboardType}
+      keyboardType={keyboardType ?? 'default'}
       style={{
         ...(multiline ? styles.descriptionInputText : styles.textInputText),
         backgroundColor: Colors.settingsBackground,

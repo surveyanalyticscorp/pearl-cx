@@ -23,7 +23,7 @@ import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
 import moment from 'moment';
-import DatePicker from './DatePicker';
+// import DatePicker from './DatePicker';
 
 export default function RangeCalendar(props) {
   let [startDate, setStartDate] = useState(props.startDate);
@@ -145,13 +145,13 @@ export default function RangeCalendar(props) {
   let renderDatePicker = () => {
     return (
       <View style={styles.datePicker}>
-        <DatePicker
+        {/* <DatePicker
           onSubmit={setSelectedData}
           dateFormat={DMYFORMAT}
           savedDate={startDateSelected ? startDate : endDate}
           minYear={1970}
           maxYear={2050}
-        />
+        /> */}
       </View>
     );
   };

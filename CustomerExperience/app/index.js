@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
+import * as React from 'react';
+
+import {Component} from 'react';
 import {store} from './redux/store/store';
 import {Provider} from 'react-redux';
-import FlashMessage from 'react-native-flash-message';
+// import FlashMessage from 'react-native-flash-message';
 import SplashScreen from './components/login/SplashScreen';
 import {NetworkMonitor} from 'react-native-redux-connectivity';
 import {
@@ -29,26 +31,26 @@ const defaultOptions = {
   message: 'Do you want to update the app?',
 };
 
-const CustomFlashMessage = () => {
-  const insets = useSafeAreaInsets();
-  return (
-    <FlashMessage
-      // style={{borderRadius: 4}}
-      animated={true}
-      position={{
-        // top: DeviceInfo.hasDynamicIsland() ? (DeviceInfo.hasNotch() ? 59 : ) : 0,
-        top: insets.top + MarginConstants.tab1_2x,
-        left: insets.left + MarginConstants.tab1_2x,
-        right: insets.right + MarginConstants.tab1_2x,
+// const CustomFlashMessage = () => {
+//   const insets = useSafeAreaInsets();
+//   return (
+//     <FlashMessage
+//       // style={{borderRadius: 4}}
+//       animated={true}
+//       position={{
+//         // top: DeviceInfo.hasDynamicIsland() ? (DeviceInfo.hasNotch() ? 59 : ) : 0,
+//         top: insets.top + MarginConstants.tab1_2x,
+//         left: insets.left + MarginConstants.tab1_2x,
+//         right: insets.right + MarginConstants.tab1_2x,
 
-        // top: 0,
-        // left: 0,
-        // right: 0,
-        // bottom: 0,
-      }}
-    />
-  );
-};
+//         // top: 0,
+//         // left: 0,
+//         // right: 0,
+//         // bottom: 0,
+//       }}
+//     />
+//   );
+// };
 
 class CxApp extends Component {
   constructor() {
