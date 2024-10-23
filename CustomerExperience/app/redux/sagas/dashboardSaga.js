@@ -23,6 +23,7 @@ import {
   GET_CLF_BASE_URL,
   GET_DASHBOARD,
   GET_WELCOME_SCREEN_DATA,
+  SET_TOKEN_EXPIRED,
   WELCOME_SCREEN_DATA_RECIEVED,
 } from '../actions/dashboard.actions';
 import {showErrorFlashMessage} from '../../Utils/Utility';
@@ -116,11 +117,15 @@ export function* fetchDataCount(action) {
       clfResponse: clf_response,
     });
   } catch (error) {
-    showErrorFlashMessage(error.errorAlert);
-    yield put({
-      type: API_ERROR,
-      error: error,
-    });
+    if (JSON.stringify(error).includes('jwt expired')) {
+      yield put({type: SET_TOKEN_EXPIRED, isTokenExpired: true});
+    } else {
+      showErrorFlashMessage(error.message);
+      yield put({
+        type: API_ERROR,
+        error: error,
+      });
+    }
   } finally {
     yield put({type: IS_LOADING, payload: {isLoading: false}});
   }
@@ -140,11 +145,15 @@ export function* postApploginCount(action) {
 
     console.log('CLF_APP_LOGIN_COUNT', JSON.stringify(clf_response));
   } catch (error) {
-    showErrorFlashMessage(error.errorAlert);
-    yield put({
-      type: API_ERROR,
-      error: error,
-    });
+    // showErrorFlashMessage(error.errorAlert);
+    if (JSON.stringify(error).includes('jwt expired')) {
+      yield put({type: SET_TOKEN_EXPIRED, isTokenExpired: true});
+    } else {
+      yield put({
+        type: API_ERROR,
+        error: error,
+      });
+    }
   }
 }
 export function* watchApploginCount() {
