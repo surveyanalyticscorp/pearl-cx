@@ -802,9 +802,7 @@ export default function CreateTicket(props) {
           <ShowTitleAndDropdown
             titleIcon={<StatusIcon size={12} />}
             title={'Select status'}
-            currentItemName={`${
-              getStatusById(ticketState.status) ?? 'New'
-            } Status`}
+            currentItemName={`${getStatusById(ticketState.status) ?? 'New'}`}
             onPress={handleStatusSelection}
             frontIcon={
               <RenderStatusIcon
