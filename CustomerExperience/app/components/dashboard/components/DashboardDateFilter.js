@@ -255,7 +255,7 @@ export default function DashboardDateFilter(props) {
         <RenderDatePickerModal
           isOpen={showCalendar}
           setOpen={setShowCalendar}
-          currentDate={customDate}
+          currentDate={customDate ?? selectedRange.startDate}
           setDate={setCalendarDate}
           isStartDate={startDateSelected}
         />

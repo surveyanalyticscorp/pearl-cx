@@ -43,6 +43,7 @@ import {Notifications} from 'react-native-notifications';
 import {translate} from '../Utils/MultilinguaUtils';
 import moment from 'moment';
 import {setTokenExpired} from '../redux/actions/dashboard.actions';
+import TicketSync from '../components/TicketSync';
 
 const DrawerContent = props => {
   const [userCredentials, setUserCredentials] = useState('');
@@ -88,6 +89,7 @@ const DrawerContent = props => {
   const renderDrawerButtons = () => {
     return (
       <View>
+        <TicketSync />
         <TouchableWithoutFeedback
           onPress={() => {
             props.navigation.navigate('Dashboard');

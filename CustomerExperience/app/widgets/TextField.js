@@ -39,6 +39,7 @@ const QPTextField = props => {
     return (
       StringUtils.isNotEmpty(props.value) && (
         <Icon
+          testID="render-visibility-icon"
           style={{
             position: 'absolute',
             top: 38,
@@ -54,8 +55,10 @@ const QPTextField = props => {
   };
 
   return (
-    <View style={style}>
+    <View testID="text-field-container" style={style}>
       <TextField
+        accessibilityLabel={props.accessibilityLabel ?? 'text-field'}
+        testID={props.testID ?? 'text-field'}
         underlineColorAndroid="transparent"
         autoCapitalize={'none'}
         autoCorrect={false}
@@ -64,6 +67,7 @@ const QPTextField = props => {
         textColor={props.textColor || Colors.primary}
         baseColor={props.baseColor || Colors.primary}
         label={label}
+        value={props.value}
         placeholderTextColor={Colors.borderColor}
         defaultValue={defaultValue}
         secureTextEntry={secureText}

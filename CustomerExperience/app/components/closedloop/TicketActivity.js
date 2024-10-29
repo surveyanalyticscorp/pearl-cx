@@ -178,7 +178,7 @@ export default function TicketActivity(props) {
             sortingList[currentSortingIndex],
           )}
           renderItem={getRenderItem}
-          ListEmptyComponent={<NoItemsFound>No Activity...</NoItemsFound>}
+          ListEmptyComponent={<NoItemsFound>{'No Activity...'}</NoItemsFound>}
           keyExtractor={item => JSON.stringify(item.id)}
         />
       </Animated.View>

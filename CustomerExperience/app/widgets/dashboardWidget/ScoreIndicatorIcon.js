@@ -4,7 +4,7 @@ import {Colors} from '../../styles/color.constants';
 import IndicatorIcon from '../../routes/commonUI/IndicatorIcon';
 const ScoreIndicatorIcon = ({diff}) => {
   return diff === 0 ? (
-    <View />
+    <View testID="no-view" />
   ) : (
     <IndicatorIcon
       name={diff < 0 ? 'caret-down-sharp' : 'caret-up-sharp'}

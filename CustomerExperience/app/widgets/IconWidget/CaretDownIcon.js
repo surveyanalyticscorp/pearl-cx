@@ -5,7 +5,11 @@ const CaretDownIcon = ({height = 8, width = 12}) => {
   const caretDownIcon = require('./../../../assets/images/caret_down.png');
 
   return (
-    <Image source={caretDownIcon} style={{height: height, width: width}} />
+    <Image
+      testID="caret-down-icon"
+      source={caretDownIcon}
+      style={{height, width}}
+    />
   );
 };
 

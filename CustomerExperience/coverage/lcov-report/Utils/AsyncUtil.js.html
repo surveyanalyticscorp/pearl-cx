@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -157,39 +157,39 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -246,40 +246,40 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import AsyncStorage from '@react-native-async-storage/async-storage';
 &nbsp;
 export default class AsyncStorageData {
-<span class="fstat-no" title="function not covered" >  co</span>nstructor(key) {
-<span class="cstat-no" title="statement not covered" >    this.key = key;</span>
+  constructor(key) {
+    this.key = key;
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync removeData() {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      await AsyncStorage.removeItem(this.key);</span>
+  async removeData() {
+    try {
+      await AsyncStorage.removeItem(this.key);
     } catch (e) {
-<span class="cstat-no" title="statement not covered" >      console.log('ERROR_ASYNC_REMOVE_DATA', e);</span>
+      console.log('ERROR_ASYNC_REMOVE_DATA', e);
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync setData(data) {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      await AsyncStorage.setItem(this.key, data);</span>
+  async setData(data) {
+    try {
+      await AsyncStorage.setItem(this.key, data);
     } catch (e) {
-<span class="cstat-no" title="statement not covered" >      console.log('ERROR_ASYNC_SET_DATA', e);</span>
+      console.log('ERROR_ASYNC_SET_DATA', e);
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync getData() {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      return await AsyncStorage.getItem(this.key);</span>
+  async getData() {
+    try {
+      return await AsyncStorage.getItem(this.key);
     } catch (e) {
-<span class="cstat-no" title="statement not covered" >      console.log('ERROR_ASYNC_GET_DATA', e);</span>
-<span class="cstat-no" title="statement not covered" >      return null;</span>
+      console.log('ERROR_ASYNC_GET_DATA', e);
+      return null;
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  as</span>ync setDataAsString(data) {
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      await AsyncStorage.setItem(this.key, JSON.stringify(data));</span>
+  async setDataAsString(data) {
+    try {
+      await AsyncStorage.setItem(this.key, JSON.stringify(data));
     } catch (e) {
-<span class="cstat-no" title="statement not covered" >      console.log('ERROR_ASYNC_SET_DATA_AS_STRING', e);</span>
+      console.log('ERROR_ASYNC_SET_DATA_AS_STRING', e);
     }
   }
 }
@@ -340,7 +340,7 @@ export default class AsyncStorageData {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-14T10:09:50.820Z
+                at 2024-10-28T05:49:51.098Z
             </div>
         <script src="../prettify.js"></script>
         <script>

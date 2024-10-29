@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -114,8 +114,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -125,11 +125,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">30x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -137,7 +137,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -155,8 +155,8 @@ import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {Colors} from '../../styles/color.constants';
 import NoDataFound from './NoDataFound';
-const RenderRootCauseItem = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span>onClickCheckBox, title, data}) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return (</span>
+const RenderRootCauseItem = ({onClickCheckBox, title, data}) =&gt; {
+  return (
     &lt;FlatList
       ListHeaderComponent={&lt;Text style={styles.titleText}&gt;{title}&lt;/Text&gt;}
       style={{marginVertical: MarginConstants.tab2}}
@@ -165,12 +165,12 @@ const RenderRootCauseItem = <span class="cstat-no" title="statement not covered"
       keyExtractor={<span class="fstat-no" title="function not covered" >(i</span>tem, index) =&gt; <span class="cstat-no" title="statement not covered" >item.id.toString()}</span>
       numColumns={1}
       ListEmptyComponent={&lt;NoDataFound dataText={title} /&gt;}
-      renderItem={<span class="fstat-no" title="function not covered" >({</span>item, index}) =&gt; (
-<span class="cstat-no" title="statement not covered" >        &lt;CheckBoxItem</span>
+      renderItem={({item, index}) =&gt; (
+        &lt;CheckBoxItem
           textStyle={textStyles.optionText}
           item={item}
           index={index}
-          onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onClickCheckBox(title, item, index)}</span>
+          onPress={() =&gt; onClickCheckBox(title, item, index)}
         /&gt;
       )}
     /&gt;
@@ -178,7 +178,7 @@ const RenderRootCauseItem = <span class="cstat-no" title="statement not covered"
 };
 export default RenderRootCauseItem;
 &nbsp;
-const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
+const styles = StyleSheet.create({
   titleText: {
     fontFamily: FontFamily.medium,
     fontWeight: FontWeight._700,
@@ -193,7 +193,7 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-14T10:09:50.820Z
+                at 2024-10-28T05:49:51.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -54,14 +54,17 @@ const AMCharts = props => {
   if (props?.isLoading) {
     return (
       <View style={[fileStyle.chartContainer, props?.style]}>
-        <ActivityIndicator />
+        <ActivityIndicator testID="loading-indicator" />
       </View>
     );
   }
 
   return (
-    <View style={[fileStyle.chartContainer, props?.style]}>
+    <View
+      testID="chart-container"
+      style={[fileStyle.chartContainer, props?.style]}>
       <WebView
+        testID="chart-webview"
         androidLayerType={'hardware'}
         startInLoadingState={true}
         style={props?.webViewStyle}

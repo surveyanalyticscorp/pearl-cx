@@ -76,7 +76,7 @@ const ShowFilterTag = ({handleFilterTag, filterData}) => {
     // }
   };
   return (
-    <View style={styles.container}>
+    <View testID="show-filter-tag-container" style={styles.container}>
       {list.length > 0 && (
         <FlatList
           data={list}

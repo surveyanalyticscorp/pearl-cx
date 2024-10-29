@@ -31,6 +31,7 @@ import {
   GET_CLOSED_LOOP_ALL_OWNERS_DETAILS,
   FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED,
   GET_FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS,
+  SET_TOKEN_EXPIRED,
 } from '../actions/dashboard.actions';
 import {
   CX_ADD_CLOSED_LOOP_TICKET,
@@ -317,12 +318,14 @@ export function* syncTickets(action) {
       response: response,
     });
   } catch (error) {
-    console.log('ERROR:', JSON.stringify(error));
-    // yield put({type: IS_TICKET_LOADING, payload: {isLoading: false}});
-    // yield put({
-    //   type: API_ERROR,
-    //   error: error,
-    // });
+    if (JSON.stringify(error).includes('jwt expired')) {
+      yield put({type: SET_TOKEN_EXPIRED, isTokenExpired: true});
+    } else {
+      yield put({
+        type: API_ERROR,
+        error: error,
+      });
+    }
   }
 }
 export function* watchSyncTickets() {

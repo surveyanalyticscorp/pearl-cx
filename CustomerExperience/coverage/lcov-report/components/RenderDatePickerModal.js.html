@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -111,7 +111,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -119,31 +119,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -154,39 +154,39 @@ import DatePicker from 'react-native-date-picker';
 // import {showSuccessFlashMessage} from '../Utils/Utility';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../Utils/AppConstants';
-const RenderDatePickerModal = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
+const RenderDatePickerModal = ({
   isOpen,
   setOpen,
   currentDate,
   setDate,
-  isMaxDateIsToday = <span class="branch-0 cbranch-no" title="branch not covered" >true,</span>
-  isStartDate = <span class="branch-0 cbranch-no" title="branch not covered" >false,</span>
+  isMaxDateIsToday = true,
+  isStartDate = false,
 }) =&gt; {
-  const today = <span class="cstat-no" title="statement not covered" >new Date();</span>
-  const selectedDate = <span class="cstat-no" title="statement not covered" >new Date(</span>
+  const today = new Date();
+  const selectedDate = new Date(
     moment(currentDate, DMYFORMAT).format(YMDFORMAT),
   );
 &nbsp;
-  const minimumDate = <span class="cstat-no" title="statement not covered" >new Date(</span>
+  const minimumDate = new Date(
     new Date().setFullYear(new Date().getFullYear() - 4),
   );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;DatePicker
       modal
       open={isOpen}
       date={selectedDate}
       mode="date"
-      maximumDate={isMaxDateIsToday ? today : undefined}
+      maximumDate={isMaxDateIsToday ? today : <span class="branch-1 cbranch-no" title="branch not covered" >undefined}</span>
       minimumDate={minimumDate}
-      onConfirm={<span class="fstat-no" title="function not covered" >da</span>te =&gt; {
-<span class="cstat-no" title="statement not covered" >        setOpen(false);</span>
-<span class="cstat-no" title="statement not covered" >        setDate(isStartDate, date);</span>
+      onConfirm={date =&gt; {
+        setOpen(false);
+        setDate(isStartDate, date);
 &nbsp;
         // showSuccessFlashMessage(date.getDate().toLocaleString());
       }}
-      onCancel={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >        setOpen(false);</span>
+      onCancel={() =&gt; {
+        setOpen(false);
       }}
     /&gt;
   );
@@ -199,7 +199,7 @@ export default RenderDatePickerModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-14T10:09:50.820Z
+                at 2024-10-28T05:49:51.098Z
             </div>
         <script src="../prettify.js"></script>
         <script>

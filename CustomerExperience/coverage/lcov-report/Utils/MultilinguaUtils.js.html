@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -116,38 +116,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">36x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">76x</span>
+<span class="cline-any cline-yes">385x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
  * Datta Kunde created on 20/04/21
@@ -159,38 +159,38 @@ import {I18nManager} from 'react-native';
 import I18n from 'react-native-i18n';
 import memoize from 'lodash.memoize';
 &nbsp;
-const translationGetters = <span class="cstat-no" title="statement not covered" >{</span>
+const translationGetters = {
   // lazy requires (metro bundler does not support symlinks)
-  en: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >require('../config/translations/en.json'),</span>
-  fr: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >require('../config/translations/fr.json'),</span>
-  de: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >require('../config/translations/de.json'),</span>
-  es: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >require('../config/translations/es.json'),</span>
-  pt: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >require('../config/translations/pt.json'),</span>
+  en: () =&gt; require('../config/translations/en.json'),
+  fr: () =&gt; require('../config/translations/fr.json'),
+  de: () =&gt; require('../config/translations/de.json'),
+  es: () =&gt; require('../config/translations/es.json'),
+  pt: () =&gt; require('../config/translations/pt.json'),
 };
 &nbsp;
-export const translate = <span class="cstat-no" title="statement not covered" >memoize(</span>
-<span class="fstat-no" title="function not covered" >  (k</span>ey, config) =&gt; <span class="cstat-no" title="statement not covered" >I18n.t(key, config),</span>
-<span class="fstat-no" title="function not covered" >  (k</span>ey, config) =&gt; (<span class="cstat-no" title="statement not covered" >config ? key + JSON.stringify(config) : key)</span>,
+export const translate = memoize(
+  (key, config) =&gt; I18n.t(key, config),
+  (key, config) =&gt; (config ? key + JSON.stringify(config) : key),
 );
 &nbsp;
-export const setI18nConfig = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>anguageTag, isRTL = <span class="branch-0 cbranch-no" title="branch not covered" >false)</span> =&gt; {</span>
+export const setI18nConfig = (languageTag, isRTL = false) =&gt; {
   // fallback if no available language fits
   //const fallback = { languageTag: "en", isRTL: false };
   //const { languageTag, isRTL } = RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) || fallback;
-<span class="cstat-no" title="statement not covered" >  if (!Object.keys(translationGetters).includes(languageTag)) {</span>
-<span class="cstat-no" title="statement not covered" >    languageTag = 'en';</span>
+  if (!Object.keys(translationGetters).includes(languageTag)) {
+    languageTag = 'en';
   }
 &nbsp;
   // console.log(`LANG TAG: ${languageTag}`);
   // console.log(`LANG TAG: ${JSON.stringify(translationGetters[languageTag]())}`);
 &nbsp;
   // clear translation cache
-<span class="cstat-no" title="statement not covered" >  translate.cache.clear();</span>
+  translate.cache.clear();
   // update layout direction
-<span class="cstat-no" title="statement not covered" >  I18nManager.forceRTL(isRTL);</span>
+  I18nManager.forceRTL(isRTL);
   // set i18n-js config
-<span class="cstat-no" title="statement not covered" >  I18n.translations = {[languageTag]: translationGetters[languageTag]()};</span>
-<span class="cstat-no" title="statement not covered" >  I18n.locale = languageTag;</span>
+  I18n.translations = {[languageTag]: translationGetters[languageTag]()};
+  I18n.locale = languageTag;
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -199,7 +199,7 @@ export const setI18nConfig = <span class="cstat-no" title="statement not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-14T10:09:50.820Z
+                at 2024-10-28T05:49:51.098Z
             </div>
         <script src="../prettify.js"></script>
         <script>

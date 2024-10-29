@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -188,28 +188,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -236,11 +233,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,7 +251,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -292,25 +292,25 @@ import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
 import {baseTextStyles} from '../../../styles/text.styles';
 import {PaddingConstants} from '../../../styles/padding.constants';
 &nbsp;
-const SelectPriority = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span>data, selectedIndex, handleOnPress}) =&gt; {</span>
-  const [currentIndex, setIndex] = <span class="cstat-no" title="statement not covered" >useState(selectedIndex);</span>
-  const [currentItem, setItem] = <span class="cstat-no" title="statement not covered" >useState(data[selectedIndex]);</span>
+const SelectPriority = ({data, selectedIndex, handleOnPress}) =&gt; {
+  const [currentIndex, setIndex] = useState(selectedIndex);
+  const [currentItem, setItem] = useState(data[selectedIndex]);
   // const [selectedIndex, setSelectedIndex] = useState(selectedIndex);
 &nbsp;
-  const onApplyPress = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    handleOnPress(currentItem, currentIndex);</span>
+  const onApplyPress = () =&gt; {
+    handleOnPress(currentItem, currentIndex);
   };
-  const renderRow = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span>item, index}) =&gt; {</span>
-    const borderColor = <span class="cstat-no" title="statement not covered" >getPriorityBorderColor(item.title.toLowerCase());</span>
-    const backgroundColor = <span class="cstat-no" title="statement not covered" >getPriorityFillerColor(item.title.toLowerCase());</span>
+  const renderRow = ({item, index}) =&gt; {
+    const borderColor = getPriorityBorderColor(item.title.toLowerCase());
+    const backgroundColor = getPriorityFillerColor(item.title.toLowerCase());
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return (</span>
+    return (
       &lt;TouchableWithoutFeedback
         testID="priority-row"
         onPress={
-<span class="fstat-no" title="function not covered" >          ()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >            setIndex(index);</span>
-<span class="cstat-no" title="statement not covered" >            setItem(item);</span>
+          () =&gt; {
+            setIndex(index);
+            setItem(item);
             // handleOnPress(item, index);
             // setSelectedIndex(index);
           }
@@ -340,11 +340,11 @@ const SelectPriority = <span class="cstat-no" title="statement not covered" ><sp
     );
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;View style={styles.container}&gt;
       &lt;FlatList
         data={data}
-        keyExtractor={<span class="fstat-no" title="function not covered" >(i</span>tem, index) =&gt; <span class="cstat-no" title="statement not covered" >index.toString()}</span>
+        keyExtractor={(item, index) =&gt; index.toString()}
         renderItem={renderRow}
         ItemSeparatorComponent={ListItemSeparator}
         ListFooterComponent={&lt;ApplyButton onPress={onApplyPress} /&gt;}
@@ -355,7 +355,7 @@ const SelectPriority = <span class="cstat-no" title="statement not covered" ><sp
 &nbsp;
 export default SelectPriority;
 &nbsp;
-const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
@@ -382,7 +382,7 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-14T10:09:50.820Z
+                at 2024-10-28T05:49:51.098Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

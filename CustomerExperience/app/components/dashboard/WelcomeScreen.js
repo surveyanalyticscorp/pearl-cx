@@ -1,5 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useEffect, useRef} from 'react';
 import {StyleSheet, ImageBackground, Text, Platform} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {View} from 'react-native-animatable';
@@ -14,7 +13,6 @@ import {
   getWelcomeScreenDataCount,
   setMoveNext,
 } from '../../redux/actions/dashboard.actions';
-// import QPSpinner from '../../widgets/QPSpinner';
 import {RenderSpinner} from '../../routes/commonUI/CommonUI';
 import {
   ASYNC_BEARER_TOKEN,
@@ -23,20 +21,15 @@ import {
   BASE_URL,
   SUBSCRIBER_ID,
 } from '../../api/Constant';
-import {
-  getActionList,
-  getRootCauseList,
-} from '../../redux/actions/closedloop.actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {buttonStyles} from '../../styles/button.styles';
 import StringUtils from '../../Utils/StringUtils';
 import {setIsFirstTime} from '../../redux/actions';
-// import CreateTicket from './ticketManagement/CreateTicket';
 
-const RenderCountItem = ({style, title, data}) => {
+export const RenderCountItem = ({style, title, data}) => {
   return (
-    <View style={styles.ticketBox}>
+    <View testID="render-count-item" style={styles.ticketBox}>
       <Text style={styles.titleText}>{data}</Text>
       <Text style={styles.valueText}>{title}</Text>
     </View>
@@ -49,7 +42,7 @@ const RenderCountData = () => {
   );
 
   return (
-    <View>
+    <View testID="render-count-data">
       <View style={styles.responseContainer}>
         <RenderCountItem
           title={translate('dashboard.new_responses')}
@@ -75,6 +68,7 @@ const RenderCountData = () => {
 const CustomBackground = ({children}) => {
   return (
     <ImageBackground
+      testID="custom-background"
       resizeMode={'cover'}
       source={require('../../config/images/background1.png')}
       style={styles.backgroundContainer}>
@@ -83,7 +77,7 @@ const CustomBackground = ({children}) => {
   );
 };
 
-const SkipButton = () => {
+export const SkipButton = () => {
   const dispatch = useDispatch();
   // let [moveNext, setMoveNext] = useState(false);
   let splashTimer = useRef(null);
@@ -111,7 +105,7 @@ const SkipButton = () => {
   };
 
   return (
-    <View style={styles.skipButtonView}>
+    <View testID="skip-button-view" style={styles.skipButtonView}>
       <QPButton
         buttonText={translate('onBoarding.skip')}
         buttonColor={Colors.accentLight}
@@ -126,9 +120,9 @@ const SkipButton = () => {
 const RenderWelcomeScreen = () => {
   const {userInfo} = useSelector(state => state.global);
   return (
-    <View style={styles.backgroundContainer}>
+    <View testID="render-welcome-screen" style={styles.backgroundContainer}>
       <View style={styles.backgroundContainer}>
-        <Text style={styles.welcomeText}>
+        <Text testID="welcome-text" style={styles.welcomeText}>
           {translate('onBoarding.welcomeBack')}
         </Text>
         <Text style={styles.nameText}>

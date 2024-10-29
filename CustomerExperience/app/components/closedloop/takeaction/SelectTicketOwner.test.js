@@ -54,7 +54,7 @@ describe('SelectTicketOwner', () => {
 
     fireEvent.press(getByText('Owner 2'));
     expect(getByText('Owner 2')).toBeTruthy();
-    fireEvent.press(getByTestId('QPButton'));
+    fireEvent.press(getByTestId('TakeActionButton'));
     expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[1], 1);
   });
 
@@ -67,7 +67,7 @@ describe('SelectTicketOwner', () => {
 
   it('calls handleOnPress with correct item on button press', () => {
     const {getByTestId} = render(<SelectTicketOwner {...defaultProps} />);
-    fireEvent.press(getByTestId('QPButton'));
+    fireEvent.press(getByTestId('TakeActionButton'));
     expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[0], 0);
   });
 });

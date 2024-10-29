@@ -11,7 +11,7 @@
     "start:resetCache": "NODE_OPTIONS=--openssl-legacy-provider react-native start --reset-cache",
     "test": "NODE_OPTIONS=--openssl-legacy-provider jest -u",
     "test:watch": "NODE_OPTIONS=--openssl-legacy-provider jest --watch",
-    "test:coverage": "NODE_OPTIONS=--openssl-legacy-provider jest --coverage",
+    "test:coverage": "NODE_OPTIONS=--openssl-legacy-provider jest --coverage -u",
     "postinstall": "patch-package",
     "check-deps": "rnx-align-deps",
     "fix-deps": "rnx-align-deps --write",
@@ -27,9 +27,10 @@
     "test:unit": "NODE_OPTIONS=--openssl-legacy-provider jest --testPathPattern=app/testcases/unit_test",
     "test:widget": "NODE_OPTIONS=--openssl-legacy-provider jest --testPathPattern=app/testcases/widget_test",
     "test:component": "NODE_OPTIONS=--openssl-legacy-provider jest --testPathPattern=app/testcases/component_test -u",
-    "test:singleFile": "NODE_OPTIONS=--openssl-legacy-provider jest --testPathPattern=app/redux/sagas/ClosedLoopSaga.test.js -u",
-    "test:singleFileCoverageOld": "NODE_OPTIONS=--openssl-legacy-provider jest --coverage --testPathPattern=app/redux/sagas/ClosedLoopSaga.test.js -u",
-    "test:singleFileCoverage": "jest --collectCoverageFrom=\"<rootDir>/app/**/*.{js,jsx}\" --testPathPattern=app/redux/sagas/ClosedLoopSaga.test.js -u",
+    "test:singleFile": "NODE_OPTIONS=--openssl-legacy-provider jest --testPathPattern=app/components/dashboard/CxDashboard.test.js -u",
+    "test:singleFileCoverageOld": "NODE_OPTIONS=--openssl-legacy-provider jest --coverage --testPathPattern=app/routes/CommonScreen.test.js.test.js -u",
+    "test:singleFileCoverage": "NODE_OPTIONS=--openssl-legacy-provider jest --collectCoverageFrom=\"<rootDir>/app/**/*.{js,jsx}\" --testPathPattern=app/components/view/CalendarScreen.test.js -u",
+    "test:singleDirectoryCoverage": "NODE_OPTIONS=--openssl-legacy-provider jest --coverage --testPathPattern=app/components/login/",
     "android:go": "rm -rf node_modules && yarn cache clean && yarn && yarn cache clean && cd android && ./gradlew clean --stacktrace && cd .. && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && react-native run-android"
   },
   "dependencies": {

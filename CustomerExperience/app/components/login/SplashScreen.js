@@ -2,7 +2,6 @@ import {ImageBackground, Image, StyleSheet} from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  ACCESS_CODE,
   ASYNC_AUTH_TOKEN,
   ASYNC_BEARER_TOKEN,
   ASYNC_CLF_BASE_URL,
@@ -10,10 +9,8 @@ import {
   ASYNC_LOGIN_EXPIRE_DATE,
   ASYNC_USER_INFO,
   BASE_URL,
-  RESPONSE_READ_UNREAD_FEATURE_ACTIVATION_DATE,
 } from '../../api/Constant';
-// import AppRouter from '../../routes/appRouter';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import {
   fillUserInfo,
   setAuthToken,
@@ -26,15 +23,8 @@ import {
   setTokenExpired,
 } from '../../redux/actions/dashboard.actions';
 import {setLanguageInfo, setRangeFilter} from '../../redux/actions';
-import {WelcomeScreen} from '../dashboard/WelcomeScreen';
 import AppRouter from '../../routes/appRouter';
-import {
-  SET_ACCESS_CODE,
-  authenticatePanel,
-  setAccessCode,
-  setBaseUrl,
-  updateBaseUrl,
-} from '../../redux/actions/login.actions';
+import {setBaseUrl} from '../../redux/actions/login.actions';
 import moment from 'moment';
 
 function SplashScreen(props) {
@@ -64,17 +54,6 @@ function SplashScreen(props) {
       }
     });
   };
-
-  // const setAuthAccessCode = () => {
-  //   AsyncStorage.getItem(ACCESS_CODE).then(accessCode => {
-  //     // console.log(`subscriber ID from async storage: ${subscriberId}`);
-  //     //console.log(`Base url from async storage: ${baseUrl}`);
-  //     if (accessCode && accessCode.length > 0) {
-  //       dispatch(setAccessCode(accessCode));
-  //       dispatch(authenticatePanel({accessCode: accessCode}));
-  //     }
-  //   });
-  // };
 
   useEffect(() => {
     splashTimer.current = setTimeout(() => {
@@ -126,7 +105,6 @@ function SplashScreen(props) {
         if (!isStringNullOrEmpty(userInfo)) {
           props.saveUserInfo(JSON.parse(userInfo));
           setGlobalBaseUrl();
-          // setAuthAccessCode();
         }
         if (!isStringNullOrEmpty(dashboardRange)) {
           props.setRange(JSON.parse(dashboardRange));
@@ -149,6 +127,7 @@ function SplashScreen(props) {
   let renderSplashScreenView = () => {
     return (
       <ImageBackground
+        testID="splash-background"
         resizeMode={'cover'}
         source={require('../../config/images/background1.png')}
         style={styles.backgroundContainer}>
@@ -161,8 +140,11 @@ function SplashScreen(props) {
     );
   };
 
-  return moveNext ? <AppRouter /> : renderSplashScreenView();
-  // return moveNext ? <WelcomeScreen /> : renderSplashScreenView();
+  return moveNext ? (
+    <AppRouter testID="app-router" />
+  ) : (
+    renderSplashScreenView()
+  );
 }
 
 const mapStateToProps = state => {

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">69.23% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>9/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -120,18 +120,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">33x</span>
+<span class="cline-any cline-yes">33x</span>
+<span class="cline-any cline-yes">94x</span>
+<span class="cline-any cline-yes">94x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">94x</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">94x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -148,7 +146,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">33x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,16 +170,16 @@ import {Platform, StyleSheet, Text, Pressable, Dimensions} from 'react-native';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
-const screen = <span class="cstat-no" title="statement not covered" >Dimensions.get('screen');</span>
-const QPButton = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pr</span>ops =&gt; {</span>
-  let style = <span class="cstat-no" title="statement not covered" >props.style ? props.style : styles.button;</span>
-  let textStyle = <span class="cstat-no" title="statement not covered" >props.textStyle ? props.textStyle : styles.text;</span>
+const screen = Dimensions.get('screen');
+const QPButton = props =&gt; {
+  let style = props.style ? props.style : <span class="branch-1 cbranch-no" title="branch not covered" >styles.button;</span>
+  let textStyle = props.textStyle ? props.textStyle : <span class="branch-1 cbranch-no" title="branch not covered" >styles.text;</span>
 &nbsp;
-  const onPress = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    props.onPress &amp;&amp; props.onPress();</span>
+  const onPress = () =&gt; {
+    props.onPress &amp;&amp; props.onPress();
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Pressable
       testID={props.testID ?? 'QPButton'}
       style={[
@@ -188,7 +188,7 @@ const QPButton = <span class="cstat-no" title="statement not covered" ><span cla
           backgroundColor:
             props.buttonColor ??
             style.backgroundColor ??
-            buttonColors.backgroundColor,
+<span class="branch-2 cbranch-no" title="branch not covered" >            buttonColors.backgroundColor,</span>
         },
       ]}
       onPress={onPress}&gt;
@@ -198,7 +198,7 @@ const QPButton = <span class="cstat-no" title="statement not covered" ><span cla
 };
 export default QPButton;
 &nbsp;
-const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
+const styles = StyleSheet.create({
   button: {
     width: screen.width / 1.1,
     height: MarginConstants.tab3 * 1.5,
@@ -210,7 +210,7 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
     alignSelf: 'center',
     color: textColors.primary,
     fontFamily: FontFamily.semiBold,
-    fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
+    fontSize: Platform.isPad ? <span class="branch-0 cbranch-no" title="branch not covered" >TextSizes.primary </span>: TextSizes.secondary,
   },
 });
 &nbsp;</pre></td></tr></table></pre>
@@ -220,7 +220,7 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-14T10:09:50.820Z
+                at 2024-10-28T05:49:51.098Z
             </div>
         <script src="../prettify.js"></script>
         <script>

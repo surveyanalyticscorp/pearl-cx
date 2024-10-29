@@ -10,7 +10,7 @@ const IconButton = ({
   buttonText,
 }) => {
   return (
-    <Pressable style={buttonStyle} onPress={onPress}>
+    <Pressable testID="icon-button" style={buttonStyle} onPress={onPress}>
       {leftIcon}
       <Text style={textStyle}>{buttonText}</Text>
       {rightIcon}

@@ -1,176 +1,171 @@
 import React from 'react';
-import {render, fireEvent} from '@testing-library/react-native';
-import {useNavigation, DrawerActions} from '@react-navigation/native';
-import DismissKeyboard from './commonUI/DismissKeyboard';
-import FabAddButton from './commonUI/FabAddButton';
-import IconButton from './commonUI/IconButton';
-import {Colors} from '../styles/color.constants';
-import IonIcons from 'react-native-vector-icons/Ionicons';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import MenuIcon from './commonUI/MenuIcon';
-import IndicatorIcon from './commonUI/IndicatorIcon';
-import PageHeaderText from './commonUI/PageHeaderText';
-import GestureHandleBar from './commonUI/GestureHandleBar';
-import HeaderBackLeft from './commonUI/HeaderBackLeft';
-import {Keyboard, Text} from 'react-native';
 import {Alert, BackHandler} from 'react-native';
-import {RenderExitAlert} from './CommonScreen';
-import {translate} from './MultilinguaUtils';
+import {render, fireEvent} from '@testing-library/react-native';
+import * as MultilinguaUtils from '../Utils/MultilinguaUtils';
+import CommonScreens, {
+  RenderExitAlert,
+  CloseLoopTicketsTabs,
+  DateRangeTabStack,
+  TicketLogTabStack,
+} from './CommonScreen';
 
-jest.mock('@react-navigation/native', () => ({
-  useNavigation: jest.fn(),
-  DrawerActions: {
-    toggleDrawer: jest.fn(),
+// Mock the navigation libraries
+jest.mock('@react-navigation/material-top-tabs', () => ({
+  createMaterialTopTabNavigator: jest.fn().mockReturnValue({
+    Navigator: ({children}) => <>{children}</>,
+    Screen: ({children}) => <>{children}</>,
+  }),
+}));
+
+jest.mock('@react-navigation/stack', () => ({
+  TransitionPresets: {
+    ModalPresentationIOS: {},
   },
 }));
 
-const mockNavigation = {
-  navigate: jest.fn(),
-  goBack: jest.fn(),
-  dispatch: jest.fn(),
-};
+jest.mock('react-native/Libraries/Utilities/BackHandler', () => ({
+  exitApp: jest.fn(),
+}));
 
-describe('CommonScreen Components', () => {
+// Mock translate to return expected translated values
+jest.mock('../Utils/MultilinguaUtils', () => ({
+  translate: jest.fn(key => {
+    const translations = {
+      'dashboard.new': 'New',
+      'dashboard.open': 'Open',
+      'dashboard.escalated': 'Escalated',
+      'dashboard.resolved': 'Resolved',
+      'date_filter.month': 'Month',
+      'date_filter.custom': 'Custom',
+      'close_loop.overview': 'Overview',
+      'close_loop.comments': 'Comments',
+      'close_loop.logs': 'Logs',
+      exit_app: 'Exit App',
+      exit_message: 'Are you sure you want to exit?',
+      yes: 'Yes',
+      no: 'No',
+    };
+    return translations[key] || key;
+  }),
+}));
+
+describe('CommonScreen components', () => {
   beforeEach(() => {
-    useNavigation.mockReturnValue(mockNavigation);
-  });
-
-  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('FabAddButton renders correctly and handles press', () => {
-    const {getByRole} = render(
-      <FabAddButton onPress={mockNavigation.navigate} />,
-    );
-    const button = getByRole('button');
-    fireEvent.press(button);
-    expect(mockNavigation.navigate).toHaveBeenCalled();
+  describe('RenderExitAlert', () => {
+    it('should show exit alert with translated messages', () => {
+      const mockShowExitAlert = jest.fn();
+      jest.spyOn(Alert, 'alert');
+
+      RenderExitAlert({showExitAlert: mockShowExitAlert});
+
+      expect(Alert.alert).toHaveBeenCalledWith(
+        'Exit App',
+        'Are you sure you want to exit?',
+        expect.arrayContaining([
+          expect.objectContaining({
+            text: 'Yes',
+            onPress: expect.any(Function),
+          }),
+          expect.objectContaining({
+            text: 'No',
+            onPress: expect.any(Function),
+          }),
+        ]),
+        {cancelable: false},
+      );
+    });
+
+    it('should call BackHandler.exitApp on "yes" press', () => {
+      const mockShowExitAlert = jest.fn();
+      jest
+        .spyOn(Alert, 'alert')
+        .mockImplementation((title, message, buttons) => {
+          buttons[0].onPress(); // Simulate "yes" button press
+        });
+
+      RenderExitAlert({showExitAlert: mockShowExitAlert});
+      expect(mockShowExitAlert).toHaveBeenCalledWith(false);
+      expect(BackHandler.exitApp).toHaveBeenCalled();
+    });
+
+    it('should hide alert on "no" press', () => {
+      const mockShowExitAlert = jest.fn();
+      jest
+        .spyOn(Alert, 'alert')
+        .mockImplementation((title, message, buttons) => {
+          buttons[1].onPress(); // Simulate "no" button press
+        });
+
+      RenderExitAlert({showExitAlert: mockShowExitAlert});
+      expect(mockShowExitAlert).toHaveBeenCalledWith(false);
+    });
   });
 
-  test('IconButton renders correctly with left and right icons', () => {
-    const leftIcon = (
-      <IonIcons name="arrow-back" size={20} color={Colors.black} />
-    );
-    const rightIcon = (
-      <IonIcons name="arrow-forward" size={20} color={Colors.black} />
-    );
-    const {getByText} = render(
-      <IconButton
-        buttonText="Click Me"
-        leftIcon={leftIcon}
-        rightIcon={rightIcon}
-        onPress={mockNavigation.navigate}
-      />,
-    );
-    expect(getByText('Click Me')).toBeTruthy();
+  describe('CloseLoopTicketsTabs', () => {
+    it('should render CloseLoopTicketsTab with correct screens', () => {
+      const {getByText} = render(<CloseLoopTicketsTabs />);
+
+      expect(getByText(new RegExp('New', 'i'))).toBeTruthy();
+      expect(getByText(new RegExp('Open', 'i'))).toBeTruthy();
+      expect(getByText(new RegExp('Escalated', 'i'))).toBeTruthy();
+      expect(getByText(new RegExp('Resolved', 'i'))).toBeTruthy();
+    });
   });
 
-  test('GestureHandleBar renders correctly', () => {
-    const {getByTestId} = render(<GestureHandleBar />);
-    expect(getByTestId('gesture-handle-bar')).toBeTruthy();
+  describe('DateRangeTabStack', () => {
+    it('should render DateRangeTabStack with correct screens', () => {
+      const mockRoute = {
+        params: {
+          range: 'last_month',
+          setRange: jest.fn(),
+        },
+      };
+      const {getByText} = render(<DateRangeTabStack route={mockRoute} />);
+
+      expect(getByText(new RegExp('Month', 'i'))).toBeTruthy();
+      expect(getByText(new RegExp('Custom', 'i'))).toBeTruthy();
+    });
   });
 
-  test('PageHeaderText renders correctly with text', () => {
-    const {getByText} = render(<PageHeaderText text="Header Text" />);
-    expect(getByText('Header Text')).toBeTruthy();
+  describe('TicketLogTabStack', () => {
+    it('should render TicketLogTabStack with correct screens', () => {
+      const mockRoute = {
+        params: {
+          ticketID: '123',
+          parentRoute: 'Home',
+        },
+      };
+      const {getByText} = render(<TicketLogTabStack route={mockRoute} />);
+
+      expect(getByText(new RegExp('Overview', 'i'))).toBeTruthy();
+      expect(getByText(new RegExp('Comments', 'i'))).toBeTruthy();
+      expect(getByText(new RegExp('Logs', 'i'))).toBeTruthy();
+    });
   });
 
-  test('PageHeaderText does not render close button when hasCloseButton is false', () => {
-    const {queryByTestId} = render(
-      <PageHeaderText text="Header Text" hasCloseButton={false} />,
-    );
-    expect(queryByTestId('close-button')).toBeNull();
-  });
+  describe('CommonScreens', () => {
+    it('should return an array of RootStack screens', () => {
+      const mockRootStack = {
+        Screen: jest.fn(({children}) => <>{children}</>),
+      };
+      const screens = CommonScreens(mockRootStack);
 
-  test('IndicatorIcon renders correctly with given props', () => {
-    const {getByTestId} = render(
-      <IndicatorIcon name="checkmark" color={Colors.green} size={20} />,
-    );
-    expect(getByTestId('indicator-icon')).toBeTruthy();
-  });
-
-  test('MenuIcon renders correctly and handles press', () => {
-    const {getByRole} = render(<MenuIcon />);
-    const button = getByRole('button');
-    fireEvent.press(button);
-    expect(mockNavigation.dispatch).toHaveBeenCalledWith(
-      DrawerActions.toggleDrawer(),
-    );
-  });
-
-  test('HeaderBackLeft renders correctly and handles press', () => {
-    const {getByRole} = render(<HeaderBackLeft />);
-    const button = getByRole('button');
-    fireEvent.press(button);
-    expect(mockNavigation.goBack).toHaveBeenCalled();
-  });
-
-  test('HeaderBackLeft handles press without route params', () => {
-    const props = {};
-    const {getByRole} = render(<HeaderBackLeft {...props} />);
-    const button = getByRole('button');
-    fireEvent.press(button);
-    expect(mockNavigation.goBack).toHaveBeenCalled();
-  });
-
-  test('DismissKeyboard dismisses keyboard on press', () => {
-    Keyboard.dismiss = jest.fn();
-    const {getByRole} = render(
-      <DismissKeyboard>
-        <Text>Child Component</Text>
-      </DismissKeyboard>,
-    );
-    const button = getByRole('button');
-    fireEvent.press(button);
-    expect(Keyboard.dismiss).toHaveBeenCalled();
+      const screenNames = screens.map(screen => screen.props.name);
+      expect(screenNames).toContain('TicketDetails');
+      expect(screenNames).toContain('responses.new_ticket');
+      expect(screenNames).toContain('SelectEmailTemplate');
+      expect(screenNames).toContain('sendEmail');
+      expect(screenNames).toContain('actionEmailHistory');
+    });
   });
 });
 
-describe('RenderExitAlert', () => {
-  const showExitAlertMock = jest.fn();
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it('should display an alert with "yes" and "no" buttons', () => {
-    render(<RenderExitAlert showExitAlert={showExitAlertMock} />);
-
-    expect(Alert.alert).toHaveBeenCalledWith(
-      'exit_app',
-      'exit_message',
-      [
-        {
-          text: 'yes',
-          onPress: expect.any(Function),
-        },
-        {
-          text: 'no',
-          onPress: expect.any(Function),
-        },
-      ],
-      {cancelable: false},
-    );
-  });
-
-  it('should call BackHandler.exitApp when "yes" is pressed', () => {
-    render(<RenderExitAlert showExitAlert={showExitAlertMock} />);
-
-    const yesButton = Alert.alert.mock.calls[0][2][0];
-    yesButton.onPress();
-
-    expect(showExitAlertMock).toHaveBeenCalledWith(false);
-    expect(BackHandler.exitApp).toHaveBeenCalled();
-  });
-
-  it('should not call BackHandler.exitApp when "no" is pressed', () => {
-    render(<RenderExitAlert showExitAlert={showExitAlertMock} />);
-
-    const noButton = Alert.alert.mock.calls[0][2][1];
-    noButton.onPress();
-
-    expect(showExitAlertMock).toHaveBeenCalledWith(false);
-    expect(BackHandler.exitApp).not.toHaveBeenCalled();
+describe('CloseLoopTicketsTabs', () => {
+  it('should render CloseLoopTicketsTab with correct screens', () => {
+    const {getByText, debug} = render(<CloseLoopTicketsTabs />);
+    debug(); // Outputs the entire rendered component structure for inspection
   });
 });

@@ -27,11 +27,16 @@ const GlobalSelectSegment = ({
 
   const renderRow = ({item, index}) => {
     return (
-      <TouchableWithoutFeedback onPress={() => handleOnPress(item)}>
-        <View style={styles.row}>
-          <Text style={styles.title}>{item.segmentName}</Text>
+      <TouchableWithoutFeedback
+        testID={`touchable-without-feedback-${index}`}
+        onPress={() => handleOnPress(item, index)}>
+        <View testID={`row-${index}`} style={styles.row}>
+          <Text testID="segment-name" style={styles.title}>
+            {item.segmentName}
+          </Text>
           {currentSegmentId === item.segmentID ? (
             <IonIcon
+              testID="check-mark-icon"
               style={{marginHorizontal: MarginConstants.halfTab}}
               name={'checkmark'}
               size={20}
@@ -52,8 +57,9 @@ const GlobalSelectSegment = ({
   console.log('Segment_API_CALL', JSON.stringify(filteredList));
 
   return (
-    <View style={styles.container}>
+    <View testID="global-select-segment" style={styles.container}>
       <TextInput
+        testID="text-input"
         style={styles.searchInput}
         placeholder={translate('search')}
         onChangeText={text => {
@@ -71,6 +77,7 @@ const GlobalSelectSegment = ({
       />
       {filteredList && filteredList.length > 0 ? (
         <FlatList
+          testID="flat-list"
           style={styles.flatList}
           data={filteredList}
           keyExtractor={(item, index) => item.segmentName}
@@ -81,7 +88,7 @@ const GlobalSelectSegment = ({
           extraData={[filteredList]}
         />
       ) : (
-        <View />
+        <View testID="no-items-found" />
       )}
     </View>
   );

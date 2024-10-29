@@ -390,12 +390,7 @@
 <a name='L325'></a><a href='#L325'>325</a>
 <a name='L326'></a><a href='#L326'>326</a>
 <a name='L327'></a><a href='#L327'>327</a>
-<a name='L328'></a><a href='#L328'>328</a>
-<a name='L329'></a><a href='#L329'>329</a>
-<a name='L330'></a><a href='#L330'>330</a>
-<a name='L331'></a><a href='#L331'>331</a>
-<a name='L332'></a><a href='#L332'>332</a>
-<a name='L333'></a><a href='#L333'>333</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L328'></a><a href='#L328'>328</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -452,11 +447,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -745,8 +735,8 @@ import {Colors} from '../../../styles/color.constants';
 import Pie from 'react-native-pie';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {apiHandler} from '../../../api/ApiHandler';
-import {showMessage} from 'react-native-flash-message';
 import QPSpinner from '../../../widgets/QPSpinner';
+import {showErrorFlashMessage} from '../../../Utils/Utility';
 &nbsp;
 class DashBoardStoreDetails extends Component {
 <span class="fstat-no" title="function not covered" >  co</span>nstructor(props) {
@@ -766,14 +756,14 @@ class DashBoardStoreDetails extends Component {
 <span class="cstat-no" title="statement not covered" >      apiHandler.getCXDashBoard(</span>
         this.props.authToken,
         this.props.route.params.data,
-<span class="fstat-no" title="function not covered" >        (r</span>esponse) =&gt; {
+<span class="fstat-no" title="function not covered" >        re</span>sponse =&gt; {
 <span class="cstat-no" title="statement not covered" >          this.storeData = response;</span>
 <span class="cstat-no" title="statement not covered" >          this.props.navigation.setParams({</span>
             name: response.body.primaryStoreName,
           });
 <span class="cstat-no" title="statement not covered" >          this.setState({callApi: false});</span>
         },
-<span class="fstat-no" title="function not covered" >        (e</span>rror) =&gt; {
+<span class="fstat-no" title="function not covered" >        er</span>ror =&gt; {
 <span class="cstat-no" title="statement not covered" >          this.setState({isLoading: false});</span>
 <span class="cstat-no" title="statement not covered" >          this.setState({isError: true});</span>
         },
@@ -783,13 +773,8 @@ class DashBoardStoreDetails extends Component {
 &nbsp;
 <span class="fstat-no" title="function not covered" >  co</span>mponentDidUpdate(prevProps, prevState, snapshot) {
 <span class="cstat-no" title="statement not covered" >    if (this.state.isError) {</span>
-<span class="cstat-no" title="statement not covered" >      showMessage({</span>
-        message: 'There was an error completing this request!',
-        type: 'danger',
-        icon: 'auto',
-        backgroundColor: Colors.red,
-        color: Colors.white,
-      });
+<span class="cstat-no" title="statement not covered" >      showErrorFlashMessage('There was an error completing this request!');</span>
+&nbsp;
       let timer = <span class="cstat-no" title="statement not covered" >setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        this.setState({isError: false});</span>
       }, 1000);
@@ -802,8 +787,8 @@ class DashBoardStoreDetails extends Component {
   getTrimmedNoOfResponses = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     let numberOfResponsesNumber = <span class="cstat-no" title="statement not covered" >0;</span>
 <span class="cstat-no" title="statement not covered" >    if (this.storeData.body.primaryStoreNPS.totalResponses) {</span>
-<span class="cstat-no" title="statement not covered" >      numberOfResponsesNumber = this.storeData.body.primaryStoreNPS</span>
-        .totalResponses;
+<span class="cstat-no" title="statement not covered" >      numberOfResponsesNumber =</span>
+        this.storeData.body.primaryStoreNPS.totalResponses;
     }
     let numberOfResponses = <span class="cstat-no" title="statement not covered" >numberOfResponsesNumber + '';</span>
 &nbsp;
@@ -942,7 +927,7 @@ class DashBoardStoreDetails extends Component {
     );
   };
 &nbsp;
-  renderRow = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>toreItem) =&gt; {</span>
+  renderRow = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >st</span>oreItem =&gt; {</span>
     let name = <span class="cstat-no" title="statement not covered" >storeItem.item.filterName</span>
       ? storeItem.item.filterName
       : storeItem.item.storeName;
@@ -983,7 +968,7 @@ class DashBoardStoreDetails extends Component {
         &lt;/View&gt;
         &lt;FlatList
           data={list}
-          keyExtractor={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.filterName}</span>
+          keyExtractor={<span class="fstat-no" title="function not covered" >it</span>em =&gt; <span class="cstat-no" title="statement not covered" >item.filterName}</span>
           renderItem={this.renderRow}
           onEndReachedThreshold={0.01}
           refreshing={false}
@@ -1042,14 +1027,14 @@ class DashBoardStoreDetails extends Component {
   }
 }
 &nbsp;
-const mapStateToProps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; {</span>
+const mapStateToProps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >st</span>ate =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  return {</span>
     userInfo: state.global.userInfo,
     authToken: state.global.authToken,
   };
 };
 &nbsp;
-const mapDispatchToProps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ispatch) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+const mapDispatchToProps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >di</span>spatch =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   cleanError: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >    dispatch(clearError(false));</span>
   },
@@ -1066,7 +1051,7 @@ export default connect(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-07T10:13:16.510Z
+                at 2024-10-27T20:06:50.549Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

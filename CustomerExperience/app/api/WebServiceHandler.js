@@ -193,6 +193,7 @@ export default class WebServiceHandler {
         })
         .catch(function (err) {
           // console.log('ERROR', JSON.stringify(err));
+          failed(err);
         });
     });
   }

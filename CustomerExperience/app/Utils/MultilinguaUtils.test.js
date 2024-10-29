@@ -17,6 +17,9 @@ describe('MultilinguaUtils', () => {
     I18n.translations = {
       en: {hello: 'Hello, World!'},
       fr: {hello: 'Bonjour, le monde!'},
+      de: {hello: 'Hallo, Welt!'},
+      es: {hello: '¡Hola, Mundo!'},
+      pt: {hello: 'Olá, Mundo!'},
     };
     I18n.locale = 'en';
     translate.cache.clear();
@@ -34,7 +37,22 @@ describe('MultilinguaUtils', () => {
     expect(I18n.locale).toBe('fr');
     expect(I18n.translations.fr).toBeDefined();
   });
+  test('should load the correct translations for German', () => {
+    setI18nConfig('de');
+    expect(I18n.locale).toBe('de');
+    expect(I18n.translations.de).toBeDefined();
+  });
+  test('should load the correct translations for Spanish', () => {
+    setI18nConfig('es');
+    expect(I18n.locale).toBe('es');
+    expect(I18n.translations.es).toBeDefined();
+  });
 
+  test('should load the correct translations for Portuguese', () => {
+    setI18nConfig('pt');
+    expect(I18n.locale).toBe('pt');
+    expect(I18n.translations.pt).toBeDefined();
+  });
   test('should set layout direction to RTL if isRTL is true', () => {
     setI18nConfig('ar', true);
     expect(I18nManager.forceRTL).toHaveBeenCalledWith(true);

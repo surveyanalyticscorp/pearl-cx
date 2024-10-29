@@ -1,5 +1,5 @@
-import SafeAreaView from 'react-native-safe-area-view';
 import React, {useState, useEffect} from 'react';
+// import SafeAreaView from 'react-native-safe-area-view';
 import {StyleSheet, Text, View} from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
@@ -10,6 +10,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_USER_CREDENTIALS} from '../../api/Constant';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function AccountDetails(props) {
   const [userCredentials, setUserCredentials] = useState('');
@@ -20,7 +21,7 @@ export default function AccountDetails(props) {
     });
   }, []);
 
-  let renderInfoRow = (icon, title) => {
+  let RenderInfoRow = ({icon, title}) => {
     return (
       <View style={styles.row}>
         <Icon name={icon} color={Colors.secondary} size={1.2 * Sizes.icons} />
@@ -29,27 +30,34 @@ export default function AccountDetails(props) {
     );
   };
 
-  let renderCard = () => {
+  let RenderCard = () => {
     return (
-      <View style={styles.card}>
-        {renderInfoRow(
-          'account',
-          props.route.params.userInfo.firstName +
+      <View testID={'render-card'} style={styles.card}>
+        <RenderInfoRow
+          icon={'account'}
+          title={
+            props.route.params.userInfo.firstName +
             ' ' +
-            props.route.params.userInfo.lastName,
-        )}
-        {renderInfoRow('email', userCredentials.email)}
-        {renderInfoRow(
-          'office-building',
-          props.route.params.userInfo.organizationName,
-        )}
+            props.route.params.userInfo.lastName
+          }
+        />
+        <RenderInfoRow icon={'email'} title={userCredentials.email} />
+        <RenderInfoRow
+          icon={'office-building'}
+          title={props.route.params.userInfo.organizationName}
+        />
       </View>
     );
   };
 
   return (
-    <SafeAreaView forceInset={{bottom: 'never'}} style={styles.safeArea}>
-      <View style={styles.safeArea}>{renderCard()}</View>
+    <SafeAreaView
+      testID={'account-details'}
+      forceInset={{bottom: 'never'}}
+      style={styles.safeArea}>
+      <View testID={'account-details-view'} style={styles.safeArea}>
+        <RenderCard />
+      </View>
     </SafeAreaView>
   );
 }

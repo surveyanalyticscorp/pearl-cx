@@ -18,6 +18,7 @@ function AppSettings(props) {
         <View style={styles.rowContainer}>
           <View style={styles.row}>
             <Icon
+              testID="icon-account"
               name={icon}
               color={Colors.secondary}
               size={1.2 * Sizes.icons}
@@ -28,6 +29,7 @@ function AppSettings(props) {
             </View>
           </View>
           <Icon
+            testID="icon-chevron-right"
             name={'chevron-right'}
             color={Colors.secondary}
             size={1.5 * Sizes.icons}
@@ -58,13 +60,13 @@ function AppSettings(props) {
   );
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     userInfo: state.global.userInfo,
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppSettings);
 

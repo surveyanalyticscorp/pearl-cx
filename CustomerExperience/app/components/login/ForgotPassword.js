@@ -42,7 +42,7 @@ import {
 } from '../../redux/actions/login.actions';
 
 let {width} = Dimensions.get('window');
-const stringConst = require('../../config/translations/en');
+import {translate} from '../../Utils/MultilinguaUtils';
 
 const ForgotPassword = props => {
   const [email, setEmail] = useState(props.route.params.email);
@@ -134,13 +134,26 @@ const ForgotPassword = props => {
     }
   };
 
+  // const isValidateInput = () => {
+  //   if (!validateEmail(email)) {
+  //     setValidation(stringConst.onBoarding.invalidEmail);
+  //     return false;
+  //   }
+  //   if (isStringNullOrEmpty(accessCode)) {
+  //     setValidation(stringConst.onBoarding.invalidCompanyCode);
+  //     return false;
+  //   }
+  //   setValidation('');
+  //   return true;
+  // };
+
   const isValidateInput = () => {
     if (!validateEmail(email)) {
-      setValidation(stringConst.onBoarding.invalidEmail);
+      setValidation(translate('onBoarding.invalidEmail')); // Triggering error message
       return false;
     }
     if (isStringNullOrEmpty(accessCode)) {
-      setValidation(stringConst.onBoarding.invalidCompanyCode);
+      setValidation(translate('onBoarding.invalidCompanyCode')); // Triggering error message
       return false;
     }
     setValidation('');
@@ -159,14 +172,14 @@ const ForgotPassword = props => {
   let renderSpinnerResetButton = () => {
     return props.isLoading ? (
       <View style={styles.resetPswdButton}>
-        <QPSpinner spinnerColor={Colors.white} />
+        <QPSpinner testID="loading-indicator" spinnerColor={Colors.white} />
       </View>
     ) : (
       <QPButton
         testID="SignInButton"
         style={styles.resetPswdButton}
         onPress={authenticateAccessCode}
-        buttonText={stringConst.onBoarding.resetPassword}
+        buttonText={translate('onBoarding.resetPassword')}
         textStyle={styles.nextText}
       />
     );
@@ -195,11 +208,13 @@ const ForgotPassword = props => {
           </View>
           <View style={styles.textFieldContainer}>
             <Text style={styles.forgotPasswordMessage}>
-              {stringConst.onBoarding.forgotPasswordMessage}
+              {translate('onBoarding.forgotPasswordMessage')}
             </Text>
             <QPTextField
+              accessibilityLabel="Email"
+              testID="email-input"
               autofocus={false}
-              label={stringConst.onBoarding.email}
+              label={translate('onBoarding.email')}
               defaultValue={email}
               style={styles.textInput}
               onChange={handleEmail}
@@ -211,8 +226,10 @@ const ForgotPassword = props => {
               clearButtonMode={'while-editing'}
             />
             <QPTextField
+              accessibilityLabel="Company Code"
+              testID="company-code-input"
               defaultValue={accessCode}
-              label={stringConst.onBoarding.companyCode}
+              label={translate('onBoarding.companyCode')}
               style={styles.textInput}
               onChange={handleAccessCode}
               onSubmitEditing={() => {

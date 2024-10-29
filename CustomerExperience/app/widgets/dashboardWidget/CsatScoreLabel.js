@@ -10,7 +10,7 @@ const CsatScoreLabel = () => {
   const {isCsatViewTopBox} = useSelector(state => state.dashboard);
 
   return (
-    <Text style={dashboardStyles.csatScoreLabel}>
+    <Text testID="csat-score-label" style={dashboardStyles.csatScoreText}>
       {isCsatViewTopBox
         ? `${StringUtils.floatTo2DecimalPointString(csatMeanAverage)}`
         : `${StringUtils.floatTo2DecimalPointString(csatScore)}%`}

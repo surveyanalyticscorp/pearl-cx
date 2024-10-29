@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {toggleCsatView} from '../../redux/actions/dashboard.actions';
 import {dashboardStyles} from '../../components/dashboard/dashboard.style';
 import TextLabel from '../TextLabel/TextLabel';
-import CaretDownIcon from '../IconWidget/CaretDownIcon';
 
 const CsatToggleButton = () => {
   const dispatch = useDispatch();
@@ -15,8 +14,8 @@ const CsatToggleButton = () => {
   };
 
   return (
-    <Pressable style={dashboardStyles.csatToggleButton} onPress={toggleView}>
-      <TextLabel text={label} />
+    <Pressable testID="csat-toggle-button" onPress={toggleView}>
+      <TextLabel testID="csat-toggle-button-text" text={label} />
       {/* <CaretDownIcon /> */}
     </Pressable>
   );

@@ -67,4 +67,48 @@ describe('AsyncStorageData', () => {
 
     consoleSpy.mockRestore();
   });
+
+  test('removeData should log an error if AsyncStorage.removeItem fails', async () => {
+    const consoleSpy = jest.spyOn(console, 'log');
+    AsyncStorage.removeItem.mockRejectedValueOnce(
+      new Error('AsyncStorage error'),
+    );
+
+    await asyncStorageData.removeData();
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'ERROR_ASYNC_REMOVE_DATA',
+      expect.any(Error),
+    );
+
+    consoleSpy.mockRestore();
+  });
+
+  test('setDataAsString should log an error if AsyncStorage.setItem fails', async () => {
+    const consoleSpy = jest.spyOn(console, 'log');
+    AsyncStorage.setItem.mockRejectedValueOnce(new Error('AsyncStorage error'));
+
+    await asyncStorageData.setDataAsString('testData');
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'ERROR_ASYNC_SET_DATA_AS_STRING',
+      expect.any(Error),
+    );
+
+    consoleSpy.mockRestore();
+  });
+
+  test('setData should log an error if AsyncStorage.setItem fails', async () => {
+    const consoleSpy = jest.spyOn(console, 'log');
+    AsyncStorage.setItem.mockRejectedValueOnce(new Error('AsyncStorage error'));
+
+    await asyncStorageData.setData('testData');
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'ERROR_ASYNC_SET_DATA',
+      expect.any(Error),
+    );
+
+    consoleSpy.mockRestore();
+  });
 });

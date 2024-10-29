@@ -11,7 +11,7 @@ module.exports = {
   setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
 
   transformIgnorePatterns: [
-    'node_modules/(?!react-native|@react-native|@react-navigation|rn-fetch-blob)',
+    'node_modules/(?!victory-native|react-native|@react-native|@react-navigation|rn-fetch-blob)',
   ],
 
   testPathIgnorePatterns: ['/node_modules/', '/android/', '/ios/'],
@@ -26,6 +26,10 @@ module.exports = {
       '<rootDir>/__mocks__/react-native-flash-message.js',
     '^@react-navigation/material-top-tabs$':
       '<rootDir>/__mocks__/@react-navigation/material-top-tabs.js',
+    '^@react-navigation/native$':
+      '<rootDir>/__mocks__/@react-navigation/native.js',
+    '^@react-navigation/stack$':
+      '<rootDir>/__mocks__/@react-navigation/stack.js',
     '\\.svg': '<rootDir>/__mocks__/svgMock.js',
     '^react-native-reanimated$':
       '<rootDir>/__mocks__/react-native-reanimated.js',
@@ -33,8 +37,6 @@ module.exports = {
       '<rootDir>/__mocks__/react-native-gesture-handler.js',
     '^@react-native-firebase/messaging$':
       '<rootDir>/__mocks__/@react-native-firebase/messaging.js',
-    '^@react-navigation/native$':
-      '<rootDir>/__mocks__/react-navigation-native.js',
     '^@react-native-async-storage/async-storage$':
       '<rootDir>/__mocks__/async-storage.js',
     // '^reanimated-bottom-sheet$':
@@ -44,16 +46,21 @@ module.exports = {
     'app/components/Notification.js',
     'app/components/feedback/feedbackdetails/ResponseFeedback.js',
     'app/components/feedback/SearchFeedback.js',
-    'app/components/login',
     'app/index.js',
     '/node_modules/',
     '/android/',
     '/ios/',
-    // 'app/widgets/qp-calendar',
-    // 'app/widgets/dashboardWidgets',
-    // 'app/widgets/dialog',
-    // 'app/widgets/drop-down',
-    // 'app/widgets/iconWidget',
-    // 'app/components/dashboard',
+    'app/widgets/qp-calendar',
+    'app/widgets/QPCalendar',
+    'app/widgets/RangeCalendar',
+    'app/widgets/dashboardWidgets',
+    'app/widgets/dialog',
+    'app/widgets/drop-down',
+    'app/Utils/NotificationUtils',
+    'app/components/dashboard/highchart.html',
+    'app/components/dashboard/highcharts.js',
+    'app/components/dashboard/jquery.min.js',
+    'app/components/dashboard/components',
+    'app/components/dashboard/ticketManagement',
   ],
 };

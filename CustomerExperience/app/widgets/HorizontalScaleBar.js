@@ -5,7 +5,7 @@ import {FontFamily, FontWeight} from '../styles/font.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
 
-const HorizontalScaleBar = (props) => {
+const HorizontalScaleBar = props => {
   const getNagativePercentage = () => {
     return Number(props.value) < 0 ? `${Number(props.value) * -1}%` : '0%';
   };
@@ -16,7 +16,7 @@ const HorizontalScaleBar = (props) => {
 
   const BarLabel = () => {
     return (
-      <View style={styles.barLabel}>
+      <View testID="bar-label" style={styles.barLabel}>
         <Text style={styles.barLabelText}>-100</Text>
         <Text style={styles.barLabelText}>0</Text>
         <Text style={styles.barLabelText}>100</Text>

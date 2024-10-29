@@ -37,10 +37,13 @@ const CustomErrorToast = ({text1, props}) => {
       <LeadingIcon {...props.leadingIcon} />
       <View style={{flex: 1}}>
         <TextLabel
-          numberOfLines={2}
+          numberOfLines={1}
           text={text1 ?? props.bodyText ?? ''}
           color={Colors.deleteButtonText}
-          style={baseTextStyles.semiSecondaryRegular2Text}
+          style={{
+            padding: PaddingConstants.halfTab,
+            ...baseTextStyles.semiSecondaryRegular2Text,
+          }}
           testID="error-toast-msg"
         />
       </View>
@@ -55,7 +58,7 @@ const CustomSuccessToast = ({text1, props}) => {
       <LeadingIcon {...props.leadingIcon} />
       <View style={{flex: 1}}>
         <TextLabel
-          numberOfLines={2}
+          numberOfLines={1}
           text={text1 ?? props.bodyText ?? ''}
           color={Colors.toastSuccessTextColor}
           style={baseTextStyles.semiSecondaryRegular2Text}

@@ -32,9 +32,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_RESET_CREDENTIALS} from '../../api/Constant';
 import {setDynamicLink} from '../../redux/actions';
 import QPTextField from '../../widgets/TextField';
+import {translate} from '../../Utils/MultilinguaUtils';
 
 let {width} = Dimensions.get('window');
-const stringConst = require('../../config/translations/en');
 
 const ResetPassword = props => {
   const [password, setPassword] = useState('');
@@ -77,15 +77,15 @@ const ResetPassword = props => {
 
   const isValidateInput = () => {
     if (isStringNullOrEmpty(password)) {
-      setValidation(stringConst.onBoarding.invalidPassword);
+      setValidation(translate('onBoarding.invalidPassword'));
       return false;
     }
     if (isStringNullOrEmpty(confirmPassword)) {
-      setValidation(stringConst.onBoarding.invalidPassword);
+      setValidation(translate('onBoarding.invalidPassword'));
       return false;
     }
     if (password !== confirmPassword) {
-      setValidation(stringConst.onBoarding.passwordNotMatching);
+      setValidation(translate('onBoarding.passwordNotMatching'));
       return false;
     }
     setValidation('');
@@ -141,9 +141,11 @@ const ResetPassword = props => {
           </View>
           <View style={styles.textFieldContainer}>
             <Text style={styles.resetPasswordMessage}>
-              {stringConst.onBoarding.resetPasswordMessage}
+              {translate('onBoarding.resetPasswordMessage')}
             </Text>
             <QPTextField
+              testID="password-input"
+              label="Password"
               autofocus={false}
               label={'Password'}
               value={password}
@@ -159,6 +161,8 @@ const ResetPassword = props => {
               }}
             />
             <QPTextField
+              testID="confirm-password-input"
+              label="Confirm Password"
               defaultValue={''}
               value={confirmPassword}
               secureText={true}

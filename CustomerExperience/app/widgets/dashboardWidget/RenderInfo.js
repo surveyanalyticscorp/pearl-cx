@@ -5,13 +5,18 @@ import {Colors} from '../../styles/color.constants';
 const RenderInfo = ({icon, title, count}) => {
   const size = 16;
   return (
-    <View style={dashboardStyles.responseView}>
-      <View style={dashboardStyles.ticketTypeContainer}>
+    <View testID="render-info" style={dashboardStyles.responseView}>
+      <View
+        testID="render-info-icon"
+        style={dashboardStyles.ticketTypeContainer}>
         <Image
+          testID="render-info-icon-image"
           source={icon}
           style={{tintColor: Colors.evenDarkerGrey, width: size, height: size}}
         />
-        <Text style={dashboardStyles.response}>{title}</Text>
+        <Text testID="render-info-title" style={dashboardStyles.response}>
+          {title}
+        </Text>
       </View>
       <Text style={dashboardStyles.responseText}>{count}</Text>
     </View>

@@ -6,32 +6,31 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {VictoryPie} from 'victory-native';
 import SmileyImageLabel from './SmileyImageLabel';
 
+export function getCsatData(positive, neutral, negative) {
+  console.log('positive', StringUtils.floatTo2DecimalPointString(positive));
+
+  return [
+    {
+      y: positive,
+      x: 'positive',
+      imageSource: require('../../../assets/images/csat_positive.png'),
+    },
+    {
+      y: neutral,
+      x: 'neutral',
+      imageSource: require('../../../assets/images/csat_neutral.png'),
+    },
+    {
+      y: negative,
+      x: 'negative',
+      imageSource: require('../../../assets/images/csat_negative.png'),
+    },
+  ];
+}
 const CsatChart = () => {
   const {promoterPercent, passivePercent, detractorPercent} = useSelector(
     state => state.dashboard.currentNPSData.NPSScore,
   );
-
-  function getCsatData(positive, neutral, negative) {
-    console.log('positive', StringUtils.floatTo2DecimalPointString(positive));
-
-    return [
-      {
-        y: positive,
-        x: 'positive',
-        imageSource: require('../../../assets/images/csat_positive.png'),
-      },
-      {
-        y: neutral,
-        x: 'neutral',
-        imageSource: require('../../../assets/images/csat_neutral.png'),
-      },
-      {
-        y: negative,
-        x: 'negative',
-        imageSource: require('../../../assets/images/csat_negative.png'),
-      },
-    ];
-  }
 
   let victoryPieColorScale = [
     Colors.promoter2,
@@ -41,6 +40,7 @@ const CsatChart = () => {
 
   return (
     <VictoryPie
+      testID="csat-chart"
       data={getCsatData(promoterPercent, passivePercent, detractorPercent)}
       height={5 * MarginConstants.tab4}
       width={5 * MarginConstants.tab4}

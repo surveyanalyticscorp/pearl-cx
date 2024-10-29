@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>9/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">42.85% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>6/14</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>9/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -159,26 +159,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">72x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">72x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">72x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">72x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">72x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">72x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">72x</span>
+<span class="cline-any cline-yes">72x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">72x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// import React from 'react';
 // import {Dimensions, PixelRatio, Platform} from 'react-native';
 // import Orientation from 'react-native-orientation-locker';
@@ -217,26 +217,26 @@
 import React from 'react';
 import {Dimensions, PixelRatio, Platform} from 'react-native';
 &nbsp;
-const {height, width, scale, fontScale} = <span class="cstat-no" title="statement not covered" >Dimensions.get('window');</span>
+const {height, width, scale, fontScale} = Dimensions.get('window');
 &nbsp;
-let rem = <span class="cstat-no" title="statement not covered" >Platform.OS === 'ios' ? 15 : 14;</span>
+let rem = Platform.OS === 'ios' ? 15 : <span class="branch-1 cbranch-no" title="branch not covered" >14;</span>
 &nbsp;
-const tempWidth = <span class="cstat-no" title="statement not covered" >(width &gt; height ? height : width) / PixelRatio.get();</span>
+const tempWidth = (width &gt; height ? <span class="branch-0 cbranch-no" title="branch not covered" >height </span>: width) / PixelRatio.get();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >if (tempWidth &gt;= 768) {</span>
+<span class="missing-if-branch" title="if path not taken" >I</span>if (tempWidth &gt;= 768) {
   /**
    * when pixel ratio is 1
    * */
 <span class="cstat-no" title="statement not covered" >  rem = tempWidth === 768 ? 18 : 20;</span>
-} else <span class="cstat-no" title="statement not covered" >if (tempWidth &gt; 414) {</span>
+} else <span class="missing-if-branch" title="if path not taken" >I</span>if (tempWidth &gt; 414) {
 <span class="cstat-no" title="statement not covered" >  rem = 26;</span>
-} else <span class="cstat-no" title="statement not covered" >if (tempWidth &gt; 385) {</span>
+} else <span class="missing-if-branch" title="if path not taken" >I</span>if (tempWidth &gt; 385) {
 <span class="cstat-no" title="statement not covered" >  rem = 18;</span>
-} else <span class="cstat-no" title="statement not covered" >if (tempWidth &gt;= 300) {</span>
-<span class="cstat-no" title="statement not covered" >  rem = 15;</span>
+} else <span class="missing-if-branch" title="else path not taken" >E</span>if (tempWidth &gt;= 300) {
+  rem = 15;
 }
 &nbsp;
-export const $rem = <span class="cstat-no" title="statement not covered" >rem;</span>
+export const $rem = rem;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -244,7 +244,7 @@ export const $rem = <span class="cstat-no" title="statement not covered" >rem;</
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-14T10:09:50.820Z
+                at 2024-10-28T05:49:51.098Z
             </div>
         <script src="../prettify.js"></script>
         <script>

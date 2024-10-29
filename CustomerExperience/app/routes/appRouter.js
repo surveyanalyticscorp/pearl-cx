@@ -53,8 +53,6 @@ import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
 import SegmentSelector from '../components/SegmentSelector';
 import Feedback from '../components/feedback/Feedback';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
-import {syncTickets} from '../redux/actions/closedloop.actions';
-import StringUtils from '../Utils/StringUtils';
 
 const Drawer = createDrawerNavigator();
 const DetractorStack = createStackNavigator();
@@ -81,26 +79,6 @@ const AppRouter = props => {
   let [lastLoginArray, setLastLoginArray] = useState([]);
 
   const dispatch = useDispatch();
-
-  const startSyncingTickets = (subscriberId_ = global.subscriberId) => {
-    console.log(
-      'GET_TICKET_LIST_SYNC_RECEIVED: ',
-      'subscriberId',
-      subscriberId_,
-    );
-
-    if (!StringUtils.isEmptyOrNull(subscriberId_)) {
-      console.log('GET_TICKET_LIST_SYNC_RECEIVED: ', 'dispatched');
-
-      dispatch(
-        syncTickets(
-          authToken,
-          {subscriberId: subscriberId_, feedbackApiKey: feedbackApiKey},
-          feedbackID,
-        ),
-      );
-    }
-  };
 
   const linking = {
     prefixes: [
@@ -216,7 +194,6 @@ const AppRouter = props => {
         console.log(`subscriber ID from global: ${global.subscriberId}`);
 
         setSubscriberId(subscriberId);
-        startSyncingTickets(subscriberId);
       }
     });
   };

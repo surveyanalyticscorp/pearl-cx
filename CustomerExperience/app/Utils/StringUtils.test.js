@@ -105,6 +105,10 @@ describe('StringUtils', () => {
   });
 
   describe('getTrimmedNoOfResponses', () => {
+    test('should format count under 100', () => {
+      expect(StringUtils.getTrimmedNoOfResponses(99)).toBe('99');
+    });
+
     test('should format count under 1000', () => {
       expect(StringUtils.getTrimmedNoOfResponses(999)).toBe('999');
     });
@@ -121,9 +125,27 @@ describe('StringUtils', () => {
       expect(StringUtils.getTrimmedNoOfResponses(3000000000)).toBe('3B');
     });
 
+    test('should format count in trillions', () => {
+      expect(StringUtils.getTrimmedNoOfResponses(3000000000000)).toBe('3T');
+    });
+
+    test('should format count in quadrillions', () => {
+      expect(StringUtils.getTrimmedNoOfResponses(4000000000000000)).toBe('4Q');
+    });
+
+    test('should return "0" for negative counts or NaN or empty string', () => {
+      expect(StringUtils.getTrimmedNoOfResponses(-1)).toBe('0'); // Negative count
+      expect(StringUtils.getTrimmedNoOfResponses(NaN)).toBe('0'); // NaN
+      expect(StringUtils.getTrimmedNoOfResponses('')).toBe(''); // Empty string
+    });
+
     test('should return "0" for negative counts or NaN', () => {
       expect(StringUtils.getTrimmedNoOfResponses(-1)).toBe('0');
       expect(StringUtils.getTrimmedNoOfResponses(NaN)).toBe('0');
+    });
+    test('if empty string is passed, it should return empty string', () => {
+      const text = '';
+      expect(StringUtils.getTrimmedNoOfResponses(text)).toBe('');
     });
   });
 
@@ -152,6 +174,16 @@ describe('StringUtils', () => {
         'Short text',
       );
     });
+    test('should return the original text if it is within the max length and has no spaces', () => {
+      const shortText = 'Short text';
+      expect(StringUtils.getShortTextTruncateMiddle(shortText, 20)).toBe(
+        'Short text',
+      );
+    });
+    test('if empty string is passed, it should return empty string', () => {
+      const shortText = '';
+      expect(StringUtils.getShortTextTruncateMiddle(shortText, 20)).toBe('');
+    });
   });
 
   describe('getShortTextTruncateEnd', () => {
@@ -167,6 +199,10 @@ describe('StringUtils', () => {
       expect(StringUtils.getShortTextTruncateEnd(shortText, 20)).toBe(
         'Short text',
       );
+    });
+    test('if empty string is passed, it should return empty string', () => {
+      const shortText = '';
+      expect(StringUtils.getShortTextTruncateEnd(shortText, 20)).toBe('');
     });
   });
 
@@ -201,6 +237,10 @@ describe('StringUtils', () => {
         'line3',
       ]);
     });
+    test('if empty string is passed, it should return empty array', () => {
+      const text = '';
+      expect(StringUtils.getTextArraySeparatedByNewline(text)).toEqual([]);
+    });
   });
 
   describe('getTextArraySeparatedBy', () => {
@@ -211,6 +251,10 @@ describe('StringUtils', () => {
         'item2',
         'item3',
       ]);
+    });
+    test('if empty string is passed, it should return empty array', () => {
+      const text = '';
+      expect(StringUtils.getTextArraySeparatedBy(text, ',')).toEqual([]);
     });
   });
 
@@ -335,6 +379,78 @@ describe('StringUtils', () => {
     });
     it('should return the number as is if it is already a whole number', () => {
       expect(StringUtils.floatToDecimal(123)).toBe(123);
+    });
+  });
+  describe('getWords', () => {
+    it('should return an array of words from a string', () => {
+      expect(StringUtils.getWords('Hello World')).toEqual(['Hello', 'World']);
+    });
+    it('should return an empty array if the string is empty', () => {
+      expect(StringUtils.getWords('')).toEqual([]);
+    });
+    it('should return an empty array if the string is null', () => {
+      expect(StringUtils.getWords(null)).toEqual([]);
+    });
+  });
+
+  describe('removeLinesAndWhiteSpaces', () => {
+    it('should remove all lines from a string', () => {
+      expect(StringUtils.removeLinesAndWhiteSpaces('Hello\nWorld\n')).toBe(
+        'HelloWorld',
+      );
+    });
+    it('should return an empty string if the string is empty', () => {
+      expect(StringUtils.removeLinesAndWhiteSpaces('')).toBe('');
+    });
+    it('should return an empty string if the string is null', () => {
+      expect(StringUtils.removeLinesAndWhiteSpaces(null)).toBe('');
+    });
+  });
+
+  describe('truncateFileName', () => {
+    test('should not truncate file name when its length les than 30', () => {
+      const fileName = 'test.txt';
+      const maxLength = 30;
+      expect(StringUtils.truncateFileName(fileName, maxLength)).toBe(
+        'test.txt',
+      );
+    });
+    test('should truncate file name with ... when its length is greater than 30', () => {
+      const fileName =
+        'test_test_test_test_test_test_test_test_test_test_test_test_test_test_test_test_test_test_test_test_test_test_test.txt';
+      const maxLength = 30;
+      expect(StringUtils.truncateFileName(fileName, maxLength)).toBe(
+        'test_test_t...st_test_test.txt',
+      );
+    });
+  });
+  describe('reformatName', () => {
+    test('should return the original name if it is not a person name', () => {
+      const user = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+      };
+      expect(StringUtils.reformatName(user)).toBe('John Doe');
+    });
+    test('should return the formatted name if it is a person name', () => {
+      const user = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+      };
+      expect(StringUtils.reformatName(user)).toBe('John Doe');
+    });
+  });
+
+  describe('reformatComplexName', () => {
+    test('should return the original name if it is not a person name', () => {
+      const name = 'John Doe';
+      expect(StringUtils.reformatComplexName(name)).toBe('John Doe');
+    });
+    test('should return the formatted name if it is a person name', () => {
+      const name = 'John Doe';
+      expect(StringUtils.reformatComplexName(name)).toBe('John Doe');
     });
   });
 });

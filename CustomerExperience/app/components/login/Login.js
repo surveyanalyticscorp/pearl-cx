@@ -12,7 +12,6 @@ import DeviceInfo from 'react-native-device-info';
 import {
   isStringNullOrEmpty,
   showErrorFlashMessage,
-  showSuccessFlashMessage,
   validateEmail,
 } from '../../Utils/Utility';
 import QPTextField from '../../widgets/TextField';
@@ -44,12 +43,19 @@ import {
   SUBSCRIBER_ID,
 } from '../../api/Constant';
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
-import {translate} from '../../Utils/MultilinguaUtils';
 import {getExpireDate} from '../../Utils/TimeUtils';
-import {retry} from 'redux-saga/effects';
 
 const stringConst = require('../../config/translations/en');
 
+let getApiValidationErrorMessage = errorMessage => {
+  console.log('getApiValidationErrorMessage', JSON.stringify(errorMessage));
+  if (errorMessage.errorAlert) {
+    return errorMessage?.errorAlert
+      ? errorMessage?.errorAlert
+      : errorMessage?.validationErrors[0]?.error;
+  }
+  return 'Error';
+};
 const RenderSpinnerLoginButton = ({isLoading, onPress}) => {
   return isLoading ? (
     <View style={loginStyles.signInButton}>
@@ -91,7 +97,9 @@ const Login = props => {
   useEffect(() => {
     console.log('VALIDATION MSG', validation);
     if (StringUtils.isNotEmpty(validation) || props.isError) {
-      let message = props.isError ? getApiValidationErrorMessage() : validation;
+      let message = props.isError
+        ? getApiValidationErrorMessage(props.errorMessage)
+        : validation;
       const loginError = 'Invalid email/password combination.';
       const customeErrorMessage = 'Invalid credentials. Please try again';
       showErrorFlashMessage(
@@ -154,16 +162,6 @@ const Login = props => {
         loginAction(token);
       }
     });
-  };
-
-  let getApiValidationErrorMessage = () => {
-    console.log('getApiValidationErrorMessage', JSON.stringify(props));
-    if (props.errorMessage.errorAlert) {
-      return props.errorMessage?.errorAlert
-        ? props.errorMessage?.errorAlert
-        : props.errorMessage?.validationErrors[0]?.error;
-    }
-    return 'Error';
   };
 
   const authenticateAccessCode = useCallback(() => {
@@ -354,6 +352,7 @@ const Login = props => {
 
   return (
     <ImageBackground
+      testID="login-container"
       resizeMode={'cover'}
       source={require('../../config/images/background1.png')}
       style={loginStyles.container}>

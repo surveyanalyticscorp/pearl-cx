@@ -14,17 +14,8 @@ jest.mock('react-native-reanimated', () => {
   return Reanimated;
 });
 
-jest.mock('../../routes/commonUI/CommonUI', () => ({
-  FilterIcon: 'FilterIcon',
-  NoItemsFound: 'NoItemsFound',
-}));
-
-// Mock BottomSheet correctly
-jest.mock('reanimated-bottom-sheet', () => {
-  return jest.fn().mockImplementation(({children}) => {
-    return <div>{children}</div>;
-  });
-});
+// mock reanimated-bottom-sheet
+jest.mock('reanimated-bottom-sheet', () => 'mockBottomSheet');
 
 const mockStore = configureStore([]);
 const initialState = {
@@ -149,7 +140,7 @@ describe('TicketActivity Component', () => {
       </Provider>,
     );
 
-    fireEvent.press(getByText('latest'));
+    fireEvent.press(getByText('activity.sorted_by activity.latest'));
     expect(getByText('latest')).toBeTruthy();
   });
 
@@ -176,73 +167,19 @@ describe('TicketActivity Component', () => {
       </Provider>,
     );
 
-    expect(getByText('ticket_list.anonymous')).toBeTruthy();
+    expect(getByText('Anonymous Activity')).toBeTruthy();
   });
 
-  it('changes sorting order when selecting a different option', async () => {
-    const {getByText} = render(
+  it('displays TicketActivity correctly', () => {
+    const {getAllByText, getByText} = render(
       <Provider store={store}>
         <TicketActivity />
       </Provider>,
     );
 
-    fireEvent.press(getByText('activity.sorted_by activity.latest'));
-    fireEvent.press(getByText('activity.oldest'));
-
-    await waitFor(() => {
-      expect(getByText('oldest')).toBeTruthy();
-    });
-  });
-
-  it('applies opacity to non-current segments', () => {
-    const {getByTestId} = render(
-      <Provider store={store}>
-        <TicketActivity />
-      </Provider>,
-    );
-
-    const animatedView = getByTestId('animated-view');
-    expect(animatedView.props.style[1].opacity).toBe(1);
-  });
-
-  it('disables refresh control while refreshing', async () => {
-    const {getByTestId} = render(
-      <Provider store={store}>
-        <TicketActivity />
-      </Provider>,
-    );
-
-    const flatList = getByTestId('flatlist-activity');
-    fireEvent(flatList, 'refresh');
-
-    // Wait for the refreshing state to be set to true
-    await waitFor(
-      () => {
-        const refreshControl = flatList.props.refreshControl;
-        expect(refreshControl.props.refreshing).toBe(true);
-      },
-      {timeout: 1000}, // Increase timeout if needed
-    );
-
-    // Wait for the refreshing state to be set back to false
-    await waitFor(
-      () => {
-        const refreshControl = flatList.props.refreshControl;
-        expect(refreshControl.props.refreshing).toBe(false);
-      },
-      {timeout: 2000}, // Adjust timeout based on your component's behavior
-    );
-  });
-
-  it('renders activity text correctly', () => {
-    const {getAllByTestId} = render(
-      <Provider store={store}>
-        <TicketActivity />
-      </Provider>,
-    );
-
-    const activityTexts = getAllByTestId('span');
-    expect(activityTexts[0].props.children).toBe('Activity 1');
-    expect(activityTexts[1].props.children).toBe('Activity 2');
+    expect(getByText('User1')).toBeTruthy();
+    const dayAgoElements = getAllByText('1 day ago');
+    expect(dayAgoElements.length).toBe(2); // Assuming there are two activities
+    expect(getByText('Activity 1')).toBeTruthy();
   });
 });

@@ -113,6 +113,10 @@ export default class StringUtils {
   }
 
   static getWords(text) {
+    // fix if text is null
+    if (!text) {
+      return [];
+    }
     var specialPattern = /@\[[^\]]+\]\(\d+\)/g;
 
     // Extract all occurrences of the special pattern and store them in an array
@@ -137,8 +141,13 @@ export default class StringUtils {
     // Return the count of words
     return words;
   }
-  static removeLines(str) {
-    return str.replace(/\s{2,}/g, '');
+
+  static removeLinesAndWhiteSpaces(str) {
+    // Fix to remove new line characters and handle multiple spaces
+    if (!str) {
+      return '';
+    }
+    return str.replace(/[\n\r]/g, '').replace(/\s{2,}/g, ' ');
   }
 
   static convertStringToNumberElseReturnZero(str) {
@@ -193,13 +202,19 @@ export default class StringUtils {
   }
 
   static getTextArraySeparatedByNewline(text) {
-    let textLines = text || '';
+    if (!text || text.trim() === '') {
+      return [];
+    }
+    let textLines = text;
     textLines = textLines.replace('\r\n', '\n');
     return textLines.split('\n');
   }
 
   static getTextArraySeparatedBy(text, symbol) {
-    let textLines = text || '';
+    if (!text || text.trim() === '') {
+      return [];
+    }
+    let textLines = text;
     return textLines.split(symbol);
   }
 
@@ -282,8 +297,12 @@ export default class StringUtils {
     let ONE_MILLION = 1000000;
     let ONE_BILLION = 1000000000;
     let ONE_THOUSAND_BILLION = 1000000000000;
+    let ONE_TRILLION = 1000000000000000;
+    let ONE_QUADRILLION = 1000000000000000000;
 
-    if (isNaN(responseCount) || responseCount < 0) return '0';
+    if (isNaN(responseCount) || responseCount < 0) {
+      return '0';
+    }
     if (responseCount < ONE_THOUSAND) {
       return responseCount.toString();
     } else if (responseCount < ONE_MILLION) {
@@ -292,6 +311,10 @@ export default class StringUtils {
       return this.formattedCount(responseCount, ONE_MILLION, 'M');
     } else if (responseCount < ONE_THOUSAND_BILLION) {
       return this.formattedCount(responseCount, ONE_BILLION, 'B');
+    } else if (responseCount < ONE_TRILLION) {
+      return this.formattedCount(responseCount, ONE_THOUSAND_BILLION, 'T');
+    } else if (responseCount < ONE_QUADRILLION) {
+      return this.formattedCount(responseCount, ONE_TRILLION, 'Q');
     } else {
       return responseCount.toString();
     }

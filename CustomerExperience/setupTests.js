@@ -8,6 +8,9 @@ import Adapter from 'enzyme-adapter-react-16';
 // import 'react-native-gesture-handler/jestSetup';
 import fetchMock from 'jest-fetch-mock';
 import {NativeModules, Platform} from 'react-native';
+import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock';
+
+jest.mock('react-native-safe-area-context', () => mockSafeAreaContext);
 
 global.document = new JSDOM();
 global.window = document.defaultView;

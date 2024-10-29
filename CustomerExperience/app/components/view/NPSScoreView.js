@@ -10,8 +10,9 @@ import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
 const NPSScoreView = ({text}) => {
   return (
-    <View style={npsStyles.npsView}>
+    <View testID="nps-view" style={npsStyles.npsView}>
       <Image
+        testID="nps-image"
         style={npsStyles.npsImage}
         source={require('./../../../assets/images/nps_meter.png')}
       />

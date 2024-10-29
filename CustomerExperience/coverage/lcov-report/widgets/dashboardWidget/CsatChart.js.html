@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -130,15 +130,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -156,14 +151,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,41 +189,41 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {VictoryPie} from 'victory-native';
 import SmileyImageLabel from './SmileyImageLabel';
 &nbsp;
-const CsatChart = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const {promoterPercent, passivePercent, detractorPercent} = <span class="cstat-no" title="statement not covered" >useSelector(</span>
-<span class="fstat-no" title="function not covered" >    st</span>ate =&gt; <span class="cstat-no" title="statement not covered" >state.dashboard.currentNPSData.NPSScore,</span>
+export function getCsatData(positive, neutral, negative) {
+  console.log('positive', StringUtils.floatTo2DecimalPointString(positive));
+&nbsp;
+  return [
+    {
+      y: positive,
+      x: 'positive',
+      imageSource: require('../../../assets/images/csat_positive.png'),
+    },
+    {
+      y: neutral,
+      x: 'neutral',
+      imageSource: require('../../../assets/images/csat_neutral.png'),
+    },
+    {
+      y: negative,
+      x: 'negative',
+      imageSource: require('../../../assets/images/csat_negative.png'),
+    },
+  ];
+}
+const CsatChart = () =&gt; {
+  const {promoterPercent, passivePercent, detractorPercent} = useSelector(
+    state =&gt; state.dashboard.currentNPSData.NPSScore,
   );
 &nbsp;
-  function <span class="fstat-no" title="function not covered" >getCsatData(</span>positive, neutral, negative) {
-<span class="cstat-no" title="statement not covered" >    console.log('positive', StringUtils.floatTo2DecimalPointString(positive));</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return [</span>
-      {
-        y: positive,
-        x: 'positive',
-        imageSource: require('../../../assets/images/csat_positive.png'),
-      },
-      {
-        y: neutral,
-        x: 'neutral',
-        imageSource: require('../../../assets/images/csat_neutral.png'),
-      },
-      {
-        y: negative,
-        x: 'negative',
-        imageSource: require('../../../assets/images/csat_negative.png'),
-      },
-    ];
-  }
-&nbsp;
-  let victoryPieColorScale = <span class="cstat-no" title="statement not covered" >[</span>
+  let victoryPieColorScale = [
     Colors.promoter2,
     Colors.passive2,
     Colors.detractor2,
   ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;VictoryPie
+      testID="csat-chart"
       data={getCsatData(promoterPercent, passivePercent, detractorPercent)}
       height={5 * MarginConstants.tab4}
       width={5 * MarginConstants.tab4}
@@ -247,7 +247,7 @@ export default CsatChart;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-14T10:09:50.820Z
+                at 2024-10-28T05:49:51.098Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

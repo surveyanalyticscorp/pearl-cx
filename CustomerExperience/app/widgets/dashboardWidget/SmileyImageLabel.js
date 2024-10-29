@@ -23,10 +23,14 @@ const SmileyImageLabel = props => {
   });
 
   return datum.y === 0 ? (
-    <View />
+    <View testID="no-view" />
   ) : (
-    <View style={style_.labelContainer}>
-      <Image source={datum.imageSource} style={style_.imageLabel} />
+    <View testID="label-container" style={style_.labelContainer}>
+      <Image
+        testID="image-label"
+        source={datum.imageSource}
+        style={style_.imageLabel}
+      />
     </View>
   );
 };

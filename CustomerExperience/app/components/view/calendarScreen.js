@@ -15,6 +15,7 @@ const CalendarScreen = props => {
   const renderCloseButton = () => {
     return (
       <Pressable
+        testID="close-button"
         onPress={() => {
           props.closeCalendar && props.closeCalendar(false);
         }}
@@ -46,6 +47,7 @@ const CalendarScreen = props => {
   const renderCalendarView = () => {
     return (
       <Modal
+        testID="calendar-modal"
         animationType={'fade'}
         transparent={true}
         visible={props.showCalendar}

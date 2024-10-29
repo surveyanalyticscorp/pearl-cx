@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">2.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/140</span>
+                <span class='fraction'>3/140</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">2.63% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/76</span>
+                <span class='fraction'>2/76</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">2.22% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/135</span>
+                <span class='fraction'>3/135</span>
             </div>
         
             
@@ -982,19 +982,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1003,13 +1000,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1507,7 +1507,7 @@ function <span class="fstat-no" title="function not covered" >dropdownRenderRow(
   );
 }
 &nbsp;
-const mapStateToProps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; {</span>
+const mapStateToProps = <span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; {
 <span class="cstat-no" title="statement not covered" >  return {</span>
     authToken: state.global.authToken,
     ticket: state.dashboard.ticketDetails,
@@ -1516,7 +1516,7 @@ const mapStateToProps = <span class="cstat-no" title="statement not covered" ><s
   };
 };
 &nbsp;
-const mapDispatchToProps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ispatch) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+const mapDispatchToProps = <span class="fstat-no" title="function not covered" >(d</span>ispatch) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
   getClosedLoopSegments: <span class="fstat-no" title="function not covered" >(t</span>oken, params) =&gt; {
 <span class="cstat-no" title="statement not covered" >    dispatch(getClosedLoopSegmentDetails(token, params));</span>
   },
@@ -1534,7 +1534,7 @@ const mapDispatchToProps = <span class="cstat-no" title="statement not covered" 
 &nbsp;
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateTicket);
 &nbsp;
-const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
+const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: Colors.darkerGrey,
@@ -1582,9 +1582,9 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
     marginVertical: MarginConstants.tab1,
     marginHorizontal: MarginConstants.halfTab,
     fontSize: Platform.isPad
-      ? TextSizes.primary
+      ? <span class="branch-0 cbranch-no" title="branch not covered" >TextSizes.primary</span>
       : Platform.OS === 'android'
-      ? TextSizes.primary
+      ? <span class="branch-0 cbranch-no" title="branch not covered" >TextSizes.primary</span>
       : TextSizes.secondary,
     textAlign: 'left',
     paddingLeft: MarginConstants.halfTab,
@@ -1645,7 +1645,7 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-07T10:13:16.510Z
+                at 2024-10-27T20:09:00.656Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

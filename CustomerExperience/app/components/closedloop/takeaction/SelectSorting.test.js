@@ -21,7 +21,7 @@ describe('SelectSorting', () => {
 
     expect(getByText('Sort by date')).toBeTruthy();
     expect(getByText('Sort by name')).toBeTruthy();
-    expect(getByTestId('QPButton')).toBeTruthy();
+    expect(getByTestId('ApplyButton')).toBeTruthy();
   });
 
   it('should call handleOnPress with the correct item and index when Apply button is pressed', () => {
@@ -33,7 +33,7 @@ describe('SelectSorting', () => {
       />,
     );
 
-    const applyButton = getByTestId('QPButton');
+    const applyButton = getByTestId('ApplyButton');
     fireEvent.press(applyButton);
 
     expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[0], 0);
@@ -51,7 +51,7 @@ describe('SelectSorting', () => {
     const radioButtons = getAllByTestId('check-radio-button-item');
     fireEvent.press(radioButtons[1]);
 
-    const applyButton = getByTestId('QPButton');
+    const applyButton = getByTestId('ApplyButton');
     fireEvent.press(applyButton);
 
     expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[1], 1);

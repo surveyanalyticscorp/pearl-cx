@@ -9,7 +9,9 @@ import {MarginConstants} from '../../styles/margin.constants';
 
 const LegendContainer = ({justifyContent = 'flex-start', children}) => {
   return (
-    <View style={{justifyContent: justifyContent, ...styles.legendContainer}}>
+    <View
+      testID="legend-container"
+      style={{justifyContent: justifyContent, ...styles.legendContainer}}>
       {children}
     </View>
   );
@@ -17,7 +19,7 @@ const LegendContainer = ({justifyContent = 'flex-start', children}) => {
 
 const LegendScoreView = ({title, count, percentage, backgroundColor}) => {
   return (
-    <View style={dashboardStyles.legendItemView}>
+    <View testID="legend-score-view" style={dashboardStyles.legendItemView}>
       <LegendContainer>
         <View
           style={{
@@ -26,6 +28,7 @@ const LegendScoreView = ({title, count, percentage, backgroundColor}) => {
           }}
         />
         <TextLabel
+          testID="legend-score-title"
           text={title ?? ''}
           baseTextStyle={baseTextStyles.secondaryRegularText}
           fontWeight={FontWeight.bold}
@@ -33,12 +36,14 @@ const LegendScoreView = ({title, count, percentage, backgroundColor}) => {
       </LegendContainer>
       <LegendContainer justifyContent="flex-end">
         <TextLabel
+          testID="legend-score-count"
           text={count ?? ''}
           baseTextStyle={baseTextStyles.secondaryRegularText}
           fontWeight={FontWeight.bold}
           style={styles.countText}
         />
         <TextLabel
+          testID="legend-score-percentage"
           text={`(${StringUtils.floatToDecimal(percentage)}%)`}
           baseTextStyle={baseTextStyles.secondaryRegularText}
           style={styles.parcentageText}

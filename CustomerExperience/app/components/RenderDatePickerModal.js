@@ -3,6 +3,7 @@ import DatePicker from 'react-native-date-picker';
 // import {showSuccessFlashMessage} from '../Utils/Utility';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../Utils/AppConstants';
+import StringUtils from '../Utils/StringUtils';
 const RenderDatePickerModal = ({
   isOpen,
   setOpen,
@@ -11,13 +12,39 @@ const RenderDatePickerModal = ({
   isMaxDateIsToday = true,
   isStartDate = false,
 }) => {
-  const today = new Date();
-  const selectedDate = new Date(
-    moment(currentDate, DMYFORMAT).format(YMDFORMAT),
+  console.log(
+    'TEST RenderDatePickerModal',
+    JSON.stringify({
+      isOpen,
+      setOpen,
+      currentDate,
+      setDate,
+      isMaxDateIsToday,
+      isStartDate,
+    }),
   );
+
+  const today = new Date();
+  const selectedDate = StringUtils.isNotEmpty(currentDate)
+    ? new Date(moment(currentDate, DMYFORMAT).format(YMDFORMAT))
+    : new Date();
 
   const minimumDate = new Date(
     new Date().setFullYear(new Date().getFullYear() - 4),
+  );
+
+  console.log(
+    'TEST RenderDatePickerModal',
+    JSON.stringify({
+      isOpen,
+      setOpen,
+      currentDate,
+      setDate,
+      isMaxDateIsToday,
+      isStartDate,
+      today,
+      selectedDate,
+    }),
   );
 
   return (

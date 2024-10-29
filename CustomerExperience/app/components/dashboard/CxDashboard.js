@@ -26,14 +26,8 @@ import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import {setRangeFilter} from '../../redux/actions';
 import {DashboardClosedLoopView} from './DashboardClosedLoopView';
 import {translate} from '../../Utils/MultilinguaUtils';
-import AsyncStorage, {
-  useAsyncStorage,
-} from '@react-native-async-storage/async-storage';
-import {
-  ASYNC_LAST_LOGIN,
-  ASYNC_RESPONSES_WITH_CX_MANAGER,
-} from '../../api/Constant';
-import {SEGMENT_SELECTED} from '../../redux/actions/dashboard.actions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {HeaderFilter} from '../../routes/commonUI/CommonUI';
 import FabAddButton from '../../routes/commonUI/FabAddButton';
 import NpsGaugeChart from '../../widgets/dashboardWidget/NpsGaugeChart';
@@ -434,6 +428,7 @@ const CxDashboard = props => {
   let RenderDashboard = () => {
     return (
       <View
+        testID="cx-dashboard"
         forceInset={{bottom: 'never', top: 'never'}}
         style={[
           dashboardStyles.container,

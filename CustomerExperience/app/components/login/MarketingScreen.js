@@ -16,8 +16,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {FontFamily} from '../../styles/font.constants';
 import {StackActions} from '@react-navigation/native';
-
-const stringConst = require('../../config/translations/en');
+import {translate} from '../../Utils/MultilinguaUtils';
 
 const MarketingScreen = props => {
   let content = getMarketingScreenContent();
@@ -39,6 +38,7 @@ const MarketingScreen = props => {
 
   return (
     <ImageBackground
+      testID="imageBackground"
       resizeMode={'cover'}
       source={require('../../config/images/background1.png')}
       style={styles.imageBackgroundContainer}>
@@ -52,9 +52,12 @@ const MarketingScreen = props => {
           activeDotColor={Colors.accent}>
           {introPages}
         </Swiper>
-        <Pressable style={styles.getStartedButton} onPress={onPress}>
+        <Pressable
+          testID="getStartedButton"
+          style={styles.getStartedButton}
+          onPress={onPress}>
           <Text style={styles.buttonTextColor}>
-            {stringConst.onBoarding.getStarted}
+            {translate('onBoarding.getStarted')}
           </Text>
         </Pressable>
       </SafeAreaView>
@@ -66,28 +69,28 @@ function getMarketingScreenContent() {
   return [
     {
       introImage: require('../../config/images/ms_connect_engage.png'),
-      introTitle: stringConst.onBoarding.marketing_title_1,
-      description: stringConst.onBoarding.marketing_desc_1,
+      introTitle: translate('onBoarding.marketing_title_1'),
+      description: translate('onBoarding.marketing_desc_1'),
     },
     {
       introImage: require('../../config/images/ms_take_control.png'),
-      introTitle: stringConst.onBoarding.marketing_title_2,
-      description: stringConst.onBoarding.marketing_desc_2,
+      introTitle: translate('onBoarding.marketing_title_2'),
+      description: translate('onBoarding.marketing_desc_2'),
     },
     {
       introImage: require('../../config/images/ms_mobile_dashboard.png'),
-      introTitle: stringConst.onBoarding.marketing_title_3,
-      description: stringConst.onBoarding.marketing_desc_3,
+      introTitle: translate('onBoarding.marketing_title_3'),
+      description: translate('onBoarding.marketing_desc_3'),
     },
     {
       introImage: require('../../config/images/ms_drive_business_decisions.png'),
-      introTitle: stringConst.onBoarding.marketing_title_4,
-      description: stringConst.onBoarding.marketing_desc_4,
+      introTitle: translate('onBoarding.marketing_title_4'),
+      description: translate('onBoarding.marketing_desc_4'),
     },
     {
       introImage: require('../../config/images/ms_full_growth.png'),
-      introTitle: stringConst.onBoarding.marketing_title_5,
-      description: stringConst.onBoarding.marketing_desc_5,
+      introTitle: translate('onBoarding.marketing_title_5'),
+      description: translate('onBoarding.marketing_desc_5'),
     },
   ];
 }
