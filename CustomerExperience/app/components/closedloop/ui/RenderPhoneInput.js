@@ -8,10 +8,15 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily} from '../../../styles/font.constants';
+import StringUtils from '../../../Utils/StringUtils';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import CountryPhoneNumberLength from '../../../Utils/CountryPhoneNumberLength';
 
 const RenderPhoneInput = ({setTicketState}) => {
   const [text, setText] = useState(' ');
   const phoneInput = React.useRef();
+  const [isValid, setIsValid] = useState(false);
+  const [maxLength, setMaxLength] = useState(CountryPhoneNumberLength['US']);
   const setPhoneNumber = () => {
     console.log('TEXT_INPUT', text);
     setTicketState(state => ({
@@ -37,6 +42,7 @@ const RenderPhoneInput = ({setTicketState}) => {
         // flagButtonStyle={{borderColor: Colors.accent, borderWidth: 1}}
         countryPickerButtonStyle={styles.phoneInputCountryPickerButtonStyle}
         textInputProps={{
+          maxLength: maxLength,
           placeholderTextColor: Colors.borderColor,
           onEndEditing: function (value) {
             setPhoneNumber();
@@ -50,10 +56,22 @@ const RenderPhoneInput = ({setTicketState}) => {
         // setValue(text);
         // console.log('PHONE:', text);
         // }}
+        onChangeCountry={country => {
+          console.log('COUNTRY:', country);
+          setMaxLength(CountryPhoneNumberLength[country?.cca2]);
+        }}
         onChangeFormattedText={text => {
           // setFormattedValue(text);
           setText(text);
-          console.log('FORMATTED PHONE:', text);
+          // setIsValid(phoneInput.current?.isValidNumber(text));
+          // console.log('PHONE:', text, phoneInput.current?.isValidNumber(text));
+
+          // console.log(
+          //   'FORMATTED PHONE:',
+          //   text,
+          //   StringUtils.validatePhoneNumber(text),
+          // );
+
           // setTicketState(state => ({...state, mobileNumber: text}));
           // userInfo.mobileNumber = text;
         }}
@@ -92,6 +110,15 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
+    height: MarginConstants.tab1_5x,
+    paddingVertical: 0,
+    marginVertical: 0,
+  },
+
+  phoneInputTextInputStyleError: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    color: Colors.detractor2,
     height: MarginConstants.tab1_5x,
     paddingVertical: 0,
     marginVertical: 0,

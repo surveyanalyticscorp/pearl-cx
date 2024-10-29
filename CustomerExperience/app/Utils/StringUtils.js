@@ -362,4 +362,23 @@ export default class StringUtils {
     // Join the name parts back into a full name
     return nameParts.join(' ');
   }
+
+  static validatePhoneNumber = formattedPhoneNumber => {
+    // Check if the phone number starts with a + followed by 1-3 digits (country code)
+    const countryCodePattern = /^\+\d{1,3}/;
+    const isCountryCodeValid = countryCodePattern.test(formattedPhoneNumber);
+
+    if (!isCountryCodeValid) return false; // Invalid if country code doesn't match
+
+    // Remove the country code for further validation
+    const phoneNumber = formattedPhoneNumber
+      .replace(countryCodePattern, '')
+      .trim();
+
+    // Check if the remaining part contains only 6-14 digits
+    const phonePattern = /^\d{6,14}$/;
+    const isPhoneNumberValid = phonePattern.test(phoneNumber);
+
+    return isPhoneNumberValid;
+  };
 }

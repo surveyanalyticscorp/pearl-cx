@@ -65,6 +65,9 @@ import StatusIcon from '../../../widgets/IconWidget/StatusIcon';
 import RenderPhoneInput from '../../closedloop/ui/RenderPhoneInput';
 import RenderCreateTicketButton from './RenderCreateTicketButton';
 import {IonIcon, MaterialIcons} from '../../../Utils/IconUtils';
+import StringUtils from '../../../Utils/StringUtils';
+import RenderDatePickerModal from '../../RenderDatePickerModal';
+import {set} from 'lodash';
 
 const RenderMaterialIcon = ({iconName}) => (
   <MaterialIcon name={iconName} size={14} color={Colors.lightBlack} />
@@ -370,14 +373,26 @@ export default function CreateTicket(props) {
     if (isValid()) {
       setLoading(true);
       setValidation('');
-      // console.log('TICKET_DETAILS_', JSON.stringify(ticketState));
       dispatch(createClfTicket(authToken, ticketState, feedbackApiKey));
       props.navigation.goBack();
-      // console.log(JSON.stringify(ticketState));
+      // console.log('TICKET_DETAILS_', JSON.stringify(ticketState));
     }
   };
+  // Example Usage
+  // console.log(validatePhoneNumber("+14155552671")); // Expected output: true
+  // console.log(validatePhoneNumber("+914055662001")); // Expected output: true
+  // console.log(validatePhoneNumber("+123456")); // Expected output: false (too short)
+  // console.log(validatePhoneNumber("1234567890")); // Expected output: false (no country code)
 
   const isValid = () => {
+    if (
+      ticketState.mobileNumber &&
+      !StringUtils.validatePhoneNumber(ticketState.mobileNumber)
+    ) {
+      setValidation('Enter valid phone number');
+      return false;
+    }
+
     if (!ticketState.currentSegmentId) {
       setValidation(translate('segment_not_selected'));
       return false;
@@ -623,90 +638,96 @@ export default function CreateTicket(props) {
     );
   };
 
-  let renderCancelButton = () => {
-    return (
-      <Pressable
-        style={styles.cancelButton}
-        onPress={() => {
-          setShowCalendar(false);
-        }}>
-        <Text style={styles.buttonText}>Cancel</Text>
-      </Pressable>
-    );
+  // let renderCancelButton = () => {
+  //   return (
+  //     <Pressable
+  //       style={styles.cancelButton}
+  //       onPress={() => {
+  //         setShowCalendar(false);
+  //       }}>
+  //       <Text style={styles.buttonText}>Cancel</Text>
+  //     </Pressable>
+  //   );
+  // };
+
+  // let renderOkButton = () => {
+  //   return (
+  //     <Pressable
+  //       style={styles.cancelButton}
+  //       onPress={() => {
+  //         console.log('DATE_', JSON.stringify(selectedDate));
+  //         setTicketState(state => ({
+  //           ...state,
+  //           issueDate: moment(selectedDate, DMYFORMAT).format(YMDFORMAT),
+  //         }));
+
+  //         setShowCalendar(false);
+  //       }}>
+  //       <Text style={styles.buttonText}>Ok</Text>
+  //     </Pressable>
+  //   );
+  // };
+
+  // let renderCalendarFooter = () => {
+  //   return (
+  //     <View style={styles.calendarFooter}>
+  //       {renderCancelButton()}
+  //       {renderOkButton()}
+  //     </View>
+  //   );
+  // };
+
+  let setCalendarDate = (isStartDate = false, date) => {
+    console.log('setCalendarDate', date);
+
+    // let tempDate = moment(date, 'YYYY-MM-DD').format(DMYFORMAT);
+    setSelectedDate(moment(date).format(DMYFORMAT));
+    setTicketState(state => ({
+      ...state,
+      issueDate: moment(date).format(YMDFORMAT),
+    }));
   };
 
-  let renderOkButton = () => {
-    return (
-      <Pressable
-        style={styles.cancelButton}
-        onPress={() => {
-          console.log('DATE_', JSON.stringify(selectedDate));
-          setTicketState(state => ({
-            ...state,
-            issueDate: moment(selectedDate, DMYFORMAT).format(YMDFORMAT),
-          }));
+  // let renderCalendar = () => {
+  //   let currentDate = moment().format('YYYY-MM-DD');
+  //   let currentYear = moment().year();
+  //   let minYear = parseInt(currentYear) - 4;
+  //   return (
+  //     <View style={styles.calendarContainer}>
+  //       <View style={styles.calendarBox}>
+  //         {/* <QPCalendar
+  //           {...props}
+  //           selectDate={setCalendarDate}
+  //           selectedDate={currentDate}
+  //           minimumDate={minYear + '-01-01'}
+  //           maximumDate={currentDate}
+  //           minYear={minYear}
+  //           maxYear={currentYear}
+  //         /> */}
+  //       </View>
+  //       {renderCalendarFooter()}
+  //     </View>
+  //   );
+  // };
 
-          setShowCalendar(false);
-        }}>
-        <Text style={styles.buttonText}>Ok</Text>
-      </Pressable>
-    );
-  };
-
-  let renderCalendarFooter = () => {
-    return (
-      <View style={styles.calendarFooter}>
-        {renderCancelButton()}
-        {renderOkButton()}
-      </View>
-    );
-  };
-
-  let setCalendarDate = date => {
-    let tempDate = moment(date, 'YYYY-MM-DD').format(DMYFORMAT);
-    setSelectedDate(tempDate);
-  };
-
-  let renderCalendar = () => {
-    let currentDate = moment().format('YYYY-MM-DD');
-    let currentYear = moment().year();
-    let minYear = parseInt(currentYear) - 4;
-    return (
-      <View style={styles.calendarContainer}>
-        <View style={styles.calendarBox}>
-          <QPCalendar
-            {...props}
-            selectDate={setCalendarDate}
-            selectedDate={currentDate}
-            minimumDate={minYear + '-01-01'}
-            maximumDate={currentDate}
-            minYear={minYear}
-            maxYear={currentYear}
-          />
-        </View>
-        {renderCalendarFooter()}
-      </View>
-    );
-  };
-
-  let renderCalendarViewOnModal = () => {
-    return (
-      <Modal
-        animationType={'fade'}
-        transparent={true}
-        onRequestClose={() => {}}
-        visible={showCalendar}
-        supportedOrientations={['portrait']}>
-        <View style={styles.modalContainer}>
-          <SafeAreaView style={{flex: 1}}>
-            <ScrollView style={styles.scrollContainer}>
-              {renderCalendar()}
-            </ScrollView>
-          </SafeAreaView>
-        </View>
-      </Modal>
-    );
-  };
+  // let renderCalendarViewOnModal = () => {
+  //   return (
+  //     <Modal
+  //       animationType={'fade'}
+  //       transparent={true}
+  //       onRequestClose={() => {}}
+  //       visible={showCalendar}
+  //       supportedOrientations={['portrait']}>
+  //       <View style={styles.modalContainer}>
+  //         <SafeAreaView style={{flex: 1}}>
+  //           <ScrollView style={styles.scrollContainer}>
+  //             {renderCalendar()}
+  //           </ScrollView>
+  //         </SafeAreaView>
+  //       </View>
+  //     </Modal>
+  //   );
+  // };
 
   const VerticalSpace = () => (
     <VerticalSpaceBox marginVertical={MarginConstants.halfTab} />
@@ -819,8 +840,15 @@ export default function CreateTicket(props) {
       <RenderStatusBottomSheet />
       <RenderSegmentBottomSheet />
       <RenderOwnerBottomSheet />
+      <RenderDatePickerModal
+        isOpen={showCalendar}
+        setOpen={setShowCalendar}
+        currentDate={selectedDate}
+        setDate={setCalendarDate}
+        isStartDate={true}
+      />
       {/* <RenderCalenderBottomSheet /> */}
-      {showCalendar ? renderCalendarViewOnModal() : <View />}
+      {/* {showCalendar ? renderCalendarViewOnModal() : <View />} */}
     </View>
   );
 }
