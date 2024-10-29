@@ -15,7 +15,7 @@ import CountryPhoneNumberLength from '../../../Utils/CountryPhoneNumberLength';
 const RenderPhoneInput = ({setTicketState}) => {
   const [text, setText] = useState(' ');
   const phoneInput = React.useRef();
-  const [isValid, setIsValid] = useState(false);
+  // const [isValid, setIsValid] = useState(false);
   const [maxLength, setMaxLength] = useState(CountryPhoneNumberLength['US']);
   const setPhoneNumber = () => {
     console.log('TEXT_INPUT', text);
