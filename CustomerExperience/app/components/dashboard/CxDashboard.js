@@ -24,7 +24,7 @@ import {MarginConstants} from '../../styles/margin.constants';
 import StringUtils from '../../Utils/StringUtils';
 import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import {setRangeFilter} from '../../redux/actions';
-import {DashboardClosedLoopView} from './DashboardClosedLoopView';
+// import {DashboardClosedLoopView} from './DashboardClosedLoopView';
 import {translate} from '../../Utils/MultilinguaUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_LAST_LOGIN} from '../../api/Constant';
@@ -34,7 +34,10 @@ import NpsGaugeChart from '../../widgets/dashboardWidget/NpsGaugeChart';
 import {baseTextStyles} from '../../styles/text.styles';
 import {FontWeight} from '../../styles/font.constants';
 import Animated from 'react-native-reanimated';
-import {StatusDashboardBottomSheet} from './ClosedLoopDashboard';
+import {
+  ClosedLoopDashboard,
+  StatusDashboardBottomSheet,
+} from './ClosedLoopDashboard';
 import ScoreIndicatorIcon from '../../widgets/dashboardWidget/ScoreIndicatorIcon';
 import DottedLine from '../../widgets/dashboardWidget/DottedLine';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
@@ -62,13 +65,16 @@ let getNPSColor = nps => {
   }
 };
 
-const NPSIcon = ({nps}) => {
+const NPSIcon = () => {
+  const {npsPercentage} = useSelector(
+    state => state.dashboard?.currentNPSData?.NPSScore,
+  );
   return (
     <View style={dashboardStyles.npsIcon}>
       <View
         style={[
           dashboardStyles.roundSquareShape,
-          {backgroundColor: getNPSColor(nps)},
+          {backgroundColor: getNPSColor(npsPercentage)},
         ]}
       />
       <DottedLine borderStyle="solid" />
@@ -84,7 +90,7 @@ const NpsScoreView = () => {
 
   return (
     <View style={dashboardStyles.squareView}>
-      <NPSIcon nps={npsPercentage} />
+      <NPSIcon />
       <TextLabel text={'NPS:'} fontWeight={FontWeight.bold} />
       <TextLabel
         text={StringUtils.floatToDecimal(npsPercentage)}
@@ -155,7 +161,9 @@ const RenderSegmentDashboardData = () => {
           ? dashboardStyles.csatChartContainer
           : dashboardStyles.chartContainer
       }>
-      <DashboardWidgetTitle text={title} child={<ResponsesButton />} />
+      <DashboardWidgetTitle text={title}>
+        <ResponsesButton />
+      </DashboardWidgetTitle>
       <RenderInfoContainer />
       {scoringModel && scoringModel === 1 ? (
         <RenderCSATChart />
@@ -242,11 +250,7 @@ function RenderNPSChart() {
 const ClosedLoopView = props => {
   return (
     <View style={dashboardStyles.closedLoopView}>
-      <DashboardClosedLoopView
-        // ticketCount={props.dashboardData.detractorTicketsCount}
-        ticketCount={props.ticketCount}
-        {...props}
-      />
+      <ClosedLoopDashboard {...props} />
     </View>
   );
 };
@@ -444,7 +448,6 @@ const CxDashboard = props => {
           ]}>
           <HeaderFilter
             hasFilterIcon={false}
-            dateRange={range}
             onPressDateRange={onDateRangeChangeHandler}
           />
 

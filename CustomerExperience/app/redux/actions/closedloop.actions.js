@@ -47,11 +47,11 @@ export const MEDIA_FILE_UPLOAD = 'MEDIA_FILE_UPLOAD';
 export const MEDIA_FILE_UPLOAD_RESPONSE = 'MEDIA_FILE_UPLOAD_RESPONSE';
 export const MEDIA_FILE_UPLOAD_RESET = 'MEDIA_FILE_UPLOAD_RESET';
 
-export const syncTickets = (token, param, feedbackId) => ({
+export const syncTickets = ({token, param, feedbackID}) => ({
   type: GET_TICKET_LIST_SYNC,
   token,
   param,
-  feedbackId,
+  feedbackID,
 });
 
 export const clearSyncTicketStatus = () => ({

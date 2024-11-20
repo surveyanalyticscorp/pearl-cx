@@ -330,6 +330,21 @@ export default class StringUtils {
     return `${start}...${end}`;
   };
 
+  static truncateCustomerName = (
+    name,
+    maxLength = 18,
+    firstCharatcetCount = 6,
+    lastCharatcetCount = 6,
+  ) => {
+    if (name.length <= maxLength) {
+      return name;
+    }
+
+    const start = name.slice(0, firstCharatcetCount); // Take first 6 characters
+    const end = name.slice(-lastCharatcetCount); // Take last 12 characters
+    return `${start}...${end}`;
+  };
+
   static reformatName(user) {
     // Split firstName by any non-alphabetical characters and trim any spaces
     let firstName = user.firstName.trim().split(/[^\w]+/)[0];

@@ -6,7 +6,7 @@ buildscript {
         minSdkVersion = 26
         compileSdkVersion = 34
         targetSdkVersion = 34
-        kotlinVersion="1.5.31"
+        kotlinVersion=  "1.5.31"
 
 
     }
@@ -47,8 +47,6 @@ allprojects {
 
     configurations.all {
         resolutionStrategy {
-            // use 0.9.0 to fix crash on Android 11
-            // force "com.facebook.soloader:soloader:0.9.0"
                        force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
 
 

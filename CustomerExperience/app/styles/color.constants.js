@@ -67,6 +67,9 @@ const Colors = {
   overdueTextColor: '#D8000C',
   toastSuccessTextColor: '#227700',
   toastSuccessBackgroundColor: '#DFF2BF',
+
+  toastInfoTextColor: ' #215694',
+  toastInfoBackgroundColor: '#CCF0FF',
 };
 
 const textColors = {

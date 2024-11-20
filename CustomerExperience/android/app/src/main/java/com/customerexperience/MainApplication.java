@@ -5,7 +5,7 @@ import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.facebook.soloader.SoLoader;
+//import com.facebook.soloader.SoLoader;
 import java.util.List;
 import androidx.multidex.MultiDexApplication;
 import android.content.BroadcastReceiver;
@@ -49,7 +49,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-    SoLoader.init(this, /* native exopackage */ false);
+//    SoLoader.init(this, /* native exopackage */ false);
   }
 
     @Override

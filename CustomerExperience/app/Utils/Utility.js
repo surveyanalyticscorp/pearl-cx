@@ -32,20 +32,6 @@ export function usePrevious(value) {
 }
 
 export const showErrorFlashMessage = error => {
-  // return showMessage({
-  //   message: error ?? 'something went worng, please try again later.',
-  //   type: 'danger',
-  //   backgroundColor: Colors.overdueBackgroundColor,
-  //   color: Colors.deleteButtonText,
-  // });
-
-  // return Toast.show({
-  //   text1: error ?? 'something went worng, please try again later.',
-  //   type: 'error',
-  //   backgroundColor: Colors.overdueBackgroundColor,
-  //   color: Colors.deleteButtonText,
-  // });
-
   return Toast.show({
     type: 'custom_error',
     props: {
@@ -66,12 +52,6 @@ export const showErrorFlashMessage = error => {
 };
 
 export const showSuccessFlashMessage = message => {
-  // return showMessage({
-  //   message: message,
-  //   type: 'success',
-  //   backgroundColor: Colors.success,
-  //   color: Colors.white,
-  // });
   return Toast.show({
     type: 'custom_success',
     props: {
@@ -80,10 +60,31 @@ export const showSuccessFlashMessage = message => {
       leadingIcon: {
         color: Colors.toastSuccessTextColor,
         testID: 'success-toast-icon',
+
         name: 'checkmark-sharp',
       },
       trailingIcon: {
         color: Colors.toastSuccessTextColor,
+        onPress: () => Toast.hide(),
+        testID: 'close-toast-button',
+      },
+    },
+  });
+};
+
+export const showInfoFlashMessage = message => {
+  return Toast.show({
+    type: 'custom_info',
+    props: {
+      headerText: 'Info',
+      bodyText: message ?? 'Info',
+      leadingIcon: {
+        color: Colors.accent,
+        testID: 'info-toast-icon',
+        name: 'alert-circle-sharp',
+      },
+      trailingIcon: {
+        color: Colors.accent,
         onPress: () => Toast.hide(),
         testID: 'close-toast-button',
       },

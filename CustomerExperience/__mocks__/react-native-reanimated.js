@@ -52,6 +52,8 @@ export default {
   ValueXY: jest.fn(),
   interpolateNode: jest.fn(),
   interpolate: jest.fn(),
+  ScrollView: jest.fn().mockImplementation(({children}) => children),
+
   Extrapolate: {
     EXTEND: 'extend',
     CLAMP: 'clamp',

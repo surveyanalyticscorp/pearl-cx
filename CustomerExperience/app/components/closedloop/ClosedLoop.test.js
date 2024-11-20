@@ -1,11 +1,20 @@
 import React from 'react';
-import {render, fireEvent} from '@testing-library/react-native';
+import {
+  render,
+  screen,
+  fireEvent,
+  userEvent,
+  waitFor,
+  act,
+} from '@testing-library/react-native';
 import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
-import ClosedLoop from './ClosedLoop';
+import ClosedLoop, {getFilterCount, SearchBox} from './ClosedLoop';
+import {mockNavigate} from '@react-navigation/native';
 
 const mockStore = configureStore([]);
 
+// jest.unmock('@react-navigation/native');
 jest.mock('reanimated-bottom-sheet', () => {
   return jest.fn().mockImplementation(({children}) => {
     return <div>{children}</div>;
@@ -261,49 +270,42 @@ describe('ClosedLoop', () => {
 
     const ticketCell = getAllByTestId('closedloop-cell')[0];
     fireEvent.press(ticketCell);
-    expect(props.navigation.navigate).toHaveBeenCalledWith('TicketDetails', {
-      prevScreen: 'TicketList',
-      ticketItem: expect.anything(),
-    });
-    expect(props.navigation.navigate).toHaveBeenCalled();
+
+    expect(mockNavigate).toHaveBeenCalled();
+  });
+  it('fab button', () => {
+    const {getByTestId} = render(
+      <Provider store={store}>
+        <ClosedLoop {...props} />
+      </Provider>,
+    );
+    fireEvent.press(getByTestId('fab-button'));
+
+    expect(mockNavigate).toHaveBeenCalled();
   });
 
-  // it('refreshes ticket list', () => {
-  //   const {getByTestId} = render(
-  //     <Provider store={store}>
-  //       <ClosedLoop {...props} />
-  //     </Provider>,
-  //   );
+  describe('getFilterCount', () => {
+    it('should return the correct count', () => {
+      const filterState = {status: [2, 1, 3], priority: [1, 2], type: [1, 2]};
+      const count = getFilterCount(filterState);
+      expect(count).toBe(3);
+    });
+  });
+});
 
-  //   fireEvent.refresh(getByTestId('closed-loop-container'));
-  //   expect(store.getActions()).toContainEqual(
-  //     expect.objectContaining({
-  //       type: 'SET_FILTER_STATE',
-  //       payload: expect.objectContaining({pageNumber: 1}),
-  //     }),
-  //   );
-  // });
+describe('SearchBox', () => {
+  it('renders correctly', async () => {
+    userEvent.setup();
+    const props = {
+      onResetSearch: jest.fn(),
+      onQuerySubmit: jest.fn(),
+      currentText: 'test',
+    };
+    const {getByTestId, getByText} = render(<SearchBox {...props} />);
+    const searchBox = getByTestId('search-box');
+    const textInput = getByTestId('search-box-input');
 
-  // it('loads more data', () => {
-  //   const {getByTestId} = render(
-  //     <Provider store={store}>
-  //       <ClosedLoop {...props} />
-  //     </Provider>,
-  //   );
-
-  //   fireEvent.scroll(getByTestId('closed-loop-container'), {
-  //     nativeEvent: {
-  //       contentOffset: {y: 100},
-  //       layoutMeasurement: {height: 100},
-  //       contentSize: {height: 200},
-  //     },
-  //   });
-
-  //   expect(store.getActions()).toContainEqual(
-  //     expect.objectContaining({
-  //       type: 'SET_FILTER_STATE',
-  //       payload: expect.objectContaining({pageNumber: 2}),
-  //     }),
-  //   );
-  // });
+    expect(searchBox).toBeTruthy();
+    expect(textInput).toBeTruthy();
+  });
 });

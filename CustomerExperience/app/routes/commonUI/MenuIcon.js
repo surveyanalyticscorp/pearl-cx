@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  DrawerActions,
-  StackActions,
-  useNavigation,
-  useNavigationState,
-} from '@react-navigation/native';
+import {DrawerActions, useNavigation} from '@react-navigation/native';
 import {Pressable, StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {Sizes} from '../../styles/Size.constant';

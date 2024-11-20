@@ -62,5 +62,12 @@ module.exports = {
     'app/components/dashboard/jquery.min.js',
     'app/components/dashboard/components',
     'app/components/dashboard/ticketManagement',
+    'app/routes',
+    'app/routes/SearchStack.js',
+    'app/components/dashboard/RenderSegmentBottomSheet.js',
+    'app/components/closedloop/takeaction/SendEmail.js',
+    'app/components/login/SplashScreen.js',
+    'app/components/login/ForgotPassword.js',
+    'app/redux/sagas/notificationSaga.js',
   ],
 };

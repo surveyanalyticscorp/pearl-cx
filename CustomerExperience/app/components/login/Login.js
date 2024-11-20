@@ -44,6 +44,7 @@ import {
 } from '../../api/Constant';
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 import {getExpireDate} from '../../Utils/TimeUtils';
+import {set} from 'lodash';
 
 const stringConst = require('../../config/translations/en');
 
@@ -76,7 +77,6 @@ const RenderSpinnerLoginButton = ({isLoading, onPress}) => {
 const Login = props => {
   let timer = useRef(null);
   let textFieldTimer = useRef(null);
-
   const [userData, setUserData] = useState({
     email: '',
     password: '',
@@ -153,7 +153,7 @@ const Login = props => {
   const onSignInPress = () => {
     Keyboard.dismiss();
     AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(token => {
-      if (isStringNullOrEmpty(token)) {
+      if (isStringNullOrEmpty(token) && isSignInPressed) {
         console.log('onSignInPress: token:', token);
         checkNotificationPermission().then(() => onSignInPress());
       } else {
@@ -165,8 +165,6 @@ const Login = props => {
   };
 
   const authenticateAccessCode = useCallback(() => {
-    // console.log('authenticateAccessCode', checkValidation(), props.baseUrl);
-
     if (StringUtils.isEmpty(props.baseUrl) && checkValidation()) {
       props.authenticatePanel({accessCode: userData.accessCode});
     }

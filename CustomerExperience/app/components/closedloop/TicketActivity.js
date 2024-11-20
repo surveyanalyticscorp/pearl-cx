@@ -41,6 +41,16 @@ const RenderItem = ({item}) => {
   );
 };
 
+export function getTicketActivityList(list, item) {
+  // console.log(JSON.stringify(item));
+  switch (item.id) {
+    case 1:
+      return list.slice().reverse();
+    default:
+      return list;
+  }
+}
+
 export default function TicketActivity(props) {
   const sortingList = [
     {id: 0, title: translate('activity.latest').toLocaleLowerCase()},
@@ -55,16 +65,6 @@ export default function TicketActivity(props) {
   const ticketActivityList = useSelector(
     state => state.dashboard.ticketActivity,
   );
-
-  function getTicketActivityList(list, item) {
-    // console.log(JSON.stringify(item));
-    switch (item.id) {
-      case 1:
-        return list.slice().reverse();
-      default:
-        return list;
-    }
-  }
 
   // sorting bottom sheet stuff
   const fall = new Animated.Value(1);
@@ -119,33 +119,33 @@ export default function TicketActivity(props) {
     wait(500).then(() => setRefreshing(false));
   }, []);
 
-  console.log(
-    'Padding half, tab1, tab2, tab3, tab4',
-    PaddingConstants.halfTab,
-    PaddingConstants.tab1,
-    PaddingConstants.tab2,
-    PaddingConstants.tab3,
-    PaddingConstants.tab4,
-  );
-  console.log(
-    'Margin half, tab1, tab2, tab3, tab4',
-    MarginConstants.halfTab,
-    MarginConstants.tab1,
-    MarginConstants.tab2,
-    MarginConstants.tab3,
-    MarginConstants.tab4,
-  );
-  console.log(
-    `TextSizes.donutPercentText: ${TextSizes.donutPercentText}`,
-    `TextSizes.extraLargeText: ${TextSizes.extraLargeText}`,
-    `TextSizes.largeText: ${TextSizes.largeText}`,
-    `TextSizes.primary: ${TextSizes.primary}`,
-    `TextSizes.secondary: ${TextSizes.secondary}`,
-    `TextSizes.semiSecondary: ${TextSizes.semiSecondary}`,
-    `TextSizes.semiMediumText: ${TextSizes.semiMediumText}`,
-    `TextSizes.mediumText: ${TextSizes.mediumText}`,
-    `TextSizes.smallText: ${TextSizes.smallText}`,
-  );
+  // console.log(
+  //   'Padding half, tab1, tab2, tab3, tab4',
+  //   PaddingConstants.halfTab,
+  //   PaddingConstants.tab1,
+  //   PaddingConstants.tab2,
+  //   PaddingConstants.tab3,
+  //   PaddingConstants.tab4,
+  // );
+  // console.log(
+  //   'Margin half, tab1, tab2, tab3, tab4',
+  //   MarginConstants.halfTab,
+  //   MarginConstants.tab1,
+  //   MarginConstants.tab2,
+  //   MarginConstants.tab3,
+  //   MarginConstants.tab4,
+  // );
+  // console.log(
+  //   `TextSizes.donutPercentText: ${TextSizes.donutPercentText}`,
+  //   `TextSizes.extraLargeText: ${TextSizes.extraLargeText}`,
+  //   `TextSizes.largeText: ${TextSizes.largeText}`,
+  //   `TextSizes.primary: ${TextSizes.primary}`,
+  //   `TextSizes.secondary: ${TextSizes.secondary}`,
+  //   `TextSizes.semiSecondary: ${TextSizes.semiSecondary}`,
+  //   `TextSizes.semiMediumText: ${TextSizes.semiMediumText}`,
+  //   `TextSizes.mediumText: ${TextSizes.mediumText}`,
+  //   `TextSizes.smallText: ${TextSizes.smallText}`,
+  // );
 
   const getRenderItem = ({item}) => {
     // return userID === item.userId ? RenderMyItem({item}) : RenderItem({item});

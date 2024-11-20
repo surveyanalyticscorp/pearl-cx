@@ -132,6 +132,11 @@ describe('StringUtils', () => {
     test('should format count in quadrillions', () => {
       expect(StringUtils.getTrimmedNoOfResponses(4000000000000000)).toBe('4Q');
     });
+    test('should not format count and return the original string', () => {
+      expect(StringUtils.getTrimmedNoOfResponses(4000000000000000000)).toBe(
+        '4000000000000000000',
+      );
+    });
 
     test('should return "0" for negative counts or NaN or empty string', () => {
       expect(StringUtils.getTrimmedNoOfResponses(-1)).toBe('0'); // Negative count
@@ -451,6 +456,20 @@ describe('StringUtils', () => {
     test('should return the formatted name if it is a person name', () => {
       const name = 'John Doe';
       expect(StringUtils.reformatComplexName(name)).toBe('John Doe');
+    });
+  });
+
+  describe('validatePhoneNumber', () => {
+    test('should return true for valid phone numbers', () => {
+      expect(StringUtils.validatePhoneNumber('+1234567890')).toBe(true);
+      expect(StringUtils.validatePhoneNumber('+911234567890')).toBe(true);
+      expect(StringUtils.validatePhoneNumber('+14155552671')).toBe(true);
+    });
+
+    test('should return false for invalid phone numbers', () => {
+      expect(StringUtils.validatePhoneNumber('1234567890')).toBe(false);
+      expect(StringUtils.validatePhoneNumber('911234567890')).toBe(false);
+      expect(StringUtils.validatePhoneNumber('14155552671')).toBe(false);
     });
   });
 });

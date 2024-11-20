@@ -48,7 +48,11 @@ import SelectPriority from './takeaction/SelectPriority';
 import SelectTicketOwner from './takeaction/SelectTicketOwner';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
-import {isObjectEmpty, showSuccessFlashMessage} from '../../Utils/Utility';
+import {
+  isObjectEmpty,
+  showInfoFlashMessage,
+  showSuccessFlashMessage,
+} from '../../Utils/Utility';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {
   deleteTickets,
@@ -63,14 +67,14 @@ import {ChildContainer} from '../../widgets/ParentContainer';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
 import ShowTitleAndDropdown from '../closedloop/ui/ShowTitleAndDropdown';
 
-const CopyTicketIdButton = ({ticket}) => {
+export const CopyTicketIdButton = ({ticket}) => {
   const onPress = () => {
     Clipboard.setString(JSON.stringify(ticket.id));
-    showSuccessFlashMessage(translate('close_loop.copied_success'));
+    showInfoFlashMessage(translate('close_loop.copied_success'));
   };
 
   return (
-    <Pressable onPress={onPress}>
+    <Pressable testID="copy-ticket-id-button" onPress={onPress}>
       <View style={styles.ticketIdView}>
         <CopyIcon size={16} tintColor={Colors.accentLight} />
       </View>
@@ -78,7 +82,7 @@ const CopyTicketIdButton = ({ticket}) => {
   );
 };
 
-const TakeActionButton = ({onTakeActionHandler, hasPanelMember}) => {
+export const TakeActionButton = ({onTakeActionHandler, hasPanelMember}) => {
   return (
     <View style={styles.takeActionContainer}>
       <QPButton
@@ -95,7 +99,7 @@ const TakeActionButton = ({onTakeActionHandler, hasPanelMember}) => {
   );
 };
 
-const DescriptionHeader = ({text}) => {
+export const DescriptionHeader = ({text}) => {
   return (
     <TextLabel
       testID="description-header"
@@ -106,9 +110,10 @@ const DescriptionHeader = ({text}) => {
     />
   );
 };
-const Title = ({value}) => {
+export const Title = ({value}) => {
   return (
     <Text
+      testID="title-text"
       style={[
         styles.titleText,
         {paddingBottom: PaddingConstants.halfTab, flex: 2},
@@ -117,25 +122,10 @@ const Title = ({value}) => {
     </Text>
   );
 };
-const ShowText = ({style, text, isHighlighted = false}) => {
-  return (
-    <Text
-      style={[
-        style,
-        styles.showText,
-        {
-          flex: 3,
-          color: isHighlighted ? Colors.accentLight : Colors.filterIconColor,
-        },
-      ]}>
-      {text}
-    </Text>
-  );
-};
 
-const ShowTitleAndText = ({title, subText, isSubtextHighlighted}) => {
+export const ShowTitleAndText = ({title, subText, isSubtextHighlighted}) => {
   return (
-    <View style={styles.titleTextContainer}>
+    <View testID="show-title-and-text" style={styles.titleTextContainer}>
       <TextLabel text={title} style={{flex: 2}} />
       {/* <Title value={title} /> */}
       <TextLabel
@@ -150,13 +140,13 @@ const ShowTitleAndText = ({title, subText, isSubtextHighlighted}) => {
   );
 };
 
-const DescriptionView = ({ticket, showResponseButton}) => {
+export const DescriptionView = ({ticket, showResponseButton}) => {
   const createdDate =
     ticket !== undefined
       ? moment(ticket.issueDate).format(FullMonthDateYearFormat)
       : '';
   return (
-    <View style={styles.ticketStatusContainer}>
+    <View testID="description-view" style={styles.ticketStatusContainer}>
       <View style={styles.rowContainer}>
         <DescriptionHeader text={'Details'} />
         <CopyTicketIdButton ticket={ticket} />
@@ -194,14 +184,14 @@ const DescriptionView = ({ticket, showResponseButton}) => {
   );
 };
 
-const ContactView = ({
+export const ContactView = ({
   panelMember,
   description,
   hasPanelMember,
   onTakeActionHandler,
 }) => {
   return (
-    <View style={[styles.ticketStatusContainer]}>
+    <View testID="contact-view" style={[styles.ticketStatusContainer]}>
       <DescriptionHeader text={translate('ticket_overview.contact')} />
       <ChildContainer style={{paddingHorizontal: 0}}>
         <ShowTitleAndText
@@ -248,7 +238,7 @@ const ContactView = ({
   );
 };
 
-const DeleteView = ({onPressDelete}) => {
+export const DeleteView = ({onPressDelete}) => {
   return (
     <QPButton
       testID="DeleteButtonAction"
@@ -263,22 +253,8 @@ const DeleteView = ({onPressDelete}) => {
     />
   );
 };
-const UnderLineText = ({text, type}) => {
+export const UnderLineText = ({text, type}) => {
   return (
-    // <TouchableWithoutFeedback
-    // onPress={() => {
-    //   console.log(text);
-
-    //   switch (type) {
-    //     case PHONE:
-    //       promptCall();
-    //       break;
-    //     default:
-    //       navigateToSendEmail();
-    //       break;
-    //   }
-    // }}
-    // >
     <View
       style={[
         {
@@ -290,20 +266,10 @@ const UnderLineText = ({text, type}) => {
       ]}>
       <Text style={styles.underLineText}>{text}</Text>
     </View>
-    // </TouchableWithoutFeedback>
   );
 };
 
-const TitleAndUnderLineText = ({title, underlineText, type}) => {
-  return (
-    <View style={styles.titleAndUnderlineContainer}>
-      <Title value={title} />
-      <UnderLineText text={underlineText} type={type} />
-    </View>
-  );
-};
-
-const ViewResponseDetailsButton = () => {
+export const ViewResponseDetailsButton = () => {
   const responseDetails = useSelector(
     state => state.response.responseDetailsByResponseDetails,
   );
@@ -820,8 +786,8 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderTicketOverView = props => (
-    <View style={styles.container}>
+  return !isLoading ? (
+    <View testID="ticket-overview" style={styles.container}>
       <Animated.ScrollView
         style={{
           opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
@@ -868,12 +834,9 @@ export default function TicketOverview(props) {
         // onOpenStart={() => setShadow(true)}
       />
     </View>
+  ) : (
+    <RenderSpinner />
   );
-
-  return isLoading ? <RenderSpinner /> : <RenderTicketOverView />;
-
-  // return <RenderTicketOverView />;
-  // return isLoading ? <RenderSpinner /> : <TempUI />;
 }
 
 const styles = StyleSheet.create({
@@ -937,10 +900,6 @@ const styles = StyleSheet.create({
     ...baseTextStyles.secondaryRegularText,
     color: Colors.filterIconColor,
 
-    alignItems: 'flex-start',
-  },
-  showText: {
-    ...baseTextStyles.primaryLightText,
     alignItems: 'flex-start',
   },
 

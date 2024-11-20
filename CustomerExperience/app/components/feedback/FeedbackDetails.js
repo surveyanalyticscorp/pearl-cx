@@ -161,7 +161,8 @@ const FeedbackDetailsTabStack = props => (
       labelStyle: {
         width: useWindowDimensions().width / 3,
         fontSize: TextSizes.secondary,
-        fontFamily: FontFamily.secondary,
+        fontFamily: FontFamily.regular,
+        textTransform: 'none',
       },
       indicatorStyle: {backgroundColor: Colors.accentLight},
       style: {backgroundColor: Colors.white, width: '100%'},
@@ -180,6 +181,7 @@ const FeedbackDetailsTabStack = props => (
         url: props.route.params.data.responseDataURL,
         data: props.route.params.data,
         isFromFeedback: props.isFromFeedback,
+        screenName: translate('responses.feedback'),
       }}
     />
     <DetailsTab.Screen
@@ -190,6 +192,7 @@ const FeedbackDetailsTabStack = props => (
         url: props.route.params.data.memberProfileURL,
         data: props.route.params.data,
         isFromFeedback: props.isFromFeedback,
+        screenName: translate('responses.profile'),
       }}
     />
     <DetailsTab.Screen
@@ -200,6 +203,7 @@ const FeedbackDetailsTabStack = props => (
         url: props.route.params.data.activityURL,
         data: props.route.params.data,
         isFromFeedback: props.isFromFeedback,
+        screenName: translate('responses.activity'),
       }}
     />
   </DetailsTab.Navigator>

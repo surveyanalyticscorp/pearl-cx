@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, Text, Switch, Platform} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, Text, Platform} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
@@ -13,21 +13,16 @@ import {setStatusFilterById} from '../../redux/actions/closedloop.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
-import {textStyles} from '../../styles/text.styles';
-import DropDownPicker from 'react-native-dropdown-picker';
 import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
 import {RenderStatusIcon} from '../../routes/commonUI/CommonUI';
 import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
 import IconButton from '../../routes/commonUI/IconButton';
 import BottomSheet from 'reanimated-bottom-sheet';
 import SelectStatus from '../closedloop/takeaction/SelectStatus';
-
 import {setStatusIndex} from '../../redux/actions/dashboard.actions';
 import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTitle';
 
 export const RenderDonutChart = ({count, showPercentageCount}) => {
-  // let count = getCount(props.route.params.ticketCount);
-
   let victoryPieColorScale =
     count.totalTickets > 0
       ? [Colors.low2, Colors.medium2, Colors.high2, Colors.critical2]
@@ -67,7 +62,6 @@ export const RenderDonutChart = ({count, showPercentageCount}) => {
 };
 
 let RenderDonutInfoViewContainer = ({priorities, showPercentageCount}) => {
-  // let priorities = getCount(props.route.params.ticketCount);
   return (
     <View testID="render-donut-info-view-container">
       <RenderTicketTotalView totalCount={priorities.totalTickets} />
@@ -115,7 +109,6 @@ export const RenderTicketView = ({
   count,
   bgColor,
   status,
-  textColor,
   showPercentageCount,
 }) => {
   const ticketCount = showPercentageCount
@@ -153,80 +146,16 @@ export const RenderTicketTotalView = ({totalCount}) => {
   );
 };
 
-// const RenderCountContainer = ({
-//   count,
-//   setShowPercentageCount,
-//   showPercentageCount,
-// }) => {
-//   console.log(`COUNT: ${JSON.stringify(count)}`);
-//   const toggleSwitch = () => setShowPercentageCount(!showPercentageCount);
-//   return (
-//     <View style={[styles.viewCountContainer]}>
-//       <View
-//         style={{
-//           height: MarginConstants.tab4,
-//           justifyContent: 'center',
-//         }}>
-//         <Text style={textStyles.secondaryText}>{`${
-//           count.totalTickets ?? 0
-//         } ${translate('dashboard.total')}`}</Text>
-//       </View>
-//       <View
-//         style={{
-//           height: MarginConstants.tab4,
-//           flexDirection: 'row',
-//           alignItems: 'center',
-//           justifyContent: 'center',
-//         }}>
-//         <Text style={textStyles.secondaryText}>Count</Text>
-//         <Switch
-//           trackColor={{true: Colors.accent, false: Colors.darkGrey}}
-//           thumbColor={Colors.white}
-//           ios_backgroundColor={Colors.filterIconColor}
-//           onValueChange={toggleSwitch}
-//           value={showPercentageCount}
-//           style={styles.switch}
-//         />
-//         <Text style={textStyles.secondaryText}>Percentage</Text>
-//       </View>
-//     </View>
-//   );
-// };
-
-// let RenderViewTicketsContainer = ({statusId}) => {
-//   const dispatch = useDispatch();
-//   const navigation = useNavigation();
-//   const navigateToCLosedLoop = () => {
-//     if (statusId) {
-//       dispatch(setStatusFilterById(statusId));
-//     }
-
-//     // props.navigation.navigate('ClosedLoop');
-//     navigation.navigate('dashboard_to_closed_loop');
-//   };
-//   return (
-//     <View style={styles.viewTicketsContainer}>
-//       <QPButton
-//         testID="ViewTicketsButton"
-//         style={buttonStyles.textButton}
-//         onPress={navigateToCLosedLoop}
-//         buttonText={`${translate('dashboard.view_tickets')}`}
-//         textStyle={buttonStyles.textButtonText}
-//       />
-//     </View>
-//   );
-// };
-
 export const ViewTicketsButton = ({statusIndex}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const navigateToCLosedLoop = () => {
-    if (statusIndex === 0) {
-      dispatch(setStatusFilterById(''));
-    } else {
-      dispatch(setStatusFilterById(JSON.stringify(statusIndex - 1)));
-    }
+    dispatch(
+      setStatusFilterById(
+        statusIndex === 0 ? '' : JSON.stringify(statusIndex - 1),
+      ),
+    );
 
     navigation.navigate('dashboard_to_closed_loop');
   };
@@ -246,14 +175,7 @@ export const RenderStatusFilterButton = ({currentStatus, onPress}) => {
   console.log('ABUL', JSON.stringify(currentStatus));
   return (
     <IconButton
-      buttonStyle={{
-        ...buttonStyles.outlinePrimaryButtonMedium,
-        marginHorizontal: MarginConstants.tab2,
-        maxWidth: MarginConstants.tab4 * 3,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
+      buttonStyle={styles.iconButton}
       onPress={onPress}
       leftIcon={
         <RenderStatusIcon
@@ -269,89 +191,9 @@ export const RenderStatusFilterButton = ({currentStatus, onPress}) => {
     />
   );
 };
-// export const RenderDropDown = ({
-//   currentStatus,
-//   setCurrentStatus,
-//   statusList,
-// }) => {
-//   const dispatch = useDispatch();
-//   const navigation = useNavigation();
-//   const [isOpen, setOpen] = useState(false);
-
-//   const [currentValue, setCurrentValue] = useState(currentStatus.value);
-//   const [statusIndex, setStatusIndex] = useState(0);
-//   console.log('CUreent status', JSON.stringify(currentStatus));
-//   const setDropdownValue = item => {
-//     console.log('DROPDOWN VALUE: ', item);
-//     setCurrentStatus(item);
-//     console.log(
-//       'Index',
-//       statusList.findIndex(obj => obj.value === item.value),
-//     );
-//     setStatusIndex(statusList.findIndex(obj => obj.value === item.value));
-//   };
-
-//   const navigateToCLosedLoop = () => {
-//     if (statusIndex !== statusList.length - 1) {
-//       dispatch(setStatusFilterById(statusIndex.toString()));
-//     } else {
-//       dispatch(setStatusFilterById(''));
-//     }
-
-//     // props.navigation.navigate('ClosedLoop');
-//     navigation.navigate('dashboard_to_closed_loop');
-//     return (
-//       <QPButton
-//         testID="ViewTicketsButton"
-//         style={buttonStyles.outlinePrimaryButtonMedium}
-//         onPress={navigateToCLosedLoop}
-//         buttonText={`${translate('dashboard.view_tickets')}`}
-//         textStyle={buttonStyles.outlinePrimaryButtonMediumText}
-//       />
-//     );
-//   };
-
-//   return (
-//     <View
-//       style={{
-//         flexDirection: 'row',
-//         justifyContent: 'space-between',
-//         alignItems: 'flex-end',
-//         marginHorizontal: MarginConstants.tab2,
-//         marginTop: MarginConstants.tab1,
-//         zIndex: 100,
-//       }}>
-//       <View
-//         style={{
-//           flex: 1,
-//         }}>
-//         <DropDownPicker
-//           style={{
-//             borderColor: Colors.transparent,
-//             maxWidth: MarginConstants.tab4 * 4,
-//             borderBottomColor: Colors.darkGrey,
-//             borderRadius: 0,
-//             position: 'relative',
-//           }}
-//           items={statusList}
-//           open={isOpen}
-//           setOpen={() => setOpen(!isOpen)}
-//           searchable={false}
-//           showTickIcon
-//           onSelectItem={setDropdownValue}
-//           setValue={setCurrentValue}
-//           labelStyle={{color: Colors.accentLight}}
-//           listItemLabelStyle={{color: Colors.filterIconColor}}
-//           value={currentValue}
-//         />
-//       </View>
-//     </View>
-//   );
-// };
 
 export const StatusDashboardBottomSheet = React.forwardRef(
   ({snapPoints, fall, ticketCount}, ref) => {
-    // const snapPoints = ['75%', '0%'];
     const dispatch = useDispatch();
     const statusList = getDashboardStatusListForBottomList(ticketCount);
     const statusIndex = useSelector(
@@ -413,10 +255,9 @@ export const ClosedLoopDashboard = props => {
 
   return (
     <View style={styles.container}>
-      <DashboardWidgetTitle
-        text={'Closedloop'}
-        child={<ViewTicketsButton statusIndex={statusIndex} />}
-      />
+      <DashboardWidgetTitle text={'Closedloop'}>
+        <ViewTicketsButton statusIndex={statusIndex} />
+      </DashboardWidgetTitle>
       <RenderStatusFilterButton
         currentStatus={statusList[statusIndex]}
         onPress={props.openStatusBS}
@@ -589,5 +430,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     paddingHorizontal: 24,
     height: '100%',
+  },
+  iconButton: {
+    ...buttonStyles.outlinePrimaryButtonMedium,
+    marginHorizontal: MarginConstants.tab2,
+    maxWidth: MarginConstants.tab4 * 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

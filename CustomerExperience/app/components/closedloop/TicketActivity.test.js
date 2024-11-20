@@ -2,7 +2,7 @@ import React from 'react';
 import {render, fireEvent, waitFor} from '@testing-library/react-native';
 import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
-import TicketActivity from './TicketActivity';
+import TicketActivity, {getTicketActivityList} from './TicketActivity';
 import * as TimeUtils from '../../Utils/TimeUtils';
 import * as DashboardActions from '../../redux/actions/dashboard.actions';
 import {Colors} from '../../styles/color.constants';
@@ -80,12 +80,12 @@ describe('TicketActivity Component', () => {
     const flatList = getByTestId('flatlist-activity');
     fireEvent(flatList, 'refresh');
 
-    await waitFor(() => {
-      expect(getClosedLoopTicketItemActivitySpy).toHaveBeenCalledWith(
-        'mockToken',
-        '"123"',
-      );
-    });
+    // await waitFor(() => {
+    expect(getClosedLoopTicketItemActivitySpy).toHaveBeenCalledWith(
+      'mockToken',
+      '"123"',
+    );
+    // });
   });
 
   it('opens and closes the sorting bottom sheet', async () => {
@@ -181,5 +181,20 @@ describe('TicketActivity Component', () => {
     const dayAgoElements = getAllByText('1 day ago');
     expect(dayAgoElements.length).toBe(2); // Assuming there are two activities
     expect(getByText('Activity 1')).toBeTruthy();
+  });
+
+  describe('getTicketActivityList', () => {
+    it('should return the list in reverse order', () => {
+      const list = [
+        {id: 1, title: 'Activity 1'},
+        {id: 2, title: 'Activity 2'},
+      ];
+      const item = {id: 1};
+      const result = getTicketActivityList(list, item);
+      expect(result).toEqual([
+        {id: 2, title: 'Activity 2'},
+        {id: 1, title: 'Activity 1'},
+      ]);
+    });
   });
 });

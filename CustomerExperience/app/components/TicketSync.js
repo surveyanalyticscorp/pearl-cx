@@ -18,9 +18,11 @@ const TicketSync = () => {
     dispatch(
       syncTickets({
         authToken,
-        feedbackApiKey,
+        param: {
+          subscriberId: global.subscriberId,
+          feedbackApiKey,
+        },
         feedbackID,
-        subscriberId: global.subscriberId,
       }),
     );
   }, [authToken, feedbackApiKey, feedbackID, dispatch]);
@@ -32,6 +34,12 @@ const TicketSync = () => {
       !StringUtils.isEmptyOrNull(feedbackApiKey) &&
       !StringUtils.isEmptyOrNull(feedbackID)
     ) {
+      console.log(
+        'TICKET_SYNC',
+        global.subscriberId,
+        feedbackApiKey,
+        feedbackID,
+      );
       callTicketSync();
     }
   }, [callTicketSync, feedbackApiKey, feedbackID, ticketSync]);

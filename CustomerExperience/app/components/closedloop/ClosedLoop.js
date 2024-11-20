@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TextInput,
   RefreshControl,
-  Pressable,
   Platform,
 } from 'react-native';
 import ClosedLoopCell from './ClosedloopCell';
@@ -41,32 +40,34 @@ import {
 } from '../../Utils/TicketUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
 import QPSpinner from '../../widgets/QPSpinner';
-import ShowFilterTag, {taglist} from '../view/ShowFilterTag';
-import StringUtils from '../../Utils/StringUtils';
+import {taglist} from '../view/ShowFilterTag';
 import {
-  clearSyncTicketStatus,
   resetDeleteTicketStatus,
-  resetStatusId,
   syncTickets,
 } from '../../redux/actions/closedloop.actions';
 import {baseTextStyles} from '../../styles/text.styles';
 import {useNavigation} from '@react-navigation/native';
-// import {getHeightPercentage} from '../../Utils/DimentionUtils';
-// import RenderSegmentBottomSheet from '../dashboard/RenderSegmentBottomSheet';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
+import {FontWeight} from '../../styles/font.constants';
+import IconButton from '../../routes/commonUI/IconButton';
+import {NoTicketFound} from './NoTicketFound';
 
-// const ClosedLoopTab = createMaterialTopTabNavigator();
-const SearchIcon = () => {
-  return <IonIcons name="search" size={20} color={Colors.evenDarkerGrey} />;
-};
-const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
-  // const placeHolder = currentText.trim().length > 0 ? currentText :
-  // console.log('STATE_CHANGING, ', JSON.stringify(currentText));
-  // const [text, setText] = useState(currentText);
-
+export const SearchIcon = () => {
   return (
-    <View style={[styles.searchBox]}>
+    <IonIcons
+      testID="search-icon"
+      name="search"
+      size={20}
+      color={Colors.evenDarkerGrey}
+    />
+  );
+};
+export const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
+  return (
+    <View testID="search-box" style={[styles.searchBox]}>
       <SearchIcon />
       <TextInput
+        testID="search-box-input"
         defaultValue={currentText}
         placeholder={translate('ticket_search_hint')}
         placeholderTextColor={Colors.evenDarkerGrey}
@@ -80,6 +81,71 @@ const SearchBox = ({onResetSearch, onQuerySubmit, currentText}) => {
         }}
       />
     </View>
+  );
+};
+
+export function convertDateToYMDFORMAT(date) {
+  return moment(date, DMYFORMAT).format(YMDFORMAT);
+}
+
+export const getFilterCount = filterState => {
+  let count = 0;
+  for (let tag of taglist) {
+    if (filterState.hasOwnProperty(tag) && filterState[tag]) {
+      if (filterState[tag].length > 0) {
+        count++;
+      }
+    }
+  }
+
+  return count;
+};
+const ClosedLoopTicketList = ({
+  onPressReset,
+  onRefresh,
+  refreshing,
+  ticketList,
+  isPagination,
+  isTicketLoading,
+  onPressHandler,
+  selectedTickets,
+  showCheckBox,
+  loadMoreData,
+}) => {
+  return (
+    <FlatList
+      refreshControl={
+        <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+      }
+      style={styles.flatList}
+      contentContainerStyle={{flexGrow: 1}}
+      data={ticketList}
+      onEndReached={loadMoreData}
+      onEndReachedThreshold={0.25}
+      ListFooterComponent={isPagination ? <QPSpinner /> : <View />}
+      extraData={[ticketList]}
+      ListEmptyComponent={
+        !isTicketLoading && !isPagination ? (
+          // <NoItemsFound>No tickets found</NoItemsFound>
+          <NoTicketFound onPressReset={onPressReset} />
+        ) : (
+          <View />
+        )
+      }
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({item, index}) => {
+        return (
+          <ClosedLoopCell
+            data={item}
+            index={index}
+            showCheckBox={showCheckBox}
+            isSelected={selectedTickets.includes(item.id)}
+            onPressHandler={() => onPressHandler(item, index)}
+            // onLongPressHandler={() => onLongPressHandler(item, index)}
+          />
+        );
+      }}
+    />
   );
 };
 
@@ -119,9 +185,6 @@ export default function ClosedLoop(props) {
 
   // console.log('STATUS_ID_FILTER_useeffect', JSON.stringify(filterState));
 
-  function convertDateToYMDFORMAT(date) {
-    return moment(date, DMYFORMAT).format(YMDFORMAT);
-  }
   // const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
   const ticketList = useSelector(state => state.dashboard.ticketList);
   const [selectedTickets, setSelectedTickets] = useState([]);
@@ -133,23 +196,9 @@ export default function ClosedLoop(props) {
   const currentFeedback = useSelector(state => state.dashboard.currentFeedback);
   const currentSegment = useSelector(state => state.dashboard.currentSegment);
 
-  // const [ticketList, setTicketList] = useState([]);
   const owners = useSelector(state => state.dashboard.ownerDetails.owners);
-  // const keepSyncingTickets = useSelector(state => state.dashboard.ticketSync);
   const [refreshing, setRefreshing] = useState(false);
   const {ticketDeleteStatus} = useSelector(state => state.dashboard);
-  const sync = () => {
-    // console.log('SYNC_API, api called');
-    if (!isTicketLoading) {
-      dispatch(
-        syncTickets(
-          authToken,
-          {subscriberId: subscriberId, feedbackApiKey: feedbackApiKey},
-          feedbackID,
-        ),
-      );
-    }
-  };
 
   useEffect(() => {
     if (
@@ -161,13 +210,6 @@ export default function ClosedLoop(props) {
     }
   }, [ticketDeleteStatus]);
 
-  // useEffect(() => {
-  //   if (keepSyncingTickets) {
-  //     // console.log('SYNC_API, when keeSyncingChanged');
-
-  //     sync();
-  //   }
-  // }, [keepSyncingTickets]);
   const sampleFilterData = () => {
     const priority = priorityList.map(value => ({
       ...value,
@@ -211,15 +253,6 @@ export default function ClosedLoop(props) {
     resetFilterState(range_);
   };
 
-  function setStatusToFilter(data, statusId_) {
-    let arr = [];
-    data.map(value => {
-      // console.log(value);
-      arr.push({...value, isChecked: value.id === statusId_});
-    });
-    return arr;
-  }
-
   const filterByStatus = statusId_ => {
     let tempStatusData = [];
 
@@ -256,11 +289,6 @@ export default function ClosedLoop(props) {
   }, [currentSegment]);
 
   const makeAPICall = () => {
-    // console.log('SYNC_API, when makeAPICall called');
-    // if (keepSyncingTickets && !isTicketLoading) {
-    //   sync();
-    // }
-
     let filterObj = {
       ...filterState,
       fromDate: convertDateToYMDFORMAT(range.startDate),
@@ -269,39 +297,20 @@ export default function ClosedLoop(props) {
 
     getTicketList(filterObj, currentSegment.currentSegmentID);
     getTicketOwnerList(currentSegment.currentSegmentID);
-    // dispatch(clearSyncTicketStatus());
   };
 
-  // const resetSyncTicket = () => {
-  //   dispatch(clearSyncTicketStatus());
-  // };
   const wait = timeout => {
     return new Promise(resolve => {
       setTimeout(resolve, timeout);
     });
   };
   const onRefresh = useCallback(() => {
-    // setFilterState((state) => ({...state, pageNumber: 1}));
-    // setTicketList([]);
     resetFilterState(range);
     setRefreshing(true);
-    // resetSyncTicket();
     makeAPICall();
     wait(500).then(() => setRefreshing(false));
   }, []);
 
-  // useEffect(() => {
-  //   updateTicketList();
-  // }, [ticketDetails.data]);
-
-  // const updateTicketList = () => {
-  //   setLoading(false);
-  //   setTicketList((state) =>
-  //     getUniqueValues([...state, ...(ticketDetails.data ?? [])], 'id'),
-  //   );
-  // };
-
-  // console.log('Ticket list: ', JSON.stringify(ticketDetails.data));
   useEffect(() => {
     updateFilterData();
   }, [owners]);
@@ -314,14 +323,9 @@ export default function ClosedLoop(props) {
     } else {
       setFilterData(state => ({...state, managers: []}));
     }
-    // console.log('OWNERS', JSON.stringify(owners));
   };
-  // useEffect(() => {}, []);
 
   const getTicketList = (filterState_, currentSegmentId) => {
-    // setRefreshing(true);
-
-    // dispatch(showLoading(true));
     dispatch(
       getClosedLoopTicketList(
         authToken,
@@ -330,12 +334,6 @@ export default function ClosedLoop(props) {
         currentSegmentId,
       ),
     );
-
-    //   dispatch(
-    //     getClosedLoopOwnerDetails(authToken, {
-    //       segmentID: currentSegment.currentSegmentID,
-    //     }),
-    //   );
   };
 
   const loadMoreData = () => {
@@ -355,50 +353,10 @@ export default function ClosedLoop(props) {
     );
   };
 
-  const closedLoopTicketList = () => {
-    return (
-      <FlatList
-        refreshControl={
-          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-        }
-        style={styles.flatList}
-        data={ticketList}
-        onEndReached={loadMoreData}
-        onEndReachedThreshold={0.25}
-        ListFooterComponent={isPagination ? <QPSpinner /> : <View />}
-        extraData={[ticketList]}
-        ListEmptyComponent={
-          !isTicketLoading && !isPagination ? (
-            <NoItemsFound>No tickets found</NoItemsFound>
-          ) : (
-            <View />
-          )
-        }
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => {
-          return (
-            <ClosedLoopCell
-              data={item}
-              index={index}
-              showCheckBox={showCheckBox}
-              isSelected={selectedTickets.includes(item.id)}
-              onPressHandler={() => onPressHandler(item, index)}
-              // onLongPressHandler={() => onLongPressHandler(item, index)}
-            />
-          );
-        }}
-      />
-    );
-  };
-
   const onResetSearch = useCallback(() => {
-    if (searchText.trim().length > 0) {
-      setSearchText('');
-      setFilterState(prev => ({...prev, search: ''}));
-      // console.log('RESET_SEARCH', JSON.stringify(''));
-    } else {
-      setSearchVisibility(false);
-    }
+    setSearchText('');
+    setFilterState(prev => ({...prev, search: ''}));
+    console.log('RESET_SEARCH', JSON.stringify(''));
   }, [searchText]);
 
   const onPressHandler = (item, index) => {
@@ -419,20 +377,6 @@ export default function ClosedLoop(props) {
       ticketItem: item,
       prevScreen: translate('dashboard.closed_loop'),
     });
-  };
-  const onLongPressHandler = (item, index) => {
-    // console.log(`onLongPressHandler`);
-    if (showCheckBox) {
-      setSelectedTickets([]);
-      setShowCheckBox(false);
-      return;
-    }
-    if (selectedTickets.includes(item.id)) {
-      setSelectedTickets(selectedTickets.filter(id => id !== item.id));
-    } else {
-      setSelectedTickets([...selectedTickets, item.id]);
-    }
-    setShowCheckBox(true);
   };
 
   const onFabHandler = () => {
@@ -546,74 +490,61 @@ export default function ClosedLoop(props) {
     }
   };
 
-  const submitQuery = useCallback(text => {
-    setSearchText(text);
-    setFilterState(prev => ({...prev, search: text}));
-    // console.log('KEYBOARD_SEARCH', JSON.stringify(text));
+  const submitQuery = useCallback(searchText => {
+    setSearchText(searchText);
+    setFilterState(prev => ({...prev, search: searchText}));
+    console.log('KEYBOARD_SEARCH', JSON.stringify({searchText, filterState}));
   }, []);
-
-  const toogleSearchView = useCallback(() => {
-    setSearchVisibility(state => !state);
-  }, []);
-
-  const getFilterCount = filterState => {
-    let count = 0;
-    for (let tag of taglist) {
-      if (filterState.hasOwnProperty(tag) && filterState[tag]) {
-        // console.log('TAG_ITEM_COUNT', tag, filterState[tag]);
-        if (filterState[tag].length > 0) {
-          count++;
-        }
-      }
-    }
-
-    return count;
-  };
-
-  const RenderClosedLoop = () => {
-    return (
-      <View testID="closed-loop-container" style={styles.container}>
-        <Animated.View
-          style={{
-            opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-            flex: 1,
-          }}>
-          <HeaderFilter
-            style={{justifyContent: 'space-between'}}
-            dateRange={range}
-            onPressDateRange={getDataOnNewRange}
-            onPressFilter={openFilter}
-            filterCount={getFilterCount(filterState)}
-          />
-
-          {true && (
-            <SearchBox
-              onResetSearch={onResetSearch}
-              onQuerySubmit={submitQuery}
-              currentText={searchText}
-            />
-          )}
-          {closedLoopTicketList()}
-          <FabAddButton onPress={onFabHandler} />
-        </Animated.View>
-
-        <BottomSheet
-          ref={bs}
-          snapPoints={bsSnapPoints}
-          initialSnap={bsSnapPoints.length - 1}
-          enabledGestureInteraction={true}
-          renderContent={renderFilterContent}
-          renderHeader={renderFilterHeader}
-          callbackNode={fall}
-        />
-      </View>
-    );
-  };
 
   return isTicketLoading && !isPagination ? (
     <RenderSpinner />
   ) : (
-    RenderClosedLoop()
+    <View testID="closed-loop-container" style={styles.container}>
+      <Animated.View
+        style={{
+          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+          flex: 1,
+        }}>
+        <HeaderFilter
+          style={{justifyContent: 'space-between'}}
+          onPressDateRange={getDataOnNewRange}
+          onPressFilter={openFilter}
+          filterCount={getFilterCount(filterState)}
+        />
+
+        {ticketList.length > 0 ? (
+          <SearchBox
+            onResetSearch={onResetSearch}
+            onQuerySubmit={submitQuery}
+            currentText={searchText}
+          />
+        ) : null}
+
+        <ClosedLoopTicketList
+          onPressReset={() => {}}
+          onRefresh={onRefresh}
+          refreshing={refreshing}
+          ticketList={ticketList}
+          isPagination={isPagination}
+          isTicketLoading={isTicketLoading}
+          onPressHandler={onPressHandler}
+          selectedTickets={selectedTickets}
+          showCheckBox={showCheckBox}
+          loadMoreData={loadMoreData}
+        />
+        <FabAddButton onPress={onFabHandler} />
+      </Animated.View>
+
+      <BottomSheet
+        ref={bs}
+        snapPoints={bsSnapPoints}
+        initialSnap={bsSnapPoints.length - 1}
+        enabledGestureInteraction={true}
+        renderContent={renderFilterContent}
+        renderHeader={renderFilterHeader}
+        callbackNode={fall}
+      />
+    </View>
   );
 }
 

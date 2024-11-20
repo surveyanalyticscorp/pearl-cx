@@ -36,9 +36,7 @@ import Animated from 'react-native-reanimated';
 import {baseTextStyles} from '../../styles/text.styles';
 import SendButton from '../../widgets/SendButton';
 import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
-function getFoldedText(text) {
-  //
-  const MAX_WORD_LENGTH = 10;
+export function getFoldedText(text, MAX_WORD_LENGTH = 10) {
   if (StringUtils.getWords(text).length > MAX_WORD_LENGTH) {
     return `${StringUtils.getWords(text).slice(0, MAX_WORD_LENGTH).join(' ')}
       <span><b> ...see more</b></span>`;
@@ -46,9 +44,10 @@ function getFoldedText(text) {
   return text;
 }
 
-const CommentCancelReplyButton = ({isSelected, toggle}) => {
+export const CommentCancelReplyButton = ({isSelected, toggle}) => {
   return (
     <Pressable
+      testID="cancel-reply-button"
       style={{
         marginStart: MarginConstants.tab4,
         marginVertical: MarginConstants.halfTab,
@@ -61,7 +60,7 @@ const CommentCancelReplyButton = ({isSelected, toggle}) => {
   );
 };
 
-const CommentText = ({text}) => {
+export const CommentText = ({text}) => {
   const {width} = useWindowDimensions();
   const systemFonts = [...defaultSystemFonts, FontFamily.regular];
 
@@ -72,7 +71,7 @@ const CommentText = ({text}) => {
   );
 
   return (
-    <View>
+    <View testID="comment-text-container">
       <RenderHTML
         source={{
           html: `
@@ -93,9 +92,10 @@ const CommentText = ({text}) => {
   );
 };
 
-const CommentParentItemContainer = ({isSelected, children}) => {
+export const CommentParentItemContainer = ({isSelected, children}) => {
   return (
     <ScrollView
+      testID="comment-parent-item-container"
       style={[
         styles.commentParentItemContainer,
         {borderColor: isSelected ? Colors.darkGrey : Colors.transparent},
@@ -138,7 +138,7 @@ const CommentBoxChildContainer = ({UIalignItems, children}) => {
   );
 };
 
-const CommentTextInput = React.forwardRef(
+export const CommentTextInput = React.forwardRef(
   (
     {
       defaultValue,
@@ -157,6 +157,7 @@ const CommentTextInput = React.forwardRef(
 
     return (
       <TextInput
+        testID="comment-text-input"
         ref={ref}
         defaultValue={defaultValue}
         multiline
@@ -174,15 +175,15 @@ const CommentTextInput = React.forwardRef(
         placeholder={placeHolder}
         onEndEditing={onChangeHandler}
         onContentSizeChange={event_ => {
-          console.log(
-            'EVENT',
-            JSON.stringify(event_.nativeEvent.contentSize.height),
-          );
+          // console.log(
+          //   'EVENT',
+          //   JSON.stringify(event_.nativeEvent.contentSize.height),
+          // );
           setTextInputHeight(event_.nativeEvent.contentSize.height);
         }}
         returnKeyType={'default'}
         onSubmitEditing={event => {
-          console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
+          // console.log('KEYBOARD_DONE', JSON.stringify(event.nativeEvent));
           onChangeHandler(event.nativeEvent.text);
           // handleOnSubmit();
         }}

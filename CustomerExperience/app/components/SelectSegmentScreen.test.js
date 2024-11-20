@@ -1,6 +1,6 @@
 import React from 'react';
 import {render, fireEvent, waitFor} from '@testing-library/react-native';
-import SelectSegmentScreen from './SelectSegmentScreen';
+import SelectSegmentScreen, {SearchTextInput} from './SelectSegmentScreen';
 import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
 
@@ -110,4 +110,38 @@ describe('SelectSegmentScreen', () => {
       expect(mockProps.route.params.setSegmentSelection).toHaveBeenCalled();
     });
   });
+
+  // test onSearchHandler
+  // it('should call onSearchHandler when search button is pressed', async () => {
+  //   const mockProps = {
+  //     ...generateMockProps(),
+  //     onSearchHandler: jest.fn(text => {
+  //       console.log('SEARCH_HANDLER', text);
+  //     }),
+  //   };
+  //   const {getByTestId} = render(
+  //     <Provider store={store}>
+  //       <SelectSegmentScreen {...mockProps} />
+  //     </Provider>,
+  //   );
+  //   const testText = 'test';
+  //   const input = getByTestId('search-input');
+  //   fireEvent.changeText(input, testText);
+  //   fireEvent(input, 'onSubmitEditing', {nativeEvent: {text: testText}});
+
+  //   expect(mockProps.onSearchHandler).toHaveBeenCalledWith(testText);
+  // });
 });
+
+// describe('SearchTextInput', () => {
+//   it('renders corrctly', () => {
+//     const props = {
+//       ref: jest.fn(),
+//       onSearchHandler: jest.fn(),
+//       searchText: 'test',
+//     };
+
+//     const searchInput = render(<SearchTextInput {...props} />);
+//     expect(searchInput).toBeTruthy();
+//   });
+// });

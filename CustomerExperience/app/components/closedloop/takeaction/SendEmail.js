@@ -5,9 +5,8 @@ import {
   TextInput,
   View,
   Pressable,
-  Platform,
-  SafeAreaView,
   FlatList,
+  Keyboard,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -18,8 +17,6 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import {CloseButton} from '../../../routes/commonUI/CommonUI';
 import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
 import Animated from 'react-native-reanimated';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ACTION_EMAIL, ASYNC_USER_CREDENTIALS} from '../../../api/Constant';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import BottomSheet from 'reanimated-bottom-sheet';
 import SelectEmailTemplate from './SelectEmailTemplate';
@@ -34,15 +31,14 @@ import {
 } from '../../../redux/actions/closedloop.actions';
 import StringUtils from '../../../Utils/StringUtils';
 import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
-// import {useHeaderHeight} from '@react-navigation/elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
-import DocumentPicker, {types} from 'react-native-document-picker';
+import DocumentPicker from 'react-native-document-picker';
 import {isNull} from 'lodash';
 import {AttachmentIcon} from '../../../Utils/IconUtils';
 import {translate} from '../../../Utils/MultilinguaUtils';
 
-const RenderHeader = () => {
+export const RenderHeader = () => {
   return (
     <View style={styles.rowContainerHeader}>
       <Text style={styles.headerText}>Respond via email</Text>
@@ -51,17 +47,19 @@ const RenderHeader = () => {
   );
 };
 
-const RenderTicketId = ({ticketId}) => {
+export const RenderTicketId = () => {
+  const id = useSelector(state => state.dashboard.ticket.id);
+
   return (
     <View style={styles.ticketIdView}>
       <Text style={styles.ticketIdText}>{`${translate(
         'ticket_overview.ticket_id',
-      )} #${ticketId}`}</Text>
+      )} #${id}`}</Text>
     </View>
   );
 };
 
-const RenderIonIcon = ({name, size, color, style}) => {
+export const RenderIonIcon = ({name, size, color, style}) => {
   const color_ = Colors.filterIconColor;
 
   return (
@@ -74,7 +72,7 @@ const RenderIonIcon = ({name, size, color, style}) => {
   );
 };
 
-const EmailToFrom = ({title, value}) => {
+export const EmailToFrom = ({title, value}) => {
   return (
     <View>
       <View style={styles.rowContainerCenterAlign}>
@@ -86,7 +84,7 @@ const EmailToFrom = ({title, value}) => {
   );
 };
 
-const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
+export const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
   return (
     <View>
       <View style={styles.rowContainerCenterAlign}>
@@ -108,19 +106,30 @@ const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
   );
 };
 
-const RenderOptionsView = ({onPressTemplate, emailBody, onPressSend}) => {
+export const RenderOptionsView = ({
+  onPressTemplate,
+  emailBody,
+  onPressSend,
+}) => {
   return (
-    <View style={styles.renderOptionView}>
-      {/* {getTemplateIcon()} */}
-      <TemplateIcon onPressTemplate={onPressTemplate} />
-      <AttachmentUploadIcon />
-      <SendIcon emailBody={emailBody} />
+    <View
+      style={{
+        flexDirection: 'row',
+        flex: 1,
+        marginTop: MarginConstants.tab1,
+        marginBottom: MarginConstants.halfTab,
+      }}>
+      <RenderTicketId />
+      <View style={styles.renderOptionView}>
+        <TemplateIcon onPressTemplate={onPressTemplate} />
+        <AttachmentUploadIcon />
+        <SendIcon emailBody={emailBody} />
+      </View>
     </View>
   );
 };
 
-const SendIcon = ({emailBody}) => {
-  // const {userInfo} = useSelector(state => state.global);
+export const SendIcon = ({emailBody}) => {
   const {mediaFileList} = useSelector(state => state.dashboard);
   const dispatch = useDispatch();
 
@@ -176,7 +185,7 @@ const SendIcon = ({emailBody}) => {
   );
 };
 
-const AttachmentUploadIcon = () => {
+export const AttachmentUploadIcon = () => {
   const dispatch = useDispatch();
   const onPressAttachment = useCallback(async () => {
     console.log('Attach items');
@@ -188,8 +197,6 @@ const AttachmentUploadIcon = () => {
       });
 
       console.log(JSON.stringify(response));
-
-      // setFileResponse(response);
 
       const formData = new FormData();
       formData.append('mediaType', '1');
@@ -211,7 +218,7 @@ const AttachmentUploadIcon = () => {
   );
 };
 
-const TemplateIcon = ({onPressTemplate}) => {
+export const TemplateIcon = ({onPressTemplate}) => {
   return (
     <Pressable onPress={onPressTemplate} style={styles.optionIcon}>
       <RenderIonIcon name={'ios-reader'} />
@@ -219,7 +226,7 @@ const TemplateIcon = ({onPressTemplate}) => {
   );
 };
 
-const ActionHistory = ({onPressActionHistoryItem}) => {
+export const ActionHistory = ({onPressActionHistoryItem}) => {
   return (
     <View style={styles.actionHistoryContainer}>
       <Text style={styles.actionHistoryHeader}>Action history</Text>
@@ -228,7 +235,7 @@ const ActionHistory = ({onPressActionHistoryItem}) => {
     </View>
   );
 };
-const AttachmentView = ({onPressActionHistoryItem}) => {
+export const AttachmentView = ({onPressActionHistoryItem}) => {
   const {mediaFileList} = useSelector(state => state.dashboard);
   console.log(
     'ATTACHEMENTS_LIST',
@@ -248,42 +255,18 @@ const AttachmentView = ({onPressActionHistoryItem}) => {
   );
 };
 
-const AttachmentItem = ({item, index}) => {
-  // const onPressOpenWithBrowser = useCallback(async () => {
-  //   // const isSupported = await Linking.canOpenURL(item.path);
-  //   // if (isSupported) {
-  //   Linking.openURL(item.path);
-  //   // } else {
-  //   //   Alert.alert(`Can't open this URL: ${item.path}`);
-  //   // }
-  // }, [item.path]);
-
-  // const onPressDownload = useCallback(async () => {
-  //   if (Platform.OS === 'android') {
-  //     getDownloadPermissionAndroid().then(granted => {
-  //       if (granted) {
-  //         downloadFile(item.path, item.fileName);
-  //       }
-  //     });
-  //   } else {
-  //     downloadFile(item.path, item.fileName).then(res => {
-  //       RNFetchBlob.ios.previewDocument(res.path());
-  //     });
-  //   }
-  // }, [item.path, item.fileName]);
-
+export const AttachmentItem = ({item, index}) => {
   return (
     <Pressable style={styles.attachmentItem}>
       <AttachmentIcon mimeType={item.mimeType} />
       <Text numberOfLines={1} style={styles.attachmentText}>
-        {/* {item.fileName} */}
         {StringUtils.truncateFileName(item.fileName)}
       </Text>
     </Pressable>
   );
 };
 
-const NoActionView = () => {
+export const NoActionView = () => {
   return (
     <View>
       <Text style={[styles.actionHistoryDetailText, {fontStyle: 'italic'}]}>
@@ -293,15 +276,11 @@ const NoActionView = () => {
   );
 };
 
-const ActionHistoryItem = ({onItemPress}) => {
+export const ActionHistoryItem = ({onItemPress}) => {
   const {summary} = useSelector(state => state.dashboard.ticketActionHistory);
   const actionDetails = summary?.data?.action ?? null;
   console.log('SUMMARY OS', JSON.stringify(summary));
-  // if (isNull(summary.data.action) || isObjectEmpty(summary.data.action)) {
-  //   return (
 
-  //   );
-  // }
   if (isNull(actionDetails)) {
     return <NoActionView />;
   }
@@ -330,8 +309,29 @@ const ActionHistoryItem = ({onItemPress}) => {
   );
 };
 
-const SendEmail = props => {
-  // const height = useHeaderHeight();
+export const CustomKeyboardToolbar = ({toolbarRef, richTextfieldRef}) => {
+  return (
+    <View style={styles.toolbarContainer}>
+      <RichToolbar
+        ref={toolbarRef}
+        editor={richTextfieldRef}
+        selectedIconTint={Colors.accentLight}
+        iconTint={Colors.lightBlack}
+        actions={[
+          actions.setBold,
+          actions.setItalic,
+          actions.setUnderline,
+          actions.insertBulletsList,
+          actions.insertOrderedList,
+          actions.setStrikethrough,
+        ]}
+        style={styles.richToolbar}
+      />
+    </View>
+  );
+};
+
+export const SendEmail = props => {
   const defaultEmail = useSelector(
     state => state.dashboard.emailData.defaultTemplate,
   );
@@ -341,7 +341,6 @@ const SendEmail = props => {
     ticketId: JSON.stringify(props.route.params.ticketId),
     subject: '',
     toEmail: props.route.params.toEmail ?? '',
-    // fromEmail: ACTION_EMAIL,
     emailBody: '',
     attachments: [],
   };
@@ -350,8 +349,6 @@ const SendEmail = props => {
   const {authToken} = useSelector(state => state.global);
   const richText = React.useRef();
   const richTextToolBar = React.useRef();
-  // const [userInfo, setUserInfo] = useState();
-  // const [userEmail, setUserEmail] = useState('');
   const templateList = useSelector(
     state => state.dashboard.emailData.emailTemplates,
   );
@@ -359,22 +356,10 @@ const SendEmail = props => {
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
   const bsSnapPoints = ['33%', '0%'];
-  const [shadow, setShadow] = useState(false);
-  const [fileResponse, setFileResponse] = useState([]);
 
   const closeBottomSheet = () => {
     bs.current.snapTo(bsSnapPoints.length - 1);
   };
-
-  // useEffect(() => {
-  // AsyncStorage.getItem(ASYNC_USER_INFO).then((value) => {
-  //   setUserInfo(JSON.parse(value));
-  //   // console.log('USER_INFO__', value);
-  // });
-  //   AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then(value => {
-  //     setUserEmail(JSON.parse(value)?.email);
-  //   });
-  // }, [authToken]);
 
   useEffect(() => {
     if (!isObjectEmpty(defaultEmail)) {
@@ -400,13 +385,6 @@ const SendEmail = props => {
     richText.current.setContentHTML('');
   }, [emailSentResponse]);
 
-  // useEffect(() => {
-  //   setBody((state) => ({
-  //     ...state,
-  //     subject: defaultEmail.title ?? '',
-  //     emailBody: defaultEmail.templateText,
-  //   }));
-  // }, [defaultEmail]);
   const onPressActionHistoryItem = useCallback(() => {
     console.log('on Press action history Item');
     props.navigation.navigate('actionEmailHistory', {
@@ -428,10 +406,8 @@ const SendEmail = props => {
     setBody(state => ({...state, emailBody: text}));
   };
   const handleTemplateSelectAction = item => {
-    // setDefaultEmail(item);
     setBody(state => ({
       ...state,
-      // subject: item.title ?? '',
       emailBody: item.templateText,
     }));
 
@@ -459,66 +435,63 @@ const SendEmail = props => {
     );
   };
 
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      e => {
+        setKeyboardVisible(true);
+      },
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
     <View style={styles.container}>
-      <SafeAreaView>
-        <KeyboardAwareScrollView enableOnAndroid={true}>
-          <RenderHeader />
-          <RenderTicketId ticketId={ticketId} />
-          <RenderOptionsView
-            onPressTemplate={onPressTemplate}
-            // onPressSend={onPressSend}
-            emailBody={body}
-          />
+      <KeyboardAwareScrollView enableOnAndroid={true}>
+        <RenderHeader />
 
-          <EmailToFrom
-            title={translate('action_email.to')}
-            value={body.toEmail}
-          />
-          <EmailSubject
-            body={body}
-            closeBottomSheet={closeBottomSheet}
-            onChangeSubject={onChangeSubject}
-          />
-          <RichEditor
-            ref={richText}
-            useContainer
-            disabled={false}
-            initialFocus={false}
-            onChange={onChangeEmailBody}
-            placeholder={translate('action_email.email_body')}
-            placeholderTextColor={Colors.borderColor}
-            androidHardwareAccelerationDisabled={true}
-            initialHeight={300}
-            style={styles.textInput}
-            setContentHTML={body.emailBody}
-            onFocus={closeBottomSheet}
-          />
-          <RichToolbar
-            ref={richTextToolBar}
-            editor={richText}
-            selectedIconTint={Colors.accentLight}
-            iconTint={Colors.lightBlack}
-            actions={[
-              actions.setBold,
-              actions.setItalic,
-              actions.setUnderline,
-              actions.insertBulletsList,
-              actions.insertOrderedList,
-              actions.setStrikethrough,
-              // actions.keyboard,
-            ]}
-            style={{
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              flex: 2,
-            }}
-          />
+        <RenderOptionsView onPressTemplate={onPressTemplate} emailBody={body} />
 
-          <AttachmentView />
-          <ActionHistory onPressActionHistoryItem={onPressActionHistoryItem} />
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
+        <EmailToFrom
+          title={translate('action_email.to')}
+          value={body.toEmail}
+        />
+        <EmailSubject
+          body={body}
+          closeBottomSheet={closeBottomSheet}
+          onChangeSubject={onChangeSubject}
+        />
+        <RichEditor
+          ref={richText}
+          useContainer
+          disabled={false}
+          initialFocus={false}
+          onChange={onChangeEmailBody}
+          placeholder={translate('action_email.email_body')}
+          placeholderTextColor={Colors.borderColor}
+          androidHardwareAccelerationDisabled={true}
+          initialHeight={300}
+          style={styles.textInput}
+          setContentHTML={body.emailBody}
+          onFocus={closeBottomSheet}
+        />
+
+        <AttachmentView />
+        <ActionHistory onPressActionHistoryItem={onPressActionHistoryItem} />
+      </KeyboardAwareScrollView>
 
       <BottomSheet
         ref={bs}
@@ -529,6 +502,12 @@ const SendEmail = props => {
         renderHeader={renderHeader}
         callbackNode={fall}
       />
+      {isKeyboardVisible && (
+        <CustomKeyboardToolbar
+          toolbarRef={richTextToolBar}
+          richTextfieldRef={richText}
+        />
+      )}
     </View>
   );
 };
@@ -543,6 +522,7 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 5,
     marginTop: MarginConstants.tab2,
     paddingTop: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab1_2x,
   },
 
   innerContainer: {
@@ -571,7 +551,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.medium,
     fontSize: TextSizes.largeText,
     padding: PaddingConstants.tab1,
-    color: Colors.filterIconColor,
+    color: Colors.accent,
   },
   emailText: {
     fontFamily: FontFamily.medium,
@@ -612,11 +592,33 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
   },
+  toolbarContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#fff', // Adjust background color to match the keyboard
+    elevation: 10, // Adds shadow on Android
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2}, // Adds shadow on iOS
+    shadowOpacity: 0.3,
+    shadowRadius: 3.84,
+  },
+  richToolbar: {
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    padding: PaddingConstants.tab1_2x,
+    height: MarginConstants.tab1_8x,
+    backgroundColor: Colors.white,
+
+    // Add padding to make the toolbar easier to interact with
+  },
   renderOptionView: {
+    flex: 2,
     marginHorizontal: MarginConstants.tab1,
-    marginTop: MarginConstants.tab2,
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   titleText: {
     fontFamily: FontFamily.regular,
@@ -625,14 +627,15 @@ const styles = StyleSheet.create({
     color: Colors.filterIconColor,
   },
   ticketIdView: {
-    flexDirection: 'row-reverse',
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: PaddingConstants.halfTab,
     marginHorizontal: MarginConstants.tab1,
   },
   ticketIdText: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
-    color: Colors.accentLight,
+    color: Colors.evenDarkerGrey,
   },
   actionHistoryContainer: {
     margin: MarginConstants.tab2,

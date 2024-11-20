@@ -27,21 +27,15 @@ import AppRouter from '../../routes/appRouter';
 import {setBaseUrl} from '../../redux/actions/login.actions';
 import moment from 'moment';
 
+const isExpireDateValid = expireDate => {
+  const today = new Date();
+  return expireDate && moment(today).isAfter(moment(expireDate));
+};
+
 function SplashScreen(props) {
   let [moveNext, setMoveNext] = useState(false);
   let splashTimer = useRef(null);
   const dispatch = useDispatch();
-
-  const validateExpireDate = expireDate => {
-    const today = new Date();
-    if (expireDate && moment(today).isAfter(moment(expireDate))) {
-      dispatch(setTokenExpired(true));
-      console.log('EXPIRED!');
-    } else {
-      dispatch(setTokenExpired(false));
-      console.log('not EXPIRED');
-    }
-  };
 
   const setGlobalBaseUrl = () => {
     AsyncStorage.getItem(BASE_URL).then(baseUrl => {
@@ -58,7 +52,7 @@ function SplashScreen(props) {
   useEffect(() => {
     splashTimer.current = setTimeout(() => {
       AsyncStorage.getItem(ASYNC_LOGIN_EXPIRE_DATE).then(expireDate => {
-        validateExpireDate(expireDate);
+        dispatch(setTokenExpired(isExpireDateValid(expireDate)));
       });
 
       AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {

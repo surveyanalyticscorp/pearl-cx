@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     height: MarginConstants.tab4,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.accentLight,
     marginBottom: MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab1,
   },

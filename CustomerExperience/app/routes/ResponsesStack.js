@@ -39,28 +39,6 @@ const feedbackStack = props => (
       })}
     />
 
-    {/* <FeedbackStack.Screen
-      name={translate('responses.new_ticket')}
-      component={CreateTicket}
-      options={({navigation, route}) => ({
-        // headerLeft: (props) => <View />,
-        // headerRight: (props) => <CloseButton />,
-        headerShown: false,
-      })}
-    /> */}
-
-    {/* <FeedbackStack.Screen
-      name={'TicketDetails'}
-      component={TicketDetails}
-      options={({navigation, route}) => ({
-        // headerShown: false,
-        title: 'Ticket Details',
-        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
-        headerRight: props => <View />,
-        // headerRight: (props) => <EditTicket {...props} route={route} />,
-        // headerLeft: (props) => <MenuIcon />,
-      })}
-    /> */}
     {CommonScreens(FeedbackStack)}
   </FeedbackStack.Navigator>
 );
@@ -87,20 +65,7 @@ const ResponsesStack = ({navigation}) => (
         //   close: TransitionSpecs.TransitionIOSSpec,
         // },
       })}
-
-      // options={({navigation, route}) => ({
-      //   headerLeft: props => <View />,
-      //   headerRight: props => <CloseButton />,
-      // })}
     />
-    {/* <FeedbackStack.Screen
-      name={translate('responses.new_ticket')}
-      component={CreateTicket}
-      headerShown={false}
-      options={({navigation, route}) => ({
-        headerShown: false,
-      })}
-    /> */}
   </FeedbackStack.Navigator>
 );
 

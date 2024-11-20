@@ -297,7 +297,7 @@ export function* syncTickets(action) {
     let response = {};
     while (hasNextCall) {
       response = yield WebServiceHandler.get(
-        getClfUrl(syncTicketList(action.feedbackId)),
+        getClfUrl(syncTicketList(action.feedbackID)),
         // {'Auth-Token': action.token},
         getBearerTokenStatic(),
         action.param,

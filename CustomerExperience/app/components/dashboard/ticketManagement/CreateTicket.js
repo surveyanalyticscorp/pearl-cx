@@ -65,9 +65,7 @@ import StatusIcon from '../../../widgets/IconWidget/StatusIcon';
 import RenderPhoneInput from '../../closedloop/ui/RenderPhoneInput';
 import RenderCreateTicketButton from './RenderCreateTicketButton';
 import {IonIcon, MaterialIcons} from '../../../Utils/IconUtils';
-import StringUtils from '../../../Utils/StringUtils';
 import RenderDatePickerModal from '../../RenderDatePickerModal';
-import {set} from 'lodash';
 
 const RenderMaterialIcon = ({iconName}) => (
   <MaterialIcon name={iconName} size={14} color={Colors.lightBlack} />
@@ -385,10 +383,7 @@ export default function CreateTicket(props) {
   // console.log(validatePhoneNumber("1234567890")); // Expected output: false (no country code)
 
   const isValid = () => {
-    if (
-      ticketState.mobileNumber &&
-      !StringUtils.validatePhoneNumber(ticketState.mobileNumber)
-    ) {
+    if (ticketState.mobileNumber && !ticketState.isMobileNumberValid) {
       setValidation('Enter valid phone number');
       return false;
     }

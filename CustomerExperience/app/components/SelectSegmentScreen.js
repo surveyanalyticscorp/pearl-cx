@@ -26,7 +26,7 @@ const SelectSegmentScreen = props => {
   const dispatch = useDispatch();
   let currentSegmentId = props.route.params.currentSegmentId;
   const setSegmentSelection = props.route.params.setSegmentSelection;
-  const [isLoading, setLoading] = useState(false);
+  // const [isLoading, setLoading] = useState(false);
   const textInputRef = useRef();
   const authToken = useSelector(state => state.global.authToken);
   const ownerID = useSelector(state => state.global.userInfo.userID);
@@ -96,7 +96,7 @@ const SelectSegmentScreen = props => {
   };
 
   const onSearchHandler = text => {
-    console.log('TEXT_INPUT:', JSON.stringify(textInputRef.current));
+    // console.log('TEXT_INPUT:', JSON.stringify(textInputRef.current));
 
     setRequestBody({
       ...defaultRequestBody,
@@ -131,6 +131,7 @@ const SelectSegmentScreen = props => {
             styles.bottomBar,
           ]}>
           <TextInput
+            testID="search-input"
             ref={textInputRef}
             defaultValue={requestBody.segmentName}
             style={[styles.searchInput, {flex: 1}]}
@@ -138,7 +139,7 @@ const SelectSegmentScreen = props => {
             returnKeyType={'search'}
             placeholderTextColor={Colors.borderColor}
             onSubmitEditing={event => {
-              console.log('KEYBOARD_SEARCH', JSON.stringify(event.nativeEvent));
+              // console.log('KEYBOARD_SEARCH', JSON.stringify(event.nativeEvent));
               onSearchHandler(event.nativeEvent.text);
               // setSearchText(event.nativeEvent.text);
               // onSearchHandler();
@@ -146,6 +147,7 @@ const SelectSegmentScreen = props => {
           />
           {requestBody.segmentName.length > 0 ? (
             <Pressable
+              testID="clear-button"
               style={[styles.searchInput]}
               onPress={clearSearchHandler}>
               <IonIcons
@@ -159,18 +161,6 @@ const SelectSegmentScreen = props => {
             <View />
           )}
         </View>
-        {/* <Pressable
-          style={[
-            styles.searchInput,
-            {
-              padding: PaddingConstants.tab1,
-              backgroundColor: Colors.accent,
-              borderRadius: 5,
-            },
-          ]}
-          onPress={onSearchHandler}>
-          <Text style={{color: Colors.white}}>{'Search'}</Text>
-        </Pressable> */}
       </View>
     );
   };

@@ -137,7 +137,7 @@ let RenderResponseContainer = ({
           <HorizontalSpaceBox />
           <UserName
             isNewResponse={isNewResponse}
-            name={showName(item)}
+            name={StringUtils.truncateCustomerName(showName(item), 30, 10, 8)}
             isDisabled={disable}
           />
         </View>

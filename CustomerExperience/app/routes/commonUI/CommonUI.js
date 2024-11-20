@@ -48,6 +48,7 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import {DMYFORMAT, HalfMonthDateYearFormat} from '../../Utils/AppConstants';
 import moment from 'moment';
 import testIDs from '../../widgets/qp-calendar/testIDs';
+import {useSelector} from 'react-redux';
 // let {width} = Dimensions.get('window');
 
 export const StatusIcon = ({
@@ -445,7 +446,8 @@ const DateText = ({dateRange}) => {
   );
 };
 
-export const FilterDateBox = ({range, onDateRangeChangeHandler}) => {
+export const FilterDateBox = ({onDateRangeChangeHandler}) => {
+  const range = useSelector(state => state.global.range);
   const navigation = useNavigation();
 
   let filterAction = (range_, callBackHandler) => {
@@ -569,7 +571,7 @@ export const RenderFilterCount = ({filterCount, onPressFilter}) => {
 export const HeaderFilter = ({
   hasFilterIcon = true,
   hasSortIcon = false,
-  dateRange,
+
   onPressFilter,
   onPressDateRange,
   filterCount,
@@ -585,10 +587,7 @@ export const HeaderFilter = ({
         />
       )}
 
-      <FilterDateBox
-        range={dateRange}
-        onDateRangeChangeHandler={onPressDateRange}
-      />
+      <FilterDateBox onDateRangeChangeHandler={onPressDateRange} />
       {hasFilterIcon && (
         <RenderFilterCount
           filterCount={filterCount}

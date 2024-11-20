@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import {dashboardStyles} from '../../components/dashboard/dashboard.style';
 
-const DashboardWidgetTitle = ({text, child}) => {
+const DashboardWidgetTitle = ({text, children}) => {
   return (
     <View
       testID="render-segment-title"
@@ -14,7 +14,7 @@ const DashboardWidgetTitle = ({text, child}) => {
         style={dashboardStyles.dashboardTitle}>
         {text}
       </Text>
-      {child}
+      {children}
     </View>
   );
 };

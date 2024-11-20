@@ -94,7 +94,6 @@ export default function TicketDetails(props) {
           screenName: translate('close_loop.overview'),
           prevScreen: prevScreen,
         }}
-        op
       />
       <TicketTabs.Screen
         testID={'ticket-comments'}
