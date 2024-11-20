@@ -167,8 +167,7 @@ export default function ClosedLoop(props) {
   );
   const [isSearchVisible, setSearchVisibility] = useState(false);
   const [searchText, setSearchText] = useState('');
-
-  const [filterState, setFilterState] = useState({
+  const initialFilterState = {
     feedbackApiKey: feedbackApiKey,
     status: '',
     priority: '',
@@ -181,11 +180,10 @@ export default function ClosedLoop(props) {
     toDate: convertDateToYMDFORMAT(range.endDate),
     type: '',
     search: '',
-  });
+  };
 
-  // console.log('STATUS_ID_FILTER_useeffect', JSON.stringify(filterState));
+  const [filterState, setFilterState] = useState(initialFilterState);
 
-  // const ticketDetails = useSelector((state) => state.dashboard.ticketDetails);
   const ticketList = useSelector(state => state.dashboard.ticketList);
   const [selectedTickets, setSelectedTickets] = useState([]);
   const [showCheckBox, setShowCheckBox] = useState(false);
@@ -272,7 +270,6 @@ export default function ClosedLoop(props) {
       ...state,
       status: tempStatusData,
     }));
-    // dispatch(resetStatusId());
   };
   useEffect(() => {
     if (statusId) {
@@ -496,6 +493,11 @@ export default function ClosedLoop(props) {
     console.log('KEYBOARD_SEARCH', JSON.stringify({searchText, filterState}));
   }, []);
 
+  const resetFilter = () => {
+    setFilterState(initialFilterState);
+    setFilterData(sampleFilterData());
+  };
+
   return isTicketLoading && !isPagination ? (
     <RenderSpinner />
   ) : (
@@ -507,7 +509,6 @@ export default function ClosedLoop(props) {
         }}>
         <HeaderFilter
           style={{justifyContent: 'space-between'}}
-          onPressDateRange={getDataOnNewRange}
           onPressFilter={openFilter}
           filterCount={getFilterCount(filterState)}
         />
@@ -521,7 +522,7 @@ export default function ClosedLoop(props) {
         ) : null}
 
         <ClosedLoopTicketList
-          onPressReset={() => {}}
+          onPressReset={resetFilter}
           onRefresh={onRefresh}
           refreshing={refreshing}
           ticketList={ticketList}

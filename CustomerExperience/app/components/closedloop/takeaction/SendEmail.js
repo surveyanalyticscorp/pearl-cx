@@ -607,11 +607,11 @@ const styles = StyleSheet.create({
   richToolbar: {
     justifyContent: 'center',
     alignItems: 'flex-start',
-    padding: PaddingConstants.tab1_2x,
-    height: MarginConstants.tab1_8x,
-    backgroundColor: Colors.white,
+    paddingHorizontal: PaddingConstants.tab1_2x,
+    paddingBottom: PaddingConstants.halfTab,
 
-    // Add padding to make the toolbar easier to interact with
+    height: MarginConstants.tab1_8x,
+    backgroundColor: Colors.settingsBackground,
   },
   renderOptionView: {
     flex: 2,

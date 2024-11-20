@@ -69,9 +69,9 @@ export default function DashboardDateFilter(props) {
     }
   };
 
-  useEffect(() => {
-    props.navigation.dangerouslyGetParent().setParams({saveRange: saveRange});
-  }, [selectedRange]);
+  // useEffect(() => {
+  //   props.navigation.dangerouslyGetParent().setParams({saveRange: saveRange});
+  // }, [selectedRange]);
 
   let getFilterText = type => {
     switch (type) {

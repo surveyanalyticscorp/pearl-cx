@@ -446,10 +446,7 @@ const CxDashboard = props => {
               opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
             },
           ]}>
-          <HeaderFilter
-            hasFilterIcon={false}
-            onPressDateRange={onDateRangeChangeHandler}
-          />
+          <HeaderFilter hasFilterIcon={false} />
 
           <ScrollView
             contentContainerStyle={dashboardStyles.scrollView}

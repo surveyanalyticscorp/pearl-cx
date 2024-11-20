@@ -43,6 +43,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.white,
+    margin: MarginConstants.tab1,
+    marginVertical: MarginConstants.tab1_2x,
+
+    borderRadius: 4,
   },
   buttonStyle: {
     flexDirection: 'row',

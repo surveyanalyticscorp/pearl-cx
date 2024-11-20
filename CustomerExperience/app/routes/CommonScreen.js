@@ -108,18 +108,10 @@ export const DateRangeTabStack = props => (
     <DateRangeTab.Screen
       name={translate('date_filter.month')}
       component={DashboardDateFilter}
-      initialParams={{
-        range: props.route.params.range,
-        setRange: props.route.params.setRange,
-      }}
     />
     <DateRangeTab.Screen
       name={translate('date_filter.custom')}
       component={DashboardDateFilter}
-      initialParams={{
-        range: props.route.params.range,
-        setRange: props.route.params.setRange,
-      }}
     />
   </DateRangeTab.Navigator>
 );
@@ -178,7 +170,7 @@ const CommonScreens = RootStack => {
         ...TransitionPresets.ModalPresentationIOS,
 
         // headerLeft: props => <HeaderBackLeft />,
-        headerRight: props => <SaveDashboardDate {...props} route={route} />,
+        // headerRight: props => <SaveDashboardDate {...props} route={route} />,
       })}
     />,
     <RootStack.Screen

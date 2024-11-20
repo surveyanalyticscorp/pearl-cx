@@ -23,16 +23,11 @@ const FilterHeader = props => {
     HalfMonthDateYearFormat,
   );
 
-  let getDataOnNewRange = range => {
-    props.setRange(range);
-    props.callDataAPI();
-  };
-
   let filterAction = () => {
-    const pushAction = StackActions.push(translate('date_filter.date_range'), {
-      range: props.range,
-      setRange: getDataOnNewRange,
-    });
+    const pushAction = StackActions.push(
+      translate('date_filter.date_range'),
+      {},
+    );
     props.navigation.dispatch(pushAction);
   };
 

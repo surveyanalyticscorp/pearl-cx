@@ -238,16 +238,14 @@ export const SearchIcon = props => {
   );
 };
 
-export const SaveDashboardDate = props => {
+export const SaveDashboardDate = ({saveRange}) => {
   return (
     <Pressable
       style={[
         buttonStyles.primaryButton,
         {marginHorizontal: MarginConstants.tab1},
       ]}
-      onPress={() => {
-        props.saveRange();
-      }}>
+      onPress={saveRange}>
       <Text style={buttonStyles.primaryButtonText}>{`Apply`}</Text>
     </Pressable>
   );
@@ -428,13 +426,11 @@ export const DateIcon = () => {
   );
 };
 
-const DateText = ({dateRange}) => {
-  const sDate = moment(dateRange.startDate, DMYFORMAT).format(
-    HalfMonthDateYearFormat,
-  );
-  const eDate = moment(dateRange.endDate, DMYFORMAT).format(
-    HalfMonthDateYearFormat,
-  );
+const DateText = () => {
+  const {startDate, endDate} = useSelector(state => state.global.range);
+
+  const sDate = moment(startDate, DMYFORMAT).format(HalfMonthDateYearFormat);
+  const eDate = moment(endDate, DMYFORMAT).format(HalfMonthDateYearFormat);
   return (
     <Text
       style={[
@@ -446,24 +442,18 @@ const DateText = ({dateRange}) => {
   );
 };
 
-export const FilterDateBox = ({onDateRangeChangeHandler}) => {
-  const range = useSelector(state => state.global.range);
+export const FilterDateBox = () => {
   const navigation = useNavigation();
 
-  let filterAction = (range_, callBackHandler) => {
-    const pushAction = StackActions.push(translate('date_filter.date_range'), {
-      range: range_,
-      setRange: callBackHandler,
-    });
+  let filterAction = () => {
+    const pushAction = StackActions.push(translate('date_filter.date_range'));
     navigation.dispatch(pushAction);
   };
 
   return (
-    <Pressable
-      testID="Filter-Date-Box"
-      onPress={() => filterAction(range, onDateRangeChangeHandler)}>
+    <Pressable testID="Filter-Date-Box" onPress={() => filterAction()}>
       <View style={styles.filterBox}>
-        <DateText dateRange={range} />
+        <DateText />
         <CalendarIcon size={16} />
       </View>
     </Pressable>
@@ -573,7 +563,7 @@ export const HeaderFilter = ({
   hasSortIcon = false,
 
   onPressFilter,
-  onPressDateRange,
+
   filterCount,
   endComponent,
   style,
@@ -587,7 +577,7 @@ export const HeaderFilter = ({
         />
       )}
 
-      <FilterDateBox onDateRangeChangeHandler={onPressDateRange} />
+      <FilterDateBox />
       {hasFilterIcon && (
         <RenderFilterCount
           filterCount={filterCount}

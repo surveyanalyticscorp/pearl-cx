@@ -244,7 +244,6 @@ function Feedback(props) {
         ]}>
         <HeaderFilter
           testID="header-filter"
-          onPressDateRange={dateRangeHandler}
           onPressFilter={filterHandler}
           hasSortIcon={true}
           hasFilterIcon={false}
