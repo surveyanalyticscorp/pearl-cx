@@ -7,6 +7,7 @@ import {
   Pressable,
   FlatList,
   Keyboard,
+  Platform,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -37,49 +38,19 @@ import DocumentPicker from 'react-native-document-picker';
 import {isNull} from 'lodash';
 import {AttachmentIcon} from '../../../Utils/IconUtils';
 import {translate} from '../../../Utils/MultilinguaUtils';
+import {useNavigation} from '@react-navigation/native';
+import SendIcon from './sendEmail/SendIcon';
+import SendEmailTo from './sendEmail/SendEmailTo';
+import TemplateIcon from './sendEmail/TemplateIcon';
+import AttachmentUploadIcon from './sendEmail/AttachmentUploadIcon';
+import RenderTicketId from './sendEmail/TicketId';
+import EmailOptions from './sendEmail/EmailOptions';
 
 export const RenderHeader = () => {
   return (
     <View style={styles.rowContainerHeader}>
       <Text style={styles.headerText}>Respond via email</Text>
       <CloseButton color={Colors.filterIconColor} />
-    </View>
-  );
-};
-
-export const RenderTicketId = () => {
-  const id = useSelector(state => state.dashboard.ticket.id);
-
-  return (
-    <View style={styles.ticketIdView}>
-      <Text style={styles.ticketIdText}>{`${translate(
-        'ticket_overview.ticket_id',
-      )} #${id}`}</Text>
-    </View>
-  );
-};
-
-export const RenderIonIcon = ({name, size, color, style}) => {
-  const color_ = Colors.filterIconColor;
-
-  return (
-    <IonIcons
-      name={name}
-      size={size ?? 24}
-      color={color ?? color_}
-      style={style}
-    />
-  );
-};
-
-export const EmailToFrom = ({title, value}) => {
-  return (
-    <View>
-      <View style={styles.rowContainerCenterAlign}>
-        <Text style={styles.titleText}>{title}</Text>
-        <Text style={styles.textInputEmail}>{value}</Text>
-      </View>
-      <View style={styles.devider} />
     </View>
   );
 };
@@ -106,136 +77,15 @@ export const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
   );
 };
 
-export const RenderOptionsView = ({
-  onPressTemplate,
-  emailBody,
-  onPressSend,
-}) => {
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        flex: 1,
-        marginTop: MarginConstants.tab1,
-        marginBottom: MarginConstants.halfTab,
-      }}>
-      <RenderTicketId />
-      <View style={styles.renderOptionView}>
-        <TemplateIcon onPressTemplate={onPressTemplate} />
-        <AttachmentUploadIcon />
-        <SendIcon emailBody={emailBody} />
-      </View>
-    </View>
-  );
-};
-
-export const SendIcon = ({emailBody}) => {
-  const {mediaFileList} = useSelector(state => state.dashboard);
-  const dispatch = useDispatch();
-
-  console.log('EMAIL BODY: 1', JSON.stringify(emailBody));
-  console.log('ATTACHMENTS: 1', JSON.stringify(mediaFileList));
-
-  const callSendEmailApi = () => {
-    let attachments = [];
-    // const queryParam = {
-    //   subscriberId: global.subscriberId,
-    //   emailAddress: userInfo.emailAddress,
-    // };
-    if (mediaFileList.length > 0) {
-      for (let i = 0; i < mediaFileList.length; i++) {
-        attachments[i] = mediaFileList[i].id;
-      }
-    }
-    if (StringUtils.isEmpty(emailBody.subject)) {
-      showErrorFlashMessage('Empty email subject');
-      return;
-    }
-    if (StringUtils.isEmpty(emailBody.emailBody)) {
-      showErrorFlashMessage('Empty email body');
-      return;
-    } else {
-      console.log('EMAIL BODY: 2', JSON.stringify(emailBody));
-      console.log('ATTACHMENTS: 2', JSON.stringify(attachments));
-
-      dispatch(
-        sendEmail(
-          '',
-          emailBody.ticketId,
-          {...emailBody, attachments: attachments},
-          // queryParam,
-        ),
-      );
-      // props.navigation.goBack();
-    }
-  };
-
-  const onPressSend = useCallback(() => {
-    callSendEmailApi();
-  }, [emailBody, mediaFileList]);
-
-  return (
-    <Pressable onPress={onPressSend} style={styles.optionIcon}>
-      <RenderIonIcon
-        name={'send'}
-        color={Colors.accentLight}
-        style={{transform: [{rotateZ: '-45deg'}]}}
-      />
-    </Pressable>
-  );
-};
-
-export const AttachmentUploadIcon = () => {
-  const dispatch = useDispatch();
-  const onPressAttachment = useCallback(async () => {
-    console.log('Attach items');
-
-    try {
-      const response = await DocumentPicker.pickSingle({
-        presentationStyle: 'fullScreen',
-        type: [DocumentPicker.types.allFiles],
-      });
-
-      console.log(JSON.stringify(response));
-
-      const formData = new FormData();
-      formData.append('mediaType', '1');
-      formData.append('file', {
-        uri: response.uri,
-        type: response.type,
-        name: response.name,
-      });
-      dispatch(postUploadFile(formData));
-    } catch (err) {
-      console.warn(err);
-    }
-  }, []);
-
-  return (
-    <Pressable onPress={onPressAttachment} style={styles.optionIcon}>
-      <RenderIonIcon name={'attach'} />
-    </Pressable>
-  );
-};
-
-export const TemplateIcon = ({onPressTemplate}) => {
-  return (
-    <Pressable onPress={onPressTemplate} style={styles.optionIcon}>
-      <RenderIonIcon name={'ios-reader'} />
-    </Pressable>
-  );
-};
-
-export const ActionHistory = ({onPressActionHistoryItem}) => {
+export const ActionHistory = ({children}) => {
   return (
     <View style={styles.actionHistoryContainer}>
       <Text style={styles.actionHistoryHeader}>Action history</Text>
-
-      <ActionHistoryItem onItemPress={onPressActionHistoryItem} />
+      {children}
     </View>
   );
 };
-export const AttachmentView = ({onPressActionHistoryItem}) => {
+export const AttachmentView = () => {
   const {mediaFileList} = useSelector(state => state.dashboard);
   console.log(
     'ATTACHEMENTS_LIST',
@@ -276,11 +126,12 @@ export const NoActionView = () => {
   );
 };
 
-export const ActionHistoryItem = ({onItemPress}) => {
+export const ActionHistoryItem = () => {
+  const navigation = useNavigation();
   const {summary} = useSelector(state => state.dashboard.ticketActionHistory);
   const actionDetails = summary?.data?.action ?? null;
   console.log('SUMMARY OS', JSON.stringify(summary));
-
+  const ticketId = useSelector(state => state.dashboard?.ticket?.id);
   if (isNull(actionDetails)) {
     return <NoActionView />;
   }
@@ -288,6 +139,13 @@ export const ActionHistoryItem = ({onItemPress}) => {
   const senderName = summary?.data?.action?.emailSendBy ?? 'Default sender';
   const actionCount = (summary?.data?.totalAction ?? 0).toString();
   const timeStamp = convertDateTimeAgo(summary?.data?.action?.createdAt);
+
+  const onItemPress = () => {
+    navigation.navigate('actionEmailHistory', {
+      ticketId: ticketId,
+    });
+  };
+
   return (
     <Pressable onPress={onItemPress} style={styles.actionHistoryItemContainer}>
       <Text style={styles.actionHistorySubjectText}>{emailSubject}</Text>
@@ -358,7 +216,9 @@ export const SendEmail = props => {
   const bsSnapPoints = ['33%', '0%'];
 
   const closeBottomSheet = () => {
-    bs.current.snapTo(bsSnapPoints.length - 1);
+    if (bs.current) {
+      bs.current.snapTo(bsSnapPoints.length - 1);
+    }
   };
 
   useEffect(() => {
@@ -385,16 +245,11 @@ export const SendEmail = props => {
     richText.current.setContentHTML('');
   }, [emailSentResponse]);
 
-  const onPressActionHistoryItem = useCallback(() => {
-    console.log('on Press action history Item');
-    props.navigation.navigate('actionEmailHistory', {
-      ticketId: ticketId,
-    });
-  }, []);
-
   const onPressTemplate = useCallback(() => {
     richText.current.dismissKeyboard();
-    bs.current.snapTo(0);
+    if (bs.current) {
+      bs.current.snapTo(0);
+    }
     console.log('call');
   }, []);
 
@@ -463,12 +318,8 @@ export const SendEmail = props => {
       <KeyboardAwareScrollView enableOnAndroid={true}>
         <RenderHeader />
 
-        <RenderOptionsView onPressTemplate={onPressTemplate} emailBody={body} />
-
-        <EmailToFrom
-          title={translate('action_email.to')}
-          value={body.toEmail}
-        />
+        <EmailOptions body={body} onPressTemplate={onPressTemplate} />
+        <SendEmailTo />
         <EmailSubject
           body={body}
           closeBottomSheet={closeBottomSheet}
@@ -483,29 +334,32 @@ export const SendEmail = props => {
           placeholder={translate('action_email.email_body')}
           placeholderTextColor={Colors.borderColor}
           androidHardwareAccelerationDisabled={true}
-          initialHeight={300}
+          initialHeight={350}
           style={styles.textInput}
           setContentHTML={body.emailBody}
           onFocus={closeBottomSheet}
         />
 
         <AttachmentView />
-        <ActionHistory onPressActionHistoryItem={onPressActionHistoryItem} />
+        <ActionHistory>
+          <ActionHistoryItem />
+        </ActionHistory>
       </KeyboardAwareScrollView>
 
-      <BottomSheet
-        ref={bs}
-        snapPoints={bsSnapPoints}
-        initialSnap={bsSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderSelectTemplate}
-        renderHeader={renderHeader}
-        callbackNode={fall}
-      />
       {isKeyboardVisible && (
         <CustomKeyboardToolbar
           toolbarRef={richTextToolBar}
           richTextfieldRef={richText}
+        />
+      )}
+      {!isKeyboardVisible && (
+        <BottomSheet
+          ref={bs}
+          snapPoints={bsSnapPoints}
+          initialSnap={bsSnapPoints.length - 1}
+          renderContent={renderSelectTemplate}
+          renderHeader={renderHeader}
+          callbackNode={fall}
         />
       )}
     </View>
@@ -518,6 +372,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     flex: 1,
+    flexDirection: 'column',
     borderTopEndRadius: 5,
     borderTopStartRadius: 5,
     marginTop: MarginConstants.tab2,
@@ -613,11 +468,18 @@ const styles = StyleSheet.create({
     height: MarginConstants.tab1_8x,
     backgroundColor: Colors.settingsBackground,
   },
-  renderOptionView: {
+  renderOptionViewEnd: {
     flex: 2,
     marginHorizontal: MarginConstants.tab1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  renderOptionViewStart: {
+    flex: 2,
+    marginHorizontal: MarginConstants.tab1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   titleText: {
@@ -634,7 +496,7 @@ const styles = StyleSheet.create({
   },
   ticketIdText: {
     fontFamily: FontFamily.regular,
-    fontSize: TextSizes.secondary,
+    fontSize: TextSizes.secondary2,
     color: Colors.evenDarkerGrey,
   },
   actionHistoryContainer: {
@@ -694,4 +556,10 @@ const styles = StyleSheet.create({
   },
 
   contentContainer: {backgroundColor: Colors.white, height: '100%'},
+  emailOptionContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    marginTop: MarginConstants.tab1,
+    marginBottom: MarginConstants.halfTab,
+  },
 });

@@ -48,6 +48,7 @@ export default SelectEmailTemplate;
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     flex: 1,
     backgroundColor: Colors.white,
   },

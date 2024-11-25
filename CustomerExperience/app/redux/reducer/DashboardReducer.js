@@ -43,6 +43,10 @@ import {
   IS_CSAT_VIEW_TOP_BOX,
   SET_MOVE_NEXT,
 } from '../actions/dashboard.actions';
+import {
+  SET_EMAIL_SUBJECT,
+  TOGGLE_TEMPLATE_BOTTOM_SHEET,
+} from '../actions/email.actions';
 
 const initialState = {
   dashboardData: {},
@@ -91,7 +95,8 @@ const initialState = {
   ticketSync: true,
   apiCallStatus: {},
   welcomeScreenData: {},
-  emailData: {emailSentResponse: {}},
+  emailData: {currentEmailBody: {}, emailSentResponse: {}},
+  isEmailTemplateOpen: false,
   mediaFileList: [],
   ticketDeleteStatus: {status: 'default'},
   ticketActionHistory: {summary: {}, details: {}},
@@ -266,6 +271,25 @@ const dashboardReducer = (state = initialState, action) => {
       };
     }
 
+    case SET_EMAIL_SUBJECT: {
+      return {
+        ...state,
+        emailData: {
+          ...state.emailData,
+          currentEmailBody: {
+            ...state.emailData.currentEmailBody,
+            subject: action.emailSubject,
+          },
+        },
+      };
+    }
+
+    case TOGGLE_TEMPLATE_BOTTOM_SHEET: {
+      return {
+        ...state,
+        isEmailTemplateOpen: action.isOpen,
+      };
+    }
     case GET_EMAIL_TEMPLATES_RECEIVED: {
       return {
         ...state,

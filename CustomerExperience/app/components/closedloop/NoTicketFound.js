@@ -32,7 +32,7 @@ export const NoTicketFound = ({onPressReset}) => {
         buttonStyle={styles.buttonStyle}
         textStyle={styles.buttonTextStyle}
         leftIcon={<ResetFilterIcon size={MarginConstants.halfTab * 5} />}
-        buttonText={'reset filters'}
+        buttonText={'Reset filters'}
       />
     </View>
   );

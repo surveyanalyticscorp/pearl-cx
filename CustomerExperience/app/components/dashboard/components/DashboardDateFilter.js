@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Colors} from '../../../styles/color.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {
@@ -29,6 +29,7 @@ import {SaveDashboardDate} from '../../../routes/commonUI/CommonUI';
 import {useDispatch, useSelector} from 'react-redux';
 import {setRangeFilter} from '../../../redux/actions';
 import RenderDatePickerModal from '../../RenderDatePickerModal';
+import {showErrorFlashMessage} from '../../../Utils/Utility';
 
 export default function DashboardDateFilter(props) {
   const dispatch = useDispatch();
@@ -68,10 +69,6 @@ export default function DashboardDateFilter(props) {
       setValidationError('Start date should be less than End date');
     }
   };
-
-  // useEffect(() => {
-  //   props.navigation.dangerouslyGetParent().setParams({saveRange: saveRange});
-  // }, [selectedRange]);
 
   let getFilterText = type => {
     switch (type) {
@@ -156,7 +153,7 @@ export default function DashboardDateFilter(props) {
   };
 
   let renderValidationError = () => {
-    return <Text style={styles.error}>{validationError}</Text>;
+    showErrorFlashMessage(validationError);
   };
 
   let renderMonthRow = type => {
@@ -204,20 +201,13 @@ export default function DashboardDateFilter(props) {
 
   let setCalendarDate = (isStartDate, date) => {
     let tempDate = moment(date).format(DMYFORMAT);
-    // setCustomDate(tempDate);
-    if (isStartDate) {
-      setSelectedRange({
-        ...selectedRange,
-        type: CUSTOM_DATE_RANGE,
-        startDate: tempDate,
-      });
-    } else {
-      setSelectedRange({
-        ...selectedRange,
-        type: CUSTOM_DATE_RANGE,
-        endDate: tempDate,
-      });
-    }
+    const tempSelectDate = {...selectedRange, type: CUSTOM_DATE_RANGE};
+
+    isStartDate
+      ? (tempSelectDate.startDate = tempDate)
+      : (tempSelectDate.endDate = tempDate);
+
+    setSelectedRange(tempSelectDate);
   };
 
   let renderStartDateRow = (isStartDate, displayDate) => {
