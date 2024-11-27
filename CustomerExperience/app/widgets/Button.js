@@ -16,6 +16,7 @@ const QPButton = props => {
 
   return (
     <Pressable
+      disabled={props.disabled ?? false}
       testID={props.testID ?? 'QPButton'}
       style={[
         style,

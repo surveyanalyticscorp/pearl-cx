@@ -66,38 +66,8 @@ import StringUtils from '../../Utils/StringUtils';
 import {ChildContainer} from '../../widgets/ParentContainer';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
 import ShowTitleAndDropdown from '../closedloop/ui/ShowTitleAndDropdown';
-
-export const CopyTicketIdButton = ({ticket}) => {
-  const onPress = () => {
-    Clipboard.setString(JSON.stringify(ticket.id));
-    showInfoFlashMessage(translate('close_loop.copied_success'));
-  };
-
-  return (
-    <Pressable testID="copy-ticket-id-button" onPress={onPress}>
-      <View style={styles.ticketIdView}>
-        <CopyIcon size={16} tintColor={Colors.accentLight} />
-      </View>
-    </Pressable>
-  );
-};
-
-export const TakeActionButton = ({onTakeActionHandler, hasPanelMember}) => {
-  return (
-    <View style={styles.takeActionContainer}>
-      <QPButton
-        testID="TakeActionButton"
-        buttonColor={
-          hasPanelMember ? Colors.accentLight : Colors.filterIconColor
-        }
-        style={buttonStyles.primaryButton}
-        onPress={onTakeActionHandler}
-        buttonText={translate('ticket_overview.take_action')}
-        textStyle={buttonStyles.primaryButtonText}
-      />
-    </View>
-  );
-};
+import CopyTicketIdButton from './TicketOverview/CopyTicketIdButton';
+import TakeActionButton from './TicketOverview/TakeActionButton';
 
 export const DescriptionHeader = ({text}) => {
   return (
@@ -149,7 +119,7 @@ export const DescriptionView = ({ticket, showResponseButton}) => {
     <View testID="description-view" style={styles.ticketStatusContainer}>
       <View style={styles.rowContainer}>
         <DescriptionHeader text={'Details'} />
-        <CopyTicketIdButton ticket={ticket} />
+        <CopyTicketIdButton />
       </View>
       <ChildContainer style={{paddingHorizontal: 0}}>
         <ShowTitleAndText
@@ -187,7 +157,6 @@ export const DescriptionView = ({ticket, showResponseButton}) => {
 export const ContactView = ({
   panelMember,
   description,
-  hasPanelMember,
   onTakeActionHandler,
 }) => {
   return (
@@ -230,10 +199,7 @@ export const ContactView = ({
         )}
         {description?.length > 0 ? <TextLabel text={description} /> : <View />}
       </ChildContainer>
-      <TakeActionButton
-        hasPanelMember={hasPanelMember}
-        onTakeActionHandler={onTakeActionHandler}
-      />
+      <TakeActionButton onTakeActionHandler={onTakeActionHandler} />
     </View>
   );
 };
@@ -306,10 +272,6 @@ export const ViewResponseDetailsButton = () => {
   );
 };
 
-function hasPanelMemberObj(obj) {
-  return obj !== null && obj !== undefined && !isObjectEmpty(obj);
-}
-
 export default function TicketOverview(props) {
   const bottomSheetEnum = {
     status: 'status',
@@ -331,7 +293,6 @@ export default function TicketOverview(props) {
   const {ticketDeleteStatus} = useSelector(state => state.dashboard);
   const isLoading = useSelector(state => state.global.isTicketLoading);
   const ticketDetails = useSelector(state => state.dashboard.ticket);
-  const hasPanelMember = hasPanelMemberObj(ticketDetails.panelMember);
   const {emailAddress, firstName, lastName, userID, feedbackApiKey} =
     useSelector(state => state.global.userInfo);
   // const [selectedSegment, setSelectedSegment] = useState();
@@ -430,13 +391,7 @@ export default function TicketOverview(props) {
   });
 
   const onTakeActionHandler = () => {
-    if (hasPanelMember) {
-      actionBottomSheet.current.snapTo(0);
-    }
-    // setAssigneeModal(true);
-    // else {
-    //   showErrorFlashMessage('Actions disabled, customer details missing');
-    // }
+    actionBottomSheet.current.snapTo(0);
   };
   const handleStatusSelection = () => {
     setCurrentBS(bottomSheetEnum.status);
@@ -803,14 +758,10 @@ export default function TicketOverview(props) {
           <ContactView
             panelMember={ticketDetails?.panelMember}
             description={ticketDetails?.comment ? ticketDetails?.comment : ''}
-            hasPanelMember={hasPanelMember}
             onTakeActionHandler={onTakeActionHandler}
           />
           <DeleteView onPressDelete={onPressDelete} />
-          {/* <TakeActionButton
-            hasPanelMember={hasPanelMember}
-            onTakeActionHandler={onTakeActionHandler}
-          /> */}
+
           <RenderShowAssigneeModal
             showAssigneeModal={showAssigneeModal}
             id={ticketDetails.id}
@@ -933,14 +884,6 @@ const styles = StyleSheet.create({
     color: Colors.accentLight,
   },
 
-  takeActionContainer: {
-    paddingTop: PaddingConstants.tab1,
-  },
-  ticketIdView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: PaddingConstants.halfTab,
-  },
   ticketIdText: {
     fontFamily: FontFamily.medium,
     fontSize: TextSizes.primary,

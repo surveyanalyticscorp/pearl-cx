@@ -13,11 +13,13 @@ import {
 import {enableScreens} from 'react-native-screens';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as globalVariables from '../app/styles/globalStyleVariables';
-import {View, Platform, StatusBar} from 'react-native';
+import {View, Platform, StatusBar, AppState} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {MarginConstants} from './styles/margin.constants';
 import Toast from 'react-native-toast-message';
 import toastConfig from './config/toastConfig';
+import AppTimeTracker from './Utils/AppTimeTracker';
+import SaveTimeDataToStorage from './Utils/SaveTimeDataToStorage';
 
 // import codePush from 'react-native-code-push';
 
@@ -30,64 +32,79 @@ const defaultOptions = {
   forceUpgrade: false,
   message: 'Do you want to update the app?',
 };
+// convert this class componenet as a functional component
 
-// const CustomFlashMessage = () => {
-//   const insets = useSafeAreaInsets();
-//   return (
-//     <FlashMessage
-//       // style={{borderRadius: 4}}
-//       animated={true}
-//       position={{
-//         // top: DeviceInfo.hasDynamicIsland() ? (DeviceInfo.hasNotch() ? 59 : ) : 0,
-//         top: insets.top + MarginConstants.tab1_2x,
-//         left: insets.left + MarginConstants.tab1_2x,
-//         right: insets.right + MarginConstants.tab1_2x,
+// class CxApp extends Component {
+//   constructor() {
+//     super();
+//     this.networkMonitor = new NetworkMonitor(store);
+//     Platform.OS === 'ios' && enableScreens();
+//     this.state = {
+//       styleBuilt: false,
+//     };
+//     // Siren.promptUser(defaultOptions)
+//   }
 
-//         // top: 0,
-//         // left: 0,
-//         // right: 0,
-//         // bottom: 0,
-//       }}
-//     />
-//   );
-// };
+//   componentDidMount() {
+//     this.networkMonitor.start();
+//     EStyleSheet.subscribe('build', () => {
+//       this.setState({styleBuilt: true});
+//     });
+//   }
 
-class CxApp extends Component {
-  constructor() {
-    super();
-    this.networkMonitor = new NetworkMonitor(store);
-    Platform.OS === 'ios' && enableScreens();
-    this.state = {
-      styleBuilt: false,
-    };
-    // Siren.promptUser(defaultOptions)
-  }
+//   componentWillUnmount() {
+//     this.networkMonitor.stop();
+//   }
 
-  componentDidMount() {
-    this.networkMonitor.start();
-    EStyleSheet.subscribe('build', () => {
-      this.setState({styleBuilt: true});
+//   render() {
+//     return (
+//       <Provider store={store}>
+//         <SafeAreaProvider>
+//           <StatusBar barStyle={'light-content'} />
+//           {this.state.styleBuilt ? <SplashScreen /> : <View />}
+//           <Toast config={toastConfig} />
+//         </SafeAreaProvider>
+//       </Provider>
+//     );
+//   }
+// }
+
+// convert this class component as a functional component
+const CxApp = () => {
+  const [styleBuilt, setStyleBuilt] = React.useState(false);
+  const networkMonitor = React.useRef(new NetworkMonitor(store));
+
+  React.useEffect(() => {
+    if (Platform.OS === 'ios') {
+      enableScreens();
+    }
+
+    AppTimeTracker.start(totalTime => {
+      console.log('App Total Time Spent (ms):', totalTime);
     });
-  }
+    const currentNetworkMonitor = networkMonitor.current;
+    currentNetworkMonitor.start();
+    const unsubscribe = EStyleSheet.subscribe('build', () => {
+      setStyleBuilt(true);
+    });
 
-  componentWillUnmount() {
-    this.networkMonitor.stop();
-  }
+    return () => {
+      currentNetworkMonitor.stop();
+      AppTimeTracker.stop();
+      unsubscribe();
+    };
+  }, []);
 
-  render() {
-    return (
-      <Provider store={store}>
-        <SafeAreaProvider>
-          <StatusBar barStyle={'light-content'} />
-          {this.state.styleBuilt ? <SplashScreen /> : <View />}
-          {/* <CustomFlashMessage /> */}
-          <Toast config={toastConfig} />
-        </SafeAreaProvider>
-      </Provider>
-    );
-  }
-}
-
+  return (
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <StatusBar barStyle={'light-content'} />
+        {styleBuilt ? <SplashScreen /> : <View />}
+        <Toast config={toastConfig} />
+      </SafeAreaProvider>
+    </Provider>
+  );
+};
 // let codePushOptions = {
 //   installMode: codePush.InstallMode.IMMEDIATE,
 //   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,

@@ -10,7 +10,6 @@ import {
   Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-// import MyIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome5';
 import {Colors} from '../styles/color.constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -41,7 +40,6 @@ import {DrawerActions} from '@react-navigation/native';
 import QPSpinner from '../widgets/QPSpinner';
 import {Notifications} from 'react-native-notifications';
 import {translate} from '../Utils/MultilinguaUtils';
-import moment from 'moment';
 import {setTokenExpired} from '../redux/actions/dashboard.actions';
 import TicketSync from '../components/TicketSync';
 
