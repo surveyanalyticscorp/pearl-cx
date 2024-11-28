@@ -10,7 +10,7 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import {enableScreens} from 'react-native-screens';
+// import {enableScreens} from 'react-native-screens';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as globalVariables from '../app/styles/globalStyleVariables';
 import {View, Platform, StatusBar, AppState} from 'react-native';
@@ -76,7 +76,7 @@ const CxApp = () => {
 
   React.useEffect(() => {
     if (Platform.OS === 'ios') {
-      enableScreens();
+      // enableScreens();
     }
 
     AppTimeTracker.start(totalTime => {

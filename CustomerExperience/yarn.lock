@@ -3061,34 +3061,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-firebase/app@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "@react-native-firebase/app@npm:9.0.0"
+"@react-native-firebase/app@npm:10.8.1":
+  version: 10.8.1
+  resolution: "@react-native-firebase/app@npm:10.8.1"
   dependencies:
     opencollective-postinstall: ^2.0.1
     superstruct: ^0.6.2
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 824b26542a6e3f6833e0f4e8da437a25356453eff6eb35589993916e25d4110cb6043ce4b6f892d62762aa798b7210a1309e1ca7e86bbfcbd2306a87303f209b
+  checksum: 4f3d374d740c4d8d10fa6ed79b98ee4016c02f43bc1c5edbd9eaeb9f6d2af0c2d69b2004402240cfa11aca9ba1963bccfcb99bf2a98c65ded5dfdacf04ce4e63
   languageName: node
   linkType: hard
 
-"@react-native-firebase/dynamic-links@npm:^7.5.10":
-  version: 7.5.13
-  resolution: "@react-native-firebase/dynamic-links@npm:7.5.13"
+"@react-native-firebase/dynamic-links@npm:10.8.1":
+  version: 10.8.1
+  resolution: "@react-native-firebase/dynamic-links@npm:10.8.1"
   peerDependencies:
-    "@react-native-firebase/app": 9.0.0
-  checksum: a325a55def64f32db0c6218e889531ee0f68d4dc7ab1007116d90f2e77129e1c9fe96ebe987b97da696cc4afca562ac2e659cc26e7f942cb54ffe50116c6db1e
+    "@react-native-firebase/app": 10.8.1
+  checksum: 81ebed53fc3f63ed174a40de335594dcf97858076899a68558931ac4e9293716f0d13a79558fb3072002c3dfb56af58f2f1af787cd695e840d4914d85c7ee2a3
   languageName: node
   linkType: hard
 
-"@react-native-firebase/messaging@npm:^8.0.1":
-  version: 8.0.1
-  resolution: "@react-native-firebase/messaging@npm:8.0.1"
+"@react-native-firebase/messaging@npm:10.8.1":
+  version: 10.8.1
+  resolution: "@react-native-firebase/messaging@npm:10.8.1"
   peerDependencies:
-    "@react-native-firebase/app": 9.0.0
-  checksum: cafd1965bb1921a763089d32461befc0542be927c10502525424f37c1e3e014006a1788f6e318f255855cfcf2152c000d8b64e6587e16e600024897f7af16153
+    "@react-native-firebase/app": 10.8.1
+  checksum: 73cff8fb4aa2b511f28bb9e28a6e16a8819894314705546ade4e7da22e95f66d96f2422064230ce30c56dd001ea661cbc7530ce3727d94736903d4a76fab8a91
   languageName: node
   linkType: hard
 
@@ -3142,7 +3142,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-navigation/drawer@npm:^5.12.5":
+"@react-navigation/drawer@npm:5.12.9":
   version: 5.12.9
   resolution: "@react-navigation/drawer@npm:5.12.9"
   dependencies:
@@ -4034,11 +4034,11 @@ __metadata:
     "@react-native-community/cli-platform-ios": ^6.0.0
     "@react-native-community/eslint-config": ^2.0.0
     "@react-native-community/netinfo": 9.4.1
-    "@react-native-firebase/app": ^9.0.0
-    "@react-native-firebase/dynamic-links": ^7.5.10
-    "@react-native-firebase/messaging": ^8.0.1
+    "@react-native-firebase/app": 10.8.1
+    "@react-native-firebase/dynamic-links": 10.8.1
+    "@react-native-firebase/messaging": 10.8.1
     "@react-navigation/core": ^5.16.1
-    "@react-navigation/drawer": ^5.12.5
+    "@react-navigation/drawer": 5.12.9
     "@react-navigation/material-top-tabs": ^5.3.15
     "@react-navigation/native": ^5.9.4
     "@react-navigation/stack": ^5.14.5
@@ -4103,7 +4103,7 @@ __metadata:
     react-native-render-html: ^6.3.4
     react-native-safe-area-context: 4.5.0
     react-native-safe-area-view: ^1.1.1
-    react-native-screens: ^3.9.0
+    react-native-screens: 3.1.1
     react-native-simple-radio-button: ^2.7.4
     react-native-svg: ^12.1.1
     react-native-svg-transformer: ^1.5.0
@@ -12126,15 +12126,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-freeze@npm:^1.0.0":
-  version: 1.0.3
-  resolution: "react-freeze@npm:1.0.3"
-  peerDependencies:
-    react: ">=17.0.0"
-  checksum: 4258eabdbbf74aaebc38ad1fd7cfdc1984d2a844a2247b39a341c55c1beb02d5e855e6473ec5683205a52b2251d0f7dffa07cd8100f402dd2698af88b932d946
-  languageName: node
-  linkType: hard
-
 "react-is@npm:^16.12.0 || ^17.0.0 || ^18.0.0, react-is@npm:^18.0.0":
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
@@ -12597,16 +12588,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:^3.9.0":
-  version: 3.20.0
-  resolution: "react-native-screens@npm:3.20.0"
-  dependencies:
-    react-freeze: ^1.0.0
-    warn-once: ^0.1.0
+"react-native-screens@npm:3.1.1":
+  version: 3.1.1
+  resolution: "react-native-screens@npm:3.1.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 94ab21378ee82765d329ccb8c92f5ca7cb15df916496fac7ce9a03c45e22579715000dae9c16f0a7d734a8fc1c2d0569fd82ecb71119a0b56046b5ea7533e7c2
+  checksum: 214476ed6072b3cc25b8b4d368d6ebd1023f6cdff0e2a051c5fd0f16f43686a127323258cc114c3d9102d185a1abf3bfd93f47c4bbb1e58bd04b4b39994fcd1a
   languageName: node
   linkType: hard
 
@@ -15415,13 +15403,6 @@ __metadata:
   dependencies:
     makeerror: 1.0.12
   checksum: ad7a257ea1e662e57ef2e018f97b3c02a7240ad5093c392186ce0bcf1f1a60bbadd520d073b9beb921ed99f64f065efb63dfc8eec689a80e569f93c1c5d5e16c
-  languageName: node
-  linkType: hard
-
-"warn-once@npm:^0.1.0":
-  version: 0.1.1
-  resolution: "warn-once@npm:0.1.1"
-  checksum: e6a5a1f5a8dba7744399743d3cfb571db4c3947897875d4962a7c5b1bf2195ab4518c838cb4cea652e71729f21bba2e98dc75686f5fccde0fabbd894e2ed0c0d
   languageName: node
   linkType: hard
 

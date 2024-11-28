@@ -1,4 +1,3 @@
-// utils/AppTimeTracker.js
 import {AppState} from 'react-native';
 
 class AppTimeTracker {
