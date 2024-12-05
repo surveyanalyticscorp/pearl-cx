@@ -327,7 +327,7 @@ const AppRouter = props => {
           headerTitle: props => {
             return (
               <SegmentSelector
-                screenName={translate('dashboard.closed_loop')}
+                screenName={'ClosedLoop'}
                 navigation={navigation}
               />
             );

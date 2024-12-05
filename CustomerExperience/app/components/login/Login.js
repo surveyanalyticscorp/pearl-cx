@@ -16,7 +16,7 @@ import {
 } from '../../Utils/Utility';
 import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import {
   clearError,
   clearUserInfo,
@@ -44,9 +44,7 @@ import {
 } from '../../api/Constant';
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 import {getExpireDate} from '../../Utils/TimeUtils';
-import {set} from 'lodash';
-
-const stringConst = require('../../config/translations/en');
+import {translate} from '../../Utils/MultilinguaUtils';
 
 let getApiValidationErrorMessage = errorMessage => {
   console.log('getApiValidationErrorMessage', JSON.stringify(errorMessage));
@@ -57,7 +55,8 @@ let getApiValidationErrorMessage = errorMessage => {
   }
   return 'Error';
 };
-const RenderSpinnerLoginButton = ({isLoading, onPress}) => {
+const RenderSpinnerLoginButton = ({onPress}) => {
+  const isLoading = useSelector(state => state.global.isLoading);
   return isLoading ? (
     <View style={loginStyles.signInButton}>
       <QPSpinner spinnerColor={Colors.white} />
@@ -68,7 +67,7 @@ const RenderSpinnerLoginButton = ({isLoading, onPress}) => {
       style={loginStyles.signInButton}
       buttonColor={Colors.accentLight}
       onPress={onPress}
-      buttonText={stringConst.onBoarding.signIn}
+      buttonText={translate('onBoarding.signIn')}
       textStyle={loginStyles.signInText}
     />
   );
@@ -105,7 +104,6 @@ const Login = props => {
       showErrorFlashMessage(
         message === loginError ? customeErrorMessage : message,
       );
-      // showSuccessFlashMessage('Logged in!');
       props.clearUserInfo();
       timer = setTimeout(() => {
         setValidation('');
@@ -199,20 +197,20 @@ const Login = props => {
     console.log('VALIDATION MSG', 'checkValidation 1', validation);
 
     if (!validateEmail(userData.email)) {
-      setValidation(stringConst.onBoarding.invalidEmail);
+      setValidation(translate('onBoarding.invalidEmail'));
       console.log('VALIDATION MSG', 'checkValidation email', validation);
 
       return false;
     }
     if (isStringNullOrEmpty(userData.password)) {
-      setValidation(stringConst.onBoarding.invalidPassword);
+      setValidation(translate('onBoarding.invalidPassword'));
       console.log('VALIDATION MSG', 'checkValidation password', validation);
 
       return false;
     }
 
     if (isStringNullOrEmpty(userData.accessCode)) {
-      setValidation(stringConst.onBoarding.invalidCompanyCode);
+      setValidation(translate('onBoarding.invalidCompanyCode'));
       console.log('VALIDATION MSG', 'checkValidation accessCode', validation);
 
       return false;
@@ -290,7 +288,7 @@ const Login = props => {
               secureText={false}
               testID="emailTextField"
               autofocus={false}
-              label={stringConst.onBoarding.email}
+              label={translate('onBoarding.email')}
               defaultValue={''}
               style={loginStyles.emailInput}
               onEndEdit={handleEmail}
@@ -304,7 +302,7 @@ const Login = props => {
             <QPTextField
               testID="passwordTextField"
               secureText={true}
-              label={stringConst.onBoarding.password}
+              label={translate('onBoarding.password')}
               defaultValue={''}
               style={loginStyles.emailInput}
               onEndEdit={handlePassword}
@@ -319,7 +317,7 @@ const Login = props => {
             <QPTextField
               testID="companyCodeTextField"
               defaultValue={''}
-              label={stringConst.onBoarding.companyCode}
+              label={translate('onBoarding.companyCode')}
               style={loginStyles.emailInput}
               onChange={handleAccessCode}
               onEndEdit={handleAccessCode}
@@ -333,16 +331,13 @@ const Login = props => {
             />
           </View>
         </KeyboardAvoidingView>
-        <RenderSpinnerLoginButton
-          isLoading={props.isLoading}
-          onPress={authenticateAccessCode}
-        />
+        <RenderSpinnerLoginButton onPress={authenticateAccessCode} />
         <QPButton
           style={loginStyles.forgotPswdButton}
           buttonColor={Colors.fullTransparent}
           onPress={onForgotPasswordPress}
           textStyle={loginStyles.forgotPasswordText}
-          buttonText={stringConst.onBoarding.forgotPassword}
+          buttonText={translate('onBoarding.forgotPassword')}
         />
       </ScrollView>
     );
@@ -365,7 +360,6 @@ const Login = props => {
 
 const mapStateToProps = state => {
   return {
-    isLoading: state.global.isLoading,
     isError: state.global.isError,
     errorMessage: state.global.errorMessage,
     dynamicLink: state.global.dynamicLink,

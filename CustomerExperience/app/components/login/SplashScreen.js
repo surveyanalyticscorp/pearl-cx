@@ -26,6 +26,13 @@ import {setLanguageInfo, setRangeFilter} from '../../redux/actions';
 import AppRouter from '../../routes/appRouter';
 import {setBaseUrl} from '../../redux/actions/login.actions';
 import moment from 'moment';
+import {sendAnalyticsEvent} from '../../Utils/AnalyticLogs';
+import {
+  ANALYTICS_EVENTS,
+  ANALYTICS_EVENTS_SCREEN,
+} from '../../Utils/Analytic.constants';
+import DeviceInfo from 'react-native-device-info';
+import AppInfo from '../../Utils/AppInfo';
 
 const isExpireDateValid = expireDate => {
   const today = new Date();
@@ -119,6 +126,10 @@ function SplashScreen(props) {
   }, []);
 
   let renderSplashScreenView = () => {
+    sendAnalyticsEvent(ANALYTICS_EVENTS.APP_OPEN, {
+      screen: ANALYTICS_EVENTS_SCREEN.SPLASH_SCREEN,
+      ...AppInfo,
+    });
     return (
       <ImageBackground
         testID="splash-background"

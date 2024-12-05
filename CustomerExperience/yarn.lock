@@ -3061,6 +3061,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-firebase/analytics@npm:10.8.1":
+  version: 10.8.1
+  resolution: "@react-native-firebase/analytics@npm:10.8.1"
+  peerDependencies:
+    "@react-native-firebase/app": 10.8.1
+  checksum: 0def12f91a96105c234947afa1bed970336b24d3a6265a17b5f36d890e5afaa4eea958bfe66fd2e8344845d1e1908cd9f9abc7227843b0dca1a8a5f71edf39e3
+  languageName: node
+  linkType: hard
+
 "@react-native-firebase/app@npm:10.8.1":
   version: 10.8.1
   resolution: "@react-native-firebase/app@npm:10.8.1"
@@ -4034,6 +4043,7 @@ __metadata:
     "@react-native-community/cli-platform-ios": ^6.0.0
     "@react-native-community/eslint-config": ^2.0.0
     "@react-native-community/netinfo": 9.4.1
+    "@react-native-firebase/analytics": 10.8.1
     "@react-native-firebase/app": 10.8.1
     "@react-native-firebase/dynamic-links": 10.8.1
     "@react-native-firebase/messaging": 10.8.1

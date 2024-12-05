@@ -15,7 +15,7 @@ const InfoToast = ({text1, props}) => {
       <View style={{flex: 1}}>
         <TextLabel
           numberOfLines={1}
-          text={'Main Segment' ?? props.bodyText ?? ''}
+          text={text1 ?? props.bodyText ?? ''}
           color={Colors.accent}
           style={{
             padding: PaddingConstants.halfTab,

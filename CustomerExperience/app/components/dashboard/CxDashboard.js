@@ -430,6 +430,7 @@ const CxDashboard = props => {
   };
 
   let RenderDashboard = () => {
+    console.log('RENDER DASHBOARD');
     return (
       <View
         testID="cx-dashboard"

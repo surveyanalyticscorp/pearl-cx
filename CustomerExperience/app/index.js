@@ -10,16 +10,21 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-// import {enableScreens} from 'react-native-screens';
+import {enableScreens} from 'react-native-screens';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as globalVariables from '../app/styles/globalStyleVariables';
-import {View, Platform, StatusBar, AppState} from 'react-native';
+import {View, Platform, StatusBar, NativeModules} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {MarginConstants} from './styles/margin.constants';
 import Toast from 'react-native-toast-message';
 import toastConfig from './config/toastConfig';
 import AppTimeTracker from './Utils/AppTimeTracker';
 import SaveTimeDataToStorage from './Utils/SaveTimeDataToStorage';
+import {sendAnalyticsEvent} from './Utils/AnalyticLogs';
+import {ANALYTICS_EVENTS} from './Utils/Analytic.constants';
+import {msToHMS} from './Utils/TimeUtils';
+import AppInfo from './Utils/AppInfo';
+import StringUtils from './Utils/StringUtils';
 
 // import codePush from 'react-native-code-push';
 
@@ -76,11 +81,14 @@ const CxApp = () => {
 
   React.useEffect(() => {
     if (Platform.OS === 'ios') {
-      // enableScreens();
+      enableScreens();
     }
 
     AppTimeTracker.start(totalTime => {
-      console.log('App Total Time Spent (ms):', totalTime);
+      sendAnalyticsEvent(ANALYTICS_EVENTS.APP_SCREEN_TIME, {
+        appScreenTime: JSON.stringify(totalTime),
+        ...AppInfo,
+      });
     });
     const currentNetworkMonitor = networkMonitor.current;
     currentNetworkMonitor.start();

@@ -43,6 +43,7 @@
     "@react-native-clipboard/clipboard": "1.11.2",
     "@react-native-community/art": "^1.2.0",
     "@react-native-community/netinfo": "9.4.1",
+    "@react-native-firebase/analytics": "10.8.1",
     "@react-native-firebase/app": "10.8.1",
     "@react-native-firebase/dynamic-links": "10.8.1",
     "@react-native-firebase/messaging": "10.8.1",
