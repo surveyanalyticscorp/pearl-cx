@@ -1,8 +1,5 @@
 import {
   Dimensions,
-  Image,
-  ImageBackground,
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -10,7 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect} from 'react';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
 import {
@@ -20,19 +17,16 @@ import {
   validateEmail,
 } from '../../Utils/Utility';
 import {FontFamily} from '../../styles/font.constants';
-import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
 import {
-  clearError,
   setDynamicLink,
   setUserDetailsForResetPassword,
 } from '../../redux/actions/index';
-import {connect} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import StringUtils from '../../Utils/StringUtils';
 import QPSpinner from '../../widgets/QPSpinner';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import SafeAreaView from 'react-native-safe-area-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_RESET_CREDENTIALS, BASE_URL} from '../../api/Constant';
 import {
@@ -43,150 +37,139 @@ import {
 
 let {width} = Dimensions.get('window');
 import {translate} from '../../Utils/MultilinguaUtils';
+import AccessCodeTextInput from './components/AccessCodeTextInput';
+import EmailTextInput from './components/EmailTextInput';
+import CXLogo from './components/CXLogo';
+import LoginBackground from './components/LoginBackground';
+import {useNavigation} from '@react-navigation/core';
 
-const ForgotPassword = props => {
-  const [email, setEmail] = useState(props.route.params.email);
-  const [accessCode, setAccessCode] = useState(props.route.params.accessCode);
-  const [validation, setValidation] = useState('');
+const isValidateInput = ({email, accessCode}) => {
+  if (!validateEmail(email)) {
+    showErrorFlashMessage(translate('onBoarding.invalidEmail')); // Triggering error message
+    return false;
+  }
+  if (isStringNullOrEmpty(accessCode)) {
+    showErrorFlashMessage(translate('onBoarding.invalidCompanyCode')); // Triggering error message
+    return false;
+  }
+  return true;
+};
 
-  let textFieldTimer = useRef(null);
+let RenderSpinnerResetButton = ({route}) => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const {
+    isLoading,
+    isError,
+    errorMessage,
+    dynamicLink,
+    baseUrl,
+    validatePasswordLinkResponse,
+  } = useSelector(state => state.global);
+  const login = useSelector(state => state.login);
+
+  const authenticateAccessCode = () => {
+    if (isValidateInput(login) && StringUtils.isEmpty(baseUrl)) {
+      dispatch(authenticatePanel({accessCode: login.accessCode}));
+    }
+  };
 
   useEffect(() => {
     if (
-      props.route &&
-      props.route.params &&
-      props.route.params.timestamp &&
-      StringUtils.isNotEmpty(props.dynamicLink)
+      route &&
+      route.params &&
+      route.params.timestamp &&
+      StringUtils.isNotEmpty(dynamicLink)
     ) {
-      let time = props.route.params.timestamp.replace('+', ' ');
-      if (StringUtils.isNotEmpty(props.dynamicLink)) {
+      let time = route.params.timestamp.replace('+', ' ');
+      if (StringUtils.isNotEmpty(dynamicLink)) {
         let data = {
-          emailAddress: email,
-          accessCode: accessCode,
+          emailAddress: login.email,
+          accessCode: login.accessCode,
           timestamp: time,
         };
-        props.validatePasswordLink(data);
+        // props.validatePasswordLink(data);
+        dispatch(validateResetPasswordLink(data));
       }
     }
   }, []);
 
   useEffect(() => {
-    if (!isObjectEmpty(props.validatePasswordLinkResponse)) {
-      if (
-        props.validatePasswordLinkResponse &&
-        props.validatePasswordLinkResponse.Error
-      ) {
-        props.setDynamicLink();
-        showErrorFlashMessage(props.validatePasswordLinkResponse.Error);
+    if (!isObjectEmpty(validatePasswordLinkResponse)) {
+      if (validatePasswordLinkResponse && validatePasswordLinkResponse.Error) {
+        // props.setDynamicLink();
+        dispatch(setDynamicLink(''));
+        showErrorFlashMessage(validatePasswordLinkResponse.Error);
       } else {
-        if (!props.validatePasswordLinkResponse.isExpired) {
-          props.navigation.navigate('ResetPassword', {
-            email: email,
-            accessCode: accessCode,
+        if (!validatePasswordLinkResponse.isExpired) {
+          navigation.navigate('ResetPassword', {
+            email: login.email,
+            accessCode: login.accessCode,
           });
         } else {
-          props.setDynamicLink();
-          showErrorFlashMessage(props.validatePasswordLinkResponse.message);
+          // props.setDynamicLink();
+          dispatch(setDynamicLink(''));
+          showErrorFlashMessage(validatePasswordLinkResponse.message);
         }
       }
     }
-  }, [props.validatePasswordLinkResponse]);
+  }, [validatePasswordLinkResponse]);
 
   useEffect(() => {
-    if (StringUtils.isNotEmpty(validation) || props.isError) {
-      let apiError = props.errorMessage.errorAlert
-        ? props.errorMessage.errorAlert
-        : props.errorMessage.message;
-      let message = props.isError ? apiError : validation;
-      showErrorFlashMessage(message);
-      let timer = setTimeout(() => {
-        setValidation('');
-      }, 1000);
-      return () => {
-        clearTimeout(timer);
-      };
+    if (isError) {
+      console.log('ERROR', errorMessage, isError);
+
+      showErrorFlashMessage(
+        errorMessage?.errorAlert ??
+          errorMessage?.message ??
+          'Something went wrong',
+      );
     }
-  }, [validation, props.isError]);
+  }, [isError]);
 
   useEffect(() => {
-    if (props.baseUrl && StringUtils.isNotEmpty(props.baseUrl)) {
-      AsyncStorage.setItem(BASE_URL, props.baseUrl).then();
-      global.baseUrl = props.baseUrl;
+    if (baseUrl && StringUtils.isNotEmpty(baseUrl)) {
+      AsyncStorage.setItem(BASE_URL, baseUrl).then();
+      global.baseUrl = baseUrl;
       onResetPasswordClick();
     }
-  }, [props.baseUrl]);
-
-  const authenticateAccessCode = () => {
-    if (StringUtils.isEmpty(props.baseUrl)) {
-      props.authenticatePanel({accessCode: accessCode});
-    }
-  };
+  }, [baseUrl]);
 
   const onResetPasswordClick = () => {
-    if (isValidateInput()) {
+    if (isValidateInput(login)) {
       let data = {
-        emailAddress: email,
-        accessCode: accessCode,
+        emailAddress: login.email,
+        accessCode: login.accessCode,
       };
-      props.setUserDetails(data);
+      // props.setUserDetails(data);
+      dispatch(setUserDetailsForResetPassword(data));
+
       AsyncStorage.setItem(ASYNC_RESET_CREDENTIALS, JSON.stringify(data));
-      props.requestPasswordLink(data);
+      // props.requestPasswordLink(data);
+      dispatch(requestPasswordLink(data));
     }
   };
 
-  // const isValidateInput = () => {
-  //   if (!validateEmail(email)) {
-  //     setValidation(stringConst.onBoarding.invalidEmail);
-  //     return false;
-  //   }
-  //   if (isStringNullOrEmpty(accessCode)) {
-  //     setValidation(stringConst.onBoarding.invalidCompanyCode);
-  //     return false;
-  //   }
-  //   setValidation('');
-  //   return true;
-  // };
+  return isLoading ? (
+    <View style={styles.resetPswdButton}>
+      <QPSpinner testID="loading-indicator" spinnerColor={Colors.white} />
+    </View>
+  ) : (
+    <QPButton
+      testID="SignInButton"
+      style={styles.resetPswdButton}
+      onPress={authenticateAccessCode}
+      buttonText={translate('onBoarding.resetPassword')}
+      textStyle={styles.nextText}
+    />
+  );
+};
 
-  const isValidateInput = () => {
-    if (!validateEmail(email)) {
-      setValidation(translate('onBoarding.invalidEmail')); // Triggering error message
-      return false;
-    }
-    if (isStringNullOrEmpty(accessCode)) {
-      setValidation(translate('onBoarding.invalidCompanyCode')); // Triggering error message
-      return false;
-    }
-    setValidation('');
-    return true;
-  };
+const ForgotPassword = props => {
+  console.log('NAVIGATION_LOGIN', props.route.name);
 
-  const handleEmail = text => {
-    setEmail(text);
-    setValidation('');
-  };
-  const handleAccessCode = text => {
-    setAccessCode(text);
-    setValidation('');
-  };
-
-  let renderSpinnerResetButton = () => {
-    return props.isLoading ? (
-      <View style={styles.resetPswdButton}>
-        <QPSpinner testID="loading-indicator" spinnerColor={Colors.white} />
-      </View>
-    ) : (
-      <QPButton
-        testID="SignInButton"
-        style={styles.resetPswdButton}
-        onPress={authenticateAccessCode}
-        buttonText={translate('onBoarding.resetPassword')}
-        textStyle={styles.nextText}
-      />
-    );
-  };
-
-  let renderContainer = () => {
-    return (
+  return (
+    <LoginBackground>
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         keyboardDismissMode="on-drag"
@@ -199,99 +182,22 @@ const ForgotPassword = props => {
             android: -200,
           })}
           enabled>
-          <View style={styles.logo}>
-            <Image
-              style={styles.logoImage}
-              resizeMode="contain"
-              source={require('../../config/images/cx-logo.png')}
-            />
-          </View>
+          <CXLogo />
           <View style={styles.textFieldContainer}>
             <Text style={styles.forgotPasswordMessage}>
               {translate('onBoarding.forgotPasswordMessage')}
             </Text>
-            <QPTextField
-              accessibilityLabel="Email"
-              testID="email-input"
-              autofocus={false}
-              label={translate('onBoarding.email')}
-              defaultValue={email}
-              style={styles.textInput}
-              onChange={handleEmail}
-              onSubmitEditing={() => {
-                textFieldTimer = setTimeout(() => {
-                  Keyboard.dismiss();
-                }, 5);
-              }}
-              clearButtonMode={'while-editing'}
-            />
-            <QPTextField
-              accessibilityLabel="Company Code"
-              testID="company-code-input"
-              defaultValue={accessCode}
-              label={translate('onBoarding.companyCode')}
-              style={styles.textInput}
-              onChange={handleAccessCode}
-              onSubmitEditing={() => {
-                textFieldTimer = setTimeout(() => {
-                  Keyboard.dismiss();
-                }, 5);
-              }}
-              clearButtonMode={'while-editing'}
-            />
+            <EmailTextInput />
+            <AccessCodeTextInput />
           </View>
         </KeyboardAvoidingView>
-        {renderSpinnerResetButton()}
+        <RenderSpinnerResetButton />
       </ScrollView>
-    );
-  };
-
-  return (
-    <ImageBackground
-      resizeMode={'cover'}
-      source={require('../../config/images/background1.png')}
-      style={styles.container}>
-      <SafeAreaView
-        forceInset={{top: 'always', bottom: 'never'}}
-        style={styles.safeArea}>
-        {renderContainer()}
-      </SafeAreaView>
-    </ImageBackground>
+    </LoginBackground>
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    isLoading: state.global.isLoading,
-    isError: state.global.isError,
-    errorMessage: state.global.errorMessage,
-    dynamicLink: state.global.dynamicLink,
-    validatePasswordLinkResponse: state.global.validatePasswordLinkResponse,
-    baseUrl: state.global.baseUrl,
-  };
-};
-const mapDispatchToProps = dispatch => ({
-  authenticatePanel: param => {
-    dispatch(authenticatePanel(param));
-  },
-  setUserDetails: data => {
-    dispatch(setUserDetailsForResetPassword(data));
-  },
-  clearError: () => {
-    dispatch(clearError(false));
-  },
-  requestPasswordLink: param => {
-    dispatch(requestPasswordLink(param));
-  },
-  validatePasswordLink: param => {
-    dispatch(validateResetPasswordLink(param));
-  },
-  setDynamicLink: () => {
-    dispatch(setDynamicLink(''));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);
+export default ForgotPassword;
 
 const styles = StyleSheet.create({
   safeArea: {

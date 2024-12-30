@@ -17,7 +17,7 @@
     "invalidPassword": "Bitte geben Sie ein gültiges Passwort ein",
     "invalidCompanyCode": "Bitte geben Sie einen gültigen Unternehmenscode ein",
     "signIn": "Anmelden",
-    "email": "E-Mail-adresse",
+    "email": "Email",
     "password": "Kennwort",
     "companyCode": "Unternehmenscode",
     "forgotPassword": "Passwort vergessen?",
@@ -92,7 +92,7 @@
     "no_comments": "Keine Kommentare",
     "submit": "einreichen",
     "update": "Aktualisieren",
-    "copied_success": "Ticket id copied to clipboard"
+    "copied_success": "Ticket ID copied to clipboard"
   },
   "ticket_list": {
     "alert": "Warnung!",

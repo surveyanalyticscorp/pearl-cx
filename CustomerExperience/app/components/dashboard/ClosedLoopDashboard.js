@@ -242,7 +242,7 @@ export const StatusDashboardBottomSheet = React.forwardRef(
   },
 );
 
-export const ClosedLoopDashboard = props => {
+export const ClosedLoopDashboard = ({openStatusBS}) => {
   const statusIndex = useSelector(
     state => state.dashboard.currentStatusIndexForFilter,
   );
@@ -260,7 +260,7 @@ export const ClosedLoopDashboard = props => {
       </DashboardWidgetTitle>
       <RenderStatusFilterButton
         currentStatus={statusList[statusIndex]}
-        onPress={props.openStatusBS}
+        onPress={openStatusBS}
       />
       <RenderDonutChart
         count={statusList[statusIndex].count}

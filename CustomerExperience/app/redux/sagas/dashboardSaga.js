@@ -4,6 +4,7 @@ import {
   BASE_URL_MID_FIX,
   CLF_APP_LOGIN_COUNT,
   CLF_GET_BASE_URL,
+  CLF_GET_GLOBAL_SETTINGS,
   CLF_STATUS_WISE_PRIORITY_ANALYTICS,
   CLF_WELCOME_SCREEN_COUNTS,
   CX_HOME,
@@ -14,6 +15,8 @@ import {
   CLEAR_API_ERROR,
   IS_ERROR,
   IS_LOADING,
+  SET_GLOBAL_SETTINGS,
+  SET_GLOBAL_SETTINGS_RESPONSE,
   SET_LANGUAGE_INFO,
   WANT_TO_RELOAD_DASHBOARD,
 } from '../actions/index';
@@ -178,4 +181,32 @@ export function* getCLFBaseURL(action) {
 }
 export function* watchGetCLFBaseUrl() {
   yield takeLatest(GET_CLF_BASE_URL, getCLFBaseURL);
+}
+
+export function* fetchGlobalSettings() {
+  try {
+    const response = yield WebServiceHandler.get(
+      getClfUrl(CLF_GET_GLOBAL_SETTINGS),
+      getBearerTokenStatic(),
+      {},
+    );
+
+    console.log('SUCCESS', JSON.stringify(response));
+
+    yield put({
+      type: SET_GLOBAL_SETTINGS_RESPONSE,
+      payload: response?.data,
+    });
+  } catch (error) {
+    // showErrorFlashMessage(error.errorAlert);
+    console.log('ERROR', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+
+export function* watchGetGlobalSettings() {
+  yield takeLatest(SET_GLOBAL_SETTINGS, fetchGlobalSettings);
 }

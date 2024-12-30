@@ -37,6 +37,13 @@ export default class AsyncStorageData {
       console.log('ERROR_ASYNC_SET_DATA_AS_STRING', e);
     }
   }
+  async clearAllData() {
+    try {
+      await AsyncStorage.clear();
+    } catch (e) {
+      console.log('ERROR_ASYNC_CLEAR_ALL_DATA', e);
+    }
+  }
 }
 
 // import { useState, useEffect, useCallback } from 'react';

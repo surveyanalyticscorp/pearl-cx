@@ -271,6 +271,16 @@ export function getNPSColor(sentiment) {
   }
 }
 
+let getNPSColorByNPS = nps => {
+  if (nps < 0) {
+    return Colors.detractor2;
+  } else if (nps >= 0 && nps <= 50) {
+    return Colors.passive2;
+  } else {
+    return Colors.promoter2;
+  }
+};
+
 export const PROGRESS_COLOR_INCOMPLETE = '#DD4F43';
 export const PROGRESS_COLOR_TERMINATED = '#FFCE42';
 
@@ -288,4 +298,5 @@ export {
   getPriorityFillerColorbyId,
   getStatusBorderColorbyId,
   getStatusFillerColorbyId,
+  getNPSColorByNPS,
 };

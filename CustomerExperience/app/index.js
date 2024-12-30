@@ -13,18 +13,13 @@ import {
 import {enableScreens} from 'react-native-screens';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as globalVariables from '../app/styles/globalStyleVariables';
-import {View, Platform, StatusBar, NativeModules} from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import {MarginConstants} from './styles/margin.constants';
+import {View, Platform, StatusBar} from 'react-native';
 import Toast from 'react-native-toast-message';
 import toastConfig from './config/toastConfig';
 import AppTimeTracker from './Utils/AppTimeTracker';
-import SaveTimeDataToStorage from './Utils/SaveTimeDataToStorage';
 import {sendAnalyticsEvent} from './Utils/AnalyticLogs';
 import {ANALYTICS_EVENTS} from './Utils/Analytic.constants';
-import {msToHMS} from './Utils/TimeUtils';
 import AppInfo from './Utils/AppInfo';
-import StringUtils from './Utils/StringUtils';
 
 // import codePush from 'react-native-code-push';
 

@@ -17,7 +17,7 @@
     "invalidPassword": "Por favor, insira uma senha válida",
     "invalidCompanyCode": "Por favor, insira o código da empresa válido",
     "signIn": "Iniciar sessão",
-    "email": "Endereço de email",
+    "email": "Correio eletrónico OR E-mail",
     "password": "Senha",
     "companyCode": "Código da empresa",
     "forgotPassword": "Esqueceu sua senha?",
@@ -92,7 +92,7 @@
     "no_comments": "No comments",
     "submit": "Submit",
     "update": "Update",
-    "copied_success": "Ticket id copied to clipboard"
+    "copied_success": "Ticket ID copied to clipboard"
   },
   "ticket_list": {
     "alert": "Alerta!",

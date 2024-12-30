@@ -12,7 +12,6 @@ import {
   Platform,
   useWindowDimensions,
 } from 'react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
@@ -28,7 +27,7 @@ import {
 } from '../../redux/actions/dashboard.actions';
 import moment from 'moment';
 import StringUtils from '../../Utils/StringUtils';
-import {getDateTimeAgo} from '../../Utils/TimeUtils';
+import {getDateTimeAgo, toLocalTime} from '../../Utils/TimeUtils';
 import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {MAX_COMMENT_LENGTH} from '../../api/Constant';
@@ -36,6 +35,7 @@ import Animated from 'react-native-reanimated';
 import {baseTextStyles} from '../../styles/text.styles';
 import SendButton from '../../widgets/SendButton';
 import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
 export function getFoldedText(text, MAX_WORD_LENGTH = 10) {
   if (StringUtils.getWords(text).length > MAX_WORD_LENGTH) {
     return `${StringUtils.getWords(text).slice(0, MAX_WORD_LENGTH).join(' ')}
@@ -43,6 +43,23 @@ export function getFoldedText(text, MAX_WORD_LENGTH = 10) {
   }
   return text;
 }
+export const UserNameAndCommentContainer = ({children, isSelected}) => {
+  return (
+    <View
+      style={
+        isSelected ? styles.commentSelectedTextView : styles.commentTextView
+      }>
+      {children}
+    </View>
+  );
+};
+export const UserAvatar = ({title}) => {
+  return (
+    <View style={styles.commentUserView}>
+      <Avatar title={title} />
+    </View>
+  );
+};
 
 export const CommentCancelReplyButton = ({isSelected, toggle}) => {
   return (
@@ -207,6 +224,8 @@ const TextLengthCount = ({textLength, maxCountLength}) => {
 
 const CommentItem = ({item, isSelected = false}) => {
   const [isFolded, setFolded] = useState(true);
+  const {commentBy, createdAt, text} = item;
+
   return (
     <Pressable
       style={[
@@ -216,23 +235,20 @@ const CommentItem = ({item, isSelected = false}) => {
       onPress={() => {
         setFolded(state => !state);
       }}>
-      <View style={styles.commentUserView}>
-        <Avatar title={StringUtils.reformatComplexName(item.commentBy)} />
-      </View>
-      <View
-        style={
-          isSelected ? styles.commentSelectedTextView : styles.commentTextView
-        }>
-        <Text style={[styles.commentByText]}>
-          {StringUtils.reformatComplexName(item.commentBy.trim())}
-        </Text>
-        <CommentText
-          text={isFolded ? getFoldedText(item.text.trim()) : item.text.trim()}
+      <UserAvatar title={StringUtils.reformatComplexName(commentBy)} />
+      <UserNameAndCommentContainer isSelected={isSelected}>
+        <TextLabel
+          text={StringUtils.reformatComplexName(commentBy.trim())}
+          style={styles.commentByText}
         />
-        <Text style={styles.commentDateText}>
-          {getDateTimeAgo(moment.utc(item.createdAt).toDate())}
-        </Text>
-      </View>
+        <CommentText
+          text={isFolded ? getFoldedText(text.trim()) : text.trim()}
+        />
+        <TextLabel
+          text={getDateTimeAgo(moment.utc(createdAt).toDate())}
+          style={styles.commentDateText}
+        />
+      </UserNameAndCommentContainer>
     </Pressable>
   );
 };

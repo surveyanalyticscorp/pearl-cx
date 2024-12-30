@@ -306,13 +306,13 @@ export const NoItemsFound = ({children}) => {
   );
 };
 
-export const ApplyButton = ({onPress}) => (
+export const ApplyButton = ({onPress, buttonText}) => (
   <QPButton
     buttonColor={Colors.accentLight}
     testID="ApplyButton"
     style={[buttonStyles.primaryButton, {marginVertical: MarginConstants.tab2}]}
     onPress={onPress}
-    buttonText={'Apply'}
+    buttonText={buttonText ?? 'Apply'}
     textStyle={buttonStyles.primaryButtonText}
   />
 );
@@ -389,22 +389,6 @@ export const CheckRadioButtonItem = ({
   return (
     <Pressable testID="check-radio-button-item" onPress={() => onPress(index)}>
       <View style={checkBoxRowStyle ?? styles.checkBoxRow}>
-        {/* <CheckBox
-            disabled={false}
-            value={item.isChecked}
-            onCheckColor={Colors.accentLight}
-            boxType={'square'}
-            onValueChange={(newValue) => {
-              // onPress(index);
-            }}
-          /> */}
-        {/* <IonIcons
-            name={item.isChecked ? 'radio-button-on' : 'radio-button-off'}
-            size={24}
-            color={item.isChecked ? Colors.accentLight : Colors.checkboxColor}
-            style={{marginHorizontal: MarginConstants.halfTab}}
-          /> */}
-
         <RadioButtonCheckbox isChecked={item.isChecked} />
         <Text style={_textStyle}>
           {StringUtils.uppercaseFirstCharRestLowercase(item.title)}

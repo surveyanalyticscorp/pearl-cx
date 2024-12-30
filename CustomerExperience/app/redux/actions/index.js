@@ -18,6 +18,8 @@ export const SET_DYNAMIC_LINK = 'SET_DYNAMIC_LINK';
 export const WANT_TO_RELOAD_DASHBOARD = 'WANT_TO_RELOAD_DASHBOARD';
 export const SET_LANGUAGE_INFO = 'SET_LANGUAGE_INFO';
 export const SET_IS_FIRST_TIME = 'SET_IS_FIRST_TIME';
+export const SET_GLOBAL_SETTINGS = 'SET_GLOBAL_SETTINGS';
+export const SET_GLOBAL_SETTINGS_RESPONSE = 'SET_GLOBAL_SETTINGS_RESPONSE';
 
 export const showLoading = (isLoading = true) => ({
   type: IS_LOADING,
@@ -82,4 +84,8 @@ export const setUserDetailsForResetPassword = body => ({
 export const setDynamicLink = link => ({
   type: SET_DYNAMIC_LINK,
   payload: link,
+});
+
+export const getGlobalSettings = () => ({
+  type: SET_GLOBAL_SETTINGS,
 });

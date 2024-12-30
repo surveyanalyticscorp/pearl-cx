@@ -31,6 +31,7 @@ const TicketSync = () => {
     if (
       ticketSync &&
       !StringUtils.isEmptyOrNull(global.subscriberId) &&
+      !StringUtils.isEmptyOrNull(global.clfBaseUrl) &&
       !StringUtils.isEmptyOrNull(feedbackApiKey) &&
       !StringUtils.isEmptyOrNull(feedbackID)
     ) {

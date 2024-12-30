@@ -51,14 +51,23 @@ export function getTicketActivityList(list, item) {
   }
 }
 
+const SortingView = ({onPress, text}) => {
+  return (
+    <View style={styles.sortingView}>
+      <SortingToggleButton onPress={onPress} text={text} />
+    </View>
+  );
+};
+
 export default function TicketActivity(props) {
   const sortingList = [
     {id: 0, title: translate('activity.latest').toLocaleLowerCase()},
     {id: 1, title: translate('activity.oldest').toLocaleLowerCase()},
   ];
-  const [currentSortingIndex, setCurrentIndex] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
   const dispatch = useDispatch();
+  const [currentSortingIndex, setCurrentIndex] = useState(0);
+
   const {authToken} = useSelector(state => state.global);
   const ticketId = useSelector(state => state.dashboard.ticket.id);
   // const {userID} = useSelector(state => state.global.userInfo);
@@ -119,34 +128,6 @@ export default function TicketActivity(props) {
     wait(500).then(() => setRefreshing(false));
   }, []);
 
-  // console.log(
-  //   'Padding half, tab1, tab2, tab3, tab4',
-  //   PaddingConstants.halfTab,
-  //   PaddingConstants.tab1,
-  //   PaddingConstants.tab2,
-  //   PaddingConstants.tab3,
-  //   PaddingConstants.tab4,
-  // );
-  // console.log(
-  //   'Margin half, tab1, tab2, tab3, tab4',
-  //   MarginConstants.halfTab,
-  //   MarginConstants.tab1,
-  //   MarginConstants.tab2,
-  //   MarginConstants.tab3,
-  //   MarginConstants.tab4,
-  // );
-  // console.log(
-  //   `TextSizes.donutPercentText: ${TextSizes.donutPercentText}`,
-  //   `TextSizes.extraLargeText: ${TextSizes.extraLargeText}`,
-  //   `TextSizes.largeText: ${TextSizes.largeText}`,
-  //   `TextSizes.primary: ${TextSizes.primary}`,
-  //   `TextSizes.secondary: ${TextSizes.secondary}`,
-  //   `TextSizes.semiSecondary: ${TextSizes.semiSecondary}`,
-  //   `TextSizes.semiMediumText: ${TextSizes.semiMediumText}`,
-  //   `TextSizes.mediumText: ${TextSizes.mediumText}`,
-  //   `TextSizes.smallText: ${TextSizes.smallText}`,
-  // );
-
   const getRenderItem = ({item}) => {
     // return userID === item.userId ? RenderMyItem({item}) : RenderItem({item});
     return RenderItem({item});
@@ -161,12 +142,10 @@ export default function TicketActivity(props) {
             opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
           },
         ]}>
-        <View style={styles.sortingView}>
-          <SortingToggleButton
-            onPress={openSortingBottomSheet}
-            text={sortingList[currentSortingIndex].title}
-          />
-        </View>
+        <SortingView
+          onPress={openSortingBottomSheet}
+          text={sortingList[currentSortingIndex].title}
+        />
         <FlatList
           testID="flatlist-activity"
           refreshControl={

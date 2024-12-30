@@ -25,7 +25,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {buttonStyles} from '../../styles/button.styles';
 import StringUtils from '../../Utils/StringUtils';
-import {setIsFirstTime} from '../../redux/actions';
+import {getGlobalSettings, setIsFirstTime} from '../../redux/actions';
 import {sendAnalyticsEvent} from '../../Utils/AnalyticLogs';
 import {
   ANALYTICS_EVENTS,
@@ -216,6 +216,7 @@ export const WelcomeScreen = () => {
   const getInitData = () => {
     console.log('USER_DATA: ', userInfo);
     console.log('SUBSCRIBER_ID', global.subscriberId);
+    dispatch(getGlobalSettings());
     dispatch(
       callAppLoginCounter('', {
         cxUserId: userInfo.userID,
@@ -231,7 +232,12 @@ export const WelcomeScreen = () => {
   }, [baseUrl]);
 
   useEffect(() => {
-    if (authToken) {
+    if (
+      authToken &&
+      StringUtils.isNotEmpty(authToken) &&
+      global.bearerToken &&
+      global.clfBaseUrl
+    ) {
       getSegmentData(authToken);
       getWelcomeScreenData(authToken);
       getInitData();

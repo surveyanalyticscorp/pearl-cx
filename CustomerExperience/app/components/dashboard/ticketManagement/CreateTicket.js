@@ -47,7 +47,6 @@ import {
   FullMonthDateYearFormat,
   YMDFORMAT,
 } from '../../../Utils/AppConstants';
-import QPCalendar from '../../../widgets/QPCalendar';
 import {
   isStringNullOrEmpty,
   showErrorFlashMessage,
@@ -66,6 +65,53 @@ import RenderPhoneInput from '../../closedloop/ui/RenderPhoneInput';
 import RenderCreateTicketButton from './RenderCreateTicketButton';
 import {IonIcon, MaterialIcons} from '../../../Utils/IconUtils';
 import RenderDatePickerModal from '../../RenderDatePickerModal';
+
+const isValid = ticketState => {
+  if (ticketState.mobileNumber && !ticketState.isMobileNumberValid) {
+    showErrorFlashMessage('Enter valid phone number');
+    return false;
+  }
+
+  if (!ticketState.currentSegmentId) {
+    showErrorFlashMessage(translate('segment_not_selected'));
+    return false;
+  }
+  if (!ticketState.issueDate) {
+    showErrorFlashMessage(translate('issue_date_not_selected'));
+    return false;
+  }
+  if (!ticketState.firstName) {
+    showErrorFlashMessage(translate('enter_customer_name'));
+    return false;
+  }
+  if (!ticketState.emailAddress) {
+    showErrorFlashMessage(translate('enter_an_email'));
+    return false;
+  }
+  if (ticketState.emailAddress && !validateEmail(ticketState.emailAddress)) {
+    showErrorFlashMessage(translate('enter_an_valid_email'));
+    return false;
+  }
+  if (ticketState.priority === null || ticketState.priority === undefined) {
+    showErrorFlashMessage(translate('priority_not_selected'));
+    return false;
+  }
+  if (ticketState.status === null || ticketState.status === undefined) {
+    showErrorFlashMessage(translate('status_not_selected'));
+    return false;
+  }
+
+  if (!ticketState.assignToId) {
+    showErrorFlashMessage(translate('select_a_ticket_owner'));
+    return false;
+  }
+
+  if (!ticketState.comment) {
+    showErrorFlashMessage(translate('add_description'));
+    return false;
+  }
+  return true;
+};
 
 const RenderMaterialIcon = ({iconName}) => (
   <MaterialIcon name={iconName} size={14} color={Colors.lightBlack} />
@@ -203,6 +249,25 @@ const CreateTicketButton = ({showLoading, onPress}) => {
   );
 };
 
+const CreateTicketForm = ({children, fall}) => {
+  return (
+    <Animated.ScrollView
+      style={[
+        styles.container,
+        {
+          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+          marginHorizontal: MarginConstants.tab1_2x,
+        },
+      ]}>
+      <View style={styles.innerContainer}>{children}</View>
+    </Animated.ScrollView>
+  );
+};
+
+const VerticalSpace = () => (
+  <VerticalSpaceBox marginVertical={MarginConstants.halfTab} />
+);
+
 export default function CreateTicket(props) {
   const responseId = props.route?.params?.responseId ?? null;
   const customerName = props.route?.params?.customerName ?? '';
@@ -265,7 +330,6 @@ export default function CreateTicket(props) {
 
   // const [shadow, setShadow] = useState(false);
   const dispatch = useDispatch();
-  const [validation, setValidation] = useState('');
   const [showLoading, setLoading] = useState(false);
   const [ticketState, setTicketState] = useState({
     userName: `${firstName} ${lastName}`,
@@ -361,73 +425,17 @@ export default function CreateTicket(props) {
   };
 
   useEffect(() => {
-    if (!isStringNullOrEmpty(validation)) {
-      showErrorFlashMessage(validation);
-      setValidation('');
+    if (!isStringNullOrEmpty(props.error)) {
+      showErrorFlashMessage(props.error);
     }
-  }, [validation, props.error]);
+  }, [props.error]);
 
   const handleCreateTicket = () => {
-    if (isValid()) {
+    if (isValid(ticketState)) {
       setLoading(true);
-      setValidation('');
       dispatch(createClfTicket(authToken, ticketState, feedbackApiKey));
       props.navigation.goBack();
-      // console.log('TICKET_DETAILS_', JSON.stringify(ticketState));
     }
-  };
-  // Example Usage
-  // console.log(validatePhoneNumber("+14155552671")); // Expected output: true
-  // console.log(validatePhoneNumber("+914055662001")); // Expected output: true
-  // console.log(validatePhoneNumber("+123456")); // Expected output: false (too short)
-  // console.log(validatePhoneNumber("1234567890")); // Expected output: false (no country code)
-
-  const isValid = () => {
-    if (ticketState.mobileNumber && !ticketState.isMobileNumberValid) {
-      setValidation('Enter valid phone number');
-      return false;
-    }
-
-    if (!ticketState.currentSegmentId) {
-      setValidation(translate('segment_not_selected'));
-      return false;
-    }
-    if (!ticketState.issueDate) {
-      setValidation(translate('issue_date_not_selected'));
-      return false;
-    }
-    if (!ticketState.firstName) {
-      setValidation(translate('enter_customer_name'));
-      return false;
-    }
-    if (!ticketState.emailAddress) {
-      setValidation(translate('enter_an_email'));
-      return false;
-    }
-    if (ticketState.emailAddress && !validateEmail(ticketState.emailAddress)) {
-      setValidation(translate('enter_an_valid_email'));
-      return false;
-    }
-    if (ticketState.priority === null || ticketState.priority === undefined) {
-      setValidation(translate('priority_not_selected'));
-      return false;
-    }
-    if (ticketState.status === null || ticketState.status === undefined) {
-      console.log(ticketState.status);
-      setValidation(translate('status_not_selected'));
-      return false;
-    }
-
-    if (!ticketState.assignToId) {
-      setValidation(translate('select_a_ticket_owner'));
-      return false;
-    }
-
-    if (!ticketState.comment) {
-      setValidation(translate('add_description'));
-      return false;
-    }
-    return true;
   };
 
   const renderPrioritySelectContent = () => {
@@ -437,9 +445,6 @@ export default function CreateTicket(props) {
           data={priorityList}
           selectedIndex={priorityIndex}
           handleOnPress={(item, index) => {
-            // console.log(JSON.stringify(item));
-            // setPriority(item.title);
-
             setTicketState(state => ({
               ...state,
               priority: item.id,
@@ -511,26 +516,10 @@ export default function CreateTicket(props) {
     );
   };
 
-  // const renderDateSelectContent = () => {
-  //   return (
-  //     <View style={styles.contentContainer}>
-  //       <SelectDate
-  //         data={owners}
-  //         selectedIndex={ticketOwnerIndex}
-  //         handleOnPress={(item, index) => {
-  //           // console.log(JSON.stringify(item));
-  //           setIssueDate(moment().format(HalfMonthDateYearFormat));
-  //           // setTIcketOwnerIndex(index);
-  //         }}
-  //       />
-  //     </View>
-  //   );
-  // };
-
   const renderPriorityHeader = _title => {
     return (
       <BottomSheetHeader
-        title={translate('ticket_overview.select_priority')}
+        title={'Priority'}
         onPressClose={() =>
           priorityBottomSheet.current.snapTo(
             priorityBottomSheetSnapPoints.length - 1,
@@ -543,7 +532,7 @@ export default function CreateTicket(props) {
   const renderStatusHeader = _title => {
     return (
       <BottomSheetHeader
-        title={translate('ticket_overview.select_status')}
+        title={'Status'}
         onPressClose={() =>
           statusBottomSheet.current.snapTo(
             statusBottomSheetSnapPoints.length - 1,
@@ -633,45 +622,6 @@ export default function CreateTicket(props) {
     );
   };
 
-  // let renderCancelButton = () => {
-  //   return (
-  //     <Pressable
-  //       style={styles.cancelButton}
-  //       onPress={() => {
-  //         setShowCalendar(false);
-  //       }}>
-  //       <Text style={styles.buttonText}>Cancel</Text>
-  //     </Pressable>
-  //   );
-  // };
-
-  // let renderOkButton = () => {
-  //   return (
-  //     <Pressable
-  //       style={styles.cancelButton}
-  //       onPress={() => {
-  //         console.log('DATE_', JSON.stringify(selectedDate));
-  //         setTicketState(state => ({
-  //           ...state,
-  //           issueDate: moment(selectedDate, DMYFORMAT).format(YMDFORMAT),
-  //         }));
-
-  //         setShowCalendar(false);
-  //       }}>
-  //       <Text style={styles.buttonText}>Ok</Text>
-  //     </Pressable>
-  //   );
-  // };
-
-  // let renderCalendarFooter = () => {
-  //   return (
-  //     <View style={styles.calendarFooter}>
-  //       {renderCancelButton()}
-  //       {renderOkButton()}
-  //     </View>
-  //   );
-  // };
-
   let setCalendarDate = (isStartDate = false, date) => {
     console.log('setCalendarDate', date);
 
@@ -683,152 +633,96 @@ export default function CreateTicket(props) {
     }));
   };
 
-  // let renderCalendar = () => {
-  //   let currentDate = moment().format('YYYY-MM-DD');
-  //   let currentYear = moment().year();
-  //   let minYear = parseInt(currentYear) - 4;
-  //   return (
-  //     <View style={styles.calendarContainer}>
-  //       <View style={styles.calendarBox}>
-  //         {/* <QPCalendar
-  //           {...props}
-  //           selectDate={setCalendarDate}
-  //           selectedDate={currentDate}
-  //           minimumDate={minYear + '-01-01'}
-  //           maximumDate={currentDate}
-  //           minYear={minYear}
-  //           maxYear={currentYear}
-  //         /> */}
-  //       </View>
-  //       {renderCalendarFooter()}
-  //     </View>
-  //   );
-  // };
-
-  // let renderCalendarViewOnModal = () => {
-  //   return (
-  //     <Modal
-  //       animationType={'fade'}
-  //       transparent={true}
-  //       onRequestClose={() => {}}
-  //       visible={showCalendar}
-  //       supportedOrientations={['portrait']}>
-  //       <View style={styles.modalContainer}>
-  //         <SafeAreaView style={{flex: 1}}>
-  //           <ScrollView style={styles.scrollContainer}>
-  //             {renderCalendar()}
-  //           </ScrollView>
-  //         </SafeAreaView>
-  //       </View>
-  //     </Modal>
-  //   );
-  // };
-
-  const VerticalSpace = () => (
-    <VerticalSpaceBox marginVertical={MarginConstants.halfTab} />
-  );
-
   return (
     <View
       forceInset={{bottom: 'never', top: 'never'}}
       style={styles.rootContainer}>
-      <Animated.ScrollView
-        style={[
-          styles.container,
-          {
-            opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-            marginHorizontal: MarginConstants.tab1_2x,
-          },
-        ]}>
-        <View style={styles.innerContainer}>
-          <VerticalSpaceBox multiplyBy={2} />
-          <RenderCustomerNameInput
-            defaultValue={customerName}
-            setTicketState={setTicketState}
-          />
-          <VerticalSpaceBox multiplyBy={2} />
+      <CreateTicketForm fall={fall}>
+        <VerticalSpaceBox multiplyBy={2} />
+        <RenderCustomerNameInput
+          defaultValue={customerName}
+          setTicketState={setTicketState}
+        />
+        <VerticalSpaceBox multiplyBy={2} />
 
-          <RenderPhoneInput setTicketState={setTicketState} />
-          <VerticalSpaceBox multiplyBy={4} />
-          <RenderEmailAddressInput
-            defaultValue={customerEmail}
-            setTicketState={setTicketState}
-          />
-          <VerticalSpaceBox multiplyBy={2} />
-          <ShowTitleAndDropdown
-            titleIcon={<SegmentIcon />}
-            title={'Select Segment'}
-            currentItemName={segment}
-            onPress={handleSegmentSelection}
-            hasArrowDownIcon
-          />
-          <VerticalSpaceBox multiplyBy={2} />
-          <ShowTitleAndDropdown
-            titleIcon={<DateFilterIcon size={12} />}
-            title={'Select date'}
-            currentItemName={moment(selectedDate, DMYFORMAT).format(
-              FullMonthDateYearFormat,
-            )}
-            onPress={handleDateSelection}
-            hasArrowDownIcon={false}
-          />
-          <VerticalSpaceBox multiplyBy={2} />
+        <RenderPhoneInput setTicketState={setTicketState} />
+        <VerticalSpaceBox multiplyBy={4} />
+        <RenderEmailAddressInput
+          defaultValue={customerEmail}
+          setTicketState={setTicketState}
+        />
+        <VerticalSpaceBox multiplyBy={2} />
+        <ShowTitleAndDropdown
+          titleIcon={<SegmentIcon />}
+          title={'Segment'}
+          currentItemName={segment}
+          onPress={handleSegmentSelection}
+          hasArrowDownIcon
+        />
+        <VerticalSpaceBox multiplyBy={2} />
+        <ShowTitleAndDropdown
+          titleIcon={<DateFilterIcon size={12} />}
+          title={'Date'}
+          currentItemName={moment(selectedDate, DMYFORMAT).format(
+            FullMonthDateYearFormat,
+          )}
+          onPress={handleDateSelection}
+          hasArrowDownIcon={false}
+        />
+        <VerticalSpaceBox multiplyBy={2} />
 
-          <ShowTitleAndDropdown
-            titleIcon={
-              <IonIcon name={'flag'} size={14} color={Colors.filterIconColor} />
-            }
-            title={'Select Priority'}
-            currentItemName={`${
-              getPriorityById(ticketState.priority) ?? 'Unassigned'
-            }`}
-            onPress={handlePrioritySelection}
-            frontIcon={
-              <IonIcon
-                name={'flag'}
-                size={14}
-                color={getPriorityBorderColorbyId(ticketState.priority)}
-              />
-            }
-            hasArrowDownIcon
-          />
-          <VerticalSpaceBox multiplyBy={2} />
+        <ShowTitleAndDropdown
+          titleIcon={
+            <IonIcon name={'flag'} size={14} color={Colors.filterIconColor} />
+          }
+          title={'Priority'}
+          currentItemName={`${
+            getPriorityById(ticketState.priority) ?? 'Unassigned'
+          }`}
+          onPress={handlePrioritySelection}
+          frontIcon={
+            <IonIcon
+              name={'flag'}
+              size={14}
+              color={getPriorityBorderColorbyId(ticketState.priority)}
+            />
+          }
+          hasArrowDownIcon
+        />
+        <VerticalSpaceBox multiplyBy={2} />
 
-          <ShowTitleAndDropdown
-            titleIcon={<StatusIcon size={12} />}
-            title={'Select status'}
-            currentItemName={`${getStatusById(ticketState.status) ?? 'New'}`}
-            onPress={handleStatusSelection}
-            frontIcon={
-              <RenderStatusIcon
-                title={getStatusById(ticketState.status) ?? 'New'}
-                size={14}
-              />
-            }
-            hasArrowDownIcon
-          />
-          <VerticalSpaceBox multiplyBy={2} />
+        <ShowTitleAndDropdown
+          titleIcon={<StatusIcon size={12} />}
+          title={'Status'}
+          currentItemName={`${getStatusById(ticketState.status) ?? 'New'}`}
+          onPress={handleStatusSelection}
+          frontIcon={
+            <RenderStatusIcon
+              title={getStatusById(ticketState.status) ?? 'New'}
+              size={14}
+            />
+          }
+          hasArrowDownIcon
+        />
+        <VerticalSpaceBox multiplyBy={2} />
 
-          <ShowTitleAndDropdown
-            titleIcon={
-              <RenderMateriaCommunityIcon iconName={'shield-account'} />
-            }
-            title={translate('ticket_overview.select_ticket_owner')}
-            currentItemName={`${ticketOwner ?? ''}`}
-            onPress={handleOwnerSelection}
-            hasArrowDownIcon
-          />
-          <VerticalSpaceBox multiplyBy={2} />
-          <RenderDescriptionInput setTicketState={setTicketState} />
-          {/* <View style={{marginVertical: MarginConstants.tab1_2x}} /> */}
-          <VerticalSpaceBox multiplyBy={4} />
-          <CreateTicketButton
-            onPress={handleCreateTicket}
-            showLoading={showLoading}
-          />
-          <VerticalSpace />
-        </View>
-      </Animated.ScrollView>
+        <ShowTitleAndDropdown
+          titleIcon={<RenderMateriaCommunityIcon iconName={'shield-account'} />}
+          title={'Ticket owner'}
+          currentItemName={`${ticketOwner ?? ''}`}
+          onPress={handleOwnerSelection}
+          hasArrowDownIcon
+        />
+        <VerticalSpaceBox multiplyBy={2} />
+        <RenderDescriptionInput setTicketState={setTicketState} />
+        <VerticalSpaceBox multiplyBy={4} />
+        <CreateTicketButton
+          onPress={handleCreateTicket}
+          showLoading={showLoading}
+        />
+        <VerticalSpace />
+      </CreateTicketForm>
+
       <RenderPriorityBottomSheet />
       <RenderStatusBottomSheet />
       <RenderSegmentBottomSheet />

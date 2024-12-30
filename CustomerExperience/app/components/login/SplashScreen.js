@@ -10,7 +10,7 @@ import {
   ASYNC_USER_INFO,
   BASE_URL,
 } from '../../api/Constant';
-import {connect, useDispatch} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import {
   fillUserInfo,
   setAuthToken,
@@ -33,6 +33,7 @@ import {
 } from '../../Utils/Analytic.constants';
 import DeviceInfo from 'react-native-device-info';
 import AppInfo from '../../Utils/AppInfo';
+import useLogoutProcess from '../../routes/drawerContent/useLogoutProcess';
 
 const isExpireDateValid = expireDate => {
   const today = new Date();
@@ -41,6 +42,7 @@ const isExpireDateValid = expireDate => {
 
 function SplashScreen(props) {
   let [moveNext, setMoveNext] = useState(false);
+
   let splashTimer = useRef(null);
   const dispatch = useDispatch();
 

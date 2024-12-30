@@ -69,7 +69,7 @@ exports[`FilterHeader matches snapshot 1`] = `
           }
         }
       >
-        Oct 30, 2024
+        Dec 03, 2024
          - 
       </Text>
       <Text
@@ -81,7 +81,7 @@ exports[`FilterHeader matches snapshot 1`] = `
           }
         }
       >
-        Nov 06, 2024
+        Dec 10, 2024
       </Text>
     </View>
   </View>

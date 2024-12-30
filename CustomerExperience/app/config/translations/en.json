@@ -17,7 +17,7 @@
     "invalidPassword": "Please enter valid password",
     "invalidCompanyCode": "Please enter valid company code",
     "signIn": "Sign in",
-    "email": "Email address",
+    "email": "Email",
     "password": "Password",
     "companyCode": "Company code",
     "forgotPassword": "Forgot password?",
@@ -92,7 +92,7 @@
     "no_comments": "No comments",
     "submit": "Submit",
     "update": "Update",
-    "copied_success": "Ticket id copied to clipboard"
+    "copied_success": "Ticket ID copied to clipboard"
   },
   "ticket_list": {
     "alert": "Alert!",
@@ -113,7 +113,7 @@
   },
   "comment": {
     "Comments": "Comments",
-    "reply": "reply",
+    "reply": "Reply",
     "write_a_comment": "Write a comment",
     "write_a_reply": "Write a reply"
   },

@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {DMY_AT_TIME_FORMAT, HalfMonthDateYearFormat} from './AppConstants';
+import {HalfMonthDateYearFormat} from './AppConstants';
 import {isStringNullOrEmpty} from './Utility';
 import {TOKEN_VALIDATION_DURATION} from '../api/Constant';
 
@@ -21,8 +21,8 @@ export const getDateTimeAgo = date => {
   const ONE_DAY = 24 * ONE_HOUR;
 
   const now = new Date();
-  const diff = now.getTime() - date.getTime();
-
+  const diff = now.getTime() - date.getTime() + constantTimeOffset();
+  console.log('MOMNET_OBJ', JSON.stringify(date.getTime()));
   if (diff < ONE_MINUTE) {
     return 'just now';
   } else if (diff < ONE_HOUR) {
@@ -37,6 +37,10 @@ export const getDateTimeAgo = date => {
     return convertToDateTime(date);
   }
 };
+
+export function constantTimeOffset() {
+  return new Date().getTimezoneOffset() * 60 * 1000;
+}
 
 export function getExpireDate() {
   let today = new Date();
