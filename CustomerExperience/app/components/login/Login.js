@@ -1,22 +1,19 @@
 import {
-  Image,
-  ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   View,
 } from 'react-native';
-import React, {useEffect, useRef, useState, useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import DeviceInfo from 'react-native-device-info';
 import {
   isStringNullOrEmpty,
   showErrorFlashMessage,
   validateEmail,
 } from '../../Utils/Utility';
-import QPTextField from '../../widgets/TextField';
 import QPButton from '../../widgets/Button';
-import {connect} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import {
   clearError,
   clearUserInfo,
@@ -31,7 +28,6 @@ import {loginStyles} from './login.styles';
 import StringUtils from '../../Utils/StringUtils';
 import {Colors} from '../../styles/color.constants';
 import QPSpinner from '../../widgets/QPSpinner';
-import SafeAreaView from 'react-native-safe-area-view';
 import {setDynamicLink} from '../../redux/actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -44,9 +40,14 @@ import {
 } from '../../api/Constant';
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 import {getExpireDate} from '../../Utils/TimeUtils';
-import {set} from 'lodash';
+import {translate} from '../../Utils/MultilinguaUtils';
 
-const stringConst = require('../../config/translations/en');
+import {useNavigation} from '@react-navigation/core';
+import EmailTextInput from './components/EmailTextInput';
+import PasswordTextInput from './components/PasswordTextInput';
+import AccessCodeTextInput from './components/AccessCodeTextInput';
+import CXLogo from './components/CXLogo';
+import LoginBackground from './components/LoginBackground';
 
 let getApiValidationErrorMessage = errorMessage => {
   console.log('getApiValidationErrorMessage', JSON.stringify(errorMessage));
@@ -57,103 +58,118 @@ let getApiValidationErrorMessage = errorMessage => {
   }
   return 'Error';
 };
-const RenderSpinnerLoginButton = ({isLoading, onPress}) => {
-  return isLoading ? (
-    <View style={loginStyles.signInButton}>
-      <QPSpinner spinnerColor={Colors.white} />
-    </View>
-  ) : (
+
+const checkValidation = ({email, password, accessCode}) => {
+  if (!validateEmail(email)) {
+    console.log('EMAIL NOT VALID');
+    showErrorFlashMessage(translate('onBoarding.invalidEmail'));
+
+    return false;
+  }
+  if (isStringNullOrEmpty(password)) {
+    showErrorFlashMessage(translate('onBoarding.invalidPassword'));
+
+    return false;
+  }
+
+  if (isStringNullOrEmpty(accessCode)) {
+    showErrorFlashMessage(translate('onBoarding.invalidCompanyCode'));
+
+    return false;
+  }
+
+  return true;
+};
+
+const RenderForgotPasswordButton = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const onPress = () => {
+    dispatch(clearError(false));
+    Keyboard.dismiss();
+    navigation.navigate('ForgotPassword');
+  };
+  return (
     <QPButton
-      testID="SignInButton"
-      style={loginStyles.signInButton}
-      buttonColor={Colors.accentLight}
+      style={loginStyles.forgotPswdButton}
+      buttonColor={Colors.fullTransparent}
       onPress={onPress}
-      buttonText={stringConst.onBoarding.signIn}
-      textStyle={loginStyles.signInText}
+      textStyle={loginStyles.forgotPasswordText}
+      buttonText={translate('onBoarding.forgotPassword')}
     />
   );
 };
 
-const Login = props => {
-  let timer = useRef(null);
-  let textFieldTimer = useRef(null);
-  const [userData, setUserData] = useState({
-    email: '',
-    password: '',
-    accessCode: '',
-  });
+const RenderSpinnerLoginButton = () => {
+  // const [login, setLogin] = useState({});
 
-  const [validation, setValidation] = useState('');
+  const dispatch = useDispatch();
+  const isLoading = useSelector(state => state.global.isLoading);
+  const login = useSelector(state => state.login);
+
+  const {
+    isError,
+    errorMessage,
+    dataCenter,
+    dynamicLink,
+    baseUrl,
+    clfBaseUrl,
+    subscriberId,
+    userInfo,
+  } = useSelector(state => state.global);
+
+  const globalAccessCode = useSelector(state => state.global.accessCode);
 
   useEffect(() => {
-    return function cleanup() {
-      props.clearError();
-
-      clearTimeout(timer);
-      clearTimeout(textFieldTimer);
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log('VALIDATION MSG', validation);
-    if (StringUtils.isNotEmpty(validation) || props.isError) {
-      let message = props.isError
-        ? getApiValidationErrorMessage(props.errorMessage)
-        : validation;
+    if (isError) {
+      let message = getApiValidationErrorMessage(errorMessage);
       const loginError = 'Invalid email/password combination.';
       const customeErrorMessage = 'Invalid credentials. Please try again';
       showErrorFlashMessage(
         message === loginError ? customeErrorMessage : message,
       );
-      // showSuccessFlashMessage('Logged in!');
-      props.clearUserInfo();
-      timer = setTimeout(() => {
-        setValidation('');
-      }, 1000);
+      dispatch(clearUserInfo());
     }
-  }, [validation, props.isError]);
+  }, [isError]);
 
   useEffect(() => {
-    if (props.baseUrl && StringUtils.isNotEmpty(props.baseUrl)) {
-      AsyncStorage.setItem(BASE_URL, props.baseUrl).then();
-      AsyncStorage.setItem(SUBSCRIBER_ID, props.subscriberId).then();
-      AsyncStorage.setItem(ACCESS_CODE, props.accessCode).then();
+    if (baseUrl && StringUtils.isNotEmpty(baseUrl)) {
+      AsyncStorage.setItem(BASE_URL, baseUrl).then();
+      AsyncStorage.setItem(SUBSCRIBER_ID, subscriberId).then();
+      AsyncStorage.setItem(ACCESS_CODE, globalAccessCode).then();
       AsyncStorage.setItem(ASYNC_LOGIN_EXPIRE_DATE, getExpireDate());
-      global.baseUrl = props.baseUrl;
-      global.subscriberId = props.subscriberId;
-      console.log('BASEURL', props.baseUrl);
-      console.log('SUBSCRIBER_ID', props.subscriberId);
-
+      global.baseUrl = baseUrl;
+      global.subscriberId = subscriberId;
+      console.log('BASEURL', baseUrl);
+      console.log('SUBSCRIBER_ID', subscriberId);
       onSignInPress();
     }
-  }, [props.baseUrl]);
+  }, [baseUrl]);
 
   useEffect(() => {
-    if (props.clfBaseUrl && StringUtils.isNotEmpty(props.clfBaseUrl)) {
-      AsyncStorage.setItem(ASYNC_CLF_BASE_URL, props.clfBaseUrl);
-
-      global.clfBaseUrl = props.clfBaseUrl;
-
-      callClfAuth(props.clfBaseUrl);
+    if (clfBaseUrl && StringUtils.isNotEmpty(clfBaseUrl)) {
+      AsyncStorage.setItem(ASYNC_CLF_BASE_URL, clfBaseUrl);
+      global.clfBaseUrl = clfBaseUrl;
+      callClfAuth(clfBaseUrl);
     }
-  }, [props.clfBaseUrl]);
+  }, [clfBaseUrl]);
 
-  function callClfAuth(clfBaseUrl) {
+  function callClfAuth() {
     const data = {
       clfBaseUrl,
-      emailAddress: props.userInfo.emailAddress,
-      userID: props.userInfo.userID,
-      feedbackID: props.userInfo.feedbackID,
-      feedbackApiKey: props.userInfo.feedbackApiKey,
+      emailAddress: userInfo.emailAddress,
+      userID: userInfo.userID,
+      feedbackID: userInfo.feedbackID,
+      feedbackApiKey: userInfo.feedbackApiKey,
     };
-
-    props.getClfAuth(data);
+    dispatch(clearError());
+    dispatch(getClfAuth(data));
   }
 
   const onSignInPress = () => {
     Keyboard.dismiss();
     AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(token => {
-      if (isStringNullOrEmpty(token) && isSignInPressed) {
+      if (isStringNullOrEmpty(token)) {
         console.log('onSignInPress: token:', token);
         checkNotificationPermission().then(() => onSignInPress());
       } else {
@@ -164,107 +180,58 @@ const Login = props => {
     });
   };
 
-  const authenticateAccessCode = useCallback(() => {
-    if (StringUtils.isEmpty(props.baseUrl) && checkValidation()) {
-      props.authenticatePanel({accessCode: userData.accessCode});
-    }
-  }, [userData.accessCode, props.authenticatePanel, props.baseUrl]);
-
   let loginAction = token => {
-    if (checkValidation()) {
+    if (checkValidation(login)) {
       let data = {
-        accessCode: userData.accessCode,
-        emailAddress: userData.email,
-        password: userData.password,
+        accessCode: login.accessCode,
+        emailAddress: login.email,
+        password: login.password,
         platform: Platform.OS,
         sourceMode: 'email',
         udId: DeviceInfo.getUniqueId(),
         pushToken: token,
-        dataCenter: props.dataCenter,
+        dataCenter: dataCenter,
       };
 
-      // console.log(`LOGIN DATA: ${JSON.stringify(data)}`);
       if (
-        StringUtils.isNotEmpty(props.dynamicLink) &&
-        props.dynamicLink.includes('resetpassword')
+        StringUtils.isNotEmpty(dynamicLink) &&
+        dynamicLink.includes('resetpassword')
       ) {
-        props.resetPasswordLink();
+        // resetPasswordLink
+        dispatch(setDynamicLink(''));
       }
-      props.loginClick(data);
+      // props.loginClick(data);
+      dispatch(clearError());
+      dispatch(doLogin(data));
+      dispatch(showLoading(true));
     }
   };
 
-  const checkValidation = useCallback(() => {
-    // console.log('Validate email: ' + validateEmail(userData.email));
-    console.log('VALIDATION MSG', 'checkValidation 1', validation);
-
-    if (!validateEmail(userData.email)) {
-      setValidation(stringConst.onBoarding.invalidEmail);
-      console.log('VALIDATION MSG', 'checkValidation email', validation);
-
-      return false;
-    }
-    if (isStringNullOrEmpty(userData.password)) {
-      setValidation(stringConst.onBoarding.invalidPassword);
-      console.log('VALIDATION MSG', 'checkValidation password', validation);
-
-      return false;
-    }
-
-    if (isStringNullOrEmpty(userData.accessCode)) {
-      setValidation(stringConst.onBoarding.invalidCompanyCode);
-      console.log('VALIDATION MSG', 'checkValidation accessCode', validation);
-
-      return false;
-    }
-    setValidation('');
-    console.log('VALIDATION MSG', 'checkValidation return', validation);
-
-    return true;
-  }, [validation, userData.email, userData.password, userData.accessCode]);
-
-  const onForgotPasswordPress = () => {
-    props.clearError();
-    Keyboard.dismiss();
-    props.navigation.navigate('ForgotPassword', {
-      email: userData.email,
-      accessCode: userData.accessCode,
-    });
-  };
-
-  const handleEmail = text => {
-    if (userData.email !== text) {
-      setUserData({
-        ...userData,
-        email: text,
-      });
+  const onPress = () => {
+    if (StringUtils.isEmpty(baseUrl) && checkValidation(login)) {
+      dispatch(authenticatePanel({accessCode: login?.accessCode ?? ''}));
     }
   };
+  return isLoading ? (
+    <View style={loginStyles.signInButton}>
+      <QPSpinner spinnerColor={Colors.white} />
+    </View>
+  ) : (
+    <QPButton
+      testID="SignInButton"
+      style={loginStyles.signInButton}
+      buttonColor={Colors.accentLight}
+      onPress={onPress}
+      buttonText={translate('onBoarding.signIn')}
+      textStyle={loginStyles.signInText}
+    />
+  );
+};
 
-  const handlePassword = text => {
-    if (userData.password !== text) {
-      setUserData({
-        ...userData,
-        password: text,
-      });
-    }
-  };
-
-  const handleAccessCode = text => {
-    if (userData.accessCode !== text) {
-      setUserData({
-        ...userData,
-        accessCode: text,
-      });
-    }
-  };
-
-  // const handleSubmit = text => {
-  //   authenticateAccessCode();
-  // };
-
-  const renderSignTextFieldAndButton = () => {
-    return (
+const Login = props => {
+  console.log('LOGIN RENDERED');
+  return (
+    <LoginBackground>
       <ScrollView
         contentContainerStyle={loginStyles.scrollContainer}
         keyboardDismissMode="on-drag"
@@ -277,130 +244,16 @@ const Login = props => {
             android: -200,
           })}
           enabled>
-          <View style={{flex: 1}}>
-            <View style={loginStyles.logo}>
-              <Image
-                style={loginStyles.logoImage}
-                resizeMode="contain"
-                source={require('../../config/images/cx-logo.png')}
-              />
-            </View>
-
-            <QPTextField
-              secureText={false}
-              testID="emailTextField"
-              autofocus={false}
-              label={stringConst.onBoarding.email}
-              defaultValue={''}
-              style={loginStyles.emailInput}
-              onEndEdit={handleEmail}
-              onChange={handleEmail}
-              onSubmitEditing={() => {
-                textFieldTimer = setTimeout(() => {
-                  Keyboard.dismiss();
-                }, 5);
-              }}
-            />
-            <QPTextField
-              testID="passwordTextField"
-              secureText={true}
-              label={stringConst.onBoarding.password}
-              defaultValue={''}
-              style={loginStyles.emailInput}
-              onEndEdit={handlePassword}
-              onChange={handlePassword}
-              onSubmitEditing={() => {
-                textFieldTimer = setTimeout(() => {
-                  Keyboard.dismiss();
-                }, 5);
-              }}
-              value={userData.password}
-            />
-            <QPTextField
-              testID="companyCodeTextField"
-              defaultValue={''}
-              label={stringConst.onBoarding.companyCode}
-              style={loginStyles.emailInput}
-              onChange={handleAccessCode}
-              onEndEdit={handleAccessCode}
-              onSubmitEditing={() => {
-                textFieldTimer = setTimeout(() => {
-                  Keyboard.dismiss();
-                }, 5);
-              }}
-              value={userData.accessCode}
-              returnKey={'done'}
-            />
-          </View>
+          <CXLogo />
+          <EmailTextInput />
+          <PasswordTextInput />
+          <AccessCodeTextInput />
         </KeyboardAvoidingView>
-        <RenderSpinnerLoginButton
-          isLoading={props.isLoading}
-          onPress={authenticateAccessCode}
-        />
-        <QPButton
-          style={loginStyles.forgotPswdButton}
-          buttonColor={Colors.fullTransparent}
-          onPress={onForgotPasswordPress}
-          textStyle={loginStyles.forgotPasswordText}
-          buttonText={stringConst.onBoarding.forgotPassword}
-        />
+        <RenderSpinnerLoginButton />
+        <RenderForgotPasswordButton />
       </ScrollView>
-    );
-  };
-
-  return (
-    <ImageBackground
-      testID="login-container"
-      resizeMode={'cover'}
-      source={require('../../config/images/background1.png')}
-      style={loginStyles.container}>
-      <SafeAreaView
-        forceInset={{top: 'always', bottom: 'never'}}
-        style={loginStyles.safeArea}>
-        {renderSignTextFieldAndButton()}
-      </SafeAreaView>
-    </ImageBackground>
+    </LoginBackground>
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    isLoading: state.global.isLoading,
-    isError: state.global.isError,
-    errorMessage: state.global.errorMessage,
-    dynamicLink: state.global.dynamicLink,
-    dataCenter: state.global.dataCenter,
-    baseUrl: state.global.baseUrl,
-    clfBaseUrl: state.global.clfBaseUrl,
-    subscriberId: state.global.subscriberId,
-    userInfo: state.global.userInfo,
-    accessCode: state.global.accessCode,
-  };
-};
-
-const mapDispatchToProps = dispatch => ({
-  getClfAuth: param => {
-    dispatch(clearError());
-    dispatch(getClfAuth(param));
-  },
-  authenticatePanel: param => {
-    dispatch(clearError());
-    dispatch(authenticatePanel(param));
-  },
-  loginClick: data => {
-    dispatch(clearError());
-    dispatch(doLogin(data));
-    dispatch(showLoading(true));
-  },
-  clearError: () => {
-    dispatch(clearError(false));
-  },
-  resetPasswordLink: () => {
-    dispatch(setDynamicLink(''));
-  },
-  clearUserInfo: () => {
-    dispatch(clearUserInfo());
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

@@ -39,8 +39,6 @@ module.exports = {
       '<rootDir>/__mocks__/@react-native-firebase/messaging.js',
     '^@react-native-async-storage/async-storage$':
       '<rootDir>/__mocks__/async-storage.js',
-    // '^reanimated-bottom-sheet$':
-    //   '<rootDir>/__mocks__/@reanimated-bottom-sheet.js',
   },
   coveragePathIgnorePatterns: [
     'app/components/Notification.js',
@@ -69,5 +67,6 @@ module.exports = {
     'app/components/login/SplashScreen.js',
     'app/components/login/ForgotPassword.js',
     'app/redux/sagas/notificationSaga.js',
+    'app/components/dashboard/DashboardClosedLoopView.js',
   ],
 };

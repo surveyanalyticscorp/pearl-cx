@@ -1,4 +1,5 @@
 import {getUniqueValues} from '../../Utils/TicketUtils';
+import {CLEAR_USER_INFO} from '../actions';
 import {
   ACTIONS_RECEIVED,
   ACTION_HISTORY_DETAILS_RECEIVED,
@@ -42,6 +43,7 @@ import {
   SET_TOKEN_EXPIRE_DATE,
   IS_CSAT_VIEW_TOP_BOX,
   SET_MOVE_NEXT,
+  CLEAR_DASHBOARD,
 } from '../actions/dashboard.actions';
 import {
   SET_EMAIL_SUBJECT,
@@ -428,6 +430,13 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         skipWelcome: action.doesMoveNext,
+      };
+    }
+
+    case CLEAR_DASHBOARD: {
+      console.log('CLEAR_DASHBOARD');
+      return {
+        ...initialState,
       };
     }
 

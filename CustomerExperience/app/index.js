@@ -13,13 +13,13 @@ import {
 import {enableScreens} from 'react-native-screens';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as globalVariables from '../app/styles/globalStyleVariables';
-import {View, Platform, StatusBar, AppState} from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import {MarginConstants} from './styles/margin.constants';
+import {View, Platform, StatusBar} from 'react-native';
 import Toast from 'react-native-toast-message';
 import toastConfig from './config/toastConfig';
 import AppTimeTracker from './Utils/AppTimeTracker';
-import SaveTimeDataToStorage from './Utils/SaveTimeDataToStorage';
+import {sendAnalyticsEvent} from './Utils/AnalyticLogs';
+import {ANALYTICS_EVENTS} from './Utils/Analytic.constants';
+import AppInfo from './Utils/AppInfo';
 
 // import codePush from 'react-native-code-push';
 
@@ -80,7 +80,10 @@ const CxApp = () => {
     }
 
     AppTimeTracker.start(totalTime => {
-      console.log('App Total Time Spent (ms):', totalTime);
+      sendAnalyticsEvent(ANALYTICS_EVENTS.APP_SCREEN_TIME, {
+        appScreenTime: JSON.stringify(totalTime),
+        ...AppInfo,
+      });
     });
     const currentNetworkMonitor = networkMonitor.current;
     currentNetworkMonitor.start();

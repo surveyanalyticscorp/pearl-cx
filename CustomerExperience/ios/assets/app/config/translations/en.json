@@ -16,13 +16,13 @@
     "invalidEmail": "Please enter valid email address",
     "invalidPassword": "Please enter valid password",
     "invalidCompanyCode": "Please enter valid company code",
-    "signIn": "Sign In",
-    "email": "Email Address",
+    "signIn": "Sign in",
+    "email": "Email",
     "password": "Password",
     "companyCode": "Company code",
     "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset Password",
-    "forgotPasswordMessage": "Please enter the details below and hit Reset Password button to reset your password.",
+    "resetPassword": "Reset password",
+    "forgotPasswordMessage": "Please enter the details below and hit Reset password button to reset your password.",
     "passwordNotMatching": "Password and Confirm password not matching",
     "resetPasswordMessage": "Please enter the new password and hit the Update button to change your password.",
     "welcomeBack": "Welcome back",
@@ -78,7 +78,7 @@
     "customer_email": "Customer email:",
     "origin_segment": "Origin segment:",
     "current_segment": "Current segment:",
-    "ticket_owner": "Ticket Owner:",
+    "ticket_owner": "Ticket owner:",
     "created_on": "Created on:",
     "customer_comments": "Customer comments:",
     "author": "Author: ",
@@ -92,7 +92,7 @@
     "no_comments": "No comments",
     "submit": "Submit",
     "update": "Update",
-    "copied_success": "Ticket id copied to clipboard"
+    "copied_success": "Ticket ID copied to clipboard"
   },
   "ticket_list": {
     "alert": "Alert!",
@@ -108,7 +108,7 @@
     "select_status": "Select status",
     "select_priority": "Select priority",
     "select_ticket_owner": "Select ticket owner",
-    "assigned_to": "Assigned to",
+    "assigned_to": "Assigned to:",
     "contact": "Contact"
   },
   "comment": {
@@ -199,7 +199,7 @@
   "logout_confirmation_message": "Are you sure you want to logout?",
   "yes": "Yes",
   "no": "No",
-  "exit_app": "Exit App",
+  "exit_app": "Exit app",
   "exit_message": "Are you sure?",
   "cancel": "cancel",
   "no_items_found": "No items found",

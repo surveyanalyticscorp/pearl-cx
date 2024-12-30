@@ -298,7 +298,6 @@ export function* syncTickets(action) {
     while (hasNextCall) {
       response = yield WebServiceHandler.get(
         getClfUrl(syncTicketList(action.feedbackID)),
-        // {'Auth-Token': action.token},
         getBearerTokenStatic(),
         action.param,
       );
@@ -320,6 +319,8 @@ export function* syncTickets(action) {
   } catch (error) {
     if (JSON.stringify(error).includes('jwt expired')) {
       yield put({type: SET_TOKEN_EXPIRED, isTokenExpired: true});
+    } else if (JSON.stringify(error).includes('ticketsHttpException')) {
+      console.log('TICKET_SYNC_ERROR', JSON.stringify(error));
     } else {
       yield put({
         type: API_ERROR,

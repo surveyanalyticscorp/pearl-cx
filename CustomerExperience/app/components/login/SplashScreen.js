@@ -10,7 +10,7 @@ import {
   ASYNC_USER_INFO,
   BASE_URL,
 } from '../../api/Constant';
-import {connect, useDispatch} from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import {
   fillUserInfo,
   setAuthToken,
@@ -26,6 +26,14 @@ import {setLanguageInfo, setRangeFilter} from '../../redux/actions';
 import AppRouter from '../../routes/appRouter';
 import {setBaseUrl} from '../../redux/actions/login.actions';
 import moment from 'moment';
+import {sendAnalyticsEvent} from '../../Utils/AnalyticLogs';
+import {
+  ANALYTICS_EVENTS,
+  ANALYTICS_EVENTS_SCREEN,
+} from '../../Utils/Analytic.constants';
+import DeviceInfo from 'react-native-device-info';
+import AppInfo from '../../Utils/AppInfo';
+import useLogoutProcess from '../../routes/drawerContent/useLogoutProcess';
 
 const isExpireDateValid = expireDate => {
   const today = new Date();
@@ -34,6 +42,7 @@ const isExpireDateValid = expireDate => {
 
 function SplashScreen(props) {
   let [moveNext, setMoveNext] = useState(false);
+
   let splashTimer = useRef(null);
   const dispatch = useDispatch();
 
@@ -119,6 +128,10 @@ function SplashScreen(props) {
   }, []);
 
   let renderSplashScreenView = () => {
+    sendAnalyticsEvent(ANALYTICS_EVENTS.APP_OPEN, {
+      screen: ANALYTICS_EVENTS_SCREEN.SPLASH_SCREEN,
+      ...AppInfo,
+    });
     return (
       <ImageBackground
         testID="splash-background"

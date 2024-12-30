@@ -53,6 +53,7 @@ import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
 import SegmentSelector from '../components/SegmentSelector';
 import Feedback from '../components/feedback/Feedback';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
+import {clearLoginUser} from '../redux/actions/login.action';
 
 const Drawer = createDrawerNavigator();
 const DetractorStack = createStackNavigator();
@@ -169,6 +170,7 @@ const AppRouter = props => {
   useEffect(() => {
     if (authToken && baseUrl) {
       dispatch(getNotification(authToken));
+      dispatch(clearLoginUser());
     }
   }, [authToken, baseUrl]);
 
@@ -327,7 +329,7 @@ const AppRouter = props => {
           headerTitle: props => {
             return (
               <SegmentSelector
-                screenName={translate('dashboard.closed_loop')}
+                screenName={'ClosedLoop'}
                 navigation={navigation}
               />
             );

@@ -15,7 +15,6 @@ import {
 } from '../../redux/actions/dashboard.actions';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
-import {Colors} from '../../styles/color.constants';
 import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
 import moment from 'moment';
@@ -24,30 +23,18 @@ import {MarginConstants} from '../../styles/margin.constants';
 import StringUtils from '../../Utils/StringUtils';
 import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import {setRangeFilter} from '../../redux/actions';
-// import {DashboardClosedLoopView} from './DashboardClosedLoopView';
 import {translate} from '../../Utils/MultilinguaUtils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {HeaderFilter} from '../../routes/commonUI/CommonUI';
 import FabAddButton from '../../routes/commonUI/FabAddButton';
-import NpsGaugeChart from '../../widgets/dashboardWidget/NpsGaugeChart';
-import {baseTextStyles} from '../../styles/text.styles';
-import {FontWeight} from '../../styles/font.constants';
 import Animated from 'react-native-reanimated';
 import {
   ClosedLoopDashboard,
   StatusDashboardBottomSheet,
 } from './ClosedLoopDashboard';
-import ScoreIndicatorIcon from '../../widgets/dashboardWidget/ScoreIndicatorIcon';
-import DottedLine from '../../widgets/dashboardWidget/DottedLine';
-import TextLabel from '../../widgets/TextLabel/TextLabel';
-import CsatToggleButton from '../../widgets/dashboardWidget/CsatToggleButton';
-import CsatScoreLabel from '../../widgets/dashboardWidget/CsatScoreLabel';
-import CsatChart from '../../widgets/dashboardWidget/CsatChart';
-import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTitle';
-import ResponsesButton from '../../widgets/dashboardWidget/ResponsesButton';
-import RenderInfoContainer from '../../widgets/dashboardWidget/RenderInfoContainer';
-import LegendScoreView from '../../widgets/dashboardWidget/LegendScoreView';
+
+import RenderSegmentDashboardData from './cxDashboard/RenderSegmentDashboardData';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -55,236 +42,28 @@ const wait = timeout => {
   });
 };
 
-let getNPSColor = nps => {
-  if (nps < 0) {
-    return Colors.detractor2;
-  } else if (nps >= 0 && nps <= 50) {
-    return Colors.passive2;
-  } else {
-    return Colors.promoter2;
-  }
-};
-
-const NPSIcon = () => {
-  const {npsPercentage} = useSelector(
-    state => state.dashboard?.currentNPSData?.NPSScore,
-  );
-  return (
-    <View style={dashboardStyles.npsIcon}>
-      <View
-        style={[
-          dashboardStyles.roundSquareShape,
-          {backgroundColor: getNPSColor(npsPercentage)},
-        ]}
-      />
-      <DottedLine borderStyle="solid" />
-    </View>
-  );
-};
-
-const NpsScoreView = () => {
-  const {npsPercentage, benchmarkScore} = useSelector(
-    state => state.dashboard?.currentNPSData?.NPSScore,
-  );
-  const hasBenchmark = benchmarkScore && benchmarkScore !== 0;
-
-  return (
-    <View style={dashboardStyles.squareView}>
-      <NPSIcon />
-      <TextLabel text={'NPS:'} fontWeight={FontWeight.bold} />
-      <TextLabel
-        text={StringUtils.floatToDecimal(npsPercentage)}
-        fontWeight={FontWeight.bold}
-        color={getNPSColor(npsPercentage)}
-      />
-      {hasBenchmark ? (
-        <TextLabel
-          text={`${StringUtils.floatToDecimal(npsPercentage - benchmarkScore)}`}
-          baseTextStyle={baseTextStyles.semiSecondaryRegularText}
-          color={Colors.evenDarkerGrey}
-        />
-      ) : (
-        <View />
-      )}
-      {hasBenchmark ? (
-        <ScoreIndicatorIcon diff={npsPercentage - benchmarkScore} />
-      ) : (
-        <View />
-      )}
-    </View>
-  );
-};
-
-const BenchmarkIcon = ({benchmark}) => {
-  return (
-    <View>
-      <View
-        style={[
-          dashboardStyles.roundSquareShape,
-          {backgroundColor: getNPSColor(benchmark)},
-        ]}
-      />
-      <DottedLine />
-    </View>
-  );
-};
-const BenchmarkView = () => {
-  const {benchmarkScore} = useSelector(
-    state => state.dashboard.currentNPSData?.NPSScore,
-  );
-  return benchmarkScore !== 0 ? (
-    <View style={dashboardStyles.squareView}>
-      <BenchmarkIcon benchmark={benchmarkScore} />
-      <TextLabel text={`Benchmark: ${benchmarkScore}`} />
-    </View>
-  ) : (
-    <View style={dashboardStyles.emptyBenchmarkView} />
-  );
-};
-
-const RenderSegmentDashboardData = () => {
-  const {scoringModel, primaryStoreName} = useSelector(
-    state => state.dashboard?.dashboardData,
-  );
-
-  const currentSegmentName = useSelector(
-    state => state.dashboard?.currentSegment?.currentSegment,
-  );
-
-  const title = `${currentSegmentName ?? primaryStoreName} ${
-    scoringModel === 1 ? 'CSAT' : 'NPS'
-  }`;
-  return (
-    <View
-      style={
-        scoringModel === 1
-          ? dashboardStyles.csatChartContainer
-          : dashboardStyles.chartContainer
-      }>
-      <DashboardWidgetTitle text={title}>
-        <ResponsesButton />
-      </DashboardWidgetTitle>
-      <RenderInfoContainer />
-      {scoringModel && scoringModel === 1 ? (
-        <RenderCSATChart />
-      ) : (
-        <RenderNPSChart />
-      )}
-    </View>
-  );
-};
-
-const ChartLegendView = () => {
-  const {
-    promoters,
-    passive,
-    detractors,
-    promoterPercent,
-    passivePercent,
-    detractorPercent,
-  } = useSelector(state => state.dashboard.currentNPSData?.NPSScore);
-
-  const {scoringModel} = useSelector(state => state.dashboard?.dashboardData);
-  return (
-    <View
-      style={
-        scoringModel === 1
-          ? dashboardStyles.csatLegendContainer
-          : dashboardStyles.npsLegendContainer
-      }>
-      <LegendScoreView
-        title={scoringModel === 1 ? 'Negatives' : 'Detractors'}
-        count={detractors}
-        percentage={detractorPercent}
-        backgroundColor={Colors.detractor2}
-      />
-      <LegendScoreView
-        title={scoringModel === 1 ? 'Neutral' : 'Passive'}
-        count={passive}
-        percentage={passivePercent}
-        backgroundColor={Colors.passive2}
-      />
-      <LegendScoreView
-        title={scoringModel === 1 ? 'Positives' : 'Promoters'}
-        count={promoters}
-        percentage={promoterPercent}
-        backgroundColor={Colors.promoter2}
-      />
-    </View>
-  );
-};
-
-const NPSView = () => {
-  return (
-    <View style={dashboardStyles.npsViewContainer}>
-      <NpsGaugeChart />
-      <NpsScoreView />
-      <BenchmarkView />
-      <ChartLegendView />
-    </View>
-  );
-};
-
-const RenderNoDataFound = () => {
-  return (
-    <View style={dashboardStyles.emptyView}>
-      <Text style={dashboardStyles.emptyText}>
-        {translate('dashboard.no_segment_found')}
-      </Text>
-    </View>
-  );
-};
-
-function RenderNPSChart() {
-  const NPSScore = useSelector(
-    state => state.dashboard.currentNPSData?.NPSScore,
-  );
-
-  return (
-    <View style={dashboardStyles.renderNpsChartContainer}>
-      {NPSScore ? <NPSView /> : <View />}
-    </View>
-  );
-}
-
-const ClosedLoopView = props => {
+const ClosedLoopView = ({openStatusBS}) => {
   return (
     <View style={dashboardStyles.closedLoopView}>
-      <ClosedLoopDashboard {...props} />
+      <ClosedLoopDashboard openStatusBS={openStatusBS} />
     </View>
   );
 };
 
-let RenderDashboardContent = props => {
-  if (
-    !props.isError &&
-    !props.isLoading &&
-    !isObjectEmpty(props.dashboardData)
-  ) {
+let RenderDashboardContent = ({openStatusBS}) => {
+  const isError = useSelector(state => state.global.isError);
+  const isLoading = useSelector(state => state.global.isLoading);
+  const dashboardData = useSelector(state => state.dashboard.dashboardData);
+
+  if (!isError && !isLoading && !isObjectEmpty(dashboardData)) {
     return (
       <SafeAreaView>
         <RenderSegmentDashboardData />
-        <ClosedLoopView {...props} />
+        <ClosedLoopView openStatusBS={openStatusBS} />
       </SafeAreaView>
     );
   }
   return <View style={dashboardStyles.container} />;
-};
-
-const RenderCSATChart = () => {
-  const NPSScore = useSelector(
-    state => state.dashboard.currentNPSData?.NPSScore,
-  );
-  return NPSScore ? (
-    <View style={dashboardStyles.csatContainer}>
-      <CsatChart />
-      <CsatScoreLabel />
-      <CsatToggleButton />
-      <ChartLegendView />
-    </View>
-  ) : (
-    <View />
-  );
 };
 
 const CxDashboard = props => {
@@ -429,49 +208,6 @@ const CxDashboard = props => {
     }
   };
 
-  let RenderDashboard = () => {
-    return (
-      <View
-        testID="cx-dashboard"
-        forceInset={{bottom: 'never', top: 'never'}}
-        style={[
-          dashboardStyles.container,
-          {paddingBottom: MarginConstants.tab1},
-        ]}>
-        <Animated.View
-          style={[
-            dashboardStyles.container,
-
-            {
-              opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-            },
-          ]}>
-          <HeaderFilter hasFilterIcon={false} />
-
-          <ScrollView
-            contentContainerStyle={dashboardStyles.scrollView}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }>
-            <View style={dashboardStyles.container}>
-              <RenderDashboardContent openStatusBS={openStatusBS} {...props} />
-              {renderSpinner()}
-              {exitAlert && renderExitAlert()}
-            </View>
-          </ScrollView>
-        </Animated.View>
-        <FabAddButton onPress={onFabPressHandler} />
-
-        <StatusDashboardBottomSheet
-          ref={statusBottomSheetRef}
-          snapPoints={statusBottomSheetSnapPoints}
-          fall={fall}
-          ticketCount={props.ticketCount}
-        />
-      </View>
-    );
-  };
-
   let renderSpinner = () => {
     if (props.isLoading) {
       return (
@@ -486,7 +222,46 @@ const CxDashboard = props => {
     props.navigation.navigate(translate('responses.new_ticket'));
   };
 
-  return <RenderDashboard />;
+  return (
+    <View
+      testID="cx-dashboard"
+      forceInset={{bottom: 'never', top: 'never'}}
+      style={[
+        dashboardStyles.container,
+        {paddingBottom: MarginConstants.tab1},
+      ]}>
+      <Animated.View
+        style={[
+          dashboardStyles.container,
+
+          {
+            opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+          },
+        ]}>
+        <HeaderFilter hasFilterIcon={false} />
+
+        <ScrollView
+          contentContainerStyle={dashboardStyles.scrollView}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+          <View style={dashboardStyles.container}>
+            <RenderDashboardContent openStatusBS={openStatusBS} {...props} />
+            {renderSpinner()}
+            {exitAlert && renderExitAlert()}
+          </View>
+        </ScrollView>
+      </Animated.View>
+      <FabAddButton onPress={onFabPressHandler} />
+
+      <StatusDashboardBottomSheet
+        ref={statusBottomSheetRef}
+        snapPoints={statusBottomSheetSnapPoints}
+        fall={fall}
+        ticketCount={props.ticketCount}
+      />
+    </View>
+  );
 };
 
 const mapStateToProps = state => {

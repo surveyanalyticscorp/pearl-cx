@@ -43,7 +43,9 @@ const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
         ItemSeparatorComponent={statusListItemSeparator}
-        ListFooterComponent={<ApplyButton onPress={onApplyPress} />}
+        ListFooterComponent={
+          <ApplyButton buttonText={'Set status'} onPress={onApplyPress} />
+        }
       />
     </View>
   );

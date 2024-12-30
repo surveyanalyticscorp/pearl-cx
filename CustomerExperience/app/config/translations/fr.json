@@ -16,13 +16,13 @@
     "invalidEmail": "Please enter valid email address",
     "invalidPassword": "Please enter valid password",
     "invalidCompanyCode": "Please enter valid company code",
-    "signIn": "Sign In",
-    "email": "Email Address",
+    "signIn": "Sign in",
+    "email": "Email",
     "password": "Password",
-    "companyCode": "Company Code",
-    "forgotPassword": "Forgot Password?",
-    "resetPassword": "Reset Password",
-    "forgotPasswordMessage": "Please enter the details below and hit Reset Password button to reset your password.",
+    "companyCode": "Company code",
+    "forgotPassword": "Forgot password?",
+    "resetPassword": "Reset password",
+    "forgotPasswordMessage": "Please enter the details below and hit Reset password button to reset your password.",
     "passwordNotMatching": "Password and Confirm password not matching",
     "resetPasswordMessage": "Please enter the new password and hit the Update button to change your password.",
     "welcomeBack": "Welcome back",
@@ -51,10 +51,10 @@
     "clear_all_notification": "Effacer toutes les notifications",
     "are_you_sure": "Êtes-vous sûr?",
     "no_notification_to_display": "Aucune notification à afficher",
-    "new_responses": "New Responses",
-    "new_tickets": "New Tickets",
+    "new_responses": "New responses",
+    "new_tickets": "New tickets",
     "overdues": "Overdues",
-    "view_responses": "View Responses",
+    "view_responses": "View responses",
     "total": "Total",
     "cx_tickets": "CX tickets"
   },
@@ -92,7 +92,7 @@
     "no_comments": "Sans commentaires",
     "submit": "Soumettre",
     "update": "Mettre à jour",
-    "copied_success": "Ticket id copied to clipboard"
+    "copied_success": "Ticket ID copied to clipboard"
   },
   "ticket_list": {
     "alert": "Alert!",
@@ -102,7 +102,7 @@
   "ticket_overview": {
     "take_action": "Take ction",
     "description": "Description",
-    "ticket_id": "Ticket Id",
+    "ticket_id": "Ticket ID",
     "filter_ticket": "Filter ticket",
     "delete_ticket": "Delete ticket",
     "select_status": "Select status",
@@ -113,7 +113,7 @@
   },
   "comment": {
     "Comments": "Comments",
-    "reply": "reply",
+    "reply": "Reply",
     "write_a_comment": "Write a comment",
     "write_a_reply": "Write a reply"
   },

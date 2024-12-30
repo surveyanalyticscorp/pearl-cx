@@ -3,11 +3,10 @@ import {
   View,
   Image,
   StyleSheet,
-  ImageBackground,
-  TouchableWithoutFeedback,
   Text,
   Alert,
   Platform,
+  Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome5';
@@ -18,37 +17,74 @@ import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {clearUserInfo} from '../redux/actions';
 import {doLogout} from '../redux/actions/login.actions';
-import {connect, useSelector} from 'react-redux';
-import {
-  ACCESS_CODE,
-  ASYNC_AUTH_TOKEN,
-  ASYNC_BEARER_TOKEN,
-  ASYNC_CLF_BASE_URL,
-  ASYNC_LOGIN_EXPIRE_DATE,
-  ASYNC_PUSH_TOKEN,
-  ASYNC_USER_CREDENTIALS,
-  ASYNC_USER_INFO,
-  BASE_URL,
-} from '../api/Constant';
+import {useDispatch, useSelector} from 'react-redux';
+import {ASYNC_PUSH_TOKEN, ASYNC_USER_CREDENTIALS} from '../api/Constant';
 import {Sizes} from '../styles/Size.constant';
 import {PaddingConstants} from '../styles/padding.constants';
 import StringUtils from '../Utils/StringUtils';
 import DeviceInfo from 'react-native-device-info';
-import {isObjectEmpty, isStringNullOrEmpty} from '../Utils/Utility';
+import {isStringNullOrEmpty} from '../Utils/Utility';
 import messaging from '@react-native-firebase/messaging';
 import {DrawerActions} from '@react-navigation/native';
-import QPSpinner from '../widgets/QPSpinner';
 import {Notifications} from 'react-native-notifications';
 import {translate} from '../Utils/MultilinguaUtils';
 import {setTokenExpired} from '../redux/actions/dashboard.actions';
 import TicketSync from '../components/TicketSync';
+import ClosedLoopSvgIcon from '../../assets/images/closed_loop.svg';
+import DrawerBackground from './commonUI/DrawerBackground';
+import TextLabel from '../../app/widgets/TextLabel/TextLabel';
+import useLogoutProcess from './drawerContent/useLogoutProcess';
+import {log} from 'react-native-reanimated';
+import logoutDialog from './drawerContent/LogoutDialog';
 
-const DrawerContent = props => {
-  const [userCredentials, setUserCredentials] = useState('');
-  const [logoutAlert, setLogoutAlert] = useState(false);
-  const [loading, setLoading] = useState(false);
-  // const expirationDate = useSelector(state => state.dashboard.expirationDate);
+const LogoutButton = ({navigation}) => {
+  const dispatch = useDispatch();
+  const authToken = useSelector(state => state.global.authToken);
   const isTokenExpired = useSelector(state => state.dashboard.isTokenExpired);
+  const [logoutAlert, setLogoutAlert] = useState(false);
+  const removeCashedData = () => {
+    AsyncStorage.clear().then(() => {
+      dispatch(clearUserInfo());
+      setLogoutAlert(false);
+      global.baseUrl = '';
+      global.clfBaseUrl = '';
+      global.subscriberId = '';
+      global.bearerToken = '';
+      global.authToken = '';
+    });
+  };
+  let callLogoutAPI = (emailAddress, accessCode, token) => {
+    let params = {
+      accessCode: accessCode,
+      emailAddress: emailAddress,
+      pushToken: token,
+      udid: DeviceInfo.getDeviceId(),
+    };
+
+    dispatch(doLogout(authToken, params));
+    dispatch(setTokenExpired(true));
+    Notifications.removeAllDeliveredNotifications();
+    removeCashedData();
+  };
+
+  let logoutAction = () => {
+    AsyncStorage.multiGet([ASYNC_PUSH_TOKEN, ASYNC_USER_CREDENTIALS]).then(
+      response => {
+        let pushToken = response[0][1];
+        let user = JSON.parse(response[1][1]);
+
+        if (!isStringNullOrEmpty(pushToken)) {
+          callLogoutAPI(user.email, user.accessCode, pushToken);
+        } else {
+          messaging()
+            .getToken()
+            .then(token => {
+              callLogoutAPI(user.email, user.accessCode, token);
+            });
+        }
+      },
+    );
+  };
 
   useEffect(() => {
     if (isTokenExpired) {
@@ -58,142 +94,6 @@ const DrawerContent = props => {
       console.log('not EXPIRED');
     }
   }, [isTokenExpired]);
-
-  useEffect(() => {
-    let hasValue = true;
-    AsyncStorage.getItem(ASYNC_USER_CREDENTIALS).then(value => {
-      if (hasValue) {
-        setUserCredentials(JSON.parse(value));
-      }
-    });
-
-    return () => {
-      hasValue = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isObjectEmpty(props.logoutResponse)) {
-      // if (props.logoutResponse.statusCode === 200) {
-      AsyncStorage.clear().then(() => {
-        props.clearUserData();
-        setLogoutAlert(false);
-        setLoading(false);
-      });
-      // }
-    }
-  }, [props.logoutResponse]);
-
-  const renderDrawerButtons = () => {
-    return (
-      <View>
-        <TicketSync />
-        <TouchableWithoutFeedback
-          onPress={() => {
-            props.navigation.navigate('Dashboard');
-          }}>
-          <View style={styles.drawerRow}>
-            <Icon
-              size={1.3 * Sizes.icons}
-              color={Colors.filterIconColor}
-              name={'dashboard'}
-              style={styles.rowIcon}
-            />
-            <Text style={styles.labelStyle}>
-              {translate('dashboard.dashboard')}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            props.navigation.navigate('Responses');
-          }}>
-          <View style={styles.drawerRow}>
-            <Icon
-              size={1.3 * Sizes.icons}
-              color={Colors.filterIconColor}
-              name={'feedback'}
-              style={styles.rowIcon}
-            />
-            <Text style={styles.labelStyle}>
-              {translate('responses.responses')}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            props.navigation.navigate('ClosedLoop');
-          }}>
-          <View style={styles.drawerRow}>
-            {/* <MyIcon
-              size={1.3 * Sizes.icons}
-              color={Colors.filterIconColor}
-              name={'ticket-account'}
-              style={styles.rowIcon}
-            /> */}
-            <Image
-              source={require('./../../assets/images/closed_loop.png')}
-              style={[styles.rowIcon, {height: 24, width: 24}]}
-            />
-            <Text style={styles.labelStyle}>{'Closedloop'}</Text>
-          </View>
-        </TouchableWithoutFeedback>
-        {/* 
-        <TouchableWithoutFeedback
-          onPress={() => {
-            props.navigation.navigate(translate('Tickets'));
-          }}>
-          <View style={styles.drawerRow}>
-            <MyIcon
-              size={1.3 * Sizes.icons}
-              color={Colors.accent}
-              name={'ticket-account'}
-              style={styles.rowIcon}
-            />
-            <Text style={styles.labelStyle}>
-              {translate('dashboard.tickets')}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback> */}
-        {/* <TouchableWithoutFeedback
-          onPress={() => {
-            props.navigation.navigate(translate('dashboard.notifications'));
-          }}>
-          <View style={styles.drawerRow}>
-            <MyIcon
-              name={'bell'}
-              size={1.3 * Sizes.icons}
-              color={Colors.filterIconColor}
-              style={styles.rowIcon}
-            />
-            <Text style={styles.labelStyle}>
-              {translate('dashboard.notifications')}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback> */}
-        {/* <TouchableWithoutFeedback
-          onPress={() => {
-            props.navigation.navigate('Search Response');
-          }}>
-          <View style={styles.drawerRow}> */}
-        {/* <Icon
-              size={1.3 * Sizes.icons}
-              color={Colors.accent}
-              name={'settings'}
-              style={styles.rowIcon}
-            /> */}
-        {/* <Icon
-              name={'search'}
-              size={1.3 * Sizes.icons}
-              color={Colors.filterIconColor}
-              style={styles.rowIcon}
-            /> */}
-        {/* <Text style={styles.labelStyle}>{'Search'}</Text> */}
-        {/* </View>
-        </TouchableWithoutFeedback> */}
-      </View>
-    );
-  };
 
   const renderDialog = () => {
     return Alert.alert(
@@ -215,163 +115,175 @@ const DrawerContent = props => {
     );
   };
 
-  let renderSpinner = () => {
-    if (loading) {
-      return (
-        <View style={styles.loading}>
-          <QPSpinner />
-        </View>
-      );
-    }
+  const popLogoutDialog = () => {
+    navigation.dispatch(DrawerActions.toggleDrawer());
+    !logoutAlert && setLogoutAlert(true);
   };
-
-  let logoutAction = () => {
-    AsyncStorage.multiGet([ASYNC_PUSH_TOKEN, ASYNC_USER_CREDENTIALS]).then(
-      response => {
-        let token = response[0][1];
-        let userDetails = response[1][1];
-        if (!isStringNullOrEmpty(token)) {
-          callLogoutAPI(userDetails, token);
-        } else {
-          messaging()
-            .getToken()
-            .then(token => {
-              callLogoutAPI(userDetails, token);
-            });
-        }
-      },
-    );
-  };
-
-  let callLogoutAPI = (user, token) => {
-    let userDetails = JSON.parse(user);
-    let params = {
-      accessCode: userDetails.accessCode,
-      emailAddress: userDetails.email,
-      pushToken: token,
-      udid: DeviceInfo.getUniqueId(),
-    };
-    props.logoutUser(props.authToken, params);
-    // setLoading(true);
-    Notifications.removeAllDeliveredNotifications();
-
-    // let removeAsyncData = [
-    //   [BASE_URL, ''],
-    //   [ASYNC_AUTH_TOKEN, ''],
-    //   [ASYNC_BEARER_TOKEN, ''],
-    //   [ACCESS_CODE, ''],
-    //   [ASYNC_USER_INFO, {}],
-    // ];
-    AsyncStorage.setItem(BASE_URL, '').then(() => {
-      global.baseUrl = '';
-    });
-    AsyncStorage.setItem(ASYNC_CLF_BASE_URL, '').then(() => {
-      global.clfBaseUrl = '';
-    });
-
-    AsyncStorage.setItem(ASYNC_AUTH_TOKEN, '').then();
-    AsyncStorage.setItem(ASYNC_BEARER_TOKEN, '').then();
-    AsyncStorage.setItem(ACCESS_CODE, '').then();
-    AsyncStorage.setItem(ASYNC_USER_INFO, '').then();
-    AsyncStorage.setItem(ASYNC_LOGIN_EXPIRE_DATE, '').then(() => {
-      setTokenExpired(false);
-    });
-  };
-
-  let renderAppVersion = () => {
-    return (
-      <View style={styles.drawerVersionContainer}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            props.navigation.navigate(translate('settings.settings'));
-          }}>
-          <View style={styles.drawerRow}>
-            <Icon
-              size={1.3 * Sizes.icons}
-              color={Colors.filterIconColor}
-              name={'settings'}
-              style={styles.rowIcon}
-            />
-            <Text style={styles.labelStyle}>
-              {translate('settings.settings')}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            props.navigation.dispatch(DrawerActions.toggleDrawer());
-            !logoutAlert && setLogoutAlert(true);
-          }}>
-          <View style={styles.drawerRow}>
-            <FontIcon
-              size={1.3 * Sizes.icons}
-              color={Colors.filterIconColor}
-              name={'sign-out-alt'}
-              style={styles.rowIcon}
-            />
-            <Text style={styles.labelStyle}>{translate('logout')}</Text>
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
-    );
-  };
-
-  let username = props.userInfo.firstName + ' ' + props.userInfo.lastName;
-  let titleText = StringUtils.isNotEmpty(username)
-    ? username
-    : userCredentials
-    ? userCredentials.email
-    : '';
-
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        resizeMode={'cover'}
-        source={require('../config/images/drawerBanner.png')}
-        style={styles.imageBackgroundContainer}>
-        <View style={{flex: 1}}>
-          <Image
-            style={styles.image}
-            source={require('../config/images/cx-logo.png')}
-            resizeMode="contain"
-          />
-          <Text style={styles.drawerVersionText}>
-            {'v ' + DeviceInfo.getVersion()}
-          </Text>
-          <View style={styles.emailView}>
-            <Text style={styles.emailCaption}>{titleText}</Text>
-          </View>
-          {renderDrawerButtons()}
-          {renderAppVersion()}
-        </View>
-        {!loading && logoutAlert && renderDialog()}
-        {loading && renderSpinner()}
-      </ImageBackground>
+    <View>
+      <DrawerButton
+        onPress={popLogoutDialog}
+        frontIcon={<LogoutButtonIcon />}
+        title={translate('logout')}
+      />
+      {logoutAlert && renderDialog()}
     </View>
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    userInfo: state.global.userInfo,
-    logoutResponse: state.global.logoutResponse,
-    authToken: state.global.authToken,
-  };
+const LogoutButtonIcon = () => {
+  return (
+    <FontIcon
+      size={1.3 * Sizes.icons}
+      color={Colors.filterIconColor}
+      name={'sign-out-alt'}
+      style={styles.rowIcon}
+    />
+  );
+};
+const DrawerCXLogo = () => {
+  return (
+    <Image
+      style={styles.image}
+      source={require('../config/images/cx-logo.png')}
+      resizeMode="contain"
+    />
+  );
 };
 
-const mapDispatchToProps = dispatch => ({
-  logoutUser: (token, params) => {
-    dispatch(doLogout(token, params));
-  },
-  clearUserData: () => {
-    dispatch(clearUserInfo());
-  },
-  setTokenExpired: isExpired => {
-    dispatch(setTokenExpired(isExpired));
-  },
-});
+const AppVersion = () => {
+  let {logoutAction} = useLogoutProcess();
+  let isTokenExpired = useSelector(state => state.dashboard.isTokenExpired);
+  useEffect(() => {
+    if (isTokenExpired) {
+      console.log('EXPIRED!');
+      logoutAction();
+    } else {
+      console.log('not EXPIRED!');
+    }
+  }, [isTokenExpired]);
+  return (
+    <TextLabel style={styles.drawerVersionText}>
+      {'v ' + DeviceInfo.getVersion()}
+    </TextLabel>
+  );
+};
+const UserName = () => {
+  const userInfo = useSelector(state => state.global.userInfo);
+  let username = StringUtils.isNotEmpty(StringUtils.reformatName(userInfo))
+    ? StringUtils.reformatName(userInfo)
+    : userInfo.emailAddress;
 
-export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent);
+  return (
+    <TextLabel
+      text={username}
+      style={{...styles.emailView, ...styles.emailCaption}}
+    />
+  );
+};
+
+const ClosedLoopIcon = () => (
+  <View style={styles.rowIcon}>
+    <ClosedLoopSvgIcon height={1.3 * Sizes.icons} width={1.3 * Sizes.icons} />
+  </View>
+);
+
+const DrawerButtonIcon = ({name}) => (
+  <Icon
+    size={1.3 * Sizes.icons}
+    color={Colors.filterIconColor}
+    name={name}
+    style={styles.rowIcon}
+  />
+);
+
+const DrawerButton = ({dataObj, frontIcon, title, onPress}) => {
+  return (
+    <Pressable onPress={onPress ?? dataObj.onPress}>
+      <View style={styles.drawerRow}>
+        {frontIcon ?? dataObj.frontIcon}
+        <Text style={styles.labelStyle}>{title ?? dataObj.title}</Text>
+      </View>
+    </Pressable>
+  );
+};
+
+let RenderSettingsAndLogout = ({children}) => {
+  return <View style={styles.drawerVersionContainer}>{children}</View>;
+};
+const RenderDrawerButtons = ({children}) => {
+  return (
+    <View>
+      <TicketSync />
+      {children}
+    </View>
+  );
+};
+
+const DrawerContent = ({navigation}) => {
+  const {logoutAction} = useLogoutProcess();
+  const [logoutAlert, setLogoutAlert] = useState(false);
+
+  const buttonData = {
+    dashboard: {
+      title: 'Dashboard',
+      frontIcon: <DrawerButtonIcon name={'dashboard'} />,
+      onPress: () => {
+        navigation.navigate('Dashboard');
+      },
+    },
+    responses: {
+      title: 'Responses',
+      frontIcon: <DrawerButtonIcon name={'feedback'} />,
+      onPress: () => {
+        navigation.navigate('Responses');
+      },
+    },
+    closedLoop: {
+      title: 'Closedloop',
+      frontIcon: <ClosedLoopIcon />,
+      onPress: () => {
+        navigation.navigate('ClosedLoop');
+      },
+    },
+    settings: {
+      title: 'Settings',
+      frontIcon: <DrawerButtonIcon name={'settings'} />,
+      onPress: () => {
+        navigation.navigate(translate('settings.settings'));
+      },
+    },
+    logout: {
+      title: 'Logout',
+      frontIcon: <LogoutButtonIcon />,
+      onPress: () => {
+        navigation.dispatch(DrawerActions.toggleDrawer());
+        !logoutAlert && setLogoutAlert(true);
+      },
+    },
+  };
+
+  return (
+    <DrawerBackground>
+      <DrawerCXLogo />
+      <AppVersion />
+      <UserName />
+      <RenderDrawerButtons>
+        <DrawerButton dataObj={buttonData['dashboard']} />
+        <DrawerButton dataObj={buttonData['responses']} />
+        <DrawerButton dataObj={buttonData['closedLoop']} />
+      </RenderDrawerButtons>
+      <RenderSettingsAndLogout>
+        <DrawerButton dataObj={buttonData['settings']} />
+        <DrawerButton dataObj={buttonData['logout']} />
+        {/* <LogoutButton navigation={navigation} /> */}
+        {logoutAlert && logoutDialog(logoutAction)}
+      </RenderSettingsAndLogout>
+    </DrawerBackground>
+  );
+};
+
+export default DrawerContent;
 
 const styles = StyleSheet.create({
   container: {

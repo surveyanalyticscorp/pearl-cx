@@ -42,6 +42,8 @@ const ResetPassword = props => {
   const [validation, setValidation] = useState('');
   let textFieldTimer = useRef(null);
 
+  console.log('NAVIGATION_LOGIN', props.route.name);
+
   useEffect(() => {
     if (props.updatePasswordResponse.body) {
       showSuccessFlashMessage(props.updatePasswordResponse.body.message);

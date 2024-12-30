@@ -7,7 +7,7 @@ import StringUtils from '../Utils/StringUtils';
 import {TextSizes} from '../styles/textsize.constants';
 
 const QPTextField = props => {
-  const fieldRef = React.createRef();
+  const fieldRef = props.ref ?? React.createRef();
   const [secureText, setSecureText] = useState(props.secureText);
   const onSubmit = () => {
     let {current: field} = fieldRef;

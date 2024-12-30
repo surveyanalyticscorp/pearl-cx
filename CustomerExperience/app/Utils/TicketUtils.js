@@ -1,6 +1,7 @@
 import React, {Image} from 'react';
 import {ResponsesIcon, RenderStatusIcon} from '../routes/commonUI/CommonUI';
 import StringUtils from './StringUtils';
+import {translate} from './MultilinguaUtils';
 
 export const wordsToBold = [
   'HIGH',
@@ -305,3 +306,8 @@ export const getNameInitials = title => {
     ? nameArray[0].slice(0, 2)
     : nameArray[0];
 };
+
+export const sortingList = [
+  {id: 0, title: translate('activity.latest').toLocaleLowerCase()},
+  {id: 1, title: translate('activity.oldest').toLocaleLowerCase()},
+];

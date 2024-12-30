@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63.1% </span>
+                <span class="strong">62.82% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>118/187</span>
+                <span class='fraction'>120/191</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.82% </span>
+                <span class="strong">47.91% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>22/46</span>
+                <span class='fraction'>23/48</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.28% </span>
+                <span class="strong">50.63% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>40/78</span>
+                <span class='fraction'>40/79</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.03% </span>
+                <span class="strong">65.64% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>105/159</span>
+                <span class='fraction'>107/163</span>
             </div>
         
             
@@ -645,7 +645,21 @@
 <a name='L580'></a><a href='#L580'>580</a>
 <a name='L581'></a><a href='#L581'>581</a>
 <a name='L582'></a><a href='#L582'>582</a>
-<a name='L583'></a><a href='#L583'>583</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L583'></a><a href='#L583'>583</a>
+<a name='L584'></a><a href='#L584'>584</a>
+<a name='L585'></a><a href='#L585'>585</a>
+<a name='L586'></a><a href='#L586'>586</a>
+<a name='L587'></a><a href='#L587'>587</a>
+<a name='L588'></a><a href='#L588'>588</a>
+<a name='L589'></a><a href='#L589'>589</a>
+<a name='L590'></a><a href='#L590'>590</a>
+<a name='L591'></a><a href='#L591'>591</a>
+<a name='L592'></a><a href='#L592'>592</a>
+<a name='L593'></a><a href='#L593'>593</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -754,7 +768,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -807,7 +824,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -823,8 +839,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-yes">11x</span>
@@ -913,7 +928,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1137,6 +1151,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1276,6 +1296,10 @@ import {
 } from '../../redux/actions/closedloop.actions';
 import {baseTextStyles} from '../../styles/text.styles';
 import {useNavigation} from '@react-navigation/native';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
+import {FontWeight} from '../../styles/font.constants';
+import IconButton from '../../routes/commonUI/IconButton';
+import {NoTicketFound} from './NoTicketFound';
 &nbsp;
 export const SearchIcon = () =&gt; {
   return (
@@ -1326,6 +1350,7 @@ export const getFilterCount = filterState =&gt; {
   return count;
 };
 const ClosedLoopTicketList = ({
+  onPressReset,
   onRefresh,
   refreshing,
   ticketList,
@@ -1342,6 +1367,7 @@ const ClosedLoopTicketList = ({
         &lt;RefreshControl onRefresh={onRefresh} refreshing={refreshing} /&gt;
       }
       style={styles.flatList}
+      contentContainerStyle={{flexGrow: 1}}
       data={ticketList}
       onEndReached={loadMoreData}
       onEndReachedThreshold={0.25}
@@ -1349,7 +1375,8 @@ const ClosedLoopTicketList = ({
       extraData={[ticketList]}
       ListEmptyComponent={
         !isTicketLoading &amp;&amp; !isPagination ? (
-          &lt;NoItemsFound&gt;No tickets found&lt;/NoItemsFound&gt;
+          // &lt;NoItemsFound&gt;No tickets found&lt;/NoItemsFound&gt;
+          &lt;NoTicketFound onPressReset={onPressReset} /&gt;
         ) : (
 <span class="branch-1 cbranch-no" title="branch not covered" >          &lt;View /&gt;</span>
         )
@@ -1389,8 +1416,7 @@ export default function ClosedLoop(props) {
   );
   const [isSearchVisible, setSearchVisibility] = useState(false);
   const [searchText, setSearchText] = useState('');
-&nbsp;
-  const [filterState, setFilterState] = useState({
+  const initialFilterState = {
     feedbackApiKey: feedbackApiKey,
     status: '',
     priority: '',
@@ -1403,11 +1429,10 @@ export default function ClosedLoop(props) {
     toDate: convertDateToYMDFORMAT(range.endDate),
     type: '',
     search: '',
-  });
+  };
 &nbsp;
-  // console.log('STATUS_ID_FILTER_useeffect', JSON.stringify(filterState));
+  const [filterState, setFilterState] = useState(initialFilterState);
 &nbsp;
-  // const ticketDetails = useSelector((state) =&gt; state.dashboard.ticketDetails);
   const ticketList = useSelector(state =&gt; state.dashboard.ticketList);
   const [selectedTickets, setSelectedTickets] = useState([]);
   const [showCheckBox, setShowCheckBox] = useState(false);
@@ -1494,7 +1519,6 @@ export default function ClosedLoop(props) {
       ...state,
       status: tempStatusData,
     }));
-    // dispatch(resetStatusId());
   };
   useEffect(() =&gt; {
     <span class="missing-if-branch" title="if path not taken" >I</span>if (statusId) {
@@ -1718,6 +1742,11 @@ export default function ClosedLoop(props) {
     console.log('KEYBOARD_SEARCH', JSON.stringify({searchText, filterState}));
   }, []);
 &nbsp;
+  const resetFilter = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >    setFilterState(initialFilterState);</span>
+<span class="cstat-no" title="statement not covered" >    setFilterData(sampleFilterData());</span>
+  };
+&nbsp;
   return isTicketLoading &amp;&amp; !isPagination ? (
     &lt;RenderSpinner /&gt;
   ) : (
@@ -1729,19 +1758,20 @@ export default function ClosedLoop(props) {
         }}&gt;
         &lt;HeaderFilter
           style={{justifyContent: 'space-between'}}
-          dateRange={range}
-          onPressDateRange={getDataOnNewRange}
           onPressFilter={openFilter}
           filterCount={getFilterCount(filterState)}
         /&gt;
 &nbsp;
-        &lt;SearchBox
-          onResetSearch={onResetSearch}
-          onQuerySubmit={submitQuery}
-          currentText={searchText}
-        /&gt;
+        {ticketList.length &gt; 0 ? (
+          &lt;SearchBox
+            onResetSearch={onResetSearch}
+            onQuerySubmit={submitQuery}
+            currentText={searchText}
+          /&gt;
+        ) : <span class="branch-1 cbranch-no" title="branch not covered" >null}</span>
 &nbsp;
         &lt;ClosedLoopTicketList
+          onPressReset={resetFilter}
           onRefresh={onRefresh}
           refreshing={refreshing}
           ticketList={ticketList}
@@ -1816,7 +1846,7 @@ const styles = StyleSheet.create({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-06T10:03:10.948Z
+                at 2024-12-10T12:17:19.694Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -100,6 +100,8 @@ export const CLF_GET_TICKET_LIST = '/mobile/tickets/feedback/';
 export function getClfTicketListUrl(feedBackId, segmentId) {
   return CLF_GET_TICKET_LIST + feedBackId + '/' + SEGMENT + segmentId;
 }
+export const CLF_GET_GLOBAL_SETTINGS = `/mobile/global-setting`;
+
 // "ex: {{BASE_URL}}/mobile/tickets/feedback/:feedBackId/segment/:segmentId?fromDate=2022-09-28&toDate=2022-10-28"
 export const CLF_GET_TICKET_LIST_BY_RESPONSEID = '/mobile/tickets/feedbacks/';
 // ex: {{BASE_URL}}/mobile/tickets/feedbacks/{feedbackId}/responses/{responseId}?feedbackApiKey=95e89018-22a9-4a23-b774-ee0041010813

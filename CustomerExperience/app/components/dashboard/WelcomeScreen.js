@@ -25,7 +25,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {buttonStyles} from '../../styles/button.styles';
 import StringUtils from '../../Utils/StringUtils';
-import {setIsFirstTime} from '../../redux/actions';
+import {getGlobalSettings, setIsFirstTime} from '../../redux/actions';
+import {sendAnalyticsEvent} from '../../Utils/AnalyticLogs';
+import {
+  ANALYTICS_EVENTS,
+  ANALYTICS_EVENTS_SCREEN,
+} from '../../Utils/Analytic.constants';
+import AppInfo from '../../Utils/AppInfo';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
 
 export const RenderCountItem = ({style, title, data}) => {
   return (
@@ -66,6 +73,14 @@ const RenderCountData = () => {
   );
 };
 const CustomBackground = ({children}) => {
+  const {userInfo} = useSelector(state => state.global);
+  useEffect(() => {
+    sendAnalyticsEvent(ANALYTICS_EVENTS.APP_OPEN, {
+      screen: ANALYTICS_EVENTS_SCREEN.WELCOME_SCREEN,
+      ...AppInfo,
+      ...userInfo,
+    });
+  }, []);
   return (
     <ImageBackground
       testID="custom-background"
@@ -117,20 +132,24 @@ export const SkipButton = () => {
   );
 };
 
+const UserName = () => {
+  const {firstName, lastName} = useSelector(state => state.global.userInfo);
+  return (
+    <TextLabel
+      text={`${firstName ?? ''} ${lastName ?? ''}`}
+      style={styles.nameText}
+    />
+  );
+};
+
 const RenderWelcomeScreen = () => {
-  const {userInfo} = useSelector(state => state.global);
   return (
     <View testID="render-welcome-screen" style={styles.backgroundContainer}>
       <View style={styles.backgroundContainer}>
         <Text testID="welcome-text" style={styles.welcomeText}>
           {translate('onBoarding.welcomeBack')}
         </Text>
-        <Text style={styles.nameText}>
-          {(userInfo?.firstName === undefined ? '' : userInfo?.firstName) +
-            ' ' +
-            (userInfo?.lastName === undefined ? '' : userInfo?.lastName)}
-        </Text>
-
+        <UserName />
         <RenderCountData />
       </View>
       <SkipButton />
@@ -197,6 +216,7 @@ export const WelcomeScreen = () => {
   const getInitData = () => {
     console.log('USER_DATA: ', userInfo);
     console.log('SUBSCRIBER_ID', global.subscriberId);
+    dispatch(getGlobalSettings());
     dispatch(
       callAppLoginCounter('', {
         cxUserId: userInfo.userID,
@@ -212,7 +232,12 @@ export const WelcomeScreen = () => {
   }, [baseUrl]);
 
   useEffect(() => {
-    if (authToken) {
+    if (
+      authToken &&
+      StringUtils.isNotEmpty(authToken) &&
+      global.bearerToken &&
+      global.clfBaseUrl
+    ) {
       getSegmentData(authToken);
       getWelcomeScreenData(authToken);
       getInitData();

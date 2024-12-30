@@ -24,6 +24,8 @@ import {
   IS_SEGMENT_LOADING,
   SET_BEARER_TOKEN,
   SET_IS_FIRST_TIME,
+  SET_MANAGER_DELETE_PERMISSION_RESPONSE,
+  SET_GLOBAL_SETTINGS_RESPONSE,
 } from '../actions';
 import {SET_TICKET_FILTER_BY_STATUS_ID} from '../actions/closedloop.actions';
 import {
@@ -70,6 +72,9 @@ const initialState = {
   updatePasswordResponse: {},
   pushToken: '',
   logoutResponse: {},
+  globalSettings: {
+    managerDeletePermission: false,
+  },
 };
 
 const globalReducer = (state = initialState, action) => {
@@ -227,8 +232,7 @@ const globalReducer = (state = initialState, action) => {
     }
     case CLEAR_USER_INFO: {
       return {
-        ...state,
-        userInfo: {},
+        ...initialState,
       };
     }
     case API_ERROR: {
@@ -267,15 +271,10 @@ const globalReducer = (state = initialState, action) => {
       };
     }
     case LOGOUT_RESPONSE: {
+      console.log('LOGOUT_RESPONSE_ACTION', JSON.stringify(action));
       return {
         ...state,
         logoutResponse: action.response,
-        baseUrl: '',
-        clfBaseUrl: '',
-        subscriberId: '',
-        accessCode: '',
-        bearerToken: '',
-        authToken: '',
       };
     }
     case GET_BEARER_TOKEN_RESPONSE: {
@@ -288,6 +287,12 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         isError: action.payload.isError,
+      };
+    }
+    case SET_GLOBAL_SETTINGS_RESPONSE: {
+      return {
+        ...state,
+        globalSettings: action.payload,
       };
     }
     default: {

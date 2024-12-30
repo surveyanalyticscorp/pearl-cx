@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Image, StyleSheet, Text} from 'react-native';
-import {PaddingConstants} from '../../styles/padding.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily} from '../../styles/font.constants';

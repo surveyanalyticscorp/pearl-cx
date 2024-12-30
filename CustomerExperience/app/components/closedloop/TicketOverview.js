@@ -69,6 +69,20 @@ import ShowTitleAndDropdown from '../closedloop/ui/ShowTitleAndDropdown';
 import CopyTicketIdButton from './TicketOverview/CopyTicketIdButton';
 import TakeActionButton from './TicketOverview/TakeActionButton';
 
+const TicketOverviewContainer = ({children}) => {
+  const isLoading = useSelector(state => state.global.isTicketLoading);
+
+  return isLoading ? (
+    <View style={styles.container}>
+      <RenderSpinner />
+    </View>
+  ) : (
+    <View testID="ticket-overview" style={styles.container}>
+      {children}
+    </View>
+  );
+};
+
 export const DescriptionHeader = ({text}) => {
   return (
     <TextLabel
@@ -205,7 +219,11 @@ export const ContactView = ({
 };
 
 export const DeleteView = ({onPressDelete}) => {
-  return (
+  const hasPermission = useSelector(
+    state => state.global.globalSettings.managerDeletePermission,
+  );
+
+  return hasPermission ? (
     <QPButton
       testID="DeleteButtonAction"
       buttonColor={Colors.white}
@@ -217,6 +235,8 @@ export const DeleteView = ({onPressDelete}) => {
       buttonText={translate('ticket_overview.delete_ticket')}
       textStyle={buttonStyles.deleteButtonText}
     />
+  ) : (
+    <View />
   );
 };
 export const UnderLineText = ({text, type}) => {
@@ -291,7 +311,6 @@ export default function TicketOverview(props) {
   const [currentBS, setCurrentBS] = useState(bottomSheetEnum.status);
   const {owners} = useSelector(state => state.dashboard.ownerDetails ?? []);
   const {ticketDeleteStatus} = useSelector(state => state.dashboard);
-  const isLoading = useSelector(state => state.global.isTicketLoading);
   const ticketDetails = useSelector(state => state.dashboard.ticket);
   const {emailAddress, firstName, lastName, userID, feedbackApiKey} =
     useSelector(state => state.global.userInfo);
@@ -308,7 +327,6 @@ export default function TicketOverview(props) {
   //   (state) => state.dashboard.segmentDetails.segments,
   // );
   console.log('TTTTT', ticketDetails ?? '');
-  console.log({isLoading});
   const onPressDelete = () => {
     setTicketDeleteModal(true);
     console.log('DELETE');
@@ -423,12 +441,7 @@ export default function TicketOverview(props) {
   };
 
   const RenderStatusHeader = _title => {
-    return (
-      <BottomSheetHeader
-        title={translate('ticket_overview.select_status')}
-        onPressClose={closeBS}
-      />
-    );
+    return <BottomSheetHeader title={'Status'} onPressClose={closeBS} />;
   };
 
   const RenderStatusSelectContent = () => {
@@ -482,12 +495,7 @@ export default function TicketOverview(props) {
   };
 
   const RenderPriorityHeader = _title => {
-    return (
-      <BottomSheetHeader
-        title={translate('ticket_overview.select_priority')}
-        onPressClose={closeBS}
-      />
-    );
+    return <BottomSheetHeader title={'Priority'} onPressClose={closeBS} />;
   };
 
   const RenderPrioritySelectContent = () => {
@@ -741,14 +749,13 @@ export default function TicketOverview(props) {
     );
   };
 
-  return !isLoading ? (
-    <View testID="ticket-overview" style={styles.container}>
+  return (
+    <TicketOverviewContainer>
       <Animated.ScrollView
         style={{
           opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
         }}>
         <View style={styles.container}>
-          {/* {ticketStatusPriorityView()} */}
           <TicketStatusPriorityView ticket={ticketDetails} />
           <DescriptionView
             ticket={ticketDetails}
@@ -784,9 +791,7 @@ export default function TicketOverview(props) {
         // onCloseEnd={() => setShadow(false)}
         // onOpenStart={() => setShadow(true)}
       />
-    </View>
-  ) : (
-    <RenderSpinner />
+    </TicketOverviewContainer>
   );
 }
 

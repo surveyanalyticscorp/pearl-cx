@@ -80,12 +80,10 @@ describe('TicketActivity Component', () => {
     const flatList = getByTestId('flatlist-activity');
     fireEvent(flatList, 'refresh');
 
-    // await waitFor(() => {
-    expect(getClosedLoopTicketItemActivitySpy).toHaveBeenCalledWith(
+    expect(getClosedLoopTicketItemActivitySpy).toBeCalledWith(
       'mockToken',
-      '"123"',
+      '123',
     );
-    // });
   });
 
   it('opens and closes the sorting bottom sheet', async () => {

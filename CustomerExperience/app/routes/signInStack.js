@@ -53,10 +53,10 @@ const SignInStack = ({navigation}) => {
         options={({navigation, route}) => ({
           headerTransparent: true,
           title: '',
-          headerLeft: props => {
-            return isFirstTime && stackHeaderProps(route, navigation);
-          },
-          headerShown: isFirstTime,
+          // headerLeft: props => {
+          //   return isFirstTime && stackHeaderProps(route, navigation);
+          // },
+          headerShown: false,
         })}
       />
 

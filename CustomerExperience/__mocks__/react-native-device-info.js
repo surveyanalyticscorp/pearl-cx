@@ -7,6 +7,8 @@ export const DeviceInfo = {
   getSystemVersion: jest.fn(() => 'MockSystemVersion'),
   getVersion: jest.fn(() => 'MockVersion'),
   getIPAddress: () => {},
+  getApplicationName: jest.fn(() => 'CX On The Go'),
+  getDeviceId: jest.fn(() => 'MockDeviceId'),
 };
 
 export default DeviceInfo;

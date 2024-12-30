@@ -4,6 +4,7 @@ import {
   watchDataCount,
   watchGetCLFBaseUrl,
   watchGetDashboard,
+  watchGetGlobalSettings,
 } from './dashboardSaga';
 import {
   watchAuthenticatePanel,
@@ -98,5 +99,6 @@ export function* rootSaga() {
     fork(watchClfAuth),
     fork(watchUploadFile),
     fork(watchFetchAllResponses),
+    fork(watchGetGlobalSettings),
   ]);
 }

@@ -1,5 +1,5 @@
 import moment from 'moment';
-import {DMY_AT_TIME_FORMAT, HalfMonthDateYearFormat} from './AppConstants';
+import {HalfMonthDateYearFormat} from './AppConstants';
 import {isStringNullOrEmpty} from './Utility';
 import {TOKEN_VALIDATION_DURATION} from '../api/Constant';
 
@@ -21,8 +21,8 @@ export const getDateTimeAgo = date => {
   const ONE_DAY = 24 * ONE_HOUR;
 
   const now = new Date();
-  const diff = now.getTime() - date.getTime();
-
+  const diff = now.getTime() - date.getTime() + constantTimeOffset();
+  console.log('MOMNET_OBJ', JSON.stringify(date.getTime()));
   if (diff < ONE_MINUTE) {
     return 'just now';
   } else if (diff < ONE_HOUR) {
@@ -38,6 +38,10 @@ export const getDateTimeAgo = date => {
   }
 };
 
+export function constantTimeOffset() {
+  return new Date().getTimezoneOffset() * 60 * 1000;
+}
+
 export function getExpireDate() {
   let today = new Date();
   let nextExpireDate = new Date(today);
@@ -48,4 +52,16 @@ export function getExpireDate() {
     JSON.stringify(nextExpireDate),
   );
   return nextExpireDate.toISOString();
+}
+export function msToHMS(ms) {
+  // 1- Convert to seconds:
+  let seconds = ms / 1000;
+  // 2- Extract hours:
+  const hours = parseInt(seconds / 3600); // 3,600 seconds in 1 hour
+  seconds = seconds % 3600; // seconds remaining after extracting hours
+  // 3- Extract minutes:
+  const minutes = parseInt(seconds / 60); // 60 seconds in 1 minute
+  // 4- Keep only seconds not extracted to minutes:
+  seconds = seconds % 60;
+  return `${hours}:${minutes}:${Math.floor(seconds)}`;
 }

@@ -1,23 +1,10 @@
 import React, {useState} from 'react';
-import {
-  View,
-  TouchableWithoutFeedback,
-  Text,
-  StyleSheet,
-  FlatList,
-} from 'react-native';
-import {
-  Colors,
-  getPriorityBorderColor,
-  getPriorityFillerColor,
-} from '../../../styles/color.constants';
-import {FontFamily} from '../../../styles/font.constants';
-import {MarginConstants} from '../../../styles/margin.constants';
-import IonIcon from 'react-native-vector-icons/Ionicons';
+import {View, StyleSheet, FlatList} from 'react-native';
+import {Colors} from '../../../styles/color.constants';
 import {ApplyButton} from '../../../routes/commonUI/CommonUI';
 import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
-import {baseTextStyles} from '../../../styles/text.styles';
 import {PaddingConstants} from '../../../styles/padding.constants';
+import PriorityItem from './PriorityItem';
 
 const SelectPriority = ({data, selectedIndex, handleOnPress}) => {
   const [currentIndex, setIndex] = useState(selectedIndex);
@@ -28,42 +15,16 @@ const SelectPriority = ({data, selectedIndex, handleOnPress}) => {
     handleOnPress(currentItem, currentIndex);
   };
   const renderRow = ({item, index}) => {
-    const borderColor = getPriorityBorderColor(item.title.toLowerCase());
-    const backgroundColor = getPriorityFillerColor(item.title.toLowerCase());
-
     return (
-      <TouchableWithoutFeedback
-        testID="priority-row"
-        onPress={
-          () => {
-            setIndex(index);
-            setItem(item);
-            // handleOnPress(item, index);
-            // setSelectedIndex(index);
-          }
-          // handleOnPress(item)
-        }>
-        <View style={[styles.row]}>
-          <IonIcon
-            style={{marginHorizontal: MarginConstants.halfTab}}
-            name={'flag'}
-            size={20}
-            color={borderColor}
-          />
-          <Text style={styles.title}>{item.title}</Text>
-          {currentIndex === index ? (
-            <IonIcon
-              testID={`checkmark-icon-${index}`}
-              style={{marginHorizontal: MarginConstants.halfTab}}
-              name={'checkmark'}
-              size={20}
-              color={Colors.filterIconColor}
-            />
-          ) : (
-            <View />
-          )}
-        </View>
-      </TouchableWithoutFeedback>
+      <PriorityItem
+        index={index}
+        item={item}
+        selectedIndex={currentIndex}
+        onPressHandler={() => {
+          setIndex(index);
+          setItem(item);
+        }}
+      />
     );
   };
 
@@ -74,7 +35,9 @@ const SelectPriority = ({data, selectedIndex, handleOnPress}) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
         ItemSeparatorComponent={ListItemSeparator}
-        ListFooterComponent={<ApplyButton onPress={onApplyPress} />}
+        ListFooterComponent={
+          <ApplyButton buttonText={'Set priority'} onPress={onApplyPress} />
+        }
       />
     </View>
   );
@@ -87,18 +50,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.white,
     padding: PaddingConstants.tab1_2x,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: MarginConstants.tab1,
-
-    paddingVertical: MarginConstants.tab1,
-  },
-  title: {
-    flex: 1,
-    ...baseTextStyles.primaryRegularText,
-    marginStart: MarginConstants.halfTab,
-    color: Colors.filterIconColor,
   },
 });

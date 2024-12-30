@@ -17,7 +17,7 @@
     "invalidPassword": "Bitte geben Sie ein gültiges Passwort ein",
     "invalidCompanyCode": "Bitte geben Sie einen gültigen Unternehmenscode ein",
     "signIn": "Anmelden",
-    "email": "E-Mail-Adresse",
+    "email": "Email",
     "password": "Kennwort",
     "companyCode": "Unternehmenscode",
     "forgotPassword": "Passwort vergessen?",
@@ -51,12 +51,12 @@
     "clear_all_notification": "Alle Benachrichtigungen löschen",
     "are_you_sure": "Bist du sicher?",
     "no_notification_to_display": "Keine Benachrichtigungen zum Anzeigen",
-    "new_responses": "New Responses",
-    "new_tickets": "New Tickets",
+    "new_responses": "New responses",
+    "new_tickets": "New tickets",
     "overdues": "Overdues",
     "view_responses": "Antworten anzeigen",
     "total": "Gesamt",
-    "cx_tickets": "CX-Tickets"
+    "cx_tickets": "CX-tickets"
   },
   "close_loop": {
     "close_loop": "Geschlossener Kreis",
@@ -77,7 +77,7 @@
     "status": "Status:",
     "customer_email": "Kunden-eMail:",
     "origin_segment": "Ursprungssegment:",
-    "current_segment": "Aktuelles Segment:",
+    "current_segment": "Aktuelles segment:",
     "ticket_owner": "Ticketinhaber:",
     "created_on": "Erstellen am:",
     "customer_comments": "Kunden-Kommentare:",
@@ -87,12 +87,12 @@
     "addition_comments": "zusätzliche Kommentare",
     "please_add_comments": "Bitte fügen Sie Kommentare hinzu",
     "no_tickets": "Keine Tickets",
-    "enter_email_id": "E-Mail Adresse eingeben",
+    "enter_email_id": "E-Mail adresse eingeben",
     "type_a_comment": "Geben Sie einen Kommentar ein",
     "no_comments": "Keine Kommentare",
     "submit": "einreichen",
     "update": "Aktualisieren",
-    "copied_success": "Ticket id copied to clipboard"
+    "copied_success": "Ticket ID copied to clipboard"
   },
   "ticket_list": {
     "alert": "Warnung!",
@@ -165,7 +165,7 @@
   },
   "profile": {
     "surveys": "Umfragen",
-    "profile_details": "Profil-Details",
+    "profile_details": "Profil-details",
     "name": "Name",
     "contact_information": "Kontaktinformationen",
     "date": "Datum",
