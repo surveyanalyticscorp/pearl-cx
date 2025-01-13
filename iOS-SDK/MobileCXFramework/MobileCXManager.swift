@@ -10,21 +10,24 @@ import UIKit
 import WebKit
 
 public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDelegate, WKNavigationDelegate {
-    public func CXServiceResponse(withURL response: [String : Any]) {
-        print("CXServiceResponse", response);
+    @MainActor public func CXServiceResponse(withURL response: [String: Any]) {
+        print("CXServiceResponse", response)
         if let _ = response[ksurveyURL] {
-            print("URL found");
+            print("URL found")
             if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
-                self.iResponseURL = responseURL
-                let strUserDefaultKey = "\(self.iTouchPointName ?? 0)\(self.iCurrentViewName)"
-                if !self.iPresentViewFlag {
-                    GlobalDataCX.addValueToUserDefault(response, forKey: strUserDefaultKey)
-                } else {
-                    DispatchQueue.main.async {
-                        self.showMessageInViewControllerWithResponse(responseInfo: response)
-                    }
-                    
-                }
+                        let responseCopy = response // Create a copy of the response
+
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+
+                            self.iResponseURL = responseURL
+                            let strUserDefaultKey = "\(self.iTouchPointName ?? 0)\(self.iCurrentViewName)"
+                            if !self.iPresentViewFlag {
+                                GlobalDataCX.addValueToUserDefault(responseCopy, forKey: strUserDefaultKey)
+                            } else {
+                                self.showMessageInViewControllerWithResponse(responseInfo: responseCopy)
+                            }
+                        }
             }
         } else if let error = response["error"] as? [String: Any] {
             // Extract error message
@@ -40,19 +43,24 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             }
         }
     }
+
     
     public var iBaseWindow: UIWindow?
     public var iView: UIView?
     public var iWebView: WKWebView?
+    @MainActor
     public var iResponseURL: String?
     public var iPopupMenuTitle: String?
     public var iPopupMenuMessage: String?
     public var iPopupMenuRightButtonTitle: String?
     public var iPopupMenuLeftButtonTitle: String?
     public var iPopUpViewFlag: Bool = false
+    @MainActor
     public var iPresentViewFlag: Bool = false
+    @MainActor
     public var iTouchPointName: Int?
     public var iApiKey: String?
+    @MainActor
     public var iCurrentViewName: String = ""
     public var iDataCenter: TouchPoint.DataCenter?
     public var touchPoint: TouchPoint?
@@ -99,7 +107,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             let aMobileCXServiceTxManager = MobileCXServiceTxManager()
             self.iTouchPointName = touchPoint.surveyId
             aMobileCXServiceTxManager.iDelegate = self
-            aMobileCXServiceTxManager.invokeService(touchPoint: touchPoint, withAPIKey: self.iApiKey!, DataCenter: self.iDataCenter!)
+            aMobileCXServiceTxManager.invokeService(touchPoint: touchPoint, withAPIKey: self.iApiKey!, dataCenter: self.iDataCenter!)
         }
     }
 
