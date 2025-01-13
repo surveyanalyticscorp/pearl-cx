@@ -11,6 +11,7 @@ import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import CheckmarkIcon from '../../../routes/commonUI/CheckmarkIcon';
 
 const SelectSegment = props => {
   const [data, setData] = useState(props.data);
@@ -29,17 +30,7 @@ const SelectSegment = props => {
         }>
         <View style={[styles.row]}>
           <Text style={styles.title}>{item.segmentName}</Text>
-          {selectedIndex === index ? (
-            <IonIcon
-              testID={`checkmark-icon-${index}`}
-              style={{marginHorizontal: MarginConstants.halfTab}}
-              name={'checkmark'}
-              size={20}
-              color={Colors.filterIconColor}
-            />
-          ) : (
-            <View />
-          )}
+          {selectedIndex === index ? <CheckmarkIcon index={index} /> : <View />}
         </View>
       </TouchableWithoutFeedback>
     );

@@ -10,22 +10,22 @@ import {
   Alert,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {Colors, priorityColors} from '../styles/color.constants';
-import {MarginConstants} from '../styles/margin.constants';
-import {PaddingConstants} from '../styles/padding.constants';
-import {TextSizes} from '../styles/textsize.constants';
-import {FontFamily} from '../styles/font.constants';
-import {showErrorFlashMessage} from '../Utils/Utility';
+import {Colors, priorityColors} from '../../styles/color.constants';
+import {MarginConstants} from '../../styles/margin.constants';
+import {PaddingConstants} from '../../styles/padding.constants';
+import {TextSizes} from '../../styles/textsize.constants';
+import {FontFamily} from '../../styles/font.constants';
+import {showErrorFlashMessage} from '../../Utils/Utility';
 import {useDispatch, useSelector} from 'react-redux';
-import {apiHandler} from '../api/ApiHandler';
+import {apiHandler} from '../../api/ApiHandler';
 import moment from 'moment';
-import {HalfMonthDateYearFormat} from '../Utils/AppConstants';
-import QPSpinner from '../widgets/QPSpinner';
+import {HalfMonthDateYearFormat} from '../../Utils/AppConstants';
+import QPSpinner from '../../widgets/QPSpinner';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {Notifications} from 'react-native-notifications';
 import {connect} from 'react-redux';
-import {clearNotification} from '../redux/actions/notification.actions';
-import {translate} from '../Utils/MultilinguaUtils';
+import {clearNotification} from '../../redux/actions/notification.actions';
+import {translate} from '../../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 
 const Notification = props => {
@@ -147,8 +147,8 @@ const Notification = props => {
     // console.log(`Notification Item: ${JSON.stringify(item)}`);
     let imagePath =
       item.logType === 'U'
-        ? require('../config/images/notification_comment_blue.png')
-        : require('../config/images/notification_ticket_blue.png');
+        ? require('../../config/images/notification_comment_blue.png')
+        : require('../../config/images/notification_ticket_blue.png');
     let text = item.notificationText.replace(item.emailAddress, '');
     let time = moment(item.timestamp).format(HalfMonthDateYearFormat);
     let priority = 'high';

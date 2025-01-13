@@ -5,6 +5,7 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {baseTextStyles} from '../../../styles/text.styles';
 import {RadioButtonCheckbox} from '../../../routes/commonUI/CommonUI';
+import CheckmarkIcon from '../../../routes/commonUI/CheckmarkIcon';
 
 const PriorityIcon = ({item}) => {
   const {title} = item;
@@ -22,15 +23,7 @@ const PriorityIcon = ({item}) => {
 };
 
 const PriorityCheckmarkIcon = ({index}) => {
-  return (
-    <IonIcon
-      testID={`checkmark-icon-${index}`}
-      style={{marginHorizontal: MarginConstants.halfTab}}
-      name={'checkmark'}
-      size={20}
-      color={Colors.filterIconColor}
-    />
-  );
+  return <CheckmarkIcon index={index} />;
 };
 
 const PriorityItem = ({index, item, selectedIndex, onPressHandler}) => {

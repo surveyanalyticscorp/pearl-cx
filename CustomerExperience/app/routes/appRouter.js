@@ -36,7 +36,7 @@ import {
 } from '../Utils/NotificationUtils';
 import messaging from '@react-native-firebase/messaging';
 import {Notifications} from 'react-native-notifications';
-import Notification from '../components/Notification';
+import Notification from '../components/notifications/Notification';
 import SearchTicket from '../components/dashboard/components/SearchTicket';
 import TicketFilter from '../components/dashboard/components/TicketFilter';
 import {getNotification} from '../redux/actions/notification.actions';

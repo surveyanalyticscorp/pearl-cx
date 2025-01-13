@@ -42,6 +42,7 @@ const isExpireDateValid = expireDate => {
 
 function SplashScreen(props) {
   let [moveNext, setMoveNext] = useState(false);
+  const {logoutAction} = useLogoutProcess();
 
   let splashTimer = useRef(null);
   const dispatch = useDispatch();
@@ -59,11 +60,14 @@ function SplashScreen(props) {
   };
 
   useEffect(() => {
-    splashTimer.current = setTimeout(() => {
-      AsyncStorage.getItem(ASYNC_LOGIN_EXPIRE_DATE).then(expireDate => {
-        dispatch(setTokenExpired(isExpireDateValid(expireDate)));
-      });
+    AsyncStorage.getItem(ASYNC_LOGIN_EXPIRE_DATE).then(expireDate => {
+      if (isExpireDateValid(expireDate)) {
+        console.log('EXPIRE_DATE_INVALID');
+        logoutAction();
+      }
+    });
 
+    splashTimer.current = setTimeout(() => {
       AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {
         console.log(
           'Async Storage: saved clf base url from splash screen',

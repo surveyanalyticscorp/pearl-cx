@@ -1,6 +1,6 @@
 import {StyleSheet, View} from 'react-native';
 import React from 'react';
-import RenderDropDownButton from './RenderDropDownButton';
+import RenderDropDownButton from '../TicketOverview/components/RenderDropDownButton';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -33,8 +33,10 @@ const ShowTitleAndDropdown = ({
 export default ShowTitleAndDropdown;
 const styles = StyleSheet.create({
   titleAndDropdownContainer: {
+    flex: 1,
     flexDirection: 'column',
     marginBottom: MarginConstants.tab1_2x,
+    height: '100%',
   },
   titleContainer: {
     flexDirection: 'row',

@@ -122,22 +122,16 @@ export const resetStatusId = () => ({
   statusId: '',
 });
 
-export const updateSetTicketEscalation = (
-  token,
-  param,
-  ticketId,
-  feedbackApiKey,
-) => ({
+export const updateSetTicketEscalation = (param, ticketId, feedbackApiKey) => ({
   type: UPDATE_TICKET_ESCALATION,
-  token,
   param,
   ticketId,
   feedbackApiKey,
 });
 
-export const deleteTickets = (token, param) => ({
+export const deleteTickets = param => ({
   type: DELETE_TICKET,
-  token,
+
   param,
 });
 

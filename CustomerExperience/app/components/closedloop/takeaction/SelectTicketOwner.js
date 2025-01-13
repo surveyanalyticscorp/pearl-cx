@@ -1,16 +1,9 @@
 import React, {useState, useRef} from 'react';
-import {
-  View,
-  TouchableWithoutFeedback,
-  Text,
-  StyleSheet,
-  FlatList,
-} from 'react-native';
+import {View, StyleSheet, FlatList, Pressable} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import IonIcon from 'react-native-vector-icons/Ionicons';
 import {SearchTextInput} from '../../../routes/commonUI/CommonUI';
 import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
 import StringUtils from '../../../Utils/StringUtils';
@@ -18,49 +11,43 @@ import {NoItemsFound} from '../../../routes/commonUI/CommonUI';
 import QPButton from '../../../widgets/Button';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {PaddingConstants} from '../../../styles/padding.constants';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import CheckmarkIcon from '../../../routes/commonUI/CheckmarkIcon';
 
-const SelectTicketOwner = props => {
-  const [data, setData] = useState(props.data);
-  const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
-  const [selectedItem, setSelectedItem] = useState(
-    props.data[props.selectedIndex],
+const OwnerItem = ({onPress, isSelected, title}) => {
+  return (
+    <Pressable onPress={onPress} style={styles.row}>
+      <TextLabel text={title} />
+      {isSelected ? <CheckmarkIcon /> : <View />}
+    </Pressable>
   );
+};
+
+const SelectTicketOwner = ({data, selectedIndex, handleOnPress}) => {
+  const [ownerData, setOwnerData] = useState(data);
+  const [selectedOwnerIndex, setSelectedOwnerIndex] = useState(selectedIndex);
+  const [selectedItem, setSelectedItem] = useState(data[selectedIndex]);
   const textInputRef = useRef();
 
   function filterOwnerList(text) {
-    if (StringUtils.isEmpty(text)) {
-      setData(props.data);
-    } else {
-      setData(prevState =>
-        prevState.filter(item => item.ownerName.includes(text)),
-      );
-    }
+    setOwnerData(prevState =>
+      StringUtils.isEmpty(text)
+        ? data
+        : prevState.filter(item => item.ownerName.includes(text)),
+    );
   }
+
   const renderRow = ({item, index}) => {
+    function onPress() {
+      setSelectedOwnerIndex(index);
+      setSelectedItem(item);
+    }
     return (
-      <TouchableWithoutFeedback
-        onPress={
-          () => {
-            // props.handleOnPress(item, index);
-            setSelectedIndex(index);
-            setSelectedItem(item);
-          }
-          // handleOnPress(item)
-        }>
-        <View style={[styles.row]}>
-          <Text style={styles.title}>{item.ownerName}</Text>
-          {selectedIndex === index ? (
-            <IonIcon
-              style={{marginHorizontal: MarginConstants.halfTab}}
-              name={'checkmark'}
-              size={20}
-              color={Colors.filterIconColor}
-            />
-          ) : (
-            <View />
-          )}
-        </View>
-      </TouchableWithoutFeedback>
+      <OwnerItem
+        onPress={onPress}
+        isSelected={selectedOwnerIndex === index}
+        title={item.ownerName}
+      />
     );
   };
 
@@ -74,7 +61,7 @@ const SelectTicketOwner = props => {
       />
       <FlatList
         style={styles.flatList}
-        data={data}
+        data={ownerData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
         ItemSeparatorComponent={ListItemSeparator}
@@ -86,7 +73,7 @@ const SelectTicketOwner = props => {
         testID="TakeActionButton"
         buttonColor={Colors.accentLight}
         style={styles.takeActionButton}
-        onPress={() => props.handleOnPress(selectedItem, selectedIndex)}
+        onPress={() => handleOnPress(selectedItem, selectedOwnerIndex)}
         buttonText={translate('select')}
         textStyle={styles.takeActionText}
       />

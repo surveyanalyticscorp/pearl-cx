@@ -1,16 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  Pressable,
-  View,
-  Image,
-  Modal,
-  SafeAreaView,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Platform, StyleSheet, TextInput, View, Image} from 'react-native';
 import {
   Colors,
   getPriorityBorderColorbyId,
@@ -58,7 +47,6 @@ import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 import ShowTitleAndDropdown from '../../closedloop/ui/ShowTitleAndDropdown';
 import DateFilterIcon from '../../../widgets/IconWidget/DateFilterIcon';
 import PersonIcon from '../../../widgets/IconWidget/PersonIcon';
-import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import IconAndTitleText from '../../closedloop/ui/IconAndTitleText';
 import StatusIcon from '../../../widgets/IconWidget/StatusIcon';
 import RenderPhoneInput from '../../closedloop/ui/RenderPhoneInput';
@@ -113,6 +101,32 @@ const isValid = ticketState => {
   return true;
 };
 
+const CreateTicketContainer = ({children}) => {
+  const {isError, errorMessage} = useSelector(state => state.global);
+  let getApiValidationErrorMessage = errorMessage => {
+    console.log('getApiValidationErrorMessage', JSON.stringify(errorMessage));
+    if (errorMessage.errorAlert) {
+      return errorMessage?.errorAlert
+        ? errorMessage?.errorAlert
+        : errorMessage?.validationErrors[0]?.error;
+    }
+    return 'Error';
+  };
+
+  useEffect(() => {
+    if (isError) {
+      showErrorFlashMessage(getApiValidationErrorMessage(errorMessage));
+    }
+  }, [isError, errorMessage]);
+
+  return (
+    <View
+      forceInset={{bottom: 'never', top: 'never'}}
+      style={styles.rootContainer}>
+      {children}
+    </View>
+  );
+};
 const RenderMaterialIcon = ({iconName}) => (
   <MaterialIcon name={iconName} size={14} color={Colors.lightBlack} />
 );
@@ -361,8 +375,6 @@ export default function CreateTicket(props) {
     );
   };
 
-  // console.log('OWNERS:', JSON.stringify(owners));
-
   useEffect(() => {
     getTicketOwnerList(segmentId);
   }, [segmentId]);
@@ -424,16 +436,10 @@ export default function CreateTicket(props) {
     }));
   };
 
-  useEffect(() => {
-    if (!isStringNullOrEmpty(props.error)) {
-      showErrorFlashMessage(props.error);
-    }
-  }, [props.error]);
-
   const handleCreateTicket = () => {
     if (isValid(ticketState)) {
       setLoading(true);
-      dispatch(createClfTicket(authToken, ticketState, feedbackApiKey));
+      dispatch(createClfTicket(ticketState, feedbackApiKey));
       props.navigation.goBack();
     }
   };
@@ -634,9 +640,7 @@ export default function CreateTicket(props) {
   };
 
   return (
-    <View
-      forceInset={{bottom: 'never', top: 'never'}}
-      style={styles.rootContainer}>
+    <CreateTicketContainer>
       <CreateTicketForm fall={fall}>
         <VerticalSpaceBox multiplyBy={2} />
         <RenderCustomerNameInput
@@ -736,7 +740,7 @@ export default function CreateTicket(props) {
       />
       {/* <RenderCalenderBottomSheet /> */}
       {/* {showCalendar ? renderCalendarViewOnModal() : <View />} */}
-    </View>
+    </CreateTicketContainer>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import PhoneInput from 'react-native-phone-number-input';
-import {View, StyleSheet, Platform} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import IconAndTitleText from './IconAndTitleText';
 import {Colors} from '../../../styles/color.constants';
 import {translate} from '../../../Utils/MultilinguaUtils';
@@ -8,8 +8,6 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily} from '../../../styles/font.constants';
-import StringUtils from '../../../Utils/StringUtils';
-import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import CountryPhoneNumberLength from '../../../Utils/CountryPhoneNumberLength';
 
 const RenderPhoneInput = ({setTicketState}) => {
@@ -39,7 +37,6 @@ const RenderPhoneInput = ({setTicketState}) => {
         codeTextStyle={styles.phoneInputCodeText}
         textContainerStyle={styles.phoneInputTextContainer}
         textInputStyle={styles.phoneInputTextInputStyle}
-        // flagButtonStyle={{borderColor: Colors.accent, borderWidth: 1}}
         countryPickerButtonStyle={styles.phoneInputCountryPickerButtonStyle}
         textInputProps={{
           maxLength: maxLength,
@@ -49,31 +46,14 @@ const RenderPhoneInput = ({setTicketState}) => {
           },
         }}
         ref={phoneInput}
-        // defaultValue={value}
         defaultCode="US"
         layout="first"
-        // onChangeText={text => {
-        // setValue(text);
-        // console.log('PHONE:', text);
-        // }}
         onChangeCountry={country => {
           console.log('COUNTRY:', country);
           setMaxLength(CountryPhoneNumberLength[country?.cca2]);
         }}
         onChangeFormattedText={text => {
-          // setFormattedValue(text);
           setText(text);
-          // setIsValid(phoneInput.current?.isValidNumber(text));
-          // console.log('PHONE:', text, phoneInput.current?.isValidNumber(text));
-
-          // console.log(
-          //   'FORMATTED PHONE:',
-          //   text,
-          //   StringUtils.validatePhoneNumber(text),
-          // );
-
-          // setTicketState(state => ({...state, mobileNumber: text}));
-          // userInfo.mobileNumber = text;
         }}
       />
     </View>

@@ -165,9 +165,9 @@ export const getClosedLoopTicketItemComments = (token, ticketId) => ({
   ticketId,
 });
 
-export const getClosedLoopTicketItemActivity = (token, ticketId) => ({
+export const getClosedLoopTicketItemActivity = ticketId => ({
   type: GET_CLOSED_LOOP_TICKET_ITEM_ACTIVITY,
-  token,
+
   ticketId,
 });
 
@@ -187,9 +187,9 @@ export const resetParentComment = () => ({
   type: RESET_PARENT_COMMENT,
 });
 
-export const createClfTicket = (token, param, feedbackApiKey) => ({
+export const createClfTicket = (param, feedbackApiKey) => ({
   type: CREATE_CLF_TICKET,
-  token,
+
   param,
   feedbackApiKey,
 });

@@ -21,6 +21,7 @@ import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {translate} from '../Utils/MultilinguaUtils';
+import CheckmarkIcon from '../routes/commonUI/CheckmarkIcon';
 
 const SelectSegmentScreen = props => {
   const dispatch = useDispatch();
@@ -81,12 +82,7 @@ const SelectSegmentScreen = props => {
         <View style={styles.row}>
           <Text style={styles.title}>{item.segmentName}</Text>
           {currentSegmentId === item.segmentID ? (
-            <IonIcons
-              style={{marginHorizontal: MarginConstants.halfTab}}
-              name={'checkmark'}
-              size={20}
-              color={Colors.filterIconColor}
-            />
+            <CheckmarkIcon index={index} />
           ) : (
             <View />
           )}

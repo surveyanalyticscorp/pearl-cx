@@ -15,6 +15,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {translate} from '../../Utils/MultilinguaUtils';
+import CheckmarkIcon from '../../routes/commonUI/CheckmarkIcon';
 
 const GlobalSelectSegment = ({
   currentSegmentId,
@@ -34,17 +35,7 @@ const GlobalSelectSegment = ({
           <Text testID="segment-name" style={styles.title}>
             {item.segmentName}
           </Text>
-          {currentSegmentId === item.segmentID ? (
-            <IonIcon
-              testID="check-mark-icon"
-              style={{marginHorizontal: MarginConstants.halfTab}}
-              name={'checkmark'}
-              size={20}
-              color={Colors.filterIconColor}
-            />
-          ) : (
-            <View />
-          )}
+          {currentSegmentId === item.segmentID ? <CheckmarkIcon /> : <View />}
         </View>
       </TouchableWithoutFeedback>
     );

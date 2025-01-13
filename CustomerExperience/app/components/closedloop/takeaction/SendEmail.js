@@ -14,7 +14,6 @@ import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
-import IonIcons from 'react-native-vector-icons/Ionicons';
 import {CloseButton} from '../../../routes/commonUI/CommonUI';
 import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
 import Animated from 'react-native-reanimated';
@@ -443,6 +442,7 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
   },
   textInput: {
+    flex: 1,
     color: Colors.filterIconColor,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,

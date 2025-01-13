@@ -7,9 +7,7 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import {RenderSpinner} from '../../routes/commonUI/CommonUI';
 import {translate} from '../../Utils/MultilinguaUtils';
-import TicketOverview from './TicketOverview';
 import TicketComments from './TicketComments';
-import TicketActivity from './TicketActivity';
 import {FontFamily} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {getClosedLoopTicketItem} from '../../redux/actions/dashboard.actions';
@@ -20,6 +18,8 @@ import {
   getActionList,
   getRootCauseList,
 } from '../../redux/actions/closedloop.actions';
+import TicketOverview from './TicketOverview/TicketOverview';
+import TicketActivity from './TicketActivity/TicketActivity';
 
 export default function TicketDetails(props) {
   const authToken = useSelector(state => state.global.authToken);

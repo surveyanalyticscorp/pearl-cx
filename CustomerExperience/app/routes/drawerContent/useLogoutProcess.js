@@ -9,11 +9,13 @@ import {
 } from '../../api/Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Notifications} from 'react-native-notifications';
-import {clearDashboard} from '../../redux/actions/dashboard.actions';
+import {
+  clearDashboard,
+  setTokenExpired,
+} from '../../redux/actions/dashboard.actions';
 import DeviceInfo from 'react-native-device-info';
 import {isStringNullOrEmpty} from '../../Utils/Utility';
 import messaging from '@react-native-firebase/messaging';
-import AsyncStorageData from '../../Utils/AsyncUtil';
 
 const useLogoutProcess = () => {
   const dispatch = useDispatch();
@@ -33,13 +35,14 @@ const useLogoutProcess = () => {
       AsyncStorage.setItem(ASYNC_LOGGED_IN_ALREADY, 'true').then();
 
       console.log('USE_LOGOUT', 'Global dara removed ');
-
       dispatch(clearDashboard());
       console.log('USE_LOGOUT', 'clearDashboard');
 
       dispatch(clearUserInfo());
       console.log('USE_LOGOUT', 'clearUserInfo');
       dispatch(clearError(false));
+
+      dispatch(setTokenExpired(false));
     });
   };
   useEffect(() => {
@@ -59,7 +62,11 @@ const useLogoutProcess = () => {
         let user = JSON.parse(response[1][1]);
 
         if (!isStringNullOrEmpty(pushToken)) {
-          callLogoutAPI(user.email, user.accessCode, pushToken);
+          callLogoutAPI(
+            user?.email ?? '',
+            user?.accessCode ?? '',
+            pushToken ?? '',
+          );
         } else {
           messaging()
             .getToken()

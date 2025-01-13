@@ -1,12 +1,12 @@
 import React from 'react';
 import {View} from 'react-native';
-import QPButton from '../../../widgets/Button';
-import {buttonStyles} from '../../../styles/button.styles';
-import {translate} from '../../../Utils/MultilinguaUtils';
-import {Colors} from '../../../styles/color.constants';
-import {PaddingConstants} from '../../../styles/padding.constants';
+import QPButton from '../../../../widgets/Button';
+import {buttonStyles} from '../../../../styles/button.styles';
+import {translate} from '../../../../Utils/MultilinguaUtils';
+import {Colors} from '../../../../styles/color.constants';
+import {PaddingConstants} from '../../../../styles/padding.constants';
 import {useSelector} from 'react-redux';
-import {isObjectEmpty} from '../../../Utils/Utility';
+import {isObjectEmpty} from '../../../../Utils/Utility';
 
 export function hasPanelMemberObj(obj) {
   return obj !== null && obj !== undefined && !isObjectEmpty(obj);

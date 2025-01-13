@@ -2,7 +2,6 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {PaddingConstants} from '../styles/padding.constants';
 import {MarginConstants} from '../styles/margin.constants';
-import {Colors} from '../styles/color.constants';
 
 export const ParentContainer = ({children, style}) => {
   return (
