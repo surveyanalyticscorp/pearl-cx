@@ -138,6 +138,8 @@ export const CLF_GET_ROOT_CAUSE = '/mobile/root-cause';
 export const CLF_GET_ROOT_CAUSE_ACTIONS = '/mobile/root-cause-action'; // subscriberId
 // /mobile/root-cause-action
 
+export const CLF_GET_CENTRALIZED_ROOT_CAUSE = '/mobile/root-cause/central'; // subscriberId
+
 export const CLF_UPDATE_ROOT_CAUSE_PREFIX = '/mobile/tickets/'; // ticketId
 export const CLF_UPDATE_ROOT_CAUSE_POSTFIX = '/update-root-causes';
 

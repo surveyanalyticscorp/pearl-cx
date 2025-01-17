@@ -4,6 +4,8 @@ import {
   ACTIONS_RECEIVED,
   ACTION_HISTORY_DETAILS_RECEIVED,
   ACTION_HISTORY_SUMMARY_RECEIVED,
+  CENTRALIZED_ROOT_CAUSE_RECEIVED,
+  CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED,
   CLEAR_TICKET_SYNC,
   DELETE_TICKET_COMPLETE,
   DELETE_TICKET_STATUS_RESET,
@@ -85,6 +87,7 @@ const initialState = {
   segmentList: [],
   rootCauseList: [],
   rootCauseActionList: [],
+  centralizedRootCauseList: [],
   isSegmentSelectorOpen: false,
   ownerDetails: {},
   allOwnersDetails: {},
@@ -330,6 +333,20 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         rootCauseList: action.response,
+      };
+    }
+
+    case CENTRALIZED_ROOT_CAUSE_RECEIVED: {
+      return {
+        ...state,
+        centralizedRootCauseList: action.response,
+      };
+    }
+
+    case CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED: {
+      return {
+        ...state,
+        ticket: action.response,
       };
     }
 

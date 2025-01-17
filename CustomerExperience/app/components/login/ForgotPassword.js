@@ -42,6 +42,7 @@ import EmailTextInput from './components/EmailTextInput';
 import CXLogo from './components/CXLogo';
 import LoginBackground from './components/LoginBackground';
 import {useNavigation} from '@react-navigation/core';
+import {useState} from 'react';
 
 const isValidateInput = ({email, accessCode}) => {
   if (!validateEmail(email)) {
@@ -55,9 +56,10 @@ const isValidateInput = ({email, accessCode}) => {
   return true;
 };
 
-let RenderSpinnerResetButton = ({route}) => {
+let RenderSpinnerResetButton = ({route, resetData}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
   const {
     isLoading,
     isError,
@@ -66,11 +68,10 @@ let RenderSpinnerResetButton = ({route}) => {
     baseUrl,
     validatePasswordLinkResponse,
   } = useSelector(state => state.global);
-  const login = useSelector(state => state.login);
 
   const authenticateAccessCode = () => {
-    if (isValidateInput(login) && StringUtils.isEmpty(baseUrl)) {
-      dispatch(authenticatePanel({accessCode: login.accessCode}));
+    if (isValidateInput(resetData) && StringUtils.isEmpty(baseUrl)) {
+      dispatch(authenticatePanel({accessCode: resetData.accessCode}));
     }
   };
 
@@ -84,8 +85,8 @@ let RenderSpinnerResetButton = ({route}) => {
       let time = route.params.timestamp.replace('+', ' ');
       if (StringUtils.isNotEmpty(dynamicLink)) {
         let data = {
-          emailAddress: login.email,
-          accessCode: login.accessCode,
+          emailAddress: resetData.email,
+          accessCode: resetData.accessCode,
           timestamp: time,
         };
         // props.validatePasswordLink(data);
@@ -103,8 +104,8 @@ let RenderSpinnerResetButton = ({route}) => {
       } else {
         if (!validatePasswordLinkResponse.isExpired) {
           navigation.navigate('ResetPassword', {
-            email: login.email,
-            accessCode: login.accessCode,
+            email: resetData.email,
+            accessCode: resetData.accessCode,
           });
         } else {
           // props.setDynamicLink();
@@ -136,10 +137,10 @@ let RenderSpinnerResetButton = ({route}) => {
   }, [baseUrl]);
 
   const onResetPasswordClick = () => {
-    if (isValidateInput(login)) {
+    if (isValidateInput(resetData)) {
       let data = {
-        emailAddress: login.email,
-        accessCode: login.accessCode,
+        emailAddress: resetData.email,
+        accessCode: resetData.accessCode,
       };
       // props.setUserDetails(data);
       dispatch(setUserDetailsForResetPassword(data));
@@ -167,6 +168,13 @@ let RenderSpinnerResetButton = ({route}) => {
 
 const ForgotPassword = props => {
   console.log('NAVIGATION_LOGIN', props.route.name);
+  const [resetData, setResetData] = useState({email: '', accessCode: ''});
+  const setEmail = email => {
+    setResetData({...resetData, email});
+  };
+  const setAccessCode = accessCode => {
+    setResetData({...resetData, accessCode});
+  };
 
   return (
     <LoginBackground>
@@ -187,11 +195,11 @@ const ForgotPassword = props => {
             <Text style={styles.forgotPasswordMessage}>
               {translate('onBoarding.forgotPasswordMessage')}
             </Text>
-            <EmailTextInput />
-            <AccessCodeTextInput />
+            <EmailTextInput setEmail={setEmail} />
+            <AccessCodeTextInput setAccessCode={setAccessCode} />
           </View>
         </KeyboardAvoidingView>
-        <RenderSpinnerResetButton />
+        <RenderSpinnerResetButton route={props.route} resetData={resetData} />
       </ScrollView>
     </LoginBackground>
   );

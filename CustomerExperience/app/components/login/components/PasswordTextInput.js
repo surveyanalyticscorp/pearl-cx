@@ -4,12 +4,12 @@ import {useDispatch} from 'react-redux';
 import {setLoginPassword} from '../../../redux/actions/login.action';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {loginStyles} from '../login.styles';
-const PasswordTextInput = () => {
+const PasswordTextInput = ({setPassword}) => {
   // const password = useSelector(state => state.login.password);
   const dispatch = useDispatch();
 
   const handlePassword = text => {
-    dispatch(setLoginPassword(text));
+    setPassword ? setPassword(text) : dispatch(setLoginPassword(text));
   };
 
   return (

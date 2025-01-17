@@ -62,6 +62,7 @@ target 'CustomerExperience' do
   use_flipper!()
 
   pod 'RNI18n', :path => '../node_modules/react-native-i18n'
+  
 
 
   post_install do |installer|

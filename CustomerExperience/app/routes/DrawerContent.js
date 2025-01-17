@@ -1,135 +1,24 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Image,
-  StyleSheet,
-  Text,
-  Alert,
-  Platform,
-  Pressable,
-} from 'react-native';
+import {View, Image, StyleSheet, Text, Platform, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome5';
 import {Colors} from '../styles/color.constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
-import {clearUserInfo} from '../redux/actions';
-import {doLogout} from '../redux/actions/login.actions';
-import {useDispatch, useSelector} from 'react-redux';
-import {ASYNC_PUSH_TOKEN, ASYNC_USER_CREDENTIALS} from '../api/Constant';
+import {useSelector} from 'react-redux';
 import {Sizes} from '../styles/Size.constant';
 import {PaddingConstants} from '../styles/padding.constants';
 import StringUtils from '../Utils/StringUtils';
 import DeviceInfo from 'react-native-device-info';
-import {isStringNullOrEmpty} from '../Utils/Utility';
-import messaging from '@react-native-firebase/messaging';
 import {DrawerActions} from '@react-navigation/native';
-import {Notifications} from 'react-native-notifications';
 import {translate} from '../Utils/MultilinguaUtils';
-import {setTokenExpired} from '../redux/actions/dashboard.actions';
 import TicketSync from '../components/TicketSync';
 import ClosedLoopSvgIcon from '../../assets/images/closed_loop.svg';
 import DrawerBackground from './commonUI/DrawerBackground';
 import TextLabel from '../../app/widgets/TextLabel/TextLabel';
 import useLogoutProcess from './drawerContent/useLogoutProcess';
-import {log} from 'react-native-reanimated';
 import logoutDialog from './drawerContent/LogoutDialog';
-
-const LogoutButton = ({navigation}) => {
-  const dispatch = useDispatch();
-  const authToken = useSelector(state => state.global.authToken);
-  const isTokenExpired = useSelector(state => state.dashboard.isTokenExpired);
-  const [logoutAlert, setLogoutAlert] = useState(false);
-  const removeCashedData = () => {
-    AsyncStorage.clear().then(() => {
-      dispatch(clearUserInfo());
-      setLogoutAlert(false);
-      global.baseUrl = '';
-      global.clfBaseUrl = '';
-      global.subscriberId = '';
-      global.bearerToken = '';
-      global.authToken = '';
-    });
-  };
-  let callLogoutAPI = (emailAddress, accessCode, token) => {
-    let params = {
-      accessCode: accessCode,
-      emailAddress: emailAddress,
-      pushToken: token,
-      udid: DeviceInfo.getDeviceId(),
-    };
-
-    dispatch(doLogout(authToken, params));
-    dispatch(setTokenExpired(true));
-    Notifications.removeAllDeliveredNotifications();
-    removeCashedData();
-  };
-
-  let logoutAction = () => {
-    AsyncStorage.multiGet([ASYNC_PUSH_TOKEN, ASYNC_USER_CREDENTIALS]).then(
-      response => {
-        let pushToken = response[0][1];
-        let user = JSON.parse(response[1][1]);
-
-        if (!isStringNullOrEmpty(pushToken)) {
-          callLogoutAPI(user.email, user.accessCode, pushToken);
-        } else {
-          messaging()
-            .getToken()
-            .then(token => {
-              callLogoutAPI(user.email, user.accessCode, token);
-            });
-        }
-      },
-    );
-  };
-
-  useEffect(() => {
-    if (isTokenExpired) {
-      console.log('EXPIRED!');
-      logoutAction();
-    } else {
-      console.log('not EXPIRED');
-    }
-  }, [isTokenExpired]);
-
-  const renderDialog = () => {
-    return Alert.alert(
-      translate('logout_confirmation_message'),
-      '',
-      [
-        {
-          text: translate('yes'),
-          onPress: logoutAction,
-        },
-        {
-          text: translate('no'),
-          onPress: () => {
-            setLogoutAlert(false);
-          },
-        },
-      ],
-      {cancelable: false},
-    );
-  };
-
-  const popLogoutDialog = () => {
-    navigation.dispatch(DrawerActions.toggleDrawer());
-    !logoutAlert && setLogoutAlert(true);
-  };
-  return (
-    <View>
-      <DrawerButton
-        onPress={popLogoutDialog}
-        frontIcon={<LogoutButtonIcon />}
-        title={translate('logout')}
-      />
-      {logoutAlert && renderDialog()}
-    </View>
-  );
-};
 
 const LogoutButtonIcon = () => {
   return (
@@ -277,7 +166,10 @@ const DrawerContent = ({navigation}) => {
         <DrawerButton dataObj={buttonData['settings']} />
         <DrawerButton dataObj={buttonData['logout']} />
         {/* <LogoutButton navigation={navigation} /> */}
-        {logoutAlert && logoutDialog(logoutAction)}
+        {logoutAlert &&
+          logoutDialog(logoutAction, () => {
+            setLogoutAlert(false);
+          })}
       </RenderSettingsAndLogout>
     </DrawerBackground>
   );

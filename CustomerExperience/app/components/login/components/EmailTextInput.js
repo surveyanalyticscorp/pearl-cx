@@ -4,12 +4,12 @@ import {useDispatch} from 'react-redux';
 import {setLoginEmail} from '../../../redux/actions/login.action';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {loginStyles} from '../login.styles';
-const EmailTextInput = ({defaultValue}) => {
+const EmailTextInput = ({defaultValue, setEmail}) => {
   // const email = useSelector(state => state.login.email);
   const dispatch = useDispatch();
 
   const handleEmail = text => {
-    dispatch(setLoginEmail(text));
+    setEmail ? setEmail(text) : dispatch(setLoginEmail(text));
   };
 
   return (

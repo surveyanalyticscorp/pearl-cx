@@ -28,6 +28,14 @@ export const ACTIONS_RECEIVED = 'ACTIONS_RECEIVED';
 export const UPDATE_ROOT_CAUSE = 'UPDATE_ROOT_CAUSE';
 export const ROOT_CAUSE_UPDATE_RECEIVED = 'ROOT_CAUSE_UPDATE_RECEIVED';
 
+export const CENTRALIZED_ROOT_CAUSE = 'CENTRALIZED_ROOT_CAUSE';
+export const CENTRALIZED_ROOT_CAUSE_RECEIVED =
+  'CENTRALIZED_ROOT_CAUSE_RECEIVED';
+
+export const UPDATE_CENTRALIZED_ROOT_CAUSE = 'UPDATE_CENTRALIZED_ROOT_CAUSE';
+export const CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED =
+  'CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED';
+
 export const UPDATE_TICKET_ESCALATION = 'UPDATE_TICKET_ESCALATION';
 export const TICKET_ESCALATION_RECIEVED = 'TICKET_ESCALATION_RECIEVED';
 
@@ -112,6 +120,15 @@ export const updateRootCause = (token, ticketId, param, feedbackApiKey) => ({
   feedbackApiKey,
 });
 
+export const updateCentralizedRootCause = (ticketId, param) => ({
+  type: UPDATE_CENTRALIZED_ROOT_CAUSE,
+  ticketId,
+  param,
+});
+
+export const getCentralizedRootCause = () => ({
+  type: CENTRALIZED_ROOT_CAUSE,
+});
 export const setStatusFilterById = statusId => ({
   type: SET_TICKET_FILTER_BY_STATUS_ID,
   statusId,

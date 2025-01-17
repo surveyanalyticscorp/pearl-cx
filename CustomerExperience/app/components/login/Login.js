@@ -13,7 +13,7 @@ import {
   validateEmail,
 } from '../../Utils/Utility';
 import QPButton from '../../widgets/Button';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   clearError,
   clearUserInfo,
@@ -67,6 +67,8 @@ const checkValidation = ({email, password, accessCode}) => {
     return false;
   }
   if (isStringNullOrEmpty(password)) {
+    console.log('LOGIN', 'PASSWORD NOT VALID');
+
     showErrorFlashMessage(translate('onBoarding.invalidPassword'));
 
     return false;
@@ -100,12 +102,13 @@ const RenderForgotPasswordButton = () => {
   );
 };
 
-const RenderSpinnerLoginButton = () => {
+const RenderSpinnerLoginButton = ({login}) => {
   // const [login, setLogin] = useState({});
 
   const dispatch = useDispatch();
+
   const isLoading = useSelector(state => state.global.isLoading);
-  const login = useSelector(state => state.login);
+  // const login = useSelector(state => state.login);
 
   const {
     isError,
@@ -230,6 +233,16 @@ const RenderSpinnerLoginButton = () => {
 
 const Login = props => {
   console.log('LOGIN RENDERED');
+  const [login, setLogin] = useState({email: '', password: '', accessCode: ''});
+  const setEmail = email => {
+    setLogin({...login, email});
+  };
+  const setPassword = password => {
+    setLogin({...login, password});
+  };
+  const setAccessCode = accessCode => {
+    setLogin({...login, accessCode});
+  };
   return (
     <LoginBackground>
       <ScrollView
@@ -245,11 +258,11 @@ const Login = props => {
           })}
           enabled>
           <CXLogo />
-          <EmailTextInput />
-          <PasswordTextInput />
-          <AccessCodeTextInput />
+          <EmailTextInput setEmail={setEmail} />
+          <PasswordTextInput setPassword={setPassword} />
+          <AccessCodeTextInput setAccessCode={setAccessCode} />
         </KeyboardAvoidingView>
-        <RenderSpinnerLoginButton />
+        <RenderSpinnerLoginButton login={login} />
         <RenderForgotPasswordButton />
       </ScrollView>
     </LoginBackground>

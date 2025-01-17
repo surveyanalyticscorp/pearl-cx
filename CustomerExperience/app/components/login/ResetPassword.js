@@ -79,10 +79,14 @@ const ResetPassword = props => {
 
   const isValidateInput = () => {
     if (isStringNullOrEmpty(password)) {
+      console.log('RESET PASSWORD 1', 'CONFIRM PASSWORD NOT VALID');
+
       setValidation(translate('onBoarding.invalidPassword'));
       return false;
     }
     if (isStringNullOrEmpty(confirmPassword)) {
+      console.log('RESET PASSWORD 2', 'CONFIRM PASSWORD NOT VALID');
+
       setValidation(translate('onBoarding.invalidPassword'));
       return false;
     }

@@ -42,6 +42,7 @@ import {
   watchActionSummary,
   watchActionDetails,
   watchUploadFile,
+  watchGetCentralizdRootCause,
 } from './ClosedLoopSaga';
 import {watchGetNotification} from './notificationSaga';
 import {
@@ -100,5 +101,6 @@ export function* rootSaga() {
     fork(watchUploadFile),
     fork(watchFetchAllResponses),
     fork(watchGetGlobalSettings),
+    fork(watchGetCentralizdRootCause),
   ]);
 }

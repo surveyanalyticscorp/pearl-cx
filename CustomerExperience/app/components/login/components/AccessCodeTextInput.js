@@ -1,15 +1,15 @@
 import React from 'react';
 import QPTextField from '../../../widgets/TextField';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {setLoginAccessCode} from '../../../redux/actions/login.action';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {loginStyles} from '../login.styles';
-const AccessCodeTextInput = ({defaultValue}) => {
+const AccessCodeTextInput = ({defaultValue, setAccessCode}) => {
   // const accessCode = useSelector(state => state.login.accessCode);
   const dispatch = useDispatch();
 
   const handleAccessCode = text => {
-    dispatch(setLoginAccessCode(text));
+    setAccessCode ? setAccessCode(text) : dispatch(setLoginAccessCode(text));
   };
 
   return (

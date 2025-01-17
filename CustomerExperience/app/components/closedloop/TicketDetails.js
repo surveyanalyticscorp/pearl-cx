@@ -20,6 +20,7 @@ import {
 } from '../../redux/actions/closedloop.actions';
 import TicketOverview from './TicketOverview/TicketOverview';
 import TicketActivity from './TicketActivity/TicketActivity';
+import CentralizedRootCause from './CentralizedRootCause/CentralizedRootCause';
 
 export default function TicketDetails(props) {
   const authToken = useSelector(state => state.global.authToken);
@@ -118,6 +119,15 @@ export default function TicketDetails(props) {
         component={TicketRootCause}
         initialParams={{screenName: translate('root_cause.root_cause')}}
       />
+
+      {/* <TicketTabs.Screen
+        testID={'ticket-centralized-root-cause'}
+        name={'Centralized root cause'}
+        component={CentralizedRootCause}
+        initialParams={{
+          screenName: 'Centralized root cause',
+        }}
+      /> */}
     </TicketTabs.Navigator>
   );
 }

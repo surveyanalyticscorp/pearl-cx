@@ -64,6 +64,7 @@ import {
   CLF_GET_ROOT_CAUSE_ACTIONS,
   getClfTicketListUrl,
   CLF_MEDIA_UPLOAD,
+  CLF_GET_CENTRALIZED_ROOT_CAUSE,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -72,6 +73,8 @@ import {
   ACTION_HISTORY_DETAILS_RECEIVED,
   ACTION_HISTORY_SUMMARY,
   ACTION_HISTORY_SUMMARY_RECEIVED,
+  CENTRALIZED_ROOT_CAUSE,
+  CENTRALIZED_ROOT_CAUSE_RECEIVED,
   DELETE_TICKET,
   DELETE_TICKET_COMPLETE,
   GET_ACTIONS,
@@ -860,6 +863,27 @@ export function* watchGetrootCauseActionList() {
   yield takeLatest(GET_ACTIONS, getRootCauseActionList);
 }
 
+export function* getCentralizedRootCause() {
+  try {
+    const json = yield WebServiceHandler.get(
+      getClfUrl(CLF_GET_CENTRALIZED_ROOT_CAUSE),
+      getBearerTokenStatic(),
+    );
+    yield put({
+      type: CENTRALIZED_ROOT_CAUSE_RECEIVED,
+      response: json.data,
+    });
+  } catch (error) {
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+
+export function* watchGetCentralizdRootCause() {
+  yield takeLatest(CENTRALIZED_ROOT_CAUSE, getCentralizedRootCause);
+}
 export function* updateRootCauseAndAction(action) {
   try {
     const json = yield WebServiceHandler.patch(
