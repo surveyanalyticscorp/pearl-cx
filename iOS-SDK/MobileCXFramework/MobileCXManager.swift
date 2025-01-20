@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import WebKit
 
+@MainActor
 public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDelegate, WKNavigationDelegate {
     @MainActor public func CXServiceResponse(withURL response: [String: Any]) {
         print("CXServiceResponse", response)
@@ -139,7 +140,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             } else {
                 frontView.frame = CGRect(x: 0, y: 70, width: self.iView!.frame.size.width, height: self.iView!.frame.size.height)
             }
-            frontView.backgroundColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
+            frontView.backgroundColor = UIColor(red: 255/255.0, green: 255/255.0, blue: 255/255.0, alpha: 1.0)
             self.iWebView = WKWebView(frame: CGRect(x: 0, y: 50, width: frontView.frame.size.width, height: frontView.frame.size.height - 120))
             self.iWebView?.navigationDelegate = self
             if let url = self.iResponseURL, let nsurl = URL(string: url) {
@@ -181,28 +182,23 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             if let boldFont = UIFont(name: "FiraSans-Bold", size: 16.0) {
                 attributedString.addAttribute(.font, value: boldFont, range: boldText)
             }
-//            attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 16.0), range: boldText)
-//            attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 16.0), range: plainText)
+            
             attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: attributedString.length))
-            hedearTextView.attributedText = attributedString
             
             frontView.addSubview(headerView)
-            frontView.addSubview(hedearTextView)
             
             let closeButtonImage = UIImage(systemName: "xmark",
                                            withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
             doneButton.setImage(closeButtonImage, for: .normal)
-            doneButton.tintColor = UIColor.white
+            doneButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
             doneButton.layer.cornerRadius = doneButton.bounds.size.width / 2
             if popUpFlag {
                 doneButton.frame = CGRect(x: self.iView!.frame.size.width - 80, y: 10, width: 20, height: 20)
             } else {
                 doneButton.frame = CGRect(x: self.iView!.frame.size.width - 40, y: 15, width: 20, height: 20)
-            }
-            
+            }            
             frontView.addSubview(doneButton)
         }
-        
     }
 
     public func showInAppSurvey(surveyUrl: String, withSuperView appSuperview: UIView) {
