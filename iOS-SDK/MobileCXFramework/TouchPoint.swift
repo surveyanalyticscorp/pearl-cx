@@ -29,7 +29,7 @@ public class TouchPoint {
     public var  lastName = "";
     public var  mobile = "";
     public var  segmentCode = "";
-    public var ShowInDialog = 0;
+    public var ShowInDialog = false;
     public var  customVariable1 = "";
     public var  customVariable2 = "";
     public var  customVariable3 = "";
@@ -41,7 +41,7 @@ public class TouchPoint {
         self.lastName = "";
         self.mobile = "";
         self.segmentCode = "";
-        self.ShowInDialog = 0;
+        self.ShowInDialog = false;
         self.customVariable1 = "";
         self.customVariable2 = "";
         self.customVariable3 = "";

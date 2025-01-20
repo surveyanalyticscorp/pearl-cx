@@ -16,19 +16,21 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         if let _ = response[ksurveyURL] {
             print("URL found")
             if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
-                        let responseCopy = response // Create a copy of the response
-
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
-
-                            self.iResponseURL = responseURL
-                            let strUserDefaultKey = "\(self.iTouchPointName ?? 0)\(self.iCurrentViewName)"
-                            if !self.iPresentViewFlag {
-                                GlobalDataCX.addValueToUserDefault(responseCopy, forKey: strUserDefaultKey)
-                            } else {
-                                self.showMessageInViewControllerWithResponse(responseInfo: responseCopy)
-                            }
+                let responseCopy = response // Create a copy of the response
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.iResponseURL = responseURL
+                    let strUserDefaultKey = "\(self.iTouchPointName ?? 0)\(self.iCurrentViewName)"
+                    if !self.iPresentViewFlag {
+                        GlobalDataCX.addValueToUserDefault(responseCopy, forKey: strUserDefaultKey)
+                    } else {
+                        if let url = self.iResponseURL, let nsurl = URL(string: url) {
+                            let nsrequest = URLRequest(url: nsurl)
+                            self.iWebView?.backgroundColor = UIColor.white
+                            self.iWebView?.load(nsrequest)
                         }
+                    }
+                }
             }
         } else if let error = response["error"] as? [String: Any] {
             // Extract error message
@@ -94,21 +96,11 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     }
 
     public func launchFeedbackSurvey(touchPoint: TouchPoint) {
-        
-        GlobalDataCX.addToUserDefault(touchPoint.ShowInDialog, forKey: kisDialog)
-        var responseInfo: [String: Any] = [:]
-        let key = "\(String(describing: self.iTouchPointName))"
-        responseInfo = GlobalDataCX.checkValueInUserDefault(forKey: key)!
-        
-        if let surveyURL = responseInfo[ksurveyURL] as? String, !surveyURL.isEmpty {
-            self.iResponseURL = surveyURL
-            showMessageInViewControllerWithResponse(responseInfo: responseInfo)
-            GlobalDataCX.deleteUserDefaultValue(forKey: "\(self.iTouchPointName ?? 0)")
+        var ShowInDialog = touchPoint.ShowInDialog
+        if (ShowInDialog) {
+            self.showInAppSurvey(touchPoint: touchPoint);
         } else {
-            let aMobileCXServiceTxManager = MobileCXServiceTxManager()
-            self.iTouchPointName = touchPoint.surveyId
-            aMobileCXServiceTxManager.iDelegate = self
-            aMobileCXServiceTxManager.invokeService(touchPoint: touchPoint, withAPIKey: self.iApiKey!, dataCenter: self.iDataCenter!)
+            self.showMessageInViewControllerWithResponse(touchPoint: touchPoint)
         }
     }
 
@@ -122,12 +114,24 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         self.iPopupMenuRightButtonTitle = aRightButtonTitle
         self.iPopupMenuLeftButtonTitle = aLeftButtonTitle
     }
+    
+    public func getAPIResponse (touchPoint: TouchPoint) {
+        var responseInfo: [String: Any] = [:]
+        let key = "\(String(describing: self.iTouchPointName))"
+        responseInfo = GlobalDataCX.checkValueInUserDefault(forKey: key)!
+        if let surveyURL = responseInfo[ksurveyURL] as? String, !surveyURL.isEmpty {
+            self.iResponseURL = surveyURL
+            GlobalDataCX.deleteUserDefaultValue(forKey: "\(self.iTouchPointName ?? 0)")
+        } else {
+            let aMobileCXServiceTxManager = MobileCXServiceTxManager()
+            self.iTouchPointName = touchPoint.surveyId
+            aMobileCXServiceTxManager.iDelegate = self
+            aMobileCXServiceTxManager.invokeService(touchPoint: touchPoint, withAPIKey: self.iApiKey!, dataCenter: self.iDataCenter!)
+        }
+    }
 
-    public func showMessageInViewControllerWithResponse(responseInfo: [String: Any]) {
-        var popUpFlag = false
-        let isDialog = GlobalDataCX.getValueFromUserDefault("\(kisDialog)")
-        popUpFlag = isDialog == 1
-
+    public func showMessageInViewControllerWithResponse(touchPoint: TouchPoint) {
+        self.getAPIResponse(touchPoint: touchPoint)
         DispatchQueue.main.async {
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             rect.origin.x = 0
@@ -135,19 +139,11 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             self.iView = UIView(frame: rect)
             self.iView?.backgroundColor = UIColor.black.withAlphaComponent(0.6)
             let frontView = UIView()
-            if popUpFlag {
-                frontView.frame = CGRect(x: 0, y: 70, width: self.iView!.frame.size.width, height: self.iView!.frame.size.height)
-            } else {
-                frontView.frame = CGRect(x: 0, y: 70, width: self.iView!.frame.size.width, height: self.iView!.frame.size.height)
-            }
+            frontView.frame = CGRect(x: 0, y: 70, width: self.iView!.frame.size.width, height: self.iView!.frame.size.height)
             frontView.backgroundColor = UIColor(red: 255/255.0, green: 255/255.0, blue: 255/255.0, alpha: 1.0)
             self.iWebView = WKWebView(frame: CGRect(x: 0, y: 50, width: frontView.frame.size.width, height: frontView.frame.size.height - 120))
             self.iWebView?.navigationDelegate = self
-            if let url = self.iResponseURL, let nsurl = URL(string: url) {
-                let nsrequest = URLRequest(url: nsurl)
-                self.iWebView?.backgroundColor = UIColor.white
-                self.iWebView?.load(nsrequest)
-            }
+            
             frontView.addSubview(self.iWebView!)
             self.iView?.addSubview(frontView)
             self.iBaseWindow?.addSubview(self.iView!)
@@ -192,52 +188,47 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             doneButton.setImage(closeButtonImage, for: .normal)
             doneButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
             doneButton.layer.cornerRadius = doneButton.bounds.size.width / 2
-            if popUpFlag {
-                doneButton.frame = CGRect(x: self.iView!.frame.size.width - 80, y: 10, width: 20, height: 20)
-            } else {
-                doneButton.frame = CGRect(x: self.iView!.frame.size.width - 40, y: 15, width: 20, height: 20)
-            }            
+            doneButton.frame = CGRect(x: self.iView!.frame.size.width - 40, y: 15, width: 20, height: 20)
             frontView.addSubview(doneButton)
         }
     }
 
-    public func showInAppSurvey(surveyUrl: String, withSuperView appSuperview: UIView) {
-        var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
-        let screenRect = UIScreen.main.bounds
-        rect.origin.x = 0
-        rect.origin.y = 0
-        rect.size.width = screenRect.size.width
-        rect.size.height = screenRect.size.height
+    public func showInAppSurvey(touchPoint: TouchPoint) {
+        self.getAPIResponse(touchPoint: touchPoint)
+        DispatchQueue.main.async {
+            var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
+            let screenRect = UIScreen.main.bounds
+            rect.origin.x = 0
+            rect.origin.y = 0
+            rect.size.width = screenRect.size.width
+            rect.size.height = screenRect.size.height
 
-        self.iView = UIView(frame: rect)
-        self.iView?.backgroundColor = UIColor.gray.withAlphaComponent(0.6)
+            self.iView = UIView(frame: rect)
+            self.iView?.backgroundColor = UIColor.gray.withAlphaComponent(0.6)
 
-        let frontView = UIView(frame: CGRect(x: 30, y: 70, width: self.iView!.frame.size.width - 60, height: self.iView!.frame.size.height - 140))
-        frontView.backgroundColor = UIColor.white
+            let frontView = UIView(frame: CGRect(x: 30, y: 70, width: self.iView!.frame.size.width - 60, height: self.iView!.frame.size.height - 140))
+            frontView.backgroundColor = UIColor.white
 
-        self.iWebView = WKWebView(frame: CGRect(x: 0, y: 20, width: frontView.frame.size.width, height: frontView.frame.size.height - 20))
-        self.iWebView?.navigationDelegate = self
-        if let nsurl = URL(string: surveyUrl) {
-            let nsrequest = URLRequest(url: nsurl)
-            self.iWebView?.backgroundColor = UIColor.clear
-            self.iWebView?.load(nsrequest)
+            self.iWebView = WKWebView(frame: CGRect(x: 0, y: 20, width: frontView.frame.size.width, height: frontView.frame.size.height - 20))
+            self.iWebView?.navigationDelegate = self
+            
+            frontView.addSubview(self.iWebView!)
+
+            self.iView?.addSubview(frontView)
+            self.iBaseWindow?.addSubview(self.iView!)
+            self.iBaseWindow?.bringSubviewToFront(self.iView!)
+
+            let doneButton = UIButton(type: .custom)
+            doneButton.addTarget(self, action: #selector(self.aDismissWebview(_:)), for: .touchUpInside)
+
+            let closeButtonImage = UIImage(systemName: "xmark",
+                                           withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
+            doneButton.setImage(closeButtonImage, for: .normal)
+            doneButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
+            doneButton.layer.cornerRadius = doneButton.bounds.size.width / 2
+            doneButton.frame = CGRect(x: self.iView!.frame.size.width - 90, y: 10, width: 25, height: 25)
+            frontView.addSubview(doneButton)
         }
-        frontView.addSubview(self.iWebView!)
-
-        self.iView?.addSubview(frontView)
-        appSuperview.addSubview(self.iView!)
-        appSuperview.bringSubviewToFront(self.iView!)
-
-        let doneButton = UIButton(type: .custom)
-        doneButton.addTarget(self, action: #selector(aDismissWebview(_:)), for: .touchUpInside)
-
-        let closeButtonImage = UIImage(systemName: "xmark",
-                                       withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
-        doneButton.setImage(closeButtonImage, for: .normal)
-        doneButton.tintColor = UIColor.white
-        doneButton.layer.cornerRadius = doneButton.bounds.size.width / 2
-        doneButton.frame = CGRect(x: self.iView!.frame.size.width - 80, y: -10, width: 25, height: 25)
-        frontView.addSubview(doneButton)
     }
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {

@@ -30,12 +30,12 @@ public class GMDCircleLoader: UIView {
         // hud.center = img.center
         // hud.addSubview(img)
         
-        // let label = UILabel(frame: CGRect(x: -70.0, y: 40.0, width: 200.0, height: 42.0))
-        // label.font = UIFont.boldSystemFont(ofSize: 18.0)
-        // label.textColor = GMD_SPINNER_COLOR
-        // label.textAlignment = .center
-        // label.text = title
-        // hud.addSubview(label)
+         let label = UILabel(frame: CGRect(x: -70.0, y: 40.0, width: 200.0, height: 42.0))
+         label.font = UIFont.boldSystemFont(ofSize: 18.0)
+//         label.textColor = GMD_SPINNER_COLOR
+         label.textAlignment = .center
+         label.text = title
+         hud.addSubview(label)
         
         hud.start()
         view.addSubview(hud)
