@@ -258,9 +258,12 @@ const Login = props => {
           })}
           enabled>
           <CXLogo />
-          <EmailTextInput setEmail={setEmail} />
-          <PasswordTextInput setPassword={setPassword} />
-          <AccessCodeTextInput setAccessCode={setAccessCode} />
+          <EmailTextInput value={login.email} setEmail={setEmail} />
+          <PasswordTextInput value={login.password} setPassword={setPassword} />
+          <AccessCodeTextInput
+            value={login.accessCode}
+            setAccessCode={setAccessCode}
+          />
         </KeyboardAvoidingView>
         <RenderSpinnerLoginButton login={login} />
         <RenderForgotPasswordButton />

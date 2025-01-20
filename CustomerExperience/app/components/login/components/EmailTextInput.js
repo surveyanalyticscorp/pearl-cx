@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import {setLoginEmail} from '../../../redux/actions/login.action';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {loginStyles} from '../login.styles';
-const EmailTextInput = ({defaultValue, setEmail}) => {
+const EmailTextInput = ({defaultValue, value, setEmail}) => {
   // const email = useSelector(state => state.login.email);
   const dispatch = useDispatch();
 
@@ -17,6 +17,7 @@ const EmailTextInput = ({defaultValue, setEmail}) => {
       secureText={false}
       testID="emailTextField"
       autofocus={false}
+      value={value}
       label={translate('onBoarding.email')}
       defaultValue={defaultValue ?? ''}
       style={loginStyles.emailInput}

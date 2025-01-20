@@ -32,6 +32,11 @@ export const loginStyles = StyleSheet.create({
     height: MarginConstants.tab4,
     marginBottom: MarginConstants.tab3,
     paddingHorizontal: MarginConstants.tab1,
+    fontFamily: FontFamily.regular,
+  },
+  emailInputText: {
+    color: Colors.filterIconColor,
+    fontFamily: FontFamily.regular,
   },
   signInButton: {
     height: MarginConstants.tab4,

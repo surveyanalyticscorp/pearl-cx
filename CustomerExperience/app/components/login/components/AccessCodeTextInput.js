@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import {setLoginAccessCode} from '../../../redux/actions/login.action';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {loginStyles} from '../login.styles';
-const AccessCodeTextInput = ({defaultValue, setAccessCode}) => {
+const AccessCodeTextInput = ({defaultValue, value, setAccessCode}) => {
   // const accessCode = useSelector(state => state.login.accessCode);
   const dispatch = useDispatch();
 
@@ -18,6 +18,7 @@ const AccessCodeTextInput = ({defaultValue, setAccessCode}) => {
       defaultValue={defaultValue ?? ''}
       label={translate('onBoarding.companyCode')}
       style={loginStyles.emailInput}
+      value={value}
       // onEndEdit={handleAccessCode}
       onChange={handleAccessCode}
       returnKey={'done'}

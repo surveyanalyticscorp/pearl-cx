@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 import {setLoginPassword} from '../../../redux/actions/login.action';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {loginStyles} from '../login.styles';
-const PasswordTextInput = ({setPassword}) => {
+const PasswordTextInput = ({setPassword, value}) => {
   // const password = useSelector(state => state.login.password);
   const dispatch = useDispatch();
 
@@ -18,7 +18,8 @@ const PasswordTextInput = ({setPassword}) => {
       secureText={true}
       label={translate('onBoarding.password')}
       defaultValue={''}
-      style={loginStyles.emailInput}
+      value={value}
+      style={{...loginStyles.emailInput}}
       // onEndEdit={handlePassword}
       onChange={handlePassword}
     />
