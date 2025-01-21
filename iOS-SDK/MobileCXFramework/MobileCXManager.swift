@@ -12,7 +12,6 @@ import WebKit
 @MainActor
 public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDelegate, WKNavigationDelegate {
     @MainActor public func CXServiceResponse(withURL response: [String: Any]) {
-        print("CXServiceResponse", response)
         if let _ = response[ksurveyURL] {
             print("URL found")
             if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
@@ -40,13 +39,16 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
                 if let topController = UIApplication.shared.windows[0].rootViewController {
                     // Show alert
                     let alert = UIAlertController(title: "", message: errorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in self.errorAPIHandler() }))
                     topController.present(alert, animated: true, completion: nil)
                 }
             }
         }
     }
 
+    func errorAPIHandler() {
+        perform(#selector(self.aDismissWebview(_:)), with: self, afterDelay: 0)
+    }
     
     public var iBaseWindow: UIWindow?
     public var iView: UIView?
@@ -208,8 +210,19 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
 
             let frontView = UIView(frame: CGRect(x: Int(screenRect.size.width * 0.1), y: Int(screenRect.size.height * 0.15), width: Int(screenRect.size.width * 0.8), height: Int(screenRect.size.height * 0.7)))
             frontView.backgroundColor = UIColor.white
-
-            self.iWebView = WKWebView(frame: CGRect(x: 0, y: 30, width: frontView.frame.size.width, height: frontView.frame.size.height - 20))
+                        
+            let preferences = WKPreferences()
+            let configuration = WKWebViewConfiguration()
+            if #available(iOS 14.0, *) {
+                let webpagePreferences = WKWebpagePreferences()
+                webpagePreferences.allowsContentJavaScript = true
+                configuration.defaultWebpagePreferences = webpagePreferences
+            } else {
+                preferences.javaScriptEnabled = true
+                configuration.preferences = preferences
+            }
+            
+            self.iWebView = WKWebView(frame: CGRect(x: 0, y: 30, width: frontView.frame.size.width, height: frontView.frame.size.height - 20), configuration: configuration)
             self.iWebView?.navigationDelegate = self
             
             frontView.addSubview(self.iWebView!)
@@ -233,22 +246,16 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         }
     }
     
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        if let url = navigationAction.request.url {
-            if url.absoluteString.contains("#autoClose") {
-                perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 4.0)
-            }
-        }
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {        
         decisionHandler(.allow)
     }
     
     public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        print("Web view did start loading")
-        GMDCircleLoader.setOnView(self.iWebView!, withTitle: "Loading...", animated: true)
+        GMDCircleLoader.setOnView(self.iWebView!, withTitle: "Please wait.", animated: true)
         let url = webView.url
         print("##### url = \(url?.absoluteString ?? "")")
-        if (url?.absoluteString.range(of: "#autoClose")) != nil {
-            perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 4.0)
+        if (((url?.absoluteString.range(of: "exitsurvey")) != nil) || ((url?.absoluteString.range(of: "#autoClose") != nil))) {
+            perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 1.0)
         }
     }
 

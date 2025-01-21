@@ -71,7 +71,7 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
         }
         request.setValue(apiKey, forHTTPHeaderField: "api-key")
 
-        printRequestDetails(request: request)
+//        printRequestDetails(request: request)
 
         // Create and resume the data task
         let task = session?.dataTask(with: request)
@@ -145,7 +145,7 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
 
     public func processJson(json: [String: Any]) {
         if let surveyURL = json["surveyURL"] as? String {
-            print("processJson -> surveyURL: \(surveyURL)")
+//            print("processJson -> surveyURL: \(surveyURL)")
         }
         iDelegate?.CXServiceResponse(withURL: json)
     }
