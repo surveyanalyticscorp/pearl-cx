@@ -7,149 +7,27 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
-import {
-  isObjectEmpty,
-  isStringNullOrEmpty,
-  showErrorFlashMessage,
-  validateEmail,
-} from '../../Utils/Utility';
 import {FontFamily} from '../../styles/font.constants';
 import QPButton from '../../widgets/Button';
-import {
-  setDynamicLink,
-  setUserDetailsForResetPassword,
-} from '../../redux/actions/index';
-import {useDispatch, useSelector} from 'react-redux';
-import StringUtils from '../../Utils/StringUtils';
+import {useSelector} from 'react-redux';
 import QPSpinner from '../../widgets/QPSpinner';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ASYNC_RESET_CREDENTIALS, BASE_URL} from '../../api/Constant';
-import {
-  authenticatePanel,
-  requestPasswordLink,
-  validateResetPasswordLink,
-} from '../../redux/actions/login.actions';
-
 let {width} = Dimensions.get('window');
 import {translate} from '../../Utils/MultilinguaUtils';
 import AccessCodeTextInput from './components/AccessCodeTextInput';
 import EmailTextInput from './components/EmailTextInput';
 import CXLogo from './components/CXLogo';
 import LoginBackground from './components/LoginBackground';
-import {useNavigation} from '@react-navigation/core';
 import {useState} from 'react';
-
-const isValidateInput = ({email, accessCode}) => {
-  if (!validateEmail(email)) {
-    showErrorFlashMessage(translate('onBoarding.invalidEmail')); // Triggering error message
-    return false;
-  }
-  if (isStringNullOrEmpty(accessCode)) {
-    showErrorFlashMessage(translate('onBoarding.invalidCompanyCode')); // Triggering error message
-    return false;
-  }
-  return true;
-};
+import useForgotPasswordProcess from './components/hooks/useForgotPasswordProcess';
 
 let RenderSpinnerResetButton = ({route, resetData}) => {
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
-
-  const {
-    isLoading,
-    isError,
-    errorMessage,
-    dynamicLink,
-    baseUrl,
-    validatePasswordLinkResponse,
-  } = useSelector(state => state.global);
-
-  const authenticateAccessCode = () => {
-    if (isValidateInput(resetData) && StringUtils.isEmpty(baseUrl)) {
-      dispatch(authenticatePanel({accessCode: resetData.accessCode}));
-    }
-  };
-
-  useEffect(() => {
-    if (
-      route &&
-      route.params &&
-      route.params.timestamp &&
-      StringUtils.isNotEmpty(dynamicLink)
-    ) {
-      let time = route.params.timestamp.replace('+', ' ');
-      if (StringUtils.isNotEmpty(dynamicLink)) {
-        let data = {
-          emailAddress: resetData.email,
-          accessCode: resetData.accessCode,
-          timestamp: time,
-        };
-        // props.validatePasswordLink(data);
-        dispatch(validateResetPasswordLink(data));
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!isObjectEmpty(validatePasswordLinkResponse)) {
-      if (validatePasswordLinkResponse && validatePasswordLinkResponse.Error) {
-        // props.setDynamicLink();
-        dispatch(setDynamicLink(''));
-        showErrorFlashMessage(validatePasswordLinkResponse.Error);
-      } else {
-        if (!validatePasswordLinkResponse.isExpired) {
-          navigation.navigate('ResetPassword', {
-            email: resetData.email,
-            accessCode: resetData.accessCode,
-          });
-        } else {
-          // props.setDynamicLink();
-          dispatch(setDynamicLink(''));
-          showErrorFlashMessage(validatePasswordLinkResponse.message);
-        }
-      }
-    }
-  }, [validatePasswordLinkResponse]);
-
-  useEffect(() => {
-    if (isError) {
-      console.log('ERROR', errorMessage, isError);
-
-      showErrorFlashMessage(
-        errorMessage?.errorAlert ??
-          errorMessage?.message ??
-          'Something went wrong',
-      );
-    }
-  }, [isError]);
-
-  useEffect(() => {
-    if (baseUrl && StringUtils.isNotEmpty(baseUrl)) {
-      AsyncStorage.setItem(BASE_URL, baseUrl).then();
-      global.baseUrl = baseUrl;
-      onResetPasswordClick();
-    }
-  }, [baseUrl]);
-
-  const onResetPasswordClick = () => {
-    if (isValidateInput(resetData)) {
-      let data = {
-        emailAddress: resetData.email,
-        accessCode: resetData.accessCode,
-      };
-      // props.setUserDetails(data);
-      dispatch(setUserDetailsForResetPassword(data));
-
-      AsyncStorage.setItem(ASYNC_RESET_CREDENTIALS, JSON.stringify(data));
-      // props.requestPasswordLink(data);
-      dispatch(requestPasswordLink(data));
-    }
-  };
+  const {authenticateAccessCode} = useForgotPasswordProcess(route, resetData);
+  const {isLoading} = useSelector(state => state.global);
 
   return isLoading ? (
     <View style={styles.resetPswdButton}>
