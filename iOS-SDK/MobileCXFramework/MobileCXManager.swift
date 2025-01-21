@@ -206,10 +206,10 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             self.iView = UIView(frame: rect)
             self.iView?.backgroundColor = UIColor.gray.withAlphaComponent(0.6)
 
-            let frontView = UIView(frame: CGRect(x: 30, y: 70, width: self.iView!.frame.size.width - 60, height: self.iView!.frame.size.height - 140))
+            let frontView = UIView(frame: CGRect(x: Int(screenRect.size.width * 0.1), y: Int(screenRect.size.height * 0.15), width: Int(screenRect.size.width * 0.8), height: Int(screenRect.size.height * 0.7)))
             frontView.backgroundColor = UIColor.white
 
-            self.iWebView = WKWebView(frame: CGRect(x: 0, y: 20, width: frontView.frame.size.width, height: frontView.frame.size.height - 20))
+            self.iWebView = WKWebView(frame: CGRect(x: 0, y: 30, width: frontView.frame.size.width, height: frontView.frame.size.height - 20))
             self.iWebView?.navigationDelegate = self
             
             frontView.addSubview(self.iWebView!)
@@ -217,7 +217,9 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             self.iView?.addSubview(frontView)
             self.iBaseWindow?.addSubview(self.iView!)
             self.iBaseWindow?.bringSubviewToFront(self.iView!)
-
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: frontView.frame.size.width, height: 40))
+            headerView.backgroundColor = UIColor.white
+            frontView.addSubview(headerView)
             let doneButton = UIButton(type: .custom)
             doneButton.addTarget(self, action: #selector(self.aDismissWebview(_:)), for: .touchUpInside)
 
@@ -226,7 +228,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             doneButton.setImage(closeButtonImage, for: .normal)
             doneButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
             doneButton.layer.cornerRadius = doneButton.bounds.size.width / 2
-            doneButton.frame = CGRect(x: self.iView!.frame.size.width - 90, y: 10, width: 25, height: 25)
+            doneButton.frame = CGRect(x: screenRect.size.width * 0.7, y: 10, width: 25, height: 25)
             frontView.addSubview(doneButton)
         }
     }
