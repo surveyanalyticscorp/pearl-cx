@@ -14,8 +14,15 @@ const CsatToggleButton = () => {
   };
 
   return (
-    <Pressable testID="csat-toggle-button" onPress={toggleView}>
-      <TextLabel testID="csat-toggle-button-text" text={label} />
+    <Pressable
+      style={dashboardStyles.csatToggleButton}
+      testID="csat-toggle-button"
+      onPress={toggleView}>
+      <TextLabel
+        style={dashboardStyles.csatToggleButtonText}
+        testID="csat-toggle-button-text"
+        text={label}
+      />
       {/* <CaretDownIcon /> */}
     </Pressable>
   );

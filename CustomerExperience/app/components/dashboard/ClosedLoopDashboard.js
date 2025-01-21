@@ -195,6 +195,7 @@ export const RenderStatusFilterButton = ({currentStatus, onPress}) => {
 export const StatusDashboardBottomSheet = React.forwardRef(
   ({snapPoints, fall, ticketCount}, ref) => {
     const dispatch = useDispatch();
+
     const statusList = getDashboardStatusListForBottomList(ticketCount);
     const statusIndex = useSelector(
       state => state.dashboard.currentStatusIndexForFilter,
