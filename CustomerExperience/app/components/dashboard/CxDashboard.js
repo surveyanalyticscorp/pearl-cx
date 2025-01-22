@@ -42,15 +42,7 @@ const wait = timeout => {
   });
 };
 
-const ClosedLoopView = ({openStatusBS}) => {
-  return (
-    <View style={dashboardStyles.closedLoopView}>
-      <ClosedLoopDashboard openStatusBS={openStatusBS} />
-    </View>
-  );
-};
-
-let RenderDashboardContent = ({openStatusBS}) => {
+let RenderDashboardContent = ({children}) => {
   const isError = useSelector(state => state.global.isError);
   const isLoading = useSelector(state => state.global.isLoading);
   const dashboardData = useSelector(state => state.dashboard.dashboardData);
@@ -59,7 +51,8 @@ let RenderDashboardContent = ({openStatusBS}) => {
     return (
       <SafeAreaView>
         <RenderSegmentDashboardData />
-        <ClosedLoopView openStatusBS={openStatusBS} />
+        {/* <ClosedLoopView openStatusBS={openStatusBS} /> */}
+        {children}
       </SafeAreaView>
     );
   }
@@ -233,7 +226,6 @@ const CxDashboard = props => {
       <Animated.View
         style={[
           dashboardStyles.container,
-
           {
             opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
           },
@@ -246,7 +238,9 @@ const CxDashboard = props => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
           <View style={dashboardStyles.container}>
-            <RenderDashboardContent openStatusBS={openStatusBS} {...props} />
+            <RenderDashboardContent>
+              <ClosedLoopDashboard openStatusBS={openStatusBS} />
+            </RenderDashboardContent>
             {renderSpinner()}
             {exitAlert && renderExitAlert()}
           </View>
