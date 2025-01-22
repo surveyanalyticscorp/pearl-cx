@@ -4,21 +4,19 @@ import {
   isObjectEmpty,
   isStringNullOrEmpty,
   showErrorFlashMessage,
+  showSuccessFlashMessage,
   validateEmail,
 } from '../../../../Utils/Utility';
 import {translate} from '../../../../Utils/MultilinguaUtils';
 import StringUtils from '../../../../Utils/StringUtils';
-import {
-  authenticatePanel,
-  requestPasswordLink,
-} from '../../../../redux/actions/login.actions';
+import {requestPasswordLink} from '../../../../redux/actions/login.actions';
 import {useEffect} from 'react';
 import {validateResetPasswordLink} from '../../../../redux/sagas/loginInSaga';
 import {
   setDynamicLink,
   setUserDetailsForResetPassword,
 } from '../../../../redux/actions';
-import {ASYNC_RESET_CREDENTIALS, BASE_URL} from '../../../../api/Constant';
+import {ASYNC_RESET_CREDENTIALS} from '../../../../api/Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const isValidateInput = ({email, accessCode}) => {
@@ -33,65 +31,57 @@ const isValidateInput = ({email, accessCode}) => {
   return true;
 };
 
-const useForgotPasswordProcess = (route, resetData) => {
+const useForgotPasswordProcess = resetData => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
 
   const {
-    isLoading,
     isError,
     errorMessage,
     dynamicLink,
-    baseUrl,
+    resetPasswordLinkResponse,
     validatePasswordLinkResponse,
   } = useSelector(state => state.global);
 
-  const authenticateAccessCode = () => {
-    if (isValidateInput(resetData) && StringUtils.isEmpty(baseUrl)) {
-      dispatch(authenticatePanel({accessCode: resetData.accessCode}));
-    }
-  };
+  // useEffect(() => {
+  //   if (
+  //     route &&
+  //     route.params &&
+  //     route.params.timestamp &&
+  //     StringUtils.isNotEmpty(dynamicLink)
+  //   ) {
+  //     let time = route.params.timestamp.replace('+', ' ');
+  //     if (StringUtils.isNotEmpty(dynamicLink)) {
+  //       let data = {
+  //         emailAddress: resetData.email,
+  //         accessCode: resetData.accessCode,
+  //         timestamp: time,
+  //       };
+  //       // props.validatePasswordLink(data);
+  //       dispatch(validateResetPasswordLink(data));
+  //     }
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    if (
-      route &&
-      route.params &&
-      route.params.timestamp &&
-      StringUtils.isNotEmpty(dynamicLink)
-    ) {
-      let time = route.params.timestamp.replace('+', ' ');
-      if (StringUtils.isNotEmpty(dynamicLink)) {
-        let data = {
-          emailAddress: resetData.email,
-          accessCode: resetData.accessCode,
-          timestamp: time,
-        };
-        // props.validatePasswordLink(data);
-        dispatch(validateResetPasswordLink(data));
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!isObjectEmpty(validatePasswordLinkResponse)) {
-      if (validatePasswordLinkResponse && validatePasswordLinkResponse.Error) {
-        // props.setDynamicLink();
-        dispatch(setDynamicLink(''));
-        showErrorFlashMessage(validatePasswordLinkResponse.Error);
-      } else {
-        if (!validatePasswordLinkResponse.isExpired) {
-          navigation.navigate('ResetPassword', {
-            email: resetData.email,
-            accessCode: resetData.accessCode,
-          });
-        } else {
-          // props.setDynamicLink();
-          dispatch(setDynamicLink(''));
-          showErrorFlashMessage(validatePasswordLinkResponse.message);
-        }
-      }
-    }
-  }, [validatePasswordLinkResponse]);
+  // useEffect(() => {
+  //   if (!isObjectEmpty(validatePasswordLinkResponse)) {
+  //     if (validatePasswordLinkResponse && validatePasswordLinkResponse.Error) {
+  //       // props.setDynamicLink();
+  //       dispatch(setDynamicLink(''));
+  //       showErrorFlashMessage(validatePasswordLinkResponse.Error);
+  //     } else {
+  //       if (!validatePasswordLinkResponse.isExpired) {
+  //         navigation.navigate('ResetPassword', {
+  //           email: resetData.email,
+  //           accessCode: resetData.accessCode,
+  //         });
+  //       } else {
+  //         // props.setDynamicLink();
+  //         dispatch(setDynamicLink(''));
+  //         showErrorFlashMessage(validatePasswordLinkResponse.message);
+  //       }
+  //     }
+  //   }
+  // }, [validatePasswordLinkResponse]);
 
   useEffect(() => {
     if (isError) {
@@ -104,14 +94,6 @@ const useForgotPasswordProcess = (route, resetData) => {
       );
     }
   }, [isError]);
-
-  useEffect(() => {
-    if (baseUrl && StringUtils.isNotEmpty(baseUrl)) {
-      AsyncStorage.setItem(BASE_URL, baseUrl).then();
-      global.baseUrl = baseUrl;
-      onResetPasswordClick();
-    }
-  }, [baseUrl]);
 
   const onResetPasswordClick = () => {
     if (isValidateInput(resetData)) {
@@ -128,7 +110,7 @@ const useForgotPasswordProcess = (route, resetData) => {
     }
   };
 
-  return {authenticateAccessCode};
+  return {onResetPasswordClick};
 };
 
 export default useForgotPasswordProcess;

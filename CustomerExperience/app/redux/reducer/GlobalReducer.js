@@ -30,9 +30,11 @@ import {
 import {SET_TICKET_FILTER_BY_STATUS_ID} from '../actions/closedloop.actions';
 import {
   AUTHENTICATE_PANEL_RESPONSE,
+  CLEAR_RESET_PASSWORD_LINK_RESPONSE,
   GET_BEARER_TOKEN_RESPONSE,
   LOGIN_RESPONSE,
   LOGOUT_RESPONSE,
+  RESET_PASSWORD_LINK_RESPONSE,
   SET_ACCESS_CODE,
   SET_BASE_URL,
   UPDATE_BASE_CLF_URL,
@@ -69,6 +71,7 @@ const initialState = {
   dataCenter: '',
   userDetailsForResetPassword: {},
   validatePasswordLinkResponse: {},
+  resetPasswordLinkResponse: {},
   updatePasswordResponse: {},
   pushToken: '',
   logoutResponse: {},
@@ -166,6 +169,19 @@ const globalReducer = (state = initialState, action) => {
         ...state,
         validatePasswordLinkResponse: action.response,
         isLoading: false,
+      };
+    }
+    case RESET_PASSWORD_LINK_RESPONSE: {
+      return {
+        ...state,
+        resetPasswordLinkResponse: action.response,
+        isLoading: false,
+      };
+    }
+    case CLEAR_RESET_PASSWORD_LINK_RESPONSE: {
+      return {
+        ...state,
+        resetPasswordLinkResponse: {},
       };
     }
     case UPDATE_PASSWORD_RESPONSE: {

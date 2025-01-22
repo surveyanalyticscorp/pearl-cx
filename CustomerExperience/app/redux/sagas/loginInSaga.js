@@ -42,6 +42,7 @@ import {
   AUTHENTICATE_PANEL_RESPONSE,
   GET_BEARER_TOKEN,
   GET_BEARER_TOKEN_RESPONSE,
+  RESET_PASSWORD_LINK_RESPONSE,
 } from '../actions/login.actions';
 
 export function* doAuthenticatePanel(action) {
@@ -174,13 +175,37 @@ export function* watchClfAuth() {
 }
 
 export function* getResetPasswordLink(action) {
+  yield put({type: IS_LOADING, payload: {isLoading: true}});
+
   try {
-    const response = yield WebServiceHandler.postNew(
-      CX_GET_RESET_PASSWORD_LINK,
+    let authenticateAccessCodeUrl =
+      (IS_DEV_MODE ? DEV_BASE_URL : INIT_BASE + BASE_URL_NEW_MID_FIX) +
+      PANEL_AUTH;
+
+    const authenticateAccessCodeResponse = yield WebServiceHandler.postNew(
+      authenticateAccessCodeUrl,
       {},
       action.param,
     );
-    yield showSuccessFlashMessage(response.body.message);
+    console.log(
+      'authenticateAccessCodeResponse',
+      JSON.stringify(authenticateAccessCodeResponse),
+    );
+    if (authenticateAccessCodeResponse?.body?.mobileAPIURL) {
+      const response = yield WebServiceHandler.postNew(
+        authenticateAccessCodeResponse.body.mobileAPIURL +
+          BASE_URL_NEW_MID_FIX +
+          CX_GET_RESET_PASSWORD_LINK,
+        {},
+        action.param,
+      );
+
+      yield put({
+        type: RESET_PASSWORD_LINK_RESPONSE,
+        response: response.body,
+      });
+      yield showSuccessFlashMessage(response.body.message);
+    }
   } catch (error) {
     yield put({
       type: API_ERROR,

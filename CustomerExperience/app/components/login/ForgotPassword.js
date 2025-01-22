@@ -7,12 +7,12 @@ import {
   Text,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily} from '../../styles/font.constants';
 import QPButton from '../../widgets/Button';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import QPSpinner from '../../widgets/QPSpinner';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {TextSizes} from '../../styles/textsize.constants';
@@ -24,10 +24,23 @@ import CXLogo from './components/CXLogo';
 import LoginBackground from './components/LoginBackground';
 import {useState} from 'react';
 import useForgotPasswordProcess from './components/hooks/useForgotPasswordProcess';
+import {useNavigation} from '@react-navigation/native';
+import {clearResetPasswordLinkResponse} from '../../redux/actions/login.actions';
 
-let RenderSpinnerResetButton = ({route, resetData}) => {
-  const {authenticateAccessCode} = useForgotPasswordProcess(route, resetData);
-  const {isLoading} = useSelector(state => state.global);
+let RenderSpinnerResetButton = ({resetData}) => {
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const {onResetPasswordClick} = useForgotPasswordProcess(resetData);
+  const {isLoading, resetPasswordLinkResponse} = useSelector(
+    state => state.global,
+  );
+  useEffect(() => {
+    if (resetPasswordLinkResponse?.message) {
+      dispatch(clearResetPasswordLinkResponse());
+      navigation.goBack();
+    }
+  }, [resetPasswordLinkResponse]);
 
   return isLoading ? (
     <View style={styles.resetPswdButton}>
@@ -37,7 +50,7 @@ let RenderSpinnerResetButton = ({route, resetData}) => {
     <QPButton
       testID="SignInButton"
       style={styles.resetPswdButton}
-      onPress={authenticateAccessCode}
+      onPress={onResetPasswordClick}
       buttonText={translate('onBoarding.resetPassword')}
       textStyle={styles.nextText}
     />
@@ -46,6 +59,8 @@ let RenderSpinnerResetButton = ({route, resetData}) => {
 
 const ForgotPassword = props => {
   console.log('NAVIGATION_LOGIN', props.route.name);
+  console.log('NAVIGATION_LOGIN', JSON.stringify(props));
+
   const [resetData, setResetData] = useState({email: '', accessCode: ''});
   const setEmail = email => {
     setResetData({...resetData, email});
@@ -77,7 +92,7 @@ const ForgotPassword = props => {
             <AccessCodeTextInput setAccessCode={setAccessCode} />
           </View>
         </KeyboardAvoidingView>
-        <RenderSpinnerResetButton route={props.route} resetData={resetData} />
+        <RenderSpinnerResetButton {...props} resetData={resetData} />
       </ScrollView>
     </LoginBackground>
   );

@@ -9,6 +9,10 @@ export const UPDATE_BASE_CLF_URL = 'UPDATE_BASE_CLF_URL';
 export const LOGOUT = 'LOGOUT';
 export const LOGOUT_RESPONSE = 'LOGOUT_RESPONSE';
 export const GET_RESET_PASSWORD_LINK = 'GET_RESET_PASSWORD_LINK';
+export const RESET_PASSWORD_LINK_RESPONSE = 'RESET_PASSWORD_LINK_RESPONSE';
+export const CLEAR_RESET_PASSWORD_LINK_RESPONSE =
+  'CLEAR_RESET_PASSWORD_LINK_RESPONSE';
+
 export const GET_BEARER_TOKEN = 'GET_BEARER_TOKEN';
 export const GET_BEARER_TOKEN_RESPONSE = 'GET_BEARER_TOKEN_RESPONSE';
 
@@ -71,4 +75,8 @@ export const doLogout = (token, param) => ({
   type: LOGOUT,
   token,
   param,
+});
+
+export const clearResetPasswordLinkResponse = () => ({
+  type: CLEAR_RESET_PASSWORD_LINK_RESPONSE,
 });
