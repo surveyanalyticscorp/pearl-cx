@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
 
-@MainActor public protocol CXServiceDelegate: NSObjectProtocol {
+public protocol CXServiceDelegate: NSObjectProtocol {
     func CXServiceResponse(withURL response: [String: Any])
 }
 
-@MainActor
+
 public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate {
     public var response: URLResponse?
     public var receivedData: Data
@@ -95,21 +95,17 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
     }
 
     // URLSessionDataDelegate methods
-    nonisolated public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
-        Task { @MainActor in
-            self.receivedData.append(data)
-            handleHttpOK(data: self.receivedData)
-        }
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        self.receivedData.append(data)
+        handleHttpOK(data: self.receivedData)
     }
 
-    nonisolated public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        Task { @MainActor in
-                self.response = response                
-            }
+    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+        self.response = response  
         completionHandler(.allow)
     }
 
-    nonisolated public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+    public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let error = error {
             print("Task completed with error: \(error)")
         } else {
@@ -118,7 +114,7 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
     }
 
     // Handling SSL/TLS challenges
-    nonisolated public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
             if let serverTrust = challenge.protectionSpace.serverTrust {
                 let credential = URLCredential(trust: serverTrust)

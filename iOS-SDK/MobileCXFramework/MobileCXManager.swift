@@ -9,11 +9,9 @@ import Foundation
 import UIKit
 import WebKit
 
-@MainActor
 public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDelegate, WKNavigationDelegate {
-    @MainActor public func CXServiceResponse(withURL response: [String: Any]) {
+    public func CXServiceResponse(withURL response: [String: Any]) {
         if let _ = response[ksurveyURL] {
-            print("URL found")
             if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
                 let responseCopy = response // Create a copy of the response
                 DispatchQueue.main.async { [weak self] in
@@ -36,6 +34,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             let errorMessage = error["message"] as? String ?? "Unknown error"
             // Present the alert (requires a view controller)
             DispatchQueue.main.async {
+                GMDCircleLoader.hideFromView(self.iWebView!, animated: true)
                 if let topController = UIApplication.shared.windows[0].rootViewController {
                     // Show alert
                     let alert = UIAlertController(title: "", message: errorMessage, preferredStyle: .alert)
@@ -53,19 +52,15 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     public var iBaseWindow: UIWindow?
     public var iView: UIView?
     public var iWebView: WKWebView?
-    @MainActor
     public var iResponseURL: String?
     public var iPopupMenuTitle: String?
     public var iPopupMenuMessage: String?
     public var iPopupMenuRightButtonTitle: String?
     public var iPopupMenuLeftButtonTitle: String?
     public var iPopUpViewFlag: Bool = false
-    @MainActor
     public var iPresentViewFlag: Bool = false
-    @MainActor
     public var iTouchPointName: Int?
     public var iApiKey: String?
-    @MainActor
     public var iCurrentViewName: String = ""
     public var iDataCenter: TouchPoint.DataCenter?
     public var touchPoint: TouchPoint?
@@ -107,7 +102,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     }
 
     public func stopQuestionProCXManager() {
-        print("Manager stopped..")
+//        print("Manager stopped..")
     }
 
     public func setPopupMenuTitle(aTitle: String, message aMessage: String, rightButtonTitle aRightButtonTitle: String, leftButtonTitle aLeftButtonTitle: String) {
@@ -147,6 +142,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             self.iWebView?.navigationDelegate = self
             
             frontView.addSubview(self.iWebView!)
+            GMDCircleLoader.setOnView(self.iWebView!, withTitle: "Please wait.", animated: true)
             self.iView?.addSubview(frontView)
             self.iBaseWindow?.addSubview(self.iView!)
             self.iBaseWindow?.bringSubviewToFront(self.iView!)
@@ -226,7 +222,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             self.iWebView?.navigationDelegate = self
             
             frontView.addSubview(self.iWebView!)
-
+            GMDCircleLoader.setOnView(self.iWebView!, withTitle: "Please wait.", animated: true)
             self.iView?.addSubview(frontView)
             self.iBaseWindow?.addSubview(self.iView!)
             self.iBaseWindow?.bringSubviewToFront(self.iView!)
@@ -251,9 +247,8 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     }
     
     public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        GMDCircleLoader.setOnView(self.iWebView!, withTitle: "Please wait.", animated: true)
         let url = webView.url
-        print("##### url = \(url?.absoluteString ?? "")")
+//        print("##### url = \(url?.absoluteString ?? "")")
         if (((url?.absoluteString.range(of: "exitsurvey")) != nil) || ((url?.absoluteString.range(of: "#autoClose") != nil))) {
             perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 1.0)
         }
@@ -261,7 +256,6 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
 
         // WKNavigationDelegate method for when navigation finishes
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            print("Web view did finish loading")
         GMDCircleLoader.hideFromView(self.iWebView!, animated: true)
         }
 
