@@ -155,30 +155,6 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             hedearTextView.textAlignment = .left
             hedearTextView.textColor = UIColor.white
             
-            let headerText = "Powered by QuestionPro";
-            let boldText = (headerText as NSString).range(of: "QuestionPro")
-            let plainText = (headerText as NSString).range(of: "Powered by")
-            let attributedString = NSMutableAttributedString(string: headerText)
-            
-            
-            if let regularFontURL = Bundle.main.url(forResource: "FiraSans-Regular", withExtension: "ttf") {
-                CTFontManagerRegisterFontsForURL(regularFontURL as CFURL, .process, nil);
-            } 
-            
-            if let boldFontURL = Bundle.main.url(forResource: "FiraSans-Bold", withExtension: "ttf") {
-                CTFontManagerRegisterFontsForURL(boldFontURL as CFURL, .process, nil)
-            }
-            
-            if let regularFont = UIFont(name: "FiraSans-Regular", size: 16.0) {
-                attributedString.addAttribute(.font, value: regularFont, range: plainText)
-            }
-        
-            if let boldFont = UIFont(name: "FiraSans-Bold", size: 16.0) {
-                attributedString.addAttribute(.font, value: boldFont, range: boldText)
-            }
-            
-            attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: attributedString.length))
-            
             frontView.addSubview(headerView)
             
             let closeButtonImage = UIImage(systemName: "xmark",

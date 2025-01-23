@@ -4,14 +4,6 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>FiraSans-Bold.ttf</key>
-		<data>
-		vbBM2eg1o897oi3wNU8UcoEt8iU=
-		</data>
-		<key>FiraSans-Regular.ttf</key>
-		<data>
-		lkfowU5mGFF/aUL7raCgHiwYlz0=
-		</data>
 		<key>Headers/MobileCXFramework.h</key>
 		<data>
 		j6KzU7cHGR52IeJUVYGcajbQTlA=
@@ -22,7 +14,7 @@
 		</data>
 		<key>Modules/QuestionProCXFramework.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		/KZDUNRkYJhttMV4ekmRKLQtXH0=
+		qcXoxyPpkN/FXbzqrmoxfQ3UGDQ=
 		</data>
 		<key>Modules/QuestionProCXFramework.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -42,7 +34,7 @@
 		</data>
 		<key>Modules/QuestionProCXFramework.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		/KZDUNRkYJhttMV4ekmRKLQtXH0=
+		qcXoxyPpkN/FXbzqrmoxfQ3UGDQ=
 		</data>
 		<key>Modules/QuestionProCXFramework.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -67,20 +59,6 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>FiraSans-Bold.ttf</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			dLR3o+K3x0Xm2sjAF2TI/YLlN2O0fvHszSTc420v9x8=
-			</data>
-		</dict>
-		<key>FiraSans-Regular.ttf</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			Pavz1Iv0WZ+Vz/2S+Z6kJqAU1TEfUqXrXsOvJl6XzZc=
-			</data>
-		</dict>
 		<key>Headers/MobileCXFramework.h</key>
 		<dict>
 			<key>hash2</key>
@@ -92,7 +70,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			3IFwVJSmoXrMTlWNm1KBFOwb5TBMqb6seGAyM3oCIlk=
+			kI04Id7svxPrYEN9K0UFyxF9gImaicZS3EXRkWabiPQ=
 			</data>
 		</dict>
 		<key>Modules/QuestionProCXFramework.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -127,7 +105,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			3IFwVJSmoXrMTlWNm1KBFOwb5TBMqb6seGAyM3oCIlk=
+			kI04Id7svxPrYEN9K0UFyxF9gImaicZS3EXRkWabiPQ=
 			</data>
 		</dict>
 		<key>Modules/QuestionProCXFramework.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
