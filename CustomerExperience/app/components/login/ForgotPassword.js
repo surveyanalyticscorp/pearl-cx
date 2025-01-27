@@ -24,11 +24,11 @@ import CXLogo from './components/CXLogo';
 import LoginBackground from './components/LoginBackground';
 import {useState} from 'react';
 import useForgotPasswordProcess from './components/hooks/useForgotPasswordProcess';
-import {useNavigation} from '@react-navigation/native';
 import {clearResetPasswordLinkResponse} from '../../redux/actions/login.actions';
+import {showSuccessFlashMessage} from '../../Utils/Utility';
 
 let RenderSpinnerResetButton = ({resetData}) => {
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const {onResetPasswordClick} = useForgotPasswordProcess(resetData);
@@ -38,7 +38,7 @@ let RenderSpinnerResetButton = ({resetData}) => {
   useEffect(() => {
     if (resetPasswordLinkResponse?.message) {
       dispatch(clearResetPasswordLinkResponse());
-      navigation.goBack();
+      showSuccessFlashMessage('Reset password link sent to your email');
     }
   }, [resetPasswordLinkResponse]);
 

@@ -204,7 +204,7 @@ export function* getResetPasswordLink(action) {
         type: RESET_PASSWORD_LINK_RESPONSE,
         response: response.body,
       });
-      yield showSuccessFlashMessage(response.body.message);
+      // yield showSuccessFlashMessage(response.body.message);
     }
   } catch (error) {
     yield put({

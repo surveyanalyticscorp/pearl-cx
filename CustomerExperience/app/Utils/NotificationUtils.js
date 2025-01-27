@@ -23,7 +23,7 @@ let getToken = () => {
       messaging()
         .getToken()
         .then(token => {
-          console.log(token);
+          console.log('FCM TOKEN', token);
           AsyncStorage.setItem(ASYNC_PUSH_TOKEN, token);
         });
     }
@@ -35,7 +35,9 @@ export async function checkNotificationPermission() {
   if (enabled) {
     getToken();
   } else {
-    requestUserPermission().then({});
+    requestUserPermission().then(() => {
+      getToken();
+    });
   }
 }
 

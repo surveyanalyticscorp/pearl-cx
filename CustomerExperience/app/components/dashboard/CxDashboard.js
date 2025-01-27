@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {
   RefreshControl,
   ScrollView,
-  Text,
   View,
   BackHandler,
   Alert,
@@ -59,13 +58,23 @@ let RenderDashboardContent = ({children}) => {
   return <View style={dashboardStyles.container} />;
 };
 
-const CxDashboard = props => {
+const CxDashboard = ({route, navigation}) => {
   console.log('CX DASHBOARD SCREEN RENDER');
+
+  const segmentId = useSelector(
+    state => state.dashboard.currentSegment.currentSegmentID,
+  );
+  const {range, authToken, wantToReloadDashboard, isLoading} = useSelector(
+    state => state.global,
+  );
+  const primaryStoreNPS = useSelector(
+    state => state.dashboard.dashboardData.primaryStoreNPS,
+  );
 
   let dispatch = useDispatch();
   let [refreshing, setRefreshing] = useState(false);
   let [exitAlert, showExitAlert] = useState(false);
-  let [lastLoginArray, setLastLoginArray] = useState([]);
+  // let [lastLoginArray, setLastLoginArray] = useState([]);
 
   const statusBottomSheetRef = React.useRef();
   const statusBottomSheetSnapPoints = ['55%', '0%'];
@@ -77,14 +86,9 @@ const CxDashboard = props => {
 
   const getSegmentData = () => {
     dispatch(
-      getFirstTimeClosedLoopSegmentDetails(props.authToken, {pageOffset: '0'}),
+      getFirstTimeClosedLoopSegmentDetails(authToken, {pageOffset: '0'}),
     );
   };
-  let segmentId = useSelector(
-    state => state.dashboard.currentSegment.currentSegmentID,
-  );
-  const range = props.range;
-  const wantToReload = props.wantToReload;
 
   const loadDashboardData = segmentId => {
     getDashboardData();
@@ -110,52 +114,53 @@ const CxDashboard = props => {
       StringUtils.isEmpty(range.endDate)
     ) {
       let selectedRange = getSelectedRange({type: 1});
-      props.setRange({
-        type: 1,
-        startDate: selectedRange.startDate,
-        endDate: selectedRange.endDate,
-      });
+      dispatch(
+        setRangeFilter({
+          type: 1,
+          startDate: selectedRange.startDate,
+          endDate: selectedRange.endDate,
+        }),
+      );
+
+      // props.setRange();
     }
     console.log('CALL DASHBOARD from range, wantToReload, segmentId');
 
     getDashboardData();
-  }, [range, wantToReload, segmentId]); //props.navigation
+  }, [range, wantToReloadDashboard, segmentId]); //props.navigation
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleBackPress);
 
-    getLastLogin();
+    // getLastLogin();
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
     };
   }, []);
   //////////////////////////////////////////////
-  const getLastLogin = async () => {
-    try {
-      const lastLogin = await AsyncStorage.getItem(ASYNC_LAST_LOGIN);
-      if (JSON.parse(lastLogin) !== null) {
-        setLastLoginArray(JSON.parse(lastLogin));
-      }
-    } catch (e) {
-      console.log(`LAST LOGIN ASYNC ERROR: ${JSON.stringify(e)}`);
-    }
-  };
+  // const getLastLogin = async () => {
+  //   try {
+  //     const lastLogin = await AsyncStorage.getItem(ASYNC_LAST_LOGIN);
+  //     if (JSON.parse(lastLogin) !== null) {
+  //       setLastLoginArray(JSON.parse(lastLogin));
+  //     }
+  //   } catch (e) {
+  //     console.log(`LAST LOGIN ASYNC ERROR: ${JSON.stringify(e)}`);
+  //   }
+  // };
 
   useEffect(() => {
-    if (props.dashboardData.primaryStoreNPS) {
-      props.showLoading(false);
+    if (primaryStoreNPS) {
+      dispatch(showLoading(false));
+      // props.showLoading(false);
       setRefreshing(false);
     }
-  }, [props.dashboardData.primaryStoreNPS]);
-
-  const onDateRangeChangeHandler = range_ => {
-    props.setRange(range_);
-  };
+  }, [primaryStoreNPS]);
 
   function handleBackPress() {
     if (
-      props.route.name === translate('dashboard.dashboard') &&
-      !props.navigation.canGoBack()
+      route.name === translate('dashboard.dashboard') &&
+      !navigation.canGoBack()
     ) {
       showExitAlert(true);
       return true;
@@ -191,18 +196,20 @@ const CxDashboard = props => {
   let getDashboardData = () => {
     console.log('CALL DASHBOARD');
     let data = {
-      startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-      endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
-      fromDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-      toDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
+      startDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
+      endDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
+      fromDate: moment(range.startDate, DMYFORMAT).format(YMDFORMAT),
+      toDate: moment(range.endDate, DMYFORMAT).format(YMDFORMAT),
     };
     if (data.startDate !== 'Invalid date') {
-      props.getDashboardContent(props.authToken, data, segmentId);
+      dispatch(showLoading(true));
+      dispatch(getDashboardContent(authToken, data, segmentId));
+      // props.getDashboardContent(authToken, data, segmentId);
     }
   };
 
   let renderSpinner = () => {
-    if (props.isLoading) {
+    if (isLoading) {
       return (
         <View style={dashboardStyles.loading}>
           <QPSpinner />
@@ -212,7 +219,7 @@ const CxDashboard = props => {
   };
 
   let onFabPressHandler = () => {
-    props.navigation.navigate(translate('responses.new_ticket'));
+    navigation.navigate(translate('responses.new_ticket'));
   };
 
   return (
@@ -252,47 +259,47 @@ const CxDashboard = props => {
         ref={statusBottomSheetRef}
         snapPoints={statusBottomSheetSnapPoints}
         fall={fall}
-        ticketCount={props.ticketCount}
       />
     </View>
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    dashboardData: state.dashboard.dashboardData,
-    ticketCount: state.dashboard.dashBoardTicketCount,
-    isLoading: state.global.isLoading,
-    isError: state.global.isError,
-    errorMessage: state.global.errorMessage,
-    authToken: state.global.authToken,
-    range: state.global.range,
+// const mapStateToProps = state => {
+//   return {
+//     dashboardData: state.dashboard.dashboardData,
 
-    wantToReload: state.global.wantToReloadDashboard,
+//     isLoading: state.global.isLoading,
+//     isError: state.global.isError,
+//     errorMessage: state.global.errorMessage,
+//     authToken: state.global.authToken,
+//     range: state.global.range,
 
-    segmentList: state.dashboard.segmentDetails.segments,
-  };
-};
+//     wantToReload: state.global.wantToReloadDashboard,
 
-const mapDispatchToProps = dispatch => ({
-  // updateSegment: segment => {
-  //   dispatch({
-  //     type: SEGMENT_SELECTED,
-  //     payload: segment,
-  //   });
-  // },
+//     segmentList: state.dashboard.segmentDetails.segments,
+//   };
+// };
 
-  getDashboardContent: (token, data, segmentId) => {
-    dispatch(showLoading(true));
-    dispatch(getDashboardContent(token, data, segmentId));
-  },
+// const mapDispatchToProps = dispatch => ({
+//   // updateSegment: segment => {
+//   //   dispatch({
+//   //     type: SEGMENT_SELECTED,
+//   //     payload: segment,
+//   //   });
+//   // },
 
-  showLoading: flag => {
-    dispatch(showLoading(flag));
-  },
-  setRange: range => {
-    dispatch(setRangeFilter(range));
-  },
-});
+//   getDashboardContent: (token, data, segmentId) => {
+//     dispatch(showLoading(true));
+//     dispatch(getDashboardContent(token, data, segmentId));
+//   },
 
-export default connect(mapStateToProps, mapDispatchToProps)(CxDashboard);
+//   showLoading: flag => {
+//     dispatch(showLoading(flag));
+//   },
+//   setRange: range => {
+//     dispatch(setRangeFilter(range));
+//   },
+// });
+
+// export default connect(mapStateToProps, mapDispatchToProps)(CxDashboard);
+export default CxDashboard;

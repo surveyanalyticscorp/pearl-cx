@@ -22,7 +22,7 @@
     "companyCode": "Código de empresa",
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "resetPassword": "Restablecer contraseña",
-    "forgotPasswordMessage": "Ingresa los detalles a continuación y presiona el botón Restablecer contraseña para restablecer tu contraseña.",
+    "forgotPasswordMessage": "Por favor, ingrese los detalles a continuación para restablecer su contraseña",
     "passwordNotMatching": "La contraseña y la confirmación de contraseña no coinciden",
     "resetPasswordMessage": "Ingresa la nueva contraseña y presiona el botón Actualizar para cambiar tu contraseña.",
     "welcomeBack": "Bienvenido de nuevo",

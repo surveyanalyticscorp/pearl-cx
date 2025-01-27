@@ -193,13 +193,15 @@ export const RenderStatusFilterButton = ({currentStatus, onPress}) => {
 };
 
 export const StatusDashboardBottomSheet = React.forwardRef(
-  ({snapPoints, fall, ticketCount}, ref) => {
+  ({snapPoints, fall}, ref) => {
     const dispatch = useDispatch();
-
-    const statusList = getDashboardStatusListForBottomList(ticketCount);
+    const ticketCount = useSelector(
+      state => state.dashboard.dashBoardTicketCount,
+    );
     const statusIndex = useSelector(
       state => state.dashboard.currentStatusIndexForFilter,
     );
+    const statusList = getDashboardStatusListForBottomList(ticketCount);
 
     const closeStatusSelection = () => {
       // close status selection bottom sheet

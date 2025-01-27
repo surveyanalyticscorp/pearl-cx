@@ -22,7 +22,7 @@
     "companyCode": "Company code",
     "forgotPassword": "Forgot password?",
     "resetPassword": "Reset password",
-    "forgotPasswordMessage": "Please enter the details below and hit Reset password button to reset your password.",
+    "forgotPasswordMessage": "Please enter the details below to reset your password.",
     "passwordNotMatching": "Password and Confirm password not matching",
     "resetPasswordMessage": "Please enter the new password and hit the Update button to change your password.",
     "welcomeBack": "Welcome back",
