@@ -49,7 +49,6 @@ let RenderDashboardContent = ({children}) => {
   if (!isError && !isLoading && !isObjectEmpty(dashboardData)) {
     return (
       <SafeAreaView>
-        <RenderSegmentDashboardData />
         {/* <ClosedLoopView openStatusBS={openStatusBS} /> */}
         {children}
       </SafeAreaView>
@@ -226,10 +225,12 @@ const CxDashboard = ({route, navigation}) => {
     <View
       testID="cx-dashboard"
       forceInset={{bottom: 'never', top: 'never'}}
-      style={[
-        dashboardStyles.container,
-        {paddingBottom: MarginConstants.tab1},
-      ]}>
+      style={dashboardStyles.container}>
+      <StatusDashboardBottomSheet
+        ref={statusBottomSheetRef}
+        snapPoints={statusBottomSheetSnapPoints}
+        fall={fall}
+      />
       <Animated.View
         style={[
           dashboardStyles.container,
@@ -246,6 +247,7 @@ const CxDashboard = ({route, navigation}) => {
           }>
           <View style={dashboardStyles.container}>
             <RenderDashboardContent>
+              <RenderSegmentDashboardData />
               <ClosedLoopDashboard openStatusBS={openStatusBS} />
             </RenderDashboardContent>
             {renderSpinner()}
@@ -254,12 +256,6 @@ const CxDashboard = ({route, navigation}) => {
         </ScrollView>
       </Animated.View>
       <FabAddButton onPress={onFabPressHandler} />
-
-      <StatusDashboardBottomSheet
-        ref={statusBottomSheetRef}
-        snapPoints={statusBottomSheetSnapPoints}
-        fall={fall}
-      />
     </View>
   );
 };
