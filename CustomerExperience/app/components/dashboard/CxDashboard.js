@@ -34,6 +34,7 @@ import {
 } from './ClosedLoopDashboard';
 
 import RenderSegmentDashboardData from './cxDashboard/RenderSegmentDashboardData';
+import {Notifications} from 'react-native-notifications';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -80,6 +81,9 @@ const CxDashboard = ({route, navigation}) => {
   const statusBottomSheetSnapPoints = ['55%', '0%'];
   const fall = new Animated.Value(1);
 
+  useEffect(() => {
+    Notifications.registerRemoteNotifications();
+  }, []);
   const openStatusBS = () => {
     statusBottomSheetRef.current.snapTo(0);
   };

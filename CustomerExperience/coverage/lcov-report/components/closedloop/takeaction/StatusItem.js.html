@@ -115,23 +115,7 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -142,18 +126,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">16x</span>
@@ -174,12 +147,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -200,45 +168,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import {View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
-import {
-  Colors,
-  // getStatusBorderColor,
-  // getStatusFillerColor,
-  // textColors,
-} from '../../../styles/color.constants';
-import {FontFamily} from '../../../styles/font.constants';
+import {StyleSheet, Pressable, View} from 'react-native';
+import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
-import {TextSizes} from '../../../styles/textsize.constants';
-import IonIcon from 'react-native-vector-icons/Ionicons';
-import {
-  CheckBox,
-  CheckBoxItem,
-  RadioButtonCheckbox,
-} from '../../../routes/commonUI/CommonUI';
-&nbsp;
+import {RadioButtonCheckbox} from '../../../routes/commonUI/CommonUI';
 import {RenderStatusIcon} from '../../../routes/commonUI/CommonUI';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import {baseTextStyles} from '../../../styles/text.styles';
+import StartAlignedView from '../../../routes/commonUI/StartAlignedView';
+import EndAlignedView from '../../../routes/commonUI/EndAlignedView';
 &nbsp;
 const StatusItem = ({index, item, selectedIndex, onPressHandler}) =&gt; {
   const {title} = item;
 &nbsp;
   return (
-    &lt;TouchableWithoutFeedback
+    &lt;Pressable
       testID="status-item-button"
       onPress={onPressHandler}
       style={styles.container}&gt;
-      &lt;View style={styles.container}&gt;
-        &lt;RadioButtonCheckbox size={18} isChecked={index === selectedIndex} /&gt;
-        &lt;TextLabel
-          text={title}
-          baseTextStyle={baseTextStyles.primaryRegularText}
-          style={{flex: 1}}
-        /&gt;
+      &lt;StartAlignedView&gt;
         &lt;RenderStatusIcon size={18} title={title} /&gt;
-      &lt;/View&gt;
-    &lt;/TouchableWithoutFeedback&gt;
+        &lt;TextLabel text={title} style={styles.title} /&gt;
+      &lt;/StartAlignedView&gt;
+      &lt;EndAlignedView&gt;
+        &lt;RadioButtonCheckbox size={26} isChecked={index === selectedIndex} /&gt;
+      &lt;/EndAlignedView&gt;
+    &lt;/Pressable&gt;
   );
 };
 &nbsp;
@@ -249,16 +204,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-&nbsp;
-    paddingVertical: MarginConstants.tab1,
-    marginTop: MarginConstants.tab2,
+    justifyContent: 'space-between',
+    paddingVertical: MarginConstants.tab1_2x,
+    marginTop: MarginConstants.tab1_2x,
   },
   title: {
-    flex: 1,
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.primary,
-    marginStart: MarginConstants.halfTab,
-    color: Colors.filterIconColor,
+    ...baseTextStyles.primaryRegularText,
+    marginStart: MarginConstants.tab1_2x,
   },
   icon: {
     flex: 1,
@@ -274,7 +226,7 @@ const styles = StyleSheet.create({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-10T12:17:19.694Z
+                at 2025-01-27T11:26:48.596Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

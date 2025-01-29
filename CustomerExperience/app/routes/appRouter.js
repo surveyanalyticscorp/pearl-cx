@@ -104,12 +104,23 @@ const AppRouter = props => {
         }
       });
 
+    /* {"notification":
+      {"android":{},
+      "body":
+      "{\"id\":71,\"type\":2,\"hasRead\":false,\"notificationText\":\"Ticket #520 priority changed to MEDIUM by Mehedi Hasan.\",\"createdAt\":\"2025-01-28T02:55:34.394Z\",\"ticket\":{\"id\":520,\"feedbackId\":27233,\"assignToId\":81504},\"media\":null}",
+      "title":"Ticket priority notification"},
+      "sentTime":1738061734538,"data":{},
+      "from":"163493809530",
+      "messageId":"0:1738061734550760%0ee3cfb10ee3cfb1","ttl":2419200,
+      "collapseKey":"com.questionpro.cxonthego"}
+    
+      */
     const unsubscribeNotifications = messaging().onMessage(
       async remoteMessage => {
-        console.log('on message' + JSON.stringify(remoteMessage));
+        console.log('on message' + JSON.stringify(remoteMessage.notification));
         Notifications.postLocalNotification(
           {
-            body: remoteMessage.notification.body,
+            body: JSON.parse(remoteMessage.notification.body).notificationText,
             title: remoteMessage.notification.title,
             data: remoteMessage.data,
           },

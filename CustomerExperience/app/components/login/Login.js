@@ -49,6 +49,8 @@ import AccessCodeTextInput from './components/AccessCodeTextInput';
 import CXLogo from './components/CXLogo';
 import LoginBackground from './components/LoginBackground';
 import {use} from 'react';
+import getDeviceType from '../../Utils/DeviceType';
+import {get} from 'lodash';
 
 let getApiValidationErrorMessage = errorMessage => {
   console.log('getApiValidationErrorMessage', JSON.stringify(errorMessage));
@@ -158,15 +160,19 @@ const RenderSpinnerLoginButton = ({login}) => {
   }, [clfBaseUrl]);
 
   function callClfAuth() {
-    const data = {
-      clfBaseUrl,
-      emailAddress: userInfo.emailAddress,
-      userID: userInfo.userID,
-      feedbackID: userInfo.feedbackID,
-      feedbackApiKey: userInfo.feedbackApiKey,
-    };
-    dispatch(clearError());
-    dispatch(getClfAuth(data));
+    AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(token => {
+      const data = {
+        clfBaseUrl,
+        emailAddress: userInfo.emailAddress,
+        userID: userInfo.userID,
+        feedbackID: userInfo.feedbackID,
+        feedbackApiKey: userInfo.feedbackApiKey,
+        pushToken: token,
+        deviceType: getDeviceType(Platform.OS),
+      };
+      dispatch(clearError());
+      dispatch(getClfAuth(data));
+    });
   }
 
   const onSignInPress = () => {

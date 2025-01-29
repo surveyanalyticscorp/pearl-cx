@@ -2,23 +2,20 @@ import React from 'react';
 import {render, fireEvent, waitFor} from '@testing-library/react-native';
 import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
-import TicketOverview, {
-  CopyTicketIdButton,
-  TakeActionButton,
-  DescriptionHeader,
-  Title,
-  ShowTitleAndText,
-  DescriptionView,
-  ContactView,
-  DeleteView,
-  UnderLineText,
-  ViewResponseDetailsButton,
-} from './TicketOverview';
+import TicketOverview from './TicketOverview/TicketOverview';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {View} from 'react-native-animatable';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {mockNavigate} from '@react-navigation/native';
+import CopyTicketIdButton from './TicketOverview/components/CopyTicketIdButton';
+import TakeActionButton from './TicketOverview/components/TakeActionButton';
+import DescriptionHeader from './TicketOverview/components/DescriptionHeader';
+import ShowTitleAndText, {Title} from './ui/ShowTitleAndText';
+import DescriptionView from './TicketOverview/components/DescriptionView';
+import ContactView from './TicketOverview/components/ContactView';
+import DeleteView from './TicketOverview/components/DeleteView';
+import ViewResponseDetailsButton from './TicketOverview/components/ViewResponseDetailsButton';
 
 // mock Clipboard
 jest.mock('@react-native-clipboard/clipboard', () => ({
@@ -160,13 +157,6 @@ describe('DeleteView', () => {
   });
 });
 
-describe('underLineText', () => {
-  it('renders correctly', () => {
-    const {getByText} = render(<UnderLineText text="Test Text" />);
-    expect(getByText('Test Text')).toBeTruthy();
-  });
-});
-
 describe('ViewResponseDetailsButton', () => {
   let store;
   // mock store for ViewResponseDetailsButton
@@ -195,6 +185,9 @@ describe('ViewResponseDetailsButton', () => {
   const initialState = {
     global: {
       authToken: 'mockToken',
+      globalSettings: {
+        managerDeletePermission: true,
+      },
     },
     dashboard: {
       ticketDeleteStatus: {status: 'default'},
@@ -211,26 +204,24 @@ describe('ViewResponseDetailsButton', () => {
     store = mockStore(initialState);
   });
 
-  const renderComponent = () => {
+  const renderComponent = component => {
     return render(
       <Provider store={store}>
-        <SafeAreaProvider>
-          <ViewResponseDetailsButton />
-        </SafeAreaProvider>
+        <SafeAreaProvider>{component}</SafeAreaProvider>
       </Provider>,
     );
   };
 
   it('renders correctly', () => {
-    const {getByTestId} = renderComponent();
+    const {getByTestId} = renderComponent(<ViewResponseDetailsButton />);
     expect(getByTestId('responseButtonTest')).toBeTruthy();
   });
   it('renders correctly when isFromFeedback is true', () => {
-    const {getByTestId} = renderComponent();
+    const {getByTestId} = renderComponent(<ViewResponseDetailsButton />);
     expect(getByTestId('responseButtonTest')).toBeTruthy();
   });
   it('onPress function is called when the button is pressed', () => {
-    const {getByTestId} = renderComponent();
+    const {getByTestId} = renderComponent(<ViewResponseDetailsButton />);
     fireEvent.press(getByTestId('responseButtonTest'));
     expect(mockNavigate).toHaveBeenCalledWith('responses.feedback_details', {
       data: mockResponseDetails,

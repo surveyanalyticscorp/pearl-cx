@@ -1,8 +1,9 @@
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 
-# $FirebaseSDKVersion = '6.34.0'
-# $RNFirebaseAsStaticFramework = true
+$FirebaseSDKVersion = '8.15.0'
+$RNFirebaseAsStaticFramework = true
+$RNFirebaseAnalyticsWithoutAdIdSupport=true
 platform :ios, '11.0'
 
 target 'CustomerExperience' do
@@ -38,7 +39,10 @@ target 'CustomerExperience' do
   # pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+    pod 'boost', :podspec => '../node_modules/react-native/third-party-podspecs/boost.podspec'
 
+pod for `boost` from `../node_modules/react-native/third-party-podspecs/boost.podspec`
+# podspec for `glog` from `../node_modules/react-native/third-party-podspecs/glog.podspec`
   # pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
   # pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
   # pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'

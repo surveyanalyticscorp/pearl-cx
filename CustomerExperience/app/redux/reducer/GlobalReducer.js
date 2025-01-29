@@ -1,3 +1,4 @@
+import {log} from 'react-native-reanimated';
 import {
   IS_DEV_MODE,
   DEV_BASE_URL,
@@ -291,6 +292,7 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         logoutResponse: action.response,
+        logoutResponseClf: action.clfResponse,
       };
     }
     case GET_BEARER_TOKEN_RESPONSE: {

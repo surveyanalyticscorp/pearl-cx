@@ -10,16 +10,19 @@ exports[`ShowTitleAndText renders correctly 1`] = `
       "marginVertical": 3.75,
     }
   }
+  testID="show-title-and-text"
 >
   <Text
     style={
       {
+        "alignItems": "flex-start",
         "color": "#545E6B",
         "flex": 2,
         "fontFamily": "FiraSans-Regular",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
+        "paddingBottom": 3.75,
       }
     }
     testID="text-label"
@@ -50,16 +53,19 @@ exports[`ShowTitleAndText renders correctly with isSubtextHighlighted 1`] = `
       "marginVertical": 3.75,
     }
   }
+  testID="show-title-and-text"
 >
   <Text
     style={
       {
+        "alignItems": "flex-start",
         "color": "#545E6B",
         "flex": 2,
         "fontFamily": "FiraSans-Regular",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
+        "paddingBottom": 3.75,
       }
     }
     testID="text-label"
@@ -90,16 +96,19 @@ exports[`ShowTitleAndText renders correctly with subText 1`] = `
       "marginVertical": 3.75,
     }
   }
+  testID="show-title-and-text"
 >
   <Text
     style={
       {
+        "alignItems": "flex-start",
         "color": "#545E6B",
         "flex": 2,
         "fontFamily": "FiraSans-Regular",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
+        "paddingBottom": 3.75,
       }
     }
     testID="text-label"
@@ -132,16 +141,19 @@ exports[`ShowTitleAndText renders correctly with title 1`] = `
       "marginVertical": 3.75,
     }
   }
+  testID="show-title-and-text"
 >
   <Text
     style={
       {
+        "alignItems": "flex-start",
         "color": "#545E6B",
         "flex": 2,
         "fontFamily": "FiraSans-Regular",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
+        "paddingBottom": 3.75,
       }
     }
     testID="text-label"
@@ -174,16 +186,19 @@ exports[`ShowTitleAndText renders correctly with title and subText 1`] = `
       "marginVertical": 3.75,
     }
   }
+  testID="show-title-and-text"
 >
   <Text
     style={
       {
+        "alignItems": "flex-start",
         "color": "#545E6B",
         "flex": 2,
         "fontFamily": "FiraSans-Regular",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
+        "paddingBottom": 3.75,
       }
     }
     testID="text-label"
@@ -218,16 +233,19 @@ exports[`ShowTitleAndText renders correctly with title, subText and isSubtextHig
       "marginVertical": 3.75,
     }
   }
+  testID="show-title-and-text"
 >
   <Text
     style={
       {
+        "alignItems": "flex-start",
         "color": "#545E6B",
         "flex": 2,
         "fontFamily": "FiraSans-Regular",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
+        "paddingBottom": 3.75,
       }
     }
     testID="text-label"
@@ -262,16 +280,19 @@ exports[`ShowTitleAndText should render correctly with title, subText and isSubt
       "marginVertical": 3.75,
     }
   }
+  testID="show-title-and-text"
 >
   <Text
     style={
       {
+        "alignItems": "flex-start",
         "color": "#545E6B",
         "flex": 2,
         "fontFamily": "FiraSans-Regular",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
+        "paddingBottom": 3.75,
       }
     }
     testID="text-label"

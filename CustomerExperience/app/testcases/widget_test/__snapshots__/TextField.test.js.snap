@@ -97,6 +97,7 @@ exports[`renders correctly 1`] = `
             style={
               {
                 "color": "rgba(112, 112, 112, 1)",
+                "fontFamily": "FiraSans-Regular",
                 "fontSize": 18,
                 "includeFontPadding": false,
                 "lineHeight": 18,
@@ -151,7 +152,10 @@ exports[`renders correctly 1`] = `
                   "fontSize": 18,
                   "height": 27,
                 },
-                undefined,
+                {
+                  "color": "#545E6B",
+                  "fontFamily": "FiraSans-Regular",
+                },
               ]
             }
             testID="text-field"
@@ -178,5 +182,6 @@ exports[`renders correctly 1`] = `
       }
     />
   </View>
+  <View />
 </View>
 `;

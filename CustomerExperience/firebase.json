@@ -1,7 +1,8 @@
 {
   "react-native": {
     "crashlytics_debug_enabled": true,
-    "messaging_android_notification_color": "@color/colorAccent"
-
+    "messaging_android_notification_color": "@color/colorAccent",
+    "analytics_auto_collection_enabled": true,
+    "analytics_without_ad_id_support": true
   }
 }
