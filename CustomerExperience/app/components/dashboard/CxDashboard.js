@@ -12,19 +12,16 @@ import {
   getDashboardContent,
   getFirstTimeClosedLoopSegmentDetails,
 } from '../../redux/actions/dashboard.actions';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
 import {isObjectEmpty} from '../../Utils/Utility';
 import QPSpinner from '../../widgets/QPSpinner';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
-import {MarginConstants} from '../../styles/margin.constants';
 import StringUtils from '../../Utils/StringUtils';
 import {getSelectedRange} from '../../Utils/DateFilterUtility';
 import {setRangeFilter} from '../../redux/actions';
 import {translate} from '../../Utils/MultilinguaUtils';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ASYNC_LAST_LOGIN} from '../../api/Constant';
 import {HeaderFilter} from '../../routes/commonUI/CommonUI';
 import FabAddButton from '../../routes/commonUI/FabAddButton';
 import Animated from 'react-native-reanimated';
@@ -34,11 +31,22 @@ import {
 } from './ClosedLoopDashboard';
 
 import RenderSegmentDashboardData from './cxDashboard/RenderSegmentDashboardData';
+import useBackHandler from './hooks/useBackHandler';
 
 const wait = timeout => {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
   });
+};
+
+let DashboardSpinner = () => {
+  const isLoading = useSelector(state => state.global.isLoading);
+
+  return isLoading ? (
+    <View style={dashboardStyles.loading}>
+      <QPSpinner />
+    </View>
+  ) : null;
 };
 
 let RenderDashboardContent = ({children}) => {
@@ -63,7 +71,7 @@ const CxDashboard = ({route, navigation}) => {
   const segmentId = useSelector(
     state => state.dashboard.currentSegment.currentSegmentID,
   );
-  const {range, authToken, wantToReloadDashboard, isLoading} = useSelector(
+  const {range, authToken, wantToReloadDashboard} = useSelector(
     state => state.global,
   );
   const primaryStoreNPS = useSelector(
@@ -72,8 +80,7 @@ const CxDashboard = ({route, navigation}) => {
 
   let dispatch = useDispatch();
   let [refreshing, setRefreshing] = useState(false);
-  let [exitAlert, showExitAlert] = useState(false);
-  // let [lastLoginArray, setLastLoginArray] = useState([]);
+  const {renderExitAlert, exitAlert} = useBackHandler(navigation);
 
   const statusBottomSheetRef = React.useRef();
   const statusBottomSheetSnapPoints = ['55%', '0%'];
@@ -120,33 +127,11 @@ const CxDashboard = ({route, navigation}) => {
           endDate: selectedRange.endDate,
         }),
       );
-
-      // props.setRange();
     }
     console.log('CALL DASHBOARD from range, wantToReload, segmentId');
 
     getDashboardData();
   }, [range, wantToReloadDashboard, segmentId]); //props.navigation
-
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-
-    // getLastLogin();
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
-    };
-  }, []);
-  //////////////////////////////////////////////
-  // const getLastLogin = async () => {
-  //   try {
-  //     const lastLogin = await AsyncStorage.getItem(ASYNC_LAST_LOGIN);
-  //     if (JSON.parse(lastLogin) !== null) {
-  //       setLastLoginArray(JSON.parse(lastLogin));
-  //     }
-  //   } catch (e) {
-  //     console.log(`LAST LOGIN ASYNC ERROR: ${JSON.stringify(e)}`);
-  //   }
-  // };
 
   useEffect(() => {
     if (primaryStoreNPS) {
@@ -155,42 +140,6 @@ const CxDashboard = ({route, navigation}) => {
       setRefreshing(false);
     }
   }, [primaryStoreNPS]);
-
-  function handleBackPress() {
-    if (
-      route.name === translate('dashboard.dashboard') &&
-      !navigation.canGoBack()
-    ) {
-      showExitAlert(true);
-      return true;
-    } else {
-      showExitAlert(false);
-      return false;
-    }
-  }
-
-  let renderExitAlert = () => {
-    return Alert.alert(
-      translate('exit_app'),
-      translate('exit_message'),
-      [
-        {
-          text: translate('yes'),
-          onPress: () => {
-            showExitAlert(false);
-            BackHandler.exitApp();
-          },
-        },
-        {
-          text: translate('no'),
-          onPress: () => {
-            showExitAlert(false);
-          },
-        },
-      ],
-      {cancelable: false},
-    );
-  };
 
   let getDashboardData = () => {
     console.log('CALL DASHBOARD');
@@ -203,17 +152,6 @@ const CxDashboard = ({route, navigation}) => {
     if (data.startDate !== 'Invalid date') {
       dispatch(showLoading(true));
       dispatch(getDashboardContent(authToken, data, segmentId));
-      // props.getDashboardContent(authToken, data, segmentId);
-    }
-  };
-
-  let renderSpinner = () => {
-    if (isLoading) {
-      return (
-        <View style={dashboardStyles.loading}>
-          <QPSpinner />
-        </View>
-      );
     }
   };
 
@@ -226,11 +164,6 @@ const CxDashboard = ({route, navigation}) => {
       testID="cx-dashboard"
       forceInset={{bottom: 'never', top: 'never'}}
       style={dashboardStyles.container}>
-      <StatusDashboardBottomSheet
-        ref={statusBottomSheetRef}
-        snapPoints={statusBottomSheetSnapPoints}
-        fall={fall}
-      />
       <Animated.View
         style={[
           dashboardStyles.container,
@@ -245,16 +178,19 @@ const CxDashboard = ({route, navigation}) => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-          <View style={dashboardStyles.container}>
-            <RenderDashboardContent>
-              <RenderSegmentDashboardData />
-              <ClosedLoopDashboard openStatusBS={openStatusBS} />
-            </RenderDashboardContent>
-            {renderSpinner()}
-            {exitAlert && renderExitAlert()}
-          </View>
+          <RenderDashboardContent>
+            <RenderSegmentDashboardData />
+            <ClosedLoopDashboard openStatusBS={openStatusBS} />
+          </RenderDashboardContent>
+          <DashboardSpinner />
+          {exitAlert && renderExitAlert()}
         </ScrollView>
       </Animated.View>
+      <StatusDashboardBottomSheet
+        ref={statusBottomSheetRef}
+        snapPoints={statusBottomSheetSnapPoints}
+        fall={fall}
+      />
       <FabAddButton onPress={onFabPressHandler} />
     </View>
   );

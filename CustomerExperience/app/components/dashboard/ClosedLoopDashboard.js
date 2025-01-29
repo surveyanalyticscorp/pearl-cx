@@ -433,6 +433,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     paddingHorizontal: 24,
     height: '100%',
+    zIndex: 10,
   },
   iconButton: {
     ...buttonStyles.outlinePrimaryButtonMedium,

@@ -68,5 +68,6 @@ module.exports = {
     'app/components/login/ForgotPassword.js',
     'app/redux/sagas/notificationSaga.js',
     'app/components/dashboard/DashboardClosedLoopView.js',
+    'app/components/closedloop/CentralizedRootCause',
   ],
 };
