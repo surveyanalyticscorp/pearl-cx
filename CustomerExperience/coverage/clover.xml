@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1738143363326" clover="3.2.0">
-  <project timestamp="1738143363326" name="All files">
-    <metrics statements="3861" coveredstatements="2989" conditionals="1330" coveredconditionals="814" methods="1241" coveredmethods="829" elements="6432" coveredelements="4632" complexity="0" loc="3861" ncloc="3861" packages="37" files="198" classes="198"/>
+<coverage generated="1738149956463" clover="3.2.0">
+  <project timestamp="1738149956463" name="All files">
+    <metrics statements="3869" coveredstatements="2996" conditionals="1330" coveredconditionals="814" methods="1244" coveredmethods="832" elements="6443" coveredelements="4642" complexity="0" loc="3869" ncloc="3869" packages="38" files="200" classes="200"/>
     <package name="Utils">
       <metrics statements="627" coveredstatements="568" conditionals="225" coveredconditionals="175" methods="151" coveredmethods="132"/>
       <file name="Analytic.constants.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/Utils/Analytic.constants.js">
@@ -2247,7 +2247,7 @@
       </file>
     </package>
     <package name="components.dashboard">
-      <metrics statements="212" coveredstatements="153" conditionals="97" coveredconditionals="54" methods="80" coveredmethods="57"/>
+      <metrics statements="201" coveredstatements="151" conditionals="93" coveredconditionals="54" methods="75" coveredmethods="56"/>
       <file name="ClosedLoopDashboard.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/components/dashboard/ClosedLoopDashboard.js">
         <metrics statements="50" coveredstatements="34" conditionals="22" coveredconditionals="14" methods="19" coveredmethods="11"/>
         <line num="25" count="1" type="stmt"/>
@@ -2302,81 +2302,70 @@
         <line num="276" count="1" type="stmt"/>
       </file>
       <file name="CxDashboard.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/components/dashboard/CxDashboard.js">
-        <metrics statements="74" coveredstatements="45" conditionals="23" coveredconditionals="8" methods="27" coveredmethods="17"/>
-        <line num="35" count="1" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
+        <metrics statements="63" coveredstatements="43" conditionals="19" coveredconditionals="8" methods="22" coveredmethods="16"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="8" type="stmt"/>
+        <line num="38" count="8" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
         <line num="42" count="8" type="stmt"/>
-        <line num="44" count="8" type="cond" truecount="1" falsecount="1"/>
-        <line num="51" count="1" type="stmt"/>
-        <line num="52" count="8" type="stmt"/>
-        <line num="53" count="8" type="stmt"/>
-        <line num="54" count="8" type="stmt"/>
-        <line num="56" count="8" type="cond" truecount="4" falsecount="1"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="64" count="8" type="stmt"/>
-        <line num="67" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="46" count="8" type="stmt"/>
+        <line num="48" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="56" count="8" type="stmt"/>
+        <line num="57" count="8" type="stmt"/>
+        <line num="58" count="8" type="stmt"/>
+        <line num="60" count="8" type="cond" truecount="4" falsecount="1"/>
+        <line num="61" count="0" type="stmt"/>
         <line num="68" count="8" type="stmt"/>
-        <line num="70" count="8" type="stmt"/>
-        <line num="71" count="8" type="stmt"/>
-        <line num="73" count="8" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="72" count="8" type="stmt"/>
         <line num="74" count="8" type="stmt"/>
-        <line num="76" count="8" type="stmt"/>
+        <line num="75" count="8" type="stmt"/>
         <line num="77" count="8" type="stmt"/>
+        <line num="78" count="8" type="stmt"/>
         <line num="80" count="8" type="stmt"/>
         <line num="81" count="8" type="stmt"/>
-        <line num="82" count="8" type="stmt"/>
+        <line num="84" count="8" type="stmt"/>
         <line num="85" count="8" type="stmt"/>
         <line num="86" count="8" type="stmt"/>
-        <line num="87" count="8" type="stmt"/>
+        <line num="88" count="8" type="stmt"/>
         <line num="89" count="8" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="93" count="8" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
-        <line num="99" count="8" type="stmt"/>
-        <line num="100" count="8" type="stmt"/>
-        <line num="101" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="102" count="0" type="stmt"/>
-        <line num="106" count="8" type="stmt"/>
-        <line num="107" count="8" type="stmt"/>
+        <line num="90" count="8" type="stmt"/>
+        <line num="92" count="8" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="96" count="8" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="102" count="8" type="stmt"/>
+        <line num="103" count="8" type="stmt"/>
+        <line num="104" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="109" count="8" type="stmt"/>
         <line num="110" count="8" type="stmt"/>
-        <line num="111" count="0" type="stmt"/>
-        <line num="113" count="0" type="stmt"/>
+        <line num="113" count="8" type="stmt"/>
         <line num="114" count="0" type="stmt"/>
-        <line num="117" count="8" type="stmt"/>
-        <line num="118" count="8" type="cond" truecount="0" falsecount="2"/>
-        <line num="122" count="0" type="stmt"/>
-        <line num="123" count="0" type="stmt"/>
-        <line num="133" count="0" type="stmt"/>
-        <line num="135" count="0" type="stmt"/>
-        <line num="138" count="8" type="stmt"/>
+        <line num="116" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="120" count="8" type="stmt"/>
+        <line num="121" count="8" type="cond" truecount="0" falsecount="2"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="136" count="0" type="stmt"/>
         <line num="139" count="8" type="stmt"/>
-        <line num="142" count="8" type="stmt"/>
-        <line num="143" count="8" type="stmt"/>
-        <line num="158" count="8" type="stmt"/>
-        <line num="159" count="8" type="cond" truecount="1" falsecount="1"/>
-        <line num="160" count="0" type="stmt"/>
-        <line num="162" count="0" type="stmt"/>
-        <line num="167" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="171" count="0" type="stmt"/>
-        <line num="172" count="0" type="stmt"/>
-        <line num="174" count="0" type="stmt"/>
-        <line num="175" count="0" type="stmt"/>
-        <line num="179" count="8" type="stmt"/>
-        <line num="180" count="0" type="stmt"/>
-        <line num="187" count="0" type="stmt"/>
-        <line num="188" count="0" type="stmt"/>
-        <line num="194" count="0" type="stmt"/>
-        <line num="202" count="8" type="stmt"/>
-        <line num="203" count="8" type="stmt"/>
-        <line num="204" count="8" type="stmt"/>
-        <line num="210" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="211" count="0" type="stmt"/>
-        <line num="212" count="0" type="stmt"/>
-        <line num="217" count="8" type="stmt"/>
-        <line num="218" count="0" type="stmt"/>
-        <line num="221" count="8" type="stmt"/>
+        <line num="140" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="141" count="0" type="stmt"/>
+        <line num="143" count="0" type="stmt"/>
+        <line num="147" count="8" type="stmt"/>
+        <line num="148" count="8" type="stmt"/>
+        <line num="149" count="8" type="stmt"/>
+        <line num="155" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="156" count="0" type="stmt"/>
+        <line num="157" count="0" type="stmt"/>
+        <line num="161" count="8" type="stmt"/>
       </file>
       <file name="GlobalSelectSegment.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/components/dashboard/GlobalSelectSegment.js">
         <metrics statements="15" coveredstatements="15" conditionals="8" coveredconditionals="8" methods="7" coveredmethods="7"/>
@@ -2537,6 +2526,29 @@
         <line num="17" count="1" type="stmt"/>
         <line num="20" count="1" type="cond" truecount="2" falsecount="0"/>
         <line num="23" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.dashboard.hooks">
+      <metrics statements="17" coveredstatements="7" conditionals="4" coveredconditionals="0" methods="7" coveredmethods="3"/>
+      <file name="useBackHandler.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/components/dashboard/hooks/useBackHandler.js">
+        <metrics statements="17" coveredstatements="7" conditionals="4" coveredconditionals="0" methods="7" coveredmethods="3"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
+        <line num="8" count="8" type="stmt"/>
+        <line num="9" count="8" type="stmt"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="22" count="8" type="stmt"/>
+        <line num="25" count="8" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="48" count="8" type="stmt"/>
       </file>
     </package>
     <package name="components.feedback">
@@ -4283,7 +4295,7 @@
       </file>
     </package>
     <package name="widgets">
-      <metrics statements="89" coveredstatements="89" conditionals="82" coveredconditionals="71" methods="28" coveredmethods="28"/>
+      <metrics statements="91" coveredstatements="91" conditionals="82" coveredconditionals="71" methods="29" coveredmethods="29"/>
       <file name="AMChart.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/widgets/AMChart.js">
         <metrics statements="6" coveredstatements="6" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
         <line num="5" count="4" type="stmt"/>
@@ -4292,6 +4304,11 @@
         <line num="55" count="1" type="stmt"/>
         <line num="62" count="4" type="stmt"/>
         <line num="85" count="4" type="stmt"/>
+      </file>
+      <file name="AnimatedView.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/widgets/AnimatedView.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="8" type="stmt"/>
       </file>
       <file name="Button.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/widgets/Button.js">
         <metrics statements="8" coveredstatements="8" conditionals="15" coveredconditionals="11" methods="2" coveredmethods="2"/>

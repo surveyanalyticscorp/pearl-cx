@@ -1,12 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {
-  RefreshControl,
-  ScrollView,
-  View,
-  BackHandler,
-  Alert,
-  SafeAreaView,
-} from 'react-native';
+import {RefreshControl, ScrollView, View, SafeAreaView} from 'react-native';
 import {showLoading} from '../../redux/actions/index';
 import {
   getDashboardContent,
@@ -32,11 +25,21 @@ import {
 
 import RenderSegmentDashboardData from './cxDashboard/RenderSegmentDashboardData';
 import useBackHandler from './hooks/useBackHandler';
+import AnimatedView from '../../widgets/AnimatedView';
+import {useNavigation} from '@react-navigation/native';
 
 const wait = timeout => {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
   });
+};
+const CreateTicketButton = () => {
+  const navigation = useNavigation();
+  let onFabPressHandler = useCallback(() => {
+    navigation.navigate(translate('responses.new_ticket'));
+  }, [navigation]);
+
+  return <FabAddButton onPress={onFabPressHandler} />;
 };
 
 let DashboardSpinner = () => {
@@ -155,24 +158,13 @@ const CxDashboard = ({route, navigation}) => {
     }
   };
 
-  let onFabPressHandler = () => {
-    navigation.navigate(translate('responses.new_ticket'));
-  };
-
   return (
     <View
       testID="cx-dashboard"
       forceInset={{bottom: 'never', top: 'never'}}
       style={dashboardStyles.container}>
-      <Animated.View
-        style={[
-          dashboardStyles.container,
-          {
-            opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-          },
-        ]}>
+      <AnimatedView fall={fall}>
         <HeaderFilter hasFilterIcon={false} />
-
         <ScrollView
           contentContainerStyle={dashboardStyles.scrollView}
           refreshControl={
@@ -185,53 +177,14 @@ const CxDashboard = ({route, navigation}) => {
           <DashboardSpinner />
           {exitAlert && renderExitAlert()}
         </ScrollView>
-      </Animated.View>
+      </AnimatedView>
       <StatusDashboardBottomSheet
         ref={statusBottomSheetRef}
         snapPoints={statusBottomSheetSnapPoints}
         fall={fall}
       />
-      <FabAddButton onPress={onFabPressHandler} />
+      <CreateTicketButton />
     </View>
   );
 };
-
-// const mapStateToProps = state => {
-//   return {
-//     dashboardData: state.dashboard.dashboardData,
-
-//     isLoading: state.global.isLoading,
-//     isError: state.global.isError,
-//     errorMessage: state.global.errorMessage,
-//     authToken: state.global.authToken,
-//     range: state.global.range,
-
-//     wantToReload: state.global.wantToReloadDashboard,
-
-//     segmentList: state.dashboard.segmentDetails.segments,
-//   };
-// };
-
-// const mapDispatchToProps = dispatch => ({
-//   // updateSegment: segment => {
-//   //   dispatch({
-//   //     type: SEGMENT_SELECTED,
-//   //     payload: segment,
-//   //   });
-//   // },
-
-//   getDashboardContent: (token, data, segmentId) => {
-//     dispatch(showLoading(true));
-//     dispatch(getDashboardContent(token, data, segmentId));
-//   },
-
-//   showLoading: flag => {
-//     dispatch(showLoading(flag));
-//   },
-//   setRange: range => {
-//     dispatch(setRangeFilter(range));
-//   },
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(CxDashboard);
 export default CxDashboard;
