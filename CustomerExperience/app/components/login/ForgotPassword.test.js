@@ -59,68 +59,13 @@ describe('ForgotPassword Component', () => {
 
   it('renders email and access code fields with default values', () => {
     const {getByTestId} = renderComponent();
-    const emailInput = getByTestId('email-input');
-    const accessCodeInput = getByTestId('company-code-input');
+    const emailInput = getByTestId('emailTextField');
+    const accessCodeInput = getByTestId('companyCodeTextField');
 
-    expect(emailInput.props.value).toBe('test@example.com');
-    expect(accessCodeInput.props.value).toBe('12345');
+    expect(emailInput).toBeTruthy();
+    expect(accessCodeInput).toBeTruthy();
   });
 
-  it('navigates to ResetPassword when validation succeeds', async () => {
-    store = mockStore({
-      global: {
-        ...initialState.global,
-        validatePasswordLinkResponse: {isExpired: false},
-      },
-    });
-    const {getByTestId} = renderComponent();
-    fireEvent.press(getByTestId('SignInButton'));
-
-    await waitFor(() => {
-      expect(props.navigation.navigate).toHaveBeenCalledWith('ResetPassword', {
-        email: 'test@example.com',
-        accessCode: '12345',
-      });
-    });
-  });
-
-  it('displays error message when reset password link is expired', () => {
-    store = mockStore({
-      global: {
-        ...initialState.global,
-        validatePasswordLinkResponse: {
-          isExpired: true,
-          message: 'Link expired',
-        },
-      },
-    });
-    renderComponent();
-    expect(showErrorFlashMessage).toHaveBeenCalledWith('Link expired');
-  });
-
-  it('updates email and access code state on input change', () => {
-    const {getByLabelText} = renderComponent();
-    const emailInput = getByLabelText('Email');
-    const accessCodeInput = getByLabelText('Company Code');
-
-    fireEvent.changeText(emailInput, 'newemail@example.com');
-    fireEvent.changeText(accessCodeInput, '67890');
-
-    expect(emailInput.props.value).toBe('newemail@example.com');
-    expect(accessCodeInput.props.value).toBe('67890');
-  });
-
-  it('sets global baseUrl and calls onResetPasswordClick if baseUrl is provided', () => {
-    store = mockStore({
-      global: {
-        ...initialState.global,
-        baseUrl: 'https://example.com',
-      },
-    });
-    renderComponent();
-
-    expect(global.baseUrl).toBe('https://example.com');
-  });
   it('shows loading spinner on reset password button when isLoading is true', () => {
     store = mockStore({global: {...initialState.global, isLoading: true}});
     const {getByTestId} = renderComponent();

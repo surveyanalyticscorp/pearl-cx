@@ -19,7 +19,10 @@ const useBackHandler = navigation => {
       },
     );
 
-    return () => backHandler.remove();
+    return () => {
+      console.log('Cleanup called');
+      backHandler.remove();
+    };
   }, [navigation]);
 
   const renderExitAlert = () => {
