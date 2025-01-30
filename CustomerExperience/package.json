@@ -32,7 +32,7 @@
     "test:unit": "jest --testPathPattern=app/testcases/unit_test",
     "test:widget": "jest --testPathPattern=app/testcases/widget_test",
     "test:component": "jest --testPathPattern=app/testcases/component_test -u",
-    "test:singleFile": "jest --testPathPattern=app/components/TicketSync.test.js -u",
+    "test:singleFile": "jest --testPathPattern=app/components/login/components/hooks/useForgotPasswordProcess.test.js -u",
     "test:singleFileCoverageOld": "NODE_OPTIONS=--openssl-legacy-provider jest --coverage --testPathPattern=app/routes/CommonScreen.test.js.test.js -u",
     "test:singleFileCoverage": "NODE_OPTIONS=--openssl-legacy-provider jest --collectCoverageFrom=\"<rootDir>/app/**/*.{js,jsx}\" --testPathPattern=app/components/view/CalendarScreen.test.js -u",
     "test:singleDirectoryCoverage": "jest --coverage --testPathPattern=app/components/login/",
