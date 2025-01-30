@@ -26,6 +26,11 @@ describe('index reducer', () => {
       },
       dashboard: {},
       global: {},
+      login: {
+        accessCode: '',
+        email: '',
+        password: '',
+      },
       notification: {},
       response: {},
     });
@@ -55,6 +60,11 @@ describe('index reducer', () => {
       },
       dashboard: {},
       global: {},
+      login: {
+        accessCode: '',
+        email: '',
+        password: '',
+      },
       notification: {},
       response: {},
     });
