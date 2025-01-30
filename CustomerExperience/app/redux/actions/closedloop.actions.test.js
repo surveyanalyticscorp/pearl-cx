@@ -1,36 +1,22 @@
 import * as actions from './closedloop.actions';
 import {
   GET_TICKET_LIST_SYNC,
-  GET_TICKET_LIST_SYNC_RECEIVED,
   CLEAR_TICKET_SYNC,
   GET_DEFAULT_EMAIL_TEMPLATE,
-  GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
   GET_EMAIL_TEMPLATES,
-  GET_EMAIL_TEMPLATES_RECEIVED,
   SEND_EMAIL,
-  SEND_EMAIL_RECEIVED,
   GET_LATEST_COMMENT,
-  LATEST_COMMENT_RECEIVED,
   GET_TICKET_STATUS_HISTORY,
-  GET_TICKET_STATUS_HISTORY_RECEIVED,
   SET_TICKET_FILTER_BY_STATUS_ID,
   GET_ROOT_CASUES,
-  ROOT_CASUES_RECEIVED,
   GET_ACTIONS,
-  ACTIONS_RECEIVED,
   UPDATE_ROOT_CAUSE,
-  ROOT_CAUSE_UPDATE_RECEIVED,
   UPDATE_TICKET_ESCALATION,
-  TICKET_ESCALATION_RECIEVED,
   DELETE_TICKET,
-  DELETE_TICKET_COMPLETE,
   DELETE_TICKET_STATUS_RESET,
   ACTION_HISTORY_SUMMARY,
-  ACTION_HISTORY_SUMMARY_RECEIVED,
   ACTION_HISTORY_DETAILS,
-  ACTION_HISTORY_DETAILS_RECEIVED,
   MEDIA_FILE_UPLOAD,
-  MEDIA_FILE_UPLOAD_RESPONSE,
   MEDIA_FILE_UPLOAD_RESET,
 } from './closedloop.actions';
 
@@ -38,14 +24,14 @@ describe('Closed Loop Actions', () => {
   it('should create an action to sync tickets', () => {
     const token = 'someToken';
     const param = {key: 'value'};
-    const feedbackId = 'someFeedbackId';
+    const feedbackID = 'someFeedbackId';
     const expectedAction = {
       type: GET_TICKET_LIST_SYNC,
       token,
       param,
-      feedbackId,
+      feedbackID,
     };
-    expect(actions.syncTickets(token, param, feedbackId)).toEqual(
+    expect(actions.syncTickets({token, param, feedbackID})).toEqual(
       expectedAction,
     );
   });
@@ -177,31 +163,29 @@ describe('Closed Loop Actions', () => {
   });
 
   it('should create an action to update ticket escalation', () => {
-    const token = 'someToken';
     const param = {key: 'value'};
     const ticketId = 'someTicketId';
     const feedbackApiKey = 'someFeedbackApiKey';
     const expectedAction = {
       type: UPDATE_TICKET_ESCALATION,
-      token,
+
       param,
       ticketId,
       feedbackApiKey,
     };
     expect(
-      actions.updateSetTicketEscalation(token, param, ticketId, feedbackApiKey),
+      actions.updateSetTicketEscalation(param, ticketId, feedbackApiKey),
     ).toEqual(expectedAction);
   });
 
   it('should create an action to delete tickets', () => {
-    const token = 'someToken';
     const param = {key: 'value'};
     const expectedAction = {
       type: DELETE_TICKET,
-      token,
+
       param,
     };
-    expect(actions.deleteTickets(token, param)).toEqual(expectedAction);
+    expect(actions.deleteTickets(param)).toEqual(expectedAction);
   });
 
   it('should create an action to reset delete ticket status', () => {

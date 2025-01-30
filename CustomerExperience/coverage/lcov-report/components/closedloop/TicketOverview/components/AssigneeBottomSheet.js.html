@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">4.76% </span>
+                <span class="strong">61.9% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/21</span>
+                <span class='fraction'>13/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>2/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">37.5% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>3/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.26% </span>
+                <span class="strong">57.89% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/19</span>
+                <span class='fraction'>11/19</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -144,20 +144,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -166,7 +166,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,7 +190,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -214,20 +214,20 @@ import ticketOverviewStyles from '../ticket.overview.style';
 import {translate} from '../../../../Utils/MultilinguaUtils';
 import SelectTicketOwner from '../../takeaction/SelectTicketOwner';
 &nbsp;
-const AssigneeBottomSheet = React.forwardRef(<span class="fstat-no" title="function not covered" >({</span>fall}, ref) =&gt; {
-  const STATUS_ESCALATED = <span class="cstat-no" title="statement not covered" >2;</span>
-  const snapPoints = <span class="cstat-no" title="statement not covered" >['50%', '0%'];</span>
-  const updateTicket = <span class="cstat-no" title="statement not covered" >useUpdateTicket();</span>
-  const {owners} = <span class="cstat-no" title="statement not covered" >useSelector(<span class="fstat-no" title="function not covered" >st</span>ate =&gt; <span class="cstat-no" title="statement not covered" >state.dashboard.ownerDetails ?? [])</span>;</span>
-  const {assignToId} = <span class="cstat-no" title="statement not covered" >useSelector(<span class="fstat-no" title="function not covered" >st</span>ate =&gt; <span class="cstat-no" title="statement not covered" >state.dashboard.ticket)</span>;</span>
-  const [ticketOwnerIndex, setTicketOwnerIndex] = <span class="cstat-no" title="statement not covered" >useState(</span>
-    getOwnerIndex(owners, assignToId ?? 0),
+const AssigneeBottomSheet = React.forwardRef(({fall}, ref) =&gt; {
+  const STATUS_ESCALATED = 2;
+  const snapPoints = ['50%', '0%'];
+  const updateTicket = useUpdateTicket();
+  const {owners} = useSelector(state =&gt; state.dashboard.ownerDetails ?? <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>;
+  const {assignToId} = useSelector(state =&gt; state.dashboard.ticket);
+  const [ticketOwnerIndex, setTicketOwnerIndex] = useState(
+    getOwnerIndex(owners, assignToId ?? <span class="branch-1 cbranch-no" title="branch not covered" >0)</span>,
   );
 &nbsp;
-  const close = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const close = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >    ref.current.snapTo(snapPoints.length - 1);</span>
   };
-  const renderHeader = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const renderHeader = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;BottomSheetHeader
         title={translate('ticket_overview.select_ticket_owner')}
@@ -236,7 +236,7 @@ const AssigneeBottomSheet = React.forwardRef(<span class="fstat-no" title="funct
     );
   };
 &nbsp;
-  const renderContent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const renderContent = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;View style={ticketOverviewStyles.contentContainer}&gt;
         &lt;SelectTicketOwner
@@ -260,7 +260,7 @@ const AssigneeBottomSheet = React.forwardRef(<span class="fstat-no" title="funct
     );
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;BottomSheet
       ref={ref}
       snapPoints={snapPoints}
@@ -280,7 +280,7 @@ export default AssigneeBottomSheet;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-29T11:25:56.264Z
+                at 2025-01-30T04:36:34.019Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

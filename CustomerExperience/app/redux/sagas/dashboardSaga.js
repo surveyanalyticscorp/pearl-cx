@@ -152,7 +152,8 @@ export function* postApploginCount(action) {
     if (JSON.stringify(error).includes('jwt expired')) {
       yield put({type: SET_TOKEN_EXPIRED, isTokenExpired: true});
     } else {
-      // showErrorFlashMessage(error.message);
+      showErrorFlashMessage(error.message);
+
       yield put({
         type: API_ERROR,
         error: error,

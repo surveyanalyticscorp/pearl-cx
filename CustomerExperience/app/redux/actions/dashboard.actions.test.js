@@ -211,14 +211,14 @@ describe('Dashboard Actions', () => {
   });
 
   it('should create an action to get closed loop ticket item activity', () => {
-    const token = 'someToken';
     const ticketId = 'someTicketId';
+
     const expectedAction = {
       type: GET_CLOSED_LOOP_TICKET_ITEM_ACTIVITY,
-      token,
+
       ticketId,
     };
-    expect(actions.getClosedLoopTicketItemActivity(token, ticketId)).toEqual(
+    expect(actions.getClosedLoopTicketItemActivity(ticketId)).toEqual(
       expectedAction,
     );
   });
@@ -255,16 +255,15 @@ describe('Dashboard Actions', () => {
   });
 
   it('should create an action to create CLF ticket', () => {
-    const token = 'someToken';
     const param = {key: 'value'};
     const feedbackApiKey = 'someFeedbackApiKey';
     const expectedAction = {
       type: CREATE_CLF_TICKET,
-      token,
+
       param,
       feedbackApiKey,
     };
-    expect(actions.createClfTicket(token, param, feedbackApiKey)).toEqual(
+    expect(actions.createClfTicket(param, feedbackApiKey)).toEqual(
       expectedAction,
     );
   });

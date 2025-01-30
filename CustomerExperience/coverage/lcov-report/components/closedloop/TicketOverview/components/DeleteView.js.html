@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.69% </span>
+                <span class="strong">76.92% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/13</span>
+                <span class='fraction'>10/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>4/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">8.33% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/12</span>
+                <span class='fraction'>9/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -121,25 +121,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -168,16 +168,16 @@ import {buttonStyles} from '../../../../styles/button.styles';
 import {MarginConstants} from '../../../../styles/margin.constants';
 import {translate} from '../../../../Utils/MultilinguaUtils';
 &nbsp;
-export const DeleteView = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
-  const [setDeleteAlertVisibility] = <span class="cstat-no" title="statement not covered" >useDeleteAlert();</span>
-  const {ticketDeleteStatus} = <span class="cstat-no" title="statement not covered" >useSelector(<span class="fstat-no" title="function not covered" >st</span>ate =&gt; <span class="cstat-no" title="statement not covered" >state.dashboard)</span>;</span>
-  const navigation = <span class="cstat-no" title="statement not covered" >useNavigation();</span>
-  const hasPermission = <span class="cstat-no" title="statement not covered" >useSelector(</span>
-<span class="fstat-no" title="function not covered" >    st</span>ate =&gt; <span class="cstat-no" title="statement not covered" >state.global.globalSettings.managerDeletePermission,</span>
+export const DeleteView = () =&gt; {
+  const [setDeleteAlertVisibility] = useDeleteAlert();
+  const {ticketDeleteStatus} = useSelector(state =&gt; state.dashboard);
+  const navigation = useNavigation();
+  const hasPermission = useSelector(
+    state =&gt; state.global.globalSettings.managerDeletePermission,
   );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (</span>
+  useEffect(() =&gt; {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (
       ticketDeleteStatus.status &amp;&amp;
       ticketDeleteStatus.status.trim() === 'success'
     ) {
@@ -186,7 +186,7 @@ export const DeleteView = <span class="fstat-no" title="function not covered" >(
     }
   }, [navigation, ticketDeleteStatus]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return hasPermission ? (</span>
+  return hasPermission ? (
     &lt;QPButton
       testID="DeleteButtonAction"
       buttonColor={Colors.white}
@@ -199,7 +199,7 @@ export const DeleteView = <span class="fstat-no" title="function not covered" >(
       textStyle={buttonStyles.deleteButtonText}
     /&gt;
   ) : (
-    &lt;View /&gt;
+<span class="branch-1 cbranch-no" title="branch not covered" >    &lt;View /&gt;</span>
   );
 };
 &nbsp;
@@ -211,7 +211,7 @@ export default DeleteView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-29T11:25:56.264Z
+                at 2025-01-30T04:36:34.019Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

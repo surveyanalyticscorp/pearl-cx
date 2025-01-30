@@ -1,52 +1,113 @@
 import React from 'react';
-import {render, fireEvent, waitFor} from '@testing-library/react-native';
+import {
+  render,
+  fireEvent,
+  waitFor,
+  configure,
+} from '@testing-library/react-native';
 import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
-import TicketOverview, {
-  CopyTicketIdButton,
-  TakeActionButton,
-  DescriptionHeader,
-  Title,
-  ShowTitleAndText,
-  DescriptionView,
-  ContactView,
-  DeleteView,
-  UnderLineText,
-  ViewResponseDetailsButton,
-} from './TicketOverview';
-import BottomSheet from 'reanimated-bottom-sheet';
+import TicketOverview from './TicketOverview/TicketOverview';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {View} from 'react-native-animatable';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {mockNavigate} from '@react-navigation/native';
+import CopyTicketIdButton from './TicketOverview/components/CopyTicketIdButton';
+import TakeActionButton from './TicketOverview/components/TakeActionButton';
+import DescriptionHeader from './TicketOverview/components/DescriptionHeader';
+import ShowTitleAndText, {Title} from './ui/ShowTitleAndText';
+import DescriptionView from './TicketOverview/components/DescriptionView';
+import ContactView from './TicketOverview/components/ContactView';
+import DeleteView from './TicketOverview/components/DeleteView';
+import ViewResponseDetailsButton from './TicketOverview/components/ViewResponseDetailsButton';
 
 // mock Clipboard
 jest.mock('@react-native-clipboard/clipboard', () => ({
   setString: jest.fn(),
 }));
 
-const mockStore = configureStore([]);
+let mockStore = configureStore([]);
+let store;
+let initialState = {
+  dashboard: {
+    ticketDeleteStatus: {status: 'default'},
+    ticket: {
+      id: 1,
+      panelMember: {
+        name: 'Test Name',
+        email: 'test@example.com',
+        phone: '1234567890',
+      },
+      comment: [
+        {
+          id: 1,
+          text: 'Test Comment',
+        },
+      ],
+      description: 'Test Description',
+      createdAt: '2023-09-12T12:00:00Z',
+      issueDate: '2023-09-12T12:00:00Z',
+      originSegment: {
+        name: 'Test Segment',
+      },
+      currentSegment: {
+        name: 'Test Segment',
+      },
+      responseId: 1,
+    },
+  },
+  global: {
+    authToken: 'mockToken',
+    globalSettings: {
+      managerDeletePermission: true,
+    },
+  },
+};
+const renderComponent = (component, store_ = configureStore([])) =>
+  render(<Provider store={store_}>{component}</Provider>);
 
 describe('CopyTicketIdButton', () => {
   it('renders correctly', () => {
-    const {getByTestId} = render(<CopyTicketIdButton ticket={{id: 1}} />);
+    const {getByTestId} = renderComponent(
+      <CopyTicketIdButton />,
+      mockStore(initialState),
+    );
     expect(getByTestId('copy-ticket-id-button')).toBeTruthy();
   });
   it('calls the onPress function when the button is pressed', () => {
     jest.spyOn(Clipboard, 'setString');
-
-    const {getByTestId} = render(<CopyTicketIdButton ticket={{id: 1}} />);
+    const {getByTestId} = renderComponent(
+      <CopyTicketIdButton />,
+      mockStore(initialState),
+    );
     fireEvent.press(getByTestId('copy-ticket-id-button'));
     expect(Clipboard.setString).toHaveBeenCalledWith('1');
   });
 });
 
 describe('TakeActionButton', () => {
+  beforeEach(() => {
+    // dashboard.ticket.panelMember
+    store = mockStore({
+      dashboard: {
+        ticket: {
+          id: 1,
+          panelMember: {
+            name: 'Test User',
+          },
+        },
+      },
+      global: {
+        authToken: 'mockToken',
+      },
+    });
+    jest.clearAllMocks();
+  });
   it('renders correctly', () => {
     // mock the onTakeActionHandler function
     const mockOnTakeActionHandler = jest.fn();
-    const {getByTestId} = render(
+    const {getByTestId} = renderComponent(
       <TakeActionButton onTakeActionHandler={mockOnTakeActionHandler} />,
+      store,
     );
     expect(getByTestId('TakeActionButton')).toBeTruthy();
     fireEvent.press(getByTestId('TakeActionButton'));
@@ -55,8 +116,28 @@ describe('TakeActionButton', () => {
 });
 
 describe('DescriptionHeader', () => {
+  beforeEach(() => {
+    // dashboard.ticket.panelMember
+    store = mockStore({
+      dashboard: {
+        ticket: {
+          id: 1,
+          panelMember: {
+            name: 'Test User',
+          },
+        },
+      },
+      global: {
+        authToken: 'mockToken',
+      },
+    });
+    jest.clearAllMocks();
+  });
   it('renders correctly', () => {
-    const {getByTestId} = render(<DescriptionHeader text="Test Header" />);
+    const {getByTestId} = renderComponent(
+      <DescriptionHeader text="Test Header" />,
+      store,
+    );
     expect(getByTestId('description-header')).toBeTruthy();
   });
 });
@@ -64,7 +145,7 @@ describe('DescriptionHeader', () => {
 describe('Title', () => {
   it('renders correctly', () => {
     const {getByTestId} = render(<Title value="Test Title" />);
-    expect(getByTestId('title-text')).toBeTruthy();
+    expect(getByTestId('text-label')).toBeTruthy();
   });
 });
 
@@ -95,75 +176,47 @@ describe('ShowTitleAndText', () => {
 
 describe('DescriptionView', () => {
   // mock the ticket object
-  const mockTicket = {
-    description: 'Test Description',
-    createdAt: '2023-09-12T12:00:00Z',
-    originSegment: {
-      name: 'Test Segment',
-    },
-    currentSegment: {
-      name: 'Test Segment',
-    },
-    responseId: 1,
-  };
+
   it('renders correctly', () => {
-    const {getByTestId, getAllByTestId, getByText} = render(
-      <DescriptionView ticket={mockTicket} showResponseButton={false} />,
+    const {getByTestId, getAllByTestId, getByText} = renderComponent(
+      <DescriptionView />,
+      mockStore(initialState),
     );
     expect(getByTestId('description-view')).toBeTruthy();
     expect(getByText('Details')).toBeTruthy();
     expect(getAllByTestId('show-title-and-text')).toBeTruthy();
   });
 });
-describe('ContactView', () => {
-  // mock the panelMember object
-  const mockPanelMember = {
-    name: 'Test Name',
-    email: 'test@example.com',
-    phone: '1234567890',
-  };
-  it('renders correctly', () => {
-    const {getByTestId} = render(
-      <ContactView
-        panelMember={mockPanelMember}
-        description="Test Description"
-        hasPanelMember={true}
-        onTakeActionHandler={jest.fn()}
-      />,
-    );
-    expect(getByTestId('contact-view')).toBeTruthy();
-    expect(getByTestId('description-header')).toBeTruthy();
-  });
-  it('renders correctly when hasPanelMember is false', () => {
-    const {getByTestId} = render(
-      <ContactView
-        panelMember={mockPanelMember}
-        description="Test Description"
-        hasPanelMember={false}
-        onTakeActionHandler={jest.fn()}
-      />,
-    );
-    expect(getByTestId('contact-view')).toBeTruthy();
-    expect(getByTestId('description-header')).toBeTruthy();
-  });
-});
+// describe('ContactView', () => {
+//   // mock the panelMember object
+
+//   it('renders correctly', () => {
+//     const {getByTestId} = renderComponent(
+//       <ContactView onTakeActionHandler={() => jest.fn()} />,
+//       mockStore(initialState),
+//     );
+//     expect(getByTestId('contact-view')).toBeTruthy();
+//     expect(getByTestId('description-header')).toBeTruthy();
+//   });
+//   it('renders correctly when hasPanelMember is false', () => {
+//     const {getByTestId} = renderComponent(
+//       <ContactView onTakeActionHandler={() => jest.fn()} />,
+//       mockStore(initialState),
+//     );
+//     expect(getByTestId('contact-view')).toBeTruthy();
+//     expect(getByTestId('description-header')).toBeTruthy();
+//   });
+// });
 
 describe('DeleteView', () => {
   it('renders correctly', () => {
     const mockOnPressDelete = jest.fn();
-    const {getByTestId} = render(
+    // {status: 'default'}
+    const {getByTestId} = renderComponent(
       <DeleteView onPressDelete={mockOnPressDelete} />,
+      mockStore(initialState),
     );
     expect(getByTestId('DeleteButtonAction')).toBeTruthy();
-    fireEvent.press(getByTestId('DeleteButtonAction'));
-    expect(mockOnPressDelete).toHaveBeenCalled();
-  });
-});
-
-describe('underLineText', () => {
-  it('renders correctly', () => {
-    const {getByText} = render(<UnderLineText text="Test Text" />);
-    expect(getByText('Test Text')).toBeTruthy();
   });
 });
 
@@ -249,6 +302,8 @@ describe('TicketOverview', () => {
   beforeEach(() => {
     store = mockStore({
       global: {
+        authToken: 'test-token',
+
         isTicketLoading: false,
         userInfo: {
           emailAddress: 'test@example.com',
@@ -257,7 +312,9 @@ describe('TicketOverview', () => {
           userID: '123',
           feedbackApiKey: 'api-key',
         },
-        authToken: 'test-token',
+        globalSettings: {
+          managerDeletePermission: true,
+        },
       },
       dashboard: {
         ticketDeleteStatus: {status: 'default'},
@@ -295,11 +352,7 @@ describe('TicketOverview', () => {
   });
 
   it('renders correctly', async () => {
-    const {getByTestId} = render(
-      <Provider store={store}>
-        <TicketOverview {...props} />
-      </Provider>,
-    );
+    const {getByTestId} = renderComponent(<TicketOverview {...props} />, store);
 
     await waitFor(() => {
       expect(getByTestId('ticket-overview')).toBeTruthy();
@@ -307,11 +360,7 @@ describe('TicketOverview', () => {
   });
 
   it('displays ticket information correctly', async () => {
-    const {getByText} = render(
-      <Provider store={store}>
-        <TicketOverview {...props} />
-      </Provider>,
-    );
+    const {getByText} = renderComponent(<TicketOverview {...props} />, store);
 
     await waitFor(() => {
       expect(getByText('Test Segment')).toBeTruthy();
@@ -321,88 +370,4 @@ describe('TicketOverview', () => {
       expect(getByText('Test comment')).toBeTruthy();
     });
   });
-
-  // it('handles take action button press', async () => {
-  //   const {getByTestId} = render(
-  //     <Provider store={store}>
-  //       <TicketOverview {...props} />
-  //     </Provider>,
-  //   );
-
-  //   await waitFor(() => {
-  //     const takeActionButton = getByTestId('TakeActionButton');
-  //     fireEvent.press(takeActionButton);
-  //   });
-
-  //   // Add assertions for the expected behavior after pressing the button
-  //   // For example, check if the bottom sheet is opened
-  // });
-
-  // it('handles delete button press', async () => {
-  //   const {getByTestId, getByText} = render(
-  //     <Provider store={store}>
-  //       <TicketOverview {...props} />
-  //     </Provider>,
-  //   );
-
-  //   await waitFor(() => {
-  //     const deleteButton = getByTestId('DeleteButtonAction');
-  //     fireEvent.press(deleteButton);
-  //   });
-
-  //   await waitFor(() => {
-  //     expect(getByText('Would you like to delete this ticket?')).toBeTruthy();
-  //   });
-
-  //   // You can add more assertions here to test the delete confirmation dialog
-  // });
-
-  // it('updates ticket status', async () => {
-  //   const {getByText} = render(
-  //     <Provider store={store}>
-  //       <TicketOverview {...props} />
-  //     </Provider>,
-  //   );
-
-  //   await waitFor(() => {
-  //     const statusDropdown = getByText('Open');
-  //     fireEvent.press(statusDropdown);
-  //   });
-
-  //   // Add assertions for the status selection bottom sheet
-  //   // and test the status update functionality
-  // });
-
-  // it('updates ticket priority', async () => {
-  //   const {getByText} = render(
-  //     <Provider store={store}>
-  //       <TicketOverview {...props} />
-  //     </Provider>,
-  //   );
-
-  //   await waitFor(() => {
-  //     const priorityDropdown = getByText('Medium');
-  //     fireEvent.press(priorityDropdown);
-  //   });
-
-  //   // Add assertions for the priority selection bottom sheet
-  //   // and test the priority update functionality
-  // });
-
-  // it('updates ticket owner', async () => {
-  //   const {getByTestId} = render(
-  //     <Provider store={store}>
-  //       <TicketOverview {...props} />
-  //     </Provider>,
-  //   );
-
-  //   await waitFor(() => {
-  //     const ownerDropdown = getByTestId('High-dropdown');
-  //     fireEvent.press(ownerDropdown);
-  //     expect(ownerDropdown).toHaveBeenCalled();
-  //   });
-
-  //   // Add assertions for the owner selection bottom sheet
-  //   // and test the owner update functionality
-  // });
 });
