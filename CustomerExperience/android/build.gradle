@@ -7,6 +7,7 @@ buildscript {
         compileSdkVersion = 34
         targetSdkVersion = 34
         kotlinVersion=  "1.5.31"
+        soLoaderVersion = "0.10.4"
 
 
     }
@@ -46,8 +47,10 @@ allprojects {
     }
 
     configurations.all {
+
         resolutionStrategy {
                        force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
+                        force "com.facebook.soloader:soloader:0.10.4"
 
 
         }

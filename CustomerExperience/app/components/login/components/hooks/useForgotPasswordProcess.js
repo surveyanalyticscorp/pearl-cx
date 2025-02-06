@@ -32,10 +32,16 @@ export const validateForgotPasswordData = ({email, accessCode}) => {
   }
   return null; // Means no error
 };
-
+export const getFormatedEmailAndAccessCode = resetData => {
+  return {
+    emailAddress: resetData.email,
+    accessCode: resetData.accessCode,
+  };
+};
 const useForgotPasswordProcess = resetData => {
   const dispatch = useDispatch();
   const {isError, errorMessage} = useSelector(state => state.global);
+
   useEffect(() => {
     if (isError) {
       console.log('ERROR', errorMessage, isError);
@@ -50,10 +56,7 @@ const useForgotPasswordProcess = resetData => {
   const onResetPasswordClick = () => {
     console.log('LOG: onResetPasswordClick', resetData);
     if (isValidInput(resetData)) {
-      let data = {
-        emailAddress: resetData.email,
-        accessCode: resetData.accessCode,
-      };
+      const data = getFormatedEmailAndAccessCode(resetData);
       dispatch(setUserDetailsForResetPassword(data));
       AsyncStorage.setItem(ASYNC_RESET_CREDENTIALS, JSON.stringify(data));
       dispatch(requestPasswordLink(data));

@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Platform, StyleSheet, TextInput, View, Image} from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  TextInput,
+  View,
+  Image,
+  SafeAreaView,
+  KeyboardAvoidingView,
+} from 'react-native';
 import {
   Colors,
   getPriorityBorderColorbyId,
@@ -53,6 +61,8 @@ import RenderPhoneInput from '../../closedloop/ui/RenderPhoneInput';
 import RenderCreateTicketButton from './RenderCreateTicketButton';
 import {IonIcon, MaterialIcons} from '../../../Utils/IconUtils';
 import RenderDatePickerModal from '../../RenderDatePickerModal';
+import {ANALYTICS_EVENTS} from '../../../Utils/Analytic.constants';
+import {sendAnalyticsEvent} from '../../../Utils/AnalyticLogs';
 
 const isValid = ticketState => {
   if (ticketState.mobileNumber && !ticketState.isMobileNumberValid) {
@@ -201,7 +211,7 @@ const RenderDescriptionInput = ({defaultValue, setTicketState}) => {
     }));
   };
   return (
-    <View>
+    <KeyboardAvoidingView>
       <IconAndTitleText
         icon={
           <MaterialIcons
@@ -217,7 +227,7 @@ const RenderDescriptionInput = ({defaultValue, setTicketState}) => {
         multiline={true}
         setValue={setDescription}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -439,6 +449,9 @@ export default function CreateTicket(props) {
   const handleCreateTicket = () => {
     if (isValid(ticketState)) {
       setLoading(true);
+      sendAnalyticsEvent(ANALYTICS_EVENTS.CREATE_TICKET, {
+        ...ticketState,
+      });
       dispatch(createClfTicket(ticketState, feedbackApiKey));
       props.navigation.goBack();
     }

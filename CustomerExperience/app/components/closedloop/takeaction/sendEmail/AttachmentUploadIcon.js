@@ -33,8 +33,16 @@ export const AttachmentUploadIcon = () => {
   }, []);
 
   return (
-    <Pressable onPress={onPressAttachment} style={styles.optionIcon}>
-      <IonIcon name={'attach'} size={24} color={Colors.filterIconColor} />
+    <Pressable
+      testID="attachment-upload-button"
+      onPress={onPressAttachment}
+      style={styles.optionIcon}>
+      <IonIcon
+        testID={'attachment-upload-icon'}
+        name={'attach'}
+        size={24}
+        color={Colors.filterIconColor}
+      />
     </Pressable>
   );
 };

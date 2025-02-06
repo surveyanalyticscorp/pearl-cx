@@ -47,6 +47,7 @@ const SendIcon = ({emailBody}) => {
         size={24}
         color={Colors.accentLight}
         style={{transform: [{rotateZ: '-45deg'}]}}
+        testID={'send-icon-button'}
       />
     </Pressable>
   );
