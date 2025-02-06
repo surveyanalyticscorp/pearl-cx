@@ -41,16 +41,15 @@ import {
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 import {getExpireDate} from '../../Utils/TimeUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
-
 import {useNavigation} from '@react-navigation/core';
 import EmailTextInput from './components/EmailTextInput';
 import PasswordTextInput from './components/PasswordTextInput';
 import AccessCodeTextInput from './components/AccessCodeTextInput';
 import CXLogo from './components/CXLogo';
 import LoginBackground from './components/LoginBackground';
-import {use} from 'react';
+import {useLoginError} from './hooks/useLoginError';
 
-let getApiValidationErrorMessage = errorMessage => {
+export let getApiValidationErrorMessage = errorMessage => {
   console.log('getApiValidationErrorMessage', JSON.stringify(errorMessage));
   if (errorMessage.errorAlert) {
     return errorMessage?.errorAlert
@@ -60,7 +59,7 @@ let getApiValidationErrorMessage = errorMessage => {
   return 'Error';
 };
 
-const checkValidation = ({email, password, accessCode}) => {
+export const checkValidation = ({email, password, accessCode}) => {
   if (!validateEmail(email)) {
     console.log('EMAIL NOT VALID');
     showErrorFlashMessage(translate('onBoarding.invalidEmail'));
@@ -84,7 +83,7 @@ const checkValidation = ({email, password, accessCode}) => {
   return true;
 };
 
-const RenderForgotPasswordButton = () => {
+export const RenderForgotPasswordButton = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const onPress = () => {
@@ -102,14 +101,20 @@ const RenderForgotPasswordButton = () => {
     />
   );
 };
+export const setGlobalData = (baseUrl, subscriberId, globalAccessCode) => {
+  AsyncStorage.setItem(BASE_URL, baseUrl).then();
+  AsyncStorage.setItem(SUBSCRIBER_ID, subscriberId).then();
+  AsyncStorage.setItem(ACCESS_CODE, globalAccessCode).then();
+  AsyncStorage.setItem(ASYNC_LOGIN_EXPIRE_DATE, getExpireDate());
+  global.baseUrl = baseUrl;
+  global.subscriberId = subscriberId;
+  console.log('BASEURL', baseUrl);
+  console.log('SUBSCRIBER_ID', subscriberId);
+};
 
-const RenderSpinnerLoginButton = ({login}) => {
-  // const [login, setLogin] = useState({});
+export const RenderSpinnerLoginButton = ({login}) => {
   const dispatch = useDispatch();
-
   const isLoading = useSelector(state => state.global.isLoading);
-  // const login = useSelector(state => state.login);
-
   const {
     isError,
     errorMessage,
@@ -123,28 +128,11 @@ const RenderSpinnerLoginButton = ({login}) => {
 
   const globalAccessCode = useSelector(state => state.global.accessCode);
 
-  useEffect(() => {
-    if (isError) {
-      let message = getApiValidationErrorMessage(errorMessage);
-      const loginError = 'Invalid email/password combination.';
-      const customeErrorMessage = 'Invalid credentials. Please try again';
-      showErrorFlashMessage(
-        message === loginError ? customeErrorMessage : message,
-      );
-      dispatch(clearUserInfo());
-    }
-  }, [isError]);
+  useLoginError(isError, errorMessage);
 
   useEffect(() => {
     if (baseUrl && StringUtils.isNotEmpty(baseUrl)) {
-      AsyncStorage.setItem(BASE_URL, baseUrl).then();
-      AsyncStorage.setItem(SUBSCRIBER_ID, subscriberId).then();
-      AsyncStorage.setItem(ACCESS_CODE, globalAccessCode).then();
-      AsyncStorage.setItem(ASYNC_LOGIN_EXPIRE_DATE, getExpireDate());
-      global.baseUrl = baseUrl;
-      global.subscriberId = subscriberId;
-      console.log('BASEURL', baseUrl);
-      console.log('SUBSCRIBER_ID', subscriberId);
+      setGlobalData(baseUrl, subscriberId, globalAccessCode);
       onSignInPress();
     }
   }, [baseUrl]);
