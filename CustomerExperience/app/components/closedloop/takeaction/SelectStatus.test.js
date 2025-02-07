@@ -31,7 +31,7 @@ describe('SelectStatus', () => {
       />,
     );
 
-    const applyButton = getByText('Apply');
+    const applyButton = getByText('Set status');
     fireEvent.press(applyButton);
 
     expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[0], 0);
@@ -49,7 +49,7 @@ describe('SelectStatus', () => {
     const statusItems = getAllByTestId('status-item-button');
     fireEvent.press(statusItems[1]);
 
-    const applyButton = getByText('Apply');
+    const applyButton = getByText('Set status');
     fireEvent.press(applyButton);
 
     expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[1], 1);
@@ -77,7 +77,7 @@ describe('SelectStatus', () => {
       />,
     );
 
-    const applyButton = getByText('Apply');
+    const applyButton = getByText('Set status');
     expect(applyButton).toBeTruthy();
   });
 });
