@@ -38,7 +38,7 @@ const SignInStack = ({navigation}) => {
   console.log('isFirstTime', isFirstTime);
   return (
     <RootStack.Navigator>
-      {true && (
+      {isFirstTime && (
         <RootStack.Screen
           name="MarketingScreen"
           component={MarketingScreen}
