@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1738924787638" clover="3.2.0">
-  <project timestamp="1738924787638" name="All files">
-    <metrics statements="3746" coveredstatements="3187" conditionals="1301" coveredconditionals="877" methods="1202" coveredmethods="918" elements="6249" coveredelements="4982" complexity="0" loc="3746" ncloc="3746" packages="41" files="202" classes="202"/>
+<coverage generated="1738927501986" clover="3.2.0">
+  <project timestamp="1738927501986" name="All files">
+    <metrics statements="3746" coveredstatements="3188" conditionals="1301" coveredconditionals="877" methods="1202" coveredmethods="919" elements="6249" coveredelements="4984" complexity="0" loc="3746" ncloc="3746" packages="41" files="202" classes="202"/>
     <package name="Utils">
       <metrics statements="611" coveredstatements="572" conditionals="217" coveredconditionals="175" methods="147" coveredmethods="135"/>
       <file name="Analytic.constants.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/Utils/Analytic.constants.js">
@@ -1874,7 +1874,7 @@
       </file>
     </package>
     <package name="components.closedloop.takeaction">
-      <metrics statements="185" coveredstatements="177" conditionals="30" coveredconditionals="19" methods="82" coveredmethods="75"/>
+      <metrics statements="185" coveredstatements="178" conditionals="30" coveredconditionals="19" methods="82" coveredmethods="76"/>
       <file name="ActionEmailHistory.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/components/closedloop/takeaction/ActionEmailHistory.js">
         <metrics statements="35" coveredstatements="32" conditionals="14" coveredconditionals="9" methods="15" coveredmethods="13"/>
         <line num="29" count="2" type="stmt"/>
@@ -2039,14 +2039,14 @@
         <line num="59" count="5" type="stmt"/>
       </file>
       <file name="SelectStatus.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/components/closedloop/takeaction/SelectStatus.js">
-        <metrics statements="14" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="5"/>
+        <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="6"/>
         <line num="11" count="5" type="stmt"/>
         <line num="12" count="6" type="stmt"/>
         <line num="15" count="5" type="stmt"/>
         <line num="16" count="6" type="stmt"/>
         <line num="17" count="6" type="stmt"/>
         <line num="19" count="6" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
         <line num="23" count="6" type="stmt"/>
         <line num="24" count="12" type="stmt"/>
         <line num="31" count="1" type="stmt"/>
@@ -4209,7 +4209,7 @@
         <line num="10" count="90" type="cond" truecount="1" falsecount="1"/>
         <line num="11" count="90" type="cond" truecount="1" falsecount="1"/>
         <line num="13" count="90" type="stmt"/>
-        <line num="14" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="14" count="17" type="cond" truecount="2" falsecount="0"/>
         <line num="17" count="90" type="stmt"/>
         <line num="37" count="37" type="stmt"/>
       </file>
