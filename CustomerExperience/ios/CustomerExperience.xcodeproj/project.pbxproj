@@ -28,7 +28,6 @@
 		2AD006E599654953B9C37B4B /* notification_comment_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E727197684E4D31A44F2A69 /* notification_comment_blue.png */; };
 		2D86DBC993EC6D72350EC00E /* libPods-CustomerExperience.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7ECAB697A5F4D4C9F7192ED1 /* libPods-CustomerExperience.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* CustomerExperienceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CustomerExperienceTests.m */; };
-		44CCD7251B254FC28A5A975D /* ms_connect_engage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2F6664A6DE3D41C89F15AE06 /* ms_connect_engage.png */; };
 		45F09722226F40EFA41B268B /* FiraSans-Two.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0CA094FCCE76427782439EB0 /* FiraSans-Two.otf */; };
 		46A29CDFFFF5432B870435E0 /* FiraSans-ExtraLightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 187393A9BDD14A6C944F4440 /* FiraSans-ExtraLightItalic.otf */; };
 		485BE01DD51E487BBBC4BEA8 /* FiraSans-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 80B5364D13CD404E869FFC7F /* FiraSans-HeavyItalic.otf */; };
@@ -583,7 +582,6 @@
 				84852F5E3A934B3E82F58F0E /* background1.png in Resources */,
 				8753779DF8064ACFA74F1266 /* cx-logo.png in Resources */,
 				7F373BFBB0FA46EDB7E5E274 /* drawerBanner.png in Resources */,
-				44CCD7251B254FC28A5A975D /* ms_connect_engage.png in Resources */,
 				55F257C22BDA683E005AC660 /* PrivacyInfo.xcprivacy in Resources */,
 				EA9653C1ADB8499E9B10B386 /* ms_drive_business_decisions.png in Resources */,
 				DF343EB6899149E69DF42E72 /* ms_full_growth.png in Resources */,
