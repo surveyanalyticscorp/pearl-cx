@@ -247,7 +247,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         
         print(webView.url as Any)
         if (((url?.absoluteString.range(of: "exitsurvey")) != nil) || ((url?.absoluteString.range(of: "#autoClose") != nil))) {
-            perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 1.0)
+            perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 3.0)
         }
         
         let navigationType = navigationAction.navigationType
