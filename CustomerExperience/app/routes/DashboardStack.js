@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet, Text, Pressable, View} from 'react-native';
+import {StyleSheet, Text, Pressable, View} from 'react-native';
 import TicketFilter from '../components/dashboard/components/TicketFilter';
 import React from 'react';
 import Notification from '../components/notifications/Notification';
@@ -8,9 +8,7 @@ import SearchTicket from '../components/dashboard/components/SearchTicket';
 import {TextSizes} from '../styles/textsize.constants';
 import {Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
-import FontIcon from 'react-native-vector-icons/FontAwesome';
 import {FontFamily} from '../styles/font.constants';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import CommonScreens from './CommonScreen';
 import {CloseButton} from './commonUI/CommonUI';
 import MenuIcon from './commonUI/MenuIcon';
@@ -21,11 +19,6 @@ import {translate} from '../Utils/MultilinguaUtils';
 import HeaderBackLeft from './commonUI/HeaderBackLeft';
 
 const DetractorStack = createStackNavigator();
-const DetractorTicketsTab = createMaterialTopTabNavigator();
-
-let {width} = Dimensions.get('window');
-
-let notificationCount = 2;
 
 const ClearAllButton = props => {
   return (
