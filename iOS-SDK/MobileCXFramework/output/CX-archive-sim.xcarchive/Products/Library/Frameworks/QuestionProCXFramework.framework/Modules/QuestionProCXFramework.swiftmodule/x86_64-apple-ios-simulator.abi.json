@@ -1986,19 +1986,19 @@
           },
           {
             "kind": "Var",
-            "name": "ShowInDialog",
-            "printedName": "ShowInDialog",
+            "name": "transactionLanguage",
+            "printedName": "transactionLanguage",
             "children": [
               {
                 "kind": "TypeNominal",
-                "name": "Int",
-                "printedName": "Swift.Int",
-                "usr": "s:Si"
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
               }
             ],
             "declKind": "Var",
-            "usr": "s:22QuestionProCXFramework10TouchPointC12ShowInDialogSivp",
-            "mangledName": "$s22QuestionProCXFramework10TouchPointC12ShowInDialogSivp",
+            "usr": "s:22QuestionProCXFramework10TouchPointC19transactionLanguageSSvp",
+            "mangledName": "$s22QuestionProCXFramework10TouchPointC19transactionLanguageSSvp",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
@@ -2014,14 +2014,14 @@
                 "children": [
                   {
                     "kind": "TypeNominal",
-                    "name": "Int",
-                    "printedName": "Swift.Int",
-                    "usr": "s:Si"
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:22QuestionProCXFramework10TouchPointC12ShowInDialogSivg",
-                "mangledName": "$s22QuestionProCXFramework10TouchPointC12ShowInDialogSivg",
+                "usr": "s:22QuestionProCXFramework10TouchPointC19transactionLanguageSSvg",
+                "mangledName": "$s22QuestionProCXFramework10TouchPointC19transactionLanguageSSvg",
                 "moduleName": "QuestionProCXFramework",
                 "implicit": true,
                 "accessorKind": "get"
@@ -2038,14 +2038,14 @@
                   },
                   {
                     "kind": "TypeNominal",
-                    "name": "Int",
-                    "printedName": "Swift.Int",
-                    "usr": "s:Si"
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:22QuestionProCXFramework10TouchPointC12ShowInDialogSivs",
-                "mangledName": "$s22QuestionProCXFramework10TouchPointC12ShowInDialogSivs",
+                "usr": "s:22QuestionProCXFramework10TouchPointC19transactionLanguageSSvs",
+                "mangledName": "$s22QuestionProCXFramework10TouchPointC19transactionLanguageSSvs",
                 "moduleName": "QuestionProCXFramework",
                 "implicit": true,
                 "accessorKind": "set"
@@ -2062,8 +2062,94 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:22QuestionProCXFramework10TouchPointC12ShowInDialogSivM",
-                "mangledName": "$s22QuestionProCXFramework10TouchPointC12ShowInDialogSivM",
+                "usr": "s:22QuestionProCXFramework10TouchPointC19transactionLanguageSSvM",
+                "mangledName": "$s22QuestionProCXFramework10TouchPointC19transactionLanguageSSvM",
+                "moduleName": "QuestionProCXFramework",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "ShowInDialog",
+            "printedName": "ShowInDialog",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:22QuestionProCXFramework10TouchPointC12ShowInDialogSbvp",
+            "mangledName": "$s22QuestionProCXFramework10TouchPointC12ShowInDialogSbvp",
+            "moduleName": "QuestionProCXFramework",
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:22QuestionProCXFramework10TouchPointC12ShowInDialogSbvg",
+                "mangledName": "$s22QuestionProCXFramework10TouchPointC12ShowInDialogSbvg",
+                "moduleName": "QuestionProCXFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:22QuestionProCXFramework10TouchPointC12ShowInDialogSbvs",
+                "mangledName": "$s22QuestionProCXFramework10TouchPointC12ShowInDialogSbvs",
+                "moduleName": "QuestionProCXFramework",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:22QuestionProCXFramework10TouchPointC12ShowInDialogSbvM",
+                "mangledName": "$s22QuestionProCXFramework10TouchPointC12ShowInDialogSbvM",
                 "moduleName": "QuestionProCXFramework",
                 "implicit": true,
                 "accessorKind": "_modify"
@@ -2454,9 +2540,8 @@
             "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC17CXServiceResponse7withURLySDySSypG_tF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
-              "Preconcurrency",
-              "Custom",
-              "AccessControl"
+              "AccessControl",
+              "Custom"
             ],
             "funcSelfKind": "NonMutating"
           },
@@ -2486,7 +2571,6 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
               "Custom",
               "HasStorage",
               "AccessControl"
@@ -2598,7 +2682,6 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
               "Custom",
               "HasStorage",
               "AccessControl"
@@ -2710,10 +2793,9 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
-              "Custom",
               "HasStorage",
-              "AccessControl"
+              "AccessControl",
+              "Custom"
             ],
             "hasStorage": true,
             "accessors": [
@@ -2822,10 +2904,9 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
-              "Custom",
               "HasStorage",
-              "AccessControl"
+              "AccessControl",
+              "Custom"
             ],
             "hasStorage": true,
             "accessors": [
@@ -2934,7 +3015,6 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
               "Custom",
               "HasStorage",
               "AccessControl"
@@ -3046,7 +3126,6 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
               "Custom",
               "HasStorage",
               "AccessControl"
@@ -3158,7 +3237,6 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
               "Custom",
               "HasStorage",
               "AccessControl"
@@ -3270,7 +3348,6 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
               "Custom",
               "HasStorage",
               "AccessControl"
@@ -3374,7 +3451,6 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
               "Custom",
               "HasStorage",
               "AccessControl"
@@ -3462,10 +3538,9 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
-              "Custom",
               "HasStorage",
-              "AccessControl"
+              "AccessControl",
+              "Custom"
             ],
             "hasStorage": true,
             "accessors": [
@@ -3558,10 +3633,9 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
-              "Custom",
               "HasStorage",
-              "AccessControl"
+              "AccessControl",
+              "Custom"
             ],
             "hasStorage": true,
             "accessors": [
@@ -3670,7 +3744,6 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
               "Custom",
               "HasStorage",
               "AccessControl"
@@ -3774,10 +3847,9 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
-              "Custom",
               "HasStorage",
-              "AccessControl"
+              "AccessControl",
+              "Custom"
             ],
             "hasStorage": true,
             "accessors": [
@@ -3870,7 +3942,6 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
               "Custom",
               "HasStorage",
               "AccessControl"
@@ -3982,7 +4053,6 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
-              "Preconcurrency",
               "Custom",
               "HasStorage",
               "AccessControl"
@@ -4089,7 +4159,6 @@
             "declAttributes": [
               "Dynamic",
               "ObjC",
-              "Preconcurrency",
               "Custom",
               "Override",
               "AccessControl"
@@ -4117,7 +4186,6 @@
               "HasInitialValue",
               "Final",
               "HasStorage",
-              "Preconcurrency",
               "Custom",
               "AccessControl"
             ],
@@ -4183,7 +4251,6 @@
             "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC14initwithAPIKey6apiKey10dataCenter10withWindowySS_AA10TouchPointC04DataJ0OSo8UIWindowCtF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
-              "Preconcurrency",
               "Custom",
               "AccessControl"
             ],
@@ -4212,7 +4279,6 @@
             "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC17touchPointBuilder0eF2IDAA05TouchF0CSi_tF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
-              "Preconcurrency",
               "Custom",
               "AccessControl"
             ],
@@ -4240,7 +4306,6 @@
             "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC20launchFeedbackSurvey10touchPointyAA05TouchI0C_tF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
-              "Preconcurrency",
               "Custom",
               "AccessControl"
             ],
@@ -4262,7 +4327,6 @@
             "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC04stopabD0yyF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
-              "Preconcurrency",
               "Custom",
               "AccessControl"
             ],
@@ -4308,7 +4372,33 @@
             "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC17setPopupMenuTitle01aH07message011rightButtonH004leftkH0ySS_S3StF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
-              "Preconcurrency",
+              "Custom",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "getAPIResponse",
+            "printedName": "getAPIResponse(touchPoint:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "TouchPoint",
+                "printedName": "QuestionProCXFramework.TouchPoint",
+                "usr": "s:22QuestionProCXFramework10TouchPointC"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:22QuestionProCXFramework0aB9CXManagerC14getAPIResponse10touchPointyAA05TouchH0C_tF",
+            "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC14getAPIResponse10touchPointyAA05TouchH0C_tF",
+            "moduleName": "QuestionProCXFramework",
+            "declAttributes": [
               "Custom",
               "AccessControl"
             ],
@@ -4317,7 +4407,7 @@
           {
             "kind": "Function",
             "name": "showMessageInViewControllerWithResponse",
-            "printedName": "showMessageInViewControllerWithResponse(responseInfo:)",
+            "printedName": "showMessageInViewControllerWithResponse(touchPoint:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -4326,30 +4416,16 @@
               },
               {
                 "kind": "TypeNominal",
-                "name": "Dictionary",
-                "printedName": "[Swift.String : Any]",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "ProtocolComposition",
-                    "printedName": "Any"
-                  }
-                ],
-                "usr": "s:SD"
+                "name": "TouchPoint",
+                "printedName": "QuestionProCXFramework.TouchPoint",
+                "usr": "s:22QuestionProCXFramework10TouchPointC"
               }
             ],
             "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework0aB9CXManagerC39showMessageInViewControllerWithResponse12responseInfoySDySSypG_tF",
-            "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC39showMessageInViewControllerWithResponse12responseInfoySDySSypG_tF",
+            "usr": "s:22QuestionProCXFramework0aB9CXManagerC39showMessageInViewControllerWithResponse10touchPointyAA05TouchM0C_tF",
+            "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC39showMessageInViewControllerWithResponse10touchPointyAA05TouchM0C_tF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
-              "Preconcurrency",
               "Custom",
               "AccessControl"
             ],
@@ -4358,7 +4434,7 @@
           {
             "kind": "Function",
             "name": "showInAppSurvey",
-            "printedName": "showInAppSurvey(surveyUrl:withSuperView:)",
+            "printedName": "showInAppSurvey(touchPoint:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -4367,23 +4443,16 @@
               },
               {
                 "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "UIView",
-                "printedName": "UIKit.UIView",
-                "usr": "c:objc(cs)UIView"
+                "name": "TouchPoint",
+                "printedName": "QuestionProCXFramework.TouchPoint",
+                "usr": "s:22QuestionProCXFramework10TouchPointC"
               }
             ],
             "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework0aB9CXManagerC15showInAppSurvey9surveyUrl13withSuperViewySS_So6UIViewCtF",
-            "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC15showInAppSurvey9surveyUrl13withSuperViewySS_So6UIViewCtF",
+            "usr": "s:22QuestionProCXFramework0aB9CXManagerC15showInAppSurvey10touchPointyAA05TouchJ0C_tF",
+            "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC15showInAppSurvey10touchPointyAA05TouchJ0C_tF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
-              "Preconcurrency",
               "Custom",
               "AccessControl"
             ],
@@ -4432,14 +4501,13 @@
             ],
             "declKind": "Func",
             "usr": "c:@M@QuestionProCXFramework@objc(cs)QuestionProCXManager(im)webView:decidePolicyForNavigationAction:decisionHandler:",
-            "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC7webView_15decidePolicyFor15decisionHandlerySo05WKWebF0C_So18WKNavigationActionCySo0mnH0VctF",
+            "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC7webView_15decidePolicyFor15decisionHandlerySo05WKWebF0C_So18WKNavigationActionCySo0mnH0VYbScMYcctF",
             "moduleName": "QuestionProCXFramework",
             "objc_name": "webView:decidePolicyForNavigationAction:decisionHandler:",
             "declAttributes": [
               "ObjC",
-              "Preconcurrency",
-              "Custom",
-              "AccessControl"
+              "AccessControl",
+              "Custom"
             ],
             "funcSelfKind": "NonMutating"
           },
@@ -4599,7 +4667,6 @@
             "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC17currentViewLoadedyyF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
-              "Preconcurrency",
               "Custom",
               "AccessControl"
             ],
@@ -4621,7 +4688,6 @@
             "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC19currentViewUnLoadedyyF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
-              "Preconcurrency",
               "Custom",
               "AccessControl"
             ],
@@ -4633,9 +4699,8 @@
         "mangledName": "$s22QuestionProCXFramework0aB9CXManagerC",
         "moduleName": "QuestionProCXFramework",
         "declAttributes": [
-          "Preconcurrency",
-          "Custom",
           "AccessControl",
+          "Custom",
           "ObjC"
         ],
         "superclassUsr": "c:objc(cs)NSObject",
@@ -4728,10 +4793,7 @@
         "name": "Foundation",
         "printedName": "Foundation",
         "declKind": "Import",
-        "moduleName": "QuestionProCXFramework",
-        "declAttributes": [
-          "RawDocComment"
-        ]
+        "moduleName": "QuestionProCXFramework"
       },
       {
         "kind": "Import",
@@ -4782,6 +4844,9 @@
             "genericSig": "<τ_0_0 where τ_0_0 : QuestionProCXFramework.CXServiceDelegate>",
             "sugared_genericSig": "<Self where Self : QuestionProCXFramework.CXServiceDelegate>",
             "protocolReq": true,
+            "declAttributes": [
+              "Custom"
+            ],
             "reqNewWitnessTableEntry": true,
             "funcSelfKind": "NonMutating"
           }
@@ -4793,7 +4858,8 @@
         "genericSig": "<τ_0_0 : ObjectiveC.NSObjectProtocol>",
         "sugared_genericSig": "<Self : ObjectiveC.NSObjectProtocol>",
         "declAttributes": [
-          "AccessControl"
+          "AccessControl",
+          "Custom"
         ],
         "conformances": [
           {
@@ -4843,6 +4909,7 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
+              "Custom",
               "HasStorage",
               "AccessControl"
             ],
@@ -4934,16 +5001,17 @@
             "children": [
               {
                 "kind": "TypeNominal",
-                "name": "NSMutableData",
-                "printedName": "Foundation.NSMutableData",
-                "usr": "c:objc(cs)NSMutableData"
+                "name": "Data",
+                "printedName": "Foundation.Data",
+                "usr": "s:10Foundation4DataV"
               }
             ],
             "declKind": "Var",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedDataSo09NSMutableI0Cvp",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedDataSo09NSMutableI0Cvp",
+            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedData10Foundation0I0Vvp",
+            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedData10Foundation0I0Vvp",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
+              "Custom",
               "HasStorage",
               "AccessControl"
             ],
@@ -4956,14 +5024,14 @@
                 "children": [
                   {
                     "kind": "TypeNominal",
-                    "name": "NSMutableData",
-                    "printedName": "Foundation.NSMutableData",
-                    "usr": "c:objc(cs)NSMutableData"
+                    "name": "Data",
+                    "printedName": "Foundation.Data",
+                    "usr": "s:10Foundation4DataV"
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedDataSo09NSMutableI0Cvg",
-                "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedDataSo09NSMutableI0Cvg",
+                "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedData10Foundation0I0Vvg",
+                "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedData10Foundation0I0Vvg",
                 "moduleName": "QuestionProCXFramework",
                 "implicit": true,
                 "accessorKind": "get"
@@ -4980,14 +5048,14 @@
                   },
                   {
                     "kind": "TypeNominal",
-                    "name": "NSMutableData",
-                    "printedName": "Foundation.NSMutableData",
-                    "usr": "c:objc(cs)NSMutableData"
+                    "name": "Data",
+                    "printedName": "Foundation.Data",
+                    "usr": "s:10Foundation4DataV"
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedDataSo09NSMutableI0Cvs",
-                "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedDataSo09NSMutableI0Cvs",
+                "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedData10Foundation0I0Vvs",
+                "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedData10Foundation0I0Vvs",
                 "moduleName": "QuestionProCXFramework",
                 "implicit": true,
                 "accessorKind": "set"
@@ -5004,8 +5072,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedDataSo09NSMutableI0CvM",
-                "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedDataSo09NSMutableI0CvM",
+                "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedData10Foundation0I0VvM",
+                "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC12receivedData10Foundation0I0VvM",
                 "moduleName": "QuestionProCXFramework",
                 "implicit": true,
                 "accessorKind": "_modify"
@@ -5029,6 +5097,7 @@
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
               "HasInitialValue",
+              "Custom",
               "HasStorage",
               "ReferenceOwnership",
               "AccessControl"
@@ -5136,15 +5205,17 @@
             "declAttributes": [
               "Dynamic",
               "ObjC",
+              "Custom",
               "Override",
-              "AccessControl"
+              "AccessControl",
+              "RawDocComment"
             ],
             "init_kind": "Designated"
           },
           {
             "kind": "Function",
             "name": "invokeService",
-            "printedName": "invokeService(touchPoint:withAPIKey:DataCenter:)",
+            "printedName": "invokeService(touchPoint:withAPIKey:dataCenter:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -5153,31 +5224,15 @@
               },
               {
                 "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "QuestionProCXFramework.TouchPoint?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "TouchPoint",
-                    "printedName": "QuestionProCXFramework.TouchPoint",
-                    "usr": "s:22QuestionProCXFramework10TouchPointC"
-                  }
-                ],
-                "usr": "s:Sq"
+                "name": "TouchPoint",
+                "printedName": "QuestionProCXFramework.TouchPoint",
+                "usr": "s:22QuestionProCXFramework10TouchPointC"
               },
               {
                 "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Swift.String?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "usr": "s:Sq"
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
               },
               {
                 "kind": "TypeNominal",
@@ -5187,10 +5242,11 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC13invokeService10touchPoint10withAPIKey10DataCenteryAA05TouchK0CSg_SSSgAiGOtF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC13invokeService10touchPoint10withAPIKey10DataCenteryAA05TouchK0CSg_SSSgAiGOtF",
+            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC13invokeService10touchPoint10withAPIKey10dataCenteryAA05TouchK0C_SSAI04DataO0OtF",
+            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC13invokeService10touchPoint10withAPIKey10dataCenteryAA05TouchK0C_SSAI04DataO0OtF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
+              "Custom",
               "AccessControl"
             ],
             "funcSelfKind": "NonMutating"
@@ -5202,38 +5258,23 @@
             "children": [
               {
                 "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Swift.String?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "usr": "s:Sq"
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
               },
               {
                 "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "QuestionProCXFramework.TouchPoint?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "TouchPoint",
-                    "printedName": "QuestionProCXFramework.TouchPoint",
-                    "usr": "s:22QuestionProCXFramework10TouchPointC"
-                  }
-                ],
-                "usr": "s:Sq"
+                "name": "TouchPoint",
+                "printedName": "QuestionProCXFramework.TouchPoint",
+                "usr": "s:22QuestionProCXFramework10TouchPointC"
               }
             ],
             "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC31createCXRequestWithTouchPointID05touchL0SSSgAA0kL0CSg_tF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC31createCXRequestWithTouchPointID05touchL0SSSgAA0kL0CSg_tF",
+            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC31createCXRequestWithTouchPointID05touchL0SSAA0kL0C_tF",
+            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC31createCXRequestWithTouchPointID05touchL0SSAA0kL0C_tF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
+              "Custom",
               "AccessControl"
             ],
             "funcSelfKind": "NonMutating"
@@ -5250,7 +5291,25 @@
               },
               {
                 "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
                 "printedName": "Swift.String?",
                 "children": [
                   {
@@ -5264,66 +5323,17 @@
               },
               {
                 "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Swift.String?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Swift.String?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Swift.String?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Swift.String?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "usr": "s:Sq"
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
               }
             ],
             "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC7execute6method7baseUrl4path4body6apiKeyySSSg_A4JtF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC7execute6method7baseUrl4path4body6apiKeyySSSg_A4JtF",
+            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC7execute6method7baseUrl4path4body6apiKeyySS_S3SSgSStF",
+            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC7execute6method7baseUrl4path4body6apiKeyySS_S3SSgSStF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
+              "Custom",
               "AccessControl"
             ],
             "funcSelfKind": "NonMutating"
@@ -5340,156 +5350,18 @@
               },
               {
                 "kind": "TypeNominal",
-                "name": "NSMutableURLRequest",
-                "printedName": "Foundation.NSMutableURLRequest",
-                "usr": "c:objc(cs)NSMutableURLRequest"
+                "name": "URLRequest",
+                "printedName": "Foundation.URLRequest",
+                "usr": "s:10Foundation10URLRequestV"
               }
             ],
             "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC19printRequestDetails7requestySo19NSMutableURLRequestC_tF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC19printRequestDetails7requestySo19NSMutableURLRequestC_tF",
+            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC19printRequestDetails7requesty10Foundation10URLRequestV_tF",
+            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC19printRequestDetails7requesty10Foundation10URLRequestV_tF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
+              "Custom",
               "AccessControl"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "get",
-            "printedName": "get(baseUrl:Path:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Swift.String?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Swift.String?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC3get7baseUrl4PathySSSg_AGtF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC3get7baseUrl4PathySSSg_AGtF",
-            "moduleName": "QuestionProCXFramework",
-            "declAttributes": [
-              "AccessControl"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "urlSession",
-            "printedName": "urlSession(_:didBecomeInvalidWithError:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "URLSession",
-                "printedName": "Foundation.URLSession",
-                "usr": "c:objc(cs)NSURLSession"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "(any Swift.Error)?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Error",
-                    "printedName": "any Swift.Error",
-                    "usr": "s:s5ErrorP"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "c:@M@QuestionProCXFramework@objc(cs)MobileCXServiceTxManager(im)URLSession:didBecomeInvalidWithError:",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC10urlSession_25didBecomeInvalidWithErrorySo12NSURLSessionC_s0N0_pSgtF",
-            "moduleName": "QuestionProCXFramework",
-            "objc_name": "URLSession:didBecomeInvalidWithError:",
-            "declAttributes": [
-              "ObjC",
-              "AccessControl"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "urlSession",
-            "printedName": "urlSession(_:task:didCompleteWithError:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "URLSession",
-                "printedName": "Foundation.URLSession",
-                "usr": "c:objc(cs)NSURLSession"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "URLSessionTask",
-                "printedName": "Foundation.URLSessionTask",
-                "usr": "c:objc(cs)NSURLSessionTask"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "(any Swift.Error)?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Error",
-                    "printedName": "any Swift.Error",
-                    "usr": "s:s5ErrorP"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "c:@M@QuestionProCXFramework@objc(cs)MobileCXServiceTxManager(im)URLSession:task:didCompleteWithError:",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC10urlSession_4task20didCompleteWithErrorySo12NSURLSessionC_So0O4TaskCs0N0_pSgtF",
-            "moduleName": "QuestionProCXFramework",
-            "objc_name": "URLSession:task:didCompleteWithError:",
-            "declAttributes": [
-              "ObjC",
-              "AccessControl",
-              "RawDocComment"
             ],
             "funcSelfKind": "NonMutating"
           },
@@ -5530,6 +5402,7 @@
             "declAttributes": [
               "ObjC",
               "AccessControl",
+              "Nonisolated",
               "RawDocComment"
             ],
             "funcSelfKind": "NonMutating"
@@ -5589,7 +5462,56 @@
             "declAttributes": [
               "ObjC",
               "AccessControl",
-              "RawDocComment"
+              "Nonisolated"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "urlSession",
+            "printedName": "urlSession(_:task:didCompleteWithError:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "URLSession",
+                "printedName": "Foundation.URLSession",
+                "usr": "c:objc(cs)NSURLSession"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "URLSessionTask",
+                "printedName": "Foundation.URLSessionTask",
+                "usr": "c:objc(cs)NSURLSessionTask"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "(any Swift.Error)?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Error",
+                    "printedName": "any Swift.Error",
+                    "usr": "s:s5ErrorP"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@QuestionProCXFramework@objc(cs)MobileCXServiceTxManager(im)URLSession:task:didCompleteWithError:",
+            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC10urlSession_4task20didCompleteWithErrorySo12NSURLSessionC_So0O4TaskCs0N0_pSgtF",
+            "moduleName": "QuestionProCXFramework",
+            "objc_name": "URLSession:task:didCompleteWithError:",
+            "declAttributes": [
+              "ObjC",
+              "AccessControl",
+              "Nonisolated"
             ],
             "funcSelfKind": "NonMutating"
           },
@@ -5656,350 +5578,13 @@
               }
             ],
             "declKind": "Func",
-            "usr": "c:@M@QuestionProCXFramework@objc(cs)MobileCXServiceTxManager(im)URLSession:didReceiveChallenge:completionHandler:",
+            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC10urlSession_10didReceive17completionHandlerySo12NSURLSessionC_So28NSURLAuthenticationChallengeCySo0n4AuthP11DispositionV_So15NSURLCredentialCSgtctF",
             "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC10urlSession_10didReceive17completionHandlerySo12NSURLSessionC_So28NSURLAuthenticationChallengeCySo0n4AuthP11DispositionV_So15NSURLCredentialCSgtctF",
             "moduleName": "QuestionProCXFramework",
-            "objc_name": "URLSession:didReceiveChallenge:completionHandler:",
             "declAttributes": [
-              "ObjC",
               "AccessControl",
+              "Nonisolated",
               "RawDocComment"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "connection",
-            "printedName": "connection(connection:didReceiveData:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Foundation.NSURLConnection?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "NSURLConnection",
-                    "printedName": "Foundation.NSURLConnection",
-                    "usr": "c:objc(cs)NSURLConnection"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Foundation.NSData?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "NSData",
-                    "printedName": "Foundation.NSData",
-                    "usr": "c:objc(cs)NSData"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC10connectionAD14didReceiveDataySo15NSURLConnectionCSg_So6NSDataCSgtF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC10connectionAD14didReceiveDataySo15NSURLConnectionCSg_So6NSDataCSgtF",
-            "moduleName": "QuestionProCXFramework",
-            "declAttributes": [
-              "AccessControl"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "connection",
-            "printedName": "connection(connection:canAuthenticateAgainstProtectionSpace:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Foundation.NSURLConnection?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "NSURLConnection",
-                    "printedName": "Foundation.NSURLConnection",
-                    "usr": "c:objc(cs)NSURLConnection"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Foundation.URLProtectionSpace?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "URLProtectionSpace",
-                    "printedName": "Foundation.URLProtectionSpace",
-                    "usr": "c:objc(cs)NSURLProtectionSpace"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC10connectionAD37canAuthenticateAgainstProtectionSpaceSbSo15NSURLConnectionCSg_So015NSURLProtectionM0CSgtF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC10connectionAD37canAuthenticateAgainstProtectionSpaceSbSo15NSURLConnectionCSg_So015NSURLProtectionM0CSgtF",
-            "moduleName": "QuestionProCXFramework",
-            "declAttributes": [
-              "AccessControl"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "connection",
-            "printedName": "connection(connection:didReceiveAuthenticationChallenge:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Foundation.NSURLConnection?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "NSURLConnection",
-                    "printedName": "Foundation.NSURLConnection",
-                    "usr": "c:objc(cs)NSURLConnection"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Foundation.URLAuthenticationChallenge?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "URLAuthenticationChallenge",
-                    "printedName": "Foundation.URLAuthenticationChallenge",
-                    "usr": "c:objc(cs)NSURLAuthenticationChallenge"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC10connectionAD33didReceiveAuthenticationChallengeySo15NSURLConnectionCSg_So019NSURLAuthenticationL0CSgtF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC10connectionAD33didReceiveAuthenticationChallengeySo15NSURLConnectionCSg_So019NSURLAuthenticationL0CSgtF",
-            "moduleName": "QuestionProCXFramework",
-            "declAttributes": [
-              "AccessControl"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "connection",
-            "printedName": "connection(connection:willSendRequestForAuthenticationChallenge:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Foundation.NSURLConnection?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "NSURLConnection",
-                    "printedName": "Foundation.NSURLConnection",
-                    "usr": "c:objc(cs)NSURLConnection"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Foundation.URLAuthenticationChallenge?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "URLAuthenticationChallenge",
-                    "printedName": "Foundation.URLAuthenticationChallenge",
-                    "usr": "c:objc(cs)NSURLAuthenticationChallenge"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC10connectionAD41willSendRequestForAuthenticationChallengeySo15NSURLConnectionCSg_So019NSURLAuthenticationN0CSgtF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC10connectionAD41willSendRequestForAuthenticationChallengeySo15NSURLConnectionCSg_So019NSURLAuthenticationN0CSgtF",
-            "moduleName": "QuestionProCXFramework",
-            "declAttributes": [
-              "AccessControl"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "handleAuthenticationChallenge",
-            "printedName": "handleAuthenticationChallenge(challenge:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Foundation.URLAuthenticationChallenge?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "URLAuthenticationChallenge",
-                    "printedName": "Foundation.URLAuthenticationChallenge",
-                    "usr": "c:objc(cs)NSURLAuthenticationChallenge"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC29handleAuthenticationChallenge9challengeySo019NSURLAuthenticationJ0CSg_tF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC29handleAuthenticationChallenge9challengeySo019NSURLAuthenticationJ0CSg_tF",
-            "moduleName": "QuestionProCXFramework",
-            "declAttributes": [
-              "AccessControl"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "handleHttpError",
-            "printedName": "handleHttpError(code:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Int",
-                "printedName": "Swift.Int",
-                "usr": "s:Si"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC15handleHttpError4codeSbSi_tF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC15handleHttpError4codeSbSi_tF",
-            "moduleName": "QuestionProCXFramework",
-            "declAttributes": [
-              "AccessControl"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "connection",
-            "printedName": "connection(connection:didFailWithError:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Foundation.NSURLConnection?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "NSURLConnection",
-                    "printedName": "Foundation.NSURLConnection",
-                    "usr": "c:objc(cs)NSURLConnection"
-                  }
-                ],
-                "usr": "s:Sq"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Foundation.NSError?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "NSError",
-                    "printedName": "Foundation.NSError",
-                    "usr": "c:objc(cs)NSError"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC10connectionAD16didFailWithErrorySo15NSURLConnectionCSg_So7NSErrorCSgtF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC10connectionAD16didFailWithErrorySo15NSURLConnectionCSg_So7NSErrorCSgtF",
-            "moduleName": "QuestionProCXFramework",
-            "declAttributes": [
-              "AccessControl"
-            ],
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "connectionDidFinishLoading",
-            "printedName": "connectionDidFinishLoading(connection:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "Foundation.NSURLConnection?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "NSURLConnection",
-                    "printedName": "Foundation.NSURLConnection",
-                    "usr": "c:objc(cs)NSURLConnection"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC26connectionDidFinishLoading0H0ySo15NSURLConnectionCSg_tF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC26connectionDidFinishLoading0H0ySo15NSURLConnectionCSg_tF",
-            "moduleName": "QuestionProCXFramework",
-            "declAttributes": [
-              "AccessControl"
             ],
             "funcSelfKind": "NonMutating"
           },
@@ -6010,9 +5595,8 @@
             "children": [
               {
                 "kind": "TypeNominal",
-                "name": "Bool",
-                "printedName": "Swift.Bool",
-                "usr": "s:Sb"
+                "name": "Void",
+                "printedName": "()"
               },
               {
                 "kind": "TypeNominal",
@@ -6022,10 +5606,11 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC12handleHttpOK4dataSb10Foundation4DataV_tF",
-            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC12handleHttpOK4dataSb10Foundation4DataV_tF",
+            "usr": "s:22QuestionProCXFramework24MobileCXServiceTxManagerC12handleHttpOK4datay10Foundation4DataV_tF",
+            "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC12handleHttpOK4datay10Foundation4DataV_tF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
+              "Custom",
               "AccessControl"
             ],
             "funcSelfKind": "NonMutating"
@@ -6065,6 +5650,7 @@
             "mangledName": "$s22QuestionProCXFramework24MobileCXServiceTxManagerC11processJson4jsonySDySSypG_tF",
             "moduleName": "QuestionProCXFramework",
             "declAttributes": [
+              "Custom",
               "AccessControl"
             ],
             "funcSelfKind": "NonMutating"
@@ -6076,6 +5662,7 @@
         "moduleName": "QuestionProCXFramework",
         "declAttributes": [
           "AccessControl",
+          "Custom",
           "ObjC"
         ],
         "superclassUsr": "c:objc(cs)NSObject",
@@ -7099,651 +6686,1078 @@
   },
   "ConstValues": [
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/AppConstantCX.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/AppConstantCX.swift",
       "kind": "StringLiteral",
       "offset": 135,
       "length": 11,
       "value": "\"surveyURL\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/AppConstantCX.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/AppConstantCX.swift",
       "kind": "StringLiteral",
       "offset": 170,
       "length": 10,
       "value": "\"isDialog\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/AppConstantCX.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/AppConstantCX.swift",
       "kind": "StringLiteral",
       "offset": 258,
       "length": 30,
       "value": "\"com.surveyAnalytics.mobileCX\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 212,
       "length": 5,
       "value": "0.129"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 226,
       "length": 5,
       "value": "0.455"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 239,
       "length": 5,
       "value": "0.627"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 253,
       "length": 3,
       "value": "1.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 310,
       "length": 4,
       "value": "40.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 319,
       "length": 4,
       "value": "40.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 332,
       "length": 4,
       "value": "40.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 346,
       "length": 4,
       "value": "40.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 397,
       "length": 4,
       "value": "15.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 406,
       "length": 4,
       "value": "15.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 419,
       "length": 4,
       "value": "30.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 433,
       "length": 4,
       "value": "30.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "StringLiteral",
       "offset": 481,
       "length": 7,
       "value": "\"image\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 534,
       "length": 5,
       "value": "100.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 542,
       "length": 5,
       "value": "0.025"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "FloatLiteral",
       "offset": 549,
       "length": 3,
       "value": "1.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/GMDCircleLoader.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/GMDCircleLoader.swift",
       "kind": "BooleanLiteral",
       "offset": 639,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/TouchPoint.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/TouchPoint.swift",
       "kind": "IntegerLiteral",
       "offset": 452,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/TouchPoint.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/TouchPoint.swift",
       "kind": "StringLiteral",
       "offset": 479,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/TouchPoint.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/TouchPoint.swift",
       "kind": "StringLiteral",
       "offset": 511,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/TouchPoint.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/TouchPoint.swift",
       "kind": "StringLiteral",
       "offset": 542,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/TouchPoint.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/TouchPoint.swift",
       "kind": "StringLiteral",
       "offset": 571,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/TouchPoint.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/TouchPoint.swift",
       "kind": "StringLiteral",
       "offset": 605,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/TouchPoint.swift",
-      "kind": "IntegerLiteral",
-      "offset": 639,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/TouchPoint.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/TouchPoint.swift",
       "kind": "StringLiteral",
-      "offset": 676,
+      "offset": 646,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/TouchPoint.swift",
-      "kind": "StringLiteral",
-      "offset": 714,
-      "length": 2,
-      "value": "\"\""
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/TouchPoint.swift",
-      "kind": "StringLiteral",
-      "offset": 752,
-      "length": 2,
-      "value": "\"\""
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/TouchPoint.swift",
       "kind": "BooleanLiteral",
-      "offset": 2174,
+      "offset": 680,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "BooleanLiteral",
-      "offset": 2220,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/TouchPoint.swift",
       "kind": "StringLiteral",
-      "offset": 2337,
+      "offset": 721,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/TouchPoint.swift",
       "kind": "StringLiteral",
-      "offset": 2662,
+      "offset": 759,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/TouchPoint.swift",
+      "kind": "StringLiteral",
+      "offset": 797,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2737,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2798,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "StringLiteral",
+      "offset": 2945,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "StringLiteral",
+      "offset": 3270,
       "length": 10,
       "value": "\"Feedback\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 2710,
+      "offset": 3318,
       "length": 42,
       "value": "\"Would you like to give us some feedback?\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 2799,
+      "offset": 3407,
       "length": 4,
       "value": "\"No\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 2849,
+      "offset": 3457,
       "length": 5,
       "value": "\"Yes\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 2891,
+      "offset": 3499,
       "length": 4,
       "value": "true"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 2930,
+      "offset": 3538,
       "length": 4,
       "value": "true"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "BooleanLiteral",
-      "offset": 4942,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "StringLiteral",
-      "offset": 5008,
-      "length": 14,
-      "value": "\"\""
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "StringLiteral",
-      "offset": 5021,
-      "length": 2,
-      "value": "\"\""
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 5056,
-      "length": 1,
-      "value": "1"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "IntegerLiteral",
-      "offset": 5198,
+      "offset": 5846,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 5228,
+      "offset": 5876,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "FloatLiteral",
-      "offset": 5350,
+      "offset": 5998,
       "length": 3,
       "value": "0.6"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 5463,
+      "offset": 6080,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 5469,
+      "offset": 6086,
       "length": 2,
       "value": "70"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 5614,
-      "length": 1,
-      "value": "0"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "IntegerLiteral",
-      "offset": 5620,
-      "length": 2,
-      "value": "70"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "IntegerLiteral",
-      "offset": 5767,
-      "length": 2,
-      "value": "27"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "FloatLiteral",
-      "offset": 5770,
-      "length": 5,
-      "value": "255.0"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "IntegerLiteral",
-      "offset": 5784,
-      "length": 2,
-      "value": "51"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "FloatLiteral",
-      "offset": 5787,
-      "length": 5,
-      "value": "255.0"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "IntegerLiteral",
-      "offset": 5800,
+      "offset": 6219,
       "length": 3,
-      "value": "128"
+      "value": "255"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "FloatLiteral",
-      "offset": 5804,
+      "offset": 6223,
       "length": 5,
       "value": "255.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 6237,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "FloatLiteral",
-      "offset": 5818,
+      "offset": 6241,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 6254,
+      "length": 3,
+      "value": "255"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 6258,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 6272,
       "length": 3,
       "value": "1.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 6559,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 6710,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 5878,
+      "offset": 6853,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 5884,
+      "offset": 6859,
       "length": 2,
-      "value": "50"
+      "value": "30"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 5961,
-      "length": 3,
-      "value": "120"
+      "offset": 6936,
+      "length": 2,
+      "value": "20"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 7071,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 6698,
+      "offset": 7514,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 6704,
+      "offset": 7520,
       "length": 2,
       "value": "10"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 6744,
+      "offset": 7560,
       "length": 2,
       "value": "50"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 6756,
+      "offset": 7572,
       "length": 2,
       "value": "80"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 6822,
+      "offset": 7638,
       "length": 2,
       "value": "10"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 6829,
+      "offset": 7645,
       "length": 2,
       "value": "10"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 6869,
+      "offset": 7685,
       "length": 2,
       "value": "50"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 6881,
+      "offset": 7697,
       "length": 2,
       "value": "50"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 7089,
+      "offset": 7905,
       "length": 24,
       "value": "\"Powered by QuestionPro\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 7177,
+      "offset": 7993,
       "length": 13,
       "value": "\"QuestionPro\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 7255,
+      "offset": 8071,
       "length": 12,
       "value": "\"Powered by\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 7441,
+      "offset": 8257,
       "length": 18,
       "value": "\"FiraSans-Regular\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 7476,
+      "offset": 8292,
       "length": 5,
       "value": "\"ttf\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 7665,
+      "offset": 8481,
       "length": 15,
       "value": "\"FiraSans-Bold\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 7697,
+      "offset": 8513,
       "length": 5,
       "value": "\"ttf\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 7865,
+      "offset": 8681,
       "length": 18,
       "value": "\"FiraSans-Regular\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "FloatLiteral",
-      "offset": 7891,
+      "offset": 8707,
       "length": 4,
       "value": "16.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 8056,
+      "offset": 8872,
       "length": 15,
       "value": "\"FiraSans-Bold\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "FloatLiteral",
-      "offset": 8079,
+      "offset": 8895,
       "length": 4,
       "value": "16.0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 8516,
+      "offset": 9124,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "StringLiteral",
-      "offset": 8789,
+      "offset": 9287,
       "length": 7,
       "value": "\"xmark\""
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 8899,
+      "offset": 9397,
       "length": 2,
       "value": "16"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 9107,
+      "offset": 9529,
+      "length": 2,
+      "value": "27"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 9532,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 9546,
+      "length": 2,
+      "value": "51"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 9549,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 9562,
+      "length": 3,
+      "value": "128"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 9566,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 9580,
+      "length": 3,
+      "value": "1.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 9660,
       "length": 1,
       "value": "2"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 9212,
-      "length": 2,
-      "value": "80"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "IntegerLiteral",
-      "offset": 9219,
-      "length": 2,
-      "value": "10"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "IntegerLiteral",
-      "offset": 9230,
-      "length": 2,
-      "value": "20"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "IntegerLiteral",
-      "offset": 9242,
-      "length": 2,
-      "value": "20"
-    },
-    {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
-      "kind": "IntegerLiteral",
-      "offset": 9343,
+      "offset": 9734,
       "length": 2,
       "value": "40"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 9350,
+      "offset": 9741,
       "length": 2,
       "value": "15"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 9361,
+      "offset": 9752,
       "length": 2,
       "value": "20"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/MobileCXManager.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 9373,
+      "offset": 9764,
       "length": 2,
       "value": "20"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/KeychainItemWrapper.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "StringLiteral",
+      "offset": 9991,
+      "length": 18,
+      "value": "\"chevron.backward\""
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 10112,
+      "length": 2,
+      "value": "16"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 10253,
+      "length": 2,
+      "value": "27"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 10256,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 10270,
+      "length": 2,
+      "value": "51"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 10273,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 10286,
+      "length": 3,
+      "value": "128"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 10290,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 10304,
+      "length": 3,
+      "value": "1.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 10394,
+      "length": 1,
+      "value": "2"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 10442,
+      "length": 2,
+      "value": "20"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 10449,
+      "length": 2,
+      "value": "15"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 10460,
+      "length": 2,
+      "value": "20"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 10472,
+      "length": 2,
+      "value": "20"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 10515,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 10886,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 10916,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 11144,
+      "length": 3,
+      "value": "0.6"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 11230,
+      "length": 3,
+      "value": "0.1"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 11268,
+      "length": 4,
+      "value": "0.15"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 11310,
+      "length": 3,
+      "value": "0.8"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 11353,
+      "length": 3,
+      "value": "0.7"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 11708,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 11859,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 12002,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 12008,
+      "length": 2,
+      "value": "30"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 12085,
+      "length": 2,
+      "value": "20"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 12220,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 12505,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 12511,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 12557,
+      "length": 2,
+      "value": "40"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "StringLiteral",
+      "offset": 12876,
+      "length": 7,
+      "value": "\"xmark\""
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 12986,
+      "length": 2,
+      "value": "16"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 13118,
+      "length": 2,
+      "value": "27"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 13121,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 13135,
+      "length": 2,
+      "value": "51"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 13138,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 13151,
+      "length": 3,
+      "value": "128"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 13155,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 13169,
+      "length": 3,
+      "value": "1.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 13249,
+      "length": 1,
+      "value": "2"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 13316,
+      "length": 3,
+      "value": "0.7"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 13324,
+      "length": 2,
+      "value": "10"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 13335,
+      "length": 2,
+      "value": "25"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 13347,
+      "length": 2,
+      "value": "25"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "StringLiteral",
+      "offset": 13574,
+      "length": 18,
+      "value": "\"chevron.backward\""
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 13695,
+      "length": 2,
+      "value": "16"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 13836,
+      "length": 2,
+      "value": "27"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 13839,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 13853,
+      "length": 2,
+      "value": "51"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 13856,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 13869,
+      "length": 3,
+      "value": "128"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 13873,
+      "length": 5,
+      "value": "255.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "FloatLiteral",
+      "offset": 13887,
+      "length": 3,
+      "value": "1.0"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 13977,
+      "length": 1,
+      "value": "2"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 14025,
+      "length": 2,
+      "value": "20"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 14032,
+      "length": 2,
+      "value": "10"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 14043,
+      "length": 2,
+      "value": "25"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "IntegerLiteral",
+      "offset": 14055,
+      "length": 2,
+      "value": "25"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/MobileCXManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 14098,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/KeychainItemWrapper.swift",
       "kind": "Dictionary",
       "offset": 217,
       "length": 3,
       "value": "[]"
     },
     {
-      "filePath": "\/Users\/admin\/QuestionPro\/ios-cx\/MobileCXFramework\/KeychainItemWrapper.swift",
+      "filePath": "\/Users\/admin\/QuestionPro\/pearl-cx\/iOS-SDK\/MobileCXFramework\/KeychainItemWrapper.swift",
       "kind": "Dictionary",
       "offset": 275,
       "length": 3,
