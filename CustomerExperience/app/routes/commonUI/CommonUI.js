@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  //   Dimensions,
   Image,
   Pressable,
   StyleSheet,
@@ -21,19 +20,11 @@ import {
   getStatusById,
 } from '../../Utils/TicketUtils';
 import {MarginConstants} from '../../styles/margin.constants';
-
-import {
-  useNavigation,
-  useNavigationState,
-  StackActions,
-} from '@react-navigation/native';
+import {useNavigation, StackActions} from '@react-navigation/native';
 import {PaddingConstants} from '../../styles/padding.constants';
 import IonIcons from 'react-native-vector-icons/Ionicons';
-
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-// import {TextSizes} from '../../styles/textsize.constants';
-// import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {baseTextStyles} from '../../styles/text.styles';
 import {Sizes} from '../../styles/Size.constant';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -47,9 +38,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {DMYFORMAT, HalfMonthDateYearFormat} from '../../Utils/AppConstants';
 import moment from 'moment';
-import testIDs from '../../widgets/qp-calendar/testIDs';
 import {useSelector} from 'react-redux';
-// let {width} = Dimensions.get('window');
 
 export const StatusIcon = ({
   size,
@@ -79,7 +68,6 @@ export const StatusIcon = ({
 
 export const CopyIcon = ({size = 12, tintColor = Colors.filterIconColor}) => (
   <Image
-    // source={require('./../../assets/images/copy_icon.png')}
     source={require('./../../../assets/images/copy_icon.png')}
     style={{width: size, height: size, tintColor: tintColor}}
     testID={'image'}
@@ -136,20 +124,6 @@ export const StatusUI = ({style, status}) => {
 };
 export const RenderPriorityIcon = props => {
   return (
-    // <View
-    //   style={[
-    //     {
-    //       borderRadius: 50,
-    //       borderWidth: 1,
-    //       borderColor: getStatusBorderColor(props.title.toLowerCase()),
-    //       backgroundColor: getStatusFillerColor(props.title.toLowerCase()),
-    //       height: props.size ?? 14,
-    //       width: props.size ?? 14,
-    //     },
-    //     props.style,
-    //   ]}
-    // />
-
     <IonIcons
       style={{marginHorizontal: MarginConstants.halfTab}}
       name={'flag'}
@@ -226,10 +200,6 @@ export const SearchIcon = props => {
       <Pressable
         testID={'search-button'}
         onPress={() => {
-          // props.route === 'Dashboard'
-          //   ? navigation.navigate('Search Ticket')
-          //   : navigation.navigate('Search Response');
-
           navigation.navigate('Search Response');
         }}>
         <Icon name={'magnifier'} size={Sizes.icons} color={Colors.white} />
@@ -328,15 +298,6 @@ export const CheckBoxItem = ({item, title, index, onPress, textStyle}) => {
   return (
     <Pressable testID="check-box-button" onPress={() => onPress(item, index)}>
       <View style={styles.checkBoxRow}>
-        {/* <CheckBox
-            disabled={false}
-            value={item.isChecked}
-            onCheckColor={Colors.accentLight}
-            boxType={'square'}
-            onValueChange={(newValue) => {
-              // onPress(index);
-            }}
-          /> */}
         <CheckBox isChecked={item.isChecked} />
         <Text style={_textStyle}>{item.title ? item.title : title}</Text>
       </View>
@@ -466,13 +427,7 @@ export const FilterIcon = ({
       testID="on-press-filter-icon"
       style={style}
       onPress={onPressFilter}>
-      {/* <IonIcons
-          name="funnel"
-          size={size ?? 20}
-          color={color ?? Colors.lightBlack}
-        /> */}
       <Image
-        // source={require('./../../../assets/images/responses_icon.png')}
         source={require('./../../../assets/images/filter_icon.png')}
         style={{
           width: size ?? 22,
@@ -495,7 +450,6 @@ export const ExclaimationIcon = ({
   return (
     <Pressable style={style} testID="exclaimation-icon" onPress={onPress}>
       <Image
-        // source={require('./../../../assets/images/responses_icon.png')}
         source={require('./../../../assets/images/exclaimation_icon.png')}
         style={{
           width: size ?? 22,
@@ -569,10 +523,6 @@ export const HeaderFilter = ({
         />
       )}
       {endComponent}
-      {/* <View
-          style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
-          {getSearchIcon()}
-        </View> */}
     </View>
   );
 };
@@ -604,25 +554,6 @@ const SegmentSelector = ({segmentName, segmentList, onPressHandle}) => {
           />
         </View>
       </Pressable>
-      {/* <MainDropDown
-      options={segmentOptions.map((item) => item.segmentName)}
-      defaultText={selectedSegment.segmentName}
-      onSelection={(index) => {
-        console.log(
-          `Selected : ${JSON.stringify(segmentOptions[index])}`,
-        );
-        //////
-        dispatch(setSegment(segmentOptions[index]));
-  
-        // dispatch({
-        //   type: SEGMENT_SELECTED,
-        //   payload: segmentOptions[index],
-        // });
-  
-        // updateSegment(`${segmentOptions[index]}`);
-        //////
-      }}
-    />*/}
     </View>
   ) : (
     <Text style={segmentSelectorStyles.appbarTitle}>{segmentName}</Text>

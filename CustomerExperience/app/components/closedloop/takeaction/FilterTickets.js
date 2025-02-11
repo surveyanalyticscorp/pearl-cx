@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   View,
-  Pressable,
   Text,
   StyleSheet,
   FlatList,
@@ -22,23 +21,14 @@ import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
 import {textStyles} from '../../../styles/text.styles';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
-// import IconTextModalDropdown from '../../../widgets/drop-down/IconTextModalDropdown';
-// import IonIcons from 'react-native-vector-icons/Ionicons';
 
 const FilterTicket = ({data, onPressHandler}) => {
   const [status, setStatus] = useState(data.status);
   const [priority, setPriority] = useState(data.priority);
   const [type, setType] = useState(data.type);
-  // const [showMyTickets, setShowMyTickets] = useState(data.showMyTickets);
-  // const [hasOwner, setHasOwner] = useState(data.assignToId.length > 0);
-  // const [managerlist, setManagerList] = useState(data.managers);
   const [assignToId, setAssignToId] = useState(data.assignToId);
-  console.log('MANAGERS', JSON.stringify(data));
 
-  // let [managerlist, setManagerList] = useState(data.managers);
-  let [selectedManager, setSelectedManager] = useState(
-    data.selectedManager ?? [],
-  );
+  const selectedManager = data.selectedManager ?? [];
 
   const RenderStatusFilter = () => {
     const selectedStatus = (item, index) => {
@@ -145,99 +135,14 @@ const FilterTicket = ({data, onPressHandler}) => {
     );
   };
 
-  // const RenderAssigneeDropDown = () => {
-  //   const defaultText = 'Select...';
-  //   const list = managerlist.filter((item) => item.isChecked === false);
-  //   return (
-  //     <View>
-  //       <Text style={styles.titleText}>Assignee</Text>
-  //       <RenderAssigneeList />
-  //       <IconTextModalDropdown
-  //         style={styles.modelDropdown}
-  //         textStyle={styles.dropdownText}
-  //         dropdownTextStyle={styles.dropdownText}
-  //         arrowIconColor={Colors.secondary}
-  //         options={list.map((item) => item.ownerName)}
-  //         defaultValue={defaultText}
-  //         renderRow={dropdownRenderRow}
-  //         onSelect={(_index) => {
-  //           setAssigneeManager(list[_index], true);
-  //           // setSelectedManager((state) => [...state, managerlist[_index]]);
-  //           // setManagerList((state) =>
-  //           //   state.filter((item) => item.ownerID !== state[_index].ownerID),
-  //           // );
-  //         }}
-  //       />
-  //     </View>
-  //   );
-  // };
-
-  // const setAssigneeManager = (item, isChecked) => {
-  //   let index = 0;
-  //   managerlist.map((item_, index_) => {
-  //     if (item_.ownerID === item.ownerID) {
-  //       index = index_;
-  //     }
-  //   });
-
-  //   setManagerList((prevState) => {
-  //     const temp = [...prevState];
-  //     temp[index].isChecked = isChecked;
-  //     return temp;
-  //   });
-  // };
-  const dropdownRenderRow = (rowData, rowID, highlighted) => {
-    return (
-      <View
-        style={[
-          styles.dropdownRow,
-          {backgroundColor: highlighted ? Colors.overlay : Colors.white},
-        ]}>
-        {/* <RenderRoundImageOrColor data={rowData} /> */}
-        <Text style={styles.dropdownText}>{rowData}</Text>
-      </View>
-    );
-  };
-
-  const onCancelHandler = () => {
-    // close filter screen
-    onPressHandler(null, 'close');
-  };
-
   const onApplyFilterHandler = () => {
-    // apply filter
-    // close filter
-
     data.status = status;
     data.priority = priority;
     data.type = type;
-    // data.managers = managerlist;
     data.selectedManager = selectedManager;
     data.assignToId = assignToId;
-    // data.showMyTickets = showMyTickets;
     onPressHandler(data, 'apply');
   };
-
-  // const onClearHandler = () => {
-  //   // clear filter fields
-
-  //   setPriority((prevState) => {
-  //     const temp = prevState.map((item) => ({...item, isChecked: false}));
-  //     return temp;
-  //   });
-
-  //   setStatus((prevState) => {
-  //     const temp = prevState.map((item) => ({...item, isChecked: false}));
-  //     return temp;
-  //   });
-
-  //   setType((prevState) => {
-  //     const temp = prevState.map((item) => ({...item, isChecked: false}));
-  //     return temp;
-  //   });
-
-  //   selectedManager = [];
-  // };
 
   const RenderButtons = () => {
     return (
@@ -249,14 +154,6 @@ const FilterTicket = ({data, onPressHandler}) => {
             justifyContent: 'flex-end',
           },
         ]}>
-        {/* <QPButton
-          style={{...buttonStyles.outlineButton, margin: MarginConstants.tab2}}
-          buttonColor={Colors.white}
-          onPress={onCancelHandler}
-          textStyle={buttonStyles.outlineButtonText}
-          buttonText={'Close'}
-        /> */}
-
         <QPButton
           style={{
             ...buttonStyles.primaryButton,
@@ -270,41 +167,6 @@ const FilterTicket = ({data, onPressHandler}) => {
       </View>
     );
   };
-
-  // const assigneeCell = ({item, index}) => {
-  //   return (
-  //     <View style={[styles.assigneeCell, styles.rowContainer]}>
-  //       <Pressable
-  //         style={styles.rowContainer}
-  //         onPress={() => {
-  //           // setSelectedManager((state) =>
-  //           //   state.filter((item_) => item_.ownerID !== state[index].ownerID),
-  //           // );
-  //           // setManagerList((state) => [...state, selectedManager[index]]);
-  //           console.log({SELECTED_INDEX: index});
-
-  //           setAssigneeManager(item, false);
-  //         }}>
-  //         <Text style={styles.departmentNameText}>{item.ownerName}</Text>
-  //         <IonIcons name="close" size={20} color={Colors.filterIconColor} />
-  //       </Pressable>
-  //     </View>
-  //   );
-  // };
-
-  // const RenderAssigneeList = () => {
-  //   const list = managerlist.filter((item) => item.isChecked);
-  //   return (
-  //     <View style={[{margin: MarginConstants.halfTab}]}>
-  //       <FlatList
-  //         horizontal={true}
-  //         data={list}
-  //         renderItem={assigneeCell}
-  //         keyExtractor={(item) => item.toString()}
-  //       />
-  //     </View>
-  //   );
-  // };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -320,7 +182,6 @@ const FilterTicket = ({data, onPressHandler}) => {
           userId={data.userId}
         />
         <VerticalSpaceBox multiplyBy={2} />
-        {/* <RenderAssigneeDropDown /> */}
         <RenderButtons />
       </View>
     </SafeAreaView>

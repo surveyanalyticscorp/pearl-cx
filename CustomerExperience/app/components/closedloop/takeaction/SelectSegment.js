@@ -10,24 +10,20 @@ import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import IonIcon from 'react-native-vector-icons/Ionicons';
 import CheckmarkIcon from '../../../routes/commonUI/CheckmarkIcon';
 
 const SelectSegment = props => {
-  const [data, setData] = useState(props.data);
+  const data = props.data;
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
 
   const renderRow = ({item, index}) => {
     return (
       <TouchableWithoutFeedback
         testID="select-segment-button"
-        onPress={
-          () => {
-            props.handleOnPress(item, index);
-            setSelectedIndex(index);
-          }
-          // handleOnPress(item)
-        }>
+        onPress={() => {
+          props.handleOnPress(item, index);
+          setSelectedIndex(index);
+        }}>
         <View style={[styles.row]}>
           <Text style={styles.title}>{item.segmentName}</Text>
           {selectedIndex === index ? <CheckmarkIcon index={index} /> : <View />}

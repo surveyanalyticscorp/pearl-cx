@@ -10,7 +10,6 @@ import CheckmarkIcon from '../../../routes/commonUI/CheckmarkIcon';
 const PriorityIcon = ({item}) => {
   const {title} = item;
   const borderColor = getPriorityBorderColor(title.toLowerCase());
-  //   const backgroundColor = getPriorityFillerColor(title.toLowerCase());
 
   return (
     <IonIcon
@@ -20,10 +19,6 @@ const PriorityIcon = ({item}) => {
       color={borderColor}
     />
   );
-};
-
-const PriorityCheckmarkIcon = ({index}) => {
-  return <CheckmarkIcon index={index} />;
 };
 
 const PriorityItem = ({index, item, selectedIndex, onPressHandler}) => {

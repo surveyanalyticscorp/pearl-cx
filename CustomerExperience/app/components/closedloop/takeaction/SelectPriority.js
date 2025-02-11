@@ -9,7 +9,6 @@ import PriorityItem from './PriorityItem';
 const SelectPriority = ({data, selectedIndex, handleOnPress}) => {
   const [currentIndex, setIndex] = useState(selectedIndex);
   const [currentItem, setItem] = useState(data[selectedIndex]);
-  // const [selectedIndex, setSelectedIndex] = useState(selectedIndex);
 
   const onApplyPress = () => {
     handleOnPress(currentItem, currentIndex);
