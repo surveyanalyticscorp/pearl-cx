@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 
 public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDelegate, WKNavigationDelegate {
+    let backButton = UIButton(type: .custom)
     public func CXServiceResponse(withURL response: [String: Any]) {
         if let _ = response[ksurveyURL] {
             if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
@@ -164,6 +165,17 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             doneButton.layer.cornerRadius = doneButton.bounds.size.width / 2
             doneButton.frame = CGRect(x: self.iView!.frame.size.width - 40, y: 15, width: 20, height: 20)
             frontView.addSubview(doneButton)
+            
+            
+            self.backButton.addTarget(self, action: #selector(self.goToPreviousPage(_:)), for: .touchUpInside)
+            let backButtonImage = UIImage(systemName: "chevron.backward",
+                                           withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
+            self.backButton.setImage(backButtonImage, for: .normal)
+            self.backButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
+            self.backButton.layer.cornerRadius = self.backButton.bounds.size.width / 2
+            self.backButton.frame = CGRect(x: 20, y: 15, width: 20, height: 20)
+            self.backButton.isHidden = true
+            frontView.addSubview(self.backButton)
         }
     }
 
@@ -214,11 +226,38 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             doneButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
             doneButton.layer.cornerRadius = doneButton.bounds.size.width / 2
             doneButton.frame = CGRect(x: screenRect.size.width * 0.7, y: 10, width: 25, height: 25)
+            
             frontView.addSubview(doneButton)
+            
+            
+            self.backButton.addTarget(self, action: #selector(self.goToPreviousPage(_:)), for: .touchUpInside)
+            let backButtonImage = UIImage(systemName: "chevron.backward",
+                                           withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
+            self.backButton.setImage(backButtonImage, for: .normal)
+            self.backButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
+            self.backButton.layer.cornerRadius = self.backButton.bounds.size.width / 2
+            self.backButton.frame = CGRect(x: 20, y: 10, width: 25, height: 25)
+            self.backButton.isHidden = true
+            frontView.addSubview(self.backButton)
         }
     }
     
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {        
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let url = webView.url
+        
+        print(webView.url as Any)
+        if (((url?.absoluteString.range(of: "exitsurvey")) != nil) || ((url?.absoluteString.range(of: "#autoClose") != nil))) {
+            perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 1.0)
+        }
+        
+        let navigationType = navigationAction.navigationType
+        if navigationType == .linkActivated {
+            webView.load(navigationAction.request)
+            decisionHandler(.cancel)
+            self.backButton.isHidden = false
+            GMDCircleLoader.setOnView(self.iWebView!, withTitle: "Please wait.", animated: true)
+            return
+        }
         decisionHandler(.allow)
     }
     
@@ -243,6 +282,11 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
 
     @objc func aDismissWebview(_ sender: Any) {
         self.iView?.removeFromSuperview()
+    }
+    
+    @objc func goToPreviousPage(_ sender: Any) {
+        self.iWebView?.goBack()
+        self.backButton.isHidden = true
     }
 
     public func currentViewLoaded() {
