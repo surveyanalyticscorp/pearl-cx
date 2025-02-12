@@ -118,9 +118,12 @@ const AppRouter = props => {
     const unsubscribeNotifications = messaging().onMessage(
       async remoteMessage => {
         console.log('on message' + JSON.stringify(remoteMessage.notification));
+
+        // {"android":{},"body":"{\"id\":21532,\"type\":2,\"hasRead\":false,\"notificationText\":\"Ticket #135847 priority changed to MEDIUM by Mehedi Hasan.\",\"createdAt\":\"2025-02-11T22:50:19.105Z\",\"ticket\":{\"id\":135847,\"feedbackId\":27233,\"assignToId\":81504},\"media\":null}","title":"Ticket priority notification"}
+
         Notifications.postLocalNotification(
           {
-            body: JSON.parse(remoteMessage.notification.body).notificationText,
+            body: remoteMessage.notification.body.notificationText,
             title: remoteMessage.notification.title,
             data: remoteMessage.data,
           },
