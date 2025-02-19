@@ -3,9 +3,23 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_PUSH_TOKEN} from '../api/Constant';
 import {isStringNullOrEmpty} from './Utility';
 import {Notifications} from 'react-native-notifications';
-import {AppState} from 'react-native';
+import {AppState, PermissionsAndroid, Platform} from 'react-native';
 import * as RootNagation from '../routes/RootNavigation';
 import {translate} from './MultilinguaUtils';
+
+export const requestNotificationPermission = async () => {
+  if (Platform.OS === 'android' && Platform.Version >= 31) {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+    );
+
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('Notification permission granted');
+    } else {
+      console.log('Notification permission denied');
+    }
+  }
+};
 
 async function requestUserPermission() {
   try {
