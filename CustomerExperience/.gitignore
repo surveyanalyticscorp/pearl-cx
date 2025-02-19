@@ -61,5 +61,5 @@ buck-out/
 # yarn
 .yarn/
 
-# covarage
+# coverage
 coverage/

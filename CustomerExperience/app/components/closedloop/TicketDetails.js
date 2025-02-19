@@ -11,7 +11,6 @@ import TicketComments from './TicketComments';
 import {FontFamily} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {getClosedLoopTicketItem} from '../../redux/actions/dashboard.actions';
-import TicketRootCause from './TicketRootCause';
 import {getResponseDetailsByResponseId} from '../../redux/actions/feedback.actions';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -21,6 +20,7 @@ import {
 import TicketOverview from './TicketOverview/TicketOverview';
 import TicketActivity from './TicketActivity/TicketActivity';
 import CentralizedRootCause from './CentralizedRootCause/CentralizedRootCause';
+import TicketRootCause from './TicketRootCause/TicketRootCause';
 
 export default function TicketDetails(props) {
   const authToken = useSelector(state => state.global.authToken);

@@ -2,7 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Login from '../components/login/Login';
 import ForgotPassword from '../components/login/ForgotPassword';
-import MarketingScreen from '../components/login/MarketingScreen';
+import MarketingScreen from '../components/login/Marketing/MarketingScreen';
 import ResetPassword from '../components/login/ResetPassword';
 import {StyleSheet, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';

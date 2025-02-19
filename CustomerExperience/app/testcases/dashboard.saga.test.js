@@ -231,7 +231,7 @@ describe('Dashboard Sagas', () => {
 
   it('fetchDataCount saga - failure', async () => {
     const dispatched = [];
-    const mockError = {errorAlert: 'Error occurred'};
+    const mockError = {errorMessage: 'Error occurred'};
 
     WebServiceHandler.get.mockRejectedValue(mockError);
 
@@ -276,7 +276,7 @@ describe('Dashboard Sagas', () => {
 
   it('postApploginCount saga - failure', async () => {
     const dispatched = [];
-    const mockError = {errorAlert: 'Error occurred'};
+    const mockError = {message: 'Error occurred'};
 
     WebServiceHandler.postNew.mockRejectedValue(mockError);
 
@@ -291,7 +291,7 @@ describe('Dashboard Sagas', () => {
       },
     ).toPromise();
 
-    expect(showErrorFlashMessage).toHaveBeenCalledWith(mockError.errorAlert);
+    expect(showErrorFlashMessage).toHaveBeenCalledWith(mockError.message);
     expect(dispatched).toEqual([{type: API_ERROR, error: mockError}]);
   });
 

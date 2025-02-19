@@ -275,13 +275,13 @@ export const ClosedLoopDashboard = ({openStatusBS}) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: MarginConstants.tab2,
-    width: '100%',
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
       ? MarginConstants.tab4 * 11
       : MarginConstants.tab4 * 10,
     justifyContent: 'flex-start',
+    margin: MarginConstants.tab2,
+
     borderRadius: 5,
   },
   chartContainer: {
@@ -433,6 +433,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     paddingHorizontal: 24,
     height: '100%',
+    zIndex: 10,
   },
   iconButton: {
     ...buttonStyles.outlinePrimaryButtonMedium,

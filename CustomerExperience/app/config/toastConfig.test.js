@@ -74,4 +74,40 @@ describe('Toast Config', () => {
       expect(successProps.props.trailingIcon.onPress).toHaveBeenCalled();
     });
   });
+
+  describe('CustomInfoToast', () => {
+    const infoProps = {
+      text1: 'Info message',
+      props: {
+        bodyText: 'An important information',
+        leadingIcon: {
+          testID: 'info-toast-icon',
+          name: 'info-circle-outline',
+          color: '#00ff00',
+        },
+        trailingIcon: {
+          testID: 'close-info-toast-button',
+          onPress: jest.fn(),
+          color: '#00ff00',
+        },
+      },
+    };
+
+    it('renders CustomInfoToast with correct message and icons', () => {
+      const {getByTestId, getByText} = render(
+        toastConfig.custom_info(infoProps),
+      );
+
+      expect(getByTestId('info-toast-container')).toBeTruthy();
+      expect(getByTestId('info-toast-icon')).toBeTruthy();
+      expect(getByText('Info message')).toBeTruthy();
+      expect(getByTestId('close-info-toast-button')).toBeTruthy();
+    });
+
+    it('calls onPress function when trailing icon is pressed in CustomInfoToast', () => {
+      const {getByTestId} = render(toastConfig.custom_info(infoProps));
+      fireEvent.press(getByTestId('close-info-toast-button'));
+      expect(infoProps.props.trailingIcon.onPress).toHaveBeenCalled();
+    });
+  });
 });

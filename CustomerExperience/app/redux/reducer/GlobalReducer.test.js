@@ -46,6 +46,7 @@ const initialState = {
     startDate: '',
     endDate: '',
   },
+  resetPasswordLinkResponse: {},
   isLoading: false,
   isResponseLoading: false,
   isTicketLoading: false,
@@ -64,6 +65,9 @@ const initialState = {
   authToken: '',
   bearerToken: '',
   errorMessage: '',
+  globalSettings: {
+    managerDeletePermission: false,
+  },
   dynamicLink: '',
   dataCenter: '',
   userDetailsForResetPassword: {},

@@ -1,87 +1,46 @@
-import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  isObjectEmpty,
   isStringNullOrEmpty,
   showErrorFlashMessage,
-  showSuccessFlashMessage,
   validateEmail,
 } from '../../../../Utils/Utility';
 import {translate} from '../../../../Utils/MultilinguaUtils';
-import StringUtils from '../../../../Utils/StringUtils';
 import {requestPasswordLink} from '../../../../redux/actions/login.actions';
 import {useEffect} from 'react';
-import {validateResetPasswordLink} from '../../../../redux/sagas/loginInSaga';
-import {
-  setDynamicLink,
-  setUserDetailsForResetPassword,
-} from '../../../../redux/actions';
+import {setUserDetailsForResetPassword} from '../../../../redux/actions';
 import {ASYNC_RESET_CREDENTIALS} from '../../../../api/Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const isValidateInput = ({email, accessCode}) => {
-  if (!validateEmail(email)) {
-    showErrorFlashMessage(translate('onBoarding.invalidEmail')); // Triggering error message
+export const isValidInput = ({email, accessCode}) => {
+  const error = validateForgotPasswordData({email, accessCode});
+  if (error) {
+    showErrorFlashMessage(error);
+    console.log('LOG: isValidInput', error);
     return false;
   }
-  if (isStringNullOrEmpty(accessCode)) {
-    showErrorFlashMessage(translate('onBoarding.invalidCompanyCode')); // Triggering error message
-    return false;
-  }
+  console.log('LOG: isValidInput', error);
+
   return true;
 };
 
+export const validateForgotPasswordData = ({email, accessCode}) => {
+  if (!validateEmail(email)) {
+    return translate('onBoarding.invalidEmail');
+  }
+  if (isStringNullOrEmpty(accessCode)) {
+    return translate('onBoarding.invalidCompanyCode');
+  }
+  return null; // Means no error
+};
+export const getFormatedEmailAndAccessCode = resetData => {
+  return {
+    emailAddress: resetData.email,
+    accessCode: resetData.accessCode,
+  };
+};
 const useForgotPasswordProcess = resetData => {
   const dispatch = useDispatch();
-
-  const {
-    isError,
-    errorMessage,
-    dynamicLink,
-    resetPasswordLinkResponse,
-    validatePasswordLinkResponse,
-  } = useSelector(state => state.global);
-
-  // useEffect(() => {
-  //   if (
-  //     route &&
-  //     route.params &&
-  //     route.params.timestamp &&
-  //     StringUtils.isNotEmpty(dynamicLink)
-  //   ) {
-  //     let time = route.params.timestamp.replace('+', ' ');
-  //     if (StringUtils.isNotEmpty(dynamicLink)) {
-  //       let data = {
-  //         emailAddress: resetData.email,
-  //         accessCode: resetData.accessCode,
-  //         timestamp: time,
-  //       };
-  //       // props.validatePasswordLink(data);
-  //       dispatch(validateResetPasswordLink(data));
-  //     }
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!isObjectEmpty(validatePasswordLinkResponse)) {
-  //     if (validatePasswordLinkResponse && validatePasswordLinkResponse.Error) {
-  //       // props.setDynamicLink();
-  //       dispatch(setDynamicLink(''));
-  //       showErrorFlashMessage(validatePasswordLinkResponse.Error);
-  //     } else {
-  //       if (!validatePasswordLinkResponse.isExpired) {
-  //         navigation.navigate('ResetPassword', {
-  //           email: resetData.email,
-  //           accessCode: resetData.accessCode,
-  //         });
-  //       } else {
-  //         // props.setDynamicLink();
-  //         dispatch(setDynamicLink(''));
-  //         showErrorFlashMessage(validatePasswordLinkResponse.message);
-  //       }
-  //     }
-  //   }
-  // }, [validatePasswordLinkResponse]);
+  const {isError, errorMessage} = useSelector(state => state.global);
 
   useEffect(() => {
     if (isError) {
@@ -93,24 +52,16 @@ const useForgotPasswordProcess = resetData => {
           'Something went wrong',
       );
     }
-  }, [isError]);
-
+  }, [isError, errorMessage]);
   const onResetPasswordClick = () => {
-    if (isValidateInput(resetData)) {
-      let data = {
-        emailAddress: resetData.email,
-        accessCode: resetData.accessCode,
-      };
-      // props.setUserDetails(data);
+    console.log('LOG: onResetPasswordClick', resetData);
+    if (isValidInput(resetData)) {
+      const data = getFormatedEmailAndAccessCode(resetData);
       dispatch(setUserDetailsForResetPassword(data));
-
       AsyncStorage.setItem(ASYNC_RESET_CREDENTIALS, JSON.stringify(data));
-      // props.requestPasswordLink(data);
       dispatch(requestPasswordLink(data));
     }
   };
-
   return {onResetPasswordClick};
 };
-
 export default useForgotPasswordProcess;

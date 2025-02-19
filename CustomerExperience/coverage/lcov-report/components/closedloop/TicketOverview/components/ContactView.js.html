@@ -23,30 +23,54 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">40% </span>
                 <span class="quiet">Statements</span>
                 <span class='fraction'>2/5</span>
+=======
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>5/5</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
                 <span class='fraction'>0/10</span>
+=======
+                <span class="strong">70% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>7/10</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
                 <span class='fraction'>0/2</span>
+=======
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>2/2</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">50% </span>
                 <span class="quiet">Lines</span>
                 <span class='fraction'>2/4</span>
+=======
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>4/4</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         
             
@@ -61,7 +85,11 @@
             </div>
         </template>
     </div>
+<<<<<<< HEAD
     <div class='status-line low'></div>
+=======
+    <div class='status-line high'></div>
+>>>>>>> e_clf_ui_audit_6_nov_2023
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -149,10 +177,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<<<<<<< HEAD
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+=======
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -199,7 +234,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<<<<<<< HEAD
 <span class="cline-any cline-yes">2x</span>
+=======
+<span class="cline-any cline-yes">3x</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -222,10 +261,17 @@ import {Colors} from '../../../../styles/color.constants';
 import {MarginConstants} from '../../../../styles/margin.constants';
 import {PaddingConstants} from '../../../../styles/padding.constants';
 &nbsp;
+<<<<<<< HEAD
 const ContactView = <span class="fstat-no" title="function not covered" >({</span>onTakeActionHandler}) =&gt; {
   const {panelMember, comment} = <span class="cstat-no" title="statement not covered" >useSelector(<span class="fstat-no" title="function not covered" >st</span>ate =&gt; <span class="cstat-no" title="statement not covered" >state.dashboard.ticket)</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
+=======
+const ContactView = ({onTakeActionHandler}) =&gt; {
+  const {panelMember, comment} = useSelector(state =&gt; state.dashboard.ticket);
+&nbsp;
+  return (
+>>>>>>> e_clf_ui_audit_6_nov_2023
     &lt;View testID="contact-view" style={[styles.ticketStatusContainer]}&gt;
       &lt;DescriptionHeader text={translate('ticket_overview.contact')} /&gt;
       &lt;ChildContainer style={{paddingHorizontal: 0}}&gt;
@@ -234,7 +280,11 @@ const ContactView = <span class="fstat-no" title="function not covered" >({</spa
           subText={
             panelMember?.name?.length &gt; 0
               ? panelMember.name
+<<<<<<< HEAD
               : translate('ticket_list.anonymous')
+=======
+              : <span class="branch-1 cbranch-no" title="branch not covered" >translate('ticket_list.anonymous')</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
           }
         /&gt;
         {panelMember?.email?.length &gt; 0 ? (
@@ -261,9 +311,15 @@ const ContactView = <span class="fstat-no" title="function not covered" >({</spa
             subText={''}
           /&gt;
         ) : (
+<<<<<<< HEAD
           &lt;View /&gt;
         )}
         {comment?.length &gt; 0 ? &lt;TextLabel text={comment} /&gt; : &lt;View /&gt;}
+=======
+<span class="branch-1 cbranch-no" title="branch not covered" >          &lt;View /&gt;</span>
+        )}
+        {comment?.length &gt; 0 ? &lt;TextLabel text={comment} /&gt; : <span class="branch-1 cbranch-no" title="branch not covered" >&lt;View /&gt;}</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
       &lt;/ChildContainer&gt;
       &lt;TakeActionButton onTakeActionHandler={onTakeActionHandler} /&gt;
     &lt;/View&gt;
@@ -289,7 +345,11 @@ const styles = StyleSheet.create({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+<<<<<<< HEAD
                 at 2025-01-27T11:26:48.596Z
+=======
+                at 2025-02-07T11:25:01.786Z
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

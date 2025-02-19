@@ -187,6 +187,8 @@ describe('login sagas', () => {
   describe('getResetPasswordLink saga', () => {
     it('should dispatch GET_RESET_PASSWORD_LINK_RESPONSE on success', async () => {
       const action = {param: {}};
+
+      const action = {param: {}};
       const response = {body: {message: 'Reset link sent'}};
       WebServiceHandler.postNew.mockResolvedValue(response);
 
@@ -319,7 +321,14 @@ describe('login sagas', () => {
       generator.next(); // Skip to API call
       const responseYield = generator.throw(error).value;
 
-      expect(responseYield).toEqual(put({type: LOGOUT_RESPONSE, response: {}}));
+      expect(responseYield).toEqual(
+        put({
+          payload: {
+            isLoading: false,
+          },
+          type: 'CLEAR_API_ERROR',
+        }),
+      );
     });
   });
 });

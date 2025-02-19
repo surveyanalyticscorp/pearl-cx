@@ -23,9 +23,15 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">9.09% </span>
                 <span class="quiet">Statements</span>
                 <span class='fraction'>1/11</span>
+=======
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>12/12</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         
             
@@ -37,16 +43,28 @@
         
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
                 <span class='fraction'>0/5</span>
+=======
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>5/5</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">12.5% </span>
                 <span class="quiet">Lines</span>
                 <span class='fraction'>1/8</span>
+=======
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>9/9</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         
             
@@ -61,7 +79,11 @@
             </div>
         </template>
     </div>
+<<<<<<< HEAD
     <div class='status-line low'></div>
+=======
+    <div class='status-line high'></div>
+>>>>>>> e_clf_ui_audit_6_nov_2023
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -86,6 +108,7 @@
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
+<<<<<<< HEAD
 <a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -98,19 +121,49 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+=======
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">1x</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<<<<<<< HEAD
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+=======
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {useDispatch, useSelector} from 'react-redux';
 import {updateClfTicket} from '../../../../redux/actions/dashboard.actions';
+<<<<<<< HEAD
 &nbsp;
 const useUpdateTicket = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
   const dispatch = <span class="cstat-no" title="statement not covered" >useDispatch();</span>
@@ -121,13 +174,35 @@ const useUpdateTicket = <span class="fstat-no" title="function not covered" >()<
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >pa</span>rams =&gt; {</span>
     let body = <span class="cstat-no" title="statement not covered" >{</span>
+=======
+import {sendAnalyticsEvent} from '../../../../Utils/AnalyticLogs';
+import {ANALYTICS_EVENTS} from '../../../../Utils/Analytic.constants';
+&nbsp;
+const useUpdateTicket = () =&gt; {
+  const dispatch = useDispatch();
+  const authToken = useSelector(state =&gt; state.global.authToken);
+  const {emailAddress, firstName, lastName, userID, feedbackApiKey} =
+    useSelector(state =&gt; state.global.userInfo);
+  const {id} = useSelector(state =&gt; state.dashboard.ticket);
+&nbsp;
+  return params =&gt; {
+    let body = {
+>>>>>>> e_clf_ui_audit_6_nov_2023
       ...params,
       userName: `${firstName} ${lastName}`,
       userEmailAddress: `${emailAddress}`,
       userId: `${userID}`,
     };
+<<<<<<< HEAD
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    dispatch(updateClfTicket(authToken, body, id, feedbackApiKey));</span>
+=======
+    sendAnalyticsEvent(ANALYTICS_EVENTS.UPDATE_TICKET, {
+      ticketId: id,
+      ...body,
+    });
+    dispatch(updateClfTicket(authToken, body, id, feedbackApiKey));
+>>>>>>> e_clf_ui_audit_6_nov_2023
   };
 };
 &nbsp;
@@ -139,7 +214,11 @@ export default useUpdateTicket;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+<<<<<<< HEAD
                 at 2025-01-27T11:26:48.596Z
+=======
+                at 2025-02-07T11:25:01.786Z
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

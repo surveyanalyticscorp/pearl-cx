@@ -7,6 +7,7 @@ buildscript {
         compileSdkVersion = 34
         targetSdkVersion = 34
         kotlinVersion=  "1.5.31"
+        soLoaderVersion = "0.10.4"
 
 
     }
@@ -16,7 +17,7 @@ buildscript {
     }
     dependencies {
         classpath('com.android.tools.build:gradle:7.0.4')
-        classpath 'com.google.gms:google-services:4.3.3'
+        classpath 'com.google.gms:google-services:4.3.15'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -46,10 +47,10 @@ allprojects {
     }
 
     configurations.all {
-        resolutionStrategy {
 
-            force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
-//            force 'androidx.work:work-runtime:2.8.0-alpha02'
+        resolutionStrategy {
+                       force "com.facebook.react:react-native:" + REACT_NATIVE_VERSION
+                        force "com.facebook.soloader:soloader:0.10.4"
 
 
         }

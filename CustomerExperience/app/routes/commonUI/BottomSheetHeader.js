@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderTopStartRadius: MarginConstants.tab1,
     borderTopEndRadius: MarginConstants.tab1,
+    zIndex: 10,
   },
   panelHandleContainer: {
     alignItems: 'center',

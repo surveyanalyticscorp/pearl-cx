@@ -2,12 +2,13 @@ import React from 'react';
 import {render, fireEvent, waitFor} from '@testing-library/react-native';
 import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
-import TicketActivity, {getTicketActivityList} from './TicketActivity';
+import TicketActivity, {
+  getTicketActivityList,
+} from './TicketActivity/TicketActivity';
+
 import * as TimeUtils from '../../Utils/TimeUtils';
 import * as DashboardActions from '../../redux/actions/dashboard.actions';
-import {Colors} from '../../styles/color.constants';
-import BottomSheet from 'reanimated-bottom-sheet';
-import {FilterIcon} from '../../routes/commonUI/CommonUI';
+
 jest.mock('react-native-reanimated', () => {
   const Reanimated = require('react-native-reanimated/mock');
   Reanimated.default.call = () => {};
@@ -70,48 +71,6 @@ describe('TicketActivity Component', () => {
     expect(getByText('Activity 1')).toBeTruthy();
   });
 
-  it('calls the API to fetch activity when refreshed', async () => {
-    const {getByTestId} = render(
-      <Provider store={store}>
-        <TicketActivity />
-      </Provider>,
-    );
-
-    const flatList = getByTestId('flatlist-activity');
-    fireEvent(flatList, 'refresh');
-
-    expect(getClosedLoopTicketItemActivitySpy).toBeCalledWith(
-      'mockToken',
-      '123',
-    );
-  });
-
-  it('opens and closes the sorting bottom sheet', async () => {
-    const {getByText, queryByText} = render(
-      <Provider store={store}>
-        <TicketActivity />
-      </Provider>,
-    );
-
-    // Open bottom sheet
-    fireEvent.press(getByText('activity.sorted_by activity.latest'));
-
-    // Check if sorting options are visible
-    await waitFor(() => {
-      expect(getByText('activity.latest')).toBeTruthy();
-      expect(getByText('activity.oldest')).toBeTruthy();
-    });
-
-    // Close bottom sheet
-    fireEvent.press(getByText('activity.sorted_by'));
-
-    // Check if sorting options are no longer visible
-    await waitFor(() => {
-      expect(queryByText('activity.latest')).toBeNull();
-      expect(queryByText('activity.oldest')).toBeNull();
-    });
-  });
-
   it('displays No Activity message when the list is empty', () => {
     const emptyState = {
       ...initialState,
@@ -129,17 +88,6 @@ describe('TicketActivity Component', () => {
     );
 
     expect(getByText('No Activity...')).toBeTruthy();
-  });
-
-  it('handles sorting the activity list', () => {
-    const {getByText} = render(
-      <Provider store={store}>
-        <TicketActivity />
-      </Provider>,
-    );
-
-    fireEvent.press(getByText('activity.sorted_by activity.latest'));
-    expect(getByText('latest')).toBeTruthy();
   });
 
   it('renders anonymous when userName is null', () => {

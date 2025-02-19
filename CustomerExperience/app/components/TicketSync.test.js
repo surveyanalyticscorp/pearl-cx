@@ -59,9 +59,11 @@ describe('TicketSync', () => {
 
     expect(syncTickets).toHaveBeenCalledWith({
       authToken: 'mock-token',
-      feedbackApiKey: 'mock-api-key',
+      param: {
+        feedbackApiKey: 'mock-api-key',
+        subscriberId: 'mock-subscriber-id',
+      },
       feedbackID: 'mock-feedback-id',
-      subscriberId: 'mock-subscriber-id',
     });
   });
   test('does not call callTicketSync when ticketSync is false', () => {

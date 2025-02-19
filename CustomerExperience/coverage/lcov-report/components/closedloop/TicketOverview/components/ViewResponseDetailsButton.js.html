@@ -23,9 +23,15 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">20% </span>
                 <span class="quiet">Statements</span>
                 <span class='fraction'>2/10</span>
+=======
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>10/10</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         
             
@@ -37,16 +43,28 @@
         
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
                 <span class='fraction'>0/4</span>
+=======
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>4/4</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         
             
             <div class='fl pad1y space-right2'>
+<<<<<<< HEAD
                 <span class="strong">22.22% </span>
                 <span class="quiet">Lines</span>
                 <span class='fraction'>2/9</span>
+=======
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>9/9</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         
             
@@ -61,7 +79,11 @@
             </div>
         </template>
     </div>
+<<<<<<< HEAD
     <div class='status-line low'></div>
+=======
+    <div class='status-line high'></div>
+>>>>>>> e_clf_ui_audit_6_nov_2023
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -122,6 +144,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<<<<<<< HEAD
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -130,6 +153,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+=======
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -137,7 +170,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<<<<<<< HEAD
 <span class="cline-any cline-no">&nbsp;</span>
+=======
+<span class="cline-any cline-yes">3x</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -155,7 +192,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<<<<<<< HEAD
 <span class="cline-any cline-yes">2x</span>
+=======
+<span class="cline-any cline-yes">3x</span>
+>>>>>>> e_clf_ui_audit_6_nov_2023
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -171,6 +212,7 @@ import {buttonStyles} from '../../../../styles/button.styles';
 import {baseTextStyles} from '../../../../styles/text.styles';
 import {Colors} from '../../../../styles/color.constants';
 &nbsp;
+<<<<<<< HEAD
 export const ViewResponseDetailsButton = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
   const responseDetails = <span class="cstat-no" title="statement not covered" >useSelector(</span>
 <span class="fstat-no" title="function not covered" >    st</span>ate =&gt; <span class="cstat-no" title="statement not covered" >state.response.responseDetailsByResponseDetails,</span>
@@ -179,6 +221,16 @@ export const ViewResponseDetailsButton = <span class="fstat-no" title="function 
   const navigation = <span class="cstat-no" title="statement not covered" >useNavigation();</span>
   const navigateToFeedbackDetails = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    navigation.navigate(translate('responses.feedback_details'), {</span>
+=======
+export const ViewResponseDetailsButton = () =&gt; {
+  const responseDetails = useSelector(
+    state =&gt; state.response.responseDetailsByResponseDetails,
+  );
+  const {authToken} = useSelector(state =&gt; state.global);
+  const navigation = useNavigation();
+  const navigateToFeedbackDetails = () =&gt; {
+    navigation.navigate(translate('responses.feedback_details'), {
+>>>>>>> e_clf_ui_audit_6_nov_2023
       data: responseDetails,
       isFromFeedback: false,
       ticketStatus: {},
@@ -186,7 +238,11 @@ export const ViewResponseDetailsButton = <span class="fstat-no" title="function 
       // parentRoute: translate('responses.responses'),
     });
   };
+<<<<<<< HEAD
 <span class="cstat-no" title="statement not covered" >  return (</span>
+=======
+  return (
+>>>>>>> e_clf_ui_audit_6_nov_2023
     &lt;View style={[styles.rowContainer]}&gt;
       &lt;QPButton
         testID="responseButtonTest"
@@ -217,7 +273,11 @@ const styles = StyleSheet.create({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+<<<<<<< HEAD
                 at 2025-01-27T11:26:48.596Z
+=======
+                at 2025-02-07T11:25:01.786Z
+>>>>>>> e_clf_ui_audit_6_nov_2023
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
