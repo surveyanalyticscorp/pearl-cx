@@ -65,11 +65,6 @@ import {ANALYTICS_EVENTS} from '../../../Utils/Analytic.constants';
 import {sendAnalyticsEvent} from '../../../Utils/AnalyticLogs';
 
 const isValid = ticketState => {
-  if (ticketState.mobileNumber && !ticketState.isMobileNumberValid) {
-    showErrorFlashMessage('Enter valid phone number');
-    return false;
-  }
-
   if (!ticketState.currentSegmentId) {
     showErrorFlashMessage(translate('segment_not_selected'));
     return false;
