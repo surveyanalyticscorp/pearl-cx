@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     color: Colors.filterIconColor,
   },
   title: {
-    fontFamily: FontFamily.medium,
+    fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     marginStart: MarginConstants.halfTab,
     color: Colors.filterIconColor,

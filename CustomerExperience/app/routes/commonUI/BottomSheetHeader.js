@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     marginEnd: MarginConstants.tab2,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.largeText,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight._400,
     marginVertical: MarginConstants.halfTab,
     color: Colors.filterIconColor,
   },
