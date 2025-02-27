@@ -4100,6 +4100,7 @@ __metadata:
     react-native-localize: ^2.0.3
     react-native-material-textfield: "git+https://github.com/javarahulsharma/react-native-material-textfield.git"
     react-native-material-textfield-axel: ^0.14.0
+    react-native-material-textfield-upgraded: ^0.12.1
     react-native-mock: ^0.3.1
     react-native-mock-render: ^0.1.9
     react-native-modal: ^13.0.0
@@ -12396,6 +12397,18 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 4e5dfd2531725339e99a76141e7850bf7e3ab49746ab8bb390fd11b5e41a9a5fcc330351ebfd934cd482c13ae6c0974905a8173b80d474e8ca2706455b425cb2
+  languageName: node
+  linkType: hard
+
+"react-native-material-textfield-upgraded@npm:^0.12.1":
+  version: 0.12.1
+  resolution: "react-native-material-textfield-upgraded@npm:0.12.1"
+  dependencies:
+    prop-types: ^15.5.9
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 7ca85dfc34b4db98f9032baa631ad038d3f627ed2a6c8b245b7ef7d35cdfc4cff5b5a9be7c822dda68837b23637966b142f8aa5a936650f23a0845c33f42078d
   languageName: node
   linkType: hard
 

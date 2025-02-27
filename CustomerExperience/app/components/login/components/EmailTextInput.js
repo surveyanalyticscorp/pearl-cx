@@ -21,6 +21,7 @@ const EmailTextInput = ({defaultValue, value, setEmail}) => {
       label={translate('onBoarding.email')}
       defaultValue={defaultValue ?? ''}
       style={loginStyles.emailInput}
+      keyboardType="email-address"
       // onEndEdit={handleEmail}
       onChange={handleEmail}
     />
