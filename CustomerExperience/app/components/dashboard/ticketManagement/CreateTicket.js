@@ -63,6 +63,7 @@ import {IonIcon, MaterialIcons} from '../../../Utils/IconUtils';
 import RenderDatePickerModal from '../../RenderDatePickerModal';
 import {ANALYTICS_EVENTS} from '../../../Utils/Analytic.constants';
 import {sendAnalyticsEvent} from '../../../Utils/AnalyticLogs';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const isValid = ticketState => {
   if (!ticketState.currentSegmentId) {
@@ -206,7 +207,7 @@ const RenderDescriptionInput = ({defaultValue, setTicketState}) => {
     }));
   };
   return (
-    <KeyboardAvoidingView>
+    <View>
       <IconAndTitleText
         icon={
           <MaterialIcons
@@ -217,12 +218,14 @@ const RenderDescriptionInput = ({defaultValue, setTicketState}) => {
         }
         title={translate('ticket_overview.description')}
       />
+
       <RenderTextInput
         defaultValue={defaultValue}
         multiline={true}
         setValue={setDescription}
+        keyboardType={'default'}
       />
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
@@ -278,7 +281,11 @@ const CreateTicketForm = ({children, fall}) => {
           marginHorizontal: MarginConstants.tab1_2x,
         },
       ]}>
-      <View style={styles.innerContainer}>{children}</View>
+      <KeyboardAwareScrollView
+        enableOnAndroid={true}
+        contentContainerStyle={styles.innerContainer}>
+        {children}
+      </KeyboardAwareScrollView>
     </Animated.ScrollView>
   );
 };
@@ -726,7 +733,9 @@ export default function CreateTicket(props) {
           hasArrowDownIcon
         />
         <VerticalSpaceBox multiplyBy={2} />
+
         <RenderDescriptionInput setTicketState={setTicketState} />
+
         <VerticalSpaceBox multiplyBy={4} />
         <CreateTicketButton
           onPress={handleCreateTicket}
