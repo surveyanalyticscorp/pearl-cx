@@ -3,6 +3,7 @@ import {useDispatch} from 'react-redux';
 import {clearUserInfo} from '../../../redux/actions';
 import {showErrorFlashMessage} from '../../../Utils/Utility';
 import {getApiValidationErrorMessage} from '../Login';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const useLoginError = (isError, errorMessage) => {
   const dispatch = useDispatch();
@@ -16,7 +17,9 @@ export const useLoginError = (isError, errorMessage) => {
       showErrorFlashMessage(
         message === loginError ? customeErrorMessage : message,
       );
-      dispatch(clearUserInfo());
+      AsyncStorage.clear().then(() => {
+        dispatch(clearUserInfo());
+      });
     }
   }, [isError, errorMessage, dispatch]);
 };

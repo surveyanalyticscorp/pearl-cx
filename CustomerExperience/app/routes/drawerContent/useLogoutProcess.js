@@ -26,7 +26,7 @@ const useLogoutProcess = () => {
 
     AsyncStorage.clear().then(() => {
       console.log('USE_LOGOUT', 'AsyncStorage.clear() success');
-      ASYNC_LOGGED_IN_ALREADY;
+
       global.baseUrl = '';
       global.clfBaseUrl = '';
       global.subscriberId = '';

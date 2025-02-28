@@ -199,7 +199,7 @@ export const RenderSpinnerLoginButton = ({login}) => {
   };
 
   const onPress = () => {
-    if (StringUtils.isEmpty(baseUrl) && checkValidation(login)) {
+    if (checkValidation(login)) {
       dispatch(authenticatePanel({accessCode: login?.accessCode ?? ''}));
     }
   };
