@@ -1,0 +1,35 @@
+{
+  "name": "questionpro-feedback-survey",
+  "version": "0.1.1",
+  "description": "A simple and fully customizable React Native component to conduct the study and collect the feedback of customers.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/surveyanalyticscorp/pearl-cx.git"
+  },
+  "keywords": [
+    "React-native, Javascript, Android, iOS, QuestionPro"
+  ],
+  "author": "Datta Kunde",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/surveyanalyticscorp/pearl-cx/issues"
+  },
+  "transform": {
+    "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js",
+    "\\.(ts|tsx)$": "ts-jest"
+  },
+  "homepage": "https://github.com/surveyanalyticscorp/pearl-cx#readme",
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.17.11",
+    "react-native-webview": "11.14.4",
+    "axios": "^0.24.0"
+  },
+  "devDependencies": {
+    "metro-react-native-babel-preset": "^0.66.0"
+  },
+  "peerDependencies": {}
+}
