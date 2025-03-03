@@ -29,14 +29,12 @@
 			<string>Bundle ID</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.questionpro.cx</string>
+				<string>com.questionpro.cxonthego</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>CodePushDeploymentKey</key>
-	<string>gPQhNs6OPDE9yJgEyYb0T_VX7jALi0WAojhya</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<true/>
 	<key>FirebaseDynamicLinksCustomDomains</key>
@@ -62,8 +60,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>To access device files for upload upon user request</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>To access device files for upload upon user request</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>
@@ -87,6 +89,34 @@
 		<string>FiraSans-Regular.otf</string>
 		<string>FiraSans-SemiBold.otf</string>
 		<string>icomoon.ttf</string>
+		<string>FiraSans-BoldItalic.otf</string>
+		<string>FiraSans-Book.otf</string>
+		<string>FiraSans-BookItalic.otf</string>
+		<string>FiraSans-Eight.otf</string>
+		<string>FiraSans-EightItalic.otf</string>
+		<string>FiraSans-ExtraBold.otf</string>
+		<string>FiraSans-ExtraBoldItalic.otf</string>
+		<string>FiraSans-ExtraLight.otf</string>
+		<string>FiraSans-ExtraLightItalic.otf</string>
+		<string>FiraSans-Four.otf</string>
+		<string>FiraSans-FourItalic.otf</string>
+		<string>FiraSans-Hair.otf</string>
+		<string>FiraSans-HairItalic.otf</string>
+		<string>FiraSans-Heavy.otf</string>
+		<string>FiraSans-HeavyItalic.otf</string>
+		<string>FiraSans-Italic.otf</string>
+		<string>FiraSans-LightItalic.otf</string>
+		<string>FiraSans-MediumItalic.otf</string>
+		<string>firasans-regularitalic.ttf</string>
+		<string>FiraSans-SemiBoldItalic.otf</string>
+		<string>FiraSans-Thin.otf</string>
+		<string>FiraSans-ThinItalic.otf</string>
+		<string>FiraSans-Two.otf</string>
+		<string>FiraSans-TwoItalic.otf</string>
+		<string>FiraSans-Ultra.otf</string>
+		<string>FiraSans-UltraItalic.otf</string>
+		<string>FiraSans-UltraLight.otf</string>
+		<string>FiraSans-UltraLightItalic.otf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
@@ -101,6 +131,8 @@
 	</array>
 	<key>UIRequiresFullScreen</key>
 	<true/>
+	<key>UIStatusBarStyle</key>
+	<string/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

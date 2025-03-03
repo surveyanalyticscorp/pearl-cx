@@ -1,4 +1,12 @@
-import {StyleSheet, TouchableOpacity, View, TextInput, Text, FlatList, SafeAreaView} from 'react-native';
+import {
+  StyleSheet,
+  Pressable,
+  View,
+  TextInput,
+  Text,
+  FlatList,
+  SafeAreaView,
+} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {Sizes} from '../../../styles/Size.constant';
 import {Colors} from '../../../styles/color.constants';
@@ -15,207 +23,211 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import QPSpinner from '../../../widgets/QPSpinner';
 import ActionButton from 'react-native-action-button';
 import ArrayUtils from '../../../Utils/ArrayUtils';
-import {translate} from "../../../Utils/MultilinguaUtils";
-
+import {translate} from '../../../Utils/MultilinguaUtils';
 
 function SearchTicket(props) {
+  let [searchText, onChangeText] = useState('');
+  let [responseData, setResponseData] = useState([]);
+  let [showLoader, setShowLoader] = useState(false);
+  let pageCount = useRef('-1');
 
-    let [searchText, onChangeText] = useState('');
-    let [responseData, setResponseData] = useState([]);
-    let [showLoader, setShowLoader] = useState(false);
-    let pageCount = useRef("-1");
+  useEffect(() => {
+    if (showLoader) {
+      getDetractorAPI();
+    }
+  }, [responseData]);
 
-    useEffect(() => {
-        if(showLoader) {
-            getDetractorAPI()
-        }
-    },[responseData]);
+  useEffect(() => {
+    if (showLoader) {
+      setResponseData([]);
+    }
+  }, [showLoader]);
 
-    useEffect(() => {
-        if(showLoader) {
-            setResponseData([])
-        }
-    },[showLoader]);
-
-    const renderNoDataFound = () => {
-        return (
-            <View style={dashboardStyles.emptyView}>
-                <Text style={dashboardStyles.detractorEmptyText}> {translate("close_loop.no_tickets")} </Text>
-            </View>
-        );
-    };
-
-    const renderRow = (rowItem) => {
-        let commentText = rowItem.item.comment.replace(/\n/g, " ");
-        return (
-            <TicketWidget
-                comment={commentText}
-                item={rowItem.item}
-                {...props}
-            />
-        );
-    };
-
-    const onEndReached = () => {
-        getDetractorAPI()
-    };
-
-    const getDetractorAPI = () => {
-            let count = parseInt(pageCount.current) + 1 + '';
-            pageCount.current = count;
-        let params = {
-            pageOffset: count,
-            startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
-            endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
-            searchText: searchText
-        };
-        apiHandler.getCXDetractorTicket(
-            props.authToken,
-            params,
-            response => {
-                showLoader && setShowLoader(false);
-                if(response.body && response.body.tickets && ArrayUtils.isNotEmpty(response.body.tickets)) {
-                    let data = ArrayUtils.isEmpty(responseData) ? response.body.tickets : [...responseData, ...response.body.tickets];
-                    setResponseData(data);
-                    pageCount.current = response.body.pageOffset
-                }
-            },
-            error => {
-                showLoader && setShowLoader(false);
-            },
-        );
-    };
-
-    let renderDetractorTickets = () => {
-        return (
-            <View style={{flex : 1, backgroundColor: Colors.white}}>
-                <FlatList
-                    data={responseData}
-                    keyExtractor={item => item.ticketID+''}
-                    renderItem={renderRow}
-                    onEndReachedThreshold={0.01}
-                    refreshing={false}
-                    onEndReached={onEndReached}
-                    ListEmptyComponent={renderNoDataFound}
-                    ListFooterComponent={() => <View style={{paddingBottom: PaddingConstants.tab2}}/>}
-                />
-                <ActionButton
-                    buttonColor= {Colors.accent}
-                    buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
-                    onPress={() => {
-                        props.navigation.navigate(translate("responses.new_ticket"),{parentRoute: 'Dashboard'});
-                    }}
-                />
-            </View>
-        );
-    };
-
-    let renderSpinner = () => {
-        return (
-            <View style={dashboardStyles.loading}>
-                <QPSpinner />
-            </View>
-        )
-    };
-
-    let renderSearchBar = () => {
-        return(
-            <TextInput
-                style={styles.textInputContainer}
-                onChangeText={text => {
-                    onChangeText(text);
-                }}
-                onSubmitEditing={() => {
-                    pageCount.current = "-1";
-                    setShowLoader(true);
-                }}
-                placeholderTextColor={Colors.white}
-                placeholder={translate("responses.search_placeholder")}
-                value={searchText}
-                autoFocus={false}
-                autoCapitalize={'none'}
-                clearButtonMode={'while-editing'}
-            />
-        )
-    };
-
-    let renderHeaderBackLeft = () => {
-        return (
-            <View style={styles.leftHeaderButton}>
-                <TouchableOpacity
-                    hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
-                    onPress={() => {
-                        props.navigation.goBack()
-                    }}>
-                    <Icon name="arrow-left" size={Sizes.icons} color= {Colors.white}/>
-                </TouchableOpacity>
-            </View>
-        );
-    };
-
-    let renderNavigationHeader = () => {
-        return (
-            <View style={styles.headerContainer}>
-                {renderHeaderBackLeft()}
-                {renderSearchBar()}
-            </View>
-        )
-    };
-
+  const renderNoDataFound = () => {
     return (
-        <SafeAreaView forceInset={{bottom: 'never', top:'never'}} style={styles.container}>
-            {renderNavigationHeader()}
-            {showLoader ? renderSpinner() : renderDetractorTickets()}
-        </SafeAreaView>
-    )
+      <View style={dashboardStyles.emptyView}>
+        <Text style={dashboardStyles.detractorEmptyText}>
+          {' '}
+          {translate('close_loop.no_tickets')}{' '}
+        </Text>
+      </View>
+    );
+  };
 
+  const renderRow = rowItem => {
+    let commentText = rowItem.item.comment.replace(/\n/g, ' ');
+    return (
+      <TicketWidget comment={commentText} item={rowItem.item} {...props} />
+    );
+  };
+
+  const onEndReached = () => {
+    getDetractorAPI();
+  };
+
+  const getDetractorAPI = () => {
+    let count = parseInt(pageCount.current) + 1 + '';
+    pageCount.current = count;
+    let params = {
+      pageOffset: count,
+      startDate: moment(props.range.startDate, DMYFORMAT).format(YMDFORMAT),
+      endDate: moment(props.range.endDate, DMYFORMAT).format(YMDFORMAT),
+      searchText: searchText,
+    };
+    apiHandler.getCXDetractorTicket(
+      props.authToken,
+      params,
+      response => {
+        showLoader && setShowLoader(false);
+        if (
+          response.body &&
+          response.body.tickets &&
+          ArrayUtils.isNotEmpty(response.body.tickets)
+        ) {
+          let data = ArrayUtils.isEmpty(responseData)
+            ? response.body.tickets
+            : [...responseData, ...response.body.tickets];
+          setResponseData(data);
+          pageCount.current = response.body.pageOffset;
+        }
+      },
+      error => {
+        showLoader && setShowLoader(false);
+      },
+    );
+  };
+
+  let renderDetractorTickets = () => {
+    return (
+      <View style={{flex: 1, backgroundColor: Colors.white}}>
+        <FlatList
+          data={responseData}
+          keyExtractor={item => item.ticketID + ''}
+          renderItem={renderRow}
+          onEndReachedThreshold={0.01}
+          refreshing={false}
+          onEndReached={onEndReached}
+          ListEmptyComponent={renderNoDataFound}
+          ListFooterComponent={() => (
+            <View style={{paddingBottom: PaddingConstants.tab2}} />
+          )}
+        />
+        <ActionButton
+          buttonColor={Colors.accent}
+          buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
+          onPress={() => {
+            props.navigation.navigate(translate('responses.new_ticket'), {
+              parentRoute: 'Dashboard',
+            });
+          }}
+        />
+      </View>
+    );
+  };
+
+  let renderSpinner = () => {
+    return (
+      <View style={dashboardStyles.loading}>
+        <QPSpinner />
+      </View>
+    );
+  };
+
+  let renderSearchBar = () => {
+    return (
+      <TextInput
+        style={styles.textInputContainer}
+        onChangeText={text => {
+          onChangeText(text);
+        }}
+        onSubmitEditing={() => {
+          pageCount.current = '-1';
+          setShowLoader(true);
+        }}
+        placeholderTextColor={Colors.white}
+        placeholder={translate('responses.search_placeholder')}
+        value={searchText}
+        autoFocus={false}
+        autoCapitalize={'none'}
+        clearButtonMode={'while-editing'}
+      />
+    );
+  };
+
+  let renderHeaderBackLeft = () => {
+    return (
+      <View style={styles.leftHeaderButton}>
+        <Pressable
+          hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+          onPress={() => {
+            props.navigation.goBack();
+          }}>
+          <Icon name="arrow-left" size={Sizes.icons} color={Colors.white} />
+        </Pressable>
+      </View>
+    );
+  };
+
+  let renderNavigationHeader = () => {
+    return (
+      <View style={styles.headerContainer}>
+        {renderHeaderBackLeft()}
+        {renderSearchBar()}
+      </View>
+    );
+  };
+
+  return (
+    <SafeAreaView
+      forceInset={{bottom: 'never', top: 'never'}}
+      style={styles.container}>
+      {renderNavigationHeader()}
+      {showLoader ? renderSpinner() : renderDetractorTickets()}
+    </SafeAreaView>
+  );
 }
 
 const mapStateToProps = state => {
-    return {
-        isLoading: state.global.isLoading,
-        authToken: state.global.authToken,
-        storeId: state.dashboard.dashboardData.primaryStoreId,
-        range: state.global.range
-    };
+  return {
+    isLoading: state.global.isLoading,
+    authToken: state.global.authToken,
+    storeId: state.dashboard.dashboardData.primaryStoreId,
+    range: state.global.range,
+  };
 };
 
-const mapDispatchToProps = dispatch => ({
-});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchTicket);
 
-
 const styles = StyleSheet.create({
-    safeArea: {
-        flex: 1,
-    },
-    container: {
-        flex: 1,
-        backgroundColor: Colors.accent,
-    },
-    headerContainer: {
-        width:'100%',
-        flexDirection: 'row',
-        backgroundColor: Colors.accent,
-        alignItems: "center",
-        justifyContent: 'space-between',
-        paddingTop: 1.3 * PaddingConstants.tab1
-
-    },
-    leftHeaderButton: {
-        marginHorizontal: MarginConstants.halfTab,
-        height:30,
-        paddingHorizontal: PaddingConstants.tab1
-    },
-    textInputContainer: {
-        flex:1,
-        backgroundColor: 'rgba(85, 149, 224, 0.7)',
-        marginRight: MarginConstants.tab2,
-        paddingHorizontal: PaddingConstants.tab2,
-        color: Colors.white,
-        height:35,
-        marginBottom: MarginConstants.tab1
-
-    }
+  safeArea: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: Colors.accent,
+  },
+  headerContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    backgroundColor: Colors.accent,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 1.3 * PaddingConstants.tab1,
+  },
+  leftHeaderButton: {
+    marginHorizontal: MarginConstants.halfTab,
+    height: 30,
+    paddingHorizontal: PaddingConstants.tab1,
+  },
+  textInputContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(85, 149, 224, 0.7)',
+    marginRight: MarginConstants.tab2,
+    paddingHorizontal: PaddingConstants.tab2,
+    color: Colors.white,
+    height: 35,
+    marginBottom: MarginConstants.tab1,
+  },
 });

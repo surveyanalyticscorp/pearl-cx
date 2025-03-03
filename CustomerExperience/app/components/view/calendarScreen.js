@@ -1,18 +1,21 @@
 import React, {useState} from 'react';
-import {Modal, Platform, TouchableOpacity, View} from 'react-native';
+import {Modal, Platform, Pressable, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import MonthYearSelector from '../../widgets/MonthYearSelector';
+// import MonthYearSelector from '../../widgets/MonthYearSelector';
 import moment from 'moment';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
 import SafeAreaView from 'react-native-safe-area-view';
 
 const CalendarScreen = props => {
-
-  const [selectedYear, setSelectedYear] = useState({month: props.selectedDate.month, year: props.selectedDate.year});
+  const [selectedYear, setSelectedYear] = useState({
+    month: props.selectedDate.month,
+    year: props.selectedDate.year,
+  });
   const renderCloseButton = () => {
     return (
-      <TouchableOpacity
+      <Pressable
+        testID="close-button"
         onPress={() => {
           props.closeCalendar && props.closeCalendar(false);
         }}
@@ -37,13 +40,14 @@ const CalendarScreen = props => {
             />
           </View>
         </SafeAreaView>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
   const renderCalendarView = () => {
     return (
       <Modal
+        testID="calendar-modal"
         animationType={'fade'}
         transparent={true}
         visible={props.showCalendar}
@@ -63,7 +67,7 @@ const CalendarScreen = props => {
               },
             ]}>
             {renderCloseButton()}
-            <MonthYearSelector
+            {/* <MonthYearSelector
               month={selectedYear.month}
               year={selectedYear.year}
               minYear={2010}
@@ -76,7 +80,7 @@ const CalendarScreen = props => {
               onCancel={() => {
                 props.closeCalendar && props.closeCalendar(false);
               }}
-            />
+            /> */}
           </View>
         </SafeAreaView>
       </Modal>

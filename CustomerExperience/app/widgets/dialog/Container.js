@@ -41,7 +41,7 @@ export default class DialogContainer extends React.PureComponent {
     const descriptionChildrens = [];
     const buttonChildrens = [];
     const otherChildrens = [];
-    React.Children.forEach(children, child => {
+    React.Children.forEach(children, (child) => {
       if (!child) {
         return;
       }

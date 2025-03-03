@@ -1,14 +1,44 @@
 import React, {useState} from 'react';
-import {Platform, View} from 'react-native';
+import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {TextField} from 'react-native-material-textfield';
 import {Colors} from '../styles/color.constants';
 import StringUtils from '../Utils/StringUtils';
 import {TextSizes} from '../styles/textsize.constants';
+import {FontFamily} from '../styles/font.constants';
+import {MarginConstants} from '../styles/margin.constants';
+
+const PasswordVisibilityIcon = ({iconName, onPress}) => {
+  return (
+    <Icon
+      testID="render-visibility-icon"
+      style={{
+        flex: 1,
+        position: 'absolute',
+        top: MarginConstants.tab4,
+        right: MarginConstants.tab1,
+      }}
+      name={iconName}
+      size={25}
+      color={Colors.textTintColor}
+      onPress={onPress}
+    />
+  );
+};
+
+const RenderPasswordVisibility = ({secureText, value, iconName, onPress}) => {
+  const isVisibility = secureText && StringUtils.isNotEmpty(value);
+  return isVisibility ? (
+    <PasswordVisibilityIcon iconName={iconName} onPress={onPress} />
+  ) : (
+    <View />
+  );
+};
 
 const QPTextField = props => {
-  const fieldRef = React.createRef();
+  const fieldRef = props.ref ?? React.createRef();
   const [secureText, setSecureText] = useState(props.secureText);
+
   const onSubmit = () => {
     let {current: field} = fieldRef;
     props.onSubmit && props.onSubmit(field.value());
@@ -20,7 +50,6 @@ const QPTextField = props => {
   };
 
   const onChange = text => {
-    // let {current: field} = fieldRef;
     props.onChange && props.onChange(text);
   };
 
@@ -32,28 +61,21 @@ const QPTextField = props => {
   let returnKey = props.returnKey ? props.returnKey : 'next';
   let label = props.label ? props.label : '';
   let defaultValue = props.defaultValue ? props.defaultValue : '';
-  let style = [props.style, {paddingVertical: 0}];
+  let style = [props?.style, {paddingVertical: 0}];
   let icon = secureText ? 'visibility-off' : 'visibility';
-
-  let renderVisibility = () => {
-    return StringUtils.isNotEmpty(props.value) && (
-      <Icon
-        style={{
-          position: 'absolute',
-          top: 38,
-          right: 10
-        }}
-        name={icon}
-        size={25}
-        color={Colors.textTintColor}
-        onPress={changePwdType}
-      />
-    );
-  };
+  let textStyle = props.textStyle
+    ? props.textStyle
+    : {color: Colors.filterIconColor, fontFamily: FontFamily.regular};
 
   return (
-    <View style={style}>
+    <View testID="text-field-container" style={style}>
       <TextField
+        labelTextStyle={textStyle}
+        titleTextStyle={textStyle}
+        affixTextStyle={textStyle}
+        style={textStyle}
+        accessibilityLabel={props.accessibilityLabel ?? 'text-field'}
+        testID={props.testID ?? 'text-field'}
         underlineColorAndroid="transparent"
         autoCapitalize={'none'}
         autoCorrect={false}
@@ -62,6 +84,8 @@ const QPTextField = props => {
         textColor={props.textColor || Colors.primary}
         baseColor={props.baseColor || Colors.primary}
         label={label}
+        value={props.value}
+        placeholderTextColor={Colors.borderColor}
         defaultValue={defaultValue}
         secureTextEntry={secureText}
         keyboardType={keyboardType}
@@ -74,7 +98,13 @@ const QPTextField = props => {
         labelFontSize={TextSizes.secondary}
         returnKeyType={returnKey}
       />
-      {props.secureText && renderVisibility()}
+
+      <RenderPasswordVisibility
+        secureText={props.secureText}
+        value={props.value}
+        iconName={icon}
+        onPress={changePwdType}
+      />
     </View>
   );
 };

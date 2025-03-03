@@ -1,25 +1,34 @@
 export const IS_LOADING = 'IS_LOADING';
+export const IS_RESPONSE_LOADING = 'IS_RESPONSE_LOADING';
+export const IS_TICKET_LOADING = 'IS_TICKET_LOADING';
+export const IS_SEGMENT_LOADING = 'IS_SEGMENT_LOADING';
 export const IS_LOGIN = 'IS_LOGIN';
+export const IS_PAGINATION = 'IS_PAGINATION';
 export const FILL_USER_INFO = 'FILL_USER_INFO';
 export const CLEAR_USER_INFO = 'CLEAR_USER_INFO';
 export const API_ERROR = 'API_ERROR';
 export const IS_ERROR = 'IS_ERROR';
 export const CLEAR_API_ERROR = 'CLEAR_API_ERROR';
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
+export const SET_BEARER_TOKEN = 'SET_BEARER_TOKEN';
 export const SET_RANGE_FILTER = 'SET_RANGE_FILTER';
-export const SET_USER_DETAILS_FOR_RESET_PASSWORD = 'SET_USER_DETAILS_FOR_RESET_PASSWORD';
+export const SET_USER_DETAILS_FOR_RESET_PASSWORD =
+  'SET_USER_DETAILS_FOR_RESET_PASSWORD';
 export const SET_DYNAMIC_LINK = 'SET_DYNAMIC_LINK';
 export const WANT_TO_RELOAD_DASHBOARD = 'WANT_TO_RELOAD_DASHBOARD';
 export const SET_LANGUAGE_INFO = 'SET_LANGUAGE_INFO';
+export const SET_IS_FIRST_TIME = 'SET_IS_FIRST_TIME';
+export const SET_GLOBAL_SETTINGS = 'SET_GLOBAL_SETTINGS';
+export const SET_GLOBAL_SETTINGS_RESPONSE = 'SET_GLOBAL_SETTINGS_RESPONSE';
 
 export const showLoading = (isLoading = true) => ({
   type: IS_LOADING,
   payload: {isLoading: isLoading},
 });
 
-export const wantToReloadDashboard = (wantToReload) => ({
-    type: WANT_TO_RELOAD_DASHBOARD,
-    payload: {wantToReload: wantToReload},
+export const wantToReloadDashboard = wantToReload => ({
+  type: WANT_TO_RELOAD_DASHBOARD,
+  payload: {wantToReload: wantToReload},
 });
 
 export const fillUserInfo = userInfo => ({
@@ -28,13 +37,13 @@ export const fillUserInfo = userInfo => ({
 });
 
 export const setLanguageInfo = languageInfo => ({
-    type: SET_LANGUAGE_INFO,
-    payload: {languageInfo: languageInfo},
+  type: SET_LANGUAGE_INFO,
+  payload: {languageInfo: languageInfo},
 });
 
 export const clearUserInfo = () => ({
   type: CLEAR_USER_INFO,
-  payload: {}
+  payload: {},
 });
 
 export const clearError = (isLoading = true) => ({
@@ -42,9 +51,14 @@ export const clearError = (isLoading = true) => ({
   payload: {isLoading: isLoading},
 });
 
-export const setAuthToken = (token) => ({
+export const setAuthToken = token => ({
   type: SET_AUTH_TOKEN,
   payload: {authToken: token},
+});
+
+export const setBearerToken = token => ({
+  type: SET_BEARER_TOKEN,
+  payload: {bearerToken: token},
 });
 
 export const setRangeFilter = range => ({
@@ -52,17 +66,26 @@ export const setRangeFilter = range => ({
   range,
 });
 
-export const setError = (error) => ({
-  type: API_ERROR,
-  error
+export const setIsFirstTime = isFirstTime => ({
+  type: SET_IS_FIRST_TIME,
+  isFirstTime,
 });
 
-export const setUserDetailsForResetPassword = (body) => ({
+export const setError = error => ({
+  type: API_ERROR,
+  error,
+});
+
+export const setUserDetailsForResetPassword = body => ({
   type: SET_USER_DETAILS_FOR_RESET_PASSWORD,
   payload: body,
 });
 
-export const setDynamicLink = (link) => ({
+export const setDynamicLink = link => ({
   type: SET_DYNAMIC_LINK,
-  payload: link
+  payload: link,
+});
+
+export const getGlobalSettings = () => ({
+  type: SET_GLOBAL_SETTINGS,
 });

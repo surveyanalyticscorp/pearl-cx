@@ -1,18 +1,8 @@
 import React from 'react';
-import {Provider} from 'react-redux';
-import {mount} from 'enzyme';
-import configureStore from 'redux-mock-store';
 import QPTextField from '../../widgets/TextField';
-import '../../../setupTests';
+import renderer from 'react-test-renderer';
 
-it('should render correctly <QPTextField> component', () => {
-  const mockStore = configureStore();
-  const store = mockStore({});
-  const wrapper = mount(
-    <Provider store={store}>
-      <QPTextField />
-    </Provider>,
-  );
-
-  expect(wrapper).toMatchSnapshot();
+test('renders correctly', () => {
+  const tree = renderer.create(<QPTextField />).toJSON();
+  expect(tree).toMatchSnapshot();
 });

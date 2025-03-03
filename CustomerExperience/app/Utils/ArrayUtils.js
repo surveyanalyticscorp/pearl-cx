@@ -10,8 +10,9 @@ export default class ArrayUtils {
     return null;
   }
   static isNotEmpty(array) {
-    return array && array.length > 0;
+    return Array.isArray(array) && array.length > 0;
   }
+
   static isEmpty(array) {
     return !this.isNotEmpty(array);
   }

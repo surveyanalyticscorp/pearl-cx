@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>163493809530-l84bi465vdokfl5ct5k8oigh3t06f9qq.apps.googleusercontent.com</string>
+	<string>163493809530-b45q1aca8dttgvanfc9lgq53ue8q5o8l.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.163493809530-l84bi465vdokfl5ct5k8oigh3t06f9qq</string>
+	<string>com.googleusercontent.apps.163493809530-b45q1aca8dttgvanfc9lgq53ue8q5o8l</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>163493809530-tqlm49ndb74g7kkrqct5v0q7p2270naq.apps.googleusercontent.com</string>
+	<string>163493809530-0r5u82e9g1iufun8fs0kcj0t1pblgaaq.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBs40fZrZJu2cJ9XsMkpcdqJ6lq9ew66C8</string>
 	<key>GCM_SENDER_ID</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.questionpro.cx</string>
+	<string>com.questionpro.cxonthego</string>
 	<key>PROJECT_ID</key>
 	<string>questionpro-offline-surveys</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:163493809530:ios:154549f05d339c9103dac3</string>
+	<string>1:163493809530:ios:169588f99effd06703dac3</string>
 	<key>DATABASE_URL</key>
 	<string>https://questionpro-offline-surveys.firebaseio.com</string>
 </dict>

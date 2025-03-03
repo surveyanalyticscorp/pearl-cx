@@ -6,7 +6,7 @@ import {
   GET_LOGIN,
   UPDATE_PASSWORD,
   VALIDATE_USER_OTP,
-} from '../redux/actions';
+} from '../redux/actions/login.actions';
 import {GET_FEEDBACK} from '../redux/actions/feedback.actions';
 import {FEEDBACK_UPDATED} from '../redux/actions/feedback.actions';
 import {UPDATE_FEEDBACK} from '../redux/actions/feedback.actions';
@@ -16,8 +16,19 @@ describe('ACTIONS', () => {
   it('should create an action with correct type', () => {
     const expectedAction = {
       type: GET_LOGIN,
+      param: {
+        accessCode: 'clean333',
+        emailAddress: 'mehedi@ymail.com',
+        password: 'abc123',
+      },
     };
-    expect(actions.doLogin()).toEqual(expectedAction);
+    expect(
+      actions.doLogin({
+        accessCode: 'clean333',
+        emailAddress: 'mehedi@ymail.com',
+        password: 'abc123',
+      }),
+    ).toEqual(expectedAction);
   });
 
   // it('should create an action with correct type GET_FORGOT_PSWD_OTP', () => {

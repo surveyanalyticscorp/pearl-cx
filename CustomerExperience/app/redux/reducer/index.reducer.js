@@ -1,24 +1,27 @@
 import {combineReducers} from 'redux';
 import dashboardReducer from './DashboardReducer';
 import globalReducer from './GlobalReducer';
-import notificationReducer from './NotificationReducer'
+import notificationReducer from './NotificationReducer';
 import {CLEAR_USER_INFO} from '../actions';
 import {NetworkReducer} from 'react-native-redux-connectivity';
+import feedbackReducer from './FeedbackReducer';
+import loginReducer from './LoginReducer';
 
 const rootReducer = (state, action) => {
-    if (action.type === CLEAR_USER_INFO) {
-        let {network} = state;
-        state = {network};
-    }
-    return appReducer(state, action);
+  if (action.type === CLEAR_USER_INFO) {
+    let {network} = state;
+    state = {network};
+  }
+  return appReducer(state, action);
 };
 
 const appReducer = combineReducers({
-    network: NetworkReducer,
-    dashboard: dashboardReducer,
-    global: globalReducer,
-    notification: notificationReducer,
+  network: NetworkReducer,
+  dashboard: dashboardReducer,
+  global: globalReducer,
+  notification: notificationReducer,
+  response: feedbackReducer,
+  login: loginReducer,
 });
-
 
 export default rootReducer;

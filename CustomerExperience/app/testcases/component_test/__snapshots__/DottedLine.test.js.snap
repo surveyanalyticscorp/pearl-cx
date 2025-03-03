@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  style={
+    {
+      "alignSelf": "auto",
+      "borderColor": "#9B9B9B",
+      "borderRadius": 1,
+      "borderStyle": "dotted",
+      "borderWidth": 1,
+      "height": 0,
+      "marginHorizontal": 3.75,
+      "marginTop": 1,
+      "width": 9,
+    }
+  }
+  testID="dotted-line"
+/>
+`;

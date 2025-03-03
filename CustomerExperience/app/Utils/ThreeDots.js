@@ -7,11 +7,20 @@ const ThreeDot = props => {
     circles.push(<Circle color={props.color} key={i} />);
   }
 
-  return <View style={styles.container}>{circles}</View>;
+  return (
+    <View testID="three-dot-container" style={styles.container}>
+      {circles}
+    </View>
+  );
 };
 
 const Circle = props => {
-  return <View style={[styles.dot, {backgroundColor: props.color}]} />;
+  return (
+    <View
+      testID="circle-dot"
+      style={[styles.dot, {backgroundColor: props.color}]}
+    />
+  );
 };
 
 const styles = StyleSheet.create({

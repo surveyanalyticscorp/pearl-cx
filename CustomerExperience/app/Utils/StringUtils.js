@@ -94,13 +94,65 @@ export default class StringUtils {
     return html;
   }
 
-  static removeLines(str) {
-    return str.replace(/\s{2,}/g, '');
+  static formatCommentToHTML(commentText) {
+    return commentText.replace(/\@\[([^\]]+)\]\(([^\)]+)\)/g, `<b>$1</b>`);
+  }
+
+  static formatActivityToHTML(activityText, wordsToBold) {
+    let tempText = activityText;
+    wordsToBold.forEach(word => {
+      tempText = tempText.replace(
+        new RegExp(`\\b${word}\\b`, 'g'),
+        `<b>${word}</b>`,
+      );
+    });
+    return tempText;
+    // const pattern = new RegExp(`(${wordsToBold.join('|')})`, 'g');
+
+    // return activityText.replace(pattern, `<b>$1</b>`);
+  }
+
+  static getWords(text) {
+    // fix if text is null
+    if (!text) {
+      return [];
+    }
+    var specialPattern = /@\[[^\]]+\]\(\d+\)/g;
+
+    // Extract all occurrences of the special pattern and store them in an array
+    var specialMatches = text.match(specialPattern) || [];
+
+    // Replace all occurrences of the special pattern with a placeholder
+    var textWithoutSpecialPattern = text.replace(specialPattern, 'PLACEHOLDER');
+
+    // Use a regular expression to split the text into words
+    var words = textWithoutSpecialPattern.split(/\s+/);
+
+    // Replace the placeholders with the original special pattern in the words array
+    words = words.map(function (word) {
+      return word === 'PLACEHOLDER' ? specialMatches.shift() : word;
+    });
+
+    // Filter out empty strings (occurs when there are consecutive spaces)
+    words = words.filter(function (word) {
+      return word.length > 0;
+    });
+
+    // Return the count of words
+    return words;
+  }
+
+  static removeLinesAndWhiteSpaces(str) {
+    // Fix to remove new line characters and handle multiple spaces
+    if (!str) {
+      return '';
+    }
+    return str.replace(/[\n\r]/g, '').replace(/\s{2,}/g, ' ');
   }
 
   static convertStringToNumberElseReturnZero(str) {
     try {
-      return convertStringToNumber(str);
+      return this.convertStringToNumber(str);
     } catch (e) {
       return 0;
     }
@@ -109,7 +161,7 @@ export default class StringUtils {
   static getShortTextTruncateMiddle(str, MAX_LENGTH = 30) {
     const MIN_LENGTH = 10;
     const ELLIPSIS_LENGTH = 3;
-    if (isEmpty(str)) {
+    if (this.isEmpty(str)) {
       return str;
     }
 
@@ -130,7 +182,7 @@ export default class StringUtils {
   }
 
   static getShortTextTruncateEnd(str, lengthLimit) {
-    if (isEmpty(str)) {
+    if (this.isEmpty(str)) {
       return str;
     }
 
@@ -146,19 +198,23 @@ export default class StringUtils {
   }
 
   static getRandomAlphanumericString() {
-    return Math.random()
-      .toString(36)
-      .substring(7);
+    return Math.random().toString(36).substring(7);
   }
 
   static getTextArraySeparatedByNewline(text) {
-    let textLines = text || '';
+    if (!text || text.trim() === '') {
+      return [];
+    }
+    let textLines = text;
     textLines = textLines.replace('\r\n', '\n');
     return textLines.split('\n');
   }
 
   static getTextArraySeparatedBy(text, symbol) {
-    let textLines = text || '';
+    if (!text || text.trim() === '') {
+      return [];
+    }
+    let textLines = text;
     return textLines.split(symbol);
   }
 
@@ -168,26 +224,12 @@ export default class StringUtils {
     for (let i = 0; i < obj[property].length; i++) {
       let item = obj[property][i];
 
-      itemsTextSeparatedByNewLine += emptyIfUndefined(item.text);
+      itemsTextSeparatedByNewLine += this.emptyIfUndefined(item.text);
       const isNotLastItem = i != lastItemIndex;
       itemsTextSeparatedByNewLine += isNotLastItem ? '\n' : '';
     }
 
     return itemsTextSeparatedByNewLine;
-  }
-
-  static isSafariBrowserOnMacOS() {
-    return (
-      navigator != null &&
-      navigator.userAgent != null &&
-      navigator.userAgent.indexOf('Safari') != -1 &&
-      navigator.userAgent.indexOf('Chrome') == -1 &&
-      navigator.userAgent.indexOf('Mac') > 0
-    );
-  }
-
-  static addCssClassToTargetMacSafariBrowser(cssClass) {
-    return cssClass + (isSafariBrowserOnMacOS() ? ' mac-safari' : '');
   }
 
   static removeSpecialCharacters(text) {
@@ -203,7 +245,7 @@ export default class StringUtils {
   }
 
   static getPlainTextWithoutSpecialCharacters(text) {
-    return convertToPlainText(removeSpecialCharacters(text));
+    return this.convertToPlainText(this.removeSpecialCharacters(text));
   }
 
   static removeNewLines(text) {
@@ -214,7 +256,144 @@ export default class StringUtils {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  static getStringFromNumber(number) {
-    return number.toString()
+  static uppercaseFirstCharRestLowercase(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   }
+
+  static getStringFromNumber(number) {
+    return number.toString();
+  }
+
+  static floatTo2DecimalPointString(number) {
+    if (number % 1 === 0) {
+      return number;
+    }
+    return parseFloat(number).toFixed(2);
+  }
+
+  static floatTo2DecimalPoint(number) {
+    if (number % 1 === 0) {
+      return number;
+    }
+    return parseFloat(parseFloat(number).toFixed(2));
+  }
+
+  static floatToDecimal(number) {
+    if (number % 1 === 0) {
+      return number;
+    }
+    return Math.round(parseFloat(number).toFixed(2));
+  }
+
+  static formattedCount(count, minCompareValue, notion) {
+    const formatted = (count / minCompareValue).toFixed(1);
+    return formatted.endsWith('.0')
+      ? Math.floor(formatted) + notion
+      : formatted + notion;
+  }
+
+  static getTrimmedNoOfResponses(responseCount) {
+    let ONE_THOUSAND = 1000;
+    let ONE_MILLION = 1000000;
+    let ONE_BILLION = 1000000000;
+    let ONE_THOUSAND_BILLION = 1000000000000;
+    let ONE_TRILLION = 1000000000000000;
+    let ONE_QUADRILLION = 1000000000000000000;
+
+    if (isNaN(responseCount) || responseCount < 0) {
+      return '0';
+    }
+    if (responseCount < ONE_THOUSAND) {
+      return responseCount.toString();
+    } else if (responseCount < ONE_MILLION) {
+      return this.formattedCount(responseCount, ONE_THOUSAND, 'K');
+    } else if (responseCount < ONE_BILLION) {
+      return this.formattedCount(responseCount, ONE_MILLION, 'M');
+    } else if (responseCount < ONE_THOUSAND_BILLION) {
+      return this.formattedCount(responseCount, ONE_BILLION, 'B');
+    } else if (responseCount < ONE_TRILLION) {
+      return this.formattedCount(responseCount, ONE_THOUSAND_BILLION, 'T');
+    } else if (responseCount < ONE_QUADRILLION) {
+      return this.formattedCount(responseCount, ONE_TRILLION, 'Q');
+    } else {
+      return responseCount.toString();
+    }
+  }
+
+  static truncateFileName = (fileName, maxLength = 30) => {
+    if (fileName.length <= maxLength) {
+      return fileName;
+    }
+
+    const start = fileName.slice(0, 11); // Take first 6 characters
+    const end = fileName.slice(-16); // Take last 12 characters
+    return `${start}...${end}`;
+  };
+
+  static truncateCustomerName = (
+    name,
+    maxLength = 18,
+    firstCharatcetCount = 6,
+    lastCharatcetCount = 6,
+  ) => {
+    if (name.length <= maxLength) {
+      return name;
+    }
+
+    const start = name.slice(0, firstCharatcetCount); // Take first 6 characters
+    const end = name.slice(-lastCharatcetCount); // Take last 12 characters
+    return `${start}...${end}`;
+  };
+
+  static reformatName(user) {
+    // Split firstName by any non-alphabetical characters and trim any spaces
+    let firstName = user.firstName.trim().split(/[^\w]+/)[0];
+    let lastName =
+      user.firstName.trim().split(/[^\w]+/)[1] || user.lastName.trim();
+
+    // Capitalize the first letter of both first and last name
+    firstName =
+      firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+    lastName =
+      lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase();
+
+    return `${firstName} ${lastName}`;
+  }
+  static reformatComplexName(name) {
+    // Split the name by non-alphabet characters, excluding hyphens
+    let nameParts = name.trim().split(/[^a-zA-Z-]+/);
+
+    // Capitalize the first letter of each part, keeping hyphenated names intact
+    nameParts = nameParts.map(part =>
+      part
+        .split('-')
+        .map(
+          subPart =>
+            subPart.charAt(0).toUpperCase() + subPart.slice(1).toLowerCase(),
+        )
+        .join('-'),
+    );
+
+    // Join the name parts back into a full name
+    return nameParts.join(' ');
+  }
+
+  static validatePhoneNumber = formattedPhoneNumber => {
+    // Check if the phone number starts with a + followed by 1-3 digits (country code)
+    const countryCodePattern = /^\+\d{1,3}/;
+    const isCountryCodeValid = countryCodePattern.test(formattedPhoneNumber);
+
+    if (!isCountryCodeValid) return false; // Invalid if country code doesn't match
+
+    // Remove the country code for further validation
+    const phoneNumber = formattedPhoneNumber
+      .replace(countryCodePattern, '')
+      .trim();
+
+    // Check if the remaining part contains only 6-14 digits
+    const phonePattern = /^\d{6,14}$/;
+    const isPhoneNumberValid = phonePattern.test(phoneNumber);
+
+    return isPhoneNumberValid;
+  };
 }

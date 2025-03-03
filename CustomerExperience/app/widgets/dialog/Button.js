@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Platform, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {Platform, StyleSheet, Text, Pressable} from 'react-native';
 
 const COLOR = Platform.OS === 'ios' ? '#007ff9' : '#169689';
 
@@ -33,16 +33,13 @@ export default class DialogButton extends React.PureComponent {
     } = this.props;
     const fontWeight = bold ? '600' : 'normal';
     return (
-      <TouchableOpacity
-        style={styles.button}
-        onPress={onPress}
-        disabled={disabled}>
+      <Pressable style={styles.button} onPress={onPress} disabled={disabled}>
         <Text
           style={[styles.text, {color: color, fontWeight: fontWeight}, style]}
           {...otherProps}>
           {Platform.OS === 'ios' ? label : label.toUpperCase()}
         </Text>
-      </TouchableOpacity>
+      </Pressable>
     );
   }
 }

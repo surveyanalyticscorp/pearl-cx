@@ -1,14 +1,7 @@
 import React from 'react';
 
-import {buttonColors, Colors, textColors} from '../styles/color.constants';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Dimensions,
-} from 'react-native';
+import {buttonColors, textColors} from '../styles/color.constants';
+import {Platform, StyleSheet, Text, Pressable, Dimensions} from 'react-native';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
@@ -22,9 +15,21 @@ const QPButton = props => {
   };
 
   return (
-    <TouchableOpacity style={style} onPress={onPress}>
+    <Pressable
+      disabled={props.disabled ?? false}
+      testID={props.testID ?? 'QPButton'}
+      style={[
+        style,
+        {
+          backgroundColor:
+            props.buttonColor ??
+            style.backgroundColor ??
+            buttonColors.backgroundColor,
+        },
+      ]}
+      onPress={onPress}>
       <Text style={textStyle}>{props.buttonText}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 export default QPButton;
@@ -36,7 +41,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: MarginConstants.tab4,
-    backgroundColor: buttonColors.backgroundColor,
   },
   text: {
     alignSelf: 'center',

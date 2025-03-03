@@ -16,10 +16,11 @@ const QPWebView = props => {
         domStorageEnabled={true}
         startInLoadingState={true}
         renderLoading={() => {
-          return <QPSpinner/>
+          return <QPSpinner />;
         }}
         showsVerticalScrollIndicator={false}
       />
+      {props.child}
     </View>
   );
 };
