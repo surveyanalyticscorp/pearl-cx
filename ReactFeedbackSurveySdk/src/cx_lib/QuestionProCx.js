@@ -2,18 +2,23 @@
  * Datta Kunde created on 09/12/21
  */
 
-import {AsyncStorage} from 'react-native';
+//import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     CX_PAYLOAD,
     CX_THEME_COLOR,
     CX_API_KEY,
     CX_SURVEY_HEADER,
+    SURVEY_TYPE,
+    CUSTOM_VAR_INDEX,
     qpString,
-    surveyUrl,
+    getSurveyUrlApi,
+    getCxTransactionSurveyApi
 } from './utils/QpConstant';
-import {postApiCall} from './api/ApiKit';
+import {postApiCall, getApiCall} from './api/ApiKit';
 import GLOBAL from './utils/global.js';
 import {makeEmailId} from './utils/qpUtils';
+import {SurveyType} from './utils/QpConstant'
 
 export const initQp = async payload => {
     console.log('Initialization payload: ' + JSON.stringify(payload));
@@ -27,6 +32,20 @@ export const initQp = async payload => {
                     console.error(`Error in initQp ${qpString.apiKeyRequired}`);
                     GLOBAL.initialized = false;
                     resolve(qpString.apiKeyRequired);
+                }
+
+                if (payload.hasOwnProperty('surveyType') || payload.surveyType) {
+                    await AsyncStorage.setItem(SURVEY_TYPE, payload.surveyType);
+                    delete payload.surveyType;
+                } else {
+                    console.error(`Error in initQp ${qpString.typeRequired}`);
+                    GLOBAL.initialized = false;
+                    resolve(qpString.typeRequired);
+                }
+          
+                if (payload.hasOwnProperty('customVarIndex') || payload.customVarIndex) {
+                    await AsyncStorage.setItem(CUSTOM_VAR_INDEX, payload.customVarIndex.toString());
+                    delete payload.customVarIndex;
                 }
 
                 if (payload.hasOwnProperty('themeColorHex') || payload.themeColorHex) {
@@ -49,9 +68,9 @@ export const initQp = async payload => {
     });
 };
 
-
 export const getSurveyUrl = async surveyId => {
     let payloadStr = await AsyncStorage.getItem(CX_PAYLOAD);
+    let customVarIndex = await AsyncStorage.getItem(CUSTOM_VAR_INDEX);
 
     let payload = JSON.parse(payloadStr);
     payload = {...payload, surveyID: surveyId};
@@ -60,9 +79,26 @@ export const getSurveyUrl = async surveyId => {
         payload.email = `${makeEmailId(15)}@questionpro.com`;
     }
 
+    if(customVarIndex){
+        let dynamic = 'custom' + customVarIndex;
+        payload = {...payload, [dynamic] : surveyId};
+    }
+
     let apiKey = await AsyncStorage.getItem(CX_API_KEY);
-    let response = await postApiCall(surveyUrl(apiKey), payload);
-    console.log('api response: ' + JSON.stringify(response));
-    return response.response;
+    let type = await AsyncStorage.getItem(SURVEY_TYPE);
+    let apiResponse;
+    if(type == SurveyType.Feedback){
+        apiResponse = await postApiCall(getCxTransactionSurveyApi(apiKey), payload);
+        if(apiResponse.response && apiResponse.response.surveyURL)
+            return apiResponse.response.surveyURL;
+        else
+            return apiResponse;
+    }else{
+        apiResponse = await getApiCall(getSurveyUrlApi(apiKey, surveyId));
+        if(apiResponse.response && apiResponse.response.surveyURL)
+            return apiResponse.response.url;
+        else
+            return apiResponse;
+    }
 };
 

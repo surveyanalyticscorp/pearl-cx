@@ -36,6 +36,11 @@ const useLogoutProcess = () => {
     AsyncStorage.clear().then(() => {
       console.log('USE_LOGOUT', 'AsyncStorage.clear() success');
 
+      global.baseUrl = '';
+      global.clfBaseUrl = '';
+      global.subscriberId = '';
+      global.bearerToken = '';
+      global.authToken = '';
       AsyncStorage.setItem(ASYNC_LOGGED_IN_ALREADY, 'true').then();
 
       console.log('USE_LOGOUT', 'Global dara removed ');

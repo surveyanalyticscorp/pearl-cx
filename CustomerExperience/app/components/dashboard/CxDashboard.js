@@ -86,7 +86,7 @@ const CxDashboard = ({route, navigation}) => {
   const {renderExitAlert, exitAlert} = useBackHandler(navigation);
 
   const statusBottomSheetRef = React.useRef();
-  const statusBottomSheetSnapPoints = ['55%', '0%'];
+  const statusBottomSheetSnapPoints = ['62%', '0%'];
   const fall = new Animated.Value(1);
 
   useEffect(() => {

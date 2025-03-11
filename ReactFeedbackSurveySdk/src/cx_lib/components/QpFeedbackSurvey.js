@@ -3,7 +3,13 @@
  */
 
 import React, {useState, useEffect} from 'react';
-import {View, ActivityIndicator, Alert, AsyncStorage} from 'react-native';
+import {
+    View, 
+    ActivityIndicator, 
+    Alert,
+    StyleSheet
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {WebView} from 'react-native-webview';
 import {getSurveyUrl} from '../QuestionProCx';
 import SurveyHeader from './SurveyHeader';
@@ -15,6 +21,7 @@ import {
     qpErrorMsg,
     qpString,
 } from '../utils/QpConstant';
+import { isValidUrl } from '../utils/qpUtils';
 
 export const QpFeedbackSurvey = props => {
     const [isLoading, setIsLoading] = useState(true);
@@ -27,16 +34,16 @@ export const QpFeedbackSurvey = props => {
         if (GLOBAL.initialized) {
             getSurveyUrl(props.surveyId).then(apiResponse => {
                 console.log('getSurveyUrl: ' + JSON.stringify(apiResponse));
-                setIsLoading(false);
-                if(apiResponse){
-                    console.log('Survey Url: '+ apiResponse.SurveyURL);
-                    setSurveyUrl(apiResponse.SurveyURL);
+                if(isValidUrl(apiResponse)){
+                    setSurveyUrl(apiResponse);
                 }else{
                     if (typeof props.onSurveyFinished === 'function') {
                         props.onSurveyFinished();
                     }
                 }
-            });
+                setIsLoading(false);
+            })
+            .catch((error) =>{console.error(error.message);});;
         } else {
             setIsLoading(false);
             try {
@@ -51,11 +58,13 @@ export const QpFeedbackSurvey = props => {
 
         AsyncStorage.getItem(CX_SURVEY_HEADER).then(surveyHeader => {
             setHeaderText(surveyHeader);
-        });
+        })
+        .catch((error) =>{console.error(error.message);});
 
         AsyncStorage.getItem(CX_THEME_COLOR).then(themeColorStr => {
             themeColorStr && setThemeColor(themeColorStr);
-        });
+        })
+        .catch((error) =>{console.error(error.message);});
     }, []);
 
     const renderDialog = () => {
@@ -129,9 +138,26 @@ export const QpFeedbackSurvey = props => {
                     }}
                 />
             )}
-            {isLoading && <ActivityIndicator size="large" color={themeColor}/>}
+            {isLoading && (
+            <ActivityIndicator 
+                style={feedbackSurveyStyle.activityIndicator}
+                size="large" 
+                color={themeColor}
+            />
+            )}
             {showAlert && renderDialog()}
         </View>
     );
 };
 
+const feedbackSurveyStyle = StyleSheet.create({
+    activityIndicator: {
+      position: 'absolute',
+      alignItems: 'center',
+      justifyContent: 'center',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+    },
+  });

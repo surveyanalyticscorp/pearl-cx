@@ -9,6 +9,7 @@ import {Colors} from '../../../../styles/color.constants';
 import StartAlignedView from '../../../../routes/commonUI/StartAlignedView';
 import EndAlignedView from '../../../../routes/commonUI/EndAlignedView';
 import {baseTextStyles} from '../../../../styles/text.styles';
+import {color} from 'react-native-reanimated';
 
 const RenderDropDownButton = ({
   text,
@@ -64,5 +65,6 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.regular,
     marginVertical: MarginConstants.tab1,
+    color: Colors.filterIconColor,
   },
 });

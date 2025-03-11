@@ -86,6 +86,7 @@
     "react-native-localize": "^2.0.3",
     "react-native-material-textfield": "git+https://github.com/javarahulsharma/react-native-material-textfield.git",
     "react-native-material-textfield-axel": "^0.14.0",
+    "react-native-material-textfield-upgraded": "^0.12.1",
     "react-native-modal": "^13.0.0",
     "react-native-notifications": "4.3.5",
     "react-native-pell-rich-editor": "^1.8.8",
