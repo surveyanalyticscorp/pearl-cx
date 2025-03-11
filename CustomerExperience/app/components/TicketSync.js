@@ -7,11 +7,20 @@ import StringUtils from '../Utils/StringUtils';
 const TicketSync = () => {
   console.log('TicketSync Rendered');
   const authToken = useSelector(state => state.global.authToken);
-  const ticketSync = useSelector(state => state.dashboard.ticketSync);
+  const hasTicketToSync = useSelector(state => state.dashboard.ticketSync);
   const {feedbackApiKey, feedbackID} = useSelector(
     state => state.global.userInfo,
   );
   const dispatch = useDispatch();
+
+  const hasValidDataToSyncTickets = () => {
+    return (
+      !StringUtils.isEmptyOrNull(global.subscriberId) &&
+      !StringUtils.isEmptyOrNull(global.clfBaseUrl) &&
+      !StringUtils.isEmptyOrNull(feedbackApiKey) &&
+      !StringUtils.isEmptyOrNull(feedbackID)
+    );
+  };
 
   const callTicketSync = useCallback(() => {
     console.log('GET_TICKET_LIST_SYNC_RECEIVED: ', 'dispatched');
@@ -28,13 +37,7 @@ const TicketSync = () => {
   }, [authToken, feedbackApiKey, feedbackID, dispatch]);
 
   useEffect(() => {
-    if (
-      ticketSync &&
-      !StringUtils.isEmptyOrNull(global.subscriberId) &&
-      !StringUtils.isEmptyOrNull(global.clfBaseUrl) &&
-      !StringUtils.isEmptyOrNull(feedbackApiKey) &&
-      !StringUtils.isEmptyOrNull(feedbackID)
-    ) {
+    if (hasTicketToSync && hasValidDataToSyncTickets()) {
       console.log(
         'TICKET_SYNC',
         global.subscriberId,
@@ -43,7 +46,7 @@ const TicketSync = () => {
       );
       callTicketSync();
     }
-  }, [callTicketSync, feedbackApiKey, feedbackID, ticketSync]);
+  }, [callTicketSync, feedbackApiKey, feedbackID, hasTicketToSync]);
   return <View testID="ticket-sync-view" />;
 };
 export default TicketSync;
