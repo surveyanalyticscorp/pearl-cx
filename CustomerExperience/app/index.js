@@ -20,6 +20,7 @@ import AppTimeTracker from './Utils/AppTimeTracker';
 import {sendAnalyticsEvent} from './Utils/AnalyticLogs';
 import {ANALYTICS_EVENTS} from './Utils/Analytic.constants';
 import AppInfo from './Utils/AppInfo';
+import {requestNotificationPermission} from './Utils/NotificationUtils';
 
 // import codePush from 'react-native-code-push';
 
@@ -90,7 +91,7 @@ const CxApp = () => {
     const unsubscribe = EStyleSheet.subscribe('build', () => {
       setStyleBuilt(true);
     });
-
+    requestNotificationPermission();
     return () => {
       currentNetworkMonitor.stop();
       AppTimeTracker.stop();

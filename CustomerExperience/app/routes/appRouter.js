@@ -92,7 +92,7 @@ const AppRouter = props => {
   useEffect(() => {
     global.baseUrl = '';
     global.subscriberId = '';
-    requestNotificationPermission();
+    // requestNotificationPermission();
     setGlobalBaseUrl();
     setGlobalSubscriberId();
     const unsubscribeLinks = dynamicLinks().onLink(handleDynamicLink);

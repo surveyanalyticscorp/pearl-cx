@@ -7,16 +7,28 @@ import {AppState, PermissionsAndroid, Platform} from 'react-native';
 import * as RootNagation from '../routes/RootNavigation';
 import {translate} from './MultilinguaUtils';
 
-export const requestNotificationPermission = async () => {
-  if (Platform.OS === 'android' && Platform.Version >= 31) {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-    );
+// export const requestNotificationPermission = async () => {
+//   if (Platform.OS === 'android' && Platform.Version >= 31) {
+//     const granted = await PermissionsAndroid.request(
+//       PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+//     );
 
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log('Notification permission granted');
-    } else {
-      console.log('Notification permission denied');
+//     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+//       console.log('Notification permission granted');
+//     } else {
+//       console.log('Notification permission denied');
+//     }
+//   }
+// };
+
+export const requestNotificationPermission = async () => {
+  if (Platform.OS === 'android') {
+    try {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      );
+    } catch (err) {
+      console.log(err);
     }
   }
 };
