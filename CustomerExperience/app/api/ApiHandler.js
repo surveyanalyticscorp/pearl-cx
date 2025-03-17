@@ -18,6 +18,16 @@ class ApiHandler {
       });
   }
 
+  callAIRouterAPI(url, apiKey, data, successCallback, errorCallback) {
+    return WebServiceHandler.postNew(url, {'api-key': apiKey}, data)
+    .then((response) => {
+      successCallback(response);
+    })
+    .catch((error) => {
+      errorCallback(error);
+    })
+  }
+
   getCXDetractorTicket(
     token,
     data = {},
@@ -46,6 +56,10 @@ class ApiHandler {
       successCallback,
       errorCallback,
     );
+  }
+
+  generateEmailWithAI(url, apiKey, data = {}, successCallback, errorCallback = () => {}) {
+    return this.callAIRouterAPI(url, apiKey, data, successCallback, errorCallback);
   }
 
   getSegmentList(token, data = {}, successCallback, errorCallback = () => {}) {

@@ -57,7 +57,7 @@ export default class WebServiceHandler {
             `URL: ${url}`,
             `Response Data: ${JSON.stringify(response)}`,
           );
-          if (response.statusCode === 200 || response.status === SUCCESS) {
+          if (response.statusCode === 200 || response.status === SUCCESS || response.error == null) {
             success(response);
           } else {
             console.log('API CALL ERROR', JSON.stringify(response));

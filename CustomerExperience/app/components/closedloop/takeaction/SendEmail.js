@@ -8,6 +8,7 @@ import {
   FlatList,
   Keyboard,
   Platform,
+  SafeAreaView,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -44,6 +45,10 @@ import TemplateIcon from './sendEmail/TemplateIcon';
 import AttachmentUploadIcon from './sendEmail/AttachmentUploadIcon';
 import RenderTicketId from './sendEmail/TicketId';
 import EmailOptions from './sendEmail/EmailOptions';
+import { apiHandler } from '../../../api/ApiHandler';
+import { AI_ROUTER_API_KEY } from '../../../api/Constant';
+import QPSpinner from '../../../widgets/QPSpinner';
+import { showLoading } from '../../../redux/actions';
 
 export const RenderHeader = () => {
   return (
@@ -86,22 +91,22 @@ export const ActionHistory = ({children}) => {
 };
 export const AttachmentView = () => {
   const {mediaFileList} = useSelector(state => state.dashboard);
-  console.log(
-    'ATTACHEMENTS_LIST',
-    JSON.stringify(JSON.stringify(mediaFileList)),
-  );
-  return (
-    <View style={styles.attachmentContainer}>
-      <Text style={styles.actionHistoryHeader}>Attachments</Text>
-      <FlatList
-        data={mediaFileList}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => {
-          return <AttachmentItem item={item} index={index} />;
-        }}
-      />
-    </View>
-  );
+  if (mediaFileList && mediaFileList.length && mediaFileList.length > 0) {
+    return (
+      <View style={styles.attachmentContainer}>
+        <Text style={styles.actionHistoryHeader}>Attachments</Text>
+        <FlatList
+          data={mediaFileList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item, index}) => {
+            return <AttachmentItem item={item} index={index} />;
+          }}
+        />
+      </View>
+    );
+  }
+  return <View/>
+  
 };
 
 export const AttachmentItem = ({item, index}) => {
@@ -129,7 +134,6 @@ export const ActionHistoryItem = () => {
   const navigation = useNavigation();
   const {summary} = useSelector(state => state.dashboard.ticketActionHistory);
   const actionDetails = summary?.data?.action ?? null;
-  console.log('SUMMARY OS', JSON.stringify(summary));
   const ticketId = useSelector(state => state.dashboard?.ticket?.id);
   if (isNull(actionDetails)) {
     return <NoActionView />;
@@ -192,7 +196,7 @@ export const SendEmail = props => {
   const defaultEmail = useSelector(
     state => state.dashboard.emailData.defaultTemplate,
   );
-  const {emailSentResponse} = useSelector(state => state.dashboard.emailData);
+  // const isLoading = useSelector(state => state.global.isLoading);
   const ticketId = JSON.stringify(props.route.params.ticketId);
   const sampleEmailBody = {
     ticketId: JSON.stringify(props.route.params.ticketId),
@@ -202,13 +206,14 @@ export const SendEmail = props => {
     attachments: [],
   };
   const [body, setBody] = useState(sampleEmailBody);
+  const [aiRouterApiCalled, setAiRouterApiCalled] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const richText = React.useRef();
-  const richTextToolBar = React.useRef();
-  const templateList = useSelector(
-    state => state.dashboard.emailData.emailTemplates,
-  );
+  const richTextToolBar = React.useRef();  
+  const {emailTemplates} = useSelector((state) => state.dashboard.emailData);
+  const {ticketActionHistory} = useSelector((state) => state.dashboard.ticketActionHistory);
 
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
@@ -224,33 +229,133 @@ export const SendEmail = props => {
     if (!isObjectEmpty(defaultEmail)) {
       setBody(state => ({
         ...state,
-        emailBody: defaultEmail?.templateText ?? '',
+        emailBody: '',
       }));
-
-      richText.current.setContentHTML(defaultEmail?.templateText ?? '');
+      richText.current.setContentHTML('');
     }
   }, [defaultEmail]);
 
-  useEffect(() => {
-    dispatch(
-      getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
-    );
+  useEffect(() => {    
+    dispatch(getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),);
     dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
-  }, []);
-  useEffect(() => {
     dispatch(getActionHistorySummary(authToken, ticketId));
     dispatch(getActionHistoryDetails(authToken, ticketId));
     setBody(sampleEmailBody);
     richText.current.setContentHTML('');
-  }, [emailSentResponse]);
+  }, []);
+
+  useEffect(() => {
+    if ((emailTemplates && emailTemplates.length && emailTemplates.length > 0)) { 
+      setIsLoading(true);
+      aiRouterAPICall();
+    }
+  }, [emailTemplates])
+
+  useEffect(() => {
+    console.log("loading state changed!!!!\n\n", isLoading);
+  }, [isLoading])
 
   const onPressTemplate = useCallback(() => {
     richText.current.dismissKeyboard();
     if (bs.current) {
       bs.current.snapTo(0);
     }
-    console.log('call');
   }, []);
+
+  const renderLoadingSpinner = () => {
+      return (
+        <View style={styles.loading}>
+          <QPSpinner />
+        </View>
+      );
+    };
+
+  const aiRouterAPICall = () => {
+    richText.current.dismissKeyboard();
+    console.log("Generating with AI!!!!!\n\n");
+    apiHandler.generateEmailWithAI("https://airouter-api-staging.questionpro.com/v1/prompt-routes",AI_ROUTER_API_KEY, {
+      "user_id": 4894850,
+      "use_case_name": "generate-email-draft",
+      "prompt_version": 1,
+      "organization_id": 4787064,
+      "data_center": "US",
+      "meta": {
+        "id": 1
+      },
+      "input_data": {
+        "messages": [
+          {
+            "key": "content",
+            "value": "JSON Draft email for customer"
+          },
+          {
+            "key": "customer",
+            "value": "Angad"
+          },
+          {
+            "key": "manager",
+            "value": "Prasad"
+          },
+          {
+            "key": "ticketDetails",
+            "value": "The table and near by area was dirty. Never coming back here again"
+          },
+          {
+            "key": "rootCauses",
+            "value": "Unclean Environment, hygiene concerns"
+          },
+           {
+            "key": "actions",
+            "value": "Assigned a dedicated cleaning staff, reported to supervisor, talked to the staff about the issue"
+          },
+           {
+            "key": "comments",
+            "value": null
+          },    
+          {
+            "key": "emailTemplates",
+            "value": [
+                {
+                    "title": "Slow Service Apology Email",
+                    "subject": "Our Apologies for the Delay – We’re Taking Action!",
+                    "templateText": "<p>Dear [Customer Name],</p><p>Thank you for dining with us at [Restaurant Name]. We sincerely apologize for the wait time you experienced. Your time is valuable, and we regret any inconvenience caused.</p><p>We’ve already taken steps to improve our service speed, including additional staff training and better order management. To make it up to you, we’d love to invite you back with a [discount/free appetizer].</p><p>Please let us know when you’d like to visit again. We appreciate your feedback and look forward to serving you better.</p><p>Best regards,</p><p>[CX Manager Name]<br>[Restaurant Name]</p>"
+                },
+                {
+                    "title": "Incorrect Order Apology Email",
+                    "subject": "We Owe You a Better Experience",
+                    "templateText": "<p>Dear [Customer Name],</p><p>We deeply regret that your order was incorrect during your visit to [Restaurant Name]. Your satisfaction is our top priority, and we are taking measures to ensure this does not happen again.</p><p>To make things right, we’d love to offer you [discount, complimentary meal, etc.]. Please let us know a convenient time to visit, and we’ll ensure your next experience is seamless.</p><p>Thank you for bringing this to our attention. We hope to see you again soon.</p><p>Sincerely,</p><p>[CX Manager Name]<br>[Restaurant Name]</p>"
+                },
+                {
+                    "title": "Staff Behavior Complaint Email",
+                    "subject": "We Apologize – Your Experience Matters to Us",
+                    "templateText": "<p>Dear [Customer Name],</p><p>We’re truly sorry for the experience you had with our staff at [Restaurant Name]. We hold our team to high standards, and your feedback helps us improve.</p><p>We have addressed this matter with our team and will ensure that every guest receives the warm hospitality they deserve. To show our appreciation, we’d love to offer you [discount, free meal, etc.].</p><p>Please let us know when you’d like to visit again. We appreciate the opportunity to serve you better.</p><p>Warm regards,</p><p>[CX Manager Name]<br>[Restaurant Name]</p>"
+                },
+                {
+                    "title": "Cleanliness Complaint Response",
+                    "subject": "We’re Committed to a Cleaner Environment",
+                    "templateText": "<p>Dear [Customer Name],</p><p>Thank you for sharing your feedback about our restaurant’s cleanliness. We take hygiene and sanitation very seriously, and we regret that we fell short of expectations during your visit.</p><p>We have reinforced our cleaning protocols and added additional checks to ensure a spotless dining experience. We’d love to invite you back and show you the improvements we’ve made.</p><p>Please let us know how we can make it up to you. Your feedback is invaluable to us.</p><p>Best,</p><p>[CX Manager Name]<br>[Restaurant Name]</p>"
+                },
+                {
+                    "title": "Billing Issue Resolution Email",
+                    "subject": "Let’s Make It Right – Billing Correction",
+                    "templateText": "<p>Dear [Customer Name],</p><p>We sincerely apologize for the billing issue you encountered at [Restaurant Name]. This is not the experience we want for our valued guests.</p><p>We have reviewed the matter and corrected the error. You will receive [refund, credit, discount], and we’ve taken steps to prevent this from happening again.</p><p>If there’s anything else we can do to make up for the inconvenience, please let us know. We appreciate your patience and hope to welcome you back soon.</p><p>Sincerely,</p><p>[CX Manager Name]<br>[Restaurant Name]</p>"
+                }
+            ]
+        }
+        ]
+      }
+    }, 
+    response => {
+      console.log("AI Router response",response)
+      richText.current.setContentHTML(response.result.documents[0].output[0].value.body)      
+      onChangeSubject(response.result.documents[0].output[0].value.subject);
+      setIsLoading(false)
+    },
+    error => {
+      setIsLoading(false)
+      console.log(error)
+    })
+  }
 
   const onChangeSubject = text => {
     setBody(state => ({...state, subject: text}));
@@ -273,7 +378,7 @@ export const SendEmail = props => {
     return (
       <View style={styles.contentContainer}>
         <SelectEmailTemplate
-          data={templateList}
+          data={emailTemplates}
           handleOnPress={item => handleTemplateSelectAction(item)}
         />
       </View>
@@ -312,56 +417,65 @@ export const SendEmail = props => {
     };
   }, []);
 
+  const onGenerateWithAIPressed = () => {
+    aiRouterAPICall()
+  }
+
   return (
-    <View style={styles.container}>
-      <KeyboardAwareScrollView enableOnAndroid={true}>
-        <RenderHeader />
+    <SafeAreaView style={styles.container}>
+        
+        <KeyboardAwareScrollView enableOnAndroid={true}>
+          <RenderHeader />
 
-        <EmailOptions body={body} onPressTemplate={onPressTemplate} />
-        <SendEmailTo />
-        <EmailSubject
-          body={body}
-          closeBottomSheet={closeBottomSheet}
-          onChangeSubject={onChangeSubject}
-        />
-        <RichEditor
-          ref={richText}
-          useContainer
-          disabled={false}
-          initialFocus={false}
-          onChange={onChangeEmailBody}
-          placeholder={translate('action_email.email_body')}
-          placeholderTextColor={Colors.borderColor}
-          androidHardwareAccelerationDisabled={true}
-          initialHeight={350}
-          style={styles.textInput}
-          setContentHTML={body.emailBody}
-          onFocus={closeBottomSheet}
-        />
+          <EmailOptions body={body} onPressTemplate={onPressTemplate}/>
+          <SendEmailTo />
+          <EmailSubject
+            body={body}
+            closeBottomSheet={closeBottomSheet}
+            onChangeSubject={onChangeSubject}
+          />
+          <Pressable onPress={onGenerateWithAIPressed}>
+            <Text style={[styles.headerText, {fontSize: TextSizes.mediumText}]}>Click here to genetate with AI.</Text>
+          </Pressable>
+          <RichEditor
+            ref={richText}
+            useContainer
+            disabled={false}
+            initialFocus={false}
+            onChange={onChangeEmailBody}
+            placeholder={translate('action_email.email_body')}
+            placeholderTextColor={Colors.borderColor}
+            androidHardwareAccelerationDisabled={true}
+            initialHeight={350}
+            style={styles.textInput}
+            setContentHTML={body.emailBody}
+            onFocus={closeBottomSheet}
+          />
 
-        <AttachmentView />
-        <ActionHistory>
-          <ActionHistoryItem />
-        </ActionHistory>
-      </KeyboardAwareScrollView>
+          <AttachmentView />
+          <ActionHistory>
+            <ActionHistoryItem />
+          </ActionHistory>
+        </KeyboardAwareScrollView>
 
-      {isKeyboardVisible && (
-        <CustomKeyboardToolbar
-          toolbarRef={richTextToolBar}
-          richTextfieldRef={richText}
-        />
-      )}
-      {!isKeyboardVisible && (
-        <BottomSheet
-          ref={bs}
-          snapPoints={bsSnapPoints}
-          initialSnap={bsSnapPoints.length - 1}
-          renderContent={renderSelectTemplate}
-          renderHeader={renderHeader}
-          callbackNode={fall}
-        />
-      )}
-    </View>
+        {isKeyboardVisible && (
+          <CustomKeyboardToolbar
+            toolbarRef={richTextToolBar}
+            richTextfieldRef={richText}
+          />
+        )}
+        {!isKeyboardVisible && (
+          <BottomSheet
+            ref={bs}
+            snapPoints={bsSnapPoints}
+            initialSnap={bsSnapPoints.length - 1}
+            renderContent={renderSelectTemplate}
+            renderHeader={renderHeader}
+            callbackNode={fall}
+          />
+        )}
+        {isLoading && renderLoadingSpinner()}
+    </SafeAreaView>
   );
 };
 
@@ -561,5 +675,14 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: MarginConstants.tab1,
     marginBottom: MarginConstants.halfTab,
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
