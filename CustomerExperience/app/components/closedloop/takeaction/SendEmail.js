@@ -248,11 +248,7 @@ export const SendEmail = props => {
   }, []);
 
   useEffect(() => {
-    if (!isAIRouterApiCalled && (emailTemplates && emailTemplates.length && emailTemplates.length > 0)) { 
-      setIsLoading(true);
-      aiRouterAPICall();
-      setIsAIRouterApiCalled(true);
-    }
+    aiRouterAPICall();
   }, [emailTemplates])
 
   const onPressTemplate = useCallback(() => {
@@ -279,66 +275,70 @@ export const SendEmail = props => {
   }
 
   const aiRouterAPICall = () => {
-    richText.current.dismissKeyboard();
-    const extractedTemplates = emailTemplates.map(({ title, subject, templateText }) => ({
-      title,
-      subject,
-      templateText
-  }));
-    apiHandler.generateEmailWithAI(AI_ROUTER_API_URL,AI_ROUTER_API_KEY, {
-      "user_id": 4894850,
-      "use_case_name": "generate-email-draft",
-      "prompt_version": 1,
-      "organization_id": 4787064,
-      "data_center": "US",
-      "meta": {
-        "id": 1
-      },
-      "input_data": {
-        "messages": [
-          {
-            "key": "content",
-            "value": "JSON Draft email for customer"
-          },
-          {
-            "key": "customer",
-            "value": customerName
-          },
-          {
-            "key": "manager",
-            "value": "Prasad"
-          },
-          {
-            "key": "ticketDetails",
-            "value": "The table and near by area was dirty. Never coming back here again"
-          },
-          {
-            "key": "rootCauses",
-            "value": "Unclean Environment, hygiene concerns"
-          },
-           {
-            "key": "actions",
-            "value": "Assigned a dedicated cleaning staff, reported to supervisor, talked to the staff about the issue"
-          },
-           {
-            "key": "comments",
-            "value": null
-          },    
-          {
-            "key": "emailTemplates",
-            "value": extractedTemplates
+    if (!isAIRouterApiCalled && (emailTemplates && emailTemplates.length && emailTemplates.length > 0)) { 
+      richText.current.dismissKeyboard();
+      setIsLoading(true);
+      const extractedTemplates = emailTemplates.map(({ title, subject, templateText }) => ({
+        title,
+        subject,
+        templateText
+      }));
+      apiHandler.generateEmailWithAI(AI_ROUTER_API_URL,AI_ROUTER_API_KEY, {
+        "user_id": 4894850,
+        "use_case_name": "generate-email-draft",
+        "prompt_version": 1,
+        "organization_id": 4787064,
+        "data_center": "US",
+        "meta": {
+          "id": 1
+        },
+        "input_data": {
+          "messages": [
+            {
+              "key": "content",
+              "value": "JSON Draft email for customer"
+            },
+            {
+              "key": "customer",
+              "value": customerName
+            },
+            {
+              "key": "manager",
+              "value": "Prasad"
+            },
+            {
+              "key": "ticketDetails",
+              "value": "The table and near by area was dirty. Never coming back here again"
+            },
+            {
+              "key": "rootCauses",
+              "value": "Unclean Environment, hygiene concerns"
+            },
+             {
+              "key": "actions",
+              "value": "Assigned a dedicated cleaning staff, reported to supervisor, talked to the staff about the issue"
+            },
+             {
+              "key": "comments",
+              "value": null
+            },    
+            {
+              "key": "emailTemplates",
+              "value": extractedTemplates
+          }
+          ]
         }
-        ]
-      }
-    }, 
-    response => {
-      richText.current.setContentHTML(response.result.documents[0].output[0].value.body)      
-      onChangeSubject(response.result.documents[0].output[0].value.subject);
-      setIsLoading(false)
-    },
-    error => {
-      setIsLoading(false)
-    })
+      }, 
+      response => {
+        richText.current.setContentHTML(response.result.documents[0].output[0].value.body)      
+        onChangeSubject(response.result.documents[0].output[0].value.subject);
+        setIsLoading(false)
+      },
+      error => {
+        setIsLoading(false)
+      })
+      setIsAIRouterApiCalled(true);
+    }
   }
 
   const onChangeSubject = text => {
@@ -400,11 +400,7 @@ export const SendEmail = props => {
       keyboardDidHideListener.remove();
     };
   }, []);
-
-  const onGenerateWithAIPressed = () => {
-    aiRouterAPICall()
-  }
-
+  
   return (
     <SafeAreaView style={styles.container}>
         
@@ -418,7 +414,10 @@ export const SendEmail = props => {
             closeBottomSheet={closeBottomSheet}
             onChangeSubject={onChangeSubject}
           />
-          <Pressable onPress={onGenerateWithAIPressed}>
+          <Pressable onPress={() => {
+            setIsAIRouterApiCalled(false)
+            aiRouterAPICall()
+            }}>
             <Text style={[styles.headerText, {fontSize: TextSizes.mediumText}]}>Click here to genetate with AI.</Text>
           </Pressable>
           <RichEditor
