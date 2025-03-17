@@ -46,7 +46,7 @@ import AttachmentUploadIcon from './sendEmail/AttachmentUploadIcon';
 import RenderTicketId from './sendEmail/TicketId';
 import EmailOptions from './sendEmail/EmailOptions';
 import { apiHandler } from '../../../api/ApiHandler';
-import { AI_ROUTER_API_KEY } from '../../../api/Constant';
+import { AI_ROUTER_API_KEY, AI_ROUTER_API_URL } from '../../../api/Constant';
 import QPSpinner from '../../../widgets/QPSpinner';
 import { showLoading } from '../../../redux/actions';
 
@@ -197,6 +197,7 @@ export const SendEmail = props => {
     state => state.dashboard.emailData.defaultTemplate,
   );
   // const isLoading = useSelector(state => state.global.isLoading);
+  console.log("props.route.params",props.route.params)
   const ticketId = JSON.stringify(props.route.params.ticketId);
   const sampleEmailBody = {
     ticketId: JSON.stringify(props.route.params.ticketId),
@@ -206,14 +207,16 @@ export const SendEmail = props => {
     attachments: [],
   };
   const [body, setBody] = useState(sampleEmailBody);
-  const [aiRouterApiCalled, setAiRouterApiCalled] = useState(false);
+  const [isAIRouterApiCalled, setIsAIRouterApiCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const richText = React.useRef();
   const richTextToolBar = React.useRef();  
   const {emailTemplates} = useSelector((state) => state.dashboard.emailData);
-  const {ticketActionHistory} = useSelector((state) => state.dashboard.ticketActionHistory);
+  const {ticketComments} = useSelector((state) => state.dashboard);
+  const {rootCauseList} = useSelector((state) => state.dashboard);
+  const  customerName = useSelector((state) => state.dashboard?.ticket?.panelMember?.name);
 
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
@@ -245,15 +248,12 @@ export const SendEmail = props => {
   }, []);
 
   useEffect(() => {
-    if ((emailTemplates && emailTemplates.length && emailTemplates.length > 0)) { 
+    if (!isAIRouterApiCalled && (emailTemplates && emailTemplates.length && emailTemplates.length > 0)) { 
       setIsLoading(true);
       aiRouterAPICall();
+      setIsAIRouterApiCalled(true);
     }
   }, [emailTemplates])
-
-  useEffect(() => {
-    console.log("loading state changed!!!!\n\n", isLoading);
-  }, [isLoading])
 
   const onPressTemplate = useCallback(() => {
     richText.current.dismissKeyboard();
@@ -270,10 +270,22 @@ export const SendEmail = props => {
       );
     };
 
+  const getRequestParamsForAiRouterApiCall = () => {
+    const extractedTemplates = emailTemplates.map(({ title, subject, templateText }) => ({
+      title,
+      subject,
+      templateText
+  }));
+  }
+
   const aiRouterAPICall = () => {
     richText.current.dismissKeyboard();
-    console.log("Generating with AI!!!!!\n\n");
-    apiHandler.generateEmailWithAI("https://airouter-api-staging.questionpro.com/v1/prompt-routes",AI_ROUTER_API_KEY, {
+    const extractedTemplates = emailTemplates.map(({ title, subject, templateText }) => ({
+      title,
+      subject,
+      templateText
+  }));
+    apiHandler.generateEmailWithAI(AI_ROUTER_API_URL,AI_ROUTER_API_KEY, {
       "user_id": 4894850,
       "use_case_name": "generate-email-draft",
       "prompt_version": 1,
@@ -290,7 +302,7 @@ export const SendEmail = props => {
           },
           {
             "key": "customer",
-            "value": "Angad"
+            "value": customerName
           },
           {
             "key": "manager",
@@ -314,46 +326,18 @@ export const SendEmail = props => {
           },    
           {
             "key": "emailTemplates",
-            "value": [
-                {
-                    "title": "Slow Service Apology Email",
-                    "subject": "Our Apologies for the Delay – We’re Taking Action!",
-                    "templateText": "<p>Dear [Customer Name],</p><p>Thank you for dining with us at [Restaurant Name]. We sincerely apologize for the wait time you experienced. Your time is valuable, and we regret any inconvenience caused.</p><p>We’ve already taken steps to improve our service speed, including additional staff training and better order management. To make it up to you, we’d love to invite you back with a [discount/free appetizer].</p><p>Please let us know when you’d like to visit again. We appreciate your feedback and look forward to serving you better.</p><p>Best regards,</p><p>[CX Manager Name]<br>[Restaurant Name]</p>"
-                },
-                {
-                    "title": "Incorrect Order Apology Email",
-                    "subject": "We Owe You a Better Experience",
-                    "templateText": "<p>Dear [Customer Name],</p><p>We deeply regret that your order was incorrect during your visit to [Restaurant Name]. Your satisfaction is our top priority, and we are taking measures to ensure this does not happen again.</p><p>To make things right, we’d love to offer you [discount, complimentary meal, etc.]. Please let us know a convenient time to visit, and we’ll ensure your next experience is seamless.</p><p>Thank you for bringing this to our attention. We hope to see you again soon.</p><p>Sincerely,</p><p>[CX Manager Name]<br>[Restaurant Name]</p>"
-                },
-                {
-                    "title": "Staff Behavior Complaint Email",
-                    "subject": "We Apologize – Your Experience Matters to Us",
-                    "templateText": "<p>Dear [Customer Name],</p><p>We’re truly sorry for the experience you had with our staff at [Restaurant Name]. We hold our team to high standards, and your feedback helps us improve.</p><p>We have addressed this matter with our team and will ensure that every guest receives the warm hospitality they deserve. To show our appreciation, we’d love to offer you [discount, free meal, etc.].</p><p>Please let us know when you’d like to visit again. We appreciate the opportunity to serve you better.</p><p>Warm regards,</p><p>[CX Manager Name]<br>[Restaurant Name]</p>"
-                },
-                {
-                    "title": "Cleanliness Complaint Response",
-                    "subject": "We’re Committed to a Cleaner Environment",
-                    "templateText": "<p>Dear [Customer Name],</p><p>Thank you for sharing your feedback about our restaurant’s cleanliness. We take hygiene and sanitation very seriously, and we regret that we fell short of expectations during your visit.</p><p>We have reinforced our cleaning protocols and added additional checks to ensure a spotless dining experience. We’d love to invite you back and show you the improvements we’ve made.</p><p>Please let us know how we can make it up to you. Your feedback is invaluable to us.</p><p>Best,</p><p>[CX Manager Name]<br>[Restaurant Name]</p>"
-                },
-                {
-                    "title": "Billing Issue Resolution Email",
-                    "subject": "Let’s Make It Right – Billing Correction",
-                    "templateText": "<p>Dear [Customer Name],</p><p>We sincerely apologize for the billing issue you encountered at [Restaurant Name]. This is not the experience we want for our valued guests.</p><p>We have reviewed the matter and corrected the error. You will receive [refund, credit, discount], and we’ve taken steps to prevent this from happening again.</p><p>If there’s anything else we can do to make up for the inconvenience, please let us know. We appreciate your patience and hope to welcome you back soon.</p><p>Sincerely,</p><p>[CX Manager Name]<br>[Restaurant Name]</p>"
-                }
-            ]
+            "value": extractedTemplates
         }
         ]
       }
     }, 
     response => {
-      console.log("AI Router response",response)
       richText.current.setContentHTML(response.result.documents[0].output[0].value.body)      
       onChangeSubject(response.result.documents[0].output[0].value.subject);
       setIsLoading(false)
     },
     error => {
       setIsLoading(false)
-      console.log(error)
     })
   }
 
