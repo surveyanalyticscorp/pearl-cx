@@ -6,8 +6,6 @@ import {
   View,
   Pressable,
   FlatList,
-  Keyboard,
-  Platform,
   SafeAreaView,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
@@ -25,31 +23,21 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   getActionHistoryDetails,
   getActionHistorySummary,
-  getDefaultEmailTemplate,
-  getEmailTemplates,
-  postUploadFile,
-  sendEmail,
 } from '../../../redux/actions/closedloop.actions';
 import StringUtils from '../../../Utils/StringUtils';
 import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
-import DocumentPicker from 'react-native-document-picker';
 import {isNull} from 'lodash';
-import {AttachmentIcon} from '../../../Utils/IconUtils';
+import {AttachmentIcon, MaterialIcons} from '../../../Utils/IconUtils';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {useNavigation} from '@react-navigation/native';
-import SendIcon from './sendEmail/SendIcon';
 import SendEmailTo from './sendEmail/SendEmailTo';
-import TemplateIcon from './sendEmail/TemplateIcon';
-import AttachmentUploadIcon from './sendEmail/AttachmentUploadIcon';
-import RenderTicketId from './sendEmail/TicketId';
 import EmailOptions from './sendEmail/EmailOptions';
 import {apiHandler} from '../../../api/ApiHandler';
 import {AI_ROUTER_API_KEY, AI_ROUTER_API_URL} from '../../../api/Constant';
 import QPSpinner from '../../../widgets/QPSpinner';
-import {showLoading} from '../../../redux/actions';
-import QPTextField from '../../../widgets/TextField';
+import IonIcons from 'react-native-vector-icons/Ionicons';
 
 export const RenderHeader = () => {
   return (
@@ -162,6 +150,11 @@ export const AttachmentItem = ({item, index}) => {
       <Text numberOfLines={1} style={styles.attachmentText}>
         {StringUtils.truncateFileName(item.fileName)}
       </Text>
+      <Pressable style={{alignSelf: 'flex-end'}} onPress={() => {
+
+      }}>
+        <IonIcons name="close" size={20} color={Colors.filterIconColor} />
+      </Pressable>
     </Pressable>
   );
 };
@@ -358,7 +351,7 @@ export const SendEmail = props => {
       },
       response => {
         richText.current.setContentHTML(
-          response.result.documents[0].output[0].value.body,
+          response.result.documents[0].output[0].value.body
         );
         onChangeSubject(response.result.documents[0].output[0].value.subject);
         onChangeEmailBody(response.result.documents[0].output[0].value.body);
@@ -396,6 +389,7 @@ export const SendEmail = props => {
           data={emailTemplates}
           handleOnPress={item => handleTemplateSelectAction(item)}
           handleOnPressGenarateWithAI={() => {
+            setPromptVisibility(true);
             closeBottomSheet();
             aiRouterAPICall();
           }}
@@ -436,7 +430,7 @@ export const SendEmail = props => {
           placeholder={translate('action_email.email_body')}
           placeholderTextColor={Colors.borderColor}
           androidHardwareAccelerationDisabled={true}
-          initialHeight={320}
+          initialHeight={350}
           style={styles.textInput}
           editorStyle={{
             backgroundColor: isBottomSheetVisible
@@ -447,7 +441,7 @@ export const SendEmail = props => {
           onFocus={closeBottomSheet}
           />
           {isLoading && renderLoadingSpinner()}
-          <View style={styles.devider} />
+          {!isPromptVisible && <View style={styles.devider} />}
           {isPromptVisible && !isLoading && (
             <AIPrompt
               onPress={userPrompt => {
@@ -456,7 +450,7 @@ export const SendEmail = props => {
               }}
             />
           )}
-          <AttachmentView />
+          {!isLoading && <AttachmentView />}
           </KeyboardAwareScrollView>
           {isBottomSheetVisible && (
             <BottomSheet
@@ -478,9 +472,13 @@ export const SendEmail = props => {
     const [userPrompt, setUserPrompt] = useState('');
     return (
       <View style={styles.instructionContainer}>
+        <MaterialIcons 
+          name={'auto-fix-high'} 
+          style={{paddingRight: PaddingConstants.halfTab}}
+        />
         <TextInput
           autoCorrect={false}
-          keyboardType="email-address"
+          spellCheck={false}
           textContentType="none"
           onChangeText={text => setUserPrompt(text)}
           style={styles.instructionInput}
@@ -719,10 +717,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: PaddingConstants.tab1,
+    marginHorizontal: MarginConstants.halfTab,
     borderWidth: 1,
     borderColor: Colors.darkGrey,
     borderRadius: 5,
-    paddingHorizontal: PaddingConstants.tab1_2x,
   },
   instructionInput: {
     flex: 1,
@@ -733,7 +731,8 @@ const styles = StyleSheet.create({
   },
   generateButton: {
     backgroundColor: Colors.accentLight,
-    padding: PaddingConstants.tab1,
+    paddingVertical: PaddingConstants.halfTab,
+    paddingHorizontal: PaddingConstants.tab1,
     borderRadius: 5,
   },
   generateButtonText: {
