@@ -45,10 +45,10 @@ import TemplateIcon from './sendEmail/TemplateIcon';
 import AttachmentUploadIcon from './sendEmail/AttachmentUploadIcon';
 import RenderTicketId from './sendEmail/TicketId';
 import EmailOptions from './sendEmail/EmailOptions';
-import { apiHandler } from '../../../api/ApiHandler';
-import { AI_ROUTER_API_KEY, AI_ROUTER_API_URL } from '../../../api/Constant';
+import {apiHandler} from '../../../api/ApiHandler';
+import {AI_ROUTER_API_KEY, AI_ROUTER_API_URL} from '../../../api/Constant';
 import QPSpinner from '../../../widgets/QPSpinner';
-import { showLoading } from '../../../redux/actions';
+import {showLoading} from '../../../redux/actions';
 
 export const RenderHeader = () => {
   return (
@@ -105,8 +105,7 @@ export const AttachmentView = () => {
       </View>
     );
   }
-  return <View/>
-  
+  return <View />;
 };
 
 export const AttachmentItem = ({item, index}) => {
@@ -197,7 +196,7 @@ export const SendEmail = props => {
     state => state.dashboard.emailData.defaultTemplate,
   );
   // const isLoading = useSelector(state => state.global.isLoading);
-  console.log("props.route.params",props.route.params)
+  console.log('props.route.params', props.route.params);
   const ticketId = JSON.stringify(props.route.params.ticketId);
   const sampleEmailBody = {
     ticketId: JSON.stringify(props.route.params.ticketId),
@@ -212,13 +211,15 @@ export const SendEmail = props => {
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const richText = React.useRef();
-  const richTextToolBar = React.useRef();  
-  const {emailTemplates} = useSelector((state) => state.dashboard.emailData);
-  const {rootCauseList} = useSelector((state) => state.dashboard);
-  const {rootCauseActions} = useSelector((state) => state.dashboard.ticket);
-  const {comment} = useSelector((state) => state.dashboard.ticket);
-  const  customerName = useSelector((state) => state.dashboard?.ticket?.panelMember?.name);
-  const  {userInfo} = useSelector((state) => state.global);
+  const richTextToolBar = React.useRef();
+  const {emailTemplates} = useSelector(state => state.dashboard.emailData);
+  const {rootCauseList} = useSelector(state => state.dashboard);
+  const {rootCauseActions} = useSelector(state => state.dashboard.ticket);
+  const {comment} = useSelector(state => state.dashboard.ticket);
+  const customerName = useSelector(
+    state => state.dashboard?.ticket?.panelMember?.name,
+  );
+  const {userInfo} = useSelector(state => state.global);
 
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
@@ -240,8 +241,10 @@ export const SendEmail = props => {
     }
   }, [defaultEmail]);
 
-  useEffect(() => {    
-    dispatch(getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),);
+  useEffect(() => {
+    dispatch(
+      getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
+    );
     dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
     dispatch(getActionHistorySummary(authToken, ticketId));
     dispatch(getActionHistoryDetails(authToken, ticketId));
@@ -251,7 +254,7 @@ export const SendEmail = props => {
 
   useEffect(() => {
     aiRouterAPICall();
-  }, [emailTemplates])
+  }, [emailTemplates]);
 
   const onPressTemplate = useCallback(() => {
     richText.current.dismissKeyboard();
@@ -261,88 +264,100 @@ export const SendEmail = props => {
   }, []);
 
   const renderLoadingSpinner = () => {
-      return (
-        <View style={styles.loading}>
-          <QPSpinner 
-            spinnerText={"Crafting your email with AI..."}
-          />
-        </View>
-      );
-    };
+    return (
+      <View style={styles.loading}>
+        <QPSpinner spinnerText={'Crafting your email with AI...'} />
+      </View>
+    );
+  };
 
   const aiRouterAPICall = () => {
-    if (!isAIRouterApiCalled && (emailTemplates && emailTemplates.length && emailTemplates.length > 0)) { 
+    if (
+      !isAIRouterApiCalled &&
+      emailTemplates &&
+      emailTemplates.length &&
+      emailTemplates.length > 0
+    ) {
       richText.current.dismissKeyboard();
       setIsLoading(true);
-      const extractedTemplates = emailTemplates.map(({ title, subject, templateText }) => ({
-        title,
-        subject,
-        templateText
-      }));
+      const extractedTemplates = emailTemplates.map(
+        ({title, subject, templateText}) => ({
+          title,
+          subject,
+          templateText,
+        }),
+      );
       const extractedRootCauses = rootCauseList.map(({title}) => ({
-        title
+        title,
       }));
       const extractedActions = rootCauseActions.map(({actionName}) => ({
-        actionName
+        actionName,
       }));
-      
-      apiHandler.generateEmailWithAI(AI_ROUTER_API_URL,AI_ROUTER_API_KEY, {
-        "user_id": 4894850,
-        "use_case_name": "generate-email-draft",
-        "prompt_version": 1,
-        "organization_id": 4787064,
-        "data_center": "US",
-        "meta": {
-          "id": 1
+
+      apiHandler.generateEmailWithAI(
+        AI_ROUTER_API_URL,
+        AI_ROUTER_API_KEY,
+        {
+          user_id: 4894850,
+          use_case_name: 'generate-email-draft',
+          prompt_version: 1,
+          organization_id: 4787064,
+          data_center: 'US',
+          meta: {
+            id: 1,
+          },
+          input_data: {
+            messages: [
+              {
+                key: 'content',
+                value: 'JSON Draft email for customer',
+              },
+              {
+                key: 'customer',
+                value: customerName,
+              },
+              {
+                key: 'manager',
+                value: userInfo.firstName + '\t' + userInfo.lastName,
+              },
+              {
+                key: 'ticketDetails',
+                value: comment,
+              },
+              {
+                key: 'rootCauses',
+                value: extractedRootCauses,
+              },
+              {
+                key: 'actions',
+                value: extractedActions,
+              },
+              {
+                key: 'comments',
+                value: null,
+              },
+              {
+                key: 'emailTemplates',
+                value: extractedTemplates,
+              },
+            ],
+          },
         },
-        "input_data": {
-          "messages": [
-            {
-              "key": "content",
-              "value": "JSON Draft email for customer"
-            },
-            {
-              "key": "customer",
-              "value": customerName
-            },
-            {
-              "key": "manager",
-              "value": userInfo.firstName + "\t" + userInfo.lastName
-            },
-            {
-              "key": "ticketDetails",
-              "value": comment
-            },
-            {
-              "key": "rootCauses",
-              "value": extractedRootCauses
-            },
-             {
-              "key": "actions",
-              "value": extractedActions
-            },
-             {
-              "key": "comments",
-              "value": null
-            },    
-            {
-              "key": "emailTemplates",
-              "value": extractedTemplates
-          }
-          ]
-        }
-      }, 
-      response => {
-        richText.current.setContentHTML(response.result.documents[0].output[0].value.body)      
-        onChangeSubject(response.result.documents[0].output[0].value.subject);
-        setIsLoading(false)
-      },
-      error => {
-        setIsLoading(false)
-      })
+        response => {
+          richText.current.setContentHTML(
+            response.result.documents[0].output[0].value.body,
+          );
+          onChangeSubject(response.result.documents[0].output[0].value.subject);
+          onChangeEmailBody(response.result.documents[0].output[0].value.body);
+          setIsLoading(false);
+        },
+        error => {
+          setIsLoading(false);
+        },
+      );
       setIsAIRouterApiCalled(true);
     }
-  }
+  };
 
   const onChangeSubject = text => {
     setBody(state => ({...state, subject: text}));
@@ -403,64 +418,66 @@ export const SendEmail = props => {
       keyboardDidHideListener.remove();
     };
   }, []);
-  
+
   return (
     <SafeAreaView style={styles.container}>
-        
-        <KeyboardAwareScrollView enableOnAndroid={true}>
-          <RenderHeader />
+      <KeyboardAwareScrollView enableOnAndroid={true}>
+        <RenderHeader />
 
-          <EmailOptions body={body} onPressTemplate={onPressTemplate}/>
-          <SendEmailTo />
-          <EmailSubject
-            body={body}
-            closeBottomSheet={closeBottomSheet}
-            onChangeSubject={onChangeSubject}
-          />
-          <Pressable onPress={() => {
-            setIsAIRouterApiCalled(false)
-            aiRouterAPICall()
-            }}>
-            <Text style={[styles.headerText, {fontSize: TextSizes.mediumText}]}>Click here to genetate with AI.</Text>
-          </Pressable>
-          <RichEditor
-            ref={richText}
-            useContainer
-            disabled={false}
-            initialFocus={false}
-            onChange={onChangeEmailBody}
-            placeholder={translate('action_email.email_body')}
-            placeholderTextColor={Colors.borderColor}
-            androidHardwareAccelerationDisabled={true}
-            initialHeight={350}
-            style={styles.textInput}
-            setContentHTML={body.emailBody}
-            onFocus={closeBottomSheet}
-          />
+        <EmailOptions body={body} onPressTemplate={onPressTemplate} />
+        <SendEmailTo />
+        <EmailSubject
+          body={body}
+          closeBottomSheet={closeBottomSheet}
+          onChangeSubject={onChangeSubject}
+        />
+        <Pressable
+          onPress={() => {
+            setIsAIRouterApiCalled(false);
+            aiRouterAPICall();
+          }}>
+          <Text style={[styles.headerText, {fontSize: TextSizes.mediumText}]}>
+            Click here to genetate with AI.
+          </Text>
+        </Pressable>
+        <RichEditor
+          ref={richText}
+          useContainer
+          disabled={false}
+          initialFocus={false}
+          onChange={onChangeEmailBody}
+          placeholder={translate('action_email.email_body')}
+          placeholderTextColor={Colors.borderColor}
+          androidHardwareAccelerationDisabled={true}
+          initialHeight={350}
+          style={styles.textInput}
+          setContentHTML={body.emailBody}
+          onFocus={closeBottomSheet}
+        />
 
-          <AttachmentView />
-          <ActionHistory>
-            <ActionHistoryItem />
-          </ActionHistory>
-        </KeyboardAwareScrollView>
+        <AttachmentView />
+        <ActionHistory>
+          <ActionHistoryItem />
+        </ActionHistory>
+      </KeyboardAwareScrollView>
 
-        {isKeyboardVisible && (
-          <CustomKeyboardToolbar
-            toolbarRef={richTextToolBar}
-            richTextfieldRef={richText}
-          />
-        )}
-        {!isKeyboardVisible && (
-          <BottomSheet
-            ref={bs}
-            snapPoints={bsSnapPoints}
-            initialSnap={bsSnapPoints.length - 1}
-            renderContent={renderSelectTemplate}
-            renderHeader={renderHeader}
-            callbackNode={fall}
-          />
-        )}
-        {isLoading && renderLoadingSpinner()}
+      {isKeyboardVisible && (
+        <CustomKeyboardToolbar
+          toolbarRef={richTextToolBar}
+          richTextfieldRef={richText}
+        />
+      )}
+      {!isKeyboardVisible && (
+        <BottomSheet
+          ref={bs}
+          snapPoints={bsSnapPoints}
+          initialSnap={bsSnapPoints.length - 1}
+          renderContent={renderSelectTemplate}
+          renderHeader={renderHeader}
+          callbackNode={fall}
+        />
+      )}
+      {isLoading && renderLoadingSpinner()}
     </SafeAreaView>
   );
 };
