@@ -29,7 +29,7 @@ import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import {isNull} from 'lodash';
-import {AttachmentIcon, MaterialIcons} from '../../../Utils/IconUtils';
+import {AttachmentIcon, IonIcon, MaterialIcons} from '../../../Utils/IconUtils';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {useNavigation} from '@react-navigation/native';
 import SendEmailTo from './sendEmail/SendEmailTo';
@@ -37,7 +37,6 @@ import EmailOptions from './sendEmail/EmailOptions';
 import {apiHandler} from '../../../api/ApiHandler';
 import {AI_ROUTER_API_KEY, AI_ROUTER_API_URL} from '../../../api/Constant';
 import QPSpinner from '../../../widgets/QPSpinner';
-import IonIcons from 'react-native-vector-icons/Ionicons';
 
 export const RenderHeader = () => {
   return (
@@ -153,7 +152,7 @@ export const AttachmentItem = ({item, index}) => {
       <Pressable style={{alignSelf: 'flex-end'}} onPress={() => {
 
       }}>
-        <IonIcons name="close" size={20} color={Colors.filterIconColor} />
+        <IonIcon name="close" size={20} color={Colors.filterIconColor} />
       </Pressable>
     </Pressable>
   );
@@ -473,13 +472,16 @@ export const SendEmail = props => {
     return (
       <View style={styles.instructionContainer}>
         <MaterialIcons 
+          size={22}
           name={'auto-fix-high'} 
           style={{paddingRight: PaddingConstants.halfTab}}
         />
         <TextInput
           autoCorrect={false}
-          spellCheck={false}
+          textAlignVertical={"top"}
+          spellCheck={false}          
           textContentType="none"
+          multiline
           onChangeText={text => setUserPrompt(text)}
           style={styles.instructionInput}
           placeholder="Put your instruction for AI to refine email"
@@ -487,13 +489,25 @@ export const SendEmail = props => {
         />
         <Pressable
           style={styles.generateButton}
-          onPress={() => onPress(userPrompt)}>
-          <Text style={styles.generateButtonText}>Generate</Text>
+          onPress={() => {
+            richText.current?.dismissKeyboard()
+            onPress(userPrompt)}}>
+          <IonIcon 
+            name={'refresh-sharp'} 
+            size={22}
+            color={Colors.accentLight}
+          />
         </Pressable>
         <Pressable
-          onPress={() => setPromptVisibility(false)}
+          onPress={() => {
+            richText.current?.dismissKeyboard()
+            setPromptVisibility(false)
+          }}
           style={styles.closeButton}>
-          <Text style={styles.closeButtonText}>X</Text>
+          <MaterialIcons 
+            name={'close'} 
+            size={22}
+          />
         </Pressable>
       </View>
     );
@@ -717,35 +731,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: PaddingConstants.tab1,
-    marginHorizontal: MarginConstants.halfTab,
+    marginHorizontal: MarginConstants.tab1,
     borderWidth: 1,
     borderColor: Colors.darkGrey,
     borderRadius: 5,
   },
   instructionInput: {
     flex: 1,
-
+    paddingLeft: PaddingConstants.tab1,
+    paddingBottom: PaddingConstants.halfTab,
     color: Colors.filterIconColor,
     fontFamily: FontFamily.regular,
-    fontSize: TextSizes.semiSecondary,
+    fontSize: TextSizes.secondary,
   },
-  generateButton: {
-    backgroundColor: Colors.accentLight,
-    paddingVertical: PaddingConstants.halfTab,
-    paddingHorizontal: PaddingConstants.tab1,
+  generateButton: {    
+    padding: PaddingConstants.halfTab,
     borderRadius: 5,
-  },
-  generateButtonText: {
-    fontSize: TextSizes.semiSecondary2,
-    color: Colors.white,
   },
   closeButton: {
-    padding: PaddingConstants.tab1,
     borderRadius: 5,
-    marginLeft: PaddingConstants.tab1,
-  },
-  closeButtonText: {
-    fontSize: TextSizes.semiSecondary2,
-    color: Colors.filterIconColor,
-  },
+    padding: PaddingConstants.halfTab,
+  }
 });
