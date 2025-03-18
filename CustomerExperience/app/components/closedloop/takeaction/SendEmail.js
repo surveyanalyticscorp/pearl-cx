@@ -281,92 +281,94 @@ export const SendEmail = props => {
   };
 
   const aiRouterAPICall = userPrompt => {
-    if (
-      !isAIRouterApiCalled &&
-      emailTemplates &&
-      emailTemplates.length &&
-      emailTemplates.length > 0
-    ) {
-      richText.current.dismissKeyboard();
-      setIsLoading(true);
-      const extractedTemplates = emailTemplates.map(
-        ({title, subject, templateText}) => ({
-          title,
-          subject,
-          templateText,
-        }),
-      );
-      const extractedRootCauses = rootCauseList.map(({title}) => ({
-        title,
-      }));
-      const extractedActions = rootCauseActions.map(({actionName}) => ({
-        actionName,
-      }));
+    console.log('aiRouterAPICall', userPrompt ?? '');
+    // if (
+    //   !isAIRouterApiCalled &&
+    //   emailTemplates &&
+    //   emailTemplates.length &&
+    //   emailTemplates.length > 0
+    // ) {
+    console.log('aiRouterAPICall', 'inside if statement');
 
-      apiHandler.generateEmailWithAI(
-        AI_ROUTER_API_URL,
-        AI_ROUTER_API_KEY,
-        {
-          user_id: 4894850,
-          use_case_name: 'generate-email-draft',
-          prompt_version: 1,
-          organization_id: 4787064,
-          data_center: 'US',
-          meta: {
-            id: 1,
-          },
-          input_data: {
-            messages: [
-              {
-                key: 'content',
-                value:
-                  'JSON Draft email for customer. Keep generated email under 100 words',
-              },
-              {
-                key: 'customer',
-                value: customerName,
-              },
-              {
-                key: 'manager',
-                value: userInfo.firstName + '\t' + userInfo.lastName,
-              },
-              {
-                key: 'ticketDetails',
-                value: comment,
-              },
-              {
-                key: 'rootCauses',
-                value: extractedRootCauses,
-              },
-              {
-                key: 'actions',
-                value: extractedActions,
-              },
-              {
-                key: 'comments',
-                value: userPrompt ?? 'Keep it short and to the point',
-              },
-              {
-                key: 'emailTemplates',
-                value: extractedTemplates,
-              },
-            ],
-          },
+    richText.current.dismissKeyboard();
+    setIsLoading(true);
+    const extractedTemplates = emailTemplates.map(
+      ({title, subject, templateText}) => ({
+        title,
+        subject,
+        templateText,
+      }),
+    );
+    const extractedRootCauses = rootCauseList.map(({title}) => ({
+      title,
+    }));
+    const extractedActions = rootCauseActions.map(({actionName}) => ({
+      actionName,
+    }));
+
+    apiHandler.generateEmailWithAI(
+      AI_ROUTER_API_URL,
+      AI_ROUTER_API_KEY,
+      {
+        user_id: 4894850,
+        use_case_name: 'generate-email-draft',
+        prompt_version: 1,
+        organization_id: 4787064,
+        data_center: 'US',
+        meta: {
+          id: 1,
         },
-        response => {
-          richText.current.setContentHTML(
-            response.result.documents[0].output[0].value.body,
-          );
-          onChangeSubject(response.result.documents[0].output[0].value.subject);
-          onChangeEmailBody(response.result.documents[0].output[0].value.body);
-          setIsLoading(false);
+        input_data: {
+          messages: [
+            {
+              key: 'content',
+              value:
+                'JSON Draft email for customer. Keep generated email under 100 words',
+            },
+            {
+              key: 'customer',
+              value: customerName,
+            },
+            {
+              key: 'manager',
+              value: userInfo.firstName + '\t' + userInfo.lastName,
+            },
+            {
+              key: 'ticketDetails',
+              value: comment,
+            },
+            {
+              key: 'rootCauses',
+              value: extractedRootCauses,
+            },
+            {
+              key: 'actions',
+              value: extractedActions,
+            },
+            {
+              key: 'comments',
+              value: userPrompt ?? 'Keep it short and to the point',
+            },
+            {
+              key: 'emailTemplates',
+              value: extractedTemplates,
+            },
+          ],
         },
-        error => {
-          setIsLoading(false);
-        },
-      );
-      setIsAIRouterApiCalled(true);
-    }
+      },
+      response => {
+        richText.current.setContentHTML(
+          response.result.documents[0].output[0].value.body,
+        );
+        onChangeSubject(response.result.documents[0].output[0].value.subject);
+        onChangeEmailBody(response.result.documents[0].output[0].value.body);
+        setIsLoading(false);
+      },
+      error => {
+        setIsLoading(false);
+      },
+    );
+    setIsAIRouterApiCalled(true);
   };
 
   const onChangeSubject = text => {
@@ -472,6 +474,7 @@ export const SendEmail = props => {
           setContentHTML={body.emailBody}
           onFocus={closeBottomSheet}
         />
+        {isLoading && renderLoadingSpinner()}
 
         {isPromptVisible && (
           <AIPrompt
@@ -482,6 +485,7 @@ export const SendEmail = props => {
           />
         )}
         <View style={styles.devider} />
+
         <AttachmentView />
         {/* <ActionHistory>
             <ActionHistoryItem />
@@ -492,18 +496,17 @@ export const SendEmail = props => {
             richTextfieldRef={richText}
           />
         )}
-        {!isKeyboardVisible && (
-          <BottomSheet
-            ref={bs}
-            snapPoints={bsSnapPoints}
-            initialSnap={bsSnapPoints.length - 1}
-            renderContent={renderSelectTemplate}
-            renderHeader={renderHeader}
-            callbackNode={fall}
-          />
-        )}
-        {isLoading && renderLoadingSpinner()}
       </KeyboardAwareScrollView>
+      {!isKeyboardVisible && (
+        <BottomSheet
+          ref={bs}
+          snapPoints={bsSnapPoints}
+          initialSnap={bsSnapPoints.length - 1}
+          renderContent={renderSelectTemplate}
+          renderHeader={renderHeader}
+          callbackNode={fall}
+        />
+      )}
     </SafeAreaView>
   );
 
