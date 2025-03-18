@@ -30,8 +30,8 @@ export default function QPSpinner(props) {
           count={indicatorCount || 3}
           size={size || 10}
         />
+        {!StringUtils.isEmpty(spinnerText) && <Text style={styles.spinnerText}>{spinnerText}</Text>}
       </Animatable.View>
-      {!StringUtils.isEmpty(spinnerText) && <Text style={styles.spinnerText}>{spinnerText}</Text>}
     </View>
   );
 }
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
   spinnerText: {
       fontFamily: FontFamily.medium,
-      fontSize: TextSizes.largeText,
+      fontSize: TextSizes.semiSecondary,
       padding: PaddingConstants.tab1,
       color: Colors.accent,
     },

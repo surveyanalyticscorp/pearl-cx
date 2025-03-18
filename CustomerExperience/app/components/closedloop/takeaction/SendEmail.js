@@ -424,7 +424,7 @@ export const SendEmail = props => {
             setIsAIRouterApiCalled(false)
             aiRouterAPICall()
             }}>
-            <Text style={[styles.headerText, {fontSize: TextSizes.mediumText}]}>Click here to genetate with AI.</Text>
+            <Text style={[styles.headerText, {fontSize: TextSizes.semiMediumText}]}>Click here to genetate with AI.</Text>            
           </Pressable>
           <RichEditor
             ref={richText}
@@ -446,25 +446,25 @@ export const SendEmail = props => {
           {/* <ActionHistory>
             <ActionHistoryItem />
           </ActionHistory> */}
-        </KeyboardAwareScrollView>
-
-        {isKeyboardVisible && (
+          {isKeyboardVisible && (
           <CustomKeyboardToolbar
             toolbarRef={richTextToolBar}
             richTextfieldRef={richText}
           />
-        )}
-        {!isKeyboardVisible && (
-          <BottomSheet
-            ref={bs}
-            snapPoints={bsSnapPoints}
-            initialSnap={bsSnapPoints.length - 1}
-            renderContent={renderSelectTemplate}
-            renderHeader={renderHeader}
-            callbackNode={fall}
-          />
-        )}
-        {isLoading && renderLoadingSpinner()}
+          )}
+          {!isKeyboardVisible && (
+            <BottomSheet
+              ref={bs}
+              snapPoints={bsSnapPoints}
+              initialSnap={bsSnapPoints.length - 1}
+              renderContent={renderSelectTemplate}
+              renderHeader={renderHeader}
+              callbackNode={fall}
+            />
+          )}
+          {isLoading && renderLoadingSpinner()}
+        </KeyboardAwareScrollView>
+        
     </SafeAreaView>
   );
 };
@@ -510,6 +510,14 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.largeText,
     padding: PaddingConstants.tab1,
     color: Colors.accent,
+  },
+  generateUsingAIText: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.semiSecondary,
+    padding: PaddingConstants.tab1,
+    color: Colors.evenDarkerGrey,
   },
   emailText: {
     fontFamily: FontFamily.medium,
@@ -667,11 +675,9 @@ const styles = StyleSheet.create({
     marginBottom: MarginConstants.halfTab,
   },
   loading: {
-    flex: 1,
     position: 'absolute',
     left: 0,
     right: 0,
-    top: 0,
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
