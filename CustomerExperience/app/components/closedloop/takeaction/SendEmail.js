@@ -490,12 +490,12 @@ export const SendEmail = props => {
         {/* <ActionHistory>
             <ActionHistoryItem />
           </ActionHistory> */}
-        {isKeyboardVisible && (
+        {/* {isKeyboardVisible && (
           <CustomKeyboardToolbar
             toolbarRef={richTextToolBar}
             richTextfieldRef={richText}
           />
-        )}
+        )} */}
       </KeyboardAwareScrollView>
       {!isKeyboardVisible && (
         <BottomSheet
