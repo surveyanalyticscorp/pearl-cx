@@ -213,7 +213,7 @@ export const SendEmail = props => {
   };
   const [body, setBody] = useState(sampleEmailBody);
   const [isAIRouterApiCalled, setIsAIRouterApiCalled] = useState(false);
-  const [isPromptVisible, setPromptVisibility] = useState(false);
+  const [isPromptVisible, setPromptVisibility] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
@@ -266,8 +266,8 @@ export const SendEmail = props => {
 
   const onPressTemplate = useCallback(() => {
     richText.current.dismissKeyboard();
-    if (bs.current) {
-      setIsBottomSheetVisible(true);
+    setIsBottomSheetVisible(true);
+    if (bs.current) {      
       bs.current.snapTo(0);
     }
   }, []);
@@ -379,6 +379,7 @@ export const SendEmail = props => {
     setBody(state => ({...state, emailBody: text}));
   };
   const handleTemplateSelectAction = item => {
+    setPromptVisibility(false);
     setBody(state => ({
       ...state,
       emailBody: item.templateText,
@@ -447,18 +448,7 @@ export const SendEmail = props => {
           body={body}
           closeBottomSheet={closeBottomSheet}
           onChangeSubject={onChangeSubject}
-        />
-        {/* <Pressable
-          onPress={() => {
-            setIsAIRouterApiCalled(false);
-            aiRouterAPICall();
-          }}>
-          <Text
-            style={[styles.headerText, {fontSize: TextSizes.semiMediumText}]}>
-            Click here to genetate with AI.
-          </Text>
-        </Pressable> */}
-        <ClickToGenerateWithAI />
+        />        
         <RichEditor
           ref={richText}
           useContainer
@@ -477,43 +467,32 @@ export const SendEmail = props => {
           }}
           setContentHTML={body.emailBody}
           onFocus={closeBottomSheet}
-        />
-        {isLoading && renderLoadingSpinner()}
-
-        {isPromptVisible && (
-          <AIPrompt
-            onPress={userPrompt => {
-              setIsAIRouterApiCalled(false);
-              aiRouterAPICall(userPrompt);
-              setPromptVisibility(false);
-            }}
           />
-        )}
-        <View style={styles.devider} />
-
-        <AttachmentView />
-        {/* <ActionHistory>
-            <ActionHistoryItem />
-          </ActionHistory> */}
-        {/* {isKeyboardVisible && (
-          <CustomKeyboardToolbar
-            toolbarRef={richTextToolBar}
-            richTextfieldRef={richText}
-          />
-          )}          
           {isLoading && renderLoadingSpinner()}
-        </KeyboardAwareScrollView>
-          {!isKeyboardVisible && (
+          <View style={styles.devider} />
+          {isPromptVisible && !isLoading && (
+            <AIPrompt
+              onPress={userPrompt => {
+                setIsAIRouterApiCalled(false);
+                aiRouterAPICall(userPrompt);
+              }}
+            />
+          )}
+          <AttachmentView />
+            {isLoading && renderLoadingSpinner()}
+          </KeyboardAwareScrollView>        
+          {isBottomSheetVisible && (
             <BottomSheet
               ref={bs}
               snapPoints={bsSnapPoints}
-              initialSnap={bsSnapPoints.length - 1}
+              initialSnap={0}
               renderContent={renderSelectTemplate}
-              renderHeader={renderHeader}
+              renderHeader={renderHeader}            
               onCloseEnd={() => {setIsBottomSheetVisible(false)}}
               callbackNode={fall}
             />
           )}
+          
     </SafeAreaView>
   );
 
@@ -524,7 +503,7 @@ export const SendEmail = props => {
         <TextInput
           onChangeText={text => setUserPrompt(text)}
           style={styles.instructionInput}
-          placeholder="Put your instruction for AI to generate emails"
+          placeholder="Put your instruction for AI to refine email"
           placeholderTextColor={Colors.borderColor}
         />
         <Pressable
@@ -755,7 +734,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  contentContainer: {backgroundColor: Colors.white, height: '100%'},
+  contentContainer: {backgroundColor: Colors.red, height: '100%'},
   emailOptionContainer: {
     flexDirection: 'row',
     flex: 1,
