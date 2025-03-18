@@ -394,6 +394,10 @@ export const SendEmail = props => {
         <SelectEmailTemplate
           data={emailTemplates}
           handleOnPress={item => handleTemplateSelectAction(item)}
+          handleOnPressGenarateWithAI={() => {
+            closeBottomSheet();
+            aiRouterAPICall();
+          }}
         />
       </View>
     );
