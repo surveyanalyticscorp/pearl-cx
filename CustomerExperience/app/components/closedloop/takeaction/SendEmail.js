@@ -451,7 +451,9 @@ export const SendEmail = props => {
             toolbarRef={richTextToolBar}
             richTextfieldRef={richText}
           />
-          )}
+          )}          
+          {isLoading && renderLoadingSpinner()}
+        </KeyboardAwareScrollView>
           {!isKeyboardVisible && (
             <BottomSheet
               ref={bs}
@@ -459,12 +461,10 @@ export const SendEmail = props => {
               initialSnap={bsSnapPoints.length - 1}
               renderContent={renderSelectTemplate}
               renderHeader={renderHeader}
+              onCloseEnd={() => {setIsBottomSheetVisible(false)}}
               callbackNode={fall}
             />
           )}
-          {isLoading && renderLoadingSpinner()}
-        </KeyboardAwareScrollView>
-        
     </SafeAreaView>
   );
 };
