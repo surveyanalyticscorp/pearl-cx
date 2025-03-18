@@ -5,6 +5,7 @@ const Colors = {
   red: '#990000',
   lightRed: '#FC1154',
   white: '#ffffff',
+  transparentBackground: 'rgba(0,0,0,0.1)',
   black: '#000000',
   accentLight: '#1b87e6',
   checkboxColor: '#ababab',

@@ -222,10 +222,11 @@ export const SendEmail = props => {
 
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
-  const bsSnapPoints = ['33%', '0%'];
+  const bsSnapPoints = ['33%', '-33%'];
 
   const closeBottomSheet = () => {
     if (bs.current) {
+      setIsBottomSheetVisible(false);
       bs.current.snapTo(bsSnapPoints.length - 1);
     }
   };
@@ -256,6 +257,7 @@ export const SendEmail = props => {
   const onPressTemplate = useCallback(() => {
     richText.current.dismissKeyboard();
     if (bs.current) {
+      setIsBottomSheetVisible(true);
       bs.current.snapTo(0);
     }
   }, []);
@@ -323,7 +325,7 @@ export const SendEmail = props => {
             },
              {
               "key": "comments",
-              "value": null
+              "value": "Keep generated email under 100 words"
             },    
             {
               "key": "emailTemplates",
@@ -382,6 +384,7 @@ export const SendEmail = props => {
   };
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -434,14 +437,15 @@ export const SendEmail = props => {
             androidHardwareAccelerationDisabled={true}
             initialHeight={350}
             style={styles.textInput}
+            editorStyle={{backgroundColor: isBottomSheetVisible ? Colors.transparentBackground : Colors.white}}
             setContentHTML={body.emailBody}
             onFocus={closeBottomSheet}
           />
-
+          <View style={styles.devider} />
           <AttachmentView />
-          <ActionHistory>
+          {/* <ActionHistory>
             <ActionHistoryItem />
-          </ActionHistory>
+          </ActionHistory> */}
         </KeyboardAwareScrollView>
 
         {isKeyboardVisible && (
