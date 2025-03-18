@@ -481,6 +481,7 @@ export const SendEmail = props => {
             onPress={userPrompt => {
               setIsAIRouterApiCalled(false);
               aiRouterAPICall(userPrompt);
+              setPromptVisibility(false);
             }}
           />
         )}
