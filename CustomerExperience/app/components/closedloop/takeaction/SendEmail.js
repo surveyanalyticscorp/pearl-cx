@@ -82,51 +82,17 @@ export const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
 };
 
 export const ActionHistory = ({children}) => {
-  return (
-    <View style={styles.actionHistoryContainer}>
-      <Text style={styles.actionHistoryHeader}>Action history</Text>
-      {children}
-    </View>
-  );
-};
-export const AttachmentView = () => {
-  const {mediaFileList} = useSelector(state => state.dashboard);
-  if (mediaFileList && mediaFileList.length && mediaFileList.length > 0) {
+  const {summary} = useSelector(state => state.dashboard.ticketActionHistory);
+
+  if (!isNull(summary?.data?.action)) {
     return (
-      <View style={styles.attachmentContainer}>
-        <Text style={styles.actionHistoryHeader}>Attachments</Text>
-        <FlatList
-          data={mediaFileList}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => {
-            return <AttachmentItem item={item} index={index} />;
-          }}
-        />
+      <View style={styles.actionHistoryContainer}>
+        <Text style={styles.actionHistoryHeader}>Action history</Text>
+        {children}
       </View>
     );
   }
   return <View />;
-};
-
-export const AttachmentItem = ({item, index}) => {
-  return (
-    <Pressable style={styles.attachmentItem}>
-      <AttachmentIcon mimeType={item.mimeType} />
-      <Text numberOfLines={1} style={styles.attachmentText}>
-        {StringUtils.truncateFileName(item.fileName)}
-      </Text>
-    </Pressable>
-  );
-};
-
-export const NoActionView = () => {
-  return (
-    <View>
-      <Text style={[styles.actionHistoryDetailText, {fontStyle: 'italic'}]}>
-        No action has taken yet
-      </Text>
-    </View>
-  );
 };
 
 export const ActionHistoryItem = () => {
@@ -166,6 +132,46 @@ export const ActionHistoryItem = () => {
           }>{`total actions: ${actionCount}`}</Text>
       </View>
     </Pressable>
+  );
+};
+
+export const AttachmentView = () => {
+  const {mediaFileList} = useSelector(state => state.dashboard);
+  if (mediaFileList && mediaFileList.length && mediaFileList.length > 0) {
+    return (
+      <View style={styles.attachmentContainer}>
+        <Text style={styles.actionHistoryHeader}>Attachments</Text>
+        <FlatList
+          data={mediaFileList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item, index}) => {
+            return <AttachmentItem item={item} index={index} />;
+          }}
+        />
+      </View>
+    );
+  }
+  return <View />;
+};
+
+export const AttachmentItem = ({item, index}) => {
+  return (
+    <Pressable style={styles.attachmentItem}>
+      <AttachmentIcon mimeType={item.mimeType} />
+      <Text numberOfLines={1} style={styles.attachmentText}>
+        {StringUtils.truncateFileName(item.fileName)}
+      </Text>
+    </Pressable>
+  );
+};
+
+export const NoActionView = () => {
+  return (
+    <View>
+      <Text style={[styles.actionHistoryDetailText, {fontStyle: 'italic'}]}>
+        No action has taken yet
+      </Text>
+    </View>
   );
 };
 
