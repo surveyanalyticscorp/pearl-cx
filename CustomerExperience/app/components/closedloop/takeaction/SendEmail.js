@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useState} from 'react';
+import React, {useEffect, useCallback, useState, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -45,10 +45,10 @@ import TemplateIcon from './sendEmail/TemplateIcon';
 import AttachmentUploadIcon from './sendEmail/AttachmentUploadIcon';
 import RenderTicketId from './sendEmail/TicketId';
 import EmailOptions from './sendEmail/EmailOptions';
-import { apiHandler } from '../../../api/ApiHandler';
-import { AI_ROUTER_API_KEY, AI_ROUTER_API_URL } from '../../../api/Constant';
+import {apiHandler} from '../../../api/ApiHandler';
+import {AI_ROUTER_API_KEY, AI_ROUTER_API_URL} from '../../../api/Constant';
 import QPSpinner from '../../../widgets/QPSpinner';
-import { showLoading } from '../../../redux/actions';
+import {showLoading} from '../../../redux/actions';
 
 export const RenderHeader = () => {
   return (
@@ -82,52 +82,17 @@ export const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
 };
 
 export const ActionHistory = ({children}) => {
-  return (
-    <View style={styles.actionHistoryContainer}>
-      <Text style={styles.actionHistoryHeader}>Action history</Text>
-      {children}
-    </View>
-  );
-};
-export const AttachmentView = () => {
-  const {mediaFileList} = useSelector(state => state.dashboard);
-  if (mediaFileList && mediaFileList.length && mediaFileList.length > 0) {
+  const {summary} = useSelector(state => state.dashboard.ticketActionHistory);
+
+  if (!isNull(summary?.data?.action)) {
     return (
-      <View style={styles.attachmentContainer}>
-        <Text style={styles.actionHistoryHeader}>Attachments</Text>
-        <FlatList
-          data={mediaFileList}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => {
-            return <AttachmentItem item={item} index={index} />;
-          }}
-        />
+      <View style={styles.actionHistoryContainer}>
+        <Text style={styles.actionHistoryHeader}>Action history</Text>
+        {children}
       </View>
     );
   }
-  return <View/>
-  
-};
-
-export const AttachmentItem = ({item, index}) => {
-  return (
-    <Pressable style={styles.attachmentItem}>
-      <AttachmentIcon mimeType={item.mimeType} />
-      <Text numberOfLines={1} style={styles.attachmentText}>
-        {StringUtils.truncateFileName(item.fileName)}
-      </Text>
-    </Pressable>
-  );
-};
-
-export const NoActionView = () => {
-  return (
-    <View>
-      <Text style={[styles.actionHistoryDetailText, {fontStyle: 'italic'}]}>
-        No action has taken yet
-      </Text>
-    </View>
-  );
+  return <View />;
 };
 
 export const ActionHistoryItem = () => {
@@ -170,6 +135,46 @@ export const ActionHistoryItem = () => {
   );
 };
 
+export const AttachmentView = () => {
+  const {mediaFileList} = useSelector(state => state.dashboard);
+  if (mediaFileList && mediaFileList.length && mediaFileList.length > 0) {
+    return (
+      <View style={styles.attachmentContainer}>
+        <Text style={styles.actionHistoryHeader}>Attachments</Text>
+        <FlatList
+          data={mediaFileList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item, index}) => {
+            return <AttachmentItem item={item} index={index} />;
+          }}
+        />
+      </View>
+    );
+  }
+  return <View />;
+};
+
+export const AttachmentItem = ({item, index}) => {
+  return (
+    <Pressable style={styles.attachmentItem}>
+      <AttachmentIcon mimeType={item.mimeType} />
+      <Text numberOfLines={1} style={styles.attachmentText}>
+        {StringUtils.truncateFileName(item.fileName)}
+      </Text>
+    </Pressable>
+  );
+};
+
+export const NoActionView = () => {
+  return (
+    <View>
+      <Text style={[styles.actionHistoryDetailText, {fontStyle: 'italic'}]}>
+        No action has taken yet
+      </Text>
+    </View>
+  );
+};
+
 export const CustomKeyboardToolbar = ({toolbarRef, richTextfieldRef}) => {
   return (
     <View style={styles.toolbarContainer}>
@@ -197,7 +202,7 @@ export const SendEmail = props => {
     state => state.dashboard.emailData.defaultTemplate,
   );
   // const isLoading = useSelector(state => state.global.isLoading);
-  console.log("props.route.params",props.route.params)
+  console.log('props.route.params', props.route.params);
   const ticketId = JSON.stringify(props.route.params.ticketId);
   const sampleEmailBody = {
     ticketId: JSON.stringify(props.route.params.ticketId),
@@ -208,17 +213,20 @@ export const SendEmail = props => {
   };
   const [body, setBody] = useState(sampleEmailBody);
   const [isAIRouterApiCalled, setIsAIRouterApiCalled] = useState(false);
+  const [isPromptVisible, setPromptVisibility] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const richText = React.useRef();
-  const richTextToolBar = React.useRef();  
-  const {emailTemplates} = useSelector((state) => state.dashboard.emailData);
-  const {rootCauseList} = useSelector((state) => state.dashboard);
-  const {rootCauseActions} = useSelector((state) => state.dashboard.ticket);
-  const {comment} = useSelector((state) => state.dashboard.ticket);
-  const  customerName = useSelector((state) => state.dashboard?.ticket?.panelMember?.name);
-  const  {userInfo} = useSelector((state) => state.global);
+  const richTextToolBar = React.useRef();
+  const {emailTemplates} = useSelector(state => state.dashboard.emailData);
+  const {rootCauseList} = useSelector(state => state.dashboard);
+  const {rootCauseActions} = useSelector(state => state.dashboard.ticket);
+  const {comment} = useSelector(state => state.dashboard.ticket);
+  const customerName = useSelector(
+    state => state.dashboard?.ticket?.panelMember?.name,
+  );
+  const {userInfo} = useSelector(state => state.global);
 
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
@@ -241,9 +249,11 @@ export const SendEmail = props => {
     }
   }, [defaultEmail]);
 
-  useEffect(() => {    
-    dispatch(getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),);
-    dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
+  useEffect(() => {
+    // dispatch(
+    //   getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
+    // );
+    // dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
     dispatch(getActionHistorySummary(authToken, ticketId));
     dispatch(getActionHistoryDetails(authToken, ticketId));
     setBody(sampleEmailBody);
@@ -252,7 +262,7 @@ export const SendEmail = props => {
 
   useEffect(() => {
     aiRouterAPICall();
-  }, [emailTemplates])
+  }, [emailTemplates]);
 
   const onPressTemplate = useCallback(() => {
     richText.current.dismissKeyboard();
@@ -263,88 +273,103 @@ export const SendEmail = props => {
   }, []);
 
   const renderLoadingSpinner = () => {
-      return (
-        <View style={styles.loading}>
-          <QPSpinner 
-            spinnerText={"Crafting your email with AI..."}
-          />
-        </View>
-      );
-    };
+    return (
+      <View style={styles.loading}>
+        <QPSpinner spinnerText={'Crafting your email with AI...'} />
+      </View>
+    );
+  };
 
-  const aiRouterAPICall = () => {
-    if (!isAIRouterApiCalled && (emailTemplates && emailTemplates.length && emailTemplates.length > 0)) { 
-      richText.current.dismissKeyboard();
-      setIsLoading(true);
-      const extractedTemplates = emailTemplates.map(({ title, subject, templateText }) => ({
+  const aiRouterAPICall = userPrompt => {
+    console.log('aiRouterAPICall', userPrompt ?? '');
+    // if (
+    //   !isAIRouterApiCalled &&
+    //   emailTemplates &&
+    //   emailTemplates.length &&
+    //   emailTemplates.length > 0
+    // ) {
+    console.log('aiRouterAPICall', 'inside if statement');
+
+    richText.current.dismissKeyboard();
+    setIsLoading(true);
+    const extractedTemplates = emailTemplates.map(
+      ({title, subject, templateText}) => ({
         title,
         subject,
-        templateText
-      }));
-      const extractedRootCauses = rootCauseList.map(({title}) => ({
-        title
-      }));
-      const extractedActions = rootCauseActions.map(({actionName}) => ({
-        actionName
-      }));
-      
-      apiHandler.generateEmailWithAI(AI_ROUTER_API_URL,AI_ROUTER_API_KEY, {
-        "user_id": 4894850,
-        "use_case_name": "generate-email-draft",
-        "prompt_version": 1,
-        "organization_id": 4787064,
-        "data_center": "US",
-        "meta": {
-          "id": 1
+        templateText,
+      }),
+    );
+    const extractedRootCauses = rootCauseList.map(({title}) => ({
+      title,
+    }));
+    const extractedActions = rootCauseActions.map(({actionName}) => ({
+      actionName,
+    }));
+
+    apiHandler.generateEmailWithAI(
+      AI_ROUTER_API_URL,
+      AI_ROUTER_API_KEY,
+      {
+        user_id: 4894850,
+        use_case_name: 'generate-email-draft',
+        prompt_version: 1,
+        organization_id: 4787064,
+        data_center: 'US',
+        meta: {
+          id: 1,
         },
-        "input_data": {
-          "messages": [
+        input_data: {
+          messages: [
             {
-              "key": "content",
-              "value": "JSON Draft email for customer"
+              key: 'content',
+              value:
+                'JSON Draft email for customer. Keep generated email under 100 words',
             },
             {
-              "key": "customer",
-              "value": customerName
+              key: 'customer',
+              value: customerName,
             },
             {
-              "key": "manager",
-              "value": userInfo.firstName + "\t" + userInfo.lastName
+              key: 'manager',
+              value: userInfo.firstName + '\t' + userInfo.lastName,
             },
             {
-              "key": "ticketDetails",
-              "value": comment
+              key: 'ticketDetails',
+              value: comment,
             },
             {
-              "key": "rootCauses",
-              "value": extractedRootCauses
+              key: 'rootCauses',
+              value: extractedRootCauses,
             },
-             {
-              "key": "actions",
-              "value": extractedActions
-            },
-             {
-              "key": "comments",
-              "value": "Keep generated email under 100 words"
-            },    
             {
-              "key": "emailTemplates",
-              "value": extractedTemplates
-          }
-          ]
-        }
-      }, 
+              key: 'actions',
+              value: extractedActions,
+            },
+            {
+              key: 'comments',
+              value: userPrompt ?? 'Keep it short and to the point',
+            },
+            {
+              key: 'emailTemplates',
+              value: extractedTemplates,
+            },
+          ],
+        },
+      },
       response => {
-        richText.current.setContentHTML(response.result.documents[0].output[0].value.body)      
+        richText.current.setContentHTML(
+          response.result.documents[0].output[0].value.body,
+        );
         onChangeSubject(response.result.documents[0].output[0].value.subject);
-        setIsLoading(false)
+        onChangeEmailBody(response.result.documents[0].output[0].value.body);
+        setIsLoading(false);
       },
       error => {
-        setIsLoading(false)
-      })
-      setIsAIRouterApiCalled(true);
-    }
-  }
+        setIsLoading(false);
+      },
+    );
+    setIsAIRouterApiCalled(true);
+  };
 
   const onChangeSubject = text => {
     setBody(state => ({...state, subject: text}));
@@ -369,6 +394,10 @@ export const SendEmail = props => {
         <SelectEmailTemplate
           data={emailTemplates}
           handleOnPress={item => handleTemplateSelectAction(item)}
+          handleOnPressGenarateWithAI={() => {
+            closeBottomSheet();
+            aiRouterAPICall();
+          }}
         />
       </View>
     );
@@ -406,47 +435,67 @@ export const SendEmail = props => {
       keyboardDidHideListener.remove();
     };
   }, []);
-  
+
   return (
     <SafeAreaView style={styles.container}>
-        
-        <KeyboardAwareScrollView enableOnAndroid={true}>
-          <RenderHeader />
+      <KeyboardAwareScrollView enableOnAndroid={true}>
+        <RenderHeader />
 
-          <EmailOptions body={body} onPressTemplate={onPressTemplate}/>
-          <SendEmailTo />
-          <EmailSubject
-            body={body}
-            closeBottomSheet={closeBottomSheet}
-            onChangeSubject={onChangeSubject}
+        <EmailOptions body={body} onPressTemplate={onPressTemplate} />
+        <SendEmailTo />
+        <EmailSubject
+          body={body}
+          closeBottomSheet={closeBottomSheet}
+          onChangeSubject={onChangeSubject}
+        />
+        {/* <Pressable
+          onPress={() => {
+            setIsAIRouterApiCalled(false);
+            aiRouterAPICall();
+          }}>
+          <Text
+            style={[styles.headerText, {fontSize: TextSizes.semiMediumText}]}>
+            Click here to genetate with AI.
+          </Text>
+        </Pressable> */}
+        <ClickToGenerateWithAI />
+        <RichEditor
+          ref={richText}
+          useContainer
+          disabled={false}
+          initialFocus={false}
+          onChange={onChangeEmailBody}
+          placeholder={translate('action_email.email_body')}
+          placeholderTextColor={Colors.borderColor}
+          androidHardwareAccelerationDisabled={true}
+          initialHeight={350}
+          style={styles.textInput}
+          editorStyle={{
+            backgroundColor: isBottomSheetVisible
+              ? Colors.transparentBackground
+              : Colors.white,
+          }}
+          setContentHTML={body.emailBody}
+          onFocus={closeBottomSheet}
+        />
+        {isLoading && renderLoadingSpinner()}
+
+        {isPromptVisible && (
+          <AIPrompt
+            onPress={userPrompt => {
+              setIsAIRouterApiCalled(false);
+              aiRouterAPICall(userPrompt);
+              setPromptVisibility(false);
+            }}
           />
-          <Pressable onPress={() => {
-            setIsAIRouterApiCalled(false)
-            aiRouterAPICall()
-            }}>
-            <Text style={[styles.headerText, {fontSize: TextSizes.semiMediumText}]}>Click here to genetate with AI.</Text>            
-          </Pressable>
-          <RichEditor
-            ref={richText}
-            useContainer
-            disabled={false}
-            initialFocus={false}
-            onChange={onChangeEmailBody}
-            placeholder={translate('action_email.email_body')}
-            placeholderTextColor={Colors.borderColor}
-            androidHardwareAccelerationDisabled={true}
-            initialHeight={350}
-            style={styles.textInput}
-            editorStyle={{backgroundColor: isBottomSheetVisible ? Colors.transparentBackground : Colors.white}}
-            setContentHTML={body.emailBody}
-            onFocus={closeBottomSheet}
-          />
-          <View style={styles.devider} />
-          <AttachmentView />
-          {/* <ActionHistory>
+        )}
+        <View style={styles.devider} />
+
+        <AttachmentView />
+        {/* <ActionHistory>
             <ActionHistoryItem />
           </ActionHistory> */}
-          {isKeyboardVisible && (
+        {/* {isKeyboardVisible && (
           <CustomKeyboardToolbar
             toolbarRef={richTextToolBar}
             richTextfieldRef={richText}
@@ -467,6 +516,45 @@ export const SendEmail = props => {
           )}
     </SafeAreaView>
   );
+
+  function AIPrompt({onPress}) {
+    const [userPrompt, setUserPrompt] = useState('');
+    return (
+      <View style={styles.instructionContainer}>
+        <TextInput
+          onChangeText={text => setUserPrompt(text)}
+          style={styles.instructionInput}
+          placeholder="Put your instruction for AI to generate emails"
+          placeholderTextColor={Colors.borderColor}
+        />
+        <Pressable
+          style={styles.generateButton}
+          onPress={() => onPress(userPrompt)}>
+          <Text style={styles.generateButtonText}>Generate</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => setPromptVisibility(false)}
+          style={styles.closeButton}>
+          <Text style={styles.closeButtonText}>X</Text>
+        </Pressable>
+      </View>
+    );
+  }
+
+  function ClickToGenerateWithAI() {
+    return (
+      <Pressable
+        onPress={() => {
+          setPromptVisibility(true);
+          // setIsAIRouterApiCalled(false);
+          // aiRouterAPICall();
+        }}>
+        <Text style={[styles.headerText, {fontSize: TextSizes.mediumText}]}>
+          Click here to genetate with AI.
+        </Text>
+      </Pressable>
+    );
+  }
 };
 
 export default SendEmail;
@@ -681,5 +769,39 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  instructionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: PaddingConstants.tab1,
+    borderWidth: 1,
+    borderColor: Colors.darkGrey,
+    borderRadius: 5,
+    paddingHorizontal: PaddingConstants.tab1_2x,
+  },
+  instructionInput: {
+    flex: 1,
+
+    color: Colors.filterIconColor,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.semiSecondary,
+  },
+  generateButton: {
+    backgroundColor: Colors.accentLight,
+    padding: PaddingConstants.tab1,
+    borderRadius: 5,
+  },
+  generateButtonText: {
+    fontSize: TextSizes.semiSecondary2,
+    color: Colors.white,
+  },
+  closeButton: {
+    padding: PaddingConstants.tab1,
+    borderRadius: 5,
+    marginLeft: PaddingConstants.tab1,
+  },
+  closeButtonText: {
+    fontSize: TextSizes.semiSecondary2,
+    color: Colors.filterIconColor,
   },
 });

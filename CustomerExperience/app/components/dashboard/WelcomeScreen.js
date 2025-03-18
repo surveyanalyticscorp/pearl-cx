@@ -33,6 +33,10 @@ import {
 } from '../../Utils/Analytic.constants';
 import AppInfo from '../../Utils/AppInfo';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
+import {
+  getEmailTemplates,
+  getDefaultEmailTemplate,
+} from '../../redux/actions/closedloop.actions';
 
 export const RenderCountItem = ({style, title, data}) => {
   return (
@@ -223,6 +227,10 @@ export const WelcomeScreen = () => {
         deviceType: deviceType,
       }),
     );
+    dispatch(
+      getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
+    );
+    dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
   };
 
   useEffect(() => {
