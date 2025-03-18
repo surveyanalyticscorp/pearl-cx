@@ -442,7 +442,16 @@ export const SendEmail = props => {
           closeBottomSheet={closeBottomSheet}
           onChangeSubject={onChangeSubject}
         />
-        <ClickToGenerateWithAI />
+        <Pressable
+          onPress={() => {
+            setIsAIRouterApiCalled(false);
+            aiRouterAPICall();
+          }}>
+          <Text
+            style={[styles.headerText, {fontSize: TextSizes.semiMediumText}]}>
+            Click here to genetate with AI.
+          </Text>
+        </Pressable>
         <RichEditor
           ref={richText}
           useContainer
@@ -462,33 +471,29 @@ export const SendEmail = props => {
           setContentHTML={body.emailBody}
           onFocus={closeBottomSheet}
         />
-
-        {isPromptVisible ? <AIPrompt /> : <View />}
-
         <View style={styles.devider} />
         <AttachmentView />
         {/* <ActionHistory>
-          <ActionHistoryItem />
-        </ActionHistory> */}
+            <ActionHistoryItem />
+          </ActionHistory> */}
+        {isKeyboardVisible && (
+          <CustomKeyboardToolbar
+            toolbarRef={richTextToolBar}
+            richTextfieldRef={richText}
+          />
+        )}
+        {!isKeyboardVisible && (
+          <BottomSheet
+            ref={bs}
+            snapPoints={bsSnapPoints}
+            initialSnap={bsSnapPoints.length - 1}
+            renderContent={renderSelectTemplate}
+            renderHeader={renderHeader}
+            callbackNode={fall}
+          />
+        )}
+        {isLoading && renderLoadingSpinner()}
       </KeyboardAwareScrollView>
-
-      {isKeyboardVisible && (
-        <CustomKeyboardToolbar
-          toolbarRef={richTextToolBar}
-          richTextfieldRef={richText}
-        />
-      )}
-      {!isKeyboardVisible && (
-        <BottomSheet
-          ref={bs}
-          snapPoints={bsSnapPoints}
-          initialSnap={bsSnapPoints.length - 1}
-          renderContent={renderSelectTemplate}
-          renderHeader={renderHeader}
-          callbackNode={fall}
-        />
-      )}
-      {isLoading && renderLoadingSpinner()}
     </SafeAreaView>
   );
 
@@ -576,6 +581,14 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.largeText,
     padding: PaddingConstants.tab1,
     color: Colors.accent,
+  },
+  generateUsingAIText: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.semiSecondary,
+    padding: PaddingConstants.tab1,
+    color: Colors.evenDarkerGrey,
   },
   emailText: {
     fontFamily: FontFamily.medium,
@@ -733,11 +746,9 @@ const styles = StyleSheet.create({
     marginBottom: MarginConstants.halfTab,
   },
   loading: {
-    flex: 1,
     position: 'absolute',
     left: 0,
     right: 0,
-    top: 0,
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
