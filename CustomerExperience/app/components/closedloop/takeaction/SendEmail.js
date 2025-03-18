@@ -442,7 +442,7 @@ export const SendEmail = props => {
           closeBottomSheet={closeBottomSheet}
           onChangeSubject={onChangeSubject}
         />
-        <Pressable
+        {/* <Pressable
           onPress={() => {
             setIsAIRouterApiCalled(false);
             aiRouterAPICall();
@@ -451,7 +451,8 @@ export const SendEmail = props => {
             style={[styles.headerText, {fontSize: TextSizes.semiMediumText}]}>
             Click here to genetate with AI.
           </Text>
-        </Pressable>
+        </Pressable> */}
+        <ClickToGenerateWithAI />
         <RichEditor
           ref={richText}
           useContainer
@@ -471,6 +472,15 @@ export const SendEmail = props => {
           setContentHTML={body.emailBody}
           onFocus={closeBottomSheet}
         />
+
+        {isPromptVisible && (
+          <AIPrompt
+            onPress={userPrompt => {
+              setIsAIRouterApiCalled(false);
+              aiRouterAPICall(userPrompt);
+            }}
+          />
+        )}
         <View style={styles.devider} />
         <AttachmentView />
         {/* <ActionHistory>
@@ -497,7 +507,7 @@ export const SendEmail = props => {
     </SafeAreaView>
   );
 
-  function AIPrompt() {
+  function AIPrompt({onPress}) {
     const [userPrompt, setUserPrompt] = useState('');
     return (
       <View style={styles.instructionContainer}>
@@ -509,10 +519,7 @@ export const SendEmail = props => {
         />
         <Pressable
           style={styles.generateButton}
-          onPress={() => {
-            setIsAIRouterApiCalled(false);
-            aiRouterAPICall(userPrompt);
-          }}>
+          onPress={() => onPress(userPrompt)}>
           <Text style={styles.generateButtonText}>Generate</Text>
         </Pressable>
         <Pressable
@@ -528,9 +535,9 @@ export const SendEmail = props => {
     return (
       <Pressable
         onPress={() => {
-          // setPromptVisibility(true);
-          setIsAIRouterApiCalled(false);
-          aiRouterAPICall();
+          setPromptVisibility(true);
+          // setIsAIRouterApiCalled(false);
+          // aiRouterAPICall();
         }}>
         <Text style={[styles.headerText, {fontSize: TextSizes.mediumText}]}>
           Click here to genetate with AI.
