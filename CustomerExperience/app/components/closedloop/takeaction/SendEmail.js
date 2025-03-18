@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useState} from 'react';
+import React, {useEffect, useCallback, useState, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -213,6 +213,7 @@ export const SendEmail = props => {
   };
   const [body, setBody] = useState(sampleEmailBody);
   const [isAIRouterApiCalled, setIsAIRouterApiCalled] = useState(false);
+  const [isPromptVisible, setPromptVisibility] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
@@ -249,10 +250,10 @@ export const SendEmail = props => {
   }, [defaultEmail]);
 
   useEffect(() => {
-    dispatch(
-      getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
-    );
-    dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
+    // dispatch(
+    //   getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
+    // );
+    // dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
     dispatch(getActionHistorySummary(authToken, ticketId));
     dispatch(getActionHistoryDetails(authToken, ticketId));
     setBody(sampleEmailBody);
@@ -279,7 +280,7 @@ export const SendEmail = props => {
     );
   };
 
-  const aiRouterAPICall = () => {
+  const aiRouterAPICall = userPrompt => {
     if (
       !isAIRouterApiCalled &&
       emailTemplates &&
@@ -318,7 +319,8 @@ export const SendEmail = props => {
             messages: [
               {
                 key: 'content',
-                value: 'JSON Draft email for customer',
+                value:
+                  'JSON Draft email for customer. Keep generated email under 100 words',
               },
               {
                 key: 'customer',
@@ -342,7 +344,7 @@ export const SendEmail = props => {
               },
               {
                 key: 'comments',
-                value: 'Keep generated email under 100 words',
+                value: userPrompt ?? 'Keep it short and to the point',
               },
               {
                 key: 'emailTemplates',
@@ -440,15 +442,7 @@ export const SendEmail = props => {
           closeBottomSheet={closeBottomSheet}
           onChangeSubject={onChangeSubject}
         />
-        <Pressable
-          onPress={() => {
-            setIsAIRouterApiCalled(false);
-            aiRouterAPICall();
-          }}>
-          <Text style={[styles.headerText, {fontSize: TextSizes.mediumText}]}>
-            Click here to genetate with AI.
-          </Text>
-        </Pressable>
+        <ClickToGenerateWithAI />
         <RichEditor
           ref={richText}
           useContainer
@@ -468,6 +462,9 @@ export const SendEmail = props => {
           setContentHTML={body.emailBody}
           onFocus={closeBottomSheet}
         />
+
+        {isPromptVisible ? <AIPrompt /> : <View />}
+
         <View style={styles.devider} />
         <AttachmentView />
         {/* <ActionHistory>
@@ -494,6 +491,48 @@ export const SendEmail = props => {
       {isLoading && renderLoadingSpinner()}
     </SafeAreaView>
   );
+
+  function AIPrompt() {
+    const [userPrompt, setUserPrompt] = useState('');
+    return (
+      <View style={styles.instructionContainer}>
+        <TextInput
+          onChangeText={text => setUserPrompt(text)}
+          style={styles.instructionInput}
+          placeholder="Put your instruction for AI to generate emails"
+          placeholderTextColor={Colors.borderColor}
+        />
+        <Pressable
+          style={styles.generateButton}
+          onPress={() => {
+            setIsAIRouterApiCalled(false);
+            aiRouterAPICall(userPrompt);
+          }}>
+          <Text style={styles.generateButtonText}>Generate</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => setPromptVisibility(false)}
+          style={styles.closeButton}>
+          <Text style={styles.closeButtonText}>X</Text>
+        </Pressable>
+      </View>
+    );
+  }
+
+  function ClickToGenerateWithAI() {
+    return (
+      <Pressable
+        onPress={() => {
+          // setPromptVisibility(true);
+          setIsAIRouterApiCalled(false);
+          aiRouterAPICall();
+        }}>
+        <Text style={[styles.headerText, {fontSize: TextSizes.mediumText}]}>
+          Click here to genetate with AI.
+        </Text>
+      </Pressable>
+    );
+  }
 };
 
 export default SendEmail;
@@ -702,5 +741,39 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  instructionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: PaddingConstants.tab1,
+    borderWidth: 1,
+    borderColor: Colors.darkGrey,
+    borderRadius: 5,
+    paddingHorizontal: PaddingConstants.tab1_2x,
+  },
+  instructionInput: {
+    flex: 1,
+
+    color: Colors.filterIconColor,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.semiSecondary,
+  },
+  generateButton: {
+    backgroundColor: Colors.accentLight,
+    padding: PaddingConstants.tab1,
+    borderRadius: 5,
+  },
+  generateButtonText: {
+    fontSize: TextSizes.semiSecondary2,
+    color: Colors.white,
+  },
+  closeButton: {
+    padding: PaddingConstants.tab1,
+    borderRadius: 5,
+    marginLeft: PaddingConstants.tab1,
+  },
+  closeButtonText: {
+    fontSize: TextSizes.semiSecondary2,
+    color: Colors.filterIconColor,
   },
 });
