@@ -49,6 +49,7 @@ import {apiHandler} from '../../../api/ApiHandler';
 import {AI_ROUTER_API_KEY, AI_ROUTER_API_URL} from '../../../api/Constant';
 import QPSpinner from '../../../widgets/QPSpinner';
 import {showLoading} from '../../../redux/actions';
+import QPTextField from '../../../widgets/TextField';
 
 export const RenderHeader = () => {
   return (
@@ -289,8 +290,7 @@ export const SendEmail = props => {
     //   emailTemplates.length > 0
     // ) {
     console.log('aiRouterAPICall', 'inside if statement');
-
-    richText.current.dismissKeyboard();
+    
     setIsLoading(true);
     const extractedTemplates = emailTemplates.map(
       ({title, subject, templateText}) => ({
@@ -413,33 +413,11 @@ export const SendEmail = props => {
     );
   };
 
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      e => {
-        setKeyboardVisible(true);
-      },
-    );
-
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        setKeyboardVisible(false);
-      },
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAwareScrollView enableOnAndroid={true}>
+      <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={40}>
         <RenderHeader />
 
         <EmailOptions body={body} onPressTemplate={onPressTemplate} />
@@ -458,7 +436,7 @@ export const SendEmail = props => {
           placeholder={translate('action_email.email_body')}
           placeholderTextColor={Colors.borderColor}
           androidHardwareAccelerationDisabled={true}
-          initialHeight={350}
+          initialHeight={320}
           style={styles.textInput}
           editorStyle={{
             backgroundColor: isBottomSheetVisible
@@ -479,11 +457,11 @@ export const SendEmail = props => {
             />
           )}
           <AttachmentView />
-            {isLoading && renderLoadingSpinner()}
-          </KeyboardAwareScrollView>        
+          </KeyboardAwareScrollView>
           {isBottomSheetVisible && (
             <BottomSheet
               ref={bs}
+              enabledContentGestureInteraction={false}
               snapPoints={bsSnapPoints}
               initialSnap={0}
               renderContent={renderSelectTemplate}
@@ -501,6 +479,9 @@ export const SendEmail = props => {
     return (
       <View style={styles.instructionContainer}>
         <TextInput
+          autoCorrect={false}
+          keyboardType="email-address"
+          textContentType="none"
           onChangeText={text => setUserPrompt(text)}
           style={styles.instructionInput}
           placeholder="Put your instruction for AI to refine email"
@@ -517,21 +498,6 @@ export const SendEmail = props => {
           <Text style={styles.closeButtonText}>X</Text>
         </Pressable>
       </View>
-    );
-  }
-
-  function ClickToGenerateWithAI() {
-    return (
-      <Pressable
-        onPress={() => {
-          setPromptVisibility(true);
-          // setIsAIRouterApiCalled(false);
-          // aiRouterAPICall();
-        }}>
-        <Text style={[styles.headerText, {fontSize: TextSizes.mediumText}]}>
-          Click here to genetate with AI.
-        </Text>
-      </Pressable>
     );
   }
 };
