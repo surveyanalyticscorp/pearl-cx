@@ -153,7 +153,7 @@ const TicketRootCause = props => {
           data={rootCauseActions}
           onClickCheckBox={onClickCheckBox}
         />
-        <RenderSegmentItem
+        {/* <RenderSegmentItem
           title={ORIGIN_SEGMENTS}
           onClickRadioButton={onClickRadioButton}
           currentSelected={originSegmentId}
@@ -163,7 +163,7 @@ const TicketRootCause = props => {
           title={CURRENT_SEGMENTS}
           onClickRadioButton={onClickRadioButton}
           currentSelected={currentSegmentId}
-        />
+        /> */}
       </ScrollView>
 
       <View style={styles.buttonView}>

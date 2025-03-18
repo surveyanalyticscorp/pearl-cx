@@ -214,9 +214,11 @@ export const SendEmail = props => {
   const richText = React.useRef();
   const richTextToolBar = React.useRef();  
   const {emailTemplates} = useSelector((state) => state.dashboard.emailData);
-  const {ticketComments} = useSelector((state) => state.dashboard);
   const {rootCauseList} = useSelector((state) => state.dashboard);
+  const {rootCauseActions} = useSelector((state) => state.dashboard.ticket);
+  const {comment} = useSelector((state) => state.dashboard.ticket);
   const  customerName = useSelector((state) => state.dashboard?.ticket?.panelMember?.name);
+  const  {userInfo} = useSelector((state) => state.global);
 
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
@@ -261,18 +263,12 @@ export const SendEmail = props => {
   const renderLoadingSpinner = () => {
       return (
         <View style={styles.loading}>
-          <QPSpinner />
+          <QPSpinner 
+            spinnerText={"Crafting your email with AI..."}
+          />
         </View>
       );
     };
-
-  const getRequestParamsForAiRouterApiCall = () => {
-    const extractedTemplates = emailTemplates.map(({ title, subject, templateText }) => ({
-      title,
-      subject,
-      templateText
-  }));
-  }
 
   const aiRouterAPICall = () => {
     if (!isAIRouterApiCalled && (emailTemplates && emailTemplates.length && emailTemplates.length > 0)) { 
@@ -283,6 +279,13 @@ export const SendEmail = props => {
         subject,
         templateText
       }));
+      const extractedRootCauses = rootCauseList.map(({title}) => ({
+        title
+      }));
+      const extractedActions = rootCauseActions.map(({actionName}) => ({
+        actionName
+      }));
+      
       apiHandler.generateEmailWithAI(AI_ROUTER_API_URL,AI_ROUTER_API_KEY, {
         "user_id": 4894850,
         "use_case_name": "generate-email-draft",
@@ -304,19 +307,19 @@ export const SendEmail = props => {
             },
             {
               "key": "manager",
-              "value": "Prasad"
+              "value": userInfo.firstName + "\t" + userInfo.lastName
             },
             {
               "key": "ticketDetails",
-              "value": "The table and near by area was dirty. Never coming back here again"
+              "value": comment
             },
             {
               "key": "rootCauses",
-              "value": "Unclean Environment, hygiene concerns"
+              "value": extractedRootCauses
             },
              {
               "key": "actions",
-              "value": "Assigned a dedicated cleaning staff, reported to supervisor, talked to the staff about the issue"
+              "value": extractedActions
             },
              {
               "key": "comments",
@@ -660,6 +663,7 @@ const styles = StyleSheet.create({
     marginBottom: MarginConstants.halfTab,
   },
   loading: {
+    flex: 1,
     position: 'absolute',
     left: 0,
     right: 0,

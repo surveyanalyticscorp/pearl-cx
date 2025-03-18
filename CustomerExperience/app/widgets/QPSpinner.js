@@ -1,8 +1,12 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import {DotIndicator} from 'react-native-indicators';
 import * as Animatable from 'react-native-animatable';
 import {Colors} from '../styles/color.constants';
+import StringUtils from '../Utils/StringUtils';
+import { FontFamily } from '../styles/font.constants';
+import { TextSizes } from '../styles/textsize.constants';
+import { PaddingConstants } from '../styles/padding.constants';
 
 export default function QPSpinner(props) {
   const {
@@ -11,10 +15,11 @@ export default function QPSpinner(props) {
     animationType,
     customSpinnerStyle,
     size,
+    spinnerText
   } = props;
 
   return (
-    <View style={{alignItems: 'center', justifyContent: 'center'}}>
+    <View style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'column',}}>
       <Animatable.View
         testID="QPSpinner"
         useNativeDriver={true}
@@ -26,6 +31,7 @@ export default function QPSpinner(props) {
           size={size || 10}
         />
       </Animatable.View>
+      {!StringUtils.isEmpty(spinnerText) && <Text style={styles.spinnerText}>{spinnerText}</Text>}
     </View>
   );
 }
@@ -40,4 +46,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  spinnerText: {
+      fontFamily: FontFamily.medium,
+      fontSize: TextSizes.largeText,
+      padding: PaddingConstants.tab1,
+      color: Colors.accent,
+    },
 });
