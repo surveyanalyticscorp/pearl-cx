@@ -363,6 +363,11 @@ export const SendEmail = props => {
         setIsLoading(false);
       },
       error => {
+        richText.current.setContentHTML(
+          defaultEmail.templateText
+        );
+        onChangeSubject(defaultEmail.subject);
+        onChangeEmailBody(defaultEmail.templateText);
         setIsLoading(false);
       },
     );
