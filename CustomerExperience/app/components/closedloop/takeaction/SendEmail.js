@@ -206,7 +206,6 @@ export const SendEmail = props => {
     attachments: [],
   };
   const [body, setBody] = useState(sampleEmailBody);
-  const [isAIRouterApiCalled, setIsAIRouterApiCalled] = useState(false);
   const [isPromptVisible, setPromptVisibility] = useState(false);
   const [isActionButtonVisible, setActionButtonVisibility] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -277,6 +276,7 @@ export const SendEmail = props => {
 
   const aiRouterAPICall = userPrompt => {
     setIsLoading(true);
+
     const extractedTemplates = emailTemplates.map(
       ({title, subject, templateText}) => ({
         title,
@@ -355,7 +355,6 @@ export const SendEmail = props => {
         setIsLoading(false);
       },
     );
-    setIsAIRouterApiCalled(true);
   };
 
   const onChangeSubject = text => {
@@ -386,10 +385,10 @@ export const SendEmail = props => {
             handleTemplateSelectAction(item)
           }}
           handleOnPressGenarateWithAI={() => {
+            aiRouterAPICall();
             setIsLoading(true);
             setActionButtonVisibility(true);
-            closeBottomSheet();
-            aiRouterAPICall();
+            closeBottomSheet();            
           }}
         />
       </View>
@@ -440,10 +439,9 @@ export const SendEmail = props => {
           />
           {isLoading && renderLoadingSpinner()}
           {!isPromptVisible && <View style={styles.devider} />}
-          {isPromptVisible && !isLoading && (
+          {isPromptVisible && (
             <AIPrompt
               onPress={userPrompt => {
-                setIsAIRouterApiCalled(false);
                 aiRouterAPICall(userPrompt);
               }}
             />
