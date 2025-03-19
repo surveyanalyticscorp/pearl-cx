@@ -37,6 +37,7 @@ import EmailOptions from './sendEmail/EmailOptions';
 import {apiHandler} from '../../../api/ApiHandler';
 import {AI_ROUTER_API_KEY, AI_ROUTER_API_URL} from '../../../api/Constant';
 import QPSpinner from '../../../widgets/QPSpinner';
+import ActionButton from 'react-native-action-button';
 
 export const RenderHeader = () => {
   return (
@@ -206,7 +207,8 @@ export const SendEmail = props => {
   };
   const [body, setBody] = useState(sampleEmailBody);
   const [isAIRouterApiCalled, setIsAIRouterApiCalled] = useState(false);
-  const [isPromptVisible, setPromptVisibility] = useState(true);
+  const [isPromptVisible, setPromptVisibility] = useState(false);
+  const [isActionButtonVisible, setActionButtonVisibility] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
@@ -274,15 +276,6 @@ export const SendEmail = props => {
   };
 
   const aiRouterAPICall = userPrompt => {
-    console.log('aiRouterAPICall', userPrompt ?? '');
-    // if (
-    //   !isAIRouterApiCalled &&
-    //   emailTemplates &&
-    //   emailTemplates.length &&
-    //   emailTemplates.length > 0
-    // ) {
-    console.log('aiRouterAPICall', 'inside if statement');
-    
     setIsLoading(true);
     const extractedTemplates = emailTemplates.map(
       ({title, subject, templateText}) => ({
@@ -291,9 +284,11 @@ export const SendEmail = props => {
         templateText,
       }),
     );
+
     const extractedRootCauses = rootCauseList.map(({title}) => ({
       title,
     }));
+
     const extractedActions = rootCauseActions.map(({actionName}) => ({
       actionName,
     }));
@@ -386,9 +381,13 @@ export const SendEmail = props => {
       <View style={styles.contentContainer}>
         <SelectEmailTemplate
           data={emailTemplates}
-          handleOnPress={item => handleTemplateSelectAction(item)}
+          handleOnPress={item => {
+            setActionButtonVisibility(false);
+            handleTemplateSelectAction(item)
+          }}
           handleOnPressGenarateWithAI={() => {
-            setPromptVisibility(true);
+            setIsLoading(true);
+            setActionButtonVisibility(true);
             closeBottomSheet();
             aiRouterAPICall();
           }}
@@ -450,6 +449,7 @@ export const SendEmail = props => {
             />
           )}
           {!isLoading && <AttachmentView />}
+          
           </KeyboardAwareScrollView>
           {isBottomSheetVisible && (
             <BottomSheet
@@ -463,9 +463,31 @@ export const SendEmail = props => {
               callbackNode={fall}
             />
           )}
-          
+          <View style={{marginBottom: 150}}>
+            {isActionButtonVisible && renderAIActionButton()}
+          </View>
     </SafeAreaView>
   );
+
+  function renderAIActionButton() {
+    return (
+    <ActionButton
+      hideShadow
+      renderIcon={(active) => 
+        <MaterialIcons 
+          size={24}
+          name={'auto-fix-high'} 
+          color={Colors.white}
+          style={{paddingRight: PaddingConstants.halfTab}}
+        />}
+      buttonColor={Colors.accentLight}
+      buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
+      onPress={() => {
+        setPromptVisibility(true);
+        setActionButtonVisibility(false)
+      }}
+    />);
+  }
 
   function AIPrompt({onPress}) {
     const [userPrompt, setUserPrompt] = useState('');
@@ -501,7 +523,8 @@ export const SendEmail = props => {
         <Pressable
           onPress={() => {
             richText.current?.dismissKeyboard()
-            setPromptVisibility(false)
+            setPromptVisibility(false);
+            setActionButtonVisibility(true);
           }}
           style={styles.closeButton}>
           <MaterialIcons 
