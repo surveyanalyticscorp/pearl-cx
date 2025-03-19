@@ -195,7 +195,6 @@ export const SendEmail = props => {
   const defaultEmail = useSelector(
     state => state.dashboard.emailData.defaultTemplate,
   );
-  // const isLoading = useSelector(state => state.global.isLoading);
   console.log('props.route.params', props.route.params);
   const ticketId = JSON.stringify(props.route.params.ticketId);
   const sampleEmailBody = {
@@ -385,8 +384,12 @@ export const SendEmail = props => {
             handleTemplateSelectAction(item)
           }}
           handleOnPressGenarateWithAI={() => {
-            aiRouterAPICall();
-            setIsLoading(true);
+            setBody(state => ({
+              ...state,
+              emailBody: '',
+            }));      
+            richText.current.setContentHTML('');
+            aiRouterAPICall();            
             setActionButtonVisibility(true);
             closeBottomSheet();            
           }}
@@ -456,7 +459,7 @@ export const SendEmail = props => {
               snapPoints={bsSnapPoints}
               initialSnap={0}
               renderContent={renderSelectTemplate}
-              renderHeader={renderHeader}            
+              renderHeader={renderHeader}
               onCloseEnd={() => {setIsBottomSheetVisible(false)}}
               callbackNode={fall}
             />
@@ -511,6 +514,8 @@ export const SendEmail = props => {
           style={styles.generateButton}
           onPress={() => {
             richText.current?.dismissKeyboard()
+            setPromptVisibility(false);
+            setActionButtonVisibility(true);
             onPress(userPrompt)}}>
           <IonIcon 
             name={'refresh-sharp'} 
