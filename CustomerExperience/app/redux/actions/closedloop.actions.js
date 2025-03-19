@@ -9,6 +9,7 @@ export const GET_EMAIL_TEMPLATES = 'GET_EMAIL_TEMPLATES';
 export const GET_EMAIL_TEMPLATES_RECEIVED = 'GET_EMAIL_TEMPLATES_RECEIVED';
 
 export const SEND_EMAIL = 'SEND_EMAIL';
+export const RESET_SEND_EMAIL_RESPONSE = 'RESET_SEND_EMAIL_RESPONSE';
 export const SEND_EMAIL_RECEIVED = 'SEND_EMAIL_RECEIVED';
 
 export const GET_LATEST_COMMENT = 'GET_LATEST_COMMENT';
@@ -84,6 +85,10 @@ export const sendEmail = (token, ticketId, param) => ({
   ticketId,
   param,
 });
+
+export const resetSendEmailResponse = () => ({
+  type: RESET_SEND_EMAIL_RESPONSE,
+})
 
 // Takes CX Ticket ID
 export const getLatestComment = (token, ticketId) => ({

@@ -14,6 +14,7 @@ import {
   GET_TICKET_LIST_SYNC_RECEIVED,
   MEDIA_FILE_UPLOAD_RESET,
   MEDIA_FILE_UPLOAD_RESPONSE,
+  RESET_SEND_EMAIL_RESPONSE,
   ROOT_CASUES_RECEIVED,
   ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL_RECEIVED,
@@ -307,6 +308,12 @@ const dashboardReducer = (state = initialState, action) => {
         ...state,
         emailData: {...state.emailData, defaultTemplate: action.response},
       };
+    }
+    case RESET_SEND_EMAIL_RESPONSE: {
+      return {
+        ...state,
+        emailData: {...state.emailData, emailSentResponse: {}}
+      }
     }
     case SEND_EMAIL_RECEIVED: {
       return {

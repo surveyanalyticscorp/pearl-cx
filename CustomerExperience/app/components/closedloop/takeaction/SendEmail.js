@@ -23,6 +23,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   getActionHistoryDetails,
   getActionHistorySummary,
+  resetSendEmailResponse,
 } from '../../../redux/actions/closedloop.actions';
 import StringUtils from '../../../Utils/StringUtils';
 import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
@@ -195,6 +196,8 @@ export const SendEmail = props => {
   const defaultEmail = useSelector(
     state => state.dashboard.emailData.defaultTemplate,
   );
+  const navigation = useNavigation();
+  const {emailSentResponse} = useSelector(state => state.dashboard.emailData);
   console.log('props.route.params', props.route.params);
   const ticketId = JSON.stringify(props.route.params.ticketId);
   const sampleEmailBody = {
@@ -223,7 +226,7 @@ export const SendEmail = props => {
 
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
-  const bsSnapPoints = ['33%', '-33%'];
+  const bsSnapPoints = ['33%', '50%'];
 
   const closeBottomSheet = () => {
     if (bs.current) {
@@ -231,6 +234,15 @@ export const SendEmail = props => {
       bs.current.snapTo(bsSnapPoints.length - 1);
     }
   };
+
+  useEffect(() => {
+    if (emailSentResponse && emailSentResponse.status && emailSentResponse.status === "success") {
+      setTimeout(() => {
+        navigation.goBack();
+      }, 1000);
+      dispatch(resetSendEmailResponse())
+    }
+  }, [emailSentResponse])
 
   useEffect(() => {
     if (!isObjectEmpty(defaultEmail)) {
@@ -464,9 +476,7 @@ export const SendEmail = props => {
               callbackNode={fall}
             />
           )}
-          <View style={{marginBottom: 150}}>
-            {isActionButtonVisible && renderAIActionButton()}
-          </View>
+          {isActionButtonVisible && renderAIActionButton()}
     </SafeAreaView>
   );
 
@@ -474,6 +484,7 @@ export const SendEmail = props => {
     return (
     <ActionButton
       hideShadow
+      activeOpacity={isLoading ? 1 : 0.8}
       renderIcon={(active) => 
         <MaterialIcons 
           size={24}
@@ -481,12 +492,14 @@ export const SendEmail = props => {
           color={Colors.white}
           style={{paddingRight: PaddingConstants.halfTab}}
         />}
-      buttonColor={Colors.accentLight}
-      buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
-      onPress={() => {
-        setPromptVisibility(true);
-        setActionButtonVisibility(false)
-      }}
+        buttonColor={Colors.accentLight}
+        buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
+        onPress={() => {
+          if (!isLoading) {
+            setPromptVisibility(true);
+            setActionButtonVisibility(false)
+          }          
+        }}
     />);
   }
 
@@ -518,8 +531,8 @@ export const SendEmail = props => {
             setActionButtonVisibility(true);
             onPress(userPrompt)}}>
           <IonIcon 
-            name={'refresh-sharp'} 
-            size={22}
+            name={'refresh-circle'} 
+            size={36}
             color={Colors.accentLight}
           />
         </Pressable>
@@ -532,7 +545,7 @@ export const SendEmail = props => {
           style={styles.closeButton}>
           <MaterialIcons 
             name={'close'} 
-            size={22}
+            size={30}
           />
         </Pressable>
       </View>
@@ -756,7 +769,7 @@ const styles = StyleSheet.create({
   instructionContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.halfTab,
     marginHorizontal: MarginConstants.tab1,
     borderWidth: 1,
     borderColor: Colors.darkGrey,
@@ -764,7 +777,7 @@ const styles = StyleSheet.create({
   },
   instructionInput: {
     flex: 1,
-    paddingLeft: PaddingConstants.tab1,
+    paddingLeft: PaddingConstants.halfTab,
     paddingBottom: PaddingConstants.halfTab,
     color: Colors.filterIconColor,
     fontFamily: FontFamily.regular,
@@ -776,6 +789,6 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     borderRadius: 5,
-    padding: PaddingConstants.halfTab,
+    paddingEnd: PaddingConstants.halfTab,
   }
 });
