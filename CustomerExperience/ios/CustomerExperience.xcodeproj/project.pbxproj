@@ -21,12 +21,12 @@
 		1A69CD2797014C85A7746949 /* FiraSans-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = CD7ACF4533E04453B6D6E3AB /* FiraSans-Heavy.otf */; };
 		1B98949326DA47BC8AA6F59C /* FiraSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = A2E46CC536FA45A29493AC35 /* FiraSans-Light.otf */; };
 		1BA17E64F8E64FE195126022 /* firasans-regularitalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2AB3873DBE24B628B6E4DA2 /* firasans-regularitalic.ttf */; };
+		2055D0E3654D75C54AA8DFEC /* libPods-CustomerExperience.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B960FF4DD0F4E232F39B9D5C /* libPods-CustomerExperience.a */; };
 		21129F8F812042C983A7DADB /* FiraSans-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = CBBAAE4BDD214A78B8F32E4D /* FiraSans-MediumItalic.otf */; };
 		219DCE1E25124CAA00236FA1 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 219DCE1D25124CAA00236FA1 /* icomoon.ttf */; };
 		21E6248A254A8291005F1200 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21E62489254A8290005F1200 /* GoogleService-Info.plist */; };
 		25FD0BA37AF844C485161F37 /* FiraSans-Four.otf in Resources */ = {isa = PBXBuildFile; fileRef = 64B3BB690EB24C78B3317EA3 /* FiraSans-Four.otf */; };
 		2AD006E599654953B9C37B4B /* notification_comment_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E727197684E4D31A44F2A69 /* notification_comment_blue.png */; };
-		2D86DBC993EC6D72350EC00E /* libPods-CustomerExperience.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7ECAB697A5F4D4C9F7192ED1 /* libPods-CustomerExperience.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* CustomerExperienceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CustomerExperienceTests.m */; };
 		45F09722226F40EFA41B268B /* FiraSans-Two.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0CA094FCCE76427782439EB0 /* FiraSans-Two.otf */; };
 		46A29CDFFFF5432B870435E0 /* FiraSans-ExtraLightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 187393A9BDD14A6C944F4440 /* FiraSans-ExtraLightItalic.otf */; };
@@ -141,7 +141,6 @@
 		5AE3CD5D759547B481BF530D /* drawerBanner.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = drawerBanner.png; path = ../app/config/images/drawerBanner.png; sourceTree = "<group>"; };
 		5B6DCE07CE0849E3A2B4EB44 /* FiraSans-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-BoldItalic.otf"; path = "../app/config/fonts/FiraSans-BoldItalic.otf"; sourceTree = "<group>"; };
 		5E9385DB3C954391B9F39641 /* FiraSans-Ultra.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-Ultra.otf"; path = "../app/config/fonts/FiraSans-Ultra.otf"; sourceTree = "<group>"; };
-		647FFDE97A8F17A61557D2D2 /* Pods-CustomerExperience.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CustomerExperience.debug.xcconfig"; path = "Target Support Files/Pods-CustomerExperience/Pods-CustomerExperience.debug.xcconfig"; sourceTree = "<group>"; };
 		64B3BB690EB24C78B3317EA3 /* FiraSans-Four.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-Four.otf"; path = "../app/config/fonts/FiraSans-Four.otf"; sourceTree = "<group>"; };
 		652640ACD55F4B3B8D3B614F /* FiraSans-TwoItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-TwoItalic.otf"; path = "../app/config/fonts/FiraSans-TwoItalic.otf"; sourceTree = "<group>"; };
 		69C1D2EF55EC4136AE3A74E7 /* notification_comment.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = notification_comment.png; path = ../app/config/images/notification_comment.png; sourceTree = "<group>"; };
@@ -149,7 +148,6 @@
 		6DF6A5E250A446D38FE567FE /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		77DDA098F3EF48B29A162BA4 /* FiraSans-UltraLightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-UltraLightItalic.otf"; path = "../app/config/fonts/FiraSans-UltraLightItalic.otf"; sourceTree = "<group>"; };
 		7E79F03401B942BBA78D49AD /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
-		7ECAB697A5F4D4C9F7192ED1 /* libPods-CustomerExperience.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CustomerExperience.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		80B5364D13CD404E869FFC7F /* FiraSans-HeavyItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-HeavyItalic.otf"; path = "../app/config/fonts/FiraSans-HeavyItalic.otf"; sourceTree = "<group>"; };
 		82C6938D84D941A9B7B8FBF8 /* FiraSans-BookItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-BookItalic.otf"; path = "../app/config/fonts/FiraSans-BookItalic.otf"; sourceTree = "<group>"; };
 		8B198EAE37C34FAEA4C3832B /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
@@ -162,15 +160,17 @@
 		A8419D27CD4C46D69B23FA7B /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		B680E6E8BE5F4C3B9B34C12D /* FiraSans-UltraLight.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-UltraLight.otf"; path = "../app/config/fonts/FiraSans-UltraLight.otf"; sourceTree = "<group>"; };
 		B870A40357B040FD935B445B /* FiraSans-EightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-EightItalic.otf"; path = "../app/config/fonts/FiraSans-EightItalic.otf"; sourceTree = "<group>"; };
+		B960FF4DD0F4E232F39B9D5C /* libPods-CustomerExperience.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CustomerExperience.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC42376EC16F1CA25B28D8CB /* Pods-CustomerExperience.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CustomerExperience.debug.xcconfig"; path = "Target Support Files/Pods-CustomerExperience/Pods-CustomerExperience.debug.xcconfig"; sourceTree = "<group>"; };
 		BF2D2AC81E584D478C77763C /* notification_ticket_blue.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = notification_ticket_blue.png; path = ../app/config/images/notification_ticket_blue.png; sourceTree = "<group>"; };
 		C2D9757706814D659616DA32 /* FiraSans-ThinItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-ThinItalic.otf"; path = "../app/config/fonts/FiraSans-ThinItalic.otf"; sourceTree = "<group>"; };
 		C7590CB588724B8AAE7DE099 /* FiraSans-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-Italic.otf"; path = "../app/config/fonts/FiraSans-Italic.otf"; sourceTree = "<group>"; };
 		CBBAAE4BDD214A78B8F32E4D /* FiraSans-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-MediumItalic.otf"; path = "../app/config/fonts/FiraSans-MediumItalic.otf"; sourceTree = "<group>"; };
 		CD7ACF4533E04453B6D6E3AB /* FiraSans-Heavy.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-Heavy.otf"; path = "../app/config/fonts/FiraSans-Heavy.otf"; sourceTree = "<group>"; };
-		DCB042DCA416CC7909613FA7 /* Pods-CustomerExperience.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CustomerExperience.release.xcconfig"; path = "Target Support Files/Pods-CustomerExperience/Pods-CustomerExperience.release.xcconfig"; sourceTree = "<group>"; };
 		DEAC833BA07148768F4285F7 /* ms_drive_business_decisions.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = ms_drive_business_decisions.png; path = ../app/config/images/ms_drive_business_decisions.png; sourceTree = "<group>"; };
 		DF1A2203B584472B85DF2935 /* FiraSans-Book.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraSans-Book.otf"; path = "../app/config/fonts/FiraSans-Book.otf"; sourceTree = "<group>"; };
 		DF77864B3FCC4EC2A3BA863C /* notification_ticket.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = notification_ticket.png; path = ../app/config/images/notification_ticket.png; sourceTree = "<group>"; };
+		E159D7EDC851A4C887720C2F /* Pods-CustomerExperience.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CustomerExperience.release.xcconfig"; path = "Target Support Files/Pods-CustomerExperience/Pods-CustomerExperience.release.xcconfig"; sourceTree = "<group>"; };
 		E2AB3873DBE24B628B6E4DA2 /* firasans-regularitalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "firasans-regularitalic.ttf"; path = "../app/config/fonts/firasans-regularitalic.ttf"; sourceTree = "<group>"; };
 		E4AB1745A29B4785874CD9D9 /* ms_full_growth.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = ms_full_growth.png; path = ../app/config/images/ms_full_growth.png; sourceTree = "<group>"; };
 		E83E06A931004EE3AEB66608 /* cx-logo_2.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "cx-logo_2.png"; path = "../app/config/images/cx-logo_2.png"; sourceTree = "<group>"; };
@@ -196,7 +196,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				181D834824DACEFC005F57C2 /* libRNDeviceInfo.a in Frameworks */,
-				2D86DBC993EC6D72350EC00E /* libPods-CustomerExperience.a in Frameworks */,
+				2055D0E3654D75C54AA8DFEC /* libPods-CustomerExperience.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,7 +351,7 @@
 				181D834724DACEFC005F57C2 /* libRNDeviceInfo.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				7ECAB697A5F4D4C9F7192ED1 /* libPods-CustomerExperience.a */,
+				B960FF4DD0F4E232F39B9D5C /* libPods-CustomerExperience.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -393,8 +393,8 @@
 		B344130F8C94C7B86D4066E4 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				647FFDE97A8F17A61557D2D2 /* Pods-CustomerExperience.debug.xcconfig */,
-				DCB042DCA416CC7909613FA7 /* Pods-CustomerExperience.release.xcconfig */,
+				BC42376EC16F1CA25B28D8CB /* Pods-CustomerExperience.debug.xcconfig */,
+				E159D7EDC851A4C887720C2F /* Pods-CustomerExperience.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -424,15 +424,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "CustomerExperience" */;
 			buildPhases = (
-				5CBEB16C2E2A9F1035AAFC7F /* [CP] Check Pods Manifest.lock */,
+				5BAA6F1FCA5C1ECAED4BB13E /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				1295D8EB14DEDFCD2B2F172F /* [CP] Embed Pods Frameworks */,
-				A6D57E1167372F0581555425 /* [CP] Copy Pods Resources */,
-				DD5BBF025CC08EA7BB49CE9F /* [CP-User] [RNFB] Core Configuration */,
+				29F3A7E8D889F6CAD8263EFC /* [CP] Embed Pods Frameworks */,
+				011C5E43D1002276A8C26F17 /* [CP] Copy Pods Resources */,
+				7860500F807FC096736EFAE9 /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
@@ -628,7 +628,24 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		1295D8EB14DEDFCD2B2F172F /* [CP] Embed Pods Frameworks */ = {
+		011C5E43D1002276A8C26F17 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CustomerExperience/Pods-CustomerExperience-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CustomerExperience/Pods-CustomerExperience-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CustomerExperience/Pods-CustomerExperience-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		29F3A7E8D889F6CAD8263EFC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -659,7 +676,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		5CBEB16C2E2A9F1035AAFC7F /* [CP] Check Pods Manifest.lock */ = {
+		5BAA6F1FCA5C1ECAED4BB13E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -681,24 +698,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A6D57E1167372F0581555425 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CustomerExperience/Pods-CustomerExperience-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CustomerExperience/Pods-CustomerExperience-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CustomerExperience/Pods-CustomerExperience-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DD5BBF025CC08EA7BB49CE9F /* [CP-User] [RNFB] Core Configuration */ = {
+		7860500F807FC096736EFAE9 /* [CP-User] [RNFB] Core Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -853,7 +853,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 647FFDE97A8F17A61557D2D2 /* Pods-CustomerExperience.debug.xcconfig */;
+			baseConfigurationReference = BC42376EC16F1CA25B28D8CB /* Pods-CustomerExperience.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -903,7 +903,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DCB042DCA416CC7909613FA7 /* Pods-CustomerExperience.release.xcconfig */;
+			baseConfigurationReference = E159D7EDC851A4C887720C2F /* Pods-CustomerExperience.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1100,7 +1100,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				EXCLUDED_ARCHS = "";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1167,7 +1167,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				EXCLUDED_ARCHS = "";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
