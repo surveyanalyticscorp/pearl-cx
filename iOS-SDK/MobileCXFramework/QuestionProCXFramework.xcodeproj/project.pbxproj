@@ -3,39 +3,29 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		8407527B2D279B2C00F86DAA /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8407527A2D279B1700F86DAA /* PrivacyInfo.xcprivacy */; };
-		8447F6012C590C5D0067F3B0 /* MobileCXLaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8447F6002C590C5D0067F3B0 /* MobileCXLaunchView.swift */; };
-		84C78CC22C81C306008314C9 /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84C78CC02C81C306008314C9 /* FiraSans-Bold.ttf */; };
-		84C78CC32C81C306008314C9 /* FiraSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84C78CC12C81C306008314C9 /* FiraSans-Regular.ttf */; };
 		84F7F4852C58CFB800154D58 /* MobileCXFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 84F7F4842C58CFB800154D58 /* MobileCXFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		84F7F5A72C58EA0A00154D58 /* TouchPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F7F5A62C58EA0A00154D58 /* TouchPoint.swift */; };
-		84F7F5EC2C58ED7700154D58 /* MobileCXManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F7F5EB2C58ED7700154D58 /* MobileCXManager.swift */; };
-		84F7F6272C58F5A100154D58 /* GlobalDataCX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F7F6262C58F5A100154D58 /* GlobalDataCX.swift */; };
-		84F7F6292C58F5EA00154D58 /* KeychainItemWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F7F6282C58F5EA00154D58 /* KeychainItemWrapper.swift */; };
-		84F7F62B2C58F62200154D58 /* AppConstantCX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F7F62A2C58F62200154D58 /* AppConstantCX.swift */; };
-		84F7F62D2C58F89A00154D58 /* MobileCXServiceTxManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F7F62C2C58F89A00154D58 /* MobileCXServiceTxManager.swift */; };
-		84F7F62F2C58FE8800154D58 /* GMDCircleLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F7F62E2C58FE8800154D58 /* GMDCircleLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8407527A2D279B1700F86DAA /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		8447F6002C590C5D0067F3B0 /* MobileCXLaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCXLaunchView.swift; sourceTree = "<group>"; };
-		84C78CC02C81C306008314C9 /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
-		84C78CC12C81C306008314C9 /* FiraSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Regular.ttf"; sourceTree = "<group>"; };
 		84F7F4812C58CFB800154D58 /* QuestionProCXFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QuestionProCXFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84F7F4842C58CFB800154D58 /* MobileCXFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MobileCXFramework.h; sourceTree = "<group>"; };
-		84F7F5A62C58EA0A00154D58 /* TouchPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchPoint.swift; sourceTree = "<group>"; };
-		84F7F5EB2C58ED7700154D58 /* MobileCXManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileCXManager.swift; sourceTree = "<group>"; };
-		84F7F6262C58F5A100154D58 /* GlobalDataCX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalDataCX.swift; sourceTree = "<group>"; };
-		84F7F6282C58F5EA00154D58 /* KeychainItemWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainItemWrapper.swift; sourceTree = "<group>"; };
-		84F7F62A2C58F62200154D58 /* AppConstantCX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstantCX.swift; sourceTree = "<group>"; };
-		84F7F62C2C58F89A00154D58 /* MobileCXServiceTxManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCXServiceTxManager.swift; sourceTree = "<group>"; };
-		84F7F62E2C58FE8800154D58 /* GMDCircleLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMDCircleLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		8427A3152D8C397900D9E265 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
+		8427A3162D8C3A0900D9E265 /* Services */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Services; sourceTree = "<group>"; };
+		8427A3172D8C3BD000D9E265 /* Managers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Managers; sourceTree = "<group>"; };
+		8427A31A2D8C3CC800D9E265 /* Utilities */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utilities; sourceTree = "<group>"; };
+		8427A31B2D8C3CDA00D9E265 /* Constants */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Constants; sourceTree = "<group>"; };
+		8427A31C2D8C3CED00D9E265 /* Widgets */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Widgets; sourceTree = "<group>"; };
+		8427A31D2D8C3CF900D9E265 /* Models */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Models; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		84F7F47E2C58CFB800154D58 /* Frameworks */ = {
@@ -51,17 +41,14 @@
 		84F7F4772C58CFB800154D58 = {
 			isa = PBXGroup;
 			children = (
+				8427A31D2D8C3CF900D9E265 /* Models */,
+				8427A31C2D8C3CED00D9E265 /* Widgets */,
+				8427A31B2D8C3CDA00D9E265 /* Constants */,
+				8427A31A2D8C3CC800D9E265 /* Utilities */,
+				8427A3172D8C3BD000D9E265 /* Managers */,
+				8427A3162D8C3A0900D9E265 /* Services */,
+				8427A3152D8C397900D9E265 /* Resources */,
 				8407527A2D279B1700F86DAA /* PrivacyInfo.xcprivacy */,
-				84C78CC02C81C306008314C9 /* FiraSans-Bold.ttf */,
-				84C78CC12C81C306008314C9 /* FiraSans-Regular.ttf */,
-				8447F6002C590C5D0067F3B0 /* MobileCXLaunchView.swift */,
-				84F7F62E2C58FE8800154D58 /* GMDCircleLoader.swift */,
-				84F7F62C2C58F89A00154D58 /* MobileCXServiceTxManager.swift */,
-				84F7F62A2C58F62200154D58 /* AppConstantCX.swift */,
-				84F7F6282C58F5EA00154D58 /* KeychainItemWrapper.swift */,
-				84F7F6262C58F5A100154D58 /* GlobalDataCX.swift */,
-				84F7F5EB2C58ED7700154D58 /* MobileCXManager.swift */,
-				84F7F5A62C58EA0A00154D58 /* TouchPoint.swift */,
 				84F7F4832C58CFB800154D58 /* MobileCXFramework */,
 				84F7F4822C58CFB800154D58 /* Products */,
 				84F7F5A42C58E82E00154D58 /* Frameworks */,
@@ -118,6 +105,15 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				8427A3152D8C397900D9E265 /* Resources */,
+				8427A3162D8C3A0900D9E265 /* Services */,
+				8427A3172D8C3BD000D9E265 /* Managers */,
+				8427A31A2D8C3CC800D9E265 /* Utilities */,
+				8427A31B2D8C3CDA00D9E265 /* Constants */,
+				8427A31C2D8C3CED00D9E265 /* Widgets */,
+				8427A31D2D8C3CF900D9E265 /* Models */,
+			);
 			name = QuestionProCXFramework;
 			productName = MobileCXFramework;
 			productReference = 84F7F4812C58CFB800154D58 /* QuestionProCXFramework.framework */;
@@ -161,9 +157,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84C78CC22C81C306008314C9 /* FiraSans-Bold.ttf in Resources */,
 				8407527B2D279B2C00F86DAA /* PrivacyInfo.xcprivacy in Resources */,
-				84C78CC32C81C306008314C9 /* FiraSans-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,14 +168,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84F7F62B2C58F62200154D58 /* AppConstantCX.swift in Sources */,
-				84F7F62F2C58FE8800154D58 /* GMDCircleLoader.swift in Sources */,
-				84F7F5A72C58EA0A00154D58 /* TouchPoint.swift in Sources */,
-				8447F6012C590C5D0067F3B0 /* MobileCXLaunchView.swift in Sources */,
-				84F7F5EC2C58ED7700154D58 /* MobileCXManager.swift in Sources */,
-				84F7F62D2C58F89A00154D58 /* MobileCXServiceTxManager.swift in Sources */,
-				84F7F6272C58F5A100154D58 /* GlobalDataCX.swift in Sources */,
-				84F7F6292C58F5EA00154D58 /* KeychainItemWrapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,15 +1,15 @@
 import Foundation
 import UIKit
 
-@MainActor public protocol CXServiceDelegate: NSObjectProtocol {
+@MainActor public protocol ServiceDelegate: NSObjectProtocol {
     func CXServiceResponse(withURL response: [String: Any])
 }
 
 @MainActor
-public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate {
+public class ApiService: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate {
     public var response: URLResponse?
     public var receivedData: Data
-    public weak var iDelegate: CXServiceDelegate?
+    public weak var iDelegate: ServiceDelegate?
 
     // Initialize the receivedData
     public override init() {
@@ -18,14 +18,14 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
 
     lazy var session: URLSession? = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
 
-    public func invokeService(touchPoint: TouchPoint, withAPIKey apikey: String, dataCenter: TouchPoint.DataCenter) {
-        let dataCenterString = GlobalDataCX.getDataCenterString(dataCenter: dataCenter)
-        let baseUrl = GlobalDataCX.getBaseUrl(dataCenter: dataCenterString)
+    public func invokeService(touchPoint: TouchPoint, withAPIKey apikey: String, dataCenter: TouchPoint.DataCenter) {        
+        let dataCenterString = APIUtils.getDataCenterString(dataCenter: dataCenter)
+        let baseUrl = GlobalData.getBaseUrl(dataCenter: dataCenterString)
 
         let path = "/a/api/v2/cx/transactions/survey-url"
         let body = self.createCXRequestWithTouchPointID(touchPoint: touchPoint)
 
-        self.execute(method: "POST", baseUrl: baseUrl, path: path, body: body, apiKey: apikey)
+        self.execute(method: APIRequestType.POST.method, baseUrl: baseUrl, path: path, body: body, apiKey: apikey)
     }
 
     public func createCXRequestWithTouchPointID(touchPoint: TouchPoint) -> String {

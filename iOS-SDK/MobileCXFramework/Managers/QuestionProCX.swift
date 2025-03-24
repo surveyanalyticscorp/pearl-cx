@@ -10,8 +10,9 @@ import UIKit
 import WebKit
 
 @MainActor
-public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDelegate, WKNavigationDelegate {
+public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNavigationDelegate {
     let backButton = UIButton(type: .custom)
+    let pageVisitCount: Int = CacheUtils.getIntFromUserDefaults(key: kPageVisitCountKey)!;
     @MainActor public func CXServiceResponse(withURL response: [String: Any]) {
         if let _ = response[ksurveyURL] {
             print("URL found")
@@ -22,7 +23,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
                     self.iResponseURL = responseURL
                     let strUserDefaultKey = "\(self.iTouchPointName ?? 0)\(self.iCurrentViewName)"
                     if !self.iPresentViewFlag {
-                        GlobalDataCX.addValueToUserDefault(responseCopy, forKey: strUserDefaultKey)
+                        CacheUtils.setToUserDefaults(key: strUserDefaultKey, value: responseCopy)
                     } else {
                         if let url = self.iResponseURL, let nsurl = URL(string: url) {
                             let nsrequest = URLRequest(url: nsurl)
@@ -75,9 +76,8 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     public override init() {
     }
 
-    public static let sharedManager: QuestionProCXManager = {
-        let instance = QuestionProCXManager()
-        GlobalDataCX.checkUUIDValueInKeyChain()
+    public static let getInstance: QuestionProCX = {
+        let instance = QuestionProCX()
         instance.iPopupMenuTitle = "Feedback"
         instance.iPopupMenuMessage = "Would you like to give us some feedback?"
         instance.iPopupMenuRightButtonTitle = "No"
@@ -87,11 +87,57 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         return instance
     }()
 
-    public func initwithAPIKey(apiKey: String, dataCenter: TouchPoint.DataCenter, withWindow aWindow: UIWindow) {
+    public func initwithAPIKey(apiKey: String, touchPoint: TouchPoint, dataCenter: TouchPoint.DataCenter, withWindow aWindow: UIWindow) {
         self.iApiKey = apiKey
         self.iDataCenter = dataCenter
         self.iBaseWindow = aWindow
         self.iCurrentViewName = ""
+               
+        let dateOfMonth = Calendar.current.component(.day, from: Date())
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE"
+        let dayOfWeek = formatter.string(from: Date())
+        print(dateOfMonth)
+        print(dayOfWeek)
+        
+        
+//        if (SurveyLaunchLogicUtils.checkSurveyLaunchDayLogic(dayOfTheWeek: "Monday")) {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//                self.showInAppSurvey(touchPoint: touchPoint);
+//            }
+//        }
+        
+        
+//        if (SurveyLaunchLogicUtils.checkPageVisitCountLogic(pageVisitCount: 2)) {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//                self.showInAppSurvey(touchPoint: touchPoint);
+//            }
+//        }
+        
+//        if (SurveyLaunchLogicUtils.checkSurveyLaunchDateOfMonthLogic(dateOfMonth: dateOfMonth)) {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//                self.showInAppSurvey(touchPoint: touchPoint);
+//            }
+//        }
+        
+        if (SurveyLaunchLogicUtils.checkSurveyLaunchDayLogic(dayOfWeek: dayOfWeek)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.showInAppSurvey(touchPoint: touchPoint);
+            }
+        }
+//        self.showSurveyForAppUsageAndLaunch(touchPoint: touchPoint);
+    }
+    
+    public func showSurveyForAppUsageAndLaunch (touchPoint: TouchPoint) {
+        CacheUtils.setToUserDefaults(key: kPageVisitCountKey, value: pageVisitCount + 1);
+        
+        if (SurveyLaunchLogicUtils.checkPageVisitCountLogic(pageVisitCount: 4)) {
+            let appInteractionTimeLimit = DispatchTimeInterval.seconds(SurveyLaunchLogicUtils.getAppUserInteractionTimeInSeconds());
+            DispatchQueue.main.asyncAfter(deadline: .now() + appInteractionTimeLimit) {
+                self.showInAppSurvey(touchPoint: touchPoint);
+            }
+            CacheUtils.clearUserDefaults(key: kPageVisitCountKey);
+        }
     }
 
     public func touchPointBuilder(touchPointID: Int) -> TouchPoint {
@@ -122,15 +168,15 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     public func getAPIResponse (touchPoint: TouchPoint) {
         var responseInfo: [String: Any] = [:]
         let key = "\(String(describing: self.iTouchPointName))"
-        responseInfo = GlobalDataCX.checkValueInUserDefault(forKey: key)!
+        responseInfo = CacheUtils.getFromUserDefaults(key: key)!
         if let surveyURL = responseInfo[ksurveyURL] as? String, !surveyURL.isEmpty {
             self.iResponseURL = surveyURL
-            GlobalDataCX.deleteUserDefaultValue(forKey: "\(self.iTouchPointName ?? 0)")
+            CacheUtils.clearUserDefaults(key: "\(self.iTouchPointName ?? 0)")
         } else {
-            let aMobileCXServiceTxManager = MobileCXServiceTxManager()
+            let apiService = ApiService()
             self.iTouchPointName = touchPoint.surveyId
-            aMobileCXServiceTxManager.iDelegate = self
-            aMobileCXServiceTxManager.invokeService(touchPoint: touchPoint, withAPIKey: self.iApiKey!, dataCenter: self.iDataCenter!)
+            apiService.iDelegate = self
+            apiService.invokeService(touchPoint: touchPoint, withAPIKey: self.iApiKey!, dataCenter: self.iDataCenter!)
         }
     }
 
