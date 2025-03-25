@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1741326373235" clover="3.2.0">
-  <project timestamp="1741326373235" name="All files">
-    <metrics statements="3748" coveredstatements="3189" conditionals="1299" coveredconditionals="878" methods="1203" coveredmethods="919" elements="6250" coveredelements="4986" complexity="0" loc="3748" ncloc="3748" packages="41" files="202" classes="202"/>
+<coverage generated="1742809245860" clover="3.2.0">
+  <project timestamp="1742809245860" name="All files">
+    <metrics statements="3794" coveredstatements="3230" conditionals="1306" coveredconditionals="885" methods="1207" coveredmethods="923" elements="6307" coveredelements="5038" complexity="0" loc="3794" ncloc="3794" packages="42" files="203" classes="203"/>
     <package name="Utils">
       <metrics statements="611" coveredstatements="572" conditionals="217" coveredconditionals="175" methods="147" coveredmethods="135"/>
       <file name="Analytic.constants.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/Utils/Analytic.constants.js">
@@ -13,9 +13,9 @@
       <file name="AnalyticLogs.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/Utils/AnalyticLogs.js">
         <metrics statements="7" coveredstatements="5" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="1"/>
         <line num="9" count="5" type="stmt"/>
-        <line num="10" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="11" count="4" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
         <line num="15" count="5" type="stmt"/>
         <line num="16" count="0" type="cond" truecount="0" falsecount="6"/>
         <line num="17" count="0" type="stmt"/>
@@ -411,7 +411,7 @@
         <line num="189" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="190" count="1" type="stmt"/>
         <line num="193" count="1" type="stmt"/>
-        <line num="197" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="197" count="95" type="cond" truecount="2" falsecount="0"/>
         <line num="201" count="1" type="stmt"/>
         <line num="205" count="2" type="cond" truecount="4" falsecount="0"/>
         <line num="206" count="1" type="stmt"/>
@@ -470,13 +470,13 @@
         <line num="316" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="317" count="1" type="stmt"/>
         <line num="319" count="1" type="stmt"/>
-        <line num="323" count="54" type="cond" truecount="0" falsecount="1"/>
+        <line num="323" count="55" type="cond" truecount="0" falsecount="1"/>
         <line num="324" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="325" count="1" type="stmt"/>
         <line num="328" count="1" type="stmt"/>
         <line num="329" count="1" type="stmt"/>
         <line num="330" count="1" type="stmt"/>
-        <line num="333" count="54" type="stmt"/>
+        <line num="333" count="55" type="stmt"/>
         <line num="339" count="10" type="cond" truecount="1" falsecount="1"/>
         <line num="340" count="10" type="stmt"/>
         <line num="343" count="0" type="stmt"/>
@@ -492,7 +492,7 @@
         <line num="368" count="4" type="stmt"/>
         <line num="372" count="4" type="stmt"/>
         <line num="378" count="2" type="stmt"/>
-        <line num="381" count="54" type="stmt"/>
+        <line num="381" count="55" type="stmt"/>
         <line num="383" count="6" type="stmt"/>
         <line num="384" count="6" type="stmt"/>
         <line num="386" count="6" type="cond" truecount="2" falsecount="0"/>
@@ -898,7 +898,7 @@
       </file>
     </package>
     <package name="components">
-      <metrics statements="127" coveredstatements="118" conditionals="35" coveredconditionals="23" methods="41" coveredmethods="32"/>
+      <metrics statements="116" coveredstatements="107" conditionals="28" coveredconditionals="16" methods="36" coveredmethods="27"/>
       <file name="FilterHeader.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/components/FilterHeader.js">
         <metrics statements="42" coveredstatements="40" conditionals="2" coveredconditionals="1" methods="7" coveredmethods="4"/>
         <line num="18" count="1" type="stmt"/>
@@ -1027,22 +1027,11 @@
         <line num="200" count="2" type="stmt"/>
       </file>
       <file name="TicketSync.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/components/TicketSync.js">
-        <metrics statements="15" coveredstatements="15" conditionals="7" coveredconditionals="7" methods="6" coveredmethods="6"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="8" count="4" type="stmt"/>
-        <line num="9" count="4" type="stmt"/>
-        <line num="10" count="4" type="stmt"/>
-        <line num="11" count="4" type="stmt"/>
-        <line num="12" count="4" type="stmt"/>
-        <line num="14" count="4" type="stmt"/>
-        <line num="16" count="4" type="stmt"/>
-        <line num="17" count="2" type="stmt"/>
-        <line num="18" count="2" type="stmt"/>
-        <line num="30" count="4" type="stmt"/>
-        <line num="31" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="38" count="2" type="stmt"/>
-        <line num="44" count="2" type="stmt"/>
-        <line num="47" count="4" type="stmt"/>
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="13" type="stmt"/>
+        <line num="7" count="13" type="stmt"/>
+        <line num="9" count="12" type="stmt"/>
       </file>
     </package>
     <package name="components.closedloop">
@@ -1875,7 +1864,7 @@
       </file>
     </package>
     <package name="components.closedloop.takeaction">
-      <metrics statements="185" coveredstatements="178" conditionals="30" coveredconditionals="19" methods="82" coveredmethods="76"/>
+      <metrics statements="185" coveredstatements="179" conditionals="30" coveredconditionals="19" methods="82" coveredmethods="77"/>
       <file name="ActionEmailHistory.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/components/closedloop/takeaction/ActionEmailHistory.js">
         <metrics statements="35" coveredstatements="32" conditionals="14" coveredconditionals="9" methods="15" coveredmethods="13"/>
         <line num="29" count="2" type="stmt"/>
@@ -1997,12 +1986,12 @@
         <line num="49" count="4" type="stmt"/>
       </file>
       <file name="SelectPriority.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/components/closedloop/takeaction/SelectPriority.js">
-        <metrics statements="12" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="4"/>
+        <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
         <line num="9" count="4" type="stmt"/>
         <line num="10" count="6" type="stmt"/>
         <line num="11" count="6" type="stmt"/>
         <line num="14" count="6" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
         <line num="17" count="6" type="stmt"/>
         <line num="18" count="18" type="stmt"/>
         <line num="24" count="2" type="stmt"/>
@@ -2114,21 +2103,21 @@
       </file>
     </package>
     <package name="components.closedloop.takeaction.sendEmail">
-      <metrics statements="48" coveredstatements="38" conditionals="8" coveredconditionals="5" methods="11" coveredmethods="11"/>
+      <metrics statements="48" coveredstatements="43" conditionals="8" coveredconditionals="5" methods="11" coveredmethods="11"/>
       <file name="AttachmentUploadIcon.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/components/closedloop/takeaction/sendEmail/AttachmentUploadIcon.js">
-        <metrics statements="14" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="9" count="4" type="stmt"/>
         <line num="10" count="6" type="stmt"/>
         <line num="11" count="6" type="stmt"/>
         <line num="12" count="3" type="stmt"/>
         <line num="14" count="3" type="stmt"/>
         <line num="15" count="3" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="31" count="3" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="24" count="2" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
         <line num="35" count="5" type="stmt"/>
         <line num="52" count="4" type="stmt"/>
       </file>
@@ -3247,67 +3236,130 @@
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
     </package>
+    <package name="hooks">
+      <metrics statements="57" coveredstatements="49" conditionals="14" coveredconditionals="14" methods="9" coveredmethods="9"/>
+      <file name="useTicketSync.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/hooks/useTicketSync.js">
+        <metrics statements="57" coveredstatements="49" conditionals="14" coveredconditionals="14" methods="9" coveredmethods="9"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="18" count="66" type="stmt"/>
+        <line num="19" count="65" type="stmt"/>
+        <line num="20" count="65" type="stmt"/>
+        <line num="22" count="65" type="stmt"/>
+        <line num="23" count="65" type="stmt"/>
+        <line num="24" count="65" type="stmt"/>
+        <line num="25" count="12" type="stmt"/>
+        <line num="27" count="65" type="stmt"/>
+        <line num="29" count="65" type="stmt"/>
+        <line num="30" count="19" type="stmt"/>
+        <line num="31" count="19" type="stmt"/>
+        <line num="32" count="17" type="cond" truecount="2" falsecount="0"/>
+        <line num="33" count="3" type="stmt"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="36" count="14" type="stmt"/>
+        <line num="37" count="14" type="stmt"/>
+        <line num="38" count="14" type="stmt"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="46" count="65" type="stmt"/>
+        <line num="47" count="14" type="stmt"/>
+        <line num="48" count="14" type="stmt"/>
+        <line num="49" count="14" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="56" count="65" type="stmt"/>
+        <line num="57" count="28" type="stmt"/>
+        <line num="58" count="28" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="71" count="65" type="stmt"/>
+        <line num="73" count="19" type="stmt"/>
+        <line num="74" count="19" type="cond" truecount="2" falsecount="0"/>
+        <line num="75" count="3" type="stmt"/>
+        <line num="76" count="3" type="stmt"/>
+        <line num="79" count="16" type="cond" truecount="2" falsecount="0"/>
+        <line num="80" count="2" type="stmt"/>
+        <line num="81" count="2" type="stmt"/>
+        <line num="84" count="14" type="stmt"/>
+        <line num="85" count="14" type="stmt"/>
+        <line num="87" count="14" type="stmt"/>
+        <line num="88" count="14" type="stmt"/>
+        <line num="89" count="14" type="stmt"/>
+        <line num="100" count="14" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="107" count="14" type="stmt"/>
+        <line num="119" count="65" type="stmt"/>
+        <line num="120" count="14" type="cond" truecount="4" falsecount="0"/>
+        <line num="121" count="10" type="stmt"/>
+        <line num="127" count="10" type="stmt"/>
+        <line num="137" count="65" type="stmt"/>
+      </file>
+    </package>
     <package name="redux.actions">
       <metrics statements="267" coveredstatements="256" conditionals="2" coveredconditionals="0" methods="101" coveredmethods="64"/>
       <file name="closedloop.actions.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/redux/actions/closedloop.actions.js">
         <metrics statements="57" coveredstatements="57" conditionals="0" coveredconditionals="0" methods="21" coveredmethods="19"/>
-        <line num="1" count="10" type="stmt"/>
-        <line num="2" count="10" type="stmt"/>
-        <line num="3" count="10" type="stmt"/>
-        <line num="4" count="10" type="stmt"/>
-        <line num="6" count="10" type="stmt"/>
-        <line num="8" count="10" type="stmt"/>
-        <line num="9" count="10" type="stmt"/>
-        <line num="11" count="10" type="stmt"/>
-        <line num="12" count="10" type="stmt"/>
-        <line num="14" count="10" type="stmt"/>
-        <line num="15" count="10" type="stmt"/>
-        <line num="17" count="10" type="stmt"/>
-        <line num="19" count="10" type="stmt"/>
-        <line num="21" count="10" type="stmt"/>
-        <line num="23" count="10" type="stmt"/>
-        <line num="24" count="10" type="stmt"/>
-        <line num="25" count="10" type="stmt"/>
-        <line num="26" count="10" type="stmt"/>
-        <line num="28" count="10" type="stmt"/>
-        <line num="29" count="10" type="stmt"/>
-        <line num="31" count="10" type="stmt"/>
-        <line num="33" count="10" type="stmt"/>
-        <line num="35" count="10" type="stmt"/>
-        <line num="37" count="10" type="stmt"/>
-        <line num="39" count="10" type="stmt"/>
-        <line num="40" count="10" type="stmt"/>
-        <line num="42" count="10" type="stmt"/>
-        <line num="43" count="10" type="stmt"/>
-        <line num="44" count="10" type="stmt"/>
-        <line num="46" count="10" type="stmt"/>
-        <line num="48" count="10" type="stmt"/>
-        <line num="50" count="10" type="stmt"/>
-        <line num="52" count="10" type="stmt"/>
-        <line num="54" count="10" type="stmt"/>
-        <line num="55" count="10" type="stmt"/>
-        <line num="56" count="10" type="stmt"/>
-        <line num="58" count="10" type="stmt"/>
-        <line num="65" count="10" type="stmt"/>
-        <line num="69" count="10" type="stmt"/>
-        <line num="75" count="10" type="stmt"/>
-        <line num="81" count="10" type="stmt"/>
-        <line num="89" count="10" type="stmt"/>
-        <line num="97" count="10" type="stmt"/>
-        <line num="103" count="10" type="stmt"/>
-        <line num="109" count="10" type="stmt"/>
-        <line num="115" count="10" type="stmt"/>
-        <line num="123" count="10" type="stmt"/>
-        <line num="129" count="10" type="stmt"/>
-        <line num="132" count="10" type="stmt"/>
-        <line num="137" count="10" type="stmt"/>
-        <line num="142" count="10" type="stmt"/>
-        <line num="149" count="10" type="stmt"/>
-        <line num="155" count="10" type="stmt"/>
-        <line num="159" count="10" type="stmt"/>
-        <line num="165" count="10" type="stmt"/>
-        <line num="171" count="10" type="stmt"/>
-        <line num="176" count="10" type="stmt"/>
+        <line num="1" count="11" type="stmt"/>
+        <line num="2" count="11" type="stmt"/>
+        <line num="3" count="11" type="stmt"/>
+        <line num="4" count="11" type="stmt"/>
+        <line num="6" count="11" type="stmt"/>
+        <line num="8" count="11" type="stmt"/>
+        <line num="9" count="11" type="stmt"/>
+        <line num="11" count="11" type="stmt"/>
+        <line num="12" count="11" type="stmt"/>
+        <line num="14" count="11" type="stmt"/>
+        <line num="15" count="11" type="stmt"/>
+        <line num="17" count="11" type="stmt"/>
+        <line num="19" count="11" type="stmt"/>
+        <line num="21" count="11" type="stmt"/>
+        <line num="23" count="11" type="stmt"/>
+        <line num="24" count="11" type="stmt"/>
+        <line num="25" count="11" type="stmt"/>
+        <line num="26" count="11" type="stmt"/>
+        <line num="28" count="11" type="stmt"/>
+        <line num="29" count="11" type="stmt"/>
+        <line num="31" count="11" type="stmt"/>
+        <line num="33" count="11" type="stmt"/>
+        <line num="35" count="11" type="stmt"/>
+        <line num="37" count="11" type="stmt"/>
+        <line num="39" count="11" type="stmt"/>
+        <line num="40" count="11" type="stmt"/>
+        <line num="42" count="11" type="stmt"/>
+        <line num="43" count="11" type="stmt"/>
+        <line num="44" count="11" type="stmt"/>
+        <line num="46" count="11" type="stmt"/>
+        <line num="48" count="11" type="stmt"/>
+        <line num="50" count="11" type="stmt"/>
+        <line num="52" count="11" type="stmt"/>
+        <line num="54" count="11" type="stmt"/>
+        <line num="55" count="11" type="stmt"/>
+        <line num="56" count="11" type="stmt"/>
+        <line num="58" count="13" type="stmt"/>
+        <line num="65" count="11" type="stmt"/>
+        <line num="69" count="11" type="stmt"/>
+        <line num="75" count="11" type="stmt"/>
+        <line num="81" count="11" type="stmt"/>
+        <line num="89" count="11" type="stmt"/>
+        <line num="97" count="11" type="stmt"/>
+        <line num="103" count="11" type="stmt"/>
+        <line num="109" count="11" type="stmt"/>
+        <line num="115" count="11" type="stmt"/>
+        <line num="123" count="11" type="stmt"/>
+        <line num="129" count="11" type="stmt"/>
+        <line num="132" count="11" type="stmt"/>
+        <line num="137" count="11" type="stmt"/>
+        <line num="142" count="11" type="stmt"/>
+        <line num="149" count="11" type="stmt"/>
+        <line num="155" count="11" type="stmt"/>
+        <line num="159" count="11" type="stmt"/>
+        <line num="165" count="11" type="stmt"/>
+        <line num="171" count="11" type="stmt"/>
+        <line num="176" count="11" type="stmt"/>
       </file>
       <file name="dashboard.actions.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/redux/actions/dashboard.actions.js">
         <metrics statements="81" coveredstatements="81" conditionals="0" coveredconditionals="0" methods="31" coveredmethods="30"/>
@@ -4211,7 +4263,7 @@
         <line num="10" count="90" type="cond" truecount="1" falsecount="1"/>
         <line num="11" count="90" type="cond" truecount="1" falsecount="1"/>
         <line num="13" count="90" type="stmt"/>
-        <line num="14" count="17" type="cond" truecount="2" falsecount="0"/>
+        <line num="14" count="19" type="cond" truecount="2" falsecount="0"/>
         <line num="17" count="90" type="stmt"/>
         <line num="37" count="37" type="stmt"/>
       </file>
@@ -4372,7 +4424,7 @@
       </file>
     </package>
     <package name="widgets.dashboardWidget">
-      <metrics statements="66" coveredstatements="66" conditionals="28" coveredconditionals="24" methods="24" coveredmethods="24"/>
+      <metrics statements="66" coveredstatements="63" conditionals="28" coveredconditionals="24" methods="24" coveredmethods="23"/>
       <file name="CsatChart.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/widgets/dashboardWidget/CsatChart.js">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
         <line num="10" count="3" type="stmt"/>
@@ -4465,10 +4517,10 @@
         <line num="6" count="5" type="cond" truecount="2" falsecount="0"/>
       </file>
       <file name="SimpleTest.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/widgets/dashboardWidget/SimpleTest.js">
-        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
       </file>
       <file name="SmileyImageLabel.js" path="/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/app/widgets/dashboardWidget/SmileyImageLabel.js">
         <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>

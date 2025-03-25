@@ -11,7 +11,7 @@ module.exports = {
   setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
 
   transformIgnorePatterns: [
-    'node_modules/(?!victory-native|react-native|@react-native|@react-navigation|rn-fetch-blob)',
+    'node_modules/(?!victory-native|react-native|@react-native|@react-navigation|rn-fetch-blob|cheerio)',
   ],
 
   testPathIgnorePatterns: ['/node_modules/', '/android/', '/ios/'],
