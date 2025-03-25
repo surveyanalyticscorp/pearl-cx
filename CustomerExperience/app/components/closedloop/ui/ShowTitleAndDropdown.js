@@ -4,6 +4,7 @@ import RenderDropDownButton from '../TicketOverview/components/RenderDropDownBut
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
+import {HorizontalSpaceBox} from '../../../widgets/SpaceBox';
 
 const ShowTitleAndDropdown = ({
   title,
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
   titleAndDropdownContainer: {
     flex: 1,
     flexDirection: 'column',
-    marginBottom: MarginConstants.tab1_2x,
+    marginBottom: MarginConstants.tab1,
     height: '100%',
   },
   titleContainer: {

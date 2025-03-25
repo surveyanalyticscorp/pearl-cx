@@ -10,6 +10,7 @@ import StartAlignedView from '../../../../routes/commonUI/StartAlignedView';
 import EndAlignedView from '../../../../routes/commonUI/EndAlignedView';
 import {baseTextStyles} from '../../../../styles/text.styles';
 import {color} from 'react-native-reanimated';
+import {HorizontalSpaceBox} from '../../../../widgets/SpaceBox';
 
 const RenderDropDownButton = ({
   text,
@@ -30,6 +31,8 @@ const RenderDropDownButton = ({
       <View style={styles.container}>
         <StartAlignedView>
           {frontIcon}
+          <HorizontalSpaceBox />
+
           <Text style={styles.dropdownContainerText}>{text}</Text>
         </StartAlignedView>
         <EndAlignedView>

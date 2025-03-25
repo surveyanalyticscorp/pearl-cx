@@ -64,47 +64,92 @@ import RenderDatePickerModal from '../../RenderDatePickerModal';
 import {ANALYTICS_EVENTS} from '../../../Utils/Analytic.constants';
 import {sendAnalyticsEvent} from '../../../Utils/AnalyticLogs';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
 
-const isValid = ticketState => {
-  if (!ticketState.currentSegmentId) {
-    showErrorFlashMessage(translate('segment_not_selected'));
-    return false;
-  }
-  if (!ticketState.issueDate) {
-    showErrorFlashMessage(translate('issue_date_not_selected'));
-    return false;
-  }
+const INPUTTYPES = {
+  EMAIL: 'EMAIL',
+  PHONE: 'PHONE',
+  NAME: 'NAME',
+  DATE: 'DATE',
+  SEGMENT: 'SEGMENT',
+  PRIORITY: 'PRIORITY',
+  STATUS: 'STATUS',
+  DESCRIPTION: 'DESCRIPTION',
+  OWNER: 'OWNER',
+};
+
+const checkValidation = ticketState => {
   if (!ticketState.firstName) {
-    showErrorFlashMessage(translate('enter_customer_name'));
-    return false;
+    return {
+      isValid: false,
+      type: INPUTTYPES.NAME,
+      errorMessage: translate('enter_customer_name'),
+    };
   }
+
   if (!ticketState.emailAddress) {
-    showErrorFlashMessage(translate('enter_an_email'));
-    return false;
+    return {
+      isValid: false,
+      type: INPUTTYPES.EMAIL,
+      errorMessage: translate('enter_an_email'),
+    };
   }
+
   if (ticketState.emailAddress && !validateEmail(ticketState.emailAddress)) {
-    showErrorFlashMessage(translate('enter_an_valid_email'));
-    return false;
+    return {
+      isValid: false,
+      type: INPUTTYPES.EMAIL,
+      errorMessage: translate('enter_an_valid_email'),
+    };
   }
+  if (!ticketState.currentSegmentId) {
+    return {
+      isValid: false,
+      type: INPUTTYPES.SEGMENT,
+      errorMessage: translate('segment_not_selected'),
+    };
+  }
+
+  if (!ticketState.issueDate) {
+    return {
+      isValid: false,
+      type: INPUTTYPES.DATE,
+      errorMessage: translate('issue_date_not_selected'),
+    };
+  }
+
   if (ticketState.priority === null || ticketState.priority === undefined) {
-    showErrorFlashMessage(translate('priority_not_selected'));
-    return false;
+    return {
+      isValid: false,
+      type: INPUTTYPES.PRIORITY,
+      errorMessage: translate('priority_not_selected'),
+    };
   }
+
   if (ticketState.status === null || ticketState.status === undefined) {
-    showErrorFlashMessage(translate('status_not_selected'));
-    return false;
+    return {
+      isValid: false,
+      type: INPUTTYPES.STATUS,
+      errorMessage: translate('status_not_selected'),
+    };
   }
 
   if (!ticketState.assignToId) {
-    showErrorFlashMessage(translate('select_a_ticket_owner'));
-    return false;
+    return {
+      isValid: false,
+      type: INPUTTYPES.OWNER,
+      errorMessage: translate('select_a_ticket_owner'),
+    };
   }
 
   if (!ticketState.comment) {
-    showErrorFlashMessage(translate('add_description'));
-    return false;
+    return {
+      isValid: false,
+      type: INPUTTYPES.DESCRIPTION,
+      errorMessage: translate('add_description'),
+    };
   }
-  return true;
+  return {isValid: true};
 };
 
 const CreateTicketContainer = ({children}) => {
@@ -294,6 +339,16 @@ const VerticalSpace = () => (
   <VerticalSpaceBox marginVertical={MarginConstants.halfTab} />
 );
 
+const ShowInputError = ({inputType, componentType}) => {
+  if (inputType.type === componentType) {
+    return (
+      <TextLabel text={inputType.errorMessage} style={styles.errorLabelRed} />
+    );
+  } else {
+    return <View />;
+  }
+};
+
 export default function CreateTicket(props) {
   const responseId = props.route?.params?.responseId ?? null;
   const customerName = props.route?.params?.customerName ?? '';
@@ -307,7 +362,7 @@ export default function CreateTicket(props) {
     state => state.global.userInfo,
   );
   // const [priority, setPriority] = useState('Select');
-  const [priorityIndex, setPriorityIndex] = useState(-1);
+  const [priorityIndex, setPriorityIndex] = useState(0);
   const [segment, setSegment] = useState(
     translate('select_segment.select_segment'),
   );
@@ -318,7 +373,7 @@ export default function CreateTicket(props) {
   );
   const [ticketOwnerIndex, setTIcketOwnerIndex] = useState(-1);
   // const [status, setStatus] = useState('Select');
-  const [statusIndex, setStatusIndex] = useState(-1);
+  const [statusIndex, setStatusIndex] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(moment().format(DMYFORMAT));
   const navigation = useNavigation();
@@ -343,11 +398,11 @@ export default function CreateTicket(props) {
 
   const fall = new Animated.Value(1);
   const priorityBottomSheetSnapPoints = [
-    Platform.OS === 'ios' ? '45%' : '50%',
+    Platform.OS === 'ios' ? '50%' : '55%',
     '0%',
   ];
   const statusBottomSheetSnapPoints = [
-    Platform.OS === 'ios' ? '40%' : '45%',
+    Platform.OS === 'ios' ? '45%' : '50%',
     '0%',
   ];
   const segmentBottomSheetSnapPoints = ['45%', '0%'];
@@ -357,6 +412,11 @@ export default function CreateTicket(props) {
   // const [shadow, setShadow] = useState(false);
   const dispatch = useDispatch();
   const [showLoading, setLoading] = useState(false);
+  const [inputType, setInputType] = useState({
+    isValid: true,
+    type: '',
+    errorMessage: '',
+  });
   const [ticketState, setTicketState] = useState({
     userName: `${firstName} ${lastName}`,
     userEmailAddress: `${emailAddress}`,
@@ -449,13 +509,17 @@ export default function CreateTicket(props) {
   };
 
   const handleCreateTicket = () => {
-    if (isValid(ticketState)) {
+    const {isValid, errorMessage, type} = checkValidation(ticketState);
+    if (isValid) {
       setLoading(true);
       sendAnalyticsEvent(ANALYTICS_EVENTS.CREATE_TICKET, {
         ...ticketState,
       });
       dispatch(createClfTicket(ticketState, feedbackApiKey));
       props.navigation.goBack();
+    } else {
+      setInputType(checkValidation(ticketState));
+      errorMessage && showErrorFlashMessage(errorMessage);
     }
   };
 
@@ -662,6 +726,7 @@ export default function CreateTicket(props) {
           defaultValue={customerName}
           setTicketState={setTicketState}
         />
+        <ShowInputError componentType={INPUTTYPES.NAME} inputType={inputType} />
         <VerticalSpaceBox multiplyBy={2} />
 
         <RenderPhoneInput setTicketState={setTicketState} />
@@ -670,6 +735,11 @@ export default function CreateTicket(props) {
           defaultValue={customerEmail}
           setTicketState={setTicketState}
         />
+        <ShowInputError
+          componentType={INPUTTYPES.EMAIL}
+          inputType={inputType}
+        />
+
         <VerticalSpaceBox multiplyBy={2} />
         <ShowTitleAndDropdown
           titleIcon={<SegmentIcon />}
@@ -678,6 +748,11 @@ export default function CreateTicket(props) {
           onPress={handleSegmentSelection}
           hasArrowDownIcon
         />
+        <ShowInputError
+          componentType={INPUTTYPES.SEGMENT}
+          inputType={inputType}
+        />
+
         <VerticalSpaceBox multiplyBy={2} />
         <ShowTitleAndDropdown
           titleIcon={<DateFilterIcon size={12} />}
@@ -688,6 +763,8 @@ export default function CreateTicket(props) {
           onPress={handleDateSelection}
           hasArrowDownIcon={false}
         />
+        <ShowInputError componentType={INPUTTYPES.DATE} inputType={inputType} />
+
         <VerticalSpaceBox multiplyBy={2} />
 
         <ShowTitleAndDropdown
@@ -708,6 +785,11 @@ export default function CreateTicket(props) {
           }
           hasArrowDownIcon
         />
+        <ShowInputError
+          componentType={INPUTTYPES.PRIORITY}
+          inputType={inputType}
+        />
+
         <VerticalSpaceBox multiplyBy={2} />
 
         <ShowTitleAndDropdown
@@ -724,6 +806,10 @@ export default function CreateTicket(props) {
           hasArrowDownIcon
         />
         <VerticalSpaceBox multiplyBy={2} />
+        <ShowInputError
+          componentType={INPUTTYPES.STATUS}
+          inputType={inputType}
+        />
 
         <ShowTitleAndDropdown
           titleIcon={<RenderMateriaCommunityIcon iconName={'shield-account'} />}
@@ -732,9 +818,17 @@ export default function CreateTicket(props) {
           onPress={handleOwnerSelection}
           hasArrowDownIcon
         />
+        <ShowInputError
+          componentType={INPUTTYPES.OWNER}
+          inputType={inputType}
+        />
         <VerticalSpaceBox multiplyBy={2} />
 
         <RenderDescriptionInput setTicketState={setTicketState} />
+        <ShowInputError
+          componentType={INPUTTYPES.DESCRIPTION}
+          inputType={inputType}
+        />
 
         <VerticalSpaceBox multiplyBy={4} />
         <CreateTicketButton
@@ -836,6 +930,14 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.halfTab,
     borderBottomColor: Colors.darkGrey,
     borderBottomWidth: 1,
+  },
+  errorLabelRed: {
+    marginBottom: MarginConstants.tab1,
+    alignItems: 'center',
+    paddingVertical: PaddingConstants.halfTab,
+    color: Colors.red,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.mediumText,
   },
   rowButton: {
     marginHorizontal: MarginConstants.tab2,
