@@ -30,6 +30,11 @@ public class CacheUtils {
         UserDefaults.standard.set(value, forKey: key)
     }
     
+    public static func resetIntUserDefaults(key: String) {
+        UserDefaults.standard.removeObject(forKey: key)
+        setToUserDefaults(key: key, value: 1)
+    }
+    
     public static func clearUserDefaults(key: String) {
         UserDefaults.standard.removeObject(forKey: key)
     }

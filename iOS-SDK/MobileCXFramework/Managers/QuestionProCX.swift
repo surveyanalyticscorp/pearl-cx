@@ -10,9 +10,19 @@ import UIKit
 import WebKit
 
 @MainActor
-public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNavigationDelegate {
+public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNavigationDelegate, SurveyLaunchDelegate {
+    
+    @MainActor public func launchSurvey() {
+        print("delegate successfully called")
+        if (touchPoint != nil) {
+            self.showInAppSurvey(touchPoint: touchPoint!);
+            CacheUtils.resetIntUserDefaults(key: kPageVisitCountKey)
+        }
+    }
+    
     let backButton = UIButton(type: .custom)
     let pageVisitCount: Int = CacheUtils.getIntFromUserDefaults(key: kPageVisitCountKey)!;
+    
     @MainActor public func CXServiceResponse(withURL response: [String: Any]) {
         if let _ = response[ksurveyURL] {
             print("URL found")
@@ -99,45 +109,44 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         let dayOfWeek = formatter.string(from: Date())
         print(dateOfMonth)
         print(dayOfWeek)
+        self.touchPoint = touchPoint;
+        SurveyLaunchLogicUtils.getInstance().surveyLaunchDelegate = self;
+        let date = 24;
+        let day = "Monday"
+        let timer:Double = 5.0
+        var intercept1 = NSMutableDictionary()
+        intercept1.setValue(timer, forKey: "timer")
+        intercept1.setValue(pageVisitCount, forKey: "pageVisitCount")
+        intercept1.setValue(date, forKey: "date")
+        intercept1.setValue(day, forKey: "day")
+        intercept1.setValue("AND", forKey: "condition")
         
         
-//        if (SurveyLaunchLogicUtils.checkSurveyLaunchDayLogic(dayOfTheWeek: "Monday")) {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//                self.showInAppSurvey(touchPoint: touchPoint);
-//            }
-//        }
+        print("pageVisitCount",pageVisitCount);
         
+        SurveyLaunchLogicUtils.getInstance().initializeIntercept(intercept: intercept1)
+        CacheUtils.setToUserDefaults(key: kPageVisitCountKey, value: pageVisitCount + 1);
+//        SurveyLaunchLogicUtils.getInstance().checkSurveyLaunchDayLogic(dayOfWeek: "Monday")
         
-//        if (SurveyLaunchLogicUtils.checkPageVisitCountLogic(pageVisitCount: 2)) {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//                self.showInAppSurvey(touchPoint: touchPoint);
-//            }
-//        }
+//        SurveyLaunchLogicUtils.getInstance().checkPageVisitCountLogic(pageVisitCount: 2)
         
-//        if (SurveyLaunchLogicUtils.checkSurveyLaunchDateOfMonthLogic(dateOfMonth: dateOfMonth)) {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//                self.showInAppSurvey(touchPoint: touchPoint);
-//            }
-//        }
+//        SurveyLaunchLogicUtils.getInstance().checkSurveyLaunchDateOfMonthLogic(dateOfMonth: dateOfMonth)
         
-        if (SurveyLaunchLogicUtils.checkSurveyLaunchDayLogic(dayOfWeek: dayOfWeek)) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                self.showInAppSurvey(touchPoint: touchPoint);
-            }
-        }
+//        SurveyLaunchLogicUtils.getInstance().checkSurveyLaunchDayLogic(dayOfWeek: dayOfWeek)
+        
 //        self.showSurveyForAppUsageAndLaunch(touchPoint: touchPoint);
     }
     
     public func showSurveyForAppUsageAndLaunch (touchPoint: TouchPoint) {
         CacheUtils.setToUserDefaults(key: kPageVisitCountKey, value: pageVisitCount + 1);
         
-        if (SurveyLaunchLogicUtils.checkPageVisitCountLogic(pageVisitCount: 4)) {
-            let appInteractionTimeLimit = DispatchTimeInterval.seconds(SurveyLaunchLogicUtils.getAppUserInteractionTimeInSeconds());
-            DispatchQueue.main.asyncAfter(deadline: .now() + appInteractionTimeLimit) {
-                self.showInAppSurvey(touchPoint: touchPoint);
-            }
-            CacheUtils.clearUserDefaults(key: kPageVisitCountKey);
-        }
+//        if (SurveyLaunchLogicUtils.checkPageVisitCountLogic(pageVisitCount: 4)) {
+//            let appInteractionTimeLimit = DispatchTimeInterval.seconds(SurveyLaunchLogicUtils.getAppUserInteractionTimeInSeconds());
+//            DispatchQueue.main.asyncAfter(deadline: .now() + appInteractionTimeLimit) {
+//                self.showInAppSurvey(touchPoint: touchPoint);
+//            }
+//            CacheUtils.clearUserDefaults(key: kPageVisitCountKey);
+//        }
     }
 
     public func touchPointBuilder(touchPointID: Int) -> TouchPoint {
