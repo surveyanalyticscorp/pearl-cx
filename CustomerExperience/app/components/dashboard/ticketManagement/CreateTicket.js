@@ -521,7 +521,6 @@ export default function CreateTicket(props) {
       props.navigation.goBack();
     } else {
       setInputType(checkValidation(ticketState));
-      errorMessage && showErrorFlashMessage(errorMessage);
     }
   };
 
