@@ -511,8 +511,8 @@ export default function CreateTicket(props) {
   };
 
   const handleCreateTicket = () => {
-    const {isValid, errorMessage, type} = checkValidation(ticketState);
-    if (isValid) {
+    const validation = checkValidation(ticketState);
+    if (validation.isValid) {
       setLoading(true);
       sendAnalyticsEvent(ANALYTICS_EVENTS.CREATE_TICKET, {
         ...ticketState,
@@ -520,7 +520,7 @@ export default function CreateTicket(props) {
       dispatch(createClfTicket(ticketState, feedbackApiKey));
       props.navigation.goBack();
     } else {
-      setInputType(checkValidation(ticketState));
+      setInputType(validation);
     }
   };
 
