@@ -1,35 +1,45 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Pressable, View, StyleSheet} from 'react-native';
 import {TextField} from 'react-native-material-textfield';
 import {Colors} from '../styles/color.constants';
 import StringUtils from '../Utils/StringUtils';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
 import {MarginConstants} from '../styles/margin.constants';
+import PasswordVisibilitySVGIcon from './../../assets/images/visibility.svg';
+import PasswordVisibility_offSVGIcon from './../../assets/images/visibility_off.svg';
+import {PaddingConstants} from '../styles/padding.constants';
 
-const PasswordVisibilityIcon = ({iconName, onPress}) => {
+const VisibilityOnIcon = () => {
   return (
-    <Icon
-      testID="render-visibility-icon"
-      style={{
-        flex: 1,
-        position: 'absolute',
-        top: MarginConstants.tab4,
-        right: MarginConstants.tab1,
-      }}
-      name={iconName}
-      size={25}
-      color={Colors.textTintColor}
-      onPress={onPress}
+    <PasswordVisibilitySVGIcon
+      height={24}
+      width={24}
+      fill={Colors.filterIconColor}
     />
   );
 };
 
-const RenderPasswordVisibility = ({secureText, value, iconName, onPress}) => {
+const VisibilityOffIcon = () => {
+  return (
+    <PasswordVisibility_offSVGIcon
+      height={24}
+      width={24}
+      fill={Colors.filterIconColor}
+    />
+  );
+};
+const RenderPasswordVisibility = ({
+  secureText,
+  value,
+  isPasswordVisible,
+  onPress,
+}) => {
   const isVisibility = secureText && StringUtils.isNotEmpty(value);
   return isVisibility ? (
-    <PasswordVisibilityIcon iconName={iconName} onPress={onPress} />
+    <Pressable style={styles.passwordVisibilityButton} onPress={onPress}>
+      {isPasswordVisible ? <VisibilityOffIcon /> : <VisibilityOnIcon />}
+    </Pressable>
   ) : (
     <View />
   );
@@ -62,7 +72,7 @@ const QPTextField = props => {
   let label = props.label ? props.label : '';
   let defaultValue = props.defaultValue ? props.defaultValue : '';
   let style = [props?.style, {paddingVertical: 0}];
-  let icon = secureText ? 'visibility-off' : 'visibility';
+  let isPasswordVisible = secureText;
   let textStyle = props.textStyle
     ? props.textStyle
     : {color: Colors.filterIconColor, fontFamily: FontFamily.regular};
@@ -102,10 +112,20 @@ const QPTextField = props => {
       <RenderPasswordVisibility
         secureText={props.secureText}
         value={props.value}
-        iconName={icon}
+        isPasswordVisible={isPasswordVisible}
         onPress={changePwdType}
       />
     </View>
   );
 };
 export default QPTextField;
+
+const styles = StyleSheet.create({
+  passwordVisibilityButton: {
+    flex: 1,
+    position: 'absolute',
+    top: MarginConstants.tab4,
+    right: MarginConstants.tab1,
+    paddingVertical: PaddingConstants.halfTab,
+  },
+});
