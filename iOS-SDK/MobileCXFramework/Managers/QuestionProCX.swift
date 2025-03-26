@@ -20,6 +20,76 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         }
     }
     
+    @MainActor public func launchSurveyForIntercept(interceptId: Int, satisfiedRule: Rule) {
+        
+        var satisfiedRules: [Rule] = [];
+        if let savedData = CacheUtils.getInterceptRulesForInterceptId(key: kSatisfiedRulesForId+String(interceptId)) {
+            do {
+                var decodedRules = try JSONDecoder().decode([Rule].self, from: savedData)
+                if !decodedRules.contains(where: { $0.name == satisfiedRule.name }) {
+                    decodedRules.append(satisfiedRule)
+                    if let updatedData = try? JSONEncoder().encode(decodedRules) {
+                        CacheUtils.setInterceptRulesForInterceptId(key: kSatisfiedRulesForId+String(interceptId), value: updatedData)
+                    }
+                }
+            } catch {
+                print("Failed to decode intercept rules: ", error)
+            }
+        } else {
+            satisfiedRules.append(satisfiedRule);
+            if let encodedData = try? JSONEncoder().encode(satisfiedRules) {
+                CacheUtils.setInterceptRulesForInterceptId(key: kSatisfiedRulesForId+String(interceptId), value: encodedData)
+            }
+        }
+        
+        
+        
+        if let satisfiedRulesData = CacheUtils.getInterceptRulesForInterceptId(key: kSatisfiedRulesForId+String(interceptId)) {
+            do {
+                let satisfiedRules = try JSONDecoder().decode([Rule].self, from: satisfiedRulesData)
+                print("satisfiedRules ----> ", satisfiedRules)
+                if let apiResponse = CacheUtils.getIntercepts(key: kIntercepts) {
+                    do {
+                        let apiIntercepts = try JSONDecoder().decode([Intercept].self, from: apiResponse)
+                        for intercept in apiIntercepts {
+                            if (intercept.id == interceptId) {
+                                print("intercept id matched", interceptId)
+                                if (intercept.condition == InterceptCondition.AND.rawValue) {
+                                    print("AND condition")
+                                    if (satisfiedRules.count == intercept.rules.count) {
+                                        print("satisfiedRules --->",satisfiedRules)
+                                        print("intercept.rules --->",intercept.rules)
+                                        if (touchPoint != nil) {
+                                            print("Launching survey for intercept id -> ", interceptId)
+                                            self.showInAppSurvey(touchPoint: touchPoint!);
+                                            CacheUtils.resetInterceptRulesForInterceptId(key: kSatisfiedRulesForId+String(interceptId))
+                                        }
+                                    }
+                                } else if (intercept.condition == InterceptCondition.OR.rawValue){
+                                    print("OR condition")
+                                    if (touchPoint != nil) {
+                                        print("Launching survey for intercept id -> ", interceptId)
+                                        self.showInAppSurvey(touchPoint: touchPoint!);
+                                        CacheUtils.resetInterceptRulesForInterceptId(key: kSatisfiedRulesForId+String(interceptId))
+                                    }
+                                }
+                                
+                            }
+                        }
+                    } catch {
+                        print("Error while fetching all intercepts", error)
+                    }
+                } else {
+                    print("No valid Data found in UserDefaults")
+                }
+            } catch {
+                print("Failed to decode intercept rules:", error)
+            }
+        } else {
+            print("No valid Data found in UserDefaults")
+        }
+    }
+    
     let backButton = UIButton(type: .custom)
     let pageVisitCount: Int = CacheUtils.getIntFromUserDefaults(key: kPageVisitCountKey)!;
     
@@ -107,46 +177,85 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE"
         let dayOfWeek = formatter.string(from: Date())
-        print(dateOfMonth)
-        print(dayOfWeek)
         self.touchPoint = touchPoint;
         SurveyLaunchLogicUtils.getInstance().surveyLaunchDelegate = self;
-        let date = 24;
-        let day = "Monday"
-        let timer:Double = 5.0
-        var intercept1 = NSMutableDictionary()
-        intercept1.setValue(timer, forKey: "timer")
-        intercept1.setValue(pageVisitCount, forKey: "pageVisitCount")
-        intercept1.setValue(date, forKey: "date")
-        intercept1.setValue(day, forKey: "day")
-        intercept1.setValue("AND", forKey: "condition")
+        let surveyLogicUtilsInstance = SurveyLaunchLogicUtils.getInstance();
+        let mobileVisitorAPIURL = APIUtils.getVisitorMobileAPIURL()
+        var visitorApiResponse: ApiResponse!
+        Task {
+            do {
+                let response: ApiResponse = try await ApiServiceCX.shared.request(
+                    urlString: mobileVisitorAPIURL,
+                    method: .GET,
+                    headers: [
+                        "x-app-key": "e37da3ff-858c-4358-af11-a727377dfac2",
+                        "package-name": "com.questionpro",
+                    ],
+                    responseType: ApiResponse.self
+                    )
+               
+                visitorApiResponse = response
+                
+                do {
+                    let encodedData = try JSONEncoder().encode(visitorApiResponse.project.intercepts)
+                    CacheUtils.setIntercepts(key: kIntercepts, value: encodedData)
+                } catch {
+                    print("Erro while saving all intercepts:", error)
+                }
+                
+                for intercept in visitorApiResponse.project.intercepts {
+                    do {
+                        let encodedData = try JSONEncoder().encode(intercept.rules)
+                        CacheUtils.setInterceptRulesForInterceptId(key: String(intercept.id), value: encodedData)
+                    } catch {
+                        print("Failed to encode intercept rules:", error)
+                    }
+                    
+                    for rule in intercept.rules {
+                        if (rule.name == InterceptRuleType.TIME_SPENT.rawValue) {
+                            Task {
+                                for await timeLeft in  TimerUtils.startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {}
+                            }
+                        } else if (rule.name == InterceptRuleType.VIEW_COUNT.rawValue) {
+                            CacheUtils.setToUserDefaults(key: kPageVisitCountKey, value: pageVisitCount + 1);
+                            print("AppLaunch count -> ",CacheUtils.getIntFromUserDefaults(key: kPageVisitCountKey))
+                            surveyLogicUtilsInstance.checkPageVisitCountLogic(pageVisitCount: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
+                        } else if (rule.name == InterceptRuleType.DAY.rawValue) {
+                            surveyLogicUtilsInstance.checkSurveyLaunchDayLogic(dayValue: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
+                        } else if (rule.name == InterceptRuleType.DATE.rawValue) {
+                            surveyLogicUtilsInstance.checkSurveyLaunchDateOfMonthLogic(date: Int(rule.value)!,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
+                        }
+                    }
+                }
+                
+                for intercept in visitorApiResponse.project.intercepts {
+                    if let savedData = CacheUtils.getInterceptRulesForInterceptId(key: String(intercept.id)) {
+                        do {
+                            let decodedRules = try JSONDecoder().decode([Rule].self, from: savedData)
+                            print("Saved Rules for \(String(intercept.id)) id", decodedRules)
+                        } catch {
+                            print("Failed to decode intercept rules:", error)
+                        }
+                    } else {
+                        print("No valid Data found in UserDefaults")
+                    }
+                }
+                
+                
+                
+                
+                
+            } catch {
+                print("API error: \(error)")
+            }
+        }
+//        intercept.setValue(visitorApiResponse.project.intercepts[0].rules[0].value, forKey: "timer")
+//        intercept.setValue(visitorApiResponse.project.intercepts[0].rules[1].value, forKey: "pageVisitCount")
+//        intercept.setValue(date, forKey: "date")
+//        intercept.setValue(day, forKey: "day")
+//        intercept.setValue(visitorApiResponse.project.intercepts[0].condition, forKey: "condition")
+//        SurveyLaunchLogicUtils.getInstance().initializeIntercept(intercept: intercept)
         
-        
-        print("pageVisitCount",pageVisitCount);
-        
-        SurveyLaunchLogicUtils.getInstance().initializeIntercept(intercept: intercept1)
-        CacheUtils.setToUserDefaults(key: kPageVisitCountKey, value: pageVisitCount + 1);
-//        SurveyLaunchLogicUtils.getInstance().checkSurveyLaunchDayLogic(dayOfWeek: "Monday")
-        
-//        SurveyLaunchLogicUtils.getInstance().checkPageVisitCountLogic(pageVisitCount: 2)
-        
-//        SurveyLaunchLogicUtils.getInstance().checkSurveyLaunchDateOfMonthLogic(dateOfMonth: dateOfMonth)
-        
-//        SurveyLaunchLogicUtils.getInstance().checkSurveyLaunchDayLogic(dayOfWeek: dayOfWeek)
-        
-//        self.showSurveyForAppUsageAndLaunch(touchPoint: touchPoint);
-    }
-    
-    public func showSurveyForAppUsageAndLaunch (touchPoint: TouchPoint) {
-        CacheUtils.setToUserDefaults(key: kPageVisitCountKey, value: pageVisitCount + 1);
-        
-//        if (SurveyLaunchLogicUtils.checkPageVisitCountLogic(pageVisitCount: 4)) {
-//            let appInteractionTimeLimit = DispatchTimeInterval.seconds(SurveyLaunchLogicUtils.getAppUserInteractionTimeInSeconds());
-//            DispatchQueue.main.asyncAfter(deadline: .now() + appInteractionTimeLimit) {
-//                self.showInAppSurvey(touchPoint: touchPoint);
-//            }
-//            CacheUtils.clearUserDefaults(key: kPageVisitCountKey);
-//        }
     }
 
     public func touchPointBuilder(touchPointID: Int) -> TouchPoint {
@@ -155,12 +264,16 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     }
 
     public func launchFeedbackSurvey(touchPoint: TouchPoint) {
-        var ShowInDialog = touchPoint.ShowInDialog
+        let ShowInDialog = touchPoint.ShowInDialog
         if (ShowInDialog) {
             self.showInAppSurvey(touchPoint: touchPoint);
         } else {
             self.showMessageInViewControllerWithResponse(touchPoint: touchPoint)
         }
+    }
+    
+    public func resetQuestionProCXManager() {
+        
     }
 
     public func stopQuestionProCXManager() {

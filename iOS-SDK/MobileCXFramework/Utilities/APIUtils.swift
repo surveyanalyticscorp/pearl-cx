@@ -11,27 +11,22 @@ public class APIUtils {
     
     public static func getBaseURL() -> URLComponents {
         var components = URLComponents()
-        components.scheme = "https://"
-        components.host = kMobileAPIProduction
+        components.scheme = "https"
         
-        if (kEnvironment == kProductionEnvironment) {
-            var components = URLComponents()
-            components.scheme = "https://"
+        // Set the correct host based on environment
+        if kEnvironment == kProductionEnvironment {
             components.host = kMobileAPIProduction
-            return components
-        } else if (kEnvironment == kStagingEnvironment) {
-            var components = URLComponents()
-            components.scheme = "https://"
+        } else if kEnvironment == kStagingEnvironment {
             components.host = kMobileAPIStaging
-            return components
         }
+        
         return components
     }
-    
-    public static func getVisitorMobileAPIURL() -> URL {
+
+    public static func getVisitorMobileAPIURL() -> String {
         var components = getBaseURL()
         components.path = kMobileCXGetSurveyURL
-        return components.url!
+        return components.url?.absoluteString ?? ""
     }
     
     public static func getDataCenterString(dataCenter: TouchPoint.DataCenter) -> String {

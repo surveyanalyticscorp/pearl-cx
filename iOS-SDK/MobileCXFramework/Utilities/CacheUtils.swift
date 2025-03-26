@@ -18,6 +18,35 @@ public class CacheUtils {
         return defaultValue
     }
     
+    public static func setInterceptRulesForInterceptId(key: String, value: Data) {
+        UserDefaults.standard.set(value, forKey: key)
+    }
+    
+    public static func resetInterceptRulesForInterceptId(key: String) {
+        UserDefaults.standard.removeObject(forKey: key)
+    }
+    
+    public static func getInterceptRulesForInterceptId(key: String) -> Data? {
+        return UserDefaults.standard.data(forKey: key)
+    }
+    
+    public static func setIntercepts(key: String, value: Data) {
+        UserDefaults.standard.set(value, forKey: key)
+    }
+    
+    public static func getIntercepts(key: String) -> Data? {
+        return UserDefaults.standard.data(forKey: key)
+    }
+    
+    
+    public static func setInterceptForInterceptId(key: String, value: Data) {
+        UserDefaults.standard.set(value, forKey: key)
+    }
+    
+    public static func getInterceptForInterceptId(key: String) -> Data? {
+        return UserDefaults.standard.data(forKey: key)
+    }
+    
     public static func getIntFromUserDefaults(key: String) -> Int?  {
         if let defaultValue = UserDefaults.standard.object(forKey: key) as? Int {
             return defaultValue

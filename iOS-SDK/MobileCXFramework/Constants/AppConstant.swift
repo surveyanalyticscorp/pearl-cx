@@ -18,6 +18,9 @@ let kStagingEnvironment = "STAGING"
 
 //User defaults constant keys
 public let kPageVisitCountKey = "PageVisitCountKey"
+public let kInterceptRulesForId = "InterceptRulesForId"
+public let kSatisfiedRulesForId = "SatisfiedRulesForId"
+public let kIntercepts = "Intercepts"
 
 //API request types
 public enum APIRequestType: String {
@@ -33,12 +36,23 @@ public enum APIRequestType: String {
 }
 
 //API Serivce constants
-public let kMobileAPIStaging = "cx-intercept-staging-api.questionpro.com/api/v1/"
-public let kMobileAPIProduction = "api.questionpro.com/api/v1/"
+public let kMobileAPIStaging = "cx-intercept-staging-api.questionpro.com"
+public let kMobileAPIProduction = "api.questionpro.com/"
 
 //API URLs
-public let kMobileCXGetSurveyURL = "visitor/mobile"
+public let kMobileCXGetSurveyURL = "/api/v1/visitor/mobile"
 public let kGetSurveyURL = "/cx/transactions/survey-url"
 
 public let kEnvironment = kStagingEnvironment
 
+public enum InterceptType: String {
+    case PROMPT, EMBED
+}
+
+public enum InterceptRuleType: String {
+    case TIME_SPENT, VIEW_COUNT, DAY, DATE
+}
+
+public enum InterceptCondition: String {
+    case AND, OR
+}
