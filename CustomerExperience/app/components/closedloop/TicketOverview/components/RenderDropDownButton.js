@@ -9,7 +9,6 @@ import {Colors} from '../../../../styles/color.constants';
 import StartAlignedView from '../../../../routes/commonUI/StartAlignedView';
 import EndAlignedView from '../../../../routes/commonUI/EndAlignedView';
 import {baseTextStyles} from '../../../../styles/text.styles';
-import {color} from 'react-native-reanimated';
 import {HorizontalSpaceBox} from '../../../../widgets/SpaceBox';
 
 const RenderDropDownButton = ({
@@ -18,9 +17,11 @@ const RenderDropDownButton = ({
   handleOnPress,
   hasArrowDownIcon = false,
   isDisabled = false,
+  isError,
 }) => {
   const rootContainerStyle = {
     opacity: isDisabled ? 0.6 : 1,
+    borderBottomColor: isError ? Colors.deleteButtonText : Colors.darkGrey,
     ...styles.rootContainer,
   };
   return (

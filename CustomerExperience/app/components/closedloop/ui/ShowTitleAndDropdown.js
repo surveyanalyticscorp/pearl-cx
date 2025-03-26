@@ -5,6 +5,7 @@ import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {HorizontalSpaceBox} from '../../../widgets/SpaceBox';
+import ShowInputError from '../../../routes/commonUI/ShowInputError';
 
 const ShowTitleAndDropdown = ({
   title,
@@ -14,6 +15,8 @@ const ShowTitleAndDropdown = ({
   hasArrowDownIcon = false,
   frontIcon,
   isDisabled = false,
+  isError = false,
+  errorMessage,
 }) => {
   return (
     <View style={styles.titleAndDropdownContainer}>
@@ -26,7 +29,9 @@ const ShowTitleAndDropdown = ({
         handleOnPress={onPress}
         hasArrowDownIcon={hasArrowDownIcon}
         frontIcon={frontIcon}
+        isError={isError}
       />
+      <ShowInputError isError={isError} errorMessage={errorMessage} />
     </View>
   );
 };

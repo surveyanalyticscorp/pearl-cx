@@ -1,18 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Platform,
-  StyleSheet,
-  TextInput,
-  View,
-  Image,
-  SafeAreaView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {Platform, StyleSheet, TextInput, View, Image} from 'react-native';
 import {
   Colors,
   getPriorityBorderColorbyId,
 } from '../../../styles/color.constants';
-import {FontFamily, FontWeight} from '../../../styles/font.constants';
+import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
@@ -44,11 +36,7 @@ import {
   FullMonthDateYearFormat,
   YMDFORMAT,
 } from '../../../Utils/AppConstants';
-import {
-  isStringNullOrEmpty,
-  showErrorFlashMessage,
-  validateEmail,
-} from '../../../Utils/Utility';
+import {showErrorFlashMessage, validateEmail} from '../../../Utils/Utility';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
@@ -64,7 +52,7 @@ import RenderDatePickerModal from '../../RenderDatePickerModal';
 import {ANALYTICS_EVENTS} from '../../../Utils/Analytic.constants';
 import {sendAnalyticsEvent} from '../../../Utils/AnalyticLogs';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import ShowInputError from '../../../routes/commonUI/ShowInputError';
 
 const INPUTTYPES = {
   EMAIL: 'EMAIL',
@@ -202,6 +190,7 @@ const RenderTextInput = ({
   defaultValue = '',
   keyboardType,
   setValue,
+  isError = false,
 }) => {
   return (
     <TextInput
@@ -212,6 +201,8 @@ const RenderTextInput = ({
       style={{
         ...(multiline ? styles.descriptionInputText : styles.textInputText),
         backgroundColor: Colors.settingsBackground,
+        borderBottomWidth: 1,
+        borderBottomColor: isError ? Colors.error : Colors.borderColor,
       }}
       onEndEditing={value => {
         console.log('TEXT_INPUT', value.nativeEvent.text);
@@ -220,7 +211,12 @@ const RenderTextInput = ({
     />
   );
 };
-const RenderEmailAddressInput = ({defaultValue, setTicketState}) => {
+const RenderEmailAddressInput = ({
+  defaultValue,
+  setTicketState,
+  isError = false,
+  errorMessage,
+}) => {
   const setEmailAddress = text => {
     setTicketState(state => ({
       ...state,
@@ -240,11 +236,18 @@ const RenderEmailAddressInput = ({defaultValue, setTicketState}) => {
         placeholder={'Email'}
         keyboardType={'email-address'}
         setValue={setEmailAddress}
+        isError={isError}
       />
+      <ShowInputError isError={isError} errorMessage={errorMessage} />
     </View>
   );
 };
-const RenderDescriptionInput = ({defaultValue, setTicketState}) => {
+const RenderDescriptionInput = ({
+  defaultValue,
+  setTicketState,
+  isError = false,
+  errorMessage,
+}) => {
   const setDescription = text => {
     setTicketState(state => ({
       ...state,
@@ -269,12 +272,19 @@ const RenderDescriptionInput = ({defaultValue, setTicketState}) => {
         multiline={true}
         setValue={setDescription}
         keyboardType={'default'}
+        isError={isError}
       />
+      <ShowInputError isError={isError} errorMessage={errorMessage} />
     </View>
   );
 };
 
-const RenderCustomerNameInput = ({defaultValue, setTicketState}) => {
+const RenderCustomerNameInput = ({
+  defaultValue,
+  setTicketState,
+  isError = false,
+  errorMessage,
+}) => {
   const setCustomerName = text => {
     setTicketState(state => ({
       ...state,
@@ -291,7 +301,9 @@ const RenderCustomerNameInput = ({defaultValue, setTicketState}) => {
         defaultValue={defaultValue}
         placeholder={translate('create_new_ticket.customer_name')}
         setValue={setCustomerName}
+        isError={isError}
       />
+      <ShowInputError isError={isError} errorMessage={errorMessage} />
     </View>
   );
 };
@@ -338,16 +350,6 @@ const CreateTicketForm = ({children, fall}) => {
 const VerticalSpace = () => (
   <VerticalSpaceBox marginVertical={MarginConstants.halfTab} />
 );
-
-const ShowInputError = ({inputType, componentType}) => {
-  if (inputType.type === componentType) {
-    return (
-      <TextLabel text={inputType.errorMessage} style={styles.errorLabelRed} />
-    );
-  } else {
-    return <View />;
-  }
-};
 
 export default function CreateTicket(props) {
   const responseId = props.route?.params?.responseId ?? null;
@@ -725,8 +727,9 @@ export default function CreateTicket(props) {
         <RenderCustomerNameInput
           defaultValue={customerName}
           setTicketState={setTicketState}
+          isError={inputType.type === INPUTTYPES.NAME}
+          errorMessage={inputType.errorMessage}
         />
-        <ShowInputError componentType={INPUTTYPES.NAME} inputType={inputType} />
         <VerticalSpaceBox multiplyBy={2} />
 
         <RenderPhoneInput setTicketState={setTicketState} />
@@ -734,10 +737,8 @@ export default function CreateTicket(props) {
         <RenderEmailAddressInput
           defaultValue={customerEmail}
           setTicketState={setTicketState}
-        />
-        <ShowInputError
-          componentType={INPUTTYPES.EMAIL}
-          inputType={inputType}
+          isError={inputType.type === INPUTTYPES.EMAIL}
+          errorMessage={inputType.errorMessage}
         />
 
         <VerticalSpaceBox multiplyBy={2} />
@@ -747,10 +748,8 @@ export default function CreateTicket(props) {
           currentItemName={segment}
           onPress={handleSegmentSelection}
           hasArrowDownIcon
-        />
-        <ShowInputError
-          componentType={INPUTTYPES.SEGMENT}
-          inputType={inputType}
+          isError={inputType.type === INPUTTYPES.SEGMENT}
+          errorMessage={inputType.errorMessage}
         />
 
         <VerticalSpaceBox multiplyBy={2} />
@@ -762,8 +761,9 @@ export default function CreateTicket(props) {
           )}
           onPress={handleDateSelection}
           hasArrowDownIcon={false}
+          isError={inputType.type === INPUTTYPES.DATE}
+          errorMessage={inputType.errorMessage}
         />
-        <ShowInputError componentType={INPUTTYPES.DATE} inputType={inputType} />
 
         <VerticalSpaceBox multiplyBy={2} />
 
@@ -784,10 +784,8 @@ export default function CreateTicket(props) {
             />
           }
           hasArrowDownIcon
-        />
-        <ShowInputError
-          componentType={INPUTTYPES.PRIORITY}
-          inputType={inputType}
+          isError={inputType.type === INPUTTYPES.PRIORITY}
+          errorMessage={inputType.errorMessage}
         />
 
         <VerticalSpaceBox multiplyBy={2} />
@@ -804,12 +802,10 @@ export default function CreateTicket(props) {
             />
           }
           hasArrowDownIcon
+          isError={inputType.type === INPUTTYPES.STATUS}
+          errorMessage={inputType.errorMessage}
         />
         <VerticalSpaceBox multiplyBy={2} />
-        <ShowInputError
-          componentType={INPUTTYPES.STATUS}
-          inputType={inputType}
-        />
 
         <ShowTitleAndDropdown
           titleIcon={<RenderMateriaCommunityIcon iconName={'shield-account'} />}
@@ -817,17 +813,16 @@ export default function CreateTicket(props) {
           currentItemName={`${ticketOwner ?? ''}`}
           onPress={handleOwnerSelection}
           hasArrowDownIcon
+          isError={inputType.type === INPUTTYPES.OWNER}
+          errorMessage={inputType.errorMessage}
         />
-        <ShowInputError
-          componentType={INPUTTYPES.OWNER}
-          inputType={inputType}
-        />
+
         <VerticalSpaceBox multiplyBy={2} />
 
-        <RenderDescriptionInput setTicketState={setTicketState} />
-        <ShowInputError
-          componentType={INPUTTYPES.DESCRIPTION}
-          inputType={inputType}
+        <RenderDescriptionInput
+          setTicketState={setTicketState}
+          isError={inputType.type === INPUTTYPES.DESCRIPTION}
+          errorMessage={inputType.errorMessage}
         />
 
         <VerticalSpaceBox multiplyBy={4} />
@@ -930,15 +925,6 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.halfTab,
     borderBottomColor: Colors.darkGrey,
     borderBottomWidth: 1,
-  },
-  errorLabelRed: {
-    marginBottom: MarginConstants.tab1,
-    alignItems: 'center',
-    paddingVertical: PaddingConstants.halfTab,
-    color: Colors.deleteButtonText,
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.secondary,
-    fontWeight: FontWeight._300,
   },
   rowButton: {
     marginHorizontal: MarginConstants.tab2,
