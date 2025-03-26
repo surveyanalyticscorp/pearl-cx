@@ -12,7 +12,7 @@ import {
   Colors,
   getPriorityBorderColorbyId,
 } from '../../../styles/color.constants';
-import {FontFamily} from '../../../styles/font.constants';
+import {FontFamily, FontWeight} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
@@ -935,9 +935,10 @@ const styles = StyleSheet.create({
     marginBottom: MarginConstants.tab1,
     alignItems: 'center',
     paddingVertical: PaddingConstants.halfTab,
-    color: Colors.red,
+    color: Colors.deleteButtonText,
     fontFamily: FontFamily.regular,
-    fontSize: TextSizes.mediumText,
+    fontSize: TextSizes.secondary,
+    fontWeight: FontWeight._300,
   },
   rowButton: {
     marginHorizontal: MarginConstants.tab2,
