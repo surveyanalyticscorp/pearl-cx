@@ -36,8 +36,9 @@ export const dashboardStyles = StyleSheet.create({
   },
   responseText: {
     color: Colors.filterIconColor,
-    fontFamily: FontFamily.bold,
-    fontSize: TextSizes.secondary,
+    fontFamily: FontFamily.regular,
+    fontWeight: FontWeight._500,
+    fontSize: TextSizes.primary,
     textAlign: 'center',
   },
   response: {
@@ -167,6 +168,7 @@ export const dashboardStyles = StyleSheet.create({
   ticketTypeContainer: {
     flexDirection: 'row',
     marginHorizontal: MarginConstants.tab1,
+    marginVertical: MarginConstants.halfTab,
 
     justifyContent: 'center',
     alignItems: 'center',
