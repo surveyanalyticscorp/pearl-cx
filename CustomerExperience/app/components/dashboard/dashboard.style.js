@@ -43,8 +43,9 @@ export const dashboardStyles = StyleSheet.create({
   response: {
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
-    fontFamily: FontFamily.light,
+    fontFamily: FontFamily.regular,
     textAlign: 'center',
+    fontWeight: FontWeight._300,
     paddingHorizontal: PaddingConstants.tab1,
   },
   ticketButton: {
