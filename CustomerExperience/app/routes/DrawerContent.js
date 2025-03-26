@@ -15,6 +15,7 @@ import {DrawerActions} from '@react-navigation/native';
 import {translate} from '../Utils/MultilinguaUtils';
 import TicketSync from '../components/TicketSync';
 import ClosedLoopSvgIcon from '../../assets/images/closed_loop.svg';
+import ChatBubbleSvgIcon from '../../assets/images/chat_bubble.svg';
 import DrawerBackground from './commonUI/DrawerBackground';
 import TextLabel from '../../app/widgets/TextLabel/TextLabel';
 import useLogoutProcess from './drawerContent/useLogoutProcess';
@@ -77,6 +78,16 @@ const ClosedLoopIcon = () => (
   </View>
 );
 
+const ResponsesIcon = () => (
+  <View style={styles.rowIcon}>
+    <ChatBubbleSvgIcon
+      fill={Colors.filterIconColor}
+      height={1.3 * Sizes.icons}
+      width={1.3 * Sizes.icons}
+    />
+  </View>
+);
+
 const DrawerButtonIcon = ({name}) => (
   <Icon
     size={1.3 * Sizes.icons}
@@ -123,7 +134,7 @@ const DrawerContent = ({navigation}) => {
     },
     responses: {
       title: 'Responses',
-      frontIcon: <DrawerButtonIcon name={'feedback'} />,
+      frontIcon: <ResponsesIcon />,
       onPress: () => {
         navigation.navigate('Responses');
       },
