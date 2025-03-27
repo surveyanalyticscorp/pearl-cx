@@ -20,6 +20,7 @@ let kStagingEnvironment = "STAGING"
 public let kPageVisitCountKey = "PageVisitCountKey"
 public let kInterceptRulesForId = "InterceptRulesForId"
 public let kSatisfiedRulesForId = "SatisfiedRulesForId"
+public let kIsSurveyLaunched = "IsSurveyLaunched"
 public let kIntercepts = "Intercepts"
 
 //API request types

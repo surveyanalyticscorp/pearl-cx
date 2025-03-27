@@ -51,7 +51,7 @@ public class CacheUtils {
         if let defaultValue = UserDefaults.standard.object(forKey: key) as? Int {
             return defaultValue
         }
-        return 1
+        return 0
     }
     
     //set to UserDefaults
@@ -61,10 +61,24 @@ public class CacheUtils {
     
     public static func resetIntUserDefaults(key: String) {
         UserDefaults.standard.removeObject(forKey: key)
-        setToUserDefaults(key: key, value: 1)
+        setToUserDefaults(key: key, value: 0)
+    }
+    
+    public static func getValueFromUserDefaults(key: String) -> Any? {
+        let defaultValue = false;
+        if let defaultValue = UserDefaults.standard.object(forKey: key) as? Bool {
+            return defaultValue;
+        }
+        return defaultValue;
     }
     
     public static func clearUserDefaults(key: String) {
         UserDefaults.standard.removeObject(forKey: key)
+    }
+    
+    public static func clearAllUserDefaults() {
+        UserDefaults.standard.dictionaryRepresentation().keys.forEach { key in
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
 }

@@ -23,9 +23,9 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     @MainActor public func launchSurveyForIntercept(interceptId: Int, satisfiedRule: Rule) {
         
         var satisfiedRules: [Rule] = [];
-        if let savedData = CacheUtils.getInterceptRulesForInterceptId(key: kSatisfiedRulesForId+String(interceptId)) {
+        if let savedSatisfiedRule = CacheUtils.getInterceptRulesForInterceptId(key: kSatisfiedRulesForId+String(interceptId)) {
             do {
-                var decodedRules = try JSONDecoder().decode([Rule].self, from: savedData)
+                var decodedRules = try JSONDecoder().decode([Rule].self, from: savedSatisfiedRule)
                 if !decodedRules.contains(where: { $0.name == satisfiedRule.name }) {
                     decodedRules.append(satisfiedRule)
                     if let updatedData = try? JSONEncoder().encode(decodedRules) {
@@ -42,38 +42,40 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
             }
         }
         
-        
-        
         if let satisfiedRulesData = CacheUtils.getInterceptRulesForInterceptId(key: kSatisfiedRulesForId+String(interceptId)) {
             do {
+                let isSurveyAlreadyLaunched = CacheUtils.getValueFromUserDefaults(key: kIsSurveyLaunched) as! Bool
                 let satisfiedRules = try JSONDecoder().decode([Rule].self, from: satisfiedRulesData)
                 print("satisfiedRules ----> ", satisfiedRules)
                 if let apiResponse = CacheUtils.getIntercepts(key: kIntercepts) {
                     do {
                         let apiIntercepts = try JSONDecoder().decode([Intercept].self, from: apiResponse)
                         for intercept in apiIntercepts {
+                            let showInDialog = intercept.type == InterceptType.PROMPT.rawValue ? true : false
                             if (intercept.id == interceptId) {
                                 print("intercept id matched", interceptId)
                                 if (intercept.condition == InterceptCondition.AND.rawValue) {
                                     print("AND condition")
                                     if (satisfiedRules.count == intercept.rules.count) {
-                                        print("satisfiedRules --->",satisfiedRules)
-                                        print("intercept.rules --->",intercept.rules)
-                                        if (touchPoint != nil) {
+                                        print("all rules satisfied \(satisfiedRules.count == intercept.rules.count)")
+                                        if (touchPoint != nil && !isSurveyAlreadyLaunched) {
                                             print("Launching survey for intercept id -> ", interceptId)
-                                            self.showInAppSurvey(touchPoint: touchPoint!);
+                                            CacheUtils.setToUserDefaults(key: kIsSurveyLaunched, value: true);
+                                            self.launchFeedbackSurvey(touchPoint: touchPoint!, showInDialog: showInDialog)
                                             CacheUtils.resetInterceptRulesForInterceptId(key: kSatisfiedRulesForId+String(interceptId))
                                         }
+                                    } else {
+                                        print("all rules are not satisfied for \(interceptId)")
                                     }
                                 } else if (intercept.condition == InterceptCondition.OR.rawValue){
                                     print("OR condition")
-                                    if (touchPoint != nil) {
+                                    if (touchPoint != nil && !isSurveyAlreadyLaunched) {
                                         print("Launching survey for intercept id -> ", interceptId)
-                                        self.showInAppSurvey(touchPoint: touchPoint!);
+                                        CacheUtils.setToUserDefaults(key: kIsSurveyLaunched, value: true);
+                                        self.launchFeedbackSurvey(touchPoint: touchPoint!, showInDialog: showInDialog)
                                         CacheUtils.resetInterceptRulesForInterceptId(key: kSatisfiedRulesForId+String(interceptId))
                                     }
                                 }
-                                
                             }
                         }
                     } catch {
@@ -172,11 +174,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         self.iDataCenter = dataCenter
         self.iBaseWindow = aWindow
         self.iCurrentViewName = ""
-               
-        let dateOfMonth = Calendar.current.component(.day, from: Date())
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE"
-        let dayOfWeek = formatter.string(from: Date())
+        
         self.touchPoint = touchPoint;
         SurveyLaunchLogicUtils.getInstance().surveyLaunchDelegate = self;
         let surveyLogicUtilsInstance = SurveyLaunchLogicUtils.getInstance();
@@ -214,7 +212,9 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                     for rule in intercept.rules {
                         if (rule.name == InterceptRuleType.TIME_SPENT.rawValue) {
                             Task {
-                                for await timeLeft in  TimerUtils.startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {}
+                                for await timeLeft in  TimerUtils.startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
+                                    print("⏳ Time left: \(timeLeft) sec for \(intercept.id)")
+                                }
                             }
                         } else if (rule.name == InterceptRuleType.VIEW_COUNT.rawValue) {
                             CacheUtils.setToUserDefaults(key: kPageVisitCountKey, value: pageVisitCount + 1);
@@ -240,21 +240,10 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                         print("No valid Data found in UserDefaults")
                     }
                 }
-                
-                
-                
-                
-                
             } catch {
                 print("API error: \(error)")
             }
         }
-//        intercept.setValue(visitorApiResponse.project.intercepts[0].rules[0].value, forKey: "timer")
-//        intercept.setValue(visitorApiResponse.project.intercepts[0].rules[1].value, forKey: "pageVisitCount")
-//        intercept.setValue(date, forKey: "date")
-//        intercept.setValue(day, forKey: "day")
-//        intercept.setValue(visitorApiResponse.project.intercepts[0].condition, forKey: "condition")
-//        SurveyLaunchLogicUtils.getInstance().initializeIntercept(intercept: intercept)
         
     }
 
@@ -263,9 +252,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         return self.touchPoint!
     }
 
-    public func launchFeedbackSurvey(touchPoint: TouchPoint) {
-        let ShowInDialog = touchPoint.ShowInDialog
-        if (ShowInDialog) {
+    public func launchFeedbackSurvey(touchPoint: TouchPoint, showInDialog: Bool) {
+        if (showInDialog) {
             self.showInAppSurvey(touchPoint: touchPoint);
         } else {
             self.showMessageInViewControllerWithResponse(touchPoint: touchPoint)
@@ -273,7 +261,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     }
     
     public func resetQuestionProCXManager() {
-        
+        print("Cleraing all user defaults..")
+        CacheUtils.clearAllUserDefaults()
     }
 
     public func stopQuestionProCXManager() {
@@ -494,6 +483,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     }
 
     @objc func aDismissWebview(_ sender: Any) {
+        CacheUtils.setToUserDefaults(key: kIsSurveyLaunched, value: false);
         self.iView?.removeFromSuperview()
     }
     

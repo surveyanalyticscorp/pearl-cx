@@ -35,10 +35,10 @@ public class SurveyLaunchLogicUtils: NSObject {
         }
     }
     
-    public func checkPageVisitCountLogic(pageVisitCount: Int, interceptId: Int, interceptRule: Rule, completionDelegate: SurveyLaunchDelegate?) -> Void {
+    public func checkPageVisitCountLogic(pageVisitCount: Int, interceptId: Int, interceptRule: Rule, completionDelegate: SurveyLaunchDelegate) -> Void {
         let appLaunchCount = CacheUtils.getIntFromUserDefaults(key: kPageVisitCountKey)
         if (appLaunchCount == pageVisitCount) {
-            completionDelegate?.launchSurveyForIntercept(interceptId: interceptId, satisfiedRule: interceptRule)
+            completionDelegate.launchSurveyForIntercept(interceptId: interceptId, satisfiedRule: interceptRule)
             CacheUtils.resetIntUserDefaults(key: kPageVisitCountKey)
         }
     }
@@ -53,10 +53,10 @@ public class SurveyLaunchLogicUtils: NSObject {
         return Int(appUserInteractionTimeInSeconds);
     }
     
-    public func checkSurveyLaunchDateOfMonthLogic(date: Int, interceptId: Int, interceptRule: Rule, completionDelegate: SurveyLaunchDelegate?) -> Void {
+    public func checkSurveyLaunchDateOfMonthLogic(date: Int, interceptId: Int, interceptRule: Rule, completionDelegate: SurveyLaunchDelegate) -> Void {
         let dateOfMonth: Int = Calendar.current.component(.day, from: Date())
         if (dateOfMonth == date) {
-            completionDelegate!.launchSurveyForIntercept(interceptId: interceptId, satisfiedRule: interceptRule)
+            completionDelegate.launchSurveyForIntercept(interceptId: interceptId, satisfiedRule: interceptRule)
         }
     }
 }
