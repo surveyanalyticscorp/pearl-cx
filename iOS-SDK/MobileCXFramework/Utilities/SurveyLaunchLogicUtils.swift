@@ -8,7 +8,6 @@
 import Foundation
 
 @MainActor public protocol SurveyLaunchDelegate: NSObjectProtocol {
-    func launchSurvey()
     func launchSurveyForIntercept(interceptId: Int, satisfiedRule: Rule)
 }
 
@@ -36,16 +35,10 @@ public class SurveyLaunchLogicUtils: NSObject {
     }
     
     public func checkPageVisitCountLogic(pageVisitCount: Int, interceptId: Int, interceptRule: Rule, completionDelegate: SurveyLaunchDelegate) -> Void {
-        let appLaunchCount = CacheUtils.getIntFromUserDefaults(key: kPageVisitCountKey)
+        let appLaunchCount = CacheUtils.getViewCountForInterceptId(key: kViewCount + String(interceptId))
         if (appLaunchCount == pageVisitCount) {
             completionDelegate.launchSurveyForIntercept(interceptId: interceptId, satisfiedRule: interceptRule)
-            CacheUtils.resetIntUserDefaults(key: kPageVisitCountKey)
-        }
-    }
-    
-    public func launchSurveyOnUserInteractionTimeLogic(userInteractionTimeInSeconds: Double) -> Void {
-        DispatchQueue.main.asyncAfter(deadline: .now() + userInteractionTimeInSeconds) {
-            self.surveyLaunchDelegate?.launchSurvey();
+            CacheUtils.resetViewCountForInterceptId(key: kViewCount + String(interceptId))
         }
     }
     

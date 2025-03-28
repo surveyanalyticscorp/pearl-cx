@@ -9,6 +9,8 @@ import Foundation
 
 public class CacheUtils {
     
+    @MainActor static let persistentDefaults = UserDefaults(suiteName: "com.questionProCX")!
+    
     //get from UserDefaults
     public static func getFromUserDefaults(key: String) -> [String: Any]?  {
         var defaultValue = [String: Any]()
@@ -38,13 +40,30 @@ public class CacheUtils {
         return UserDefaults.standard.data(forKey: key)
     }
     
+    public static func getInterceptById(key: String) -> Data? {
+        let intercepts = getIntercepts(key: kIntercepts);
+        do {
+            let allIntercepts = try JSONDecoder().decode([Intercept].self, from: intercepts!)
+            for intercept in allIntercepts {
+                if String(intercept.id) == key {
+                    return try JSONEncoder().encode(intercept)
+                }
+            }
+            
+        }
+        catch {
+            return nil;
+       }
+        return nil
+    }
     
-    public static func setInterceptForInterceptId(key: String, value: Data) {
+    
+    public static func setInterceptForInterceptId(key: String, value: [String]) {
         UserDefaults.standard.set(value, forKey: key)
     }
     
-    public static func getInterceptForInterceptId(key: String) -> Data? {
-        return UserDefaults.standard.data(forKey: key)
+    public static func getInterceptForInterceptId(key: String) -> [String] {
+        return UserDefaults.standard.object(forKey: key) as! [String]
     }
     
     public static func getIntFromUserDefaults(key: String) -> Int?  {
@@ -80,5 +99,20 @@ public class CacheUtils {
         UserDefaults.standard.dictionaryRepresentation().keys.forEach { key in
             UserDefaults.standard.removeObject(forKey: key)
         }
+    }
+    
+    @MainActor public static func setViewCountForInterceptId(key: String, value: Int) {
+        persistentDefaults.set(value, forKey: key);
+    }
+    
+    @MainActor public static func getViewCountForInterceptId(key: String) -> Int {
+        if let defaultValue = persistentDefaults.object(forKey: key) as? Int {
+            return defaultValue
+        }
+        return 0
+    }
+    
+    @MainActor public static func resetViewCountForInterceptId(key: String) {
+        setViewCountForInterceptId(key: key, value: 0)
     }
 }

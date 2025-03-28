@@ -18,6 +18,7 @@ let kStagingEnvironment = "STAGING"
 
 //User defaults constant keys
 public let kPageVisitCountKey = "PageVisitCountKey"
+public let kViewCount = "ViewCount"
 public let kInterceptRulesForId = "InterceptRulesForId"
 public let kSatisfiedRulesForId = "SatisfiedRulesForId"
 public let kIsSurveyLaunched = "IsSurveyLaunched"
