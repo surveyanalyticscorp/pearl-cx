@@ -214,11 +214,11 @@
   "segment_not_selected": "Please select a segment",
   "issue_date_not_selected": "Please enter a valid date",
   "enter_customer_name": "Please enter customer’s name",
-  "enter_an_email": "Enter an email address",
+  "enter_an_email": "Please enter an email address",
   "enter_an_valid_email": "Please enter a valid email address",
   "priority_not_selected": "Please select a priority",
   "status_not_selected": "Please select a status",
   "select_a_ticket_owner": "Please select a ticket owner",
-  "add_description": "Add description",
+  "add_description": "Please, add a description",
   "enter_a_valid_phone_number": "Please enter valid phone number"
 }

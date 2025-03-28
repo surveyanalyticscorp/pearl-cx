@@ -67,77 +67,60 @@ const INPUTTYPES = {
 };
 
 const checkValidation = ticketState => {
+  // convert errorInputTypes to map
+  const errorInputTypes = new Map();
+
+  let isValid = true;
+
   if (!ticketState.firstName) {
-    return {
-      isValid: false,
-      type: INPUTTYPES.NAME,
-      errorMessage: translate('enter_customer_name'),
-    };
+    errorInputTypes.set(INPUTTYPES.NAME, translate('enter_customer_name'));
+    isValid = false;
   }
 
   if (!ticketState.emailAddress) {
-    return {
-      isValid: false,
-      type: INPUTTYPES.EMAIL,
-      errorMessage: translate('enter_an_email'),
-    };
+    errorInputTypes.set(INPUTTYPES.EMAIL, translate('enter_an_email'));
+    isValid = false;
   }
 
   if (ticketState.emailAddress && !validateEmail(ticketState.emailAddress)) {
-    return {
-      isValid: false,
-      type: INPUTTYPES.EMAIL,
-      errorMessage: translate('enter_an_valid_email'),
-    };
+    errorInputTypes.set(INPUTTYPES.EMAIL, translate('enter_an_valid_email'));
+    isValid = false;
   }
+
   if (!ticketState.currentSegmentId) {
-    return {
-      isValid: false,
-      type: INPUTTYPES.SEGMENT,
-      errorMessage: translate('segment_not_selected'),
-    };
+    errorInputTypes.set(INPUTTYPES.SEGMENT, translate('segment_not_selected'));
+    isValid = false;
   }
 
   if (!ticketState.issueDate) {
-    return {
-      isValid: false,
-      type: INPUTTYPES.DATE,
-      errorMessage: translate('issue_date_not_selected'),
-    };
+    errorInputTypes.set(INPUTTYPES.DATE, translate('issue_date_not_selected'));
+    isValid = false;
   }
 
   if (ticketState.priority === null || ticketState.priority === undefined) {
-    return {
-      isValid: false,
-      type: INPUTTYPES.PRIORITY,
-      errorMessage: translate('priority_not_selected'),
-    };
+    errorInputTypes.set(
+      INPUTTYPES.PRIORITY,
+      translate('priority_not_selected'),
+    );
+    isValid = false;
   }
 
   if (ticketState.status === null || ticketState.status === undefined) {
-    return {
-      isValid: false,
-      type: INPUTTYPES.STATUS,
-      errorMessage: translate('status_not_selected'),
-    };
+    errorInputTypes.set(INPUTTYPES.STATUS, translate('status_not_selected'));
+    isValid = false;
   }
 
   if (!ticketState.assignToId) {
-    return {
-      isValid: false,
-      type: INPUTTYPES.OWNER,
-      errorMessage: translate('select_a_ticket_owner'),
-    };
+    errorInputTypes.set(INPUTTYPES.OWNER, translate('select_a_ticket_owner'));
+    isValid = false;
   }
 
   if (!ticketState.comment) {
-    return {
-      isValid: false,
-      type: INPUTTYPES.DESCRIPTION,
-      errorMessage: translate('add_description'),
-    };
+    errorInputTypes.set(INPUTTYPES.DESCRIPTION, translate('add_description'));
+    isValid = false;
   }
-  return {isValid: true};
+
+  return {isValid: isValid, errorInputTypes: errorInputTypes};
 };
 
 const CreateTicketContainer = ({children}) => {
@@ -215,7 +198,7 @@ const RenderEmailAddressInput = ({
   defaultValue,
   setTicketState,
   isError = false,
-  errorMessage,
+  errorMessage = '',
 }) => {
   const setEmailAddress = text => {
     setTicketState(state => ({
@@ -246,7 +229,7 @@ const RenderDescriptionInput = ({
   defaultValue,
   setTicketState,
   isError = false,
-  errorMessage,
+  errorMessage = '',
 }) => {
   const setDescription = text => {
     setTicketState(state => ({
@@ -283,7 +266,7 @@ const RenderCustomerNameInput = ({
   defaultValue,
   setTicketState,
   isError = false,
-  errorMessage,
+  errorMessage = '',
 }) => {
   const setCustomerName = text => {
     setTicketState(state => ({
@@ -414,11 +397,7 @@ export default function CreateTicket(props) {
   // const [shadow, setShadow] = useState(false);
   const dispatch = useDispatch();
   const [showLoading, setLoading] = useState(false);
-  const [inputType, setInputType] = useState({
-    isValid: true,
-    type: '',
-    errorMessage: '',
-  });
+  const [errorInputType, setErrorInputType] = useState(new Map());
   const [ticketState, setTicketState] = useState({
     userName: `${firstName} ${lastName}`,
     userEmailAddress: `${emailAddress}`,
@@ -520,7 +499,7 @@ export default function CreateTicket(props) {
       dispatch(createClfTicket(ticketState, feedbackApiKey));
       props.navigation.goBack();
     } else {
-      setInputType(validation);
+      setErrorInputType(validation.errorInputTypes);
     }
   };
 
@@ -726,8 +705,8 @@ export default function CreateTicket(props) {
         <RenderCustomerNameInput
           defaultValue={customerName}
           setTicketState={setTicketState}
-          isError={inputType.type === INPUTTYPES.NAME}
-          errorMessage={inputType.errorMessage}
+          isError={errorInputType.has(INPUTTYPES.NAME)}
+          errorMessage={errorInputType.get(INPUTTYPES.NAME)}
         />
         <VerticalSpaceBox multiplyBy={2} />
 
@@ -736,8 +715,8 @@ export default function CreateTicket(props) {
         <RenderEmailAddressInput
           defaultValue={customerEmail}
           setTicketState={setTicketState}
-          isError={inputType.type === INPUTTYPES.EMAIL}
-          errorMessage={inputType.errorMessage}
+          isError={errorInputType.has(INPUTTYPES.EMAIL)}
+          errorMessage={errorInputType.get(INPUTTYPES.EMAIL)}
         />
 
         <VerticalSpaceBox multiplyBy={2} />
@@ -747,8 +726,8 @@ export default function CreateTicket(props) {
           currentItemName={segment}
           onPress={handleSegmentSelection}
           hasArrowDownIcon
-          isError={inputType.type === INPUTTYPES.SEGMENT}
-          errorMessage={inputType.errorMessage}
+          isError={errorInputType.has(INPUTTYPES.SEGMENT)}
+          errorMessage={errorInputType.get(INPUTTYPES.SEGMENT)}
         />
 
         <VerticalSpaceBox multiplyBy={2} />
@@ -760,8 +739,8 @@ export default function CreateTicket(props) {
           )}
           onPress={handleDateSelection}
           hasArrowDownIcon={false}
-          isError={inputType.type === INPUTTYPES.DATE}
-          errorMessage={inputType.errorMessage}
+          isError={errorInputType.has(INPUTTYPES.DATE)}
+          errorMessage={errorInputType.get(INPUTTYPES.DATE)}
         />
 
         <VerticalSpaceBox multiplyBy={2} />
@@ -783,8 +762,8 @@ export default function CreateTicket(props) {
             />
           }
           hasArrowDownIcon
-          isError={inputType.type === INPUTTYPES.PRIORITY}
-          errorMessage={inputType.errorMessage}
+          isError={errorInputType.has(INPUTTYPES.PRIORITY)}
+          errorMessage={errorInputType.get(INPUTTYPES.PRIORITY)}
         />
 
         <VerticalSpaceBox multiplyBy={2} />
@@ -801,8 +780,8 @@ export default function CreateTicket(props) {
             />
           }
           hasArrowDownIcon
-          isError={inputType.type === INPUTTYPES.STATUS}
-          errorMessage={inputType.errorMessage}
+          isError={errorInputType.has(INPUTTYPES.STATUS)}
+          errorMessage={errorInputType.get(INPUTTYPES.STATUS)}
         />
         <VerticalSpaceBox multiplyBy={2} />
 
@@ -812,16 +791,16 @@ export default function CreateTicket(props) {
           currentItemName={`${ticketOwner ?? ''}`}
           onPress={handleOwnerSelection}
           hasArrowDownIcon
-          isError={inputType.type === INPUTTYPES.OWNER}
-          errorMessage={inputType.errorMessage}
+          isError={errorInputType.has(INPUTTYPES.OWNER)}
+          errorMessage={errorInputType.get(INPUTTYPES.OWNER)}
         />
 
         <VerticalSpaceBox multiplyBy={2} />
 
         <RenderDescriptionInput
           setTicketState={setTicketState}
-          isError={inputType.type === INPUTTYPES.DESCRIPTION}
-          errorMessage={inputType.errorMessage}
+          isError={errorInputType.has(INPUTTYPES.DESCRIPTION)}
+          errorMessage={errorInputType.get(INPUTTYPES.DESCRIPTION)}
         />
 
         <VerticalSpaceBox multiplyBy={4} />
