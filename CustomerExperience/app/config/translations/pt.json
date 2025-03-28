@@ -219,5 +219,6 @@
   "priority_not_selected": "Priority not selected",
   "status_not_selected": "Status not selected",
   "select_a_ticket_owner": "Select a ticket owner",
-  "add_description": "Add description"
+  "add_description": "Add description",
+  "enter_a_valid_phone_number": "Please enter valid phone number"
 }

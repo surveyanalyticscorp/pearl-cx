@@ -219,5 +219,6 @@
   "priority_not_selected": "Priorytet nie został wybrany",
   "status_not_selected": "Status nie został wybrany",
   "select_a_ticket_owner": "Wybierz właściciela zgłoszenia",
-  "add_description": "Dodaj opis"
+  "add_description": "Dodaj opis",
+  "enter_a_valid_phone_number": "Please enter valid phone number"
 }
