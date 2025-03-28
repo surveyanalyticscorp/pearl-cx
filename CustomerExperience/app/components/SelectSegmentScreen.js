@@ -186,7 +186,7 @@ const SelectSegmentScreen = props => {
       <View style={styles.container}>
         <View style={styles.headerRow}>
           <Text style={styles.headerText}>
-            {translate('select_segment.select_segment')}
+            {translate('dashboard.segment')}
           </Text>
           <CloseButton color={Colors.filterIconColor} />
         </View>

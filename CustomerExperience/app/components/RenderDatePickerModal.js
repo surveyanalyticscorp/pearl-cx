@@ -55,6 +55,7 @@ const RenderDatePickerModal = ({
       mode="date"
       maximumDate={isMaxDateIsToday ? today : undefined}
       minimumDate={minimumDate}
+      title={isStartDate ? 'Start date' : 'End date'}
       onConfirm={date => {
         setOpen(false);
         setDate(isStartDate, date);

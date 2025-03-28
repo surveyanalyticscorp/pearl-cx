@@ -71,8 +71,8 @@
     "logs": "Protokolle",
     "response_id": "Antwort-ID:",
     "view_response": "Antwort anzeigen",
-    "priority": "Priorität:",
-    "status": "Status:",
+    "priority": "Priorität",
+    "status": "Status",
     "customer_email": "Kunden-eMail:",
     "origin_segment": "Ursprungssegment:",
     "current_segment": "Aktuelles segment:",
@@ -188,7 +188,7 @@
     "last_6_months": "Letzte 6 Monate"
   },
   "select_segment": {
-    "search_segment_name": "Search segment name here...",
+    "search_segment_name": "Segment name",
     "select_segment": "Select segment",
     "business_unit": "Business unit"
   },
