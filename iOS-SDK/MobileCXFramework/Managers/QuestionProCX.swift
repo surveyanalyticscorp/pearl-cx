@@ -13,6 +13,7 @@ import WebKit
 public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNavigationDelegate, SurveyLaunchDelegate {
     var satisfiedRulesForIntercept: [String: [[String]]] = [:]
     var visitorApiResponse: ApiResponse!
+    private var isSurveyDisplayed = false
     private func containsValue(for id: String, value: String) -> Bool {
         if let lists = satisfiedRulesForIntercept[id] {
             return lists.contains { $0.contains(value) }
@@ -40,35 +41,30 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         print("intercept id \(interceptId)")
         addValue(for: String(interceptId), newValue: satisfiedRule.name)
                 
-        let isSurveyAlreadyLaunched = CacheUtils.getIsSurveyLaunched(key: kIsSurveyLaunched) 
-        print("isSurveyAlreadyLaunched \(isSurveyAlreadyLaunched)")
+//        let isSurveyAlreadyLaunched = CacheUtils.getIsSurveyLaunched(key: kIsSurveyLaunched) 
+//        print("isSurveyAlreadyLaunched \(isSurveyAlreadyLaunched)")
         
         if let intercept = CacheUtils.getInterceptById(key: String(interceptId)) {
             do {
                 let interceptData = try JSONDecoder().decode(Intercept.self, from: intercept)
                 
                 let showInDialog = interceptData.type == InterceptType.PROMPT.rawValue ? true : false
-                
+                guard !self.isSurveyDisplayed else { return }
                 if (interceptData.condition == InterceptCondition.AND.rawValue) {
                     print("AND condition")
                     let satisfiedRulesCount = satisfiedRulesForIntercept[String(interceptId)]?.flatMap { $0 }.count ?? 0
                     print("satisfiedRulesForIntercept ->",satisfiedRulesForIntercept)
                     if (satisfiedRulesCount == interceptData.rules.count) {
-                        if (touchPoint != nil && !isSurveyAlreadyLaunched) {
-                            print("Launching survey for intercept id -> ", interceptId)
-                            CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: true);
-                            self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, showInDialog: showInDialog)
-                        }
+                        print("Launching survey for intercept id -> ", interceptId)
+//                            CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: true);
+                        self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, showInDialog: showInDialog)
                     } else {
                         print("all rules are not satisfied for \(interceptId)")
                     }
                 } else if (interceptData.condition == InterceptCondition.OR.rawValue){
                     print("OR condition")
-                    if (touchPoint != nil && !isSurveyAlreadyLaunched) {
-                        print("Launching survey for intercept id -> ", interceptId)
-                        CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: true);
-                        self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, showInDialog: showInDialog)
-                    }
+                    CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: true);
+                    self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, showInDialog: showInDialog)
                 }
             } catch {
                 
@@ -182,6 +178,64 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
             }
         }
     }
+    
+    public func fetchAndSetupIntercepts() async {
+        let surveyLogicUtilsInstance = SurveyLaunchLogicUtils.getInstance();
+        let mobileVisitorAPIURL = APIUtils.getVisitorMobileAPIURL()
+        do {
+            let response: ApiResponse = try await ApiServiceCX.shared.request(
+                urlString: mobileVisitorAPIURL,
+                method: .GET,
+                headers: [
+                    "x-app-key": kXAPPKey,
+                    "package-name": kPackageName,
+                ],
+                responseType: ApiResponse.self
+                )
+           
+            visitorApiResponse = response
+            
+            let intercepts = visitorApiResponse.project.intercepts
+            
+            do {
+                let encodedData = try JSONEncoder().encode(intercepts)
+                CacheUtils.setIntercepts(key: kIntercepts, value: encodedData)
+            } catch {
+                print("Erro while saving all intercepts:", error)
+            }
+            
+            for intercept in intercepts {
+                var viewCount: Int = CacheUtils.getViewCountForInterceptId(key: kViewCount + String(intercept.id));
+                var interceptRules: [String] = []
+                for interceptRule in intercept.rules {
+                    interceptRules.append(interceptRule.name)
+                }
+                
+                CacheUtils.setInterceptForInterceptId(key: String(intercept.id), value: interceptRules)
+                
+                for rule in intercept.rules {
+                    if (rule.name == InterceptRuleType.TIME_SPENT.rawValue) {
+                        Task {
+                            for await timeLeft in  TimerUtils.startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
+                                print("⏳ Time left: \(timeLeft) sec for \(intercept.id)")
+                            }
+                        }
+                    } else if (rule.name == InterceptRuleType.VIEW_COUNT.rawValue) {
+                        viewCount += 1
+                        CacheUtils.setViewCountForInterceptId(key: kViewCount + String(intercept.id), value: viewCount)
+                        print("AppLaunch count -> \(String(intercept.id))",CacheUtils.getViewCountForInterceptId(key: kViewCount + String(intercept.id)))
+                        surveyLogicUtilsInstance.checkPageVisitCountLogic(pageVisitCount: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
+                    } else if (rule.name == InterceptRuleType.DAY.rawValue) {
+                        surveyLogicUtilsInstance.checkSurveyLaunchDayLogic(dayValue: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
+                    } else if (rule.name == InterceptRuleType.DATE.rawValue) {
+                        surveyLogicUtilsInstance.checkSurveyLaunchDateOfMonthLogic(date: Int(rule.value)!,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
+                    }
+                }
+            }
+        } catch {
+            print("API error: \(error)")
+        }
+    }
 
     public func initwithAPIKey(apiKey: String, touchPoint: TouchPoint, dataCenter: TouchPoint.DataCenter, withWindow aWindow: UIWindow) {
         self.iApiKey = apiKey
@@ -191,216 +245,55 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         
         self.touchPoint = touchPoint;
         SurveyLaunchLogicUtils.getInstance().surveyLaunchDelegate = self;
-        let surveyLogicUtilsInstance = SurveyLaunchLogicUtils.getInstance();
-        let mobileVisitorAPIURL = APIUtils.getVisitorMobileAPIURL()
-        CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: false);
-        Task {
-            do {
-                let response: ApiResponse = try await ApiServiceCX.shared.request(
-                    urlString: mobileVisitorAPIURL,
-                    method: .GET,
-                    headers: [
-                        "x-app-key": kXAPPKey,
-                        "package-name": kPackageName,
-                    ],
-                    responseType: ApiResponse.self
-                    )
-               
-                visitorApiResponse = response
-                
-                do {
-                    let encodedData = try JSONEncoder().encode(visitorApiResponse.project.intercepts)
-                    CacheUtils.setIntercepts(key: kIntercepts, value: encodedData)
-                } catch {
-                    print("Erro while saving all intercepts:", error)
-                }
-                
-                for intercept in visitorApiResponse.project.intercepts {
-                    var viewCount: Int = CacheUtils.getViewCountForInterceptId(key: kViewCount + String(intercept.id));
-                    var interceptRules: [String] = []
-                    for interceptRule in intercept.rules {
-                        interceptRules.append(interceptRule.name)
-                    }
-                    
-                    CacheUtils.setInterceptForInterceptId(key: String(intercept.id), value: interceptRules)
-                    
-                    for rule in intercept.rules {
-                        if (rule.name == InterceptRuleType.TIME_SPENT.rawValue) {
-                            Task {
-                                for await timeLeft in  TimerUtils.startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
-                                    print("⏳ Time left: \(timeLeft) sec for \(intercept.id)")
-                                }
-                            }
-                        } else if (rule.name == InterceptRuleType.VIEW_COUNT.rawValue) {
-                            viewCount += 1
-                            CacheUtils.setViewCountForInterceptId(key: kViewCount + String(intercept.id), value: viewCount)
-                            print("AppLaunch count -> \(String(intercept.id))",CacheUtils.getViewCountForInterceptId(key: kViewCount + String(intercept.id)))
-                            surveyLogicUtilsInstance.checkPageVisitCountLogic(pageVisitCount: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
-                        } else if (rule.name == InterceptRuleType.DAY.rawValue) {
-                            surveyLogicUtilsInstance.checkSurveyLaunchDayLogic(dayValue: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
-                        } else if (rule.name == InterceptRuleType.DATE.rawValue) {
-                            surveyLogicUtilsInstance.checkSurveyLaunchDateOfMonthLogic(date: Int(rule.value)!,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
-                        }
-                    }
-                }
-            } catch {
-                print("API error: \(error)")
-            }
-        }
         
-    }
-
-    public func touchPointBuilder(touchPointID: Int) -> TouchPoint {
-        self.touchPoint?.surveyId = touchPointID
-        return self.touchPoint!
+//        CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: false);
+        
+        Task {
+            await self.fetchAndSetupIntercepts()
+        }
     }
 
     public func launchFeedbackSurvey(showInDialog: Bool) {
         print("survey url to load:",iResponseURL)
-        if (showInDialog) {
-            self.showInAppSurvey();
-        } else {
-            self.showMessageInViewControllerWithResponse()
+//        if (showInDialog) {
+//            self.showInAppSurvey();
+//        } else {
+//            self.showMessageInViewControllerWithResponse()
+//        }
+        if (!self.isSurveyDisplayed) {
+            self.showSurvey(isInAppSurvey: showInDialog)
+            self.loadSurveyURLInWebView();
         }
-        self.loadSurveyURLInWebView();
     }
     
-    public func resetQuestionProCXManager() {
-        print("Cleraing all user defaults..")
-        CacheUtils.clearAllUserDefaults()
-    }
-
-    public func stopQuestionProCXManager() {
-        print("Manager stopped..")
-    }
-
-    public func setPopupMenuTitle(aTitle: String, message aMessage: String, rightButtonTitle aRightButtonTitle: String, leftButtonTitle aLeftButtonTitle: String) {
-        self.iPopupMenuTitle = aTitle
-        self.iPopupMenuMessage = aMessage
-        self.iPopupMenuRightButtonTitle = aRightButtonTitle
-        self.iPopupMenuLeftButtonTitle = aLeftButtonTitle
-    }
-
-    public func showMessageInViewControllerWithResponse() {
+    public func showSurvey(isInAppSurvey: Bool) {
         DispatchQueue.main.async {
+            
+            self.isSurveyDisplayed = true
+            
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             rect.origin.x = 0
             rect.origin.y = 0
-            self.iView = UIView(frame: rect)
-            self.iView?.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-            let frontView = UIView()
-            frontView.frame = CGRect(x: 0, y: 70, width: self.iView!.frame.size.width, height: self.iView!.frame.size.height)
-            frontView.backgroundColor = UIColor(red: 255/255.0, green: 255/255.0, blue: 255/255.0, alpha: 1.0)
-            
-            let preferences = WKPreferences()
-            let configuration = WKWebViewConfiguration()
-            if #available(iOS 14.0, *) {
-                let webpagePreferences = WKWebpagePreferences()
-                webpagePreferences.allowsContentJavaScript = true
-                configuration.defaultWebpagePreferences = webpagePreferences
-            } else {
-                preferences.javaScriptEnabled = true
-                configuration.preferences = preferences
-            }
-            
-            self.iWebView = WKWebView(frame: CGRect(x: 0, y: 30, width: frontView.frame.size.width, height: frontView.frame.size.height - 20), configuration: configuration)
-            self.iWebView?.navigationDelegate = self
-            self.iWebView?.allowsLinkPreview = false
-            
-            frontView.addSubview(self.iWebView!)
-            self.iView?.addSubview(frontView)
-            self.iBaseWindow?.addSubview(self.iView!)
-            self.iBaseWindow?.bringSubviewToFront(self.iView!)
-            let doneButton = UIButton(type: .custom)
-            doneButton.addTarget(self, action: #selector(self.aDismissWebview(_:)), for: .touchUpInside)
-
-            let headerView = UIView(frame: CGRect(x: 0, y: 10, width: frontView.frame.size.width - 50, height: 80))
-            let hedearTextView = UITextView(frame: CGRect(x: 10, y: 10, width: frontView.frame.size.width - 50, height: 50))
-            hedearTextView.backgroundColor = UIColor.clear
-            hedearTextView.textAlignment = .left
-            hedearTextView.textColor = UIColor.white
-            
-            let headerText = "Powered by QuestionPro";
-            let boldText = (headerText as NSString).range(of: "QuestionPro")
-            let plainText = (headerText as NSString).range(of: "Powered by")
-            let attributedString = NSMutableAttributedString(string: headerText)
-            
-            
-            if let regularFontURL = Bundle.main.url(forResource: "FiraSans-Regular", withExtension: "ttf") {
-                CTFontManagerRegisterFontsForURL(regularFontURL as CFURL, .process, nil);
-            } 
-            
-            if let boldFontURL = Bundle.main.url(forResource: "FiraSans-Bold", withExtension: "ttf") {
-                CTFontManagerRegisterFontsForURL(boldFontURL as CFURL, .process, nil)
-            }
-            
-            if let regularFont = UIFont(name: "FiraSans-Regular", size: 16.0) {
-                attributedString.addAttribute(.font, value: regularFont, range: plainText)
-            }
-        
-            if let boldFont = UIFont(name: "FiraSans-Bold", size: 16.0) {
-                attributedString.addAttribute(.font, value: boldFont, range: boldText)
-            }
-            
-            attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: attributedString.length))
-            
-            frontView.addSubview(headerView)
-            
-            let closeButtonImage = UIImage(systemName: "xmark",
-                                           withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
-            doneButton.setImage(closeButtonImage, for: .normal)
-            doneButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
-            doneButton.layer.cornerRadius = doneButton.bounds.size.width / 2
-            doneButton.frame = CGRect(x: self.iView!.frame.size.width - 40, y: 15, width: 20, height: 20)
-            frontView.addSubview(doneButton)
-            
-            self.backButton.addTarget(self, action: #selector(self.goToPreviousPage(_:)), for: .touchUpInside)
-            let backButtonImage = UIImage(systemName: "chevron.backward",
-                                           withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
-            self.backButton.setImage(backButtonImage, for: .normal)
-            self.backButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
-            self.backButton.layer.cornerRadius = self.backButton.bounds.size.width / 2
-            self.backButton.frame = CGRect(x: 20, y: 15, width: 20, height: 20)
-            self.backButton.isHidden = true
-            frontView.addSubview(self.backButton)
-        }
-    }
-    
-    public func loadSurveyURLInWebView() {
-        print("Loading into webview -> \(self.iResponseURL)")
-        DispatchQueue.main.async {
-            if let url = self.iResponseURL, let nsurl = URL(string: url) {
-                let nsrequest = URLRequest(url: nsurl)
-                self.iWebView?.backgroundColor = UIColor.white
-                self.iWebView?.load(nsrequest)
-            }
-        }
-    }
-
-    public func showInAppSurvey() {
-        DispatchQueue.main.async {
-            var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             let screenRect = UIScreen.main.bounds
-            rect.origin.x = 0
-            rect.origin.y = 0
             rect.size.width = screenRect.size.width
             rect.size.height = screenRect.size.height
-
+            
             self.iView = UIView(frame: rect)
-            self.iView?.backgroundColor = UIColor.gray.withAlphaComponent(0.6)
+            self.iView?.backgroundColor = UIColor.black.withAlphaComponent(0.6)
 
-            let frontView = UIView(frame: CGRect(x: Int(screenRect.size.width * 0.1), y: Int(screenRect.size.height * 0.15), width: Int(screenRect.size.width * 0.8), height: Int(screenRect.size.height * 0.7)))
-            frontView.backgroundColor = UIColor.white
-                        
-            let preferences = WKPreferences()
+            let frontView = UIView(frame: CGRect(
+                x: isInAppSurvey ? screenRect.size.width * 0.1 : 0,
+                y: isInAppSurvey ? screenRect.size.height * 0.15 : 70,
+                width: isInAppSurvey ? screenRect.size.width * 0.8 : self.iView!.frame.size.width,
+                height: isInAppSurvey ? screenRect.size.height * 0.7 : self.iView!.frame.size.height
+            ))
+            frontView.backgroundColor = .white
+            
             let configuration = WKWebViewConfiguration()
             if #available(iOS 14.0, *) {
                 let webpagePreferences = WKWebpagePreferences()
                 webpagePreferences.allowsContentJavaScript = true
                 configuration.defaultWebpagePreferences = webpagePreferences
-            } else {
-                preferences.javaScriptEnabled = true
-                configuration.preferences = preferences
             }
             
             self.iWebView = WKWebView(frame: CGRect(x: 0, y: 30, width: frontView.frame.size.width, height: frontView.frame.size.height - 20), configuration: configuration)
@@ -408,10 +301,10 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
             self.iWebView?.allowsLinkPreview = false
             
             frontView.addSubview(self.iWebView!)
-
             self.iView?.addSubview(frontView)
             self.iBaseWindow?.addSubview(self.iView!)
             self.iBaseWindow?.bringSubviewToFront(self.iView!)
+            
             let headerView = UIView(frame: CGRect(x: 0, y: 0, width: frontView.frame.size.width, height: 40))
             headerView.backgroundColor = UIColor.white
             frontView.addSubview(headerView)
@@ -423,7 +316,10 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
             doneButton.setImage(closeButtonImage, for: .normal)
             doneButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
             doneButton.layer.cornerRadius = doneButton.bounds.size.width / 2
-            doneButton.frame = CGRect(x: screenRect.size.width * 0.7, y: 10, width: 25, height: 25)
+            
+            doneButton.frame = isInAppSurvey ? CGRect(x: screenRect.size.width * 0.7, y: 10, width: 25, height: 25) : CGRect(x: self.iView!.frame.size.width - 40, y: 15, width: 20, height: 20)
+            
+            
             frontView.addSubview(doneButton)
             
             self.backButton.addTarget(self, action: #selector(self.goToPreviousPage(_:)), for: .touchUpInside)
@@ -435,6 +331,26 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
             self.backButton.frame = CGRect(x: 20, y: 10, width: 25, height: 25)
             self.backButton.isHidden = true
             frontView.addSubview(self.backButton)
+        }
+    }
+    
+    public func resetQuestionProCXManager() {
+        print("Cleraing all user defaults..")
+        CacheUtils.clearAllUserDefaults()
+    }
+
+    public func stopQuestionProCXManager() {
+        print("Manager stopped..")
+    }
+    
+    public func loadSurveyURLInWebView() {
+        print("Loading into webview -> \(self.iResponseURL)")
+        DispatchQueue.main.async {
+            if let url = self.iResponseURL, let nsurl = URL(string: url) {
+                let nsrequest = URLRequest(url: nsurl)
+                self.iWebView?.backgroundColor = UIColor.white
+                self.iWebView?.load(nsrequest)
+            }
         }
     }
     
@@ -482,10 +398,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     }
 
     @objc func aDismissWebview(_ sender: Any) {
-        CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: false);
         self.iView?.removeFromSuperview()
-        let isSurveyAlreadyLaunched = CacheUtils.getValueFromUserDefaults(key: kIsSurveyLaunched) as! Bool
-        print("aDismissWebview isSurveyAlreadyLaunched: \(isSurveyAlreadyLaunched)")
+        self.isSurveyDisplayed = false
     }
     
     @objc func goToPreviousPage(_ sender: Any) {
