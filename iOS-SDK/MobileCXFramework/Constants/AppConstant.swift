@@ -43,7 +43,11 @@ public let kMobileAPIProduction = "api.questionpro.com/"
 
 //API URLs
 public let kMobileCXGetSurveyURL = "/api/v1/visitor/mobile"
-public let kGetSurveyURL = "/cx/transactions/survey-url"
+//public let kGetSurveyURL = "/cx/transactions/survey-url"
+public let kGetSurveyURL = "/api/v1/data-mapping/mobile/survey-url"
+
+public let kPackageName = "com.questionpro"
+public let kXAPPKey = "e37da3ff-858c-4358-af11-a727377dfac2"
 
 public let kEnvironment = kStagingEnvironment
 

@@ -91,6 +91,18 @@ public class CacheUtils {
         return defaultValue;
     }
     
+    public static func getIsSurveyLaunched(key: String) -> Bool {
+        let defaultValue = false;
+        if let isSurveyLaunched = UserDefaults.standard.object(forKey: key) as? Bool {
+            return isSurveyLaunched
+        }
+        return defaultValue
+    }
+    
+    public static func setIsSurveyLaunched(key: String, value: Bool) {
+        UserDefaults.standard.set(value, forKey: key)
+    }
+    
     public static func clearUserDefaults(key: String) {
         UserDefaults.standard.removeObject(forKey: key)
     }

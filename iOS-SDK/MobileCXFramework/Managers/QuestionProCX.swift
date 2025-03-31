@@ -12,7 +12,7 @@ import WebKit
 @MainActor
 public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNavigationDelegate, SurveyLaunchDelegate {
     var satisfiedRulesForIntercept: [String: [[String]]] = [:]
-    
+    var visitorApiResponse: ApiResponse!
     private func containsValue(for id: String, value: String) -> Bool {
         if let lists = satisfiedRulesForIntercept[id] {
             return lists.contains { $0.contains(value) }
@@ -40,7 +40,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         print("intercept id \(interceptId)")
         addValue(for: String(interceptId), newValue: satisfiedRule.name)
                 
-        let isSurveyAlreadyLaunched = CacheUtils.getValueFromUserDefaults(key: kIsSurveyLaunched) as! Bool
+        let isSurveyAlreadyLaunched = CacheUtils.getIsSurveyLaunched(key: kIsSurveyLaunched) 
         print("isSurveyAlreadyLaunched \(isSurveyAlreadyLaunched)")
         
         if let intercept = CacheUtils.getInterceptById(key: String(interceptId)) {
@@ -53,13 +53,11 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                     print("AND condition")
                     let satisfiedRulesCount = satisfiedRulesForIntercept[String(interceptId)]?.flatMap { $0 }.count ?? 0
                     print("satisfiedRulesForIntercept ->",satisfiedRulesForIntercept)
-                    print("satisfiedRulesCount \(satisfiedRulesCount)")
                     if (satisfiedRulesCount == interceptData.rules.count) {
-                        print("all rules satisfied \(satisfiedRulesForIntercept.count == interceptData.rules.count)")
                         if (touchPoint != nil && !isSurveyAlreadyLaunched) {
                             print("Launching survey for intercept id -> ", interceptId)
-                            CacheUtils.setToUserDefaults(key: kIsSurveyLaunched, value: true);
-                            self.launchFeedbackSurvey(touchPoint: touchPoint!, showInDialog: showInDialog)
+                            CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: true);
+                            self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, showInDialog: showInDialog)
                         }
                     } else {
                         print("all rules are not satisfied for \(interceptId)")
@@ -68,8 +66,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                     print("OR condition")
                     if (touchPoint != nil && !isSurveyAlreadyLaunched) {
                         print("Launching survey for intercept id -> ", interceptId)
-                        CacheUtils.setToUserDefaults(key: kIsSurveyLaunched, value: true);
-                        self.launchFeedbackSurvey(touchPoint: touchPoint!, showInDialog: showInDialog)
+                        CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: true);
+                        self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, showInDialog: showInDialog)
                     }
                 }
             } catch {
@@ -153,6 +151,37 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         instance.iPopUpViewFlag = true
         return instance
     }()
+    
+    public func fetchSurveyURLForSurveyId (interceptId: Int, surveyId: Int, showInDialog: Bool) {
+        var fetchSurveyURLResponse: SurveyURL!
+        var bodyParam = [:] as [String: Any]
+        bodyParam["visitedUserId"] = visitorApiResponse.visitor.uuid;
+        bodyParam["interceptId"] = interceptId;
+        bodyParam["surveyId"] = surveyId;
+        bodyParam["packageName"] = kPackageName;
+        let fetchSurveyURL = APIUtils.getFetchSurveyURL()
+        Task {
+            do {
+                let response: SurveyURL = try await ApiServiceCX.shared.request(
+                    urlString: fetchSurveyURL,
+                    method: .POST,
+                    headers: [
+                        "x-app-key": kXAPPKey,
+                        "package-name": kPackageName,
+                    ],
+                    body: bodyParam,
+                    responseType: SurveyURL.self
+                )
+                fetchSurveyURLResponse = response
+                self.iResponseURL = fetchSurveyURLResponse.surveyURL
+                print("Survey URL = \(self.iResponseURL)")
+                self.launchFeedbackSurvey(showInDialog: showInDialog)
+            } catch {
+                print("API error ->", error)
+                self.iResponseURL = ""
+            }
+        }
+    }
 
     public func initwithAPIKey(apiKey: String, touchPoint: TouchPoint, dataCenter: TouchPoint.DataCenter, withWindow aWindow: UIWindow) {
         self.iApiKey = apiKey
@@ -164,15 +193,15 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         SurveyLaunchLogicUtils.getInstance().surveyLaunchDelegate = self;
         let surveyLogicUtilsInstance = SurveyLaunchLogicUtils.getInstance();
         let mobileVisitorAPIURL = APIUtils.getVisitorMobileAPIURL()
-        var visitorApiResponse: ApiResponse!
+        CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: false);
         Task {
             do {
                 let response: ApiResponse = try await ApiServiceCX.shared.request(
                     urlString: mobileVisitorAPIURL,
                     method: .GET,
                     headers: [
-                        "x-app-key": "e37da3ff-858c-4358-af11-a727377dfac2",
-                        "package-name": "com.questionpro",
+                        "x-app-key": kXAPPKey,
+                        "package-name": kPackageName,
                     ],
                     responseType: ApiResponse.self
                     )
@@ -205,7 +234,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                         } else if (rule.name == InterceptRuleType.VIEW_COUNT.rawValue) {
                             viewCount += 1
                             CacheUtils.setViewCountForInterceptId(key: kViewCount + String(intercept.id), value: viewCount)
-                            print("AppLaunch count -> ",CacheUtils.getViewCountForInterceptId(key: kViewCount + String(intercept.id)))
+                            print("AppLaunch count -> \(String(intercept.id))",CacheUtils.getViewCountForInterceptId(key: kViewCount + String(intercept.id)))
                             surveyLogicUtilsInstance.checkPageVisitCountLogic(pageVisitCount: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
                         } else if (rule.name == InterceptRuleType.DAY.rawValue) {
                             surveyLogicUtilsInstance.checkSurveyLaunchDayLogic(dayValue: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
@@ -226,12 +255,14 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         return self.touchPoint!
     }
 
-    public func launchFeedbackSurvey(touchPoint: TouchPoint, showInDialog: Bool) {
+    public func launchFeedbackSurvey(showInDialog: Bool) {
+        print("survey url to load:",iResponseURL)
         if (showInDialog) {
-            self.showInAppSurvey(touchPoint: touchPoint);
+            self.showInAppSurvey();
         } else {
-            self.showMessageInViewControllerWithResponse(touchPoint: touchPoint)
+            self.showMessageInViewControllerWithResponse()
         }
+        self.loadSurveyURLInWebView();
     }
     
     public func resetQuestionProCXManager() {
@@ -249,24 +280,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         self.iPopupMenuRightButtonTitle = aRightButtonTitle
         self.iPopupMenuLeftButtonTitle = aLeftButtonTitle
     }
-    
-    public func getAPIResponse (touchPoint: TouchPoint) {
-        var responseInfo: [String: Any] = [:]
-        let key = "\(String(describing: self.iTouchPointName))"
-        responseInfo = CacheUtils.getFromUserDefaults(key: key)!
-        if let surveyURL = responseInfo[ksurveyURL] as? String, !surveyURL.isEmpty {
-            self.iResponseURL = surveyURL
-            CacheUtils.clearUserDefaults(key: "\(self.iTouchPointName ?? 0)")
-        } else {
-            let apiService = ApiService()
-            self.iTouchPointName = touchPoint.surveyId
-            apiService.iDelegate = self
-            apiService.invokeService(touchPoint: touchPoint, withAPIKey: self.iApiKey!, dataCenter: self.iDataCenter!)
-        }
-    }
 
-    public func showMessageInViewControllerWithResponse(touchPoint: TouchPoint) {
-        self.getAPIResponse(touchPoint: touchPoint)
+    public func showMessageInViewControllerWithResponse() {
         DispatchQueue.main.async {
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             rect.origin.x = 0
@@ -350,9 +365,19 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
             frontView.addSubview(self.backButton)
         }
     }
+    
+    public func loadSurveyURLInWebView() {
+        print("Loading into webview -> \(self.iResponseURL)")
+        DispatchQueue.main.async {
+            if let url = self.iResponseURL, let nsurl = URL(string: url) {
+                let nsrequest = URLRequest(url: nsurl)
+                self.iWebView?.backgroundColor = UIColor.white
+                self.iWebView?.load(nsrequest)
+            }
+        }
+    }
 
-    public func showInAppSurvey(touchPoint: TouchPoint) {
-        self.getAPIResponse(touchPoint: touchPoint)
+    public func showInAppSurvey() {
         DispatchQueue.main.async {
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             let screenRect = UIScreen.main.bounds
@@ -457,7 +482,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     }
 
     @objc func aDismissWebview(_ sender: Any) {
-        CacheUtils.setToUserDefaults(key: kIsSurveyLaunched, value: false);
+        CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: false);
         self.iView?.removeFromSuperview()
         let isSurveyAlreadyLaunched = CacheUtils.getValueFromUserDefaults(key: kIsSurveyLaunched) as! Bool
         print("aDismissWebview isSurveyAlreadyLaunched: \(isSurveyAlreadyLaunched)")

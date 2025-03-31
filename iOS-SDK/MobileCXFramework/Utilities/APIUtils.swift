@@ -29,6 +29,12 @@ public class APIUtils {
         return components.url?.absoluteString ?? ""
     }
     
+    public static func getFetchSurveyURL() -> String {
+        var components = getBaseURL()
+        components.path = kGetSurveyURL
+        return components.url?.absoluteString ?? ""
+    }
+    
     public static func getDataCenterString(dataCenter: TouchPoint.DataCenter) -> String {
         switch dataCenter {
         case TouchPoint.DataCenter.DATA_CENTER_US:
