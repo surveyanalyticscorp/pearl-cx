@@ -40,9 +40,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         print("satisfiedRule.name \(satisfiedRule.name)")
         print("intercept id \(interceptId)")
         addValue(for: String(interceptId), newValue: satisfiedRule.name)
-                
-//        let isSurveyAlreadyLaunched = CacheUtils.getIsSurveyLaunched(key: kIsSurveyLaunched) 
-//        print("isSurveyAlreadyLaunched \(isSurveyAlreadyLaunched)")
         
         if let intercept = CacheUtils.getInterceptById(key: String(interceptId)) {
             do {
@@ -56,7 +53,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                     print("satisfiedRulesForIntercept ->",satisfiedRulesForIntercept)
                     if (satisfiedRulesCount == interceptData.rules.count) {
                         print("Launching survey for intercept id -> ", interceptId)
-//                            CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: true);
                         self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, showInDialog: showInDialog)
                     } else {
                         print("all rules are not satisfied for \(interceptId)")
@@ -67,9 +63,13 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                     self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, showInDialog: showInDialog)
                 }
             } catch {
-                
+                print("Error in launchSurveyForIntercept -> \(error)")
             }
         }
+    }
+    
+    public func setViewCountForScreenName(screenName: String) {
+        print("Received screen name from host app: \(screenName)")
     }
     
     let backButton = UIButton(type: .custom)
@@ -214,21 +214,21 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                 CacheUtils.setInterceptForInterceptId(key: String(intercept.id), value: interceptRules)
                 
                 for rule in intercept.rules {
-                    if (rule.name == InterceptRuleType.TIME_SPENT.rawValue) {
-                        Task {
-                            for await timeLeft in  TimerUtils.startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
-                                print("⏳ Time left: \(timeLeft) sec for \(intercept.id)")
-                            }
-                        }
-                    } else if (rule.name == InterceptRuleType.VIEW_COUNT.rawValue) {
+                    if (rule.name == InterceptRuleType.VIEW_COUNT.rawValue) {
                         viewCount += 1
                         CacheUtils.setViewCountForInterceptId(key: kViewCount + String(intercept.id), value: viewCount)
                         print("AppLaunch count -> \(String(intercept.id))",CacheUtils.getViewCountForInterceptId(key: kViewCount + String(intercept.id)))
                         surveyLogicUtilsInstance.checkPageVisitCountLogic(pageVisitCount: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
                     } else if (rule.name == InterceptRuleType.DAY.rawValue) {
-                        surveyLogicUtilsInstance.checkSurveyLaunchDayLogic(dayValue: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
+                        surveyLogicUtilsInstance.checkSurveyLaunchDayLogic(days: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
                     } else if (rule.name == InterceptRuleType.DATE.rawValue) {
-                        surveyLogicUtilsInstance.checkSurveyLaunchDateOfMonthLogic(date: Int(rule.value)!,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
+                        surveyLogicUtilsInstance.checkSurveyLaunchDateOfMonthLogic(dates: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
+                    } else if (rule.name == InterceptRuleType.TIME_SPENT.rawValue) {
+                        Task {
+                            for await timeLeft in  TimerUtils.startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
+                                print("⏳ Time left: \(timeLeft) sec for \(intercept.id)")
+                            }
+                        }
                     }
                 }
             }
@@ -245,9 +245,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         
         self.touchPoint = touchPoint;
         SurveyLaunchLogicUtils.getInstance().surveyLaunchDelegate = self;
-        
-//        CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: false);
-        
         Task {
             await self.fetchAndSetupIntercepts()
         }
@@ -255,11 +252,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
 
     public func launchFeedbackSurvey(showInDialog: Bool) {
         print("survey url to load:",iResponseURL)
-//        if (showInDialog) {
-//            self.showInAppSurvey();
-//        } else {
-//            self.showMessageInViewControllerWithResponse()
-//        }
         if (!self.isSurveyDisplayed) {
             self.showSurvey(isInAppSurvey: showInDialog)
             self.loadSurveyURLInWebView();

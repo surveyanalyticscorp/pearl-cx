@@ -25,11 +25,12 @@ public class SurveyLaunchLogicUtils: NSObject {
         return instance!
     }
     
-    public func checkSurveyLaunchDayLogic(dayValue: String, interceptId: Int, interceptRule: Rule, completionDelegate: SurveyLaunchDelegate) -> Void {
+    public func checkSurveyLaunchDayLogic(days: String, interceptId: Int, interceptRule: Rule, completionDelegate: SurveyLaunchDelegate) -> Void {
         let formatter = DateFormatter();
         formatter.dateFormat = "EEEE";
         let dayOfWeek = formatter.string(from: Date());
-        if (dayOfWeek == dayValue) {
+        let dayArray = days.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+        if (dayArray.contains(dayOfWeek)) {
             completionDelegate.launchSurveyForIntercept(interceptId: interceptId, satisfiedRule: interceptRule)
         }
     }
@@ -46,9 +47,10 @@ public class SurveyLaunchLogicUtils: NSObject {
         return Int(appUserInteractionTimeInSeconds);
     }
     
-    public func checkSurveyLaunchDateOfMonthLogic(date: Int, interceptId: Int, interceptRule: Rule, completionDelegate: SurveyLaunchDelegate) -> Void {
+    public func checkSurveyLaunchDateOfMonthLogic(dates: String, interceptId: Int, interceptRule: Rule, completionDelegate: SurveyLaunchDelegate) -> Void {
         let dateOfMonth: Int = Calendar.current.component(.day, from: Date())
-        if (dateOfMonth == date) {
+        let datesArray = dates.components(separatedBy: ",").map{ $0.trimmingCharacters(in: .whitespaces) }
+        if (datesArray.contains(String(dateOfMonth))) {
             completionDelegate.launchSurveyForIntercept(interceptId: interceptId, satisfiedRule: interceptRule)
         }
     }
