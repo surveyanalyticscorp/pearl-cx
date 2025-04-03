@@ -11,6 +11,10 @@ import Foundation
     func launchSurveyForIntercept(interceptId: Int, satisfiedRule: Rule)
 }
 
+@MainActor public protocol ScreenVisitDelegate: NSObjectProtocol {
+    func trackScreenVisit(screenName: String)
+}
+
 @MainActor
 public class SurveyLaunchLogicUtils: NSObject {
     public weak var surveyLaunchDelegate: SurveyLaunchDelegate?
@@ -35,13 +39,13 @@ public class SurveyLaunchLogicUtils: NSObject {
         }
     }
     
-    public func checkPageVisitCountLogic(pageVisitCount: Int, interceptId: Int, interceptRule: Rule, completionDelegate: SurveyLaunchDelegate) -> Void {
-        let appLaunchCount = CacheUtils.getViewCountForInterceptId(key: kViewCount + String(interceptId))
-        if (appLaunchCount == pageVisitCount) {
-            completionDelegate.launchSurveyForIntercept(interceptId: interceptId, satisfiedRule: interceptRule)
-            CacheUtils.resetViewCountForInterceptId(key: kViewCount + String(interceptId))
-        }
-    }
+//    public func checkPageVisitCountLogic(pageVisitCount: Int, interceptId: Int, interceptRule: Rule, completionDelegate: SurveyLaunchDelegate) -> Void {
+//        let appLaunchCount = CacheUtils.getViewCountForInterceptId(key: kViewCount + String(interceptId))
+//        if (appLaunchCount == pageVisitCount) {
+//            completionDelegate.launchSurveyForIntercept(interceptId: interceptId, satisfiedRule: interceptRule)
+//            CacheUtils.resetViewCountForInterceptId(key: kViewCount + String(interceptId))
+//        }
+//    }
     
     public func getAppUserInteractionTimeInSeconds() -> Int {
         return Int(appUserInteractionTimeInSeconds);

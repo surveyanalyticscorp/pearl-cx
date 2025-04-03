@@ -14,19 +14,14 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     var satisfiedRulesForIntercept: [String: [[String]]] = [:]
     var visitorApiResponse: ApiResponse!
     private var isSurveyDisplayed = false
-    private func containsValue(for id: String, value: String) -> Bool {
-        if let lists = satisfiedRulesForIntercept[id] {
-            return lists.contains { $0.contains(value) }
-        }
-        return false
-    }
+    @MainActor public static var instance: QuestionProCX?
     
-    private func addValue(for id: String, newValue: String) {
+    private func addRuleToSatisfiedRulesList(for id: String, newValue: String) {
         if var existingLists = satisfiedRulesForIntercept[id] {
-            // ✅ Add to the last list if available, else create a new list
-            if !existingLists.isEmpty {
+            // ✅ Add to the last list if available and the value is not already present
+            if let lastList = existingLists.last, !lastList.contains(newValue) {
                 existingLists[existingLists.count - 1].append(newValue)
-            } else {
+            } else if existingLists.isEmpty {
                 existingLists.append([newValue]) // Create a new list if empty
             }
             satisfiedRulesForIntercept[id] = existingLists
@@ -39,7 +34,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     @MainActor public func launchSurveyForIntercept(interceptId: Int, satisfiedRule: Rule) {
         print("satisfiedRule.name \(satisfiedRule.name)")
         print("intercept id \(interceptId)")
-        addValue(for: String(interceptId), newValue: satisfiedRule.name)
+        addRuleToSatisfiedRulesList(for: String(interceptId), newValue: satisfiedRule.name)
         
         if let intercept = CacheUtils.getInterceptById(key: String(interceptId)) {
             do {
@@ -68,8 +63,35 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         }
     }
     
-    public func setViewCountForScreenName(screenName: String) {
-        print("Received screen name from host app: \(screenName)")
+    public func setScreenName(screenName: String) {
+        self.handleScreenNameViewCount(screenName: screenName)
+    }
+    
+    func handleScreenNameViewCount(screenName: String) {
+        if let intercepts = CacheUtils.getIntercepts(key: kIntercepts) {
+            do {
+                let interceptData = try JSONDecoder().decode([Intercept].self, from: intercepts)
+                for intercept in interceptData {
+                    for rule in intercept.rules {
+                        if (InterceptRuleType.VIEW_COUNT.rawValue == rule.name) {
+                            if (rule.key == screenName) {
+                                var count = CacheUtils.getScreenVisitCountForInterceptId(key: String(intercept.id))
+                                print("Count: \(count)")
+                                if (count == Int(rule.value)) {
+                                    self.launchSurveyForIntercept(interceptId: intercept.id, satisfiedRule: rule)
+                                    CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: 1)
+                                } else {
+                                    count += 1;
+                                    CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: count)
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch {
+                print("error in view count for screen name");
+            }
+        }
     }
     
     let backButton = UIButton(type: .custom)
@@ -137,16 +159,12 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     public override init() {
     }
 
-    public static let getInstance: QuestionProCX = {
-        let instance = QuestionProCX()
-        instance.iPopupMenuTitle = "Feedback"
-        instance.iPopupMenuMessage = "Would you like to give us some feedback?"
-        instance.iPopupMenuRightButtonTitle = "No"
-        instance.iPopupMenuLeftButtonTitle = "Yes"
-        instance.iPresentViewFlag = true
-        instance.iPopUpViewFlag = true
-        return instance
-    }()
+    public static func getinstance() -> QuestionProCX{
+        if instance == nil {
+            instance = QuestionProCX()
+        }
+        return instance!
+    }
     
     public func fetchSurveyURLForSurveyId (interceptId: Int, surveyId: Int, showInDialog: Bool) {
         var fetchSurveyURLResponse: SurveyURL!
@@ -205,7 +223,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
             }
             
             for intercept in intercepts {
-                var viewCount: Int = CacheUtils.getViewCountForInterceptId(key: kViewCount + String(intercept.id));
                 var interceptRules: [String] = []
                 for interceptRule in intercept.rules {
                     interceptRules.append(interceptRule.name)
@@ -214,12 +231,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                 CacheUtils.setInterceptForInterceptId(key: String(intercept.id), value: interceptRules)
                 
                 for rule in intercept.rules {
-                    if (rule.name == InterceptRuleType.VIEW_COUNT.rawValue) {
-                        viewCount += 1
-                        CacheUtils.setViewCountForInterceptId(key: kViewCount + String(intercept.id), value: viewCount)
-                        print("AppLaunch count -> \(String(intercept.id))",CacheUtils.getViewCountForInterceptId(key: kViewCount + String(intercept.id)))
-                        surveyLogicUtilsInstance.checkPageVisitCountLogic(pageVisitCount: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
-                    } else if (rule.name == InterceptRuleType.DAY.rawValue) {
+                    if (rule.name == InterceptRuleType.DAY.rawValue) {
                         surveyLogicUtilsInstance.checkSurveyLaunchDayLogic(days: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
                     } else if (rule.name == InterceptRuleType.DATE.rawValue) {
                         surveyLogicUtilsInstance.checkSurveyLaunchDateOfMonthLogic(dates: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
