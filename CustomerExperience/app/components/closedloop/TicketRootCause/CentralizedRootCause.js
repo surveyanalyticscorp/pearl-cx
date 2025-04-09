@@ -1,31 +1,180 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, Platform} from 'react-native';
+
+import {ScrollView} from 'react-native-gesture-handler';
 import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily, FontWeight} from '../../../styles/font.constants';
-import QPButton from '../../../widgets/Button';
+import {useDispatch, useSelector} from 'react-redux';
 
+import {updateRootCause} from '../../../redux/actions/closedloop.actions';
+import {translate} from '../../../Utils/MultilinguaUtils';
+import QPButton from '../../../widgets/Button';
+import {buttonStyles} from '../../../styles/button.styles';
+import StringUtils from '../../../Utils/StringUtils';
+import RenderRootCauseItem from '../RenderRootCauseItem';
+import RenderSegmentItem from '../RenderSegmentItem';
+// to find all the
+export const hasId = (id, arr = []) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (id === arr[i].id) {
+      return true;
+    }
+  }
+  return false;
+};
 const TicketRootCause = props => {
+  const ROOT_CAUSES = translate('root_cause.root_cause');
+  const ACTIONS = translate('root_cause.actions');
+  const ORIGIN_SEGMENTS = translate('close_loop.origin_segment');
+  const CURRENT_SEGMENTS = translate('close_loop.current_segment');
+
+  const dispatch = useDispatch();
+  const {feedbackApiKey} = useSelector(state => state.global.userInfo);
+  const {authToken} = useSelector(state => state.global);
+  const {ticket, rootCauseList, rootCauseActionList} = useSelector(
+    state => state.dashboard,
+  );
+
+  console.log('ROOT_CAUSES', JSON.stringify(rootCauseList));
+  console.log('ROOT_CAUSES_ACTIONS', JSON.stringify(rootCauseActionList));
+
+  const getRootCauses = () => {
+    return rootCauseList.length > 0
+      ? rootCauseList.map((value, index) => ({
+          ...value,
+          isChecked: hasId(value.id, ticket.rootCauses),
+        }))
+      : [];
+  };
+
+  const getRootActions = () => {
+    return rootCauseActionList.length > 0
+      ? rootCauseActionList.map((value, index) => ({
+          ...value,
+          title: value.actionName,
+          isChecked: hasId(value.id, ticket.rootCauseActions),
+        }))
+      : [];
+  };
+  const [rootCauses, setRootCauses] = useState(getRootCauses());
+  const [rootCauseActions, setRootActions] = useState(getRootActions());
+  const [originSegmentId, setOriginSegmentId] = useState(
+    ticket.originSegment.id,
+  );
+  const [currentSegmentId, setcurrentSegmentId] = useState(
+    ticket.currentSegment.id,
+  );
+
+  console.log('ROOT_CAUSES', JSON.stringify(rootCauseList));
+  console.log('ROOT_CAUSES_ACTIONS', JSON.stringify(rootCauseActionList));
+  console.log('TICKET', JSON.stringify(ticket));
+
+  const updateRootCauses = (item, index) => {
+    setRootCauses(prevState => {
+      const temp = [...prevState];
+      temp[index].isChecked = !prevState[index].isChecked;
+      return temp;
+    });
+  };
+
+  const updateRootActions = (item, index) => {
+    setRootActions(prevState => {
+      const temp = [...prevState];
+      temp[index].isChecked = !prevState[index].isChecked;
+      return temp;
+    });
+  };
+
+  const onClickCheckBox = (title, item, index) => {
+    if (title === ROOT_CAUSES) {
+      updateRootCauses(item, index);
+    } else {
+      updateRootActions(item, index);
+    }
+  };
+
+  const onClickRadioButton = (title, item, index) => {
+    // update segment
+    title === ORIGIN_SEGMENTS
+      ? setOriginSegmentId(item.id)
+      : setcurrentSegmentId(item.id);
+  };
+
+  const resetSelections = () => {
+    setRootActions(getRootActions);
+    setRootCauses(getRootCauses);
+    setOriginSegmentId(ticket.originSegment.id);
+    setcurrentSegmentId(ticket.currentSegment.id);
+  };
+
+  const updateRootCauseAndAction = () => {
+    const rootCauseArr = [];
+    for (let item of rootCauses) {
+      if (item.isChecked) {
+        rootCauseArr.push(item.id);
+      }
+    }
+
+    const rootActionArr = [];
+    for (let item of rootCauseActions) {
+      if (item.isChecked) {
+        rootActionArr.push(item.id);
+      }
+    }
+
+    dispatch(
+      updateRootCause(
+        authToken,
+        JSON.stringify(ticket.id),
+        {
+          rootCauses: rootCauseArr,
+          rootCauseActions: rootActionArr,
+          currentSegmentId: currentSegmentId,
+          originSegmentId: originSegmentId,
+        },
+        feedbackApiKey,
+      ),
+    );
+  };
+
   return (
-    <View style={styles.rootContainer}>
-      <View style={styles.rowContainer}>
-        <QPButton
-          textStyle={{
-            ...styles.buttonText,
-            ...styles.centralizedButtonTextColor,
-          }}
-          style={{...styles.buttonStyle, ...styles.centralizedButtonColor}}
-          buttonText="Centralized"
+    <View testID="root-cause-view" style={styles.rootContainer}>
+      <ScrollView style={styles.container}>
+        <RenderRootCauseItem
+          title={ROOT_CAUSES}
+          data={rootCauses}
+          onClickCheckBox={onClickCheckBox}
         />
+        <RenderRootCauseItem
+          title={ACTIONS}
+          data={rootCauseActions}
+          onClickCheckBox={onClickCheckBox}
+        />
+      </ScrollView>
+
+      <View style={styles.buttonView}>
         <QPButton
-          textStyle={{
-            ...styles.buttonText,
-            ...styles.olodRootCauseButtonTextColor,
+          testID="RootCasueResetButton"
+          style={{
+            ...buttonStyles.textButton,
+            marginHorizontal: MarginConstants.tab4,
           }}
-          style={{...styles.buttonStyle, ...styles.oldRootCauseButtonColor}}
-          buttonText="Previous root cause"
+          onPress={resetSelections}
+          buttonText={StringUtils.uppercaseFirstCharRestLowercase(
+            translate('root_cause.reset'),
+          )}
+          textStyle={buttonStyles.textButtonTextPrimary}
+        />
+
+        <QPButton
+          testID="RootCauseUpdateButton"
+          style={buttonStyles.primaryButton}
+          onPress={updateRootCauseAndAction}
+          buttonText={translate('close_loop.update')}
+          textStyle={buttonStyles.primaryButtonText}
         />
       </View>
     </View>
@@ -43,22 +192,25 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.tab1,
   },
 
-  rowContainer: {
-    flexDirection: 'row',
-    backgroundColor: Colors.white,
-    padding: PaddingConstants.tab1,
-  },
-
   container: {
     margin: MarginConstants.tab1,
     flex: 1,
+
+    // borderColor: Colors.evenDarkerGrey,
+    // borderWidth: 1,
+    // borderRadius: 4,
   },
 
   ticketStatusContainer: {
     backgroundColor: Colors.white,
     margin: MarginConstants.tab1,
   },
+  rowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
 
+    padding: PaddingConstants.tab1,
+  },
   columnContainer: {
     alignItems: 'flex-start',
     padding: PaddingConstants.tab1,
@@ -127,7 +279,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.accentLight,
   },
-
+  buttonText: {
+    fontFamily: FontFamily.regular,
+    fontWeight: FontWeight._900,
+    fontSize: TextSizes.secondary,
+  },
   resetButton: {color: Colors.accentLight},
   updatetButton: {color: Colors.white},
   statusText: {
@@ -163,34 +319,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-
-  buttonText: {
-    fontFamily: FontFamily.regular,
-    fontWeight: FontWeight._400,
-    fontSize: TextSizes.secondary,
-  },
-
-  centralizedButtonTextColor: {
-    color: Colors.white,
-  },
-  olodRootCauseButtonTextColor: {
-    color: Colors.filterIconColor,
-  },
-
-  buttonStyle: {
-    alignItems: 'center',
+  button: {
     margin: MarginConstants.tab1,
-    paddingVertical: PaddingConstants.tab1_2x,
-    paddingHorizontal: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab2,
+    paddingVertical: PaddingConstants.tab1,
     borderRadius: 5,
-    maxWidth: '50%',
-  },
-
-  centralizedButtonColor: {
-    backgroundColor: Colors.accentLight,
-  },
-  oldRootCauseButtonColor: {
-    backgroundColor: Colors.negativePromter,
   },
   modelDropdown: {
     minHeight: MarginConstants.tab3,
