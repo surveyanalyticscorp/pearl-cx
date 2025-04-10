@@ -89,9 +89,9 @@ const CxDashboard = ({route, navigation}) => {
   const statusBottomSheetSnapPoints = ['62%', '0%'];
   const fall = new Animated.Value(1);
 
-  useEffect(() => {
-    Notifications.registerRemoteNotifications();
-  }, []);
+  // useEffect(() => {
+  //   Notifications.registerRemoteNotifications();
+  // }, []);
   const openStatusBS = () => {
     statusBottomSheetRef.current.snapTo(0);
   };
