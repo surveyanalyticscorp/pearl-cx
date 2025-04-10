@@ -15,7 +15,7 @@ const ResponsesButton = () => {
       testID="dashboardToResponseButton"
       style={buttonStyles.textButton}
       onPress={navigateToResponses}
-      buttonText={translate('dashboard.view_responses')}
+      buttonText={translate('dashboard.responses')}
       textStyle={buttonStyles.textButtonText}
     />
   );

@@ -165,7 +165,7 @@ export const ViewTicketsButton = ({statusIndex}) => {
       testID="ViewTicketsButton"
       style={buttonStyles.textButton}
       onPress={navigateToCLosedLoop}
-      buttonText={`${translate('dashboard.view_tickets')}`}
+      buttonText={`${translate('dashboard.tickets')}`}
       textStyle={buttonStyles.textButtonText}
     />
   );
@@ -226,7 +226,7 @@ export const StatusDashboardBottomSheet = React.forwardRef(
     const renderStatusHeader = _title => {
       return (
         <BottomSheetHeader
-          title={translate('ticket_overview.select_status')}
+          title={translate('close_loop.status')}
           onPressClose={() => ref.current.snapTo(snapPoints.length - 1)}
         />
       );

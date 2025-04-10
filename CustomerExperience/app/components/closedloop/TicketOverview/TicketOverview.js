@@ -46,7 +46,7 @@ export default function TicketOverview(props) {
   const statusBottomSheet = React.useRef();
   const priorityBottomSheet = React.useRef();
   const assigneeBottomSheet = React.useRef();
-  const statusBottomSheetSnapPoints = ['50', '0'];
+  const statusBottomSheetSnapPoints = ['55', '0'];
 
   const fall = new Animated.Value(1);
   const onTakeActionHandler = () => {

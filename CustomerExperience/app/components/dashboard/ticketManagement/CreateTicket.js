@@ -1,13 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Platform,
-  StyleSheet,
-  TextInput,
-  View,
-  Image,
-  SafeAreaView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {Platform, StyleSheet, TextInput, View, Image} from 'react-native';
 import {
   Colors,
   getPriorityBorderColorbyId,
@@ -44,11 +36,7 @@ import {
   FullMonthDateYearFormat,
   YMDFORMAT,
 } from '../../../Utils/AppConstants';
-import {
-  isStringNullOrEmpty,
-  showErrorFlashMessage,
-  validateEmail,
-} from '../../../Utils/Utility';
+import {showErrorFlashMessage, validateEmail} from '../../../Utils/Utility';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
@@ -64,47 +52,75 @@ import RenderDatePickerModal from '../../RenderDatePickerModal';
 import {ANALYTICS_EVENTS} from '../../../Utils/Analytic.constants';
 import {sendAnalyticsEvent} from '../../../Utils/AnalyticLogs';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import ShowInputError from '../../../routes/commonUI/ShowInputError';
 
-const isValid = ticketState => {
-  if (!ticketState.currentSegmentId) {
-    showErrorFlashMessage(translate('segment_not_selected'));
-    return false;
-  }
-  if (!ticketState.issueDate) {
-    showErrorFlashMessage(translate('issue_date_not_selected'));
-    return false;
-  }
+const INPUTTYPES = {
+  EMAIL: 'EMAIL',
+  PHONE: 'PHONE',
+  NAME: 'NAME',
+  DATE: 'DATE',
+  SEGMENT: 'SEGMENT',
+  PRIORITY: 'PRIORITY',
+  STATUS: 'STATUS',
+  DESCRIPTION: 'DESCRIPTION',
+  OWNER: 'OWNER',
+};
+
+const checkValidation = ticketState => {
+  // convert errorInputTypes to map
+  const errorInputTypes = new Map();
+
+  let isValid = true;
+
   if (!ticketState.firstName) {
-    showErrorFlashMessage(translate('enter_customer_name'));
-    return false;
+    errorInputTypes.set(INPUTTYPES.NAME, translate('enter_customer_name'));
+    isValid = false;
   }
+
   if (!ticketState.emailAddress) {
-    showErrorFlashMessage(translate('enter_an_email'));
-    return false;
+    errorInputTypes.set(INPUTTYPES.EMAIL, translate('enter_an_email'));
+    isValid = false;
   }
+
   if (ticketState.emailAddress && !validateEmail(ticketState.emailAddress)) {
-    showErrorFlashMessage(translate('enter_an_valid_email'));
-    return false;
+    errorInputTypes.set(INPUTTYPES.EMAIL, translate('enter_an_valid_email'));
+    isValid = false;
   }
+
+  if (!ticketState.currentSegmentId) {
+    errorInputTypes.set(INPUTTYPES.SEGMENT, translate('segment_not_selected'));
+    isValid = false;
+  }
+
+  if (!ticketState.issueDate) {
+    errorInputTypes.set(INPUTTYPES.DATE, translate('issue_date_not_selected'));
+    isValid = false;
+  }
+
   if (ticketState.priority === null || ticketState.priority === undefined) {
-    showErrorFlashMessage(translate('priority_not_selected'));
-    return false;
+    errorInputTypes.set(
+      INPUTTYPES.PRIORITY,
+      translate('priority_not_selected'),
+    );
+    isValid = false;
   }
+
   if (ticketState.status === null || ticketState.status === undefined) {
-    showErrorFlashMessage(translate('status_not_selected'));
-    return false;
+    errorInputTypes.set(INPUTTYPES.STATUS, translate('status_not_selected'));
+    isValid = false;
   }
 
   if (!ticketState.assignToId) {
-    showErrorFlashMessage(translate('select_a_ticket_owner'));
-    return false;
+    errorInputTypes.set(INPUTTYPES.OWNER, translate('select_a_ticket_owner'));
+    isValid = false;
   }
 
   if (!ticketState.comment) {
-    showErrorFlashMessage(translate('add_description'));
-    return false;
+    errorInputTypes.set(INPUTTYPES.DESCRIPTION, translate('add_description'));
+    isValid = false;
   }
-  return true;
+
+  return {isValid: isValid, errorInputTypes: errorInputTypes};
 };
 
 const CreateTicketContainer = ({children}) => {
@@ -157,6 +173,7 @@ const RenderTextInput = ({
   defaultValue = '',
   keyboardType,
   setValue,
+  isError = false,
 }) => {
   return (
     <TextInput
@@ -167,6 +184,8 @@ const RenderTextInput = ({
       style={{
         ...(multiline ? styles.descriptionInputText : styles.textInputText),
         backgroundColor: Colors.settingsBackground,
+        borderBottomWidth: 1,
+        borderBottomColor: isError ? Colors.error : Colors.borderColor,
       }}
       onEndEditing={value => {
         console.log('TEXT_INPUT', value.nativeEvent.text);
@@ -175,7 +194,12 @@ const RenderTextInput = ({
     />
   );
 };
-const RenderEmailAddressInput = ({defaultValue, setTicketState}) => {
+const RenderEmailAddressInput = ({
+  defaultValue,
+  setTicketState,
+  isError = false,
+  errorMessage = '',
+}) => {
   const setEmailAddress = text => {
     setTicketState(state => ({
       ...state,
@@ -195,11 +219,18 @@ const RenderEmailAddressInput = ({defaultValue, setTicketState}) => {
         placeholder={'Email'}
         keyboardType={'email-address'}
         setValue={setEmailAddress}
+        isError={isError}
       />
+      <ShowInputError isError={isError} errorMessage={errorMessage} />
     </View>
   );
 };
-const RenderDescriptionInput = ({defaultValue, setTicketState}) => {
+const RenderDescriptionInput = ({
+  defaultValue,
+  setTicketState,
+  isError = false,
+  errorMessage = '',
+}) => {
   const setDescription = text => {
     setTicketState(state => ({
       ...state,
@@ -224,12 +255,19 @@ const RenderDescriptionInput = ({defaultValue, setTicketState}) => {
         multiline={true}
         setValue={setDescription}
         keyboardType={'default'}
+        isError={isError}
       />
+      <ShowInputError isError={isError} errorMessage={errorMessage} />
     </View>
   );
 };
 
-const RenderCustomerNameInput = ({defaultValue, setTicketState}) => {
+const RenderCustomerNameInput = ({
+  defaultValue,
+  setTicketState,
+  isError = false,
+  errorMessage = '',
+}) => {
   const setCustomerName = text => {
     setTicketState(state => ({
       ...state,
@@ -246,7 +284,9 @@ const RenderCustomerNameInput = ({defaultValue, setTicketState}) => {
         defaultValue={defaultValue}
         placeholder={translate('create_new_ticket.customer_name')}
         setValue={setCustomerName}
+        isError={isError}
       />
+      <ShowInputError isError={isError} errorMessage={errorMessage} />
     </View>
   );
 };
@@ -307,7 +347,7 @@ export default function CreateTicket(props) {
     state => state.global.userInfo,
   );
   // const [priority, setPriority] = useState('Select');
-  const [priorityIndex, setPriorityIndex] = useState(-1);
+  const [priorityIndex, setPriorityIndex] = useState(0);
   const [segment, setSegment] = useState(
     translate('select_segment.select_segment'),
   );
@@ -318,7 +358,7 @@ export default function CreateTicket(props) {
   );
   const [ticketOwnerIndex, setTIcketOwnerIndex] = useState(-1);
   // const [status, setStatus] = useState('Select');
-  const [statusIndex, setStatusIndex] = useState(-1);
+  const [statusIndex, setStatusIndex] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(moment().format(DMYFORMAT));
   const navigation = useNavigation();
@@ -343,11 +383,11 @@ export default function CreateTicket(props) {
 
   const fall = new Animated.Value(1);
   const priorityBottomSheetSnapPoints = [
-    Platform.OS === 'ios' ? '45%' : '50%',
+    Platform.OS === 'ios' ? '50%' : '55%',
     '0%',
   ];
   const statusBottomSheetSnapPoints = [
-    Platform.OS === 'ios' ? '40%' : '45%',
+    Platform.OS === 'ios' ? '45%' : '50%',
     '0%',
   ];
   const segmentBottomSheetSnapPoints = ['45%', '0%'];
@@ -357,6 +397,7 @@ export default function CreateTicket(props) {
   // const [shadow, setShadow] = useState(false);
   const dispatch = useDispatch();
   const [showLoading, setLoading] = useState(false);
+  const [errorInputType, setErrorInputType] = useState(new Map());
   const [ticketState, setTicketState] = useState({
     userName: `${firstName} ${lastName}`,
     userEmailAddress: `${emailAddress}`,
@@ -449,13 +490,16 @@ export default function CreateTicket(props) {
   };
 
   const handleCreateTicket = () => {
-    if (isValid(ticketState)) {
+    const validation = checkValidation(ticketState);
+    if (validation.isValid) {
       setLoading(true);
       sendAnalyticsEvent(ANALYTICS_EVENTS.CREATE_TICKET, {
         ...ticketState,
       });
       dispatch(createClfTicket(ticketState, feedbackApiKey));
       props.navigation.goBack();
+    } else {
+      setErrorInputType(validation.errorInputTypes);
     }
   };
 
@@ -661,6 +705,8 @@ export default function CreateTicket(props) {
         <RenderCustomerNameInput
           defaultValue={customerName}
           setTicketState={setTicketState}
+          isError={errorInputType.has(INPUTTYPES.NAME)}
+          errorMessage={errorInputType.get(INPUTTYPES.NAME)}
         />
         <VerticalSpaceBox multiplyBy={2} />
 
@@ -669,7 +715,10 @@ export default function CreateTicket(props) {
         <RenderEmailAddressInput
           defaultValue={customerEmail}
           setTicketState={setTicketState}
+          isError={errorInputType.has(INPUTTYPES.EMAIL)}
+          errorMessage={errorInputType.get(INPUTTYPES.EMAIL)}
         />
+
         <VerticalSpaceBox multiplyBy={2} />
         <ShowTitleAndDropdown
           titleIcon={<SegmentIcon />}
@@ -677,7 +726,10 @@ export default function CreateTicket(props) {
           currentItemName={segment}
           onPress={handleSegmentSelection}
           hasArrowDownIcon
+          isError={errorInputType.has(INPUTTYPES.SEGMENT)}
+          errorMessage={errorInputType.get(INPUTTYPES.SEGMENT)}
         />
+
         <VerticalSpaceBox multiplyBy={2} />
         <ShowTitleAndDropdown
           titleIcon={<DateFilterIcon size={12} />}
@@ -687,7 +739,10 @@ export default function CreateTicket(props) {
           )}
           onPress={handleDateSelection}
           hasArrowDownIcon={false}
+          isError={errorInputType.has(INPUTTYPES.DATE)}
+          errorMessage={errorInputType.get(INPUTTYPES.DATE)}
         />
+
         <VerticalSpaceBox multiplyBy={2} />
 
         <ShowTitleAndDropdown
@@ -707,7 +762,10 @@ export default function CreateTicket(props) {
             />
           }
           hasArrowDownIcon
+          isError={errorInputType.has(INPUTTYPES.PRIORITY)}
+          errorMessage={errorInputType.get(INPUTTYPES.PRIORITY)}
         />
+
         <VerticalSpaceBox multiplyBy={2} />
 
         <ShowTitleAndDropdown
@@ -722,6 +780,8 @@ export default function CreateTicket(props) {
             />
           }
           hasArrowDownIcon
+          isError={errorInputType.has(INPUTTYPES.STATUS)}
+          errorMessage={errorInputType.get(INPUTTYPES.STATUS)}
         />
         <VerticalSpaceBox multiplyBy={2} />
 
@@ -731,10 +791,17 @@ export default function CreateTicket(props) {
           currentItemName={`${ticketOwner ?? ''}`}
           onPress={handleOwnerSelection}
           hasArrowDownIcon
+          isError={errorInputType.has(INPUTTYPES.OWNER)}
+          errorMessage={errorInputType.get(INPUTTYPES.OWNER)}
         />
+
         <VerticalSpaceBox multiplyBy={2} />
 
-        <RenderDescriptionInput setTicketState={setTicketState} />
+        <RenderDescriptionInput
+          setTicketState={setTicketState}
+          isError={errorInputType.has(INPUTTYPES.DESCRIPTION)}
+          errorMessage={errorInputType.get(INPUTTYPES.DESCRIPTION)}
+        />
 
         <VerticalSpaceBox multiplyBy={4} />
         <CreateTicketButton
