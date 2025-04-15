@@ -114,11 +114,11 @@ public class CacheUtils {
     }
     
     @MainActor public static func setScreenVisitCountForInterceptId(key: String, value: Int) {
-        persistentDefaults.set(value, forKey: key);
+        UserDefaults.standard.set(value, forKey: key);
     }
     
     @MainActor public static func getScreenVisitCountForInterceptId(key: String) -> Int {
-        if let defaultValue = persistentDefaults.object(forKey: key) as? Int {            
+        if let defaultValue = UserDefaults.standard.object(forKey: key) as? Int {            
             return defaultValue
         }
         return 1

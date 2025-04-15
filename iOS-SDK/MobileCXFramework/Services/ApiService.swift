@@ -30,25 +30,25 @@ public class ApiService: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
 
     public func createCXRequestWithTouchPointID(touchPoint: TouchPoint) -> String {
         var cxRequestDict: [String: Any] = [
-            "surveyID": touchPoint.surveyId,
+//            "surveyID": touchPoint.surveyId,
             "isManualSurvey": 1
         ]
 
-        if !touchPoint.email.isEmpty {
-            cxRequestDict["email"] = touchPoint.email
-        } else {
-            let aUUID = UUID().uuidString
-            cxRequestDict["email"] = "\(aUUID)@questionpro.com"
-        }
+//        if !touchPoint.email.isEmpty {
+//            cxRequestDict["email"] = touchPoint.email
+//        } else {
+//            let aUUID = UUID().uuidString
+//            cxRequestDict["email"] = "\(aUUID)@questionpro.com"
+//        }
 
-        if !touchPoint.firstName.isEmpty { cxRequestDict["firstName"] = touchPoint.firstName }
-        if !touchPoint.lastName.isEmpty { cxRequestDict["lastName"] = touchPoint.lastName }
-        if !touchPoint.mobile.isEmpty { cxRequestDict["mobile"] = touchPoint.mobile }
-        if !touchPoint.segmentCode.isEmpty { cxRequestDict["S1"] = touchPoint.segmentCode }
-        if !touchPoint.customVariable1.isEmpty { cxRequestDict["custom1"] = touchPoint.customVariable1 }
-        if !touchPoint.customVariable2.isEmpty { cxRequestDict["custom2"] = touchPoint.customVariable2 }
-        if !touchPoint.customVariable3.isEmpty { cxRequestDict["custom3"] = touchPoint.customVariable3 }
-        if !touchPoint.transactionLanguage.isEmpty { cxRequestDict["transactionLanguage"] = touchPoint.transactionLanguage }
+//        if !touchPoint.firstName.isEmpty { cxRequestDict["firstName"] = touchPoint.firstName }
+//        if !touchPoint.lastName.isEmpty { cxRequestDict["lastName"] = touchPoint.lastName }
+//        if !touchPoint.mobile.isEmpty { cxRequestDict["mobile"] = touchPoint.mobile }
+//        if !touchPoint.segmentCode.isEmpty { cxRequestDict["S1"] = touchPoint.segmentCode }
+//        if !touchPoint.customVariable1.isEmpty { cxRequestDict["custom1"] = touchPoint.customVariable1 }
+//        if !touchPoint.customVariable2.isEmpty { cxRequestDict["custom2"] = touchPoint.customVariable2 }
+//        if !touchPoint.customVariable3.isEmpty { cxRequestDict["custom3"] = touchPoint.customVariable3 }
+//        if !touchPoint.transactionLanguage.isEmpty { cxRequestDict["transactionLanguage"] = touchPoint.transactionLanguage }
 
         do {
             let uploadData = try JSONSerialization.data(withJSONObject: cxRequestDict, options: .prettyPrinted)

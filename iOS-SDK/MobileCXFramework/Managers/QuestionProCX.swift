@@ -15,6 +15,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     var visitorApiResponse: ApiResponse!
     private var isSurveyDisplayed = false
     @MainActor public static var instance: QuestionProCX?
+    var callbackDelegate: QuestionProDelegate?
     
     private func addRuleToSatisfiedRulesList(for id: String, newValue: String) {
         if var existingLists = satisfiedRulesForIntercept[id] {
@@ -64,6 +65,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     }
     
     public func setScreenName(screenName: String) {
+        print("Screen name \(screenName)")
         self.handleScreenNameViewCount(screenName: screenName)
     }
     
@@ -76,7 +78,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                         if (InterceptRuleType.VIEW_COUNT.rawValue == rule.name) {
                             if (rule.key == screenName) {
                                 var count = CacheUtils.getScreenVisitCountForInterceptId(key: String(intercept.id))
-                                print("Count: \(count)")
+                                print("Count: \(count) for \(screenName)")
                                 if (count == Int(rule.value)) {
                                     self.launchSurveyForIntercept(interceptId: intercept.id, satisfiedRule: rule)
                                     CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: 1)
@@ -190,7 +192,9 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                 self.iResponseURL = fetchSurveyURLResponse.surveyURL
                 print("Survey URL = \(self.iResponseURL)")
                 self.launchFeedbackSurvey(showInDialog: showInDialog)
+                self.callbackDelegate?.getSurveyURL(surveyURL: self.iResponseURL!)
             } catch {
+                self.callbackDelegate?.getSurveyURL(surveyURL: "")
                 print("API error ->", error)
                 self.iResponseURL = ""
             }
@@ -212,7 +216,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                 )
            
             visitorApiResponse = response
-            
+            self.callbackDelegate?.initSDKSuccess()
             let intercepts = visitorApiResponse.project.intercepts
             
             do {
@@ -245,16 +249,17 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                 }
             }
         } catch {
+            self.callbackDelegate?.initSDKFailed(error: error)
             print("API error: \(error)")
         }
     }
 
-    public func initwithAPIKey(apiKey: String, touchPoint: TouchPoint, dataCenter: TouchPoint.DataCenter, withWindow aWindow: UIWindow) {
+    public func configure(apiKey: String, touchPoint: TouchPoint, withWindow aWindow: UIWindow, callbackDelegate: QuestionProDelegate?) {
         self.iApiKey = apiKey
-        self.iDataCenter = dataCenter
+        self.iDataCenter = touchPoint.dataCenter
         self.iBaseWindow = aWindow
         self.iCurrentViewName = ""
-        
+        self.callbackDelegate = callbackDelegate
         self.touchPoint = touchPoint;
         SurveyLaunchLogicUtils.getInstance().surveyLaunchDelegate = self;
         Task {
@@ -338,7 +343,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         }
     }
     
-    public func resetQuestionProCXManager() {
+    public func clearSession() {
         print("Cleraing all user defaults..")
         CacheUtils.clearAllUserDefaults()
     }
