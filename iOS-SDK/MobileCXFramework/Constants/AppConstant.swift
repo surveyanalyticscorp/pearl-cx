@@ -45,6 +45,7 @@ public let kMobileAPIProduction = "api.questionpro.com/"
 public let kMobileCXGetSurveyURL = "/api/v1/visitor/mobile"
 //public let kGetSurveyURL = "/cx/transactions/survey-url"
 public let kGetSurveyURL = "/api/v1/data-mapping/mobile/survey-url"
+public let kSurveyFeedbackURL = "/api/v1/visitor/mobile/survey-feedback"
 
 public let kPackageName = "com.questionpro"
 public let kXAPPKey = "e37da3ff-858c-4358-af11-a727377dfac2"
@@ -52,7 +53,7 @@ public let kXAPPKey = "e37da3ff-858c-4358-af11-a727377dfac2"
 public let kEnvironment = kStagingEnvironment
 
 public enum InterceptType: String {
-    case PROMPT, EMBED
+    case PROMPT, EMBED, SURVEY_URL
 }
 
 public enum InterceptRuleType: String {
@@ -61,4 +62,8 @@ public enum InterceptRuleType: String {
 
 public enum InterceptCondition: String {
     case AND, OR
+}
+
+public enum InterceptSurveyLaunchEvent: String {
+    case MATCHED, LAUNCHED
 }

@@ -37,6 +37,10 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         print("intercept id \(interceptId)")
         addRuleToSatisfiedRulesList(for: String(interceptId), newValue: satisfiedRule.name)
         
+        if (CacheUtils.getIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId))) {
+            print("Survey already launched for this intercept id \(interceptId)")
+            return;
+        }
         if let intercept = CacheUtils.getInterceptById(key: String(interceptId)) {
             do {
                 let interceptData = try JSONDecoder().decode(Intercept.self, from: intercept)
@@ -49,14 +53,13 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                     print("satisfiedRulesForIntercept ->",satisfiedRulesForIntercept)
                     if (satisfiedRulesCount == interceptData.rules.count) {
                         print("Launching survey for intercept id -> ", interceptId)
-                        self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, showInDialog: showInDialog)
+                        self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, interceptType: interceptData.type)
                     } else {
                         print("all rules are not satisfied for \(interceptId)")
                     }
                 } else if (interceptData.condition == InterceptCondition.OR.rawValue){
                     print("OR condition")
-                    CacheUtils.setIsSurveyLaunched(key: kIsSurveyLaunched, value: true);
-                    self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, showInDialog: showInDialog)
+                    self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, interceptType: interceptData.type)
                 }
             } catch {
                 print("Error in launchSurveyForIntercept -> \(error)")
@@ -168,7 +171,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         return instance!
     }
     
-    public func fetchSurveyURLForSurveyId (interceptId: Int, surveyId: Int, showInDialog: Bool) {
+    public func fetchSurveyURLForSurveyId (interceptId: Int, surveyId: Int, interceptType: String) {
         var fetchSurveyURLResponse: SurveyURL!
         var bodyParam = [:] as [String: Any]
         bodyParam["visitedUserId"] = visitorApiResponse.visitor.uuid;
@@ -190,9 +193,16 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                 )
                 fetchSurveyURLResponse = response
                 self.iResponseURL = fetchSurveyURLResponse.surveyURL
-                print("Survey URL = \(self.iResponseURL)")
-                self.launchFeedbackSurvey(showInDialog: showInDialog)
-                self.callbackDelegate?.getSurveyURL(surveyURL: self.iResponseURL!)
+                
+                if (interceptType == InterceptType.SURVEY_URL.rawValue) {
+                    CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
+                    self.callbackDelegate?.getSurveyURL(surveyURL: self.iResponseURL!)
+                } else {
+                    let showInDialog = interceptType == InterceptType.PROMPT.rawValue ? true : false
+                    print("Survey URL = \(self.iResponseURL!)")
+                    CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
+                    self.launchFeedbackSurvey(showInDialog: showInDialog)
+                }
             } catch {
                 self.callbackDelegate?.getSurveyURL(surveyURL: "")
                 print("API error ->", error)

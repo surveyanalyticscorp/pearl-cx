@@ -109,8 +109,22 @@ public class CacheUtils {
     
     public static func clearAllUserDefaults() {
         UserDefaults.standard.dictionaryRepresentation().keys.forEach { key in
+            print("clearing data for \(key)")
             UserDefaults.standard.removeObject(forKey: key)
         }
+    }
+    
+    public static func setIsSurveyLaunchedForInterceptId(key: String, value: Bool) {
+        UserDefaults.standard.set(value, forKey: key);
+    }
+    
+    public static func getIsSurveyLaunchedForInterceptId(key: String) -> Bool {
+        let defaultValue = false;
+        print("isSurveyLaunchedForInterceptId \(String(describing: UserDefaults.standard.object(forKey: key) as? Bool))")
+        if let isSurveyLaunched = UserDefaults.standard.object(forKey: key) as? Bool {
+            return isSurveyLaunched
+        }
+        return defaultValue
     }
     
     @MainActor public static func setScreenVisitCountForInterceptId(key: String, value: Int) {
@@ -118,7 +132,7 @@ public class CacheUtils {
     }
     
     @MainActor public static func getScreenVisitCountForInterceptId(key: String) -> Int {
-        if let defaultValue = UserDefaults.standard.object(forKey: key) as? Int {            
+        if let defaultValue = UserDefaults.standard.object(forKey: key) as? Int {
             return defaultValue
         }
         return 1
