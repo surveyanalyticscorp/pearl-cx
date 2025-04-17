@@ -53,13 +53,13 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                     print("satisfiedRulesForIntercept ->",satisfiedRulesForIntercept)
                     if (satisfiedRulesCount == interceptData.rules.count) {
                         print("Launching survey for intercept id -> ", interceptId)
-                        self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, interceptType: interceptData.type)
+                        self.fetchSurveyURLForSurveyId(interceptId: interceptId, interceptData: interceptData, interceptType: interceptData.type)
                     } else {
                         print("all rules are not satisfied for \(interceptId)")
                     }
                 } else if (interceptData.condition == InterceptCondition.OR.rawValue){
                     print("OR condition")
-                    self.fetchSurveyURLForSurveyId(interceptId: interceptId, surveyId: interceptData.surveyId, interceptType: interceptData.type)
+                    self.fetchSurveyURLForSurveyId(interceptId: interceptId, interceptData: interceptData, interceptType: interceptData.type)
                 }
             } catch {
                 print("Error in launchSurveyForIntercept -> \(error)")
@@ -171,12 +171,13 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         return instance!
     }
     
-    public func fetchSurveyURLForSurveyId (interceptId: Int, surveyId: Int, interceptType: String) {
+    public func fetchSurveyURLForSurveyId (interceptId: Int, interceptData: Intercept, interceptType: String) {
+        let visitorId = visitorApiResponse.visitor.uuid
         var fetchSurveyURLResponse: SurveyURL!
         var bodyParam = [:] as [String: Any]
-        bodyParam["visitedUserId"] = visitorApiResponse.visitor.uuid;
+        bodyParam["visitedUserId"] = visitorId;
         bodyParam["interceptId"] = interceptId;
-        bodyParam["surveyId"] = surveyId;
+        bodyParam["surveyId"] = interceptData.surveyId;
         bodyParam["packageName"] = kPackageName;
         let fetchSurveyURL = APIUtils.getFetchSurveyURL()
         Task {
@@ -203,6 +204,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                     CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
                     self.launchFeedbackSurvey(showInDialog: showInDialog)
                 }
+                APIUtils.updateInterceptSurveyLaunchEvent(interceptData: interceptData, visitorId: visitorId, surveyType: InterceptSurveyLaunchEvent.LAUNCHED.rawValue);
             } catch {
                 self.callbackDelegate?.getSurveyURL(surveyURL: "")
                 print("API error ->", error)
@@ -210,6 +212,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
             }
         }
     }
+    
+    
     
     public func fetchAndSetupIntercepts() async {
         let surveyLogicUtilsInstance = SurveyLaunchLogicUtils.getInstance();

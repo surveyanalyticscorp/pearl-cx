@@ -35,6 +35,43 @@ public class APIUtils {
         return components.url?.absoluteString ?? ""
     }
     
+    public static func getUpdateInterceptSurveyLaunchEventURL() -> String {
+        var components = getBaseURL()
+        components.path = kSurveyFeedbackURL
+        return components.url?.absoluteString ?? ""
+    }
+    
+    @MainActor
+    public static func updateInterceptSurveyLaunchEvent(interceptData: Intercept, visitorId: String, surveyType: String) -> Void {
+        
+        var bodyParam = [:] as [String: Any]
+        bodyParam["ruleGroupId"] = interceptData.ruleGroupId;
+        bodyParam["interceptId"] = interceptData.id;
+        bodyParam["surveyId"] = interceptData.surveyId;
+        bodyParam["surveyType"] = surveyType
+        let updateInterceptSurveyLaunchEventURL = self.getUpdateInterceptSurveyLaunchEventURL()
+        
+        Task {
+            do {
+                let response: InterceptSurveyLaunchEventResponse = try await ApiServiceCX.shared.request(
+                    urlString: updateInterceptSurveyLaunchEventURL,
+                    method: .POST,
+                    headers: [
+                        "x-app-key": kXAPPKey,
+                        "package-name": kPackageName,
+                        "visitor-id": visitorId
+                    ],
+                    body: bodyParam,
+                    responseType: InterceptSurveyLaunchEventResponse.self
+                )
+                print("Analytics: Update survey launch event success...")
+            } catch {
+                print("Analytics: Update survey launch event failed...")
+            }
+        }
+        
+    }
+    
     public static func getDataCenterString(dataCenter: TouchPoint.DataCenter) -> String {
         switch dataCenter {
         case TouchPoint.DataCenter.DATA_CENTER_US:
