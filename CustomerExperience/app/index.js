@@ -20,7 +20,10 @@ import AppTimeTracker from './Utils/AppTimeTracker';
 import {sendAnalyticsEvent} from './Utils/AnalyticLogs';
 import {ANALYTICS_EVENTS} from './Utils/Analytic.constants';
 import AppInfo from './Utils/AppInfo';
-import {requestNotificationPermission} from './Utils/NotificationUtils';
+import {
+  addNotificationListeners,
+  requestNotificationPermission,
+} from './Utils/NotificationUtils';
 
 // import codePush from 'react-native-code-push';
 
@@ -92,6 +95,8 @@ const CxApp = () => {
       setStyleBuilt(true);
     });
     requestNotificationPermission();
+    addNotificationListeners();
+
     return () => {
       currentNetworkMonitor.stop();
       AppTimeTracker.stop();

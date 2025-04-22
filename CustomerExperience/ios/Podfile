@@ -38,10 +38,11 @@ target 'CustomerExperience' do
   # pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   # pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  # pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
-    pod 'boost', :podspec => '../node_modules/react-native/third-party-podspecs/boost.podspec'
+    # pod 'boost', :podspec => '../node_modules/react-native/third-party-podspecs/boost.podspec'
 
-pod for `boost` from `../node_modules/react-native/third-party-podspecs/boost.podspec`
+# pod for `boost` from `../node_modules/react-native/third-party-podspecs/boost.podspec`
 # podspec for `glog` from `../node_modules/react-native/third-party-podspecs/glog.podspec`
   # pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
   # pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
@@ -63,7 +64,7 @@ pod for `boost` from `../node_modules/react-native/third-party-podspecs/boost.po
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable the next line.
-  use_flipper!()
+  # use_flipper!()
 
   pod 'RNI18n', :path => '../node_modules/react-native-i18n'
   
@@ -82,7 +83,15 @@ pod for `boost` from `../node_modules/react-native/third-party-podspecs/boost.po
   # end
  
     react_native_post_install(installer)
-      __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    
+    # Fix for Flipper-Glog
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+      end
+    end
   end
 
 #  def find_and_replace(dir, findstr, replacestr)

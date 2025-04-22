@@ -1,7 +1,6 @@
 import {StyleSheet, Text, Pressable, View} from 'react-native';
 import TicketFilter from '../components/dashboard/components/TicketFilter';
 import React from 'react';
-import Notification from '../components/notifications/Notification';
 import {createStackNavigator} from '@react-navigation/stack';
 import CxDashboard from '../components/dashboard/CxDashboard';
 import SearchTicket from '../components/dashboard/components/SearchTicket';
@@ -17,28 +16,9 @@ import ClosedLoop from '../components/closedloop/ClosedLoop';
 import Feedback from '../components/feedback/Feedback';
 import {translate} from '../Utils/MultilinguaUtils';
 import HeaderBackLeft from './commonUI/HeaderBackLeft';
+import PushNotification from '../components/notifications/PushNotifications';
 
 const DetractorStack = createStackNavigator();
-
-const ClearAllButton = props => {
-  return (
-    <View
-      style={[
-        styles.rightHeaderButton,
-        {marginHorizontal: 1.5 * MarginConstants.tab1},
-      ]}>
-      <Pressable
-        onPress={() => {
-          props.route.params.clearAllNotifications();
-        }}>
-        <Text style={styles.saveText}>
-          {' '}
-          {translate('dashboard.clear_all')}{' '}
-        </Text>
-      </Pressable>
-    </View>
-  );
-};
 
 const DashboardModalStack = props => (
   <DetractorStack.Navigator mode="modal">
@@ -47,15 +27,14 @@ const DashboardModalStack = props => (
       component={dashboardStack}
       options={({navigation, route}) => ({headerShown: false})}
     />
-    <DetractorStack.Screen
+    {/* <DetractorStack.Screen
       key={'Notifications'}
       name="Notifications"
-      component={Notification}
+      component={PushNotification}
       options={({navigation, route}) => ({
         headerLeft: props => <HeaderBackLeft />,
-        headerRight: props => <ClearAllButton {...props} route={route} />,
       })}
-    />
+    /> */}
 
     <DetractorStack.Screen
       name={translate('filter_by')}
@@ -77,6 +56,7 @@ const dashboardStack = props => (
         headerTitle: props => {
           return (
             <SegmentSelector
+              prevScreenName={translate('dashboard.dashboard')}
               screenName={translate('dashboard.dashboard')}
               navigation={navigation}
             />
@@ -105,7 +85,11 @@ const dashboardStack = props => (
 
         headerTitle: props => {
           return (
-            <SegmentSelector screenName={'Responses'} navigation={navigation} />
+            <SegmentSelector
+              prevScreenName={'dashboard_to_responses'}
+              screenName={'Responses'}
+              navigation={navigation}
+            />
           );
         },
         headerShown: true,
@@ -121,6 +105,7 @@ const dashboardStack = props => (
         headerTitle: props => {
           return (
             <SegmentSelector
+              prevScreenName={'dashboard_to_closed_loop'}
               screenName={'ClosedLoop'}
               navigation={navigation}
             />

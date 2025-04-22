@@ -68,20 +68,77 @@ export async function checkNotificationPermission() {
 }
 
 export function addNotificationListeners() {
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannel({
+      channelId: 'default',
+      name: 'Default Channel',
+      importance: 5, // Max importance
+      description: 'Default channel for notifications',
+      enableLights: true,
+      enableVibration: true,
+    });
+  }
+
+  // Handle background messages
   messaging().setBackgroundMessageHandler(async remoteMessage => {
-    console.log(
-      'Notification Message handled in the background!',
-      remoteMessage,
-    );
+    console.log('Background message received:', remoteMessage);
+    try {
+      const body = JSON.parse(remoteMessage.notification.body);
+      Notifications.postLocalNotification(
+        {
+          body: body.notificationText,
+          title: remoteMessage.notification.title,
+          data: body,
+          sound: 'default',
+          priority: 'high',
+          importance: 'high',
+          channelId: 'default',
+        },
+        parseInt(remoteMessage.messageId),
+      );
+    } catch (error) {
+      console.error('Error handling background message:', error);
+    }
   });
 
   /** When the user presses a notification displayed via FCM, this listener will be called if the app has opened from a background state */
   messaging().onNotificationOpenedApp(remoteMessage => {
     console.log(
       'Notification caused app to open from background state:',
-      remoteMessage.notification,
+      remoteMessage,
     );
-    actionOnNotification(remoteMessage.data.CXTicket, 0);
+    try {
+      const notificationBody = remoteMessage.notification?.body;
+      if (!notificationBody) {
+        console.error('No notification body found');
+        return;
+      }
+
+      const parsedBody = JSON.parse(notificationBody);
+      if (!parsedBody.ticket) {
+        console.error('No ticket data found in notification body');
+        return;
+      }
+
+      const ticketItem = parsedBody.ticket;
+      console.log('Processing ticket item from background:', ticketItem);
+
+      // Ensure navigation is ready before proceeding
+      if (RootNagation.navigationRef.current) {
+        actionOnNotification(ticketItem, 0);
+      } else {
+        console.log('Navigation not ready, retrying in 1 second...');
+        setTimeout(() => {
+          if (RootNagation.navigationRef.current) {
+            actionOnNotification(ticketItem, 0);
+          } else {
+            console.error('Navigation still not ready after retry');
+          }
+        }, 1000);
+      }
+    } catch (error) {
+      console.error('Error processing notification:', error);
+    }
   });
 
   /** When a notification from FCM has triggered the application to open from a quit state */
@@ -91,14 +148,19 @@ export function addNotificationListeners() {
       if (remoteMessage) {
         console.log(
           'Notification caused app to open from quit state:',
-          remoteMessage.notification,
+          remoteMessage,
         );
-        actionOnNotification(remoteMessage.data.CXTicket, 1000);
+        try {
+          const ticketItem = JSON.parse(remoteMessage.notification.body).ticket;
+          actionOnNotification(ticketItem, 2000);
+        } catch (error) {
+          console.error('Error processing initial notification:', error);
+        }
       }
     });
 
   Notifications.events().registerNotificationReceivedForeground(
-    (notification: Notification, completion) => {
+    (notification, completion) => {
       console.log(
         `Notification received in foreground: ${notification.title} : ${notification.body}`,
       );
@@ -107,23 +169,71 @@ export function addNotificationListeners() {
   );
 
   Notifications.events().registerNotificationOpened(
-    (notification: Notification, completion) => {
-      console.log(
-        `Notification opened here: ${JSON.stringify(notification.payload)}`,
-      );
+    (notification, completion) => {
+      console.log(`Notification opened here: ${JSON.stringify(notification)}`);
+      const ticketItem = notification.payload.data.ticket;
       if (AppState.currentState === 'active') {
-        actionOnNotification(notification.payload.data.CXTicket, 0);
+        console.log('notification opened', JSON.stringify(notification));
+
+        /*
+{
+  "payload":{
+    "title":"Ticket priority notification",
+    "data":{
+      "notificationText":"Ticket #164001 priority changed to MEDIUM by Mehedi Hasan.",
+      "hasRead":false,
+      "createdAt":"2025-04-11T09:11:00.524Z",
+      "media":null,
+      "type":2,
+      "id":26148,
+      "ticket":{
+        "assignToId":81504,
+        "feedbackId":27233,
+        "id":164001
+        }
+      },
+    "body":"Ticket #164001 priority changed to MEDIUM by Mehedi Hasan."
+  }
+}
+*/
+
+        actionOnNotification(ticketItem, 0);
+      } else {
+        actionOnNotification(ticketItem, 3000);
       }
+
       completion();
     },
   );
 }
 
-export function actionOnNotification(ticketId, timeOut) {
+export function actionOnNotification(ticketItem, timeOut) {
+  console.log('Attempting to navigate to TicketDetails with:', ticketItem);
   setTimeout(() => {
-    RootNagation.navigate(translate('close_loop.ticket_details'), {
-      ticketID: ticketId,
-      parentRoute: 'Dashboard',
-    });
+    try {
+      if (!RootNagation.navigationRef.current) {
+        console.error('Navigation reference is not available');
+        return;
+      }
+
+      // Ensure we're not already on the TicketDetails screen
+      const currentRoute = RootNagation.navigationRef.current.getCurrentRoute();
+      if (
+        currentRoute?.name === 'TicketDetails' &&
+        currentRoute?.params?.ticketItem?.id === ticketItem.id
+      ) {
+        console.log('Already on the correct ticket details screen');
+        return;
+      }
+
+      console.log('Navigating to TicketDetails...');
+      RootNagation.navigate('TicketDetails', {
+        ticketItem: ticketItem,
+        parentRoute: 'Dashboard',
+      });
+      console.log('Navigation to TicketDetails completed');
+    } catch (error) {
+      console.error('Error during navigation:', error);
+    }
   }, timeOut);
 }

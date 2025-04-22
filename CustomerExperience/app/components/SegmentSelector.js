@@ -13,11 +13,37 @@ import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../Utils/MultilinguaUtils';
 import {MarginConstants} from '../styles/margin.constants';
 import SegmentText from './SegmentText';
+import {IonIcon} from '../Utils/IconUtils';
+
+const NotiificationIcon = props => {
+  const prevScreenName = props.prevScreenName;
+  const navigation = useNavigation();
+  const notificationLogs = useSelector(
+    state => state.notification.notificationLogs,
+  );
+
+  const unreadCount = notificationLogs?.filter(log => !log.hasRead).length || 0;
+
+  return (
+    <Pressable
+      onPress={() => navigation.navigate('Notifications')}
+      style={styles.notificationContainer}>
+      <IonIcon name={'notifications'} size={22} color={Colors.white} />
+      {unreadCount > 0 && (
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{unreadCount}</Text>
+        </View>
+      )}
+    </Pressable>
+  );
+};
 
 const SegmentSelector = props => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const authToken = useSelector(state => state.global.authToken);
+
+  console.log('SEGMENT_PREV', JSON.stringify(props));
 
   const segmentList = useSelector(
     state => state.dashboard.segmentDetails.segments,
@@ -49,10 +75,29 @@ const SegmentSelector = props => {
     dispatch(setSegment(segment_));
   };
 
-  return segmentList && segmentList.length > 1 ? (
-    <Pressable style={styles.innerContainer} onPress={onPressHandle}>
-      <SegmentText
+  return (
+    <View style={styles.rowContainer}>
+      <RenderSegmentSelector
+        segmentList={segmentList}
         screenName={props.screenName}
+        currentSegment={currentSegment}
+        onPress={onPressHandle}
+      />
+      <NotiificationIcon {...props} />
+    </View>
+  );
+};
+
+const RenderSegmentSelector = ({
+  segmentList,
+  screenName,
+  currentSegment,
+  onPress,
+}) => {
+  return segmentList && segmentList.length > 1 ? (
+    <Pressable style={styles.innerContainer} onPress={onPress}>
+      <SegmentText
+        screenName={screenName}
         segmentName={currentSegment.currentSegment ?? ''}
       />
 
@@ -60,7 +105,7 @@ const SegmentSelector = props => {
     </Pressable>
   ) : (
     <SegmentText
-      screenName={props.screenName}
+      screenName={screenName}
       segmentName={currentSegment.currentSegment}
     />
   );
@@ -68,14 +113,40 @@ const SegmentSelector = props => {
 
 const styles = StyleSheet.create({
   container: {flex: 1},
-
-  innerContainer: {
+  rowContainer: {
     flex: 1,
-    width: Platform.OS === 'ios' ? '100%' : '96%',
     flexDirection: 'row',
     alignItems: 'center',
-
     justifyContent: 'space-between',
+    width: '100%',
+  },
+
+  innerContainer: {
+    maxWidth: Platform.OS === 'ios' ? '100%' : '80%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginEnd: MarginConstants.tab1_4x,
+  },
+  notificationContainer: {
+    position: 'relative',
+  },
+  badge: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: Colors.red,
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+  },
+  badgeText: {
+    color: Colors.white,
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 });
 

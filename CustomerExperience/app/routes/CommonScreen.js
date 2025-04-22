@@ -24,6 +24,8 @@ import SendEmail from '../components/closedloop/takeaction/SendEmail';
 import ActionEmailHistory from '../components/closedloop/takeaction/ActionEmailHistory';
 import HeaderBackLeft from './commonUI/HeaderBackLeft';
 import {CloseButton, SaveDashboardDate} from './commonUI/CommonUI';
+import Notification from '../components/notifications/Notification';
+import PushNotification from '../components/notifications/PushNotifications';
 
 const DateRangeTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
@@ -284,6 +286,17 @@ const CommonScreens = RootStack => {
       options={({navigation, route}) => ({
         title: 'Action email history',
         headerShown: false,
+      })}
+    />,
+
+    <RootStack.Screen
+      key={'notifications'}
+      name={'notifications'}
+      component={PushNotification}
+      options={({navigation, route}) => ({
+        title: 'Notifications',
+        headerShown: true,
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}
     />,
   ];

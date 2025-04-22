@@ -26,9 +26,7 @@ import {MarginConstants} from '../styles/margin.constants';
 import AppSettings from '../components/settings/AppSettings';
 import AccountDetails from '../components/settings/AccountDetails';
 import {Sizes} from '../styles/Size.constant';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {handleResetPasswordLink} from '../Utils/DeepLinkingUtils';
-import {setDynamicLink} from '../redux/actions';
 import QPSpinner from '../widgets/QPSpinner';
 import {
   addNotificationListeners,
@@ -37,7 +35,6 @@ import {
 } from '../Utils/NotificationUtils';
 import messaging from '@react-native-firebase/messaging';
 import {Notifications} from 'react-native-notifications';
-import Notification from '../components/notifications/Notification';
 import SearchTicket from '../components/dashboard/components/SearchTicket';
 import TicketFilter from '../components/dashboard/components/TicketFilter';
 import {getNotification} from '../redux/actions/notification.actions';
@@ -55,6 +52,7 @@ import SegmentSelector from '../components/SegmentSelector';
 import Feedback from '../components/feedback/Feedback';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
 import {clearLoginUser} from '../redux/actions/login.action';
+import PushNotification from '../components/notifications/PushNotifications';
 
 const Drawer = createDrawerNavigator();
 const DetractorStack = createStackNavigator();
@@ -63,10 +61,8 @@ const SettingsStack = createStackNavigator();
 const AppRouter = props => {
   const authToken = useSelector(state => state.global.authToken);
   const bearerToken = useSelector(state => state.global.bearerToken);
-
   const userInfo = useSelector(state => state.global.userInfo);
   const languageCode = useSelector(state => state.global.languageCode);
-  const dynamicLink = useSelector(state => state.global.dynamicLink);
   const notificationCount = useSelector(
     state => state.notification.notificationLogs.length,
   );
@@ -75,9 +71,7 @@ const AppRouter = props => {
   let [subscriberId, setSubscriberId] = useState(undefined);
   const isTokenExpired = useSelector(state => state.dashboard.isTokenExpired);
   const skipWelcome = useSelector(state => state.dashboard.skipWelcome);
-  const {feedbackApiKey, feedbackID} = useSelector(
-    state => state.global.userInfo,
-  );
+
   let [lastLoginArray, setLastLoginArray] = useState([]);
 
   const dispatch = useDispatch();
@@ -92,19 +86,17 @@ const AppRouter = props => {
   useEffect(() => {
     global.baseUrl = '';
     global.subscriberId = '';
-    // requestNotificationPermission();
     setGlobalBaseUrl();
     setGlobalSubscriberId();
-    const unsubscribeLinks = dynamicLinks().onLink(handleDynamicLink);
     Notifications.registerRemoteNotifications();
     checkNotificationPermission().then({});
-    dynamicLinks()
-      .getInitialLink()
-      .then(link => {
-        if (link && link.url) {
-          handleDynamicLink(link);
-        }
-      });
+    // dynamicLinks()
+    //   .getInitialLink()
+    //   .then(link => {
+    //     if (link && link.url) {
+    //       handleDynamicLink(link);
+    //     }
+    //   });
 
     /* {"notification":
       {"android":{},
@@ -117,55 +109,57 @@ const AppRouter = props => {
       "collapseKey":"com.questionpro.cxonthego"}
     
       */
+
+    /*
+      {
+      "android":{},
+      "body":"{
+        \"id\":26131,
+        \"type\":2,
+        \"hasRead\":false,
+        \"notificationText\":\"Ticket #164001 priority changed to MEDIUM by Mehedi Hasan.\",
+        \"createdAt\":\"2025-04-11T06:36:19.249Z\",
+        \"ticket\":{
+          \"id\":164001,
+          \"feedbackId\":27233,
+          \"assignToId\":81504
+          },
+        \"media\":null
+        }",
+      "title":"Ticket priority notification"
+      }
+*/
+
     const unsubscribeNotifications = messaging().onMessage(
       async remoteMessage => {
         console.log('on message' + JSON.stringify(remoteMessage.notification));
 
         // {"android":{},"body":"{\"id\":21532,\"type\":2,\"hasRead\":false,\"notificationText\":\"Ticket #135847 priority changed to MEDIUM by Mehedi Hasan.\",\"createdAt\":\"2025-02-11T22:50:19.105Z\",\"ticket\":{\"id\":135847,\"feedbackId\":27233,\"assignToId\":81504},\"media\":null}","title":"Ticket priority notification"}
-
+        const bodyText = JSON.parse(
+          remoteMessage.notification.body,
+        ).notificationText;
         Notifications.postLocalNotification(
           {
-            body: remoteMessage.notification.body.notificationText,
+            body: bodyText,
             title: remoteMessage.notification.title,
-            data: remoteMessage.data,
+            data: JSON.parse(remoteMessage.notification.body),
           },
           parseInt(remoteMessage.messageId),
         );
-        dispatch(getNotification(authToken));
+        dispatch(getNotification(userInfo?.userID));
       },
     );
 
-    addNotificationListeners();
-
     return () => {
-      unsubscribeLinks();
       unsubscribeNotifications();
     };
-  }, []);
-
-  useEffect(() => {
-    setGlobalBaseUrl();
-    setGlobalSubscriberId();
-
-    handleResetPasswordLink(
-      dynamicLink,
-      navigationRef,
-      authToken,
-      props.dispatch,
-    );
-  }, [dynamicLink]);
+  }, [dispatch, userInfo?.userID]);
 
   useEffect(() => {
     if (isAppActive) {
-      handleResetPasswordLink(
-        dynamicLink,
-        navigationRef,
-        authToken,
-        props.dispatch,
-      );
       setAppActiveState(false);
     }
-  }, [isAppActive]);
+  }, [isAppActive, lastLoginArray, userInfo]);
 
   useEffect(() => {
     if (!isStringNullOrEmpty(authToken)) {
@@ -184,11 +178,11 @@ const AppRouter = props => {
   }, [authToken]);
 
   useEffect(() => {
-    if (authToken && baseUrl) {
-      dispatch(getNotification(authToken));
+    if (authToken && baseUrl && userInfo) {
+      dispatch(getNotification(userInfo?.userID));
       dispatch(clearLoginUser());
     }
-  }, [authToken, baseUrl]);
+  }, [authToken, baseUrl, userInfo.userID]);
 
   useEffect(() => {
     console.log(`Language Code: `, languageCode);
@@ -214,13 +208,6 @@ const AppRouter = props => {
         setSubscriberId(subscriberId);
       }
     });
-  };
-
-  const handleDynamicLink = link => {
-    if (link && link.url) {
-      props.dispatch(setDynamicLink(link.url));
-      setAppActiveState(true);
-    }
   };
 
   const NotificationIcon = () => {
@@ -269,26 +256,6 @@ const AppRouter = props => {
     );
   };
 
-  const ClearAllButton = props => {
-    return (
-      <View
-        style={[
-          styles.rightHeaderButton,
-          {marginHorizontal: 1.5 * MarginConstants.tab1},
-        ]}>
-        <Pressable
-          onPress={() => {
-            props.route.params.clearAllNotifications();
-          }}>
-          <Text style={styles.saveText}>
-            {' '}
-            {translate('dashboard.clear_all')}{' '}
-          </Text>
-        </Pressable>
-      </View>
-    );
-  };
-
   const dashboardStack = props => (
     <DetractorStack.Navigator>
       <DetractorStack.Screen
@@ -298,6 +265,7 @@ const AppRouter = props => {
           headerTitle: props => {
             return (
               <SegmentSelector
+                prevScreenName={translate('dashboard.dashboard')}
                 screenName={translate('dashboard.dashboard')}
                 navigation={navigation}
               />
@@ -327,6 +295,7 @@ const AppRouter = props => {
           headerTitle: props => {
             return (
               <SegmentSelector
+                prevScreenName={'dashboard_to_responses'}
                 screenName={'Responses'}
                 navigation={navigation}
               />
@@ -345,6 +314,7 @@ const AppRouter = props => {
           headerTitle: props => {
             return (
               <SegmentSelector
+                prevScreenName={'dashboard_to_closed_loop'}
                 screenName={'ClosedLoop'}
                 navigation={navigation}
               />
@@ -367,10 +337,9 @@ const AppRouter = props => {
       <DetractorStack.Screen
         key={'Notifications'}
         name="Notifications"
-        component={Notification}
+        component={PushNotification}
         options={({navigation, route}) => ({
           headerLeft: props => <HeaderBackLeft />,
-          headerRight: props => <ClearAllButton {...props} route={route} />,
         })}
       />
 
@@ -420,9 +389,7 @@ const AppRouter = props => {
         drawerContent={props => <DrawerContent {...props} />}>
         <Drawer.Screen name="Dashboard" component={dashboardModalStack} />
         <Drawer.Screen name="Responses" component={ResponsesStack} />
-        {/* <Drawer.Screen name="Tickets" component={TicketsStack} /> */}
         <Drawer.Screen name="ClosedLoop" component={ClosedLoopStack} />
-        {/* <Drawer.Screen name="Search Response" component={SearchStack} /> */}
         <Drawer.Screen
           name={translate('settings.settings')}
           component={settingStack}

@@ -4,7 +4,6 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <Firebase/Firebase.h>
-#import <RNFBDynamicLinks/RNFBDynamicLinksAppDelegateInterceptor.h>
 #import "RNNotifications.h"
 //#import <CodePush/CodePush.h>
 @implementation AppDelegate
@@ -39,18 +38,6 @@
 //#else
 //  return [CodePush bundleURL];
 //#endif
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-            options:(NSDictionary<NSString *, id> *)options {
-    return [[RNFBDynamicLinksAppDelegateInterceptor sharedInstance] application:application openURL:url options:options];
-}
-
-- (BOOL)application:(UIApplication *)application
-continueUserActivity:(NSUserActivity *)userActivity
- restorationHandler:(void (^)(NSArray *))restorationHandler {
-     return [[RNFBDynamicLinksAppDelegateInterceptor sharedInstance] application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
 }
 
 @end

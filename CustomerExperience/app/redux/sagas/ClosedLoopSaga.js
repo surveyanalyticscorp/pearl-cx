@@ -304,7 +304,7 @@ export function* syncTickets(action) {
         getBearerTokenStatic(),
         action.param,
       );
-      hasNextCall = response?.hasNext ?? false;
+      hasNextCall = response?.hasNextCall ?? false;
       console.log('GET_TICKET_LIST_SYNC_RECEIVED: ', JSON.stringify(response));
       if (!hasNextCall) {
         break;
@@ -325,6 +325,7 @@ export function* syncTickets(action) {
     } else if (JSON.stringify(error).includes('ticketsHttpException')) {
       console.log('TICKET_SYNC_ERROR', JSON.stringify(error));
     } else {
+      console.log('TICKET_SYNC_OTHER_ERROR', JSON.stringify(error));
       yield put({
         type: API_ERROR,
         error: error,

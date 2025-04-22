@@ -158,6 +158,9 @@ export const CLF_GET_ACTION_HISTORY_PREFIX = `/mobile/tickets/`;
 export const CLF_GET_ACTION_SUMMARY_POSTFIX = `/action-mail`;
 export const CLF_GET_ACTION_DETAILS_POSTFIX = `/action-mails`;
 
+export const CLF_GET_NOTIFICATIONS = `/notifications/users/`;
+export const CLF_PATCH_READ_NOTIFCATION = `/mobile-notifications/`;
+
 export const EMAIL = 'email';
 export const PHONE = 'phone';
 

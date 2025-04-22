@@ -3143,15 +3143,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-firebase/dynamic-links@npm:14.12.0":
-  version: 14.12.0
-  resolution: "@react-native-firebase/dynamic-links@npm:14.12.0"
-  peerDependencies:
-    "@react-native-firebase/app": 14.12.0
-  checksum: 796a7a533144a0e31443548a08adc6b2cb7580c25251828dbee86e32d5a8e12bab9e425313e4a0f8cd00c0aaab320c84fe26c46b0fdb827b953566127dcacd61
-  languageName: node
-  linkType: hard
-
 "@react-native-firebase/messaging@npm:14.12.0":
   version: 14.12.0
   resolution: "@react-native-firebase/messaging@npm:14.12.0"
@@ -4112,7 +4103,6 @@ __metadata:
     "@react-native-community/netinfo": 9.4.1
     "@react-native-firebase/analytics": 14.12.0
     "@react-native-firebase/app": 14.12.0
-    "@react-native-firebase/dynamic-links": 14.12.0
     "@react-native-firebase/messaging": 14.12.0
     "@react-navigation/core": ^5.16.1
     "@react-navigation/drawer": 5.12.9

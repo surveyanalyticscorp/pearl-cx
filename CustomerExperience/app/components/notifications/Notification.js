@@ -27,6 +27,26 @@ import {connect} from 'react-redux';
 import {clearNotification} from '../../redux/actions/notification.actions';
 import {translate} from '../../Utils/MultilinguaUtils';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import TextLabel from '../../widgets/TextLabel/TextLabel';
+import {useNavigation} from '@react-navigation/native';
+
+const NotificationItem = (item, index) => {
+  const text = item.notificationText;
+  const navigation = useNavigation();
+
+  return (
+    <Pressable
+      onPress={() => {
+        navigation.navigate('TicketDetails', {
+          ticketItem: item.ticket,
+          parentRoute: 'Dashboard',
+        });
+      }}
+      style={styles.notificationItem}>
+      <TextLabel color={Colors.acc} text={text} />
+    </Pressable>
+  );
+};
 
 const Notification = props => {
   let row: Array<any> = [];
@@ -144,7 +164,7 @@ const Notification = props => {
   };
 
   let renderRow = ({item, index}) => {
-    // console.log(`Notification Item: ${JSON.stringify(item)}`);
+    console.log(`Notification Item: ${JSON.stringify(item)}`);
     let imagePath =
       item.logType === 'U'
         ? require('../../config/images/notification_comment_blue.png')
@@ -314,5 +334,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginEnd: MarginConstants.tab4,
+  },
+
+  notificationItem: {
+    justifyContent: 'center',
+    backgroundColor: Colors.white,
+    margin: MarginConstants.tab1,
+    borderRadius: 2,
+    padding: MarginConstants.tab1_2x,
   },
 });

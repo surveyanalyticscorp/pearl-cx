@@ -137,7 +137,7 @@ android {
         versionCode 25
         versionName "1.8.6"
         multiDexEnabled true
-    }   
+    }
     splits {
         abi {
             reset()

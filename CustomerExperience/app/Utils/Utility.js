@@ -72,6 +72,8 @@ export const showSuccessFlashMessage = message => {
   });
 };
 
+export const getDeviceType = type => (type === 'ios' ? 1 : 0);
+
 export const showInfoFlashMessage = message => {
   return Toast.show({
     type: 'custom_info',

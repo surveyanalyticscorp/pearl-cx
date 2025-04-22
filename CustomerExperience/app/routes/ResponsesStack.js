@@ -24,7 +24,10 @@ const feedbackStack = props => (
       options={({navigation, route}) => ({
         headerLeft: props => <MenuIcon />,
         headerTitle: props => (
-          <SegmentSelector screenName={translate('responses.responses')} />
+          <SegmentSelector
+            prevScreenName={translate('responses.responses')}
+            screenName={translate('responses.responses')}
+          />
         ),
         // headerRight: (props) => <SearchIcon route={'Feedback'} />,
         // headerRight: (props) => <SearchIcon route={'Feedback'} />,
