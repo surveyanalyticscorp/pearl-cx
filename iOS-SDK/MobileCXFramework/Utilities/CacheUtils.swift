@@ -9,8 +9,6 @@ import Foundation
 
 public class CacheUtils {
     
-    @MainActor static let persistentDefaults = UserDefaults(suiteName: "com.questionProCX")!
-    
     //get from UserDefaults
     public static func getFromUserDefaults(key: String) -> [String: Any]?  {
         var defaultValue = [String: Any]()

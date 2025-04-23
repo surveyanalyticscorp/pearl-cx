@@ -49,7 +49,8 @@ public let kMobileCXGetSurveyURL = "/api/v1/visitor/mobile"
 public let kGetSurveyURL = "/api/v1/data-mapping/mobile/survey-url"
 public let kSurveyFeedbackURL = "/api/v1/visitor/mobile/survey-feedback"
 
-public let kPackageName = "com.questionpro"
+let bundleIdentifier = Bundle.main.bundleIdentifier! as String
+public let kPackageName = bundleIdentifier
 
 public let kEnvironment = kProductionEnvironment
 
