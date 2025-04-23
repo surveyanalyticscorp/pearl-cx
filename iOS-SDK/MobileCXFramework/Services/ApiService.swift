@@ -18,15 +18,15 @@ public class ApiService: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
 
     lazy var session: URLSession? = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
 
-    public func invokeService(touchPoint: TouchPoint, withAPIKey apikey: String, dataCenter: TouchPoint.DataCenter) {        
-        let dataCenterString = APIUtils.getDataCenterString(dataCenter: dataCenter)
-        let baseUrl = GlobalData.getBaseUrl(dataCenter: dataCenterString)
-
-        let path = "/a/api/v2/cx/transactions/survey-url"
-        let body = self.createCXRequestWithTouchPointID(touchPoint: touchPoint)
-
-        self.execute(method: APIRequestType.POST.method, baseUrl: baseUrl, path: path, body: body, apiKey: apikey)
-    }
+//    public func invokeService(touchPoint: TouchPoint, withAPIKey apikey: String, dataCenter: TouchPoint.DataCenter) {        
+//        let dataCenterString = APIUtils.getDataCenterString(dataCenter: dataCenter)
+//        let baseUrl = GlobalData.getBaseUrl(dataCenter: dataCenterString)
+//
+//        let path = "/a/api/v2/cx/transactions/survey-url"
+//        let body = self.createCXRequestWithTouchPointID(touchPoint: touchPoint)
+//
+//        self.execute(method: APIRequestType.POST.method, baseUrl: baseUrl, path: path, body: body, apiKey: apikey)
+//    }
 
     public func createCXRequestWithTouchPointID(touchPoint: TouchPoint) -> String {
         var cxRequestDict: [String: Any] = [

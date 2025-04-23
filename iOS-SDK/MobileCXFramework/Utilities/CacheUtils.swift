@@ -113,7 +113,7 @@ public class CacheUtils {
     
     public static func clearAllUserDefaults() {
         UserDefaults.standard.dictionaryRepresentation().keys.forEach { key in
-            print("clearing data for \(key)")
+            LogUtils.printMessage(message: "clearing data for \(key)")
             UserDefaults.standard.removeObject(forKey: key)
         }
     }
@@ -124,7 +124,7 @@ public class CacheUtils {
     
     public static func getIsSurveyLaunchedForInterceptId(key: String) -> Bool {
         let defaultValue = false;
-        print("isSurveyLaunchedForInterceptId \(String(describing: UserDefaults.standard.object(forKey: key) as? Bool))")
+        LogUtils.printMessage(message: "isSurveyLaunchedForInterceptId \(String(describing: UserDefaults.standard.object(forKey: key) as? Bool))")
         if let isSurveyLaunched = UserDefaults.standard.object(forKey: key) as? Bool {
             return isSurveyLaunched
         }

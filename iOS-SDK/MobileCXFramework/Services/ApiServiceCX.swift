@@ -50,16 +50,16 @@ public class ApiServiceCX {
         }
         
         // ✅ Logging Request Details
-        print("\n🔵 [API Request]")
-        print("➡️ URL: \(url)")
-        print("➡️ Method: \(method.rawValue)")
+        LogUtils.printMessage(message: "\n🔵 [API Request]")
+        LogUtils.printMessage(message: "➡️ URL: \(url)")
+        LogUtils.printMessage(message: "➡️ Method: \(method.rawValue)")
         if let headers = headers {
-            print("➡️ Headers: \(headers)")
+            LogUtils.printMessage(message: "➡️ Headers: \(headers)")
         }
         if let body = body, method != .GET {
             if let jsonData = try? JSONSerialization.data(withJSONObject: body, options: .prettyPrinted),
                let jsonString = String(data: jsonData, encoding: .utf8) {
-                print("➡️ Body: \(jsonString)")
+                LogUtils.printMessage(message: "➡️ Body: \(jsonString)")
             }
         }
         
@@ -67,21 +67,21 @@ public class ApiServiceCX {
             let (data, response) = try await URLSession.shared.data(for: request)
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ Invalid HTTP Response")
+                LogUtils.printMessage(message: "❌ Invalid HTTP Response")
                 throw ApiError.invalidResponse
             }
-            print("\n🟢 [API Response]")
-            print("⬅️ Status Code: \(httpResponse.statusCode)")
+            LogUtils.printMessage(message: "\n🟢 [API Response]")
+            LogUtils.printMessage(message: "⬅️ Status Code: \(httpResponse.statusCode)")
             
             
             if let responseString = String(data: data, encoding: .utf8) {
-                print("⬅️ Response Body: \(responseString)")
+                LogUtils.printMessage(message: "⬅️ Response Body: \(responseString)")
             }
             
             let decodedResponse = try JSONDecoder().decode(T.self, from: data)
             return decodedResponse;
         } catch {
-            print("❌ API Request Failed: \(error.localizedDescription)")
+            LogUtils.printMessage(message: "❌ API Request Failed: \(error.localizedDescription)")
             throw ApiError.requestFailed(error)
         }
     }

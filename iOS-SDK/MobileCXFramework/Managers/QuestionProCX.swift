@@ -33,12 +33,12 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     }
     
     @MainActor public func launchSurveyForIntercept(interceptId: Int, satisfiedRule: Rule) {
-        print("satisfiedRule.name \(satisfiedRule.name)")
-        print("intercept id \(interceptId)")
+        LogUtils.printMessage(message: "satisfiedRule.name \(satisfiedRule.name)")
+        LogUtils.printMessage(message: "intercept id \(interceptId)")
         addRuleToSatisfiedRulesList(for: String(interceptId), newValue: satisfiedRule.name)
         
         if (CacheUtils.getIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId))) {
-            print("Survey already launched for this intercept id \(interceptId)")
+            LogUtils.printMessage(message: "Survey already launched for this intercept id \(interceptId)")
             return;
         }
         if let intercept = CacheUtils.getInterceptById(key: String(interceptId)) {
@@ -48,27 +48,27 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                 let showInDialog = interceptData.type == InterceptType.PROMPT.rawValue ? true : false
                 guard !self.isSurveyDisplayed else { return }
                 if (interceptData.condition == InterceptCondition.AND.rawValue) {
-                    print("AND condition")
+                    LogUtils.printMessage(message: "AND condition")
                     let satisfiedRulesCount = satisfiedRulesForIntercept[String(interceptId)]?.flatMap { $0 }.count ?? 0
-                    print("satisfiedRulesForIntercept ->",satisfiedRulesForIntercept)
+                    LogUtils.printMessage(message: "satisfiedRulesForIntercept -> \(satisfiedRulesForIntercept)")
                     if (satisfiedRulesCount == interceptData.rules.count) {
-                        print("Launching survey for intercept id -> ", interceptId)
+                        LogUtils.printMessage(message: "Launching survey for intercept id -> \(interceptId)")
                         self.fetchSurveyURLForSurveyId(interceptId: interceptId, interceptData: interceptData, interceptType: interceptData.type)
                     } else {
-                        print("all rules are not satisfied for \(interceptId)")
+                        LogUtils.printMessage(message: "all rules are not satisfied for \(interceptId)")
                     }
                 } else if (interceptData.condition == InterceptCondition.OR.rawValue){
-                    print("OR condition")
+                    LogUtils.printMessage(message: "OR condition")
                     self.fetchSurveyURLForSurveyId(interceptId: interceptId, interceptData: interceptData, interceptType: interceptData.type)
                 }
             } catch {
-                print("Error in launchSurveyForIntercept -> \(error)")
+                LogUtils.printMessage(message: "Error in launchSurveyForIntercept -> \(error)")
             }
         }
     }
     
     public func setScreenName(screenName: String) {
-        print("Screen name \(screenName)")
+        LogUtils.printMessage(message: "Screen name \(screenName)")
         self.handleScreenNameViewCount(screenName: screenName)
     }
     
@@ -81,7 +81,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                         if (InterceptRuleType.VIEW_COUNT.rawValue == rule.name) {
                             if (rule.key == screenName) {
                                 var count = CacheUtils.getScreenVisitCountForInterceptId(key: String(intercept.id))
-                                print("Count: \(count) for \(screenName)")
+                                LogUtils.printMessage(message: "Count: \(count) for \(screenName)")
                                 if (count == Int(rule.value)) {
                                     self.launchSurveyForIntercept(interceptId: intercept.id, satisfiedRule: rule)
                                     CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: 1)
@@ -94,7 +94,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                     }
                 }
             } catch {
-                print("error in view count for screen name");
+                LogUtils.printMessage(message: "error in view count for screen name");
             }
         }
     }
@@ -103,7 +103,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     
     @MainActor public func CXServiceResponse(withURL response: [String: Any]) {
         if let _ = response[ksurveyURL] {
-            print("URL found")
+            LogUtils.printMessage(message: "URL found")
             if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
                 let responseCopy = response // Create a copy of the response
                 DispatchQueue.main.async { [weak self] in
@@ -200,15 +200,16 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                     self.callbackDelegate?.getSurveyURL(surveyURL: self.iResponseURL!)
                 } else {
                     let showInDialog = interceptType == InterceptType.PROMPT.rawValue ? true : false
-                    print("Survey URL = \(self.iResponseURL!)")
+                    LogUtils.printMessage(message: "Survey URL = \(self.iResponseURL!)")
                     CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
                     self.launchFeedbackSurvey(showInDialog: showInDialog)
                 }
                 APIUtils.updateInterceptSurveyLaunchEvent(interceptData: interceptData, visitorId: visitorId, surveyType: InterceptSurveyLaunchEvent.LAUNCHED.rawValue);
             } catch {
                 self.callbackDelegate?.getSurveyURL(surveyURL: "")
-                print("API error ->", error)
+                LogUtils.printMessage(message: "API error -> \(error)")
                 self.iResponseURL = ""
+                CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: false);
             }
         }
     }
@@ -237,7 +238,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                 let encodedData = try JSONEncoder().encode(intercepts)
                 CacheUtils.setIntercepts(key: kIntercepts, value: encodedData)
             } catch {
-                print("Erro while saving all intercepts:", error)
+                LogUtils.printMessage(message: "Erro while saving all intercepts: \(error)")
             }
             
             for intercept in intercepts {
@@ -256,7 +257,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                     } else if (rule.name == InterceptRuleType.TIME_SPENT.rawValue) {
                         Task {
                             for await timeLeft in  TimerUtils.startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
-                                print("⏳ Time left: \(timeLeft) sec for \(intercept.id)")
+                                LogUtils.printMessage(message: "⏳ Time left: \(timeLeft) sec for \(intercept.id)")
                             }
                         }
                     }
@@ -264,7 +265,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
             }
         } catch {
             self.callbackDelegate?.initSDKFailed(error: error)
-            print("API error: \(error)")
+            LogUtils.printMessage(message: "API error: \(error)")
         }
     }
 
@@ -282,9 +283,13 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
             await self.fetchAndSetupIntercepts()
         }
     }
+    
+    public func enableLogs(enabledLogs: Bool) {
+        LogUtils.enableLogging(isLogsEnabled: enabledLogs)
+    }
 
     public func launchFeedbackSurvey(showInDialog: Bool) {
-        print("survey url to load:",iResponseURL)
+        LogUtils.printMessage(message: "survey url to load: \(String(describing: iResponseURL))")
         if (!self.isSurveyDisplayed) {
             self.showSurvey(isInAppSurvey: showInDialog)
             self.loadSurveyURLInWebView();
@@ -360,16 +365,16 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     }
     
     public func clearSession() {
-        print("Cleraing all user defaults..")
+        LogUtils.printMessage(message: "Cleraing all user defaults..")
         CacheUtils.clearAllUserDefaults()
     }
 
     public func stopQuestionProCXManager() {
-        print("Manager stopped..")
+        LogUtils.printMessage(message: "Manager stopped..")
     }
     
     public func loadSurveyURLInWebView() {
-        print("Loading into webview -> \(self.iResponseURL)")
+        LogUtils.printMessage(message: "Loading into webview -> \(String(describing: self.iResponseURL))")
         DispatchQueue.main.async {
             if let url = self.iResponseURL, let nsurl = URL(string: url) {
                 let nsrequest = URLRequest(url: nsurl)
@@ -386,7 +391,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
         
         let url = webView.url
         
-        print(webView.url as Any)
+        LogUtils.printMessage(message: webView.url!.absoluteString)
         if (((url?.absoluteString.range(of: "exitsurvey")) != nil) || ((url?.absoluteString.range(of: "#autoClose") != nil))) {
             perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 3.0)
         }
@@ -404,7 +409,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         GMDCircleLoader.setOnView(self.iWebView!, withTitle: "Please wait.", animated: true)
         let url = webView.url
-        print("##### url = \(url?.absoluteString ?? "")")
+        LogUtils.printMessage(message: "##### url = \(url?.absoluteString ?? "")")
         if (((url?.absoluteString.range(of: "exitsurvey")) != nil) || ((url?.absoluteString.range(of: "#autoClose") != nil))) {
             perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 1.0)
         }
@@ -412,13 +417,13 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
 
         // WKNavigationDelegate method for when navigation finishes
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            print("Web view did finish loading")
+        LogUtils.printMessage(message: "Web view did finish loading")
         GMDCircleLoader.hideFromView(self.iWebView!, animated: true)
         }
 
         // WKNavigationDelegate method for when navigation fails
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        print("Failed to load with error: \(error.localizedDescription)")
+        LogUtils.printMessage(message: "Failed to load with error: \(error.localizedDescription)")
         GMDCircleLoader.hideFromView(self.iWebView!, animated: true)
     }
 

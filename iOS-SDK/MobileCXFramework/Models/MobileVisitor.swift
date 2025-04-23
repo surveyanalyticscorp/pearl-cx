@@ -72,10 +72,10 @@ public func parseJson (jsonString: String) {
                 
                 // Print all Intercept IDs
                 for intercept in response.project.intercepts {
-                    print("Intercept ID: \(intercept.id)")
+                    LogUtils.printMessage(message: "Intercept ID: \(intercept.id)")
                 }
             } catch {
-                print("❌ Error decoding JSON: \(error)")
+                LogUtils.printMessage(message: "❌ Error decoding JSON: \(error)")
             }
         }
 }
