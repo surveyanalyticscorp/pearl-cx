@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 
 @MainActor
-public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNavigationDelegate, SurveyLaunchDelegate {
+public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate, SurveyLaunchDelegate {
     var satisfiedRulesForIntercept: [String: [[String]]] = [:]
     var visitorApiResponse: ApiResponse!
     private var isSurveyDisplayed = false
@@ -100,41 +100,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     }
     
     let backButton = UIButton(type: .custom)
-    
-    @MainActor public func CXServiceResponse(withURL response: [String: Any]) {
-        if let _ = response[ksurveyURL] {
-            LogUtils.printMessage(message: "URL found")
-            if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
-                let responseCopy = response // Create a copy of the response
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.iResponseURL = responseURL
-                    let strUserDefaultKey = "\(self.iTouchPointName ?? 0)\(self.iCurrentViewName)"
-                    if !self.iPresentViewFlag {
-                        CacheUtils.setToUserDefaults(key: strUserDefaultKey, value: responseCopy)
-                    } else {
-                        if let url = self.iResponseURL, let nsurl = URL(string: url) {
-                            let nsrequest = URLRequest(url: nsurl)
-                            self.iWebView?.backgroundColor = UIColor.white
-                            self.iWebView?.load(nsrequest)
-                        }
-                    }
-                }
-            }
-        } else if let error = response["error"] as? [String: Any] {
-            // Extract error message
-            let errorMessage = error["message"] as? String ?? "Unknown error"
-            // Present the alert (requires a view controller)
-            DispatchQueue.main.async {
-                if let topController = UIApplication.shared.windows[0].rootViewController {
-                    // Show alert
-                    let alert = UIAlertController(title: "", message: errorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in self.errorAPIHandler() }))
-                    topController.present(alert, animated: true, completion: nil)
-                }
-            }
-        }
-    }
 
     func errorAPIHandler() {
         perform(#selector(self.aDismissWebview(_:)), with: self, afterDelay: 0)
