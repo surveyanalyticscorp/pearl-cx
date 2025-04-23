@@ -10,12 +10,15 @@ import Foundation
 public class APIUtils {
     
     public static func getBaseURL() -> URLComponents {
+        let dataCenter: String = CacheUtils.getFromUserDefaults(key: kDataCenter, type: String.self)!
+        
+        let baseURL = getBaseUrl(dataCenter: dataCenter)
         var components = URLComponents()
         components.scheme = "https"
         
         // Set the correct host based on environment
         if kEnvironment == kProductionEnvironment {
-            components.host = kMobileAPIProduction
+            components.host = baseURL
         } else if kEnvironment == kStagingEnvironment {
             components.host = kMobileAPIStaging
         }
@@ -86,8 +89,8 @@ public class APIUtils {
             return "EU"
         case TouchPoint.DataCenter.DATA_CENTER_SG:
             return "SG"
-        case TouchPoint.DataCenter.DATA_CENTER_SA:
-            return "SA"
+//        case TouchPoint.DataCenter.DATA_CENTER_SA:
+//            return "SA"
         case TouchPoint.DataCenter.DATA_CENTER_KSA:
             return "KSA"
         default:
@@ -97,24 +100,24 @@ public class APIUtils {
     
     public static func getBaseUrl(dataCenter: String) -> String {
         switch dataCenter {
-        case "US":
-            return "https://api.questionpro.com"
-        case "AE":
-            return "https://api.questionpro.ae"
-        case "AU":
-            return "https://api.questionpro.au"
-        case "EU":
-            return "https://api.questionpro.eu"
-        case "CA":
-            return "https://api.questionpro.ca"
-        case "SG":
-            return "https://api.questionpro.sg"
-        case "SA":
-            return "https://api.surveyanalytics.com"
-        case "KSA":
-            return "https://api.questionprosa.com"
+        case "DATA_CENTER_US":
+            return "intercept-api.questionpro.com"
+        case "DATA_CENTER_AE":
+            return "intercept-api.questionpro.ae"
+        case "DATA_CENTER_AU":
+            return "intercept-api.questionpro.au"
+        case "DATA_CENTER_EU":
+            return "intercept-api.questionpro.eu"
+        case "DATA_CENTER_CA":
+            return "intercept-api.questionpro.ca"
+        case "DATA_CENTER_SG":
+            return "intercept-api.questionpro.sg"
+//        case "SA":
+//            return "intercept-api.questionpro.com"
+//        case "KSA":
+//            return "intercept-api.questionpro.com"
         default:
-            return "https://api.questionpro.com"
+            return "intercept-api.questionpro.com"
         }
     }
 }

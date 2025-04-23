@@ -12,7 +12,7 @@ public class TouchPoint {
     public init() {
     }
     
-    public enum DataCenter {
+    public enum DataCenter: String, Codable {
        case DATA_CENTER_US
        case DATA_CENTER_AE
        case DATA_CENTER_CA

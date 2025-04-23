@@ -270,6 +270,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
 
     public func configure(apiKey: String, touchPoint: TouchPoint, withWindow aWindow: UIWindow, callbackDelegate: QuestionProDelegate?) {
         CacheUtils.setToUserDefaults(key: kApiKey, value: apiKey)
+        CacheUtils.setToUserDefaults(key: kDataCenter, value: touchPoint.dataCenter.rawValue)
         self.iApiKey = apiKey
         self.iDataCenter = touchPoint.dataCenter
         self.iBaseWindow = aWindow

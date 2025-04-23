@@ -24,6 +24,7 @@ public let kSatisfiedRulesForId = "SatisfiedRulesForId"
 public let kIsSurveyLaunched = "IsSurveyLaunched"
 public let kIntercepts = "Intercepts"
 public let kApiKey = "apiKey"
+public let kDataCenter = "dataCenter"
 
 //API request types
 public enum APIRequestType: String {
