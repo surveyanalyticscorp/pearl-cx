@@ -155,7 +155,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     public var iPresentViewFlag: Bool = false
     @MainActor
     public var iTouchPointName: Int?
-    public var iApiKey: String?
+    public var iApiKey: String = ""
     @MainActor
     public var iCurrentViewName: String = ""
     public var iDataCenter: TouchPoint.DataCenter?
@@ -186,7 +186,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                     urlString: fetchSurveyURL,
                     method: .POST,
                     headers: [
-                        "x-app-key": kXAPPKey,
+                        "x-app-key": self.iApiKey,
                         "package-name": kPackageName,
                     ],
                     body: bodyParam,
@@ -223,7 +223,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
                 urlString: mobileVisitorAPIURL,
                 method: .GET,
                 headers: [
-                    "x-app-key": kXAPPKey,
+                    "x-app-key": self.iApiKey,
                     "package-name": kPackageName,
                 ],
                 responseType: ApiResponse.self
@@ -269,6 +269,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, ServiceDelegate, WKNa
     }
 
     public func configure(apiKey: String, touchPoint: TouchPoint, withWindow aWindow: UIWindow, callbackDelegate: QuestionProDelegate?) {
+        CacheUtils.setToUserDefaults(key: kApiKey, value: apiKey)
         self.iApiKey = apiKey
         self.iDataCenter = touchPoint.dataCenter
         self.iBaseWindow = aWindow

@@ -43,7 +43,7 @@ public class APIUtils {
     
     @MainActor
     public static func updateInterceptSurveyLaunchEvent(interceptData: Intercept, visitorId: String, surveyType: String) -> Void {
-        
+        let apiKey: String = CacheUtils.getFromUserDefaults(key: kApiKey, type: String.self)!
         var bodyParam = [:] as [String: Any]
         bodyParam["ruleGroupId"] = interceptData.ruleGroupId;
         bodyParam["interceptId"] = interceptData.id;
@@ -57,7 +57,7 @@ public class APIUtils {
                     urlString: updateInterceptSurveyLaunchEventURL,
                     method: .POST,
                     headers: [
-                        "x-app-key": kXAPPKey,
+                        "x-app-key": apiKey,
                         "package-name": kPackageName,
                         "visitor-id": visitorId
                     ],

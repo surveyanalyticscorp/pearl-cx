@@ -23,6 +23,7 @@ public let kInterceptRulesForId = "InterceptRulesForId"
 public let kSatisfiedRulesForId = "SatisfiedRulesForId"
 public let kIsSurveyLaunched = "IsSurveyLaunched"
 public let kIntercepts = "Intercepts"
+public let kApiKey = "apiKey"
 
 //API request types
 public enum APIRequestType: String {
@@ -39,7 +40,7 @@ public enum APIRequestType: String {
 
 //API Serivce constants
 public let kMobileAPIStaging = "cx-intercept-staging-api.questionpro.com"
-public let kMobileAPIProduction = "api.questionpro.com/"
+public let kMobileAPIProduction = "intercept-api.questionpro.com"
 
 //API URLs
 public let kMobileCXGetSurveyURL = "/api/v1/visitor/mobile"
@@ -48,9 +49,8 @@ public let kGetSurveyURL = "/api/v1/data-mapping/mobile/survey-url"
 public let kSurveyFeedbackURL = "/api/v1/visitor/mobile/survey-feedback"
 
 public let kPackageName = "com.questionpro"
-public let kXAPPKey = "e37da3ff-858c-4358-af11-a727377dfac2"
 
-public let kEnvironment = kStagingEnvironment
+public let kEnvironment = kProductionEnvironment
 
 public enum InterceptType: String {
     case PROMPT, EMBED, SURVEY_URL
