@@ -221,7 +221,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                         surveyLogicUtilsInstance.checkSurveyLaunchDateOfMonthLogic(dates: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
                     } else if (rule.name == InterceptRuleType.TIME_SPENT.rawValue) {
                         Task {
-                            for await timeLeft in  TimerUtils.startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
+                            for await timeLeft in  TimerUtils.getinstance().startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
                                 LogUtils.printMessage(message: "⏳ Time left: \(timeLeft) sec for \(intercept.id)")
                             }
                         }
@@ -231,6 +231,35 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         } catch {
             self.callbackDelegate?.initSDKFailed(error: error)
             LogUtils.printMessage(message: "API error: \(error)")
+        }
+    }
+    
+    func appLifecycleStateListener() {
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.didEnterBackgroundNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            LogUtils.printMessage(message: "📦 App did enter background")
+            // Perform cleanup or save data here
+            Task {
+                await MainActor.run {
+                    TimerUtils.getinstance().pauseAllTimers()
+                }
+            }
+        }
+
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.didBecomeActiveNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            LogUtils.printMessage(message: "🎯 App became active")
+            Task {
+                await MainActor.run {
+                    TimerUtils.getinstance().resumeAllTimers()
+                }
+            }
         }
     }
 
@@ -247,6 +276,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         Task {
             await self.fetchAndSetupIntercepts()
         }
+        self.appLifecycleStateListener()
     }
     
     public func enableLogs(enabledLogs: Bool) {
