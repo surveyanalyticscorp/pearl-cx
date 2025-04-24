@@ -326,10 +326,6 @@ export function* syncTickets(action) {
       console.log('TICKET_SYNC_ERROR', JSON.stringify(error));
     } else {
       console.log('TICKET_SYNC_OTHER_ERROR', JSON.stringify(error));
-      yield put({
-        type: API_ERROR,
-        error: error,
-      });
     }
   }
 }

@@ -27,6 +27,7 @@ import RenderSegmentDashboardData from './cxDashboard/RenderSegmentDashboardData
 import useBackHandler from './hooks/useBackHandler';
 import AnimatedView from '../../widgets/AnimatedView';
 import {useNavigation} from '@react-navigation/native';
+import {Notifications} from 'react-native-notifications';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -36,7 +37,15 @@ const wait = timeout => {
 const CreateTicketButton = () => {
   const navigation = useNavigation();
   let onFabPressHandler = useCallback(() => {
-    navigation.navigate(translate('responses.new_ticket'));
+    // navigation.navigate(translate('responses.new_ticket'));
+    Notifications.postLocalNotification(
+      {
+        body: 'body.notificationText',
+        title: 'Heelooo',
+        data: {},
+      },
+      parseInt('164001'),
+    );
   }, [navigation]);
 
   return <FabAddButton onPress={onFabPressHandler} />;

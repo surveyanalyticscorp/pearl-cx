@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {useEffect, useCallback, useState} from 'react';
+import {Platform} from 'react-native';
 
 import {StyleSheet, Text, Pressable, View} from 'react-native';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
@@ -88,15 +89,9 @@ const AppRouter = props => {
     global.subscriberId = '';
     setGlobalBaseUrl();
     setGlobalSubscriberId();
+
     Notifications.registerRemoteNotifications();
     checkNotificationPermission().then({});
-    // dynamicLinks()
-    //   .getInitialLink()
-    //   .then(link => {
-    //     if (link && link.url) {
-    //       handleDynamicLink(link);
-    //     }
-    //   });
 
     /* {"notification":
       {"android":{},
@@ -135,25 +130,24 @@ const AppRouter = props => {
         console.log('on message' + JSON.stringify(remoteMessage.notification));
 
         // {"android":{},"body":"{\"id\":21532,\"type\":2,\"hasRead\":false,\"notificationText\":\"Ticket #135847 priority changed to MEDIUM by Mehedi Hasan.\",\"createdAt\":\"2025-02-11T22:50:19.105Z\",\"ticket\":{\"id\":135847,\"feedbackId\":27233,\"assignToId\":81504},\"media\":null}","title":"Ticket priority notification"}
-        const bodyText = JSON.parse(
-          remoteMessage.notification.body,
-        ).notificationText;
+        const body = JSON.parse(remoteMessage.notification.body);
+
         Notifications.postLocalNotification(
           {
-            body: bodyText,
+            body: body.notificationText,
             title: remoteMessage.notification.title,
-            data: JSON.parse(remoteMessage.notification.body),
+            data: body,
           },
           parseInt(remoteMessage.messageId),
         );
-        dispatch(getNotification(userInfo?.userID));
       },
     );
+    addNotificationListeners();
 
     return () => {
       unsubscribeNotifications();
     };
-  }, [dispatch, userInfo?.userID]);
+  }, []);
 
   useEffect(() => {
     if (isAppActive) {

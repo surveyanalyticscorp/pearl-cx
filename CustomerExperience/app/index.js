@@ -22,6 +22,7 @@ import {ANALYTICS_EVENTS} from './Utils/Analytic.constants';
 import AppInfo from './Utils/AppInfo';
 import {
   addNotificationListeners,
+  checkNotificationPermission,
   requestNotificationPermission,
 } from './Utils/NotificationUtils';
 
@@ -95,8 +96,8 @@ const CxApp = () => {
       setStyleBuilt(true);
     });
     requestNotificationPermission();
-    addNotificationListeners();
-
+    checkNotificationPermission();
+    // addNotificationListeners();
     return () => {
       currentNetworkMonitor.stop();
       AppTimeTracker.stop();

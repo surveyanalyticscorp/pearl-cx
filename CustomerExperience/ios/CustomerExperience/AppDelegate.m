@@ -4,7 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <Firebase/Firebase.h>
-#import "RNNotifications.h"
+#import <RNNotifications.h>
 //#import <CodePush/CodePush.h>
 @implementation AppDelegate
 
@@ -23,9 +23,9 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  if ([FIRApp defaultApp] == nil) {
+//  if ([FIRApp defaultApp] == nil) {
   [FIRApp configure];
-  }
+//  }
   [RNNotifications startMonitorNotifications];
 
   return YES;

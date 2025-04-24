@@ -31,7 +31,6 @@ const NotificationItem = ({item, index}) => {
         dispatch(readNotification(item.id, userInfo?.userID));
         navigation.navigate('TicketDetails', {
           ticketItem: item.ticket,
-          parentRoute: 'Dashboard',
         });
       }}
       style={{

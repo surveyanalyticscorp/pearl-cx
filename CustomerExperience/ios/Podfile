@@ -4,6 +4,7 @@ require_relative '../node_modules/react-native/scripts/react_native_pods'
 $FirebaseSDKVersion = '8.15.0'
 $RNFirebaseAsStaticFramework = true
 $RNFirebaseAnalyticsWithoutAdIdSupport=true
+
 platform :ios, '11.0'
 
 target 'CustomerExperience' do
@@ -51,6 +52,12 @@ target 'CustomerExperience' do
   # pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
   # pod 'RNFBDynamicLinks', :path => '../node_modules/@react-native-firebase/dynamic-links'
   # pod 'react-native-notifications', :path => '../node_modules/react-native-notifications'
+
+  # use_frameworks! :linkage => :static
+
+
+  
+
   config = use_native_modules!
 
   use_react_native!(
@@ -86,12 +93,12 @@ target 'CustomerExperience' do
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
     
     # Fix for Flipper-Glog
-    installer.pods_project.targets.each do |target|
-      target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
-        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-      end
-    end
+    # installer.pods_project.targets.each do |target|
+    #   target.build_configurations.each do |config|
+    #     config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+    #     config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+    #   end
+    # end
   end
 
 #  def find_and_replace(dir, findstr, replacestr)

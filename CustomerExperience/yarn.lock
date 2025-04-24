@@ -4161,7 +4161,7 @@ __metadata:
     react-native-mock: ^0.3.1
     react-native-mock-render: ^0.1.9
     react-native-modal: ^13.0.0
-    react-native-notifications: 4.3.5
+    react-native-notifications: 5.1.0
     react-native-pell-rich-editor: ^1.8.8
     react-native-phone-number-input: ^2.1.0
     react-native-pie: ^1.1.2
@@ -12539,13 +12539,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-notifications@npm:4.3.5":
-  version: 4.3.5
-  resolution: "react-native-notifications@npm:4.3.5"
+"react-native-notifications@npm:5.1.0":
+  version: 5.1.0
+  resolution: "react-native-notifications@npm:5.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: dd95f7bb95f6a9cfdce28c7eea3b7e02e14784edbc48986e6b5efbd5ea127265de06f79b003a09fe2fae844f3c57b1687c7ddb35afd7814f95df19c71ad3f0f7
+  checksum: 27a201942fcb9e12c4d96ad9b0cb53f547da833e5864193285c68e2dcf03808601d396ea8292e13f7608228784ca70eb34447a13564758d8b7725492a59fc975
   languageName: node
   linkType: hard
 
