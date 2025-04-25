@@ -259,7 +259,6 @@ const AppRouter = props => {
           headerTitle: props => {
             return (
               <SegmentSelector
-                prevScreenName={translate('dashboard.dashboard')}
                 screenName={translate('dashboard.dashboard')}
                 navigation={navigation}
               />
@@ -289,7 +288,6 @@ const AppRouter = props => {
           headerTitle: props => {
             return (
               <SegmentSelector
-                prevScreenName={'dashboard_to_responses'}
                 screenName={'Responses'}
                 navigation={navigation}
               />
@@ -308,7 +306,6 @@ const AppRouter = props => {
           headerTitle: props => {
             return (
               <SegmentSelector
-                prevScreenName={'dashboard_to_closed_loop'}
                 screenName={'ClosedLoop'}
                 navigation={navigation}
               />
@@ -327,14 +324,6 @@ const AppRouter = props => {
         name="Dashboard"
         component={dashboardStack}
         options={({navigation, route}) => ({headerShown: false})}
-      />
-      <DetractorStack.Screen
-        key={'Notifications'}
-        name="Notifications"
-        component={PushNotification}
-        options={({navigation, route}) => ({
-          headerLeft: props => <HeaderBackLeft />,
-        })}
       />
 
       <DetractorStack.Screen

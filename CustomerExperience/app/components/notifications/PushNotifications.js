@@ -13,7 +13,7 @@ import {
 } from '../../redux/actions/notification.actions';
 import {translate} from '../../Utils/MultilinguaUtils';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
-import {useNavigation} from '@react-navigation/native';
+import {StackActions, useNavigation} from '@react-navigation/native';
 import {baseTextStyles} from '../../styles/text.styles';
 import {convertDateTimeAgo} from '../../Utils/TimeUtils';
 import NewResponseDot from '../feedback/feedbackCell/NewResponseDot';
@@ -28,10 +28,8 @@ const NotificationItem = ({item, index}) => {
   return (
     <Pressable
       onPress={() => {
+        navigation.navigate('TicketDetails', {ticketItem: item.ticket});
         dispatch(readNotification(item.id, userInfo?.userID));
-        navigation.navigate('TicketDetails', {
-          ticketItem: item.ticket,
-        });
       }}
       style={{
         ...styles.notificationItem,

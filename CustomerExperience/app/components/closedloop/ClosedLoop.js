@@ -13,11 +13,7 @@ import {Colors} from '../../styles/color.constants';
 
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
-import {
-  HeaderFilter,
-  NoItemsFound,
-  RenderSpinner,
-} from '../../routes/commonUI/CommonUI';
+import {HeaderFilter, RenderSpinner} from '../../routes/commonUI/CommonUI';
 
 import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
 import FabAddButton from '../../routes/commonUI/FabAddButton';
@@ -41,15 +37,9 @@ import {
 import {translate} from '../../Utils/MultilinguaUtils';
 import QPSpinner from '../../widgets/QPSpinner';
 import {taglist} from '../view/ShowFilterTag';
-import {
-  resetDeleteTicketStatus,
-  syncTickets,
-} from '../../redux/actions/closedloop.actions';
+import {resetDeleteTicketStatus} from '../../redux/actions/closedloop.actions';
 import {baseTextStyles} from '../../styles/text.styles';
 import {useNavigation} from '@react-navigation/native';
-import TextLabel from '../../widgets/TextLabel/TextLabel';
-import {FontWeight} from '../../styles/font.constants';
-import IconButton from '../../routes/commonUI/IconButton';
 import {NoTicketFound} from './NoTicketFound';
 
 export const SearchIcon = () => {
@@ -493,10 +483,11 @@ export default function ClosedLoop(props) {
     console.log('KEYBOARD_SEARCH', JSON.stringify({searchText, filterState}));
   }, []);
 
-  const resetFilter = () => {
+  const resetFilter = useCallback(() => {
     setFilterState(initialFilterState);
     setFilterData(sampleFilterData());
-  };
+    setSearchText(initialFilterState.search);
+  }, []);
 
   return isTicketLoading && !isPagination ? (
     <RenderSpinner />

@@ -37,15 +37,7 @@ const wait = timeout => {
 const CreateTicketButton = () => {
   const navigation = useNavigation();
   let onFabPressHandler = useCallback(() => {
-    // navigation.navigate(translate('responses.new_ticket'));
-    Notifications.postLocalNotification(
-      {
-        body: 'body.notificationText',
-        title: 'Heelooo',
-        data: {},
-      },
-      parseInt('164001'),
-    );
+    navigation.navigate(translate('responses.new_ticket'));
   }, [navigation]);
 
   return <FabAddButton onPress={onFabPressHandler} />;

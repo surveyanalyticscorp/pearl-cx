@@ -56,7 +56,6 @@ const dashboardStack = props => (
         headerTitle: props => {
           return (
             <SegmentSelector
-              prevScreenName={translate('dashboard.dashboard')}
               screenName={translate('dashboard.dashboard')}
               navigation={navigation}
             />
@@ -85,11 +84,7 @@ const dashboardStack = props => (
 
         headerTitle: props => {
           return (
-            <SegmentSelector
-              prevScreenName={'dashboard_to_responses'}
-              screenName={'Responses'}
-              navigation={navigation}
-            />
+            <SegmentSelector screenName={'Responses'} navigation={navigation} />
           );
         },
         headerShown: true,
@@ -105,7 +100,6 @@ const dashboardStack = props => (
         headerTitle: props => {
           return (
             <SegmentSelector
-              prevScreenName={'dashboard_to_closed_loop'}
               screenName={'ClosedLoop'}
               navigation={navigation}
             />

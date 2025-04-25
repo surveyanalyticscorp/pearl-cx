@@ -16,7 +16,6 @@ import SegmentText from './SegmentText';
 import {IonIcon} from '../Utils/IconUtils';
 
 const NotiificationIcon = props => {
-  const prevScreenName = props.prevScreenName;
   const navigation = useNavigation();
   const notificationLogs = useSelector(
     state => state.notification.notificationLogs,
@@ -26,7 +25,11 @@ const NotiificationIcon = props => {
 
   return (
     <Pressable
-      onPress={() => navigation.navigate('Notifications')}
+      onPress={() => {
+        const action = StackActions.push('notifications');
+        navigation.dispatch(action);
+        // navigation.navigate('Notifications');
+      }}
       style={styles.notificationContainer}>
       <IonIcon name={'notifications'} size={22} color={Colors.white} />
       {unreadCount > 0 && (
@@ -42,9 +45,6 @@ const SegmentSelector = props => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const authToken = useSelector(state => state.global.authToken);
-
-  console.log('SEGMENT_PREV', JSON.stringify(props));
-
   const segmentList = useSelector(
     state => state.dashboard.segmentDetails.segments,
   );
