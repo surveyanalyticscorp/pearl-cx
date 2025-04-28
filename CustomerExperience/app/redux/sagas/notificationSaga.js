@@ -4,6 +4,7 @@ import {
   CLF_GET_NOTIFICATIONS,
   CLF_PATCH_READ_NOTIFCATION,
   CX_GET_NOTIFICATION_LIST,
+  NOTIFICATIONS_PER_PAGE,
 } from '../../api/Constant';
 import {
   GET_NOTIFICATION,
@@ -25,6 +26,8 @@ function* fetchNotifications(action) {
 
     const response = yield WebServiceHandler.get(url, getBearerTokenStatic(), {
       notificationStatus: 'all',
+      perPage: NOTIFICATIONS_PER_PAGE,
+      pageNumber: 1,
     });
     if (response?.status === 'success') {
       yield put({
@@ -42,8 +45,9 @@ export function* watchGetNotification() {
 }
 
 function* readNotifiaction(action) {
+  const url = getClfUrl(CLF_PATCH_READ_NOTIFCATION + action.notificationId);
+
   try {
-    const url = getClfUrl(CLF_PATCH_READ_NOTIFCATION + action.notificationId);
     const response = yield WebServiceHandler.patch(
       url,
       getBearerTokenStatic(),

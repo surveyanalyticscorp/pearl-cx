@@ -71,49 +71,95 @@ export async function checkNotificationPermission() {
   }
 }
 
+export const postLocalNotification = (
+  title,
+  bodyText,
+  data,
+  notificationId,
+) => {
+  Notifications.postLocalNotification(
+    {
+      body: bodyText,
+      title: title,
+      data: data,
+      extra: data,
+      sound: 'default',
+      priority: 'high',
+      importance: 'high',
+      channelId: 'high-priority',
+    },
+    notificationId,
+  );
+};
+
 export function addNotificationListeners() {
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannel({
+      channelId: 'high-priority',
+      name: 'High Priority Notifications',
+      importance: 5,
+      description: 'High priority notifications for ticket updates',
+      enableLights: true,
+      enableVibration: true,
+      showBadge: true,
+      soundFile: 'default',
+    });
+  }
   messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log(
       'Notification Message handled in the background!',
       remoteMessage,
     );
-    const body = JSON.parse(remoteMessage.notification.body);
-    Notifications.postLocalNotification(
-      {
-        body: body.notificationText,
-        title: remoteMessage.notification.title,
-        data: body,
-        sound: 'default',
-        priority: 'high',
-        importance: 'high',
-        channelId: 'default',
-      },
-      parseInt(remoteMessage.messageId),
-    );
+
+    // Return a promise to indicate the message has been handled
+    // return Promise.resolve();
   });
-  /** When the user presses a notification displayed via FCM, this listener will be called if the app has opened from a background state */
-  messaging().onNotificationOpenedApp(remoteMessage => {
+
+  // Add a new handler for onMessage to handle foreground notifications
+  messaging().onMessage(async remoteMessage => {
     console.log(
-      'Notification caused app to open from background state:',
-      remoteMessage.notification,
+      'Notification Message handled in the foreground!',
+      remoteMessage,
     );
-    // const ticketItem = JSON.parse(remoteMessage.notification.body).ticket;
-    // actionOnNotification(ticketItem, 2000);
   });
+
+  // Handle notification clicks
+  messaging().onNotificationOpenedApp(remoteMessage => {
+    console.log('Notification opened from background state:', remoteMessage);
+    const payload = JSON.parse(remoteMessage.data.payload);
+    if (payload.ticket) {
+      actionOnNotification(payload.ticket, 0);
+    }
+  });
+
+  /** When the user presses a notification displayed via FCM, this listener will be called if the app has opened from a background state */
+  //  messaging().onNotificationOpenedApp(remoteMessage => {
+  // console.log(
+  //   'Notification caused app to open from background state:',
+  //   remoteMessage.notification,
+  // );
+  // const ticketItem = JSON.parse(remoteMessage.notification.body).ticket;
+  // actionOnNotification(ticketItem, 2000);
+  // });
+
   /** When a notification from FCM has triggered the application to open from a quit state */
+
+  // Handle initial notification when app is opened from quit state
   messaging()
     .getInitialNotification()
     .then(remoteMessage => {
       if (remoteMessage) {
         console.log(
           'Notification caused app to open from quit state:',
-          remoteMessage.notification,
+          remoteMessage,
         );
-        // actionOnNotification(remoteMessage.data.CXTicket, 1000)
-        // const ticketItem = JSON.parse(remoteMessage.notification.body).ticket;
-        // actionOnNotification(ticketItem, 2000);
+        const payload = JSON.parse(remoteMessage.data.payload);
+        if (payload.ticket) {
+          actionOnNotification(payload.ticket, 2000);
+        }
       }
     });
+
   Notifications.events().registerNotificationReceivedBackground(
     (
       notification: Notification,

@@ -28,6 +28,7 @@ import useBackHandler from './hooks/useBackHandler';
 import AnimatedView from '../../widgets/AnimatedView';
 import {useNavigation} from '@react-navigation/native';
 import {Notifications} from 'react-native-notifications';
+import {postLocalNotification} from '../../Utils/NotificationUtils';
 
 const wait = timeout => {
   return new Promise(resolve => {

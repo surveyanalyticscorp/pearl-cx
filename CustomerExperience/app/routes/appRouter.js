@@ -32,6 +32,7 @@ import QPSpinner from '../widgets/QPSpinner';
 import {
   addNotificationListeners,
   checkNotificationPermission,
+  postLocalNotification,
   requestNotificationPermission,
 } from '../Utils/NotificationUtils';
 import messaging from '@react-native-firebase/messaging';
@@ -64,9 +65,7 @@ const AppRouter = props => {
   const bearerToken = useSelector(state => state.global.bearerToken);
   const userInfo = useSelector(state => state.global.userInfo);
   const languageCode = useSelector(state => state.global.languageCode);
-  const notificationCount = useSelector(
-    state => state.notification.notificationLogs.length,
-  );
+
   let [isAppActive, setAppActiveState] = useState(false);
   let [baseUrl, setBaseUrl] = useState(undefined);
   let [subscriberId, setSubscriberId] = useState(undefined);
@@ -82,6 +81,14 @@ const AppRouter = props => {
       'https://mobileapps.questionpro.com/cx',
       'https://questionpro.offline.link',
     ],
+  };
+
+  const fetchNotifications = () => {
+    if (userInfo && userInfo.userID) {
+      setTimeout(() => {
+        dispatch(getNotification(userInfo?.userID));
+      }, 5000);
+    }
   };
 
   useEffect(() => {
@@ -123,26 +130,16 @@ const AppRouter = props => {
         }",
       "title":"Ticket priority notification"
       }
-*/
+*/ addNotificationListeners();
 
     const unsubscribeNotifications = messaging().onMessage(
       async remoteMessage => {
         console.log('on message' + JSON.stringify(remoteMessage.notification));
+        console.log('on message remoteMessage' + JSON.stringify(remoteMessage));
 
-        // {"android":{},"body":"{\"id\":21532,\"type\":2,\"hasRead\":false,\"notificationText\":\"Ticket #135847 priority changed to MEDIUM by Mehedi Hasan.\",\"createdAt\":\"2025-02-11T22:50:19.105Z\",\"ticket\":{\"id\":135847,\"feedbackId\":27233,\"assignToId\":81504},\"media\":null}","title":"Ticket priority notification"}
-        const body = JSON.parse(remoteMessage.notification.body);
-
-        Notifications.postLocalNotification(
-          {
-            body: body.notificationText,
-            title: remoteMessage.notification.title,
-            data: body,
-          },
-          parseInt(remoteMessage.messageId),
-        );
+        fetchNotifications();
       },
     );
-    addNotificationListeners();
 
     return () => {
       unsubscribeNotifications();
@@ -173,10 +170,13 @@ const AppRouter = props => {
 
   useEffect(() => {
     if (authToken && baseUrl && userInfo) {
-      dispatch(getNotification(userInfo?.userID));
       dispatch(clearLoginUser());
     }
   }, [authToken, baseUrl, userInfo.userID]);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [userInfo]);
 
   useEffect(() => {
     console.log(`Language Code: `, languageCode);
@@ -202,52 +202,6 @@ const AppRouter = props => {
         setSubscriberId(subscriberId);
       }
     });
-  };
-
-  const NotificationIcon = () => {
-    let navigation = useNavigation();
-    return (
-      <View
-        style={[
-          styles.rightHeaderButton,
-          {marginHorizontal: MarginConstants.tab2},
-        ]}>
-        <Pressable
-          hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
-          onPress={() => {
-            navigation.navigate('Notifications');
-          }}>
-          <FontIcon
-            name={'bell'}
-            size={1.1 * Sizes.icons}
-            color={Colors.white}
-          />
-        </Pressable>
-
-        {notificationCount > 0 ? renderNotificationBadge() : <View />}
-      </View>
-    );
-  };
-
-  let renderNotificationBadge = () => {
-    return (
-      <View
-        style={{
-          position: 'absolute',
-          top: -7,
-          right: -7,
-          width: 16,
-          height: 16,
-          borderRadius: 8,
-          backgroundColor: 'red',
-          alignItems: 'center',
-        }}>
-        <Text style={{fontSize: TextSizes.primary, color: 'white'}}>
-          {' '}
-          {notificationCount}{' '}
-        </Text>
-      </View>
-    );
   };
 
   const dashboardStack = props => (

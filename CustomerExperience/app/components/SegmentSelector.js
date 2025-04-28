@@ -15,7 +15,7 @@ import {MarginConstants} from '../styles/margin.constants';
 import SegmentText from './SegmentText';
 import {IonIcon} from '../Utils/IconUtils';
 
-const NotiificationIcon = props => {
+const NotiificationIcon = () => {
   const navigation = useNavigation();
   const notificationLogs = useSelector(
     state => state.notification.notificationLogs,
@@ -83,7 +83,7 @@ const SegmentSelector = props => {
         currentSegment={currentSegment}
         onPress={onPressHandle}
       />
-      <NotiificationIcon {...props} />
+      <NotiificationIcon />
     </View>
   );
 };
