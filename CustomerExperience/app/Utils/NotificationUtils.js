@@ -155,7 +155,7 @@ export function addNotificationListeners() {
         );
         const payload = JSON.parse(remoteMessage.data.payload);
         if (payload.ticket) {
-          actionOnNotification(payload.ticket, 2000);
+          actionOnNotification(payload.ticket, 10000);
         }
       }
     });
@@ -316,33 +316,47 @@ export function addNotificationListeners() {
 //   );
 // }
 
-export function actionOnNotification(ticketItem, timeOut) {
+export async function actionOnNotification(ticketItem, timeOut) {
   console.log('Attempting to navigate to TicketDetails with:', ticketItem);
-  setTimeout(() => {
-    try {
-      if (!RootNagation.navigationRef.current) {
-        console.error('Navigation reference is not available');
-        return;
-      }
 
-      // Ensure we're not already on the TicketDetails screen
-      const currentRoute = RootNagation.navigationRef.current.getCurrentRoute();
-      if (
-        currentRoute?.name === 'TicketDetails' &&
-        currentRoute?.params?.ticketItem?.id === ticketItem.id
-      ) {
-        console.log('Already on the correct ticket details screen');
-        return;
-      }
+  // Wait for navigation reference to be available
+  const waitForNavigation = () => {
+    return new Promise(resolve => {
+      const checkNavigation = () => {
+        if (RootNagation.navigationRef.current) {
+          resolve();
+        } else {
+          setTimeout(checkNavigation, 100); // Check every 100ms
+        }
+      };
+      checkNavigation();
+    });
+  };
 
-      console.log('Navigating to TicketDetails...');
-      RootNagation.navigate('TicketDetails', {
-        ticketItem: ticketItem,
-        parentRoute: 'Dashboard',
-      });
-      console.log('Navigation to TicketDetails completed');
-    } catch (error) {
-      console.error('Error during navigation:', error);
+  try {
+    // Wait for the specified timeout
+    await new Promise(resolve => setTimeout(resolve, timeOut));
+
+    // Wait for navigation reference to be available
+    await waitForNavigation();
+
+    // Ensure we're not already on the TicketDetails screen
+    const currentRoute = RootNagation.navigationRef.current.getCurrentRoute();
+    if (
+      currentRoute?.name === 'TicketDetails' &&
+      currentRoute?.params?.ticketItem?.id === ticketItem.id
+    ) {
+      console.log('Already on the correct ticket details screen');
+      return;
     }
-  }, timeOut);
+
+    console.log('Navigating to TicketDetails...');
+    RootNagation.navigate('TicketDetails', {
+      ticketItem: ticketItem,
+      parentRoute: 'Dashboard',
+    });
+    console.log('Navigation to TicketDetails completed');
+  } catch (error) {
+    console.error('Error during navigation:', error);
+  }
 }
