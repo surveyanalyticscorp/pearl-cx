@@ -57,7 +57,7 @@ export let getApiValidationErrorMessage = errorMessage => {
       ? errorMessage?.errorAlert
       : errorMessage?.validationErrors[0]?.error;
   }
-  return 'Error';
+  return 'Network Error';
 };
 
 export const checkValidation = ({email, password, accessCode}) => {

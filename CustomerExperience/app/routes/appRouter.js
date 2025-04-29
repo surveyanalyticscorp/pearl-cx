@@ -1,18 +1,15 @@
 import * as React from 'react';
-import {useEffect, useCallback, useState} from 'react';
-import {Platform} from 'react-native';
-
-import {StyleSheet, Text, Pressable, View} from 'react-native';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {useEffect, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import FontIcon from 'react-native-vector-icons/FontAwesome';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
 import DrawerContent from '../routes/DrawerContent';
 import CxDashboard from '../components/dashboard/CxDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import SignInStack from './signInStack';
-import {isStringNullOrEmpty, showSuccessFlashMessage} from '../Utils/Utility';
+import {isStringNullOrEmpty} from '../Utils/Utility';
 import {
   ASYNC_AUTH_TOKEN,
   ASYNC_LAST_LOGIN,
@@ -23,17 +20,12 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
 import {TextSizes} from '../styles/textsize.constants';
-import {MarginConstants} from '../styles/margin.constants';
 import AppSettings from '../components/settings/AppSettings';
 import AccountDetails from '../components/settings/AccountDetails';
-import {Sizes} from '../styles/Size.constant';
-import {handleResetPasswordLink} from '../Utils/DeepLinkingUtils';
 import QPSpinner from '../widgets/QPSpinner';
 import {
   addNotificationListeners,
   checkNotificationPermission,
-  postLocalNotification,
-  requestNotificationPermission,
 } from '../Utils/NotificationUtils';
 import messaging from '@react-native-firebase/messaging';
 import {Notifications} from 'react-native-notifications';
@@ -54,7 +46,6 @@ import SegmentSelector from '../components/SegmentSelector';
 import Feedback from '../components/feedback/Feedback';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
 import {clearLoginUser} from '../redux/actions/login.action';
-import PushNotification from '../components/notifications/PushNotifications';
 
 const Drawer = createDrawerNavigator();
 const DetractorStack = createStackNavigator();
@@ -99,38 +90,7 @@ const AppRouter = props => {
 
     Notifications.registerRemoteNotifications();
     checkNotificationPermission().then({});
-
-    /* {"notification":
-      {"android":{},
-      "body":
-      "{\"id\":71,\"type\":2,\"hasRead\":false,\"notificationText\":\"Ticket #520 priority changed to MEDIUM by Mehedi Hasan.\",\"createdAt\":\"2025-01-28T02:55:34.394Z\",\"ticket\":{\"id\":520,\"feedbackId\":27233,\"assignToId\":81504},\"media\":null}",
-      "title":"Ticket priority notification"},
-      "sentTime":1738061734538,"data":{},
-      "from":"163493809530",
-      "messageId":"0:1738061734550760%0ee3cfb10ee3cfb1","ttl":2419200,
-      "collapseKey":"com.questionpro.cxonthego"}
-    
-      */
-
-    /*
-      {
-      "android":{},
-      "body":"{
-        \"id\":26131,
-        \"type\":2,
-        \"hasRead\":false,
-        \"notificationText\":\"Ticket #164001 priority changed to MEDIUM by Mehedi Hasan.\",
-        \"createdAt\":\"2025-04-11T06:36:19.249Z\",
-        \"ticket\":{
-          \"id\":164001,
-          \"feedbackId\":27233,
-          \"assignToId\":81504
-          },
-        \"media\":null
-        }",
-      "title":"Ticket priority notification"
-      }
-*/ addNotificationListeners();
+    addNotificationListeners();
 
     const unsubscribeNotifications = messaging().onMessage(
       async remoteMessage => {

@@ -3,7 +3,6 @@ import WebServiceHandler from '../../api/WebServiceHandler';
 import {
   CLF_GET_NOTIFICATIONS,
   CLF_PATCH_READ_NOTIFCATION,
-  CX_GET_NOTIFICATION_LIST,
   NOTIFICATIONS_PER_PAGE,
 } from '../../api/Constant';
 import {
