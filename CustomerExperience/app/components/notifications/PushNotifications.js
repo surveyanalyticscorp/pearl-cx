@@ -24,7 +24,7 @@ const NotificationItem = ({item, index}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const userInfo = useSelector(state => state.global.userInfo);
-
+  console.log('NOTIFICATION ITEM', JSON.stringify(item));
   return (
     <Pressable
       onPress={() => {
