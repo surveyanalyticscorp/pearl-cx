@@ -21,6 +21,7 @@ import {
   BASE_URL_MID_FIX,
   BASE_URL_NEW_MID_FIX,
   DEV_BASE_URL,
+  CLF_LOGOUT,
 } from '../../api/Constant';
 import {API_ERROR, CLEAR_API_ERROR, IS_LOADING} from '../actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -44,6 +45,12 @@ import {
   GET_BEARER_TOKEN_RESPONSE,
   RESET_PASSWORD_LINK_RESPONSE,
 } from '../actions/login.actions';
+import {getCLFBaseURL} from '../actions/dashboard.actions';
+import {
+  getBearerToken,
+  getBearerTokenStatic,
+  getClfUrl,
+} from '../../Utils/ApiCallUtils';
 
 export function* doAuthenticatePanel(action) {
   let url =
@@ -154,6 +161,8 @@ export function* fetchClfAuth(action) {
         cxUserId: action.param.userID,
         feedbackId: action.param.feedbackID,
         feedbackApiKey: action.param.feedbackApiKey,
+        pushToken: action.param.pushToken,
+        deviceType: action.param.deviceType,
       },
     );
     let bearerToken = clfAuthResponse.data.accessToken;
@@ -275,15 +284,25 @@ export function* doLogoutAction(action) {
       {'Auth-Token': action.token},
       action.param,
     );
-    yield put({type: LOGOUT_RESPONSE, response: response});
+    const clfResponse = yield WebServiceHandler.postNew(
+      getClfUrl(CLF_LOGOUT),
+      getBearerTokenStatic(),
+      {pushToken: action.param.pushToken},
+    );
+    yield put({
+      type: LOGOUT_RESPONSE,
+      response: response,
+      clfResponse: clfResponse,
+    });
 
     console.log('CX_LOGOUT_RESPONSE', JSON.stringify(response));
   } catch (error) {
     console.log('CX_LOGOUT_RESPONSE', 'ERROR', JSON.stringify(error));
-  } finally {
-    yield put({type: CLEAR_API_ERROR, payload: {isLoading: false}});
-    // yield put({type: LOGOUT_RESPONSE, response: {}});
   }
+  // finally {
+  // yield put({type: CLEAR_API_ERROR, payload: {isLoading: false}});
+  // yield put({type: LOGOUT_RESPONSE, response: {}});
+  // }
 }
 
 export function* watchLogout() {

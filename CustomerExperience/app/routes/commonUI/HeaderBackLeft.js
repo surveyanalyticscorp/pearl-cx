@@ -19,8 +19,9 @@ const HeaderBackLeft = props => {
             props.route.params &&
             props.route.params.onBackPress
           ) {
+            console.log('props.route.params.onBackPress');
             props.route.params.onBackPress();
-            navigation.goBack();
+            // navigation.goBack();
           } else {
             navigation.goBack();
           }

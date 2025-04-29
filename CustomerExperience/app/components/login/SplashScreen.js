@@ -78,16 +78,6 @@ function SplashScreen(props) {
         }
       });
 
-      AsyncStorage.getItem(ASYNC_CLF_BASE_URL).then(clfBase => {
-        console.log(
-          'Async Storage: saved base url from splash screen',
-          clfBase,
-        );
-        if (!isStringNullOrEmpty(clfBase)) {
-          global.clfBaseUrl = clfBase;
-        }
-      });
-
       AsyncStorage.getItem(ASYNC_BEARER_TOKEN).then(bearerToken => {
         console.log(
           'Async Storage: saved bearerToken from splash screen',

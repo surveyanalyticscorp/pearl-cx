@@ -21,6 +21,15 @@ const useLogoutProcess = () => {
   const dispatch = useDispatch();
   const authToken = useSelector(state => state.global.authToken);
   const logoutResponse = useSelector(state => state.global.logoutResponse);
+
+  const removeGlobalData = () => {
+    global.baseUrl = '';
+    global.clfBaseUrl = '';
+    global.subscriberId = '';
+    global.bearerToken = '';
+    global.authToken = '';
+  };
+
   const removeCashedData = () => {
     console.log('USE_LOGOUT', 'removeCashedData');
 
@@ -48,10 +57,17 @@ const useLogoutProcess = () => {
   useEffect(() => {
     console.log('USE_LOGOUT', 'useEffect [logoutResponse]');
 
-    if (logoutResponse && logoutResponse.statusCode === 200) {
+    if (logoutResponse && logoutResponse?.statusCode === 200) {
       console.log('USE_LOGOUT', 'logoutResponse.statusCode === 200');
-
-      console.log('LOGOUT_RESPONSE', logoutResponse.statusCode, logoutResponse);
+      Notifications.removeAllDeliveredNotifications();
+      removeCashedData();
+      removeGlobalData();
+      dispatch(clearError(false));
+      console.log(
+        'LOGOUT_RESPONSE',
+        logoutResponse?.statusCode,
+        logoutResponse,
+      );
     }
   }, [logoutResponse]);
 
@@ -87,8 +103,7 @@ const useLogoutProcess = () => {
     };
 
     dispatch(doLogout(authToken, params));
-    removeCashedData();
-    Notifications.removeAllDeliveredNotifications();
+
     console.log('logoutAction');
   };
 

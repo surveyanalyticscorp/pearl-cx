@@ -85,6 +85,7 @@ export const CX_WELCOME_SCREEN_DATA = '/cx.CXWelcomeScreenDataCount';
 // CLF 3.0 APIs
 
 export const CLF_LOGIN = '/mobile/auth/login';
+export const CLF_LOGOUT = '/mobile/auth/logout';
 
 // base-url?dataCenter=us
 export const CLF_GET_BASE_URL = `${CLF_BASE_URL}/base-url`;
@@ -156,6 +157,10 @@ export const CLF_APP_LOGIN_COUNT = '/app-login-count';
 export const CLF_GET_ACTION_HISTORY_PREFIX = `/mobile/tickets/`;
 export const CLF_GET_ACTION_SUMMARY_POSTFIX = `/action-mail`;
 export const CLF_GET_ACTION_DETAILS_POSTFIX = `/action-mails`;
+
+export const CLF_GET_NOTIFICATIONS = `/notifications/users/`;
+export const CLF_PATCH_READ_NOTIFCATION = `/mobile-notifications/`;
+export const NOTIFICATIONS_PER_PAGE = 50;
 
 export const EMAIL = 'email';
 export const PHONE = 'phone';

@@ -44,7 +44,7 @@ import {
   watchUploadFile,
   watchGetCentralizdRootCause,
 } from './ClosedLoopSaga';
-import {watchGetNotification} from './notificationSaga';
+import {watchGetNotification, watchReadNotification} from './notificationSaga';
 import {
   watchFetchAllResponses,
   watchGetPanelMember,
@@ -52,7 +52,6 @@ import {
   watchGetResponseTickets,
   watchGetSurveyResponseDetails,
 } from './feedbackSaga';
-import {getFirstTimeClosedLoopSegmentDetails} from '../actions/dashboard.actions';
 
 // Redux Saga: Root Saga
 export function* rootSaga() {
@@ -60,6 +59,7 @@ export function* rootSaga() {
     fork(watchGetDashboard),
     fork(watchDataCount),
     fork(watchGetNotification),
+    fork(watchReadNotification),
     fork(watchAuthenticatePanel),
     fork(watchDoLogin),
     fork(watchValidatePasswordLink),

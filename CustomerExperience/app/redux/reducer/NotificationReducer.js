@@ -1,10 +1,13 @@
 import {
   CLEAR_NOTIFICATION,
   NOTIFICATION_RECEIVED,
+  READ_NOTIFICATION_RECIEVED,
+  readNotification,
 } from '../actions/notification.actions';
 
 const initialState = {
   notificationLogs: [],
+  readNotification: {},
 };
 
 const notificationReducer = (state = initialState, action) => {
@@ -12,7 +15,7 @@ const notificationReducer = (state = initialState, action) => {
     case NOTIFICATION_RECEIVED: {
       return {
         ...state,
-        notificationLogs: action.response.body.notificationLogs,
+        notificationLogs: action.response,
       };
     }
 
@@ -27,6 +30,13 @@ const notificationReducer = (state = initialState, action) => {
       return {
         ...state,
         notificationLogs: filteredList,
+      };
+    }
+
+    case READ_NOTIFICATION_RECIEVED: {
+      return {
+        ...state,
+        readNotification: action.payload,
       };
     }
 
