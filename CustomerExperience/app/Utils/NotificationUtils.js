@@ -171,9 +171,13 @@ export function addNotificationListeners() {
       //       "ticket":{"assignToId":81504,"feedbackId":27233,"id":165947}
       //   },
       //   "body":"Ticket #165947 priority changed to LOW by Mehedi Hasan."}}
-      if (AppState.currentState === 'active') {
-        actionOnNotification(notification.payload.ticket, 0);
-      }
+      // if (AppState.currentState === 'active') {
+      // actionOnNotification(notification.payload.ticket, 0);
+      const payload = JSON.parse(notification.payload.payload);
+      console.log('NOTIFICATION PAYLOAD', payload);
+      actionOnNotification(payload.ticket, 0);
+
+      // }
       completion();
     },
   );
