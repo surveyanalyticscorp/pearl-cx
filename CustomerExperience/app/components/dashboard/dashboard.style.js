@@ -36,15 +36,17 @@ export const dashboardStyles = StyleSheet.create({
   },
   responseText: {
     color: Colors.filterIconColor,
-    fontFamily: FontFamily.bold,
-    fontSize: TextSizes.secondary,
+    fontFamily: FontFamily.regular,
+    fontWeight: FontWeight._500,
+    fontSize: TextSizes.primary,
     textAlign: 'center',
   },
   response: {
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
-    fontFamily: FontFamily.light,
+    fontFamily: FontFamily.regular,
     textAlign: 'center',
+    fontWeight: FontWeight._300,
     paddingHorizontal: PaddingConstants.tab1,
   },
   ticketButton: {
@@ -166,6 +168,7 @@ export const dashboardStyles = StyleSheet.create({
   ticketTypeContainer: {
     flexDirection: 'row',
     marginHorizontal: MarginConstants.tab1,
+    marginVertical: MarginConstants.halfTab,
 
     justifyContent: 'center',
     alignItems: 'center',

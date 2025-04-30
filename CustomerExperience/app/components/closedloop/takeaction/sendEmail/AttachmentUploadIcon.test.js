@@ -8,8 +8,20 @@ import DocumentPicker from 'react-native-document-picker';
 
 // Create a mock Redux store
 const mockStore = configureStore([]);
+
+// Mock DocumentPicker
 jest.mock('react-native-document-picker', () => ({
   pickSingle: jest.fn(),
+  pick: jest.fn(),
+  types: {
+    allFiles: '*/*',
+    images: 'image/*',
+    plainText: 'text/plain',
+    audio: 'audio/*',
+    pdf: 'application/pdf',
+    zip: 'application/zip',
+    csv: 'text/csv',
+  },
 }));
 
 jest.mock('../../../../redux/actions/closedloop.actions', () => ({
@@ -22,6 +34,7 @@ describe('AttachmentUploadIcon Component', () => {
   beforeEach(() => {
     store = mockStore({});
     store.dispatch = jest.fn(); // Mock dispatch function
+    jest.clearAllMocks();
   });
 
   it('renders AttachmentUploadIcon correctly', () => {
@@ -49,7 +62,10 @@ describe('AttachmentUploadIcon Component', () => {
 
     const attachmentButton = getByTestId('attachment-upload-button');
 
-    fireEvent.press(attachmentButton);
+    await act(async () => {
+      fireEvent.press(attachmentButton);
+    });
+
     await waitFor(() => {
       expect(DocumentPicker.pickSingle).toHaveBeenCalled();
     });

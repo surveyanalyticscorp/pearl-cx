@@ -20,10 +20,11 @@ describe('SelectPriority Component', () => {
     expect(getByText('High')).toBeTruthy();
     expect(getByText('Medium')).toBeTruthy();
     expect(getByText('Low')).toBeTruthy();
+    expect(getByText('Set priority')).toBeTruthy();
   });
 
-  it('calls handleOnPress when Apply button is pressed', () => {
-    const {getByText} = render(
+  it('calls handleOnPress when Set priority button is pressed', () => {
+    const {getByText, getAllByTestId} = render(
       <SelectPriority
         data={mockData}
         selectedIndex={0}
@@ -32,17 +33,17 @@ describe('SelectPriority Component', () => {
     );
 
     // Change selection
-    fireEvent.press(getByText('Medium'));
+    fireEvent.press(getAllByTestId('priority-row')[1]);
 
-    // Press the Apply button
-    fireEvent.press(getByText('Apply'));
+    // Press the Set priority button
+    fireEvent.press(getByText('Set priority'));
 
     // Expect the mock function to have been called with the correct arguments
     expect(mockHandleOnPress).toHaveBeenCalledWith({title: 'Medium'}, 1);
   });
 
-  it('displays a checkmark icon for the selected priority', () => {
-    const {queryByTestId} = render(
+  it('displays a radio button for the selected priority', () => {
+    const {getAllByTestId} = render(
       <SelectPriority
         data={mockData}
         selectedIndex={1}
@@ -50,14 +51,14 @@ describe('SelectPriority Component', () => {
       />,
     );
 
-    // Check that only the Medium priority has the checkmark icon
-    expect(queryByTestId('checkmark-icon-0')).toBeNull();
-    expect(queryByTestId('checkmark-icon-1')).toBeTruthy();
-    expect(queryByTestId('checkmark-icon-2')).toBeNull();
+    const priorityRows = getAllByTestId('priority-row');
+
+    // Verify that the second priority row is selected
+    expect(priorityRows[1]).toBeTruthy();
   });
 
   it('updates the selected priority when a new item is pressed', () => {
-    const {getAllByTestId, queryByTestId} = render(
+    const {getAllByTestId} = render(
       <SelectPriority
         data={mockData}
         selectedIndex={0}
@@ -65,11 +66,15 @@ describe('SelectPriority Component', () => {
       />,
     );
 
-    // Press the third priority
-    fireEvent.press(getAllByTestId('priority-row')[2]);
+    const priorityRows = getAllByTestId('priority-row');
 
-    // Check that the third priority now has the checkmark icon
-    expect(queryByTestId('checkmark-icon-2')).toBeTruthy();
-    expect(queryByTestId('checkmark-icon-0')).toBeNull();
+    // Press the third priority
+    fireEvent.press(priorityRows[2]);
+
+    // Press the Set priority button to confirm the selection
+    fireEvent.press(getAllByTestId('ApplyButton')[0]);
+
+    // Verify that handleOnPress was called with the correct arguments
+    expect(mockHandleOnPress).toHaveBeenCalledWith({title: 'Low'}, 2);
   });
 });

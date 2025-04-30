@@ -8,6 +8,7 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import StatusItem from './StatusItem';
 import {PaddingConstants} from '../../../styles/padding.constants';
+import {translate} from '../../../Utils/MultilinguaUtils';
 const statusListItemSeparator = () => (
   <ListItemSeparator style={{marginHorizontal: MarginConstants.tab1}} />
 );
@@ -44,7 +45,10 @@ const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
         renderItem={renderRow}
         ItemSeparatorComponent={statusListItemSeparator}
         ListFooterComponent={
-          <ApplyButton buttonText={'Set status'} onPress={onApplyPress} />
+          <ApplyButton
+            buttonText={translate('close_loop.status')}
+            onPress={onApplyPress}
+          />
         }
       />
     </View>

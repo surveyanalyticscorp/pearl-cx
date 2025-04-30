@@ -19,6 +19,7 @@ import DrawerBackground from './commonUI/DrawerBackground';
 import TextLabel from '../../app/widgets/TextLabel/TextLabel';
 import useLogoutProcess from './drawerContent/useLogoutProcess';
 import logoutDialog from './drawerContent/LogoutDialog';
+import ResponsesIcon from '../widgets/IconWidget/ResponsesIcon';
 
 const LogoutButtonIcon = () => {
   return (
@@ -77,6 +78,12 @@ const ClosedLoopIcon = () => (
   </View>
 );
 
+const DrawerResponsesIcon = () => (
+  <View style={styles.rowIcon}>
+    <ResponsesIcon sizeMultiplyer={1.3} />
+  </View>
+);
+
 const DrawerButtonIcon = ({name}) => (
   <Icon
     size={1.3 * Sizes.icons}
@@ -123,7 +130,7 @@ const DrawerContent = ({navigation}) => {
     },
     responses: {
       title: 'Responses',
-      frontIcon: <DrawerButtonIcon name={'feedback'} />,
+      frontIcon: <DrawerResponsesIcon />,
       onPress: () => {
         navigation.navigate('Responses');
       },

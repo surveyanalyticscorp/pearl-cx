@@ -9,5 +9,6 @@ export function getClfUrl(url) {
 }
 
 export function getBearerTokenStatic() {
+  console.log('BEARER TOKEN', global.bearerToken);
   return {Authorization: `Bearer ${global.bearerToken}`};
 }

@@ -1950,6 +1950,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@expo/config-plugins@npm:^4.1.5":
+  version: 4.1.5
+  resolution: "@expo/config-plugins@npm:4.1.5"
+  dependencies:
+    "@expo/config-types": ^45.0.0
+    "@expo/json-file": 8.2.36
+    "@expo/plist": 0.0.18
+    "@expo/sdk-runtime-versions": ^1.0.0
+    "@react-native/normalize-color": ^2.0.0
+    chalk: ^4.1.2
+    debug: ^4.3.1
+    find-up: ~5.0.0
+    getenv: ^1.0.0
+    glob: 7.1.6
+    resolve-from: ^5.0.0
+    semver: ^7.3.5
+    slash: ^3.0.0
+    xcode: ^3.0.1
+    xml2js: 0.4.23
+  checksum: f631217251281b1e25949adbec175ef1362dd08d837ce676ed8350c1401b5764091ba100f76f42adb623e4cdcde5b270be77ad6606f978d419c07fd8c81b701c
+  languageName: node
+  linkType: hard
+
 "@expo/config-types@npm:^41.0.0":
   version: 41.0.0
   resolution: "@expo/config-types@npm:41.0.0"
@@ -1961,6 +1984,13 @@ __metadata:
   version: 42.0.0
   resolution: "@expo/config-types@npm:42.0.0"
   checksum: e9b14f81c0b360dc872e5652a2d449f0f15508853690af948b0c363a96398850e3e7ee712f20d6f7c5eefd351f3c559419e35a7a894297a56abf94ede0d9cd53
+  languageName: node
+  linkType: hard
+
+"@expo/config-types@npm:^45.0.0":
+  version: 45.0.0
+  resolution: "@expo/config-types@npm:45.0.0"
+  checksum: 9b4866540654da61af0985ebfc975b3cb690625acf7742443a7e56263bf134b261e22719720982223407f8957d08a3646178c79f482861218882f0956d804021
   languageName: node
   linkType: hard
 
@@ -2009,6 +2039,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@expo/json-file@npm:8.2.36":
+  version: 8.2.36
+  resolution: "@expo/json-file@npm:8.2.36"
+  dependencies:
+    "@babel/code-frame": ~7.10.4
+    json5: ^1.0.1
+    write-file-atomic: ^2.3.0
+  checksum: 37ce80b3472fef2a56136ebff5993d98ab4fbd45c4d7791ff47be80438dbeabd84bc699a401da0c314357ef65d8fff87a5a1241b3119db2d575878f9321bd1e7
+  languageName: node
+  linkType: hard
+
 "@expo/plist@npm:0.0.13":
   version: 0.0.13
   resolution: "@expo/plist@npm:0.0.13"
@@ -2031,7 +2072,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hapi/hoek@npm:^9.0.0, @hapi/hoek@npm:^9.3.0":
+"@expo/plist@npm:0.0.18":
+  version: 0.0.18
+  resolution: "@expo/plist@npm:0.0.18"
+  dependencies:
+    "@xmldom/xmldom": ~0.7.0
+    base64-js: ^1.2.3
+    xmlbuilder: ^14.0.0
+  checksum: 42f5743fcd2a07b55a9f048d27cf0f273510ab35dde1f7030b22dc8c30ab2cfb65c6e68f8aa58fbcfa00177fdc7c9696d0004083c9a47c36fd4ac7fea27d6ccc
+  languageName: node
+  linkType: hard
+
+"@expo/sdk-runtime-versions@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@expo/sdk-runtime-versions@npm:1.0.0"
+  checksum: 0942d5a356f590e8dc795761456cc48b3e2d6a38ad2a02d6774efcdc5a70424e05623b4e3e5d2fec0cdc30f40dde05c14391c781607eed3971bf8676518bfd9d
+  languageName: node
+  linkType: hard
+
+"@hapi/hoek@npm:^9.0.0":
   version: 9.3.0
   resolution: "@hapi/hoek@npm:9.3.0"
   checksum: 4771c7a776242c3c022b168046af4e324d116a9d2e1d60631ee64f474c6e38d1bb07092d898bf95c7bc5d334c5582798a1456321b2e53ca817d4e7c88bc25b43
@@ -2754,43 +2813,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-firebase/analytics@npm:10.8.1":
-  version: 10.8.1
-  resolution: "@react-native-firebase/analytics@npm:10.8.1"
+"@react-native-firebase/analytics@npm:14.12.0":
+  version: 14.12.0
+  resolution: "@react-native-firebase/analytics@npm:14.12.0"
   peerDependencies:
-    "@react-native-firebase/app": 10.8.1
-  checksum: 0def12f91a96105c234947afa1bed970336b24d3a6265a17b5f36d890e5afaa4eea958bfe66fd2e8344845d1e1908cd9f9abc7227843b0dca1a8a5f71edf39e3
+    "@react-native-firebase/app": 14.12.0
+  checksum: 77bbc0123bfc40255607a8ea805fddf0922e9411eb81eb531e735ee3cc9d4c9866fcf2db4635bcaf6240a74c5a93a36ca97d6469ccb94b38df8332fe7818bf81
   languageName: node
   linkType: hard
 
-"@react-native-firebase/app@npm:10.8.1":
-  version: 10.8.1
-  resolution: "@react-native-firebase/app@npm:10.8.1"
+"@react-native-firebase/app@npm:14.12.0":
+  version: 14.12.0
+  resolution: "@react-native-firebase/app@npm:14.12.0"
   dependencies:
+    "@expo/config-plugins": ^4.1.5
     opencollective-postinstall: ^2.0.1
     superstruct: ^0.6.2
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 4f3d374d740c4d8d10fa6ed79b98ee4016c02f43bc1c5edbd9eaeb9f6d2af0c2d69b2004402240cfa11aca9ba1963bccfcb99bf2a98c65ded5dfdacf04ce4e63
+  checksum: 81307665bec031fa2ec3139369cf87fd5ad6b5231f8306674cd30ad1e7a1e81842b55f679f427067bdf415cc43775cba87141dc641f6c22b29e63eeee3989941
   languageName: node
   linkType: hard
 
-"@react-native-firebase/dynamic-links@npm:10.8.1":
-  version: 10.8.1
-  resolution: "@react-native-firebase/dynamic-links@npm:10.8.1"
+"@react-native-firebase/messaging@npm:14.12.0":
+  version: 14.12.0
+  resolution: "@react-native-firebase/messaging@npm:14.12.0"
   peerDependencies:
-    "@react-native-firebase/app": 10.8.1
-  checksum: 81ebed53fc3f63ed174a40de335594dcf97858076899a68558931ac4e9293716f0d13a79558fb3072002c3dfb56af58f2f1af787cd695e840d4914d85c7ee2a3
-  languageName: node
-  linkType: hard
-
-"@react-native-firebase/messaging@npm:10.8.1":
-  version: 10.8.1
-  resolution: "@react-native-firebase/messaging@npm:10.8.1"
-  peerDependencies:
-    "@react-native-firebase/app": 10.8.1
-  checksum: 73cff8fb4aa2b511f28bb9e28a6e16a8819894314705546ade4e7da22e95f66d96f2422064230ce30c56dd001ea661cbc7530ce3727d94736903d4a76fab8a91
+    "@react-native-firebase/app": 14.12.0
+  checksum: b685a25ca2571ff76decc5391a6d03a3dd0230bb287cdc9dbe9108dd20c3f25f971a2a3c7cb26ae106b485f49080f18a9b99bba152f7cae136606e2ca46b2758
   languageName: node
   linkType: hard
 
@@ -2805,6 +2856,13 @@ __metadata:
   version: 2.0.0
   resolution: "@react-native/normalize-color@npm:2.0.0"
   checksum: 2da373297f0d22b700edb9ab1b2cca34684e94a5dfe172e1cfd114e74ac17e139e802bc671e9868e0a580190eccbf3fa804f67be8cc1d9cbd0e216e994495931
+  languageName: node
+  linkType: hard
+
+"@react-native/normalize-color@npm:^2.0.0":
+  version: 2.1.0
+  resolution: "@react-native/normalize-color@npm:2.1.0"
+  checksum: 8ccbd40b3c7629f1dc97b3e9aadd95fd3507fcf2e37535a6299a70436ab891c34cbdc4240b07380553d6e85dd909e23d5773b5be1da2906b026312e0b0768838
   languageName: node
   linkType: hard
 
@@ -3718,10 +3776,9 @@ __metadata:
     "@react-native-community/cli-platform-ios": ^6.0.0
     "@react-native-community/eslint-config": ^2.0.0
     "@react-native-community/netinfo": 9.4.1
-    "@react-native-firebase/analytics": 10.8.1
-    "@react-native-firebase/app": 10.8.1
-    "@react-native-firebase/dynamic-links": 10.8.1
-    "@react-native-firebase/messaging": 10.8.1
+    "@react-native-firebase/analytics": 14.12.0
+    "@react-native-firebase/app": 14.12.0
+    "@react-native-firebase/messaging": 14.12.0
     "@react-navigation/core": ^5.16.1
     "@react-navigation/drawer": 5.12.9
     "@react-navigation/material-top-tabs": ^5.3.15
@@ -3779,7 +3836,7 @@ __metadata:
     react-native-mock: ^0.3.1
     react-native-mock-render: ^0.1.9
     react-native-modal: ^13.0.0
-    react-native-notifications: 3.5.0
+    react-native-notifications: 5.1.0
     react-native-pell-rich-editor: ^1.8.8
     react-native-phone-number-input: ^2.1.0
     react-native-pie: ^1.1.2
@@ -12418,13 +12475,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-notifications@npm:3.5.0":
-  version: 3.5.0
-  resolution: "react-native-notifications@npm:3.5.0"
+"react-native-notifications@npm:5.1.0":
+  version: 5.1.0
+  resolution: "react-native-notifications@npm:5.1.0"
   peerDependencies:
-    react: ">=0.14.5"
-    react-native: ">=0.25.1"
-  checksum: ba657d2ca35ff59aaf7f77d782bc637d7ed90f6362be14f817235309023429c91ec993df86e5c95e74e9c8ddb661448812af41b56a80b6e934742f4a291c064e
+    react: "*"
+    react-native: "*"
+  checksum: 27a201942fcb9e12c4d96ad9b0cb53f547da833e5864193285c68e2dcf03808601d396ea8292e13f7608228784ca70eb34447a13564758d8b7725492a59fc975
   languageName: node
   linkType: hard
 
@@ -15916,7 +15973,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xml2js@npm:^0.4.23":
+"xml2js@npm:0.4.23, xml2js@npm:^0.4.23":
   version: 0.4.23
   resolution: "xml2js@npm:0.4.23"
   dependencies:

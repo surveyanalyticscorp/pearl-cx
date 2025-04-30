@@ -39,19 +39,22 @@ export default function TicketDetails(props) {
   const TicketTabs = createMaterialTopTabNavigator();
   useEffect(() => {
     dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
-  }, []);
+  }, [ticketItem.id]);
 
-  const callApis = useCallback(authToken_ => {
-    dispatch(getRootCauseList(authToken_, global.subscriberId));
-    dispatch(getActionList(authToken_, global.subscriberId));
-    if (!StringUtils.isEmptyOrNull(ticketItem.responseId)) {
-      dispatch(
-        getResponseDetailsByResponseId(authToken, {
-          responseSetID: ticketItem.responseId,
-        }),
-      );
-    }
-  }, []);
+  const callApis = useCallback(
+    authToken_ => {
+      dispatch(getRootCauseList(authToken_, global.subscriberId));
+      dispatch(getActionList(authToken_, global.subscriberId));
+      if (!StringUtils.isEmptyOrNull(ticketItem.responseId)) {
+        dispatch(
+          getResponseDetailsByResponseId(authToken, {
+            responseSetID: ticketItem.responseId,
+          }),
+        );
+      }
+    },
+    [ticketItem.id],
+  );
 
   useEffect(() => {
     props.navigation.setOptions({

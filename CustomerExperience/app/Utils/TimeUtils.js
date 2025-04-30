@@ -4,7 +4,6 @@ import {isStringNullOrEmpty} from './Utility';
 import {TOKEN_VALIDATION_DURATION} from '../api/Constant';
 
 function convertToDateTime(date) {
-  // return moment(date).local().format(DMY_AT_TIME_FORMAT);
   return moment(date).local().format(HalfMonthDateYearFormat);
 }
 
@@ -21,8 +20,9 @@ export const getDateTimeAgo = date => {
   const ONE_DAY = 24 * ONE_HOUR;
 
   const now = new Date();
-  const diff = now.getTime() - date.getTime() + constantTimeOffset();
+  const diff = now.getTime() - date.getTime();
   console.log('MOMNET_OBJ', JSON.stringify(date.getTime()));
+
   if (diff < ONE_MINUTE) {
     return 'just now';
   } else if (diff < ONE_HOUR) {

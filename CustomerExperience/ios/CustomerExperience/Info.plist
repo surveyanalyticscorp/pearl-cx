@@ -37,10 +37,6 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<true/>
-	<key>FirebaseDynamicLinksCustomDomains</key>
-	<array>
-		<string>https://mobileapps.questionpro.com/cx/</string>
-	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms-apps</string>
@@ -65,7 +61,7 @@
 	<key>NSDownloadsFolderUsageDescription</key>
 	<string>To access device files for upload upon user request</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>
@@ -107,7 +103,7 @@
 		<string>FiraSans-Italic.otf</string>
 		<string>FiraSans-LightItalic.otf</string>
 		<string>FiraSans-MediumItalic.otf</string>
-		<string>firasans-regularitalic.ttf</string>
+		<string>FiraSans-RegularItalic.otf</string>
 		<string>FiraSans-SemiBoldItalic.otf</string>
 		<string>FiraSans-Thin.otf</string>
 		<string>FiraSans-ThinItalic.otf</string>
@@ -120,8 +116,8 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>fetch</string>
 		<string>remote-notification</string>
+		<string>fetch</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>CXLaunchScreen</string>
@@ -132,7 +128,7 @@
 	<key>UIRequiresFullScreen</key>
 	<true/>
 	<key>UIStatusBarStyle</key>
-	<string/>
+	<string></string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

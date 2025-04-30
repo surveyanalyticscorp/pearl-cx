@@ -8,6 +8,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import DeviceInfo from 'react-native-device-info';
 import {
+  getDeviceType,
   isStringNullOrEmpty,
   showErrorFlashMessage,
   validateEmail,
@@ -56,7 +57,7 @@ export let getApiValidationErrorMessage = errorMessage => {
       ? errorMessage?.errorAlert
       : errorMessage?.validationErrors[0]?.error;
   }
-  return 'Error';
+  return 'Network Error';
 };
 
 export const checkValidation = ({email, password, accessCode}) => {
@@ -101,15 +102,26 @@ export const RenderForgotPasswordButton = () => {
     />
   );
 };
-export const setGlobalData = (baseUrl, subscriberId, globalAccessCode) => {
+export const setGlobalData = (baseUrl, clfBaseUrl, subscriberId) => {
+  global.baseUrl = baseUrl;
+  global.subscriberId = subscriberId;
+  global.clfBaseUrl = clfBaseUrl;
+  console.log('BASEURL', baseUrl);
+  console.log('CLF BASE URL', clfBaseUrl);
+  console.log('SUBSCRIBER_ID', subscriberId);
+};
+
+export const setAsyncStorageData = (
+  baseUrl,
+  subscriberId,
+  globalAccessCode,
+  clfBaseUrl,
+) => {
   AsyncStorage.setItem(BASE_URL, baseUrl).then();
   AsyncStorage.setItem(SUBSCRIBER_ID, subscriberId).then();
   AsyncStorage.setItem(ACCESS_CODE, globalAccessCode).then();
   AsyncStorage.setItem(ASYNC_LOGIN_EXPIRE_DATE, getExpireDate());
-  global.baseUrl = baseUrl;
-  global.subscriberId = subscriberId;
-  console.log('BASEURL', baseUrl);
-  console.log('SUBSCRIBER_ID', subscriberId);
+  AsyncStorage.setItem(ASYNC_CLF_BASE_URL, clfBaseUrl);
 };
 
 export const RenderSpinnerLoginButton = ({login}) => {
@@ -124,6 +136,7 @@ export const RenderSpinnerLoginButton = ({login}) => {
     clfBaseUrl,
     subscriberId,
     userInfo,
+    bearerToken,
   } = useSelector(state => state.global);
 
   const globalAccessCode = useSelector(state => state.global.accessCode);
@@ -131,38 +144,47 @@ export const RenderSpinnerLoginButton = ({login}) => {
   useLoginError(isError, errorMessage);
 
   useEffect(() => {
-    if (baseUrl && StringUtils.isNotEmpty(baseUrl)) {
-      setGlobalData(baseUrl, subscriberId, globalAccessCode);
-      onSignInPress();
+    if (
+      baseUrl &&
+      StringUtils.isNotEmpty(
+        baseUrl && subscriberId && StringUtils.isNotEmpty(subscriberId),
+      )
+    ) {
+      setGlobalData(baseUrl, subscriberId);
+      handleSignInWithPushToken();
     }
   }, [baseUrl]);
 
   useEffect(() => {
     if (clfBaseUrl && StringUtils.isNotEmpty(clfBaseUrl)) {
-      AsyncStorage.setItem(ASYNC_CLF_BASE_URL, clfBaseUrl);
       global.clfBaseUrl = clfBaseUrl;
+      setAsyncStorageData(baseUrl, subscriberId, globalAccessCode, clfBaseUrl);
       callClfAuth(clfBaseUrl);
     }
   }, [clfBaseUrl]);
 
   function callClfAuth() {
-    const data = {
-      clfBaseUrl,
-      emailAddress: userInfo.emailAddress,
-      userID: userInfo.userID,
-      feedbackID: userInfo.feedbackID,
-      feedbackApiKey: userInfo.feedbackApiKey,
-    };
-    dispatch(clearError());
-    dispatch(getClfAuth(data));
+    AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(token => {
+      const data = {
+        clfBaseUrl,
+        emailAddress: userInfo.emailAddress,
+        userID: userInfo.userID,
+        feedbackID: userInfo.feedbackID,
+        feedbackApiKey: userInfo.feedbackApiKey,
+        pushToken: token,
+        deviceType: getDeviceType(Platform.OS),
+      };
+      console.log('CLF AUTH DATA', JSON.stringify(data));
+      dispatch(clearError());
+      dispatch(getClfAuth(data));
+    });
   }
 
-  const onSignInPress = () => {
-    Keyboard.dismiss();
+  const handleSignInWithPushToken = () => {
     AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(token => {
       if (isStringNullOrEmpty(token)) {
-        console.log('onSignInPress: token:', token);
-        checkNotificationPermission().then(() => onSignInPress());
+        console.log('handleSignInWithPushToken: token:', token);
+        checkNotificationPermission().then(() => handleSignInWithPushToken());
       } else {
         console.log('loginAction: called:');
 
@@ -200,6 +222,7 @@ export const RenderSpinnerLoginButton = ({login}) => {
 
   const onPress = () => {
     if (checkValidation(login)) {
+      Keyboard.dismiss();
       dispatch(authenticatePanel({accessCode: login?.accessCode ?? ''}));
     }
   };

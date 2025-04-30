@@ -4,8 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <Firebase/Firebase.h>
-#import <RNFBDynamicLinks/RNFBDynamicLinksAppDelegateInterceptor.h>
-#import "RNNotifications.h"
+#import <RNNotifications.h>
 //#import <CodePush/CodePush.h>
 @implementation AppDelegate
 
@@ -24,9 +23,9 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  if ([FIRApp defaultApp] == nil) {
+//  if ([FIRApp defaultApp] == nil) {
   [FIRApp configure];
-  }
+//  }
   [RNNotifications startMonitorNotifications];
 
   return YES;
@@ -39,18 +38,6 @@
 //#else
 //  return [CodePush bundleURL];
 //#endif
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-            options:(NSDictionary<NSString *, id> *)options {
-    return [[RNFBDynamicLinksAppDelegateInterceptor sharedInstance] application:application openURL:url options:options];
-}
-
-- (BOOL)application:(UIApplication *)application
-continueUserActivity:(NSUserActivity *)userActivity
- restorationHandler:(void (^)(NSArray *))restorationHandler {
-     return [[RNFBDynamicLinksAppDelegateInterceptor sharedInstance] application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
 }
 
 @end

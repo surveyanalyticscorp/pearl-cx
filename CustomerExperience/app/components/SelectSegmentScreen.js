@@ -15,13 +15,14 @@ import {getClosedLoopSegmentDetails} from '../redux/actions/dashboard.actions';
 import {CloseButton, NoItemsFound} from '../routes/commonUI/CommonUI';
 import ListItemSeparator from '../routes/commonUI/ListItemSeparator';
 import {Colors} from '../styles/color.constants';
-import {FontFamily} from '../styles/font.constants';
+import {FontFamily, FontWeight} from '../styles/font.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {translate} from '../Utils/MultilinguaUtils';
 import CheckmarkIcon from '../routes/commonUI/CheckmarkIcon';
+import {baseTextStyles} from '../styles/text.styles';
 
 const SelectSegmentScreen = props => {
   const dispatch = useDispatch();
@@ -186,7 +187,7 @@ const SelectSegmentScreen = props => {
       <View style={styles.container}>
         <View style={styles.headerRow}>
           <Text style={styles.headerText}>
-            {translate('select_segment.select_segment')}
+            {translate('dashboard.segment')}
           </Text>
           <CloseButton color={Colors.filterIconColor} />
         </View>
@@ -265,7 +266,12 @@ const styles = StyleSheet.create({
     marginStart: MarginConstants.halfTab,
     color: Colors.filterIconColor,
   },
-  searchInput: {},
+  searchInput: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    fontWeight: FontWeight._400,
+    color: Colors.filterIconColor,
+  },
   bottomBar: {
     borderBottomWidth: 0.5,
 

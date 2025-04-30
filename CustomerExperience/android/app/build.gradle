@@ -111,6 +111,7 @@ def enableProguardInReleaseBuilds = false
  * this variant is about 6MiB larger per architecture than default.
  */
 def jscFlavor = 'org.webkit:android-jsc:+'
+def work_version = "2.8.0-alpha02"
 
 /**
  * Whether to enable the Hermes VM.
@@ -133,10 +134,10 @@ android {
         applicationId "com.questionpro.cxonthego"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 24
-        versionName "1.8.5"
+        versionCode 26
+        versionName "1.8.6"
         multiDexEnabled true
-    }   
+    }
     splits {
         abi {
             reset()
@@ -216,6 +217,10 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     implementation 'org.jetbrains:annotations:16.0.2'
+    implementation 'com.google.firebase:firebase-messaging:23.0.8'
+//    implementation("androidx.work:work-runtime:$work_version"){
+//        force = true
+//    }
 
 
 

@@ -33,6 +33,7 @@ import {
 } from '../../Utils/Analytic.constants';
 import AppInfo from '../../Utils/AppInfo';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
+import {updateClfBaseUrl} from '../../redux/actions/login.actions';
 import {
   getEmailTemplates,
   getDefaultEmailTemplate,
@@ -186,6 +187,7 @@ export const WelcomeScreen = () => {
         clfBase,
       );
       global.clfBaseUrl = clfBase;
+      dispatch(updateClfBaseUrl(clfBase));
     });
 
     AsyncStorage.getItem(ASYNC_BEARER_TOKEN).then(bearerToken_ => {
