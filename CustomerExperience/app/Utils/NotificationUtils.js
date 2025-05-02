@@ -5,6 +5,7 @@ import {isStringNullOrEmpty} from './Utility';
 import {Notifications} from 'react-native-notifications';
 import {AppState, PermissionsAndroid, Platform} from 'react-native';
 import * as RootNagation from '../routes/RootNavigation';
+import {CommonActions} from '@react-navigation/native';
 
 export const requestNotificationPermission = async () => {
   if (Platform.OS === 'android') {
@@ -110,7 +111,7 @@ export function addNotificationListeners() {
     console.log('Notification opened from background state:', remoteMessage);
     const payload = JSON.parse(remoteMessage.data.payload);
     if (payload.ticket) {
-      actionOnNotification(payload.ticket, 0);
+      actionOnNotification(payload.ticket, payload.id, 0);
     }
   });
 
@@ -137,7 +138,7 @@ export function addNotificationListeners() {
         );
         const payload = JSON.parse(remoteMessage.data.payload);
         if (payload.ticket) {
-          actionOnNotification(payload.ticket, 10000);
+          actionOnNotification(payload.ticket, payload.id, 10000);
         }
       }
     });
@@ -175,7 +176,7 @@ export function addNotificationListeners() {
       // actionOnNotification(notification.payload.ticket, 0);
       const payload = JSON.parse(notification.payload.payload);
       console.log('NOTIFICATION PAYLOAD', payload);
-      actionOnNotification(payload.ticket, 0);
+      actionOnNotification(payload.ticket, payload.id, 0);
 
       // }
       completion();
@@ -183,7 +184,11 @@ export function addNotificationListeners() {
   );
 }
 
-export async function actionOnNotification(ticketItem, timeOut) {
+export async function actionOnNotification(
+  ticketItem,
+  notificationId,
+  timeOut,
+) {
   console.log('Attempting to navigate to TicketDetails with:', ticketItem);
 
   // Wait for navigation reference to be available
@@ -214,6 +219,17 @@ export async function actionOnNotification(ticketItem, timeOut) {
       currentRoute?.params?.ticketItem?.id === ticketItem.id
     ) {
       console.log('Already on the correct ticket details screen');
+
+      // Update the route params instead of navigating
+      RootNagation.navigationRef.current?.dispatch({
+        ...CommonActions.setParams({
+          ticketItem: ticketItem, // new or updated data
+          parentRoute: 'Dashboard', // if needed
+          notificationId: notificationId, // if needed
+        }),
+        source: currentRoute.key,
+      });
+
       return;
     }
 
@@ -221,6 +237,7 @@ export async function actionOnNotification(ticketItem, timeOut) {
     RootNagation.navigate('TicketDetails', {
       ticketItem: ticketItem,
       parentRoute: 'Dashboard',
+      notificationId: notificationId,
     });
     console.log('Navigation to TicketDetails completed');
   } catch (error) {

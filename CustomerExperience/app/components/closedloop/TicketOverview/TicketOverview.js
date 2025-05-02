@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
-import {View} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {RefreshControl, View} from 'react-native';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {getStatusIndexById, statusList} from '../../../Utils/TicketUtils';
 import SelectStatus from '../takeaction/SelectStatus';
 import {translate} from '../../../Utils/MultilinguaUtils';
@@ -19,6 +19,7 @@ import AssignedToView from './components/AssignedToView';
 import ActionBottomSheet from './components/ActionBottomSheet';
 import PriorityBottomSheet from './components/PriorityBottomSheet';
 import AssigneeBottomSheet from './components/AssigneeBottomSheet';
+import {getClosedLoopTicketItem} from '../../../redux/actions/dashboard.actions';
 
 const TicketStatusPriorityView = ({children}) => {
   return (
@@ -32,11 +33,14 @@ export default function TicketOverview(props) {
 
   const updateTicket = useUpdateTicket();
   const ticketDetails = useSelector(state => state.dashboard.ticket);
-
+  const feedbackApiKey = useSelector(
+    state => state.global.userInfo.feedbackApiKey,
+  );
+  const [refreshing, setRefreshing] = useState(false);
   const [statusIndex, setStatusIndex] = useState(
     getStatusIndexById(ticketDetails.status ?? -1),
   );
-
+  const dispatch = useDispatch();
   console.log('TTTTT', ticketDetails ?? '');
 
   /// BOTTOM SHEET
@@ -108,12 +112,25 @@ export default function TicketOverview(props) {
     statusBottomSheet.current.snapTo(statusBottomSheetSnapPoints.length - 1);
   };
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+
+    dispatch(getClosedLoopTicketItem('', ticketDetails.id, feedbackApiKey));
+
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   return (
     <TicketOverviewContainer>
       <Animated.ScrollView
         style={{
           opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-        }}>
+        }}
+        refreshControl={
+          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+        }>
         <View style={ticketOverviewStyles.container}>
           <TicketStatusPriorityView>
             <StatusView onPress={handleStatusSelection} />

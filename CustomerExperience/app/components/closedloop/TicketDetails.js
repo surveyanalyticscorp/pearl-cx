@@ -31,15 +31,17 @@ export default function TicketDetails(props) {
   );
   const ticketItem = props.route.params.ticketItem;
   const prevScreen = props.route.params.prevScreen;
+  const notificationId = props.route.params.notificationId;
 
   const dispatch = useDispatch();
   const windowDimensions = useWindowDimensions();
 
   console.log(`Ticket Detailsssss: ${JSON.stringify(ticketItem)}`);
   const TicketTabs = createMaterialTopTabNavigator();
+
   useEffect(() => {
     dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
-  }, [ticketItem.id]);
+  }, [ticketItem.id, notificationId]);
 
   const callApis = useCallback(
     authToken_ => {
@@ -53,7 +55,7 @@ export default function TicketDetails(props) {
         );
       }
     },
-    [ticketItem.id],
+    [notificationId, ticketItem.id],
   );
 
   useEffect(() => {
