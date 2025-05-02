@@ -285,10 +285,10 @@ similarity index 100%
 rename from node_modules/react-native/ReactCommon/hermes/inspector/tools/msggen/.npmignore
 rename to node_modules/react-native/ReactCommon/hermes/inspector/tools/msggen/.gitignore
 diff --git a/node_modules/react-native/react.gradle b/node_modules/react-native/react.gradle
-index 2aefa12..86ff726 100644
+index 2aefa12..911d0ca 100644
 --- a/node_modules/react-native/react.gradle
 +++ b/node_modules/react-native/react.gradle
-@@ -162,6 +162,22 @@ afterEvaluate {
+@@ -162,6 +162,21 @@ afterEvaluate {
                  jsSourceMapsDir.deleteDir()
                  jsSourceMapsDir.mkdirs()
              }
@@ -307,15 +307,6 @@ index 2aefa12..86ff726 100644
 +moveFunc.curry("xxhdpi").call()
 +moveFunc.curry("xxxhdpi").call()
 +}
-+
  
              // Set up inputs and outputs so gradle can cache the result
              inputs.files fileTree(dir: reactRoot, excludes: inputExcludes)
-diff --git a/node_modules/react-native/scripts/.packager.env b/node_modules/react-native/scripts/.packager.env
-new file mode 100644
-index 0000000..21a13cf
---- /dev/null
-+++ b/node_modules/react-native/scripts/.packager.env
-@@ -0,0 +1 @@
-+export RCT_METRO_PORT=8081
-\ No newline at end of file
