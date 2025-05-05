@@ -7,6 +7,7 @@ import {
   Pressable,
   FlatList,
   SafeAreaView,
+  Modal,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -39,6 +40,8 @@ import {apiHandler} from '../../../api/ApiHandler';
 import {AI_ROUTER_API_KEY, AI_ROUTER_API_URL} from '../../../api/Constant';
 import QPSpinner from '../../../widgets/QPSpinner';
 import ActionButton from 'react-native-action-button';
+import AiDraftButton from './sendEmail/AiDraftButton';
+import AIEmailDraftModal from './AIEmailDraftModal';
 
 export const RenderHeader = () => {
   return (
@@ -151,9 +154,7 @@ export const AttachmentItem = ({item, index}) => {
       <Text numberOfLines={1} style={styles.attachmentText}>
         {StringUtils.truncateFileName(item.fileName)}
       </Text>
-      <Pressable style={{alignSelf: 'flex-end'}} onPress={() => {
-
-      }}>
+      <Pressable style={{alignSelf: 'flex-end'}} onPress={() => {}}>
         <IonIcon name="close" size={20} color={Colors.filterIconColor} />
       </Pressable>
     </Pressable>
@@ -209,7 +210,7 @@ export const SendEmail = props => {
   };
   const [body, setBody] = useState(sampleEmailBody);
   const [isPromptVisible, setPromptVisibility] = useState(false);
-  const [isActionButtonVisible, setActionButtonVisibility] = useState(true);
+  // const [isActionButtonVisible, setActionButtonVisibility] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
@@ -223,6 +224,7 @@ export const SendEmail = props => {
     state => state.dashboard?.ticket?.panelMember?.name,
   );
   const {userInfo} = useSelector(state => state.global);
+  const [emailDraftModalVisible, setEmailDraftModalVisible] = useState(false);
 
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
@@ -236,13 +238,17 @@ export const SendEmail = props => {
   };
 
   useEffect(() => {
-    if (emailSentResponse && emailSentResponse.status && emailSentResponse.status === "success") {
+    if (
+      emailSentResponse &&
+      emailSentResponse.status &&
+      emailSentResponse.status === 'success'
+    ) {
       setTimeout(() => {
         navigation.goBack();
       }, 1000);
-      dispatch(resetSendEmailResponse())
+      dispatch(resetSendEmailResponse());
     }
-  }, [emailSentResponse])
+  }, [emailSentResponse]);
 
   useEffect(() => {
     if (!isObjectEmpty(defaultEmail)) {
@@ -265,14 +271,14 @@ export const SendEmail = props => {
     richText.current.setContentHTML('');
   }, []);
 
-  useEffect(() => {
-    aiRouterAPICall();
-  }, [emailTemplates]);
+  // useEffect(() => {
+  //   aiRouterAPICall();
+  // }, [emailTemplates]);
 
   const onPressTemplate = useCallback(() => {
     richText.current.dismissKeyboard();
     setIsBottomSheetVisible(true);
-    if (bs.current) {      
+    if (bs.current) {
       bs.current.snapTo(0);
     }
   }, []);
@@ -356,16 +362,14 @@ export const SendEmail = props => {
       },
       response => {
         richText.current.setContentHTML(
-          response.result.documents[0].output[0].value.body
+          response.result.documents[0].output[0].value.body,
         );
         onChangeSubject(response.result.documents[0].output[0].value.subject);
         onChangeEmailBody(response.result.documents[0].output[0].value.body);
         setIsLoading(false);
       },
       error => {
-        richText.current.setContentHTML(
-          defaultEmail.templateText
-        );
+        richText.current.setContentHTML(defaultEmail.templateText);
         onChangeSubject(defaultEmail.subject);
         onChangeEmailBody(defaultEmail.templateText);
         setIsLoading(false);
@@ -397,18 +401,16 @@ export const SendEmail = props => {
         <SelectEmailTemplate
           data={emailTemplates}
           handleOnPress={item => {
-            setActionButtonVisibility(false);
-            handleTemplateSelectAction(item)
+            handleTemplateSelectAction(item);
           }}
           handleOnPressGenarateWithAI={() => {
             setBody(state => ({
               ...state,
               emailBody: '',
-            }));      
+            }));
             richText.current.setContentHTML('');
-            aiRouterAPICall();            
-            setActionButtonVisibility(true);
-            closeBottomSheet();            
+
+            closeBottomSheet();
           }}
         />
       </View>
@@ -424,20 +426,45 @@ export const SendEmail = props => {
     );
   };
 
+  const onPressAiButton = () => {
+    setEmailDraftModalVisible(state => !state);
+  };
+
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+
+  const setAIEmailDraft = emailBody => {
+    console.log('setAIEmailDraft', JSON.stringify(emailBody));
+    richText.current.setContentHTML(emailBody.body ?? '');
+    onChangeEmailBody(emailBody.body ?? '');
+    onChangeSubject(emailBody.subject ?? '');
+  };
+
+  const renderEmailDraftModal = () => {
+    return (
+      <AIEmailDraftModal
+        emailDraftModalVisible={emailDraftModalVisible}
+        setEmailDraftModalVisible={setEmailDraftModalVisible}
+        setEmailBody={setAIEmailDraft}
+      />
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={40}>
         <RenderHeader />
 
-        <EmailOptions body={body} onPressTemplate={onPressTemplate} />
+        <EmailOptions
+          onPressAiButton={onPressAiButton}
+          body={body}
+          onPressTemplate={onPressTemplate}
+        />
         <SendEmailTo />
         <EmailSubject
           body={body}
           closeBottomSheet={closeBottomSheet}
           onChangeSubject={onChangeSubject}
-        />        
+        />
         <RichEditor
           ref={richText}
           useContainer
@@ -456,106 +483,27 @@ export const SendEmail = props => {
           }}
           setContentHTML={body.emailBody}
           onFocus={closeBottomSheet}
-          />
-          {isLoading && renderLoadingSpinner()}
-          {!isPromptVisible && <View style={styles.devider} />}
-          {isPromptVisible && (
-            <AIPrompt
-              onPress={userPrompt => {
-                aiRouterAPICall(userPrompt);
-              }}
-            />
-          )}
-          {!isLoading && <AttachmentView />}
-          
-          </KeyboardAwareScrollView>
-          {isBottomSheetVisible && (
-            <BottomSheet
-              ref={bs}
-              enabledContentGestureInteraction={false}
-              snapPoints={bsSnapPoints}
-              initialSnap={0}
-              renderContent={renderSelectTemplate}
-              renderHeader={renderHeader}
-              onCloseEnd={() => {setIsBottomSheetVisible(false)}}
-              callbackNode={fall}
-            />
-          )}
-          {isActionButtonVisible && renderAIActionButton()}
+        />
+        {!isLoading && <AttachmentView />}
+      </KeyboardAwareScrollView>
+      {isBottomSheetVisible && (
+        <BottomSheet
+          ref={bs}
+          enabledContentGestureInteraction={false}
+          snapPoints={bsSnapPoints}
+          initialSnap={0}
+          renderContent={renderSelectTemplate}
+          renderHeader={renderHeader}
+          onCloseEnd={() => {
+            setIsBottomSheetVisible(false);
+          }}
+          callbackNode={fall}
+        />
+      )}
+      {/* {isActionButtonVisible && renderAIActionButton()} */}
+      {emailDraftModalVisible && renderEmailDraftModal()}
     </SafeAreaView>
   );
-
-  function renderAIActionButton() {
-    return (
-    <ActionButton
-      hideShadow
-      activeOpacity={isLoading ? 1 : 0.8}
-      renderIcon={(active) => 
-        <MaterialIcons 
-          size={24}
-          name={'auto-fix-high'} 
-          color={Colors.white}
-          style={{paddingRight: PaddingConstants.halfTab}}
-        />}
-        buttonColor={Colors.accentLight}
-        buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
-        onPress={() => {
-          if (!isLoading) {
-            setPromptVisibility(true);
-            setActionButtonVisibility(false)
-          }          
-        }}
-    />);
-  }
-
-  function AIPrompt({onPress}) {
-    const [userPrompt, setUserPrompt] = useState('');
-    return (
-      <View style={styles.instructionContainer}>
-        <MaterialIcons 
-          size={22}
-          name={'auto-fix-high'} 
-          style={{paddingRight: PaddingConstants.halfTab}}
-        />
-        <TextInput
-          autoCorrect={false}
-          textAlignVertical={"top"}
-          spellCheck={false}          
-          textContentType="none"
-          multiline
-          onChangeText={text => setUserPrompt(text)}
-          style={styles.instructionInput}
-          placeholder="Put your instruction for AI to refine email"
-          placeholderTextColor={Colors.borderColor}
-        />
-        <Pressable
-          style={styles.generateButton}
-          onPress={() => {
-            richText.current?.dismissKeyboard()
-            setPromptVisibility(false);
-            setActionButtonVisibility(true);
-            onPress(userPrompt)}}>
-          <IonIcon 
-            name={'refresh-circle'} 
-            size={36}
-            color={Colors.accentLight}
-          />
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            richText.current?.dismissKeyboard()
-            setPromptVisibility(false);
-            setActionButtonVisibility(true);
-          }}
-          style={styles.closeButton}>
-          <MaterialIcons 
-            name={'close'} 
-            size={30}
-          />
-        </Pressable>
-      </View>
-    );
-  }
 };
 
 export default SendEmail;
@@ -788,12 +736,12 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
   },
-  generateButton: {    
+  generateButton: {
     padding: PaddingConstants.halfTab,
     borderRadius: 5,
   },
   closeButton: {
     borderRadius: 5,
     paddingEnd: PaddingConstants.halfTab,
-  }
+  },
 });

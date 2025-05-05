@@ -38,6 +38,7 @@ import {
   getEmailTemplates,
   getDefaultEmailTemplate,
 } from '../../redux/actions/closedloop.actions';
+import useLogoutProcess from '../../routes/drawerContent/useLogoutProcess';
 
 export const RenderCountItem = ({style, title, data}) => {
   return (
@@ -52,6 +53,15 @@ const RenderCountData = () => {
   const {cxData, clfData} = useSelector(
     state => state.dashboard.welcomeScreenData,
   );
+
+  const {logout} = useLogoutProcess();
+
+  useEffect(() => {
+    if (JSON.stringify(clfData).includes('jwt expired')) {
+      console.log('CLF_DATA', JSON.stringify(clfData));
+      logout();
+    }
+  }, [clfData]);
 
   return (
     <View testID="render-count-data">

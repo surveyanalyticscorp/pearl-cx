@@ -36,15 +36,15 @@ const SelectEmailTemplate = props => {
       <FlatList
         style={styles.flatList}
         data={props.data}
-        ListHeaderComponent={
-          <TouchableWithoutFeedback onPress={props.handleOnPressGenarateWithAI}>
-            <View style={styles.row}>
-              <Text style={styles.titleForGenarateWithAI}>
-                {'Generate with AI*'}
-              </Text>
-            </View>
-          </TouchableWithoutFeedback>
-        }
+        // ListHeaderComponent={
+        //   <TouchableWithoutFeedback onPress={props.handleOnPressGenarateWithAI}>
+        //     <View style={styles.row}>
+        //       <Text style={styles.titleForGenarateWithAI}>
+        //         {'Generate with AI*'}
+        //       </Text>
+        //     </View>
+        //   </TouchableWithoutFeedback>
+        // }
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
         ItemSeparatorComponent={ListItemSeparator}
