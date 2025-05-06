@@ -120,7 +120,7 @@ const CxDashboard = ({route, navigation}) => {
 
     loadDashboardData(segmentId);
     wait(500).then();
-  }, [segmentId]);
+  }, [segmentId, range]);
 
   useEffect(() => {
     if (
