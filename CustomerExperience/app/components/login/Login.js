@@ -51,13 +51,20 @@ import LoginBackground from './components/LoginBackground';
 import {useLoginError} from './hooks/useLoginError';
 
 export let getApiValidationErrorMessage = errorMessage => {
-  console.log('getApiValidationErrorMessage', JSON.stringify(errorMessage));
+  console.log(
+    'getApiValidationErrorMessage login',
+    JSON.stringify(errorMessage),
+  );
   if (errorMessage.errorAlert) {
     return errorMessage?.errorAlert
       ? errorMessage?.errorAlert
       : errorMessage?.validationErrors[0]?.error;
   }
-  return 'Network Error';
+
+  if (errorMessage.message) {
+    return errorMessage?.message;
+  }
+  return 'Error';
 };
 
 export const checkValidation = ({email, password, accessCode}) => {

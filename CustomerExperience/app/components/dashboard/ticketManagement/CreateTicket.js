@@ -27,6 +27,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   createClfTicket,
   getClosedLoopOwnerDetails,
+  resetCreateTicketResponse,
 } from '../../../redux/actions/dashboard.actions';
 import SelectSegment from '../../closedloop/takeaction/SelectSegment';
 import SelectTicketOwner from '../../closedloop/takeaction/SelectTicketOwner';
@@ -36,7 +37,11 @@ import {
   FullMonthDateYearFormat,
   YMDFORMAT,
 } from '../../../Utils/AppConstants';
-import {showErrorFlashMessage, validateEmail} from '../../../Utils/Utility';
+import {
+  showErrorFlashMessage,
+  showSuccessFlashMessage,
+  validateEmail,
+} from '../../../Utils/Utility';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
@@ -53,6 +58,7 @@ import {ANALYTICS_EVENTS} from '../../../Utils/Analytic.constants';
 import {sendAnalyticsEvent} from '../../../Utils/AnalyticLogs';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ShowInputError from '../../../routes/commonUI/ShowInputError';
+import {get} from 'lodash';
 
 const INPUTTYPES = {
   EMAIL: 'EMAIL',
@@ -126,11 +132,18 @@ const checkValidation = ticketState => {
 const CreateTicketContainer = ({children}) => {
   const {isError, errorMessage} = useSelector(state => state.global);
   let getApiValidationErrorMessage = errorMessage => {
-    console.log('getApiValidationErrorMessage', JSON.stringify(errorMessage));
+    console.log(
+      'getApiValidationErrorMessage createTicket',
+      JSON.stringify(errorMessage),
+    );
     if (errorMessage.errorAlert) {
       return errorMessage?.errorAlert
         ? errorMessage?.errorAlert
         : errorMessage?.validationErrors[0]?.error;
+    }
+
+    if (errorMessage.message) {
+      return errorMessage?.message;
     }
     return 'Error';
   };
@@ -190,6 +203,10 @@ const RenderTextInput = ({
       onEndEditing={value => {
         console.log('TEXT_INPUT', value.nativeEvent.text);
         setValue(value.nativeEvent.text);
+      }}
+      onChangeText={value => {
+        console.log('TEXT_INPUT', value);
+        setValue(value);
       }}
     />
   );
@@ -395,6 +412,10 @@ export default function CreateTicket(props) {
   // const calenderBottomSheetSnapPoints = ['45%', '0%'];
 
   // const [shadow, setShadow] = useState(false);
+  const createTicketResponse = useSelector(
+    state => state.dashboard.createTicketResponse,
+  );
+
   const dispatch = useDispatch();
   const [showLoading, setLoading] = useState(false);
   const [errorInputType, setErrorInputType] = useState(new Map());
@@ -497,10 +518,27 @@ export default function CreateTicket(props) {
         ...ticketState,
       });
       dispatch(createClfTicket(ticketState, feedbackApiKey));
-      props.navigation.goBack();
     } else {
       setErrorInputType(validation.errorInputTypes);
     }
+  };
+
+  useEffect(() => {
+    handleCreateTicketResponse(createTicketResponse);
+  }, [createTicketResponse]);
+
+  const handleCreateTicketResponse = response => {
+    if (response?.status === 'success') {
+      setLoading(false);
+      showSuccessFlashMessage(response.message);
+      setTimeout(() => {
+        if (navigation.canGoBack()) {
+          navigation.goBack();
+        }
+        dispatch(resetCreateTicketResponse());
+      }, 1000);
+    }
+    console.log('createTicketResponse', JSON.stringify(response));
   };
 
   const renderPrioritySelectContent = () => {

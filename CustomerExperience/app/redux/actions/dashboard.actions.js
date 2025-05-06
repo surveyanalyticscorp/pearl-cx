@@ -194,6 +194,11 @@ export const createClfTicket = (param, feedbackApiKey) => ({
   feedbackApiKey,
 });
 
+export const resetCreateTicketResponse = () => ({
+  type: CREATE_CLF_TICKET_RECIEVED,
+  response: {},
+});
+
 export const updateClfTicket = (token, param, ticketId, feedbackApiKey) => ({
   type: UPDATE_CLF_TICKET,
   token,

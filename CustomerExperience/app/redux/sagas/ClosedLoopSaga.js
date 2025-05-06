@@ -576,7 +576,6 @@ export function* postCreateClfTicket(action) {
       payload: {wantToReload: true},
     });
     yield put({type: IS_LOADING, payload: {isLoading: false}});
-    showSuccessFlashMessage(json.message);
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
     yield put({type: IS_LOADING, payload: {isLoading: false}});

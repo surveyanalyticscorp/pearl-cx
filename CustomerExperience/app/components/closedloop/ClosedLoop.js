@@ -41,6 +41,7 @@ import {resetDeleteTicketStatus} from '../../redux/actions/closedloop.actions';
 import {baseTextStyles} from '../../styles/text.styles';
 import {useNavigation} from '@react-navigation/native';
 import {NoTicketFound} from './NoTicketFound';
+import {showSuccessFlashMessage} from '../../Utils/Utility';
 
 export const SearchIcon = () => {
   return (
@@ -183,7 +184,9 @@ export default function ClosedLoop(props) {
   );
   const currentFeedback = useSelector(state => state.dashboard.currentFeedback);
   const currentSegment = useSelector(state => state.dashboard.currentSegment);
-
+  const createTicketResponse = useSelector(
+    state => state.dashboard.createTicketResponse,
+  );
   const owners = useSelector(state => state.dashboard.ownerDetails.owners);
   const [refreshing, setRefreshing] = useState(false);
   const {ticketDeleteStatus} = useSelector(state => state.dashboard);
@@ -269,7 +272,10 @@ export default function ClosedLoop(props) {
 
   useEffect(() => {
     makeAPICall();
-  }, [filterState, range]);
+    if (createTicketResponse.message) {
+      showSuccessFlashMessage(createTicketResponse.message);
+    }
+  }, [filterState, range, createTicketResponse]);
 
   useEffect(() => {
     resetFilterState(range);
