@@ -45,10 +45,7 @@ const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
         renderItem={renderRow}
         ItemSeparatorComponent={statusListItemSeparator}
         ListFooterComponent={
-          <ApplyButton
-            buttonText={translate('close_loop.status')}
-            onPress={onApplyPress}
-          />
+          <ApplyButton buttonText={'Set status'} onPress={onApplyPress} />
         }
       />
     </View>

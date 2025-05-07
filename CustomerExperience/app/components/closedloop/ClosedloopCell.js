@@ -80,10 +80,11 @@ const Date = ({issueDate}) => {
 
 const NameANdDateRow = ({name, issueDate}) => {
   // console.log('USERDATA', JSON.stringify(data));
+  const title = StringUtils.truncateCustomerName(name, 30, 10, 8);
   return (
     <View style={styles.nameAndDateContainer}>
       <TextLabel
-        text={name}
+        text={title}
         baseTextStyle={baseTextStyles.primaryMediumText}
         color={Colors.accent}
       />
