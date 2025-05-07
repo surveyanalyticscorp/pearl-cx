@@ -29,8 +29,11 @@ export default class WebServiceHandler {
     }
     let urlParameter = '?';
     Object.keys(parameter).forEach(function (key) {
-      let value = parameter[key];
-      urlParameter = urlParameter + key + '=' + value + '&';
+      // let value = parameter[key];
+      // urlParameter = urlParameter + key + '=' + value + '&';
+      let encodedKey = encodeURIComponent(key);
+      let encodedValue = encodeURIComponent(parameter[key]);
+      urlParameter += `${encodedKey}=${encodedValue}&`;
     });
     urlParameter = urlParameter.replace(/\&$/, '');
     return urlParameter;
@@ -46,6 +49,7 @@ export default class WebServiceHandler {
         body: body,
       })
         .then(response => {
+          console.log('ACTUAL_URL', URL);
           if (response.status === 404) {
             failed(response);
             return new Error('API Not found');

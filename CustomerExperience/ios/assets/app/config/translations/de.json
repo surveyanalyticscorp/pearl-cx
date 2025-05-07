@@ -210,7 +210,7 @@
   "search": "Suchen",
   "select": "Auswählen",
   "only_my_tickets": "Nur meine Tickets",
-  "ticket_search_hint": "Suche nach ID, Name, E-Mail",
+  "ticket_search_hint": "Suche nach #ID, Name, E-Mail",
   "segment_not_selected": "Bitte wählen Sie ein Segment aus",
   "issue_date_not_selected": "Bitte geben Sie ein gültiges Datum ein",
   "enter_customer_name": "Bitte geben Sie den Kundennamen ein",
