@@ -5,7 +5,8 @@ export function getBearerToken(bearerToken) {
 }
 
 export function getClfUrl(url) {
-  return '' + global.clfBaseUrl + url;
+  const baseUrl = global.clfBaseUrl?.replace(/['"]/g, ''); // Remove any quotes
+  return baseUrl + url;
 }
 
 export function getBearerTokenStatic() {

@@ -27,8 +27,6 @@ import RenderSegmentDashboardData from './cxDashboard/RenderSegmentDashboardData
 import useBackHandler from './hooks/useBackHandler';
 import AnimatedView from '../../widgets/AnimatedView';
 import {useNavigation} from '@react-navigation/native';
-import {Notifications} from 'react-native-notifications';
-import {postLocalNotification} from '../../Utils/NotificationUtils';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -61,10 +59,10 @@ let RenderDashboardContent = ({children}) => {
 
   if (!isError && !isLoading && !isObjectEmpty(dashboardData)) {
     return (
-      <SafeAreaView>
+      <View>
         {/* <ClosedLoopView openStatusBS={openStatusBS} /> */}
         {children}
-      </SafeAreaView>
+      </View>
     );
   }
   return <View style={dashboardStyles.container} />;
@@ -168,13 +166,21 @@ const CxDashboard = ({route, navigation}) => {
       testID="cx-dashboard"
       forceInset={{bottom: 'never', top: 'never'}}
       style={dashboardStyles.container}>
-      <AnimatedView fall={fall}>
+      <Animated.View
+        style={[
+          dashboardStyles.container,
+          {
+            opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
+          },
+        ]}>
         <HeaderFilter hasFilterIcon={false} />
         <ScrollView
           contentContainerStyle={dashboardStyles.scrollView}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
+          {console.log('re render Dashboard', JSON.stringify(fall))}
+
           <RenderDashboardContent>
             <RenderSegmentDashboardData />
             <ClosedLoopDashboard openStatusBS={openStatusBS} />
@@ -182,12 +188,8 @@ const CxDashboard = ({route, navigation}) => {
           <DashboardSpinner />
           {exitAlert && renderExitAlert()}
         </ScrollView>
-      </AnimatedView>
-      <StatusDashboardBottomSheet
-        ref={statusBottomSheetRef}
-        snapPoints={statusBottomSheetSnapPoints}
-        fall={fall}
-      />
+      </Animated.View>
+
       <CreateTicketButton />
     </View>
   );
