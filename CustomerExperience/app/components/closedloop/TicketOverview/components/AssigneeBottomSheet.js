@@ -38,17 +38,15 @@ const AssigneeBottomSheet = React.forwardRef(({fall}, ref) => {
           data={owners}
           selectedIndex={ticketOwnerIndex}
           handleOnPress={(item, index) => {
+            console.log('handleOnPress', item, index);
+
+            setTicketOwnerIndex(index);
+            // escalating ticket and assigning a new owner
+            updateTicket({
+              status: STATUS_ESCALATED,
+              assignToId: item.ownerID,
+            });
             close();
-            if (
-              assignToId !== item.ownerID &&
-              STATUS_ESCALATED !== item.status
-            ) {
-              setTicketOwnerIndex(index);
-              updateTicket({
-                status: STATUS_ESCALATED,
-                assignToId: item.ownerID,
-              });
-            }
           }}
         />
       </View>
