@@ -88,6 +88,7 @@ export default function TicketOverview(props) {
       <View style={ticketOverviewStyles.contentContainer}>
         <SelectStatus
           data={statusList}
+          screenName={'TicketOverview'}
           selectedIndex={statusIndex}
           handleOnPress={(item, index) => {
             if (ticketDetails.status === item.id) {

@@ -213,6 +213,7 @@ export const StatusDashboardBottomSheet = React.forwardRef(
         <View style={styles.contentContainer}>
           <SelectStatus
             data={statusList}
+            screenName={'Dashboard'}
             selectedIndex={statusIndex}
             handleOnPress={(item, index) => {
               dispatch(setStatusIndex(index));

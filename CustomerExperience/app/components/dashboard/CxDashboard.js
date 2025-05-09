@@ -189,7 +189,11 @@ const CxDashboard = ({route, navigation}) => {
           {exitAlert && renderExitAlert()}
         </ScrollView>
       </Animated.View>
-
+      <StatusDashboardBottomSheet
+        ref={statusBottomSheetRef}
+        snapPoints={statusBottomSheetSnapPoints}
+        fall={fall}
+      />
       <CreateTicketButton />
     </View>
   );

@@ -6,11 +6,20 @@ import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import PriorityItem from './PriorityItem';
 
-const SelectPriority = ({data, selectedIndex, handleOnPress}) => {
+const getButtonTitle = screenName => {
+  switch (screenName) {
+    case 'CreateTicket':
+      return 'Set priority';
+
+    default:
+      return 'Update';
+  }
+};
+const SelectPriority = ({data, selectedIndex, handleOnPress, screenName}) => {
   const [currentIndex, setIndex] = useState(selectedIndex);
   const [currentItem, setItem] = useState(data[selectedIndex]);
   // const [selectedIndex, setSelectedIndex] = useState(selectedIndex);
-
+  const buttonTitle = getButtonTitle(screenName);
   const onApplyPress = () => {
     handleOnPress(currentItem, currentIndex);
   };
@@ -36,7 +45,7 @@ const SelectPriority = ({data, selectedIndex, handleOnPress}) => {
         renderItem={renderRow}
         ItemSeparatorComponent={ListItemSeparator}
         ListFooterComponent={
-          <ApplyButton buttonText={'Set priority'} onPress={onApplyPress} />
+          <ApplyButton buttonText={buttonTitle} onPress={onApplyPress} />
         }
       />
     </View>

@@ -404,7 +404,7 @@ export default function CreateTicket(props) {
     '0%',
   ];
   const statusBottomSheetSnapPoints = [
-    Platform.OS === 'ios' ? '45%' : '50%',
+    Platform.OS === 'ios' ? '55%' : '50%',
     '0%',
   ];
   const segmentBottomSheetSnapPoints = ['45%', '0%'];
@@ -547,6 +547,7 @@ export default function CreateTicket(props) {
         <SelectPriority
           data={priorityList}
           selectedIndex={priorityIndex}
+          screenName={'CreateTicket'}
           handleOnPress={(item, index) => {
             setTicketState(state => ({
               ...state,
@@ -586,6 +587,7 @@ export default function CreateTicket(props) {
       <View style={styles.contentContainer}>
         <SelectStatus
           data={statusListForCreateTicket}
+          screenName={'CreateTicket'}
           selectedIndex={statusIndex}
           handleOnPress={(item, index) => {
             // console.log(JSON.stringify(item));
