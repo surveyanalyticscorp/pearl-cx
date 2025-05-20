@@ -50,16 +50,6 @@ import CXLogo from './components/CXLogo';
 import LoginBackground from './components/LoginBackground';
 import {useLoginError} from './hooks/useLoginError';
 
-export let getApiValidationErrorMessage = errorMessage => {
-  console.log('getApiValidationErrorMessage', JSON.stringify(errorMessage));
-  if (errorMessage.errorAlert) {
-    return errorMessage?.errorAlert
-      ? errorMessage?.errorAlert
-      : errorMessage?.validationErrors[0]?.error;
-  }
-  return 'Network Error';
-};
-
 export const checkValidation = ({email, password, accessCode}) => {
   if (!validateEmail(email)) {
     console.log('EMAIL NOT VALID');

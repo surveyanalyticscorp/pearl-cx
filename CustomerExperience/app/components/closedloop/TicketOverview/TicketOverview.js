@@ -54,17 +54,29 @@ export default function TicketOverview(props) {
 
   const fall = new Animated.Value(1);
   const onTakeActionHandler = () => {
+    priorityBottomSheet.current.snapTo(1);
+    statusBottomSheet.current.snapTo(1);
+    assigneeBottomSheet.current.snapTo(1);
     actionBottomSheet.current.snapTo(0);
   };
   const handleStatusSelection = () => {
+    priorityBottomSheet.current.snapTo(1);
     statusBottomSheet.current.snapTo(0);
+    assigneeBottomSheet.current.snapTo(1);
+    actionBottomSheet.current.snapTo(1);
   };
 
   const handlePrioritySelection = () => {
     priorityBottomSheet.current.snapTo(0);
+    statusBottomSheet.current.snapTo(1);
+    assigneeBottomSheet.current.snapTo(1);
+    actionBottomSheet.current.snapTo(1);
   };
   const handleOwnerSelection = () => {
+    priorityBottomSheet.current.snapTo(1);
+    statusBottomSheet.current.snapTo(1);
     assigneeBottomSheet.current.snapTo(0);
+    actionBottomSheet.current.snapTo(1);
   };
 
   const renderStatusHeader = () => {
@@ -76,6 +88,7 @@ export default function TicketOverview(props) {
       <View style={ticketOverviewStyles.contentContainer}>
         <SelectStatus
           data={statusList}
+          screenName={'TicketOverview'}
           selectedIndex={statusIndex}
           handleOnPress={(item, index) => {
             if (ticketDetails.status === item.id) {

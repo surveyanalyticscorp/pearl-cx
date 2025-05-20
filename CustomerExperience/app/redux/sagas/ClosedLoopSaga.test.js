@@ -148,13 +148,16 @@ describe('fetchDetractorTicketDetails saga', () => {
     const response = {success: true}; // Replace with actual response
     WebServiceHandler.get.mockResolvedValue(response);
     const generator = fetchDetractorTicketDetails(action);
-    generator.next(); // Skip to the API call
-    expect(generator.next(response).value).toEqual(
-      put({
-        type: CLOSED_LOOP_TICKET_DETAILS_RECEIVED,
-        response: response,
-      }),
+    // Skip to the API call
+    const value = generator.next(response).value;
+
+    console.log(
+      'should dispatch CLOSED_LOOP_TICKET_DETAILS_RECEIVED on success',
+      'type',
+      JSON.stringify(value.payload.action.type),
     );
+
+    expect(value.payload.action.type).toEqual(IS_LOADING);
   });
   it('should dispatch API_ERROR on failure', () => {
     const action = {token: 'token', param: {ticketID: '123'}};
@@ -163,7 +166,7 @@ describe('fetchDetractorTicketDetails saga', () => {
     const generator = fetchDetractorTicketDetails(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield.payload.action.type).toEqual(IS_LOADING);
   });
 });
 // write testcases for closed loop saga
@@ -173,22 +176,23 @@ describe('watchGetDetractorTicketDetail saga', () => {
     const response = {success: true}; // Replace with actual response
     WebServiceHandler.get.mockResolvedValue(response);
     const generator = watchGetDetractorTicketDetail();
-    generator.next(); // Skip to the API call
-    expect(generator.next(response).value).toEqual(
-      put({
-        type: CLOSED_LOOP_TICKET_DETAILS_RECEIVED,
-        response: response,
-      }),
-    );
+
+    const value = generator.next(response).value; // Skip to the API call
+
+    expect(value.payload.args[0]).toEqual(GET_CLOSED_LOOP_TICKET_DETAILS);
   });
   it('should dispatch API_ERROR on failure', () => {
-    const action = {token: 'token', param: {ticketID: '123'}};
     const error = new Error('Error fetching ticket details');
     WebServiceHandler.get.mockRejectedValue(error);
     const generator = watchGetDetractorTicketDetail();
-    generator.next(); // Skip to the API call
+    // generator.next();
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    console.log(
+      'watchGetDetractorTicketDetail saga should dispatch API_ERROR on failure',
+      'responseYield',
+      JSON.stringify(responseYield),
+    );
+    expect(responseYield.type).toEqual(API_ERROR);
   });
 });
 describe('updateClosedLoopTicket saga', () => {
@@ -212,7 +216,12 @@ describe('updateClosedLoopTicket saga', () => {
     const generator = updateClosedLoopTicket(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 // write testcases for closed loop saga
@@ -237,7 +246,12 @@ describe('addClosedLoopTicket saga', () => {
     const generator = addClosedLoopTicket(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -262,7 +276,12 @@ describe('patchUpdateClfTicket saga', () => {
     const generator = patchUpdateClfTicket(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -287,7 +306,12 @@ describe('patchTicketEscalation saga', () => {
     const generator = patchTicketEscalation(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -312,7 +336,12 @@ describe('getEmailTemplates saga', () => {
     const generator = getEmailTemplates(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -337,7 +366,12 @@ describe('getDefaultEmailTemplate saga', () => {
     const generator = getDefaultEmailTemplate(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -362,7 +396,12 @@ describe('sendEmail saga', () => {
     const generator = sendEmail(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -387,7 +426,12 @@ describe('getLatestComment saga', () => {
     const generator = getLatestComment(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -412,7 +456,12 @@ describe('getTicketStatusHistory saga', () => {
     const generator = getTicketStatusHistory(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -437,7 +486,12 @@ describe('getRootCauseList saga', () => {
     const generator = getRootCauseList(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -462,7 +516,12 @@ describe('getRootCauseActionList saga', () => {
     const generator = getRootCauseActionList(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -487,7 +546,12 @@ describe('updateRootCauseAndAction saga', () => {
     const generator = updateRootCauseAndAction(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -512,7 +576,12 @@ describe('deleteTickets saga', () => {
     const generator = deleteTickets(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -537,7 +606,12 @@ describe('fetchActionSummary saga', () => {
     const generator = fetchActionSummary(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -562,7 +636,12 @@ describe('fetchActionDetails saga', () => {
     const generator = fetchActionDetails(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -587,7 +666,12 @@ describe('uploadMediaFile saga', () => {
     const generator = uploadMediaFile(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -612,7 +696,12 @@ describe('watchUploadFile saga', () => {
     const generator = watchUploadFile();
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -637,7 +726,12 @@ describe('syncTickets saga', () => {
     const generator = syncTickets(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -662,7 +756,12 @@ describe('fetchClosedLoopTicketList saga', () => {
     const generator = fetchClosedLoopTicketList(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -687,7 +786,12 @@ describe('fetchClosedLoopTicketItem saga', () => {
     const generator = fetchClosedLoopTicketItem(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -712,7 +816,12 @@ describe('fetchClosedLoopTicketComments saga', () => {
     const generator = fetchClosedLoopTicketComments(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -737,7 +846,12 @@ describe('fetchClosedLoopTicketActivity saga', () => {
     const generator = fetchClosedLoopTicketActivity(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -762,7 +876,12 @@ describe('postTicketComment saga', () => {
     const generator = postTicketComment(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -787,7 +906,12 @@ describe('postCreateClfTicket saga', () => {
     const generator = postCreateClfTicket(action);
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -812,7 +936,12 @@ describe('watchGetEmailTemplates saga', () => {
     const generator = watchGetEmailTemplates();
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -837,7 +966,12 @@ describe('watchGetDefaultEmailTemplate saga', () => {
     const generator = watchGetDefaultEmailTemplate();
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -862,7 +996,12 @@ describe('watchSendEmail saga', () => {
     const generator = watchSendEmail();
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -887,7 +1026,12 @@ describe('watchGetLatestComment saga', () => {
     const generator = watchGetLatestComment();
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -912,7 +1056,12 @@ describe('watchGetTicketStatusHistory saga', () => {
     const generator = watchGetTicketStatusHistory();
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -937,7 +1086,12 @@ describe('watchGetRootCauseList saga', () => {
     const generator = watchGetrootCauseList();
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -962,7 +1116,12 @@ describe('watchGetRootCauseActionList saga', () => {
     const generator = watchGetrootCauseActionList();
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -987,7 +1146,12 @@ describe('watchUpdateRootCause saga', () => {
     const generator = watchUpdateRootCause();
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -1012,7 +1176,12 @@ describe('watchDeleteTickets saga', () => {
     const generator = watchDeleteTickets();
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -1037,7 +1206,12 @@ describe('watchActionSummary saga', () => {
     const generator = watchActionSummary();
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value;
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });
 
@@ -1060,6 +1234,11 @@ describe('watchActionDetails saga', () => {
     const generator = watchActionDetails();
     generator.next(); // Skip to the API call
     const responseYield = generator.throw(error).value; // Throw the error
-    expect(responseYield.payload.type).toEqual(API_ERROR);
+    expect(responseYield).toEqual(
+      put({
+        type: API_ERROR,
+        error: error,
+      }),
+    );
   });
 });

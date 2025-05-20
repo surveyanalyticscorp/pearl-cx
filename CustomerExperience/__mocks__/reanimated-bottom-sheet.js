@@ -18,8 +18,8 @@ const ReanimatedBottomSheet = ({renderContent, renderHeader, snapPoints}) => {
 
   return (
     <View>
-      {renderHeader}
-      {renderContent}
+      {renderHeader?.()}
+      {renderContent?.()}
     </View>
   );
 };

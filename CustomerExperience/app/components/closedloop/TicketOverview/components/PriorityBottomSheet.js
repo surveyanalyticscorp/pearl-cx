@@ -35,6 +35,7 @@ const PriorityBottomSheet = React.forwardRef(({fall}, ref) => {
         <SelectPriority
           data={priorityList}
           selectedIndex={priorityIndex}
+          screenName={'TicketOverview'}
           handleOnPress={(item, index) => {
             close();
             setPriorityIndex(index);

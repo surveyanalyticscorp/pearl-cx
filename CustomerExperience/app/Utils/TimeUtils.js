@@ -3,7 +3,7 @@ import {HalfMonthDateYearFormat} from './AppConstants';
 import {isStringNullOrEmpty} from './Utility';
 import {TOKEN_VALIDATION_DURATION} from '../api/Constant';
 
-function convertToDateTime(date) {
+export function convertToDateTime(date) {
   return moment(date).local().format(HalfMonthDateYearFormat);
 }
 

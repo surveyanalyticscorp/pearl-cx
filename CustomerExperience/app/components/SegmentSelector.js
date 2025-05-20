@@ -15,7 +15,7 @@ import {MarginConstants} from '../styles/margin.constants';
 import SegmentText from './SegmentText';
 import {IonIcon} from '../Utils/IconUtils';
 
-const NotiificationIcon = () => {
+export const NotiificationIcon = () => {
   const navigation = useNavigation();
   const notificationLogs = useSelector(
     state => state.notification.notificationLogs,

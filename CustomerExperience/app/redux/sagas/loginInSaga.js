@@ -126,9 +126,7 @@ export function* doLoginApiCall(action) {
 
     AsyncStorage.setItem(
       ASYNC_CLF_BASE_URL,
-      JSON.stringify(
-        IS_DEV_MODE ? CLF_BASE_URL : clfBaseUrlResponse.data.baseUrl,
-      ),
+      IS_DEV_MODE ? CLF_BASE_URL : clfBaseUrlResponse.data.baseUrl,
     );
     console.log(
       'AsyncStorage base URL 3 : ',

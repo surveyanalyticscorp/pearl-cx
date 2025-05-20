@@ -1,3 +1,4 @@
+import {create} from 'lodash';
 import {getUniqueValues} from '../../Utils/TicketUtils';
 import {CLEAR_USER_INFO} from '../actions';
 import {
@@ -98,6 +99,7 @@ const initialState = {
   ticket: {},
   ticketComments: [],
   ticketActivity: [],
+  createTicketResponse: {},
   ticketSync: true,
   apiCallStatus: {},
   welcomeScreenData: {},
@@ -253,7 +255,7 @@ const dashboardReducer = (state = initialState, action) => {
     case CREATE_CLF_TICKET_RECIEVED: {
       return {
         ...state,
-        apiCallStatus: action.response,
+        createTicketResponse: action.response,
       };
     }
 
