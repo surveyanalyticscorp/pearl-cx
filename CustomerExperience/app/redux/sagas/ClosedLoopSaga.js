@@ -997,7 +997,7 @@ export function* fetchActionDetails(action) {
       response: json,
     });
   } catch (error) {
-    console.log('ERROR:', JSON.stringify(error));
+    // console.log('ERROR:', JSON.stringify(error));
     yield put({
       type: API_ERROR,
       error: error,

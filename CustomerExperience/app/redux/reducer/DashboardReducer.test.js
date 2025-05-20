@@ -93,7 +93,7 @@ const initialState = {
   ticketSync: true,
   apiCallStatus: {},
   welcomeScreenData: {},
-  emailData: {emailSentResponse: {}},
+  emailData: {currentEmailBody: {}, emailSentResponse: {}},
   mediaFileList: [],
   ticketDeleteStatus: {status: 'default'},
   ticketActionHistory: {summary: {}, details: {}},
@@ -103,6 +103,10 @@ const initialState = {
   expirationDate: '',
   isCsatViewTopBox: true,
   skipWelcome: false,
+
+  centralizedRootCauseList: [],
+  createTicketResponse: {},
+  isEmailTemplateOpen: false,
 };
 
 // write test for dashboard reducer
@@ -935,6 +939,7 @@ describe('Dashboard Reducer', () => {
     ).toEqual({
       ...initialState,
       emailData: {
+        currentEmailBody: {},
         emailSentResponse: {
           id: '1',
           name: 'template1',
@@ -1175,7 +1180,7 @@ describe('Dashboard Reducer', () => {
       }),
     ).toEqual({
       ...initialState,
-      apiCallStatus: {
+      createTicketResponse: {
         id: '1',
         name: 'rootCause1',
         description: 'rootCause1 description',

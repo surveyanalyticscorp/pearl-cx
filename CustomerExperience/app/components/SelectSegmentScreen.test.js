@@ -57,7 +57,7 @@ describe('SelectSegmentScreen', () => {
         <SelectSegmentScreen {...generateMockProps()} />
       </Provider>,
     );
-    expect(getByText('select_segment.select_segment')).toBeTruthy();
+    expect(getByText('dashboard.segment')).toBeTruthy();
   });
 
   it('renders correctly with no segments', () => {

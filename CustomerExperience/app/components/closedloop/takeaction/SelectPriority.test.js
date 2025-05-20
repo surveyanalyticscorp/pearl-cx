@@ -20,7 +20,7 @@ describe('SelectPriority Component', () => {
     expect(getByText('High')).toBeTruthy();
     expect(getByText('Medium')).toBeTruthy();
     expect(getByText('Low')).toBeTruthy();
-    expect(getByText('Set priority')).toBeTruthy();
+    expect(getByText('Update')).toBeTruthy();
   });
 
   it('calls handleOnPress when Set priority button is pressed', () => {
@@ -36,7 +36,7 @@ describe('SelectPriority Component', () => {
     fireEvent.press(getAllByTestId('priority-row')[1]);
 
     // Press the Set priority button
-    fireEvent.press(getByText('Set priority'));
+    fireEvent.press(getByText('Update'));
 
     // Expect the mock function to have been called with the correct arguments
     expect(mockHandleOnPress).toHaveBeenCalledWith({title: 'Medium'}, 1);

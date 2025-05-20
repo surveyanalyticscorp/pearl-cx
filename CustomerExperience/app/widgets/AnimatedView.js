@@ -5,6 +5,7 @@ import {dashboardStyles} from '../components/dashboard/dashboard.style';
 const AnimatedView = ({fall, children}) => {
   return (
     <Animated.View
+      testID="animated-view"
       style={[
         dashboardStyles.container,
         {

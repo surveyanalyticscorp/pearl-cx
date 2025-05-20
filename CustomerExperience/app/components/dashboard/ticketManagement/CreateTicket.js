@@ -59,6 +59,7 @@ import {sendAnalyticsEvent} from '../../../Utils/AnalyticLogs';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ShowInputError from '../../../routes/commonUI/ShowInputError';
 import {get} from 'lodash';
+import {getApiValidationErrorMessage} from '../../../Utils/ErrorValidationUtils';
 
 const INPUTTYPES = {
   EMAIL: 'EMAIL',
@@ -131,26 +132,12 @@ const checkValidation = ticketState => {
 
 const CreateTicketContainer = ({children}) => {
   const {isError, errorMessage} = useSelector(state => state.global);
-  let getApiValidationErrorMessage = errorMessage => {
-    console.log(
-      'getApiValidationErrorMessage createTicket',
-      JSON.stringify(errorMessage),
-    );
-    if (errorMessage.errorAlert) {
-      return errorMessage?.errorAlert
-        ? errorMessage?.errorAlert
-        : errorMessage?.validationErrors[0]?.error;
-    }
-
-    if (errorMessage.message) {
-      return errorMessage?.message;
-    }
-    return 'Error';
-  };
 
   useEffect(() => {
     if (isError) {
-      showErrorFlashMessage(getApiValidationErrorMessage(errorMessage));
+      showErrorFlashMessage(
+        getApiValidationErrorMessage(errorMessage, 'createTicket'),
+      );
     }
   }, [isError, errorMessage]);
 

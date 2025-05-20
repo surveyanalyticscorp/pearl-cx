@@ -32,7 +32,7 @@
     "test:unit": "jest --testPathPattern=app/testcases/unit_test",
     "test:widget": "jest --testPathPattern=app/testcases/widget_test",
     "test:component": "jest --testPathPattern=app/testcases/component_test -u",
-    "test:singleFile": "jest --testPathPattern=CustomerExperience/app/components/login/SplashScreen.test.js -u",
+    "test:singleFile": "jest --testPathPattern=CustomerExperience/app/components/TicketSync.test.js -u",
     "test:singleFileCoverageOld": "jest --coverage --testPathPattern=app/routes/CommonScreen.test.js.test.js -u",
     "test:singleFileCoverage": "jest --collectCoverageFrom=\"<rootDir>/app/**/*.{js,jsx}\" --testPathPattern=app/components/view/CalendarScreen.test.js -u",
     "test:singleDirectoryCoverage": "jest --coverage --testPathPattern=CustomerExperience/app/components/closedloop/TicketOverview/hooks/",
