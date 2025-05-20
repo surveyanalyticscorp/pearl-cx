@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
@@ -21,6 +21,7 @@ import QPBottomSheetHeader from './QPBottomSheetHeader';
 import {HorizontalSpaceBox} from '../../../widgets/SpaceBox';
 import EndAlignedView from '../../../routes/commonUI/EndAlignedView';
 import StartAlignedView from '../../../routes/commonUI/StartAlignedView';
+import QPDropDownMenu from './QPDropDownMenu';
 
 const renderLoadingSpinner = () => {
   return (
@@ -30,10 +31,11 @@ const renderLoadingSpinner = () => {
   );
 };
 
-function DropDownButton({label, onPress, isOpen}) {
+function DropDownButton({label, onPress, isOpen, onLayout}) {
   return (
     <Pressable
       onPress={onPress}
+      onLayout={onLayout}
       style={{
         flexDirection: 'row',
         marginEnd: MarginConstants.tab1_4x,
@@ -125,6 +127,11 @@ const AIEmailDraftModal = ({
   const [currentDraftBody, setCurrentDraftBody] = useState('');
   const {userInfo} = useSelector(state => state.global);
   const {comment} = useSelector(state => state.dashboard.ticket);
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const [dropDownPosition, setDropDownPosition] = useState({x: 0, y: 0});
+  const dropDownButtonRef = useRef(null);
+
+  const dropDownItems = ['shorten', 'formalize', 'elaborate'];
 
   const onChangeEmailBody = text => {
     console.log('onChangeEmailBody', text);
@@ -310,8 +317,18 @@ const AIEmailDraftModal = ({
   };
 
   const onPressDropDown = () => {
-    console.log('onPressDropDown');
+    setIsDropDownOpen(!isDropDownOpen);
   };
+
+  const onDropDownButtonLayout = event => {
+    const {x, y} = event.nativeEvent.layout;
+    setDropDownPosition({x, y});
+  };
+
+  const onSelectDropDownItem = item => {
+    setDraftType(item);
+  };
+
   return (
     <QPBottomSheet
       visible={emailDraftModalVisible}
@@ -330,13 +347,27 @@ const AIEmailDraftModal = ({
         <StartAlignedView>
           <RegenerateButton onPress={onPressRegenerate} />
           <HorizontalSpaceBox multiplyBy={2} />
-          <DropDownButton label="formalize" onPress={onPressDropDown} isOpen />
+          <DropDownButton
+            label={draftType}
+            onPress={onPressDropDown}
+            isOpen={isDropDownOpen}
+            onLayout={onDropDownButtonLayout}
+          />
         </StartAlignedView>
 
         <EndAlignedView>
           <InsertButton onPress={onPressInsert} />
         </EndAlignedView>
       </EmailGenarationActionView>
+
+      <QPDropDownMenu
+        visible={isDropDownOpen}
+        onClose={() => setIsDropDownOpen(false)}
+        anchorPosition={dropDownPosition}
+        items={dropDownItems}
+        onSelectItem={onSelectDropDownItem}
+        selectedItem={draftType}
+      />
     </QPBottomSheet>
   );
 };
