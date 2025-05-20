@@ -9,7 +9,44 @@ import StringUtils from '../../../../Utils/StringUtils';
 
 export const EmailBodyTextView = ({text}) => {
   const {width} = useWindowDimensions();
-  const systemFonts = [...defaultSystemFonts, FontFamily.regular];
+
+  const memoizedSystemFonts = useMemo(
+    () => [...defaultSystemFonts, FontFamily.regular],
+    [],
+  );
+
+  const memoizedHtmlSource = useMemo(
+    () => ({
+      html: `
+    <span style="font-size: 100%;">${text}</span>`,
+    }),
+    [text],
+  );
+
+  const memoizedTagsStyles = useMemo(
+    () => ({
+      span: {
+        color: Colors.filterIconColor,
+        ...baseTextStyles.secondaryRegularText,
+      },
+    }),
+    [],
+  );
+
+  const memoizedRenderContent = useMemo(
+    () => (
+      <View testID="email-body-text-container">
+        <RenderHTML
+          ignoredDomTags={['html', 'head', 'body']}
+          source={memoizedHtmlSource}
+          contentWidth={width / 0.5}
+          systemFonts={memoizedSystemFonts}
+          tagsStyles={memoizedTagsStyles}
+        />
+      </View>
+    ),
+    [memoizedHtmlSource, memoizedTagsStyles, memoizedSystemFonts, width],
+  );
 
   console.log('HTML comment', text);
   console.log(
@@ -20,25 +57,6 @@ export const EmailBodyTextView = ({text}) => {
   if (StringUtils.isEmpty(text)) {
     return <View />;
   }
-  const memoizedHtmlSource = {
-    html: `
-    <span style="font-size: 100%;">${text}</span>`,
-  };
 
-  return (
-    <View testID="email-body-text-container">
-      <RenderHTML
-        ignoredDomTags={['html', 'head', 'body']}
-        source={memoizedHtmlSource}
-        contentWidth={width / 0.5}
-        systemFonts={systemFonts}
-        tagsStyles={{
-          span: {
-            color: Colors.filterIconColor,
-            ...baseTextStyles.secondaryRegularText,
-          },
-        }}
-      />
-    </View>
-  );
+  return memoizedRenderContent;
 };

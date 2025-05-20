@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Modal, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState, useCallback} from 'react';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
@@ -16,6 +16,11 @@ import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
 import {CommentText} from '../TicketComments';
 import {EmailBodyTextView} from './sendEmail/AiEmailBodyTextView';
+import QPBottomSheet from './QPBottomSheet';
+import QPBottomSheetHeader from './QPBottomSheetHeader';
+import {HorizontalSpaceBox} from '../../../widgets/SpaceBox';
+import EndAlignedView from '../../../routes/commonUI/EndAlignedView';
+import StartAlignedView from '../../../routes/commonUI/StartAlignedView';
 
 const renderLoadingSpinner = () => {
   return (
@@ -25,32 +30,60 @@ const renderLoadingSpinner = () => {
   );
 };
 
-function InsertAndRegenerateButton({onPressInsert, onPressRegenerate}) {
+function DropDownButton({label, onPress, isOpen}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      style={{
+        flexDirection: 'row',
+        marginEnd: MarginConstants.tab1_4x,
+      }}>
+      <Text style={{...styles.chipButtonText, color: Colors.filterIconColor}}>
+        {label}
+      </Text>
+      <IonIcon
+        name={isOpen ? 'chevron-down' : 'chevron-up'}
+        size={20}
+        color={Colors.filterIconColor}
+      />
+    </Pressable>
+  );
+}
+
+function RegenerateButton({onPress}) {
+  return (
+    <Pressable onPress={onPress}>
+      <IonIcon name="refresh" size={28} color={Colors.accentLight} />
+    </Pressable>
+  );
+}
+
+function InsertButton({onPress}) {
+  return (
+    <QPButton
+      buttonText={'Insert'}
+      buttonColor={Colors.accentLight}
+      onPress={onPress}
+      textStyle={buttonStyles.primaryButtonText}
+      style={{
+        flexDirection: 'row-reverse',
+        ...buttonStyles.primaryButton,
+        borderRadius: 2,
+      }}
+    />
+  );
+}
+function EmailGenarationActionView({children}) {
   return (
     <View
       style={{
         margin: MarginConstants.tab1_2x,
         padding: PaddingConstants.tab1_2x,
         alignItems: 'center',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         flexDirection: 'row',
       }}>
-      <Pressable
-        style={{marginEnd: MarginConstants.tab1_4x}}
-        onPress={onPressRegenerate}>
-        <IonIcon name="refresh" size={32} color={Colors.accentLight} />
-      </Pressable>
-      <QPButton
-        buttonText={'Insert'}
-        buttonColor={Colors.accentLight}
-        onPress={onPressInsert}
-        textStyle={buttonStyles.primaryButtonText}
-        style={{
-          flexDirection: 'row-reverse',
-          ...buttonStyles.primaryButton,
-          borderRadius: 2,
-        }}
-      />
+      {children}
     </View>
   );
 }
@@ -78,27 +111,6 @@ const ChipButton = ({label, onPress, currentDraftType}) => {
   );
 };
 
-const ModalContainer = ({
-  children,
-  emailDraftModalVisible,
-  setEmailDraftModalVisible,
-  isLoading,
-}) => {
-  return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={emailDraftModalVisible}
-      onRequestClose={() => setEmailDraftModalVisible(false)}>
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          {isLoading ? renderLoadingSpinner() : children}
-        </View>
-      </View>
-    </Modal>
-  );
-};
-
 const AIEmailDraftModal = ({
   emailDraftModalVisible,
   setEmailDraftModalVisible,
@@ -119,111 +131,162 @@ const AIEmailDraftModal = ({
     setCurrentDraftBody(text);
   };
 
-  const aiRouterAPICall = userPrompt => {
-    setIsLoading(true);
-
-    // const extractedTemplates = emailTemplates.map(
-    //   ({title, subject, templateText}) => ({
-    //     title,
-    //     subject,
-    //     templateText,
-    //   }),
-    // );
-
-    // const extractedRootCauses = rootCauseList.map(({title}) => ({
-    //   title,
-    // }));
-
-    // const extractedActions = rootCauseActions.map(({actionName}) => ({
-    //   actionName,
-    // }));
-
-    apiHandler.generateEmailWithAI(
-      AI_ROUTER_API_URL,
-      AI_ROUTER_API_KEY,
-      {
-        user_id: 4894850,
-        use_case_name: 'generate-email-draft-clf',
-        prompt_version: 2,
-        organization_id: 4787064,
-        data_center: 'US',
-        meta: {
-          id: 1,
-        },
-        input_data: {
-          messages: [
+  const mockApiData = {
+    result: {
+      documents: [
+        {
+          uuid: 45189,
+          prompt_id: 129,
+          use_case_name: 'generate-email-draft-clf',
+          prompt_version: 2,
+          meta: {id: 1},
+          output: [
             {
               key: 'content',
-              value: 'JSON Draft email for customer',
-            },
-            {
-              key: 'customerName',
-              value: customerName,
-            },
-            {
-              key: 'senderName',
-              value: userInfo.firstName + '\t' + userInfo.lastName,
-            },
-            {
-              key: 'ticketDetails',
-              value: comment,
-            },
-            {
-              key: 'serveyDetails',
-              value: null,
-            },
-            {
-              key: 'comments',
-              value: userPrompt ?? 'Keep it short and to the point',
+              value_type: 'json_object',
+              value: {
+                statusCode: 200,
+                emailDrafts: [
+                  {
+                    type: 'default',
+                    subject: 'We Apologize for the Issue with Your Package',
+                    body: '<p>Dear Sean Evans,</p><p>Thank you for reaching out. We sincerely apologize for the inconvenience regarding your package being unsealed upon delivery. <br> It should have been properly sealed to ensure its integrity. We take such matters seriously and will investigate this further.</p><p>Thank you for your understanding.</p><p>Best regards,<br>Mehedi Hasan</p>',
+                  },
+                  {
+                    type: 'formalize',
+                    subject: 'Apology Regarding Your Package Delivery',
+                    body: '<p>Dear Sean Evans,</p><p>I am writing to express my sincere apologies for the condition of your package upon delivery. It is our standard to ensure packages are sealed correctly to maintain their integrity. We will address this issue promptly.</p><p>Thank you for your understanding.</p><p>Sincerely,<br>Mehedi Hasan</p>',
+                  },
+                  {
+                    type: 'elaborate',
+                    subject: 'Our Apologies for the Unsealed Package',
+                    body: '<p>Dear Sean Evans,</p><p>Thank you for bringing this matter to our attention. We truly regret that your package was unsealed during delivery. <br> This does not reflect our standards, and we will take necessary steps to ensure that all packages are properly sealed in the future. <br> Your feedback is invaluable in helping us improve our services.</p><p>Thank you for your understanding, and please feel free to reach out if you have any further concerns.</p><p>Warm regards,<br>Mehedi Hasan</p>',
+                  },
+                  {
+                    type: 'shorten',
+                    subject: 'Regarding Your Package Issue',
+                    body: "<p>Dear Sean Evans,</p><p>I'm sorry to hear about your unsealed package. It should have been properly sealed. We will look into this issue immediately.</p><p>Thank you for your understanding.</p><p>Best,<br>Mehedi Hasan</p>",
+                  },
+                ],
+              },
             },
           ],
+          usage: {
+            prompt_tokens: 555,
+            completion_tokens: 472,
+            total_tokens: 1027,
+            prompt_tokens_details: {cached_tokens: 0, audio_tokens: 0},
+            completion_tokens_details: {
+              reasoning_tokens: 0,
+              audio_tokens: 0,
+              accepted_prediction_tokens: 0,
+              rejected_prediction_tokens: 0,
+            },
+          },
         },
-      },
-      response => {
-        setIsLoading(false);
-
-        console.log('response', response);
-        if (
-          response?.error === null &&
-          response.result.documents[0].output[0].value.statusCode === 200
-        ) {
-          setDrafts(response.result.documents[0].output[0].value.emailDrafts);
-        } else {
-          showErrorFlashMessage(
-            response?.error?.message ?? "Couldn't generate email",
-          );
-        }
-      },
-      error => {
-        setIsLoading(false);
-        // richText.current.setContentHTML(defaultEmail.templateText);
-        // onChangeSubject(defaultEmail.subject);
-        // onChangeEmailBody(defaultEmail.templateText);
-        // setIsLoading(false);
-        console.log('error', error);
-        showErrorFlashMessage(error?.message ?? "Couldn't generate email");
-      },
-    );
+      ],
+    },
+    error: null,
   };
 
-  useEffect(() => {
-    aiRouterAPICall();
+  const mockAIRouterAPICall = useCallback(userPrompt => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      setDrafts(mockApiData.result.documents[0].output[0].value.emailDrafts);
+    }, 2000);
   }, []);
 
-  useEffect(() => {
-    if (drafts.length > 0) {
-      setTextToEditor();
-    }
-  }, [drafts, draftType]);
+  const aiRouterAPICall = useCallback(
+    userPrompt => {
+      setIsLoading(true);
 
-  const setTextToEditor = () => {
+      apiHandler.generateEmailWithAI(
+        AI_ROUTER_API_URL,
+        AI_ROUTER_API_KEY,
+        {
+          user_id: 4894850,
+          use_case_name: 'generate-email-draft-clf',
+          prompt_version: 2,
+          organization_id: 4787064,
+          data_center: 'US',
+          meta: {
+            id: 1,
+          },
+          input_data: {
+            messages: [
+              {
+                key: 'content',
+                value: 'JSON Draft email for customer',
+              },
+              {
+                key: 'customerName',
+                value: customerName,
+              },
+              {
+                key: 'senderName',
+                value: userInfo.firstName + '\t' + userInfo.lastName,
+              },
+              {
+                key: 'ticketDetails',
+                value: comment,
+              },
+              {
+                key: 'serveyDetails',
+                value: null,
+              },
+              {
+                key: 'comments',
+                value: userPrompt ?? 'Keep it short and to the point',
+              },
+            ],
+          },
+        },
+        response => {
+          setIsLoading(false);
+
+          console.log('response', response);
+          if (
+            response?.error === null &&
+            response.result.documents[0].output[0].value.statusCode === 200
+          ) {
+            setDrafts(response.result.documents[0].output[0].value.emailDrafts);
+          } else {
+            showErrorFlashMessage(
+              response?.error?.message ?? "Couldn't generate email",
+            );
+          }
+        },
+        error => {
+          setIsLoading(false);
+          console.log('error', error);
+          showErrorFlashMessage(error?.message ?? "Couldn't generate email");
+        },
+      );
+    },
+    [customerName, userInfo, comment],
+  );
+
+  const setTextToEditor = useCallback(() => {
     console.log('setTextToEditor', draftType);
 
     const selectedDraft =
       drafts.find(draft => draft.type === draftType) ?? drafts[0];
     setCurrentDraftBody(selectedDraft.body);
     console.log('setTextToEditor', selectedDraft.type);
-  };
+  }, [drafts, draftType]);
+
+  useEffect(() => {
+    // aiRouterAPICall();
+    mockAIRouterAPICall();
+  }, [mockAIRouterAPICall]);
+
+  useEffect(() => {
+    if (drafts.length > 0) {
+      setTextToEditor();
+    }
+  }, [drafts, draftType, setTextToEditor]);
 
   const onPressChip = selected => {
     console.log('onPressChip', selected);
@@ -245,84 +308,45 @@ const AIEmailDraftModal = ({
     setCurrentDraftBody('');
     aiRouterAPICall();
   };
+
+  const onPressDropDown = () => {
+    console.log('onPressDropDown');
+  };
   return (
-    <ModalContainer
-      emailDraftModalVisible={emailDraftModalVisible}
-      setEmailDraftModalVisible={setEmailDraftModalVisible}
-      isLoading={isLoading}>
-      <View style={styles.modalHeader}>
-        <Text style={styles.modalHeaderText}>Email Drafting with AI</Text>
-        <Pressable onPress={() => setEmailDraftModalVisible(false)}>
-          <IonIcon name="close" size={24} color={Colors.filterIconColor} />
-        </Pressable>
-      </View>
+    <QPBottomSheet
+      visible={emailDraftModalVisible}
+      onClose={() => setEmailDraftModalVisible(false)}
+      isLoading={isLoading}
+      loadingComponent={renderLoadingSpinner()}>
+      <QPBottomSheetHeader
+        headerLabel="Email Drafting with AI"
+        onClose={() => setEmailDraftModalVisible(false)}
+      />
       <View style={styles.modalBody}>
         {drafts.length > 0 && <EmailBodyTextView text={currentDraftBody} />}
       </View>
-      <View style={styles.chipButtonContainer}>
-        <ChipButton
-          label="formalize"
-          onPress={onPressChip}
-          currentDraftType={draftType}
-        />
-        <ChipButton
-          label="elaborate"
-          onPress={onPressChip}
-          currentDraftType={draftType}
-        />
-        <ChipButton
-          label="shorten"
-          onPress={onPressChip}
-          currentDraftType={draftType}
-        />
-      </View>
-      <InsertAndRegenerateButton
-        onPressInsert={onPressInsert}
-        onPressRegenerate={onPressRegenerate}
-      />
-    </ModalContainer>
+
+      <EmailGenarationActionView>
+        <StartAlignedView>
+          <RegenerateButton onPress={onPressRegenerate} />
+          <HorizontalSpaceBox multiplyBy={2} />
+          <DropDownButton label="formalize" onPress={onPressDropDown} isOpen />
+        </StartAlignedView>
+
+        <EndAlignedView>
+          <InsertButton onPress={onPressInsert} />
+        </EndAlignedView>
+      </EmailGenarationActionView>
+    </QPBottomSheet>
   );
 };
 
 export default AIEmailDraftModal;
 
 const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
-  },
-  modalContent: {
-    backgroundColor: Colors.white,
-    height: '90%',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    width: '100%',
-    alignContent: 'center',
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: Colors.white,
-    padding: PaddingConstants.tab1_2x,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-  },
-  modalHeaderText: {
-    color: Colors.filterIconColor,
-    fontSize: TextSizes.largeText,
-    fontFamily: FontFamily.medium,
-  },
   modalBody: {
     flex: 1,
     padding: PaddingConstants.tab2,
-  },
-  modalBodyText: {
-    color: Colors.filterIconColor,
-    fontSize: TextSizes.secondary,
-    fontFamily: FontFamily.regular,
-    textAlign: 'center',
   },
   loading: {
     position: 'absolute',
@@ -350,7 +374,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   chipButtonText: {
-    fontSize: TextSizes.secondary,
+    fontSize: TextSizes.secondary2,
     fontFamily: FontFamily.regular,
   },
 });
