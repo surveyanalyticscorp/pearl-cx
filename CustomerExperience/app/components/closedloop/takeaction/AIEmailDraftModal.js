@@ -5,7 +5,6 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {IonIcon} from '../../../Utils/IconUtils';
-import {RichEditor} from 'react-native-pell-rich-editor';
 import {useSelector} from 'react-redux';
 import {AI_ROUTER_API_KEY, AI_ROUTER_API_URL} from '../../../api/Constant';
 import {apiHandler} from '../../../api/ApiHandler';
@@ -15,7 +14,8 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import StringUtils from '../../../Utils/StringUtils';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
-import {set} from 'lodash';
+import {CommentText} from '../TicketComments';
+import {EmailBodyTextView} from './sendEmail/AiEmailBodyTextView';
 
 const renderLoadingSpinner = () => {
   return (
@@ -54,26 +54,6 @@ function InsertAndRegenerateButton({onPressInsert, onPressRegenerate}) {
     </View>
   );
 }
-
-const RichTextEditor = ({richText, onChangeEmailBody}) => {
-  return (
-    <RichEditor
-      ref={richText}
-      useContainer
-      disabled={false}
-      initialFocus={false}
-      onChange={onChangeEmailBody}
-      placeholder={'Generating email draft....'}
-      placeholderTextColor={Colors.borderColor}
-      androidHardwareAccelerationDisabled={true}
-      initialHeight={400}
-      style={styles.textInput}
-      editorStyle={{
-        backgroundColor: Colors.transparentBackground,
-      }}
-    />
-  );
-};
 
 const ChipButton = ({label, onPress, currentDraftType}) => {
   const isActive = currentDraftType === label;
@@ -124,7 +104,6 @@ const AIEmailDraftModal = ({
   setEmailDraftModalVisible,
   setEmailBody,
 }) => {
-  const richTextEditor = React.useRef();
   const [isLoading, setIsLoading] = useState(true);
   const [drafts, setDrafts] = useState([]);
   const [draftType, setDraftType] = useState('default');
@@ -142,7 +121,6 @@ const AIEmailDraftModal = ({
 
   const aiRouterAPICall = userPrompt => {
     setIsLoading(true);
-    richTextEditor?.current?.setContentHTML('');
 
     // const extractedTemplates = emailTemplates.map(
     //   ({title, subject, templateText}) => ({
@@ -244,7 +222,6 @@ const AIEmailDraftModal = ({
     const selectedDraft =
       drafts.find(draft => draft.type === draftType) ?? drafts[0];
     setCurrentDraftBody(selectedDraft.body);
-    richTextEditor.current.setContentHTML(selectedDraft.body);
     console.log('setTextToEditor', selectedDraft.type);
   };
 
@@ -266,7 +243,6 @@ const AIEmailDraftModal = ({
   const onPressRegenerate = () => {
     console.log('onPressRegenerate');
     setCurrentDraftBody('');
-    richTextEditor.current.setContentHTML('');
     aiRouterAPICall();
   };
   return (
@@ -281,12 +257,7 @@ const AIEmailDraftModal = ({
         </Pressable>
       </View>
       <View style={styles.modalBody}>
-        {drafts.length > 0 && (
-          <RichTextEditor
-            richText={richTextEditor}
-            onChangeEmailBody={onChangeEmailBody}
-          />
-        )}
+        {drafts.length > 0 && <EmailBodyTextView text={currentDraftBody} />}
       </View>
       <View style={styles.chipButtonContainer}>
         <ChipButton
@@ -319,14 +290,14 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   modalContent: {
     backgroundColor: Colors.white,
     height: '90%',
-    borderRadius: 2,
-    width: '90%',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    width: '100%',
     alignContent: 'center',
   },
   modalHeader: {

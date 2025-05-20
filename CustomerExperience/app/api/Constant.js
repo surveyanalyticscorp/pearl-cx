@@ -22,7 +22,7 @@ export const TOKEN_VALIDATION_DURATION = 5;
 export const RESPONSE_READ_UNREAD_FEATURE_ACTIVATION_DATE = 'Jun 1 2024';
 export const MAX_COMMENT_LENGTH = 240;
 // set true for DEV, false for LIVE
-export const IS_DEV_MODE = true;
+export const IS_DEV_MODE = false;
 
 // export const BASE_URL = 'https://api.questionpro.com/';
 
@@ -188,5 +188,6 @@ export const EMAIL_PATTERN =
 export const SEGMENT_SELECTOR = 'segmentSelector';
 export const fakeBearerToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTc2NTIsIm9yZ0lkIjo1MjAwODgxLCJjeFVzZXJJZCI6OTc2NTIsImZpcnN0TmFtZSI6IkFubW9sIiwibGFzdE5hbWUiOiIiLCJlbWFpbEFkZHJlc3MiOiJhbm1vbC5zYWhldHlhKzIxQHF1ZXN0aW9ucHJvLmNvbSIsImZlZWRiYWNrSWQiOjM1MDkwLCJmZWVkYmFja05hbWUiOiJMaXZlIFN1cnZleXMiLCJzdWJzY3JpYmVySWQiOjUzMzEzNjMsInN1YnNjcmliZXJFbWFpbEFkZHJlc3MiOiJhbm1vbC5zYWhldHlhKzIxQHF1ZXN0aW9ucHJvLmNvbSIsInJvbGUiOjAsImFwcFR5cGUiOjEsImlhdCI6MTcwNDg2Mjg5MSwiZXhwIjoxNzA1Mjk0ODkxfQ.2Cfya0yVMHPItA_cElgi3NgSHgNf-sPQC2R1cGItvL4';
-export const AI_ROUTER_API_KEY = "1ae87074-9220-4316-80bd-ba097d5ea785"
-export const AI_ROUTER_API_URL = "https://airouter-api-staging.questionpro.com/v1/prompt-routes"
+export const AI_ROUTER_API_KEY = '1ae87074-9220-4316-80bd-ba097d5ea785';
+export const AI_ROUTER_API_URL =
+  'https://airouter-api-staging.questionpro.com/v1/prompt-routes';

@@ -90,6 +90,7 @@ export const CommentText = ({text}) => {
   return (
     <View testID="comment-text-container">
       <RenderHTML
+        ignoredDomTags={['html', 'head', 'body']}
         source={{
           html: `
           <span style="font-size: 100%; ">${StringUtils.formatCommentToHTML(
