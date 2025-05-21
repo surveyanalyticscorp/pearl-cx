@@ -407,5 +407,6 @@ const styles = StyleSheet.create({
   chipButtonText: {
     fontSize: TextSizes.secondary2,
     fontFamily: FontFamily.regular,
+    marginEnd: MarginConstants.tab1_2x,
   },
 });
