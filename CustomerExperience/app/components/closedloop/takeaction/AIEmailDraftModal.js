@@ -36,10 +36,7 @@ function DropDownButton({label, onPress, isOpen, onLayout}) {
     <Pressable
       onPress={onPress}
       onLayout={onLayout}
-      style={{
-        flexDirection: 'row',
-        marginEnd: MarginConstants.tab1_4x,
-      }}>
+      style={styles.dropDownButton}>
       <Text style={{...styles.chipButtonText, color: Colors.filterIconColor}}>
         {label}
       </Text>
@@ -120,7 +117,7 @@ const AIEmailDraftModal = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [drafts, setDrafts] = useState([]);
-  const [draftType, setDraftType] = useState('default');
+  const [draftType, setDraftType] = useState('Refine');
   const customerName = useSelector(
     state => state.dashboard?.ticket?.panelMember?.name,
   );
@@ -200,8 +197,8 @@ const AIEmailDraftModal = ({
     setIsLoading(true);
 
     setTimeout(() => {
-      setIsLoading(false);
       setDrafts(mockApiData.result.documents[0].output[0].value.emailDrafts);
+      setIsLoading(false);
     }, 2000);
   }, []);
 
@@ -312,8 +309,9 @@ const AIEmailDraftModal = ({
   };
   const onPressRegenerate = () => {
     console.log('onPressRegenerate');
-    setCurrentDraftBody('');
-    aiRouterAPICall();
+
+    // aiRouterAPICall();
+    mockAIRouterAPICall();
   };
 
   const onPressDropDown = () => {
@@ -396,6 +394,15 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     margin: MarginConstants.tab1_2x,
     padding: PaddingConstants.tab1_2x,
+  },
+  dropDownButton: {
+    flexDirection: 'row',
+    marginEnd: MarginConstants.tab1_4x,
+    backgroundColor: Colors.white,
+    padding: PaddingConstants.tab1,
+    borderRadius: 2,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.borderColor,
   },
   chipButton: {
     borderRadius: 5,

@@ -3,16 +3,12 @@ import {Pressable, StyleSheet} from 'react-native';
 import {MaterialIcons} from '../../../../Utils/IconUtils';
 import {PaddingConstants} from '../../../../styles/padding.constants';
 import {Colors} from '../../../../styles/color.constants';
+import QPAIIcon from '../../../../../assets/images/qp_ai.svg';
 
 const AiDraftButton = ({onPress}) => {
   return (
     <Pressable style={styles.generateButton} onPress={onPress}>
-      <MaterialIcons
-        size={22}
-        name={'auto-fix-high'}
-        color={Colors.filterIconColor}
-        style={{paddingRight: PaddingConstants.halfTab}}
-      />
+      <QPAIIcon />
     </Pressable>
   );
 };

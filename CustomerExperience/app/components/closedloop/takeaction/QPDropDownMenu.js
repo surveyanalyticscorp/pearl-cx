@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  FlatList,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-} from 'react-native';
+import {FlatList, Modal, Pressable, StyleSheet, Text, View} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
@@ -51,7 +43,7 @@ const QPDropDownMenu = ({
           style={[
             styles.menuContainer,
             {
-              bottom: anchorPosition.y + MarginConstants.tab1_8x, // Add some padding from the button
+              bottom: anchorPosition.y + MarginConstants.tab1_8x,
               left: anchorPosition.x,
             },
           ]}>
