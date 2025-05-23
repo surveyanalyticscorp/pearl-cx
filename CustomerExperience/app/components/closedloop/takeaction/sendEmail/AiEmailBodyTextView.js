@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {View} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import {useWindowDimensions} from 'react-native';
 import {Colors} from '../../../../styles/color.constants';
 import {FontFamily} from '../../../../styles/font.constants';
@@ -8,7 +8,7 @@ import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
 import StringUtils from '../../../../Utils/StringUtils';
 
 export const EmailBodyTextView = ({text}) => {
-  const {width} = useWindowDimensions();
+  const {width, height} = useWindowDimensions();
 
   const memoizedSystemFonts = useMemo(
     () => [...defaultSystemFonts, FontFamily.regular],
@@ -35,7 +35,10 @@ export const EmailBodyTextView = ({text}) => {
 
   const memoizedRenderContent = useMemo(
     () => (
-      <View testID="email-body-text-container">
+      <ScrollView
+        style={{height: height * 0.4, backgroundColor: Colors.darkerGrey}}
+        scrollEnabled={true}
+        testID="email-body-text-container">
         <RenderHTML
           ignoredDomTags={['html', 'head', 'body']}
           source={memoizedHtmlSource}
@@ -43,7 +46,7 @@ export const EmailBodyTextView = ({text}) => {
           systemFonts={memoizedSystemFonts}
           tagsStyles={memoizedTagsStyles}
         />
-      </View>
+      </ScrollView>
     ),
     [memoizedHtmlSource, memoizedTagsStyles, memoizedSystemFonts, width],
   );

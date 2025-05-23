@@ -320,52 +320,59 @@ const AIEmailDraftModal = ({
 
   const onDropDownButtonLayout = event => {
     const {x, y} = event.nativeEvent.layout;
+    // console.log('onDropDownButtonLayout', x - 40, y);
     setDropDownPosition({x, y});
   };
 
   const onSelectDropDownItem = item => {
     setDraftType(item);
   };
-
+  const onPressClose = () => {
+    setEmailDraftModalVisible(false);
+  };
   return (
     <QPBottomSheet
       visible={emailDraftModalVisible}
-      onClose={() => setEmailDraftModalVisible(false)}
-      isLoading={isLoading}
-      loadingComponent={renderLoadingSpinner()}>
-      <QPBottomSheetHeader
-        headerLabel="Email Drafting with AI"
-        onClose={() => setEmailDraftModalVisible(false)}
-      />
-      <View style={styles.modalBody}>
-        {drafts.length > 0 && <EmailBodyTextView text={currentDraftBody} />}
-      </View>
+      onClose={onPressClose}
+      headerComponent={
+        <QPBottomSheetHeader
+          headerLabel="Email Drafting with AI"
+          onClose={onPressClose}
+        />
+      }>
+      {isLoading ? (
+        renderLoadingSpinner()
+      ) : (
+        <>
+          <View style={styles.modalBody}>
+            {drafts.length > 0 && <EmailBodyTextView text={currentDraftBody} />}
+          </View>
+          <EmailGenarationActionView>
+            <StartAlignedView>
+              <RegenerateButton onPress={onPressRegenerate} />
+              <HorizontalSpaceBox multiplyBy={2} />
+              <DropDownButton
+                label={draftType}
+                onPress={onPressDropDown}
+                isOpen={isDropDownOpen}
+                onLayout={onDropDownButtonLayout}
+              />
+            </StartAlignedView>
 
-      <EmailGenarationActionView>
-        <StartAlignedView>
-          <RegenerateButton onPress={onPressRegenerate} />
-          <HorizontalSpaceBox multiplyBy={2} />
-          <DropDownButton
-            label={draftType}
-            onPress={onPressDropDown}
-            isOpen={isDropDownOpen}
-            onLayout={onDropDownButtonLayout}
+            <EndAlignedView>
+              <InsertButton onPress={onPressInsert} />
+            </EndAlignedView>
+          </EmailGenarationActionView>
+          <QPDropDownMenu
+            visible={isDropDownOpen}
+            onClose={() => setIsDropDownOpen(false)}
+            anchorPosition={dropDownPosition}
+            items={dropDownItems}
+            onSelectItem={onSelectDropDownItem}
+            selectedItem={draftType}
           />
-        </StartAlignedView>
-
-        <EndAlignedView>
-          <InsertButton onPress={onPressInsert} />
-        </EndAlignedView>
-      </EmailGenarationActionView>
-
-      <QPDropDownMenu
-        visible={isDropDownOpen}
-        onClose={() => setIsDropDownOpen(false)}
-        anchorPosition={dropDownPosition}
-        items={dropDownItems}
-        onSelectItem={onSelectDropDownItem}
-        selectedItem={draftType}
-      />
+        </>
+      )}
     </QPBottomSheet>
   );
 };
@@ -374,7 +381,6 @@ export default AIEmailDraftModal;
 
 const styles = StyleSheet.create({
   modalBody: {
-    flex: 1,
     padding: PaddingConstants.tab2,
   },
   loading: {

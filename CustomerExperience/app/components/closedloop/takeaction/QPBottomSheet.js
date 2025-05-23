@@ -8,20 +8,34 @@ import {
   Dimensions,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
-import {PaddingConstants} from '../../../styles/padding.constants';
+import {MarginConstants} from '../../../styles/margin.constants';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-const BOTTOM_SHEET_HEIGHT = SCREEN_HEIGHT * 0.9;
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const bottomSheetHeight = SCREEN_HEIGHT * 0.9;
 
+/**
+ * QPBottomSheet - A customizable bottom sheet component with drag-to-dismiss functionality
+ *
+ * Features:
+ * - Slides up from the bottom of the screen
+ * - Can be dragged down to dismiss
+ * - Smooth animations for opening/closing
+ *
+ * @param {Object} props
+ * @param {React.ReactNode} props.children - Content to be displayed inside the bottom sheet
+ * @param {boolean} props.visible - Controls the visibility of the bottom sheet
+ * @param {Function} props.onClose - Callback function triggered when the sheet is dismissed
+ */
 const QPBottomSheet = ({
+  headerComponent,
   children,
   visible,
   onClose,
-  isLoading,
-  loadingComponent,
+  contentStyle,
 }) => {
+  const translateY = useRef(new Animated.Value(bottomSheetHeight)).current;
   const pan = useRef(new Animated.ValueXY()).current;
-  const translateY = useRef(new Animated.Value(BOTTOM_SHEET_HEIGHT)).current;
 
   const panResponder = useRef(
     PanResponder.create({
@@ -29,15 +43,13 @@ const QPBottomSheet = ({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: (_, gestureState) => {
         if (gestureState.dy > 0) {
-          // Only allow dragging down
           pan.y.setValue(gestureState.dy);
         }
       },
       onPanResponderRelease: (_, gestureState) => {
-        if (gestureState.dy > BOTTOM_SHEET_HEIGHT * 0.3) {
-          // If dragged down more than 30% of the height, close the sheet
+        if (gestureState.dy > bottomSheetHeight * 0.3) {
           Animated.timing(translateY, {
-            toValue: BOTTOM_SHEET_HEIGHT,
+            toValue: bottomSheetHeight,
             duration: 300,
             useNativeDriver: true,
           }).start(() => {
@@ -45,7 +57,6 @@ const QPBottomSheet = ({
             pan.setValue({x: 0, y: 0});
           });
         } else {
-          // Otherwise, snap back to original position
           Animated.spring(pan, {
             toValue: {x: 0, y: 0},
             useNativeDriver: true,
@@ -63,26 +74,30 @@ const QPBottomSheet = ({
         bounciness: 0,
       }).start();
     } else {
-      translateY.setValue(BOTTOM_SHEET_HEIGHT);
+      translateY.setValue(bottomSheetHeight);
     }
-  }, [visible, translateY]);
+  }, [visible]);
 
   return (
     <Modal
       animationType="none"
-      transparent={true}
+      transparent
       visible={visible}
       onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
         <Animated.View
           style={[
             styles.modalContent,
+            contentStyle,
+
             {
-              transform: [{translateY: translateY}, {translateY: pan.y}],
+              height: bottomSheetHeight,
+              transform: [{translateY: Animated.add(translateY, pan.y)}],
             },
           ]}>
           <View style={styles.dragIndicator} {...panResponder.panHandlers} />
-          {isLoading ? loadingComponent : children}
+          {headerComponent && headerComponent}
+          {children}
         </Animated.View>
       </View>
     </Modal>
@@ -97,31 +112,19 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: Colors.white,
-    height: BOTTOM_SHEET_HEIGHT,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     width: '100%',
     alignContent: 'center',
   },
   dragIndicator: {
-    width: 40,
+    width: SCREEN_WIDTH * 0.4,
     height: 4,
     backgroundColor: Colors.borderColor,
     borderRadius: 2,
     alignSelf: 'center',
-    marginTop: 8,
-    marginBottom: 8,
-  },
-  loading: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    top: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    flexDirection: 'column',
+    marginTop: MarginConstants.tab1_2x,
+    marginBottom: MarginConstants.tab1,
   },
 });
 
