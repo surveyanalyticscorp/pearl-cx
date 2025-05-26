@@ -19,7 +19,6 @@ import {
   ASYNC_CLF_BASE_URL,
   ASYNC_LOGGED_IN_ALREADY,
   BASE_URL,
-  SUBSCRIBER_ID,
 } from '../../api/Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {translate} from '../../Utils/MultilinguaUtils';
@@ -54,14 +53,16 @@ const RenderCountData = () => {
     state => state.dashboard.welcomeScreenData,
   );
 
+  console.log('CLF_DATA', JSON.stringify(clfData));
+  console.log('CX_DATA', JSON.stringify(cxData));
   const {logout} = useLogoutProcess();
 
   useEffect(() => {
-    if (JSON.stringify(clfData).includes('jwt expired')) {
+    if (clfData && JSON.stringify(clfData).includes('jwt expired')) {
       console.log('CLF_DATA', JSON.stringify(clfData));
       logout();
     }
-  }, [clfData]);
+  }, [clfData, logout]);
 
   return (
     <View testID="render-count-data">

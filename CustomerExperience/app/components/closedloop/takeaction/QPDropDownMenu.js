@@ -43,7 +43,10 @@ const QPDropDownMenu = ({
           style={[
             styles.menuContainer,
             {
-              bottom: anchorPosition.y + MarginConstants.tab1_8x,
+              bottom:
+                anchorPosition.y +
+                MarginConstants.tab1_8x +
+                MarginConstants.tab1,
               left: anchorPosition.x,
             },
           ]}>

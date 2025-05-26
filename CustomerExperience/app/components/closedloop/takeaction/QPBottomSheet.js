@@ -12,20 +12,27 @@ import {MarginConstants} from '../../../styles/margin.constants';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const bottomSheetHeight = SCREEN_HEIGHT * 0.9;
+
+const getHeightFromPercentage = value => {
+  if (typeof value === 'string' && value.includes('%')) {
+    const parsed = parseFloat(value.replace('%', ''));
+    if (!isNaN(parsed)) {
+      return SCREEN_HEIGHT * Math.min(Math.max(parsed / 100, 0), 1);
+    }
+  }
+  return null; // Use wrap content
+};
 
 /**
- * QPBottomSheet - A customizable bottom sheet component with drag-to-dismiss functionality
- *
- * Features:
- * - Slides up from the bottom of the screen
- * - Can be dragged down to dismiss
- * - Smooth animations for opening/closing
+ * QPBottomSheet - A customizable bottom sheet with optional height or auto-sizing
  *
  * @param {Object} props
- * @param {React.ReactNode} props.children - Content to be displayed inside the bottom sheet
- * @param {boolean} props.visible - Controls the visibility of the bottom sheet
- * @param {Function} props.onClose - Callback function triggered when the sheet is dismissed
+ * @param {React.ReactNode} props.children - Bottom sheet content
+ * @param {React.ReactNode} props.headerComponent - Optional header
+ * @param {boolean} props.visible - Controls modal visibility
+ * @param {Function} props.onClose - Called when sheet is dismissed
+ * @param {string} [props.bottomSheetHeight] - Optional height (e.g., '60%')
+ * @param {Object} [props.contentStyle] - Optional style override for content container
  */
 const QPBottomSheet = ({
   headerComponent,
@@ -33,8 +40,12 @@ const QPBottomSheet = ({
   visible,
   onClose,
   contentStyle,
+  bottomSheetHeight,
 }) => {
-  const translateY = useRef(new Animated.Value(bottomSheetHeight)).current;
+  const sheetHeight = getHeightFromPercentage(bottomSheetHeight);
+  const translateY = useRef(
+    new Animated.Value(sheetHeight ?? SCREEN_HEIGHT),
+  ).current;
   const pan = useRef(new Animated.ValueXY()).current;
 
   const panResponder = useRef(
@@ -47,9 +58,10 @@ const QPBottomSheet = ({
         }
       },
       onPanResponderRelease: (_, gestureState) => {
-        if (gestureState.dy > bottomSheetHeight * 0.3) {
+        const threshold = (sheetHeight ?? SCREEN_HEIGHT) * 0.3;
+        if (gestureState.dy > threshold) {
           Animated.timing(translateY, {
-            toValue: bottomSheetHeight,
+            toValue: sheetHeight ?? SCREEN_HEIGHT,
             duration: 300,
             useNativeDriver: true,
           }).start(() => {
@@ -74,9 +86,9 @@ const QPBottomSheet = ({
         bounciness: 0,
       }).start();
     } else {
-      translateY.setValue(bottomSheetHeight);
+      translateY.setValue(sheetHeight ?? SCREEN_HEIGHT);
     }
-  }, [visible]);
+  }, [visible, sheetHeight]);
 
   return (
     <Modal
@@ -89,9 +101,8 @@ const QPBottomSheet = ({
           style={[
             styles.modalContent,
             contentStyle,
-
             {
-              height: bottomSheetHeight,
+              height: sheetHeight ?? undefined, // undefined = wrap content
               transform: [{translateY: Animated.add(translateY, pan.y)}],
             },
           ]}>

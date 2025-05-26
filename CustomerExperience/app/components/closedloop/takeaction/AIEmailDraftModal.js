@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useCallback, useRef} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Modal, Pressable, StyleSheet, Text, View} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
@@ -14,7 +14,6 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import StringUtils from '../../../Utils/StringUtils';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
-import {CommentText} from '../TicketComments';
 import {EmailBodyTextView} from './sendEmail/AiEmailBodyTextView';
 import QPBottomSheet from './QPBottomSheet';
 import QPBottomSheetHeader from './QPBottomSheetHeader';
@@ -23,7 +22,10 @@ import EndAlignedView from '../../../routes/commonUI/EndAlignedView';
 import StartAlignedView from '../../../routes/commonUI/StartAlignedView';
 import QPDropDownMenu from './QPDropDownMenu';
 
-const renderLoadingSpinner = () => {
+const RenderLoadingSpinner = ({isLoading}) => {
+  if (!isLoading) {
+    return null;
+  }
   return (
     <View style={styles.loading}>
       <QPSpinner spinnerText={'Crafting your email with AI...'} />
@@ -72,12 +74,12 @@ function InsertButton({onPress}) {
     />
   );
 }
-function EmailGenarationActionView({children}) {
+function EmailGenarationActionContainer({children}) {
   return (
     <View
       style={{
-        margin: MarginConstants.tab1_2x,
-        padding: PaddingConstants.tab1_2x,
+        marginVertical: MarginConstants.tab1_2x,
+        paddingVertical: PaddingConstants.tab1_2x,
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
@@ -340,39 +342,36 @@ const AIEmailDraftModal = ({
           onClose={onPressClose}
         />
       }>
-      {isLoading ? (
-        renderLoadingSpinner()
-      ) : (
-        <>
-          <View style={styles.modalBody}>
-            {drafts.length > 0 && <EmailBodyTextView text={currentDraftBody} />}
-          </View>
-          <EmailGenarationActionView>
-            <StartAlignedView>
-              <RegenerateButton onPress={onPressRegenerate} />
-              <HorizontalSpaceBox multiplyBy={2} />
-              <DropDownButton
-                label={draftType}
-                onPress={onPressDropDown}
-                isOpen={isDropDownOpen}
-                onLayout={onDropDownButtonLayout}
-              />
-            </StartAlignedView>
+      <View style={styles.modalBody}>
+        {/* {isLoading && renderLoadingSpinner()} */}
 
-            <EndAlignedView>
-              <InsertButton onPress={onPressInsert} />
-            </EndAlignedView>
-          </EmailGenarationActionView>
-          <QPDropDownMenu
-            visible={isDropDownOpen}
-            onClose={() => setIsDropDownOpen(false)}
-            anchorPosition={dropDownPosition}
-            items={dropDownItems}
-            onSelectItem={onSelectDropDownItem}
-            selectedItem={draftType}
-          />
-        </>
-      )}
+        <EmailBodyTextView text={currentDraftBody} />
+        <RenderLoadingSpinner isLoading={isLoading} />
+        <EmailGenarationActionContainer>
+          <StartAlignedView>
+            <RegenerateButton onPress={onPressRegenerate} />
+            <HorizontalSpaceBox multiplyBy={2} />
+            <DropDownButton
+              label={draftType}
+              onPress={onPressDropDown}
+              isOpen={isDropDownOpen}
+              onLayout={onDropDownButtonLayout}
+            />
+          </StartAlignedView>
+
+          <EndAlignedView>
+            <InsertButton onPress={onPressInsert} />
+          </EndAlignedView>
+        </EmailGenarationActionContainer>
+        <QPDropDownMenu
+          visible={isDropDownOpen}
+          onClose={() => setIsDropDownOpen(false)}
+          anchorPosition={dropDownPosition}
+          items={dropDownItems}
+          onSelectItem={onSelectDropDownItem}
+          selectedItem={draftType}
+        />
+      </View>
     </QPBottomSheet>
   );
 };
