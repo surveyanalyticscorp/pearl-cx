@@ -336,6 +336,7 @@ const AIEmailDraftModal = ({
     <QPBottomSheet
       visible={emailDraftModalVisible}
       onClose={onPressClose}
+      bottomSheetHeight="90%"
       headerComponent={
         <QPBottomSheetHeader
           headerLabel="Email Drafting with AI"
@@ -380,6 +381,7 @@ export default AIEmailDraftModal;
 
 const styles = StyleSheet.create({
   modalBody: {
+    flex: 1,
     padding: PaddingConstants.tab2,
   },
   loading: {

@@ -83,10 +83,14 @@ const QPBottomSheet = ({
       Animated.spring(translateY, {
         toValue: 0,
         useNativeDriver: true,
-        bounciness: 0,
+        bounciness: 5,
       }).start();
     } else {
-      translateY.setValue(sheetHeight ?? SCREEN_HEIGHT);
+      Animated.timing(translateY, {
+        toValue: sheetHeight ?? SCREEN_HEIGHT,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(onClose);
     }
   }, [visible, sheetHeight]);
 

@@ -16,10 +16,13 @@ import ContactView from './components/ContactView';
 import StatusView from './components/StatusView';
 import PriorityView from './components/PriorityView';
 import AssignedToView from './components/AssignedToView';
-import ActionBottomSheet from './components/ActionBottomSheet';
 import PriorityBottomSheet from './components/PriorityBottomSheet';
 import AssigneeBottomSheet from './components/AssigneeBottomSheet';
 import {getClosedLoopTicketItem} from '../../../redux/actions/dashboard.actions';
+import QPBottomSheet from '../takeaction/QPBottomSheet';
+import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
+import TicketTakeAction from '../takeaction/TIcketTakeAction';
+import useActionHandler from './components/useActionHandler';
 
 const TicketStatusPriorityView = ({children}) => {
   return (
@@ -28,6 +31,9 @@ const TicketStatusPriorityView = ({children}) => {
 };
 
 export default function TicketOverview(props) {
+  const {handleTicketAction} = useActionHandler();
+  const [actionBottomSheetVisible, setActionBottomSheetVisible] =
+    useState(false);
   const isFromClosedLoopScreen =
     translate('dashboard.closed_loop') === props.route.params.prevScreen;
 
@@ -46,7 +52,6 @@ export default function TicketOverview(props) {
   /// BOTTOM SHEET
 
   // variables for bottom sheet
-  const actionBottomSheet = React.useRef();
   const statusBottomSheet = React.useRef();
   const priorityBottomSheet = React.useRef();
   const assigneeBottomSheet = React.useRef();
@@ -54,29 +59,23 @@ export default function TicketOverview(props) {
 
   const fall = new Animated.Value(1);
   const onTakeActionHandler = () => {
-    priorityBottomSheet.current.snapTo(1);
-    statusBottomSheet.current.snapTo(1);
-    assigneeBottomSheet.current.snapTo(1);
-    actionBottomSheet.current.snapTo(0);
+    setActionBottomSheetVisible(true);
   };
   const handleStatusSelection = () => {
     priorityBottomSheet.current.snapTo(1);
     statusBottomSheet.current.snapTo(0);
     assigneeBottomSheet.current.snapTo(1);
-    actionBottomSheet.current.snapTo(1);
   };
 
   const handlePrioritySelection = () => {
     priorityBottomSheet.current.snapTo(0);
     statusBottomSheet.current.snapTo(1);
     assigneeBottomSheet.current.snapTo(1);
-    actionBottomSheet.current.snapTo(1);
   };
   const handleOwnerSelection = () => {
     priorityBottomSheet.current.snapTo(1);
     statusBottomSheet.current.snapTo(1);
     assigneeBottomSheet.current.snapTo(0);
-    actionBottomSheet.current.snapTo(1);
   };
 
   const renderStatusHeader = () => {
@@ -135,6 +134,15 @@ export default function TicketOverview(props) {
     }, 2000);
   }, []);
 
+  const onCloseActionBottomSheet = () => {
+    setActionBottomSheetVisible(false);
+  };
+
+  const onPressAction = item => {
+    console.log('onPressAction', item);
+    setActionBottomSheetVisible(false);
+    handleTicketAction(item);
+  };
   return (
     <TicketOverviewContainer>
       <Animated.ScrollView
@@ -158,7 +166,17 @@ export default function TicketOverview(props) {
       <RenderStatusBottomSheet />
       <PriorityBottomSheet ref={priorityBottomSheet} fall={fall} />
       <AssigneeBottomSheet ref={assigneeBottomSheet} fall={fall} />
-      <ActionBottomSheet ref={actionBottomSheet} fall={fall} />
+      <QPBottomSheet
+        visible={actionBottomSheetVisible}
+        onClose={onCloseActionBottomSheet}
+        headerComponent={
+          <QPBottomSheetHeader
+            headerLabel="Action"
+            onClose={onCloseActionBottomSheet}
+          />
+        }>
+        <TicketTakeAction onPress={onPressAction} />
+      </QPBottomSheet>
     </TicketOverviewContainer>
   );
 }
