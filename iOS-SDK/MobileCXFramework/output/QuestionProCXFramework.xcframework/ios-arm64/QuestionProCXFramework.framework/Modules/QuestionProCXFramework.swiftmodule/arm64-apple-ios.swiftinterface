@@ -58,10 +58,13 @@ public class TouchPoint {
   public var customVariable1: Swift.String
   public var customVariable2: Swift.String
   public var customVariable3: Swift.String
+  public var themeColor: Swift.String?
+  public var customVariables: [Swift.Int : Swift.String]?
   public func initTouchPoint(surveyId: Swift.Int) -> QuestionProCXFramework.TouchPoint
   @objc deinit
 }
-@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor public class QuestionProCXManager : ObjectiveC.NSObject, UIKit.UIAlertViewDelegate, QuestionProCXFramework.CXServiceDelegate, WebKit.WKNavigationDelegate {
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor public class QuestionProCXManager : ObjectiveC.NSObject, UIKit.UIAlertViewDelegate, QuestionProCXFramework.CXServiceDelegate, WebKit.WKNavigationDelegate, WebKit.WKScriptMessageHandler {
+  @_Concurrency.MainActor @preconcurrency @objc public func userContentController(_ userContentController: WebKit.WKUserContentController, didReceive message: WebKit.WKScriptMessage)
   @_Concurrency.MainActor public func CXServiceResponse(withURL response: [Swift.String : Any])
   @_Concurrency.MainActor public var iBaseWindow: UIKit.UIWindow?
   @_Concurrency.MainActor public var iView: UIKit.UIView?

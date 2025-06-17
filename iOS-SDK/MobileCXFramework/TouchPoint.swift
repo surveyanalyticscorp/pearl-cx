@@ -34,6 +34,8 @@ public class TouchPoint {
     public var  customVariable1 = "";
     public var  customVariable2 = "";
     public var  customVariable3 = "";
+    public var themeColor: String? = "";
+    public var customVariables: [Int: String]? = [:];
     
     public func initTouchPoint(surveyId: Int) -> TouchPoint {
         self.surveyId = surveyId;

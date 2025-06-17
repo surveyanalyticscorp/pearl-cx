@@ -10,7 +10,25 @@ import UIKit
 import WebKit
 
 @MainActor
-public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDelegate, WKNavigationDelegate {
+public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDelegate, WKNavigationDelegate, WKScriptMessageHandler {
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "callbackHandler" {
+            if let messageBody = message.body as? String {
+                print("Received message: \(messageBody)")
+                openInSafari(urlString: messageBody)
+            }
+        }
+    }
+    
+    func openInSafari(urlString: String) {
+        print("opening in safari \(urlString)")
+        if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            print("Invalid URL or Safari cannot open it.")
+        }
+    }
+    
     let backButton = UIButton(type: .custom)
     @MainActor public func CXServiceResponse(withURL response: [String: Any]) {
         if let _ = response[ksurveyURL] {
@@ -156,7 +174,9 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
                 preferences.javaScriptEnabled = true
                 configuration.preferences = preferences
             }
-            
+            let contentController = WKUserContentController()
+            contentController.add(self, name: "callbackHandler")
+            configuration.userContentController = contentController
             self.iWebView = WKWebView(frame: CGRect(x: 0, y: 30, width: frontView.frame.size.width, height: frontView.frame.size.height - 20), configuration: configuration)
             self.iWebView?.navigationDelegate = self
             self.iWebView?.allowsLinkPreview = false
@@ -167,37 +187,14 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             self.iBaseWindow?.bringSubviewToFront(self.iView!)
             let doneButton = UIButton(type: .custom)
             doneButton.addTarget(self, action: #selector(self.aDismissWebview(_:)), for: .touchUpInside)
-
-            let headerView = UIView(frame: CGRect(x: 0, y: 10, width: frontView.frame.size.width - 50, height: 80))
-            let hedearTextView = UITextView(frame: CGRect(x: 10, y: 10, width: frontView.frame.size.width - 50, height: 50))
-            hedearTextView.backgroundColor = UIColor.clear
-            hedearTextView.textAlignment = .left
-            hedearTextView.textColor = UIColor.white
-            
-            let headerText = "Powered by QuestionPro";
-            let boldText = (headerText as NSString).range(of: "QuestionPro")
-            let plainText = (headerText as NSString).range(of: "Powered by")
-            let attributedString = NSMutableAttributedString(string: headerText)
-            
-            
-            if let regularFontURL = Bundle.main.url(forResource: "FiraSans-Regular", withExtension: "ttf") {
-                CTFontManagerRegisterFontsForURL(regularFontURL as CFURL, .process, nil);
-            } 
-            
-            if let boldFontURL = Bundle.main.url(forResource: "FiraSans-Bold", withExtension: "ttf") {
-                CTFontManagerRegisterFontsForURL(boldFontURL as CFURL, .process, nil)
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: frontView.frame.size.width, height: 40))
+            if (touchPoint.themeColor != ""){
+                if let color = UIColor(hex: touchPoint.themeColor!) {
+                    headerView.backgroundColor = color
+                }
+            } else {
+                headerView.backgroundColor = UIColor.white
             }
-            
-            if let regularFont = UIFont(name: "FiraSans-Regular", size: 16.0) {
-                attributedString.addAttribute(.font, value: regularFont, range: plainText)
-            }
-        
-            if let boldFont = UIFont(name: "FiraSans-Bold", size: 16.0) {
-                attributedString.addAttribute(.font, value: boldFont, range: boldText)
-            }
-            
-            attributedString.addAttribute(.foregroundColor, value: UIColor.white, range: NSRange(location: 0, length: attributedString.length))
-            
             frontView.addSubview(headerView)
             
             let closeButtonImage = UIImage(systemName: "xmark",
@@ -214,7 +211,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             self.backButton.setImage(backButtonImage, for: .normal)
             self.backButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
             self.backButton.layer.cornerRadius = self.backButton.bounds.size.width / 2
-            self.backButton.frame = CGRect(x: 20, y: 15, width: 20, height: 20)
+            self.backButton.frame = CGRect(x: 20, y: 6, width: 20, height: 20)
             self.backButton.isHidden = true
             frontView.addSubview(self.backButton)
         }
@@ -246,7 +243,9 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
                 preferences.javaScriptEnabled = true
                 configuration.preferences = preferences
             }
-            
+            let contentController = WKUserContentController()
+            contentController.add(self, name: "callbackHandler")
+            configuration.userContentController = contentController
             self.iWebView = WKWebView(frame: CGRect(x: 0, y: 30, width: frontView.frame.size.width, height: frontView.frame.size.height - 20), configuration: configuration)
             self.iWebView?.navigationDelegate = self
             self.iWebView?.allowsLinkPreview = false
@@ -257,7 +256,13 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             self.iBaseWindow?.addSubview(self.iView!)
             self.iBaseWindow?.bringSubviewToFront(self.iView!)
             let headerView = UIView(frame: CGRect(x: 0, y: 0, width: frontView.frame.size.width, height: 40))
-            headerView.backgroundColor = UIColor.white
+            if (touchPoint.themeColor != ""){
+                if let color = UIColor(hex: touchPoint.themeColor!) {
+                    headerView.backgroundColor = color
+                }
+            } else {
+                headerView.backgroundColor = UIColor.white
+            }
             frontView.addSubview(headerView)
             let doneButton = UIButton(type: .custom)
             doneButton.addTarget(self, action: #selector(self.aDismissWebview(_:)), for: .touchUpInside)

@@ -45,10 +45,13 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
         if !touchPoint.lastName.isEmpty { cxRequestDict["lastName"] = touchPoint.lastName }
         if !touchPoint.mobile.isEmpty { cxRequestDict["mobile"] = touchPoint.mobile }
         if !touchPoint.segmentCode.isEmpty { cxRequestDict["S1"] = touchPoint.segmentCode }
-        if !touchPoint.customVariable1.isEmpty { cxRequestDict["custom1"] = touchPoint.customVariable1 }
-        if !touchPoint.customVariable2.isEmpty { cxRequestDict["custom2"] = touchPoint.customVariable2 }
-        if !touchPoint.customVariable3.isEmpty { cxRequestDict["custom3"] = touchPoint.customVariable3 }
         if !touchPoint.transactionLanguage.isEmpty { cxRequestDict["transactionLanguage"] = touchPoint.transactionLanguage }
+        if let customVariables = touchPoint.customVariables {
+            for (key, value) in customVariables {
+                let customKey = "custom\(key)"
+                cxRequestDict[customKey] = value
+            }            
+        }
 
         do {
             let uploadData = try JSONSerialization.data(withJSONObject: cxRequestDict, options: .prettyPrinted)
