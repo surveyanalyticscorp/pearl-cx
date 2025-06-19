@@ -44,7 +44,7 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
         if !touchPoint.firstName.isEmpty { cxRequestDict["firstName"] = touchPoint.firstName }
         if !touchPoint.lastName.isEmpty { cxRequestDict["lastName"] = touchPoint.lastName }
         if !touchPoint.mobile.isEmpty { cxRequestDict["mobile"] = touchPoint.mobile }
-        if !touchPoint.segmentCode.isEmpty { cxRequestDict["S1"] = touchPoint.segmentCode }
+        if !touchPoint.segmentCode.isEmpty { cxRequestDict["segmentCode"] = touchPoint.segmentCode }
         if !touchPoint.transactionLanguage.isEmpty { cxRequestDict["transactionLanguage"] = touchPoint.transactionLanguage }
         if let customVariables = touchPoint.customVariables {
             for (key, value) in customVariables {
