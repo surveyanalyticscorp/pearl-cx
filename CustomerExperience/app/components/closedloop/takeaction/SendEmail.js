@@ -8,6 +8,7 @@ import {
   FlatList,
   SafeAreaView,
   Modal,
+  Keyboard,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -214,6 +215,7 @@ export const SendEmail = props => {
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const richText = React.useRef();
+  const toolbarRef = React.useRef();
   const {emailTemplates} = useSelector(state => state.dashboard.emailData);
 
   const [emailDraftModalVisible, setEmailDraftModalVisible] = useState(false);
@@ -251,6 +253,29 @@ export const SendEmail = props => {
       richText.current.setContentHTML('');
     }
   }, [defaultEmail]);
+
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      e => {
+        setKeyboardVisible(true);
+      },
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   useEffect(() => {
     dispatch(getActionHistorySummary(authToken, ticketId));
@@ -374,6 +399,9 @@ export const SendEmail = props => {
           onFocus={closeBottomSheet}
         />
         {!isLoading && <AttachmentView />}
+        <ActionHistory>
+          <ActionHistoryItem />
+        </ActionHistory>
       </KeyboardAwareScrollView>
       {isBottomSheetVisible && (
         <BottomSheet
@@ -389,8 +417,15 @@ export const SendEmail = props => {
           callbackNode={fall}
         />
       )}
+
       {/* {isActionButtonVisible && renderAIActionButton()} */}
       {emailDraftModalVisible && renderEmailDraftModal()}
+      {isKeyboardVisible && (
+        <CustomKeyboardToolbar
+          toolbarRef={toolbarRef}
+          richTextfieldRef={richText}
+        />
+      )}
     </SafeAreaView>
   );
 };

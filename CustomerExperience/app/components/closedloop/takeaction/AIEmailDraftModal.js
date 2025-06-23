@@ -40,10 +40,6 @@ import QPLoader from '../../../widgets/QPLoader';
 import QPAIIcon from '../../../../assets/images/qp_ai.svg';
 import DropDownIcon from '../../../../assets/images/dropdown_icon.svg';
 import RegenerateIcon from '../../../../assets/images/regenerate_icon.svg';
-import {Sizes} from '../../../styles/Size.constant';
-
-const sampleEmailBody =
-  '<p>Dear Sean Evans,</p><br><p>Thank you for bringing to our attention that your package was unsealed upon delivery. We understand how important it is to receive your orders properly sealed and in good condition.</p><br><p>Please accept our apologies for any inconvenience this may have caused. We would like to investigate this matter further and ensure it does not happen again.</p><br><p>Could you please provide any additional details or photos of the package you received? This will help us address your concern promptly.</p><br><p>We appreciate your patience and are here to assist you.</p><br><p>Sincerely,<br>Mehedi</p>';
 
 const RenderAILogo = () => {
   return (
@@ -142,8 +138,8 @@ const AIEmailDraftModal = ({
   const {response, context} = useSelector(
     state => state.dashboard.generatedEmailDraftResponse,
   );
-
-  const [draftType, setDraftType] = useState('Refine');
+  const defaultDropDownButtonText = 'Refine';
+  const [draftType, setDraftType] = useState(defaultDropDownButtonText);
   const customerName = useSelector(
     state => state.dashboard?.ticket?.panelMember?.name,
   );
@@ -212,6 +208,7 @@ const AIEmailDraftModal = ({
   };
   const onPressRegenerate = () => {
     console.log('onPressRegenerate');
+    setDraftType(defaultDropDownButtonText);
     getEmailDraft();
   };
 
@@ -232,16 +229,12 @@ const AIEmailDraftModal = ({
   const onSelectDropDownItem = type => {
     setDraftType(type);
 
-    if (drafts.has(type)) {
-      setCurrentDraft(drafts.get(type));
-    } else {
-      getRefinedEmailDraft(
-        type,
-        context,
-        drafts.get(REFINE_DEFAULT),
-        drafts.get(REFINE_DEFAULT),
-      );
-    }
+    getRefinedEmailDraft(
+      type,
+      context,
+      drafts.get(REFINE_DEFAULT),
+      drafts.get(REFINE_DEFAULT),
+    );
   };
   const onPressClose = () => {
     setEmailDraftModalVisible(false);
