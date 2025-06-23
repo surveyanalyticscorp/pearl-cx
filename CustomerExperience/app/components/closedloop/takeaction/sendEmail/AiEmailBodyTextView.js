@@ -36,7 +36,7 @@ export const EmailBodyTextView = ({text}) => {
   const memoizedRenderContent = useMemo(
     () => (
       <ScrollView
-        style={{height: height * 0.4, backgroundColor: Colors.darkerGrey}}
+        style={{flex: 1, backgroundColor: Colors.white}}
         scrollEnabled={true}
         testID="email-body-text-container">
         <RenderHTML
@@ -57,9 +57,9 @@ export const EmailBodyTextView = ({text}) => {
     JSON.stringify(StringUtils.formatCommentToHTML(text)),
   );
 
-  if (StringUtils.isEmpty(text)) {
-    return <View />;
-  }
+  // if (StringUtils.isEmpty(text)) {
+  //   return <View />;
+  // }
 
   return memoizedRenderContent;
 };

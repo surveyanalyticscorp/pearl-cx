@@ -210,20 +210,12 @@ export const SendEmail = props => {
   };
   const [body, setBody] = useState(sampleEmailBody);
   const [isPromptVisible, setPromptVisibility] = useState(false);
-  // const [isActionButtonVisible, setActionButtonVisibility] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const richText = React.useRef();
-  const richTextToolBar = React.useRef();
   const {emailTemplates} = useSelector(state => state.dashboard.emailData);
-  const {rootCauseList} = useSelector(state => state.dashboard);
-  const {rootCauseActions} = useSelector(state => state.dashboard.ticket);
-  const {comment} = useSelector(state => state.dashboard.ticket);
-  const customerName = useSelector(
-    state => state.dashboard?.ticket?.panelMember?.name,
-  );
-  const {userInfo} = useSelector(state => state.global);
+
   const [emailDraftModalVisible, setEmailDraftModalVisible] = useState(false);
 
   const bs = React.useRef(null);
@@ -261,19 +253,11 @@ export const SendEmail = props => {
   }, [defaultEmail]);
 
   useEffect(() => {
-    // dispatch(
-    //   getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
-    // );
-    // dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
     dispatch(getActionHistorySummary(authToken, ticketId));
     dispatch(getActionHistoryDetails(authToken, ticketId));
     setBody(sampleEmailBody);
     richText.current.setContentHTML('');
   }, []);
-
-  // useEffect(() => {
-  //   aiRouterAPICall();
-  // }, [emailTemplates]);
 
   const onPressTemplate = useCallback(() => {
     richText.current.dismissKeyboard();
@@ -282,100 +266,6 @@ export const SendEmail = props => {
       bs.current.snapTo(0);
     }
   }, []);
-
-  const renderLoadingSpinner = () => {
-    return (
-      <View style={styles.loading}>
-        <QPSpinner spinnerText={'Crafting your email with AI...'} />
-      </View>
-    );
-  };
-
-  const aiRouterAPICall = userPrompt => {
-    setIsLoading(true);
-
-    const extractedTemplates = emailTemplates.map(
-      ({title, subject, templateText}) => ({
-        title,
-        subject,
-        templateText,
-      }),
-    );
-
-    const extractedRootCauses = rootCauseList.map(({title}) => ({
-      title,
-    }));
-
-    const extractedActions = rootCauseActions.map(({actionName}) => ({
-      actionName,
-    }));
-
-    apiHandler.generateEmailWithAI(
-      AI_ROUTER_API_URL,
-      AI_ROUTER_API_KEY,
-      {
-        user_id: 4894850,
-        use_case_name: 'generate-email-draft',
-        prompt_version: 1,
-        organization_id: 4787064,
-        data_center: 'US',
-        meta: {
-          id: 1,
-        },
-        input_data: {
-          messages: [
-            {
-              key: 'content',
-              value:
-                'JSON Draft email for customer. Keep generated email under 100 words',
-            },
-            {
-              key: 'customer',
-              value: customerName,
-            },
-            {
-              key: 'manager',
-              value: userInfo.firstName + '\t' + userInfo.lastName,
-            },
-            {
-              key: 'ticketDetails',
-              value: comment,
-            },
-            {
-              key: 'rootCauses',
-              value: extractedRootCauses,
-            },
-            {
-              key: 'actions',
-              value: extractedActions,
-            },
-            {
-              key: 'comments',
-              value: userPrompt ?? 'Keep it short and to the point',
-            },
-            {
-              key: 'emailTemplates',
-              value: extractedTemplates,
-            },
-          ],
-        },
-      },
-      response => {
-        richText.current.setContentHTML(
-          response.result.documents[0].output[0].value.body,
-        );
-        onChangeSubject(response.result.documents[0].output[0].value.subject);
-        onChangeEmailBody(response.result.documents[0].output[0].value.body);
-        setIsLoading(false);
-      },
-      error => {
-        richText.current.setContentHTML(defaultEmail.templateText);
-        onChangeSubject(defaultEmail.subject);
-        onChangeEmailBody(defaultEmail.templateText);
-        setIsLoading(false);
-      },
-    );
-  };
 
   const onChangeSubject = text => {
     setBody(state => ({...state, subject: text}));
@@ -409,7 +299,6 @@ export const SendEmail = props => {
               emailBody: '',
             }));
             richText.current.setContentHTML('');
-
             closeBottomSheet();
           }}
         />

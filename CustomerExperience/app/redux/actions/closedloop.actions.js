@@ -55,6 +55,11 @@ export const ACTION_HISTORY_DETAILS_RECEIVED =
 export const MEDIA_FILE_UPLOAD = 'MEDIA_FILE_UPLOAD';
 export const MEDIA_FILE_UPLOAD_RESPONSE = 'MEDIA_FILE_UPLOAD_RESPONSE';
 export const MEDIA_FILE_UPLOAD_RESET = 'MEDIA_FILE_UPLOAD_RESET';
+export const GENERATE_EMAIL_DRAFT = 'GENERATE_EMAIL_DRAFT';
+export const GENERATE_EMAIL_DRAFT_RECEIVED = 'GENERATE_EMAIL_DRAFT_RECEIVED';
+export const GENERATE_REFINE_EMAIL_DRAFT = 'GENERATE_REFINE_EMAIL_DRAFT';
+export const GENERATE_REFINE_EMAIL_DRAFT_RECEIVED =
+  'GENERATE_REFINE_EMAIL_DRAFT_RECEIVED';
 
 export const syncTickets = ({token, param, feedbackID}) => ({
   type: GET_TICKET_LIST_SYNC,
@@ -88,7 +93,7 @@ export const sendEmail = (token, ticketId, param) => ({
 
 export const resetSendEmailResponse = () => ({
   type: RESET_SEND_EMAIL_RESPONSE,
-})
+});
 
 // Takes CX Ticket ID
 export const getLatestComment = (token, ticketId) => ({
@@ -180,5 +185,17 @@ export const postUploadFile = param => ({
 
 export const resetUploadFilelist = param => ({
   type: MEDIA_FILE_UPLOAD_RESET,
+  param,
+});
+
+export const generateEmailDraft = (param, ticketId, feedbackId) => ({
+  type: GENERATE_EMAIL_DRAFT,
+  param,
+  ticketId,
+  feedbackId,
+});
+
+export const generateRefineEmailDraft = param => ({
+  type: GENERATE_REFINE_EMAIL_DRAFT,
   param,
 });

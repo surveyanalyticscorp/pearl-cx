@@ -65,6 +65,8 @@ import {
   getClfTicketListUrl,
   CLF_MEDIA_UPLOAD,
   CLF_GET_CENTRALIZED_ROOT_CAUSE,
+  getGenerateEmailDraftEndPoint,
+  POST_GENERATE_REFINED_EMAIL_DRAFT,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -77,6 +79,10 @@ import {
   CENTRALIZED_ROOT_CAUSE_RECEIVED,
   DELETE_TICKET,
   DELETE_TICKET_COMPLETE,
+  GENERATE_EMAIL_DRAFT,
+  GENERATE_EMAIL_DRAFT_RECEIVED,
+  GENERATE_REFINE_EMAIL_DRAFT,
+  GENERATE_REFINE_EMAIL_DRAFT_RECEIVED,
   GET_ACTIONS,
   GET_DEFAULT_EMAIL_TEMPLATE,
   GET_DEFAULT_EMAIL_TEMPLATE_RECEIVED,
@@ -1021,12 +1027,53 @@ export function* uploadMediaFile(action) {
     });
   } catch (error) {
     console.log('ERROR:', JSON.stringify(error));
-    // yield put({
-    //   type: API_ERROR,
-    //   error: error,
-    // });
   }
 }
 export function* watchUploadFile() {
   yield takeLatest(MEDIA_FILE_UPLOAD, uploadMediaFile);
+}
+
+export function* generateEmailDraft(action) {
+  try {
+    const json = yield WebServiceHandler.postNew(
+      getClfUrl(
+        getGenerateEmailDraftEndPoint(action.ticketId, action.feedbackId),
+      ),
+      getBearerTokenStatic(),
+      action.param,
+    );
+    if (json.status === 'success') {
+      yield put({
+        type: GENERATE_EMAIL_DRAFT_RECEIVED,
+        response: json.data,
+      });
+    }
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+  }
+}
+export function* watchGenrateEmailDraft() {
+  yield takeLatest(GENERATE_EMAIL_DRAFT, generateEmailDraft);
+}
+
+export function* generateRefinedEmailDraft(action) {
+  try {
+    const json = yield WebServiceHandler.postNew(
+      getClfUrl(POST_GENERATE_REFINED_EMAIL_DRAFT),
+      getBearerTokenStatic(),
+      action.param,
+    );
+    if (json.status === 'success') {
+      yield put({
+        type: GENERATE_REFINE_EMAIL_DRAFT_RECEIVED,
+        response: json.data,
+      });
+    }
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+  }
+}
+
+export function* watchGenerateRefinedEmailDraft() {
+  yield takeLatest(GENERATE_REFINE_EMAIL_DRAFT, generateRefinedEmailDraft);
 }

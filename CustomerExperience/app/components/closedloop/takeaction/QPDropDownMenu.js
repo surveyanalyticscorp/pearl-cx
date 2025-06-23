@@ -43,10 +43,7 @@ const QPDropDownMenu = ({
           style={[
             styles.menuContainer,
             {
-              bottom:
-                anchorPosition.y +
-                MarginConstants.tab1_8x +
-                MarginConstants.tab1,
+              bottom: anchorPosition.y,
               left: anchorPosition.x,
             },
           ]}>
@@ -70,9 +67,10 @@ const styles = StyleSheet.create({
   menuContainer: {
     position: 'absolute',
     backgroundColor: Colors.white,
-    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.borderColor,
     padding: PaddingConstants.halfTab,
-    minWidth: 150,
+    minWidth: MarginConstants.tab1_16x + MarginConstants.tab1_4x,
     maxHeight: 200,
     shadowColor: '#000',
     shadowOffset: {
@@ -85,7 +83,6 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     padding: PaddingConstants.tab1,
-    borderRadius: 4,
   },
   selectedMenuItem: {
     backgroundColor: Colors.accentLight,

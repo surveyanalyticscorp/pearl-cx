@@ -64,6 +64,10 @@ const RenderCountData = () => {
     }
   }, [clfData, logout]);
 
+  // Add null checking for clfData
+  const newTickets = clfData?.data?.[0]?.value ?? 0;
+  const overdues = clfData?.data?.[1]?.value ?? 0;
+
   return (
     <View testID="render-count-data">
       <View style={styles.responseContainer}>
@@ -76,12 +80,12 @@ const RenderCountData = () => {
       <View style={styles.ticketAndOverdueContainer}>
         <RenderCountItem
           title={translate('dashboard.new_tickets')}
-          data={clfData?.data[0]?.value ?? 0}
+          data={newTickets}
           style={styles.ticketBox}
         />
         <RenderCountItem
           title={translate('dashboard.overdues')}
-          data={clfData?.data[1]?.value ?? 0}
+          data={overdues}
           style={styles.ticketBox}
         />
       </View>
@@ -110,7 +114,6 @@ const CustomBackground = ({children}) => {
 
 export const SkipButton = () => {
   const dispatch = useDispatch();
-  // let [moveNext, setMoveNext] = useState(false);
   let splashTimer = useRef(null);
   const welcomeScreenData = useSelector(
     state => state.dashboard.welcomeScreenData,

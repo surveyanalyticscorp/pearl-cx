@@ -75,7 +75,6 @@ module.exports = {
     'app/components/closedloop/CentralizedRootCause',
     'app/redux/sagas/centralizedRootCauseSaga.js',
     'app/redux/sagas/loginInSaga.js',
-    // 'app/components/closedloop/TicketOverview/components/actionBottomSheet.js',
   ],
 
   testTimeout: 30000,

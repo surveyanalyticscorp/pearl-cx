@@ -22,7 +22,7 @@ export const TOKEN_VALIDATION_DURATION = 5;
 export const RESPONSE_READ_UNREAD_FEATURE_ACTIVATION_DATE = 'Jun 1 2024';
 export const MAX_COMMENT_LENGTH = 240;
 // set true for DEV, false for LIVE
-export const IS_DEV_MODE = false;
+export const IS_DEV_MODE = true;
 
 // export const BASE_URL = 'https://api.questionpro.com/';
 
@@ -191,3 +191,13 @@ export const fakeBearerToken =
 export const AI_ROUTER_API_KEY = '1ae87074-9220-4316-80bd-ba097d5ea785';
 export const AI_ROUTER_API_URL =
   'https://airouter-api-staging.questionpro.com/v1/prompt-routes';
+
+export const REFINE_FORMALIZE = 'formalize';
+export const REFINE_ELABORATE = 'elaborate';
+export const REFINE_SHORT = 'shorten';
+export const REFINE_DEFAULT = 'default';
+
+export const getGenerateEmailDraftEndPoint = (ticketId, feedbackId) =>
+  `/mobile/tickets/${ticketId}/feedbacks/${feedbackId}/ai-draft`;
+export const POST_GENERATE_REFINED_EMAIL_DRAFT =
+  '/mobile/tickets/refine/ai-draft';
