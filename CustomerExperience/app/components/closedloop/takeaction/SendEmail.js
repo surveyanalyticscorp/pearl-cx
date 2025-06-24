@@ -43,6 +43,7 @@ import QPSpinner from '../../../widgets/QPSpinner';
 import ActionButton from 'react-native-action-button';
 import AiDraftButton from './sendEmail/AiDraftButton';
 import AIEmailDraftModal from './AIEmailDraftModal';
+import {FontFamilyStylesheet} from '../../../config/fonts/StyleSheet';
 
 export const RenderHeader = () => {
   return (
@@ -362,6 +363,15 @@ export const SendEmail = props => {
       />
     );
   };
+  const fontFamily = 'Fira Sans';
+  const editorStyle = {
+    initialCSSText: `${FontFamilyStylesheet}`,
+    contentCSSText: `font-family: ${fontFamily}`,
+
+    backgroundColor: isBottomSheetVisible
+      ? Colors.transparentBackground
+      : Colors.white,
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -390,11 +400,7 @@ export const SendEmail = props => {
           androidHardwareAccelerationDisabled={true}
           initialHeight={350}
           style={styles.textInput}
-          editorStyle={{
-            backgroundColor: isBottomSheetVisible
-              ? Colors.transparentBackground
-              : Colors.white,
-          }}
+          editorStyle={editorStyle}
           setContentHTML={body.emailBody}
           onFocus={closeBottomSheet}
         />
