@@ -38,6 +38,7 @@ import {
   getDefaultEmailTemplate,
 } from '../../redux/actions/closedloop.actions';
 import useLogoutProcess from '../../routes/drawerContent/useLogoutProcess';
+import {set} from 'lodash';
 
 export const RenderCountItem = ({style, title, data}) => {
   return (
@@ -55,14 +56,16 @@ const RenderCountData = () => {
 
   console.log('CLF_DATA', JSON.stringify(clfData));
   console.log('CX_DATA', JSON.stringify(cxData));
-  const {logout} = useLogoutProcess();
+  const {logoutAction} = useLogoutProcess();
 
   useEffect(() => {
     if (clfData && JSON.stringify(clfData).includes('jwt expired')) {
       console.log('CLF_DATA', JSON.stringify(clfData));
-      logout();
+      setTimeout(() => {
+        logoutAction();
+      }, 1000);
     }
-  }, [clfData, logout]);
+  }, [clfData, logoutAction]);
 
   // Add null checking for clfData
   const newTickets = clfData?.data?.[0]?.value ?? 0;

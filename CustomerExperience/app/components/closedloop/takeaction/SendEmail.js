@@ -8,6 +8,7 @@ import {
   FlatList,
   SafeAreaView,
   Modal,
+  Platform,
   Keyboard,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
@@ -173,9 +174,13 @@ export const NoActionView = () => {
   );
 };
 
-export const CustomKeyboardToolbar = ({toolbarRef, richTextfieldRef}) => {
+export const CustomKeyboardToolbar = ({
+  toolbarRef,
+  richTextfieldRef,
+  keyboardHeight,
+}) => {
   return (
-    <View style={styles.toolbarContainer}>
+    <View style={{...styles.toolbarContainer, bottom: keyboardHeight}}>
       <RichToolbar
         ref={toolbarRef}
         editor={richTextfieldRef}
@@ -220,6 +225,7 @@ export const SendEmail = props => {
   const {emailTemplates} = useSelector(state => state.dashboard.emailData);
 
   const [emailDraftModalVisible, setEmailDraftModalVisible] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
@@ -262,6 +268,8 @@ export const SendEmail = props => {
       'keyboardDidShow',
       e => {
         setKeyboardVisible(true);
+        setKeyboardHeight(Platform.OS === 'ios' ? e.endCoordinates.height : 0);
+        console.log('keyboardDidShowListener', JSON.stringify(e));
       },
     );
 
@@ -428,6 +436,7 @@ export const SendEmail = props => {
       {emailDraftModalVisible && renderEmailDraftModal()}
       {isKeyboardVisible && (
         <CustomKeyboardToolbar
+          keyboardHeight={keyboardHeight}
           toolbarRef={toolbarRef}
           richTextfieldRef={richText}
         />
@@ -528,7 +537,8 @@ const styles = StyleSheet.create({
   },
   toolbarContainer: {
     position: 'absolute',
-    bottom: 0,
+
+    // bottom: Platform.OS === 'ios' ? 300 : 0,
     left: 0,
     right: 0,
     backgroundColor: '#fff', // Adjust background color to match the keyboard

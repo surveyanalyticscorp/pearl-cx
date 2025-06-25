@@ -52,8 +52,8 @@ const RenderPhoneInput = ({setTicketState}) => {
           console.log('COUNTRY:', country);
           setMaxLength(CountryPhoneNumberLength[country?.cca2]);
         }}
-        onChangeFormattedText={text => {
-          setText(text);
+        onChangeFormattedText={text_ => {
+          setText(text_);
         }}
       />
     </View>
