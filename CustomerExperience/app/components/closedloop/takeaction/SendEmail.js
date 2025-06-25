@@ -33,7 +33,12 @@ import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import {isNull} from 'lodash';
-import {AttachmentIcon, IonIcon, MaterialIcons} from '../../../Utils/IconUtils';
+import {
+  AttachmentIcon,
+  IonIcon,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from '../../../Utils/IconUtils';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {useNavigation} from '@react-navigation/native';
 import SendEmailTo from './sendEmail/SendEmailTo';
@@ -179,6 +184,54 @@ export const CustomKeyboardToolbar = ({
   richTextfieldRef,
   keyboardHeight,
 }) => {
+  const BoldIcon = ({tintColor}) => (
+    <MaterialIcons name="format-bold" size={20} color={tintColor} />
+  );
+
+  const ItalicIcon = ({tintColor}) => (
+    <MaterialIcons name="format-italic" size={20} color={tintColor} />
+  );
+
+  const UnderlineIcon = ({tintColor}) => (
+    <MaterialIcons name="format-underlined" size={20} color={tintColor} />
+  );
+
+  const SetInsertLinkIcon = ({tintColor}) => (
+    <MaterialIcons name="insert-link" size={20} color={tintColor} />
+  );
+
+  const InsertBulletsListIcon = ({tintColor}) => (
+    <MaterialIcons name="format-list-bulleted" size={20} color={tintColor} />
+  );
+
+  const InsertOrderedListIcon = ({tintColor}) => (
+    <MaterialIcons name="format-list-numbered" size={20} color={tintColor} />
+  );
+
+  const SetStrikethroughIcon = ({tintColor}) => (
+    <MaterialIcons name="strikethrough-s" size={20} color={tintColor} />
+  );
+
+  const AlignLeftIcon = ({tintColor}) => (
+    <MaterialIcons name="format-align-left" size={20} color={tintColor} />
+  );
+
+  const AlignCenterIcon = ({tintColor}) => (
+    <MaterialIcons name="format-align-center" size={20} color={tintColor} />
+  );
+
+  const AlignRightIcon = ({tintColor}) => (
+    <MaterialIcons name="format-align-right" size={20} color={tintColor} />
+  );
+
+  const AlignJustifyIcon = ({tintColor}) => (
+    <MaterialCommunityIcons
+      name="format-align-justify"
+      size={20}
+      color={tintColor}
+    />
+  );
+
   return (
     <View style={{...styles.toolbarContainer, bottom: keyboardHeight}}>
       <RichToolbar
@@ -190,10 +243,28 @@ export const CustomKeyboardToolbar = ({
           actions.setBold,
           actions.setItalic,
           actions.setUnderline,
-          actions.insertBulletsList,
-          actions.insertOrderedList,
-          actions.setStrikethrough,
+          actions.insertLink,
+          actions.alignLeft,
+          actions.alignCenter,
+          actions.alignRight,
+          actions.alignFull,
+          // actions.insertBulletsList,
+          // actions.insertOrderedList,
+          // actions.setStrikethrough,
         ]}
+        iconMap={{
+          [actions.setBold]: BoldIcon,
+          [actions.setItalic]: ItalicIcon,
+          [actions.setUnderline]: UnderlineIcon,
+          [actions.insertLink]: SetInsertLinkIcon,
+          [actions.alignLeft]: AlignLeftIcon,
+          [actions.alignCenter]: AlignCenterIcon,
+          [actions.alignRight]: AlignRightIcon,
+          [actions.alignFull]: AlignJustifyIcon,
+          // [actions.insertBulletsList]: InsertBulletsListIcon,
+          // [actions.insertOrderedList]: InsertOrderedListIcon,
+          // [actions.setStrikethrough]: SetStrikethroughIcon,
+        }}
         style={styles.richToolbar}
       />
     </View>
@@ -208,13 +279,18 @@ export const SendEmail = props => {
   const {emailSentResponse} = useSelector(state => state.dashboard.emailData);
   console.log('props.route.params', props.route.params);
   const ticketId = JSON.stringify(props.route.params.ticketId);
-  const sampleEmailBody = {
-    ticketId: JSON.stringify(props.route.params.ticketId),
-    subject: '',
-    toEmail: props.route.params.toEmail ?? '',
-    emailBody: '',
-    attachments: [],
-  };
+  const toEmail = props.route.params.toEmail ?? '';
+  const sampleEmailBody = React.useMemo(
+    () => ({
+      ticketId: ticketId,
+      subject: '',
+      toEmail: toEmail,
+      emailBody: '',
+      attachments: [],
+    }),
+    [ticketId, toEmail],
+  );
+
   const [body, setBody] = useState(sampleEmailBody);
   const [isPromptVisible, setPromptVisibility] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -249,7 +325,7 @@ export const SendEmail = props => {
       }, 1000);
       dispatch(resetSendEmailResponse());
     }
-  }, [emailSentResponse]);
+  }, [emailSentResponse, dispatch, navigation]);
 
   useEffect(() => {
     if (!isObjectEmpty(defaultEmail)) {
@@ -291,7 +367,7 @@ export const SendEmail = props => {
     dispatch(getActionHistoryDetails(authToken, ticketId));
     setBody(sampleEmailBody);
     richText.current.setContentHTML('');
-  }, []);
+  }, [dispatch, authToken, ticketId, sampleEmailBody]);
 
   const onPressTemplate = useCallback(() => {
     richText.current.dismissKeyboard();
@@ -554,7 +630,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: PaddingConstants.tab1_2x,
     paddingBottom: PaddingConstants.halfTab,
 
-    height: MarginConstants.tab1_8x,
+    height: MarginConstants.tab1_6x,
     backgroundColor: Colors.settingsBackground,
   },
   renderOptionViewEnd: {
