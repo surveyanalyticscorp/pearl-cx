@@ -20,7 +20,7 @@ const getButtonTitle = screenName => {
     case 'Dashboard':
       return 'Set filter by status';
     default:
-      return 'Update';
+      return 'Update status';
   }
 };
 

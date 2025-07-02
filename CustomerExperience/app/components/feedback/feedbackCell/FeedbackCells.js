@@ -35,12 +35,6 @@ function showName(item) {
 }
 
 const UserName = ({isNewResponse, name, isDisabled}) => {
-  const charLength = 24;
-  const shortenedString =
-    name && name.length > charLength
-      ? name.slice(0, charLength) + '...' // If longer than 12 characters, slice and add ellipsis
-      : name;
-
   const fontWeight = isNewResponse
     ? Platform.OS === 'ios'
       ? FontWeight._700
@@ -50,18 +44,14 @@ const UserName = ({isNewResponse, name, isDisabled}) => {
     : FontWeight._100;
   return (
     <Text
-      numberOfLines={isDisabled ? 4 : 1}
+      numberOfLines={1}
       style={{
         ...styles.userNameText,
 
         fontWeight: fontWeight,
       }}
       testID="user-name">
-      {name.length > 1
-        ? isDisabled
-          ? name
-          : shortenedString
-        : translate('ticket_list.anonymous')}
+      {name && name.length > 1 ? name : translate('ticket_list.anonymous')}
     </Text>
   );
 };
@@ -147,7 +137,6 @@ let RenderResponseContainer = ({
           <HorizontalSpaceBox />
           <UserName
             isNewResponse={isNewResponse}
-            // name={StringUtils.truncateCustomerName(showName(item), 30, 10, 8)}
             name={title}
             isDisabled={disable}
           />
@@ -295,7 +284,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   cellButtonContainer: {
     flexDirection: 'row',
@@ -357,6 +346,7 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.primary,
     fontFamily: FontFamily.regular,
     color: Colors.filterIconColor,
+    maxWidth: '70%',
     textAlign: 'center',
   },
   responseIdAndTicketRowContainer: {

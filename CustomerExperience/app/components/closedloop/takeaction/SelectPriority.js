@@ -12,7 +12,7 @@ const getButtonTitle = screenName => {
       return 'Set priority';
 
     default:
-      return 'Update';
+      return 'Update priority';
   }
 };
 const SelectPriority = ({data, selectedIndex, handleOnPress, screenName}) => {
