@@ -20,6 +20,8 @@ import TextLabel from '../../app/widgets/TextLabel/TextLabel';
 import useLogoutProcess from './drawerContent/useLogoutProcess';
 import logoutDialog from './drawerContent/LogoutDialog';
 import ResponsesIcon from '../widgets/IconWidget/ResponsesIcon';
+import QuestionProBanner from '../../assets/images/questionpro_banner.svg';
+import CxLogo_ from './commonUI/CxLogo';
 
 const LogoutButtonIcon = () => {
   return (
