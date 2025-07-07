@@ -41,6 +41,31 @@ export const NotiificationIcon = () => {
   );
 };
 
+const RenderSegmentSelector = ({
+  segmentList,
+  screenName,
+  currentSegment,
+  onPress,
+}) => {
+  return segmentList && segmentList.length > 1 ? (
+    <Pressable style={styles.innerContainer} onPress={onPress}>
+      <SegmentText
+        screenName={screenName}
+        segmentName={currentSegment.currentSegment ?? ''}
+      />
+
+      <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.darkGrey} />
+    </Pressable>
+  ) : (
+    <View style={styles.rowContainer}>
+      <SegmentText
+        screenName={screenName}
+        segmentName={currentSegment.currentSegment}
+      />
+    </View>
+  );
+};
+
 const SegmentSelector = props => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -85,29 +110,6 @@ const SegmentSelector = props => {
       />
       <NotiificationIcon />
     </View>
-  );
-};
-
-const RenderSegmentSelector = ({
-  segmentList,
-  screenName,
-  currentSegment,
-  onPress,
-}) => {
-  return segmentList && segmentList.length > 1 ? (
-    <Pressable style={styles.innerContainer} onPress={onPress}>
-      <SegmentText
-        screenName={screenName}
-        segmentName={currentSegment.currentSegment ?? ''}
-      />
-
-      <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.darkGrey} />
-    </Pressable>
-  ) : (
-    <SegmentText
-      screenName={screenName}
-      segmentName={currentSegment.currentSegment}
-    />
   );
 };
 

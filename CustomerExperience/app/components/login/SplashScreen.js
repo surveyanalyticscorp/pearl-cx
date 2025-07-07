@@ -34,6 +34,7 @@ import {
 import DeviceInfo from 'react-native-device-info';
 import AppInfo from '../../Utils/AppInfo';
 import useLogoutProcess from '../../routes/drawerContent/useLogoutProcess';
+import CXLogo from './components/CXLogo';
 
 const isExpireDateValid = expireDate => {
   const today = new Date();
@@ -132,11 +133,12 @@ function SplashScreen(props) {
         resizeMode={'cover'}
         source={require('../../config/images/background1.png')}
         style={styles.backgroundContainer}>
-        <Image
+        {/* <Image
           style={{width: '70%'}}
           resizeMode={'contain'}
           source={require('../../config/images/cx-logo.png')}
-        />
+        /> */}
+        <CXLogo />
       </ImageBackground>
     );
   };
