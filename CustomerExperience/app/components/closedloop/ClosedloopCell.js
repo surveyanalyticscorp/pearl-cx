@@ -95,7 +95,7 @@ const NameAndDateRow = ({name, issueDate}) => {
 };
 
 const getNPSColor = () => {
-  return Colors.detractor2;
+  return Colors.detractor3;
 };
 
 const NPSIcon = () => {

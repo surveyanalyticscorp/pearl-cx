@@ -49,16 +49,22 @@ const Colors = {
 
   promoter: '#3FCA5A',
   promoter2: '#1BA758',
+  promoter3: '#42BD84',
+
   detractor: '#CE002A',
   detractor2: '#FF7681',
+  detractor3: '#F85271',
+
   passive: '#FFE300',
   passive2: '#FFCB47',
+  passive3: '#F1DA7E',
+
   critical: '#E53251',
-  critical2: '#DA2222',
+  critical2: '#F85271',
   high: '#FF6103',
-  high2: '#E4632D',
-  medium2: '#F6C140',
-  low2: '#A6BE54',
+  high2: '#F69A79',
+  medium2: '#F1DA7E',
+  low2: '#42BD84',
 
   negativePromter: '#E8E8E8',
   positivePromter: '#90BA5B',
@@ -264,21 +270,21 @@ const priorityColors = {
 export function getNPSColor(sentiment) {
   switch (sentiment) {
     case 'Detractor':
-      return Colors.detractor2;
+      return Colors.detractor3;
     case 'Passive':
-      return Colors.passive2;
+      return Colors.passive3;
     default:
-      return Colors.promoter2;
+      return Colors.promoter3;
   }
 }
 
 let getNPSColorByNPS = nps => {
   if (nps < 0) {
-    return Colors.detractor2;
+    return Colors.detractor3;
   } else if (nps >= 0 && nps <= 50) {
-    return Colors.passive2;
+    return Colors.passive3;
   } else {
-    return Colors.promoter2;
+    return Colors.promoter3;
   }
 };
 

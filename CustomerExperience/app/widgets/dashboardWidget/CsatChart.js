@@ -33,9 +33,9 @@ const CsatChart = () => {
   );
 
   let victoryPieColorScale = [
-    Colors.promoter2,
-    Colors.passive2,
-    Colors.detractor2,
+    Colors.promoter3,
+    Colors.passive3,
+    Colors.detractor3,
   ];
 
   return (
