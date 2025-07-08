@@ -1,6 +1,6 @@
 // swift-interface-format-version: 1.0
 // swift-compiler-version: Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
-// swift-module-flags: -target arm64-apple-ios15 -enable-objc-interop -enable-library-evolution -swift-version 6 -enforce-exclusivity=checked -O -module-name QuestionProCXFramework
+// swift-module-flags: -target arm64-apple-ios14 -enable-objc-interop -enable-library-evolution -swift-version 6 -enforce-exclusivity=checked -O -module-name QuestionProCXFramework
 import Foundation
 import Security
 import Swift
@@ -60,12 +60,18 @@ public class TouchPoint {
   public var customVariable3: Swift.String
   public var themeColor: Swift.String?
   public var customVariables: [Swift.Int : Swift.String]?
+  public var apiBaseUrl: Swift.String
+  public var accessToken: Swift.String
+  public var port: Swift.String
   public func initTouchPoint(surveyId: Swift.Int) -> QuestionProCXFramework.TouchPoint
   @objc deinit
 }
 @objc @_inheritsConvenienceInitializers @_Concurrency.MainActor public class QuestionProCXManager : ObjectiveC.NSObject, UIKit.UIAlertViewDelegate, QuestionProCXFramework.CXServiceDelegate, WebKit.WKNavigationDelegate, WebKit.WKScriptMessageHandler {
+  @_Concurrency.MainActor public func showApiError(message: Swift.String)
+  @_Concurrency.MainActor public func apiSuccess(response: Foundation.Data)
+  @_Concurrency.MainActor public func apiFailure(touchPoint: QuestionProCXFramework.TouchPoint, apiKey: Swift.String, apiBaseUrl: Swift.String, port: Swift.String, accessToken: Swift.String)
   @_Concurrency.MainActor @preconcurrency @objc public func userContentController(_ userContentController: WebKit.WKUserContentController, didReceive message: WebKit.WKScriptMessage)
-  @_Concurrency.MainActor public func CXServiceResponse(withURL response: [Swift.String : Any])
+  @_Concurrency.MainActor public func launchSurveyOnApiSuccess(withURL response: [Swift.String : Any])
   @_Concurrency.MainActor public var iBaseWindow: UIKit.UIWindow?
   @_Concurrency.MainActor public var iView: UIKit.UIView?
   @_Concurrency.MainActor public var iWebView: WebKit.WKWebView?
@@ -78,12 +84,14 @@ public class TouchPoint {
   @_Concurrency.MainActor public var iPresentViewFlag: Swift.Bool
   @_Concurrency.MainActor public var iTouchPointName: Swift.Int?
   @_Concurrency.MainActor public var iApiKey: Swift.String?
+  @_Concurrency.MainActor public var iApiBaseUrl: Swift.String?
+  @_Concurrency.MainActor public var iAccessToken: Swift.String?
+  @_Concurrency.MainActor public var iPort: Swift.String?
   @_Concurrency.MainActor public var iCurrentViewName: Swift.String
-  @_Concurrency.MainActor public var iDataCenter: QuestionProCXFramework.TouchPoint.DataCenter?
   @_Concurrency.MainActor public var touchPoint: QuestionProCXFramework.TouchPoint?
   @_Concurrency.MainActor @objc override dynamic public init()
   @_Concurrency.MainActor public static let sharedManager: QuestionProCXFramework.QuestionProCXManager
-  @_Concurrency.MainActor public func initwithAPIKey(apiKey: Swift.String, dataCenter: QuestionProCXFramework.TouchPoint.DataCenter, withWindow aWindow: UIKit.UIWindow)
+  @_Concurrency.MainActor public func initWithAPIKey(apiKey: Swift.String, apiBaseUrl: Swift.String, accessToken: Swift.String, port: Swift.String = "", callback: any QuestionProCXFramework.QuestionProCallback, withWindow aWindow: UIKit.UIWindow)
   @_Concurrency.MainActor public func touchPointBuilder(touchPointID: Swift.Int) -> QuestionProCXFramework.TouchPoint
   @_Concurrency.MainActor public func launchFeedbackSurvey(touchPoint: QuestionProCXFramework.TouchPoint)
   @_Concurrency.MainActor public func stopQuestionProCXManager()
@@ -100,23 +108,24 @@ public class TouchPoint {
   @objc deinit
 }
 @_Concurrency.MainActor public protocol CXServiceDelegate : ObjectiveC.NSObjectProtocol {
-  @_Concurrency.MainActor func CXServiceResponse(withURL response: [Swift.String : Any])
+  @_Concurrency.MainActor func apiSuccess(response: Foundation.Data)
+  @_Concurrency.MainActor func apiFailure(touchPoint: QuestionProCXFramework.TouchPoint, apiKey: Swift.String, apiBaseUrl: Swift.String, port: Swift.String, accessToken: Swift.String)
+  @_Concurrency.MainActor func showApiError(message: Swift.String)
 }
 @objc @_inheritsConvenienceInitializers @_Concurrency.MainActor public class MobileCXServiceTxManager : ObjectiveC.NSObject, Foundation.URLSessionDelegate, Foundation.URLSessionTaskDelegate, Foundation.URLSessionDataDelegate {
   @_Concurrency.MainActor public var response: Foundation.URLResponse?
   @_Concurrency.MainActor public var receivedData: Foundation.Data
   @_Concurrency.MainActor weak public var iDelegate: (any QuestionProCXFramework.CXServiceDelegate)?
   @_Concurrency.MainActor @objc override dynamic public init()
-  @_Concurrency.MainActor public func invokeService(touchPoint: QuestionProCXFramework.TouchPoint, withAPIKey apikey: Swift.String, dataCenter: QuestionProCXFramework.TouchPoint.DataCenter)
+  @_Concurrency.MainActor public func invokeSeviceForExternalApi(touchPoint: QuestionProCXFramework.TouchPoint, withAPIKey apikey: Swift.String, apiBaseUrl: Swift.String, accessToken: Swift.String, port: Swift.String, callback: any QuestionProCXFramework.QuestionProCallback)
   @_Concurrency.MainActor public func createCXRequestWithTouchPointID(touchPoint: QuestionProCXFramework.TouchPoint) -> Swift.String
-  @_Concurrency.MainActor public func execute(method: Swift.String, baseUrl: Swift.String, path: Swift.String, body: Swift.String?, apiKey: Swift.String)
+  @_Concurrency.MainActor public func execute(method: Swift.String, baseUrl: Swift.String, path: Swift.String, headers: [Swift.String : Swift.String], body: Swift.String?, apiKey: Swift.String)
   @_Concurrency.MainActor public func printRequestDetails(request: Foundation.URLRequest)
   @objc nonisolated public func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, didReceive data: Foundation.Data)
   @objc nonisolated public func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, didReceive response: Foundation.URLResponse, completionHandler: @escaping (Foundation.URLSession.ResponseDisposition) -> Swift.Void)
   @objc nonisolated public func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didCompleteWithError error: (any Swift.Error)?)
   nonisolated public func urlSession(_ session: Foundation.URLSession, didReceive challenge: Foundation.URLAuthenticationChallenge, completionHandler: @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void)
   @_Concurrency.MainActor public func handleHttpOK(data: Foundation.Data)
-  @_Concurrency.MainActor public func processJson(json: [Swift.String : Any])
   @objc deinit
 }
 @_hasMissingDesignatedInitializers public class GlobalDataCX {
@@ -130,6 +139,11 @@ public class TouchPoint {
   public static func deleteUserDefaultValue(forKey aTouchPointIDKey: Swift.String)
   public static func checkValueInUserDefault(forKey aTouchPointIDKey: Swift.String) -> [Swift.String : Any]?
   @objc deinit
+}
+@_Concurrency.MainActor public protocol QuestionProCallback : ObjectiveC.NSObjectProtocol {
+  @_Concurrency.MainActor func refreshToken(completion: @escaping (_ newToken: Swift.String?) -> Swift.Void)
+  @_Concurrency.MainActor func encryptData(data: Swift.String, completion: @escaping (_ encryptedData: Swift.String, _ headers: [Swift.String : Swift.String]) -> Swift.Void)
+  @_Concurrency.MainActor func decryptData(apiResponse: (Swift.String, [Swift.String : Swift.String]), completion: @escaping (_ decryptedData: Swift.String?) -> Swift.Void)
 }
 public class KeychainItemWrapper {
   public var keychainItemData: [Swift.String : Any]

@@ -11,6 +11,69 @@ import WebKit
 
 @MainActor
 public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDelegate, WKNavigationDelegate, WKScriptMessageHandler {
+    public func showApiError(message: String) {
+        self.showApiErrorAlert(errorMessage: message)
+    }
+    
+    public func apiSuccess(response: Data) {
+        guard
+            let json = try? JSONSerialization.jsonObject(with: response, options: []),
+            let root = json as? [String: Any],
+            let responseObject = root["response"] as? [String: Any],
+            let responseData = try? JSONSerialization.data(withJSONObject: responseObject),
+            let responseString = String(data: responseData, encoding: .utf8)
+        else {
+            print("❌ Failed to parse 'response' object from API data.")
+            return
+        }
+
+        // Step 1: Decrypt
+        let headers: [String: String] = [:]
+        self.callback?.decryptData(apiResponse: (responseString, headers)) { decryptedData in
+            print("🔓 Decrypted data: \(decryptedData ?? "nil")")
+        }
+
+        // Step 2: Convert string back to dictionary
+        guard
+            let rawData = responseString.data(using: .utf8),
+            let parsedJSON = try? JSONSerialization.jsonObject(with: rawData),
+            let dictionary = parsedJSON as? [String: Any]
+        else {
+            print("❌ Failed to re-parse decrypted string into dictionary.")
+            return
+        }
+
+        if let url = dictionary["surveyURL"] as? String {
+            print("✅ surveyURL: \(url)")
+        }
+
+        print("📦 Final Parsed Dictionary: \(dictionary)")
+        self.launchSurveyOnApiSuccess(withURL: dictionary)
+    }
+    
+    public func apiFailure(touchPoint: TouchPoint, apiKey: String, apiBaseUrl: String, port: String, accessToken: String) {
+        self.callback?.refreshToken {
+            
+            [weak self] newToken in
+            guard let self = self else { return }
+
+            print("🔁 Refreshed Token: \(newToken ?? "nil")")
+
+            let serviceManager = MobileCXServiceTxManager()
+            serviceManager.iDelegate = self
+
+            serviceManager.invokeSeviceForExternalApi(touchPoint: touchPoint, withAPIKey: apiKey,
+                                                  apiBaseUrl: apiBaseUrl, accessToken: accessToken,
+                                                  port: port, callback: self.callback!)
+            }
+    }
+    
+    private var callback: QuestionProCallback?
+    
+    private func setCallback(_ callback: QuestionProCallback) {
+        self.callback = callback
+    }
+    
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "callbackHandler" {
             if let messageBody = message.body as? String {
@@ -30,7 +93,8 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     }
     
     let backButton = UIButton(type: .custom)
-    @MainActor public func CXServiceResponse(withURL response: [String: Any]) {
+    
+    @MainActor public func launchSurveyOnApiSuccess(withURL response: [String: Any]) {
         if let _ = response[ksurveyURL] {
             print("URL found")
             if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
@@ -50,17 +114,22 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
                     }
                 }
             }
-        } else if let error = response["error"] as? [String: Any] {
-            // Extract error message
+        } else {
+            guard let error = response["error"] as? [String: Any] else { return }
+
             let errorMessage = error["message"] as? String ?? "Unknown error"
-            // Present the alert (requires a view controller)
-            DispatchQueue.main.async {
-                if let topController = UIApplication.shared.windows[0].rootViewController {
-                    // Show alert
-                    let alert = UIAlertController(title: "", message: errorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in self.errorAPIHandler() }))
-                    topController.present(alert, animated: true, completion: nil)
-                }
+            showApiErrorAlert(errorMessage: errorMessage)
+        }
+    }
+    
+    func showApiErrorAlert(errorMessage: String) {
+        DispatchQueue.main.async {
+            if let topController = UIApplication.shared.windows.first?.rootViewController {
+                let alert = UIAlertController(title: "", message: errorMessage, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+                    self.errorAPIHandler()
+                })
+                topController.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -85,9 +154,11 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     @MainActor
     public var iTouchPointName: Int?
     public var iApiKey: String?
+    public var iApiBaseUrl: String?
+    public var iAccessToken: String?
+    public var iPort: String?
     @MainActor
     public var iCurrentViewName: String = ""
-    public var iDataCenter: TouchPoint.DataCenter?
     public var touchPoint: TouchPoint?
     
     public override init() {
@@ -105,10 +176,13 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         return instance
     }()
 
-    public func initwithAPIKey(apiKey: String, dataCenter: TouchPoint.DataCenter, withWindow aWindow: UIWindow) {
+    public func initWithAPIKey(apiKey: String, apiBaseUrl: String, accessToken: String, port: String = "", callback: QuestionProCallback, withWindow aWindow: UIWindow) {
         self.iApiKey = apiKey
-        self.iDataCenter = dataCenter
         self.iBaseWindow = aWindow
+        self.iApiBaseUrl = apiBaseUrl
+        self.iAccessToken = accessToken
+        self.iPort = port
+        setCallback(callback)
         self.iCurrentViewName = ""
     }
 
@@ -148,7 +222,8 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             let aMobileCXServiceTxManager = MobileCXServiceTxManager()
             self.iTouchPointName = touchPoint.surveyId
             aMobileCXServiceTxManager.iDelegate = self
-            aMobileCXServiceTxManager.invokeService(touchPoint: touchPoint, withAPIKey: self.iApiKey!, dataCenter: self.iDataCenter!)
+//            aMobileCXServiceTxManager.invokeService(touchPoint: touchPoint, withAPIKey: self.iApiKey!, dataCenter: self.iDataCenter!, callback: self.callback!)
+            aMobileCXServiceTxManager.invokeSeviceForExternalApi(touchPoint: touchPoint, withAPIKey: self.iApiKey!, apiBaseUrl: self.iApiBaseUrl!, accessToken: self.iAccessToken!, port: self.iPort!, callback: self.callback!)
         }
     }
 

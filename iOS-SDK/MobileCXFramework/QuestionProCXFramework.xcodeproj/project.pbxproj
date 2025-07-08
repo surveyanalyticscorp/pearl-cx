@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -39,6 +39,10 @@
 		84F7F62E2C58FE8800154D58 /* GMDCircleLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GMDCircleLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		84CE60532E16A07400FA9CF6 /* Delegates */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Delegates; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		84F7F47E2C58CFB800154D58 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -53,6 +57,7 @@
 		84F7F4772C58CFB800154D58 = {
 			isa = PBXGroup;
 			children = (
+				84CE60532E16A07400FA9CF6 /* Delegates */,
 				84F030522E00446E008C91A6 /* Utilities.swift */,
 				8407527A2D279B1700F86DAA /* PrivacyInfo.xcprivacy */,
 				84C78CC02C81C306008314C9 /* FiraSans-Bold.ttf */,
@@ -120,6 +125,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				84CE60532E16A07400FA9CF6 /* Delegates */,
 			);
 			name = QuestionProCXFramework;
 			productName = MobileCXFramework;
@@ -334,7 +342,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 15;
+				IPHONEOS_DEPLOYMENT_TARGET = 14;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
@@ -383,7 +391,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 15;
+				IPHONEOS_DEPLOYMENT_TARGET = 14;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",

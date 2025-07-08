@@ -2,7 +2,10 @@ import Foundation
 import UIKit
 
 @MainActor public protocol CXServiceDelegate: NSObjectProtocol {
-    func CXServiceResponse(withURL response: [String: Any])
+    
+    func apiSuccess(response: Data)
+    func apiFailure(touchPoint: TouchPoint, apiKey: String, apiBaseUrl: String, port: String, accessToken: String)
+    func showApiError(message: String)
 }
 
 @MainActor
@@ -10,6 +13,13 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
     public var response: URLResponse?
     public var receivedData: Data
     public weak var iDelegate: CXServiceDelegate?
+    private var callback: QuestionProCallback?;
+    private var touchPoint: TouchPoint?
+    private var apiKey: String?
+    private var apiBaseUrl: String?
+    private var port: String?
+    private var accessToken: String?
+    let path = "/a/api/v2/cx/transactions/survey-url"
 
     // Initialize the receivedData
     public override init() {
@@ -17,15 +27,28 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
     }
 
     lazy var session: URLSession? = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
-
-    public func invokeService(touchPoint: TouchPoint, withAPIKey apikey: String, dataCenter: TouchPoint.DataCenter) {
-        let dataCenterString = GlobalDataCX.getDataCenterString(dataCenter: dataCenter)
-        let baseUrl = GlobalDataCX.getBaseUrl(dataCenter: dataCenterString)
-
-        let path = "/a/api/v2/cx/transactions/survey-url"
+        
+    public func invokeSeviceForExternalApi(touchPoint: TouchPoint, withAPIKey apikey: String, apiBaseUrl: String, accessToken: String, port: String, callback: QuestionProCallback) {
+        self.callback = callback
+        self.touchPoint = touchPoint
+        self.apiKey = apikey
+        self.apiBaseUrl = apiBaseUrl
+        self.port = port
+        self.accessToken = accessToken
+        print("apiBaseUrl: \(apiBaseUrl)")
+        let baseUrl = apiBaseUrl
+        
+        var encryptedBody = ""
+        var encryptedHeaders = [String: String]()
         let body = self.createCXRequestWithTouchPointID(touchPoint: touchPoint)
-
-        self.execute(method: "POST", baseUrl: baseUrl, path: path, body: body, apiKey: apikey)
+        self.callback!.encryptData(data: body) { [self] encryptedData, headers in
+            print("encryptedData: \(encryptedData)")
+            print("header: \(headers)")
+            encryptedBody = encryptedData
+            encryptedHeaders = headers
+            
+            self.execute(method: "POST", baseUrl: baseUrl, path: path, headers: encryptedHeaders, body: encryptedBody, apiKey: apikey)
+        }
     }
 
     public func createCXRequestWithTouchPointID(touchPoint: TouchPoint) -> String {
@@ -62,19 +85,23 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
         }
     }
 
-    public func execute(method: String, baseUrl: String, path: String, body: String?, apiKey: String) {
+    public func execute(method: String, baseUrl: String, path: String, headers: [String: String], body: String?, apiKey: String) {
         guard let url = URL(string: baseUrl + path) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = method
         request.timeoutInterval = 300
-
+        
+        for (key, value) in headers {
+            request.setValue(value, forHTTPHeaderField: key)
+        }
+        
         if let body = body {
             request.httpBody = body.data(using: .utf8)
-            request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+//            request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
         }
-        request.setValue(apiKey, forHTTPHeaderField: "api-key")
+//        request.setValue(apiKey, forHTTPHeaderField: "api-key")
 
-//        printRequestDetails(request: request)
+        printRequestDetails(request: request)
 
         // Create and resume the data task
         let task = session?.dataTask(with: request)
@@ -100,8 +127,24 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
     // URLSessionDataDelegate methods
     nonisolated public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         Task { @MainActor in
-            self.receivedData.append(data)
-            handleHttpOK(data: self.receivedData)
+            if let httpResponse = dataTask.response as? HTTPURLResponse {
+                let statusCode = httpResponse.statusCode
+                    print("HTTP Status Code: \(statusCode)")
+                if statusCode == 200 {
+                    self.receivedData.append(data)
+                    handleHttpOK(data: self.receivedData)
+                } else if statusCode == 401 {
+                    iDelegate?.apiFailure(touchPoint: touchPoint!, apiKey: self.apiKey!, apiBaseUrl: self.apiBaseUrl!, port: self.port!, accessToken: self.accessToken!)
+                } else {
+                    if let jsonData = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                        if let response = jsonData["response"] as? [String: Any] {
+                            guard let error = response["error"] as? [String: Any] else { return }
+                            let errorMessage = error["message"] as? String ?? "Unknown error"
+                            iDelegate?.showApiError(message: errorMessage)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -136,7 +179,7 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
         do {
             if let jsonData = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                 if let response = jsonData["response"] as? [String: Any] {
-                    processJson(json: response)
+                    iDelegate?.apiSuccess(response: data)
                 } else {
                     print("No valid response in JSON.")
                 }
@@ -144,12 +187,5 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
         } catch {
             print("Error parsing JSON: \(error)")
         }
-    }
-
-    public func processJson(json: [String: Any]) {
-        if let surveyURL = json["surveyURL"] as? String {
-//            print("processJson -> surveyURL: \(surveyURL)")
-        }
-        iDelegate?.CXServiceResponse(withURL: json)
     }
 }

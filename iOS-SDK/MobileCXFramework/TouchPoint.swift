@@ -36,6 +36,9 @@ public class TouchPoint {
     public var  customVariable3 = "";
     public var themeColor: String? = "";
     public var customVariables: [Int: String]? = [:];
+    public var apiBaseUrl: String = "";
+    public var accessToken: String = "";
+    public var port: String = "";
     
     public func initTouchPoint(surveyId: Int) -> TouchPoint {
         self.surveyId = surveyId;
@@ -49,6 +52,9 @@ public class TouchPoint {
         self.customVariable2 = "";
         self.customVariable3 = "";
         self.transactionLanguage = "";
+        self.accessToken = "";
+        self.port = "";
+        self.apiBaseUrl = "";
         return self;
     }
 }
