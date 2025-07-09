@@ -25,9 +25,8 @@ export const loginStyles = StyleSheet.create({
     height: width * 0.45,
   },
   logo: {
-    alignItems: 'center',
-    height: 'auto',
-    width: '80%',
+    width: width * 0.75,
+    height: width * 0.45,
   },
   emailInput: {
     width: width / 1.05,

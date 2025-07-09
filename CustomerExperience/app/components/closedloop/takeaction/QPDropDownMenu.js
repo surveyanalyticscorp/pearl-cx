@@ -5,6 +5,7 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
+import StringUtils from '../../../Utils/StringUtils';
 
 const QPDropDownMenu = ({
   visible,
@@ -29,7 +30,7 @@ const QPDropDownMenu = ({
           styles.menuItemText,
           selectedItem === item && styles.selectedMenuItemText,
         ]}>
-        {item}
+        {StringUtils.uppercaseFirstCharRestLowercase(item)}
       </Text>
     </Pressable>
   );
