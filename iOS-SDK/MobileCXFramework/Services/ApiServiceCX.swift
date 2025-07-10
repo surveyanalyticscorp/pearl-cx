@@ -67,7 +67,7 @@ public class ApiServiceCX {
             let (data, response) = try await URLSession.shared.data(for: request)
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                LogUtils.printMessage(message: "❌ Invalid HTTP Response")
+                LogUtils.printMessage(logTag: .LOG_ERROR, message: "❌ Invalid HTTP Response")
                 throw ApiError.invalidResponse
             }
             LogUtils.printMessage(message: "\n🟢 [API Response]")
@@ -81,7 +81,7 @@ public class ApiServiceCX {
             let decodedResponse = try JSONDecoder().decode(T.self, from: data)
             return decodedResponse;
         } catch {
-            LogUtils.printMessage(message: "❌ API Request Failed: \(error.localizedDescription)")
+            LogUtils.printMessage(logTag: .LOG_ERROR, message: "❌ API Request Failed: \(error.localizedDescription)")
             throw ApiError.requestFailed(error)
         }
     }

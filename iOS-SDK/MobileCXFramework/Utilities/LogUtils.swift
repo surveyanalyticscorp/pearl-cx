@@ -11,8 +11,8 @@ public class LogUtils {
     public static func enableLogging(isLogsEnabled: Bool) {
         self.enableLogging = isLogsEnabled
     }
-    public static func printMessage(message: String) {
-        if (self.enableLogging) {
+    public static func printMessage(logTag: LogTag = .LOG_INFO , message: String) {
+        if (self.enableLogging && logTag == .LOG_ERROR) {
             print(message)
         }
     }

@@ -62,7 +62,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                     self.fetchSurveyURLForSurveyId(interceptId: interceptId, interceptData: interceptData, interceptType: interceptData.type)
                 }
             } catch {
-                LogUtils.printMessage(message: "Error in launchSurveyForIntercept -> \(error)")
+                LogUtils.printMessage(logTag: .LOG_ERROR, message: "Error in launchSurveyForIntercept -> \(error)")
             }
         }
     }
@@ -94,7 +94,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                     }
                 }
             } catch {
-                LogUtils.printMessage(message: "error in view count for screen name");
+                LogUtils.printMessage(logTag: .LOG_ERROR, message: "error in view count for screen name");
             }
         }
     }
@@ -172,7 +172,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 APIUtils.updateInterceptSurveyLaunchEvent(interceptData: interceptData, visitorId: visitorId, surveyType: InterceptSurveyLaunchEvent.LAUNCHED.rawValue);
             } catch {
                 self.callbackDelegate?.getSurveyURL(surveyURL: "")
-                LogUtils.printMessage(message: "API error -> \(error)")
+                LogUtils.printMessage(logTag: .LOG_ERROR, message: "API error -> \(error)")
                 self.iResponseURL = ""
                 CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: false);
             }
@@ -203,7 +203,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 let encodedData = try JSONEncoder().encode(intercepts)
                 CacheUtils.setIntercepts(key: kIntercepts, value: encodedData)
             } catch {
-                LogUtils.printMessage(message: "Erro while saving all intercepts: \(error)")
+                LogUtils.printMessage(logTag: .LOG_ERROR, message: "Error while saving all intercepts: \(error)")
             }
             
             for intercept in intercepts {
@@ -230,7 +230,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             }
         } catch {
             self.callbackDelegate?.initSDKFailed(error: error)
-            LogUtils.printMessage(message: "API error: \(error)")
+            LogUtils.printMessage(logTag: .LOG_ERROR, message: "API error: \(error)")
         }
     }
     
@@ -307,9 +307,9 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             self.iView?.backgroundColor = UIColor.black.withAlphaComponent(0.6)
 
             let frontView = UIView(frame: CGRect(
-                x: isInAppSurvey ? screenRect.size.width * 0.1 : 0,
+                x: isInAppSurvey ? screenRect.size.width * 0.05 : 0,
                 y: isInAppSurvey ? screenRect.size.height * 0.15 : 70,
-                width: isInAppSurvey ? screenRect.size.width * 0.8 : self.iView!.frame.size.width,
+                width: isInAppSurvey ? screenRect.size.width * 0.9 : self.iView!.frame.size.width,
                 height: isInAppSurvey ? screenRect.size.height * 0.7 : self.iView!.frame.size.height
             ))
             frontView.backgroundColor = .white
@@ -342,7 +342,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             doneButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
             doneButton.layer.cornerRadius = doneButton.bounds.size.width / 2
             
-            doneButton.frame = isInAppSurvey ? CGRect(x: screenRect.size.width * 0.7, y: 10, width: 25, height: 25) : CGRect(x: self.iView!.frame.size.width - 40, y: 15, width: 20, height: 20)
+            doneButton.frame = isInAppSurvey ? CGRect(x: screenRect.size.width * 0.80, y: 15, width: 25, height: 25) : CGRect(x: self.iView!.frame.size.width - 40, y: 15, width: 20, height: 20)
             
             
             frontView.addSubview(doneButton)

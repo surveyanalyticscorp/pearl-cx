@@ -69,3 +69,15 @@ public enum InterceptCondition: String {
 public enum InterceptSurveyLaunchEvent: String {
     case MATCHED, LAUNCHED
 }
+
+public enum LogTag: String {
+    case LOG_ERROR, LOG_INFO
+    
+    var method: String {
+        switch self {
+        case .LOG_ERROR: return "SDK_ERROR"
+        case .LOG_INFO: return "SDK_INFO"
+        }
+    }
+    
+}

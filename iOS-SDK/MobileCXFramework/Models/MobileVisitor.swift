@@ -75,7 +75,7 @@ public func parseJson (jsonString: String) {
                     LogUtils.printMessage(message: "Intercept ID: \(intercept.id)")
                 }
             } catch {
-                LogUtils.printMessage(message: "❌ Error decoding JSON: \(error)")
+                LogUtils.printMessage(logTag: .LOG_ERROR, message: "❌ Error decoding JSON: \(error)")
             }
         }
 }
