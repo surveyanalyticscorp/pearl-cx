@@ -49,6 +49,8 @@ import AccessCodeTextInput from './components/AccessCodeTextInput';
 import CXLogo from './components/CXLogo';
 import LoginBackground from './components/LoginBackground';
 import {useLoginError} from './hooks/useLoginError';
+import {PaddingConstants} from '../../styles/padding.constants';
+import {MarginConstants} from '../../styles/margin.constants';
 
 export const checkValidation = ({email, password, accessCode}) => {
   if (!validateEmail(email)) {
@@ -217,18 +219,24 @@ export const RenderSpinnerLoginButton = ({login}) => {
     }
   };
   return isLoading ? (
-    <View style={loginStyles.signInButton}>
+    <View
+      style={{
+        ...loginStyles.signInButton,
+        marginHorizontal: MarginConstants.tab1_2x,
+      }}>
       <QPSpinner spinnerColor={Colors.white} />
     </View>
   ) : (
-    <QPButton
-      testID="SignInButton"
-      style={loginStyles.signInButton}
-      buttonColor={Colors.accentLight}
-      onPress={onPress}
-      buttonText={translate('onBoarding.signIn')}
-      textStyle={loginStyles.signInText}
-    />
+    <View style={{paddingHorizontal: PaddingConstants.tab1_2x}}>
+      <QPButton
+        testID="SignInButton"
+        style={loginStyles.signInButton}
+        buttonColor={Colors.accentLight}
+        onPress={onPress}
+        buttonText={translate('onBoarding.signIn')}
+        textStyle={loginStyles.signInText}
+      />
+    </View>
   );
 };
 
@@ -250,6 +258,9 @@ const Login = props => {
         contentContainerStyle={loginStyles.scrollContainer}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps={'handled'}>
+        <View style={loginStyles.logoContainer}>
+          <CXLogo />
+        </View>
         <KeyboardAvoidingView
           behavior="position"
           style={loginStyles.container}
@@ -258,7 +269,6 @@ const Login = props => {
             android: -200,
           })}
           enabled>
-          <CXLogo />
           <EmailTextInput value={login.email} setEmail={setEmail} />
           <PasswordTextInput value={login.password} setPassword={setPassword} />
           <AccessCodeTextInput

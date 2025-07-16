@@ -1,11 +1,22 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Platform} from 'react-native';
 import {TextSizes} from '../styles/textsize.constants';
 import {Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import {FontFamily} from '../styles/font.constants';
 
-const SegmentText = ({screenName, segmentName}) => {
+const SegmentTextForIpad = ({screenName, segmentName}) => {
+  const text = `${screenName} > ${segmentName}`;
+  return (
+    <View style={styles.segmentTextForIpad}>
+      <Text numberOfLines={1} ellipsizeMode="tail" style={styles.appbarTitle}>
+        {text}
+      </Text>
+    </View>
+  );
+};
+
+const DefaultSegmentText = ({screenName, segmentName}) => {
   return (
     <View style={{width: '100%', flexDirection: 'column'}}>
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.appbarTitle}>
@@ -18,6 +29,18 @@ const SegmentText = ({screenName, segmentName}) => {
         {segmentName}
       </Text>
     </View>
+  );
+};
+const SegmentText = ({screenName, segmentName}) => {
+  const isPad = Platform.OS && Platform.isPad;
+
+  if (isPad) {
+    return (
+      <SegmentTextForIpad screenName={screenName} segmentName={segmentName} />
+    );
+  }
+  return (
+    <DefaultSegmentText screenName={screenName} segmentName={segmentName} />
   );
 };
 
@@ -34,6 +57,11 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
     color: Colors.white,
     marginEnd: MarginConstants.tab3,
+  },
+  segmentTextForIpad: {
+    marginStart: MarginConstants.tab1_2x,
+    width: '95%',
+    flexDirection: 'column',
   },
 });
 export default SegmentText;

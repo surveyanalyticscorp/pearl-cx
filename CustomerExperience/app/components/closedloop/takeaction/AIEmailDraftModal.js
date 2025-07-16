@@ -74,7 +74,7 @@ function DropDownButton({label, onPress, isOpen, onLayout}) {
         color={Colors.filterIconColor}
       />
       <Text style={{...styles.chipButtonText, color: Colors.filterIconColor}}>
-        {label}
+        {StringUtils.uppercaseFirstChar(label)}
       </Text>
       <FaIcon
         name={isOpen ? 'caret-down' : 'caret-up'}
