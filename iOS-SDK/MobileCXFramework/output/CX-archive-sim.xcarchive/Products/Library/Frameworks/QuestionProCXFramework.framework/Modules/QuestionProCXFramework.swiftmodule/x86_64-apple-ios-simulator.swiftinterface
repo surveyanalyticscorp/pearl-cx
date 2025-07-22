@@ -9,9 +9,22 @@ import WebKit
 import _Concurrency
 import _StringProcessing
 import _SwiftConcurrencyShims
+@_hasMissingDesignatedInitializers public class LogUtils {
+  public static func enableLogging(isLogsEnabled: Swift.Bool)
+  public static func printMessage(logTag: QuestionProCXFramework.LogTag = .LOG_INFO, message: Swift.String)
+  @objc deinit
+}
 public let ksurveyURL: Swift.String
 public let kisDialog: Swift.String
 public let kKeyChainWrapperBundleId: Swift.String
+public enum LogTag : Swift.String {
+  case LOG_ERROR, LOG_INFO
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
 @objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class GMDCircleLoader : UIKit.UIView {
   @_Concurrency.MainActor @preconcurrency final public let GMD_SPINNER_COLOR: UIKit.UIColor
   @_Concurrency.MainActor @preconcurrency public static let GMD_SPINNER_FRAME: CoreFoundation.CGRect
@@ -68,7 +81,7 @@ public class TouchPoint {
 }
 @objc @_inheritsConvenienceInitializers @_Concurrency.MainActor public class QuestionProCXManager : ObjectiveC.NSObject, UIKit.UIAlertViewDelegate, QuestionProCXFramework.CXServiceDelegate, WebKit.WKNavigationDelegate, WebKit.WKScriptMessageHandler {
   @_Concurrency.MainActor public func showApiError(message: Swift.String)
-  @_Concurrency.MainActor public func apiSuccess(response: Foundation.Data)
+  @_Concurrency.MainActor public func apiSuccess(response: Foundation.Data, headers: [Swift.String : Swift.String])
   @_Concurrency.MainActor public func apiFailure(touchPoint: QuestionProCXFramework.TouchPoint, apiKey: Swift.String, apiBaseUrl: Swift.String, port: Swift.String, accessToken: Swift.String)
   @_Concurrency.MainActor @preconcurrency @objc public func userContentController(_ userContentController: WebKit.WKUserContentController, didReceive message: WebKit.WKScriptMessage)
   @_Concurrency.MainActor public func launchSurveyOnApiSuccess(withURL response: [Swift.String : Any])
@@ -107,8 +120,13 @@ public class TouchPoint {
   @_Concurrency.MainActor public func currentViewUnLoaded()
   @objc deinit
 }
+@_Concurrency.MainActor public protocol QuestionProCallback : ObjectiveC.NSObjectProtocol {
+  @_Concurrency.MainActor func refreshToken(completion: @escaping (_ newToken: Swift.String?) -> Swift.Void)
+  @_Concurrency.MainActor func encryptData(data: Swift.String, completion: @escaping (_ encryptedData: Swift.String, _ headers: [Swift.String : Swift.String]) -> Swift.Void)
+  @_Concurrency.MainActor func decryptData(apiResponse: (Swift.String, [Swift.String : Swift.String]), completion: @escaping (_ decryptedData: Swift.String?) -> Swift.Void)
+}
 @_Concurrency.MainActor public protocol CXServiceDelegate : ObjectiveC.NSObjectProtocol {
-  @_Concurrency.MainActor func apiSuccess(response: Foundation.Data)
+  @_Concurrency.MainActor func apiSuccess(response: Foundation.Data, headers: [Swift.String : Swift.String])
   @_Concurrency.MainActor func apiFailure(touchPoint: QuestionProCXFramework.TouchPoint, apiKey: Swift.String, apiBaseUrl: Swift.String, port: Swift.String, accessToken: Swift.String)
   @_Concurrency.MainActor func showApiError(message: Swift.String)
 }
@@ -140,11 +158,6 @@ public class TouchPoint {
   public static func checkValueInUserDefault(forKey aTouchPointIDKey: Swift.String) -> [Swift.String : Any]?
   @objc deinit
 }
-@_Concurrency.MainActor public protocol QuestionProCallback : ObjectiveC.NSObjectProtocol {
-  @_Concurrency.MainActor func refreshToken(completion: @escaping (_ newToken: Swift.String?) -> Swift.Void)
-  @_Concurrency.MainActor func encryptData(data: Swift.String, completion: @escaping (_ encryptedData: Swift.String, _ headers: [Swift.String : Swift.String]) -> Swift.Void)
-  @_Concurrency.MainActor func decryptData(apiResponse: (Swift.String, [Swift.String : Swift.String]), completion: @escaping (_ decryptedData: Swift.String?) -> Swift.Void)
-}
 public class KeychainItemWrapper {
   public var keychainItemData: [Swift.String : Any]
   public var genericPasswordQuery: [Swift.String : Any]
@@ -158,6 +171,9 @@ public class KeychainItemWrapper {
   public func isEqual(_ obj1: Any, _ obj2: Any) -> Swift.Bool
   @objc deinit
 }
+extension QuestionProCXFramework.LogTag : Swift.Equatable {}
+extension QuestionProCXFramework.LogTag : Swift.Hashable {}
+extension QuestionProCXFramework.LogTag : Swift.RawRepresentable {}
 extension QuestionProCXFramework.TouchPoint.DataCenter : Swift.Equatable {}
 extension QuestionProCXFramework.TouchPoint.DataCenter : Swift.Hashable {}
 extension QuestionProCXFramework.QuestionProCXManager : Swift.Sendable {}
