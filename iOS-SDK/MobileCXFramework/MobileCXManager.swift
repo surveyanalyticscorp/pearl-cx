@@ -15,7 +15,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         self.showApiErrorAlert(errorMessage: message)
     }
     
-    public func apiSuccess(response: Data) {
+    public func apiSuccess(response: Data, headers: [String: String]) {
         guard
             let json = try? JSONSerialization.jsonObject(with: response, options: []),
             let root = json as? [String: Any],
@@ -23,14 +23,13 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             let responseData = try? JSONSerialization.data(withJSONObject: responseObject),
             let responseString = String(data: responseData, encoding: .utf8)
         else {
-            print("❌ Failed to parse 'response' object from API data.")
+            LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "❌ Failed to parse 'response' object from API data.")
             return
         }
 
         // Step 1: Decrypt
-        let headers: [String: String] = [:]
         self.callback?.decryptData(apiResponse: (responseString, headers)) { decryptedData in
-            print("🔓 Decrypted data: \(decryptedData ?? "nil")")
+            LogUtils.printMessage(message: "🔓 Decrypted data: \(decryptedData ?? "nil")")
         }
 
         // Step 2: Convert string back to dictionary
@@ -39,15 +38,15 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             let parsedJSON = try? JSONSerialization.jsonObject(with: rawData),
             let dictionary = parsedJSON as? [String: Any]
         else {
-            print("❌ Failed to re-parse decrypted string into dictionary.")
+            LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "❌ Failed to re-parse decrypted string into dictionary.")
             return
         }
 
         if let url = dictionary["surveyURL"] as? String {
-            print("✅ surveyURL: \(url)")
+            LogUtils.printMessage(message: "✅ surveyURL: \(url)")
         }
 
-        print("📦 Final Parsed Dictionary: \(dictionary)")
+        LogUtils.printMessage(message: "📦 Final Parsed Dictionary: \(dictionary)")
         self.launchSurveyOnApiSuccess(withURL: dictionary)
     }
     
@@ -57,7 +56,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             [weak self] newToken in
             guard let self = self else { return }
 
-            print("🔁 Refreshed Token: \(newToken ?? "nil")")
+            LogUtils.printMessage(message: "🔁 Refreshed Token: \(newToken ?? "nil")")
 
             let serviceManager = MobileCXServiceTxManager()
             serviceManager.iDelegate = self
@@ -77,18 +76,18 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "callbackHandler" {
             if let messageBody = message.body as? String {
-                print("Received message: \(messageBody)")
+                LogUtils.printMessage(message: "Received message: \(messageBody)")
                 openInSafari(urlString: messageBody)
             }
         }
     }
     
     func openInSafari(urlString: String) {
-        print("opening in safari \(urlString)")
+        
         if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         } else {
-            print("Invalid URL or Safari cannot open it.")
+            LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "Invalid URL or Safari cannot open it.")
         }
     }
     
@@ -96,7 +95,6 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     
     @MainActor public func launchSurveyOnApiSuccess(withURL response: [String: Any]) {
         if let _ = response[ksurveyURL] {
-            print("URL found")
             if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
                 let responseCopy = response // Create a copy of the response
                 DispatchQueue.main.async { [weak self] in
@@ -201,7 +199,6 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     }
 
     public func stopQuestionProCXManager() {
-        print("Manager stopped..")
     }
 
     public func setPopupMenuTitle(aTitle: String, message aMessage: String, rightButtonTitle aRightButtonTitle: String, leftButtonTitle aLeftButtonTitle: String) {
@@ -369,7 +366,6 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         
         let url = webView.url
         
-        print(webView.url as Any)
         if (((url?.absoluteString.range(of: "exitsurvey")) != nil) || ((url?.absoluteString.range(of: "#autoClose") != nil))) {
             perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 3.0)
         }
@@ -387,7 +383,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         GMDCircleLoader.setOnView(self.iWebView!, withTitle: "Please wait.", animated: true)
         let url = webView.url
-        print("##### url = \(url?.absoluteString ?? "")")
+        LogUtils.printMessage(message: "##### url = \(url?.absoluteString ?? "")")
         if (((url?.absoluteString.range(of: "exitsurvey")) != nil) || ((url?.absoluteString.range(of: "#autoClose") != nil))) {
             perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 1.0)
         }
@@ -395,13 +391,12 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
 
         // WKNavigationDelegate method for when navigation finishes
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            print("Web view did finish loading")
         GMDCircleLoader.hideFromView(self.iWebView!, animated: true)
         }
 
         // WKNavigationDelegate method for when navigation fails
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        print("Failed to load with error: \(error.localizedDescription)")
+        LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "Failed to load with error: \(error.localizedDescription)")
         GMDCircleLoader.hideFromView(self.iWebView!, animated: true)
     }
 

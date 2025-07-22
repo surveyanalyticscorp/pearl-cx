@@ -3,7 +3,7 @@ import UIKit
 
 @MainActor public protocol CXServiceDelegate: NSObjectProtocol {
     
-    func apiSuccess(response: Data)
+    func apiSuccess(response: Data, headers: [String: String])
     func apiFailure(touchPoint: TouchPoint, apiKey: String, apiBaseUrl: String, port: String, accessToken: String)
     func showApiError(message: String)
 }
@@ -35,15 +35,12 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
         self.apiBaseUrl = apiBaseUrl
         self.port = port
         self.accessToken = accessToken
-        print("apiBaseUrl: \(apiBaseUrl)")
         let baseUrl = apiBaseUrl
         
         var encryptedBody = ""
         var encryptedHeaders = [String: String]()
         let body = self.createCXRequestWithTouchPointID(touchPoint: touchPoint)
         self.callback!.encryptData(data: body) { [self] encryptedData, headers in
-            print("encryptedData: \(encryptedData)")
-            print("header: \(headers)")
             encryptedBody = encryptedData
             encryptedHeaders = headers
             
@@ -80,7 +77,7 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
             let uploadData = try JSONSerialization.data(withJSONObject: cxRequestDict, options: .prettyPrinted)
             return String(data: uploadData, encoding: .utf8) ?? ""
         } catch {
-            print("Error serializing JSON: \(error)")
+            LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "Error serializing JSON: \(error)")
             return ""
         }
     }
@@ -109,18 +106,18 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
     }
 
     public func printRequestDetails(request: URLRequest) {
-        print("URL: \(request.url?.absoluteString ?? "No URL")")
-        print("HTTP Method: \(request.httpMethod ?? "No HTTP Method")")
+        LogUtils.printMessage(message: "URL: \(request.url?.absoluteString ?? "No URL")")
+        LogUtils.printMessage(message: "HTTP Method: \(request.httpMethod ?? "No HTTP Method")")
         if let headers = request.allHTTPHeaderFields {
-            print("Headers: \(headers)")
+            LogUtils.printMessage(message: "Headers: \(headers)")
         } else {
-            print("No Headers")
+            LogUtils.printMessage(message: "No Headers")
         }
         if let bodyData = request.httpBody {
             let bodyString = String(data: bodyData, encoding: .utf8) ?? "Unable to convert body data to string"
-            print("Body: \(bodyString)")
+            LogUtils.printMessage(message: "Body: \(bodyString)")
         } else {
-            print("No Body")
+            LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "No Body")
         }
     }
 
@@ -129,7 +126,7 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
         Task { @MainActor in
             if let httpResponse = dataTask.response as? HTTPURLResponse {
                 let statusCode = httpResponse.statusCode
-                    print("HTTP Status Code: \(statusCode)")
+                LogUtils.printMessage(message: "HTTP Status Code: \(statusCode)")
                 if statusCode == 200 {
                     self.receivedData.append(data)
                     handleHttpOK(data: self.receivedData)
@@ -157,9 +154,9 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
 
     nonisolated public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let error = error {
-            print("Task completed with error: \(error)")
+            LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "Task completed with error: \(error)")
         } else {
-            print("Task completed successfully.")
+            LogUtils.printMessage(message: "Task completed successfully.")
         }
     }
 
@@ -178,14 +175,24 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
     public func handleHttpOK(data: Data) {
         do {
             if let jsonData = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                let headers: [String: String]
+                    if let httpResponse = response as? HTTPURLResponse {
+                        headers = httpResponse.allHeaderFields.reduce(into: [:]) { result, item in
+                            if let key = item.key as? String, let value = item.value as? String {
+                                result[key] = value
+                            }
+                        }
+                    } else {
+                        headers = [:]
+                    }
                 if let response = jsonData["response"] as? [String: Any] {
-                    iDelegate?.apiSuccess(response: data)
+                    iDelegate?.apiSuccess(response: data, headers: headers)
                 } else {
-                    print("No valid response in JSON.")
+                    LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "No valid response in JSON.")
                 }
             }
         } catch {
-            print("Error parsing JSON: \(error)")
+            LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "Error parsing JSON: \(error)")
         }
     }
 }
