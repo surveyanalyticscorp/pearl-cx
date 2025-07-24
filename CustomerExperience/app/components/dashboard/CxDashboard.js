@@ -4,6 +4,7 @@ import {showLoading} from '../../redux/actions/index';
 import {
   getDashboardContent,
   getFirstTimeClosedLoopSegmentDetails,
+  setStatusIndex,
 } from '../../redux/actions/dashboard.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
@@ -26,6 +27,10 @@ import {
 import RenderSegmentDashboardData from './cxDashboard/RenderSegmentDashboardData';
 import useBackHandler from './hooks/useBackHandler';
 import {useNavigation} from '@react-navigation/native';
+import QPBottomSheet from '../closedloop/takeaction/QPBottomSheet';
+import QPBottomSheetHeader from '../closedloop/takeaction/QPBottomSheetHeader';
+import SelectStatus from '../closedloop/takeaction/SelectStatus';
+import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -92,7 +97,8 @@ const CxDashboard = ({route, navigation}) => {
   //   Notifications.registerRemoteNotifications();
   // }, []);
   const openStatusBS = () => {
-    statusBottomSheetRef.current.snapTo(0);
+    // statusBottomSheetRef.current.snapTo(0);
+    setStatusBottomSheetVisible(true);
   };
 
   const getSegmentData = () => {
@@ -160,6 +166,12 @@ const CxDashboard = ({route, navigation}) => {
     }
   };
 
+  const [statusBottomSheetVisible, setStatusBottomSheetVisible] =
+    useState(false);
+  const onCloseStatusBottomSheet = () => {
+    setStatusBottomSheetVisible(false);
+  };
+
   return (
     <View
       testID="cx-dashboard"
@@ -188,13 +200,47 @@ const CxDashboard = ({route, navigation}) => {
           {exitAlert && renderExitAlert()}
         </ScrollView>
       </Animated.View>
-      <StatusDashboardBottomSheet
+      <QPBottomSheet
+        visible={statusBottomSheetVisible}
+        onClose={onCloseStatusBottomSheet}
+        bottomSheetHeight="60%"
+        headerComponent={
+          <QPBottomSheetHeader
+            headerLabel="Status"
+            onClose={onCloseStatusBottomSheet}
+          />
+        }>
+        <RenderDashboardSelectStatusFilter onClose={onCloseStatusBottomSheet} />
+      </QPBottomSheet>
+      {/* <StatusDashboardBottomSheet
         ref={statusBottomSheetRef}
         snapPoints={statusBottomSheetSnapPoints}
         fall={fall}
-      />
+      /> */}
       <CreateTicketButton />
     </View>
   );
 };
+
+function RenderDashboardSelectStatusFilter({onClose}) {
+  const dispatch = useDispatch();
+  const ticketCount = useSelector(
+    state => state.dashboard.dashBoardTicketCount,
+  );
+  const statusIndex = useSelector(
+    state => state.dashboard.currentStatusIndexForFilter,
+  );
+  const statusList = getDashboardStatusListForBottomList(ticketCount);
+  return (
+    <SelectStatus
+      data={statusList}
+      screenName={'Dashboard'}
+      selectedIndex={statusIndex}
+      handleOnPress={(item, index) => {
+        dispatch(setStatusIndex(index));
+        onClose();
+      }}
+    />
+  );
+}
 export default CxDashboard;

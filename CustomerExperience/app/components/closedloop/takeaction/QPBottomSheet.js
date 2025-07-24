@@ -89,6 +89,7 @@ const QPBottomSheet = ({
       Animated.timing(translateY, {
         toValue: sheetHeight ?? SCREEN_HEIGHT,
         duration: 300,
+        bounciness: 5,
         useNativeDriver: true,
       }).start(onClose);
     }
