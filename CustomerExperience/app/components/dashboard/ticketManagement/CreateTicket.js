@@ -60,6 +60,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ShowInputError from '../../../routes/commonUI/ShowInputError';
 import {get} from 'lodash';
 import {getApiValidationErrorMessage} from '../../../Utils/ErrorValidationUtils';
+import {QPTransparentSpinner} from '../../../widgets/QPTransparentSpinner';
 
 const INPUTTYPES = {
   EMAIL: 'EMAIL',
@@ -291,26 +292,6 @@ const RenderCustomerNameInput = ({
         isError={isError}
       />
       <ShowInputError isError={isError} errorMessage={errorMessage} />
-    </View>
-  );
-};
-
-const CreateTicketButton = ({showLoading, onPress}) => {
-  return (
-    <View>
-      {showLoading ? (
-        <View
-          style={[
-            styles.buttonStyle,
-            {
-              backgroundColor: Colors.accentLight,
-            },
-          ]}>
-          <QPSpinner spinnerColor={Colors.white} />
-        </View>
-      ) : (
-        <RenderCreateTicketButton handleCreateTicket={onPress} />
-      )}
     </View>
   );
 };
@@ -727,6 +708,7 @@ export default function CreateTicket(props) {
 
   return (
     <CreateTicketContainer>
+      {showLoading && <QPTransparentSpinner subText={'Creating ticket...'} />}
       <CreateTicketForm fall={fall}>
         <VerticalSpaceBox multiplyBy={2} />
         <RenderCustomerNameInput
@@ -831,10 +813,8 @@ export default function CreateTicket(props) {
         />
 
         <VerticalSpaceBox multiplyBy={4} />
-        <CreateTicketButton
-          onPress={handleCreateTicket}
-          showLoading={showLoading}
-        />
+        <RenderCreateTicketButton handleCreateTicket={handleCreateTicket} />
+
         <VerticalSpace />
       </CreateTicketForm>
 

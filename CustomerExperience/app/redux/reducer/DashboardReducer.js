@@ -51,6 +51,7 @@ import {
   IS_CSAT_VIEW_TOP_BOX,
   SET_MOVE_NEXT,
   CLEAR_DASHBOARD,
+  RESET_CREATE_CLF_TICKET_RECIEVED,
 } from '../actions/dashboard.actions';
 import {
   SET_EMAIL_SUBJECT,
@@ -264,6 +265,13 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         createTicketResponse: action.response,
+      };
+    }
+
+    case RESET_CREATE_CLF_TICKET_RECIEVED: {
+      return {
+        ...state,
+        createTicketResponse: {},
       };
     }
 

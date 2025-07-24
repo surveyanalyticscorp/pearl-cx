@@ -14,6 +14,7 @@ export default function QPSpinner(props) {
     indicatorCount,
     animationType,
     customSpinnerStyle,
+    customeSpinnerContainerStyle,
     size,
     spinnerText,
   } = props;
@@ -24,6 +25,7 @@ export default function QPSpinner(props) {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
+        ...customeSpinnerContainerStyle,
       }}>
       <Animatable.View
         testID="QPSpinner"
