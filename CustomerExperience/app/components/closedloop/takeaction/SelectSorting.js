@@ -1,17 +1,13 @@
-import React, {useState} from 'react';
-import {StyleSheet, FlatList, SafeAreaView} from 'react-native';
+import React from 'react';
+import {StyleSheet, FlatList} from 'react-native';
 import {CheckRadioButtonItem} from '../../../routes/commonUI/CommonUI';
 import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
 import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
-import QPButton from '../../../widgets/Button';
-import {buttonStyles} from '../../../styles/button.styles';
 import {baseTextStyles} from '../../../styles/text.styles';
 const itemSeparator = () => <ListItemSeparator />;
 
 const SelectSorting = ({data, selectedIndex, handleOnPress}) => {
-  const [currentIndex, setIndex] = useState(selectedIndex);
-  const [currentItem, setItem] = useState(data[selectedIndex]);
   const renderRow = ({item, index}) => {
     return (
       <CheckRadioButtonItem
@@ -20,11 +16,10 @@ const SelectSorting = ({data, selectedIndex, handleOnPress}) => {
           baseTextStyles.primaryRegularText,
           {color: Colors.filterIconColor},
         ]}
-        item={{...item, isChecked: currentIndex === index}}
+        item={{...item, isChecked: selectedIndex === index}}
         index={index}
         onPress={index_ => {
-          setIndex(index_);
-          setItem(data[index_]);
+          handleOnPress(data[index_], index_);
         }}
       />
     );
@@ -32,24 +27,11 @@ const SelectSorting = ({data, selectedIndex, handleOnPress}) => {
 
   return (
     <FlatList
-      style={styles.container}
+      style={styles.flatlist}
       data={data}
       keyExtractor={(item, index) => index.toString()}
       renderItem={renderRow}
       ItemSeparatorComponent={itemSeparator}
-      ListFooterComponent={
-        <QPButton
-          buttonColor={Colors.accentLight}
-          testID="ApplyButton"
-          style={[
-            buttonStyles.primaryButton,
-            {marginVertical: MarginConstants.tab1_4x},
-          ]}
-          onPress={() => handleOnPress(currentItem, currentIndex)}
-          buttonText={'Apply'}
-          textStyle={buttonStyles.primaryButtonText}
-        />
-      }
     />
   );
 };
@@ -57,9 +39,10 @@ const SelectSorting = ({data, selectedIndex, handleOnPress}) => {
 export default SelectSorting;
 
 const styles = StyleSheet.create({
-  container: {
+  flatlist: {
     backgroundColor: Colors.white,
-    margin: MarginConstants.tab2,
+    margin: MarginConstants.tab1_2x,
+    paddingBottom: MarginConstants.tab1_4x,
   },
 
   row: {
