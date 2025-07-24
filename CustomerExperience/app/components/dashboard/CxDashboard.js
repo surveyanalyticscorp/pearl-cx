@@ -203,7 +203,6 @@ const CxDashboard = ({route, navigation}) => {
       <QPBottomSheet
         visible={statusBottomSheetVisible}
         onClose={onCloseStatusBottomSheet}
-        bottomSheetHeight="60%"
         headerComponent={
           <QPBottomSheetHeader
             headerLabel="Status"

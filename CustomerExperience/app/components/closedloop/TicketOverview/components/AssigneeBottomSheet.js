@@ -8,10 +8,11 @@ import {getOwnerIndex} from '../../../../Utils/TicketUtils';
 import ticketOverviewStyles from '../ticket.overview.style';
 import {translate} from '../../../../Utils/MultilinguaUtils';
 import SelectTicketOwner from '../../takeaction/SelectTicketOwner';
+import QPBottomSheet from '../../takeaction/QPBottomSheet';
+import QPBottomSheetHeader from '../../takeaction/QPBottomSheetHeader';
 
-const AssigneeBottomSheet = React.forwardRef(({fall}, ref) => {
+const AssigneeBottomSheet = ({onClose, visible}) => {
   const STATUS_ESCALATED = 2;
-  const snapPoints = ['50%', '0%'];
   const updateTicket = useUpdateTicket();
   const {owners} = useSelector(state => state.dashboard.ownerDetails ?? []);
   const {assignToId} = useSelector(state => state.dashboard.ticket);
@@ -19,50 +20,34 @@ const AssigneeBottomSheet = React.forwardRef(({fall}, ref) => {
     getOwnerIndex(owners, assignToId ?? 0),
   );
 
-  const close = () => {
-    ref.current.snapTo(snapPoints.length - 1);
-  };
-  const renderHeader = () => {
-    return (
-      <BottomSheetHeader
-        title={translate('ticket_overview.select_ticket_owner')}
-        onPressClose={() => close()}
-      />
-    );
-  };
-
-  const renderContent = () => {
-    return (
-      <View style={ticketOverviewStyles.contentContainer}>
-        <SelectTicketOwner
-          data={owners}
-          selectedIndex={ticketOwnerIndex}
-          handleOnPress={(item, index) => {
-            console.log('handleOnPress', item, index);
-
-            setTicketOwnerIndex(index);
-            // escalating ticket and assigning a new owner
-            updateTicket({
-              status: STATUS_ESCALATED,
-              assignToId: item.ownerID,
-            });
-            close();
-          }}
-        />
-      </View>
-    );
-  };
-
   return (
-    <BottomSheet
-      ref={ref}
-      snapPoints={snapPoints}
-      initialSnap={snapPoints.length - 1}
-      renderContent={renderContent}
-      renderHeader={renderHeader}
-      callbackNode={fall}
-    />
+    <QPBottomSheet
+      visible={visible}
+      onClose={onClose}
+      bottomSheetHeight="60%"
+      headerComponent={
+        <QPBottomSheetHeader
+          headerLabel={translate('ticket_overview.select_ticket_owner')}
+          onClose={onClose}
+        />
+      }>
+      <SelectTicketOwner
+        data={owners}
+        selectedIndex={ticketOwnerIndex}
+        handleOnPress={(item, index) => {
+          console.log('handleOnPress', item, index);
+
+          setTicketOwnerIndex(index);
+          // escalating ticket and assigning a new owner
+          updateTicket({
+            status: STATUS_ESCALATED,
+            assignToId: item.ownerID,
+          });
+          onClose();
+        }}
+      />
+    </QPBottomSheet>
   );
-});
+};
 
 export default AssigneeBottomSheet;

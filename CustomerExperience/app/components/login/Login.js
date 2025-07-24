@@ -172,14 +172,32 @@ export const RenderSpinnerLoginButton = ({login}) => {
     });
   }
 
-  const handleSignInWithPushToken = () => {
+  // Add a ref to track retries
+  const [pushTokenRetryCount, setPushTokenRetryCount] = useState(0);
+
+  const handleSignInWithPushToken = async () => {
+    // Check if running on simulator/emulator
+    const isEmulator = await DeviceInfo.isEmulator();
+    if (isEmulator) {
+      console.log('Running on simulator/emulator, skipping push token logic.');
+      // Use a dummy token for simulator
+      loginAction('SIMULATOR_DUMMY_TOKEN');
+      return;
+    }
+
     AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(token => {
       if (isStringNullOrEmpty(token)) {
         console.log('handleSignInWithPushToken: token:', token);
-        checkNotificationPermission().then(() => handleSignInWithPushToken());
+        if (pushTokenRetryCount < 3) {
+          setPushTokenRetryCount(pushTokenRetryCount + 1);
+          checkNotificationPermission().then(() => handleSignInWithPushToken());
+        } else {
+          showErrorFlashMessage(
+            'Failed to get push notification token. Please check your network or try again later.',
+          );
+        }
       } else {
         console.log('loginAction: called:');
-
         loginAction(token);
       }
     });

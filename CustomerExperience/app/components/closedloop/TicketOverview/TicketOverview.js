@@ -57,25 +57,31 @@ export default function TicketOverview(props) {
   const assigneeBottomSheet = React.useRef();
   const statusBottomSheetSnapPoints = ['55', '0'];
 
+  const [priorityBottomSheetVisible, setPriorityBottomSheetVisible] =
+    useState(false);
+  const onClosePriorityBottomSheet = () => {
+    setPriorityBottomSheetVisible(false);
+  };
+
+  const [statusBottomSheetVisible, setStatusBottomSheetVisible] =
+    useState(false);
+  const onCloseStatusBottomSheet = () => {
+    setStatusBottomSheetVisible(false);
+  };
+
   const fall = new Animated.Value(1);
   const onTakeActionHandler = () => {
     setActionBottomSheetVisible(true);
   };
   const handleStatusSelection = () => {
-    priorityBottomSheet.current.snapTo(1);
-    statusBottomSheet.current.snapTo(0);
-    assigneeBottomSheet.current.snapTo(1);
+    setStatusBottomSheetVisible(true);
   };
 
   const handlePrioritySelection = () => {
-    priorityBottomSheet.current.snapTo(0);
-    statusBottomSheet.current.snapTo(1);
-    assigneeBottomSheet.current.snapTo(1);
+    setPriorityBottomSheetVisible(true);
   };
   const handleOwnerSelection = () => {
-    priorityBottomSheet.current.snapTo(1);
-    statusBottomSheet.current.snapTo(1);
-    assigneeBottomSheet.current.snapTo(0);
+    setAssigneeBottomSheetVisible(true);
   };
 
   const renderStatusHeader = () => {
@@ -107,16 +113,43 @@ export default function TicketOverview(props) {
     );
   };
 
-  const RenderStatusBottomSheet = () => {
+  const RenderStatusBottomSheet = ({onClose, visible}) => {
     return (
-      <BottomSheet
-        ref={statusBottomSheet}
-        snapPoints={statusBottomSheetSnapPoints}
-        initialSnap={statusBottomSheetSnapPoints.length - 1}
-        renderContent={RenderStatusSelectContent}
-        renderHeader={renderStatusHeader}
-        callbackNode={fall}
-      />
+      // <BottomSheet
+      //   ref={statusBottomSheet}
+      //   snapPoints={statusBottomSheetSnapPoints}
+      //   initialSnap={statusBottomSheetSnapPoints.length - 1}
+      //   renderContent={RenderStatusSelectContent}
+      //   renderHeader={renderStatusHeader}
+      //   callbackNode={fall}
+      // />
+
+      <QPBottomSheet
+        visible={visible}
+        onClose={onClose}
+        headerComponent={
+          <QPBottomSheetHeader headerLabel={'Status'} onClose={onClose} />
+        }>
+        <SelectStatus
+          data={statusList}
+          screenName={'TicketOverview'}
+          selectedIndex={statusIndex}
+          handleOnPress={(item, index) => {
+            if (ticketDetails.status === item.id) {
+              onClose();
+              return;
+            }
+            if (item.id === 2) {
+              // popup assign user bottom sheet and let him choose an assignee
+              handleOwnerSelection();
+            } else {
+              updateTicket({status: item.id});
+            }
+            setStatusIndex(index);
+            onClose();
+          }}
+        />
+      </QPBottomSheet>
     );
   };
 
@@ -143,6 +176,11 @@ export default function TicketOverview(props) {
     setActionBottomSheetVisible(false);
     handleTicketAction(item);
   };
+  const [assigneeBottomSheetVisible, setAssigneeBottomSheetVisible] =
+    useState(false);
+  const onCloseAssigneeBottomSheet = () => {
+    setAssigneeBottomSheetVisible(false);
+  };
   return (
     <TicketOverviewContainer>
       <Animated.ScrollView
@@ -163,9 +201,18 @@ export default function TicketOverview(props) {
           <DeleteView />
         </View>
       </Animated.ScrollView>
-      <RenderStatusBottomSheet />
-      <PriorityBottomSheet ref={priorityBottomSheet} fall={fall} />
-      <AssigneeBottomSheet ref={assigneeBottomSheet} fall={fall} />
+      <RenderStatusBottomSheet
+        visible={statusBottomSheetVisible}
+        onClose={onCloseStatusBottomSheet}
+      />
+      <PriorityBottomSheet
+        visible={priorityBottomSheetVisible}
+        onClose={onClosePriorityBottomSheet}
+      />
+      <AssigneeBottomSheet
+        onClose={onCloseAssigneeBottomSheet}
+        visible={assigneeBottomSheetVisible}
+      />
       <QPBottomSheet
         visible={actionBottomSheetVisible}
         onClose={onCloseActionBottomSheet}

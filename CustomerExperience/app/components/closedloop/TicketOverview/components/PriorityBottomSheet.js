@@ -9,53 +9,36 @@ import {
   getPriorityIndexById,
   priorityList,
 } from '../../../../Utils/TicketUtils';
-import ticketOverviewStyles from '../ticket.overview.style';
 import SelectPriority from '../../takeaction/SelectPriority';
+import QPBottomSheet from '../../takeaction/QPBottomSheet';
+import QPBottomSheetHeader from '../../takeaction/QPBottomSheetHeader';
 
-const PriorityBottomSheet = React.forwardRef(({fall}, ref) => {
-  const snapPoints = ['50%', '0%'];
+const PriorityBottomSheet = ({visible, onClose}, ref) => {
   const updateTicket = useUpdateTicket();
   const {priority} = useSelector(state => state.dashboard.ticket);
   const [priorityIndex, setPriorityIndex] = useState(
     getPriorityIndexById(priority ?? -1),
   );
 
-  const close = () => {
-    ref.current.snapTo(snapPoints.length - 1);
-  };
-  const renderHeader = () => {
-    return (
-      <BottomSheetHeader title={'Priority'} onPressClose={() => close()} />
-    );
-  };
-
-  const renderContent = () => {
-    return (
-      <View style={ticketOverviewStyles.contentContainer}>
-        <SelectPriority
-          data={priorityList}
-          selectedIndex={priorityIndex}
-          screenName={'TicketOverview'}
-          handleOnPress={(item, index) => {
-            close();
-            setPriorityIndex(index);
-            updateTicket({priority: item.id});
-          }}
-        />
-      </View>
-    );
-  };
-
   return (
-    <BottomSheet
-      ref={ref}
-      snapPoints={snapPoints}
-      initialSnap={snapPoints.length - 1}
-      renderContent={renderContent}
-      renderHeader={renderHeader}
-      callbackNode={fall}
-    />
+    <QPBottomSheet
+      visible={visible}
+      onClose={onClose}
+      headerComponent={
+        <QPBottomSheetHeader headerLabel={'Priority'} onClose={onClose} />
+      }>
+      <SelectPriority
+        data={priorityList}
+        selectedIndex={priorityIndex}
+        screenName={'TicketOverview'}
+        handleOnPress={(item, index) => {
+          setPriorityIndex(index);
+          updateTicket({priority: item.id});
+          onClose();
+        }}
+      />
+    </QPBottomSheet>
   );
-});
+};
 
 export default PriorityBottomSheet;

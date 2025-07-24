@@ -770,7 +770,6 @@ export default function CreateTicket(props) {
       <QPBottomSheet
         visible={visible}
         onClose={onClose}
-        bottomSheetHeight="60%"
         headerComponent={
           <QPBottomSheetHeader
             headerLabel={translate('ticket_overview.select_ticket_owner')}
