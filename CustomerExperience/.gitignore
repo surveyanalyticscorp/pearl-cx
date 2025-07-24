@@ -63,3 +63,11 @@ buck-out/
 
 # coverage
 coverage/
+
+# Ignore custom release/debug folders
+android/app/release/
+android/app/debug/
+
+# Ignore Gradle build outputs
+android/**/build/
+

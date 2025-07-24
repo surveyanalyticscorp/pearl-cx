@@ -332,7 +332,7 @@ export default class StringUtils {
 
   static truncateCustomerName = (
     name,
-    maxLength = 18,
+    maxLength = 100,
     firstCharatcetCount = 6,
     lastCharatcetCount = 6,
   ) => {

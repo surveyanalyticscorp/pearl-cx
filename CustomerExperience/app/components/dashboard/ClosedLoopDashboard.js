@@ -165,7 +165,7 @@ export const ViewTicketsButton = ({statusIndex}) => {
       testID="ViewTicketsButton"
       style={buttonStyles.textButton}
       onPress={navigateToCLosedLoop}
-      buttonText={`${translate('dashboard.view_tickets')}`}
+      buttonText={`${translate('dashboard.tickets')}`}
       textStyle={buttonStyles.textButtonText}
     />
   );
@@ -213,6 +213,7 @@ export const StatusDashboardBottomSheet = React.forwardRef(
         <View style={styles.contentContainer}>
           <SelectStatus
             data={statusList}
+            screenName={'Dashboard'}
             selectedIndex={statusIndex}
             handleOnPress={(item, index) => {
               dispatch(setStatusIndex(index));
@@ -226,7 +227,7 @@ export const StatusDashboardBottomSheet = React.forwardRef(
     const renderStatusHeader = _title => {
       return (
         <BottomSheetHeader
-          title={translate('ticket_overview.select_status')}
+          title={translate('close_loop.status')}
           onPressClose={() => ref.current.snapTo(snapPoints.length - 1)}
         />
       );
@@ -360,7 +361,7 @@ const styles = StyleSheet.create({
     marginHorizontal: MarginConstants.halfTab,
   },
   ticketStatusView: {
-    width: 2 * MarginConstants.tab3,
+    width: Platform.isPad ? MarginConstants.tab1_6x : 2 * MarginConstants.tab3,
     paddingVertical: 2,
     alignItems: 'flex-start',
   },

@@ -27,19 +27,19 @@ const ChartLegendView = () => {
         title={scoringModel === 1 ? 'Negatives' : 'Detractors'}
         count={detractors}
         percentage={detractorPercent}
-        backgroundColor={Colors.detractor2}
+        backgroundColor={Colors.detractor3}
       />
       <LegendScoreView
         title={scoringModel === 1 ? 'Neutral' : 'Passive'}
         count={passive}
         percentage={passivePercent}
-        backgroundColor={Colors.passive2}
+        backgroundColor={Colors.passive3}
       />
       <LegendScoreView
         title={scoringModel === 1 ? 'Positives' : 'Promoters'}
         count={promoters}
         percentage={promoterPercent}
-        backgroundColor={Colors.promoter2}
+        backgroundColor={Colors.promoter3}
       />
     </View>
   );

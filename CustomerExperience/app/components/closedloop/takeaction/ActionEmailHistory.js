@@ -26,11 +26,23 @@ import RNFetchBlob from 'rn-fetch-blob';
 import {getDownloadPermissionAndroid} from '../../../Utils/PermissionUtils';
 import {downloadFile} from '../../../Utils/DownloadUtils';
 
-const RenderHeader = ({subject}) => {
+const RenderHeader = () => {
   return (
     <View style={styles.rowContainerHeader}>
-      <Text style={styles.headerText}>{subject}</Text>
+      <Text numberOfLines={3} style={styles.headerText}>
+        {'Action history'}
+      </Text>
       <CloseButton color={Colors.filterIconColor} />
+    </View>
+  );
+};
+
+const RenderSubject = ({subject}) => {
+  return (
+    <View style={styles.rowContainerHeader}>
+      <Text numberOfLines={3} style={styles.subjectText}>
+        {subject}
+      </Text>
     </View>
   );
 };
@@ -152,7 +164,8 @@ export default function ActionEmailHistory(props) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <RenderHeader subject={emailSubject} />
+      <RenderHeader />
+      <RenderSubject subject={emailSubject} />
       <FlatList
         data={details.data}
         keyExtractor={(item, index) => index.toString()}
@@ -182,6 +195,12 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: FontFamily.medium,
+    fontSize: TextSizes.largeText,
+    padding: PaddingConstants.tab1_2x,
+    color: Colors.filterIconColor,
+  },
+  subjectText: {
+    fontFamily: FontFamily.regular,
     fontSize: TextSizes.largeText,
     padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,

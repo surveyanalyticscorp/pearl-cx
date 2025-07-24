@@ -30,7 +30,7 @@ const ContactView = ({onTakeActionHandler}) => {
           <ShowTitleAndText
             title={`${translate('responses.email')}`}
             subText={panelMember?.email}
-            isSubtextHighlighted={true}
+            isSubtextHighlighted={false}
           />
         ) : (
           <View />
@@ -39,7 +39,7 @@ const ContactView = ({onTakeActionHandler}) => {
           <ShowTitleAndText
             title={`${translate('create_new_ticket.phone_number')}`}
             subText={panelMember?.phone}
-            isSubtextHighlighted={true}
+            isSubtextHighlighted={false}
           />
         ) : (
           <View />

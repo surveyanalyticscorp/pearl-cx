@@ -44,7 +44,7 @@ const SendIcon = ({emailBody}) => {
     <Pressable onPress={callSendEmailApi} style={styles.optionIcon}>
       <IonIcon
         name={'send'}
-        size={24}
+        size={22}
         color={Colors.accentLight}
         style={{transform: [{rotateZ: '-45deg'}]}}
         testID={'send-icon-button'}
@@ -57,6 +57,7 @@ export default SendIcon;
 
 const styles = StyleSheet.create({
   optionIcon: {
-    margin: MarginConstants.tab1,
+    marginHorizontal: MarginConstants.tab1,
+    marginTop: -MarginConstants.halfTab
   },
 });

@@ -43,7 +43,7 @@ export const statusListDashboardClosedLoopFilter = [
 export const statusListForCreateTicket = [
   {title: 'New', id: 0},
   {title: 'Open', id: 1},
-  // {title: 'Escalated', id: 2},
+  {title: 'Escalated', id: 2},
   // {title: 'Overdue', id: 3},
   {title: 'Resolved', id: 3},
 ];

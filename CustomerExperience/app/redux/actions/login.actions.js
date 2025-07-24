@@ -66,9 +66,9 @@ export const updateBaseUrl = param => ({
   param,
 });
 
-export const updateClfBaseUrl = param => ({
+export const updateClfBaseUrl = clfBaseUrl => ({
   type: UPDATE_BASE_CLF_URL,
-  param,
+  clfBaseUrl: clfBaseUrl,
 });
 
 export const doLogout = (token, param) => ({

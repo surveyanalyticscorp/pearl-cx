@@ -24,7 +24,7 @@ const BottomSheetHeader = ({title, onPressClose}) => {
       <View style={styles.panelTitleContainer}>
         <TextLabel text={title} style={styles.header} />
         {/* <Text style={styles.header}>{title}</Text> */}
-        <Pressable onPress={onPressClose}>
+        <Pressable testID="close-button" onPress={onPressClose}>
           <IonIcons name="close" size={20} color={Colors.filterIconColor} />
         </Pressable>
       </View>

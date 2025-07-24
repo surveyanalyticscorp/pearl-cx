@@ -52,8 +52,8 @@ const RenderPhoneInput = ({setTicketState}) => {
           console.log('COUNTRY:', country);
           setMaxLength(CountryPhoneNumberLength[country?.cca2]);
         }}
-        onChangeFormattedText={text => {
-          setText(text);
+        onChangeFormattedText={text_ => {
+          setText(text_);
         }}
       />
     </View>
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   phoneInputTextInputStyleError: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
-    color: Colors.detractor2,
+    color: Colors.detractor3,
     height: MarginConstants.tab1_5x,
     paddingVertical: 0,
     marginVertical: 0,

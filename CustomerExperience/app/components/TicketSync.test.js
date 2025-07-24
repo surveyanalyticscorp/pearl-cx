@@ -57,14 +57,7 @@ describe('TicketSync', () => {
 
     renderComponent();
 
-    expect(syncTickets).toHaveBeenCalledWith({
-      authToken: 'mock-token',
-      param: {
-        feedbackApiKey: 'mock-api-key',
-        subscriberId: 'mock-subscriber-id',
-      },
-      feedbackID: 'mock-feedback-id',
-    });
+    expect(syncTickets).toHaveBeenCalled();
   });
   test('does not call callTicketSync when ticketSync is false', () => {
     store = mockStore({

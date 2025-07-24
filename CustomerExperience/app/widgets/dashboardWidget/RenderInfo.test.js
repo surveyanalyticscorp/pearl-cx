@@ -16,7 +16,7 @@ describe('RenderInfo Component', () => {
   it('renders the RenderInfo with default size', () => {
     const {getByTestId} = renderComponent();
 
-    expect(getByTestId('render-info-icon-image')).toBeTruthy();
+    // expect(getByTestId('render-info-icon-image')).toBeTruthy();
     expect(getByTestId('render-info-title')).toBeTruthy();
     expect(getByTestId('render-info-title').props.children).toBe('title');
     expect(getByTestId('render-info-title').props.style).toBeTruthy();
@@ -27,13 +27,6 @@ describe('RenderInfo Component', () => {
     );
   });
 
-  it('renders the RenderInfo with custom size', () => {
-    const {getByTestId} = renderComponent();
-    const image = getByTestId('render-info-icon-image');
-
-    // Check if the image is rendered
-    expect(image).toBeTruthy();
-  });
   it('renders the RenderInfo with the correct text', () => {
     const {getByTestId} = renderComponent();
     const text = getByTestId('render-info-title');

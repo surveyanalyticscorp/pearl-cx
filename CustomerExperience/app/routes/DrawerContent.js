@@ -19,6 +19,8 @@ import DrawerBackground from './commonUI/DrawerBackground';
 import TextLabel from '../../app/widgets/TextLabel/TextLabel';
 import useLogoutProcess from './drawerContent/useLogoutProcess';
 import logoutDialog from './drawerContent/LogoutDialog';
+import ResponsesIcon from '../widgets/IconWidget/ResponsesIcon';
+import QuestionProBanner from '../../assets/images/questionpro_banner.svg';
 
 const LogoutButtonIcon = () => {
   return (
@@ -34,8 +36,8 @@ const DrawerCXLogo = () => {
   return (
     <Image
       style={styles.image}
-      source={require('../config/images/cx-logo.png')}
-      resizeMode="contain"
+      source={require('../config/images/cx_logo.png')}
+      resizeMode="cover"
     />
   );
 };
@@ -74,6 +76,12 @@ const UserName = () => {
 const ClosedLoopIcon = () => (
   <View style={styles.rowIcon}>
     <ClosedLoopSvgIcon height={1.3 * Sizes.icons} width={1.3 * Sizes.icons} />
+  </View>
+);
+
+const DrawerResponsesIcon = () => (
+  <View style={styles.rowIcon}>
+    <ResponsesIcon sizeMultiplyer={1.3} />
   </View>
 );
 
@@ -123,7 +131,7 @@ const DrawerContent = ({navigation}) => {
     },
     responses: {
       title: 'Responses',
-      frontIcon: <DrawerButtonIcon name={'feedback'} />,
+      frontIcon: <DrawerResponsesIcon />,
       onPress: () => {
         navigation.navigate('Responses');
       },

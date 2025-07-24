@@ -11,7 +11,7 @@ module.exports = {
   setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
 
   transformIgnorePatterns: [
-    'node_modules/(?!victory-native|react-native|@react-native|@react-navigation|rn-fetch-blob)',
+    'node_modules/(?!victory-native|react-native|@react-native|@react-navigation|rn-fetch-blob|cheerio)',
   ],
 
   testPathIgnorePatterns: ['/node_modules/', '/android/', '/ios/'],
@@ -39,6 +39,9 @@ module.exports = {
       '<rootDir>/__mocks__/@react-native-firebase/messaging.js',
     '^@react-native-async-storage/async-storage$':
       '<rootDir>/__mocks__/async-storage.js',
+
+    'react-native-device-info$':
+      '<rootDir>/__mocks__/react-native-device-info.js',
   },
   coveragePathIgnorePatterns: [
     'app/components/Notification.js',
@@ -72,6 +75,7 @@ module.exports = {
     'app/components/closedloop/CentralizedRootCause',
     'app/redux/sagas/centralizedRootCauseSaga.js',
     'app/redux/sagas/loginInSaga.js',
-    // 'app/components/closedloop/TicketOverview/components/actionBottomSheet.js',
   ],
+
+  testTimeout: 30000,
 };

@@ -1,3 +1,4 @@
+import {create} from 'lodash';
 import {getUniqueValues} from '../../Utils/TicketUtils';
 import {CLEAR_USER_INFO} from '../actions';
 import {
@@ -14,10 +15,14 @@ import {
   GET_TICKET_LIST_SYNC_RECEIVED,
   MEDIA_FILE_UPLOAD_RESET,
   MEDIA_FILE_UPLOAD_RESPONSE,
+  RESET_SEND_EMAIL_RESPONSE,
   ROOT_CASUES_RECEIVED,
   ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL_RECEIVED,
   TICKET_ESCALATION_RECIEVED,
+  GENERATE_REFINE_EMAIL_DRAFT_RECEIVED,
+  GENERATE_EMAIL_DRAFT_RECEIVED,
+  generateEmailDraft,
 } from '../actions/closedloop.actions';
 import {
   CLEAR_CLOSED_LOOP_TICKET_DETAILS,
@@ -51,6 +56,7 @@ import {
   SET_EMAIL_SUBJECT,
   TOGGLE_TEMPLATE_BOTTOM_SHEET,
 } from '../actions/email.actions';
+import {REFINE_DEFAULT} from '../../api/Constant';
 
 const initialState = {
   dashboardData: {},
@@ -97,10 +103,15 @@ const initialState = {
   ticket: {},
   ticketComments: [],
   ticketActivity: [],
+  createTicketResponse: {},
   ticketSync: true,
   apiCallStatus: {},
   welcomeScreenData: {},
   emailData: {currentEmailBody: {}, emailSentResponse: {}},
+  generatedEmailDraftResponse: {
+    context: '',
+    response: {},
+  },
   isEmailTemplateOpen: false,
   mediaFileList: [],
   ticketDeleteStatus: {status: 'default'},
@@ -252,7 +263,7 @@ const dashboardReducer = (state = initialState, action) => {
     case CREATE_CLF_TICKET_RECIEVED: {
       return {
         ...state,
-        apiCallStatus: action.response,
+        createTicketResponse: action.response,
       };
     }
 
@@ -306,6 +317,12 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         emailData: {...state.emailData, defaultTemplate: action.response},
+      };
+    }
+    case RESET_SEND_EMAIL_RESPONSE: {
+      return {
+        ...state,
+        emailData: {...state.emailData, emailSentResponse: {}},
       };
     }
     case SEND_EMAIL_RECEIVED: {
@@ -454,6 +471,27 @@ const dashboardReducer = (state = initialState, action) => {
       console.log('CLEAR_DASHBOARD');
       return {
         ...initialState,
+      };
+    }
+
+    case GENERATE_EMAIL_DRAFT_RECEIVED: {
+      return {
+        ...state,
+        generatedEmailDraftResponse: {
+          ...state.generatedEmailDraftResponse,
+          context: action.response.context,
+          response: {...action.response, refine: REFINE_DEFAULT},
+        },
+      };
+    }
+
+    case GENERATE_REFINE_EMAIL_DRAFT_RECEIVED: {
+      return {
+        ...state,
+        generatedEmailDraftResponse: {
+          ...state.generatedEmailDraftResponse,
+          response: action.response,
+        },
       };
     }
 

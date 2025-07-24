@@ -1,6 +1,7 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
 import SegmentSelector from './SegmentSelector';
+import {NotiificationIcon} from './SegmentSelector';
 import {useDispatch, useSelector} from 'react-redux';
 import {StackActions, useNavigation} from '@react-navigation/native';
 
@@ -29,6 +30,12 @@ describe('SegmentSelector Component', () => {
         dashboard: {
           segmentDetails: {segments: ['Segment 1', 'Segment 2']},
           currentSegment: {currentSegment: 'Segment 1', currentSegmentID: '1'},
+        },
+        notification: {
+          notificationLogs: [
+            {id: 1, hasRead: false},
+            {id: 2, hasRead: true},
+          ],
         },
       }),
     );

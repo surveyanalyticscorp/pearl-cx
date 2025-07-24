@@ -18,6 +18,8 @@ import {
   ACTION_HISTORY_DETAILS,
   MEDIA_FILE_UPLOAD,
   MEDIA_FILE_UPLOAD_RESET,
+  GENERATE_EMAIL_DRAFT,
+  GENERATE_REFINE_EMAIL_DRAFT,
 } from './closedloop.actions';
 
 describe('Closed Loop Actions', () => {
@@ -237,5 +239,22 @@ describe('Closed Loop Actions', () => {
       param,
     };
     expect(actions.resetUploadFilelist(param)).toEqual(expectedAction);
+  });
+
+  it('should create an action to generate email draft', () => {
+    const param = {key: 'value'};
+    const expectedAction = {
+      type: GENERATE_EMAIL_DRAFT,
+      param,
+    };
+    expect(actions.generateEmailDraft(param)).toEqual(expectedAction);
+  });
+  it('should create an action to generate refine email draft', () => {
+    const param = {key: 'value'};
+    const expectedAction = {
+      type: GENERATE_REFINE_EMAIL_DRAFT,
+      param,
+    };
+    expect(actions.generateRefineEmailDraft(param)).toEqual(expectedAction);
   });
 });

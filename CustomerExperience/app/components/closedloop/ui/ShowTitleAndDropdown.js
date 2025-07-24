@@ -4,6 +4,8 @@ import RenderDropDownButton from '../TicketOverview/components/RenderDropDownBut
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
+import {HorizontalSpaceBox} from '../../../widgets/SpaceBox';
+import ShowInputError from '../../../routes/commonUI/ShowInputError';
 
 const ShowTitleAndDropdown = ({
   title,
@@ -13,6 +15,8 @@ const ShowTitleAndDropdown = ({
   hasArrowDownIcon = false,
   frontIcon,
   isDisabled = false,
+  isError = false,
+  errorMessage,
 }) => {
   return (
     <View style={styles.titleAndDropdownContainer}>
@@ -25,7 +29,9 @@ const ShowTitleAndDropdown = ({
         handleOnPress={onPress}
         hasArrowDownIcon={hasArrowDownIcon}
         frontIcon={frontIcon}
+        isError={isError}
       />
+      <ShowInputError isError={isError} errorMessage={errorMessage} />
     </View>
   );
 };
@@ -35,7 +41,7 @@ const styles = StyleSheet.create({
   titleAndDropdownContainer: {
     flex: 1,
     flexDirection: 'column',
-    marginBottom: MarginConstants.tab1_2x,
+    marginBottom: MarginConstants.tab1,
     height: '100%',
   },
   titleContainer: {

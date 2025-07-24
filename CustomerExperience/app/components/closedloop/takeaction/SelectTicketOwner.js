@@ -52,7 +52,7 @@ const SelectTicketOwner = ({data, selectedIndex, handleOnPress}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View testID="SelectTicketOwner" style={styles.container}>
       <SearchTextInput
         ref={textInputRef}
         placeholder={translate('search')}

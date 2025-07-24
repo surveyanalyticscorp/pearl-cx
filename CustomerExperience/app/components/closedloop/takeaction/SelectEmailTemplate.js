@@ -36,6 +36,15 @@ const SelectEmailTemplate = props => {
       <FlatList
         style={styles.flatList}
         data={props.data}
+        // ListHeaderComponent={
+        //   <TouchableWithoutFeedback onPress={props.handleOnPressGenarateWithAI}>
+        //     <View style={styles.row}>
+        //       <Text style={styles.titleForGenarateWithAI}>
+        //         {'Generate with AI*'}
+        //       </Text>
+        //     </View>
+        //   </TouchableWithoutFeedback>
+        // }
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
         ItemSeparatorComponent={ListItemSeparator}
@@ -80,5 +89,11 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
     marginStart: MarginConstants.halfTab,
     color: Colors.filterIconColor,
+  },
+  titleForGenarateWithAI: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.secondary,
+    marginStart: MarginConstants.halfTab,
+    color: Colors.accentLight,
   },
 });

@@ -3,12 +3,13 @@ import {View, Image} from 'react-native';
 import {loginStyles} from '../login.styles';
 
 const CXLogo = () => {
+  const cxLogo = require('../../../config/images/cx_logo.png');
   return (
     <View style={loginStyles.logo}>
       <Image
         style={loginStyles.logoImage}
         resizeMode="contain"
-        source={require('../../../config/images/cx-logo.png')}
+        source={cxLogo}
       />
     </View>
   );

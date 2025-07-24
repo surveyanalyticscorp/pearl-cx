@@ -32,4 +32,9 @@ export default {
     Object.keys(mockStorage).forEach(key => delete mockStorage[key]);
     return Promise.resolve();
   }),
+  multiGet: jest.fn(keys => {
+    return Promise.resolve(
+      keys.map(key => [key, mockStorage.get(key) || null]),
+    );
+  }),
 };

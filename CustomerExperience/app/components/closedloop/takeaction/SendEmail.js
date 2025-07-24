@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useState} from 'react';
+import React, {useEffect, useCallback, useState, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,8 +6,10 @@ import {
   View,
   Pressable,
   FlatList,
-  Keyboard,
+  SafeAreaView,
+  Modal,
   Platform,
+  Keyboard,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
@@ -24,26 +26,30 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   getActionHistoryDetails,
   getActionHistorySummary,
-  getDefaultEmailTemplate,
-  getEmailTemplates,
-  postUploadFile,
-  sendEmail,
+  resetSendEmailResponse,
 } from '../../../redux/actions/closedloop.actions';
 import StringUtils from '../../../Utils/StringUtils';
 import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
-import DocumentPicker from 'react-native-document-picker';
 import {isNull} from 'lodash';
-import {AttachmentIcon} from '../../../Utils/IconUtils';
+import {
+  AttachmentIcon,
+  IonIcon,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from '../../../Utils/IconUtils';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {useNavigation} from '@react-navigation/native';
-import SendIcon from './sendEmail/SendIcon';
 import SendEmailTo from './sendEmail/SendEmailTo';
-import TemplateIcon from './sendEmail/TemplateIcon';
-import AttachmentUploadIcon from './sendEmail/AttachmentUploadIcon';
-import RenderTicketId from './sendEmail/TicketId';
 import EmailOptions from './sendEmail/EmailOptions';
+import {apiHandler} from '../../../api/ApiHandler';
+import {AI_ROUTER_API_KEY, AI_ROUTER_API_URL} from '../../../api/Constant';
+import QPSpinner from '../../../widgets/QPSpinner';
+import ActionButton from 'react-native-action-button';
+import AiDraftButton from './sendEmail/AiDraftButton';
+import AIEmailDraftModal from './AIEmailDraftModal';
+import {FontFamilyStylesheet} from '../../../config/fonts/StyleSheet';
 
 export const RenderHeader = () => {
   return (
@@ -77,59 +83,23 @@ export const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
 };
 
 export const ActionHistory = ({children}) => {
-  return (
-    <View style={styles.actionHistoryContainer}>
-      <Text style={styles.actionHistoryHeader}>Action history</Text>
-      {children}
-    </View>
-  );
-};
-export const AttachmentView = () => {
-  const {mediaFileList} = useSelector(state => state.dashboard);
-  console.log(
-    'ATTACHEMENTS_LIST',
-    JSON.stringify(JSON.stringify(mediaFileList)),
-  );
-  return (
-    <View style={styles.attachmentContainer}>
-      <Text style={styles.actionHistoryHeader}>Attachments</Text>
-      <FlatList
-        data={mediaFileList}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => {
-          return <AttachmentItem item={item} index={index} />;
-        }}
-      />
-    </View>
-  );
-};
+  const {summary} = useSelector(state => state.dashboard.ticketActionHistory);
 
-export const AttachmentItem = ({item, index}) => {
-  return (
-    <Pressable style={styles.attachmentItem}>
-      <AttachmentIcon mimeType={item.mimeType} />
-      <Text numberOfLines={1} style={styles.attachmentText}>
-        {StringUtils.truncateFileName(item.fileName)}
-      </Text>
-    </Pressable>
-  );
-};
-
-export const NoActionView = () => {
-  return (
-    <View>
-      <Text style={[styles.actionHistoryDetailText, {fontStyle: 'italic'}]}>
-        No action has taken yet
-      </Text>
-    </View>
-  );
+  if (!isNull(summary?.data?.action)) {
+    return (
+      <View style={styles.actionHistoryContainer}>
+        <Text style={styles.actionHistoryHeader}>Action history</Text>
+        {children}
+      </View>
+    );
+  }
+  return <View />;
 };
 
 export const ActionHistoryItem = () => {
   const navigation = useNavigation();
   const {summary} = useSelector(state => state.dashboard.ticketActionHistory);
   const actionDetails = summary?.data?.action ?? null;
-  console.log('SUMMARY OS', JSON.stringify(summary));
   const ticketId = useSelector(state => state.dashboard?.ticket?.id);
   if (isNull(actionDetails)) {
     return <NoActionView />;
@@ -166,9 +136,104 @@ export const ActionHistoryItem = () => {
   );
 };
 
-export const CustomKeyboardToolbar = ({toolbarRef, richTextfieldRef}) => {
+export const AttachmentView = () => {
+  const {mediaFileList} = useSelector(state => state.dashboard);
+  if (mediaFileList && mediaFileList.length && mediaFileList.length > 0) {
+    return (
+      <View style={styles.attachmentContainer}>
+        <Text style={styles.actionHistoryHeader}>Attachments</Text>
+        <FlatList
+          data={mediaFileList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item, index}) => {
+            return <AttachmentItem item={item} index={index} />;
+          }}
+        />
+      </View>
+    );
+  }
+  return <View />;
+};
+
+export const AttachmentItem = ({item, index}) => {
   return (
-    <View style={styles.toolbarContainer}>
+    <Pressable style={styles.attachmentItem}>
+      <AttachmentIcon mimeType={item.mimeType} />
+      <Text numberOfLines={1} style={styles.attachmentText}>
+        {StringUtils.truncateFileName(item.fileName)}
+      </Text>
+      <Pressable style={{alignSelf: 'flex-end'}} onPress={() => {}}>
+        <IonIcon name="close" size={20} color={Colors.filterIconColor} />
+      </Pressable>
+    </Pressable>
+  );
+};
+
+export const NoActionView = () => {
+  return (
+    <View>
+      <Text style={[styles.actionHistoryDetailText, {fontStyle: 'italic'}]}>
+        No action has taken yet
+      </Text>
+    </View>
+  );
+};
+
+export const CustomKeyboardToolbar = ({
+  toolbarRef,
+  richTextfieldRef,
+  keyboardHeight,
+}) => {
+  const BoldIcon = ({tintColor}) => (
+    <MaterialIcons name="format-bold" size={20} color={tintColor} />
+  );
+
+  const ItalicIcon = ({tintColor}) => (
+    <MaterialIcons name="format-italic" size={20} color={tintColor} />
+  );
+
+  const UnderlineIcon = ({tintColor}) => (
+    <MaterialIcons name="format-underlined" size={20} color={tintColor} />
+  );
+
+  const SetInsertLinkIcon = ({tintColor}) => (
+    <MaterialIcons name="insert-link" size={20} color={tintColor} />
+  );
+
+  const InsertBulletsListIcon = ({tintColor}) => (
+    <MaterialIcons name="format-list-bulleted" size={20} color={tintColor} />
+  );
+
+  const InsertOrderedListIcon = ({tintColor}) => (
+    <MaterialIcons name="format-list-numbered" size={20} color={tintColor} />
+  );
+
+  const SetStrikethroughIcon = ({tintColor}) => (
+    <MaterialIcons name="strikethrough-s" size={20} color={tintColor} />
+  );
+
+  const AlignLeftIcon = ({tintColor}) => (
+    <MaterialIcons name="format-align-left" size={20} color={tintColor} />
+  );
+
+  const AlignCenterIcon = ({tintColor}) => (
+    <MaterialIcons name="format-align-center" size={20} color={tintColor} />
+  );
+
+  const AlignRightIcon = ({tintColor}) => (
+    <MaterialIcons name="format-align-right" size={20} color={tintColor} />
+  );
+
+  const AlignJustifyIcon = ({tintColor}) => (
+    <MaterialCommunityIcons
+      name="format-align-justify"
+      size={20}
+      color={tintColor}
+    />
+  );
+
+  return (
+    <View style={{...styles.toolbarContainer, bottom: keyboardHeight}}>
       <RichToolbar
         ref={toolbarRef}
         editor={richTextfieldRef}
@@ -178,10 +243,28 @@ export const CustomKeyboardToolbar = ({toolbarRef, richTextfieldRef}) => {
           actions.setBold,
           actions.setItalic,
           actions.setUnderline,
-          actions.insertBulletsList,
-          actions.insertOrderedList,
-          actions.setStrikethrough,
+          actions.insertLink,
+          actions.alignLeft,
+          actions.alignCenter,
+          actions.alignRight,
+          actions.alignFull,
+          // actions.insertBulletsList,
+          // actions.insertOrderedList,
+          // actions.setStrikethrough,
         ]}
+        iconMap={{
+          [actions.setBold]: BoldIcon,
+          [actions.setItalic]: ItalicIcon,
+          [actions.setUnderline]: UnderlineIcon,
+          [actions.insertLink]: SetInsertLinkIcon,
+          [actions.alignLeft]: AlignLeftIcon,
+          [actions.alignCenter]: AlignCenterIcon,
+          [actions.alignRight]: AlignRightIcon,
+          [actions.alignFull]: AlignJustifyIcon,
+          // [actions.insertBulletsList]: InsertBulletsListIcon,
+          // [actions.insertOrderedList]: InsertOrderedListIcon,
+          // [actions.setStrikethrough]: SetStrikethroughIcon,
+        }}
         style={styles.richToolbar}
       />
     </View>
@@ -192,102 +275,67 @@ export const SendEmail = props => {
   const defaultEmail = useSelector(
     state => state.dashboard.emailData.defaultTemplate,
   );
+  const navigation = useNavigation();
   const {emailSentResponse} = useSelector(state => state.dashboard.emailData);
+  console.log('props.route.params', props.route.params);
   const ticketId = JSON.stringify(props.route.params.ticketId);
-  const sampleEmailBody = {
-    ticketId: JSON.stringify(props.route.params.ticketId),
-    subject: '',
-    toEmail: props.route.params.toEmail ?? '',
-    emailBody: '',
-    attachments: [],
-  };
+  const toEmail = props.route.params.toEmail ?? '';
+  const sampleEmailBody = React.useMemo(
+    () => ({
+      ticketId: ticketId,
+      subject: '',
+      toEmail: toEmail,
+      emailBody: '',
+      attachments: [],
+    }),
+    [ticketId, toEmail],
+  );
+
   const [body, setBody] = useState(sampleEmailBody);
+  const [isPromptVisible, setPromptVisibility] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const richText = React.useRef();
-  const richTextToolBar = React.useRef();
-  const templateList = useSelector(
-    state => state.dashboard.emailData.emailTemplates,
-  );
+  const toolbarRef = React.useRef();
+  const {emailTemplates} = useSelector(state => state.dashboard.emailData);
+
+  const [emailDraftModalVisible, setEmailDraftModalVisible] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const bs = React.useRef(null);
   const fall = new Animated.Value(1);
-  const bsSnapPoints = ['33%', '0%'];
+  const bsSnapPoints = ['33%', '50%'];
 
   const closeBottomSheet = () => {
     if (bs.current) {
+      setIsBottomSheetVisible(false);
       bs.current.snapTo(bsSnapPoints.length - 1);
     }
   };
 
   useEffect(() => {
+    if (
+      emailSentResponse &&
+      emailSentResponse.status &&
+      emailSentResponse.status === 'success'
+    ) {
+      setTimeout(() => {
+        navigation.goBack();
+      }, 1000);
+      dispatch(resetSendEmailResponse());
+    }
+  }, [emailSentResponse, dispatch, navigation]);
+
+  useEffect(() => {
     if (!isObjectEmpty(defaultEmail)) {
       setBody(state => ({
         ...state,
-        emailBody: defaultEmail?.templateText ?? '',
+        emailBody: '',
       }));
-
-      richText.current.setContentHTML(defaultEmail?.templateText ?? '');
+      richText.current.setContentHTML('');
     }
   }, [defaultEmail]);
-
-  useEffect(() => {
-    dispatch(
-      getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
-    );
-    dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
-  }, []);
-  useEffect(() => {
-    dispatch(getActionHistorySummary(authToken, ticketId));
-    dispatch(getActionHistoryDetails(authToken, ticketId));
-    setBody(sampleEmailBody);
-    richText.current.setContentHTML('');
-  }, [emailSentResponse]);
-
-  const onPressTemplate = useCallback(() => {
-    richText.current.dismissKeyboard();
-    if (bs.current) {
-      bs.current.snapTo(0);
-    }
-    console.log('call');
-  }, []);
-
-  const onChangeSubject = text => {
-    setBody(state => ({...state, subject: text}));
-  };
-
-  const onChangeEmailBody = text => {
-    setBody(state => ({...state, emailBody: text}));
-  };
-  const handleTemplateSelectAction = item => {
-    setBody(state => ({
-      ...state,
-      emailBody: item.templateText,
-    }));
-
-    richText.current.setContentHTML(item.templateText);
-    closeBottomSheet();
-  };
-
-  const renderSelectTemplate = () => {
-    return (
-      <View style={styles.contentContainer}>
-        <SelectEmailTemplate
-          data={templateList}
-          handleOnPress={item => handleTemplateSelectAction(item)}
-        />
-      </View>
-    );
-  };
-
-  const renderHeader = () => {
-    return (
-      <BottomSheetHeader
-        title={'Select Template'}
-        onPressClose={closeBottomSheet}
-      />
-    );
-  };
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
@@ -296,6 +344,8 @@ export const SendEmail = props => {
       'keyboardDidShow',
       e => {
         setKeyboardVisible(true);
+        setKeyboardHeight(Platform.OS === 'ios' ? e.endCoordinates.height : 0);
+        console.log('keyboardDidShowListener', JSON.stringify(e));
       },
     );
 
@@ -312,12 +362,111 @@ export const SendEmail = props => {
     };
   }, []);
 
+  useEffect(() => {
+    dispatch(getActionHistorySummary(authToken, ticketId));
+    dispatch(getActionHistoryDetails(authToken, ticketId));
+    setBody(sampleEmailBody);
+    richText.current.setContentHTML('');
+  }, [dispatch, authToken, ticketId, sampleEmailBody]);
+
+  const onPressTemplate = useCallback(() => {
+    richText.current.dismissKeyboard();
+    setIsBottomSheetVisible(true);
+    if (bs.current) {
+      bs.current.snapTo(0);
+    }
+  }, []);
+
+  const onChangeSubject = text => {
+    setBody(state => ({...state, subject: text}));
+  };
+
+  const onChangeEmailBody = text => {
+    setBody(state => ({...state, emailBody: text}));
+  };
+  const handleTemplateSelectAction = item => {
+    setPromptVisibility(false);
+    setBody(state => ({
+      ...state,
+      emailBody: item.templateText,
+    }));
+
+    richText.current.setContentHTML(item.templateText);
+    closeBottomSheet();
+  };
+
+  const renderSelectTemplate = () => {
+    return (
+      <View style={styles.contentContainer}>
+        <SelectEmailTemplate
+          data={emailTemplates}
+          handleOnPress={item => {
+            handleTemplateSelectAction(item);
+          }}
+          handleOnPressGenarateWithAI={() => {
+            setBody(state => ({
+              ...state,
+              emailBody: '',
+            }));
+            richText.current.setContentHTML('');
+            closeBottomSheet();
+          }}
+        />
+      </View>
+    );
+  };
+
+  const renderHeader = () => {
+    return (
+      <BottomSheetHeader
+        title={'Select Template'}
+        onPressClose={closeBottomSheet}
+      />
+    );
+  };
+
+  const onPressAiButton = () => {
+    setEmailDraftModalVisible(state => !state);
+  };
+
+  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+
+  const setAIEmailDraft = emailBody => {
+    console.log('setAIEmailDraft', JSON.stringify(emailBody));
+    richText.current.setContentHTML(emailBody.body ?? '');
+    onChangeEmailBody(emailBody.body ?? '');
+    onChangeSubject(emailBody.subject ?? '');
+  };
+
+  const renderEmailDraftModal = () => {
+    return (
+      <AIEmailDraftModal
+        emailDraftModalVisible={emailDraftModalVisible}
+        setEmailDraftModalVisible={setEmailDraftModalVisible}
+        setEmailBody={setAIEmailDraft}
+      />
+    );
+  };
+  const fontFamily = 'Fira Sans';
+  const editorStyle = {
+    initialCSSText: `${FontFamilyStylesheet}`,
+    contentCSSText: `font-family: ${fontFamily}`,
+
+    backgroundColor: isBottomSheetVisible
+      ? Colors.transparentBackground
+      : Colors.white,
+  };
+
   return (
-    <View style={styles.container}>
-      <KeyboardAwareScrollView enableOnAndroid={true}>
+    <SafeAreaView style={styles.container}>
+      <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={40}>
         <RenderHeader />
 
-        <EmailOptions body={body} onPressTemplate={onPressTemplate} />
+        <EmailOptions
+          onPressAiButton={onPressAiButton}
+          body={body}
+          onPressTemplate={onPressTemplate}
+        />
         <SendEmailTo />
         <EmailSubject
           body={body}
@@ -335,33 +484,40 @@ export const SendEmail = props => {
           androidHardwareAccelerationDisabled={true}
           initialHeight={350}
           style={styles.textInput}
+          editorStyle={editorStyle}
           setContentHTML={body.emailBody}
           onFocus={closeBottomSheet}
         />
-
-        <AttachmentView />
+        {!isLoading && <AttachmentView />}
         <ActionHistory>
           <ActionHistoryItem />
         </ActionHistory>
       </KeyboardAwareScrollView>
-
-      {isKeyboardVisible && (
-        <CustomKeyboardToolbar
-          toolbarRef={richTextToolBar}
-          richTextfieldRef={richText}
-        />
-      )}
-      {!isKeyboardVisible && (
+      {isBottomSheetVisible && (
         <BottomSheet
           ref={bs}
+          enabledContentGestureInteraction={false}
           snapPoints={bsSnapPoints}
-          initialSnap={bsSnapPoints.length - 1}
+          initialSnap={0}
           renderContent={renderSelectTemplate}
           renderHeader={renderHeader}
+          onCloseEnd={() => {
+            setIsBottomSheetVisible(false);
+          }}
           callbackNode={fall}
         />
       )}
-    </View>
+
+      {/* {isActionButtonVisible && renderAIActionButton()} */}
+      {emailDraftModalVisible && renderEmailDraftModal()}
+      {isKeyboardVisible && (
+        <CustomKeyboardToolbar
+          keyboardHeight={keyboardHeight}
+          toolbarRef={toolbarRef}
+          richTextfieldRef={richText}
+        />
+      )}
+    </SafeAreaView>
   );
 };
 
@@ -407,6 +563,14 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.tab1,
     color: Colors.accent,
   },
+  generateUsingAIText: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.semiSecondary,
+    padding: PaddingConstants.tab1,
+    color: Colors.evenDarkerGrey,
+  },
   emailText: {
     fontFamily: FontFamily.medium,
     fontSize: TextSizes.secondary,
@@ -449,7 +613,8 @@ const styles = StyleSheet.create({
   },
   toolbarContainer: {
     position: 'absolute',
-    bottom: 0,
+
+    // bottom: Platform.OS === 'ios' ? 300 : 0,
     left: 0,
     right: 0,
     backgroundColor: '#fff', // Adjust background color to match the keyboard
@@ -465,7 +630,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: PaddingConstants.tab1_2x,
     paddingBottom: PaddingConstants.halfTab,
 
-    height: MarginConstants.tab1_8x,
+    height: MarginConstants.tab1_6x,
     backgroundColor: Colors.settingsBackground,
   },
   renderOptionViewEnd: {
@@ -555,11 +720,44 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  contentContainer: {backgroundColor: Colors.white, height: '100%'},
+  contentContainer: {backgroundColor: Colors.red, height: '100%'},
   emailOptionContainer: {
     flexDirection: 'row',
     flex: 1,
     marginTop: MarginConstants.tab1,
     marginBottom: MarginConstants.halfTab,
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  instructionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: PaddingConstants.halfTab,
+    marginHorizontal: MarginConstants.tab1,
+    borderWidth: 1,
+    borderColor: Colors.darkGrey,
+    borderRadius: 5,
+  },
+  instructionInput: {
+    flex: 1,
+    paddingLeft: PaddingConstants.halfTab,
+    paddingBottom: PaddingConstants.halfTab,
+    color: Colors.filterIconColor,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+  },
+  generateButton: {
+    padding: PaddingConstants.halfTab,
+    borderRadius: 5,
+  },
+  closeButton: {
+    borderRadius: 5,
+    paddingEnd: PaddingConstants.halfTab,
   },
 });

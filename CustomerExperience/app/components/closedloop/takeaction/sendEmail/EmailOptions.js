@@ -5,8 +5,9 @@ import TemplateIcon from './TemplateIcon';
 import AttachmentUploadIcon from './AttachmentUploadIcon';
 import SendIcon from './SendIcon';
 import {MarginConstants} from '../../../../styles/margin.constants';
+import AiDraftButton from './AiDraftButton';
 
-const EmailOptions = ({onPressTemplate, body}) => {
+const EmailOptions = ({onPressAiButton, onPressTemplate, body}) => {
   return (
     <View style={styles.emailOptionContainer}>
       <View style={styles.renderOptionViewStart}>
@@ -14,6 +15,7 @@ const EmailOptions = ({onPressTemplate, body}) => {
       </View>
 
       <View style={styles.renderOptionViewEnd}>
+        <AiDraftButton onPress={onPressAiButton} />
         <TemplateIcon onPressTemplate={onPressTemplate} />
         <AttachmentUploadIcon />
         <SendIcon emailBody={body} />

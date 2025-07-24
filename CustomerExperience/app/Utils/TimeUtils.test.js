@@ -1,4 +1,11 @@
-import {convertDateTimeAgo, getDateTimeAgo, getExpireDate} from './TimeUtils';
+import {
+  convertToDateTime,
+  convertDateTimeAgo,
+  getDateTimeAgo,
+  getExpireDate,
+  constantTimeOffset,
+  msToHMS,
+} from './TimeUtils';
 import {TOKEN_VALIDATION_DURATION} from '../api/Constant';
 import moment from 'moment';
 
@@ -11,22 +18,9 @@ describe('TimeUtils', () => {
       expect(convertDateTimeAgo(null)).toBe('N/A');
       expect(convertDateTimeAgo('')).toBe('N/A');
     });
-
-    // it('should return relative time for different date differences', () => {
-    //   // Mocking the current date
-    //   const oneMinuteAgo = moment(now).subtract(1, 'minute').toISOString();
-    //   const oneHourAgo = moment(now).subtract(1, 'hour').toISOString();
-    //   const oneDayAgo = moment(now).subtract(1, 'day').toISOString();
-    //   const twoDaysAgo = moment(now).subtract(2, 'days').toISOString();
-
-    //   expect(convertDateTimeAgo(oneMinuteAgo)).toBe('just now');
-    //   expect(convertDateTimeAgo(oneHourAgo)).toBe('1 hour ago');
-    //   // Adjusted for function behavior
-    //   expect(convertDateTimeAgo(oneDayAgo)).toBe('yesterday');
-    //   expect(convertDateTimeAgo(twoDaysAgo)).toMatch(
-    //     moment(twoDaysAgo).local().format('MMM DD, YYYY'),
-    //   );
-    // });
+    it('should return "just now" for current time', () => {
+      expect(convertDateTimeAgo(now.toISOString())).toBe('just now');
+    });
   });
 
   describe('getDateTimeAgo', () => {
@@ -36,17 +30,20 @@ describe('TimeUtils', () => {
 
     it('should return relative time for different date differences', () => {
       const oneMinuteAgo = new Date(now.getTime() - 60 * 1000);
+      const threeMinuteAgo = new Date(now.getTime() - 60 * 3 * 1000);
+
       const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+      const fourHourAgo = new Date(now.getTime() - 60 * 60 * 4 * 1000);
+
       const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
       const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
 
-      expect(getDateTimeAgo(oneMinuteAgo)).toMatch('just now');
-      // expect(getDateTimeAgo(oneHourAgo)).toMatch(/^1 hour ago$/);
-      // // Adjusted for function behavior
-      // expect(getDateTimeAgo(oneDayAgo)).toMatch(/^yesterday$/);
-      // expect(getDateTimeAgo(twoDaysAgo)).toMatch(
-      //   moment(twoDaysAgo).local().format('MMM DD, YYYY'),
-      // );
+      expect(getDateTimeAgo(oneMinuteAgo)).toMatch('1 minute ago');
+      expect(getDateTimeAgo(threeMinuteAgo)).toMatch('3 minutes ago');
+      expect(getDateTimeAgo(oneHourAgo)).toMatch('1 hour ago');
+      expect(getDateTimeAgo(fourHourAgo)).toMatch('4 hours ago');
+      expect(getDateTimeAgo(oneDayAgo)).toMatch('yesterday');
+      expect(getDateTimeAgo(twoDaysAgo)).toMatch(convertToDateTime(twoDaysAgo));
     });
   });
 
@@ -70,6 +67,27 @@ describe('TimeUtils', () => {
 
       // Restore original Date.now() implementation
       jest.spyOn(Date, 'now').mockRestore();
+    });
+  });
+  describe('convertToDateTime', () => {
+    it('should convert date to date time', () => {
+      const date = new Date('2021-01-01T00:00:00.000Z');
+      const expectedDateTime = 'Jan 01, 2021';
+      expect(convertToDateTime(date)).toBe(expectedDateTime);
+    });
+  });
+
+  describe('constantTimeOffSet', () => {
+    it('should return the time difference between two dates', () => {
+      const expectedTimeDifference = new Date().getTimezoneOffset() * 60 * 1000;
+      expect(constantTimeOffset()).toBe(expectedTimeDifference);
+    });
+  });
+
+  describe('msToHMS', () => {
+    it('should convert milliseconds to hours, minutes, and seconds', () => {
+      const expectedTimeDifference = new Date().getTimezoneOffset() * 60 * 1000;
+      expect(msToHMS(expectedTimeDifference)).toBe('-6:0:0');
     });
   });
 });
