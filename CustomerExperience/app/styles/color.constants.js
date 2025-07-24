@@ -10,8 +10,8 @@ const Colors = {
   accentLight: '#1b87e6',
   checkboxColor: '#ababab',
   accent: '#1B3380',
-  deleteBackground: '#cc000012',
-  deleteButtonText: '#cc0000',
+  deleteButtonText: '#FFFFFF',
+  deleteBackground: '#CC0000',
 
   filterIconColor: '#545E6B',
   overdueAlertColor: '#EA4650',

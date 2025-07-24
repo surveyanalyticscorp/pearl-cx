@@ -30,7 +30,7 @@ export const DeleteView = () => {
   return hasPermission ? (
     <QPButton
       testID="DeleteButtonAction"
-      buttonColor={Colors.white}
+      buttonColor={Colors.deleteBackground}
       style={[
         buttonStyles.deleteButton,
         {borderRadius: 2, margin: MarginConstants.tab1},
