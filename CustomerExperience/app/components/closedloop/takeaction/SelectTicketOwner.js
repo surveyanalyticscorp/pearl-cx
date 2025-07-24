@@ -1,5 +1,11 @@
 import React, {useState, useRef} from 'react';
-import {View, StyleSheet, FlatList, Pressable} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  KeyboardAvoidingView,
+} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -52,7 +58,10 @@ const SelectTicketOwner = ({data, selectedIndex, handleOnPress}) => {
   };
 
   return (
-    <View testID="SelectTicketOwner" style={styles.container}>
+    <KeyboardAvoidingView
+      behavior="height"
+      testID="SelectTicketOwner"
+      style={styles.container}>
       <SearchTextInput
         ref={textInputRef}
         placeholder={translate('search')}
@@ -77,7 +86,7 @@ const SelectTicketOwner = ({data, selectedIndex, handleOnPress}) => {
         buttonText={translate('select')}
         textStyle={styles.takeActionText}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -106,7 +115,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.filterIconColor,
-    marginBottom: MarginConstants.tab2,
+    marginBottom: MarginConstants.tab1_4x,
   },
   title: {
     flex: 1,
