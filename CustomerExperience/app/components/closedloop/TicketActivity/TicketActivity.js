@@ -16,6 +16,9 @@ import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import SortingToggleButton from '../../../widgets/closedloopWidget/SortingToggleButton';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 import styles from './ticketActivity.style';
+import QPBottomSheet from '../takeaction/QPBottomSheet';
+import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
+import {set} from 'lodash';
 
 const TicketActivityContainer = ({children}) => {
   return <View style={styles.rootContainer}>{children}</View>;
@@ -80,6 +83,11 @@ export default function TicketActivity(props) {
     {id: 0, title: translate('activity.latest').toLocaleLowerCase()},
     {id: 1, title: translate('activity.oldest').toLocaleLowerCase()},
   ];
+  const [sortingBottomSheetVisible, setSortingBottomSheetVisible] =
+    useState(false);
+  const onCloseSortingBottomSheet = () => {
+    setSortingBottomSheetVisible(false);
+  };
   const [refreshing, setRefreshing] = useState(false);
   const dispatch = useDispatch();
   const [currentSortingIndex, setCurrentIndex] = useState(0);
@@ -96,7 +104,7 @@ export default function TicketActivity(props) {
   const sortingBottomSheetSnapPoints = ['45%', '0%'];
 
   const openSortingBottomSheet = () => {
-    sortingBottomSheet.current.snapTo(0);
+    setSortingBottomSheetVisible(true);
   };
   const closeSortingBottomSheet = () => {
     sortingBottomSheet.current.snapTo(sortingBottomSheetSnapPoints.length - 1);
@@ -169,15 +177,24 @@ export default function TicketActivity(props) {
           keyExtractor={item => JSON.stringify(item.id)}
         />
       </TicketActivityAnimatedView>
-      <BottomSheet
-        ref={sortingBottomSheet}
-        snapPoints={sortingBottomSheetSnapPoints}
-        initialSnap={sortingBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderSortingSelectContent}
-        renderHeader={renderSortingHeader}
-        callbackNode={fall}
-      />
+      <QPBottomSheet
+        visible={sortingBottomSheetVisible}
+        onClose={onCloseSortingBottomSheet}
+        headerComponent={
+          <QPBottomSheetHeader
+            headerLabel={translate('activity.sorted_by')}
+            onClose={onCloseSortingBottomSheet}
+          />
+        }>
+        <SelectSorting
+          data={sortingList}
+          selectedIndex={currentSortingIndex}
+          handleOnPress={(item, index) => {
+            setCurrentIndex(index);
+            onCloseSortingBottomSheet();
+          }}
+        />
+      </QPBottomSheet>
     </TicketActivityContainer>
   );
 }

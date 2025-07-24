@@ -31,26 +31,26 @@ const SelectSorting = ({data, selectedIndex, handleOnPress}) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        style={styles.flatList}
-        data={data}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderRow}
-        ItemSeparatorComponent={itemSeparator}
-      />
-      <QPButton
-        buttonColor={Colors.accentLight}
-        testID="ApplyButton"
-        style={[
-          buttonStyles.primaryButton,
-          {marginBottom: MarginConstants.tab2},
-        ]}
-        onPress={() => handleOnPress(currentItem, currentIndex)}
-        buttonText={'Apply'}
-        textStyle={buttonStyles.primaryButtonText}
-      />
-    </SafeAreaView>
+    <FlatList
+      style={styles.container}
+      data={data}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={renderRow}
+      ItemSeparatorComponent={itemSeparator}
+      ListFooterComponent={
+        <QPButton
+          buttonColor={Colors.accentLight}
+          testID="ApplyButton"
+          style={[
+            buttonStyles.primaryButton,
+            {marginVertical: MarginConstants.tab1_4x},
+          ]}
+          onPress={() => handleOnPress(currentItem, currentIndex)}
+          buttonText={'Apply'}
+          textStyle={buttonStyles.primaryButtonText}
+        />
+      }
+    />
   );
 };
 
@@ -58,13 +58,10 @@ export default SelectSorting;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: Colors.white,
-    marginHorizontal: MarginConstants.tab2,
+    margin: MarginConstants.tab2,
   },
-  flatList: {
-    flex: 1,
-  },
+
   row: {
     flexDirection: 'row',
     paddingVertical: MarginConstants.tab1,
