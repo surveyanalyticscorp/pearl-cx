@@ -64,7 +64,7 @@ export default function DashboardDateFilter(props) {
       // props.route.params.setRange(selectedRange);
 
       AsyncStorage.setItem(DASHBOARD_RANGE, JSON.stringify(selectedRange));
-      props.navigation.dispatch(StackActions.popToTop());
+      props.navigation.dispatch(StackActions.pop());
     } else {
       setValidationError('Start date should be less than End date');
     }

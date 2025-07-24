@@ -32,12 +32,12 @@ describe('AssigneeUI', () => {
 
   it('renders empty avatar when assignToId is null or empty', () => {
     const {queryByText} = render(<AssigneeUI assignToId={null} />);
-    expect(queryByText('NA')).toBeTruthy(); // Empty title should render when assignToId is null or empty
+    expect(queryByText('NA')).toBeTruthy();
   });
 
   it('renders empty avatar when owner is not found', () => {
-    const {queryByText} = render(<AssigneeUI assignToId={99} />); // Non-existing ownerID
-    expect(queryByText('NA')).toBeTruthy(); // Empty title should render for non-existing ownerID
+    const {queryByText} = render(<AssigneeUI assignToId={99} />);
+    expect(queryByText('NA')).toBeTruthy();
   });
 
   it('returns correct owner name for a given assignToId', () => {
@@ -49,6 +49,6 @@ describe('AssigneeUI', () => {
   it('handles empty or null assignToId correctly', () => {
     StringUtils.isEmptyOrNull = jest.fn(() => true);
     const {queryByText} = render(<AssigneeUI assignToId={null} />);
-    expect(queryByText('NA')).toBeTruthy(); // Expect null title when assignToId is empty
+    expect(queryByText('NA')).toBeTruthy();
   });
 });

@@ -19,7 +19,6 @@ import {
   ASYNC_CLF_BASE_URL,
   ASYNC_LOGGED_IN_ALREADY,
   BASE_URL,
-  SUBSCRIBER_ID,
 } from '../../api/Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {translate} from '../../Utils/MultilinguaUtils';
@@ -33,6 +32,13 @@ import {
 } from '../../Utils/Analytic.constants';
 import AppInfo from '../../Utils/AppInfo';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
+import {updateClfBaseUrl} from '../../redux/actions/login.actions';
+import {
+  getEmailTemplates,
+  getDefaultEmailTemplate,
+} from '../../redux/actions/closedloop.actions';
+import useLogoutProcess from '../../routes/drawerContent/useLogoutProcess';
+import {set} from 'lodash';
 
 export const RenderCountItem = ({style, title, data}) => {
   return (
@@ -48,6 +54,23 @@ const RenderCountData = () => {
     state => state.dashboard.welcomeScreenData,
   );
 
+  console.log('CLF_DATA', JSON.stringify(clfData));
+  console.log('CX_DATA', JSON.stringify(cxData));
+  const {logoutAction} = useLogoutProcess();
+
+  useEffect(() => {
+    if (clfData && JSON.stringify(clfData).includes('jwt expired')) {
+      console.log('CLF_DATA', JSON.stringify(clfData));
+      setTimeout(() => {
+        logoutAction();
+      }, 1000);
+    }
+  }, [clfData, logoutAction]);
+
+  // Add null checking for clfData
+  const newTickets = clfData?.data?.[0]?.value ?? 0;
+  const overdues = clfData?.data?.[1]?.value ?? 0;
+
   return (
     <View testID="render-count-data">
       <View style={styles.responseContainer}>
@@ -60,12 +83,12 @@ const RenderCountData = () => {
       <View style={styles.ticketAndOverdueContainer}>
         <RenderCountItem
           title={translate('dashboard.new_tickets')}
-          data={clfData?.data[0]?.value ?? 0}
+          data={newTickets}
           style={styles.ticketBox}
         />
         <RenderCountItem
           title={translate('dashboard.overdues')}
-          data={clfData?.data[1]?.value ?? 0}
+          data={overdues}
           style={styles.ticketBox}
         />
       </View>
@@ -94,7 +117,6 @@ const CustomBackground = ({children}) => {
 
 export const SkipButton = () => {
   const dispatch = useDispatch();
-  // let [moveNext, setMoveNext] = useState(false);
   let splashTimer = useRef(null);
   const welcomeScreenData = useSelector(
     state => state.dashboard.welcomeScreenData,
@@ -182,6 +204,7 @@ export const WelcomeScreen = () => {
         clfBase,
       );
       global.clfBaseUrl = clfBase;
+      dispatch(updateClfBaseUrl(clfBase));
     });
 
     AsyncStorage.getItem(ASYNC_BEARER_TOKEN).then(bearerToken_ => {
@@ -223,6 +246,10 @@ export const WelcomeScreen = () => {
         deviceType: deviceType,
       }),
     );
+    dispatch(
+      getDefaultEmailTemplate(authToken, {subscriberId: global.subscriberId}),
+    );
+    dispatch(getEmailTemplates(authToken, {subscriberId: global.subscriberId}));
   };
 
   useEffect(() => {

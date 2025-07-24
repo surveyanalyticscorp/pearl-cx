@@ -17,7 +17,7 @@ describe('FeedbackCell', () => {
       responseSetID: '123',
       surveyTakenDate: '2024-01-01',
       emailAddress: 'test@example.com',
-      answerText: 'Great service!',
+      answerText: '9',
       sentiment: 'Promoter',
       ticketID: '456',
       read: false,
@@ -75,7 +75,7 @@ describe('FeedbackCell', () => {
         <FeedbackCell {...props} />
       </Provider>,
     );
-    const NPSTextLabel = getByText('Great service!'); // Check for answerText
+    const NPSTextLabel = getByText('9'); // Check for answerText
     expect(NPSTextLabel).toBeTruthy();
   });
   // write testcases for NPSAnswerText component and NPSIcon component

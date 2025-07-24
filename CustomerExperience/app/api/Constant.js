@@ -85,6 +85,7 @@ export const CX_WELCOME_SCREEN_DATA = '/cx.CXWelcomeScreenDataCount';
 // CLF 3.0 APIs
 
 export const CLF_LOGIN = '/mobile/auth/login';
+export const CLF_LOGOUT = '/mobile/auth/logout';
 
 // base-url?dataCenter=us
 export const CLF_GET_BASE_URL = `${CLF_BASE_URL}/base-url`;
@@ -157,6 +158,10 @@ export const CLF_GET_ACTION_HISTORY_PREFIX = `/mobile/tickets/`;
 export const CLF_GET_ACTION_SUMMARY_POSTFIX = `/action-mail`;
 export const CLF_GET_ACTION_DETAILS_POSTFIX = `/action-mails`;
 
+export const CLF_GET_NOTIFICATIONS = `/notifications/users/`;
+export const CLF_PATCH_READ_NOTIFCATION = `/mobile-notifications/`;
+export const NOTIFICATIONS_PER_PAGE = 50;
+
 export const EMAIL = 'email';
 export const PHONE = 'phone';
 
@@ -183,3 +188,16 @@ export const EMAIL_PATTERN =
 export const SEGMENT_SELECTOR = 'segmentSelector';
 export const fakeBearerToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTc2NTIsIm9yZ0lkIjo1MjAwODgxLCJjeFVzZXJJZCI6OTc2NTIsImZpcnN0TmFtZSI6IkFubW9sIiwibGFzdE5hbWUiOiIiLCJlbWFpbEFkZHJlc3MiOiJhbm1vbC5zYWhldHlhKzIxQHF1ZXN0aW9ucHJvLmNvbSIsImZlZWRiYWNrSWQiOjM1MDkwLCJmZWVkYmFja05hbWUiOiJMaXZlIFN1cnZleXMiLCJzdWJzY3JpYmVySWQiOjUzMzEzNjMsInN1YnNjcmliZXJFbWFpbEFkZHJlc3MiOiJhbm1vbC5zYWhldHlhKzIxQHF1ZXN0aW9ucHJvLmNvbSIsInJvbGUiOjAsImFwcFR5cGUiOjEsImlhdCI6MTcwNDg2Mjg5MSwiZXhwIjoxNzA1Mjk0ODkxfQ.2Cfya0yVMHPItA_cElgi3NgSHgNf-sPQC2R1cGItvL4';
+export const AI_ROUTER_API_KEY = '1ae87074-9220-4316-80bd-ba097d5ea785';
+export const AI_ROUTER_API_URL =
+  'https://airouter-api-staging.questionpro.com/v1/prompt-routes';
+
+export const REFINE_FORMALIZE = 'formalize';
+export const REFINE_ELABORATE = 'elaborate';
+export const REFINE_SHORT = 'shorten';
+export const REFINE_DEFAULT = 'default';
+
+export const getGenerateEmailDraftEndPoint = (ticketId, feedbackId) =>
+  `/mobile/tickets/${ticketId}/feedbacks/${feedbackId}/ai-draft`;
+export const POST_GENERATE_REFINED_EMAIL_DRAFT =
+  '/mobile/tickets/refine/ai-draft';

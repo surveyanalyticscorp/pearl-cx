@@ -9,8 +9,21 @@ import QPButton from '../../../widgets/Button';
 
 const TicketRootCause = props => {
   return (
-    <View style={styles.rootContainer}>
-      <View style={styles.rowContainer}>
+    <View testID="root-cause-view" style={styles.rootContainer}>
+      <ScrollView style={styles.container}>
+        <RenderRootCauseItem
+          title={ROOT_CAUSES}
+          data={rootCauses}
+          onClickCheckBox={onClickCheckBox}
+        />
+        <RenderRootCauseItem
+          title={ACTIONS}
+          data={rootCauseActions}
+          onClickCheckBox={onClickCheckBox}
+        />
+      </ScrollView>
+
+      <View style={styles.buttonView}>
         <QPButton
           textStyle={{
             ...styles.buttonText,

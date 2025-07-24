@@ -13,11 +13,7 @@ import {Colors} from '../../styles/color.constants';
 
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
-import {
-  HeaderFilter,
-  NoItemsFound,
-  RenderSpinner,
-} from '../../routes/commonUI/CommonUI';
+import {HeaderFilter, RenderSpinner} from '../../routes/commonUI/CommonUI';
 
 import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
 import FabAddButton from '../../routes/commonUI/FabAddButton';
@@ -41,16 +37,11 @@ import {
 import {translate} from '../../Utils/MultilinguaUtils';
 import QPSpinner from '../../widgets/QPSpinner';
 import {taglist} from '../view/ShowFilterTag';
-import {
-  resetDeleteTicketStatus,
-  syncTickets,
-} from '../../redux/actions/closedloop.actions';
+import {resetDeleteTicketStatus} from '../../redux/actions/closedloop.actions';
 import {baseTextStyles} from '../../styles/text.styles';
 import {useNavigation} from '@react-navigation/native';
-import TextLabel from '../../widgets/TextLabel/TextLabel';
-import {FontWeight} from '../../styles/font.constants';
-import IconButton from '../../routes/commonUI/IconButton';
 import {NoTicketFound} from './NoTicketFound';
+import {showSuccessFlashMessage} from '../../Utils/Utility';
 
 export const SearchIcon = () => {
   return (
@@ -193,7 +184,9 @@ export default function ClosedLoop(props) {
   );
   const currentFeedback = useSelector(state => state.dashboard.currentFeedback);
   const currentSegment = useSelector(state => state.dashboard.currentSegment);
-
+  const createTicketResponse = useSelector(
+    state => state.dashboard.createTicketResponse,
+  );
   const owners = useSelector(state => state.dashboard.ownerDetails.owners);
   const [refreshing, setRefreshing] = useState(false);
   const {ticketDeleteStatus} = useSelector(state => state.dashboard);
@@ -279,7 +272,10 @@ export default function ClosedLoop(props) {
 
   useEffect(() => {
     makeAPICall();
-  }, [filterState, range]);
+    if (createTicketResponse.message) {
+      showSuccessFlashMessage(createTicketResponse.message);
+    }
+  }, [filterState, range, createTicketResponse]);
 
   useEffect(() => {
     resetFilterState(range);
@@ -493,10 +489,11 @@ export default function ClosedLoop(props) {
     console.log('KEYBOARD_SEARCH', JSON.stringify({searchText, filterState}));
   }, []);
 
-  const resetFilter = () => {
+  const resetFilter = useCallback(() => {
     setFilterState(initialFilterState);
     setFilterData(sampleFilterData());
-  };
+    setSearchText(initialFilterState.search);
+  }, []);
 
   return isTicketLoading && !isPagination ? (
     <RenderSpinner />

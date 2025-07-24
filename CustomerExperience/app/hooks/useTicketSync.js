@@ -6,14 +6,6 @@ import StringUtils from '../Utils/StringUtils';
 
 const TICKET_SYNC_STORAGE_KEY = '@ticket_sync_status';
 
-/**
- * Custom hook for handling ticket synchronization
- * @returns {Object} Object containing sync state and methods
- * @property {boolean} hasTicketToSync - Whether there are tickets to sync
- * @property {Function} callTicketSync - Function to manually trigger ticket sync
- * @property {boolean} isSyncing - Whether sync is currently in progress
- * @property {Error|null} syncError - Any error that occurred during sync
- */
 const useTicketSync = () => {
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncError, setSyncError] = useState(null);

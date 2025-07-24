@@ -13,10 +13,21 @@ const statusListItemSeparator = () => (
   <ListItemSeparator style={{marginHorizontal: MarginConstants.tab1}} />
 );
 
-const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
+const getButtonTitle = screenName => {
+  switch (screenName) {
+    case 'CreateTicket':
+      return 'Set status';
+    case 'Dashboard':
+      return 'Set filter by status';
+    default:
+      return 'Update status';
+  }
+};
+
+const SelectStatus = ({data, selectedIndex, handleOnPress, screenName}) => {
   const [currentIndex, setIndex] = useState(selectedIndex);
   const [currentItem, setItem] = useState(data[selectedIndex]);
-
+  const buttonTitle = getButtonTitle(screenName);
   const onApplyPress = () => {
     handleOnPress(currentItem, currentIndex);
   };
@@ -45,10 +56,7 @@ const SelectStatus = ({data, selectedIndex, handleOnPress}) => {
         renderItem={renderRow}
         ItemSeparatorComponent={statusListItemSeparator}
         ListFooterComponent={
-          <ApplyButton
-            buttonText={translate('close_loop.status')}
-            onPress={onApplyPress}
-          />
+          <ApplyButton buttonText={buttonTitle} onPress={onApplyPress} />
         }
       />
     </View>

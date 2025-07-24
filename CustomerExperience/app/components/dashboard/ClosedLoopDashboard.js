@@ -213,6 +213,7 @@ export const StatusDashboardBottomSheet = React.forwardRef(
         <View style={styles.contentContainer}>
           <SelectStatus
             data={statusList}
+            screenName={'Dashboard'}
             selectedIndex={statusIndex}
             handleOnPress={(item, index) => {
               dispatch(setStatusIndex(index));
@@ -360,7 +361,7 @@ const styles = StyleSheet.create({
     marginHorizontal: MarginConstants.halfTab,
   },
   ticketStatusView: {
-    width: 2 * MarginConstants.tab3,
+    width: Platform.isPad ? MarginConstants.tab1_6x : 2 * MarginConstants.tab3,
     paddingVertical: 2,
     alignItems: 'flex-start',
   },

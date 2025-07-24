@@ -46,6 +46,11 @@ describe('index reducer', () => {
           },
           dashboard: {},
           global: {},
+          login: {
+            accessCode: '',
+            email: '',
+            password: '',
+          },
           notification: {},
           response: {},
         },

@@ -1,212 +1,225 @@
 import React from 'react';
-import {render, act, waitFor} from '@testing-library/react-native';
+import {render, waitFor} from '@testing-library/react-native';
 import SplashScreen from './SplashScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Provider} from 'react-redux';
-import configureStore from 'redux-mock-store';
 import {
   ASYNC_AUTH_TOKEN,
-  ASYNC_BEARER_TOKEN,
-  ASYNC_USER_INFO,
-  DASHBOARD_RANGE,
   ASYNC_LOGGED_IN_ALREADY,
+  ASYNC_USER_INFO,
+  BASE_URL,
+  ASYNC_CLF_BASE_URL,
+  ASYNC_BEARER_TOKEN,
   ASYNC_LOGIN_EXPIRE_DATE,
 } from '../../api/Constant';
+import {Provider} from 'react-redux';
+import configureStore from 'redux-mock-store';
+import {sendAnalyticsEvent} from '../../Utils/AnalyticLogs';
+import useLogoutProcess from '../../routes/drawerContent/useLogoutProcess';
 import moment from 'moment';
+import {DASHBOARD_RANGE} from '../../redux/actions/dashboard.actions';
 
-// Mock AsyncStorage
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem: jest.fn(),
-  multiGet: jest.fn(),
-}));
-
-// Mock Firebase Analytics
-jest.mock('@react-native-firebase/analytics', () => {
-  return () => ({
-    logEvent: jest.fn(),
-  });
-});
-
-// Mock react-native-device-info
-jest.mock('react-native-device-info', () => ({
-  getVersion: jest.fn(() => '1.0.0'),
-  getBuildNumber: jest.fn(() => '1'),
-  isTablet: jest.fn(() => false),
-  getApplicationName: jest.fn(() => 'TestApp'),
-  getDeviceId: jest.fn(() => 'test-device-id'),
-  bundleId: 'com.test.app',
-}));
-
-// Mock NativeModules
-jest.mock('react-native', () => {
-  const RN = jest.requireActual('react-native');
-  RN.NativeModules.RNDeviceInfo = {
-    bundleId: 'com.test.app',
-  };
-  return RN;
-});
-
-// Mock navigation
-jest.mock('@react-navigation/native', () => {
-  const actualNav = jest.requireActual('@react-navigation/native');
-  return {
-    ...actualNav,
-    useNavigation: () => ({
-      navigate: jest.fn(),
-      goBack: jest.fn(),
-    }),
-    createNavigatorFactory: jest.fn(() => jest.fn()),
-  };
-});
-
-jest.mock('@react-navigation/drawer', () => ({
-  createDrawerNavigator: jest.fn(() => ({
-    Navigator: jest.fn(),
-    Screen: jest.fn(),
-  })),
-}));
-
-// Mock AppRouter component
-jest.mock('../../routes/appRouter', () => {
-  const MockAppRouter = ({testID}) => (
-    <div data-testid={testID}>Mock App Router</div>
-  );
-  return MockAppRouter;
-});
-
-// Mock useLogoutProcess
-jest.mock('../../routes/drawerContent/useLogoutProcess', () => ({
-  __esModule: true,
-  default: () => ({
-    logoutAction: jest.fn(),
-  }),
-}));
+jest.mock('../../Utils/AnalyticLogs');
+jest.mock('../../routes/drawerContent/useLogoutProcess');
+jest.mock('../../config/images/background1.png', () => 'background1.png');
+jest.mock('../../config/images/cx-logo.png', () => 'cx-logo.png');
+jest.mock('../../routes/appRouter', () => () => null);
 
 const mockStore = configureStore([]);
 
-describe('SplashScreen Component', () => {
+describe('SplashScreen', () => {
   let store;
-  const initialState = {
-    auth: {},
-    user: {},
-    dashboard: {},
-  };
+  let dispatch;
 
   beforeEach(() => {
-    store = mockStore(initialState);
-    jest.clearAllMocks();
-    jest.useFakeTimers();
+    store = mockStore({});
+    dispatch = jest.spyOn(store, 'dispatch');
+    AsyncStorage.getItem.mockClear();
+    AsyncStorage.multiGet.mockClear();
+    sendAnalyticsEvent.mockClear();
+    useLogoutProcess.mockReturnValue({logoutAction: jest.fn()});
+    // Reset global variables before each test
     global.baseUrl = undefined;
+    global.clfBaseUrl = undefined;
+    global.bearerToken = undefined;
   });
 
-  afterEach(() => {
-    jest.useRealTimers();
-  });
-
-  test('renders splash screen initially', async () => {
-    const {getByTestId} = render(
-      <Provider store={store}>
-        <SplashScreen />
-      </Provider>,
-    );
-
-    await waitFor(() => {
-      expect(getByTestId('splash-background')).toBeTruthy();
-    });
-  }, 10000);
-
-  test('navigates to AppRouter after timeout when user is logged in', async () => {
-    const mockUserInfo = {id: 1, name: 'Test User'};
-    const mockToken = 'test-token';
-    const mockBearerToken = 'test-bearer-token';
-    const mockDashboardRange = {start: '2024-01-01', end: '2024-12-31'};
-
-    AsyncStorage.multiGet.mockResolvedValue([
-      [ASYNC_AUTH_TOKEN, mockToken],
-      [ASYNC_USER_INFO, JSON.stringify(mockUserInfo)],
-      [DASHBOARD_RANGE, JSON.stringify(mockDashboardRange)],
-      [ASYNC_LOGGED_IN_ALREADY, 'true'],
-    ]);
-
-    AsyncStorage.getItem.mockImplementation(key => {
-      if (key === ASYNC_BEARER_TOKEN) return Promise.resolve(mockBearerToken);
-      if (key === ASYNC_LOGIN_EXPIRE_DATE)
-        return Promise.resolve(moment().add(1, 'day').format());
-      return Promise.resolve(null);
-    });
-
-    const {getByTestId} = render(
-      <Provider store={store}>
-        <SplashScreen />
-      </Provider>,
-    );
-
-    // Initially should show splash screen
-    expect(getByTestId('splash-background')).toBeTruthy();
-
-    // Fast forward the timer
-    await act(async () => {
-      jest.advanceTimersByTime(1000);
-    });
-
-    // Wait for navigation
-    await waitFor(() => {
-      expect(getByTestId('app-router')).toBeTruthy();
-    });
-  }, 10000);
-
-  test('handles token expiration correctly', async () => {
-    const mockLogoutAction = jest.fn();
-    jest
-      .spyOn(require('../../routes/drawerContent/useLogoutProcess'), 'default')
-      .mockImplementation(() => ({logoutAction: mockLogoutAction}));
-
-    AsyncStorage.getItem.mockImplementation(key => {
-      if (key === ASYNC_LOGIN_EXPIRE_DATE) {
-        return Promise.resolve(moment().subtract(1, 'day').format());
-      }
-      return Promise.resolve(null);
-    });
-
+  const renderComponent = () =>
     render(
       <Provider store={store}>
         <SplashScreen />
       </Provider>,
     );
+
+  it('renders the splash screen background and logo initially', () => {
+    AsyncStorage.getItem.mockResolvedValue(null);
+    AsyncStorage.multiGet.mockResolvedValue([]);
+    const {getByTestId} = renderComponent();
+    expect(getByTestId('splash-background')).toBeTruthy();
+    expect(sendAnalyticsEvent).toHaveBeenCalledWith(
+      'APP_OPEN',
+      expect.objectContaining({screen: 'SPLASH_SCREEN'}),
+    );
+  });
+
+  it('navigates to AppRouter after the timeout and AsyncStorage calls', async () => {
+    const mockToken = 'mockToken';
+    AsyncStorage.getItem.mockResolvedValue(null);
+    AsyncStorage.multiGet.mockResolvedValue([
+      [ASYNC_AUTH_TOKEN, mockToken],
+      [ASYNC_USER_INFO, JSON.stringify({id: 1, language: 'en'})],
+      [DASHBOARD_RANGE, JSON.stringify({startDate: '2023-01-01'})],
+      [ASYNC_LOGGED_IN_ALREADY, 'true'],
+    ]);
+
+    renderComponent();
+
+    await waitFor(
+      () => {
+        expect(dispatch).toHaveBeenCalledWith({
+          payload: {authToken: mockToken},
+          type: 'SET_AUTH_TOKEN',
+        });
+      },
+      {timeout: 2000},
+    );
+  });
+
+  it('calls logoutAction if the login expire date is invalid', async () => {
+    const mockLogoutAction = jest.fn();
+    useLogoutProcess.mockReturnValue({logoutAction: mockLogoutAction});
+
+    AsyncStorage.getItem.mockImplementation(key => {
+      if (key === ASYNC_LOGIN_EXPIRE_DATE) {
+        return Promise.resolve(moment().subtract(1, 'day').toISOString());
+      }
+      return Promise.resolve(null);
+    });
+    AsyncStorage.multiGet.mockResolvedValue([]);
+
+    renderComponent();
 
     await waitFor(() => {
       expect(mockLogoutAction).toHaveBeenCalled();
     });
-  }, 10000);
+  });
 
-  test('sets global base URL when user info is available', async () => {
-    const mockUserInfo = {id: 1, name: 'Test User'};
-    const mockBaseUrl = 'https://test-api.com';
-
+  it('sets the global base URL if it exists in AsyncStorage', async () => {
+    const mockBaseUrl = 'https://api.example.com';
+    AsyncStorage.getItem.mockImplementation(key => {
+      if (key === ASYNC_LOGIN_EXPIRE_DATE) {
+        return Promise.resolve(moment().add(1, 'day').toISOString());
+      }
+      if (key === BASE_URL) {
+        return Promise.resolve(mockBaseUrl);
+      }
+      return Promise.resolve(null);
+    });
     AsyncStorage.multiGet.mockResolvedValue([
-      [ASYNC_AUTH_TOKEN, 'test-token'],
-      [ASYNC_USER_INFO, JSON.stringify(mockUserInfo)],
-      [DASHBOARD_RANGE, '{}'],
+      [ASYNC_AUTH_TOKEN, 'mockToken'],
+      [ASYNC_USER_INFO, JSON.stringify({id: 1, language: 'en'})],
+      [DASHBOARD_RANGE, JSON.stringify({startDate: '2023-01-01'})],
       [ASYNC_LOGGED_IN_ALREADY, 'true'],
     ]);
 
+    renderComponent();
+
+    await waitFor(
+      () => {
+        expect(global.baseUrl).toBe(mockBaseUrl);
+      },
+      {timeout: 2000},
+    );
+  });
+
+  it('sets the global clf base URL if it exists in AsyncStorage', async () => {
+    const mockClfBaseUrl = 'https://clf.example.com';
     AsyncStorage.getItem.mockImplementation(key => {
-      if (key === 'BASE_URL') return Promise.resolve(mockBaseUrl);
+      if (key === ASYNC_LOGIN_EXPIRE_DATE) {
+        return Promise.resolve(moment().add(1, 'day').toISOString());
+      }
+      if (key === ASYNC_CLF_BASE_URL) {
+        return Promise.resolve(mockClfBaseUrl);
+      }
       return Promise.resolve(null);
     });
+    AsyncStorage.multiGet.mockResolvedValue([
+      [ASYNC_AUTH_TOKEN, 'mockToken'],
+      [ASYNC_USER_INFO, JSON.stringify({id: 1, language: 'en'})],
+      [DASHBOARD_RANGE, JSON.stringify({startDate: '2023-01-01'})],
+      [ASYNC_LOGGED_IN_ALREADY, 'true'],
+    ]);
 
-    render(
-      <Provider store={store}>
-        <SplashScreen />
-      </Provider>,
+    renderComponent();
+
+    await waitFor(
+      () => {
+        expect(global.clfBaseUrl).toBe(mockClfBaseUrl);
+      },
+      {timeout: 2000},
     );
+  });
 
-    await act(async () => {
-      jest.advanceTimersByTime(1000);
+  it('sets the bearer token if it exists in AsyncStorage', async () => {
+    const mockBearerToken = 'mockBearer';
+    AsyncStorage.getItem.mockImplementation(key => {
+      if (key === ASYNC_LOGIN_EXPIRE_DATE) {
+        return Promise.resolve(moment().add(1, 'day').toISOString());
+      }
+      if (key === ASYNC_BEARER_TOKEN) {
+        return Promise.resolve(mockBearerToken);
+      }
+      return Promise.resolve(null);
     });
+    AsyncStorage.multiGet.mockResolvedValue([
+      [ASYNC_AUTH_TOKEN, 'mockToken'],
+      [ASYNC_USER_INFO, JSON.stringify({id: 1, language: 'en'})],
+      [DASHBOARD_RANGE, JSON.stringify({startDate: '2023-01-01'})],
+      [ASYNC_LOGGED_IN_ALREADY, 'true'],
+    ]);
 
-    await waitFor(() => {
-      expect(global.baseUrl).toBe(mockBaseUrl);
+    renderComponent();
+
+    await waitFor(
+      () => {
+        expect(global.bearerToken).toBe(mockBearerToken);
+      },
+      {timeout: 2000},
+    );
+  });
+
+  it('sets isFirstTime to true if loggedInAlready is not "true"', async () => {
+    AsyncStorage.getItem.mockImplementation(key => {
+      if (key === ASYNC_LOGIN_EXPIRE_DATE) {
+        return Promise.resolve(moment().add(1, 'day').toISOString());
+      }
+      return Promise.resolve(null);
     });
-  }, 10000);
+    AsyncStorage.multiGet.mockResolvedValue([
+      [ASYNC_AUTH_TOKEN, 'mockToken'],
+      [ASYNC_USER_INFO, JSON.stringify({id: 1, language: 'en'})],
+      [DASHBOARD_RANGE, JSON.stringify({startDate: '2023-01-01'})],
+      [ASYNC_LOGGED_IN_ALREADY, 'false'],
+    ]);
+
+    renderComponent();
+
+    await waitFor(
+      () => {
+        const calls = dispatch.mock.calls;
+
+        expect(calls).toContainEqual([
+          {
+            payload: true,
+            type: 'SET_IS_FIRST_TIME',
+          },
+        ]);
+      },
+      {timeout: 2000},
+    );
+  });
+
+  it('clears the timeout on unmount', () => {
+    const {unmount} = renderComponent();
+    unmount();
+  });
 });

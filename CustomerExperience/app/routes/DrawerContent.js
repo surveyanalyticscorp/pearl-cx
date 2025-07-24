@@ -20,6 +20,7 @@ import TextLabel from '../../app/widgets/TextLabel/TextLabel';
 import useLogoutProcess from './drawerContent/useLogoutProcess';
 import logoutDialog from './drawerContent/LogoutDialog';
 import ResponsesIcon from '../widgets/IconWidget/ResponsesIcon';
+import QuestionProBanner from '../../assets/images/questionpro_banner.svg';
 
 const LogoutButtonIcon = () => {
   return (
@@ -35,8 +36,8 @@ const DrawerCXLogo = () => {
   return (
     <Image
       style={styles.image}
-      source={require('../config/images/cx-logo.png')}
-      resizeMode="contain"
+      source={require('../config/images/cx_logo.png')}
+      resizeMode="cover"
     />
   );
 };

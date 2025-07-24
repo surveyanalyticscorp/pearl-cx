@@ -9,7 +9,7 @@ const ScoreIndicatorIcon = ({diff}) => {
     <IndicatorIcon
       testID="score-indicator-icon"
       name={diff < 0 ? 'caret-down-sharp' : 'caret-up-sharp'}
-      color={diff < 0 ? Colors.detractor2 : Colors.promoter2}
+      color={diff < 0 ? Colors.detractor3 : Colors.promoter3}
     />
   );
 };

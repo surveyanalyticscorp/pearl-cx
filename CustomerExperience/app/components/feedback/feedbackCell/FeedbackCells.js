@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, TouchableWithoutFeedback, Text} from 'react-native';
+import {View, TouchableWithoutFeedback, Text, Platform} from 'react-native';
 import {StyleSheet} from 'react-native';
 import StringUtils from '../../../Utils/StringUtils';
 import ArrayUtils from '../../../Utils/ArrayUtils';
@@ -35,25 +35,23 @@ function showName(item) {
 }
 
 const UserName = ({isNewResponse, name, isDisabled}) => {
-  const charLength = 24;
-  const shortenedString =
-    name && name.length > charLength
-      ? name.slice(0, charLength) + '...' // If longer than 12 characters, slice and add ellipsis
-      : name;
+  const fontWeight = isNewResponse
+    ? Platform.OS === 'ios'
+      ? FontWeight._700
+      : FontWeight._900
+    : Platform.OS === 'ios'
+    ? FontWeight._400
+    : FontWeight._100;
   return (
     <Text
-      numberOfLines={isDisabled ? 4 : 1}
+      numberOfLines={1}
       style={{
         ...styles.userNameText,
-        maxWidth: '100%',
-        fontWeight: isNewResponse ? FontWeight._900 : FontWeight._100,
+
+        fontWeight: fontWeight,
       }}
       testID="user-name">
-      {name.length > 1
-        ? isDisabled
-          ? name
-          : shortenedString
-        : translate('ticket_list.anonymous')}
+      {name && name.length > 1 ? name : translate('ticket_list.anonymous')}
     </Text>
   );
 };
@@ -114,6 +112,7 @@ let RenderResponseContainer = ({
       surveyId: surveyID ?? '',
     });
   };
+  const title = StringUtils.truncateCustomerName(showName(item), 30, 10, 8);
 
   return (
     <View testID="response-container" style={styles.upperContainer}>
@@ -124,7 +123,6 @@ let RenderResponseContainer = ({
           style={{
             ...styles.rowContainer,
             marginStart: MarginConstants.halfTab,
-            maxWidth: '70%',
           }}>
           <NewResponseDot
             style={{
@@ -132,12 +130,14 @@ let RenderResponseContainer = ({
             }}
             isNewResponse={isNewResponse}
           />
-          <NPSIcon sentiment={sentiment} />
-          <NPSAnswerText sentiment={sentiment} answerText={answerText} />
+          {/* <NPSIcon sentiment={sentiment} />
+          <NPSAnswerText sentiment={sentiment} answerText={answerText} /> */}
+          <NPSIcon sentiment={'Promoter'} />
+          <NPSAnswerText sentiment={'Promoter'} answerText={answerText} />
           <HorizontalSpaceBox />
           <UserName
             isNewResponse={isNewResponse}
-            name={StringUtils.truncateCustomerName(showName(item), 30, 10, 8)}
+            name={title}
             isDisabled={disable}
           />
         </View>
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   cellButtonContainer: {
     flexDirection: 'row',
@@ -346,6 +346,7 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.primary,
     fontFamily: FontFamily.regular,
     color: Colors.filterIconColor,
+    maxWidth: '70%',
     textAlign: 'center',
   },
   responseIdAndTicketRowContainer: {

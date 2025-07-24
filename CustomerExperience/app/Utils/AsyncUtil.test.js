@@ -111,4 +111,18 @@ describe('AsyncStorageData', () => {
 
     consoleSpy.mockRestore();
   });
+
+  it('clearAllData should call AsyncStorage.clear', async () => {
+    const consoleSpy = jest.spyOn(console, 'log');
+    AsyncStorage.clear.mockRejectedValueOnce(new Error('AsyncStorage error'));
+
+    await asyncStorageData.clearAllData();
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'ERROR_ASYNC_CLEAR_ALL_DATA',
+      expect.any(Error),
+    );
+
+    consoleSpy.mockRestore();
+  });
 });

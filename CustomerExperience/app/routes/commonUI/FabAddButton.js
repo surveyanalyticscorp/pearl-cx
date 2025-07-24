@@ -5,7 +5,7 @@ import {MaterialIcons} from '../../Utils/IconUtils';
 const FabAddButton = props => {
   let {width} = Dimensions.get('window');
 
-  let size = width / 8;
+  let size = Platform.isPad ? width / 12 : width / 8;
   let fabStyle = StyleSheet.create({
     fabContainer: {
       position: 'absolute',

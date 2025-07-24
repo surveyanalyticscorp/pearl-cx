@@ -5,11 +5,12 @@ import {
   Text,
   Image,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
-import {FontFamily} from '../../styles/font.constants';
+import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import moment from 'moment';
 import {
@@ -78,14 +79,15 @@ const Date = ({issueDate}) => {
   );
 };
 
-const NameANdDateRow = ({name, issueDate}) => {
-  // console.log('USERDATA', JSON.stringify(data));
+const NameAndDateRow = ({name, issueDate}) => {
   return (
     <View style={styles.nameAndDateContainer}>
       <TextLabel
+        numberOfLines={1}
         text={name}
         baseTextStyle={baseTextStyles.primaryMediumText}
         color={Colors.accent}
+        style={{maxWidth: '70%'}}
       />
       <Date issueDate={issueDate} />
     </View>
@@ -93,7 +95,7 @@ const NameANdDateRow = ({name, issueDate}) => {
 };
 
 const getNPSColor = () => {
-  return Colors.detractor2;
+  return Colors.detractor3;
 };
 
 const NPSIcon = () => {
@@ -218,7 +220,7 @@ export default function ClosedLoopCell({
             style={{marginHorizontal: MarginConstants.tab1_2x}}
           />
           <VerticalSpaceBox multiplyBy={2} />
-          <NameANdDateRow
+          <NameAndDateRow
             name={name}
             issueDate={data?.issueDate}
             nps={data?.npsScore}

@@ -13,12 +13,63 @@ import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../Utils/MultilinguaUtils';
 import {MarginConstants} from '../styles/margin.constants';
 import SegmentText from './SegmentText';
+import {IonIcon} from '../Utils/IconUtils';
+
+export const NotiificationIcon = () => {
+  const navigation = useNavigation();
+  const notificationLogs = useSelector(
+    state => state.notification.notificationLogs,
+  );
+
+  const unreadCount = notificationLogs?.filter(log => !log.hasRead).length || 0;
+
+  return (
+    <Pressable
+      onPress={() => {
+        const action = StackActions.push('notifications');
+        navigation.dispatch(action);
+        // navigation.navigate('Notifications');
+      }}
+      style={styles.notificationContainer}>
+      <IonIcon name={'notifications'} size={22} color={Colors.white} />
+      {unreadCount > 0 && (
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{unreadCount}</Text>
+        </View>
+      )}
+    </Pressable>
+  );
+};
+
+const RenderSegmentSelector = ({
+  segmentList,
+  screenName,
+  currentSegment,
+  onPress,
+}) => {
+  return segmentList && segmentList.length > 1 ? (
+    <Pressable style={styles.innerContainer} onPress={onPress}>
+      <SegmentText
+        screenName={screenName}
+        segmentName={currentSegment.currentSegment ?? ''}
+      />
+
+      <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.darkGrey} />
+    </Pressable>
+  ) : (
+    <View style={styles.rowContainer}>
+      <SegmentText
+        screenName={screenName}
+        segmentName={currentSegment.currentSegment}
+      />
+    </View>
+  );
+};
 
 const SegmentSelector = props => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const authToken = useSelector(state => state.global.authToken);
-
   const segmentList = useSelector(
     state => state.dashboard.segmentDetails.segments,
   );
@@ -49,33 +100,55 @@ const SegmentSelector = props => {
     dispatch(setSegment(segment_));
   };
 
-  return segmentList && segmentList.length > 1 ? (
-    <Pressable style={styles.innerContainer} onPress={onPressHandle}>
-      <SegmentText
+  return (
+    <View style={styles.rowContainer}>
+      <RenderSegmentSelector
+        segmentList={segmentList}
         screenName={props.screenName}
-        segmentName={currentSegment.currentSegment ?? ''}
+        currentSegment={currentSegment}
+        onPress={onPressHandle}
       />
-
-      <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.darkGrey} />
-    </Pressable>
-  ) : (
-    <SegmentText
-      screenName={props.screenName}
-      segmentName={currentSegment.currentSegment}
-    />
+      <NotiificationIcon />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {flex: 1},
-
-  innerContainer: {
+  rowContainer: {
     flex: 1,
-    width: Platform.OS === 'ios' ? '100%' : '96%',
     flexDirection: 'row',
     alignItems: 'center',
-
     justifyContent: 'space-between',
+    width: '100%',
+  },
+
+  innerContainer: {
+    maxWidth: Platform.OS === 'ios' ? '100%' : '80%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginEnd: MarginConstants.tab1_4x,
+  },
+  notificationContainer: {
+    position: 'relative',
+  },
+  badge: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: Colors.red,
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+  },
+  badgeText: {
+    color: Colors.white,
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 });
 

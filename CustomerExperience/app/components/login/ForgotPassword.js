@@ -26,6 +26,7 @@ import {useState} from 'react';
 import useForgotPasswordProcess from './components/hooks/useForgotPasswordProcess';
 import {clearResetPasswordLinkResponse} from '../../redux/actions/login.actions';
 import {showSuccessFlashMessage} from '../../Utils/Utility';
+import {loginStyles} from './login.styles';
 
 let RenderSpinnerResetButton = ({resetData}) => {
   // const navigation = useNavigation();
@@ -75,6 +76,9 @@ const ForgotPassword = props => {
         contentContainerStyle={styles.scrollContainer}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps={'handled'}>
+        <View style={loginStyles.logoContainer}>
+          <CXLogo />
+        </View>
         <KeyboardAvoidingView
           behavior="position"
           style={styles.container}
@@ -83,7 +87,6 @@ const ForgotPassword = props => {
             android: -200,
           })}
           enabled>
-          <CXLogo />
           <View style={styles.textFieldContainer}>
             <Text style={styles.forgotPasswordMessage}>
               {translate('onBoarding.forgotPasswordMessage')}

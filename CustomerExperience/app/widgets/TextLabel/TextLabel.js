@@ -21,6 +21,7 @@ const TextLabel = ({
   return (
     <Text
       numberOfLines={numberOfLines}
+      ellipsizeMode="middle"
       testID={testID}
       style={{
         ...baseTextStyle_,
