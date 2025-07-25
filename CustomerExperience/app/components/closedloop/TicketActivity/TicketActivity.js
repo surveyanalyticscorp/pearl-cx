@@ -3,12 +3,10 @@ import {View, FlatList, RefreshControl} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {NoItemsFound} from '../../../routes/commonUI/CommonUI';
-import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import {getClosedLoopTicketItemActivity} from '../../../redux/actions/dashboard.actions';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
 import SelectSorting from '../takeaction/SelectSorting';
 import {baseTextStyles} from '../../../styles/text.styles';
 import ActivityText from '../../../widgets/closedloopWidget/ActivityText';
@@ -18,7 +16,6 @@ import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 import styles from './ticketActivity.style';
 import QPBottomSheet from '../takeaction/QPBottomSheet';
 import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
-import {set} from 'lodash';
 
 const TicketActivityContainer = ({children}) => {
   return <View style={styles.rootContainer}>{children}</View>;
@@ -61,7 +58,6 @@ const RenderActivityItem = ({item}) => {
 };
 
 export function getTicketActivityList(list, item) {
-  // console.log(JSON.stringify(item));
   switch (item.id) {
     case 1:
       return list.slice().reverse();
@@ -98,40 +94,8 @@ export default function TicketActivity(props) {
     state => state.dashboard.ticketActivity,
   );
 
-  // sorting bottom sheet stuff
-  const fall = new Animated.Value(1);
-  const sortingBottomSheet = React.useRef();
-  const sortingBottomSheetSnapPoints = ['45%', '0%'];
-
   const openSortingBottomSheet = () => {
     setSortingBottomSheetVisible(true);
-  };
-  const closeSortingBottomSheet = () => {
-    sortingBottomSheet.current.snapTo(sortingBottomSheetSnapPoints.length - 1);
-  };
-
-  const renderSortingHeader = _title => {
-    return (
-      <BottomSheetHeader
-        title={translate('activity.sorted_by')}
-        onPressClose={closeSortingBottomSheet}
-      />
-    );
-  };
-
-  const renderSortingSelectContent = () => {
-    return (
-      <View style={styles.contentContainer}>
-        <SelectSorting
-          data={sortingList}
-          selectedIndex={currentSortingIndex}
-          handleOnPress={(item, index) => {
-            setCurrentIndex(index);
-            closeSortingBottomSheet();
-          }}
-        />
-      </View>
-    );
   };
 
   const makeAPICall = () => {
