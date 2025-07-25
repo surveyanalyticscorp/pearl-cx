@@ -10,16 +10,12 @@ import {
 import ClosedLoopCell from './ClosedloopCell';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../styles/color.constants';
-
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {HeaderFilter, RenderSpinner} from '../../routes/commonUI/CommonUI';
-
-import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
 import FabAddButton from '../../routes/commonUI/FabAddButton';
 import FilterTicket from './takeaction/FilterTickets';
 import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getClosedLoopOwnerDetails,
@@ -27,7 +23,6 @@ import {
 } from '../../redux/actions/dashboard.actions';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
-import {setRangeFilter} from '../../redux/actions';
 
 import {
   priorityList,
@@ -42,6 +37,8 @@ import {baseTextStyles} from '../../styles/text.styles';
 import {useNavigation} from '@react-navigation/native';
 import {NoTicketFound} from './NoTicketFound';
 import {showSuccessFlashMessage} from '../../Utils/Utility';
+import QPBottomSheet from './takeaction/QPBottomSheet';
+import QPBottomSheetHeader from './takeaction/QPBottomSheetHeader';
 
 export const SearchIcon = () => {
   return (
@@ -117,7 +114,6 @@ const ClosedLoopTicketList = ({
       extraData={[ticketList]}
       ListEmptyComponent={
         !isTicketLoading && !isPagination ? (
-          // <NoItemsFound>No tickets found</NoItemsFound>
           <NoTicketFound onPressReset={onPressReset} />
         ) : (
           <View />
@@ -132,7 +128,6 @@ const ClosedLoopTicketList = ({
             showCheckBox={showCheckBox}
             isSelected={selectedTickets.includes(item.id)}
             onPressHandler={() => onPressHandler(item, index)}
-            // onLongPressHandler={() => onLongPressHandler(item, index)}
           />
         );
       }}
@@ -151,7 +146,6 @@ export default function ClosedLoop(props) {
   const {feedbackApiKey, feedbackID, userID} = useSelector(
     state => state.global.userInfo,
   );
-  // const [isLoading, setLoading] = useState(false);
   const [isPagination, setpagination] = useState(false);
   const {authToken, isTicketLoading, range, subscriberId} = useSelector(
     state => state.global,
@@ -219,15 +213,12 @@ export default function ClosedLoop(props) {
       type: type,
       assignToId,
       userId,
-      // showMyTickets: showMyTickets,
     };
   };
 
   const [filterData, setFilterData] = useState(sampleFilterData());
-  // console.log('OWNERS', JSON.stringify(owners));
 
   const resetFilterState = range_ => {
-    // setTicketList([]);
     setPageNumber(1);
     setFilterState(state => ({
       ...state,
@@ -235,13 +226,6 @@ export default function ClosedLoop(props) {
       fromDate: moment(range_.startDate, DMYFORMAT).format(YMDFORMAT),
       toDate: moment(range_.endDate, DMYFORMAT).format(YMDFORMAT),
     }));
-  };
-
-  let getDataOnNewRange = range_ => {
-    dispatch(setRangeFilter(range_));
-    // reset pageNumber, ticket list, range
-
-    resetFilterState(range_);
   };
 
   const filterByStatus = statusId_ => {
@@ -400,19 +384,19 @@ export default function ClosedLoop(props) {
       .toString();
 
   const handleAction = (item, action) => {
+    onCloseFilter();
     switch (action) {
       case 'apply':
         applyFilter(item);
         break;
       default:
-        closeFilter();
+        break;
     }
   };
-  const closeFilter = () => {
-    bs.current.snapTo(bsSnapPoints.length - 1);
-  };
+
   const openFilter = () => {
-    bs.current.snapTo(0);
+    // bs.current.snapTo(0);
+    setFilterBottomSheetVisible(true);
   };
 
   const applyFilter = item => {
@@ -431,16 +415,6 @@ export default function ClosedLoop(props) {
     }));
 
     // console.log('Apply filter');
-    closeFilter();
-  };
-
-  const renderFilterHeader = () => {
-    return (
-      <BottomSheetHeader
-        title={translate('ticket_overview.filter_ticket')}
-        onPressClose={() => closeFilter()}
-      />
-    );
   };
 
   // variables for bottom sheet
@@ -495,6 +469,11 @@ export default function ClosedLoop(props) {
     setSearchText(initialFilterState.search);
   }, []);
 
+  const [filterBottomSheetVisible, setFilterBottomSheetVisible] =
+    useState(false);
+  const onCloseFilter = () => {
+    setFilterBottomSheetVisible(false);
+  };
   return isTicketLoading && !isPagination ? (
     <RenderSpinner />
   ) : (
@@ -533,18 +512,37 @@ export default function ClosedLoop(props) {
         <FabAddButton onPress={onFabHandler} />
       </Animated.View>
 
-      <BottomSheet
-        ref={bs}
-        snapPoints={bsSnapPoints}
-        initialSnap={bsSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderFilterContent}
-        renderHeader={renderFilterHeader}
-        callbackNode={fall}
+      <RenderFilterBottomSheet
+        filterData={filterData}
+        visible={filterBottomSheetVisible}
+        onClose={onCloseFilter}
+        onPressHandler={handleAction}
       />
     </View>
   );
 }
+
+const RenderFilterBottomSheet = ({
+  filterData,
+  visible,
+  onClose,
+  onPressHandler,
+}) => {
+  return (
+    <QPBottomSheet
+      visible={visible}
+      onClose={onClose}
+      bottomSheetHeight="60%"
+      headerComponent={
+        <QPBottomSheetHeader
+          headerLabel={translate('ticket_overview.filter_ticket')}
+          onClose={onClose}
+        />
+      }>
+      <FilterTicket data={filterData} onPressHandler={onPressHandler} />
+    </QPBottomSheet>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {flex: 1},

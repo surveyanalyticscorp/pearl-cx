@@ -49,23 +49,24 @@ const FilterTicket = ({data, onPressHandler}) => {
       });
     };
     return (
-      <View testID="render-status" style={styles.sectionContainer}>
-        <Text style={styles.titleText}>{translate('close_loop.status')}</Text>
-        <FlatList
-          style={styles.flatList}
-          data={status}
-          keyExtractor={(item, index) => item.toString()}
-          numColumns={3}
-          renderItem={({item, index}) => (
-            <CheckBoxItem
-              textStyle={textStyles.optionText}
-              item={item}
-              index={index}
-              onPress={selectedStatus}
-            />
-          )}
-        />
-      </View>
+      <FlatList
+        style={styles.sectionContainer}
+        contentContainerStyle={{flexGrow: 0}}
+        ListHeaderComponent={
+          <Text style={styles.titleText}>{translate('close_loop.status')}</Text>
+        }
+        data={status}
+        keyExtractor={(item, index) => item.toString()}
+        numColumns={3}
+        renderItem={({item, index}) => (
+          <CheckBoxItem
+            textStyle={textStyles.optionText}
+            item={item}
+            index={index}
+            onPress={selectedStatus}
+          />
+        )}
+      />
     );
   };
 
@@ -78,22 +79,26 @@ const FilterTicket = ({data, onPressHandler}) => {
       });
     };
     return (
-      <View testID="render-priority" style={styles.sectionContainer}>
-        <Text style={styles.titleText}>{translate('close_loop.priority')}</Text>
-        <FlatList
-          data={priority}
-          keyExtractor={(item, index) => item.toString()}
-          numColumns={3}
-          renderItem={({item, index}) => (
-            <CheckBoxItem
-              textStyle={textStyles.optionText}
-              item={item}
-              index={index}
-              onPress={selectedPriority}
-            />
-          )}
-        />
-      </View>
+      <FlatList
+        style={styles.sectionContainer}
+        contentContainerStyle={{flexGrow: 0}}
+        ListHeaderComponent={
+          <Text style={styles.titleText}>
+            {translate('close_loop.priority')}
+          </Text>
+        }
+        data={priority}
+        keyExtractor={(item, index) => item.toString()}
+        numColumns={3}
+        renderItem={({item, index}) => (
+          <CheckBoxItem
+            textStyle={textStyles.optionText}
+            item={item}
+            index={index}
+            onPress={selectedPriority}
+          />
+        )}
+      />
     );
   };
 
@@ -107,22 +112,21 @@ const FilterTicket = ({data, onPressHandler}) => {
       );
     };
     return (
-      <View testID="render-ticket-type" style={styles.sectionContainer}>
-        <Text style={styles.titleText}>Type</Text>
-        <FlatList
-          data={typelist}
-          keyExtractor={(item, index) => item.toString()}
-          numColumns={3}
-          renderItem={({item, index}) => (
-            <CheckRadioButtonItem
-              textStyle={textStyles.optionText}
-              item={item}
-              index={index}
-              onPress={selectType}
-            />
-          )}
-        />
-      </View>
+      <FlatList
+        data={typelist}
+        contentContainerStyle={{flexGrow: 0}}
+        ListHeaderComponent={<Text style={styles.titleText}>{'Type'}</Text>}
+        keyExtractor={(item, index) => item.toString()}
+        numColumns={3}
+        renderItem={({item, index}) => (
+          <CheckRadioButtonItem
+            textStyle={textStyles.optionText}
+            item={item}
+            index={index}
+            onPress={selectType}
+          />
+        )}
+      />
     );
   };
   const RenderShowMyTicketsFilter = ({assignToId, userId}) => {
@@ -145,7 +149,6 @@ const FilterTicket = ({data, onPressHandler}) => {
     );
   };
 
-  // const RenderAssigneeDropDown = () => {
   //   const defaultText = 'Select...';
   //   const list = managerlist.filter((item) => item.isChecked === false);
   //   return (
@@ -186,23 +189,6 @@ const FilterTicket = ({data, onPressHandler}) => {
   //     return temp;
   //   });
   // };
-  const dropdownRenderRow = (rowData, rowID, highlighted) => {
-    return (
-      <View
-        style={[
-          styles.dropdownRow,
-          {backgroundColor: highlighted ? Colors.overlay : Colors.white},
-        ]}>
-        {/* <RenderRoundImageOrColor data={rowData} /> */}
-        <Text style={styles.dropdownText}>{rowData}</Text>
-      </View>
-    );
-  };
-
-  const onCancelHandler = () => {
-    // close filter screen
-    onPressHandler(null, 'close');
-  };
 
   const onApplyFilterHandler = () => {
     // apply filter
@@ -218,27 +204,6 @@ const FilterTicket = ({data, onPressHandler}) => {
     onPressHandler(data, 'apply');
   };
 
-  // const onClearHandler = () => {
-  //   // clear filter fields
-
-  //   setPriority((prevState) => {
-  //     const temp = prevState.map((item) => ({...item, isChecked: false}));
-  //     return temp;
-  //   });
-
-  //   setStatus((prevState) => {
-  //     const temp = prevState.map((item) => ({...item, isChecked: false}));
-  //     return temp;
-  //   });
-
-  //   setType((prevState) => {
-  //     const temp = prevState.map((item) => ({...item, isChecked: false}));
-  //     return temp;
-  //   });
-
-  //   selectedManager = [];
-  // };
-
   const RenderButtons = () => {
     return (
       <View
@@ -249,14 +214,6 @@ const FilterTicket = ({data, onPressHandler}) => {
             justifyContent: 'flex-end',
           },
         ]}>
-        {/* <QPButton
-          style={{...buttonStyles.outlineButton, margin: MarginConstants.tab2}}
-          buttonColor={Colors.white}
-          onPress={onCancelHandler}
-          textStyle={buttonStyles.outlineButtonText}
-          buttonText={'Close'}
-        /> */}
-
         <QPButton
           style={{
             ...buttonStyles.primaryButton,
@@ -271,59 +228,18 @@ const FilterTicket = ({data, onPressHandler}) => {
     );
   };
 
-  // const assigneeCell = ({item, index}) => {
-  //   return (
-  //     <View style={[styles.assigneeCell, styles.rowContainer]}>
-  //       <Pressable
-  //         style={styles.rowContainer}
-  //         onPress={() => {
-  //           // setSelectedManager((state) =>
-  //           //   state.filter((item_) => item_.ownerID !== state[index].ownerID),
-  //           // );
-  //           // setManagerList((state) => [...state, selectedManager[index]]);
-  //           console.log({SELECTED_INDEX: index});
-
-  //           setAssigneeManager(item, false);
-  //         }}>
-  //         <Text style={styles.departmentNameText}>{item.ownerName}</Text>
-  //         <IonIcons name="close" size={20} color={Colors.filterIconColor} />
-  //       </Pressable>
-  //     </View>
-  //   );
-  // };
-
-  // const RenderAssigneeList = () => {
-  //   const list = managerlist.filter((item) => item.isChecked);
-  //   return (
-  //     <View style={[{margin: MarginConstants.halfTab}]}>
-  //       <FlatList
-  //         horizontal={true}
-  //         data={list}
-  //         renderItem={assigneeCell}
-  //         keyExtractor={(item) => item.toString()}
-  //       />
-  //     </View>
-  //   );
-  // };
-
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.innerContainer}>
-        <RenderStatusFilter />
-        <VerticalSpaceBox multiplyBy={2} />
-        <RenderPriorityFilter />
-        <VerticalSpaceBox multiplyBy={2} />
-        <RenderTypeFilter typelist={type} />
-        <VerticalSpaceBox multiplyBy={2} />
-        <RenderShowMyTicketsFilter
-          assignToId={assignToId}
-          userId={data.userId}
-        />
-        <VerticalSpaceBox multiplyBy={2} />
-        {/* <RenderAssigneeDropDown /> */}
-        <RenderButtons />
-      </View>
-    </SafeAreaView>
+    <View style={styles.innerContainer}>
+      <RenderStatusFilter />
+      <VerticalSpaceBox multiplyBy={2} />
+      <RenderPriorityFilter />
+      <VerticalSpaceBox multiplyBy={2} />
+      <RenderTypeFilter typelist={type} />
+      <VerticalSpaceBox multiplyBy={2} />
+      <RenderShowMyTicketsFilter assignToId={assignToId} userId={data.userId} />
+      <VerticalSpaceBox multiplyBy={2} />
+      <RenderButtons />
+    </View>
   );
 };
 
@@ -347,7 +263,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   innerContainer: {
-    flex: 1,
     paddingHorizontal: PaddingConstants.tab1_2x,
   },
 
@@ -361,7 +276,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontFamily: FontFamily.medium,
     fontSize: TextSizes.primary,
-    paddingHorizontal: PaddingConstants.tab1,
+    padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,
   },
   // optionText: {
