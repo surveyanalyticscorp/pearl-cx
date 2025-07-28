@@ -12,7 +12,7 @@ import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 // import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-const SelectEmailTemplate = props => {
+const SelectEmailTemplate = ({handleOnPress, data}) => {
   const renderRow = ({item}) => {
     return (
       <TouchableWithoutFeedback onPress={() => handleOnPress(item)}>
@@ -23,44 +23,20 @@ const SelectEmailTemplate = props => {
     );
   };
 
-  const handleOnPress = item => {
-    props.handleOnPress(item);
-  };
-
   return (
-    <View style={styles.container}>
-      {/* <View style={styles.headerRow}>
-        <Text style={styles.header}>Select Template</Text>
-        <CloseButton color={Colors.filterIconColor} />
-      </View> */}
-      <FlatList
-        style={styles.flatList}
-        data={props.data}
-        // ListHeaderComponent={
-        //   <TouchableWithoutFeedback onPress={props.handleOnPressGenarateWithAI}>
-        //     <View style={styles.row}>
-        //       <Text style={styles.titleForGenarateWithAI}>
-        //         {'Generate with AI*'}
-        //       </Text>
-        //     </View>
-        //   </TouchableWithoutFeedback>
-        // }
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderRow}
-        ItemSeparatorComponent={ListItemSeparator}
-      />
-    </View>
+    <FlatList
+      style={styles.flatList}
+      data={data}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={renderRow}
+      ItemSeparatorComponent={ListItemSeparator}
+    />
   );
 };
 
 export default SelectEmailTemplate;
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    flex: 1,
-    backgroundColor: Colors.white,
-  },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
@@ -76,6 +52,7 @@ const styles = StyleSheet.create({
     marginHorizontal: MarginConstants.tab2,
     fontFamily: FontFamily.bold,
     fontSize: TextSizes.largeText,
+    minHeight: '30%',
   },
   header: {
     marginHorizontal: MarginConstants.tab2,

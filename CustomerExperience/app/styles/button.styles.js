@@ -8,7 +8,7 @@ let {width} = Dimensions.get('window');
 const isIos = Platform.OS === 'ios';
 export const buttonStyles = StyleSheet.create({
   primaryButton: {
-    height: MarginConstants.tab4,
+    height: MarginConstants.tab1_6x,
     paddingHorizontal: MarginConstants.tab2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -17,7 +17,7 @@ export const buttonStyles = StyleSheet.create({
     borderWidth: 1,
   },
   primaryButtonRadius: {
-    height: MarginConstants.tab4,
+    height: MarginConstants.tab1_6x,
     paddingHorizontal: MarginConstants.tab2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -33,7 +33,7 @@ export const buttonStyles = StyleSheet.create({
   },
 
   deleteButton: {
-    height: MarginConstants.tab4,
+    height: MarginConstants.tab1_6x,
     paddingHorizontal: MarginConstants.tab2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -46,7 +46,7 @@ export const buttonStyles = StyleSheet.create({
   },
 
   outlineButton: {
-    height: MarginConstants.tab4,
+    height: MarginConstants.tab1_6x,
     paddingHorizontal: MarginConstants.tab2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -55,7 +55,7 @@ export const buttonStyles = StyleSheet.create({
     borderWidth: 1,
   },
   outlineGreyButton: {
-    height: MarginConstants.tab4,
+    height: MarginConstants.tab1_6x,
     paddingHorizontal: MarginConstants.tab2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -70,7 +70,7 @@ export const buttonStyles = StyleSheet.create({
   },
 
   outlinePrimaryButton: {
-    height: MarginConstants.tab4,
+    height: MarginConstants.tab1_6x,
     paddingHorizontal: MarginConstants.tab2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -84,7 +84,7 @@ export const buttonStyles = StyleSheet.create({
     fontSize: TextSizes.primary,
   },
   outlinePrimaryButtonMedium: {
-    height: MarginConstants.tab4,
+    height: MarginConstants.tab1_6x,
     paddingHorizontal: MarginConstants.tab1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -99,7 +99,7 @@ export const buttonStyles = StyleSheet.create({
   },
 
   textButton: {
-    height: MarginConstants.tab4,
+    height: MarginConstants.tab1_6x,
     justifyContent: 'center',
     backgroundColor: Colors.transparent,
   },

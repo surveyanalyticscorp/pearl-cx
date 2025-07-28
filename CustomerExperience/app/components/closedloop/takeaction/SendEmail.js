@@ -1,4 +1,4 @@
-import React, {useEffect, useCallback, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,6 @@ import {
   Pressable,
   FlatList,
   SafeAreaView,
-  Modal,
   Platform,
   Keyboard,
 } from 'react-native';
@@ -17,10 +16,7 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {CloseButton} from '../../../routes/commonUI/CommonUI';
-import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
-import Animated from 'react-native-reanimated';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
-import BottomSheet from 'reanimated-bottom-sheet';
 import SelectEmailTemplate from './SelectEmailTemplate';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -29,7 +25,7 @@ import {
   resetSendEmailResponse,
 } from '../../../redux/actions/closedloop.actions';
 import StringUtils from '../../../Utils/StringUtils';
-import {isObjectEmpty, showErrorFlashMessage} from '../../../Utils/Utility';
+import {isObjectEmpty} from '../../../Utils/Utility';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import {isNull} from 'lodash';
@@ -43,13 +39,10 @@ import {translate} from '../../../Utils/MultilinguaUtils';
 import {useNavigation} from '@react-navigation/native';
 import SendEmailTo from './sendEmail/SendEmailTo';
 import EmailOptions from './sendEmail/EmailOptions';
-import {apiHandler} from '../../../api/ApiHandler';
-import {AI_ROUTER_API_KEY, AI_ROUTER_API_URL} from '../../../api/Constant';
-import QPSpinner from '../../../widgets/QPSpinner';
-import ActionButton from 'react-native-action-button';
-import AiDraftButton from './sendEmail/AiDraftButton';
 import AIEmailDraftModal from './AIEmailDraftModal';
 import {FontFamilyStylesheet} from '../../../config/fonts/StyleSheet';
+import QPBottomSheet from '../takeaction/QPBottomSheet';
+import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
 
 export const RenderHeader = () => {
   return (
@@ -60,7 +53,7 @@ export const RenderHeader = () => {
   );
 };
 
-export const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
+export const EmailSubject = ({body, onChangeSubject}) => {
   return (
     <View>
       <View style={styles.rowContainerCenterAlign}>
@@ -74,7 +67,6 @@ export const EmailSubject = ({closeBottomSheet, body, onChangeSubject}) => {
           defaultValue={body.subject ?? ''}
           style={styles.textInput}
           onChangeText={onChangeSubject}
-          onFocus={closeBottomSheet}
         />
       </View>
       <View style={styles.devider} />
@@ -292,8 +284,6 @@ export const SendEmail = props => {
   );
 
   const [body, setBody] = useState(sampleEmailBody);
-  const [isPromptVisible, setPromptVisibility] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const {authToken} = useSelector(state => state.global);
   const richText = React.useRef();
@@ -302,17 +292,6 @@ export const SendEmail = props => {
 
   const [emailDraftModalVisible, setEmailDraftModalVisible] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  const bs = React.useRef(null);
-  const fall = new Animated.Value(1);
-  const bsSnapPoints = ['33%', '50%'];
-
-  const closeBottomSheet = () => {
-    if (bs.current) {
-      setIsBottomSheetVisible(false);
-      bs.current.snapTo(bsSnapPoints.length - 1);
-    }
-  };
 
   useEffect(() => {
     if (
@@ -369,14 +348,6 @@ export const SendEmail = props => {
     richText.current.setContentHTML('');
   }, [dispatch, authToken, ticketId, sampleEmailBody]);
 
-  const onPressTemplate = useCallback(() => {
-    richText.current.dismissKeyboard();
-    setIsBottomSheetVisible(true);
-    if (bs.current) {
-      bs.current.snapTo(0);
-    }
-  }, []);
-
   const onChangeSubject = text => {
     setBody(state => ({...state, subject: text}));
   };
@@ -385,51 +356,29 @@ export const SendEmail = props => {
     setBody(state => ({...state, emailBody: text}));
   };
   const handleTemplateSelectAction = item => {
-    setPromptVisibility(false);
     setBody(state => ({
       ...state,
       emailBody: item.templateText,
     }));
 
     richText.current.setContentHTML(item.templateText);
-    closeBottomSheet();
+    closeTemplateBottomSheet();
   };
 
-  const renderSelectTemplate = () => {
-    return (
-      <View style={styles.contentContainer}>
-        <SelectEmailTemplate
-          data={emailTemplates}
-          handleOnPress={item => {
-            handleTemplateSelectAction(item);
-          }}
-          handleOnPressGenarateWithAI={() => {
-            setBody(state => ({
-              ...state,
-              emailBody: '',
-            }));
-            richText.current.setContentHTML('');
-            closeBottomSheet();
-          }}
-        />
-      </View>
-    );
-  };
+  const [isTemplateBottomSheetVisible, setIsTemplateBottomSheetVisible] =
+    useState(false);
 
-  const renderHeader = () => {
-    return (
-      <BottomSheetHeader
-        title={'Select Template'}
-        onPressClose={closeBottomSheet}
-      />
-    );
+  const closeTemplateBottomSheet = () => {
+    setIsTemplateBottomSheetVisible(false);
   };
-
+  const onPressTemplate = () => {
+    setIsTemplateBottomSheetVisible(true);
+    richText.current.dismissKeyboard();
+    console.log('onPressTemplate');
+  };
   const onPressAiButton = () => {
     setEmailDraftModalVisible(state => !state);
   };
-
-  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
 
   const setAIEmailDraft = emailBody => {
     console.log('setAIEmailDraft', JSON.stringify(emailBody));
@@ -451,10 +400,7 @@ export const SendEmail = props => {
   const editorStyle = {
     initialCSSText: `${FontFamilyStylesheet}`,
     contentCSSText: `font-family: ${fontFamily}`,
-
-    backgroundColor: isBottomSheetVisible
-      ? Colors.transparentBackground
-      : Colors.white,
+    backgroundColor: Colors.white,
   };
 
   return (
@@ -468,11 +414,7 @@ export const SendEmail = props => {
           onPressTemplate={onPressTemplate}
         />
         <SendEmailTo />
-        <EmailSubject
-          body={body}
-          closeBottomSheet={closeBottomSheet}
-          onChangeSubject={onChangeSubject}
-        />
+        <EmailSubject body={body} onChangeSubject={onChangeSubject} />
         <RichEditor
           ref={richText}
           useContainer
@@ -486,29 +428,31 @@ export const SendEmail = props => {
           style={styles.textInput}
           editorStyle={editorStyle}
           setContentHTML={body.emailBody}
-          onFocus={closeBottomSheet}
         />
-        {!isLoading && <AttachmentView />}
+        <AttachmentView />
         <ActionHistory>
           <ActionHistoryItem />
         </ActionHistory>
       </KeyboardAwareScrollView>
-      {isBottomSheetVisible && (
-        <BottomSheet
-          ref={bs}
-          enabledContentGestureInteraction={false}
-          snapPoints={bsSnapPoints}
-          initialSnap={0}
-          renderContent={renderSelectTemplate}
-          renderHeader={renderHeader}
-          onCloseEnd={() => {
-            setIsBottomSheetVisible(false);
-          }}
-          callbackNode={fall}
-        />
-      )}
 
-      {/* {isActionButtonVisible && renderAIActionButton()} */}
+      <QPBottomSheet
+        visible={isTemplateBottomSheetVisible}
+        onClose={closeTemplateBottomSheet}
+        bottomSheetHeight="40%"
+        headerComponent={
+          <QPBottomSheetHeader
+            headerLabel="Select Template"
+            onClose={closeTemplateBottomSheet}
+          />
+        }>
+        <SelectEmailTemplate
+          data={emailTemplates}
+          handleOnPress={item => {
+            handleTemplateSelectAction(item);
+          }}
+        />
+      </QPBottomSheet>
+
       {emailDraftModalVisible && renderEmailDraftModal()}
       {isKeyboardVisible && (
         <CustomKeyboardToolbar

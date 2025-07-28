@@ -21,13 +21,11 @@ const TakeActionButton = ({onTakeActionHandler}) => {
       <QPButton
         disabled={!hasPanelMember}
         testID="TakeActionButton"
-        buttonColor={
-          hasPanelMember ? Colors.accentLight : Colors.filterIconColor
-        }
-        style={buttonStyles.primaryButton}
+        buttonColor={hasPanelMember ? Colors.white : Colors.filterIconColor}
+        style={buttonStyles.outlinePrimaryButton}
         onPress={onTakeActionHandler}
         buttonText={translate('ticket_overview.take_action')}
-        textStyle={buttonStyles.primaryButtonText}
+        textStyle={buttonStyles.outlinePrimaryButtonText}
       />
     </View>
   );

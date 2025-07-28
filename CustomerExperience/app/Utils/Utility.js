@@ -38,12 +38,12 @@ export const showErrorFlashMessage = error => {
       headerText: 'Error',
       bodyText: error ?? 'something went worng, please try again later.',
       leadingIcon: {
-        color: Colors.deleteButtonText,
+        color: Colors.deleteBackground,
         testID: 'error-toast-icon',
         name: 'alert-circle-outline',
       },
       trailingIcon: {
-        color: Colors.deleteButtonText,
+        color: Colors.deleteBackground,
         onPress: () => Toast.hide(),
         testID: 'close-toast-button',
       },
