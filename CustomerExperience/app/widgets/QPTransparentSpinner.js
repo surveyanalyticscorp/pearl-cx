@@ -22,7 +22,7 @@ export const QPTransparentSpinner = ({
       style={{...styles.container, ...containerStyle}}>
       <View style={styles.indicatorContainer}>
         <DotIndicator
-          color={idicatorColor ?? Colors.accent}
+          color={idicatorColor ?? Colors.white}
           count={3}
           size={10}
           animationDuration={600}
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: 'rgba(0,0,0,0.45)',
     zIndex: 10,
     flexDirection: 'column',
     justifyContent: 'center',
@@ -53,9 +53,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   spinnerText: {
-    fontFamily: FontFamily.medium,
-    fontSize: TextSizes.semiSecondary,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.semiSecondary2,
     padding: PaddingConstants.tab1,
-    color: Colors.accent,
+    color: Colors.white,
   },
 });
