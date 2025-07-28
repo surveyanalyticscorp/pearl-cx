@@ -15,11 +15,7 @@ import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
 import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
 import {RenderStatusIcon} from '../../routes/commonUI/CommonUI';
-import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
 import IconButton from '../../routes/commonUI/IconButton';
-import BottomSheet from 'reanimated-bottom-sheet';
-import SelectStatus from '../closedloop/takeaction/SelectStatus';
-import {setStatusIndex} from '../../redux/actions/dashboard.actions';
 import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTitle';
 
 export const RenderDonutChart = ({count, showPercentageCount}) => {
@@ -191,60 +187,6 @@ export const RenderStatusFilterButton = ({currentStatus, onPress}) => {
     />
   );
 };
-
-export const StatusDashboardBottomSheet = React.forwardRef(
-  ({snapPoints, fall}, ref) => {
-    const dispatch = useDispatch();
-    const ticketCount = useSelector(
-      state => state.dashboard.dashBoardTicketCount,
-    );
-    const statusIndex = useSelector(
-      state => state.dashboard.currentStatusIndexForFilter,
-    );
-    const statusList = getDashboardStatusListForBottomList(ticketCount);
-
-    const closeStatusSelection = () => {
-      // close status selection bottom sheet
-      ref.current.snapTo(snapPoints.length - 1);
-    };
-
-    const renderStatusSelectContent = () => {
-      return (
-        <View style={styles.contentContainer}>
-          <SelectStatus
-            data={statusList}
-            screenName={'Dashboard'}
-            selectedIndex={statusIndex}
-            handleOnPress={(item, index) => {
-              dispatch(setStatusIndex(index));
-              closeStatusSelection();
-            }}
-          />
-        </View>
-      );
-    };
-
-    const renderStatusHeader = _title => {
-      return (
-        <BottomSheetHeader
-          title={translate('close_loop.status')}
-          onPressClose={() => ref.current.snapTo(snapPoints.length - 1)}
-        />
-      );
-    };
-    return (
-      <BottomSheet
-        ref={ref}
-        snapPoints={snapPoints}
-        initialSnap={snapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderStatusSelectContent}
-        renderHeader={renderStatusHeader}
-        callbackNode={fall}
-      />
-    );
-  },
-);
 
 export const ClosedLoopDashboard = ({openStatusBS}) => {
   const statusIndex = useSelector(

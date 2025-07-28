@@ -2,7 +2,6 @@ import React, {useEffect, useRef} from 'react';
 import {Colors} from '../styles/color.constants';
 import {EMAIL_PATTERN} from '../api/Constant';
 import Toast from 'react-native-toast-message';
-import {IonIcon} from './IconUtils';
 
 export const isStringNullOrEmpty = string => {
   if (string) {

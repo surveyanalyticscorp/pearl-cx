@@ -1,7 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {RefreshControl, View} from 'react-native';
 import Animated from 'react-native-reanimated';
-import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
 import {useDispatch, useSelector} from 'react-redux';
 import {getStatusIndexById, statusList} from '../../../Utils/TicketUtils';
 import SelectStatus from '../takeaction/SelectStatus';
@@ -22,7 +21,6 @@ import QPBottomSheet from '../takeaction/QPBottomSheet';
 import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
 import TicketTakeAction from '../takeaction/TIcketTakeAction';
 import useActionHandler from './components/useActionHandler';
-import {showErrorFlashMessage} from '../../../Utils/Utility';
 
 const TicketStatusPriorityView = ({children}) => {
   return (
@@ -63,8 +61,7 @@ export default function TicketOverview(props) {
 
   const fall = new Animated.Value(1);
   const onTakeActionHandler = () => {
-    // setActionBottomSheetVisible(true);
-    showErrorFlashMessage('Not Implemented Yet');
+    setActionBottomSheetVisible(true);
   };
   const handleStatusSelection = () => {
     setStatusBottomSheetVisible(true);

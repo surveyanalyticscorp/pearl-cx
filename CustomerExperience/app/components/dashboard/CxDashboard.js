@@ -211,11 +211,6 @@ const CxDashboard = ({route, navigation}) => {
         }>
         <RenderDashboardSelectStatusFilter onClose={onCloseStatusBottomSheet} />
       </QPBottomSheet>
-      {/* <StatusDashboardBottomSheet
-        ref={statusBottomSheetRef}
-        snapPoints={statusBottomSheetSnapPoints}
-        fall={fall}
-      /> */}
       <CreateTicketButton />
     </View>
   );

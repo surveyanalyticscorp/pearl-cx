@@ -36,6 +36,7 @@ import {baseTextStyles} from '../../styles/text.styles';
 import SendButton from '../../widgets/SendButton';
 import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
+import EmptyList from '../../routes/commonUI/EmptyList';
 export function getFoldedText(text, MAX_WORD_LENGTH = 10) {
   if (StringUtils.getWords(text).length > MAX_WORD_LENGTH) {
     return `${StringUtils.getWords(text).slice(0, MAX_WORD_LENGTH).join(' ')}
@@ -401,6 +402,9 @@ const ShowFlatList = ({data, onRefresh_, refreshing_}) => {
 
   const MemoizedCommentParentItem = React.memo(CommentParentItem);
 
+  if (ticketComments.length === 0) {
+    return <EmptyList>No comments on this ticket yet.</EmptyList>;
+  }
   return (
     <FlatList
       data={ticketComments}
@@ -410,6 +414,7 @@ const ShowFlatList = ({data, onRefresh_, refreshing_}) => {
       keyExtractor={item => item.id.toString()}
       renderItem={({item}) => <MemoizedCommentParentItem item={item} />}
       extraData={data}
+      on
       // ListFooterComponent={<View style={{margin: MarginConstants.tab4}} />}
       // ListFooterComponent={<CommentBox />}
     />

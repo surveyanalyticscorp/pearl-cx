@@ -1,11 +1,7 @@
 import React, {useState} from 'react';
-import BottomSheet from 'reanimated-bottom-sheet';
-import {View} from 'react-native';
-import BottomSheetHeader from '../../../../routes/commonUI/BottomSheetHeader';
 import useUpdateTicket from '../hooks/useUpdateTicket';
 import {useSelector} from 'react-redux';
 import {getOwnerIndex} from '../../../../Utils/TicketUtils';
-import ticketOverviewStyles from '../ticket.overview.style';
 import {translate} from '../../../../Utils/MultilinguaUtils';
 import SelectTicketOwner from '../../takeaction/SelectTicketOwner';
 import QPBottomSheet from '../../takeaction/QPBottomSheet';
