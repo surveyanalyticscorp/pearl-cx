@@ -11,6 +11,7 @@ import WebKit
 
 @MainActor
 public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDelegate, WKNavigationDelegate, WKScriptMessageHandler {
+    var currentTouchPoint = TouchPoint()
     public func showApiError(message: String) {
         self.showApiErrorAlert(errorMessage: message)
     }
@@ -32,11 +33,19 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
                     return
                 }
 
-                if let url = dictionary["surveyURL"] as? String, !url.isEmpty {
+                if let response = dictionary["response"] as? [String: Any],
+                   let url = response["surveyURL"] as? String,
+                   !url.isEmpty {                    
                     LogUtils.printMessage(message: "✅ surveyURL: \(url)")
-                    if let response = dictionary["response"] as? [String: Any] {
-                        self.launchSurveyOnApiSuccess(withURL: response)
+                    let showInDialog = self.currentTouchPoint.ShowInDialog
+                    if showInDialog {
+                        self.showInAppSurvey(touchPoint: self.currentTouchPoint)
+                    } else {
+                        self.showMessageInViewControllerWithResponse(touchPoint: self.currentTouchPoint)
                     }
+
+                    self.launchSurveyOnApiSuccess(withURL: response)
+
                 } else {
                     self.iView?.removeFromSuperview()
                     LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "❌ surveyURL is missing or empty")
@@ -189,12 +198,8 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     }
 
     public func launchFeedbackSurvey(touchPoint: TouchPoint) {
-        var ShowInDialog = touchPoint.ShowInDialog
-        if (ShowInDialog) {
-            self.showInAppSurvey(touchPoint: touchPoint);
-        } else {
-            self.showMessageInViewControllerWithResponse(touchPoint: touchPoint)
-        }
+        currentTouchPoint = touchPoint
+        self.getAPIResponse(touchPoint: touchPoint)
     }
 
     public func stopQuestionProCXManager() {
@@ -224,7 +229,6 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     }
 
     public func showMessageInViewControllerWithResponse(touchPoint: TouchPoint) {
-        self.getAPIResponse(touchPoint: touchPoint)
         DispatchQueue.main.async {
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             rect.origin.x = 0
@@ -289,7 +293,6 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     }
 
     public func showInAppSurvey(touchPoint: TouchPoint) {
-        self.getAPIResponse(touchPoint: touchPoint)
         DispatchQueue.main.async {
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             let screenRect = UIScreen.main.bounds
