@@ -32,15 +32,15 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
                     return
                 }
 
-                if let url = dictionary["surveyURL"] as? String {
+                if let url = dictionary["surveyURL"] as? String, !url.isEmpty {
                     LogUtils.printMessage(message: "✅ surveyURL: \(url)")
+                    if let response = dictionary["response"] as? [String: Any] {
+                        self.launchSurveyOnApiSuccess(withURL: response)
+                    }
+                } else {
+                    self.iView?.removeFromSuperview()
+                    LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "❌ surveyURL is missing or empty")
                 }
-
-                LogUtils.printMessage(message: "📦 Final Parsed Dictionary: \(dictionary)")
-                if let response = dictionary["response"] as? [String: Any] {
-                    self.launchSurveyOnApiSuccess(withURL: response)
-                }
-                
             } else {
                 LogUtils.printMessage(message:"decryptedData is nil")
             }
