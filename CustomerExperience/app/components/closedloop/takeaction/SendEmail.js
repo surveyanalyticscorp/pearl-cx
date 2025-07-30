@@ -290,9 +290,17 @@ export const SendEmail = props => {
   const toolbarRef = React.useRef();
   const {emailTemplates} = useSelector(state => state.dashboard.emailData);
 
-  const [emailDraftModalVisible, setEmailDraftModalVisible] = useState(false);
+  const [isEmailDraftBottomSheetVisible, setEmailDraftBottomSheetVisible] =
+    useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
+  const openAiDraftBottomSheet = () => {
+    setEmailDraftBottomSheetVisible(true);
+  };
+
+  const onCloseAiEmailDraftBottomSheet = () => {
+    setEmailDraftBottomSheetVisible(false);
+  };
   useEffect(() => {
     if (
       emailSentResponse &&
@@ -377,7 +385,7 @@ export const SendEmail = props => {
     console.log('onPressTemplate');
   };
   const onPressAiButton = () => {
-    setEmailDraftModalVisible(state => !state);
+    openAiDraftBottomSheet();
   };
 
   const setAIEmailDraft = emailBody => {
@@ -387,15 +395,6 @@ export const SendEmail = props => {
     onChangeSubject(emailBody.subject ?? '');
   };
 
-  const renderEmailDraftModal = () => {
-    return (
-      <AIEmailDraftModal
-        emailDraftModalVisible={emailDraftModalVisible}
-        setEmailDraftModalVisible={setEmailDraftModalVisible}
-        setEmailBody={setAIEmailDraft}
-      />
-    );
-  };
   const fontFamily = 'Fira Sans';
   const editorStyle = {
     initialCSSText: `${FontFamilyStylesheet}`,
@@ -453,7 +452,21 @@ export const SendEmail = props => {
         />
       </QPBottomSheet>
 
-      {emailDraftModalVisible && renderEmailDraftModal()}
+      <QPBottomSheet
+        visible={isEmailDraftBottomSheetVisible}
+        onClose={onCloseAiEmailDraftBottomSheet}
+        bottomSheetHeight="90%"
+        headerComponent={
+          <QPBottomSheetHeader
+            headerLabel="Draft with QuestionPro AI"
+            onClose={onCloseAiEmailDraftBottomSheet}
+          />
+        }>
+        <AIEmailDraftModal
+          onClose={onCloseAiEmailDraftBottomSheet}
+          setEmailBody={setAIEmailDraft}
+        />
+      </QPBottomSheet>
       {isKeyboardVisible && (
         <CustomKeyboardToolbar
           keyboardHeight={keyboardHeight}

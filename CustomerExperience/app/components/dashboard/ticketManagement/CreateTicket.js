@@ -18,8 +18,6 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {RenderStatusIcon} from '../../../routes/commonUI/CommonUI';
-import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
-import QPSpinner from '../../../widgets/QPSpinner';
 import SelectPriority from '../../closedloop/takeaction/SelectPriority';
 import SelectStatus from '../../closedloop/takeaction/SelectStatus';
 import {
@@ -457,7 +455,6 @@ export default function CreateTicket(props) {
       <QPBottomSheet
         visible={visible}
         onClose={onClose}
-        bottomSheetHeight="47%"
         headerComponent={
           <QPBottomSheetHeader headerLabel="Priority" onClose={onClose} />
         }>
@@ -483,7 +480,6 @@ export default function CreateTicket(props) {
       <QPBottomSheet
         visible={visible}
         onClose={onClose}
-        bottomSheetHeight="50%"
         headerComponent={
           <QPBottomSheetHeader headerLabel="Status" onClose={onClose} />
         }>
@@ -506,7 +502,6 @@ export default function CreateTicket(props) {
       <QPBottomSheet
         visible={visible}
         onClose={onClose}
-        bottomSheetHeight="80%"
         headerComponent={
           <QPBottomSheetHeader headerLabel="Segment" onClose={onClose} />
         }>

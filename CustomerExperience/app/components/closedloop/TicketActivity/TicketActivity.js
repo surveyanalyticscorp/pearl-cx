@@ -1,12 +1,11 @@
-import React, {useState, useCallback, Children} from 'react';
-import {View, FlatList, RefreshControl} from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {View, FlatList, ScrollView, RefreshControl} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {NoItemsFound} from '../../../routes/commonUI/CommonUI';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import {getClosedLoopTicketItemActivity} from '../../../redux/actions/dashboard.actions';
 import {translate} from '../../../Utils/MultilinguaUtils';
-import Animated from 'react-native-reanimated';
 import SelectSorting from '../takeaction/SelectSorting';
 import {baseTextStyles} from '../../../styles/text.styles';
 import ActivityText from '../../../widgets/closedloopWidget/ActivityText';
@@ -21,18 +20,11 @@ const TicketActivityContainer = ({children}) => {
   return <View style={styles.rootContainer}>{children}</View>;
 };
 
-const TicketActivityAnimatedView = ({children, fall}) => {
+const TicketActivityAnimatedView = ({children}) => {
   return (
-    <Animated.View
-      testID="animated-view"
-      style={[
-        styles.container,
-        {
-          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-        },
-      ]}>
+    <ScrollView testID="animated-view" style={styles.container}>
       {children}
-    </Animated.View>
+    </ScrollView>
   );
 };
 
@@ -120,7 +112,7 @@ export default function TicketActivity(props) {
   };
   return (
     <TicketActivityContainer style={styles.rootContainer}>
-      <TicketActivityAnimatedView fall={fall}>
+      <TicketActivityAnimatedView>
         <SortingView
           onPress={openSortingBottomSheet}
           text={sortingList[currentSortingIndex].title}

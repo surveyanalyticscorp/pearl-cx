@@ -237,7 +237,7 @@ const FilterTicket = ({data, onPressHandler}) => {
       <RenderTypeFilter typelist={type} />
       <VerticalSpaceBox multiplyBy={2} />
       <RenderShowMyTicketsFilter assignToId={assignToId} userId={data.userId} />
-      <VerticalSpaceBox multiplyBy={2} />
+      <VerticalSpaceBox multiplyBy={6} />
       <RenderButtons />
     </View>
   );
@@ -247,11 +247,9 @@ export default FilterTicket;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: Colors.white,
   },
   rowContainer: {
-    flex: 1,
     flexDirection: 'row',
   },
   sectionContainer: {
@@ -263,7 +261,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   innerContainer: {
-    paddingHorizontal: PaddingConstants.tab1_2x,
+    padding: PaddingConstants.tab1_2x,
   },
 
   assigneeCell: {
@@ -279,12 +277,6 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,
   },
-  // optionText: {
-  //   fontFamily: FontFamily.regular,
-  //   fontSize: TextSizes.secondary,
-  //   marginHorizontal: MarginConstants.halfTab,
-  //   color: Colors.filterIconColor,
-  // },
 
   fiiledButtonText: {
     fontFamily: FontFamily.regular,

@@ -532,7 +532,6 @@ const RenderFilterBottomSheet = ({
     <QPBottomSheet
       visible={visible}
       onClose={onClose}
-      bottomSheetHeight="60%"
       headerComponent={
         <QPBottomSheetHeader
           headerLabel={translate('ticket_overview.filter_ticket')}
