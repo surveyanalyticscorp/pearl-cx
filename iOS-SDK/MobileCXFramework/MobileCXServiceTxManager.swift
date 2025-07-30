@@ -3,7 +3,7 @@ import UIKit
 
 @MainActor public protocol CXServiceDelegate: NSObjectProtocol {
     
-    func apiSuccess(response: Data, headers: [String: String])
+    func apiSuccess(response: String, headers: [String: String])
     func apiFailure(touchPoint: TouchPoint, apiKey: String, apiBaseUrl: String, port: String, accessToken: String)
     func showApiError(message: String)
 }
@@ -173,26 +173,24 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
     }
 
     public func handleHttpOK(data: Data) {
-        do {
-            if let jsonData = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                let headers: [String: String]
-                    if let httpResponse = response as? HTTPURLResponse {
-                        headers = httpResponse.allHeaderFields.reduce(into: [:]) { result, item in
-                            if let key = item.key as? String, let value = item.value as? String {
-                                result[key] = value
-                            }
-                        }
-                    } else {
-                        headers = [:]
+        let headers: [String: String]
+            if let httpResponse = response as? HTTPURLResponse {
+                headers = httpResponse.allHeaderFields.reduce(into: [:]) { result, item in
+                    if let key = item.key as? String, let value = item.value as? String {
+                        result[key] = value
                     }
-                if let response = jsonData["response"] as? [String: Any] {
-                    iDelegate?.apiSuccess(response: data, headers: headers)
-                } else {
-                    LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "No valid response in JSON.")
                 }
+            } else {
+                headers = [:]
             }
-        } catch {
-            LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "Error parsing JSON: \(error)")
-        }
+            
+        LogUtils.printMessage(message: "Api response Headers \(headers)\n\n")
+            var apiResponse = "";
+            if let jsonString = String(data: data, encoding: .utf8) {
+                LogUtils.printMessage(message: "Encrypted Api response \(jsonString)")
+                apiResponse.append(jsonString)
+                
+            }
+            iDelegate?.apiSuccess(response: apiResponse, headers: headers)
     }
 }

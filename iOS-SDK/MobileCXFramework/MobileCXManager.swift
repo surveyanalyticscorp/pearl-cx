@@ -15,39 +15,36 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         self.showApiErrorAlert(errorMessage: message)
     }
     
-    public func apiSuccess(response: Data, headers: [String: String]) {
-        guard
-            let json = try? JSONSerialization.jsonObject(with: response, options: []),
-            let root = json as? [String: Any],
-            let responseObject = root["response"] as? [String: Any],
-            let responseData = try? JSONSerialization.data(withJSONObject: responseObject),
-            let responseString = String(data: responseData, encoding: .utf8)
-        else {
-            LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "❌ Failed to parse 'response' object from API data.")
-            return
-        }
+    public func apiSuccess(response: String, headers: [String: String]) {
+        LogUtils.printMessage(message:"Api call successfull...")
 
         // Step 1: Decrypt
-        self.callback?.decryptData(apiResponse: (responseString, headers)) { decryptedData in
+        self.callback?.decryptData(apiResponse: (response, headers)) { decryptedData in
             LogUtils.printMessage(message: "🔓 Decrypted data: \(decryptedData ?? "nil")")
-        }
+            // Step 2: Convert string back to dictionary
+            if ((decryptedData) != nil) {
+                guard
+                    let rawData = decryptedData?.data(using: .utf8),
+                    let parsedJSON = try? JSONSerialization.jsonObject(with: rawData),
+                    let dictionary = parsedJSON as? [String: Any]
+                else {
+                    LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "❌ Failed to re-parse decrypted string into dictionary.")
+                    return
+                }
 
-        // Step 2: Convert string back to dictionary
-        guard
-            let rawData = responseString.data(using: .utf8),
-            let parsedJSON = try? JSONSerialization.jsonObject(with: rawData),
-            let dictionary = parsedJSON as? [String: Any]
-        else {
-            LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "❌ Failed to re-parse decrypted string into dictionary.")
-            return
-        }
+                if let url = dictionary["surveyURL"] as? String {
+                    LogUtils.printMessage(message: "✅ surveyURL: \(url)")
+                }
 
-        if let url = dictionary["surveyURL"] as? String {
-            LogUtils.printMessage(message: "✅ surveyURL: \(url)")
+                LogUtils.printMessage(message: "📦 Final Parsed Dictionary: \(dictionary)")
+                if let response = dictionary["response"] as? [String: Any] {
+                    self.launchSurveyOnApiSuccess(withURL: response)
+                }
+                
+            } else {
+                LogUtils.printMessage(message:"decryptedData is nil")
+            }
         }
-
-        LogUtils.printMessage(message: "📦 Final Parsed Dictionary: \(dictionary)")
-        self.launchSurveyOnApiSuccess(withURL: dictionary)
     }
     
     public func apiFailure(touchPoint: TouchPoint, apiKey: String, apiBaseUrl: String, port: String, accessToken: String) {
@@ -96,6 +93,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     @MainActor public func launchSurveyOnApiSuccess(withURL response: [String: Any]) {
         if let _ = response[ksurveyURL] {
             if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
+                LogUtils.printMessage(message:"Survey URL -> \(responseURL)")
                 let responseCopy = response // Create a copy of the response
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
@@ -105,6 +103,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
                         GlobalDataCX.addValueToUserDefault(responseCopy, forKey: strUserDefaultKey)
                     } else {
                         if let url = self.iResponseURL, let nsurl = URL(string: url) {
+                            LogUtils.printMessage(message:"Loading survey in webview...`")
                             let nsrequest = URLRequest(url: nsurl)
                             self.iWebView?.backgroundColor = UIColor.white
                             self.iWebView?.load(nsrequest)
