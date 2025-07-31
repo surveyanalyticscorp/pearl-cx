@@ -323,7 +323,14 @@ export const RenderSpinner = () => {
     </View>
   );
 };
-export const CheckBoxItem = ({item, title, index, onPress, textStyle}) => {
+export const CheckBoxItem = ({
+  item,
+  title,
+  isChecked,
+  index,
+  onPress,
+  textStyle,
+}) => {
   const _textStyle = textStyle ?? styles.checkBoxText;
   return (
     <Pressable testID="check-box-button" onPress={() => onPress(item, index)}>
@@ -337,7 +344,7 @@ export const CheckBoxItem = ({item, title, index, onPress, textStyle}) => {
               // onPress(index);
             }}
           /> */}
-        <CheckBox isChecked={item.isChecked} />
+        <CheckBox isChecked={item.isChecked ?? isChecked} />
         <Text style={_textStyle}>{item.title ? item.title : title}</Text>
       </View>
     </Pressable>

@@ -22,9 +22,11 @@ const Collapsible = ({
   leadingComponent,
   tailingComponent,
   style,
+  headerStyle,
   children,
+  isInitiallyOpen,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(isInitiallyOpen ?? false);
   const [contentHeight, setContentHeight] = useState(0);
   const animation = useRef(new Animated.Value(0)).current;
 
@@ -46,8 +48,8 @@ const Collapsible = ({
   };
 
   return (
-    <View style={[styles.container, style]}>
-      <Pressable style={styles.header} onPress={toggle}>
+    <View style={style ?? styles.container}>
+      <Pressable style={headerStyle ?? styles.header} onPress={toggle}>
         {leadingComponent && (
           <View style={styles.leading}>{leadingComponent}</View>
         )}

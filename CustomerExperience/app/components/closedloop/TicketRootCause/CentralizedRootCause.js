@@ -1,6 +1,5 @@
-import React from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
-import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import React, {useState} from 'react';
+import {StyleSheet, FlatList} from 'react-native';
 import {baseTextStyles} from '../../../styles/text.styles';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 import {PaddingConstants} from '../../../styles/padding.constants';
@@ -8,15 +7,18 @@ import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import Collapsible from '../CentralizedRootCause/components/CollapsableView';
 import {useSelector} from 'react-redux';
+import {CheckBoxItem} from '../../../routes/commonUI/CommonUI';
 
-const RootCauseItem = ({item}) => {
+const RootCauseItem = ({item, index}) => {
   return (
     <Collapsible headerTitle={item.name}>
       <VerticalSpaceBox />
       {item.rcTags && item.rcTags.length > 0 ? (
         <FlatList
           style={styles.flatList}
-          listKey={`rcTags-${item.name}-0`}
+          removeClippedSubviews={true}
+          contentContainerStyle={{flexGrow: 0}}
+          listKey={`rcTags-${item.id}-0`}
           data={item.rcTags}
           keyExtractor={(item, index) => item.id.toString()}
           renderItem={({item, index}) => <TagItem item={item} />}
@@ -28,34 +30,73 @@ const RootCauseItem = ({item}) => {
   );
 };
 
-const TagItem = ({item}) => {
-  return (
-    <View>
-      <TextLabel
-        baseTextStyle={baseTextStyles.semiSecondaryRegularText}
-        text={item.name}
-      />
-      <VerticalSpaceBox />
-      {item.rcSubTags && item.rcSubTags.length > 0 ? (
+const TagItem = ({item, index}) => {
+  const [isChecked, setIsChecked] = useState(false);
+
+  if (item.rcSubTags && item.rcSubTags.length > 0) {
+    return (
+      <Collapsible
+        isInitiallyOpen={false}
+        headerTitle={item.name}
+        style={styles.nestedColapsibleContainer}
+        headerStyle={styles.nestedColapsibleHeader}
+        leadingComponent={
+          <CheckBoxItem
+            textStyle={baseTextStyles.semiSecondaryRegularText}
+            item={item}
+            index={index}
+            isChecked={isChecked}
+            onPress={() => {
+              setIsChecked(!isChecked);
+            }}
+          />
+        }>
+        <VerticalSpaceBox />
+
         <FlatList
           style={styles.flatList}
           data={item.rcSubTags}
-          listKey={`rcSubTags-${item.name}-1`}
+          removeClippedSubviews={true}
+          contentContainerStyle={{flexGrow: 0}}
+          listKey={`rcSubTags-${item.id}-1`}
           keyExtractor={(item, index) => item.id.toString()}
-          renderItem={({item, index}) => <SubTagItem item={item} />}
+          renderItem={({item, index}) => (
+            <SubTagItem item={item} index={index} />
+          )}
         />
-      ) : null}
 
-      <VerticalSpaceBox />
-    </View>
+        <VerticalSpaceBox />
+      </Collapsible>
+    );
+  }
+
+  return (
+    <CheckBoxItem
+      textStyle={baseTextStyles.secondaryRegularText}
+      item={item}
+      index={index}
+      isChecked={isChecked}
+      title={item.name}
+      onPress={() => {
+        setIsChecked(!isChecked);
+      }}
+    />
   );
 };
 
-const SubTagItem = ({item}) => {
+const SubTagItem = ({item, index}) => {
+  const [isChecked, setIsChecked] = useState(false);
+
   return (
-    <TextLabel
-      baseTextStyle={baseTextStyles.semiSecondaryRegularText}
-      text={item.name}
+    <CheckBoxItem
+      textStyle={baseTextStyles.secondaryRegularText}
+      item={item}
+      index={index}
+      isChecked={isChecked}
+      title={item.name}
+      onPress={() => {
+        setIsChecked(!isChecked);
+      }}
     />
   );
 };
@@ -73,8 +114,12 @@ export const CentralizedRootCause = props => {
     <FlatList
       style={styles.rootContainer}
       data={centralizedRootCauseList}
+      removeClippedSubviews={true}
+      contentContainerStyle={{flexGrow: 0}}
       listKey={`rootCauses-CentralizedRootCause`}
-      renderItem={({item, index}) => <RootCauseItem item={item} />}
+      renderItem={({item, index}) => (
+        <RootCauseItem index={index} item={item} />
+      )}
       keyExtractor={(item, index) => item.id.toString()}
     />
   );
@@ -88,6 +133,20 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.tab1_2x,
   },
   flatList: {
-    marginHorizontal: MarginConstants.tab1_6x,
+    marginHorizontal: MarginConstants.tab1,
+  },
+
+  nestedColapsibleContainer: {
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: Colors.transparent,
+    marginVertical: 8,
+  },
+
+  nestedColapsibleHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
+    backgroundColor: Colors.white,
   },
 });
