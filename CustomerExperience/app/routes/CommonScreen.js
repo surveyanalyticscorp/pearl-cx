@@ -26,6 +26,8 @@ import HeaderBackLeft from './commonUI/HeaderBackLeft';
 import {CloseButton, SaveDashboardDate} from './commonUI/CommonUI';
 import Notification from '../components/notifications/Notification';
 import PushNotification from '../components/notifications/PushNotifications';
+import {CentralizedRootCause} from '../components/closedloop/TicketRootCause/CentralizedRootCause';
+import {OldRootCause} from '../components/closedloop/TicketRootCause/OldRootCause';
 
 const DateRangeTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
@@ -175,6 +177,34 @@ const CommonScreens = RootStack => {
         // headerRight: props => <SaveDashboardDate {...props} route={route} />,
       })}
     />,
+
+    <RootStack.Screen
+      key={'OldRootCause'}
+      name={'OldRootCause'}
+      component={OldRootCause}
+      options={({navigation, route}) => ({
+        // headerShown: false,
+        title: 'Old Root Cause',
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+        headerRight: props => <View />,
+        // headerRight: (props) => <EditTicket {...props} route={route} />,
+        // headerLeft: (props) => <MenuIcon />,
+      })}
+    />,
+    <RootStack.Screen
+      key={'CentralizedRootCause'}
+      name={'CentralizedRootCause'}
+      component={CentralizedRootCause}
+      options={({navigation, route}) => ({
+        // headerShown: false,
+        title: 'Centralized Root Cause',
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+        headerRight: props => <View />,
+        // headerRight: (props) => <EditTicket {...props} route={route} />,
+        // headerLeft: (props) => <MenuIcon />,
+      })}
+    />,
+
     <RootStack.Screen
       key={'TicketDetails'}
       name={'TicketDetails'}

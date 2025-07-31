@@ -7,14 +7,23 @@ import {FontFamily, FontWeight} from '../../../styles/font.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
+import {useNavigation} from '@react-navigation/native';
 
 export const RootCauseNavigationButtons = () => {
+  const navigation = useNavigation();
+
+  const onCentralizedRootCausePress = () => {
+    navigation.navigate('CentralizedRootCause');
+  };
+
+  const onOldRootCausePress = () => {
+    navigation.navigate('OldRootCause');
+  };
+
   return (
     <View style={styles.buttonView}>
       <QPButton
-        onPress={() => {
-          console.log('Centralized');
-        }}
+        onPress={onCentralizedRootCausePress}
         textStyle={{
           ...styles.buttonText,
           ...styles.centralizedButtonTextColor,
@@ -29,9 +38,7 @@ export const RootCauseNavigationButtons = () => {
         }}
         style={{...styles.buttonStyle, ...styles.oldRootCauseButtonColor}}
         buttonText="Previous root cause"
-        onPress={() => {
-          console.log('Previous root cause');
-        }}
+        onPress={onOldRootCausePress}
       />
     </View>
   );

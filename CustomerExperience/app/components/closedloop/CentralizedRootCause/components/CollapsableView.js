@@ -1,45 +1,123 @@
-import React from 'react';
-import {StyleSheet, View, Easing} from 'react-native';
-import Animated from 'react-native-reanimated';
-import TextLabel from '../../../../widgets/TextLabel/TextLabel';
-import {PaddingConstants} from '../../../../styles/padding.constants';
+import React, {useRef, useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Animated,
+  Platform,
+  UIManager,
+} from 'react-native';
+import {IonIcon} from '../../../../Utils/IconUtils';
+import {TextSizes} from '../../../../styles/textsize.constants';
+import {FontFamily, FontWeight} from '../../../../styles/font.constants';
 import {Colors} from '../../../../styles/color.constants';
-import {MarginConstants} from '../../../../styles/margin.constants';
-// A colapsible view that can be expanded or collapsed
 
-const CollapsableView = ({title, children, isOpen = false}) => {
+if (Platform.OS === 'android') {
+  UIManager.setLayoutAnimationEnabledExperimental?.(true);
+}
+
+const Collapsible = ({
+  headerTitle,
+  leadingComponent,
+  tailingComponent,
+  style,
+  children,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [contentHeight, setContentHeight] = useState(0);
+  const animation = useRef(new Animated.Value(0)).current;
+
+  const toggle = () => {
+    setIsOpen(prev => !prev);
+  };
+
+  useEffect(() => {
+    Animated.timing(animation, {
+      toValue: isOpen ? contentHeight : 0,
+      duration: 250,
+      useNativeDriver: false,
+    }).start();
+  }, [isOpen, contentHeight]);
+
+  const animatedStyle = {
+    height: animation,
+    overflow: 'hidden',
+  };
+
   return (
-    <View style={styles.rootContainer}>
-      <View
-        style={{
-          backgroundColor: Colors.accentLight,
-          height: '100%',
-          width: '1%',
-        }}
-      />
+    <View style={[styles.container, style]}>
+      <Pressable style={styles.header} onPress={toggle}>
+        {leadingComponent && (
+          <View style={styles.leading}>{leadingComponent}</View>
+        )}
+        <Text style={styles.title}>{headerTitle}</Text>
+        <View style={styles.trailing}>
+          {tailingComponent ? (
+            tailingComponent
+          ) : (
+            <IonIcon
+              name={isOpen ? 'chevron-up' : 'chevron-down'}
+              size={20}
+              color={Colors.filterIconColor}
+            />
+          )}
+        </View>
+      </Pressable>
 
-      <View style={styles.columnContainer}>{children}</View>
+      {/* Hidden content for measurement */}
+      <View
+        style={styles.hiddenContent}
+        onLayout={e => {
+          const height = e.nativeEvent.layout.height;
+          if (height > 0 && contentHeight !== height) {
+            setContentHeight(height);
+          }
+        }}>
+        {children}
+      </View>
+
+      {/* Animated visible content */}
+      <Animated.View style={animatedStyle}>
+        <View>{children}</View>
+      </Animated.View>
     </View>
   );
 };
 
-export default CollapsableView;
-
 const styles = StyleSheet.create({
-  rootContainer: {
-    flex: 1,
-    flexDirection: 'row', // Ensure content doesn't spill out when collapsed
+  container: {
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: Colors.negativePromter,
+    marginVertical: 8,
   },
-  columnContainer: {
-    padding: PaddingConstants.tab1_2x,
-    flex: 1,
-    backgroundColor: 'white',
-  },
-
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: PaddingConstants.tab1_2x,
-    backgroundColor: 'white',
+    padding: 12,
+    backgroundColor: Colors.settingsBackground,
+  },
+  leading: {
+    marginRight: 8,
+  },
+  title: {
+    flex: 1,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary2,
+    fontWeight: FontWeight._600,
+    color: Colors.filterIconColor,
+  },
+  trailing: {
+    marginLeft: 8,
+  },
+  hiddenContent: {
+    position: 'absolute',
+    top: -9999,
+    left: 0,
+    right: 0,
+    opacity: 0,
   },
 });
+
+export default Collapsible;

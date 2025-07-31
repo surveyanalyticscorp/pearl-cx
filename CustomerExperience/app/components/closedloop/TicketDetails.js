@@ -15,6 +15,7 @@ import {getResponseDetailsByResponseId} from '../../redux/actions/feedback.actio
 import StringUtils from '../../Utils/StringUtils';
 import {
   getActionList,
+  getCentralizedRootCause,
   getRootCauseList,
 } from '../../redux/actions/closedloop.actions';
 import TicketOverview from './TicketOverview/TicketOverview';
@@ -47,6 +48,8 @@ export default function TicketDetails(props) {
     authToken_ => {
       dispatch(getRootCauseList(authToken_, global.subscriberId));
       dispatch(getActionList(authToken_, global.subscriberId));
+      dispatch(getCentralizedRootCause());
+
       if (!StringUtils.isEmptyOrNull(ticketItem.responseId)) {
         dispatch(
           getResponseDetailsByResponseId(authToken, {

@@ -20,14 +20,6 @@ const TicketActivityContainer = ({children}) => {
   return <View style={styles.rootContainer}>{children}</View>;
 };
 
-const TicketActivityAnimatedView = ({children}) => {
-  return (
-    <ScrollView testID="animated-view" style={styles.container}>
-      {children}
-    </ScrollView>
-  );
-};
-
 const RenderActivityItem = ({item}) => {
   const {userName, createdAt, activityText} = item;
   return (
@@ -112,27 +104,27 @@ export default function TicketActivity(props) {
   };
   return (
     <TicketActivityContainer style={styles.rootContainer}>
-      <TicketActivityAnimatedView>
-        <SortingView
-          onPress={openSortingBottomSheet}
-          text={sortingList[currentSortingIndex].title}
-        />
+      <SortingView
+        onPress={openSortingBottomSheet}
+        text={sortingList[currentSortingIndex].title}
+      />
 
-        <FlatList
-          testID="flatlist-activity"
-          refreshControl={
-            <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-          }
-          style={styles.container}
-          data={getTicketActivityList(
-            ticketActivityList,
-            sortingList[currentSortingIndex],
-          )}
-          renderItem={getRenderItem}
-          ListEmptyComponent={<NoItemsFound>{'No Activity...'}</NoItemsFound>}
-          keyExtractor={item => JSON.stringify(item.id)}
-        />
-      </TicketActivityAnimatedView>
+      <FlatList
+        testID="flatlist-activity"
+        listKey={`TicketActivity-${ticketId}`}
+        refreshControl={
+          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+        }
+        style={styles.container}
+        data={getTicketActivityList(
+          ticketActivityList,
+          sortingList[currentSortingIndex],
+        )}
+        renderItem={getRenderItem}
+        ListEmptyComponent={<NoItemsFound>{'No Activity...'}</NoItemsFound>}
+        keyExtractor={item => JSON.stringify(item.id)}
+      />
+
       <QPBottomSheet
         visible={sortingBottomSheetVisible}
         onClose={onCloseSortingBottomSheet}

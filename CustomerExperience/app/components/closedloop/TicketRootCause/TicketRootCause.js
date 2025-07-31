@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, SafeAreaView} from 'react-native';
+import {StyleSheet, ScrollView} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {RootCauseNavigationButtons} from './RootCauseNavigationButtons';
@@ -8,11 +8,11 @@ import {CustomRootCause} from './CustomeRootCause';
 
 const TicketRootCause = props => {
   return (
-    <SafeAreaView testID="root-cause-view" style={styles.rootContainer}>
+    <ScrollView testID="root-cause-view" style={styles.rootContainer}>
       <RootCauseNavigationButtons />
       <AskWhy />
       <CustomRootCause />
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

@@ -25,7 +25,7 @@ export const hasId = (id, arr = []) => {
   }
   return false;
 };
-const TicketRootCause = props => {
+export const OldRootCause = props => {
   const ROOT_CAUSES = translate('root_cause.root_cause');
   const ACTIONS = translate('root_cause.actions');
   const ORIGIN_SEGMENTS = translate('close_loop.origin_segment');
@@ -180,8 +180,6 @@ const TicketRootCause = props => {
     </View>
   );
 };
-
-export default TicketRootCause;
 
 const styles = StyleSheet.create({
   rootContainer: {
