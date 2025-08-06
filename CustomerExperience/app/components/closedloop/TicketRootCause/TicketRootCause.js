@@ -10,7 +10,7 @@ const TicketRootCause = props => {
   return (
     <ScrollView testID="root-cause-view" style={styles.rootContainer}>
       <RootCauseNavigationButtons />
-      <AskWhy />
+      {/* <AskWhy /> */}
       <CustomRootCause />
     </ScrollView>
   );

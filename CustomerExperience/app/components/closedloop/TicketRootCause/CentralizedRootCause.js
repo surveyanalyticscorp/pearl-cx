@@ -18,7 +18,6 @@ import {CheckBox, CheckBoxItem} from '../../../routes/commonUI/CommonUI';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
 import {MaterialIcons} from '../../../Utils/IconUtils';
-import TextLabel from '../../../widgets/TextLabel/TextLabel';
 
 function markAssignedRC(AllRC, assignedRC) {
   const assignedIds = new Set(assignedRC.map(item => item.id));
@@ -30,6 +29,7 @@ function markAssignedRC(AllRC, assignedRC) {
         return {
           ...subTag,
           isChecked: assignedIds.has(subTag.id),
+          isCustomerResponse: subTag.isCustomerResponse ?? false,
         };
       });
 
@@ -37,6 +37,7 @@ function markAssignedRC(AllRC, assignedRC) {
         ...tag,
         isChecked: isTagChecked,
         rcSubTags: updatedSubTags,
+        isCustomerResponse: tag.isCustomerResponse ?? false,
       };
     });
 
@@ -169,14 +170,14 @@ export const OtherTag = () => {
       </Pressable>
       <TextInput
         placeholder="Other"
+        placeholderTextColor={Colors.settingDividerColor}
         value={updatedText}
         style={styles.otherTextInput}
         onChangeText={updateOtherText}
       />
-      <Pressable onPress={updateRootCause}>
+      {/* <Pressable style={styles.addButton} onPress={updateRootCause}>
         <MaterialIcons name="add" size={26} color={Colors.accentLight} />
-      </Pressable>
-      <HorizontalSpaceBox multiplyBy={2} />
+      </Pressable> */}
     </View>
   );
 };
@@ -197,8 +198,6 @@ export const CentralizedRootCause = props => {
 
   return (
     <SafeAreaView style={styles.rootContainer}>
-      <OtherTag isOtherChecked={true} otherText={'Other'} />
-
       <FlatList
         style={styles.flatList}
         data={markAssignedRC(centralizedRootCauseList, selectedTags)}
@@ -209,6 +208,7 @@ export const CentralizedRootCause = props => {
           <RootCauseItem index={index} item={item} />
         )}
         keyExtractor={(item, index) => item.id.toString()}
+        ListFooterComponent={<OtherTag />}
       />
 
       <QPButton
@@ -262,19 +262,23 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   otherTag: {
-    marginHorizontal: MarginConstants.tab1,
+    marginTop: MarginConstants.tab1,
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
   },
   otherTextInput: {
-    marginHorizontal: MarginConstants.tab1,
     flex: 1,
     ...baseTextStyles.primaryRegularText,
-    borderBottomColor: Colors.settingsBackground,
+    borderBottomColor: Colors.settingDividerColor,
     borderBottomWidth: 1,
+    backgroundColor: Colors.settingsBackground,
+    paddingHorizontal: PaddingConstants.tab1,
   },
   otherText: {
     ...baseTextStyles.primaryRegularText,
+  },
+  addButton: {
+    marginHorizontal: MarginConstants.tab1,
   },
 });

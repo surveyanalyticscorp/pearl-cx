@@ -35,6 +35,7 @@ function extractAssignedItems(AllRC, assignedRC) {
           id: tag.id,
           name: tag.name,
           isTag: true,
+          isCustomerResponse: tag.isCustomerResponse ?? false,
         });
       }
 
@@ -50,6 +51,7 @@ function extractAssignedItems(AllRC, assignedRC) {
             id: subTag.id,
             name: subTag.name,
             isTag: false,
+            isCustomerResponse: subTag.isCustomerResponse ?? false,
           });
         }
       });
