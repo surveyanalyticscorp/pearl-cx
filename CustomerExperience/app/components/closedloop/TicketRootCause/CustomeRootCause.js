@@ -67,12 +67,17 @@ function extractAssignedItems(AllRC, assignedRC) {
   return finalResult;
 }
 
+export const PathTextLabel = ({title}) => {
+  return (
+    <TextLabel baseTextStyle={baseTextStyles.semiMediumLightText}>
+      {title}
+    </TextLabel>
+  );
+};
 export const TitleAndTagsItem = ({item, index}) => {
   return (
     <View style={styles.titleAndTagsView}>
-      <TextLabel baseTextStyle={baseTextStyles.semiMediumLightText}>
-        {item.title}
-      </TextLabel>
+      <PathTextLabel title={item.title} />
       <FlatList
         style={styles.tagList}
         data={item.items}
@@ -87,6 +92,28 @@ export const TitleAndTagsItem = ({item, index}) => {
   );
 };
 
+export const OtherSelectedTag = () => {
+  const {isOtherChecked, otherText} = useSelector(
+    state => state.dashboard.ticket?.centralizeRootCause,
+  );
+
+  if (isOtherChecked) {
+    return (
+      <View>
+        <PathTextLabel title="Others (Custom root cause)" />
+        <TextLabel
+          baseTextStyle={baseTextStyles.semiSecondaryRegularText}
+          style={{
+            padding: PaddingConstants.tab1,
+            backgroundColor: Colors.negativePromter,
+          }}
+          text={otherText}
+        />
+      </View>
+    );
+  }
+  return <View />;
+};
 export const CurrentSelectedRootCasues = () => {
   const centralizedRootCauseList = useSelector(
     state => state.dashboard.centralizedRootCauseList,
@@ -96,6 +123,7 @@ export const CurrentSelectedRootCasues = () => {
     state =>
       state.dashboard.ticket?.centralizeRootCause?.centralizeRootCauseIds ?? [],
   );
+
   return (
     <FlatList
       style={styles.flatList}
@@ -172,6 +200,7 @@ export const CustomRootCause = () => {
       </CustomRootCauseHeader>
 
       {hasRootCause ? <CurrentSelectedRootCasues /> : null}
+      <OtherSelectedTag />
       <VerticalSpaceBox />
       {!hasRootCause ? <AddCustomRootCause onPress={onPress} /> : null}
     </View>
