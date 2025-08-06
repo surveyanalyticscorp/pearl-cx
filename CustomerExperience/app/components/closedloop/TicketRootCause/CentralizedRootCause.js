@@ -133,11 +133,11 @@ const SubTagItem = ({item, index}) => {
   );
 };
 
-export const OtherTag = ({isOtherChecked, otherText}) => {
+export const OtherTag = () => {
   const dispatch = useDispatch();
-  // const {isOtherChecked, otherText} = useSelector(
-  //   state => state.dashboard.ticket?.centralizeRootCause,
-  // );
+  const {isOtherChecked, otherText} = useSelector(
+    state => state.dashboard.ticket?.centralizeRootCause,
+  );
   const [isChecked, setIsChecked] = useState(isOtherChecked);
   const [updatedText, updateOtherText] = useState(otherText);
 
