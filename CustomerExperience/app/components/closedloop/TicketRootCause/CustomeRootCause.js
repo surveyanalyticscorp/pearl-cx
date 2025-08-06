@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, FlatList, ScrollView} from 'react-native';
+import React from 'react';
+import {View, StyleSheet, FlatList} from 'react-native';
 import {baseTextStyles} from '../../../styles/text.styles';
 import {MarginConstants} from '../../../styles/margin.constants';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
@@ -9,8 +9,103 @@ import {MaterialIcons} from '../../../Utils/IconUtils';
 import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import {CentralizedRootCause} from './CentralizedRootCause';
 import {useNavigation} from '@react-navigation/core';
+import {useSelector} from 'react-redux';
+import {TagViewItem} from './TagViewItem';
+
+function extractAssignedItems(AllRC, assignedRC) {
+  const assignedMap = new Map();
+  assignedRC.forEach(item => {
+    assignedMap.set(item.id, item.isTag);
+  });
+
+  const resultMap = new Map();
+
+  AllRC.forEach(category => {
+    const categoryName = category.name;
+
+    category.rcTags.forEach(tag => {
+      const tagName = tag.name;
+
+      // Check if tag is assigned
+      if (assignedMap.has(tag.id) && assignedMap.get(tag.id) === true) {
+        const title = `${categoryName}`;
+        if (!resultMap.has(title)) resultMap.set(title, []);
+        resultMap.get(title).push({
+          id: tag.id,
+          name: tag.name,
+          isTag: true,
+        });
+      }
+
+      // Check each subtag
+      (tag.rcSubTags || []).forEach(subTag => {
+        if (
+          assignedMap.has(subTag.id) &&
+          assignedMap.get(subTag.id) === false
+        ) {
+          const title = `${categoryName} > ${tagName}`;
+          if (!resultMap.has(title)) resultMap.set(title, []);
+          resultMap.get(title).push({
+            id: subTag.id,
+            name: subTag.name,
+            isTag: false,
+          });
+        }
+      });
+    });
+  });
+
+  // Convert resultMap to desired array format
+  const finalResult = [];
+  for (const [title, items] of resultMap.entries()) {
+    finalResult.push({title, items});
+  }
+
+  return finalResult;
+}
+
+export const TitleAndTagsItem = ({item, index}) => {
+  return (
+    <View style={styles.titleAndTagsView}>
+      <TextLabel baseTextStyle={baseTextStyles.semiMediumLightText}>
+        {item.title}
+      </TextLabel>
+      <FlatList
+        style={styles.tagList}
+        data={item.items}
+        horizontal
+        removeClippedSubviews={true}
+        contentContainerStyle={{flexGrow: 0}}
+        listKey={`rootCauseItemList-${index}`}
+        renderItem={TagViewItem}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
+  );
+};
+
+export const CurrentSelectedRootCasues = () => {
+  const centralizedRootCauseList = useSelector(
+    state => state.dashboard.centralizedRootCauseList,
+  );
+
+  const selectedTags = useSelector(
+    state =>
+      state.dashboard.ticket?.centralizeRootCause?.centralizeRootCauseIds ?? [],
+  );
+  return (
+    <FlatList
+      style={styles.flatList}
+      data={extractAssignedItems(centralizedRootCauseList, selectedTags)}
+      removeClippedSubviews={true}
+      contentContainerStyle={{flexGrow: 0}}
+      listKey={`rootCauses-Centralized-RootCause`}
+      renderItem={TitleAndTagsItem}
+      keyExtractor={(item, index) => item.title.toString()}
+    />
+  );
+};
 
 export const EditCustomRootCause = ({onPress}) => {
   return (
@@ -58,17 +153,14 @@ export const CustomRootCauseHeader = ({children}) => {
   );
 };
 
-// export const SelectedRootCauseList = () => {
-//   return <View style={styles.flatList}></View>;
-// };
-
 export const CustomRootCause = () => {
-  const [hasRootCause, setHasRootCause] = useState(false);
+  const hasRootCause = useSelector(
+    state => state.dashboard.ticket?.centralizeRootCause,
+  );
 
   const navigation = useNavigation();
   const onPress = () => {
     navigation.navigate('CentralizedRootCause');
-    // console.log('navigateToAddCustomRootCause');
   };
 
   return (
@@ -76,9 +168,10 @@ export const CustomRootCause = () => {
       <CustomRootCauseHeader>
         {hasRootCause ? <EditCustomRootCause onPress={onPress} /> : null}
       </CustomRootCauseHeader>
+
+      {hasRootCause ? <CurrentSelectedRootCasues /> : null}
       <VerticalSpaceBox />
       {!hasRootCause ? <AddCustomRootCause onPress={onPress} /> : null}
-      <VerticalSpaceBox />
     </View>
   );
 };
@@ -97,7 +190,13 @@ const styles = StyleSheet.create({
   },
 
   flatList: {
-    marginVertical: MarginConstants.tab1_2x,
+    marginVertical: MarginConstants.tab1,
+  },
+  tagList: {
+    marginVertical: MarginConstants.tab1,
+  },
+  titleAndTagsView: {
+    marginVertical: MarginConstants.tab1,
   },
   buttonStyle: {
     width: PaddingConstants.tab1_8x,

@@ -2,22 +2,8 @@ import React from 'react';
 import {View, FlatList, StyleSheet} from 'react-native';
 import {baseTextStyles} from '../../../styles/text.styles';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
-import {PaddingConstants} from '../../../styles/padding.constants';
-import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
-
-const AskWhyItem = ({item}) => {
-  return (
-    <TextLabel
-      baseTextStyle={baseTextStyles.semiSecondaryRegularText}
-      style={{
-        padding: PaddingConstants.tab1,
-        backgroundColor: Colors.negativePromter,
-      }}
-      text={item.name}
-    />
-  );
-};
+import {TagViewItem} from './TagViewItem';
 
 const data = [
   {
@@ -41,7 +27,7 @@ export const AskWhy = () => {
         style={styles.flatList}
         data={data}
         horizontal
-        renderItem={({item}) => <AskWhyItem item={item} />}
+        renderItem={({item}) => <TagViewItem item={item} />}
         keyExtractor={item => item.id.toString()}
       />
     </View>
