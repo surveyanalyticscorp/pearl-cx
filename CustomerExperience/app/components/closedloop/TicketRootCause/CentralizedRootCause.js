@@ -1,15 +1,24 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, FlatList, SafeAreaView} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  SafeAreaView,
+  Pressable,
+  TextInput,
+} from 'react-native';
 import {baseTextStyles} from '../../../styles/text.styles';
-import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
+import {HorizontalSpaceBox, VerticalSpaceBox} from '../../../widgets/SpaceBox';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import Collapsible from '../CentralizedRootCause/components/CollapsableView';
-import {useSelector} from 'react-redux';
-import {CheckBoxItem} from '../../../routes/commonUI/CommonUI';
+import {useDispatch, useSelector} from 'react-redux';
+import {CheckBox, CheckBoxItem} from '../../../routes/commonUI/CommonUI';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
+import {MaterialIcons} from '../../../Utils/IconUtils';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
 
 function markAssignedRC(AllRC, assignedRC) {
   const assignedIds = new Set(assignedRC.map(item => item.id));
@@ -124,6 +133,53 @@ const SubTagItem = ({item, index}) => {
   );
 };
 
+export const OtherTag = ({isOtherChecked, otherText}) => {
+  const dispatch = useDispatch();
+  // const {isOtherChecked, otherText} = useSelector(
+  //   state => state.dashboard.ticket?.centralizeRootCause,
+  // );
+  const [isChecked, setIsChecked] = useState(isOtherChecked);
+  const [updatedText, updateOtherText] = useState(otherText);
+
+  const updateOtherTag = () => {
+    setIsChecked(prevState => !prevState);
+  };
+
+  const updateRootCause = () => {
+    console.log(isChecked, updatedText);
+  };
+
+  if (isOtherChecked) {
+    return (
+      <View style={styles.otherTag}>
+        <CheckBoxItem
+          textStyle={styles.otherText}
+          isChecked={isChecked}
+          title={otherText}
+          onPress={() => setIsChecked(prevState => !prevState)}
+        />
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.otherTag}>
+      <Pressable onPress={updateOtherTag}>
+        <CheckBox isChecked={isChecked} />
+      </Pressable>
+      <TextInput
+        placeholder="Other"
+        value={updatedText}
+        style={styles.otherTextInput}
+        onChangeText={updateOtherText}
+      />
+      <Pressable onPress={updateRootCause}>
+        <MaterialIcons name="add" size={26} color={Colors.accentLight} />
+      </Pressable>
+      <HorizontalSpaceBox multiplyBy={2} />
+    </View>
+  );
+};
 export const CentralizedRootCause = props => {
   const centralizedRootCauseList = useSelector(
     state => state.dashboard.centralizedRootCauseList,
@@ -141,6 +197,8 @@ export const CentralizedRootCause = props => {
 
   return (
     <SafeAreaView style={styles.rootContainer}>
+      <OtherTag isOtherChecked={true} otherText={'Other'} />
+
       <FlatList
         style={styles.flatList}
         data={markAssignedRC(centralizedRootCauseList, selectedTags)}
@@ -195,9 +253,28 @@ const styles = StyleSheet.create({
     borderColor: Colors.transparent,
     marginStart: MarginConstants.tab1_4x,
   },
+  otherTagCheckbox: {
+    marginStart: MarginConstants.tab1,
+  },
   borderBottom: {
     paddingBottom: PaddingConstants.tab1,
     borderBottomColor: Colors.settingsBackground,
     borderBottomWidth: 1,
+  },
+  otherTag: {
+    marginHorizontal: MarginConstants.tab1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
+  otherTextInput: {
+    marginHorizontal: MarginConstants.tab1,
+    flex: 1,
+    ...baseTextStyles.primaryRegularText,
+    borderBottomColor: Colors.settingsBackground,
+    borderBottomWidth: 1,
+  },
+  otherText: {
+    ...baseTextStyles.primaryRegularText,
   },
 });

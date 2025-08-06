@@ -348,8 +348,8 @@ export const CheckBoxItem = ({
               // onPress(index);
             }}
           /> */}
-        <CheckBox isChecked={item.isChecked ?? isChecked} />
-        <Text style={_textStyle}>{item.title ? item.title : title}</Text>
+        <CheckBox isChecked={item?.isChecked ?? isChecked} />
+        <Text style={_textStyle}>{item?.title ? item.title : title}</Text>
       </View>
     </Pressable>
   );
