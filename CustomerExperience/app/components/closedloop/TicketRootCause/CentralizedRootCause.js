@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -17,6 +17,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {CheckBox, CheckBoxItem} from '../../../routes/commonUI/CommonUI';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
+
+function getTagCount(item) {
+  return item.rcTags.reduce((acc, current) => {
+    let a = current.rcSubTags.reduce((acc_, current_) => {
+      return acc_ + (current_.isChecked ? 1 : 0);
+    }, 0);
+    return acc + (current.isChecked ? 1 : 0) + a;
+  }, 0);
+}
 
 function markAssignedRC(AllRC, assignedRC) {
   const assignedIds = new Set(assignedRC.map(item => item.id));
@@ -51,7 +60,7 @@ function markAssignedRC(AllRC, assignedRC) {
 
 const RootCauseItem = ({item, index}) => {
   return (
-    <Collapsible headerTitle={item.name}>
+    <Collapsible headerTitle={`${item.name} (${getTagCount(item)})`}>
       <VerticalSpaceBox />
       {item.rcTags && item.rcTags.length > 0
         ? item.rcTags.map((tag, index_) => (
@@ -117,7 +126,6 @@ const TagItem = ({item, index}) => {
 
 const SubTagItem = ({item, index, isChecked}) => {
   const [isItemChecked, setIsItemChecked] = useState(isChecked);
-  console.log('SUBTAGITEM', item);
 
   React.useEffect(() => {
     setIsItemChecked(isChecked);
