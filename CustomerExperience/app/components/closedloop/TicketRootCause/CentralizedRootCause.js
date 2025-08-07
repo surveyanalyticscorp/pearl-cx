@@ -27,7 +27,7 @@ function getTagCount(item) {
   }, 0);
 }
 
-function markAssignedRC(AllRC, assignedRC) {
+function remapRootCauseList(AllRC, assignedRC) {
   const assignedIds = new Set(assignedRC.map(item => item.id));
 
   const updatedAllRC = AllRC.map(rc => {
@@ -93,6 +93,7 @@ const TagItem = ({item, index}) => {
           index={index}
           isChecked={tagItem.isChecked}
           title={tagItem.name}
+          isDisabled={tagItem.isCustomerResponse}
           onPress={updateTag}
         />
         <VerticalSpaceBox />
@@ -119,26 +120,28 @@ const TagItem = ({item, index}) => {
       index={index}
       isChecked={tagItem.isChecked}
       title={tagItem.name}
+      isDisabled={tagItem.isCustomerResponse}
       onPress={updateTag}
     />
   );
 };
 
 const SubTagItem = ({item, index, isChecked}) => {
-  const [isItemChecked, setIsItemChecked] = useState(isChecked);
+  const [isSubTagChecked, setIsSubTagChecked] = useState(isChecked);
 
   React.useEffect(() => {
-    setIsItemChecked(isChecked);
+    setIsSubTagChecked(isChecked);
   }, [isChecked]);
 
   const updateSubTag = (item, index) => {
-    setIsItemChecked(prevState => !prevState);
+    setIsSubTagChecked(prevState => !prevState);
   };
   return (
     <CheckBoxItem
       textStyle={baseTextStyles.secondaryRegularText}
       style={styles.subTag}
-      isChecked={isItemChecked}
+      isChecked={isSubTagChecked}
+      isDisabled={item.isCustomerResponse ?? false}
       title={item.name}
       onPress={updateSubTag}
     />
@@ -148,7 +151,7 @@ const SubTagItem = ({item, index, isChecked}) => {
 export const OtherTag = () => {
   const dispatch = useDispatch();
   const {isOtherChecked, otherText} = useSelector(
-    state => state.dashboard.ticket?.centralizeRootCause,
+    state => state.dashboard.ticket?.centralizeRootCause ?? {},
   );
   const [isChecked, setIsChecked] = useState(isOtherChecked);
   const [updatedText, updateOtherText] = useState(otherText);
@@ -204,14 +207,14 @@ export const CentralizedRootCause = props => {
 
   console.log(
     'CENTRALIZED_ROOT_CAUSE_LIST',
-    JSON.stringify(markAssignedRC(centralizedRootCauseList, selectedTags)),
+    JSON.stringify(remapRootCauseList(centralizedRootCauseList, selectedTags)),
   );
 
   return (
     <SafeAreaView style={styles.rootContainer}>
       <FlatList
         style={styles.flatList}
-        data={markAssignedRC(centralizedRootCauseList, selectedTags)}
+        data={remapRootCauseList(centralizedRootCauseList, selectedTags)}
         removeClippedSubviews={true}
         contentContainerStyle={{flexGrow: 0}}
         listKey={`rootCauses-CentralizedRootCause`}

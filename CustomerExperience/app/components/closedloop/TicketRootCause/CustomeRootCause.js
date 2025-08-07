@@ -13,7 +13,7 @@ import {useNavigation} from '@react-navigation/core';
 import {useSelector} from 'react-redux';
 import {TagViewItem} from './TagViewItem';
 
-function extractAssignedItems(AllRC, assignedRC) {
+function extractSelectedTagList(AllRC, assignedRC) {
   const assignedMap = new Map();
   assignedRC.forEach(item => {
     assignedMap.set(item.id, item.isTag);
@@ -94,7 +94,7 @@ export const TitleAndTagsItem = ({item, index}) => {
 
 export const OtherSelectedTag = () => {
   const {isOtherChecked, otherText} = useSelector(
-    state => state.dashboard.ticket?.centralizeRootCause,
+    state => state.dashboard.ticket?.centralizeRootCause ?? {},
   );
 
   if (isOtherChecked) {
@@ -127,7 +127,7 @@ export const CurrentSelectedRootCasues = () => {
   return (
     <FlatList
       style={styles.flatList}
-      data={extractAssignedItems(centralizedRootCauseList, selectedTags)}
+      data={extractSelectedTagList(centralizedRootCauseList, selectedTags)}
       removeClippedSubviews={true}
       contentContainerStyle={{flexGrow: 0}}
       listKey={`rootCauses-Centralized-RootCause`}

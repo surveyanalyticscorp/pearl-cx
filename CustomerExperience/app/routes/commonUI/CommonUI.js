@@ -331,13 +331,15 @@ export const CheckBoxItem = ({
   onPress,
   textStyle,
   style,
+  isDisabled = false,
 }) => {
   const _textStyle = textStyle ?? styles.checkBoxText;
   return (
     <Pressable
+      isDisabled={isDisabled}
       testID="check-box-button"
-      style={style}
-      onPress={() => onPress(item, index)}>
+      style={[style, {opacity: isDisabled ? 0.5 : 1}]}
+      onPress={() => (isDisabled ? null : onPress(item, index))}>
       <View style={styles.checkBoxRow}>
         {/* <CheckBox
             disabled={false}
