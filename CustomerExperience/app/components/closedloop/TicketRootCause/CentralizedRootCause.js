@@ -8,7 +8,7 @@ import {
   TextInput,
 } from 'react-native';
 import {baseTextStyles} from '../../../styles/text.styles';
-import {HorizontalSpaceBox, VerticalSpaceBox} from '../../../widgets/SpaceBox';
+import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -17,7 +17,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {CheckBox, CheckBoxItem} from '../../../routes/commonUI/CommonUI';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
-import {MaterialIcons} from '../../../Utils/IconUtils';
 
 function markAssignedRC(AllRC, assignedRC) {
   const assignedIds = new Set(assignedRC.map(item => item.id));
@@ -69,11 +68,13 @@ const TagItem = ({item, index}) => {
   const [tagItem, setTagItem] = useState(item);
 
   const updateTag = (item, index) => {
-    setTagItem(prevState => {
-      return {...prevState, isChecked: !prevState.isChecked};
-    });
+    const subTags = item.rcSubTags.map(subTag => ({
+      ...subTag,
+      isChecked: !item.isChecked,
+    }));
+    setTagItem({...item, rcSubTags: subTags, isChecked: !item.isChecked});
   };
-  if (item.rcSubTags && item.rcSubTags.length > 0) {
+  if (tagItem.rcSubTags && tagItem.rcSubTags.length > 0) {
     return (
       <View style={[styles.tag]}>
         <CheckBoxItem
@@ -87,11 +88,12 @@ const TagItem = ({item, index}) => {
         />
         <VerticalSpaceBox />
 
-        {item.rcSubTags.map((subTag, index_) => (
+        {tagItem.rcSubTags.map((subTag, index_) => (
           <SubTagItem
             key={'subTag-' + index_ + subTag.id}
             item={subTag}
             index={index_}
+            isChecked={subTag.isChecked}
           />
         ))}
 
@@ -113,22 +115,23 @@ const TagItem = ({item, index}) => {
   );
 };
 
-const SubTagItem = ({item, index}) => {
-  const [subTagItem, setSubTagItem] = useState(item);
+const SubTagItem = ({item, index, isChecked}) => {
+  const [isItemChecked, setIsItemChecked] = useState(isChecked);
+  console.log('SUBTAGITEM', item);
+
+  React.useEffect(() => {
+    setIsItemChecked(isChecked);
+  }, [isChecked]);
 
   const updateSubTag = (item, index) => {
-    setSubTagItem(prevState => {
-      return {...prevState, isChecked: !prevState.isChecked};
-    });
+    setIsItemChecked(prevState => !prevState);
   };
   return (
     <CheckBoxItem
       textStyle={baseTextStyles.secondaryRegularText}
       style={styles.subTag}
-      item={subTagItem}
-      index={index}
-      isChecked={subTagItem.isChecked}
-      title={subTagItem.name}
+      isChecked={isItemChecked}
+      title={item.name}
       onPress={updateSubTag}
     />
   );
