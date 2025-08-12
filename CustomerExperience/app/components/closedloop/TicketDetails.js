@@ -20,7 +20,6 @@ import {
 } from '../../redux/actions/closedloop.actions';
 import TicketOverview from './TicketOverview/TicketOverview';
 import TicketActivity from './TicketActivity/TicketActivity';
-import CentralizedRootCause from './CentralizedRootCause/CentralizedRootCause';
 import TicketRootCause from './TicketRootCause/TicketRootCause';
 
 export default function TicketDetails(props) {

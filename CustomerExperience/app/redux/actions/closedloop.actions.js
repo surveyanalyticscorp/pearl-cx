@@ -37,6 +37,15 @@ export const UPDATE_CENTRALIZED_ROOT_CAUSE = 'UPDATE_CENTRALIZED_ROOT_CAUSE';
 export const CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED =
   'CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED';
 
+export const ADD_DRAFT_CENTRALIZED_ROOT_CAUSE =
+  'ADD_DRAFT_CENTRALIZED_ROOT_CAUSE';
+
+export const REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE =
+  'REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE';
+
+export const RESET_DRAFT_CENTRALIZED_ROOT_CAUSE =
+  'RESET_DRAFT_CENTRALIZED_ROOT_CAUSE';
+
 export const UPDATE_TICKET_ESCALATION = 'UPDATE_TICKET_ESCALATION';
 export const TICKET_ESCALATION_RECIEVED = 'TICKET_ESCALATION_RECIEVED';
 
@@ -130,15 +139,39 @@ export const updateRootCause = (token, ticketId, param, feedbackApiKey) => ({
   feedbackApiKey,
 });
 
-export const updateCentralizedRootCause = (ticketId, param) => ({
+export const updateCentralizedRootCause = (
+  ticketId,
+  param,
+  feedbackApiKey,
+) => ({
   type: UPDATE_CENTRALIZED_ROOT_CAUSE,
   ticketId,
   param,
+  feedbackApiKey,
+});
+
+export const addDraftTags = (tagList, isOtherChecked, otherText) => ({
+  type: ADD_DRAFT_CENTRALIZED_ROOT_CAUSE,
+  tagList,
+  isOtherChecked,
+  otherText,
+});
+
+export const removeDraftTags = (tagList, isOtherChecked, otherText) => ({
+  type: REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE,
+  tagList,
+  isOtherChecked,
+  otherText,
+});
+
+export const resetDraftTags = () => ({
+  type: RESET_DRAFT_CENTRALIZED_ROOT_CAUSE,
 });
 
 export const getCentralizedRootCause = () => ({
   type: CENTRALIZED_ROOT_CAUSE,
 });
+
 export const setStatusFilterById = statusId => ({
   type: SET_TICKET_FILTER_BY_STATUS_ID,
   statusId,

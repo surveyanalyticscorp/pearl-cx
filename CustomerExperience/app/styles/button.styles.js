@@ -113,6 +113,15 @@ export const buttonStyles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.primary,
   },
+  disableButton: {
+    height: MarginConstants.tab1_6x,
+    paddingHorizontal: MarginConstants.tab2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.settingDividerColor,
+    borderColor: Colors.settingsBackground,
+    borderWidth: 1,
+  },
 });
 // primaryButton: {
 //   margin: MarginConstants.halfTab,

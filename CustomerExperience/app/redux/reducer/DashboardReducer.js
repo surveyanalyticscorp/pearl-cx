@@ -23,6 +23,9 @@ import {
   GENERATE_REFINE_EMAIL_DRAFT_RECEIVED,
   GENERATE_EMAIL_DRAFT_RECEIVED,
   generateEmailDraft,
+  ADD_DRAFT_CENTRALIZED_ROOT_CAUSE,
+  REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE,
+  RESET_DRAFT_CENTRALIZED_ROOT_CAUSE,
 } from '../actions/closedloop.actions';
 import {
   CLEAR_CLOSED_LOOP_TICKET_DETAILS,
@@ -58,6 +61,10 @@ import {
   TOGGLE_TEMPLATE_BOTTOM_SHEET,
 } from '../actions/email.actions';
 import {REFINE_DEFAULT} from '../../api/Constant';
+import {
+  addTags,
+  removeTags,
+} from '../../components/closedloop/TicketRootCause/utils';
 
 const initialState = {
   dashboardData: {},
@@ -95,6 +102,7 @@ const initialState = {
   rootCauseList: [],
   rootCauseActionList: [],
   centralizedRootCauseList: [],
+  selectedRootCauses: {},
   isSegmentSelectorOpen: false,
   ownerDetails: {},
   allOwnersDetails: {},
@@ -235,6 +243,10 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         ticket: action.ticketData,
+        selectedRootCauses: {
+          ...(action.ticketData.centralizeRootCause ?? {}),
+          hasUpdated: false,
+        },
         ticketComments: action.ticketComments,
         ticketActivity: action.ticketActivity,
       };
@@ -280,6 +292,11 @@ const dashboardReducer = (state = initialState, action) => {
         ...state,
         apiCallStatus: action.response,
         ticket: action.ticketData,
+        selectedRootCauses: {
+          ...(action.ticketData.centralizeRootCause ?? {}),
+          hasUpdated: false,
+        },
+
         ticketComments: action.ticketComments,
         ticketActivity: action.ticketActivity,
       };
@@ -371,7 +388,50 @@ const dashboardReducer = (state = initialState, action) => {
     case CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED: {
       return {
         ...state,
-        ticket: action.response,
+      };
+    }
+    case ADD_DRAFT_CENTRALIZED_ROOT_CAUSE: {
+      return {
+        ...state,
+
+        selectedRootCauses: {
+          ...state.selectedRootCauses,
+          isOtherChecked:
+            action.isOtherChecked ?? state.selectedRootCauses.isOtherChecked,
+          otherText: action.otherText ?? state.selectedRootCauses.otherText,
+          centralizeRootCauseIds: addTags(
+            state.selectedRootCauses.centralizeRootCauseIds,
+            action.tagList,
+          ),
+          hasUpdated: true,
+        },
+      };
+    }
+
+    case REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE: {
+      return {
+        ...state,
+
+        selectedRootCauses: {
+          ...state.selectedRootCauses,
+          isOtherChecked:
+            action.isOtherChecked ?? state.selectedRootCauses.isOtherChecked,
+          otherText: action.otherText ?? state.selectedRootCauses.otherText,
+          centralizeRootCauseIds: removeTags(
+            state.selectedRootCauses.centralizeRootCauseIds,
+            action.tagList,
+          ),
+          hasUpdated: true,
+        },
+      };
+    }
+    case RESET_DRAFT_CENTRALIZED_ROOT_CAUSE: {
+      return {
+        ...state,
+        selectedRootCauses: {
+          ...(state.ticket.centralizeRootCause ?? {}),
+          hasUpdated: false,
+        },
       };
     }
 
@@ -386,6 +446,10 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         ticket: action.ticketData,
+        selectedRootCauses: {
+          ...(action.ticketData.centralizeRootCause ?? {}),
+          hasUpdated: false,
+        },
       };
     }
 

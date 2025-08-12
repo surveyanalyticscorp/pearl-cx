@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {use, useCallback, useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -7,56 +7,71 @@ import {
   Pressable,
   TextInput,
 } from 'react-native';
-import {baseTextStyles} from '../../../styles/text.styles';
-import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
-import {PaddingConstants} from '../../../styles/padding.constants';
-import {Colors} from '../../../styles/color.constants';
-import {MarginConstants} from '../../../styles/margin.constants';
-import Collapsible from '../CentralizedRootCause/components/CollapsableView';
+import {baseTextStyles} from '../../../../styles/text.styles';
+import {VerticalSpaceBox} from '../../../../widgets/SpaceBox';
+import {PaddingConstants} from '../../../../styles/padding.constants';
+import {Colors} from '../../../../styles/color.constants';
+import {MarginConstants} from '../../../../styles/margin.constants';
+import Collapsible from '../../CentralizedRootCause/components/CollapsableView';
 import {useDispatch, useSelector} from 'react-redux';
-import {CheckBox, CheckBoxItem} from '../../../routes/commonUI/CommonUI';
-import QPButton from '../../../widgets/Button';
-import {buttonStyles} from '../../../styles/button.styles';
+import {CheckBox, CheckBoxItem} from '../../../../routes/commonUI/CommonUI';
+import QPButton from '../../../../widgets/Button';
+import {buttonStyles} from '../../../../styles/button.styles';
+import {getTagCount, getRemappedRootCauseTagList} from '../utils';
+import {
+  addDraftTags,
+  removeDraftTags,
+  resetDraftTags,
+  updateCentralizedRootCause,
+} from '../../../../redux/actions/closedloop.actions';
+import {FontFamily} from '../../../../styles/font.constants';
+import {TextSizes} from '../../../../styles/textsize.constants';
+import {showErrorFlashMessage} from '../../../../Utils/Utility';
 
-function getTagCount(item) {
-  return item.rcTags.reduce((acc, current) => {
-    let a = current.rcSubTags.reduce((acc_, current_) => {
-      return acc_ + (current_.isChecked ? 1 : 0);
-    }, 0);
-    return acc + (current.isChecked ? 1 : 0) + a;
-  }, 0);
-}
+const Update = () => {
+  const dispatch = useDispatch();
+  const ticketId = useSelector(state => state.dashboard.ticket?.id);
+  const feedbackApiKey = useSelector(
+    state => state.global.userInfo?.feedbackApiKey,
+  );
+  const selectedRootCauses = useSelector(
+    state => state.dashboard.selectedRootCauses,
+  );
+  console.log('UPDATE', selectedRootCauses);
 
-function remapRootCauseList(AllRC, assignedRC) {
-  const assignedIds = new Set(assignedRC.map(item => item.id));
+  const onPress = () => {
+    if (
+      selectedRootCauses.isOtherChecked &&
+      selectedRootCauses.otherText.length <= 0
+    ) {
+      showErrorFlashMessage('Please enter the other text');
+    } else {
+      dispatch(
+        updateCentralizedRootCause(
+          ticketId,
+          selectedRootCauses,
+          feedbackApiKey,
+        ),
+      );
+    }
+    console.log('UPDATE button pressed', selectedRootCauses);
+  };
 
-  const updatedAllRC = AllRC.map(rc => {
-    const updatedTags = rc.rcTags.map(tag => {
-      const isTagChecked = assignedIds.has(tag.id);
-      const updatedSubTags = (tag.rcSubTags || []).map(subTag => {
-        return {
-          ...subTag,
-          isChecked: assignedIds.has(subTag.id),
-          isCustomerResponse: subTag.isCustomerResponse ?? false,
-        };
-      });
-
-      return {
-        ...tag,
-        isChecked: isTagChecked,
-        rcSubTags: updatedSubTags,
-        isCustomerResponse: tag.isCustomerResponse ?? false,
-      };
-    });
-
-    return {
-      ...rc,
-      rcTags: updatedTags,
-    };
-  });
-
-  return updatedAllRC;
-}
+  return (
+    <QPButton
+      buttonColor={Colors.accentLight}
+      testID="ApplyButton"
+      isDisabled={!selectedRootCauses.hasUpdated}
+      style={[
+        buttonStyles.primaryButton,
+        {marginVertical: MarginConstants.tab1_2x},
+      ]}
+      onPress={onPress}
+      buttonText={'Update'}
+      textStyle={buttonStyles.primaryButtonText}
+    />
+  );
+};
 
 const RootCauseItem = ({item, index}) => {
   return (
@@ -74,14 +89,27 @@ const RootCauseItem = ({item, index}) => {
 };
 
 const TagItem = ({item, index}) => {
+  const dispatch = useDispatch();
+  console.log('TAGITEM', item);
   const [tagItem, setTagItem] = useState(item);
 
-  const updateTag = (item, index) => {
-    const subTags = item.rcSubTags.map(subTag => ({
+  const updateTag = (item_, index) => {
+    const subTags = item_.rcSubTags.map(subTag => ({
       ...subTag,
-      isChecked: !item.isChecked,
+      isChecked: !item_.isChecked,
     }));
     setTagItem({...item, rcSubTags: subTags, isChecked: !item.isChecked});
+
+    const selectedSubTags = tagItem.rcSubTags.map(subTag => ({
+      id: subTag.id,
+      isTag: false,
+    }));
+
+    dispatch(
+      item.isChecked
+        ? removeDraftTags([{id: item.id, isTag: true}, ...selectedSubTags])
+        : addDraftTags([{id: item.id, isTag: true}, ...selectedSubTags]),
+    );
   };
   if (tagItem.rcSubTags && tagItem.rcSubTags.length > 0) {
     return (
@@ -127,22 +155,24 @@ const TagItem = ({item, index}) => {
 };
 
 const SubTagItem = ({item, index, isChecked}) => {
-  const [isSubTagChecked, setIsSubTagChecked] = useState(isChecked);
-
-  React.useEffect(() => {
-    setIsSubTagChecked(isChecked);
+  const [tagItem, setTagItem] = useState(item);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    setTagItem({...item, isChecked: isChecked});
   }, [isChecked]);
-
-  const updateSubTag = (item, index) => {
-    setIsSubTagChecked(prevState => !prevState);
+  const updateSubTag = (item_, index_) => {
+    const tag = {id: item_.id, isTag: false};
+    dispatch(item_.isChecked ? removeDraftTags([tag]) : addDraftTags([tag]));
+    setTagItem({...item_, isChecked: !item_.isChecked});
   };
   return (
     <CheckBoxItem
       textStyle={baseTextStyles.secondaryRegularText}
       style={styles.subTag}
-      isChecked={isSubTagChecked}
-      isDisabled={item.isCustomerResponse ?? false}
-      title={item.name}
+      item={tagItem}
+      isChecked={tagItem.isChecked}
+      isDisabled={tagItem.isCustomerResponse ?? false}
+      title={tagItem.name}
       onPress={updateSubTag}
     />
   );
@@ -156,15 +186,19 @@ export const OtherTag = () => {
   const [isChecked, setIsChecked] = useState(isOtherChecked);
   const [updatedText, updateOtherText] = useState(otherText);
 
-  const updateOtherTag = () => {
-    setIsChecked(prevState => !prevState);
-  };
+  useEffect(() => {
+    if (updatedText && isChecked) {
+      console.log('UPDATED TEXT', updatedText, isChecked);
+      dispatch(addDraftTags([], isChecked, updatedText));
+    }
+    dispatch(addDraftTags([], !isChecked, ''));
+  }, [updatedText, isChecked]);
 
   const updateRootCause = () => {
     console.log(isChecked, updatedText);
   };
 
-  if (isOtherChecked) {
+  if (otherText) {
     return (
       <View style={styles.otherTag}>
         <CheckBoxItem
@@ -179,7 +213,7 @@ export const OtherTag = () => {
 
   return (
     <View style={styles.otherTag}>
-      <Pressable onPress={updateOtherTag}>
+      <Pressable onPress={() => setIsChecked(prevState => !prevState)}>
         <CheckBox isChecked={isChecked} />
       </Pressable>
       <TextInput
@@ -187,7 +221,10 @@ export const OtherTag = () => {
         placeholderTextColor={Colors.settingDividerColor}
         value={updatedText}
         style={styles.otherTextInput}
-        onChangeText={updateOtherText}
+        onChangeText={text => {
+          updateOtherText(text);
+          setIsChecked(true);
+        }}
       />
       {/* <Pressable style={styles.addButton} onPress={updateRootCause}>
         <MaterialIcons name="add" size={26} color={Colors.accentLight} />
@@ -196,6 +233,7 @@ export const OtherTag = () => {
   );
 };
 export const CentralizedRootCause = props => {
+  const dispatch = useDispatch();
   const centralizedRootCauseList = useSelector(
     state => state.dashboard.centralizedRootCauseList,
   );
@@ -204,17 +242,24 @@ export const CentralizedRootCause = props => {
     state =>
       state.dashboard.ticket?.centralizeRootCause?.centralizeRootCauseIds ?? [],
   );
-
+  const selectedRootCauses = useSelector(
+    state => state.dashboard.selectedRootCauses.centralizeRootCauseIds ?? [],
+  );
   console.log(
     'CENTRALIZED_ROOT_CAUSE_LIST',
-    JSON.stringify(remapRootCauseList(centralizedRootCauseList, selectedTags)),
+    JSON.stringify(
+      getRemappedRootCauseTagList(centralizedRootCauseList, selectedTags),
+    ),
   );
 
   return (
     <SafeAreaView style={styles.rootContainer}>
       <FlatList
         style={styles.flatList}
-        data={remapRootCauseList(centralizedRootCauseList, selectedTags)}
+        data={getRemappedRootCauseTagList(
+          centralizedRootCauseList,
+          selectedRootCauses,
+        )}
         removeClippedSubviews={true}
         contentContainerStyle={{flexGrow: 0}}
         listKey={`rootCauses-CentralizedRootCause`}
@@ -225,19 +270,7 @@ export const CentralizedRootCause = props => {
         ListFooterComponent={<OtherTag />}
       />
 
-      <QPButton
-        buttonColor={Colors.accentLight}
-        testID="ApplyButton"
-        style={[
-          buttonStyles.primaryButton,
-          {marginVertical: MarginConstants.tab2},
-        ]}
-        onPress={() => {
-          console.log('Apply Button Pressed');
-        }}
-        buttonText={'Update'}
-        textStyle={buttonStyles.primaryButtonText}
-      />
+      <Update />
     </SafeAreaView>
   );
 };
@@ -250,6 +283,7 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.tab1_2x,
   },
   flatList: {
+    flex: 1,
     marginHorizontal: MarginConstants.tab1,
   },
 
@@ -280,14 +314,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
+    borderColor: Colors.transparent,
+    borderWidth: 1,
   },
   otherTextInput: {
     flex: 1,
-    ...baseTextStyles.primaryRegularText,
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.primary,
     borderBottomColor: Colors.settingDividerColor,
-    borderBottomWidth: 1,
+    borderBottomWidth: 2,
     backgroundColor: Colors.settingsBackground,
-    paddingHorizontal: PaddingConstants.tab1,
+    borderBottomStartRadius: 4,
+    borderTopEndRadius: 4,
   },
   otherText: {
     ...baseTextStyles.primaryRegularText,

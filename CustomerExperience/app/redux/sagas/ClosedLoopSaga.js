@@ -67,6 +67,8 @@ import {
   CLF_GET_CENTRALIZED_ROOT_CAUSE,
   getGenerateEmailDraftEndPoint,
   POST_GENERATE_REFINED_EMAIL_DRAFT,
+  CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_POSTFIX,
+  CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_PREFIX,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -77,6 +79,7 @@ import {
   ACTION_HISTORY_SUMMARY_RECEIVED,
   CENTRALIZED_ROOT_CAUSE,
   CENTRALIZED_ROOT_CAUSE_RECEIVED,
+  CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED,
   DELETE_TICKET,
   DELETE_TICKET_COMPLETE,
   GENERATE_EMAIL_DRAFT,
@@ -103,6 +106,7 @@ import {
   SEND_EMAIL,
   SEND_EMAIL_RECEIVED,
   TICKET_ESCALATION_RECIEVED,
+  UPDATE_CENTRALIZED_ROOT_CAUSE,
   UPDATE_ROOT_CAUSE,
   UPDATE_TICKET_ESCALATION,
 } from '../actions/closedloop.actions';
@@ -931,6 +935,41 @@ export function* updateRootCauseAndAction(action) {
 }
 export function* watchUpdateRootCause() {
   yield takeLatest(UPDATE_ROOT_CAUSE, updateRootCauseAndAction);
+}
+
+export function* updateCentralizedRootCause(action) {
+  try {
+    const json = yield WebServiceHandler.post(
+      getClfUrl(
+        CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_PREFIX +
+          action.ticketId +
+          CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_POSTFIX,
+      ),
+      getBearerTokenStatic(),
+      action.param,
+    );
+
+    if (json.status === 'success') {
+      yield put({
+        type: CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED,
+        response: json.data,
+      });
+      // fetchClosedLoopTicketItem(action);
+      showSuccessFlashMessage(json.message ?? 'Updated');
+    }
+  } catch (error) {
+    showErrorFlashMessage(
+      error.message ?? error.status ?? JSON.stringify(error),
+    );
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchUpdateCentralizedRootCause() {
+  yield takeLatest(UPDATE_CENTRALIZED_ROOT_CAUSE, updateCentralizedRootCause);
 }
 
 export function* deleteTickets(action) {

@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, FlatList, StyleSheet} from 'react-native';
-import {baseTextStyles} from '../../../styles/text.styles';
-import TextLabel from '../../../widgets/TextLabel/TextLabel';
-import {MarginConstants} from '../../../styles/margin.constants';
-import {TagViewItem} from './TagViewItem';
+import {baseTextStyles} from '../../../../styles/text.styles';
+import TextLabel from '../../../../widgets/TextLabel/TextLabel';
+import {MarginConstants} from '../../../../styles/margin.constants';
+import {TagViewItem} from '../TagViewItem';
 
 const data = [
   {

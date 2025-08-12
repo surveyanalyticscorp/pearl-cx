@@ -3,7 +3,7 @@ import {StyleSheet, ScrollView} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {RootCauseNavigationButtons} from './RootCauseNavigationButtons';
-import {AskWhy} from './AskWhy';
+import {AskWhy} from './CentralizedRootCause/AskWhy';
 import {CustomRootCause} from './CustomeRootCause';
 
 const TicketRootCause = props => {

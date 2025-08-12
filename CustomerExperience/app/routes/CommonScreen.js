@@ -26,7 +26,7 @@ import HeaderBackLeft from './commonUI/HeaderBackLeft';
 import {CloseButton, SaveDashboardDate} from './commonUI/CommonUI';
 import Notification from '../components/notifications/Notification';
 import PushNotification from '../components/notifications/PushNotifications';
-import {CentralizedRootCause} from '../components/closedloop/TicketRootCause/CentralizedRootCause';
+import {CentralizedRootCause} from '../components/closedloop/TicketRootCause/CentralizedRootCause/CentralizedRootCause';
 import {OldRootCause} from '../components/closedloop/TicketRootCause/OldRootCause';
 
 const DateRangeTab = createMaterialTopTabNavigator();

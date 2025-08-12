@@ -6,29 +6,31 @@ import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
 const screen = Dimensions.get('screen');
-const QPButton = props => {
-  let style = props.style ? props.style : styles.button;
-  let textStyle = props.textStyle ? props.textStyle : styles.text;
-
-  const onPress = () => {
-    props.onPress && props.onPress();
-  };
-
+const QPButton = ({
+  style = styles.button,
+  textStyle = styles.text,
+  onPress,
+  buttonText,
+  buttonColor,
+  isDisabled = false,
+  testID = 'QPButton',
+}) => {
+  const backgroundColor =
+    buttonColor ?? style.backgroundColor ?? buttonColors.backgroundColor;
+  const opacity = isDisabled ? 0.5 : 1;
   return (
     <Pressable
-      disabled={props.disabled ?? false}
-      testID={props.testID ?? 'QPButton'}
+      disabled={isDisabled}
+      testID={testID}
       style={[
         style,
         {
-          backgroundColor:
-            props.buttonColor ??
-            style.backgroundColor ??
-            buttonColors.backgroundColor,
+          backgroundColor: backgroundColor,
+          opacity: opacity,
         },
       ]}
-      onPress={onPress}>
-      <Text style={textStyle}>{props.buttonText}</Text>
+      onPress={isDisabled ? null : onPress}>
+      <Text style={textStyle}>{buttonText}</Text>
     </Pressable>
   );
 };

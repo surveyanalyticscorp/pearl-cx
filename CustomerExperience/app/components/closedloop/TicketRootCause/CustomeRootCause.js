@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {use, useEffect} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
 import {baseTextStyles} from '../../../styles/text.styles';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -10,62 +10,10 @@ import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {useNavigation} from '@react-navigation/core';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {TagViewItem} from './TagViewItem';
-
-function extractSelectedTagList(AllRC, assignedRC) {
-  const assignedMap = new Map();
-  assignedRC.forEach(item => {
-    assignedMap.set(item.id, item.isTag);
-  });
-
-  const resultMap = new Map();
-
-  AllRC.forEach(category => {
-    const categoryName = category.name;
-
-    category.rcTags.forEach(tag => {
-      const tagName = tag.name;
-
-      // Check if tag is assigned
-      if (assignedMap.has(tag.id) && assignedMap.get(tag.id) === true) {
-        const title = `${categoryName}`;
-        if (!resultMap.has(title)) resultMap.set(title, []);
-        resultMap.get(title).push({
-          id: tag.id,
-          name: tag.name,
-          isTag: true,
-          isCustomerResponse: tag.isCustomerResponse ?? false,
-        });
-      }
-
-      // Check each subtag
-      (tag.rcSubTags || []).forEach(subTag => {
-        if (
-          assignedMap.has(subTag.id) &&
-          assignedMap.get(subTag.id) === false
-        ) {
-          const title = `${categoryName} > ${tagName}`;
-          if (!resultMap.has(title)) resultMap.set(title, []);
-          resultMap.get(title).push({
-            id: subTag.id,
-            name: subTag.name,
-            isTag: false,
-            isCustomerResponse: subTag.isCustomerResponse ?? false,
-          });
-        }
-      });
-    });
-  });
-
-  // Convert resultMap to desired array format
-  const finalResult = [];
-  for (const [title, items] of resultMap.entries()) {
-    finalResult.push({title, items});
-  }
-
-  return finalResult;
-}
+import {getSelectedTagList} from './utils';
+import {resetDraftTags} from '../../../redux/actions/closedloop.actions';
 
 export const PathTextLabel = ({title}) => {
   return (
@@ -127,7 +75,7 @@ export const CurrentSelectedRootCasues = () => {
   return (
     <FlatList
       style={styles.flatList}
-      data={extractSelectedTagList(centralizedRootCauseList, selectedTags)}
+      data={getSelectedTagList(centralizedRootCauseList, selectedTags)}
       removeClippedSubviews={true}
       contentContainerStyle={{flexGrow: 0}}
       listKey={`rootCauses-Centralized-RootCause`}
@@ -184,9 +132,14 @@ export const CustomRootCauseHeader = ({children}) => {
 };
 
 export const CustomRootCause = () => {
+  const dispatch = useDispatch();
   const hasRootCause = useSelector(
     state => state.dashboard.ticket?.centralizeRootCause,
   );
+
+  useEffect(() => {
+    dispatch(resetDraftTags());
+  }, []);
 
   const navigation = useNavigation();
   const onPress = () => {
