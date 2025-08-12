@@ -23,34 +23,12 @@ public class TouchPoint {
        case DATA_CENTER_KSA
     }
     
-//    public var surveyId = 0;
     public var dataCenter = DataCenter.DATA_CENTER_US;
-//    public var  email = "";
-//    public var  firstName = "";
-//    public var  lastName = "";
-//    public var  mobile = "";
-//    public var  segmentCode = "";
-//    public var transactionLanguage = "";
-//    public var ShowInDialog = false;
-//    public var  customVariable1 = "";
-//    public var  customVariable2 = "";
-//    public var  customVariable3 = "";
-//    
-    public func initTouchPoint(dataCenter: DataCenter) -> TouchPoint {
+    public var customVariables: [Int: String]? = [:];
+    public func initTouchPoint(dataCenter: DataCenter, customVariables: [Int: String]? = nil) -> TouchPoint {
         
         self.dataCenter = dataCenter;
-        
-//        self.surveyId = 0;
-//        self.email = "";
-//        self.firstName = "";
-//        self.lastName = "";
-//        self.mobile = "";
-//        self.segmentCode = "";
-//        self.ShowInDialog = false;
-//        self.customVariable1 = "";
-//        self.customVariable2 = "";
-//        self.customVariable3 = "";
-//        self.transactionLanguage = "";
+        self.customVariables = customVariables;
         return self;
     }
 }

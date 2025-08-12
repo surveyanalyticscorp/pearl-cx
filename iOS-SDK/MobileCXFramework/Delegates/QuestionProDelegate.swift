@@ -9,6 +9,6 @@ import Foundation
 
 @MainActor public protocol QuestionProDelegate: NSObjectProtocol {
     func initSDKSuccess()
-    func initSDKFailed(error: Error)
+    func initSDKFailed(error: String)
     func getSurveyURL(surveyURL: String)
 }

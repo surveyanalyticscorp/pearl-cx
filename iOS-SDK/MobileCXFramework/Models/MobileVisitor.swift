@@ -51,6 +51,13 @@ public struct Intercept: Codable {
     let surveyId: Int
     let ruleGroupId: Int
     let rules: [Rule]
+    let settings: Settings?
+}
+
+public struct Settings: Codable {
+    let allowMultipleResponse: Bool
+    let autoLanguageSelection: Bool
+    let triggerDelayInSeconds: Int
 }
 
 // MARK: - Rule Model

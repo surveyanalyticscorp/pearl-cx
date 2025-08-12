@@ -32,6 +32,10 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         }
     }
     
+    private func resetSatisfiedRulesList() {
+        satisfiedRulesForIntercept.removeAll()
+    }
+    
     @MainActor public func launchSurveyForIntercept(interceptId: Int, satisfiedRule: Rule) {
         LogUtils.printMessage(message: "satisfiedRule.name \(satisfiedRule.name)")
         LogUtils.printMessage(message: "intercept id \(interceptId)")
@@ -136,6 +140,26 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         return instance!
     }
     
+    func setCustomVariables(customVariables: [Int: String]) -> [[String: String]] {
+        var customVariablesPayload : [[String: String]] = []
+        for (key, value) in customVariables {
+            let customKey = "custom\(key)"
+            let customVars: [String: String] = [
+                "variableName": customKey,
+                "value": value
+            ]
+            customVariablesPayload.append(customVars)
+        }
+        
+        LogUtils.printMessage(message: "Body Custom Variables: ----------> \(String(describing: customVariablesPayload))")
+        
+        if let jsonData = try? JSONSerialization.data(withJSONObject: customVariablesPayload, options: .prettyPrinted),
+               let jsonString = String(data: jsonData, encoding: .utf8) {
+            LogUtils.printMessage(message: " ----------> ✅ JSON Output:\n\(jsonString)")
+            }
+        return customVariablesPayload
+    }
+    
     public func fetchSurveyURLForSurveyId (interceptId: Int, interceptData: Intercept, interceptType: String) {
         let visitorId = visitorApiResponse.visitor.uuid
         var fetchSurveyURLResponse: SurveyURL!
@@ -144,6 +168,21 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         bodyParam["interceptId"] = interceptId;
         bodyParam["surveyId"] = interceptData.surveyId;
         bodyParam["packageName"] = kPackageName;
+        
+        if ((interceptData.settings) != nil) {
+            let settings = interceptData.settings
+            if (settings!.autoLanguageSelection) {
+                bodyParam["surveyLanguage"] = GlobalUtils.getAppLanguage()
+            }
+        }
+        
+        if (touchPoint?.customVariables != nil) {
+            let customVariables = self.touchPoint?.customVariables
+            LogUtils.printMessage(message: "Custom Variables: \(String(describing: customVariables))")
+                    
+            bodyParam["data"] = setCustomVariables(customVariables: customVariables!)
+        }
+        
         let fetchSurveyURL = APIUtils.getFetchSurveyURL()
         Task {
             do {
@@ -194,7 +233,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 ],
                 responseType: ApiResponse.self
                 )
-           
+            LogUtils.printMessage(message: "fetch and etup intercepts  \(response)")
             visitorApiResponse = response
             self.callbackDelegate?.initSDKSuccess()
             let intercepts = visitorApiResponse.project.intercepts
@@ -229,7 +268,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 }
             }
         } catch {
-            self.callbackDelegate?.initSDKFailed(error: error)
+            self.callbackDelegate?.initSDKFailed(error: error.localizedDescription)
             LogUtils.printMessage(logTag: .LOG_ERROR, message: "API error: \(error)")
         }
     }
@@ -244,7 +283,9 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             // Perform cleanup or save data here
             Task {
                 await MainActor.run {
-                    TimerUtils.getinstance().pauseAllTimers()
+//                    self.clearSession()
+                    TimerUtils.getinstance().stopAllTimers()
+                    self.resetSatisfiedRulesList()
                 }
             }
         }
@@ -256,9 +297,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         ) { _ in
             LogUtils.printMessage(message: "🎯 App became active")
             Task {
-                await MainActor.run {
-                    TimerUtils.getinstance().resumeAllTimers()
-                }
+                await self.fetchAndSetupIntercepts()
             }
         }
     }
@@ -359,7 +398,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         }
     }
     
-    public func clearSession() {
+    private func clearSession() {
         LogUtils.printMessage(message: "Cleraing all user defaults..")
         CacheUtils.clearAllUserDefaults()
     }
