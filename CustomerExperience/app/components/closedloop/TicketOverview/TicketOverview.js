@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {RefreshControl, View} from 'react-native';
+import {Pressable, RefreshControl, View} from 'react-native';
 import Animated from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
 import {getStatusIndexById, statusList} from '../../../Utils/TicketUtils';
@@ -21,15 +21,60 @@ import QPBottomSheet from '../takeaction/QPBottomSheet';
 import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
 import TicketTakeAction from '../takeaction/TIcketTakeAction';
 import useActionHandler from './components/useActionHandler';
+import ShowTitleAndText, {Title} from '../ui/ShowTitleAndText';
+import {CommentText, getFoldedText} from '../TicketComments';
+import StringUtils from '../../../Utils/StringUtils';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import {get} from 'lodash';
+import {DescriptionDetails} from './components/DescriptionDetails';
 
 const TicketStatusPriorityView = ({children}) => {
   return (
     <View style={ticketOverviewStyles.ticketStatusContainer}>{children}</View>
   );
 };
+const DescriptionBottomSheet = ({isVisible, onClose, onPress}) => {
+  return (
+    <QPBottomSheet
+      visible={isVisible}
+      onClose={onClose}
+      bottomSheetHeight="80%"
+      headerComponent={
+        <QPBottomSheetHeader headerLabel="Description" onClose={onClose} />
+      }>
+      <DescriptionDetails onPress={onPress} />
+    </QPBottomSheet>
+  );
+};
+const TicketDescription = ({onPress}) => {
+  const {comment} = useSelector(state => state.dashboard.ticket);
+  const temp =
+    "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum";
+  if (comment && comment.length > 0) {
+    return (
+      <View>
+        <Pressable onPress={onPress}>
+          <Title text={`${translate('ticket_overview.description')}:`} />
+          <CommentText text={getFoldedText(comment, 20)} />
+        </Pressable>
+      </View>
+    );
+  } else {
+    return <View />;
+  }
+};
 
 export default function TicketOverview(props) {
   const {handleTicketAction} = useActionHandler();
+  const [descriptionBottomSheetVisible, setDescriptionBottomSheetVisible] =
+    useState(false);
+  const onCloseDescriptionBottomSheet = () => {
+    setDescriptionBottomSheetVisible(false);
+  };
+
+  const onPressDescriptionMore = () => {
+    setDescriptionBottomSheetVisible(true);
+  };
   const [actionBottomSheetVisible, setActionBottomSheetVisible] =
     useState(false);
   const isFromClosedLoopScreen =
@@ -145,7 +190,14 @@ export default function TicketOverview(props) {
             <AssignedToView />
           </TicketStatusPriorityView>
           <DescriptionView showResponseButton={isFromClosedLoopScreen} />
-          <ContactView onTakeActionHandler={onTakeActionHandler} />
+          <ContactView onTakeActionHandler={onTakeActionHandler}>
+            {/* {ticketDetails.comment?.length > 0 ? (
+              <Title text={`${translate('ticket_overview.description')}:`} />
+            ) : (
+              <View />
+            )} */}
+            <TicketDescription onPress={onPressDescriptionMore} />
+          </ContactView>
           <DeleteView />
         </View>
       </Animated.ScrollView>
@@ -172,6 +224,10 @@ export default function TicketOverview(props) {
         }>
         <TicketTakeAction onPress={onPressAction} />
       </QPBottomSheet>
+      <DescriptionBottomSheet
+        onClose={onCloseDescriptionBottomSheet}
+        isVisible={descriptionBottomSheetVisible}
+      />
     </TicketOverviewContainer>
   );
 }

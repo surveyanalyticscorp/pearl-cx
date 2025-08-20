@@ -40,7 +40,7 @@ import EmptyList from '../../routes/commonUI/EmptyList';
 export function getFoldedText(text, MAX_WORD_LENGTH = 10) {
   if (StringUtils.getWords(text).length > MAX_WORD_LENGTH) {
     return `${StringUtils.getWords(text).slice(0, MAX_WORD_LENGTH).join(' ')}
-      <span><b> ...see more</b></span>`;
+      <span style="color:${Colors.accentLight};"><b> ...see more</b></span>`;
   }
   return text;
 }

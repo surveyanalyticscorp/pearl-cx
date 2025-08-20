@@ -112,6 +112,19 @@ export default class StringUtils {
     // return activityText.replace(pattern, `<b>$1</b>`);
   }
 
+  static escapeHtml(str) {
+    if (typeof str !== 'string') {
+      return '';
+    }
+
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   static getWords(text) {
     // fix if text is null
     if (!text) {

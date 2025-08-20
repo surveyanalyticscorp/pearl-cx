@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import DescriptionHeader from './DescriptionHeader';
 import {translate} from '../../../../Utils/MultilinguaUtils';
@@ -11,7 +11,7 @@ import {Colors} from '../../../../styles/color.constants';
 import {MarginConstants} from '../../../../styles/margin.constants';
 import {PaddingConstants} from '../../../../styles/padding.constants';
 
-const ContactView = ({onTakeActionHandler}) => {
+const ContactView = ({onTakeActionHandler, children}) => {
   const {panelMember, comment} = useSelector(state => state.dashboard.ticket);
 
   return (
@@ -44,15 +44,8 @@ const ContactView = ({onTakeActionHandler}) => {
         ) : (
           <View />
         )}
-        {comment?.length > 0 ? (
-          <ShowTitleAndText
-            title={`${translate('ticket_overview.description')}:`}
-            subText={''}
-          />
-        ) : (
-          <View />
-        )}
-        {comment?.length > 0 ? <TextLabel text={comment} /> : <View />}
+
+        {children}
       </ChildContainer>
       <TakeActionButton onTakeActionHandler={onTakeActionHandler} />
     </View>
