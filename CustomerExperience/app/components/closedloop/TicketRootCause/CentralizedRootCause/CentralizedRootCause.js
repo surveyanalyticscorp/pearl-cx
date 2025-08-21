@@ -17,7 +17,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {CheckBox, CheckBoxItem} from '../../../../routes/commonUI/CommonUI';
 import QPButton from '../../../../widgets/Button';
 import {buttonStyles} from '../../../../styles/button.styles';
-import {getTagCount, getRemappedRootCauseTagList} from '../utils';
+import {
+  getTagCount,
+  getRemappedRootCauseTagList,
+  isTagChecked,
+  getTagCountFromSelectedList,
+} from '../utils';
 import {
   addDraftTags,
   removeDraftTags,
@@ -74,8 +79,16 @@ const Update = () => {
 };
 
 const RootCauseItem = ({item, index}) => {
+  const selectedRootCauses = useSelector(
+    state => state.dashboard.selectedRootCauses.centralizeRootCauseIds ?? [],
+  );
+
   return (
-    <Collapsible headerTitle={`${item.name} (${getTagCount(item)})`}>
+    <Collapsible
+      headerTitle={`${item.name} (${getTagCountFromSelectedList(
+        selectedRootCauses,
+        item,
+      )})`}>
       <VerticalSpaceBox />
       {item.rcTags && item.rcTags.length > 0
         ? item.rcTags.map((tag, index_) => (
@@ -90,48 +103,49 @@ const RootCauseItem = ({item, index}) => {
 
 const TagItem = ({item, index}) => {
   const dispatch = useDispatch();
-  console.log('TAGITEM', item);
-  const [tagItem, setTagItem] = useState(item);
+  const selectedRootCauses = useSelector(
+    state => state.dashboard.selectedRootCauses.centralizeRootCauseIds ?? [],
+  );
 
+  const [isChecked, setIsChecked] = useState(
+    isTagChecked(selectedRootCauses, item.id),
+  );
+  // const [tagItem, setTagItem] = useState(item);
+  useEffect(() => {
+    setIsChecked(isTagChecked(selectedRootCauses, item.id));
+  }, [selectedRootCauses, item]);
   const updateTag = (item_, index) => {
-    const subTags = item_.rcSubTags.map(subTag => ({
-      ...subTag,
-      isChecked: !item_.isChecked,
-    }));
-    setTagItem({...item, rcSubTags: subTags, isChecked: !item.isChecked});
-
-    const selectedSubTags = tagItem.rcSubTags.map(subTag => ({
+    const selectedSubTags = item_.rcSubTags.map(subTag => ({
       id: subTag.id,
       isTag: false,
     }));
 
     dispatch(
-      item.isChecked
+      isChecked
         ? removeDraftTags([{id: item.id, isTag: true}, ...selectedSubTags])
         : addDraftTags([{id: item.id, isTag: true}, ...selectedSubTags]),
     );
   };
-  if (tagItem.rcSubTags && tagItem.rcSubTags.length > 0) {
+  if (item.rcSubTags && item.rcSubTags.length > 0) {
     return (
       <View style={[styles.tag]}>
         <CheckBoxItem
           textStyle={baseTextStyles.secondaryRegularText}
           style={styles.borderBottom}
-          item={tagItem}
+          item={item}
           index={index}
-          isChecked={tagItem.isChecked}
-          title={tagItem.name}
-          isDisabled={tagItem.isCustomerResponse}
+          isChecked={isChecked}
+          title={item.name}
+          isDisabled={item.isCustomerResponse ?? false}
           onPress={updateTag}
         />
         <VerticalSpaceBox />
 
-        {tagItem.rcSubTags.map((subTag, index_) => (
+        {item.rcSubTags.map((subTag, index_) => (
           <SubTagItem
             key={'subTag-' + index_ + subTag.id}
             item={subTag}
             index={index_}
-            isChecked={subTag.isChecked}
           />
         ))}
 
@@ -144,35 +158,35 @@ const TagItem = ({item, index}) => {
     <CheckBoxItem
       textStyle={baseTextStyles.secondaryRegularText}
       style={styles.tag}
-      item={tagItem}
+      item={item}
       index={index}
-      isChecked={tagItem.isChecked}
-      title={tagItem.name}
-      isDisabled={tagItem.isCustomerResponse}
+      isChecked={isChecked}
+      title={item.name}
+      isDisabled={item.isCustomerResponse ?? false}
       onPress={updateTag}
     />
   );
 };
 
-const SubTagItem = ({item, index, isChecked}) => {
-  const [tagItem, setTagItem] = useState(item);
+const SubTagItem = ({item, index}) => {
+  const selectedRootCauses = useSelector(
+    state => state.dashboard.selectedRootCauses.centralizeRootCauseIds ?? [],
+  );
+  const isChecked = isTagChecked(selectedRootCauses, item.id);
   const dispatch = useDispatch();
-  useEffect(() => {
-    setTagItem({...item, isChecked: isChecked});
-  }, [isChecked]);
+
   const updateSubTag = (item_, index_) => {
     const tag = {id: item_.id, isTag: false};
-    dispatch(item_.isChecked ? removeDraftTags([tag]) : addDraftTags([tag]));
-    setTagItem({...item_, isChecked: !item_.isChecked});
+    dispatch(isChecked ? removeDraftTags([tag]) : addDraftTags([tag]));
   };
   return (
     <CheckBoxItem
       textStyle={baseTextStyles.secondaryRegularText}
       style={styles.subTag}
-      item={tagItem}
-      isChecked={tagItem.isChecked}
-      isDisabled={tagItem.isCustomerResponse ?? false}
-      title={tagItem.name}
+      item={item}
+      isChecked={isChecked}
+      isDisabled={item?.isCustomerResponse ?? false}
+      title={item.name}
       onPress={updateSubTag}
     />
   );
@@ -180,32 +194,46 @@ const SubTagItem = ({item, index, isChecked}) => {
 
 export const OtherTag = () => {
   const dispatch = useDispatch();
-  const {isOtherChecked, otherText} = useSelector(
-    state => state.dashboard.ticket?.centralizeRootCause ?? {},
+  const preDefienedOtherText = useSelector(
+    state => state.dashboard.ticket?.centralizeRootCause?.otherText,
   );
-  const [isChecked, setIsChecked] = useState(isOtherChecked);
-  const [updatedText, updateOtherText] = useState(otherText);
+  const isOtherChecked = useSelector(
+    state => state.dashboard.selectedRootCauses.isOtherChecked ?? false,
+  );
+  const otherText = useSelector(
+    state => state.dashboard.selectedRootCauses.otherText ?? '',
+  );
 
-  useEffect(() => {
-    if (updatedText && isChecked) {
-      console.log('UPDATED TEXT', updatedText, isChecked);
-      dispatch(addDraftTags([], isChecked, updatedText));
-    }
-    dispatch(addDraftTags([], !isChecked, ''));
-  }, [updatedText, isChecked]);
+  console.log('otherTag', isOtherChecked, otherText);
 
-  const updateRootCause = () => {
-    console.log(isChecked, updatedText);
+  // const [isChecked, setIsChecked] = useState(isOtherChecked);
+  // const [updatedText, updateOtherText] = useState(otherText);
+
+  // useEffect(() => {
+  //   if (updatedText && isChecked) {
+  //     console.log('UPDATED TEXT', updatedText, isChecked);
+  //     dispatch(addDraftTags([], isChecked, updatedText));
+  //   }
+  //   dispatch(addDraftTags([], !isChecked, ''));
+  // }, [updatedText, isChecked]);
+
+  const update = () => {
+    console.log(!isOtherChecked, otherText);
+    dispatch(addDraftTags([], !isOtherChecked, otherText));
   };
 
-  if (otherText) {
+  const updateOtherText = text => {
+    dispatch(addDraftTags([], text?.length > 0, text));
+  };
+
+  if (preDefienedOtherText) {
     return (
       <View style={styles.otherTag}>
         <CheckBoxItem
           textStyle={styles.otherText}
-          isChecked={isChecked}
+          isChecked={isOtherChecked}
           title={otherText}
-          onPress={() => setIsChecked(prevState => !prevState)}
+          onPress={update}
         />
       </View>
     );
@@ -213,18 +241,15 @@ export const OtherTag = () => {
 
   return (
     <View style={styles.otherTag}>
-      <Pressable onPress={() => setIsChecked(prevState => !prevState)}>
-        <CheckBox isChecked={isChecked} />
+      <Pressable onPress={update}>
+        <CheckBox isChecked={isOtherChecked} />
       </Pressable>
       <TextInput
         placeholder="Other"
         placeholderTextColor={Colors.settingDividerColor}
-        value={updatedText}
+        value={otherText}
         style={styles.otherTextInput}
-        onChangeText={text => {
-          updateOtherText(text);
-          setIsChecked(true);
-        }}
+        onChangeText={updateOtherText}
       />
       {/* <Pressable style={styles.addButton} onPress={updateRootCause}>
         <MaterialIcons name="add" size={26} color={Colors.accentLight} />
@@ -247,19 +272,14 @@ export const CentralizedRootCause = props => {
   );
   console.log(
     'CENTRALIZED_ROOT_CAUSE_LIST',
-    JSON.stringify(
-      getRemappedRootCauseTagList(centralizedRootCauseList, selectedTags),
-    ),
+    JSON.stringify(selectedRootCauses),
   );
 
   return (
     <SafeAreaView style={styles.rootContainer}>
       <FlatList
         style={styles.flatList}
-        data={getRemappedRootCauseTagList(
-          centralizedRootCauseList,
-          selectedRootCauses,
-        )}
+        data={centralizedRootCauseList}
         removeClippedSubviews={true}
         contentContainerStyle={{flexGrow: 0}}
         listKey={`rootCauses-CentralizedRootCause`}

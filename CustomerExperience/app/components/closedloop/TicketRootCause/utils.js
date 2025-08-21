@@ -86,6 +86,19 @@ export const getRemappedRootCauseTagList = (
   return updatedAllRC;
 };
 
+export const isTagChecked = (selectedRootCauses, id) => {
+  if (selectedRootCauses.length === 0) {
+    return false;
+  }
+  for (let i = 0; i < selectedRootCauses.length; i++) {
+    if (selectedRootCauses[i].id === id) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
 export const getTagCount = item => {
   return item.rcTags.reduce((acc, current) => {
     let a = current.rcSubTags.reduce((acc_, current_) => {
@@ -95,14 +108,25 @@ export const getTagCount = item => {
   }, 0);
 };
 
-export const addTags = (selectedRootCauses, tagList) => {
+export const getTagCountFromSelectedList = (selectedRootCauses, item) => {
+  return item.rcTags.reduce((acc, current) => {
+    let a = current.rcSubTags.reduce((acc_, current_) => {
+      return acc_ + (isTagChecked(selectedRootCauses, current_.id) ? 1 : 0);
+    }, 0);
+    return acc + (isTagChecked(selectedRootCauses, current.id) ? 1 : 0) + a;
+  }, 0);
+};
+
+export const addTags = (selectedRootCauses = [], tagList) => {
   if (tagList.length === 0) {
     return selectedRootCauses;
   }
   let selectedMap = new Map();
-  selectedRootCauses.forEach(item => {
-    selectedMap.set(item.id, item);
-  });
+  if (selectedRootCauses.length > 0) {
+    selectedRootCauses.forEach(item => {
+      selectedMap.set(item.id, item);
+    });
+  }
 
   tagList.forEach(item => {
     selectedMap.set(item.id, item);
@@ -111,14 +135,16 @@ export const addTags = (selectedRootCauses, tagList) => {
   return Array.from(selectedMap.values());
 };
 
-export const removeTags = (selectedRootCauses, tagList) => {
+export const removeTags = (selectedRootCauses = [], tagList) => {
   if (tagList.length === 0) {
     return selectedRootCauses;
   }
   let selectedMap = new Map();
-  selectedRootCauses.forEach(item => {
-    selectedMap.set(item.id, item);
-  });
+  if (selectedRootCauses.length > 0) {
+    selectedRootCauses.forEach(item => {
+      selectedMap.set(item.id, item);
+    });
+  }
 
   tagList.forEach(item => {
     if (selectedMap.has(item.id)) {

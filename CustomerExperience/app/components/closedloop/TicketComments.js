@@ -44,6 +44,13 @@ export function getFoldedText(text, MAX_WORD_LENGTH = 10) {
   }
   return text;
 }
+export function getFoldedDescriptionText(text, MAX_WORD_LENGTH = 10) {
+  if (StringUtils.getWords(text).length > MAX_WORD_LENGTH) {
+    return `${StringUtils.getWords(text).slice(0, MAX_WORD_LENGTH).join(' ')}
+      <span style="color:${Colors.accentLight};"> ...see more</span>`;
+  }
+  return text;
+}
 export const UserNameAndCommentContainer = ({children, isSelected}) => {
   return (
     <View

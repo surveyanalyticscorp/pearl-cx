@@ -1,4 +1,4 @@
-import React, {use, useEffect} from 'react';
+import React, {use, useEffect, useState} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
 import {baseTextStyles} from '../../../styles/text.styles';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -67,15 +67,21 @@ export const CurrentSelectedRootCasues = () => {
     state => state.dashboard.centralizedRootCauseList,
   );
 
+  const [list, setList] = useState([]);
+
   const selectedTags = useSelector(
     state =>
       state.dashboard.ticket?.centralizeRootCause?.centralizeRootCauseIds ?? [],
   );
 
+  useEffect(() => {
+    setList(getSelectedTagList(centralizedRootCauseList, selectedTags));
+  }, []);
+
   return (
     <FlatList
       style={styles.flatList}
-      data={getSelectedTagList(centralizedRootCauseList, selectedTags)}
+      data={list}
       removeClippedSubviews={true}
       contentContainerStyle={{flexGrow: 0}}
       listKey={`rootCauses-Centralized-RootCause`}
@@ -183,7 +189,7 @@ const styles = StyleSheet.create({
     marginVertical: MarginConstants.tab1,
   },
   buttonStyle: {
-    width: PaddingConstants.tab1_8x,
+    width: PaddingConstants.tab1_8x + PaddingConstants.tab1_2x,
     paddingHorizontal: PaddingConstants.tab1_2x,
     height: MarginConstants.tab1_6x,
     borderRadius: 5,

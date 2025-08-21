@@ -397,8 +397,11 @@ const dashboardReducer = (state = initialState, action) => {
         selectedRootCauses: {
           ...state.selectedRootCauses,
           isOtherChecked:
-            action.isOtherChecked ?? state.selectedRootCauses.isOtherChecked,
-          otherText: action.otherText ?? state.selectedRootCauses.otherText,
+            action.isOtherChecked ??
+            state.selectedRootCauses?.isOtherChecked ??
+            false,
+          otherText:
+            action.otherText ?? state.selectedRootCauses?.otherText ?? '',
           centralizeRootCauseIds: addTags(
             state.selectedRootCauses.centralizeRootCauseIds,
             action.tagList,

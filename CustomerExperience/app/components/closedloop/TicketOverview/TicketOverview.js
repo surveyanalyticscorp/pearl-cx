@@ -22,7 +22,11 @@ import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
 import TicketTakeAction from '../takeaction/TIcketTakeAction';
 import useActionHandler from './components/useActionHandler';
 import ShowTitleAndText, {Title} from '../ui/ShowTitleAndText';
-import {CommentText, getFoldedText} from '../TicketComments';
+import {
+  CommentText,
+  getFoldedDescriptionText,
+  getFoldedText,
+} from '../TicketComments';
 import StringUtils from '../../../Utils/StringUtils';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import {get} from 'lodash';
@@ -55,7 +59,7 @@ const TicketDescription = ({onPress}) => {
       <View>
         <Pressable onPress={onPress}>
           <Title text={`${translate('ticket_overview.description')}:`} />
-          <CommentText text={getFoldedText(comment, 20)} />
+          <CommentText text={getFoldedDescriptionText(comment, 20)} />
         </Pressable>
       </View>
     );

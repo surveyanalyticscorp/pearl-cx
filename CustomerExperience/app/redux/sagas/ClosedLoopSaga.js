@@ -939,7 +939,7 @@ export function* watchUpdateRootCause() {
 
 export function* updateCentralizedRootCause(action) {
   try {
-    const json = yield WebServiceHandler.post(
+    const json = yield WebServiceHandler.postNew(
       getClfUrl(
         CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_PREFIX +
           action.ticketId +
@@ -948,7 +948,7 @@ export function* updateCentralizedRootCause(action) {
       getBearerTokenStatic(),
       action.param,
     );
-
+    JSON.stringify('action', JSON.stringify(action));
     if (json.status === 'success') {
       yield put({
         type: CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED,
