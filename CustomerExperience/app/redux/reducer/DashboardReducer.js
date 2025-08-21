@@ -131,6 +131,7 @@ const initialState = {
   expirationDate: '',
   isCsatViewTopBox: true,
   skipWelcome: false,
+  centralizedRootCauseUpdateStatus: {},
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -388,6 +389,7 @@ const dashboardReducer = (state = initialState, action) => {
     case CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED: {
       return {
         ...state,
+        centralizedRootCauseUpdateStatus: action.response,
       };
     }
     case ADD_DRAFT_CENTRALIZED_ROOT_CAUSE: {

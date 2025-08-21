@@ -212,7 +212,7 @@ const FeedbackDetailsTabStack = props => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 5,
+    paddingTop: 0,
   },
 
   flatlist: {

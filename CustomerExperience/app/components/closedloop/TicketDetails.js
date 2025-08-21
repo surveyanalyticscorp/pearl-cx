@@ -25,7 +25,9 @@ import TicketRootCause from './TicketRootCause/TicketRootCause';
 export default function TicketDetails(props) {
   const authToken = useSelector(state => state.global.authToken);
   const isTicketLoading = useSelector(state => state.global.isTicketLoading);
-
+  const centralizedRootCauseUpdateStatus = useSelector(
+    state => state.dashboard.centralizedRootCauseUpdateStatus,
+  );
   const feedbackApiKey = useSelector(
     state => state.global.userInfo.feedbackApiKey,
   );
@@ -41,7 +43,7 @@ export default function TicketDetails(props) {
 
   useEffect(() => {
     dispatch(getClosedLoopTicketItem(authToken, ticketItem.id, feedbackApiKey));
-  }, [ticketItem.id, notificationId]);
+  }, [ticketItem.id, notificationId, centralizedRootCauseUpdateStatus]);
 
   const callApis = useCallback(
     authToken_ => {

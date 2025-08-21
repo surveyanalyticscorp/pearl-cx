@@ -948,13 +948,18 @@ export function* updateCentralizedRootCause(action) {
       getBearerTokenStatic(),
       action.param,
     );
-    JSON.stringify('action', JSON.stringify(action));
+    JSON.stringify(
+      'action',
+      JSON.stringify(action),
+      'json',
+      JSON.stringify(json),
+    );
     if (json.status === 'success') {
       yield put({
         type: CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED,
-        response: json.data,
+        response: json,
       });
-      // fetchClosedLoopTicketItem(action);
+      fetchClosedLoopTicketItem(action);
       showSuccessFlashMessage(json.message ?? 'Updated');
     }
   } catch (error) {

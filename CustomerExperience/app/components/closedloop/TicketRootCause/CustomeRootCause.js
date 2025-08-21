@@ -1,5 +1,5 @@
 import React, {use, useEffect, useState} from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
+import {View, StyleSheet, FlatList, ScrollView} from 'react-native';
 import {baseTextStyles} from '../../../styles/text.styles';
 import {MarginConstants} from '../../../styles/margin.constants';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
