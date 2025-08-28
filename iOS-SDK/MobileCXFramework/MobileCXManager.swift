@@ -83,7 +83,11 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         if message.name == "callbackHandler" {
             if let messageBody = message.body as? String {
                 LogUtils.printMessage(message: "Received message: \(messageBody)")
-                openInSafari(urlString: messageBody)
+                if (messageBody.contains("closeThankyouPage")) {
+                    perform(#selector(self.aDismissWebview(_:)), with: self, afterDelay: 3)
+                } else {
+                    openInSafari(urlString: messageBody)
+                }
             }
         }
     }
