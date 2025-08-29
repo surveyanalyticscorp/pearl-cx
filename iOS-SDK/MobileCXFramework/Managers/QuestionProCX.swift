@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 
 @MainActor
-public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate, SurveyLaunchDelegate {
+public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate, WKScriptMessageHandler, SurveyLaunchDelegate {
     var satisfiedRulesForIntercept: [String: [[String]]] = [:]
     var visitorApiResponse: ApiResponse!
     private var isSurveyDisplayed = false
@@ -343,6 +343,28 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         }
     }
     
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+            if message.name == "callbackHandler" {
+                if let messageBody = message.body as? String {
+                    LogUtils.printMessage(message: "Received message: \(messageBody)")
+                    if (messageBody.contains("closeThankyouPage")) {
+                        perform(#selector(self.aDismissWebview(_:)), with: self, afterDelay: 3)
+                    } else {
+                        openInSafari(urlString: messageBody)
+                    }
+                }
+            }
+        }
+        
+        func openInSafari(urlString: String) {
+            
+            if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "Invalid URL or Safari cannot open it.")
+            }
+        }
+    
     public func showSurvey(isInAppSurvey: Bool) {
         DispatchQueue.main.async {
             
@@ -372,7 +394,9 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 webpagePreferences.allowsContentJavaScript = true
                 configuration.defaultWebpagePreferences = webpagePreferences
             }
-            
+            let contentController = WKUserContentController()
+            contentController.add(self, name: "callbackHandler")
+            configuration.userContentController = contentController
             self.iWebView = WKWebView(frame: CGRect(x: 0, y: 30, width: frontView.frame.size.width, height: frontView.frame.size.height - 20), configuration: configuration)
             self.iWebView?.navigationDelegate = self
             self.iWebView?.allowsLinkPreview = false
