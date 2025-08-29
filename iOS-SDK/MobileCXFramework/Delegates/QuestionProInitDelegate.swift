@@ -7,8 +7,7 @@
 
 import Foundation
 
-@MainActor public protocol QuestionProDelegate: NSObjectProtocol {
+@MainActor public protocol QuestionProInitDelegate: NSObjectProtocol {
     func initSDKSuccess()
     func initSDKFailed(error: String)
-    func getSurveyURL(surveyURL: String)
 }

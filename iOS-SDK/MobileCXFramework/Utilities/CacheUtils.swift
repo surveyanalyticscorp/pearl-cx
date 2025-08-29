@@ -121,12 +121,9 @@ public class CacheUtils {
     }
     
     public static func getIsSurveyLaunchedForInterceptId(key: String) -> Bool {
-        let defaultValue = false;
-        LogUtils.printMessage(message: "isSurveyLaunchedForInterceptId \(String(describing: UserDefaults.standard.object(forKey: key) as? Bool))")
-        if let isSurveyLaunched = UserDefaults.standard.object(forKey: key) as? Bool {
-            return isSurveyLaunched
-        }
-        return defaultValue
+        let value = UserDefaults.standard.bool(forKey: key)
+        LogUtils.printMessage(message: "isSurveyLaunchedForInterceptId (\(key)): \(value)")
+        return value
     }
     
     @MainActor public static func setScreenVisitCountForInterceptId(key: String, value: Int) {

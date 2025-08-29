@@ -15,7 +15,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     var visitorApiResponse: ApiResponse!
     private var isSurveyDisplayed = false
     @MainActor public static var instance: QuestionProCX?
-    var callbackDelegate: QuestionProDelegate?
+    var initCallbackDelegate: QuestionProInitDelegate?
+    var questionProCallbackDelegate: QuestionProCallbackDelegate?
     
     private func addRuleToSatisfiedRulesList(for id: String, newValue: String) {
         if var existingLists = satisfiedRulesForIntercept[id] {
@@ -168,6 +169,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         bodyParam["interceptId"] = interceptId;
         bodyParam["surveyId"] = interceptData.surveyId;
         bodyParam["packageName"] = kPackageName;
+        var triggerDelayInSeconds = interceptData.settings?.triggerDelayInSeconds ?? 0
         
         if ((interceptData.settings) != nil) {
             let settings = interceptData.settings
@@ -201,16 +203,16 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 
                 if (interceptType == InterceptType.SURVEY_URL.rawValue) {
                     CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
-                    self.callbackDelegate?.getSurveyURL(surveyURL: self.iResponseURL!)
+                    self.questionProCallbackDelegate?.getSurveyURL(surveyURL: self.iResponseURL!)
                 } else {
                     let showInDialog = interceptType == InterceptType.PROMPT.rawValue ? true : false
                     LogUtils.printMessage(message: "Survey URL = \(self.iResponseURL!)")
                     CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
-                    self.launchFeedbackSurvey(showInDialog: showInDialog)
+                    self.launchFeedbackSurvey(showInDialog: showInDialog, triggerDelayInSeconds: triggerDelayInSeconds)
                 }
                 APIUtils.updateInterceptSurveyLaunchEvent(interceptData: interceptData, visitorId: visitorId, surveyType: InterceptSurveyLaunchEvent.LAUNCHED.rawValue);
             } catch {
-                self.callbackDelegate?.getSurveyURL(surveyURL: "")
+                self.questionProCallbackDelegate?.getSurveyURL(surveyURL: "")
                 LogUtils.printMessage(logTag: .LOG_ERROR, message: "API error -> \(error)")
                 self.iResponseURL = ""
                 CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: false);
@@ -235,7 +237,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 )
             LogUtils.printMessage(message: "fetch and etup intercepts  \(response)")
             visitorApiResponse = response
-            self.callbackDelegate?.initSDKSuccess()
+            self.initCallbackDelegate?.initSDKSuccess()
             let intercepts = visitorApiResponse.project.intercepts
             
             do {
@@ -268,7 +270,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 }
             }
         } catch {
-            self.callbackDelegate?.initSDKFailed(error: error.localizedDescription)
+            self.initCallbackDelegate?.initSDKFailed(error: error.localizedDescription)
             LogUtils.printMessage(logTag: .LOG_ERROR, message: "API error: \(error)")
         }
     }
@@ -280,10 +282,9 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             queue: .main
         ) { _ in
             LogUtils.printMessage(message: "📦 App did enter background")
-            // Perform cleanup or save data here
             Task {
                 await MainActor.run {
-//                    self.clearSession()
+                    self.clearSession()
                     TimerUtils.getinstance().stopAllTimers()
                     self.resetSatisfiedRulesList()
                 }
@@ -296,20 +297,20 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             queue: .main
         ) { _ in
             LogUtils.printMessage(message: "🎯 App became active")
-            Task {
-                await self.fetchAndSetupIntercepts()
-            }
+//            Task {
+//                await self.fetchAndSetupIntercepts()
+//            }
         }
     }
 
-    public func configure(apiKey: String, touchPoint: TouchPoint, withWindow aWindow: UIWindow, callbackDelegate: QuestionProDelegate?) {
+    public func configure(apiKey: String, touchPoint: TouchPoint, withWindow aWindow: UIWindow, initCallbackDelegate: QuestionProInitDelegate?) {
         CacheUtils.setToUserDefaults(key: kApiKey, value: apiKey)
         CacheUtils.setToUserDefaults(key: kDataCenter, value: touchPoint.dataCenter.rawValue)
         self.iApiKey = apiKey
         self.iDataCenter = touchPoint.dataCenter
         self.iBaseWindow = aWindow
         self.iCurrentViewName = ""
-        self.callbackDelegate = callbackDelegate
+        self.initCallbackDelegate = initCallbackDelegate
         self.touchPoint = touchPoint;
         SurveyLaunchLogicUtils.getInstance().surveyLaunchDelegate = self;
         Task {
@@ -318,15 +319,27 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         self.appLifecycleStateListener()
     }
     
+    public func setQuestionProCallbackDelegate(questionProCallbackDelegate: QuestionProCallbackDelegate) {
+        self.questionProCallbackDelegate = questionProCallbackDelegate
+    }
+    
     public func enableLogs(enabledLogs: Bool) {
         LogUtils.enableLogging(isLogsEnabled: enabledLogs)
     }
 
-    public func launchFeedbackSurvey(showInDialog: Bool) {
-        LogUtils.printMessage(message: "survey url to load: \(String(describing: iResponseURL))")
-        if (!self.isSurveyDisplayed) {
+    private var isSurveyScheduled = false
+    public func launchFeedbackSurvey(showInDialog: Bool, triggerDelayInSeconds: Int) {
+        guard !self.isSurveyScheduled else {
+            LogUtils.printMessage(message: "Survey already scheduled, skipping.")
+            return
+        }
+        self.isSurveyScheduled = true
+        
+        LogUtils.printMessage(message: "Survey URL to load: \(String(describing: iResponseURL))")
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(triggerDelayInSeconds)) {
+            print("Executed after \(triggerDelayInSeconds) seconds")
             self.showSurvey(isInAppSurvey: showInDialog)
-            self.loadSurveyURLInWebView();
+            self.loadSurveyURLInWebView()
         }
     }
     
@@ -464,6 +477,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     @objc func aDismissWebview(_ sender: Any) {
         self.iView?.removeFromSuperview()
         self.isSurveyDisplayed = false
+        self.isSurveyScheduled = false
     }
     
     @objc func goToPreviousPage(_ sender: Any) {
