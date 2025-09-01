@@ -11,8 +11,8 @@ public class APIUtils {
     
     public static func getBaseURL() -> URLComponents {
         let dataCenter: String = CacheUtils.getFromUserDefaults(key: kDataCenter, type: String.self)!
-        
-        let baseURL = getBaseUrl(dataCenter: dataCenter)
+        let configtType : String = CacheUtils.getFromUserDefaults(key: kConfigType, type: String.self)!
+        let baseURL = getBaseUrl(dataCenter: dataCenter, configType: configtType)
         var components = URLComponents()
         components.scheme = "https"
         
@@ -41,6 +41,12 @@ public class APIUtils {
     public static func getUpdateInterceptSurveyLaunchEventURL() -> String {
         var components = getBaseURL()
         components.path = kSurveyFeedbackURL
+        return components.url?.absoluteString ?? ""
+    }
+    
+    public static func getCoreSurveyFeedbackURL() -> String {
+        var components = getBaseURL()
+        components.path = kCoreSurveyFeedbackURL
         return components.url?.absoluteString ?? ""
     }
     
@@ -73,26 +79,26 @@ public class APIUtils {
         }
     }
     
-    public static func getBaseUrl(dataCenter: String) -> String {
+    public static func getBaseUrl(dataCenter: String, configType: String) -> String {
         switch dataCenter {
         case "DATA_CENTER_US":
-            return "intercept-api.questionpro.com"
+            return configType == TouchPoint.ConfigType.INTERCEPT.rawValue ?  "intercept-api.questionpro.com" :  "api.questionpro.com"
         case "DATA_CENTER_AE":
-            return "intercept-api.questionpro.ae"
+            return configType == TouchPoint.ConfigType.INTERCEPT.rawValue ?  "intercept-api.questionpro.ae" :  "api.questionpro.ae"
         case "DATA_CENTER_AU":
-            return "intercept-api.questionpro.au"
+            return configType == TouchPoint.ConfigType.INTERCEPT.rawValue ?  "intercept-api.questionpro.au" :  "api.questionpro.au"
         case "DATA_CENTER_EU":
-            return "intercept-api.questionpro.eu"
+            return configType == TouchPoint.ConfigType.INTERCEPT.rawValue ?  "intercept-api.questionpro.eu" :  "api.questionpro.eu"
         case "DATA_CENTER_CA":
-            return "intercept-api.questionpro.ca"
+            return configType == TouchPoint.ConfigType.INTERCEPT.rawValue ?  "intercept-api.questionpro.ca" :  "api.questionpro.ca"
         case "DATA_CENTER_SG":
-            return "intercept-api.questionpro.sg"
+            return configType == TouchPoint.ConfigType.INTERCEPT.rawValue ?  "intercept-api.questionpro.sg" :  "api.questionpro.sg"
 //        case "SA":
 //            return "intercept-api.questionpro.com"
 //        case "KSA":
 //            return "intercept-api.questionpro.com"
         default:
-            return "intercept-api.questionpro.com"
+            return configType == TouchPoint.ConfigType.INTERCEPT.rawValue ?  "intercept-api.questionpro.com" :  "api.questionpro.com"
         }
     }
 }

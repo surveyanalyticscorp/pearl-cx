@@ -25,6 +25,7 @@ public let kIsSurveyLaunched = "IsSurveyLaunched"
 public let kIntercepts = "Intercepts"
 public let kApiKey = "apiKey"
 public let kDataCenter = "dataCenter"
+public let kConfigType = "configType"
 
 //API request types
 public enum APIRequestType: String {
@@ -48,6 +49,7 @@ public let kMobileCXGetSurveyURL = "/api/v1/visitor/mobile"
 //public let kGetSurveyURL = "/cx/transactions/survey-url"
 public let kGetSurveyURL = "/api/v1/data-mapping/mobile/survey-url"
 public let kSurveyFeedbackURL = "/api/v1/visitor/mobile/survey-feedback"
+public let kCoreSurveyFeedbackURL = "/a/api/v2/surveys/"
 
 let bundleIdentifier = Bundle.main.bundleIdentifier! as String
 public let kPackageName = bundleIdentifier

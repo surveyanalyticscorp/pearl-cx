@@ -208,7 +208,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                     let showInDialog = interceptType == InterceptType.PROMPT.rawValue ? true : false
                     LogUtils.printMessage(message: "Survey URL = \(self.iResponseURL!)")
                     CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
-                    self.launchFeedbackSurvey(showInDialog: showInDialog, triggerDelayInSeconds: triggerDelayInSeconds)
+                    self.launchSurvey(showInDialog: showInDialog, triggerDelayInSeconds: triggerDelayInSeconds)
                 }
                 APIUtils.updateInterceptSurveyLaunchEvent(interceptData: interceptData, visitorId: visitorId, surveyType: InterceptSurveyLaunchEvent.LAUNCHED.rawValue);
             } catch {
@@ -302,20 +302,64 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
 //            }
         }
     }
+    
+    private func setupIntercepts() {
+        LogUtils.printMessage(message: "Setting up intercepts")
+        SurveyLaunchLogicUtils.getInstance().surveyLaunchDelegate = self;
+        Task {
+            await self.fetchAndSetupIntercepts()
+        }
+    }
+    
+    private func setupCoreSurvey() {
+        LogUtils.printMessage(message: "Setting up core survey")
+    }
+    
+    public func launchFeedbackSurvey(surveyId: Int) {
+        let fetchSurveyURL = APIUtils.getCoreSurveyFeedbackURL() + String(surveyId)
+        Task {
+            do {
+                let response: SurveyResponse = try await ApiServiceCX.shared.request(
+                    urlString: fetchSurveyURL,
+                    method: .GET,
+                    headers: [
+                        "api-key": self.iApiKey,
+                        "Content-Type": "application/json; charSet=UTF-8"
+                    ],
+                    responseType: SurveyResponse.self
+                )
+                
+                LogUtils.printMessage(message: "Core survey url \(response.response.url)")
+                self.iResponseURL = response.response.url
+                
+                let showInDialog: Bool = true
+                let triggerDelayInSeconds: Int = 0
+                
+                self.launchSurvey(showInDialog: showInDialog, triggerDelayInSeconds: triggerDelayInSeconds)
+            } catch {
+                LogUtils.printMessage(logTag: .LOG_ERROR, message: "API error -> \(error)")
+                self.iResponseURL = ""
+            }
+        }
+    }
 
     public func configure(apiKey: String, touchPoint: TouchPoint, withWindow aWindow: UIWindow, initCallbackDelegate: QuestionProInitDelegate?) {
         CacheUtils.setToUserDefaults(key: kApiKey, value: apiKey)
         CacheUtils.setToUserDefaults(key: kDataCenter, value: touchPoint.dataCenter.rawValue)
+        CacheUtils.setToUserDefaults(key: kConfigType, value: touchPoint.configType.rawValue)
         self.iApiKey = apiKey
         self.iDataCenter = touchPoint.dataCenter
         self.iBaseWindow = aWindow
         self.iCurrentViewName = ""
         self.initCallbackDelegate = initCallbackDelegate
         self.touchPoint = touchPoint;
-        SurveyLaunchLogicUtils.getInstance().surveyLaunchDelegate = self;
-        Task {
-            await self.fetchAndSetupIntercepts()
+        
+        if (touchPoint.configType == TouchPoint.ConfigType.INTERCEPT) {
+            setupIntercepts()
+        } else {
+            setupCoreSurvey()
         }
+        
         self.appLifecycleStateListener()
     }
     
@@ -328,7 +372,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     }
 
     private var isSurveyScheduled = false
-    public func launchFeedbackSurvey(showInDialog: Bool, triggerDelayInSeconds: Int) {
+    public func launchSurvey(showInDialog: Bool, triggerDelayInSeconds: Int) {
         guard !self.isSurveyScheduled else {
             LogUtils.printMessage(message: "Survey already scheduled, skipping.")
             return
