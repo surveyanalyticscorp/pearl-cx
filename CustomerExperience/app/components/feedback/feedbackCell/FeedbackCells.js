@@ -132,8 +132,8 @@ let RenderResponseContainer = ({
           />
           {/* <NPSIcon sentiment={sentiment} />
           <NPSAnswerText sentiment={sentiment} answerText={answerText} /> */}
-          <NPSIcon sentiment={'Promoter'} />
-          <NPSAnswerText sentiment={'Promoter'} answerText={answerText} />
+          <NPSIcon sentiment={sentiment} />
+          <NPSAnswerText sentiment={sentiment} answerText={answerText} />
           <HorizontalSpaceBox />
           <UserName
             isNewResponse={isNewResponse}
