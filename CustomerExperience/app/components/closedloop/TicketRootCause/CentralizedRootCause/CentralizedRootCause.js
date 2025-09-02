@@ -130,7 +130,10 @@ const TagItem = ({item, index}) => {
     return (
       <View style={[styles.tag]}>
         <CheckBoxItem
-          textStyle={baseTextStyles.secondaryRegularText}
+          textStyle={{
+            color: Colors.filterIconColor,
+            ...baseTextStyles.secondaryRegularText,
+          }}
           style={styles.borderBottom}
           item={item}
           index={index}
@@ -156,7 +159,10 @@ const TagItem = ({item, index}) => {
 
   return (
     <CheckBoxItem
-      textStyle={baseTextStyles.secondaryRegularText}
+      textStyle={{
+        color: Colors.filterIconColor,
+        ...baseTextStyles.secondaryRegularText,
+      }}
       style={styles.tag}
       item={item}
       index={index}
@@ -181,7 +187,10 @@ const SubTagItem = ({item, index}) => {
   };
   return (
     <CheckBoxItem
-      textStyle={baseTextStyles.secondaryRegularText}
+      textStyle={{
+        color: Colors.filterIconColor,
+        ...baseTextStyles.secondaryRegularText,
+      }}
       style={styles.subTag}
       item={item}
       isChecked={isChecked}
@@ -341,6 +350,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.primary,
+    color: Colors.filterIconColor,
     borderBottomColor: Colors.settingDividerColor,
     borderBottomWidth: 2,
     backgroundColor: Colors.settingsBackground,

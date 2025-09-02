@@ -1,5 +1,5 @@
-import React, {use, useEffect, useState} from 'react';
-import {View, StyleSheet, FlatList, ScrollView} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, FlatList} from 'react-native';
 import {baseTextStyles} from '../../../styles/text.styles';
 import {MarginConstants} from '../../../styles/margin.constants';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
@@ -50,8 +50,12 @@ export const OtherSelectedTag = () => {
       <View>
         <PathTextLabel title="Others (Custom root cause)" />
         <TextLabel
-          baseTextStyle={baseTextStyles.semiSecondaryRegularText}
+          baseTextStyle={{
+            color: Colors.filterIconColor,
+            ...baseTextStyles.semiSecondaryRegularText,
+          }}
           style={{
+            alignSelf: 'flex-start',
             padding: PaddingConstants.tab1,
             backgroundColor: Colors.negativePromter,
           }}
@@ -76,7 +80,7 @@ export const CurrentSelectedRootCasues = () => {
 
   useEffect(() => {
     setList(getSelectedTagList(centralizedRootCauseList, selectedTags));
-  }, []);
+  }, [centralizedRootCauseList, selectedTags]);
 
   return (
     <FlatList
@@ -84,7 +88,7 @@ export const CurrentSelectedRootCasues = () => {
       data={list}
       removeClippedSubviews={true}
       contentContainerStyle={{flexGrow: 0}}
-      listKey={`rootCauses-Centralized-RootCause`}
+      listKey={'rootCauses-Centralized-RootCause'}
       renderItem={TitleAndTagsItem}
       keyExtractor={(item, index) => item.title.toString()}
     />
@@ -145,7 +149,7 @@ export const CustomRootCause = () => {
 
   useEffect(() => {
     dispatch(resetDraftTags());
-  }, []);
+  }, [dispatch]);
 
   const navigation = useNavigation();
   const onPress = () => {
