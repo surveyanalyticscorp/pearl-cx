@@ -44,7 +44,11 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         
         if (CacheUtils.getIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId))) {
             LogUtils.printMessage(message: "Survey already launched for this intercept id \(interceptId)")
-            return;
+            if (InterceptRuleType.VIEW_COUNT.rawValue != satisfiedRule.name) {
+                return;
+            } else {
+                LogUtils.printMessage(message: "\(satisfiedRule.name)")
+            }            
         }
         if let intercept = CacheUtils.getInterceptById(key: String(interceptId)) {
             do {
