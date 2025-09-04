@@ -25,7 +25,7 @@ public let kIsSurveyLaunched = "IsSurveyLaunched"
 public let kIntercepts = "Intercepts"
 public let kApiKey = "apiKey"
 public let kDataCenter = "dataCenter"
-public let kConfigType = "configType"
+private let kConfigType = "configType"
 
 //API request types
 public enum APIRequestType: String {
