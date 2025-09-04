@@ -12,6 +12,75 @@ import _SwiftConcurrencyShims
 public let ksurveyURL: Swift.String
 public let kisDialog: Swift.String
 public let kKeyChainWrapperBundleId: Swift.String
+public let kPageVisitCountKey: Swift.String
+public let kViewCount: Swift.String
+public let kInterceptRulesForId: Swift.String
+public let kSatisfiedRulesForId: Swift.String
+public let kIsSurveyLaunched: Swift.String
+public let kIntercepts: Swift.String
+public let kApiKey: Swift.String
+public let kDataCenter: Swift.String
+public enum APIRequestType : Swift.String {
+  case GET
+  case POST
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public let kMobileAPIStaging: Swift.String
+public let kMobileAPIProduction: Swift.String
+public let kMobileCXGetSurveyURL: Swift.String
+public let kGetSurveyURL: Swift.String
+public let kSurveyFeedbackURL: Swift.String
+public let kPackageName: Swift.String
+public let kEnvironment: Swift.String
+public enum InterceptType : Swift.String {
+  case PROMPT, EMBED, SURVEY_URL
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum InterceptRuleType : Swift.String {
+  case TIME_SPENT, VIEW_COUNT, DAY, DATE
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum InterceptCondition : Swift.String {
+  case AND, OR
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum InterceptSurveyLaunchEvent : Swift.String {
+  case MATCHED, LAUNCHED
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum LogTag : Swift.String {
+  case LOG_ERROR, LOG_INFO
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct InterceptSurveyLaunchEventResponse : Swift.Codable {
+  public var success: Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
 @objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class GMDCircleLoader : UIKit.UIView {
   @_Concurrency.MainActor @preconcurrency final public let GMD_SPINNER_COLOR: UIKit.UIColor
   @_Concurrency.MainActor @preconcurrency public static let GMD_SPINNER_FRAME: CoreFoundation.CGRect
@@ -30,9 +99,46 @@ public let kKeyChainWrapperBundleId: Swift.String
   @_Concurrency.MainActor @preconcurrency public func stop()
   @objc deinit
 }
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor public class ApiServiceCX {
+  @objc deinit
+}
+public struct ApiResponse : Swift.Codable {
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct Visitor : Swift.Codable {
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct LocalDate : Swift.Codable {
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct Project : Swift.Codable {
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct Intercept : Swift.Codable {
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct Settings : Swift.Codable {
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct Rule : Swift.Codable {
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public func parseJson(jsonString: Swift.String)
+public struct SurveyURL : Swift.Codable {
+  public var surveyURL: Swift.String
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
 public class TouchPoint {
   public init()
-  public enum DataCenter {
+  public enum DataCenter : Swift.String, Swift.Codable {
     case DATA_CENTER_US
     case DATA_CENTER_AE
     case DATA_CENTER_CA
@@ -41,28 +147,70 @@ public class TouchPoint {
     case DATA_CENTER_SG
     case DATA_CENTER_SA
     case DATA_CENTER_KSA
-    public static func == (a: QuestionProCXFramework.TouchPoint.DataCenter, b: QuestionProCXFramework.TouchPoint.DataCenter) -> Swift.Bool
-    public func hash(into hasher: inout Swift.Hasher)
-    public var hashValue: Swift.Int {
+    public init?(rawValue: Swift.String)
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
       get
     }
   }
-  public var surveyId: Swift.Int
-  public var email: Swift.String
-  public var firstName: Swift.String
-  public var lastName: Swift.String
-  public var mobile: Swift.String
-  public var segmentCode: Swift.String
-  public var transactionLanguage: Swift.String
-  public var ShowInDialog: Swift.Bool
-  public var customVariable1: Swift.String
-  public var customVariable2: Swift.String
-  public var customVariable3: Swift.String
-  public func initTouchPoint(surveyId: Swift.Int) -> QuestionProCXFramework.TouchPoint
+  public var dataCenter: QuestionProCXFramework.TouchPoint.DataCenter
+  public var customVariables: [Swift.Int : Swift.String]?
+  public func initTouchPoint(dataCenter: QuestionProCXFramework.TouchPoint.DataCenter, customVariables: [Swift.Int : Swift.String]? = nil) -> QuestionProCXFramework.TouchPoint
   @objc deinit
 }
-@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor public class QuestionProCXManager : ObjectiveC.NSObject, UIKit.UIAlertViewDelegate, QuestionProCXFramework.CXServiceDelegate, WebKit.WKNavigationDelegate {
-  @_Concurrency.MainActor public func CXServiceResponse(withURL response: [Swift.String : Any])
+@_hasMissingDesignatedInitializers public class APIUtils {
+  public static func getBaseURL() -> Foundation.URLComponents
+  public static func getVisitorMobileAPIURL() -> Swift.String
+  public static func getFetchSurveyURL() -> Swift.String
+  public static func getUpdateInterceptSurveyLaunchEventURL() -> Swift.String
+  @_Concurrency.MainActor public static func updateInterceptSurveyLaunchEvent(interceptData: QuestionProCXFramework.Intercept, visitorId: Swift.String, surveyType: Swift.String)
+  public static func getBaseUrl(dataCenter: Swift.String) -> Swift.String
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class CacheUtils {
+  public static func getFromUserDefaults(key: Swift.String) -> [Swift.String : Any]?
+  public static func setInterceptRulesForInterceptId(key: Swift.String, value: Foundation.Data)
+  public static func resetInterceptRulesForInterceptId(key: Swift.String)
+  public static func getInterceptRulesForInterceptId(key: Swift.String) -> Foundation.Data?
+  public static func setIntercepts(key: Swift.String, value: Foundation.Data)
+  public static func getIntercepts(key: Swift.String) -> Foundation.Data?
+  public static func getInterceptById(key: Swift.String) -> Foundation.Data?
+  public static func setInterceptForInterceptId(key: Swift.String, value: [Swift.String])
+  public static func getInterceptForInterceptId(key: Swift.String) -> [Swift.String]
+  public static func getIntFromUserDefaults(key: Swift.String) -> Swift.Int?
+  public static func setToUserDefaults(key: Swift.String, value: Any)
+  public static func getFromUserDefaults<T>(key: Swift.String, type: T.Type) -> T?
+  public static func resetIntUserDefaults(key: Swift.String)
+  public static func getValueFromUserDefaults(key: Swift.String) -> Any?
+  public static func getIsSurveyLaunched(key: Swift.String) -> Swift.Bool
+  public static func setIsSurveyLaunched(key: Swift.String, value: Swift.Bool)
+  public static func clearUserDefaults(key: Swift.String)
+  public static func clearAllUserDefaults()
+  public static func setIsSurveyLaunchedForInterceptId(key: Swift.String, value: Swift.Bool)
+  public static func getIsSurveyLaunchedForInterceptId(key: Swift.String) -> Swift.Bool
+  @_Concurrency.MainActor public static func setScreenVisitCountForInterceptId(key: Swift.String, value: Swift.Int)
+  @_Concurrency.MainActor public static func getScreenVisitCountForInterceptId(key: Swift.String) -> Swift.Int
+  @_Concurrency.MainActor public static func resetScreenVisitCountForInterceptId(key: Swift.String)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class GlobalData {
+  public static func getDataCenterString(dataCenter: QuestionProCXFramework.TouchPoint.DataCenter) -> Swift.String
+  public static func getBaseUrl(dataCenter: Swift.String) -> Swift.String
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class GlobalUtils {
+  public static func getAppLanguage() -> Swift.String
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class LogUtils {
+  public static func enableLogging(isLogsEnabled: Swift.Bool)
+  public static func printMessage(logTag: QuestionProCXFramework.LogTag = .LOG_INFO, message: Swift.String)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor public class QuestionProCX : ObjectiveC.NSObject, UIKit.UIAlertViewDelegate, WebKit.WKNavigationDelegate, QuestionProCXFramework.SurveyLaunchDelegate {
+  @_Concurrency.MainActor public static var instance: QuestionProCXFramework.QuestionProCX?
+  @_Concurrency.MainActor public func launchSurveyForIntercept(interceptId: Swift.Int, satisfiedRule: QuestionProCXFramework.Rule)
+  @_Concurrency.MainActor public func setScreenName(screenName: Swift.String)
   @_Concurrency.MainActor public var iBaseWindow: UIKit.UIWindow?
   @_Concurrency.MainActor public var iView: UIKit.UIView?
   @_Concurrency.MainActor public var iWebView: WebKit.WKWebView?
@@ -74,20 +222,21 @@ public class TouchPoint {
   @_Concurrency.MainActor public var iPopUpViewFlag: Swift.Bool
   @_Concurrency.MainActor public var iPresentViewFlag: Swift.Bool
   @_Concurrency.MainActor public var iTouchPointName: Swift.Int?
-  @_Concurrency.MainActor public var iApiKey: Swift.String?
+  @_Concurrency.MainActor public var iApiKey: Swift.String
   @_Concurrency.MainActor public var iCurrentViewName: Swift.String
   @_Concurrency.MainActor public var iDataCenter: QuestionProCXFramework.TouchPoint.DataCenter?
   @_Concurrency.MainActor public var touchPoint: QuestionProCXFramework.TouchPoint?
   @_Concurrency.MainActor @objc override dynamic public init()
-  @_Concurrency.MainActor public static let sharedManager: QuestionProCXFramework.QuestionProCXManager
-  @_Concurrency.MainActor public func initwithAPIKey(apiKey: Swift.String, dataCenter: QuestionProCXFramework.TouchPoint.DataCenter, withWindow aWindow: UIKit.UIWindow)
-  @_Concurrency.MainActor public func touchPointBuilder(touchPointID: Swift.Int) -> QuestionProCXFramework.TouchPoint
-  @_Concurrency.MainActor public func launchFeedbackSurvey(touchPoint: QuestionProCXFramework.TouchPoint)
+  @_Concurrency.MainActor public static func getinstance() -> QuestionProCXFramework.QuestionProCX
+  @_Concurrency.MainActor public func fetchSurveyURLForSurveyId(interceptId: Swift.Int, interceptData: QuestionProCXFramework.Intercept, interceptType: Swift.String)
+  @_Concurrency.MainActor public func fetchAndSetupIntercepts() async
+  @_Concurrency.MainActor public func configure(apiKey: Swift.String, touchPoint: QuestionProCXFramework.TouchPoint, withWindow aWindow: UIKit.UIWindow, initCallbackDelegate: (any QuestionProCXFramework.QuestionProInitDelegate)?)
+  @_Concurrency.MainActor public func setQuestionProCallbackDelegate(questionProCallbackDelegate: any QuestionProCXFramework.QuestionProCallbackDelegate)
+  @_Concurrency.MainActor public func enableLogs(enabledLogs: Swift.Bool)
+  @_Concurrency.MainActor public func launchFeedbackSurvey(showInDialog: Swift.Bool, triggerDelayInSeconds: Swift.Int)
+  @_Concurrency.MainActor public func showSurvey(isInAppSurvey: Swift.Bool)
   @_Concurrency.MainActor public func stopQuestionProCXManager()
-  @_Concurrency.MainActor public func setPopupMenuTitle(aTitle: Swift.String, message aMessage: Swift.String, rightButtonTitle aRightButtonTitle: Swift.String, leftButtonTitle aLeftButtonTitle: Swift.String)
-  @_Concurrency.MainActor public func getAPIResponse(touchPoint: QuestionProCXFramework.TouchPoint)
-  @_Concurrency.MainActor public func showMessageInViewControllerWithResponse(touchPoint: QuestionProCXFramework.TouchPoint)
-  @_Concurrency.MainActor public func showInAppSurvey(touchPoint: QuestionProCXFramework.TouchPoint)
+  @_Concurrency.MainActor public func loadSurveyURLInWebView()
   @_Concurrency.MainActor @objc public func webView(_ webView: WebKit.WKWebView, decidePolicyFor navigationAction: WebKit.WKNavigationAction, decisionHandler: @escaping @_Concurrency.MainActor @Sendable (WebKit.WKNavigationActionPolicy) -> Swift.Void)
   @_Concurrency.MainActor @preconcurrency @objc public func webView(_ webView: WebKit.WKWebView, didStartProvisionalNavigation navigation: WebKit.WKNavigation!)
   @_Concurrency.MainActor @preconcurrency @objc public func webView(_ webView: WebKit.WKWebView, didFinish navigation: WebKit.WKNavigation!)
@@ -96,51 +245,62 @@ public class TouchPoint {
   @_Concurrency.MainActor public func currentViewUnLoaded()
   @objc deinit
 }
-@_Concurrency.MainActor public protocol CXServiceDelegate : ObjectiveC.NSObjectProtocol {
-  @_Concurrency.MainActor func CXServiceResponse(withURL response: [Swift.String : Any])
+@_Concurrency.MainActor public protocol SurveyLaunchDelegate : ObjectiveC.NSObjectProtocol {
+  @_Concurrency.MainActor func launchSurveyForIntercept(interceptId: Swift.Int, satisfiedRule: QuestionProCXFramework.Rule)
 }
-@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor public class MobileCXServiceTxManager : ObjectiveC.NSObject, Foundation.URLSessionDelegate, Foundation.URLSessionTaskDelegate, Foundation.URLSessionDataDelegate {
-  @_Concurrency.MainActor public var response: Foundation.URLResponse?
-  @_Concurrency.MainActor public var receivedData: Foundation.Data
-  @_Concurrency.MainActor weak public var iDelegate: (any QuestionProCXFramework.CXServiceDelegate)?
+@_Concurrency.MainActor public protocol ScreenVisitDelegate : ObjectiveC.NSObjectProtocol {
+  @_Concurrency.MainActor func trackScreenVisit(screenName: Swift.String)
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor public class SurveyLaunchLogicUtils : ObjectiveC.NSObject {
+  @_Concurrency.MainActor weak public var surveyLaunchDelegate: (any QuestionProCXFramework.SurveyLaunchDelegate)?
+  @_Concurrency.MainActor final public let pageVisitCount: Swift.Int
+  @_Concurrency.MainActor final public let appUserInteractionTimeInSeconds: Swift.Int
+  @_Concurrency.MainActor public static var instance: QuestionProCXFramework.SurveyLaunchLogicUtils?
+  @_Concurrency.MainActor public static func getInstance() -> QuestionProCXFramework.SurveyLaunchLogicUtils
+  @_Concurrency.MainActor public func checkSurveyLaunchDayLogic(days: Swift.String, interceptId: Swift.Int, interceptRule: QuestionProCXFramework.Rule, completionDelegate: any QuestionProCXFramework.SurveyLaunchDelegate)
+  @_Concurrency.MainActor public func getAppUserInteractionTimeInSeconds() -> Swift.Int
+  @_Concurrency.MainActor public func checkSurveyLaunchDateOfMonthLogic(dates: Swift.String, interceptId: Swift.Int, interceptRule: QuestionProCXFramework.Rule, completionDelegate: any QuestionProCXFramework.SurveyLaunchDelegate)
   @_Concurrency.MainActor @objc override dynamic public init()
-  @_Concurrency.MainActor public func invokeService(touchPoint: QuestionProCXFramework.TouchPoint, withAPIKey apikey: Swift.String, dataCenter: QuestionProCXFramework.TouchPoint.DataCenter)
-  @_Concurrency.MainActor public func createCXRequestWithTouchPointID(touchPoint: QuestionProCXFramework.TouchPoint) -> Swift.String
-  @_Concurrency.MainActor public func execute(method: Swift.String, baseUrl: Swift.String, path: Swift.String, body: Swift.String?, apiKey: Swift.String)
-  @_Concurrency.MainActor public func printRequestDetails(request: Foundation.URLRequest)
-  @objc nonisolated public func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, didReceive data: Foundation.Data)
-  @objc nonisolated public func urlSession(_ session: Foundation.URLSession, dataTask: Foundation.URLSessionDataTask, didReceive response: Foundation.URLResponse, completionHandler: @escaping (Foundation.URLSession.ResponseDisposition) -> Swift.Void)
-  @objc nonisolated public func urlSession(_ session: Foundation.URLSession, task: Foundation.URLSessionTask, didCompleteWithError error: (any Swift.Error)?)
-  nonisolated public func urlSession(_ session: Foundation.URLSession, didReceive challenge: Foundation.URLAuthenticationChallenge, completionHandler: @escaping (Foundation.URLSession.AuthChallengeDisposition, Foundation.URLCredential?) -> Swift.Void)
-  @_Concurrency.MainActor public func handleHttpOK(data: Foundation.Data)
-  @_Concurrency.MainActor public func processJson(json: [Swift.String : Any])
   @objc deinit
 }
-@_hasMissingDesignatedInitializers public class GlobalDataCX {
-  public static func getDataCenterString(dataCenter: QuestionProCXFramework.TouchPoint.DataCenter) -> Swift.String
-  public static func getBaseUrl(dataCenter: Swift.String) -> Swift.String
-  public static func getUUIDValueFromKeyChain() -> Swift.String?
-  public static func checkUUIDValueInKeyChain() -> Swift.Bool
-  public static func addValueToUserDefault(_ aValue: Any, forKey aTouchPointIDKey: Swift.String)
-  public static func addToUserDefault(_ value: Swift.Int, forKey key: Swift.String)
-  public static func getValueFromUserDefault(_ key: Swift.String) -> Swift.Int?
-  public static func deleteUserDefaultValue(forKey aTouchPointIDKey: Swift.String)
-  public static func checkValueInUserDefault(forKey aTouchPointIDKey: Swift.String) -> [Swift.String : Any]?
+@_hasMissingDesignatedInitializers public class TimerUtils {
+  @_Concurrency.MainActor public static var instance: QuestionProCXFramework.TimerUtils?
+  @_Concurrency.MainActor public static func getinstance() -> QuestionProCXFramework.TimerUtils
+  public func startTimer(timeInterval: Swift.Int, interceptId: Swift.Int, interceptRule: QuestionProCXFramework.Rule, completionDelegate: any QuestionProCXFramework.SurveyLaunchDelegate) -> _Concurrency.AsyncStream<Swift.Int>
+  public func pauseAllTimers()
+  public func resumeAllTimers()
+  public func stopTimer(for interceptId: Swift.Int)
+  public func stopAllTimers()
   @objc deinit
 }
-public class KeychainItemWrapper {
-  public var keychainItemData: [Swift.String : Any]
-  public var genericPasswordQuery: [Swift.String : Any]
-  public init(identifier: Swift.String, accessGroup: Swift.String?)
-  public func setObject(_ inObject: Any?, forKey key: Swift.String)
-  public func objectForKey(_ key: Swift.String) -> Any?
-  public func resetKeychainItem()
-  public func dictionaryToSecItemFormat(_ dictionaryToConvert: [Swift.String : Any]) -> [Swift.String : Any]
-  public func secItemFormatToDictionary(_ dictionaryToConvert: [Swift.String : Any]) -> [Swift.String : Any]?
-  public func writeToKeychain()
-  public func isEqual(_ obj1: Any, _ obj2: Any) -> Swift.Bool
-  @objc deinit
+@_Concurrency.MainActor public protocol QuestionProCallbackDelegate : ObjectiveC.NSObjectProtocol {
+  @_Concurrency.MainActor func getSurveyURL(surveyURL: Swift.String)
 }
+@_Concurrency.MainActor public protocol QuestionProInitDelegate : ObjectiveC.NSObjectProtocol {
+  @_Concurrency.MainActor func initSDKSuccess()
+  @_Concurrency.MainActor func initSDKFailed(error: Swift.String)
+}
+extension QuestionProCXFramework.APIRequestType : Swift.Equatable {}
+extension QuestionProCXFramework.APIRequestType : Swift.Hashable {}
+extension QuestionProCXFramework.APIRequestType : Swift.RawRepresentable {}
+extension QuestionProCXFramework.InterceptType : Swift.Equatable {}
+extension QuestionProCXFramework.InterceptType : Swift.Hashable {}
+extension QuestionProCXFramework.InterceptType : Swift.RawRepresentable {}
+extension QuestionProCXFramework.InterceptRuleType : Swift.Equatable {}
+extension QuestionProCXFramework.InterceptRuleType : Swift.Hashable {}
+extension QuestionProCXFramework.InterceptRuleType : Swift.RawRepresentable {}
+extension QuestionProCXFramework.InterceptCondition : Swift.Equatable {}
+extension QuestionProCXFramework.InterceptCondition : Swift.Hashable {}
+extension QuestionProCXFramework.InterceptCondition : Swift.RawRepresentable {}
+extension QuestionProCXFramework.InterceptSurveyLaunchEvent : Swift.Equatable {}
+extension QuestionProCXFramework.InterceptSurveyLaunchEvent : Swift.Hashable {}
+extension QuestionProCXFramework.InterceptSurveyLaunchEvent : Swift.RawRepresentable {}
+extension QuestionProCXFramework.LogTag : Swift.Equatable {}
+extension QuestionProCXFramework.LogTag : Swift.Hashable {}
+extension QuestionProCXFramework.LogTag : Swift.RawRepresentable {}
+extension QuestionProCXFramework.ApiServiceCX : Swift.Sendable {}
 extension QuestionProCXFramework.TouchPoint.DataCenter : Swift.Equatable {}
 extension QuestionProCXFramework.TouchPoint.DataCenter : Swift.Hashable {}
-extension QuestionProCXFramework.QuestionProCXManager : Swift.Sendable {}
+extension QuestionProCXFramework.TouchPoint.DataCenter : Swift.RawRepresentable {}
+extension QuestionProCXFramework.QuestionProCX : Swift.Sendable {}
+extension QuestionProCXFramework.SurveyLaunchLogicUtils : Swift.Sendable {}
