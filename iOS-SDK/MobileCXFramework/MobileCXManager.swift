@@ -18,7 +18,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     
     public func apiSuccess(response: String, headers: [String: String]) {
         LogUtils.printMessage(message:"Api call successfull...")
-
+        
         // Step 1: Decrypt
         self.callback?.decryptData(apiResponse: (response, headers)) { decryptedData in
             LogUtils.printMessage(message: "🔓 Decrypted data: \(decryptedData ?? "nil")")
@@ -32,10 +32,10 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
                     LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "❌ Failed to re-parse decrypted string into dictionary.")
                     return
                 }
-
+                
                 if let response = dictionary["response"] as? [String: Any],
                    let url = response["surveyURL"] as? String,
-                   !url.isEmpty {                    
+                   !url.isEmpty {
                     LogUtils.printMessage(message: "✅ surveyURL: \(url)")
                     let showInDialog = self.currentTouchPoint.ShowInDialog
                     if showInDialog {
@@ -43,9 +43,9 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
                     } else {
                         self.showMessageInViewControllerWithResponse(touchPoint: self.currentTouchPoint)
                     }
-
+                    
                     self.launchSurveyOnApiSuccess(withURL: response)
-
+                    
                 } else {
                     self.iView?.removeFromSuperview()
                     LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "❌ surveyURL is missing or empty")
@@ -61,16 +61,16 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             
             [weak self] newToken in
             guard let self = self else { return }
-
+            
             LogUtils.printMessage(message: "🔁 Refreshed Token: \(newToken ?? "nil")")
-
+            
             let serviceManager = MobileCXServiceTxManager()
             serviceManager.iDelegate = self
-
+            
             serviceManager.invokeSeviceForExternalApi(touchPoint: touchPoint, withAPIKey: apiKey,
-                                                  apiBaseUrl: apiBaseUrl, accessToken: accessToken,
-                                                  port: port, callback: self.callback!)
-            }
+                                                      apiBaseUrl: apiBaseUrl, accessToken: accessToken,
+                                                      port: port, callback: self.callback!)
+        }
     }
     
     private var callback: QuestionProCallback?
@@ -103,7 +103,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     
     let backButton = UIButton(type: .custom)
     
-    @MainActor public func launchSurveyOnApiSuccess(withURL response: [String: Any]) {
+    @MainActor private func launchSurveyOnApiSuccess(withURL response: [String: Any]) {
         if let _ = response[ksurveyURL] {
             if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
                 LogUtils.printMessage(message:"Survey URL -> \(responseURL)")
@@ -126,7 +126,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             }
         } else {
             guard let error = response["error"] as? [String: Any] else { return }
-
+            
             let errorMessage = error["message"] as? String ?? "Unknown error"
             showApiErrorAlert(errorMessage: errorMessage)
         }
@@ -143,37 +143,37 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             }
         }
     }
-
+    
     func errorAPIHandler() {
         perform(#selector(self.aDismissWebview(_:)), with: self, afterDelay: 0)
     }
     
-    public var iBaseWindow: UIWindow?
-    public var iView: UIView?
+    private var iBaseWindow: UIWindow?
+    private var iView: UIView?
     @MainActor
-    public var iWebView: WKWebView?
+    private var iWebView: WKWebView?
     @MainActor
-    public var iResponseURL: String?
-    public var iPopupMenuTitle: String?
-    public var iPopupMenuMessage: String?
-    public var iPopupMenuRightButtonTitle: String?
-    public var iPopupMenuLeftButtonTitle: String?
-    public var iPopUpViewFlag: Bool = false
+    private var iResponseURL: String?
+    private var iPopupMenuTitle: String?
+    private var iPopupMenuMessage: String?
+    private var iPopupMenuRightButtonTitle: String?
+    private var iPopupMenuLeftButtonTitle: String?
+    private var iPopUpViewFlag: Bool = false
     @MainActor
-    public var iPresentViewFlag: Bool = false
+    private var iPresentViewFlag: Bool = false
     @MainActor
-    public var iTouchPointName: Int?
-    public var iApiKey: String?
-    public var iApiBaseUrl: String?
-    public var iAccessToken: String?
-    public var iPort: String?
+    private var iTouchPointName: Int?
+    private var iApiKey: String?
+    private var iApiBaseUrl: String?
+    private var iAccessToken: String?
+    private var iPort: String?
     @MainActor
-    public var iCurrentViewName: String = ""
-    public var touchPoint: TouchPoint?
+    private var iCurrentViewName: String = ""
+    private var touchPoint: TouchPoint?
     
     public override init() {
     }
-
+    
     public static let sharedManager: QuestionProCXManager = {
         let instance = QuestionProCXManager()
         GlobalDataCX.checkUUIDValueInKeyChain()
@@ -185,7 +185,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         instance.iPopUpViewFlag = true
         return instance
     }()
-
+    
     public func initWithAPIKey(apiKey: String, apiBaseUrl: String, accessToken: String, port: String = "", callback: QuestionProCallback, withWindow aWindow: UIWindow) {
         self.iApiKey = apiKey
         self.iBaseWindow = aWindow
@@ -195,28 +195,17 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         setCallback(callback)
         self.iCurrentViewName = ""
     }
-
-    public func touchPointBuilder(touchPointID: Int) -> TouchPoint {
-        self.touchPoint?.surveyId = touchPointID
-        return self.touchPoint!
-    }
-
+    
     public func launchFeedbackSurvey(touchPoint: TouchPoint) {
         currentTouchPoint = touchPoint
         self.getAPIResponse(touchPoint: touchPoint)
     }
-
-    public func stopQuestionProCXManager() {
-    }
-
-    public func setPopupMenuTitle(aTitle: String, message aMessage: String, rightButtonTitle aRightButtonTitle: String, leftButtonTitle aLeftButtonTitle: String) {
-        self.iPopupMenuTitle = aTitle
-        self.iPopupMenuMessage = aMessage
-        self.iPopupMenuRightButtonTitle = aRightButtonTitle
-        self.iPopupMenuLeftButtonTitle = aLeftButtonTitle
+    
+    public func closeSurveyWindow() {
+        self.iView?.removeFromSuperview()
     }
     
-    public func getAPIResponse (touchPoint: TouchPoint) {
+    private func getAPIResponse (touchPoint: TouchPoint) {
         var responseInfo: [String: Any] = [:]
         let key = "\(String(describing: self.iTouchPointName))"
         responseInfo = GlobalDataCX.checkValueInUserDefault(forKey: key)!
@@ -227,12 +216,11 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             let aMobileCXServiceTxManager = MobileCXServiceTxManager()
             self.iTouchPointName = touchPoint.surveyId
             aMobileCXServiceTxManager.iDelegate = self
-//            aMobileCXServiceTxManager.invokeService(touchPoint: touchPoint, withAPIKey: self.iApiKey!, dataCenter: self.iDataCenter!, callback: self.callback!)
             aMobileCXServiceTxManager.invokeSeviceForExternalApi(touchPoint: touchPoint, withAPIKey: self.iApiKey!, apiBaseUrl: self.iApiBaseUrl!, accessToken: self.iAccessToken!, port: self.iPort!, callback: self.callback!)
         }
     }
-
-    public func showMessageInViewControllerWithResponse(touchPoint: TouchPoint) {
+    
+    private func showMessageInViewControllerWithResponse(touchPoint: TouchPoint) {
         DispatchQueue.main.async {
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             rect.origin.x = 0
@@ -286,7 +274,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             
             self.backButton.addTarget(self, action: #selector(self.goToPreviousPage(_:)), for: .touchUpInside)
             let backButtonImage = UIImage(systemName: "chevron.backward",
-                                           withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
+                                          withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
             self.backButton.setImage(backButtonImage, for: .normal)
             self.backButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
             self.backButton.layer.cornerRadius = self.backButton.bounds.size.width / 2
@@ -295,8 +283,8 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             frontView.addSubview(self.backButton)
         }
     }
-
-    public func showInAppSurvey(touchPoint: TouchPoint) {
+    
+    private func showInAppSurvey(touchPoint: TouchPoint) {
         DispatchQueue.main.async {
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             let screenRect = UIScreen.main.bounds
@@ -304,13 +292,13 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             rect.origin.y = 0
             rect.size.width = screenRect.size.width
             rect.size.height = screenRect.size.height
-
+            
             self.iView = UIView(frame: rect)
             self.iView?.backgroundColor = UIColor.gray.withAlphaComponent(0.6)
-
+            
             let frontView = UIView(frame: CGRect(x: Int(screenRect.size.width * 0.1), y: Int(screenRect.size.height * 0.15), width: Int(screenRect.size.width * 0.8), height: Int(screenRect.size.height * 0.7)))
             frontView.backgroundColor = UIColor.white
-                        
+            
             let preferences = WKPreferences()
             let configuration = WKWebViewConfiguration()
             if #available(iOS 14.0, *) {
@@ -329,7 +317,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             self.iWebView?.allowsLinkPreview = false
             
             frontView.addSubview(self.iWebView!)
-
+            
             self.iView?.addSubview(frontView)
             self.iBaseWindow?.addSubview(self.iView!)
             self.iBaseWindow?.bringSubviewToFront(self.iView!)
@@ -344,7 +332,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             frontView.addSubview(headerView)
             let doneButton = UIButton(type: .custom)
             doneButton.addTarget(self, action: #selector(self.aDismissWebview(_:)), for: .touchUpInside)
-
+            
             let closeButtonImage = UIImage(systemName: "xmark",
                                            withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
             doneButton.setImage(closeButtonImage, for: .normal)
@@ -355,7 +343,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             
             self.backButton.addTarget(self, action: #selector(self.goToPreviousPage(_:)), for: .touchUpInside)
             let backButtonImage = UIImage(systemName: "chevron.backward",
-                                           withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
+                                          withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
             self.backButton.setImage(backButtonImage, for: .normal)
             self.backButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
             self.backButton.layer.cornerRadius = self.backButton.bounds.size.width / 2
@@ -380,7 +368,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         if navigationType == .linkActivated {
             webView.load(navigationAction.request)
             decisionHandler(.cancel)
-            self.backButton.isHidden = false            
+            self.backButton.isHidden = false
             return
         }
         decisionHandler(.allow)
@@ -394,18 +382,18 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
             perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 1.0)
         }
     }
-
-        // WKNavigationDelegate method for when navigation finishes
+    
+    // WKNavigationDelegate method for when navigation finishes
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         GMDCircleLoader.hideFromView(self.iWebView!, animated: true)
-        }
-
-        // WKNavigationDelegate method for when navigation fails
+    }
+    
+    // WKNavigationDelegate method for when navigation fails
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "Failed to load with error: \(error.localizedDescription)")
         GMDCircleLoader.hideFromView(self.iWebView!, animated: true)
     }
-
+    
     @objc func aDismissWebview(_ sender: Any) {
         self.iView?.removeFromSuperview()
     }
@@ -414,12 +402,12 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         self.iWebView?.goBack()
         self.backButton.isHidden = true
     }
-
-    public func currentViewLoaded() {
+    
+    private func currentViewLoaded() {
         self.iPresentViewFlag = true
     }
-
-    public func currentViewUnLoaded() {
+    
+    private func currentViewUnLoaded() {
         self.iPresentViewFlag = false
     }
 }
