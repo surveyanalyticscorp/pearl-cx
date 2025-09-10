@@ -65,41 +65,17 @@ public class TouchPoint {
 }
 @objc @_inheritsConvenienceInitializers @_Concurrency.MainActor public class QuestionProCXManager : ObjectiveC.NSObject, UIKit.UIAlertViewDelegate, QuestionProCXFramework.CXServiceDelegate, WebKit.WKNavigationDelegate, WebKit.WKScriptMessageHandler {
   @_Concurrency.MainActor public func apiSuccess(withURL response: [Swift.String : Any])
-  @_Concurrency.MainActor public func launchSurveyOnApiSuccess(withURL response: [Swift.String : Any])
   @_Concurrency.MainActor public func apiFailure(response: Swift.String)
   @_Concurrency.MainActor public func showApiError(message: Swift.String)
   @_Concurrency.MainActor @preconcurrency @objc public func userContentController(_ userContentController: WebKit.WKUserContentController, didReceive message: WebKit.WKScriptMessage)
-  @_Concurrency.MainActor public func CXServiceResponse(withURL response: [Swift.String : Any])
-  @_Concurrency.MainActor public var iBaseWindow: UIKit.UIWindow?
-  @_Concurrency.MainActor public var iView: UIKit.UIView?
-  @_Concurrency.MainActor public var iWebView: WebKit.WKWebView?
-  @_Concurrency.MainActor public var iResponseURL: Swift.String?
-  @_Concurrency.MainActor public var iPopupMenuTitle: Swift.String?
-  @_Concurrency.MainActor public var iPopupMenuMessage: Swift.String?
-  @_Concurrency.MainActor public var iPopupMenuRightButtonTitle: Swift.String?
-  @_Concurrency.MainActor public var iPopupMenuLeftButtonTitle: Swift.String?
-  @_Concurrency.MainActor public var iPopUpViewFlag: Swift.Bool
-  @_Concurrency.MainActor public var iPresentViewFlag: Swift.Bool
-  @_Concurrency.MainActor public var iTouchPointName: Swift.Int?
-  @_Concurrency.MainActor public var iApiKey: Swift.String?
-  @_Concurrency.MainActor public var iCurrentViewName: Swift.String
-  @_Concurrency.MainActor public var iDataCenter: QuestionProCXFramework.TouchPoint.DataCenter?
-  @_Concurrency.MainActor public var touchPoint: QuestionProCXFramework.TouchPoint?
   @_Concurrency.MainActor @objc override dynamic public init()
   @_Concurrency.MainActor public static let sharedManager: QuestionProCXFramework.QuestionProCXManager
   @_Concurrency.MainActor public func initwithAPIKey(apiKey: Swift.String, dataCenter: QuestionProCXFramework.TouchPoint.DataCenter, withWindow aWindow: UIKit.UIWindow)
-  @_Concurrency.MainActor public func touchPointBuilder(touchPointID: Swift.Int) -> QuestionProCXFramework.TouchPoint
   @_Concurrency.MainActor public func launchFeedbackSurvey(touchPoint: QuestionProCXFramework.TouchPoint)
-  @_Concurrency.MainActor public func setPopupMenuTitle(aTitle: Swift.String, message aMessage: Swift.String, rightButtonTitle aRightButtonTitle: Swift.String, leftButtonTitle aLeftButtonTitle: Swift.String)
-  @_Concurrency.MainActor public func getAPIResponse(touchPoint: QuestionProCXFramework.TouchPoint)
-  @_Concurrency.MainActor public func showMessageInViewControllerWithResponse(touchPoint: QuestionProCXFramework.TouchPoint)
-  @_Concurrency.MainActor public func showInAppSurvey(touchPoint: QuestionProCXFramework.TouchPoint)
   @_Concurrency.MainActor @objc public func webView(_ webView: WebKit.WKWebView, decidePolicyFor navigationAction: WebKit.WKNavigationAction, decisionHandler: @escaping @_Concurrency.MainActor @Sendable (WebKit.WKNavigationActionPolicy) -> Swift.Void)
   @_Concurrency.MainActor @preconcurrency @objc public func webView(_ webView: WebKit.WKWebView, didStartProvisionalNavigation navigation: WebKit.WKNavigation!)
   @_Concurrency.MainActor @preconcurrency @objc public func webView(_ webView: WebKit.WKWebView, didFinish navigation: WebKit.WKNavigation!)
   @_Concurrency.MainActor @preconcurrency @objc public func webView(_ webView: WebKit.WKWebView, didFail navigation: WebKit.WKNavigation!, withError error: any Swift.Error)
-  @_Concurrency.MainActor public func currentViewLoaded()
-  @_Concurrency.MainActor public func currentViewUnLoaded()
   @objc deinit
 }
 @_Concurrency.MainActor public protocol CXServiceDelegate : ObjectiveC.NSObjectProtocol {

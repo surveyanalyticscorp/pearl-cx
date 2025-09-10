@@ -46,7 +46,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         }
     }
     
-    @MainActor public func launchSurveyOnApiSuccess(withURL response: [String: Any]) {
+    @MainActor private func launchSurveyOnApiSuccess(withURL response: [String: Any]) {
         if let _ = response[ksurveyURL] {
             if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
                 let responseCopy = response // Create a copy of the response
@@ -111,64 +111,31 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     }
     
     let backButton = UIButton(type: .custom)
-    @MainActor public func CXServiceResponse(withURL response: [String: Any]) {
-        if let _ = response[ksurveyURL] {
-            if let responseURL = response[ksurveyURL] as? String, !responseURL.isEmpty, responseURL != "Empty" {
-                let responseCopy = response // Create a copy of the response
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.iResponseURL = responseURL
-                    let strUserDefaultKey = "\(self.iTouchPointName ?? 0)\(self.iCurrentViewName)"
-                    if !self.iPresentViewFlag {
-                        GlobalDataCX.addValueToUserDefault(responseCopy, forKey: strUserDefaultKey)
-                    } else {
-                        if let url = self.iResponseURL, let nsurl = URL(string: url) {
-                            let nsrequest = URLRequest(url: nsurl)
-                            self.iWebView?.backgroundColor = UIColor.white
-                            self.iWebView?.load(nsrequest)
-                        }
-                    }
-                }
-            }
-        } else if let error = response["error"] as? [String: Any] {
-            // Extract error message
-            let errorMessage = error["message"] as? String ?? "Unknown error"
-            // Present the alert (requires a view controller)
-            DispatchQueue.main.async {
-                if let topController = UIApplication.shared.windows[0].rootViewController {
-                    // Show alert
-                    let alert = UIAlertController(title: "", message: errorMessage, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in self.errorAPIHandler() }))
-                    topController.present(alert, animated: true, completion: nil)
-                }
-            }
-        }
-    }
     
     func errorAPIHandler() {
         perform(#selector(self.aDismissWebview(_:)), with: self, afterDelay: 0)
     }
     
-    public var iBaseWindow: UIWindow?
-    public var iView: UIView?
+    private var iBaseWindow: UIWindow?
+    private var iView: UIView?
     @MainActor
-    public var iWebView: WKWebView?
+    private var iWebView: WKWebView?
     @MainActor
-    public var iResponseURL: String?
-    public var iPopupMenuTitle: String?
-    public var iPopupMenuMessage: String?
-    public var iPopupMenuRightButtonTitle: String?
-    public var iPopupMenuLeftButtonTitle: String?
-    public var iPopUpViewFlag: Bool = false
+    private var iResponseURL: String?
+    private var iPopupMenuTitle: String?
+    private var iPopupMenuMessage: String?
+    private var iPopupMenuRightButtonTitle: String?
+    private var iPopupMenuLeftButtonTitle: String?
+    private var iPopUpViewFlag: Bool = false
     @MainActor
-    public var iPresentViewFlag: Bool = false
+    private var iPresentViewFlag: Bool = false
     @MainActor
-    public var iTouchPointName: Int?
-    public var iApiKey: String?
+    private var iTouchPointName: Int?
+    private var iApiKey: String?
     @MainActor
-    public var iCurrentViewName: String = ""
-    public var iDataCenter: TouchPoint.DataCenter?
-    public var touchPoint: TouchPoint?
+    private var iCurrentViewName: String = ""
+    private var iDataCenter: TouchPoint.DataCenter?
+    private var touchPoint: TouchPoint?
     
     public override init() {
     }
@@ -192,28 +159,16 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         self.iCurrentViewName = ""
     }
     
-    public func touchPointBuilder(touchPointID: Int) -> TouchPoint {
-        self.touchPoint?.surveyId = touchPointID
-        return self.touchPoint!
-    }
-    
     public func launchFeedbackSurvey(touchPoint: TouchPoint) {
         currentTouchPoint = touchPoint
         self.getAPIResponse(touchPoint: touchPoint)
     }
     
-    private func stopQuestionProCXManager() {
+    private func closeSurveyWindow() {
         self.dismissSurveyPopup()
     }
     
-    public func setPopupMenuTitle(aTitle: String, message aMessage: String, rightButtonTitle aRightButtonTitle: String, leftButtonTitle aLeftButtonTitle: String) {
-        self.iPopupMenuTitle = aTitle
-        self.iPopupMenuMessage = aMessage
-        self.iPopupMenuRightButtonTitle = aRightButtonTitle
-        self.iPopupMenuLeftButtonTitle = aLeftButtonTitle
-    }
-    
-    public func getAPIResponse (touchPoint: TouchPoint) {
+    private func getAPIResponse (touchPoint: TouchPoint) {
         var responseInfo: [String: Any] = [:]
         let key = "\(String(describing: self.iTouchPointName))"
         responseInfo = GlobalDataCX.checkValueInUserDefault(forKey: key)!
@@ -228,7 +183,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         }
     }
     
-    public func showMessageInViewControllerWithResponse(touchPoint: TouchPoint) {
+    private func showMessageInViewControllerWithResponse(touchPoint: TouchPoint) {
         DispatchQueue.main.async {
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             rect.origin.x = 0
@@ -292,7 +247,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         }
     }
     
-    public func showInAppSurvey(touchPoint: TouchPoint) {
+    private func showInAppSurvey(touchPoint: TouchPoint) {
         DispatchQueue.main.async {
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             let screenRect = UIScreen.main.bounds
@@ -368,7 +323,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         
         let url = webView.url
         
-        print(webView.url as Any)
+//        print(webView.url as Any)
         if (((url?.absoluteString.range(of: "exitsurvey")) != nil) || ((url?.absoluteString.range(of: "#autoClose") != nil))) {
             perform(#selector(aDismissWebview(_:)), with: self, afterDelay: 3.0)
         }
@@ -411,11 +366,11 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
         self.backButton.isHidden = true
     }
     
-    public func currentViewLoaded() {
+    private func currentViewLoaded() {
         self.iPresentViewFlag = true
     }
     
-    public func currentViewUnLoaded() {
+    private func currentViewUnLoaded() {
         self.iPresentViewFlag = false
     }
     
