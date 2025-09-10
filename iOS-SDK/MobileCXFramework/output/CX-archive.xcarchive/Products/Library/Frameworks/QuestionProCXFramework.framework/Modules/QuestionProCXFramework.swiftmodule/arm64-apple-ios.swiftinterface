@@ -64,6 +64,10 @@ public class TouchPoint {
   @objc deinit
 }
 @objc @_inheritsConvenienceInitializers @_Concurrency.MainActor public class QuestionProCXManager : ObjectiveC.NSObject, UIKit.UIAlertViewDelegate, QuestionProCXFramework.CXServiceDelegate, WebKit.WKNavigationDelegate, WebKit.WKScriptMessageHandler {
+  @_Concurrency.MainActor public func apiSuccess(withURL response: [Swift.String : Any])
+  @_Concurrency.MainActor public func launchSurveyOnApiSuccess(withURL response: [Swift.String : Any])
+  @_Concurrency.MainActor public func apiFailure(response: Swift.String)
+  @_Concurrency.MainActor public func showApiError(message: Swift.String)
   @_Concurrency.MainActor @preconcurrency @objc public func userContentController(_ userContentController: WebKit.WKUserContentController, didReceive message: WebKit.WKScriptMessage)
   @_Concurrency.MainActor public func CXServiceResponse(withURL response: [Swift.String : Any])
   @_Concurrency.MainActor public var iBaseWindow: UIKit.UIWindow?
@@ -86,7 +90,6 @@ public class TouchPoint {
   @_Concurrency.MainActor public func initwithAPIKey(apiKey: Swift.String, dataCenter: QuestionProCXFramework.TouchPoint.DataCenter, withWindow aWindow: UIKit.UIWindow)
   @_Concurrency.MainActor public func touchPointBuilder(touchPointID: Swift.Int) -> QuestionProCXFramework.TouchPoint
   @_Concurrency.MainActor public func launchFeedbackSurvey(touchPoint: QuestionProCXFramework.TouchPoint)
-  @_Concurrency.MainActor public func stopQuestionProCXManager()
   @_Concurrency.MainActor public func setPopupMenuTitle(aTitle: Swift.String, message aMessage: Swift.String, rightButtonTitle aRightButtonTitle: Swift.String, leftButtonTitle aLeftButtonTitle: Swift.String)
   @_Concurrency.MainActor public func getAPIResponse(touchPoint: QuestionProCXFramework.TouchPoint)
   @_Concurrency.MainActor public func showMessageInViewControllerWithResponse(touchPoint: QuestionProCXFramework.TouchPoint)
@@ -100,7 +103,9 @@ public class TouchPoint {
   @objc deinit
 }
 @_Concurrency.MainActor public protocol CXServiceDelegate : ObjectiveC.NSObjectProtocol {
-  @_Concurrency.MainActor func CXServiceResponse(withURL response: [Swift.String : Any])
+  @_Concurrency.MainActor func apiSuccess(withURL response: [Swift.String : Any])
+  @_Concurrency.MainActor func apiFailure(response: Swift.String)
+  @_Concurrency.MainActor func showApiError(message: Swift.String)
 }
 @objc @_inheritsConvenienceInitializers @_Concurrency.MainActor public class MobileCXServiceTxManager : ObjectiveC.NSObject, Foundation.URLSessionDelegate, Foundation.URLSessionTaskDelegate, Foundation.URLSessionDataDelegate {
   @_Concurrency.MainActor public var response: Foundation.URLResponse?

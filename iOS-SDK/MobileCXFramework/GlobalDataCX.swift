@@ -85,8 +85,7 @@ public class GlobalDataCX {
         UserDefaults.standard.synchronize()
     }
     
-    public static func addToUserDefault(_ value: Int, forKey key: String) {
-        print("ADding to user defaults->", value)
+    public static func addToUserDefault(_ value: Int, forKey key: String) {        
         UserDefaults.standard.set(value, forKey: key)
         UserDefaults.standard.synchronize()
     }

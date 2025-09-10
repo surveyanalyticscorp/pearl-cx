@@ -2,7 +2,9 @@ import Foundation
 import UIKit
 
 @MainActor public protocol CXServiceDelegate: NSObjectProtocol {
-    func CXServiceResponse(withURL response: [String: Any])
+    func apiSuccess(withURL response: [String: Any])
+    func apiFailure(response: String)
+    func showApiError(message: String)
 }
 
 @MainActor
@@ -11,7 +13,6 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
     public var receivedData: Data
     public weak var iDelegate: CXServiceDelegate?
 
-    // Initialize the receivedData
     public override init() {
         self.receivedData = Data()
     }
@@ -150,6 +151,6 @@ public class MobileCXServiceTxManager: NSObject, URLSessionDelegate, URLSessionT
         if let surveyURL = json["surveyURL"] as? String {
 //            print("processJson -> surveyURL: \(surveyURL)")
         }
-        iDelegate?.CXServiceResponse(withURL: json)
+        iDelegate?.apiSuccess(withURL: json)
     }
 }
