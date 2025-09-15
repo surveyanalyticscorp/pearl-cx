@@ -30,7 +30,6 @@ export const TitleAndTagsItem = ({item, index}) => {
         style={styles.tagList}
         data={item.items}
         horizontal
-        removeClippedSubviews={true}
         contentContainerStyle={{flexGrow: 0}}
         listKey={`rootCauseItemList-${index}`}
         renderItem={TagViewItem}
@@ -77,7 +76,10 @@ export const CurrentSelectedRootCasues = () => {
     state =>
       state.dashboard.ticket?.centralizeRootCause?.centralizeRootCauseIds ?? [],
   );
-
+  console.log(
+    'CENTRALIZED_ROOT_CAUSE_LIST_CURRENT_SELECTED',
+    JSON.stringify(list),
+  );
   useEffect(() => {
     setList(getSelectedTagList(centralizedRootCauseList, selectedTags));
   }, [centralizedRootCauseList, selectedTags]);
@@ -86,9 +88,8 @@ export const CurrentSelectedRootCasues = () => {
     <FlatList
       style={styles.flatList}
       data={list}
-      removeClippedSubviews={true}
       contentContainerStyle={{flexGrow: 0}}
-      listKey={'rootCauses-Centralized-RootCause'}
+      listKey={'selected-centralized-RootCause'}
       renderItem={TitleAndTagsItem}
       keyExtractor={(item, index) => item.title.toString()}
     />

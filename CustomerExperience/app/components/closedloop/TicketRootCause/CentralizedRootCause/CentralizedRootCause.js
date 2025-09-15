@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Pressable,
   TextInput,
+  Platform,
 } from 'react-native';
 import {baseTextStyles} from '../../../../styles/text.styles';
 import {VerticalSpaceBox} from '../../../../widgets/SpaceBox';
@@ -289,7 +290,6 @@ export const CentralizedRootCause = props => {
       <FlatList
         style={styles.flatList}
         data={centralizedRootCauseList}
-        removeClippedSubviews={true}
         contentContainerStyle={{flexGrow: 0}}
         listKey={`rootCauses-CentralizedRootCause`}
         renderItem={({item, index}) => (
@@ -356,6 +356,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.settingsBackground,
     borderBottomStartRadius: 4,
     borderTopEndRadius: 4,
+    height: PaddingConstants.tab1_6x,
   },
   otherText: {
     ...baseTextStyles.primaryRegularText,

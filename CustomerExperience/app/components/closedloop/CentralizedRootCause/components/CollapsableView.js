@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary2,
-    fontWeight: FontWeight._600,
+    fontWeight: Platform.OS === 'ios' ? FontWeight._400 : FontWeight._600,
     color: Colors.filterIconColor,
   },
   trailing: {

@@ -27,6 +27,8 @@ const TicketRootCause = props => {
   return (
     <ScrollView
       testID="root-cause-view"
+      contentContainerStyle={{flexGrow: 0}}
+      listKey={`rootCauses-ticket-root-cause`}
       style={styles.rootContainer}
       refreshControl={
         <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
