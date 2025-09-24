@@ -90,7 +90,7 @@ const QPTextField = props => {
         autoCapitalize={'none'}
         autoCorrect={false}
         autoFocus={props.autofocus}
-        tintColor={props.tintColor || Colors.accent}
+        tintColor={props.tintColor || Colors.accentLight}
         textColor={props.textColor || Colors.primary}
         baseColor={props.baseColor || Colors.primary}
         label={label}
