@@ -1,0 +1,279 @@
+import React, {useState, useEffect} from 'react';
+import {
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+
+//import InterceptSdk from '@questionpro/react-native-intercept-sdk';
+
+
+const App = () => {
+  const [sdkStatus, setSdkStatus] = useState('Not Configured');
+  const [lastEvent, setLastEvent] = useState<any>(null);
+  const [platform, setPlatform] = useState('unknown');
+
+  useEffect(() => {
+    // Set platform info
+    setPlatform(require('react-native').Platform.OS);
+
+    // Test basic SDK availability
+    //console.log('🚀 InterceptSdk available:', !!InterceptSdk);
+    //console.log('🚀 InterceptSdk methods:', Object.keys(InterceptSdk));
+
+    // Listen for SDK events
+    /*const subscription = InterceptSdk.onEvent((event) => {
+      console.log('🎯 Received SDK Event:', event);
+      setLastEvent(event);
+    });
+
+    return () => subscription?.remove?.();*/
+  }, []);
+
+  const handleConfigure = async () => {
+    try {
+      console.log('🔧 Configuring SDK...');
+      /*await InterceptSdk.configure({
+        apiKey: 'demo_api_key_123',
+        serverUrl: 'https://demo.questionpro.com',
+        enableLogging: true,
+      });
+      setSdkStatus('Configured ✅');*/
+      console.log('✅ SDK Configured successfully');
+    } catch (error) {
+      console.error('❌ Configuration error:', error);
+      Alert.alert('Error', `Configuration failed: ${error}`);
+    }
+  };
+
+  const handleTriggerEvent = async (eventName: string, data: any) => {
+    try {
+      console.log(`🚀 Triggering event: ${eventName}`, data);
+      //await InterceptSdk.notifyEvent(eventName, data);
+      console.log(`✅ Event ${eventName} triggered successfully`);
+    } catch (error) {
+      console.error(`❌ Error triggering ${eventName}:`, error);
+      Alert.alert('Error', `Event trigger failed: ${error}`);
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#f5f5f5" />
+      <ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
+        
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.title}>QuestionPro Survey SDK</Text>
+          <Text style={styles.subtitle}>React Native Example</Text>
+        </View>
+
+        {/* Status */}
+        <View style={styles.statusContainer}>
+          <Text style={styles.statusLabel}>SDK Status:</Text>
+          <Text style={[styles.statusValue, sdkStatus.includes('✅') ? styles.statusSuccess : styles.statusPending]}>
+            {sdkStatus}
+          </Text>
+        </View>
+
+        <View style={styles.statusContainer}>
+          <Text style={styles.statusLabel}>Platform:</Text>
+          <Text style={styles.statusValue}>{platform}</Text>
+        </View>
+
+        {/* Configure Button */}
+        <TouchableOpacity style={styles.configureButton} onPress={handleConfigure}>
+          <Text style={styles.buttonText}>Configure SDK</Text>
+        </TouchableOpacity>
+
+        {/* Event Buttons */}
+        <View style={styles.eventSection}>
+          <Text style={styles.sectionTitle}>Test Events</Text>
+          
+          <TouchableOpacity 
+            style={styles.eventButton} 
+            onPress={() => handleTriggerEvent('survey_shown', {surveyId: 'demo_survey_123', type: 'popup'})}
+          >
+            <Text style={styles.eventButtonText}>Trigger Survey Shown</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.eventButton} 
+            onPress={() => handleTriggerEvent('survey_completed', {surveyId: 'demo_survey_123', responseId: 'resp_456'})}
+          >
+            <Text style={styles.eventButtonText}>Trigger Survey Completed</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.eventButton} 
+            onPress={() => handleTriggerEvent('survey_dismissed', {surveyId: 'demo_survey_123', reason: 'user_closed'})}
+          >
+            <Text style={styles.eventButtonText}>Trigger Survey Dismissed</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.eventButton} 
+            onPress={() => handleTriggerEvent('user_action', {action: 'button_click', element: 'cta_button'})}
+          >
+            <Text style={styles.eventButtonText}>Trigger Custom Event</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Last Event Display */}
+        {lastEvent && (
+          <View style={styles.eventDisplay}>
+            <Text style={styles.sectionTitle}>Last Event Received</Text>
+            <View style={styles.eventData}>
+              <Text style={styles.eventText}>Type: {lastEvent.type}</Text>
+              <Text style={styles.eventText}>Data: {JSON.stringify(lastEvent.data, null, 2)}</Text>
+              <Text style={styles.eventText}>Timestamp: {new Date().toLocaleTimeString()}</Text>
+            </View>
+          </View>
+        )}
+
+        {/* Instructions */}
+        <View style={styles.instructions}>
+          <Text style={styles.instructionTitle}>Instructions:</Text>
+          <Text style={styles.instructionText}>1. Tap "Configure SDK" to initialize</Text>
+          <Text style={styles.instructionText}>2. Use event buttons to test functionality</Text>
+          <Text style={styles.instructionText}>3. Check console/logs for detailed output</Text>
+          <Text style={styles.instructionText}>4. Events will appear in "Last Event" section</Text>
+        </View>
+
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  scrollView: {
+    padding: 20,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 30,
+    paddingVertical: 20,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 5,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#666',
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    padding: 15,
+    marginBottom: 10,
+    borderRadius: 8,
+  },
+  statusLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+  },
+  statusValue: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  statusSuccess: {
+    color: '#28a745',
+  },
+  statusPending: {
+    color: '#ffc107',
+  },
+  configureButton: {
+    backgroundColor: '#007AFF',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  eventSection: {
+    marginTop: 20,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 15,
+  },
+  eventButton: {
+    backgroundColor: '#28a745',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  eventButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  eventDisplay: {
+    marginTop: 30,
+    backgroundColor: '#ffffff',
+    padding: 15,
+    borderRadius: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: '#007AFF',
+  },
+  eventData: {
+    backgroundColor: '#f8f9fa',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  eventText: {
+    fontFamily: 'Courier',
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 5,
+  },
+  instructions: {
+    marginTop: 30,
+    backgroundColor: '#e3f2fd',
+    padding: 15,
+    borderRadius: 8,
+  },
+  instructionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1976d2',
+    marginBottom: 10,
+  },
+  instructionText: {
+    fontSize: 14,
+    color: '#1565c0',
+    marginBottom: 5,
+  },
+});
+
+export default App;
