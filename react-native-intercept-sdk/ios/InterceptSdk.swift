@@ -115,7 +115,7 @@ class InterceptSdk: RCTEventEmitter, QuestionProInitDelegate {
     func startSurvey(_ surveyId: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         print("🔧 [iOS] StartSurvey called: \(surveyId)")
         
-        /let result: [String: Any] = [
+        let result: [String: Any] = [
             "success": true,
             "surveyId": surveyId,
             "message": "Survey started successfully"
