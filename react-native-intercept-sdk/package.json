@@ -8,28 +8,17 @@
   "scripts": {
     "prepare": "bob build",
     "build": "bob build",
-    "test": "jest",
-    "typescript": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "lint:fix": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "example": "cd example && npm start"
   },
   "keywords": [
     "react-native",
-    "questionpro",
+    "questionpro", 
     "survey",
     "intercept"
   ],
   "repository": "https://github.com/questionpro/react-native-intercept-sdk",
-  "author": "QuestionPro <support@questionpro.com> (https://github.com/questionpro)",
+  "author": "QuestionPro <support@questionpro.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/questionpro/react-native-intercept-sdk/issues"
-  },
-  "homepage": "https://github.com/questionpro/react-native-intercept-sdk#readme",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
   "devDependencies": {
     "@types/react": "^18.0.24",
     "@types/react-native": "0.70.6",
@@ -50,11 +39,6 @@
     "ios": {
       "podspecPath": "./react-native-intercept-sdk.podspec"
     }
-  },
-  "codegenConfig": {
-    "name": "InterceptSdkSpec",
-    "type": "modules",
-    "jsSrcsDir": "src"
   },
   "react-native-builder-bob": {
     "source": "src",

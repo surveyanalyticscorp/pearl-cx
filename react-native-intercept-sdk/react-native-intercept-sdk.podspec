@@ -1,30 +1,40 @@
-require 'json'
+require "json"
 
-package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
+package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 Pod::Spec.new do |s|
-  s.name         = package['name'].gsub('@questionpro/', '')
-  s.version      = package['version']
-  s.summary      = package['description']
-  s.description  = package['description']
-  s.homepage     = package['homepage']
-  s.license      = package['license']
-  s.authors      = package['author']
+  s.name         = "react-native-intercept-sdk"
+  s.version      = package["version"]
+  s.summary      = "React Native SDK wrapper for QuestionPro Survey Intercept SDK"
+  s.description  = "A React Native wrapper that provides JavaScript bridge to native Android and iOS QuestionPro survey SDK for mobile app integration."
+  s.homepage     = "https://github.com/questionpro/react-native-intercept-sdk"
+  s.license      = { :type => "MIT", :file => "LICENSE" }
+  s.authors      = { "QuestionPro" => "support@questionpro.com" }
 
-  s.platforms    = { :ios => "11.0" }
-  s.source       = { :git => package['repository']['url'], :tag => "#{s.version}" }
+  s.platforms    = { :ios => "15.0" }
+  s.source       = { :path => "." }
 
-  s.source_files = "ios/**/*.{h,c,cc,cpp,m,mm,swift}"
-  s.requires_arc = true
-
+  # Include all iOS source files
+  s.source_files = "ios/**/*.{m,swift}"
+  
+  # React Native dependency (targeting RN >= 0.70)
   s.dependency "React-Core"
-
-  # Swift version configuration
+  
+  # QuestionPro CX Framework dependency
+  s.dependency "QuestionProCXFramework"
+  
+  # Swift configuration
   s.swift_version = "5.0"
   
-  # TODO: Add your existing Survey SDK dependency here
-  # Example:
-  # s.dependency "QuestionProSurveySDK", "~> 1.0.0"
-  # or if it's a local framework:
-  # s.vendored_frameworks = 'ios/Frameworks/SurveySDK.framework'
+  # iOS deployment target (compatible with RN >= 0.70)
+  s.ios.deployment_target = "15.0"
+  
+  # Required for Swift modules
+  s.pod_target_xcconfig = {
+    'DEFINES_MODULE' => 'YES'
+  }
+
+  s.requires_arc = true
+  s.static_framework = true
+
 end

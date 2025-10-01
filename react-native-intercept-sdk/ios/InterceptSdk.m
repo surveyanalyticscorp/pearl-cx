@@ -24,15 +24,17 @@ RCT_EXTERN_METHOD(configure:(NSDictionary *)options
  * @param eventName Name of the event
  * @param params Optional event parameters
  */
-RCT_EXTERN_METHOD(notifyEvent:(NSString *)eventName
-                  params:(NSDictionary *)params)
+RCT_EXTERN_METHOD(notifyEvent:(NSString *)eventType
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
 
-/**
- * Required for RCTEventEmitter to work properly
- */
+RCT_EXTERN_METHOD(startSurvey:(NSString *)surveyId
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+
 + (BOOL)requiresMainQueueSetup
 {
-    return NO;
+  return YES;
 }
 
 @end

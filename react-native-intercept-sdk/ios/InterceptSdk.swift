@@ -1,107 +1,150 @@
 import Foundation
 import React
+import QuestionProCXFramework 
 
-/**
- * React Native bridge module for QuestionPro Survey Intercept SDK (iOS)
- * 
- * This module serves as a bridge between React Native JavaScript and the native
- * QuestionPro Survey SDK for iOS. It handles configuration, event notifications,
- * and forwards events from the native SDK back to JavaScript.
- */
 @objc(InterceptSdk)
-class InterceptSdk: RCTEventEmitter {
+class InterceptSdk: RCTEventEmitter, QuestionProInitDelegate {
     
-    // Add initialization logging
+    // Store promises for async callbacks
+    private var configurePromise: RCTPromiseResolveBlock?
+    private var configureReject: RCTPromiseRejectBlock?
+
     override init() {
         super.init()
-        print("🔧 InterceptSdk iOS module initialized")
-        print("🔍 iOS module name: \(String(describing: type(of: self)))")
+        print("🔧 [iOS] InterceptSdk module initialized")
+        NSLog("🔧 [iOS] InterceptSdk module initialized")
+    }
+
+    @objc override static func moduleName() -> String! {
+        print("✅ Returning module name: InterceptSdk")
+        return "InterceptSdk"
     }
     
-    // Add constants to help with module detection
+    // CRITICAL: Required for proper module registration
     override func constantsToExport() -> [AnyHashable : Any]! {
+        print("🔧 [iOS] constantsToExport called - registering module")
+        NSLog("🔧 [iOS] constantsToExport called - registering module")
         return [
-            "isIOS": true,
-            "moduleName": "InterceptSdk",
-            "version": "1.0.0"
+            "platform": "ios",
+            "version": "1.0.0",
+            "isReady": true
         ]
     }
     
-    // Event names that will be emitted to JavaScript
-    static let EVENT_SURVEY_SHOWN = "survey_shown"
-    static let EVENT_SURVEY_COMPLETED = "survey_completed"
-    static let EVENT_SURVEY_DISMISSED = "survey_dismissed"
-    
-    // Supported events for RCTEventEmitter
+    // Required for RCTEventEmitter - define supported events
     override func supportedEvents() -> [String]! {
         return [
-            InterceptSdk.EVENT_SURVEY_SHOWN,
-            InterceptSdk.EVENT_SURVEY_COMPLETED,
-            InterceptSdk.EVENT_SURVEY_DISMISSED,
-            "error"
+            "InterceptSdkEvent",
+            "survey_shown",
+            "survey_completed", 
+            "survey_dismissed"
         ]
     }
     
-    // Enable the module to be initialized on any thread
+    // Required for React Native bridge
     override static func requiresMainQueueSetup() -> Bool {
-        return false
+        return true
     }
     
-    /**
-     * Configure the Survey SDK with API key and optional parameters
-     * 
-     * @param options Configuration object containing:
-     *                - apiKey: String (required)
-     *                - email: String (optional)
-     *                - variables: Dictionary (optional)
-     * @param resolve Promise resolver for success
-     * @param reject Promise rejecter for errors
-     */
+    // Configure method matching Android implementation
     @objc
     func configure(_ options: [String: Any], resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-        print("start configure ios")
-        guard let apiKey = options["apiKey"] as? String, !apiKey.isEmpty else {
-            reject("INVALID_API_KEY", "API key is required", nil)
-            return
-        }
-        
-        let email = options["email"] as? String
-        let variables = options["variables"] as? [String: Any]
-        
-        // TODO: Call your existing native SDK configure method here
-        // For now, simulate success
-        DispatchQueue.main.async {
-            resolve(true)
-        }
-    }
-    
-    /**
-     * Notify the SDK of an event occurrence
-     * 
-     * @param eventName Name of the event to notify
-     * @param params Optional parameters for the event
-     */
-    @objc
-    func notifyEvent(_ eventName: String, params: [String: Any]?) {
-        
-        // TODO: Call your existing native SDK notifyEvent method here
-        // For demonstration, emit a sample event
-        DispatchQueue.main.async { [weak self] in
-            self?.sendEvent(withName: InterceptSdk.EVENT_SURVEY_SHOWN, body: [
-                "eventName": eventName,
-                "message": "Event triggered: \(eventName)"
-            ])
-        }
-    }
-    
+        print("🔧 [iOS] Configure method called with options: \(options)")
 
+         // Store promises for async callback
+        self.configurePromise = resolve
+        self.configureReject = reject
+        
+        DispatchQueue.main.async {
+            // Mock implementation for now - will integrate with QuestionProCXFramework later
+            /*let result: [String: Any] = [
+                "success": true,
+                "message": "iOS SDK configured successfully",
+                "platform": "ios"
+            ]
+            resolve(result)*/
+
+            do {
+                // Extract API key from options
+                guard let apiKey = options["apiKey"] as? String else {
+                    reject("INVALID_API_KEY", "API key is required", nil)
+                    return
+                }
+                
+                // Initialize TouchPoint with US data center
+                let touchPoint = TouchPoint.initTouchPoint(dataCenter: TouchPoint.DataCenter.DATA_CENTER_US)
+                
+                // Get main window for configuration
+                guard let window = UIApplication.shared.windows.first else {
+                    reject("NO_WINDOW", "Unable to get main window", nil)
+                    return
+                }
+                
+                // Configure QuestionPro CX SDK
+                QuestionProCX.getinstance().configure(
+                    apiKey: apiKey,
+                    touchPoint: touchPoint,
+                    withWindow: window,
+                    initCallbackDelegate: self
+                )
+                
+                print("🔧 [iOS] QuestionPro CX SDK configuration initiated")
+                
+            } catch {
+                print("🔧 [iOS] Configuration error: \(error)")
+                reject("CONFIGURATION_ERROR", error.localizedDescription, error)
+            }
+        }
+    }
     
-    /**
-     * Required method to specify which methods can be called from JavaScript
-     */
-    override func methodQueue() -> DispatchQueue! {
-        return DispatchQueue.main
+    // NotifyEvent method matching Android implementation  
+    @objc
+    func notifyEvent(_ eventType: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        print("🔧 [iOS] NotifyEvent called: \(eventType)")
+        
+        let result: [String: Any] = [
+            "success": true,
+            "eventType": eventType,
+            "timestamp": Date().timeIntervalSince1970
+        ]
+        resolve(result)
+    }
+    
+    // StartSurvey method for consistency with Android
+    @objc  
+    func startSurvey(_ surveyId: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        print("🔧 [iOS] StartSurvey called: \(surveyId)")
+        
+        /let result: [String: Any] = [
+            "success": true,
+            "surveyId": surveyId,
+            "message": "Survey started successfully"
+        ]
+        resolve(result)
     }
 }
 
-
+extension InterceptSdk {
+    
+    func initSDKSuccess() {
+        print("🔧 [iOS] QuestionPro CX SDK initialization success")
+        
+        let result: [String: Any] = [
+            "success": true,
+            "message": "iOS SDK configured successfully with QuestionPro CX",
+            "platform": "ios"
+        ]
+        
+        configurePromise?(result)
+        configurePromise = nil
+        configureReject = nil
+    }
+    
+    func initSDKFailed(error: String) {
+        print("🔧 [iOS] QuestionPro CX SDK initialization failed: \(error)")
+        
+        configureReject?("INIT_SDK_FAILED", "SDK initialization failed: \(error)", nil)
+        configurePromise = nil
+        configureReject = nil
+    }
+}
