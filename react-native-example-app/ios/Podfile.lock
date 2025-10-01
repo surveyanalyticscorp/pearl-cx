@@ -15,6 +15,7 @@ PODS:
     - hermes-engine/Pre-built (= 0.72.4)
   - hermes-engine/Pre-built (0.72.4)
   - libevent (2.1.12)
+  - QuestionProCXFramework (2.2.1)
   - RCT-Folly (2021.07.22.00):
     - boost
     - DoubleConversion
@@ -315,6 +316,9 @@ PODS:
   - React-jsinspector (0.72.4)
   - React-logger (0.72.4):
     - glog
+  - react-native-intercept-sdk (1.0.0):
+    - QuestionProCXFramework
+    - React-Core
   - React-NativeModulesApple (0.72.4):
     - hermes-engine
     - React-callinvoker
@@ -436,6 +440,7 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - libevent (~> 2.1.12)
+  - QuestionProCXFramework (from `https://github.com/surveyanalyticscorp/ios-cx.git`, tag `2.2.1`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -452,6 +457,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - "react-native-intercept-sdk (from `../node_modules/@questionpro/react-native-intercept-sdk`)"
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -491,6 +497,9 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2023-08-07-RNv0.72.4-813b2def12bc9df02654b3e3653ae4a68d0572e0
+  QuestionProCXFramework:
+    :git: https://github.com/surveyanalyticscorp/ios-cx.git
+    :tag: 2.2.1
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -521,6 +530,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-intercept-sdk:
+    :path: "../node_modules/@questionpro/react-native-intercept-sdk"
   React-NativeModulesApple:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios"
   React-perflogger:
@@ -558,6 +569,11 @@ EXTERNAL SOURCES:
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
+CHECKOUT OPTIONS:
+  QuestionProCXFramework:
+    :git: https://github.com/surveyanalyticscorp/ios-cx.git
+    :tag: 2.2.1
+
 SPEC CHECKSUMS:
   boost: 7dcd2de282d72e344012f7d6564d024930a6a440
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -567,6 +583,7 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 81191603c4eaa01f5e4ae5737a9efcf64756c7b2
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+  QuestionProCXFramework: b77dda5e2b78cbb5da19c66bfd70fbe79f226b87
   RCT-Folly: 8dc08ca5a393b48b1c523ab6220dfdcc0fe000ad
   RCTRequired: c0569ecc035894e4a68baecb30fe6a7ea6e399f9
   RCTTypeSafety: e90354072c21236e0bcf1699011e39acd25fea2f
@@ -582,6 +599,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: bee9fca67c1b8ab7d9cf1c8e19a50968dc15ba2e
   React-jsinspector: aaed4cf551c4a1c98092436518c2d267b13a673f
   React-logger: 005cf0fc175b43fd5a1abca9ad02fc50c5db45d3
+  react-native-intercept-sdk: 050b191eab7b6a204acc9b6c5a5914fc4f9114cf
   React-NativeModulesApple: 3020a249a8b7c7d7070a1666925e86e9d3f2773e
   React-perflogger: 496a1a3dc6737f964107cb3ddae7f9e265ddda58
   React-RCTActionSheet: 02904b932b50e680f4e26e7a686b33ebf7ef3c00
@@ -602,6 +620,6 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
 
-PODFILE CHECKSUM: 88222f0178999eaec2d65126e0b48b2c9b761e89
+PODFILE CHECKSUM: 6c0217dca7a642d2d5e68a367e00ff89c10b3317
 
 COCOAPODS: 1.16.2
