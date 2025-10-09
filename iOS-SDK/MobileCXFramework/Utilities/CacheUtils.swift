@@ -7,35 +7,38 @@
 
 import Foundation
 
+
 public class CacheUtils {
+
+    nonisolated(unsafe) private static let sdkUserDefaults = UserDefaults(suiteName: "com.questionpro.cxsdk") ?? UserDefaults.standard
     
     //get from UserDefaults
     public static func getFromUserDefaults(key: String) -> [String: Any]?  {
         var defaultValue = [String: Any]()
-        if let defaultValue = UserDefaults.standard.object(forKey: key) as? [String: Any] {
+        if let defaultValue = sdkUserDefaults.object(forKey: key) as? [String: Any] {
             return defaultValue
         }
         return defaultValue
     }
     
     public static func setInterceptRulesForInterceptId(key: String, value: Data) {
-        UserDefaults.standard.set(value, forKey: key)
+        sdkUserDefaults.set(value, forKey: key)
     }
     
     public static func resetInterceptRulesForInterceptId(key: String) {
-        UserDefaults.standard.removeObject(forKey: key)
+        sdkUserDefaults.removeObject(forKey: key)
     }
     
     public static func getInterceptRulesForInterceptId(key: String) -> Data? {
-        return UserDefaults.standard.data(forKey: key)
+        return sdkUserDefaults.data(forKey: key)
     }
     
     public static func setIntercepts(key: String, value: Data) {
-        UserDefaults.standard.set(value, forKey: key)
+        sdkUserDefaults.set(value, forKey: key)
     }
     
     public static func getIntercepts(key: String) -> Data? {
-        return UserDefaults.standard.data(forKey: key)
+        return sdkUserDefaults.data(forKey: key)
     }
     
     public static func getInterceptById(key: String) -> Data? {
@@ -57,15 +60,15 @@ public class CacheUtils {
     
     
     public static func setInterceptForInterceptId(key: String, value: [String]) {
-        UserDefaults.standard.set(value, forKey: key)
+        sdkUserDefaults.set(value, forKey: key)
     }
     
     public static func getInterceptForInterceptId(key: String) -> [String] {
-        return UserDefaults.standard.object(forKey: key) as! [String]
+        return sdkUserDefaults.object(forKey: key) as! [String]
     }
     
     public static func getIntFromUserDefaults(key: String) -> Int?  {
-        if let defaultValue = UserDefaults.standard.object(forKey: key) as? Int {
+        if let defaultValue = sdkUserDefaults.object(forKey: key) as? Int {
             return defaultValue
         }
         return 0
@@ -73,21 +76,21 @@ public class CacheUtils {
     
     //set to UserDefaults
     public static func setToUserDefaults(key: String, value: Any) {
-        UserDefaults.standard.set(value, forKey: key)
+        sdkUserDefaults.set(value, forKey: key)
     }
     
     public static func getFromUserDefaults<T>(key: String, type: T.Type) -> T? {
-        return UserDefaults.standard.object(forKey: key) as? T
+        return sdkUserDefaults.object(forKey: key) as? T
     }
     
     public static func resetIntUserDefaults(key: String) {
-        UserDefaults.standard.removeObject(forKey: key)
+        sdkUserDefaults.removeObject(forKey: key)
         setToUserDefaults(key: key, value: 0)
     }
     
     public static func getValueFromUserDefaults(key: String) -> Any? {
         let defaultValue = false;
-        if let defaultValue = UserDefaults.standard.object(forKey: key) as? Bool {
+        if let defaultValue = sdkUserDefaults.object(forKey: key) as? Bool {
             return defaultValue;
         }
         return defaultValue;
@@ -95,43 +98,43 @@ public class CacheUtils {
     
     public static func getIsSurveyLaunched(key: String) -> Bool {
         let defaultValue = false;
-        if let isSurveyLaunched = UserDefaults.standard.object(forKey: key) as? Bool {
+        if let isSurveyLaunched = sdkUserDefaults.object(forKey: key) as? Bool {
             return isSurveyLaunched
         }
         return defaultValue
     }
     
     public static func setIsSurveyLaunched(key: String, value: Bool) {
-        UserDefaults.standard.set(value, forKey: key)
+        sdkUserDefaults.set(value, forKey: key)
     }
     
     public static func clearUserDefaults(key: String) {
-        UserDefaults.standard.removeObject(forKey: key)
+        sdkUserDefaults.removeObject(forKey: key)
     }
     
     public static func clearAllUserDefaults() {
-        UserDefaults.standard.dictionaryRepresentation().keys.forEach { key in
+        sdkUserDefaults.dictionaryRepresentation().keys.forEach { key in
             LogUtils.printMessage(message: "clearing data for \(key)")
-            UserDefaults.standard.removeObject(forKey: key)
+            sdkUserDefaults.removeObject(forKey: key)
         }
     }
     
     public static func setIsSurveyLaunchedForInterceptId(key: String, value: Bool) {
-        UserDefaults.standard.set(value, forKey: key);
+        sdkUserDefaults.set(value, forKey: key);
     }
     
     public static func getIsSurveyLaunchedForInterceptId(key: String) -> Bool {
-        let value = UserDefaults.standard.bool(forKey: key)
+        let value = sdkUserDefaults.bool(forKey: key)
         LogUtils.printMessage(message: "isSurveyLaunchedForInterceptId (\(key)): \(value)")
         return value
     }
     
     @MainActor public static func setScreenVisitCountForInterceptId(key: String, value: Int) {
-        UserDefaults.standard.set(value, forKey: key);
+        sdkUserDefaults.set(value, forKey: key);
     }
     
     @MainActor public static func getScreenVisitCountForInterceptId(key: String) -> Int {
-        if let defaultValue = UserDefaults.standard.object(forKey: key) as? Int {
+        if let defaultValue = sdkUserDefaults.object(forKey: key) as? Int {
             return defaultValue
         }
         return 1
