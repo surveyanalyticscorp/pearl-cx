@@ -42,31 +42,33 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         LogUtils.printMessage(message: "intercept id \(interceptId)")
         addRuleToSatisfiedRulesList(for: String(interceptId), newValue: satisfiedRule.name)
         
-        if (CacheUtils.getIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId))) {
-            LogUtils.printMessage(message: "Survey already launched for this intercept id \(interceptId)")
-            if (InterceptRuleType.VIEW_COUNT.rawValue != satisfiedRule.name) {
-                return;
-            } else {
-                LogUtils.printMessage(message: "\(satisfiedRule.name)")
-            }            
-        }
         if let intercept = CacheUtils.getInterceptById(key: String(interceptId)) {
             do {
                 let interceptData = try JSONDecoder().decode(Intercept.self, from: intercept)
-                
                 let showInDialog = interceptData.type == InterceptType.PROMPT.rawValue ? true : false
+                let allowMultipleResponse = interceptData.settings?.allowMultipleResponse ?? false
+                LogUtils.printMessage(logTag: .LOG_INFO, message: "allowMultipleResponse \(allowMultipleResponse)")
+                if (!allowMultipleResponse && CacheUtils.getIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId))) {
+                    LogUtils.printMessage(message: "Survey already launched for this intercept id \(interceptId)")
+                    return;
+                }
+                
                 guard !self.isSurveyDisplayed else { return }
                 if (interceptData.condition == InterceptCondition.AND.rawValue) {
                     LogUtils.printMessage(message: "AND condition")
                     let satisfiedRulesCount = satisfiedRulesForIntercept[String(interceptId)]?.flatMap { $0 }.count ?? 0
                     LogUtils.printMessage(message: "satisfiedRulesForIntercept -> \(satisfiedRulesForIntercept)")
-                    if (satisfiedRulesCount == interceptData.rules.count) {
+                    if (satisfiedRulesCount == interceptData.rules.count && allowMultipleResponse) {
                         LogUtils.printMessage(message: "Launching survey for intercept id -> \(interceptId)")
                         self.fetchSurveyURLForSurveyId(interceptId: interceptId, interceptData: interceptData, interceptType: interceptData.type)
                     } else {
                         LogUtils.printMessage(message: "all rules are not satisfied for \(interceptId)")
                     }
-                } else if (interceptData.condition == InterceptCondition.OR.rawValue){
+                } else if (interceptData.condition == InterceptCondition.OR.rawValue && allowMultipleResponse){
+                    if (CacheUtils.getIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId))) {
+                        LogUtils.printMessage(message: "Survey already launched for this intercept id \(interceptId)")
+                        return;
+                    }
                     LogUtils.printMessage(message: "OR condition")
                     self.fetchSurveyURLForSurveyId(interceptId: interceptId, interceptData: interceptData, interceptType: interceptData.type)
                 }
@@ -224,8 +226,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         }
     }
     
-    
-    
     public func fetchAndSetupIntercepts() async {
         let surveyLogicUtilsInstance = SurveyLaunchLogicUtils.getInstance();
         let mobileVisitorAPIURL = APIUtils.getVisitorMobileAPIURL()
@@ -301,9 +301,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             queue: .main
         ) { _ in
             LogUtils.printMessage(message: "🎯 App became active")
-//            Task {
-//                await self.fetchAndSetupIntercepts()
-//            }
         }
     }
     
@@ -374,15 +371,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     public func enableLogs(enabledLogs: Bool) {
         LogUtils.enableLogging(isLogsEnabled: enabledLogs)
     }
-
-    private var isSurveyScheduled = false
+    
     public func launchSurvey(showInDialog: Bool, triggerDelayInSeconds: Int) {
-        guard !self.isSurveyScheduled else {
-            LogUtils.printMessage(message: "Survey already scheduled, skipping.")
-            return
-        }
-        self.isSurveyScheduled = true
-        
         LogUtils.printMessage(message: "Survey URL to load: \(String(describing: iResponseURL))")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(triggerDelayInSeconds)) {
             print("Executed after \(triggerDelayInSeconds) seconds")
@@ -549,7 +539,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     @objc func aDismissWebview(_ sender: Any) {
         self.iView?.removeFromSuperview()
         self.isSurveyDisplayed = false
-        self.isSurveyScheduled = false
     }
     
     @objc func goToPreviousPage(_ sender: Any) {
