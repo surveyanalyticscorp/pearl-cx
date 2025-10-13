@@ -478,8 +478,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         CacheUtils.clearAllUserDefaults()
     }
 
-    public func stopQuestionProCXManager() {
-        LogUtils.printMessage(message: "Manager stopped..")
+    public func closeSurveyWindow() {
+        self.iView?.removeFromSuperview()
     }
     
     public func loadSurveyURLInWebView() {
