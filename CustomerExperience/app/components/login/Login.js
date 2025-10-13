@@ -9,6 +9,7 @@ import React, {useEffect, useState} from 'react';
 import DeviceInfo from 'react-native-device-info';
 import {
   getDeviceType,
+  isObjectEmpty,
   isStringNullOrEmpty,
   showErrorFlashMessage,
   validateEmail,
@@ -51,6 +52,7 @@ import LoginBackground from './components/LoginBackground';
 import {useLoginError} from './hooks/useLoginError';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {MarginConstants} from '../../styles/margin.constants';
+import {getApiValidationErrorMessage} from '../../Utils/ErrorValidationUtils';
 
 export const checkValidation = ({email, password, accessCode}) => {
   if (!validateEmail(email)) {
@@ -129,11 +131,31 @@ export const RenderSpinnerLoginButton = ({login}) => {
     subscriberId,
     userInfo,
     bearerToken,
+    authToken,
   } = useSelector(state => state.global);
 
   const globalAccessCode = useSelector(state => state.global.accessCode);
 
-  useLoginError(isError, errorMessage);
+  // useLoginError(isError, errorMessage);
+
+  useEffect(() => {
+    console.log('LOGIN ERROR', isError, errorMessage);
+    if (isError) {
+      let message = getApiValidationErrorMessage(errorMessage, 'login');
+      const loginError = 'Invalid email/password combination.';
+      const customeErrorMessage = 'Invalid credentials. Please try again';
+
+      showErrorFlashMessage(
+        message === loginError ? customeErrorMessage : message,
+      );
+      console.log('LOGIN ERROR', JSON.stringify(errorMessage));
+      setTimeout(() => {
+        AsyncStorage.clear().then(() => {
+          dispatch(clearUserInfo());
+        });
+      }, 1000);
+    }
+  }, [isError, errorMessage]);
 
   useEffect(() => {
     if (
@@ -149,13 +171,15 @@ export const RenderSpinnerLoginButton = ({login}) => {
 
   useEffect(() => {
     if (clfBaseUrl && StringUtils.isNotEmpty(clfBaseUrl)) {
+      console.log('USER_INFO', 'LOGIN');
+
       global.clfBaseUrl = clfBaseUrl;
       setAsyncStorageData(baseUrl, subscriberId, globalAccessCode, clfBaseUrl);
       callClfAuth(clfBaseUrl);
     }
   }, [clfBaseUrl]);
 
-  function callClfAuth() {
+  const callClfAuth = () => {
     AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(token => {
       const data = {
         clfBaseUrl,
@@ -170,7 +194,7 @@ export const RenderSpinnerLoginButton = ({login}) => {
       dispatch(clearError());
       dispatch(getClfAuth(data));
     });
-  }
+  };
 
   // Add a ref to track retries
   const [pushTokenRetryCount, setPushTokenRetryCount] = useState(0);

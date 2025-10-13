@@ -129,10 +129,10 @@ const AppRouter = props => {
   }, [authToken]);
 
   useEffect(() => {
-    if (authToken && baseUrl && userInfo) {
+    if (authToken && baseUrl) {
       dispatch(clearLoginUser());
     }
-  }, [authToken, baseUrl, userInfo.userID]);
+  }, [authToken, baseUrl]);
 
   useEffect(() => {
     fetchNotifications();

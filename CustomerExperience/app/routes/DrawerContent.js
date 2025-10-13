@@ -61,6 +61,7 @@ const AppVersion = () => {
 };
 const UserName = () => {
   const userInfo = useSelector(state => state.global.userInfo);
+  console.log('USER_INFO', 'DRAWER _content');
   let username = StringUtils.isNotEmpty(StringUtils.reformatName(userInfo))
     ? StringUtils.reformatName(userInfo)
     : userInfo.emailAddress;

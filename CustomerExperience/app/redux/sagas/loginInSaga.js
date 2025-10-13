@@ -60,12 +60,18 @@ export function* doAuthenticatePanel(action) {
     const response = yield WebServiceHandler.postNew(url, {}, action.param);
 
     console.log(`LOGIN RESPONSE: ${JSON.stringify(response)}`);
-
-    yield put({
-      type: AUTHENTICATE_PANEL_RESPONSE,
-      hasMidFix: false,
-      response: response,
-    });
+    if (response?.body?.mobileAPIURL) {
+      yield put({
+        type: AUTHENTICATE_PANEL_RESPONSE,
+        hasMidFix: false,
+        response: response,
+      });
+    } else {
+      yield put({
+        type: API_ERROR,
+        error: response,
+      });
+    }
   } catch (error) {
     showErrorFlashMessage(error.errorAlert);
     yield put({
@@ -118,20 +124,25 @@ export function* doLoginApiCall(action) {
     );
     AsyncStorage.setItem(ASYNC_USER_CREDENTIALS, JSON.stringify(userData));
 
-    yield put({
-      type: LOGIN_RESPONSE,
-      response: response,
-      clfResponse: clfBaseUrlResponse,
-    });
+    if (response?.statusCode === 200) {
+      yield put({
+        type: LOGIN_RESPONSE,
+        response: response,
+        clfResponse: clfBaseUrlResponse,
+      });
 
-    AsyncStorage.setItem(
-      ASYNC_CLF_BASE_URL,
-      IS_DEV_MODE ? CLF_BASE_URL : clfBaseUrlResponse.data.baseUrl,
-    );
-    console.log(
-      'AsyncStorage base URL 3 : ',
-      JSON.stringify(clfBaseUrlResponse),
-    );
+      AsyncStorage.setItem(
+        ASYNC_CLF_BASE_URL,
+        IS_DEV_MODE ? CLF_BASE_URL : clfBaseUrlResponse.data.baseUrl,
+      );
+      console.log(
+        'AsyncStorage base URL 3 : ',
+        JSON.stringify(clfBaseUrlResponse),
+        JSON.stringify(response),
+      );
+    } else {
+      yield put({type: API_ERROR, error: response});
+    }
   } catch (error) {
     yield put({type: API_ERROR, error: error});
     yield put({

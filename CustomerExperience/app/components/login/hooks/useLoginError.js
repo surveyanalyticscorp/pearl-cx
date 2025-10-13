@@ -9,6 +9,7 @@ export const useLoginError = (isError, errorMessage) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('LOGIN ERROR', isError, errorMessage);
     if (isError) {
       let message = getApiValidationErrorMessage(errorMessage, 'login');
       const loginError = 'Invalid email/password combination.';
@@ -17,9 +18,12 @@ export const useLoginError = (isError, errorMessage) => {
       showErrorFlashMessage(
         message === loginError ? customeErrorMessage : message,
       );
-      AsyncStorage.clear().then(() => {
-        dispatch(clearUserInfo());
-      });
+      console.log('LOGIN ERROR', JSON.stringify(errorMessage));
+      setTimeout(() => {
+        AsyncStorage.clear().then(() => {
+          dispatch(clearUserInfo());
+        });
+      }, 1000);
     }
   }, [isError, errorMessage, dispatch]);
 };
