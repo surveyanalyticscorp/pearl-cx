@@ -347,7 +347,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     public func configure(apiKey: String, touchPoint: TouchPoint, withWindow aWindow: UIWindow, initCallbackDelegate: QuestionProInitDelegate?) {
         CacheUtils.setToUserDefaults(key: kApiKey, value: apiKey)
         CacheUtils.setToUserDefaults(key: kDataCenter, value: touchPoint.dataCenter.rawValue)
-        CacheUtils.setToUserDefaults(key: kConfigType, value: touchPoint.configType.rawValue)
         self.iApiKey = apiKey
         self.iDataCenter = touchPoint.dataCenter
         self.iBaseWindow = aWindow
@@ -355,11 +354,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         self.initCallbackDelegate = initCallbackDelegate
         self.touchPoint = touchPoint;
         
-        if (touchPoint.configType == TouchPoint.ConfigType.INTERCEPT) {
-            setupIntercepts()
-        } else {
-            setupCoreSurvey()
-        }
+        setupIntercepts()
         
         self.appLifecycleStateListener()
     }
