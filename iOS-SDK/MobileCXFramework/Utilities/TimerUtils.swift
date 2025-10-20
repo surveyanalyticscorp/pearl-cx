@@ -70,14 +70,14 @@ public class TimerUtils {
         for (interceptId, timer) in timers {
             timer.invalidate()
             timers.removeValue(forKey: interceptId)
-            print("⏸ Paused timer for interceptId: \(interceptId)")
+            LogUtils.printMessage(message: "⏸ Paused timer for interceptId: \(interceptId)")
         }
     }
 
     public func resumeAllTimers() {
         for interceptId in remainingTimes.keys {
             guard timers[interceptId] == nil else { continue }
-            print("▶️ Resuming timer for interceptId: \(interceptId)")
+            LogUtils.printMessage(message: "▶️ Resuming timer for interceptId: \(interceptId)")
             startInternalTimer(for: interceptId)
         }
     }
@@ -87,13 +87,13 @@ public class TimerUtils {
         for (interceptId, timer) in timers {
             timer.invalidate()
             timers.removeValue(forKey: interceptId)
-            print("🛑 Stopped timer for interceptId: \(interceptId) due to background")
+            LogUtils.printMessage(message: "🛑 Stopped timer for interceptId: \(interceptId) due to background")
         }
         
         // Clear continuations but keep other data for restarting
         for (interceptId, continuation) in continuations {
             continuation.finish()
-            print("🔚 Finished continuation for interceptId: \(interceptId)")
+            LogUtils.printMessage(message: "🔚 Finished continuation for interceptId: \(interceptId)")
         }
         continuations.removeAll()
     }
@@ -110,7 +110,7 @@ public class TimerUtils {
             // Reset remaining time to original interval
             remainingTimes[interceptId] = originalInterval
             
-            print("🔄 Restarting timer from beginning for interceptId: \(interceptId)")
+            LogUtils.printMessage(message: "🔄 Restarting timer from beginning for interceptId: \(interceptId)")
             
             // Create new AsyncStream
             let stream = AsyncStream<Int> { continuation in

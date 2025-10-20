@@ -63,17 +63,13 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                     LogUtils.printMessage(message: "AND condition")
                     let satisfiedRulesCount = satisfiedRulesForIntercept[String(interceptId)]?.flatMap { $0 }.count ?? 0
                     LogUtils.printMessage(message: "satisfiedRulesForIntercept -> \(satisfiedRulesForIntercept)")
-                    if (satisfiedRulesCount == interceptData.rules.count && allowMultipleResponse) {
+                    if (satisfiedRulesCount == interceptData.rules.count) {
                         LogUtils.printMessage(message: "Launching survey for intercept id -> \(interceptId)")
                         self.fetchSurveyURLForSurveyId(interceptId: interceptId, interceptData: interceptData, interceptType: interceptData.type)
                     } else {
                         LogUtils.printMessage(message: "all rules are not satisfied for \(interceptId)")
                     }
-                } else if (interceptData.condition == InterceptCondition.OR.rawValue && allowMultipleResponse){
-                    if (CacheUtils.getIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId))) {
-                        LogUtils.printMessage(message: "Survey already launched for this intercept id \(interceptId)")
-                        return;
-                    }
+                } else {
                     LogUtils.printMessage(message: "OR condition")
                     self.fetchSurveyURLForSurveyId(interceptId: interceptId, interceptData: interceptData, interceptType: interceptData.type)
                 }
@@ -421,6 +417,11 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     }
 
     public func configure(apiKey: String, touchPoint: TouchPoint, withWindow aWindow: UIWindow, initCallbackDelegate: QuestionProInitDelegate?) {
+        self.clearSession()
+        CacheUtils.clearUserDefaults(key: kApiKey)
+        CacheUtils.clearUserDefaults(key: kDataCenter)
+        self.resetSatisfiedRulesList()
+        
         CacheUtils.setToUserDefaults(key: kApiKey, value: apiKey)
         CacheUtils.setToUserDefaults(key: kDataCenter, value: touchPoint.dataCenter.rawValue)
         self.iApiKey = apiKey
@@ -446,7 +447,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     public func launchSurvey(showInDialog: Bool, triggerDelayInSeconds: Int) {
         LogUtils.printMessage(message: "Survey URL to load: \(String(describing: iResponseURL))")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(triggerDelayInSeconds)) {
-            print("Executed after \(triggerDelayInSeconds) seconds")
+            LogUtils.printMessage(message: "Executed after \(triggerDelayInSeconds) seconds")
             self.showSurvey(isInAppSurvey: showInDialog)
             self.loadSurveyURLInWebView()
         }
