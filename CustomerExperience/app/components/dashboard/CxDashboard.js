@@ -89,15 +89,9 @@ const CxDashboard = ({route, navigation}) => {
   let [refreshing, setRefreshing] = useState(false);
   const {renderExitAlert, exitAlert} = useBackHandler(navigation);
 
-  const statusBottomSheetRef = React.useRef();
-  const statusBottomSheetSnapPoints = ['62%', '0%'];
   const fall = new Animated.Value(1);
 
-  // useEffect(() => {
-  //   Notifications.registerRemoteNotifications();
-  // }, []);
   const openStatusBS = () => {
-    // statusBottomSheetRef.current.snapTo(0);
     setStatusBottomSheetVisible(true);
   };
 

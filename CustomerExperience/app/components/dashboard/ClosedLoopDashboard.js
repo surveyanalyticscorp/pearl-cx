@@ -162,7 +162,7 @@ export const ViewTicketsButton = ({statusIndex}) => {
       style={buttonStyles.textButton}
       onPress={navigateToCLosedLoop}
       buttonText={`${translate('dashboard.tickets')}`}
-      textStyle={buttonStyles.textButtonText}
+      textStyle={buttonStyles.textButtonTextPrimary}
     />
   );
 };
