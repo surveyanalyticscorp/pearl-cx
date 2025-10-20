@@ -113,10 +113,22 @@ public class CacheUtils {
     }
     
     public static func clearAllUserDefaults() {
+        // ✅ Define keys to preserve during session clear
+        let keysToPreserve: Set<String> = [kApiKey, kDataCenter, "interceptsSetup"]
+        
         sdkUserDefaults.dictionaryRepresentation().keys.forEach { key in
-            LogUtils.printMessage(message: "clearing data for \(key)")
-            sdkUserDefaults.removeObject(forKey: key)
+            if keysToPreserve.contains(key) {
+                LogUtils.printMessage(message: "🔒 Preserving key: \(key)")
+            } else {
+                LogUtils.printMessage(message: "🗑️ Clearing data for \(key)")
+                sdkUserDefaults.removeObject(forKey: key)
+            }
         }
+        
+        // Force synchronization to ensure changes are written
+        sdkUserDefaults.synchronize()
+        
+        LogUtils.printMessage(message: "✅ Session cleared while preserving essential data")
     }
     
     public static func setIsSurveyLaunchedForInterceptId(key: String, value: Bool) {
