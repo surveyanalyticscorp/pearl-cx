@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {RefreshControl, ScrollView, View, SafeAreaView} from 'react-native';
+import {RefreshControl, ScrollView, View} from 'react-native';
 import {showLoading} from '../../redux/actions/index';
 import {
   getDashboardContent,
@@ -19,10 +19,7 @@ import {translate} from '../../Utils/MultilinguaUtils';
 import {HeaderFilter} from '../../routes/commonUI/CommonUI';
 import FabAddButton from '../../routes/commonUI/FabAddButton';
 import Animated from 'react-native-reanimated';
-import {
-  ClosedLoopDashboard,
-  StatusDashboardBottomSheet,
-} from './ClosedLoopDashboard';
+import {ClosedLoopDashboard} from './ClosedLoopDashboard';
 
 import RenderSegmentDashboardData from './cxDashboard/RenderSegmentDashboardData';
 import useBackHandler from './hooks/useBackHandler';
