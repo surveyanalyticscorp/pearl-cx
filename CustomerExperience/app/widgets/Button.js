@@ -1,6 +1,10 @@
 import React from 'react';
 
-import {buttonColors, textColors} from '../styles/color.constants';
+import {
+  buttonColors,
+  textColors,
+  disabledButtonColors,
+} from '../styles/color.constants';
 import {Platform, StyleSheet, Text, Pressable, Dimensions} from 'react-native';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
@@ -8,7 +12,7 @@ import {FontFamily} from '../styles/font.constants';
 const screen = Dimensions.get('screen');
 const QPButton = ({
   style = styles.button,
-  textStyle = styles.text,
+  textStyle,
   onPress,
   buttonText,
   buttonColor,
@@ -17,7 +21,9 @@ const QPButton = ({
 }) => {
   const backgroundColor =
     buttonColor ?? style.backgroundColor ?? buttonColors.backgroundColor;
-  const opacity = isDisabled ? 0.5 : 1;
+  const textStyle_ = isDisabled
+    ? styles.disabledButtonText
+    : textStyle ?? styles.text;
   return (
     <Pressable
       disabled={isDisabled}
@@ -25,12 +31,13 @@ const QPButton = ({
       style={[
         style,
         {
-          backgroundColor: backgroundColor,
-          opacity: opacity,
+          backgroundColor: isDisabled
+            ? disabledButtonColors.buttonColor
+            : backgroundColor,
         },
       ]}
       onPress={isDisabled ? null : onPress}>
-      <Text style={textStyle}>{buttonText}</Text>
+      <Text style={textStyle_}>{buttonText}</Text>
     </Pressable>
   );
 };
@@ -48,6 +55,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: textColors.primary,
     fontFamily: FontFamily.semiBold,
+    fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
+  },
+  disabledButtonText: {
+    alignSelf: 'center',
+    color: disabledButtonColors.textColor,
+    fontFamily: FontFamily.regular,
     fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
   },
 });

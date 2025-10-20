@@ -310,6 +310,7 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.tab1,
     width: MarginConstants.tab1_16x + MarginConstants.tab1_4x,
     borderWidth: 1,
+    borderRadius: 2,
     borderColor: Colors.borderColor,
     alignItems: 'center',
   },

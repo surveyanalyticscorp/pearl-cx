@@ -6,10 +6,11 @@ import {
   View,
   Pressable,
   FlatList,
-  SafeAreaView,
   Platform,
   Keyboard,
+  Modal,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -43,6 +44,15 @@ import AIEmailDraftModal from './AIEmailDraftModal';
 import {FontFamilyStylesheet} from '../../../config/fonts/StyleSheet';
 import QPBottomSheet from '../takeaction/QPBottomSheet';
 import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
+import {buttonStyles} from '../../../styles/button.styles';
+import InsertLinkModal from './InsertLinkModal';
+
+const INSERT_LINK = 'customInsertLink';
+
+// // dummy function to simulate inserting a link into the editor
+// const insertLinkIEditor = (title, url) => {
+//   console.log('insertLinkIEditor called with:', {title, url});
+// };
 
 export const RenderHeader = () => {
   return (
@@ -112,7 +122,7 @@ export const ActionHistoryItem = () => {
       <Text style={styles.actionHistorySubjectText}>{emailSubject}</Text>
       <View style={styles.actionHistoryItemDetails}>
         <Text style={styles.actionHistoryDetailText}>by: </Text>
-        <Text style={[styles.actionHistoryDetailText, {fontStyle: 'italic'}]}>
+        <Text style={[styles.actionHistoryDetailText, styles.italic]}>
           {senderName}
         </Text>
 
@@ -154,7 +164,7 @@ export const AttachmentItem = ({item, index}) => {
       <Text numberOfLines={1} style={styles.attachmentText}>
         {StringUtils.truncateFileName(item.fileName)}
       </Text>
-      <Pressable style={{alignSelf: 'flex-end'}} onPress={() => {}}>
+      <Pressable style={styles.alignSelfEnd} onPress={() => {}}>
         <IonIcon name="close" size={20} color={Colors.filterIconColor} />
       </Pressable>
     </Pressable>
@@ -164,7 +174,7 @@ export const AttachmentItem = ({item, index}) => {
 export const NoActionView = () => {
   return (
     <View>
-      <Text style={[styles.actionHistoryDetailText, {fontStyle: 'italic'}]}>
+      <Text style={[styles.actionHistoryDetailText, styles.italic]}>
         No action has taken yet
       </Text>
     </View>
@@ -175,7 +185,10 @@ export const CustomKeyboardToolbar = ({
   toolbarRef,
   richTextfieldRef,
   keyboardHeight,
+  handleCustomInsertLink,
 }) => {
+  // const [isInsertLinkModalVisible, setIsInsertLinkModalVisible] =
+  //   useState(false);
   const BoldIcon = ({tintColor}) => (
     <MaterialIcons name="format-bold" size={20} color={tintColor} />
   );
@@ -192,17 +205,7 @@ export const CustomKeyboardToolbar = ({
     <MaterialIcons name="insert-link" size={20} color={tintColor} />
   );
 
-  const InsertBulletsListIcon = ({tintColor}) => (
-    <MaterialIcons name="format-list-bulleted" size={20} color={tintColor} />
-  );
-
-  const InsertOrderedListIcon = ({tintColor}) => (
-    <MaterialIcons name="format-list-numbered" size={20} color={tintColor} />
-  );
-
-  const SetStrikethroughIcon = ({tintColor}) => (
-    <MaterialIcons name="strikethrough-s" size={20} color={tintColor} />
-  );
+  // removed unused icons to satisfy linter
 
   const AlignLeftIcon = ({tintColor}) => (
     <MaterialIcons name="format-align-left" size={20} color={tintColor} />
@@ -223,6 +226,9 @@ export const CustomKeyboardToolbar = ({
       color={tintColor}
     />
   );
+  // const handleCustomInsertLink = () => {
+  //   setIsInsertLinkModalVisible(state => !state);
+  // };
 
   return (
     <View style={{...styles.toolbarContainer, bottom: keyboardHeight}}>
@@ -235,11 +241,13 @@ export const CustomKeyboardToolbar = ({
           actions.setBold,
           actions.setItalic,
           actions.setUnderline,
-          actions.insertLink,
+          // actions.insertLink,
           actions.alignLeft,
           actions.alignCenter,
           actions.alignRight,
           actions.alignFull,
+          INSERT_LINK,
+
           // actions.insertBulletsList,
           // actions.insertOrderedList,
           // actions.setStrikethrough,
@@ -248,7 +256,7 @@ export const CustomKeyboardToolbar = ({
           [actions.setBold]: BoldIcon,
           [actions.setItalic]: ItalicIcon,
           [actions.setUnderline]: UnderlineIcon,
-          [actions.insertLink]: SetInsertLinkIcon,
+          [INSERT_LINK]: SetInsertLinkIcon,
           [actions.alignLeft]: AlignLeftIcon,
           [actions.alignCenter]: AlignCenterIcon,
           [actions.alignRight]: AlignRightIcon,
@@ -257,6 +265,7 @@ export const CustomKeyboardToolbar = ({
           // [actions.insertOrderedList]: InsertOrderedListIcon,
           // [actions.setStrikethrough]: SetStrikethroughIcon,
         }}
+        customInsertLink={handleCustomInsertLink}
         style={styles.richToolbar}
       />
     </View>
@@ -272,6 +281,8 @@ export const SendEmail = props => {
   console.log('props.route.params', props.route.params);
   const ticketId = JSON.stringify(props.route.params.ticketId);
   const toEmail = props.route.params.toEmail ?? '';
+  const [isInsertLinkModalVisible, setIsInsertLinkModalVisible] =
+    useState(false);
   const sampleEmailBody = React.useMemo(
     () => ({
       ticketId: ticketId,
@@ -402,6 +413,10 @@ export const SendEmail = props => {
     backgroundColor: Colors.white,
   };
 
+  const insertLinkOnEditor = (title, url) => {
+    console.log('insertLinkOnEditor called with:', {title, url});
+    richText.current.insertLink(title, url);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={40}>
@@ -440,7 +455,7 @@ export const SendEmail = props => {
         bottomSheetHeight="40%"
         headerComponent={
           <QPBottomSheetHeader
-            headerLabel="Select Template"
+            headerLabel="Select template"
             onClose={closeTemplateBottomSheet}
           />
         }>
@@ -472,8 +487,16 @@ export const SendEmail = props => {
           keyboardHeight={keyboardHeight}
           toolbarRef={toolbarRef}
           richTextfieldRef={richText}
+          handleCustomInsertLink={() => {
+            setIsInsertLinkModalVisible(true);
+          }}
         />
       )}
+      <InsertLinkModal
+        setVisiblity={setIsInsertLinkModalVisible}
+        isVisible={isInsertLinkModalVisible}
+        insertLink={insertLinkOnEditor}
+      />
     </SafeAreaView>
   );
 };
@@ -590,6 +613,18 @@ const styles = StyleSheet.create({
     height: MarginConstants.tab1_6x,
     backgroundColor: Colors.settingsBackground,
   },
+
+  modalButton: {
+    paddingVertical: PaddingConstants.halfTab,
+    paddingHorizontal: PaddingConstants.tab1,
+    backgroundColor: Colors.accentLight,
+    borderRadius: 6,
+  },
+  modalButtonText: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.secondary,
+    color: Colors.accentLight,
+  },
   renderOptionViewEnd: {
     flex: 2,
     marginHorizontal: MarginConstants.tab1,
@@ -638,6 +673,9 @@ const styles = StyleSheet.create({
   actionHistoryItemDetails: {
     flex: 1,
     flexDirection: 'row',
+  },
+  italic: {
+    fontStyle: 'italic',
   },
   actionHistoryHeader: {
     fontFamily: FontFamily.regular,

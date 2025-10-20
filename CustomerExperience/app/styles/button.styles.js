@@ -104,15 +104,16 @@ export const buttonStyles = StyleSheet.create({
     backgroundColor: Colors.transparent,
   },
   textButtonText: {
-    color: Colors.accentLight,
+    color: Colors.filterIconColor,
     fontFamily: FontFamily.regular,
     fontSize: Platform.OS === 'ios' ? TextSizes.primary : TextSizes.secondary,
   },
   textButtonTextPrimary: {
     color: Colors.accentLight,
     fontFamily: FontFamily.regular,
-    fontSize: TextSizes.primary,
+    fontSize: Platform.OS === 'ios' ? TextSizes.primary : TextSizes.secondary,
   },
+
   disableButton: {
     height: MarginConstants.tab1_6x,
     paddingHorizontal: MarginConstants.tab2,
@@ -121,6 +122,7 @@ export const buttonStyles = StyleSheet.create({
     backgroundColor: Colors.settingDividerColor,
     borderColor: Colors.settingsBackground,
     borderWidth: 1,
+    borderRadius: 2,
   },
 });
 // primaryButton: {

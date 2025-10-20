@@ -283,7 +283,6 @@ export const RenderSpinnerLoginButton = ({login}) => {
 };
 
 const Login = props => {
-  console.log('LOGIN RENDERED');
   const [login, setLogin] = useState({email: '', password: '', accessCode: ''});
   const setEmail = email => {
     setLogin({...login, email});

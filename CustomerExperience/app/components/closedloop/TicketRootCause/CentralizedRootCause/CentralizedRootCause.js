@@ -65,11 +65,12 @@ const Update = () => {
 
   return (
     <QPButton
-      buttonColor={Colors.accentLight}
       testID="ApplyButton"
       isDisabled={!selectedRootCauses.hasUpdated}
       style={[
-        buttonStyles.primaryButton,
+        selectedRootCauses.hasUpdated
+          ? buttonStyles.primaryButtonRadius
+          : buttonStyles.disableButton,
         {marginVertical: MarginConstants.tab1_2x},
       ]}
       onPress={onPress}

@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: Colors.white,
     borderWidth: 1,
-    borderColor: Colors.borderColor,
+    borderColor: Colors.accentLight,
     padding: PaddingConstants.halfTab,
     minWidth: MarginConstants.tab1_16x + MarginConstants.tab1_4x,
     maxHeight: 200,

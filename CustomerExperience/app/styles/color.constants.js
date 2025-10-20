@@ -86,9 +86,14 @@ const textColors = {
 };
 
 const buttonColors = {
-  backgroundColor: '#193F8B',
+  backgroundColor: Colors.accentLight,
   positive: Colors.accent,
   negative: Colors.secondary,
+};
+
+const disabledButtonColors = {
+  textColor: Colors.evenDarkerGrey,
+  buttonColor: '#E6E6E6',
 };
 
 const getStatusBorderColor = _status => {
@@ -297,6 +302,7 @@ export {
   buttonColors,
   statusColors,
   priorityColors,
+  disabledButtonColors,
   getPriorityBorderColor,
   getPriorityFillerColor,
   getStatusBorderColor,
