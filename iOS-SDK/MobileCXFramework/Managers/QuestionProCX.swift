@@ -17,6 +17,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     @MainActor public static var instance: QuestionProCX?
     var initCallbackDelegate: QuestionProInitDelegate?
     var questionProCallbackDelegate: QuestionProCallbackDelegate?
+    private var activeTimerTasks: [Int: Task<Void, Never>] = [:]
     
     private func addRuleToSatisfiedRulesList(for id: String, newValue: String) {
         if var existingLists = satisfiedRulesForIntercept[id] {
@@ -41,7 +42,11 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         LogUtils.printMessage(message: "satisfiedRule.name \(satisfiedRule.name)")
         LogUtils.printMessage(message: "intercept id \(interceptId)")
         addRuleToSatisfiedRulesList(for: String(interceptId), newValue: satisfiedRule.name)
-        
+        if let task = activeTimerTasks[interceptId] {
+            task.cancel()
+            activeTimerTasks.removeValue(forKey: interceptId)
+            LogUtils.printMessage(message: "🗑️ Cleaned up timer task for intercept \(interceptId)")
+        }
         if let intercept = CacheUtils.getInterceptById(key: String(interceptId)) {
             do {
                 let interceptData = try JSONDecoder().decode(Intercept.self, from: intercept)
@@ -265,11 +270,15 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                     } else if (rule.name == InterceptRuleType.DATE.rawValue) {
                         surveyLogicUtilsInstance.checkSurveyLaunchDateOfMonthLogic(dates: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
                     } else if (rule.name == InterceptRuleType.TIME_SPENT.rawValue) {
-                        Task {
-                            for await timeLeft in  TimerUtils.getinstance().startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
+                        // ✅ Store the timer task properly
+                        let task = Task {
+                            for await timeLeft in TimerUtils.getinstance().startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
                                 LogUtils.printMessage(message: "⏳ Time left: \(timeLeft) sec for \(intercept.id)")
                             }
+                            // Clean up task when timer completes
+                            self.activeTimerTasks.removeValue(forKey: intercept.id)
                         }
+                        self.activeTimerTasks[intercept.id] = task
                     }
                 }
             }
@@ -288,8 +297,36 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             LogUtils.printMessage(message: "📦 App did enter background")
             Task {
                 await MainActor.run {
+                    // ✅ Cancel all active timer tasks
+                    for task in self.activeTimerTasks.values {
+                        task.cancel()
+                    }
+                    self.activeTimerTasks.removeAll()
+                    
+                    // Stop timers in TimerUtils
+                    TimerUtils.getinstance().stopAllTimersOnBackground()
+                }
+            }
+        }
+        
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.willTerminateNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            LogUtils.printMessage(message: "📦 App Killed")
+            Task {
+                await MainActor.run {
+                    // ✅ Cancel all active timer tasks
+                    for task in self.activeTimerTasks.values {
+                        task.cancel()
+                    }
+                    self.activeTimerTasks.removeAll()
+                    
+                    // Stop timers in TimerUtils
+                    TimerUtils.getinstance().stopAllTimersOnBackground()
+                    
                     self.clearSession()
-                    TimerUtils.getinstance().stopAllTimers()
                     self.resetSatisfiedRulesList()
                 }
             }
@@ -300,8 +337,47 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             object: nil,
             queue: .main
         ) { _ in
-            LogUtils.printMessage(message: "🎯 App became active")
+            Task {
+                await MainActor.run {
+                    LogUtils.printMessage(message: "🎯 App became active")
+                    
+                    // ✅ Get the returned AsyncStreams and consume them properly
+                    let newStreams = TimerUtils.getinstance().restartAllTimersFromBeginning()
+                    
+                    // ✅ Create tasks to consume each stream
+                    for (interceptId, stream) in newStreams {
+                        let task = Task {
+                            for await timeLeft in stream {
+                                LogUtils.printMessage(message: "⏳ Restarted Timer - Time left: \(timeLeft) sec for intercept \(interceptId)")
+                            }
+                            // Clean up when timer completes naturally
+                            self.activeTimerTasks.removeValue(forKey: interceptId)
+                        }
+                        self.activeTimerTasks[interceptId] = task
+                    }
+                    
+                    LogUtils.printMessage(message: "✅ Restarted \(newStreams.count) timers from beginning")
+                }
+            }
         }
+    }
+
+    private func debugTimerStates() {
+        let activeTaskIds = activeTimerTasks.keys.sorted()
+        let timerUtilsIds = TimerUtils.getinstance().getActiveTimerIds().sorted()
+        
+        LogUtils.printMessage(message: "🔍 === TIMER STATE DEBUG ===")
+        LogUtils.printMessage(message: "🔍 Active Timer Tasks: \(activeTaskIds)")
+        LogUtils.printMessage(message: "🔍 TimerUtils Active IDs: \(timerUtilsIds)")
+        LogUtils.printMessage(message: "🔍 Task Count: \(activeTimerTasks.count)")
+        LogUtils.printMessage(message: "🔍 TimerUtils Count: \(timerUtilsIds.count)")
+        
+        if activeTaskIds != timerUtilsIds {
+            LogUtils.printMessage(message: "⚠️ MISMATCH detected between tasks and timers!")
+        } else {
+            LogUtils.printMessage(message: "✅ Timer states are synchronized")
+        }
+        LogUtils.printMessage(message: "🔍 === END DEBUG ===")
     }
     
     private func setupIntercepts() {

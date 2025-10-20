@@ -12,6 +12,7 @@ public class LogUtils {
         self.enableLogging = isLogsEnabled
     }
     public static func printMessage(logTag: LogTag = .LOG_INFO , message: String) {
+        print(message)
         if (self.enableLogging && logTag == .LOG_ERROR) {
             print(message)
         }

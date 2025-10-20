@@ -94,8 +94,13 @@ public struct CoreSurveyURL : Swift.Codable {
   public func startTimer(timeInterval: Swift.Int, interceptId: Swift.Int, interceptRule: QuestionProCXFramework.Rule, completionDelegate: any QuestionProCXFramework.SurveyLaunchDelegate) -> _Concurrency.AsyncStream<Swift.Int>
   public func pauseAllTimers()
   public func resumeAllTimers()
+  public func stopAllTimersOnBackground()
+  public func restartAllTimersFromBeginning() -> [Swift.Int : _Concurrency.AsyncStream<Swift.Int>]
   public func stopTimer(for interceptId: Swift.Int)
   public func stopAllTimers()
+  public func getActiveTimerIds() -> [Swift.Int]
+  public func getRemainingTime(for interceptId: Swift.Int) -> Swift.Int?
+  public func getOriginalInterval(for interceptId: Swift.Int) -> Swift.Int?
   @objc deinit
 }
 public let ksurveyURL: Swift.String
