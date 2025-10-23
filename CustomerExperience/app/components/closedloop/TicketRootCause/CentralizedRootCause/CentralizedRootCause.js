@@ -1,13 +1,6 @@
-import React, {use, useCallback, useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  SafeAreaView,
-  Pressable,
-  TextInput,
-  Platform,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, View, FlatList, Pressable, TextInput} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {baseTextStyles} from '../../../../styles/text.styles';
 import {VerticalSpaceBox} from '../../../../widgets/SpaceBox';
 import {PaddingConstants} from '../../../../styles/padding.constants';
@@ -18,16 +11,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {CheckBox, CheckBoxItem} from '../../../../routes/commonUI/CommonUI';
 import QPButton from '../../../../widgets/Button';
 import {buttonStyles} from '../../../../styles/button.styles';
-import {
-  getTagCount,
-  getRemappedRootCauseTagList,
-  isTagChecked,
-  getTagCountFromSelectedList,
-} from '../utils';
+import {isTagChecked, getTagCountFromSelectedList} from '../utils';
 import {
   addDraftTags,
   removeDraftTags,
-  resetDraftTags,
   updateCentralizedRootCause,
 } from '../../../../redux/actions/closedloop.actions';
 import {FontFamily} from '../../../../styles/font.constants';
@@ -217,17 +204,6 @@ export const OtherTag = () => {
 
   console.log('otherTag', isOtherChecked, otherText);
 
-  // const [isChecked, setIsChecked] = useState(isOtherChecked);
-  // const [updatedText, updateOtherText] = useState(otherText);
-
-  // useEffect(() => {
-  //   if (updatedText && isChecked) {
-  //     console.log('UPDATED TEXT', updatedText, isChecked);
-  //     dispatch(addDraftTags([], isChecked, updatedText));
-  //   }
-  //   dispatch(addDraftTags([], !isChecked, ''));
-  // }, [updatedText, isChecked]);
-
   const update = () => {
     console.log(!isOtherChecked, otherText);
     dispatch(addDraftTags([], !isOtherChecked, otherText));
@@ -262,22 +238,19 @@ export const OtherTag = () => {
         style={styles.otherTextInput}
         onChangeText={updateOtherText}
       />
-      {/* <Pressable style={styles.addButton} onPress={updateRootCause}>
-        <MaterialIcons name="add" size={26} color={Colors.accentLight} />
-      </Pressable> */}
     </View>
   );
 };
 export const CentralizedRootCause = props => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const centralizedRootCauseList = useSelector(
     state => state.dashboard.centralizedRootCauseList,
   );
 
-  const selectedTags = useSelector(
-    state =>
-      state.dashboard.ticket?.centralizeRootCause?.centralizeRootCauseIds ?? [],
-  );
+  // const selectedTags = useSelector(
+  //   state =>
+  //     state.dashboard.ticket?.centralizeRootCause?.centralizeRootCauseIds ?? [],
+  // );
   const selectedRootCauses = useSelector(
     state => state.dashboard.selectedRootCauses.centralizeRootCauseIds ?? [],
   );
