@@ -8,6 +8,7 @@ const Colors = {
   transparentBackground: 'rgba(0,0,0,0.05)',
   black: '#000000',
   accentLight: '#1b87e6',
+  accentLightBackground: '#1b87e61d',
   checkboxColor: '#ababab',
   accent: '#1B3380',
   deleteButtonText: '#FFFFFF',

@@ -11,8 +11,9 @@ import ticketOverviewStyles from '../ticket.overview.style';
 import CopyTicketIdButton from './CopyTicketIdButton';
 import NPSScoreComponent from './NPSScoreComponent';
 import ConditionalResponseButton from './ConditionalResponseButton';
+import {Tag} from '../../ui/Tags';
 
-const DescriptionView = ({showResponseButton}) => {
+const DescriptionView = ({showResponseButton, children}) => {
   const ticket = useSelector(state => state.dashboard.ticket);
   const createdDate =
     ticket !== undefined
@@ -40,6 +41,9 @@ const DescriptionView = ({showResponseButton}) => {
           subText={createdDate}
         />
         <NPSScoreComponent />
+
+        {children}
+
         <ConditionalResponseButton showResponseButton={showResponseButton} />
       </ChildContainer>
     </View>

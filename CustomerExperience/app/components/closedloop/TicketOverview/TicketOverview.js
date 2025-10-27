@@ -31,6 +31,7 @@ import StringUtils from '../../../Utils/StringUtils';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import {get} from 'lodash';
 import {DescriptionDetails} from './components/DescriptionDetails';
+import {Tag} from '../ui/Tags';
 
 const TicketStatusPriorityView = ({children}) => {
   return (
@@ -193,15 +194,22 @@ export default function TicketOverview(props) {
             <PriorityView onPress={handlePrioritySelection} />
             <AssignedToView />
           </TicketStatusPriorityView>
-          <DescriptionView showResponseButton={isFromClosedLoopScreen} />
+          <DescriptionView showResponseButton={isFromClosedLoopScreen}>
+            <TicketDescription onPress={onPressDescriptionMore} />
+            <Tag tags={ticketDetails?.tags ?? []} />
+          </DescriptionView>
+
+          {/* <Tag tags={ticketDetails.tags ?? []} /> */}
+
           <ContactView onTakeActionHandler={onTakeActionHandler}>
             {/* {ticketDetails.comment?.length > 0 ? (
               <Title text={`${translate('ticket_overview.description')}:`} />
             ) : (
               <View />
             )} */}
-            <TicketDescription onPress={onPressDescriptionMore} />
+            {/* <Tag tags={ticketDetails.tags ?? []} /> */}
           </ContactView>
+
           <DeleteView />
         </View>
       </Animated.ScrollView>
