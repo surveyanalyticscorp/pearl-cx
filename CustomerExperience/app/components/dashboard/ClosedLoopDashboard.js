@@ -58,40 +58,46 @@ export const RenderDonutChart = ({count, showPercentageCount}) => {
 };
 
 let RenderDonutInfoViewContainer = ({priorities, showPercentageCount}) => {
+  const {totalTickets, critical, high, medium, low} = priorities;
+
+  const criticalCount = showPercentageCount
+    ? `${getParcentage(totalTickets, critical)}%`
+    : `${critical}`;
+
+  const highCount = showPercentageCount
+    ? `${getParcentage(totalTickets, high)}%`
+    : `${high}`;
+
+  const mediumCount = showPercentageCount
+    ? `${getParcentage(totalTickets, medium)}%`
+    : `${medium}`;
+
+  const lowCount = showPercentageCount
+    ? `${getParcentage(totalTickets, low)}%`
+    : `${low}`;
+
   return (
     <View testID="render-donut-info-view-container">
       <RenderTicketTotalView totalCount={priorities.totalTickets} />
       <RenderTicketView
-        totalTickets={priorities.totalTickets}
-        count={priorities.critical}
         bgColor={Colors.critical2}
         status={translate('dashboard.critical')}
-        textColor={Colors.white}
-        showPercentageCount={showPercentageCount}
+        ticketCount={criticalCount}
       />
       <RenderTicketView
-        totalTickets={priorities.totalTickets}
-        count={priorities.high}
         bgColor={Colors.high2}
         status={translate('dashboard.high')}
-        textColor={Colors.white}
-        showPercentageCount={showPercentageCount}
+        ticketCount={highCount}
       />
       <RenderTicketView
-        totalTickets={priorities.totalTickets}
-        count={priorities.medium}
         bgColor={Colors.medium2}
         status={translate('dashboard.medium')}
-        textColor={Colors.white}
-        showPercentageCount={showPercentageCount}
+        ticketCount={mediumCount}
       />
       <RenderTicketView
-        totalTickets={priorities.totalTickets}
-        count={priorities.low}
         bgColor={Colors.low2}
         status={translate('dashboard.low')}
-        textColor={Colors.white}
-        showPercentageCount={showPercentageCount}
+        ticketCount={lowCount}
       />
     </View>
   );
@@ -100,24 +106,14 @@ let RenderDonutInfoViewContainer = ({priorities, showPercentageCount}) => {
 export const getParcentage = (total, count) =>
   Number((total === 0 ? 0 : (100 * count) / total).toFixed(2));
 
-export const RenderTicketView = ({
-  totalTickets,
-  count,
-  bgColor,
-  status,
-  showPercentageCount,
-}) => {
-  const ticketCount = showPercentageCount
-    ? `${getParcentage(totalTickets, count)}%`
-    : `${count}`;
-
+export const RenderTicketView = ({bgColor, status, ticketCount}) => {
   return (
     <View testID="render-ticket-view" style={styles.donutInfoContainer}>
       <View
         style={[styles.ticketStatusIndicatorView, {backgroundColor: bgColor}]}
       />
       <Text testID="render-ticket-text" style={styles.ticketText}>
-        {ticketCount}
+        {ticketCount ?? 0}
       </Text>
       <View
         testID="render-ticket-status-view"

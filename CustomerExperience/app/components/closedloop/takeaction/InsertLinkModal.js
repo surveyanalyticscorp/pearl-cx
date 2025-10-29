@@ -40,17 +40,17 @@ const InsertLinkModal = ({isVisible, setVisiblity, insertLink}) => {
       animationType="fade">
       <Pressable style={styles.modalBackdrop} onPress={onCancel}>
         <View style={styles.modalCard} onStartShouldSetResponder={() => true}>
-          <Text style={styles.modalTitle}>Insert Link</Text>
+          <Text style={styles.modalTitle}>Insert link</Text>
           <View style={styles.modalInputsContainer}>
             <TextInput
-              placeholder="Title"
+              placeholder="Text"
               placeholderTextColor={Colors.borderColor}
               value={title}
               onChangeText={setTitle}
               style={styles.modalInput}
             />
             <TextInput
-              placeholder="Insert link"
+              placeholder="Link"
               placeholderTextColor={Colors.borderColor}
               value={url}
               autoCapitalize="none"
@@ -70,7 +70,7 @@ const InsertLinkModal = ({isVisible, setVisiblity, insertLink}) => {
                 {marginLeft: PaddingConstants.tab1_2x},
               ]}
               onPress={onSubmit}>
-              <Text style={[buttonStyles.textButtonTextPrimary]}>Submit</Text>
+              <Text style={[buttonStyles.textButtonTextPrimary]}>Save</Text>
             </Pressable>
           </View>
         </View>

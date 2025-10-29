@@ -138,7 +138,7 @@ const ClosedLoopTicketList = ({
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const itemPerPage = 20;
+  const itemPerPage = 50;
   const statusId = useSelector(state => state.global.statusId);
   console.log('STATUS_ID_FILTER', statusId);
 
@@ -184,6 +184,7 @@ export default function ClosedLoop(props) {
   const owners = useSelector(state => state.dashboard.ownerDetails.owners);
   const [refreshing, setRefreshing] = useState(false);
   const {ticketDeleteStatus} = useSelector(state => state.dashboard);
+  // const ticketTags = useSelector(state => state.dashboard.ticketTags);
 
   useEffect(() => {
     if (

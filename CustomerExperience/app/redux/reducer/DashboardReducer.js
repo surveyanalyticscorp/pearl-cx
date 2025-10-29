@@ -1,5 +1,5 @@
 import {create} from 'lodash';
-import {getUniqueValues} from '../../Utils/TicketUtils';
+import {getUniqueValues, removeItemFromArray} from '../../Utils/TicketUtils';
 import {CLEAR_USER_INFO} from '../actions';
 import {
   ACTIONS_RECEIVED,
@@ -26,6 +26,8 @@ import {
   ADD_DRAFT_CENTRALIZED_ROOT_CAUSE,
   REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE,
   RESET_DRAFT_CENTRALIZED_ROOT_CAUSE,
+  ADD_TICKET_TAG,
+  REMOVE_TICKET_TAG,
 } from '../actions/closedloop.actions';
 import {
   CLEAR_CLOSED_LOOP_TICKET_DETAILS,
@@ -110,6 +112,7 @@ const initialState = {
   currentFeedback: {},
   ticketFilter: {},
   ticket: {},
+  ticketTags: [],
   ticketComments: [],
   ticketActivity: [],
   createTicketResponse: {},
@@ -570,6 +573,20 @@ const dashboardReducer = (state = initialState, action) => {
           response: action.response,
         },
       };
+    }
+
+    case ADD_TICKET_TAG: {
+      return {...state, ticketTags: [...state.ticketTags, action.tagName]};
+    }
+
+    case REMOVE_TICKET_TAG: {
+      return {
+        ...state,
+        ticketTags: removeItemFromArray(state.ticketTags, action.index),
+      };
+    }
+    case REMOVE_TICKET_TAG: {
+      return {...state, ticketTags: []};
     }
 
     default: {

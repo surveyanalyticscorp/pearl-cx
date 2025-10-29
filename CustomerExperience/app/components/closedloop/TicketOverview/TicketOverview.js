@@ -198,18 +198,7 @@ export default function TicketOverview(props) {
             <TicketDescription onPress={onPressDescriptionMore} />
             <Tag tags={ticketDetails?.tags ?? []} />
           </DescriptionView>
-
-          {/* <Tag tags={ticketDetails.tags ?? []} /> */}
-
-          <ContactView onTakeActionHandler={onTakeActionHandler}>
-            {/* {ticketDetails.comment?.length > 0 ? (
-              <Title text={`${translate('ticket_overview.description')}:`} />
-            ) : (
-              <View />
-            )} */}
-            {/* <Tag tags={ticketDetails.tags ?? []} /> */}
-          </ContactView>
-
+          <ContactView onTakeActionHandler={onTakeActionHandler} />
           <DeleteView />
         </View>
       </Animated.ScrollView>

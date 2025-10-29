@@ -70,6 +70,10 @@ export const GENERATE_REFINE_EMAIL_DRAFT = 'GENERATE_REFINE_EMAIL_DRAFT';
 export const GENERATE_REFINE_EMAIL_DRAFT_RECEIVED =
   'GENERATE_REFINE_EMAIL_DRAFT_RECEIVED';
 
+export const ADD_TICKET_TAG = 'ADD_TICKET_TAG';
+export const REMOVE_TICKET_TAG = 'REMOVE_TICKET_TAG';
+export const RESET_TICKET_TAG = 'RESET_TICKET_TAG';
+
 export const syncTickets = ({token, param, feedbackID}) => ({
   type: GET_TICKET_LIST_SYNC,
   token,
@@ -231,4 +235,18 @@ export const generateEmailDraft = (param, ticketId, feedbackId) => ({
 export const generateRefineEmailDraft = param => ({
   type: GENERATE_REFINE_EMAIL_DRAFT,
   param,
+});
+
+export const addTagToFilter = tagName => ({
+  type: ADD_TICKET_TAG,
+  tagName,
+});
+
+export const removeTagFromFilter = index => ({
+  type: REMOVE_TICKET_TAG,
+  index,
+});
+
+export const resetTagFilter = () => ({
+  type: RESET_TICKET_TAG,
 });

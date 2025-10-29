@@ -22,7 +22,7 @@ export const TOKEN_VALIDATION_DURATION = 5;
 export const RESPONSE_READ_UNREAD_FEATURE_ACTIVATION_DATE = 'Jun 1 2024';
 export const MAX_COMMENT_LENGTH = 240;
 // set true for DEV, false for LIVE
-export const IS_DEV_MODE = false;
+export const IS_DEV_MODE = true;
 
 // export const BASE_URL = 'https://api.questionpro.com/';
 

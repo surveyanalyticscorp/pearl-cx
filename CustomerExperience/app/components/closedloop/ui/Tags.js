@@ -1,34 +1,44 @@
 import React from 'react';
-import {StyleSheet, View, Text, Pressable} from 'react-native';
+import {StyleSheet, View, Pressable} from 'react-native';
 import {baseTextStyles} from '../../../styles/text.styles';
 import {Colors} from '../../../styles/color.constants';
-import {FontFamily} from '../../../styles/font.constants';
-import {TextSizes} from '../../../styles/textsize.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
-import {CheckBox, CheckBoxItem} from '../../../routes/commonUI/CommonUI';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
-import DescriptionHeader from '../TicketOverview/components/DescriptionHeader';
 import {Title} from './ShowTitleAndText';
+import {useDispatch} from 'react-redux';
+import {addTagToFilter} from '../../../redux/actions/closedloop.actions';
+import {useNavigation} from '@react-navigation/native';
 
-const TagItem = ({item, index}) => {
+const TagItem = ({item, _}) => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const onPress = () => {
+    dispatch(addTagToFilter(item.name));
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  };
   return (
-    <View style={styles.tag}>
+    <Pressable onPress={onPress} style={styles.tag}>
       <TextLabel
         color={Colors.accentLight}
         text={item.name}
         textStyle={styles.text}
       />
-    </View>
+    </Pressable>
   );
 };
 
 export const Tag = ({tags}) => {
+  if (!tags || tags.length === 0) {
+    return null;
+  }
+
   return (
-    // <View style={styles.rootContainer}>
-    <View style={styles.secondaryRootContainer}>
-      {/* <DescriptionHeader text={'AI generated tags'} /> */}
+    <View style={styles.rootContainer}>
       <Title text={`AI generated tags`} />
       <VerticalSpaceBox />
       <View style={styles.tagContainer}>
@@ -42,18 +52,6 @@ export const Tag = ({tags}) => {
 
 const styles = StyleSheet.create({
   rootContainer: {
-    flex: 1,
-    flexDirection: 'column',
-
-    justifyContent: 'flex-start',
-    marginHorizontal: MarginConstants.tab1,
-    marginTop: MarginConstants.tab1,
-    marginBottom: MarginConstants.halfTab,
-    padding: PaddingConstants.tab1_2x,
-    borderRadius: 4,
-    backgroundColor: Colors.white,
-  },
-  secondaryRootContainer: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
