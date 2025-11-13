@@ -58,6 +58,79 @@ public class CacheUtils {
         return nil
     }
     
+    public static func setDataMappings(dataMappings: [DataMappings]) {
+        // Store full encoded array of DataMappings (variable, displayName, value)
+        do {
+            let encoded = try JSONEncoder().encode(dataMappings)
+            sdkUserDefaults.set(encoded, forKey: kDataMappings)
+            LogUtils.printMessage(message: "Saved dataMappings count=\(dataMappings.count)")
+        } catch {
+            LogUtils.printMessage(message: "Error encoding dataMappings: \(error)")
+        }
+    }
+
+    public static func getDataMapping() -> [String: String]? {
+        // Legacy dictionary retrieval (if any) — but new storage uses encoded array
+        if let dict = sdkUserDefaults.object(forKey: kDataMappings) as? [String:String] { return dict }
+        return nil
+    }
+
+    // New: retrieve full decoded array of DataMappings for an intercept
+    public static func getDataMappings() -> [DataMappings]? {
+        guard let data = sdkUserDefaults.data(forKey: kDataMappings) else { return nil }
+        do {
+            return try JSONDecoder().decode([DataMappings].self, from: data)
+        } catch {
+            LogUtils.printMessage(message: "Error decoding dataMappings : \(error)")
+            return nil
+        }
+    }
+
+    // Merge user-provided mappings (displayName -> value) into existing stored mappings.
+    // Only updates entries whose displayName matches; ignores unknown displayNames.
+    
+    public static func mergeUserDataMappings(userMappings: [String:String]) -> [DataMappings]? {
+        guard var existing = getDataMappings() else {
+            LogUtils.printMessage(message: "No existing dataMappings to merge")
+            return nil
+        }
+        var updatedCount = 0
+        for i in 0..<existing.count {
+            let dm = existing[i]
+            if let newValue = userMappings[dm.displayName] {
+                if dm.value != newValue {
+                    existing[i] = DataMappings(variable: dm.variable, displayName: dm.displayName, value: newValue)
+                    updatedCount += 1
+                }
+            }
+        }
+        setDataMappings(dataMappings: existing)
+        LogUtils.printMessage(message: "Merged user dataMappings; updated \(updatedCount) entries")
+        return existing
+    }
+
+    // Convenience: update a single mapping by displayName
+    @discardableResult
+    public static func updateDataMappingValue(displayName: String, value: String) -> Bool {
+        guard var existing = getDataMappings() else { return false }
+        var changed = false
+        for i in 0..<existing.count {
+            if existing[i].displayName == displayName {
+                if existing[i].value != value {
+                    let dm = existing[i]
+                    existing[i] = DataMappings(variable: dm.variable, displayName: dm.displayName, value: value)
+                    changed = true
+                }
+                break
+            }
+        }
+        if changed { setDataMappings(dataMappings: existing) }
+        return changed
+    }
+
+    public static func getDataMappingValue(displayName: String) -> String? {
+        return getDataMappings()?.first(where: { $0.displayName == displayName })?.value
+    }
     
     public static func setInterceptForInterceptId(key: String, value: [String]) {
         sdkUserDefaults.set(value, forKey: key)

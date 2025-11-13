@@ -52,6 +52,13 @@ public struct Intercept: Codable {
     let ruleGroupId: Int
     let rules: [Rule]
     let settings: Settings?
+    let dataMappings: [DataMappings]
+}
+
+public struct DataMappings: Codable {
+    let variable: String
+    let displayName: String
+    var value: String = ""
 }
 
 public struct Settings: Codable {

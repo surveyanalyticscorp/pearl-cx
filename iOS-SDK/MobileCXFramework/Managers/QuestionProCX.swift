@@ -168,6 +168,22 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         return customVariablesPayload
     }
     
+    public func setDataMappings(dataMappings: [String: String]) {
+        CacheUtils.mergeUserDataMappings(userMappings: dataMappings)
+//        var dataMappingsPayload : [[String: String]] = []
+//        for (key, value) in dataMappings {
+//            let customKey = "custom\(key)"
+//            let customVars: [String: String] = [
+//                "variable": customKey,
+//                "displayName": value
+//            ]
+//            dataMappingsPayload.append(customVars)
+//        }
+//        LogUtils.printMessage(message: "Body Data Mappings: ----------> \(String(describing: dataMappingsPayload))")
+//        
+//        return dataMappingsPayload;
+    }
+    
     public func fetchSurveyURLForSurveyId (interceptId: Int, interceptData: Intercept, interceptType: String) {
         let visitorId = visitorApiResponse.visitor.uuid
         var fetchSurveyURLResponse: SurveyURL!
@@ -257,6 +273,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 for interceptRule in intercept.rules {
                     interceptRules.append(interceptRule.name)
                 }
+                
+//                CacheUtils.setDataMappings(dataMappings: intercept.dataMappings)
                 
                 CacheUtils.setInterceptForInterceptId(key: String(intercept.id), value: interceptRules)
                 
