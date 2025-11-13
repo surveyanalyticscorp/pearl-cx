@@ -1,5 +1,5 @@
 {
-  "name": "@questionpro/react-native-intercept-sdk",
+  "name": "@questionpro/react-native-survey-intercept",
   "version": "1.0.0",
   "description": "React Native SDK wrapper for QuestionPro Survey Intercept SDK",
   "main": "lib/commonjs/index.js",
@@ -16,7 +16,7 @@
     "survey",
     "intercept"
   ],
-  "repository": "https://github.com/questionpro/react-native-intercept-sdk",
+  "repository": "https://github.com/questionpro/react-native-survey-intercept",
   "author": "QuestionPro <support@questionpro.com>",
   "license": "MIT",
   "devDependencies": {
@@ -37,7 +37,7 @@
       "packageImportPath": "com.questionpro.interceptsdk.InterceptSdkPackage"
     },
     "ios": {
-      "podspecPath": "./react-native-intercept-sdk.podspec"
+      "podspecPath": "./react-native-survey-intercept.podspec"
     }
   },
   "react-native-builder-bob": {

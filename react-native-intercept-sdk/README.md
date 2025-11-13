@@ -16,13 +16,13 @@ A React Native wrapper for the QuestionPro Survey Intercept SDK, enabling seamle
 ### 1. Install the package
 
 ```bash
-npm install @questionpro/react-native-intercept-sdk
+npm install @questionpro/react-native-survey-intercept
 ```
 
 or
 
 ```bash
-yarn add @questionpro/react-native-intercept-sdk
+yarn add @questionpro/react-native-survey-intercept
 ```
 
 ### 2. iOS Setup
@@ -33,10 +33,10 @@ For iOS, you need to install the pod dependencies:
 cd ios && pod install
 ```
 
-**Important**: Add your existing QuestionPro Survey SDK dependency to the `react-native-intercept-sdk.podspec` file:
+**Important**: Add your existing QuestionPro Survey SDK dependency to the `react-native-survey-intercept.podspec` file:
 
 ```ruby
-# In react-native-intercept-sdk.podspec
+# In react-native-survey-intercept.podspec
 s.dependency "QuestionProSurveySDK", "~> 1.0.0" # Replace with your SDK version
 ```
 
@@ -104,7 +104,7 @@ SurveySDK.configure(
 
 ```typescript
 import React, { useEffect } from 'react';
-import InterceptSdk from '@questionpro/react-native-intercept-sdk';
+import InterceptSdk from '@questionpro/react-native-survey-intercept';
 
 const App = () => {
   useEffect(() => {
@@ -141,7 +141,7 @@ const App = () => {
 
 ```typescript
 import { useEffect } from 'react';
-import InterceptSdk, { SurveyEvent } from '@questionpro/react-native-intercept-sdk';
+import InterceptSdk, { SurveyEvent } from '@questionpro/react-native-survey-intercept';
 
 const useInterceptSdk = () => {
   useEffect(() => {
@@ -172,7 +172,7 @@ const useInterceptSdk = () => {
 ### Triggering Events
 
 ```typescript
-import InterceptSdk from '@questionpro/react-native-intercept-sdk';
+import InterceptSdk from '@questionpro/react-native-survey-intercept';
 
 // Simple event
 InterceptSdk.notifyEvent('page_view');
@@ -278,7 +278,7 @@ npx react-native run-android
 
 ```typescript
 import { useEffect, useCallback } from 'react';
-import InterceptSdk, { SurveyEvent } from '@questionpro/react-native-intercept-sdk';
+import InterceptSdk, { SurveyEvent } from '@questionpro/react-native-survey-intercept';
 
 export const useSurveySDK = (apiKey: string, userEmail?: string) => {
   const [isConfigured, setIsConfigured] = useState(false);
@@ -314,7 +314,7 @@ export const useSurveySDK = (apiKey: string, userEmail?: string) => {
 ```typescript
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import InterceptSdk from '@questionpro/react-native-intercept-sdk';
+import InterceptSdk from '@questionpro/react-native-survey-intercept';
 
 export const useNavigationTracking = () => {
   const navigation = useNavigation();

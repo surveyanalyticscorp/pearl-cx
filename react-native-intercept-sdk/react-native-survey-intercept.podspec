@@ -3,13 +3,13 @@ require "json"
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 Pod::Spec.new do |s|
-  s.name         = "react-native-intercept-sdk"
+  s.name         = "react-native-survey-intercept"
   s.version      = package["version"]
   s.summary      = "React Native SDK wrapper for QuestionPro Survey Intercept SDK"
   s.description  = "A React Native wrapper that provides JavaScript bridge to native Android and iOS QuestionPro survey SDK for mobile app integration."
-  s.homepage     = "https://github.com/questionpro/react-native-intercept-sdk"
+  s.homepage     = "https://github.com/questionpro/react-native-survey-intercept"
   s.license      = { :type => "MIT", :file => "LICENSE" }
-  s.authors      = { "QuestionPro" => "support@questionpro.com" }
+  s.authors      = { "QuestionPro" => "datta.kunde@questionpro.com" }
 
   s.platforms    = { :ios => "15.0" }
   s.source       = { :path => "." }
