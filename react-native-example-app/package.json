@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@questionpro/react-native-intercept-sdk": "file:../react-native-intercept-sdk",
+    "@questionpro/react-native-survey-intercept": "file:../react-native-intercept-sdk",
     "react": "18.2.0",
     "react-native": "0.72.4"
   },

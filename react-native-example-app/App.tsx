@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 
-import InterceptSdk from '@questionpro/react-native-intercept-sdk';
+import InterceptSdk from '@questionpro/react-native-survey-intercept';
 
 
 const App = () => {

@@ -46,7 +46,7 @@ target 'InterceptSDKExample' do
   )
 
    # Manually add the SDK if autolinking fails
-   pod 'react-native-intercept-sdk', :path => '../node_modules/@questionpro/react-native-intercept-sdk'
+   pod 'react-native-survey-intercept', :path => '../node_modules/@questionpro/react-native-survey-intercept'
    pod 'QuestionProCXFramework', :git => 'https://github.com/surveyanalyticscorp/ios-cx.git', :tag => '2.2.1'
 
 

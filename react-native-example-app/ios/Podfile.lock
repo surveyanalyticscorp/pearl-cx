@@ -316,7 +316,7 @@ PODS:
   - React-jsinspector (0.72.4)
   - React-logger (0.72.4):
     - glog
-  - react-native-intercept-sdk (1.0.0):
+  - react-native-survey-intercept (1.0.0):
     - QuestionProCXFramework
     - React-Core
   - React-NativeModulesApple (0.72.4):
@@ -457,7 +457,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - "react-native-intercept-sdk (from `../node_modules/@questionpro/react-native-intercept-sdk`)"
+  - "react-native-survey-intercept (from `../node_modules/@questionpro/react-native-survey-intercept`)"
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -530,8 +530,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
-  react-native-intercept-sdk:
-    :path: "../node_modules/@questionpro/react-native-intercept-sdk"
+  react-native-survey-intercept:
+    :path: "../node_modules/@questionpro/react-native-survey-intercept"
   React-NativeModulesApple:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios"
   React-perflogger:
@@ -599,7 +599,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: bee9fca67c1b8ab7d9cf1c8e19a50968dc15ba2e
   React-jsinspector: aaed4cf551c4a1c98092436518c2d267b13a673f
   React-logger: 005cf0fc175b43fd5a1abca9ad02fc50c5db45d3
-  react-native-intercept-sdk: 050b191eab7b6a204acc9b6c5a5914fc4f9114cf
+  react-native-survey-intercept: 4e93c9cbe4309c73ce8e0ff24109948e07413fa2
   React-NativeModulesApple: 3020a249a8b7c7d7070a1666925e86e9d3f2773e
   React-perflogger: 496a1a3dc6737f964107cb3ddae7f9e265ddda58
   React-RCTActionSheet: 02904b932b50e680f4e26e7a686b33ebf7ef3c00
@@ -620,6 +620,6 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
 
-PODFILE CHECKSUM: 6c0217dca7a642d2d5e68a367e00ff89c10b3317
+PODFILE CHECKSUM: bab971211350f89b9b677ff5d33a22c8824b6362
 
 COCOAPODS: 1.16.2
