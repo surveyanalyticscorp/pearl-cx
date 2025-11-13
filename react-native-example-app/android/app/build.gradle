@@ -119,7 +119,7 @@ dependencies {
         implementation jscFlavor
     }
     
-    implementation project(':questionpro_react-native-intercept-sdk')
+    //implementation project(':questionpro_react-native-survey-intercept')
 
 }
 

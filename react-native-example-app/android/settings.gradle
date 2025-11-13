@@ -1,8 +1,8 @@
 rootProject.name = 'InterceptSDKExample'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 
-include ':questionpro_react-native-intercept-sdk'
-project(':questionpro_react-native-intercept-sdk').projectDir = new File(rootProject.projectDir, '../../react-native-intercept-sdk/android')
+//include ':questionpro_react-native-intercept-sdk'
+//project(':questionpro_react-native-intercept-sdk').projectDir = new File(rootProject.projectDir, '../../react-native-intercept-sdk/android')
 
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')
