@@ -30,13 +30,4 @@ public class TouchPoint {
     public static func initTouchPoint(dataCenter: DataCenter) -> TouchPoint {
         return TouchPoint(dataCenter: dataCenter)
     }
-    
-    public func setCustomVariables(_ customVariables: [Int: String]?) -> TouchPoint {
-        self.customVariables = customVariables;
-        return self;
-    }
-    
-    public func getCustomVariables () -> [Int: String]? {
-        return self.customVariables
-    }
 }

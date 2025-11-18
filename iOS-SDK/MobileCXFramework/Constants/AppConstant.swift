@@ -26,6 +26,7 @@ public let kIntercepts = "Intercepts"
 public let kApiKey = "apiKey"
 public let kDataCenter = "dataCenter"
 public let kConfigType = "configType"
+public let kDataMappings = "DataMappings"
 
 //API request types
 public enum APIRequestType: String {
