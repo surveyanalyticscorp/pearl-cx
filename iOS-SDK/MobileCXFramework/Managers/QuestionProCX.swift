@@ -148,40 +148,55 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         return instance!
     }
     
-    func setCustomVariables(customVariables: [Int: String]) -> [[String: String]] {
-        var customVariablesPayload : [[String: String]] = []
-        for (key, value) in customVariables {
-            let customKey = "custom\(key)"
-            let customVars: [String: String] = [
-                "variableName": customKey,
-                "value": value
-            ]
-            customVariablesPayload.append(customVars)
-        }
-        
-        LogUtils.printMessage(message: "Body Custom Variables: ----------> \(String(describing: customVariablesPayload))")
-        
-        if let jsonData = try? JSONSerialization.data(withJSONObject: customVariablesPayload, options: .prettyPrinted),
-               let jsonString = String(data: jsonData, encoding: .utf8) {
-            LogUtils.printMessage(message: " ----------> ✅ JSON Output:\n\(jsonString)")
+//    func setDataMappingForAPICall(customVariables: [Int: String]) -> [[String: String]] {
+//        var customVariablesPayload : [[String: String]] = []
+//        for (key, value) in customVariables {
+//            let customKey = "custom\(key)"
+//            let customVars: [String: String] = [
+//                "variableName": customKey,
+//                "value": value
+//            ]
+//            customVariablesPayload.append(customVars)
+//        }
+//        
+//        LogUtils.printMessage(message: "Body Custom Variables: ----------> \(String(describing: customVariablesPayload))")
+//        
+//        if let jsonData = try? JSONSerialization.data(withJSONObject: customVariablesPayload, options: .prettyPrinted),
+//               let jsonString = String(data: jsonData, encoding: .utf8) {
+//            LogUtils.printMessage(message: " ----------> ✅ JSON Output:\n\(jsonString)")
+//            }
+//        return customVariablesPayload
+//    }
+    
+    func setDataMappingForAPICall(dataMappings: [DataMappings], interceptData: Intercept) -> [[String: String]] {
+        // Only include mappings whose displayName appears in the intercept's own dataMappings list.
+        let interceptDisplayNames = Set(interceptData.dataMappings.map { $0.displayName })
+        LogUtils.printMessage(message: "🔎 Saved mappings total=\(dataMappings.count) | Intercept displayNames count=\(interceptDisplayNames.count)")
+
+        var payload: [[String: String]] = []
+        var skipped = 0
+        for dm in dataMappings {
+            guard interceptDisplayNames.contains(dm.displayName) else {
+                skipped += 1
+                continue
             }
-        return customVariablesPayload
+            let item = [
+                "variableName": dm.variable,
+                "value": dm.value
+            ]
+            LogUtils.printMessage(message: " ✅ Included Mapping: variable=\(dm.variable) displayName=\(dm.displayName) value=\(dm.value)")
+            payload.append(item)
+        }
+        LogUtils.printMessage(message: "📦 Matched/Included=\(payload.count) Skipped=\(skipped)")
+        if let jsonData = try? JSONSerialization.data(withJSONObject: payload, options: .prettyPrinted),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            LogUtils.printMessage(message: " ✅ Final DataMappings Payload JSON:\n\(jsonString)")
+        }
+        return payload
     }
     
     public func setDataMappings(dataMappings: [String: String]) {
         CacheUtils.mergeUserDataMappings(userMappings: dataMappings)
-//        var dataMappingsPayload : [[String: String]] = []
-//        for (key, value) in dataMappings {
-//            let customKey = "custom\(key)"
-//            let customVars: [String: String] = [
-//                "variable": customKey,
-//                "displayName": value
-//            ]
-//            dataMappingsPayload.append(customVars)
-//        }
-//        LogUtils.printMessage(message: "Body Data Mappings: ----------> \(String(describing: dataMappingsPayload))")
-//        
-//        return dataMappingsPayload;
     }
     
     public func fetchSurveyURLForSurveyId (interceptId: Int, interceptData: Intercept, interceptType: String) {
@@ -201,11 +216,12 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             }
         }
         
-        if (touchPoint?.customVariables != nil) {
-            let customVariables = self.touchPoint?.customVariables
-            LogUtils.printMessage(message: "Custom Variables: \(String(describing: customVariables))")
-                    
-            bodyParam["data"] = setCustomVariables(customVariables: customVariables!)
+        if let dataMappings = CacheUtils.getDataMappings() {
+            LogUtils.printMessage(message: "Data Mappings fetched (count=\(dataMappings.count))")
+            bodyParam["data"] = setDataMappingForAPICall(dataMappings: dataMappings, interceptData: interceptData)
+        } else {
+            LogUtils.printMessage(message: "⚠️ No Data Mappings found, sending empty array")
+            bodyParam["data"] = [] as [[String: String]]
         }
         
         let fetchSurveyURL = APIUtils.getFetchSurveyURL()
@@ -274,7 +290,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                     interceptRules.append(interceptRule.name)
                 }
                 
-//                CacheUtils.setDataMappings(dataMappings: intercept.dataMappings)
+                CacheUtils.appendDataMappings(newMappings: intercept.dataMappings)
                 
                 CacheUtils.setInterceptForInterceptId(key: String(intercept.id), value: interceptRules)
                 
