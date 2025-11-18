@@ -70,7 +70,8 @@ public class CacheUtils {
         }
     }
 
-    // Append new mappings, replacing existing entries with the same displayName ("last wins" semantics)
+    // Append new mappings, replacing existing entries with the same displayName ("last wins" semantics).
+    // Case-insensitive match; leading/trailing whitespace in displayName is trimmed before comparison/storage.
     @discardableResult
     public static func appendDataMappings(newMappings: [DataMappings]) -> [DataMappings] {
         guard !newMappings.isEmpty else {
@@ -78,29 +79,39 @@ public class CacheUtils {
             return getDataMappings() ?? []
         }
         if var existing = getDataMappings() {
-            // Index existing by displayName for O(1) replacement while preserving order
+            // Normalize existing displayNames (trim + case-insensitive index)
             var indexByDisplayName: [String: Int] = [:]
-            for (idx, dm) in existing.enumerated() { indexByDisplayName[dm.displayName] = idx }
+            for (idx, dm) in existing.enumerated() {
+                let trimmed = dm.displayName.trimmingCharacters(in: .whitespacesAndNewlines)
+                if trimmed != dm.displayName { // persist trimmed version
+                    existing[idx] = DataMappings(variable: dm.variable, displayName: trimmed, value: dm.value)
+                }
+                indexByDisplayName[trimmed.lowercased()] = idx
+            }
             for dm in newMappings {
-                if let idx = indexByDisplayName[dm.displayName] {
+                let incomingTrimmed = dm.displayName.trimmingCharacters(in: .whitespacesAndNewlines)
+                let keyLower = incomingTrimmed.lowercased()
+                if let idx = indexByDisplayName[keyLower] {
                     // Replace existing; preserve prior non-empty value if new value is empty
                     let prior = existing[idx]
                     let mergedValue = dm.value.isEmpty ? prior.value : dm.value
-                    existing[idx] = DataMappings(variable: dm.variable, displayName: dm.displayName, value: mergedValue)
+                    existing[idx] = DataMappings(variable: dm.variable, displayName: incomingTrimmed, value: mergedValue)
                 } else {
-                    // Append brand new displayName
-                    existing.append(dm)
-                    indexByDisplayName[dm.displayName] = existing.count - 1
+                    existing.append(DataMappings(variable: dm.variable, displayName: incomingTrimmed, value: dm.value))
+                    indexByDisplayName[keyLower] = existing.count - 1
                 }
             }
             setDataMappings(dataMappings: existing) // Reuse save + SAVE log
             logDataMappings(interceptId: kDataMappings, action: "APPEND", mappings: existing)
             return existing
         } else {
-            // No existing -> just save new
-            setDataMappings(dataMappings: newMappings)
-            logDataMappings(interceptId: kDataMappings, action: "APPEND", mappings: newMappings)
-            return newMappings
+            // No existing -> trim and save new
+            let trimmedNew = newMappings.map { DataMappings(variable: $0.variable,
+                                                           displayName: $0.displayName.trimmingCharacters(in: .whitespacesAndNewlines),
+                                                           value: $0.value) }
+            setDataMappings(dataMappings: trimmedNew)
+            logDataMappings(interceptId: kDataMappings, action: "APPEND", mappings: trimmedNew)
+            return trimmedNew
         }
     }
 
@@ -128,38 +139,44 @@ public class CacheUtils {
     // Only updates entries whose displayName matches; ignores unknown displayNames.
     
     public static func mergeUserDataMappings(userMappings: [String:String]) -> [DataMappings]? {
-        // If no existing list, create one with variable="" and provided values (or empty string if missing)
+        // If no existing list, create one with variable="" and provided values (trim displayName)
         guard var existing = getDataMappings() else {
-            var fresh: [DataMappings] = []
-            for (displayName, value) in userMappings {
-                let dm = DataMappings(variable: "", displayName: displayName, value: value)
-                fresh.append(dm)
+            let fresh: [DataMappings] = userMappings.map { (rawDisplay, value) in
+                let trimmed = rawDisplay.trimmingCharacters(in: .whitespacesAndNewlines)
+                return DataMappings(variable: "", displayName: trimmed, value: value)
             }
-            // Save new list
             setDataMappings(dataMappings: fresh)
             LogUtils.printMessage(message: "🆕 Created initial dataMappings list from user input; count=\(fresh.count)")
             logDataMappings(interceptId: kDataMappings, action: "MERGE_INIT", mappings: fresh)
             return fresh
         }
 
-        // Build index for existing by displayName for O(1) lookup
+        // Build case-insensitive trimmed index for existing
         var indexByDisplayName: [String:Int] = [:]
-        for (idx, dm) in existing.enumerated() { indexByDisplayName[dm.displayName] = idx }
+        for (idx, dm) in existing.enumerated() {
+            let trimmed = dm.displayName.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed != dm.displayName {
+                existing[idx] = DataMappings(variable: dm.variable, displayName: trimmed, value: dm.value)
+            }
+            indexByDisplayName[trimmed.lowercased()] = idx
+        }
 
         var updatedCount = 0
-        // Update existing entries where userMappings supplies a value (retain prior non-empty value preference?)
-        for (displayName, newValueRaw) in userMappings {
-            let newValue = newValueRaw // already a String
-            if let idx = indexByDisplayName[displayName] {
+        for (rawDisplayName, rawValue) in userMappings {
+            let trimmedName = rawDisplayName.trimmingCharacters(in: .whitespacesAndNewlines)
+            let newValue = rawValue
+            let keyLower = trimmedName.lowercased()
+            if let idx = indexByDisplayName[keyLower] {
                 let current = existing[idx]
-                // Only update value if different and newValue not empty OR current value empty
                 if (current.value != newValue) && (!newValue.isEmpty || current.value.isEmpty) {
-                    existing[idx] = DataMappings(variable: current.variable, displayName: current.displayName, value: newValue)
+                    existing[idx] = DataMappings(variable: current.variable, displayName: trimmedName, value: newValue)
                     updatedCount += 1
+                } else if current.displayName != trimmedName { // update casing if changed
+                    existing[idx] = DataMappings(variable: current.variable, displayName: trimmedName, value: current.value)
                 }
             } else {
-                // Append new mapping with empty variable placeholder
-                existing.append(DataMappings(variable: "", displayName: displayName, value: newValue))
+                existing.append(DataMappings(variable: "", displayName: trimmedName, value: newValue))
+                indexByDisplayName[keyLower] = existing.count - 1
                 updatedCount += 1
             }
         }
@@ -174,27 +191,35 @@ public class CacheUtils {
     @discardableResult
     public static func updateDataMappingValue(displayName: String, value: String) -> Bool {
         guard var existing = getDataMappings() else { return false }
+        let incomingTrimmed = displayName.trimmingCharacters(in: .whitespacesAndNewlines)
         var changed = false
         for i in 0..<existing.count {
-            if existing[i].displayName == displayName {
+            let existingTrimmed = existing[i].displayName.trimmingCharacters(in: .whitespacesAndNewlines)
+            if existingTrimmed.compare(incomingTrimmed, options: .caseInsensitive) == .orderedSame {
                 if existing[i].value != value {
                     let dm = existing[i]
-                    existing[i] = DataMappings(variable: dm.variable, displayName: dm.displayName, value: value)
+                    existing[i] = DataMappings(variable: dm.variable, displayName: incomingTrimmed, value: value)
                     changed = true
+                } else if existing[i].displayName != incomingTrimmed { // adjust casing/trim
+                    let dm = existing[i]
+                    existing[i] = DataMappings(variable: dm.variable, displayName: incomingTrimmed, value: dm.value)
                 }
                 break
             }
         }
-        if changed { 
-            setDataMappings(dataMappings: existing) 
-            logDataMappings(interceptId: kDataMappings, action: "UPDATE", mappings: existing) 
+        if changed {
+            setDataMappings(dataMappings: existing)
+            logDataMappings(interceptId: kDataMappings, action: "UPDATE", mappings: existing)
         }
         return changed
     }
 
     public static func getDataMappingValue(displayName: String) -> String? {
-        let val = getDataMappings()?.first(where: { $0.displayName == displayName })?.value
-        LogUtils.printMessage(message: "🔍 Lookup dataMapping displayName=\(displayName) value=\(val ?? "nil")")
+        let trimmedIncoming = displayName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let val = getDataMappings()?.first { dm in
+            dm.displayName.trimmingCharacters(in: .whitespacesAndNewlines).compare(trimmedIncoming, options: .caseInsensitive) == .orderedSame
+        }?.value
+        LogUtils.printMessage(message: "🔍 Lookup dataMapping displayName=\(trimmedIncoming) value=\(val ?? "nil")")
         return val
     }
 

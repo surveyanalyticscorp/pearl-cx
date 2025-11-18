@@ -176,7 +176,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         var payload: [[String: String]] = []
         var skipped = 0
         for dm in dataMappings {
-            guard interceptDisplayNames.contains(dm.displayName) else {
+            guard interceptDisplayNames.contains(where: { $0.caseInsensitiveCompare(dm.displayName) == .orderedSame }) else {
                 skipped += 1
                 continue
             }
