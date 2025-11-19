@@ -22,6 +22,7 @@ class InterceptSdkModule(private val reactContext: ReactApplicationContext) : Re
             Log.d("InterceptSdk", "Datta Configure called with: $options")
             
             val touchPoint = TouchPoint.Builder(DataCenter.US)
+                .isFlutterApp(true)
                 .build()
 
             QuestionProCX.getInstance().init(reactContext, touchPoint, object : IQuestionProInitCallback {
@@ -50,6 +51,19 @@ class InterceptSdkModule(private val reactContext: ReactApplicationContext) : Re
             promise.reject("CONFIGURE_ERROR", e.message, e)
         }
     }
+
+    @ReactMethod
+    fun setScreenVisited(screenName: String, promise: Promise) {
+        try {
+            Log.d("InterceptSdk", "Set Screen name in Android: $screenName")
+            QuestionProCX.getInstance().setScreenVisited(screenName);
+            promise.resolve("setScreenVisited success")
+        }catch (e: Exception) {
+            Log.e("InterceptSdk", "Is survey available failed", e)
+            promise.reject("SET_SCREEN_NAME_ERROR: ", e.message, e)
+        }
+    }
+
 
     @ReactMethod
     fun startSurvey(surveyId: String, promise: Promise) {

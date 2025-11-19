@@ -56,14 +56,6 @@ class InterceptSdk: RCTEventEmitter, QuestionProInitDelegate {
         self.configureReject = reject
         
         DispatchQueue.main.async {
-            // Mock implementation for now - will integrate with QuestionProCXFramework later
-            /*let result: [String: Any] = [
-                "success": true,
-                "message": "iOS SDK configured successfully",
-                "platform": "ios"
-            ]
-            resolve(result)*/
-
             do {
                 // Extract API key from options
                 guard let apiKey = options["apiKey"] as? String else {
@@ -95,6 +87,20 @@ class InterceptSdk: RCTEventEmitter, QuestionProInitDelegate {
                 reject("CONFIGURATION_ERROR", error.localizedDescription, error)
             }
         }
+    }
+
+    @objc
+    func setScreenVisited(_ screenName: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        print("🔧 [iOS] SetScreenVisited called: \(screenName)")
+        
+        QuestionProCX.getinstance().setScreenName(screenName: screenName);
+
+        let result: [String: Any] = [
+            "success": true,
+            "screenName": screenName,
+            "message": "Screen visited event recorded"
+        ]
+        resolve(result)
     }
     
     // NotifyEvent method matching Android implementation  

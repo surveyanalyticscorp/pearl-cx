@@ -25,8 +25,8 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-console.log('🔍 Available NativeModules:', Object.keys(NativeModules));
-console.log('🔍 Looking for InterceptSdk:', !!NativeModules.InterceptSdk);
+//console.log('🔍 Available NativeModules:', Object.keys(NativeModules));
+//console.log('🔍 Looking for InterceptSdk:', !!NativeModules.InterceptSdk);
 console.log('🔍 InterceptSdk methods:', NativeModules.InterceptSdk ? Object.keys(NativeModules.InterceptSdk) : 'Not found');
 
 // Get the native module
@@ -88,6 +88,27 @@ class InterceptSdkImpl {
     return {
       success: true,
       message: 'SDK configured successfully (JS fallback implementation)'
+    };
+  }
+
+  async setScreenVisited(screenName: string): Promise<SurveyResult> {
+    console.log('InterceptSDK: setScreenVisited called with screenName:', screenName);
+    
+    if (this.isNativeAvailable) {
+      try {
+        const result = await InterceptSdkNative.setScreenVisited(screenName);
+        console.log('InterceptSDK: Native setScreenVisited result:', result);
+        return result;
+      } catch (error) {
+        console.error('InterceptSDK: Native setScreenVisited failed, falling back to JS:', error);
+        // Fall through to JavaScript implementation
+      }
+    }
+    
+    // JavaScript fallback
+    return {
+      success: true,
+      message: `Screen "${screenName}" marked as visited (JS fallback implementation)`
     };
   }
 

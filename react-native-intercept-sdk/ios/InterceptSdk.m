@@ -19,6 +19,16 @@ RCT_EXTERN_METHOD(configure:(NSDictionary *)options
                   reject:(RCTPromiseRejectBlock)reject)
 
 /**
+ * Set screen visited event
+ * 
+ * @param screenName Name of the event
+ * @param params Optional event parameters
+ */
+RCT_EXTERN_METHOD(setScreenVisited:(NSString *)screenName
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+
+/**
  * Notify the SDK of an event
  * 
  * @param eventName Name of the event
