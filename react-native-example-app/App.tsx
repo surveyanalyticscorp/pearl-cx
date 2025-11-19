@@ -79,6 +79,20 @@ const App = () => {
     }
   };
 
+  const launchSurvey = async () => {
+    try {
+      console.log('🚀 Launching survey...');
+      
+      const result = await InterceptSdk.setScreenVisited('book_cab');
+      
+      console.log('✅ Survey launch result:', result);
+      //Alert.alert('Success', 'Survey launched successfully!');
+    } catch (error) {
+      console.error('❌ Launch survey error:', error);
+      //Alert.alert('Error', `Failed to launch survey: ${error}`);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -105,6 +119,13 @@ const App = () => {
             onPress={sendTestEvent}
           >
             <Text style={styles.buttonText}>Send Test Event</Text>
+          </TouchableOpacity>
+
+           <TouchableOpacity 
+            style={[styles.button, styles.secondaryButton]} 
+            onPress={launchSurvey}
+          >
+            <Text style={styles.buttonText}>Launch Survey</Text>
           </TouchableOpacity>
         </View>
 
