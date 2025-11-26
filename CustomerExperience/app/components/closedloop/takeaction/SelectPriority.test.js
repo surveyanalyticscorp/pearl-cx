@@ -20,26 +20,6 @@ describe('SelectPriority Component', () => {
     expect(getByText('High')).toBeTruthy();
     expect(getByText('Medium')).toBeTruthy();
     expect(getByText('Low')).toBeTruthy();
-    expect(getByText('Update')).toBeTruthy();
-  });
-
-  it('calls handleOnPress when Set priority button is pressed', () => {
-    const {getByText, getAllByTestId} = render(
-      <SelectPriority
-        data={mockData}
-        selectedIndex={0}
-        handleOnPress={mockHandleOnPress}
-      />,
-    );
-
-    // Change selection
-    fireEvent.press(getAllByTestId('priority-row')[1]);
-
-    // Press the Set priority button
-    fireEvent.press(getByText('Update'));
-
-    // Expect the mock function to have been called with the correct arguments
-    expect(mockHandleOnPress).toHaveBeenCalledWith({title: 'Medium'}, 1);
   });
 
   it('displays a radio button for the selected priority', () => {

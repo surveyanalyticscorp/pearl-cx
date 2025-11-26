@@ -3,6 +3,8 @@ import * as React from 'react';
 import {Component} from 'react';
 import {store} from './redux/store/store';
 import {Provider} from 'react-redux';
+import {Provider as PaperProvider} from 'react-native-paper';
+
 // import FlashMessage from 'react-native-flash-message';
 import SplashScreen from './components/login/SplashScreen';
 import {NetworkMonitor} from 'react-native-redux-connectivity';
@@ -107,11 +109,13 @@ const CxApp = () => {
 
   return (
     <Provider store={store}>
-      <SafeAreaProvider>
-        <StatusBar barStyle={'light-content'} />
-        {styleBuilt ? <SplashScreen /> : <View />}
-        <Toast config={toastConfig} />
-      </SafeAreaProvider>
+      <PaperProvider>
+        <SafeAreaProvider>
+          <StatusBar barStyle={'light-content'} />
+          {styleBuilt ? <SplashScreen /> : <View />}
+          <Toast config={toastConfig} />
+        </SafeAreaProvider>
+      </PaperProvider>
     </Provider>
   );
 };

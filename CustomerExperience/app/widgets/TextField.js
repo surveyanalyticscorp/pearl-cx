@@ -37,7 +37,10 @@ const RenderPasswordVisibility = ({
 }) => {
   const isVisibility = secureText && StringUtils.isNotEmpty(value);
   return isVisibility ? (
-    <Pressable style={styles.passwordVisibilityButton} onPress={onPress}>
+    <Pressable
+      testID="password-visibility-button"
+      style={styles.passwordVisibilityButton}
+      onPress={onPress}>
       {isPasswordVisible ? <VisibilityOffIcon /> : <VisibilityOnIcon />}
     </Pressable>
   ) : (

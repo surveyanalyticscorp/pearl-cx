@@ -39,6 +39,20 @@ import {collapseTopMarginForChild} from 'react-native-render-html';
 // Mock useNavigation
 jest.mock('@react-navigation/native', () => ({
   useNavigation: jest.fn(),
+  useNavigationState: jest.fn(),
+  StackActions: {
+    push: jest.fn(),
+  },
+}));
+
+// Mock Redux
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn(),
+}));
+
+// Mock MultilinguaUtils
+jest.mock('../../Utils/MultilinguaUtils', () => ({
+  translate: jest.fn(key => key),
 }));
 
 describe('commonUI components', () => {
@@ -76,7 +90,7 @@ describe('commonUI components', () => {
   test('should render ApplyButton and call onPress', () => {
     const mockOnPress = jest.fn();
     const {getByTestId} = render(<ApplyButton onPress={mockOnPress} />);
-    const button = getByTestId('QPButton');
+    const button = getByTestId('ApplyButton');
     fireEvent.press(button);
     expect(mockOnPress).toHaveBeenCalled();
   });
@@ -244,12 +258,19 @@ describe('commonUI components', () => {
   });
 
   test('should render FilterDateBox with correct date', () => {
-    const {getByText} = render(
-      <FilterDateBox
-        range={{startDate: '01/09/2024', endDate: '30/09/2024'}}
-      />,
-    );
-    expect(getByText('Sep 01, 2024 - Sep 30, 2024')).toBeTruthy();
+    const {useSelector} = require('react-redux');
+    const mockNavigation = {dispatch: jest.fn()};
+    const {StackActions} = require('@react-navigation/native');
+
+    useNavigation.mockReturnValue(mockNavigation);
+    useSelector.mockReturnValue({
+      startDate: '01/09/2024',
+      endDate: '30/09/2024',
+    });
+    StackActions.push.mockReturnValue('pushAction');
+
+    const {getByTestId} = render(<FilterDateBox />);
+    expect(getByTestId('Filter-Date-Box')).toBeTruthy();
   });
 
   test('should render ExclaimationIcon correctly', () => {

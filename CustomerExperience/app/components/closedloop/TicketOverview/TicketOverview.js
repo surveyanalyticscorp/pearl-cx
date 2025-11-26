@@ -120,9 +120,27 @@ export default function TicketOverview(props) {
   const handlePrioritySelection = () => {
     setPriorityBottomSheetVisible(true);
   };
-  const handleOwnerSelection = () => {
+  const handleOwnerSelection = useCallback(() => {
     setAssigneeBottomSheetVisible(true);
-  };
+  }, []);
+
+  const handleStatusPress = useCallback(
+    (item, index, onClose) => {
+      if (ticketDetails.status === item.id) {
+        onClose();
+        return;
+      }
+      if (item.id === 2) {
+        // popup assign user bottom sheet and let him choose an assignee
+        handleOwnerSelection();
+      } else {
+        updateTicket({status: item.id});
+      }
+      setStatusIndex(index);
+      onClose();
+    },
+    [ticketDetails.status, handleOwnerSelection, updateTicket],
+  );
 
   const RenderStatusBottomSheet = ({onClose, visible}) => {
     return (
@@ -136,20 +154,9 @@ export default function TicketOverview(props) {
           data={statusList}
           screenName={'TicketOverview'}
           selectedIndex={statusIndex}
-          handleOnPress={(item, index) => {
-            if (ticketDetails.status === item.id) {
-              onClose();
-              return;
-            }
-            if (item.id === 2) {
-              // popup assign user bottom sheet and let him choose an assignee
-              handleOwnerSelection();
-            } else {
-              updateTicket({status: item.id});
-            }
-            setStatusIndex(index);
-            onClose();
-          }}
+          handleOnPress={(item, index) =>
+            handleStatusPress(item, index, onClose)
+          }
         />
       </QPBottomSheet>
     );
@@ -163,17 +170,23 @@ export default function TicketOverview(props) {
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
-  }, []);
+  }, [dispatch, ticketDetails.id, feedbackApiKey]);
 
   const onCloseActionBottomSheet = () => {
     setActionBottomSheetVisible(false);
   };
 
-  const onPressAction = item => {
-    console.log('onPressAction', item);
-    setActionBottomSheetVisible(false);
-    handleTicketAction(item);
-  };
+  const handleActionPress = useCallback(
+    item => {
+      console.log('onPressAction', item);
+      setActionBottomSheetVisible(false);
+      handleTicketAction(item);
+    },
+    [handleTicketAction],
+  );
+
+  const onPressAction = handleActionPress;
+
   const [assigneeBottomSheetVisible, setAssigneeBottomSheetVisible] =
     useState(false);
   const onCloseAssigneeBottomSheet = () => {

@@ -357,6 +357,41 @@ export const CheckBoxItem = ({
   );
 };
 
+export const ChipItem = ({
+  item,
+  title,
+  isChecked,
+  index,
+  onPress,
+  textStyle,
+  style,
+  isDisabled = false,
+}) => {
+  const isActive = item?.isChecked ?? isChecked;
+  const chipStyle = [
+    styles.chipContainer,
+    isActive ? styles.chipActive : styles.chipInactive,
+    style,
+  ];
+
+  // Ensure text color is applied correctly by putting textStyle first, then override with active/inactive colors
+  const chipTextStyle = [
+    styles.chipText,
+    textStyle, // Apply custom text style first
+    isActive ? styles.chipTextActive : styles.chipTextInactive, // Then override with color based on state
+  ];
+
+  return (
+    <Pressable
+      isDisabled={isDisabled}
+      testID="chip-button"
+      style={[chipStyle, {opacity: isDisabled ? 0.5 : 1}]}
+      onPress={() => (isDisabled ? null : onPress(item, index))}>
+      <Text style={chipTextStyle}>{item?.title ? item.title : title}</Text>
+    </Pressable>
+  );
+};
+
 export const CheckBox = ({isChecked, checkedColor, uncheckedColor}) => {
   return (
     <IonIcons
@@ -666,6 +701,31 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: TextSizes.secondary,
     fontFamily: FontFamily.regular,
+  },
+  chipContainer: {
+    borderRadius: 20,
+    paddingHorizontal: PaddingConstants.tab2,
+    paddingVertical: PaddingConstants.tab1,
+    margin: MarginConstants.halfTab,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  chipInactive: {
+    backgroundColor: '#EEF3FB',
+  },
+  chipActive: {
+    backgroundColor: '#045EBF',
+  },
+  chipText: {
+    fontSize: TextSizes.secondary,
+    fontFamily: FontFamily.regular,
+    textAlign: 'center',
+  },
+  chipTextInactive: {
+    color: '#545E6B',
+  },
+  chipTextActive: {
+    color: '#FFFFFF',
   },
   filterBox: {
     flexDirection: 'row',

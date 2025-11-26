@@ -11,7 +11,7 @@ const QPBottomSheetHeader = ({headerLabel, onClose}) => {
   return (
     <View style={styles.modalHeader}>
       <Text style={styles.modalHeaderText}>{headerLabel}</Text>
-      <Pressable onPress={onClose}>
+      <Pressable testID="close-button" onPress={onClose}>
         <IonIcon name="close" size={24} color={Colors.filterIconColor} />
       </Pressable>
     </View>

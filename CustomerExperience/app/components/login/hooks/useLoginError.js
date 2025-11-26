@@ -5,25 +5,50 @@ import {showErrorFlashMessage} from '../../../Utils/Utility';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getApiValidationErrorMessage} from '../../../Utils/ErrorValidationUtils';
 
-export const useLoginError = (isError, errorMessage) => {
+// Constants for better testability
+const CLEAR_DELAY_MS = 1000;
+const LOGIN_ERROR_TEXT = 'Invalid email/password combination.';
+const CUSTOM_ERROR_MESSAGE = 'Invalid credentials. Please try again';
+
+export const useLoginError = (isError, errorMessage, options = {}) => {
   const dispatch = useDispatch();
+  const {
+    delay = CLEAR_DELAY_MS,
+    timeoutFn = setTimeout,
+    clearTimeoutFn = clearTimeout,
+  } = options;
 
   useEffect(() => {
-    console.log('LOGIN ERROR', isError, errorMessage);
-    if (isError) {
-      let message = getApiValidationErrorMessage(errorMessage, 'login');
-      const loginError = 'Invalid email/password combination.';
-      const customeErrorMessage = 'Invalid credentials. Please try again';
+    if (!isError) {
+      return;
+    }
 
-      showErrorFlashMessage(
-        message === loginError ? customeErrorMessage : message,
-      );
-      console.log('LOGIN ERROR', JSON.stringify(errorMessage));
-      setTimeout(() => {
-        AsyncStorage.clear().then(() => {
+    // Get the validation message and determine display message
+    const message = getApiValidationErrorMessage(errorMessage, 'login');
+    const displayMessage =
+      message === LOGIN_ERROR_TEXT ? CUSTOM_ERROR_MESSAGE : message;
+
+    // Show the error message
+    showErrorFlashMessage(displayMessage);
+
+    // Schedule user data clearing with proper error handling
+    const timeoutId = timeoutFn(() => {
+      AsyncStorage.clear()
+        .then(() => {
+          dispatch(clearUserInfo());
+        })
+        .catch(error => {
+          // Even if AsyncStorage fails, still clear user info from Redux
+          console.error('AsyncStorage clear failed:', error);
           dispatch(clearUserInfo());
         });
-      }, 1000);
-    }
-  }, [isError, errorMessage, dispatch]);
+    }, delay);
+
+    // Cleanup function to cancel timeout if component unmounts or dependencies change
+    return () => {
+      if (timeoutId) {
+        clearTimeoutFn(timeoutId);
+      }
+    };
+  }, [isError, errorMessage, dispatch, delay, timeoutFn, clearTimeoutFn]);
 };

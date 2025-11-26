@@ -31,6 +31,7 @@ exports[`IconAndTitleText renders correctly 1`] = `
     
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
@@ -78,6 +79,7 @@ exports[`IconAndTitleText renders correctly with custom color 1`] = `
     
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
@@ -125,6 +127,7 @@ exports[`IconAndTitleText renders correctly with custom font size 1`] = `
     
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
@@ -172,6 +175,7 @@ exports[`IconAndTitleText renders correctly with custom font weight 1`] = `
     
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
@@ -219,6 +223,7 @@ exports[`IconAndTitleText renders correctly with custom icon and title color 1`]
     
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
@@ -266,6 +271,7 @@ exports[`IconAndTitleText renders correctly with custom icon and title font size
     
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
@@ -313,6 +319,7 @@ exports[`IconAndTitleText renders correctly with custom icon and title font weig
     
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
@@ -360,6 +367,7 @@ exports[`IconAndTitleText renders correctly with custom icon color 1`] = `
     
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
@@ -407,6 +415,7 @@ exports[`IconAndTitleText renders correctly with custom title color 1`] = `
     
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
@@ -434,6 +443,7 @@ exports[`IconAndTitleText renders correctly with no icon 1`] = `
   }
 >
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
@@ -461,6 +471,7 @@ exports[`IconAndTitleText renders correctly with no icon and no title 1`] = `
   }
 >
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
@@ -506,6 +517,7 @@ exports[`IconAndTitleText renders correctly with no title 1`] = `
     
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",

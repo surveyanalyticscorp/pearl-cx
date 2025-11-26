@@ -120,7 +120,7 @@ describe('login sagas', () => {
 
       expect(dispatched).toEqual([
         {
-          type: 'API_ERROR',
+          type: API_ERROR,
           error: mockResponse,
         },
       ]);
@@ -144,7 +144,7 @@ describe('login sagas', () => {
 
       expect(dispatched).toEqual([
         {
-          type: 'API_ERROR',
+          type: API_ERROR,
           error: mockError,
         },
       ]);
@@ -220,7 +220,7 @@ describe('login sagas', () => {
 
       expect(dispatched).toEqual([
         {
-          type: 'API_ERROR',
+          type: API_ERROR,
           error: mockLoginResponse,
         },
       ]);
@@ -250,7 +250,7 @@ describe('login sagas', () => {
 
       expect(dispatched).toEqual([
         {
-          type: 'API_ERROR',
+          type: API_ERROR,
           error: mockError,
         },
         {
@@ -321,7 +321,7 @@ describe('login sagas', () => {
 
       expect(dispatched).toEqual([
         {
-          type: 'API_ERROR',
+          type: API_ERROR,
           error: mockError,
         },
       ]);
@@ -374,7 +374,7 @@ describe('login sagas', () => {
       expect(dispatched).toEqual([
         {type: IS_LOADING, payload: {isLoading: true}},
         {
-          type: 'API_ERROR',
+          type: API_ERROR,
           error: mockError,
         },
       ]);
@@ -424,7 +424,7 @@ describe('login sagas', () => {
       expect(dispatched).toEqual([
         {type: IS_LOADING, payload: {isLoading: true}},
         {
-          type: 'API_ERROR',
+          type: API_ERROR,
           error: mockError,
         },
       ]);
@@ -474,7 +474,7 @@ describe('login sagas', () => {
       expect(dispatched).toEqual([
         {type: CLEAR_API_ERROR, payload: {isLoading: true}},
         {
-          type: 'API_ERROR',
+          type: API_ERROR,
           error: mockError,
         },
       ]);

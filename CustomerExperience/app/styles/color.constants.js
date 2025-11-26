@@ -16,7 +16,7 @@ const Colors = {
 
   filterIconColor: '#545E6B',
   overdueAlertColor: '#EA4650',
-  textAvatarBackground: '#cc6677',
+  textAvatarBackground: '#CC6677',
   accentGradient: 'rgba(239, 246, 252, 1)',
   gradientColor: '#8AC0EA',
   grey: '#f9f9f9',

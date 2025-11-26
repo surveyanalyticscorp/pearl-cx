@@ -28,7 +28,6 @@ describe('FilterTicket Component', () => {
       <FilterTicket data={mockData} onPressHandler={mockOnPressHandler} />,
     );
 
-    // Check for the presence of status, priority, and type filters
     expect(getByTestId('render-status')).toBeTruthy();
     expect(getByTestId('render-priority')).toBeTruthy();
     expect(getByTestId('render-ticket-type')).toBeTruthy();

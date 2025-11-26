@@ -1,6 +1,20 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
 import SelectStatus from './SelectStatus';
+import {ApplyButton} from '../../../routes/commonUI/CommonUI';
+
+jest.mock('../../../routes/commonUI/CommonUI', () => {
+  const actual = jest.requireActual('../../../routes/commonUI/CommonUI');
+  const {Pressable, Text} = require('react-native');
+  return {
+    ...actual,
+    ApplyButton: jest.fn(({buttonText, onPress}) => (
+      <Pressable testID="ApplyButton" onPress={onPress}>
+        <Text>{buttonText}</Text>
+      </Pressable>
+    )),
+  };
+});
 
 describe('SelectStatus', () => {
   const mockData = [
@@ -8,6 +22,10 @@ describe('SelectStatus', () => {
     {title: 'Closed', value: 'closed'},
   ];
   const mockHandleOnPress = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   it('should render correctly', () => {
     const {getByText} = render(
@@ -23,7 +41,7 @@ describe('SelectStatus', () => {
   });
 
   it('should call handleOnPress with the correct item and index when Apply button is pressed', () => {
-    const {getByText} = render(
+    const {getByTestId} = render(
       <SelectStatus
         data={mockData}
         selectedIndex={0}
@@ -31,14 +49,13 @@ describe('SelectStatus', () => {
       />,
     );
 
-    const applyButton = getByText('Update');
-    fireEvent.press(applyButton);
+    fireEvent.press(getByTestId('ApplyButton'));
 
     expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[0], 0);
   });
 
   it('should update the selected item when a status item is pressed', () => {
-    const {getAllByTestId, getByText} = render(
+    const {getAllByTestId, getByTestId} = render(
       <SelectStatus
         data={mockData}
         selectedIndex={0}
@@ -49,8 +66,7 @@ describe('SelectStatus', () => {
     const statusItems = getAllByTestId('status-item-button');
     fireEvent.press(statusItems[1]);
 
-    const applyButton = getByText('Update');
-    fireEvent.press(applyButton);
+    fireEvent.press(getByTestId('ApplyButton'));
 
     expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[1], 1);
   });
@@ -69,7 +85,7 @@ describe('SelectStatus', () => {
   });
 
   it('should display Apply button at the end of the list', () => {
-    const {getByText} = render(
+    const {getByTestId} = render(
       <SelectStatus
         data={mockData}
         selectedIndex={0}
@@ -77,7 +93,10 @@ describe('SelectStatus', () => {
       />,
     );
 
-    const applyButton = getByText('Update');
-    expect(applyButton).toBeTruthy();
+    expect(getByTestId('ApplyButton')).toBeTruthy();
+    expect(ApplyButton).toHaveBeenCalledWith(
+      expect.objectContaining({buttonText: 'Update status'}),
+      {},
+    );
   });
 });

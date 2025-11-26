@@ -9,6 +9,92 @@ import TicketComments, {
 import configureStore from 'redux-mock-store';
 import {Provider} from 'react-redux';
 
+// Mock dependencies
+jest.mock('../../Utils/MultilinguaUtils', () => ({
+  translate: jest.fn(key => key),
+}));
+
+jest.mock('../../Utils/StringUtils', () => ({
+  isEmptyOrNull: jest.fn(text => !text || text.trim().length === 0),
+  reformatComplexName: jest.fn(name => name),
+  getWords: jest.fn(text => text.split(' ')),
+  formatCommentToHTML: jest.fn(text => text),
+}));
+
+jest.mock('../../Utils/TimeUtils', () => ({
+  getDateTimeAgo: jest.fn(() => '2 hours ago'),
+  toLocalTime: jest.fn(date => date),
+}));
+
+jest.mock('../../widgets/SendButton', () => {
+  const {View} = require('react-native');
+  return ({handleOnSubmit}) => <View testID="send-button" />;
+});
+
+jest.mock('../../routes/commonUI/EmptyList', () => {
+  const {View, Text} = require('react-native');
+  return ({children}) => (
+    <View testID="empty-list">
+      <Text>{children}</Text>
+    </View>
+  );
+});
+
+jest.mock('../../routes/commonUI/CommonUI', () => ({
+  Avatar: ({title}) => {
+    const {View, Text} = require('react-native');
+    return (
+      <View testID="avatar">
+        <Text>{title}</Text>
+      </View>
+    );
+  },
+}));
+
+jest.mock('react-native-render-html', () => {
+  const {View, Text} = require('react-native');
+  return {
+    __esModule: true,
+    default: ({source}) => (
+      <View testID="render-html">
+        <Text>{source.html}</Text>
+      </View>
+    ),
+    defaultSystemFonts: ['System'],
+  };
+});
+
+// Mock native modules
+jest.mock('react-native/Libraries/Settings/NativeSettingsManager', () => ({
+  getEnforcing: jest.fn(() => ({})),
+}));
+
+// Mock React Native useWindowDimensions
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native');
+  RN.useWindowDimensions = jest.fn(() => ({
+    width: 375,
+    height: 812,
+  }));
+  return RN;
+});
+
+jest.mock('../../styles/font.constants', () => ({
+  FontFamily: {
+    regular: 'System',
+  },
+}));
+
+jest.mock('moment', () => {
+  const moment = jest.requireActual('moment');
+  return {
+    ...moment,
+    utc: jest.fn(() => ({
+      toDate: jest.fn(() => new Date()),
+    })),
+  };
+});
+
 const mockStore = configureStore([]);
 
 describe('TicketComments', () => {
@@ -17,6 +103,7 @@ describe('TicketComments', () => {
   beforeEach(() => {
     store = mockStore({
       global: {
+        authToken: 'mock-auth-token',
         userInfo: {
           emailAddress: 'test@example.com',
           firstName: 'John',
@@ -25,7 +112,11 @@ describe('TicketComments', () => {
         },
       },
       dashboard: {
-        parentComment: 'This is a parent comment',
+        parentComment: {
+          id: 0,
+          isFocused: false,
+        },
+        ticketComments: [], // Added missing ticketComments array
         ticket: {
           id: 6999,
         },
@@ -58,17 +149,14 @@ describe('getFoldedText', () => {
       5,
     );
     expect(foldedText).toBe(`This is a long text
-      <span><b> ...see more</b></span>`);
+      <span style="color:#1b87e6;"><b> ...see more</b></span>`);
   });
 });
 
 describe('CommentCancelReplyButton', () => {
   it('should render the CancelReplyButton', () => {
     const {getByTestId} = render(
-      <CommentCancelReplyButton
-        onPress={() => {}}
-        testID={'cancel-reply-button'}
-      />,
+      <CommentCancelReplyButton isSelected={false} toggle={() => {}} />,
     );
     expect(getByTestId('cancel-reply-button')).toBeTruthy();
   });

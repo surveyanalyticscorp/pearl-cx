@@ -88,6 +88,54 @@ export const getFilterCount = filterState => {
 
   return count;
 };
+
+export const clearPriorityFilter = () => {
+  return priorityList.map(value => ({
+    ...value,
+    isChecked: false,
+  }));
+};
+
+export const clearStatusFilter = () => {
+  return statusList.map(value => ({
+    ...value,
+    isChecked: false,
+  }));
+};
+
+export const clearTypeFilter = () => {
+  return ticketTypeList.map(value => ({
+    ...value,
+    isChecked: false,
+  }));
+};
+
+export const clearAssignToIdFilter = () => {
+  return [];
+};
+
+export const getIds = items =>
+  items
+    .filter(item => item.isChecked === true)
+    .map(id => id.id)
+    .toString();
+
+export const createFilterState = (item, getIdsFunction) => {
+  return {
+    pageNumber: 1,
+    status: getIdsFunction(item.status) ?? '',
+    priority: getIdsFunction(item.priority) ?? '',
+    assignToId: item.assignToId,
+    type: getIdsFunction(item.type) ?? '',
+  };
+};
+
+export const wait = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout);
+  });
+};
+
 const ClosedLoopTicketList = ({
   onPressReset,
   onRefresh,
@@ -277,11 +325,6 @@ export default function ClosedLoop(props) {
     getTicketOwnerList(currentSegment.currentSegmentID);
   };
 
-  const wait = timeout => {
-    return new Promise(resolve => {
-      setTimeout(resolve, timeout);
-    });
-  };
   const onRefresh = useCallback(() => {
     resetFilterState(range);
     setRefreshing(true);
@@ -372,12 +415,6 @@ export default function ClosedLoop(props) {
     );
   };
 
-  const getIds = items =>
-    items
-      .filter(item => item.isChecked === true)
-      .map(id => id.id)
-      .toString();
-
   const getOwnerIds = items =>
     items
       .filter(item => item.isChecked === true)
@@ -402,20 +439,11 @@ export default function ClosedLoop(props) {
 
   const applyFilter = item => {
     setFilterData(item);
-
-    // console.log('StatusParam: ', JSON.stringify(item));
-    // setTicketList([]);
+    const newFilterState = createFilterState(item, getIds);
     setFilterState(state => ({
       ...state,
-      pageNumber: 1,
-      status: getIds(item.status) ?? '',
-      priority: getIds(item.priority) ?? '',
-      assignToId: item.assignToId,
-      type: getIds(item.type) ?? '',
-      // showMyTickets: item.showMyTickets,
+      ...newFilterState,
     }));
-
-    // console.log('Apply filter');
   };
 
   // variables for bottom sheet
@@ -426,34 +454,16 @@ export default function ClosedLoop(props) {
   const [shadow, setShadow] = useState(false);
 
   const clearFilterData = item => {
-    const priority = priorityList.map(value => ({
-      ...value,
-      isChecked: false,
-    }));
-    const status = statusList.map(value => ({...value, isChecked: false}));
-    const type = ticketTypeList.map(value => ({...value, isChecked: false}));
-    // const managers = owners.map((value) => ({...value, isChecked: false}));
-
     switch (item) {
       case 'priority':
-        return priorityList.map(value => ({
-          ...value,
-          isChecked: false,
-        }));
-
+        return clearPriorityFilter();
       case 'status':
-        return statusList.map(value => ({
-          ...value,
-          isChecked: false,
-        }));
-
+        return clearStatusFilter();
       case 'type':
-        return ticketTypeList.map(value => ({
-          ...value,
-          isChecked: false,
-        }));
-
+        return clearTypeFilter();
       case 'assignToId':
+        return clearAssignToIdFilter();
+      default:
         return [];
     }
   };
@@ -535,7 +545,8 @@ const RenderFilterBottomSheet = ({
       onClose={onClose}
       headerComponent={
         <QPBottomSheetHeader
-          headerLabel={translate('ticket_overview.filter_ticket')}
+          // headerLabel={translate('ticket_overview.filter_ticket')}
+          headerLabel={'Filter by'}
           onClose={onClose}
         />
       }>

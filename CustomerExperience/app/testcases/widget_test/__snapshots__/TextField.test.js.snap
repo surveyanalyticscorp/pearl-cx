@@ -134,7 +134,7 @@ exports[`renders correctly 1`] = `
             onSubmitEditing={[Function]}
             placeholderTextColor="#A2A6A9"
             returnKeyType="next"
-            selectionColor="#1B3380"
+            selectionColor="#1b87e6"
             style={
               [
                 {

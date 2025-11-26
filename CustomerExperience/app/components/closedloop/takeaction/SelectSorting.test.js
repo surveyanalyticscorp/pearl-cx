@@ -11,7 +11,7 @@ describe('SelectSorting', () => {
   const mockHandleOnPress = jest.fn();
 
   it('should render correctly', () => {
-    const {getByText, getByTestId} = render(
+    const {getByText} = render(
       <SelectSorting
         data={mockData}
         selectedIndex={0}
@@ -21,40 +21,6 @@ describe('SelectSorting', () => {
 
     expect(getByText('Sort by date')).toBeTruthy();
     expect(getByText('Sort by name')).toBeTruthy();
-    expect(getByTestId('ApplyButton')).toBeTruthy();
-  });
-
-  it('should call handleOnPress with the correct item and index when Apply button is pressed', () => {
-    const {getByTestId} = render(
-      <SelectSorting
-        data={mockData}
-        selectedIndex={0}
-        handleOnPress={mockHandleOnPress}
-      />,
-    );
-
-    const applyButton = getByTestId('ApplyButton');
-    fireEvent.press(applyButton);
-
-    expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[0], 0);
-  });
-
-  it('should update the selected item when a radio button is pressed', () => {
-    const {getAllByTestId, getByTestId} = render(
-      <SelectSorting
-        data={mockData}
-        selectedIndex={0}
-        handleOnPress={mockHandleOnPress}
-      />,
-    );
-
-    const radioButtons = getAllByTestId('check-radio-button-item');
-    fireEvent.press(radioButtons[1]);
-
-    const applyButton = getByTestId('ApplyButton');
-    fireEvent.press(applyButton);
-
-    expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[1], 1);
   });
 
   it('should render the correct number of items', () => {
@@ -68,5 +34,35 @@ describe('SelectSorting', () => {
 
     const radioButtons = getAllByTestId('check-radio-button-item');
     expect(radioButtons.length).toBe(2);
+  });
+
+  it('should call handleOnPress with the correct item when first radio button is pressed', () => {
+    const {getAllByTestId} = render(
+      <SelectSorting
+        data={mockData}
+        selectedIndex={0}
+        handleOnPress={mockHandleOnPress}
+      />,
+    );
+
+    const radioButtons = getAllByTestId('check-radio-button-item');
+    fireEvent.press(radioButtons[0]);
+
+    expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[0], 0);
+  });
+
+  it('should call handleOnPress with the correct item when second radio button is pressed', () => {
+    const {getAllByTestId} = render(
+      <SelectSorting
+        data={mockData}
+        selectedIndex={0}
+        handleOnPress={mockHandleOnPress}
+      />,
+    );
+
+    const radioButtons = getAllByTestId('check-radio-button-item');
+    fireEvent.press(radioButtons[1]);
+
+    expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[1], 1);
   });
 });

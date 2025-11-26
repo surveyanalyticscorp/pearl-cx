@@ -4,7 +4,7 @@ import {ASYNC_PUSH_TOKEN} from '../api/Constant';
 import {isStringNullOrEmpty} from './Utility';
 import {Notifications} from 'react-native-notifications';
 import {AppState, PermissionsAndroid, Platform} from 'react-native';
-import * as RootNagation from '../routes/RootNavigation';
+import * as RootNavigation from '../routes/RootNavigation';
 import {CommonActions} from '@react-navigation/native';
 
 export const requestNotificationPermission = async () => {
@@ -195,7 +195,7 @@ export async function actionOnNotification(
   const waitForNavigation = () => {
     return new Promise(resolve => {
       const checkNavigation = () => {
-        if (RootNagation.navigationRef.current) {
+        if (RootNavigation.navigationRef.current) {
           resolve();
         } else {
           setTimeout(checkNavigation, 100); // Check every 100ms
@@ -213,7 +213,7 @@ export async function actionOnNotification(
     await waitForNavigation();
 
     // Ensure we're not already on the TicketDetails screen
-    const currentRoute = RootNagation.navigationRef.current.getCurrentRoute();
+    const currentRoute = RootNavigation.navigationRef.current.getCurrentRoute();
     if (
       currentRoute?.name === 'TicketDetails' &&
       currentRoute?.params?.ticketItem?.id === ticketItem.id
@@ -221,7 +221,7 @@ export async function actionOnNotification(
       console.log('Already on the correct ticket details screen');
 
       // Update the route params instead of navigating
-      RootNagation.navigationRef.current?.dispatch({
+      RootNavigation.navigationRef.current?.dispatch({
         ...CommonActions.setParams({
           ticketItem: ticketItem, // new or updated data
           parentRoute: 'Dashboard', // if needed
@@ -234,7 +234,7 @@ export async function actionOnNotification(
     }
 
     console.log('Navigating to TicketDetails...');
-    RootNagation.navigate('TicketDetails', {
+    RootNavigation.navigate('TicketDetails', {
       ticketItem: ticketItem,
       parentRoute: 'Dashboard',
       notificationId: notificationId,

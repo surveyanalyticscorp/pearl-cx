@@ -4,9 +4,6 @@ import configureStore from 'redux-mock-store';
 import {Provider} from 'react-redux';
 import AssigneeBottomSheet from './AssigneeBottomSheet';
 import useUpdateTicket from '../hooks/useUpdateTicket';
-import {translate} from '../../../../Utils/MultilinguaUtils';
-import {snapTo} from 'reanimated-bottom-sheet';
-import {View, Text} from 'react-native';
 
 jest.mock('../hooks/useUpdateTicket', () => jest.fn());
 jest.mock('../../../../Utils/MultilinguaUtils', () => ({
@@ -14,19 +11,15 @@ jest.mock('../../../../Utils/MultilinguaUtils', () => ({
 }));
 
 const mockStore = configureStore([]);
-const mockRef = {
-  current: {
-    snapTo: snapTo,
-  },
-};
 
 describe('AssigneeBottomSheet', () => {
   const mockOwners = [
-    {ownerID: 1, name: 'John Doe'},
-    {ownerID: 2, name: 'Jane Smith'},
+    {ownerID: 1, ownerName: 'John Doe'},
+    {ownerID: 2, ownerName: 'Jane Smith'},
   ];
   const assignToId = 2;
   const mockUpdateTicket = jest.fn();
+  const mockOnClose = jest.fn();
   let store;
 
   beforeEach(() => {
@@ -41,43 +34,43 @@ describe('AssigneeBottomSheet', () => {
       },
     });
 
+    mockOnClose.mockClear();
+    mockUpdateTicket.mockClear();
     useUpdateTicket.mockReturnValue(mockUpdateTicket);
-    jest.clearAllMocks();
   });
 
-  it('renders header and SelectTicketOwner with correct props', () => {
-    const {getByText, getByTestId} = render(
+  const renderComponent = () =>
+    render(
       <Provider store={store}>
-        <AssigneeBottomSheet ref={mockRef} fall={{}} />
+        <AssigneeBottomSheet visible={true} onClose={mockOnClose} />
       </Provider>,
     );
+
+  it('renders header and SelectTicketOwner with correct props', () => {
+    const {getByText, getByTestId} = renderComponent();
 
     expect(getByText('ticket_overview.select_ticket_owner')).toBeTruthy();
     expect(getByTestId('SelectTicketOwner')).toBeTruthy();
   });
 
-  it('triggers updateTicket and snapTo on owner selection', () => {
-    const {getByTestId} = render(
-      <Provider store={store}>
-        <AssigneeBottomSheet ref={mockRef} fall={{}} />
-      </Provider>,
-    );
+  it('calls updateTicket and onClose when an owner is selected', () => {
+    const {getByTestId} = renderComponent();
 
-    const takeActionButton = getByTestId('TakeActionButton');
-    fireEvent(takeActionButton, 'press');
+    fireEvent.press(getByTestId('TakeActionButton'));
 
-    expect(mockUpdateTicket).toHaveBeenCalled();
-    expect(snapTo).toHaveBeenCalled();
+    expect(mockUpdateTicket).toHaveBeenCalledWith({
+      status: 2,
+      assignToId: mockOwners[1].ownerID,
+    });
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
   it('closes bottom sheet when close button is pressed in header', () => {
-    const {getByTestId} = render(
-      <Provider store={store}>
-        <AssigneeBottomSheet ref={mockRef} fall={{}} />
-      </Provider>,
-    );
+    const {getByTestId} = renderComponent();
 
     fireEvent.press(getByTestId('close-button'));
-    expect(snapTo).toHaveBeenCalled();
+
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
+    expect(mockUpdateTicket).not.toHaveBeenCalled();
   });
 });
