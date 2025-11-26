@@ -1,14 +1,5 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Pressable,
-  Text,
-  StyleSheet,
-  FlatList,
-  SafeAreaView,
-  Platform,
-  Switch,
-} from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {View, Text, StyleSheet, FlatList, Platform, Switch} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
@@ -20,216 +11,178 @@ import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
 import {textStyles} from '../../../styles/text.styles';
 import {HorizontalSpaceBox, VerticalSpaceBox} from '../../../widgets/SpaceBox';
-import {set} from 'lodash';
-// import IconTextModalDropdown from '../../../widgets/drop-down/IconTextModalDropdown';
-// import IonIcons from 'react-native-vector-icons/Ionicons';
+
+// Reusable FilterSection component for displaying filter chips
+const FilterSection = ({
+  title,
+  filterData,
+  onItemSelect,
+  numColumns = 4,
+  testID,
+}) => {
+  return (
+    <FlatList
+      style={styles.sectionContainer}
+      testID={testID}
+      contentContainerStyle={styles.filterListContainer}
+      ListHeaderComponent={<Text style={styles.titleText}>{title}</Text>}
+      data={filterData}
+      keyExtractor={(item, index) => item.toString()}
+      numColumns={numColumns}
+      renderItem={({item, index}) => (
+        <ChipItem
+          textStyle={textStyles.optionText}
+          item={item}
+          index={index}
+          onPress={onItemSelect}
+        />
+      )}
+    />
+  );
+};
+
+// Component for the "Show My Tickets" toggle switch
+const ShowMyTicketsFilter = ({assignToId, userId, onToggle}) => {
+  return (
+    <View testID="render-show-tickets" style={styles.sectionContainer}>
+      <View style={styles.switchContainer}>
+        <Text style={styles.titleText}>{translate('only_my_tickets')}</Text>
+        <Switch
+          trackColor={{
+            false: Colors.darkGrey,
+            true: Colors.darkGrey,
+          }}
+          thumbColor={
+            assignToId.length > 0 ? Colors.accentLight : Colors.filterIconColor
+          }
+          ios_backgroundColor={Colors.evenDarkerGrey}
+          onValueChange={onToggle}
+          value={assignToId.length > 0}
+        />
+      </View>
+    </View>
+  );
+};
+
+// Action buttons component
+const ActionButtons = ({onCancel, onApply}) => {
+  return (
+    <View style={[styles.rowContainer, styles.buttonContainer]}>
+      <QPButton
+        style={[buttonStyles.outlinePrimaryButton, styles.buttonFlex]}
+        buttonColor={Colors.white}
+        onPress={onCancel}
+        textStyle={buttonStyles.outlinePrimaryButtonText}
+        buttonText={translate('clear') || 'Clear'}
+      />
+      <HorizontalSpaceBox multiplyBy={2} />
+      <QPButton
+        style={[buttonStyles.primaryButton, styles.buttonFlex]}
+        buttonColor={Colors.accentLight}
+        onPress={onApply}
+        textStyle={buttonStyles.primaryButtonText}
+        buttonText={translate('apply') || 'Apply'}
+      />
+    </View>
+  );
+};
 
 const FilterTicket = ({data, onPressHandler}) => {
   const [status, setStatus] = useState(data.status);
   const [priority, setPriority] = useState(data.priority);
   const [type, setType] = useState(data.type);
-  // const [showMyTickets, setShowMyTickets] = useState(data.showMyTickets);
-  // const [hasOwner, setHasOwner] = useState(data.assignToId.length > 0);
-  // const [managerlist, setManagerList] = useState(data.managers);
   const [assignToId, setAssignToId] = useState(data.assignToId);
-  console.log('Filter Tickets, Preset data list', JSON.stringify(data));
-  console.log('Filter Tickets, Preset data list type', type);
 
-  // let [managerlist, setManagerList] = useState(data.managers);
-  let [selectedManager, setSelectedManager] = useState(
-    data.selectedManager ?? [],
+  const handleStatusSelect = useCallback((item, index) => {
+    setStatus(prevState =>
+      prevState.map((statusItem, idx) =>
+        idx === index
+          ? {...statusItem, isChecked: !statusItem.isChecked}
+          : statusItem,
+      ),
+    );
+  }, []);
+
+  const handlePrioritySelect = useCallback((item, index) => {
+    setPriority(prevState =>
+      prevState.map((priorityItem, idx) =>
+        idx === index
+          ? {...priorityItem, isChecked: !priorityItem.isChecked}
+          : priorityItem,
+      ),
+    );
+  }, []);
+
+  const handleTypeSelect = useCallback((selectedItem, index) => {
+    setType(prevState =>
+      prevState.map(typeItem => ({
+        ...typeItem,
+        isChecked:
+          typeItem.id === selectedItem.id ? !typeItem.isChecked : false,
+      })),
+    );
+  }, []);
+
+  const toggleMyTicketVisibility = useCallback(() => {
+    setAssignToId(state => (state.length > 0 ? '' : data.userId));
+  }, [data.userId]);
+
+  const onApplyFilterHandler = useCallback(() => {
+    const updatedData = {
+      ...data,
+      status,
+      priority,
+      type,
+      assignToId,
+    };
+    onPressHandler(updatedData, 'apply');
+  }, [data, status, priority, type, assignToId, onPressHandler]);
+
+  const resetFilterState = useCallback(
+    filterArray => filterArray.map(item => ({...item, isChecked: false})),
+    [],
   );
 
-  const RenderStatusFilter = () => {
-    const selectedStatus = (item, index) => {
-      setStatus(prevState => {
-        const temp = [...prevState];
-        temp[index].isChecked = !prevState[index].isChecked;
-        return temp;
-      });
-    };
-    return (
-      <FlatList
-        style={styles.sectionContainer}
-        testID="render-status"
-        contentContainerStyle={{flexGrow: 0}}
-        ListHeaderComponent={
-          <Text style={styles.titleText}>{translate('close_loop.status')}</Text>
-        }
-        data={status}
-        keyExtractor={(item, index) => item.toString()}
-        numColumns={4}
-        renderItem={({item, index}) => (
-          <ChipItem
-            textStyle={textStyles.optionText}
-            item={item}
-            index={index}
-            onPress={selectedStatus}
-          />
-        )}
-      />
-    );
-  };
-
-  const RenderPriorityFilter = () => {
-    const selectedPriority = (item, index) => {
-      setPriority(prevState => {
-        const temp = [...prevState];
-        temp[index].isChecked = !prevState[index].isChecked;
-        return temp;
-      });
-    };
-    return (
-      <FlatList
-        style={styles.sectionContainer}
-        testID="render-priority"
-        contentContainerStyle={{flexGrow: 0}}
-        ListHeaderComponent={
-          <Text style={styles.titleText}>
-            {translate('close_loop.priority')}
-          </Text>
-        }
-        data={priority}
-        keyExtractor={(item, index) => item.toString()}
-        numColumns={4}
-        renderItem={({item, index}) => (
-          <ChipItem
-            textStyle={textStyles.optionText}
-            item={item}
-            index={index}
-            onPress={selectedPriority}
-          />
-        )}
-      />
-    );
-  };
-
-  const RenderTypeFilter = () => {
-    const selectType = (item_, index_) => {
-      console.log(JSON.stringify(type));
-      console.log('Selected item:', item_, index_);
-
-      setType(prevState => {
-        return prevState.map((item, index, arr) => {
-          if (item.id === item_.id) {
-            item.isChecked = !item.isChecked;
-          } else {
-            item.isChecked = false;
-          }
-          return item;
-        });
-      });
-    };
-    return (
-      <FlatList
-        data={type}
-        testID="render-ticket-type"
-        contentContainerStyle={{flexGrow: 0}}
-        ListHeaderComponent={<Text style={styles.titleText}>{'Type'}</Text>}
-        keyExtractor={(item, index) => item.toString()}
-        numColumns={3}
-        renderItem={({item, index}) => (
-          <ChipItem
-            textStyle={textStyles.optionText}
-            item={item}
-            index={index}
-            onPress={selectType}
-          />
-        )}
-      />
-    );
-  };
-  const RenderShowMyTicketsFilter = ({assignToId, userId}) => {
-    const toggleMyTicketVisibility = () => {
-      setAssignToId(state => (state.length > 0 ? '' : userId));
-    };
-    return (
-      <View testID="render-show-tickets" style={styles.sectionContainer}>
-        <View style={styles.switchContainer}>
-          <Text style={styles.titleText}>{translate('only_my_tickets')}</Text>
-          <Switch
-            trackColor={{
-              false: Colors.darkGrey,
-              true: Colors.darkGrey,
-            }}
-            thumbColor={
-              assignToId.length > 0
-                ? Colors.accentLight
-                : Colors.filterIconColor
-            }
-            ios_backgroundColor={Colors.evenDarkerGrey}
-            onValueChange={toggleMyTicketVisibility}
-            value={assignToId.length > 0}
-          />
-        </View>
-      </View>
-    );
-  };
-
-  const onApplyFilterHandler = () => {
-    data.status = status;
-    data.priority = priority;
-    data.type = type;
-    // data.managers = managerlist;
-    data.selectedManager = selectedManager;
-    data.assignToId = assignToId;
-    // data.showMyTickets = showMyTickets;
-    onPressHandler(data, 'apply');
-  };
-
-  const onCancel = () => {
-    setStatus(prev => [...prev.map(item => ({...item, isChecked: false}))]);
-    setPriority(prev => [...prev.map(item => ({...item, isChecked: false}))]);
-    setType(prev => [...prev.map(item => ({...item, isChecked: false}))]);
-    setAssignToId(assignToId.length > 0 ? '' : data.userId);
-  };
-
-  const RenderButtons = () => {
-    return (
-      <View
-        style={[
-          styles.rowContainer,
-          {
-            paddingHorizontal: PaddingConstants.tab1_2x,
-            justifyContent: 'flex-end',
-          },
-        ]}>
-        <QPButton
-          style={{
-            ...buttonStyles.outlinePrimaryButton,
-            flex: 1,
-          }}
-          buttonColor={Colors.white}
-          onPress={onCancel}
-          textStyle={buttonStyles.outlinePrimaryButtonText}
-          buttonText={'Clear'}
-        />
-        <HorizontalSpaceBox multiplyBy={2} />
-        <QPButton
-          style={{
-            ...buttonStyles.primaryButton,
-            flex: 1,
-          }}
-          buttonColor={Colors.accentLight}
-          onPress={onApplyFilterHandler}
-          textStyle={buttonStyles.primaryButtonText}
-          buttonText={'Apply'}
-        />
-      </View>
-    );
-  };
+  const onCancel = useCallback(() => {
+    setStatus(prevState => resetFilterState(prevState));
+    setPriority(prevState => resetFilterState(prevState));
+    setType(prevState => resetFilterState(prevState));
+    setAssignToId(data.userId); // Set to userId by default when canceling
+  }, [data.userId, resetFilterState]);
 
   return (
     <View style={styles.innerContainer}>
-      <RenderStatusFilter />
+      <FilterSection
+        title={translate('close_loop.status')}
+        filterData={status}
+        onItemSelect={handleStatusSelect}
+        numColumns={4}
+        testID="render-status"
+      />
       <VerticalSpaceBox multiplyBy={2} />
-      <RenderPriorityFilter />
+      <FilterSection
+        title={translate('close_loop.priority')}
+        filterData={priority}
+        onItemSelect={handlePrioritySelect}
+        numColumns={4}
+        testID="render-priority"
+      />
       <VerticalSpaceBox multiplyBy={2} />
-      <RenderTypeFilter />
+      <FilterSection
+        title="Type"
+        filterData={type}
+        onItemSelect={handleTypeSelect}
+        numColumns={3}
+        testID="render-ticket-type"
+      />
       <VerticalSpaceBox multiplyBy={2} />
-      <RenderShowMyTicketsFilter assignToId={assignToId} userId={data.userId} />
+      <ShowMyTicketsFilter
+        assignToId={assignToId}
+        userId={data.userId}
+        onToggle={toggleMyTicketVisibility}
+      />
       <VerticalSpaceBox multiplyBy={6} />
-      <RenderButtons />
+      <ActionButtons onCancel={onCancel} onApply={onApplyFilterHandler} />
     </View>
   );
 };
@@ -274,6 +227,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: PaddingConstants.tab1,
     paddingVertical: PaddingConstants.halfTab,
+  },
+  buttonContainer: {
+    paddingHorizontal: PaddingConstants.tab1_2x,
+    justifyContent: 'flex-end',
+  },
+  buttonFlex: {
+    flex: 1,
+  },
+  filterListContainer: {
+    flexGrow: 0,
   },
 
   fiiledButtonText: {
