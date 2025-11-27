@@ -5,6 +5,7 @@ import UpdateTicket from '../components/dashboard/ticketManagement/UpdateTicket'
 import React from 'react';
 import {Colors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
+import {textStyles} from '../styles/text.styles';
 import {PaddingConstants} from '../styles/padding.constants';
 import DashboardDateFilter from '../components/dashboard/components/DashboardDateFilter';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -23,11 +24,11 @@ import SelectEmailTemplate from '../components/closedloop/takeaction/SelectEmail
 import SendEmail from '../components/closedloop/takeaction/SendEmail';
 import ActionEmailHistory from '../components/closedloop/takeaction/ActionEmailHistory';
 import HeaderBackLeft from './commonUI/HeaderBackLeft';
-import {CloseButton, SaveDashboardDate} from './commonUI/CommonUI';
-import Notification from '../components/notifications/Notification';
+import {CloseButton} from './commonUI/CommonUI';
 import PushNotification from '../components/notifications/PushNotifications';
 import {CentralizedRootCause} from '../components/closedloop/TicketRootCause/CentralizedRootCause/CentralizedRootCause';
 import {OldRootCause} from '../components/closedloop/TicketRootCause/OldRootCause';
+import FilterTicket from '../components/closedloop/takeaction/FilterTickets';
 
 const DateRangeTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
@@ -178,6 +179,32 @@ const CommonScreens = RootStack => {
       })}
     />,
 
+    // <RootStack.Screen
+    //   key={'TicketFilter'}
+    //   name={translate('filter_by') ?? 'Filter by'}
+    //   component={FilterTicket}
+    //   // component={DashboardDateFilter}
+    //   options={({navigation, route}) => ({
+    //     headerShown: true,
+    //     gestureEnabled: false,
+    //     ...TransitionPresets.ModalPresentationIOS,
+
+    //   })}
+    // />,
+
+    <RootStack.Screen
+      key={'TicketFilter'}
+      name={'TicketFilter'}
+      component={FilterTicket}
+      options={({navigation, route}) => ({
+        // headerShown: false,
+        title: translate('filter_by') ?? 'Filter by',
+        headerTitleStyle: textStyles.headerTitleStyle,
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+        headerRight: props => <View />,
+      })}
+    />,
+
     <RootStack.Screen
       key={'OldRootCause'}
       name={'OldRootCause'}
@@ -185,6 +212,7 @@ const CommonScreens = RootStack => {
       options={({navigation, route}) => ({
         // headerShown: false,
         title: 'Old Root Cause',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
         headerRight: props => <View />,
         // headerRight: (props) => <EditTicket {...props} route={route} />,
@@ -198,6 +226,7 @@ const CommonScreens = RootStack => {
       options={({navigation, route}) => ({
         // headerShown: false,
         title: 'Centralized Root Cause',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
         headerRight: props => <View />,
         // headerRight: (props) => <EditTicket {...props} route={route} />,
@@ -212,6 +241,7 @@ const CommonScreens = RootStack => {
       options={({navigation, route}) => ({
         // headerShown: false,
         title: 'Ticket Details',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
         headerRight: props => <View />,
         // headerRight: (props) => <EditTicket {...props} route={route} />,
@@ -225,6 +255,7 @@ const CommonScreens = RootStack => {
       component={FeedbackDetails}
       options={({navigation, route}) => ({
         title: translate('close_loop.view_response'),
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}
     />,
@@ -233,6 +264,7 @@ const CommonScreens = RootStack => {
       name={translate('close_loop.update_ticket')}
       component={UpdateTicket}
       options={({navigation, route}) => ({
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}
     />,
@@ -256,6 +288,7 @@ const CommonScreens = RootStack => {
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
         headerShown: true,
         title: 'New ticket',
+        headerTitleStyle: textStyles.headerTitleStyle,
         // gestureDirection: 'vertical',
         // gestureEnabled: true,
         // ...TransitionPresets.ModalPresentationIOS,
@@ -273,7 +306,8 @@ const CommonScreens = RootStack => {
       name={'TicketTakeAction'}
       component={TicketTakeAction}
       options={({navigation, route}) => ({
-        title: 'Take action ',
+        title: 'Take action',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerShown: false,
         // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
         // headerRight: (props) => <EditTicket {...props} route={route} />,
@@ -296,6 +330,7 @@ const CommonScreens = RootStack => {
       component={SelectEmailTemplate}
       options={({navigation, route}) => ({
         title: 'Select template',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerShown: false,
       })}
     />,
@@ -305,6 +340,7 @@ const CommonScreens = RootStack => {
       component={SendEmail}
       options={({navigation, route}) => ({
         title: 'Send email',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerShown: false,
       })}
     />,
@@ -315,6 +351,7 @@ const CommonScreens = RootStack => {
       component={ActionEmailHistory}
       options={({navigation, route}) => ({
         title: 'Action email history',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerShown: false,
       })}
     />,
@@ -325,6 +362,7 @@ const CommonScreens = RootStack => {
       component={PushNotification}
       options={({navigation, route}) => ({
         title: 'Notifications',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerShown: true,
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}

@@ -87,7 +87,8 @@ const ActionButtons = ({onCancel, onApply}) => {
   );
 };
 
-const FilterTicket = ({data, onPressHandler}) => {
+const FilterTicket = ({route, navigation}) => {
+  const {data, onPressHandler} = route.params;
   const [status, setStatus] = useState(data.status);
   const [priority, setPriority] = useState(data.priority);
   const [type, setType] = useState(data.type);
@@ -136,6 +137,9 @@ const FilterTicket = ({data, onPressHandler}) => {
       assignToId,
     };
     onPressHandler(updatedData, 'apply');
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
   }, [data, status, priority, type, assignToId, onPressHandler]);
 
   const resetFilterState = useCallback(
@@ -151,37 +155,39 @@ const FilterTicket = ({data, onPressHandler}) => {
   }, [data.userId, resetFilterState]);
 
   return (
-    <View style={styles.innerContainer}>
-      <FilterSection
-        title={translate('close_loop.status')}
-        filterData={status}
-        onItemSelect={handleStatusSelect}
-        numColumns={4}
-        testID="render-status"
-      />
-      <VerticalSpaceBox multiplyBy={2} />
-      <FilterSection
-        title={translate('close_loop.priority')}
-        filterData={priority}
-        onItemSelect={handlePrioritySelect}
-        numColumns={4}
-        testID="render-priority"
-      />
-      <VerticalSpaceBox multiplyBy={2} />
-      <FilterSection
-        title="Type"
-        filterData={type}
-        onItemSelect={handleTypeSelect}
-        numColumns={3}
-        testID="render-ticket-type"
-      />
-      <VerticalSpaceBox multiplyBy={2} />
-      <ShowMyTicketsFilter
-        assignToId={assignToId}
-        userId={data.userId}
-        onToggle={toggleMyTicketVisibility}
-      />
-      <VerticalSpaceBox multiplyBy={6} />
+    <View style={styles.container}>
+      <View style={styles.innerContainer}>
+        <FilterSection
+          title={translate('close_loop.status')}
+          filterData={status}
+          onItemSelect={handleStatusSelect}
+          numColumns={4}
+          testID="render-status"
+        />
+        <VerticalSpaceBox multiplyBy={2} />
+        <FilterSection
+          title={translate('close_loop.priority')}
+          filterData={priority}
+          onItemSelect={handlePrioritySelect}
+          numColumns={4}
+          testID="render-priority"
+        />
+        <VerticalSpaceBox multiplyBy={2} />
+        <FilterSection
+          title="Type"
+          filterData={type}
+          onItemSelect={handleTypeSelect}
+          numColumns={3}
+          testID="render-ticket-type"
+        />
+        <VerticalSpaceBox multiplyBy={2} />
+        <ShowMyTicketsFilter
+          assignToId={assignToId}
+          userId={data.userId}
+          onToggle={toggleMyTicketVisibility}
+        />
+        <VerticalSpaceBox multiplyBy={6} />
+      </View>
       <ActionButtons onCancel={onCancel} onApply={onApplyFilterHandler} />
     </View>
   );
@@ -190,9 +196,6 @@ const FilterTicket = ({data, onPressHandler}) => {
 export default FilterTicket;
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.white,
-  },
   rowContainer: {
     flexDirection: 'row',
   },
@@ -204,8 +207,14 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.halfTab,
     alignItems: 'center',
   },
-  innerContainer: {
+  innerContainer: {},
+
+  container: {
+    backgroundColor: Colors.white,
+    flex: 1,
     padding: PaddingConstants.tab1_2x,
+
+    justifyContent: 'space-between',
   },
 
   assigneeCell: {

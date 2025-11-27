@@ -433,8 +433,11 @@ export default function ClosedLoop(props) {
   };
 
   const openFilter = () => {
-    // bs.current.snapTo(0);
-    setFilterBottomSheetVisible(true);
+    console.log('FILTER_DATA', JSON.stringify(filterData));
+    navigation.navigate('TicketFilter', {
+      data: filterData,
+      onPressHandler: handleAction,
+    });
   };
 
   const applyFilter = item => {
@@ -447,11 +450,7 @@ export default function ClosedLoop(props) {
   };
 
   // variables for bottom sheet
-  const bs = React.useRef(null);
   const fall = new Animated.Value(1);
-
-  const bsSnapPoints = ['64%', '0%'];
-  const [shadow, setShadow] = useState(false);
 
   const clearFilterData = item => {
     switch (item) {
@@ -523,12 +522,12 @@ export default function ClosedLoop(props) {
         <FabAddButton onPress={onFabHandler} />
       </Animated.View>
 
-      <RenderFilterBottomSheet
+      {/* <RenderFilterBottomSheet
         filterData={filterData}
         visible={filterBottomSheetVisible}
         onClose={onCloseFilter}
         onPressHandler={handleAction}
-      />
+      /> */}
     </View>
   );
 }

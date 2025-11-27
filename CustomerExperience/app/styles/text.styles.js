@@ -234,6 +234,12 @@ export const textStyles = StyleSheet.create({
     color: Colors.filterIconColor,
     fontWeight: 'bold',
   },
+
+  headerTitleStyle: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.primary,
+    color: Colors.white,
+  },
 });
 // primaryButton: {
 //   margin: MarginConstants.halfTab,
