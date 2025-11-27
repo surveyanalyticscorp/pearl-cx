@@ -18,7 +18,7 @@ const getButtonTitle = screenName => {
     case 'CreateTicket':
       return 'Set status';
     case 'Dashboard':
-      return 'Set filter by status';
+      return 'Apply';
     default:
       return 'Update status';
   }
