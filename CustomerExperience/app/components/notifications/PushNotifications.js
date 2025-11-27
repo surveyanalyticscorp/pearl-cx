@@ -85,12 +85,12 @@ const PushNotification = props => {
   };
 
   let renderContainer = () => {
-    if (notificationLogs.length === 0) {
+    if (notificationLogs.length !== 0) {
       return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={styles.boldFont}>
+          <TextLabel>
             {translate('dashboard.no_notification_to_display')}
-          </Text>
+          </TextLabel>
         </View>
       );
     } else {
