@@ -102,7 +102,9 @@ export const DateRangeTabStack = props => (
         color: Colors.primary,
         width: width / 2,
         fontSize: TextSizes.secondary,
+        textTransform: 'none',
       },
+
       indicatorStyle: {backgroundColor: Colors.accent},
       style: {backgroundColor: Colors.white, width: '100%'},
       initialLayout: {width: Dimensions.get('window').width},
@@ -169,7 +171,7 @@ const CommonScreens = RootStack => {
       component={DateRangeTabStack}
       // component={DashboardDateFilter}
       options={({navigation, route}) => ({
-        headerShown: false,
+        headerShown: true,
         // gestureDirection: 'vertical',
         gestureEnabled: true,
         ...TransitionPresets.ModalPresentationIOS,
