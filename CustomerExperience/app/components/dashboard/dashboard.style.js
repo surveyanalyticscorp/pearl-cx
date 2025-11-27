@@ -209,8 +209,8 @@ export const dashboardStyles = StyleSheet.create({
   chartContainer: {
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 13
-      : MarginConstants.tab4 * 11,
+      ? MarginConstants.tab4 * 14
+      : MarginConstants.tab4 * 12,
     flexDirection: 'column',
     justifyContent: 'center',
     marginTop: MarginConstants.tab2,
@@ -223,7 +223,8 @@ export const dashboardStyles = StyleSheet.create({
       ? MarginConstants.tab1_4x * 14
       : MarginConstants.tab1_4x * 13,
     flexDirection: 'column',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
+    alignSelf: 'center',
     marginTop: MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab2,
     borderRadius: 5,
@@ -286,7 +287,8 @@ export const dashboardStyles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
+    alignSelf: 'center',
     height: '100%',
   },
   contentContainer: {backgroundColor: Colors.white, height: '100%'},

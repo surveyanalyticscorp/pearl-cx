@@ -112,7 +112,8 @@ const styles = StyleSheet.create({
     zIndex: 0,
     height: '50%',
     width: '70%',
-    margin: 0,
+    margin: 1,
+    alignSelf: 'center',
   },
 });
 
