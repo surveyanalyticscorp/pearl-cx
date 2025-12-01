@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {View, Text, StyleSheet, FlatList, Platform, Switch} from 'react-native';
+import {View, Text, StyleSheet, Platform, Switch} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
@@ -11,39 +11,28 @@ import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
 import {textStyles} from '../../../styles/text.styles';
 import {HorizontalSpaceBox, VerticalSpaceBox} from '../../../widgets/SpaceBox';
-import BottomSheetHeader, {
+import {
   CloseButton,
   PanelHandler,
-  TitleAndCloseButton,
 } from '../../../routes/commonUI/BottomSheetHeader';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
 
-// Reusable FilterSection component for displaying filter chips
-const FilterSection = ({
-  title,
-  filterData,
-  onItemSelect,
-  numColumns = 4,
-  testID,
-}) => {
+const FilterSection = ({title, filterData, onItemSelect, testID}) => {
   return (
-    <FlatList
-      style={styles.sectionContainer}
-      testID={testID}
-      contentContainerStyle={styles.filterListContainer}
-      ListHeaderComponent={<Text style={styles.titleText}>{title}</Text>}
-      data={filterData}
-      keyExtractor={(item, index) => item.toString()}
-      numColumns={numColumns}
-      renderItem={({item, index}) => (
-        <ChipItem
-          textStyle={textStyles.optionText}
-          item={item}
-          index={index}
-          onPress={onItemSelect}
-        />
-      )}
-    />
+    <View style={styles.sectionContainer}>
+      <Text style={styles.titleText}>{title}</Text>
+      <View style={styles.chipContainer} testID={testID}>
+        {filterData.map((item, index) => (
+          <ChipItem
+            key={index}
+            textStyle={textStyles.optionText}
+            item={item}
+            index={index}
+            onPress={onItemSelect}
+          />
+        ))}
+      </View>
+    </View>
   );
 };
 
@@ -70,7 +59,6 @@ const ShowMyTicketsFilter = ({assignToId, userId, onToggle}) => {
   );
 };
 
-// Action buttons component
 const ActionButtons = ({onCancel, onApply}) => {
   return (
     <View style={[styles.rowContainer, styles.buttonContainer]}>
@@ -95,7 +83,7 @@ const ActionButtons = ({onCancel, onApply}) => {
 
 const FilterTicket = ({route, navigation}) => {
   const {data, onPressHandler} = route.params;
-  const [status, setStatus] = useState(data.status);
+  const [status, setStatus] = useState([...data.status, data.status[0]]);
   const [priority, setPriority] = useState(data.priority);
   const [type, setType] = useState(data.type);
   const [assignToId, setAssignToId] = useState(data.assignToId);
@@ -177,7 +165,6 @@ const FilterTicket = ({route, navigation}) => {
           title={translate('close_loop.status')}
           filterData={status}
           onItemSelect={handleStatusSelect}
-          numColumns={4}
           testID="render-status"
         />
         <VerticalSpaceBox multiplyBy={2} />
@@ -185,7 +172,6 @@ const FilterTicket = ({route, navigation}) => {
           title={translate('close_loop.priority')}
           filterData={priority}
           onItemSelect={handlePrioritySelect}
-          numColumns={4}
           testID="render-priority"
         />
         <VerticalSpaceBox multiplyBy={2} />
@@ -193,7 +179,6 @@ const FilterTicket = ({route, navigation}) => {
           title="Type"
           filterData={type}
           onItemSelect={handleTypeSelect}
-          numColumns={3}
           testID="render-ticket-type"
         />
         <VerticalSpaceBox multiplyBy={2} />
@@ -228,7 +213,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
     flex: 1,
-    padding: PaddingConstants.tab1_2x,
+    paddingVertical: PaddingConstants.tab1_2x,
+    paddingHorizontal: PaddingConstants.tab1,
 
     justifyContent: 'space-between',
   },
@@ -236,6 +222,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingEnd: PaddingConstants.tab1,
   },
   assigneeCell: {
     borderWidth: 1,
@@ -272,6 +259,11 @@ const styles = StyleSheet.create({
   },
   filterListContainer: {
     flexGrow: 0,
+  },
+  chipContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: PaddingConstants.halfTab,
   },
 
   fiiledButtonText: {

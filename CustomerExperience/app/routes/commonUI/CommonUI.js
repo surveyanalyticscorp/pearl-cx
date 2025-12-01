@@ -706,7 +706,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: PaddingConstants.tab2,
     paddingVertical: PaddingConstants.tab1,
-    margin: MarginConstants.halfTab,
+    margin: MarginConstants.tab1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -717,7 +717,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#045EBF',
   },
   chipText: {
-    fontSize: TextSizes.secondary,
+    fontSize: TextSizes.semiSecondary2,
     fontFamily: FontFamily.regular,
     textAlign: 'center',
   },
