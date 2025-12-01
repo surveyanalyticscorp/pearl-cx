@@ -10,10 +10,28 @@ import TextLabel from '../../widgets/TextLabel/TextLabel';
 
 let {width} = Dimensions.get('window');
 
-const PanelHandler = () => {
+export const PanelHandler = () => {
   return (
     <View testID="panelHandler" style={styles.panelHandleContainer}>
       <View style={styles.panelHandle} />
+    </View>
+  );
+};
+
+export const CloseButton = ({onPressClose}) => {
+  return (
+    <Pressable testID="close-button" onPress={onPressClose}>
+      <IonIcons name="close" size={20} color={Colors.filterIconColor} />
+    </Pressable>
+  );
+};
+
+export const TitleAndCloseButton = ({title, onPressClose}) => {
+  return (
+    <View style={styles.panelTitleContainer}>
+      <TextLabel text={title} style={styles.header} />
+      {/* <Text style={styles.header}>{title}</Text> */}
+      <CloseButton onPressClose={onPressClose} />
     </View>
   );
 };
@@ -21,13 +39,7 @@ const BottomSheetHeader = ({title, onPressClose}) => {
   return (
     <View testID="bottomSheetHeader" style={styles.panelHeaderContainer}>
       <PanelHandler />
-      <View style={styles.panelTitleContainer}>
-        <TextLabel text={title} style={styles.header} />
-        {/* <Text style={styles.header}>{title}</Text> */}
-        <Pressable testID="close-button" onPress={onPressClose}>
-          <IonIcons name="close" size={20} color={Colors.filterIconColor} />
-        </Pressable>
-      </View>
+      <TitleAndCloseButton title={title} onPressClose={onPressClose} />
     </View>
   );
 };

@@ -101,7 +101,7 @@ export const DateRangeTabStack = props => (
       labelStyle: {
         color: Colors.primary,
         width: width / 2,
-        fontSize: TextSizes.secondary,
+        fontSize: TextSizes.primary,
         textTransform: 'none',
       },
 
@@ -171,11 +171,10 @@ const CommonScreens = RootStack => {
       component={DateRangeTabStack}
       // component={DashboardDateFilter}
       options={({navigation, route}) => ({
-        headerShown: true,
+        headerShown: false,
         // gestureDirection: 'vertical',
         gestureEnabled: true,
         ...TransitionPresets.ModalPresentationIOS,
-
         // headerLeft: props => <HeaderBackLeft />,
         // headerRight: props => <SaveDashboardDate {...props} route={route} />,
       })}
@@ -190,7 +189,6 @@ const CommonScreens = RootStack => {
     //     headerShown: true,
     //     gestureEnabled: false,
     //     ...TransitionPresets.ModalPresentationIOS,
-
     //   })}
     // />,
 
@@ -199,11 +197,14 @@ const CommonScreens = RootStack => {
       name={'TicketFilter'}
       component={FilterTicket}
       options={({navigation, route}) => ({
-        // headerShown: false,
+        headerShown: false,
+        gestureEnabled: true,
         title: translate('filter_by') ?? 'Filter by',
         headerTitleStyle: textStyles.headerTitleStyle,
-        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
-        headerRight: props => <View />,
+        ...TransitionPresets.ModalPresentationIOS,
+
+        // headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+        // headerRight: props => <View />,
       })}
     />,
 

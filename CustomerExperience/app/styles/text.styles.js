@@ -236,7 +236,7 @@ export const textStyles = StyleSheet.create({
   },
 
   headerTitleStyle: {
-    fontFamily: FontFamily.medium,
+    fontFamily: FontFamily.regular,
     fontSize: TextSizes.primary,
     color: Colors.white,
   },

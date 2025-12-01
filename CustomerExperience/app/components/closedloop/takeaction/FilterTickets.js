@@ -11,6 +11,12 @@ import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
 import {textStyles} from '../../../styles/text.styles';
 import {HorizontalSpaceBox, VerticalSpaceBox} from '../../../widgets/SpaceBox';
+import BottomSheetHeader, {
+  CloseButton,
+  PanelHandler,
+  TitleAndCloseButton,
+} from '../../../routes/commonUI/BottomSheetHeader';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
 
 // Reusable FilterSection component for displaying filter chips
 const FilterSection = ({
@@ -128,6 +134,11 @@ const FilterTicket = ({route, navigation}) => {
     setAssignToId(state => (state.length > 0 ? '' : data.userId));
   }, [data.userId]);
 
+  const navigateBack = useCallback(() => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  }, [navigation]);
   const onApplyFilterHandler = useCallback(() => {
     const updatedData = {
       ...data,
@@ -137,10 +148,8 @@ const FilterTicket = ({route, navigation}) => {
       assignToId,
     };
     onPressHandler(updatedData, 'apply');
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    }
-  }, [data, status, priority, type, assignToId, onPressHandler]);
+    navigateBack();
+  }, [data, status, priority, type, assignToId, onPressHandler, navigateBack]);
 
   const resetFilterState = useCallback(
     filterArray => filterArray.map(item => ({...item, isChecked: false})),
@@ -157,6 +166,13 @@ const FilterTicket = ({route, navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
+        <PanelHandler />
+        {/* <TitleAndCloseButton title={'Filter by'} onPressClose={navigateBack} /> */}
+        <View style={styles.headerContainer}>
+          <TextLabel text={'Filter by'} style={styles.headerText} />
+          <CloseButton onPressClose={navigateBack} />
+        </View>
+
         <FilterSection
           title={translate('close_loop.status')}
           filterData={status}
@@ -216,7 +232,11 @@ const styles = StyleSheet.create({
 
     justifyContent: 'space-between',
   },
-
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   assigneeCell: {
     borderWidth: 1,
     borderRadius: 2,
@@ -227,6 +247,12 @@ const styles = StyleSheet.create({
   titleText: {
     fontFamily: FontFamily.medium,
     fontSize: TextSizes.primary,
+    padding: PaddingConstants.tab1,
+    color: Colors.filterIconColor,
+  },
+  headerText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.extraLargeText,
     padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,
   },

@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   chartContainer: {
     zIndex: 0,
     height: '50%',
-    width: '70%',
+    width: '75%',
     margin: 1,
     alignSelf: 'center',
   },

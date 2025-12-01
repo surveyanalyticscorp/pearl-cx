@@ -88,7 +88,7 @@ const PushNotification = props => {
     if (notificationLogs.length !== 0) {
       return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <TextLabel>
+          <TextLabel baseTextStyle={baseTextStyles.primaryRegularText}>
             {translate('dashboard.no_notification_to_display')}
           </TextLabel>
         </View>
