@@ -28,6 +28,10 @@ RCT_EXTERN_METHOD(setScreenVisited:(NSString *)screenName
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(setDataMappings:(NSDictionary *)dataMappings
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+                  
 /**
  * Notify the SDK of an event
  * 

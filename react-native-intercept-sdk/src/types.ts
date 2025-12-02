@@ -53,3 +53,7 @@ export type UnsubscribeFunction = () => void;
 export interface EventParams {
   [key: string]: any;
 }
+
+export interface DataMapping {
+  [key: string]: string;
+}

@@ -91,16 +91,50 @@ class InterceptSdk: RCTEventEmitter, QuestionProInitDelegate {
 
     @objc
     func setScreenVisited(_ screenName: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-        print("🔧 [iOS] SetScreenVisited called: \(screenName)")
+        print("🔧 [iOS] setScreenVisited called: \(screenName)")
         
-        QuestionProCX.getinstance().setScreenName(screenName: screenName);
+        DispatchQueue.main.async {
+            do {
+                // Call QuestionPro CX SDK setScreenName
+                QuestionProCX.getinstance().setScreenName(screenName: screenName)
 
-        let result: [String: Any] = [
-            "success": true,
-            "screenName": screenName,
-            "message": "Screen visited event recorded"
-        ]
-        resolve(result)
+                let result: [String: Any] = [
+                    "success": true,
+                    "screenName": screenName,
+                    "message": "Screen visited successfully",
+                    "timestamp": Date().timeIntervalSince1970
+                ]
+                resolve(result)
+                
+            } catch {
+                print("🔧 [iOS] setScreenVisited error: \(error)")
+                reject("SET_SCREEN_VISITED_ERROR", error.localizedDescription, error)
+            }
+        }
+    }
+
+    @objc
+    func setDataMappings(_ dataMappings: [String: String], resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        print("🔧 [iOS] setDataMappings called with: \(dataMappings)")
+        
+        DispatchQueue.main.async {
+            do {
+                // Call QuestionPro CX SDK setDataMappings
+                QuestionProCX.getinstance().setDataMappings(dataMappings: dataMappings)
+                
+                let result: [String: Any] = [
+                    "success": true,
+                    "message": "Data mappings set successfully",
+                    "mappingsCount": dataMappings.count,
+                    "timestamp": Date().timeIntervalSince1970
+                ]
+                resolve(result)
+                
+            } catch {
+                print("🔧 [iOS] setDataMappings error: \(error)")
+                reject("SET_DATA_MAPPINGS_ERROR", error.localizedDescription, error)
+            }
+        }
     }
     
     // NotifyEvent method matching Android implementation  

@@ -64,6 +64,43 @@ class InterceptSdkModule(private val reactContext: ReactApplicationContext) : Re
         }
     }
 
+     @ReactMethod
+    fun setDataMappings(dataMappings: ReadableMap, promise: Promise) {
+        Log.d("InterceptSdk", "setDataMappings called")
+        
+        try {
+            // Convert ReadableMap to HashMap
+            val mappingsMap = HashMap<String, String>()
+            val iterator: ReadableMapKeySetIterator = dataMappings.keySetIterator()
+            
+            while (iterator.hasNextKey()) {
+                val key = iterator.nextKey()
+                val value = dataMappings.getString(key)
+                if (value != null) {
+                    mappingsMap[key] = value
+                }
+            }
+            
+            Log.d("InterceptSdk", "Data mappings converted: $mappingsMap")
+            
+            // Call QuestionPro Android CX SDK
+            QuestionProCX.getInstance().setDataMappings(mappingsMap)
+            
+            val result = Arguments.createMap().apply {
+                putBoolean("success", true)
+                putString("message", "Data mappings set successfully")
+                putInt("mappingsCount", mappingsMap.size)
+                putDouble("timestamp", System.currentTimeMillis().toDouble())
+            }
+            
+            promise.resolve(result)
+            
+        } catch (e: Exception) {
+            Log.e("InterceptSdk", "setDataMappings error", e)
+            promise.reject("SET_DATA_MAPPINGS_ERROR", e.message, e)
+        }
+    }
+
 
     @ReactMethod
     fun startSurvey(surveyId: String, promise: Promise) {

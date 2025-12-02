@@ -1,4 +1,5 @@
 import { NativeModules, Platform, NativeEventEmitter } from 'react-native';
+import { DataMapping } from './types';
 
 export interface ConfigureOptions {
   apiKey: string;
@@ -91,7 +92,7 @@ class InterceptSdkImpl {
     };
   }
 
-  async setScreenVisited(screenName: string): Promise<SurveyResult> {
+  async setScreenVisited(screenName: string): Promise<any> {
     console.log('InterceptSDK: setScreenVisited called with screenName:', screenName);
     
     if (this.isNativeAvailable) {
@@ -111,6 +112,30 @@ class InterceptSdkImpl {
       message: `Screen "${screenName}" marked as visited (JS fallback implementation)`
     };
   }
+
+
+async setDataMappings(dataMappings: DataMapping): Promise<any> {
+    console.log('InterceptSDK: setDataMappings called with:', dataMappings);
+    
+    if (this.isNativeAvailable) {
+      try {
+        const result = await InterceptSdkNative.setDataMappings(dataMappings);
+        console.log('InterceptSDK: Native setDataMappings result:', result);
+        return result;
+      } catch (error) {
+        console.error('InterceptSDK: Native setDataMappings failed, falling back to JS:', error);
+        // Fall through to JavaScript implementation
+      }
+    }
+    
+    // JavaScript fallback
+    return {
+      success: true,
+      message: `Data mappings set successfully (JS fallback implementation)`,
+      mappingsCount: Object.keys(dataMappings).length
+    };
+  }
+
 
   async startSurvey(surveyId: string): Promise<SurveyResult> {
     console.log('InterceptSDK: startSurvey called with surveyId:', surveyId);
