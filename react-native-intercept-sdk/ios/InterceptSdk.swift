@@ -63,11 +63,50 @@ class InterceptSdk: RCTEventEmitter, QuestionProInitDelegate {
                     return
                 }
                 
-                // Initialize TouchPoint with US data center
-                let touchPoint = TouchPoint.initTouchPoint(dataCenter: TouchPoint.DataCenter.DATA_CENTER_US)
+                // Extract DataCenter from options (default to US)
+                let dataCenterString = options["dataCenter"] as? String ?? "US"
                 
+                // Map string to TouchPoint.DataCenter enum
+                let dataCenter: TouchPoint.DataCenter
+                switch dataCenterString.uppercased() {
+                case "US":
+                    dataCenter = TouchPoint.DataCenter.DATA_CENTER_US
+                case "EU":
+                    dataCenter = TouchPoint.DataCenter.DATA_CENTER_EU
+                case "CA":
+                    dataCenter = TouchPoint.DataCenter.DATA_CENTER_CA
+                case "SG":
+                    dataCenter = TouchPoint.DataCenter.DATA_CENTER_SG
+                case "AU":
+                    dataCenter = TouchPoint.DataCenter.DATA_CENTER_AU
+                case "SA":
+                    dataCenter = TouchPoint.DataCenter.DATA_CENTER_SA
+                case "KSA":
+                    dataCenter = TouchPoint.DataCenter.DATA_CENTER_KSA
+                default:
+                    dataCenter = TouchPoint.DataCenter.DATA_CENTER_US
+                }
+            
+                print("🔧 [iOS] Using DataCenter: \(dataCenter)")
+
+                // Initialize TouchPoint with US data center
+                let touchPoint = TouchPoint.initTouchPoint(dataCenter: dataCenter)
+                
+
                 // Get main window for configuration
-                guard let window = UIApplication.shared.windows.first else {
+                var window: UIWindow?
+                if #available(iOS 13.0, *) {
+                    window = UIApplication.shared.connectedScenes
+                        .first { $0.activationState == .foregroundActive }
+                        .flatMap { $0 as? UIWindowScene }?
+                        .windows
+                        .first { $0.isKeyWindow }
+                } else {
+                    window = UIApplication.shared.keyWindow
+                }
+
+                // Get main window for configuration
+                guard let window = window else {
                     reject("NO_WINDOW", "Unable to get main window", nil)
                     return
                 }

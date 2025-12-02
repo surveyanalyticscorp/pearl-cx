@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 
-import InterceptSdk from '@questionpro/react-native-survey-intercept';
+import InterceptSdk, {DataCenter} from '@questionpro/react-native-survey-intercept';
 import { DataMapping } from '@questionpro/react-native-survey-intercept/lib/typescript/types';
 
 
@@ -48,13 +48,16 @@ const App = () => {
     };
   }, []);
 
+  
   const configureSDK = async () => {
     try {
       setSdkStatus('Configuring...');
       console.log('🔧 Configuring SDK...');
       
       const result = await InterceptSdk.configure({
-        apiKey: '058d9ebc-c80e-4969-8196-f4feb7aae5e6',
+        apiKey: '3a1a6c70-12c9-4a98-8571-bdf563331449',
+        dataCenter: DataCenter.US,
+        enableDebug: true,
       });
       
       console.log('✅ SDK Configuration result:', result);
@@ -85,7 +88,7 @@ const App = () => {
     try {
       console.log('🚀 Launching survey...');
       
-      const result = await InterceptSdk.setScreenVisited('book_cab');
+      const result = await InterceptSdk.setScreenVisited('survey');
       
       console.log('✅ Survey launch result:', result);
       //Alert.alert('Success', 'Survey launched successfully!');

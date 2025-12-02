@@ -20,8 +20,35 @@ class InterceptSdkModule(private val reactContext: ReactApplicationContext) : Re
     fun configure(options: ReadableMap, promise: Promise) {
         try {
             Log.d("InterceptSdk", "Datta Configure called with: $options")
+
+        // Extract API key
+        val apiKey = options.getString("apiKey")
+        if (apiKey.isNullOrEmpty()) {
+            promise.reject("INVALID_API_KEY", "API key is required")
+            return
+        }
+
+        // Extract DataCenter (default to US)
+        val dataCenterString = options.getString("dataCenter") ?: "US"
+       // Map string to DataCenter enum
+        val dataCenter = when (dataCenterString.uppercase()) {
+            "US" -> DataCenter.US
+            "EU" -> DataCenter.EU
+            "CA" -> DataCenter.CA
+            "SG" -> DataCenter.SG
+            "AU" -> DataCenter.AU
+            "AE" -> DataCenter.AE
+            "SA" -> DataCenter.SA
+            "KSA" -> DataCenter.KSA
             
-            val touchPoint = TouchPoint.Builder(DataCenter.US)
+            else -> {
+                Log.w("InterceptSdk", "Unknown DataCenter: $dataCenterString, defaulting to US")
+                DataCenter.US
+            }
+        }
+        Log.d("InterceptSdk", "Using DataCenter: $dataCenter")
+            
+            val touchPoint = TouchPoint.Builder(dataCenter)
                 .isFlutterApp(true)
                 .build()
 

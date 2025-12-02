@@ -3,12 +3,11 @@ import { DataMapping } from './types';
 
 export interface ConfigureOptions {
   apiKey: string;
-  domain?: string;
-  userId?: string;
+  dataCenter: DataCenter;
   enableDebug?: boolean;
 }
 
-export interface SurveyResult {
+interface SurveyResult {
   success: boolean;
   message?: string;
   surveyId?: string;
@@ -18,6 +17,17 @@ export interface SurveyResult {
 export interface EventData {
   type: string;
   data?: any;
+}
+
+export enum DataCenter {
+  US = 'US',
+  EU = 'EU',
+  CA = 'CA',
+  SG = 'SG',
+  AU = 'AU',
+  AE = 'AE',
+  SA = 'SA',
+  KSA = 'KSA'
 }
 
 const LINKING_ERROR =
