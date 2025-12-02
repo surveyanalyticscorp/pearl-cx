@@ -66,6 +66,9 @@ class InterceptSdk: RCTEventEmitter, QuestionProInitDelegate {
                 // Extract DataCenter from options (default to US)
                 let dataCenterString = options["dataCenter"] as? String ?? "US"
                 
+                // Extract debug setting from options (default to false)
+                let enableDebug = options["enableDebug"] as? Bool ?? false
+                
                 // Map string to TouchPoint.DataCenter enum
                 let dataCenter: TouchPoint.DataCenter
                 switch dataCenterString.uppercased() {
@@ -87,9 +90,12 @@ class InterceptSdk: RCTEventEmitter, QuestionProInitDelegate {
                     dataCenter = TouchPoint.DataCenter.DATA_CENTER_US
                 }
             
-                print("🔧 [iOS] Using DataCenter: \(dataCenter)")
+                if enableDebug {
+                    print("🔧 [iOS] Using DataCenter: \(dataCenter)")
+                    print("🔧 [iOS] Debug mode enabled")
+                }
 
-                // Initialize TouchPoint with US data center
+                // Initialize TouchPoint with data center
                 let touchPoint = TouchPoint.initTouchPoint(dataCenter: dataCenter)
                 
 
@@ -119,7 +125,9 @@ class InterceptSdk: RCTEventEmitter, QuestionProInitDelegate {
                     initCallbackDelegate: self
                 )
                 
-                print("🔧 [iOS] QuestionPro CX SDK configuration initiated")
+                if enableDebug {
+                    print("🔧 [iOS] QuestionPro CX SDK configuration initiated")
+                }
                 
             } catch {
                 print("🔧 [iOS] Configuration error: \(error)")

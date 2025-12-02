@@ -55,17 +55,22 @@ const InterceptSdkNative = NativeModules.InterceptSdk
 class InterceptSdkImpl {
   private isNativeAvailable: boolean;
   private eventEmitter?: NativeEventEmitter;
+  private enableDebug: boolean = false;
 
   constructor() {
     // Enhanced debugging for iOS
-    console.log('🔍 Platform:', Platform.OS);
-    console.log('🔍 Available NativeModules:', Object.keys(NativeModules));
+    if (this.enableDebug) {
+      console.log('🔍 Platform:', Platform.OS);
+      console.log('🔍 Available NativeModules:', Object.keys(NativeModules));
+    }
     
     // Check if native module is available
     this.isNativeAvailable = !!NativeModules.InterceptSdk;
-    console.log('🔍 Looking for InterceptSdk:', this.isNativeAvailable);
+    if (this.enableDebug) {
+      console.log('🔍 Looking for InterceptSdk:', this.isNativeAvailable);
+    }
     
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === 'ios' && this.enableDebug) {
       console.log('🔍 iOS: Checking for InterceptSdk in NativeModules...');
       console.log('🔍 iOS: InterceptSdk exists:', !!NativeModules.InterceptSdk);
       if (NativeModules.InterceptSdk) {
@@ -75,22 +80,39 @@ class InterceptSdkImpl {
     
     if (this.isNativeAvailable && NativeModules.InterceptSdk) {
       this.eventEmitter = new NativeEventEmitter(NativeModules.InterceptSdk);
-      console.log('✅ EventEmitter created for InterceptSdk');
+      if (this.enableDebug) {
+        console.log('✅ EventEmitter created for InterceptSdk');
+      }
     } else {
-      console.log('❌ Native module not available, will use mock implementation');
+      if (this.enableDebug) {
+        console.log('❌ Native module not available, will use mock implementation');
+      }
     }
   }
 
   async configure(options: ConfigureOptions): Promise<SurveyResult> {
-    console.log('InterceptSDK: Configure called with options:', options);
+    // Set debug mode based on options
+    this.enableDebug = options.enableDebug || false;
+    
+    if (this.enableDebug) {
+      console.log('InterceptSDK: Configure called with options:', options);
+    }
     
     if (this.isNativeAvailable) {
       try {
         const result = await InterceptSdkNative.configure(options);
-        console.log('InterceptSDK: Native configure result:', result);
+        if (this.enableDebug) {
+          console.log('InterceptSDK: Native configure result:', result);
+        }
         return result;
       } catch (error) {
-        console.error('InterceptSDK: Native configure failed, falling back to JS:', error);
+        if (this.enableDebug) {
+          console.error('InterceptSDK: Native configure failed, falling back to JS:', error);
+        }
+        return{
+          success: false,
+          message: `Native configure failed: ${error}`
+        }
         // Fall through to JavaScript implementation
       }
     }
@@ -98,20 +120,30 @@ class InterceptSdkImpl {
     // JavaScript fallback
     return {
       success: true,
-      message: 'SDK configured successfully (JS fallback implementation)'
+      message: `SDK configured successfully with debug: ${options.enableDebug || false} (JS fallback implementation)`
     };
   }
 
   async setScreenVisited(screenName: string): Promise<any> {
-    console.log('InterceptSDK: setScreenVisited called with screenName:', screenName);
+    if (this.enableDebug) {
+      console.log('InterceptSDK: setScreenVisited called with screenName:', screenName);
+    }
     
     if (this.isNativeAvailable) {
       try {
         const result = await InterceptSdkNative.setScreenVisited(screenName);
-        console.log('InterceptSDK: Native setScreenVisited result:', result);
+        if (this.enableDebug) {
+          console.log('InterceptSDK: Native setScreenVisited result:', result);
+        }
         return result;
       } catch (error) {
-        console.error('InterceptSDK: Native setScreenVisited failed, falling back to JS:', error);
+        if (this.enableDebug) {
+          console.error('InterceptSDK: Native setScreenVisited failed: ', error);
+        }
+        return{
+          success: false,
+          message: `Native setScreenVisited failed: ${error}`
+        }
         // Fall through to JavaScript implementation
       }
     }
@@ -125,38 +157,53 @@ class InterceptSdkImpl {
 
 
 async setDataMappings(dataMappings: DataMapping): Promise<any> {
-    console.log('InterceptSDK: setDataMappings called with:', dataMappings);
+    if (this.enableDebug) {
+      console.log('InterceptSDK: setDataMappings called with:', dataMappings);
+    }
     
     if (this.isNativeAvailable) {
       try {
         const result = await InterceptSdkNative.setDataMappings(dataMappings);
-        console.log('InterceptSDK: Native setDataMappings result:', result);
+        if (this.enableDebug) {
+          console.log('InterceptSDK: Native setDataMappings result:', result);
+        }
         return result;
       } catch (error) {
-        console.error('InterceptSDK: Native setDataMappings failed, falling back to JS:', error);
+        if (this.enableDebug) {
+          console.error('InterceptSDK: Native setDataMappings failed, falling back to JS:', error);
+        }
         // Fall through to JavaScript implementation
+        return{
+          success: false,
+          message: `Native setDataMappings failed: ${error}`
+        }
       }
     }
     
-    // JavaScript fallback
     return {
       success: true,
-      message: `Data mappings set successfully (JS fallback implementation)`,
+      message: `Data mappings set successfully`,
       mappingsCount: Object.keys(dataMappings).length
     };
   }
 
 
   async startSurvey(surveyId: string): Promise<SurveyResult> {
-    console.log('InterceptSDK: startSurvey called with surveyId:', surveyId);
+    if (this.enableDebug) {
+      console.log('InterceptSDK: startSurvey called with surveyId:', surveyId);
+    }
     
     if (this.isNativeAvailable) {
       try {
         const result = await InterceptSdkNative.startSurvey(surveyId);
-        console.log('InterceptSDK: Native startSurvey result:', result);
+        if (this.enableDebug) {
+          console.log('InterceptSDK: Native startSurvey result:', result);
+        }
         return result;
       } catch (error) {
-        console.error('InterceptSDK: Native startSurvey failed, falling back to JS:', error);
+        if (this.enableDebug) {
+          console.error('InterceptSDK: Native startSurvey failed, falling back to JS:', error);
+        }
         // Fall through to JavaScript implementation
       }
     }
@@ -170,15 +217,21 @@ async setDataMappings(dataMappings: DataMapping): Promise<any> {
   }
 
   async notifyEvent(eventType: string): Promise<SurveyResult> {
-    console.log('InterceptSDK: notifyEvent called with eventType:', eventType);
+    if (this.enableDebug) {
+      console.log('InterceptSDK: notifyEvent called with eventType:', eventType);
+    }
     
     if (this.isNativeAvailable) {
       try {
         const result = await InterceptSdkNative.notifyEvent(eventType);
-        console.log('InterceptSDK: Native notifyEvent result:', result);
+        if (this.enableDebug) {
+          console.log('InterceptSDK: Native notifyEvent result:', result);
+        }
         return result;
       } catch (error) {
-        console.error('InterceptSDK: Native notifyEvent failed, falling back to JS:', error);
+        if (this.enableDebug) {
+          console.error('InterceptSDK: Native notifyEvent failed, falling back to JS:', error);
+        }
         // Fall through to JavaScript implementation
       }
     }
@@ -192,7 +245,9 @@ async setDataMappings(dataMappings: DataMapping): Promise<any> {
   }
 
   onEvent(callback: (event: EventData) => void): () => void {
-    console.log('InterceptSDK: onEvent called');
+    if (this.enableDebug) {
+      console.log('InterceptSDK: onEvent called');
+    }
     
     if (this.isNativeAvailable && this.eventEmitter) {
       // Use native event emitter
@@ -212,7 +267,9 @@ async setDataMappings(dataMappings: DataMapping): Promise<any> {
       
       return () => {
         subscription.remove();
-        console.log('InterceptSDK: Native event listener unsubscribed');
+        if (this.enableDebug) {
+          console.log('InterceptSDK: Native event listener unsubscribed');
+        }
       };
     } else {
       // JavaScript fallback
@@ -229,7 +286,9 @@ async setDataMappings(dataMappings: DataMapping): Promise<any> {
 
       return () => {
         clearTimeout(timeout);
-        console.log('InterceptSDK: JS fallback event listener unsubscribed');
+        if (this.enableDebug) {
+          console.log('InterceptSDK: JS fallback event listener unsubscribed');
+        }
       };
     }
   }

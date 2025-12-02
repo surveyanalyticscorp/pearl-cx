@@ -56,8 +56,8 @@ const App = () => {
       
       const result = await InterceptSdk.configure({
         apiKey: '3a1a6c70-12c9-4a98-8571-bdf563331449',
-        dataCenter: DataCenter.US,
-        enableDebug: true,
+        dataCenter: DataCenter.EU,
+        enableDebug: false,
       });
       
       console.log('✅ SDK Configuration result:', result);

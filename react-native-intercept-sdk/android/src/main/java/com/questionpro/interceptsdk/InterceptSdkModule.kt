@@ -30,6 +30,10 @@ class InterceptSdkModule(private val reactContext: ReactApplicationContext) : Re
 
         // Extract DataCenter (default to US)
         val dataCenterString = options.getString("dataCenter") ?: "US"
+        
+        // Extract debug setting from options (default to false)
+        val enableDebug = options.getBoolean("enableDebug")
+        
        // Map string to DataCenter enum
         val dataCenter = when (dataCenterString.uppercase()) {
             "US" -> DataCenter.US
@@ -46,7 +50,11 @@ class InterceptSdkModule(private val reactContext: ReactApplicationContext) : Re
                 DataCenter.US
             }
         }
-        Log.d("InterceptSdk", "Using DataCenter: $dataCenter")
+        
+        if (enableDebug) {
+            Log.d("InterceptSdk", "Using DataCenter: $dataCenter")
+            Log.d("InterceptSdk", "Debug mode enabled")
+        }
             
             val touchPoint = TouchPoint.Builder(dataCenter)
                 .isFlutterApp(true)
@@ -54,7 +62,9 @@ class InterceptSdkModule(private val reactContext: ReactApplicationContext) : Re
 
             QuestionProCX.getInstance().init(reactContext, touchPoint, object : IQuestionProInitCallback {
                 override fun onInitializationSuccess(s: String) {
-                    Log.d("Datta","DDDDD onInitializationSuccess: $s")
+                    if (enableDebug) {
+                        Log.d("InterceptSdk","SDK initialization success: $s")
+                    }
                     
                     // Resolve promise on successful initialization
                     val result = Arguments.createMap().apply {
@@ -66,7 +76,9 @@ class InterceptSdkModule(private val reactContext: ReactApplicationContext) : Re
                 }
 
                 override fun onInitializationFailure(s: String) {
-                    Log.d("Datta","DDDD onInitializationFailure: $s")
+                    if (enableDebug) {
+                        Log.d("InterceptSdk","SDK initialization failure: $s")
+                    }
                     
                     // Reject promise on initialization failure
                     promise.reject("INITIALIZATION_FAILED", "SDK initialization failed: $s")
