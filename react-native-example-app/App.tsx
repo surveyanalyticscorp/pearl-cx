@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import InterceptSdk from '@questionpro/react-native-survey-intercept';
+import { DataMapping } from '@questionpro/react-native-survey-intercept/lib/typescript/types';
 
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
     const subscription = InterceptSdk.onEvent((event) => {
       console.log('📱 SDK Event received:', event);
       setLastEvent(event);
+      configureSDK();
     });
 
     return () => {
@@ -93,6 +95,23 @@ const App = () => {
     }
   };
 
+  const testDataMappings = async () => {
+  try {
+    const dataMappings: DataMapping = {
+      'firstName': 'ReactNative',
+      'surname': 'DemoApp',
+      'emailAddress': 'sample@questionpro.com'
+    };
+    
+    console.log('🧪 Testing setDataMappings...');
+    const result = await InterceptSdk.setDataMappings(dataMappings);
+    console.log('✅ setDataMappings result:', result);
+  } catch (error) {
+    console.error('❌ setDataMappings error:', error);
+  }
+};
+
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -122,6 +141,13 @@ const App = () => {
           </TouchableOpacity>
 
            <TouchableOpacity 
+            style={[styles.button, styles.secondaryButton]} 
+            onPress={testDataMappings}
+          >
+            <Text style={styles.buttonText}>Map Data</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
             style={[styles.button, styles.secondaryButton]} 
             onPress={launchSurvey}
           >
