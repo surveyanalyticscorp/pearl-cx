@@ -37,4 +37,15 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.static_framework = true
 
+  # Swift Package Manager integration
+  s.prepare_command = <<-CMD
+    echo "React Native Survey Intercept SDK"
+    echo "⚠️  IMPORTANT: QuestionProCXFramework dependency required"
+    echo ""
+    echo "Add to your app via CocoaPods (Podfile):"
+    echo "pod 'QuestionProCXFramework', :git => 'https://github.com/surveyanalyticscorp/ios-cx.git', :tag => '2.2.5'"
+    echo ""
+    echo "OR add via SPM (Xcode):"
+    echo "https://github.com/surveyanalyticscorp/ios-cx.git"
+  CMD
 end

@@ -230,7 +230,7 @@ extension InterceptSdk {
     func initSDKFailed(error: String) {
         print("🔧 [iOS] QuestionPro CX SDK initialization failed: \(error)")
         
-        configureReject?("INIT_SDK_FAILED", "SDK initialization failed: \(error)", nil)
+        configureReject?("INIT_SDK_FAILED", error, nil)
         configurePromise = nil
         configureReject = nil
     }
