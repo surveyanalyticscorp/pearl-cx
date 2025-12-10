@@ -47,6 +47,7 @@ import {
   watchGenerateRefinedEmailDraft,
   updateCentralizedRootCause,
   watchUpdateCentralizedRootCause,
+  watchGetTaglist,
 } from './ClosedLoopSaga';
 import {watchGetNotification, watchReadNotification} from './notificationSaga';
 import {
@@ -109,5 +110,6 @@ export function* rootSaga() {
     fork(watchGenrateEmailDraft),
     fork(watchGenerateRefinedEmailDraft),
     fork(watchUpdateCentralizedRootCause),
+    fork(watchGetTaglist),
   ]);
 }

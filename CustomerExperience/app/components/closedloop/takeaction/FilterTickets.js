@@ -16,6 +16,10 @@ import {
   PanelHandler,
 } from '../../../routes/commonUI/BottomSheetHeader';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {updateSingleTag} from '../../../redux/actions/closedloop.actions';
 
 const FilterSection = ({title, filterData, onItemSelect, testID}) => {
   return (
@@ -31,6 +35,51 @@ const FilterSection = ({title, filterData, onItemSelect, testID}) => {
             onPress={onItemSelect}
           />
         ))}
+      </View>
+    </View>
+  );
+};
+
+const AITagsFilterSection = ({title, testID}) => {
+  const dispatch = useDispatch();
+  const aiTags = useSelector(state => state.dashboard.ticketTags);
+
+  // const [aiTagsState, setAiTagsState] = useState([
+  //   ...aiTags.filter(tag => tag.isChecked),
+  // ]);
+  const onItemSelect = useCallback((item, index) => {
+    dispatch(updateSingleTag({...item, isChecked: !item.isChecked}));
+  }, []);
+
+  let navigation = useNavigation();
+  const navigateToAiTagsModal = () => {
+    navigation.navigate('AiTagsFilter');
+  };
+  return (
+    <View style={styles.sectionContainer}>
+      <View style={{...styles.rowContainer, justifyContent: 'space-between'}}>
+        <Text style={styles.titleText}>{title}</Text>
+        <QPButton
+          style={buttonStyles.textButton}
+          textStyle={buttonStyles.textButtonTextPrimaryLarge}
+          buttonText={'Select >'}
+          onPress={navigateToAiTagsModal}
+        />
+      </View>
+
+      <View style={styles.chipContainer} testID={testID}>
+        {aiTags
+          .filter(tag => tag.isChecked)
+          .map((item, index) => (
+            <ChipItem
+              key={index}
+              textStyle={textStyles.optionText}
+              item={item}
+              title={item?.name}
+              index={index}
+              onPress={onItemSelect}
+            />
+          ))}
       </View>
     </View>
   );
@@ -81,11 +130,22 @@ const ActionButtons = ({onCancel, onApply}) => {
   );
 };
 
+const ItemSeparator = () => {
+  return (
+    <>
+      <VerticalSpaceBox multiplyBy={2} />
+      <ListItemSeparator style={{marginVertical: MarginConstants.tab1}} />
+    </>
+  );
+};
+
 const FilterTicket = ({route, navigation}) => {
   const {data, onPressHandler} = route.params;
-  const [status, setStatus] = useState([...data.status, data.status[0]]);
+  const tags = useSelector(state => state.dashboard.ticketTags);
+  const [status, setStatus] = useState(data.status);
   const [priority, setPriority] = useState(data.priority);
   const [type, setType] = useState(data.type);
+  const [aiTags, setAiTags] = useState(tags);
   const [assignToId, setAssignToId] = useState(data.assignToId);
 
   const handleStatusSelect = useCallback((item, index) => {
@@ -117,6 +177,13 @@ const FilterTicket = ({route, navigation}) => {
       })),
     );
   }, []);
+  // const handleAiTagsSelect = useCallback((item, index) => {
+  //   setAiTags(prevState =>
+  //     prevState.map((tagItem, idx) =>
+  //       idx === index ? {...tagItem, isChecked: !tagItem.isChecked} : tagItem,
+  //     ),
+  //   );
+  // }, []);
 
   const toggleMyTicketVisibility = useCallback(() => {
     setAssignToId(state => (state.length > 0 ? '' : data.userId));
@@ -134,6 +201,7 @@ const FilterTicket = ({route, navigation}) => {
       priority,
       type,
       assignToId,
+      tags: tags.filter(tag => tag.isChecked),
     };
     onPressHandler(updatedData, 'apply');
     navigateBack();
@@ -148,14 +216,13 @@ const FilterTicket = ({route, navigation}) => {
     setStatus(prevState => resetFilterState(prevState));
     setPriority(prevState => resetFilterState(prevState));
     setType(prevState => resetFilterState(prevState));
-    setAssignToId(data.userId); // Set to userId by default when canceling
+    setAssignToId(data.userId);
   }, [data.userId, resetFilterState]);
 
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <PanelHandler />
-        {/* <TitleAndCloseButton title={'Filter by'} onPressClose={navigateBack} /> */}
         <View style={styles.headerContainer}>
           <TextLabel text={'Filter by'} style={styles.headerText} />
           <CloseButton onPressClose={navigateBack} />
@@ -167,21 +234,26 @@ const FilterTicket = ({route, navigation}) => {
           onItemSelect={handleStatusSelect}
           testID="render-status"
         />
-        <VerticalSpaceBox multiplyBy={2} />
+        <ItemSeparator />
+
         <FilterSection
           title={translate('close_loop.priority')}
           filterData={priority}
           onItemSelect={handlePrioritySelect}
           testID="render-priority"
         />
-        <VerticalSpaceBox multiplyBy={2} />
+        <ItemSeparator />
         <FilterSection
           title="Type"
           filterData={type}
           onItemSelect={handleTypeSelect}
           testID="render-ticket-type"
         />
-        <VerticalSpaceBox multiplyBy={2} />
+        <ItemSeparator />
+
+        <AITagsFilterSection title={'AI Tags'} testID="render-ai-tags" />
+        <ItemSeparator />
+
         <ShowMyTicketsFilter
           assignToId={assignToId}
           userId={data.userId}

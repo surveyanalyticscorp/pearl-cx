@@ -120,6 +120,12 @@ export const getIds = items =>
     .map(id => id.id)
     .toString();
 
+export const getNames = items =>
+  items
+    .filter(item => item.isChecked === true)
+    .map(item => item.name)
+    .toString();
+
 export const createFilterState = (item, getIdsFunction) => {
   return {
     pageNumber: 1,
@@ -127,6 +133,7 @@ export const createFilterState = (item, getIdsFunction) => {
     priority: getIdsFunction(item.priority) ?? '',
     assignToId: item.assignToId,
     type: getIdsFunction(item.type) ?? '',
+    // tags: getNames(item.aiTags) ?? '',
   };
 };
 

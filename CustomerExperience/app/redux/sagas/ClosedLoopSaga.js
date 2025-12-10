@@ -69,6 +69,8 @@ import {
   POST_GENERATE_REFINED_EMAIL_DRAFT,
   CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_POSTFIX,
   CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_PREFIX,
+  CLF_GET_TAGLIST,
+  FEEDBACK,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -93,6 +95,8 @@ import {
   GET_EMAIL_TEMPLATES_RECEIVED,
   GET_LATEST_COMMENT,
   GET_ROOT_CASUES,
+  GET_TAGLIST,
+  GET_TAGLIST_RECEIVED,
   GET_TICKET_LIST_SYNC,
   GET_TICKET_LIST_SYNC_RECEIVED,
   GET_TICKET_STATUS_HISTORY,
@@ -1120,4 +1124,27 @@ export function* generateRefinedEmailDraft(action) {
 
 export function* watchGenerateRefinedEmailDraft() {
   yield takeLatest(GENERATE_REFINE_EMAIL_DRAFT, generateRefinedEmailDraft);
+}
+
+export function* getTaglist(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      getClfUrl(CLF_GET_TAGLIST + FEEDBACK + action.feedbackId),
+      getBearerTokenStatic(),
+      action.param,
+    );
+    yield put({
+      type: GET_TAGLIST_RECEIVED,
+      response: json.data,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchGetTaglist() {
+  yield takeLatest(GET_TAGLIST, getTaglist);
 }

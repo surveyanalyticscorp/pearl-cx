@@ -70,7 +70,12 @@ export const GENERATE_REFINE_EMAIL_DRAFT = 'GENERATE_REFINE_EMAIL_DRAFT';
 export const GENERATE_REFINE_EMAIL_DRAFT_RECEIVED =
   'GENERATE_REFINE_EMAIL_DRAFT_RECEIVED';
 
-export const ADD_TICKET_TAG = 'ADD_TICKET_TAG';
+export const UPDATE_TAGS = 'UPDATE_TAGS';
+export const UPDATE_SINGLE_TAG = 'UPDATE_SINGLE_TAG';
+
+export const GET_TAGLIST = 'GET_TAGLIST';
+export const GET_TAGLIST_RECEIVED = 'GET_TAGLIST_RECEIVED';
+
 export const REMOVE_TICKET_TAG = 'REMOVE_TICKET_TAG';
 export const RESET_TICKET_TAG = 'RESET_TICKET_TAG';
 
@@ -236,17 +241,17 @@ export const generateRefineEmailDraft = param => ({
   type: GENERATE_REFINE_EMAIL_DRAFT,
   param,
 });
-
-export const addTagToFilter = tagName => ({
-  type: ADD_TICKET_TAG,
-  tagName,
+export const getTaglist = ({feedbackId, param}) => ({
+  type: GET_TAGLIST,
+  feedbackId,
+  param,
 });
 
-export const removeTagFromFilter = index => ({
-  type: REMOVE_TICKET_TAG,
-  index,
+export const updateSingleTag = tag => ({
+  type: UPDATE_SINGLE_TAG,
+  tag,
 });
-
-export const resetTagFilter = () => ({
-  type: RESET_TICKET_TAG,
+export const updateTags = tags => ({
+  type: UPDATE_TAGS,
+  tags,
 });

@@ -29,6 +29,7 @@ import PushNotification from '../components/notifications/PushNotifications';
 import {CentralizedRootCause} from '../components/closedloop/TicketRootCause/CentralizedRootCause/CentralizedRootCause';
 import {OldRootCause} from '../components/closedloop/TicketRootCause/OldRootCause';
 import FilterTicket from '../components/closedloop/takeaction/FilterTickets';
+import AiTagsFilter from '../components/closedloop/takeaction/AiTagsFilter';
 
 const DateRangeTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
@@ -192,6 +193,8 @@ const CommonScreens = RootStack => {
     //   })}
     // />,
 
+    // AiTagsFilter
+
     <RootStack.Screen
       key={'TicketFilter'}
       name={'TicketFilter'}
@@ -200,6 +203,22 @@ const CommonScreens = RootStack => {
         headerShown: false,
         gestureEnabled: true,
         title: translate('filter_by') ?? 'Filter by',
+        headerTitleStyle: textStyles.headerTitleStyle,
+        ...TransitionPresets.ModalPresentationIOS,
+
+        // headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+        // headerRight: props => <View />,
+      })}
+    />,
+
+    <RootStack.Screen
+      key={'AiTagsFilter'}
+      name={'AiTagsFilter'}
+      component={AiTagsFilter}
+      options={({navigation, route}) => ({
+        headerShown: false,
+        gestureEnabled: true,
+        title: 'AI Tags',
         headerTitleStyle: textStyles.headerTitleStyle,
         ...TransitionPresets.ModalPresentationIOS,
 

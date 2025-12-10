@@ -22,7 +22,7 @@ export const TOKEN_VALIDATION_DURATION = 5;
 export const RESPONSE_READ_UNREAD_FEATURE_ACTIVATION_DATE = 'Jun 1 2024';
 export const MAX_COMMENT_LENGTH = 240;
 // set true for DEV, false for LIVE
-export const IS_DEV_MODE = false;
+export const IS_DEV_MODE = true;
 
 // export const BASE_URL = 'https://api.questionpro.com/';
 
@@ -36,7 +36,7 @@ export const DEV_BASE_URL = 'https://cxlabs3.questionpro.com/a/nativehtml';
 
 // for LIVE
 export const CLF_BASE_URL = `https://${
-  IS_DEV_MODE ? 'clfqa' : 'clf'
+  IS_DEV_MODE ? 'clfqa1' : 'clf'
 }-backend.questionpro.com/api`;
 
 export const INIT_BASE = 'https://api.questionpro.com';
@@ -165,6 +165,8 @@ export const CLF_GET_ACTION_DETAILS_POSTFIX = `/action-mails`;
 export const CLF_GET_NOTIFICATIONS = `/notifications/users/`;
 export const CLF_PATCH_READ_NOTIFCATION = `/mobile-notifications/`;
 export const NOTIFICATIONS_PER_PAGE = 50;
+
+export const CLF_GET_TAGLIST = '/mobile/tag/';
 
 export const EMAIL = 'email';
 export const PHONE = 'phone';

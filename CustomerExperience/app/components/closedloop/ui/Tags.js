@@ -8,7 +8,7 @@ import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import {Title} from './ShowTitleAndText';
 import {useDispatch} from 'react-redux';
-import {addTagToFilter} from '../../../redux/actions/closedloop.actions';
+import {updateTags} from '../../../redux/actions/closedloop.actions';
 import {useNavigation} from '@react-navigation/native';
 
 const TagItem = ({item, _}) => {
@@ -16,7 +16,7 @@ const TagItem = ({item, _}) => {
   const navigation = useNavigation();
 
   const onPress = () => {
-    dispatch(addTagToFilter(item.name));
+    dispatch(updateTags(item.name));
     if (navigation.canGoBack()) {
       navigation.goBack();
     }

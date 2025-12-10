@@ -1,4 +1,4 @@
-import {create} from 'lodash';
+import {create, get} from 'lodash';
 import {getUniqueValues, removeItemFromArray} from '../../Utils/TicketUtils';
 import {CLEAR_USER_INFO} from '../actions';
 import {
@@ -26,8 +26,11 @@ import {
   ADD_DRAFT_CENTRALIZED_ROOT_CAUSE,
   REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE,
   RESET_DRAFT_CENTRALIZED_ROOT_CAUSE,
-  ADD_TICKET_TAG,
+  UPDATE_TAGS,
   REMOVE_TICKET_TAG,
+  GET_TAGLIST,
+  GET_TAGLIST_RECEIVED,
+  UPDATE_SINGLE_TAG,
 } from '../actions/closedloop.actions';
 import {
   CLEAR_CLOSED_LOOP_TICKET_DETAILS,
@@ -575,18 +578,19 @@ const dashboardReducer = (state = initialState, action) => {
       };
     }
 
-    case ADD_TICKET_TAG: {
-      return {...state, ticketTags: [...state.ticketTags, action.tagName]};
+    case UPDATE_TAGS: {
+      return {...state, ticketTags: action.tags};
     }
 
-    case REMOVE_TICKET_TAG: {
+    case UPDATE_SINGLE_TAG: {
       return {
         ...state,
-        ticketTags: removeItemFromArray(state.ticketTags, action.index),
+        ticketTags: updatingSingleTag(state.ticketTags, action.tag),
       };
     }
-    case REMOVE_TICKET_TAG: {
-      return {...state, ticketTags: []};
+
+    case GET_TAGLIST_RECEIVED: {
+      return {...state, ticketTags: getTags(state.ticketTags, action.response)};
     }
 
     default: {
@@ -625,5 +629,31 @@ const getCurrentNPS = (segmentId, npsScoreList) => {
     element => element['storeId'] === segmentId,
   );
   return index >= 0 ? npsScoreList[index] : {};
+};
+
+const getTags = (currentTags, tags) => {
+  if (currentTags.length === 0) {
+    return tags.map(tag => ({
+      ...tag,
+      isChecked: false,
+    }));
+  }
+  if (currentTags[0].id === tags[0].id) {
+    return currentTags;
+  }
+
+  return [
+    ...currentTags,
+    ...tags.map(tag => ({
+      ...tag,
+      isChecked: false,
+    })),
+  ];
+};
+
+export const updatingSingleTag = (currentTags, tag) => {
+  return currentTags.map(t =>
+    t.id === tag.id ? {...t, isChecked: tag.isChecked} : t,
+  );
 };
 export default dashboardReducer;

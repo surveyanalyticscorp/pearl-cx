@@ -88,9 +88,9 @@ const CxDashboard = ({route, navigation}) => {
 
   const fall = new Animated.Value(1);
 
-  const openStatusBS = () => {
+  const openStatusBS = useCallback(() => {
     setStatusBottomSheetVisible(true);
-  };
+  }, []);
 
   const getSegmentData = () => {
     dispatch(
@@ -159,9 +159,9 @@ const CxDashboard = ({route, navigation}) => {
 
   const [statusBottomSheetVisible, setStatusBottomSheetVisible] =
     useState(false);
-  const onCloseStatusBottomSheet = () => {
+  const onCloseStatusBottomSheet = useCallback(() => {
     setStatusBottomSheetVisible(false);
-  };
+  }, []);
 
   return (
     <View

@@ -113,6 +113,19 @@ export const buttonStyles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: Platform.OS === 'ios' ? TextSizes.primary : TextSizes.secondary,
   },
+  textButtonTextPrimaryLarge: {
+    color: Colors.accentLight,
+    fontFamily: FontFamily.regular,
+    fontSize:
+      Platform.OS === 'ios' ? TextSizes.largeText : TextSizes.secondary2,
+  },
+
+  doneButtonText: {
+    color: Colors.accentLight,
+    fontFamily: FontFamily.regular,
+    fontSize:
+      Platform.OS === 'ios' ? TextSizes.largeText : TextSizes.secondary2,
+  },
 
   disableButton: {
     height: MarginConstants.tab1_6x,
