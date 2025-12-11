@@ -1,223 +1,196 @@
-# QuestionPro React Native Survey Intercept SDK
+# React Native Survey Intercept SDK
 
-A React Native wrapper for the QuestionPro Survey Intercept SDK, enabling seamless integration of survey functionality into your React Native applications.
+A React Native SDK wrapper for QuestionPro Survey Intercept SDK that provides JavaScript bridge to native Android and iOS survey functionality.
+
+## Architecture
+
+Following React Native >= 0.70 best practices:
+- **Native SDK handles all UI components** - Survey display and interaction managed by native SDKs
+- **JS wrapper only provides bridge** - Clean separation between React Native and native functionality
+- **Event-driven communication** - Real-time survey lifecycle events (survey_shown, survey_completed, survey_dismissed)
 
 ## Features
 
-- ✅ **Cross-platform**: Works on both iOS and Android
+- ✅ **Cross-platform**: Android Kotlin + iOS Swift bridges
 - ✅ **TypeScript Support**: Full type definitions included
-- ✅ **Event-driven**: Listen to survey events (shown, completed, dismissed)
-- ✅ **Easy Integration**: Simple API with minimal setup
-- ✅ **Native Performance**: Leverages native SDKs for optimal performance
-- ✅ **Customizable**: Support for user variables and targeting
+- ✅ **Event System**: Real-time survey lifecycle events
+- ✅ **DataCenter Support**: US, EU, CA, SG, AU, AE, SA, KSA
+- ✅ **Debug Logging**: Configurable debug mode
+- ✅ **Screen Tracking**: setScreenVisited functionality
+- ✅ **Data Mappings**: User data for survey targeting
 
 ## Installation
 
 ### 1. Install the package
 
 ```bash
-npm install @questionpro/react-native-survey-intercept
+npm install @npm-questionpro/react-native-survey-intercept
 ```
 
 or
 
 ```bash
-yarn add @questionpro/react-native-survey-intercept
+yarn add @npm-questionpro/react-native-survey-intercept
 ```
 
 ### 2. iOS Setup
 
-For iOS, you need to install the pod dependencies:
+Add the QuestionPro CX Framework to your iOS project:
 
-```bash
-cd ios && pod install
-```
-
-**Important**: Add your existing QuestionPro Survey SDK dependency to the `react-native-survey-intercept.podspec` file:
-
+#### Option 1: CocoaPods (Recommended)
+Add to your `ios/Podfile`:
 ```ruby
-# In react-native-survey-intercept.podspec
-s.dependency "QuestionProSurveySDK", "~> 1.0.0" # Replace with your SDK version
+pod 'react-native-survey-intercept', :path => '../node_modules/@npm-questionpro/react-native-survey-intercept'
+pod 'QuestionProCXFramework', :git => 'https://github.com/surveyanalyticscorp/ios-cx.git', :tag => '2.2.5'
 ```
+
+#### Option 2: Swift Package Manager
+1. Open your iOS project in Xcode
+2. Go to Project Settings > Package Dependencies
+3. Add: `https://github.com/surveyanalyticscorp/ios-cx.git`
+4. Select version `2.2.5` or later
 
 ### 3. Android Setup
 
-For Android, add your existing Survey SDK dependency to the module's `build.gradle` file:
+#### AndroidManifest.xml Configuration
 
-```gradle
-// In android/build.gradle
-dependencies {
-    implementation 'com.questionpro:survey-sdk:1.0.0' // Replace with your SDK version
-    // or for local AAR:
-    // implementation(name: 'survey-sdk', ext: 'aar')
-}
+Add the following configuration to your `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<application>
+    <!-- Add your API key -->
+    <meta-data android:name="cx_manifest_api_key"
+              android:value="your-api-key-here"/>
+    
+    <!-- Add the survey activity -->
+    <activity android:name="com.questionpro.cxlib.InteractionActivity"
+              android:theme="@android:style/Theme.Translucent.NoTitleBar"
+              android:configChanges="keyboardHidden"
+              android:windowSoftInputMode="adjustResize">
+    </activity>
+</application>
 ```
 
-### 4. Native SDK Integration
+**Important**: Replace `your-api-key-here` with your actual QuestionPro API key.
 
-#### Android Integration
-
-In your Android bridge module (`android/src/main/java/com/questionpro/interceptsdk/InterceptSdkModule.kt`), replace the TODO comments with actual calls to your Survey SDK:
-
-```kotlin
-// Example integration in configure() method:
-SurveySDK.configure(
-    context = reactApplicationContext,
-    apiKey = apiKey,
-    email = email,
-    variables = convertReadableMapToHashMap(variables),
-    callback = object : SurveySDKCallback {
-        override fun onConfigured(success: Boolean) {
-            promise.resolve(success)
-        }
-        override fun onError(error: String) {
-            promise.reject("CONFIGURE_ERROR", error)
-        }
-    }
-)
-```
-
-#### iOS Integration
-
-In your iOS bridge module (`ios/InterceptSdk.swift`), replace the TODO comments with actual calls to your Survey SDK:
-
-```swift
-// Example integration in configure() method:
-SurveySDK.configure(
-    apiKey: apiKey,
-    email: email,
-    variables: variables
-) { [weak self] success, error in
-    DispatchQueue.main.async {
-        if success {
-            resolve(true)
-        } else {
-            reject("CONFIGURE_ERROR", error?.localizedDescription ?? "Configuration failed", error)
-        }
-    }
-}
-```
 
 ## Usage
 
-### Basic Setup
+### Basic Configuration
 
 ```typescript
-import React, { useEffect } from 'react';
-import InterceptSdk from '@questionpro/react-native-survey-intercept';
+import InterceptSdk, {DataCenter} from '@npm-questionpro/react-native-survey-intercept';
+// Configure the SDK
+await InterceptSdk.configure({
+  apiKey: 'your-api-key-here',
+  dataCenter: DataCenter.US, // Optional: US, EU, CA, SG, AU, AE, SA, KSA
+  enableDebug: true // Optional: Enable debug logging
+});
+```
 
-const App = () => {
-  useEffect(() => {
-    // Configure the SDK
-    const configureSDK = async () => {
-      try {
-        const success = await InterceptSdk.configure({
-          apiKey: 'your-api-key',
-          email: 'user@example.com', // Optional
-          variables: { // Optional
-            userId: '12345',
-            userType: 'premium'
-          }
-        });
-        
-        if (success) {
-          console.log('SDK configured successfully');
-        }
-      } catch (error) {
-        console.error('Failed to configure SDK:', error);
-      }
+### Data Mappings
+
+Set user data for survey targeting and personalization:
+
+```typescript
+import InterceptSdk from '@npm-questionpro/react-native-survey-intercept';
+import { DataMapping } from '@npm-questionpro/react-native-survey-intercept';
+
+const setDataMappings = async () => {
+  try {
+    const dataMappings: DataMapping = {
+      'firstName': 'first_name',
+      'lastName': 'last_name',
+      'emailAddress': 'sample@questionpro.com'
     };
-
-    configureSDK();
-  }, []);
-
-  return (
-    // Your app content
-  );
+    
+    const result = await InterceptSdk.setDataMappings(dataMappings);
+    console.log('✅ setDataMappings result:', result);
+  } catch (error) {
+    console.error('❌ setDataMappings error:', error);
+  }
 };
+
+// Call the function
+await setDataMappings();
 ```
 
-### Listening to Events
+### View Count / Screen Visited
+
+Track screen visits to trigger surveys based on user navigation patterns.
+
+#### How to Set-up View Count Rule on QuestionPro
+
+The 'View Count' rule, found in the 'Rules set-up' section of the admin dashboard, allows administrators to control when an intercept is displayed to users based on their mobile application navigation. This rule uses two parameters:
+- **screen_name**: Specify the screen(s) to monitor  
+- **count**: Set the view threshold before the intercept is triggered
+
+**Set up the rule:**
+1. Select the rule 'view count' from the mobile intercept settings
+2. Set 'screen name' (for example: 'checkout_screen')  
+3. Set the count (After how many events you want to launch the survey)
+
+#### How to Use in the SDK
 
 ```typescript
-import { useEffect } from 'react';
-import InterceptSdk, { SurveyEvent } from '@questionpro/react-native-survey-intercept';
+import InterceptSdk from '@npm-questionpro/react-native-survey-intercept';
 
-const useInterceptSdk = () => {
-  useEffect(() => {
-    const unsubscribe = InterceptSdk.onEvent((event: SurveyEvent) => {
-      switch (event.type) {
-        case 'survey_shown':
-          console.log('Survey shown:', event.data?.surveyId);
-          break;
-        case 'survey_completed':
-          console.log('Survey completed:', event.data?.responses);
-          // Handle survey completion (e.g., show thank you message)
-          break;
-        case 'survey_dismissed':
-          console.log('Survey dismissed:', event.data?.surveyId);
-          break;
-        case 'error':
-          console.error('SDK error:', event.data?.message);
-          break;
-      }
-    });
-
-    // Cleanup
-    return unsubscribe;
-  }, []);
+const launchFeedbackSurvey = async () => {
+  try {
+    const result = await InterceptSdk.setScreenVisited('checkout_screen');
+    console.log('✅ Survey launch result:', result);
+  } catch (error) {
+    console.error('❌ Launch survey error:', error);
+  }
 };
-```
 
-### Triggering Events
-
-```typescript
-import InterceptSdk from '@questionpro/react-native-survey-intercept';
-
-// Simple event
-InterceptSdk.notifyEvent('page_view');
-
-// Event with parameters
-InterceptSdk.notifyEvent('product_purchase', {
-  productId: 'abc123',
-  price: 29.99,
-  category: 'electronics'
-});
-
-// User action events
-InterceptSdk.notifyEvent('button_click', {
-  buttonId: 'cta-button',
-  page: 'home'
-});
+// Call when user visits a specific screen
+await launchFeedbackSurvey();
 ```
 
 ## API Reference
 
-### `configure(options: ConfigureOptions): Promise<boolean>`
+### Configuration Options
 
-Configures the Survey SDK with the provided options.
+```typescript
+interface ConfigureOptions {
+  apiKey: string;           // Required: Your QuestionPro API key
+  dataCenter?: DataCenter;  // Required: Data center region
+  enableDebug?: boolean;    // Optional: Enable debug logging
+}
 
-**Parameters:**
-- `options.apiKey` (string, required): Your QuestionPro API key
-- `options.email` (string, optional): User email for targeting
-- `options.variables` (object, optional): Custom variables for survey targeting
+enum DataCenter {
+  US = 'US',    // United States (default)
+  EU = 'EU',    // Europe
+  CA = 'CA',    // Canada
+  SG = 'SG',    // Singapore
+  AU = 'AU',    // Australia
+  AE = 'AE',    // UAE
+  SA = 'SA',    // Saudi Arabia
+  KSA = 'KSA'   // Kuwait, Saudi Arabia
+}
+```
 
-**Returns:** Promise that resolves to `true` if configuration was successful
+### Methods
 
-### `notifyEvent(eventName: string, params?: EventParams): void`
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| `configure()` | `ConfigureOptions` | `Promise<SurveyResult>` | Initialize the SDK with API key and settings |
+| `setScreenVisited()` | `screenName: string` | `Promise<any>` | Track screen visits for survey targeting |
+| `setDataMappings()` | `data: DataMapping` | `Promise<any>` | Set user data for survey personalization |
 
-Notifies the SDK of an event occurrence, which may trigger survey evaluation.
 
-**Parameters:**
-- `eventName` (string): Name of the event
-- `params` (object, optional): Event parameters
 
-### `onEvent(callback: EventCallback): UnsubscribeFunction`
+## Platform Support
 
-Subscribes to events from the native SDK.
+- **React Native**: >= 0.70
+- **iOS**: >= 15.0
+- **Android**: >= API 21 (Android 5.0)
 
-**Parameters:**
-- `callback` (function): Function to call when events are received
+## Native SDK Versions
+
+- **iOS**: QuestionPro CX Framework v2.2.5+
+- **Android**: QuestionPro CX SDK v2.2.3+
 
 **Returns:** Function to unsubscribe from events
 
@@ -225,149 +198,58 @@ Subscribes to events from the native SDK.
 
 Removes all event listeners. Call this when your component unmounts.
 
-## Types
-
-### `ConfigureOptions`
-
-```typescript
-interface ConfigureOptions {
-  apiKey: string;
-  email?: string;
-  variables?: Record<string, any>;
-}
-```
-
-### `SurveyEvent`
-
-```typescript
-interface SurveyEvent {
-  type: 'survey_shown' | 'survey_completed' | 'survey_dismissed' | 'error';
-  data?: {
-    surveyId?: string;
-    responses?: Record<string, any>;
-    message?: string;
-    [key: string]: any;
-  };
-}
-```
-
-## Example Project
-
-See the `/example` directory for a complete React Native app demonstrating the SDK usage.
-
-To run the example:
-
-```bash
-cd example
-npm install
-npx react-native run-ios
-# or
-npx react-native run-android
-```
-
-## Requirements
-
-- React Native >= 0.70
-- iOS >= 11.0
-- Android API Level >= 21
-- Existing QuestionPro Survey SDK for iOS and Android
-
-## Common Integration Patterns
-
-### React Hook Pattern
-
-```typescript
-import { useEffect, useCallback } from 'react';
-import InterceptSdk, { SurveyEvent } from '@questionpro/react-native-survey-intercept';
-
-export const useSurveySDK = (apiKey: string, userEmail?: string) => {
-  const [isConfigured, setIsConfigured] = useState(false);
-
-  useEffect(() => {
-    const configure = async () => {
-      try {
-        const success = await InterceptSdk.configure({
-          apiKey,
-          email: userEmail,
-        });
-        setIsConfigured(success);
-      } catch (error) {
-        console.error('SDK configuration failed:', error);
-      }
-    };
-
-    configure();
-  }, [apiKey, userEmail]);
-
-  const trackEvent = useCallback((eventName: string, params?: Record<string, any>) => {
-    if (isConfigured) {
-      InterceptSdk.notifyEvent(eventName, params);
-    }
-  }, [isConfigured]);
-
-  return { isConfigured, trackEvent };
-};
-```
-
-### Navigation Tracking
-
-```typescript
-import { useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import InterceptSdk from '@questionpro/react-native-survey-intercept';
-
-export const useNavigationTracking = () => {
-  const navigation = useNavigation();
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      // Track page view when screen comes into focus
-      InterceptSdk.notifyEvent('page_view', {
-        screenName: navigation.getCurrentRoute()?.name,
-        timestamp: Date.now(),
-      });
-    });
-
-    return unsubscribe;
-  }, [navigation]);
-};
-```
 
 ## Troubleshooting
 
-### Common Issues
+### iOS Build Issues
 
-1. **Module not found error**: Ensure you've run `cd ios && pod install` for iOS projects
-2. **Android build fails**: Check that your Survey SDK dependency is correctly added to `android/build.gradle`
-3. **Events not firing**: Verify that the SDK is properly configured before calling `notifyEvent`
-4. **TypeScript errors**: Make sure you have the latest version installed and check for peer dependency issues
+1. **Module not found**: Ensure QuestionProCXFramework is added to your project
+2. **Pod install fails**: Try `pod install --repo-update`
+3. **Swift compilation errors**: Verify iOS deployment target >= 15.0
+
+### Android Build Issues
+
+1. **Gradle sync fails**: Check Android SDK versions in `android/build.gradle`
+2. **Kotlin compilation errors**: Ensure Kotlin version >= 1.8.0
 
 ### Debug Mode
 
-Enable debug logging by adding the following to your native SDK configuration:
+Enable debug logging to troubleshoot issues:
 
 ```typescript
-// This depends on your native SDK's debug capabilities
-InterceptSdk.configure({
+await InterceptSdk.configure({
   apiKey: 'your-api-key',
-  variables: {
-    debugMode: true // If your native SDK supports this
-  }
+  enableDebug: true
 });
 ```
 
-## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+
+## Troubleshooting
+
+### iOS Build Issues
+
+1. **Module not found**: Ensure QuestionProCXFramework is added to your project
+2. **Pod install fails**: Try `pod install --repo-update`
+3. **Swift compilation errors**: Verify iOS deployment target >= 15.0
+
+### Android Build Issues
+
+1. **Gradle sync fails**: Check Android SDK versions in `android/build.gradle`
+2. **Kotlin compilation errors**: Ensure Kotlin version >= 1.8.0
+
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License. See [LICENSE](LICENSE) file for details.
 
 ## Support
 
-For support, please contact [support@questionpro.com](mailto:support@questionpro.com) or create an issue in this repository.
+For technical support and questions:
+- **Email**: support@questionpro.com
+- **Documentation**: [QuestionPro Developer Docs](https://api.questionpro.com/)
+- **Issues**: [GitHub Issues](https://github.com/questionpro/react-native-survey-intercept/issues)
+
+---
+
+**Note**: This is a bridge SDK. All survey UI components are handled by the native QuestionPro CX SDKs, ensuring optimal performance and native user experience.
