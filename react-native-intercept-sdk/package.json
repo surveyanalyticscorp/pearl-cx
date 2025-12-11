@@ -1,6 +1,6 @@
 {
-  "name": "@questionpro/react-native-survey-intercept",
-  "version": "1.0.0",
+  "name": "@npm-questionpro/react-native-survey-intercept",
+  "version": "0.0.3",
   "description": "React Native SDK wrapper for QuestionPro Survey Intercept SDK",
   "main": "lib/commonjs/index.js",
   "files": [
@@ -21,8 +21,8 @@
     "example": "cd example && npm start"
   },
   "keywords": [
-     "react-native",
-    "questionpro", 
+    "react-native",
+    "questionpro",
     "survey",
     "intercept",
     "mobile-sdk",
@@ -37,7 +37,7 @@
   "homepage": "https://github.com/questionpro/react-native-survey-intercept#readme",
   "author": "QuestionPro <datta.kunde@questionpro.com>",
   "license": "MIT",
-   "publishConfig": {
+  "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
