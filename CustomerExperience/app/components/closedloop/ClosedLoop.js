@@ -37,8 +37,6 @@ import {baseTextStyles} from '../../styles/text.styles';
 import {useNavigation} from '@react-navigation/native';
 import {NoTicketFound} from './NoTicketFound';
 import {showSuccessFlashMessage} from '../../Utils/Utility';
-import QPBottomSheet from './takeaction/QPBottomSheet';
-import QPBottomSheetHeader from './takeaction/QPBottomSheetHeader';
 
 export const SearchIcon = () => {
   return (
@@ -198,14 +196,11 @@ export default function ClosedLoop(props) {
   console.log('STATUS_ID_FILTER', statusId);
 
   const [pageNumber, setPageNumber] = useState(1);
-  const {feedbackApiKey, feedbackID, userID} = useSelector(
-    state => state.global.userInfo,
-  );
+  const {feedbackApiKey, userID} = useSelector(state => state.global.userInfo);
   const [isPagination, setpagination] = useState(false);
-  const {authToken, isTicketLoading, range, subscriberId} = useSelector(
+  const {authToken, isTicketLoading, range} = useSelector(
     state => state.global,
   );
-  const [isSearchVisible, setSearchVisibility] = useState(false);
   const [searchText, setSearchText] = useState('');
   const initialFilterState = {
     feedbackApiKey: feedbackApiKey,
@@ -258,8 +253,6 @@ export default function ClosedLoop(props) {
     }));
     const status = statusList.map(value => ({...value, isChecked: false}));
     const type = ticketTypeList.map(value => ({...value, isChecked: false}));
-    // const managers = owners.map((value) => ({...value, isChecked: false}));
-    // const showMyTickets = true;
     const assignToId = JSON.stringify(userID);
     const userId = JSON.stringify(userID);
     return {
@@ -288,7 +281,6 @@ export default function ClosedLoop(props) {
     let tempStatusData = [];
 
     filterData.status.map(value => {
-      // console.log('STATUS_ID_FILTER', 'STATUS OBJECT', JSON.stringify(value));
       tempStatusData.push({
         ...value,
         isChecked: value.id === parseInt(statusId_),
@@ -528,38 +520,9 @@ export default function ClosedLoop(props) {
         />
         <FabAddButton onPress={onFabHandler} />
       </Animated.View>
-
-      {/* <RenderFilterBottomSheet
-        filterData={filterData}
-        visible={filterBottomSheetVisible}
-        onClose={onCloseFilter}
-        onPressHandler={handleAction}
-      /> */}
     </View>
   );
 }
-
-const RenderFilterBottomSheet = ({
-  filterData,
-  visible,
-  onClose,
-  onPressHandler,
-}) => {
-  return (
-    <QPBottomSheet
-      visible={visible}
-      onClose={onClose}
-      headerComponent={
-        <QPBottomSheetHeader
-          // headerLabel={translate('ticket_overview.filter_ticket')}
-          headerLabel={'Filter by'}
-          onClose={onClose}
-        />
-      }>
-      <FilterTicket data={filterData} onPressHandler={onPressHandler} />
-    </QPBottomSheet>
-  );
-};
 
 const styles = StyleSheet.create({
   container: {flex: 1},

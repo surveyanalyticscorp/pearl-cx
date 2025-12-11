@@ -28,6 +28,7 @@ const SelectSorting = ({data, selectedIndex, handleOnPress}) => {
   return (
     <FlatList
       style={styles.flatlist}
+      contentContainerStyle={{flexGrow: 0}}
       data={data}
       keyExtractor={(item, index) => index.toString()}
       renderItem={renderRow}

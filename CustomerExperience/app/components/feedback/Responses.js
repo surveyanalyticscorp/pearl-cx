@@ -9,7 +9,13 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import NoResponsesFound from './NoResponsesFound';
 
-const Responses = ({onRefresh, onEndReached, isLoading, testID}) => {
+const Responses = ({
+  onRefresh,
+  onEndReached,
+  isLoading,
+  testID,
+  isPagination,
+}) => {
   const navigation = useNavigation();
   const allResponses = useSelector(state => state.response.allResponses);
   const authToken = useSelector(state => state.global.authToken);
