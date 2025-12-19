@@ -11,7 +11,7 @@ import {Sizes} from '../styles/Size.constant';
 import {PaddingConstants} from '../styles/padding.constants';
 import StringUtils from '../Utils/StringUtils';
 import DeviceInfo from 'react-native-device-info';
-import {DrawerActions} from '@react-navigation/native';
+import {DrawerActions, useNavigationState} from '@react-navigation/native';
 import {translate} from '../Utils/MultilinguaUtils';
 import TicketSync from '../components/TicketSync';
 import ClosedLoopSvgIcon from '../../assets/images/closed_loop.svg';
@@ -95,12 +95,20 @@ const DrawerButtonIcon = ({name}) => (
   />
 );
 
-const DrawerButton = ({dataObj, frontIcon, title, onPress}) => {
+const DrawerButton = ({
+  dataObj,
+  frontIcon,
+  title,
+  onPress,
+  isActive = false,
+}) => {
   return (
     <Pressable onPress={onPress ?? dataObj.onPress}>
-      <View style={styles.drawerRow}>
+      <View style={[styles.drawerRow, isActive && styles.activeDrawerRow]}>
         {frontIcon ?? dataObj.frontIcon}
-        <Text style={styles.labelStyle}>{title ?? dataObj.title}</Text>
+        <Text style={[styles.labelStyle, isActive && styles.activeLabelStyle]}>
+          {title ?? dataObj.title}
+        </Text>
       </View>
     </Pressable>
   );
@@ -122,9 +130,18 @@ const DrawerContent = ({navigation}) => {
   const {logoutAction} = useLogoutProcess();
   const [logoutAlert, setLogoutAlert] = useState(false);
 
+  // Get current route name
+  const getCurrentRoute = () => {
+    const state = navigation.getState();
+    return state.routes[state.index]?.name;
+  };
+
+  const currentRoute = getCurrentRoute();
+
   const buttonData = {
     dashboard: {
       title: 'Dashboard',
+      routeName: 'Dashboard',
       frontIcon: <DrawerButtonIcon name={'dashboard'} />,
       onPress: () => {
         navigation.navigate('Dashboard');
@@ -132,6 +149,7 @@ const DrawerContent = ({navigation}) => {
     },
     responses: {
       title: 'Responses',
+      routeName: 'Responses',
       frontIcon: <DrawerResponsesIcon />,
       onPress: () => {
         navigation.navigate('Responses');
@@ -139,6 +157,7 @@ const DrawerContent = ({navigation}) => {
     },
     closedLoop: {
       title: 'Closedloop',
+      routeName: 'ClosedLoop',
       frontIcon: <ClosedLoopIcon />,
       onPress: () => {
         navigation.navigate('ClosedLoop');
@@ -146,6 +165,7 @@ const DrawerContent = ({navigation}) => {
     },
     settings: {
       title: 'Settings',
+      routeName: translate('settings.settings'),
       frontIcon: <DrawerButtonIcon name={'settings'} />,
       onPress: () => {
         navigation.navigate(translate('settings.settings'));
@@ -167,12 +187,24 @@ const DrawerContent = ({navigation}) => {
       <AppVersion />
       <UserName />
       <RenderDrawerButtons>
-        <DrawerButton dataObj={buttonData['dashboard']} />
-        <DrawerButton dataObj={buttonData['responses']} />
-        <DrawerButton dataObj={buttonData['closedLoop']} />
+        <DrawerButton
+          dataObj={buttonData['dashboard']}
+          isActive={currentRoute === buttonData['dashboard'].routeName}
+        />
+        <DrawerButton
+          dataObj={buttonData['responses']}
+          isActive={currentRoute === buttonData['responses'].routeName}
+        />
+        <DrawerButton
+          dataObj={buttonData['closedLoop']}
+          isActive={currentRoute === buttonData['closedLoop'].routeName}
+        />
       </RenderDrawerButtons>
       <RenderSettingsAndLogout>
-        <DrawerButton dataObj={buttonData['settings']} />
+        <DrawerButton
+          dataObj={buttonData['settings']}
+          isActive={currentRoute === buttonData['settings'].routeName}
+        />
         <DrawerButton dataObj={buttonData['logout']} />
         {/* <LogoutButton navigation={navigation} /> */}
         {logoutAlert &&
@@ -249,5 +281,15 @@ const styles = StyleSheet.create({
   emailView: {
     marginVertical: MarginConstants.halfTab,
     marginHorizontal: MarginConstants.tab1,
+  },
+  activeDrawerRow: {
+    backgroundColor: Colors.primary + '20', // Add transparency to primary color
+    borderRadius: 8,
+    paddingVertical: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.tab1,
+  },
+  activeLabelStyle: {
+    fontFamily: FontFamily.regular, // Make active text bold if you have medium weight
+    color: Colors.filterIconColor,
   },
 });

@@ -17,6 +17,16 @@ const TicketDetailsTitle = () => {
     Clipboard.setString(JSON.stringify(ticketId));
     showInfoFlashMessage(translate('close_loop.copied_success'));
   };
+
+  if (ticketId == null) {
+    return (
+      <TextLabel
+        style={baseTextStyles.largeRegularText}
+        color={Colors.white}
+        text={'Ticket details'}
+      />
+    );
+  }
   return (
     <Pressable
       testID="copy-ticket-id-title-button"
