@@ -617,63 +617,7 @@ export const HeaderFilter = ({
         />
       )}
       {endComponent}
-      {/* <View
-          style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
-          {getSearchIcon()}
-        </View> */}
     </View>
-  );
-};
-const SegmentSelector = ({segmentName, segmentList, onPressHandle}) => {
-  const segmentSelectorStyles = StyleSheet.create({
-    container: {flex: 1},
-    appbarTitle: {fontSize: TextSizes.primary, color: Colors.white},
-    innerContainer: {
-      flex: 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-  });
-  return segmentList && segmentList.length ? (
-    <View style={segmentSelectorStyles.container}>
-      <Pressable
-        // onPress={() => {
-        //   dispatch(setSegmentSelectorOpen(true));
-        // }}
-        onPress={onPressHandle}>
-        <View style={segmentSelectorStyles.innerContainer}>
-          <Text style={segmentSelectorStyles.appbarTitle}>{segmentName}</Text>
-
-          <SimpleLineIcon
-            name={'arrow-down'}
-            size={15}
-            color={Colors.darkGrey}
-          />
-        </View>
-      </Pressable>
-      {/* <MainDropDown
-      options={segmentOptions.map((item) => item.segmentName)}
-      defaultText={selectedSegment.segmentName}
-      onSelection={(index) => {
-        console.log(
-          `Selected : ${JSON.stringify(segmentOptions[index])}`,
-        );
-        //////
-        dispatch(setSegment(segmentOptions[index]));
-  
-        // dispatch({
-        //   type: SEGMENT_SELECTED,
-        //   payload: segmentOptions[index],
-        // });
-  
-        // updateSegment(`${segmentOptions[index]}`);
-        //////
-      }}
-    />*/}
-    </View>
-  ) : (
-    <Text style={segmentSelectorStyles.appbarTitle}>{segmentName}</Text>
   );
 };
 
@@ -744,6 +688,15 @@ const styles = StyleSheet.create({
     paddingVertical: PaddingConstants.halfTab,
     paddingHorizontal: PaddingConstants.tab2,
     backgroundColor: Colors.white,
+    // Bottom shadow
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   avatarView: {
     flexDirection: 'row',

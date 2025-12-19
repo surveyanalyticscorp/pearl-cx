@@ -38,10 +38,10 @@ const Responses = ({
     );
   };
 
-  if (allResponses.length === 0) {
+  if (allResponses.length === 0 && !isLoading) {
     return (
       <EmptyView
-        title={isLoading ? 'Loading responses' : 'No responses to display'}
+        title={'No responses to display'}
         subTitle={'Check back later'}
       />
     );
