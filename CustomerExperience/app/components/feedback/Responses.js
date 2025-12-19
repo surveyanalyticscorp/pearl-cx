@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {MarginConstants} from '../../styles/margin.constants';
-import NoResponsesFound from './NoResponsesFound';
+import {EmptyView} from '../closedloop/EmptyComment';
 
 const Responses = ({
   onRefresh,
@@ -38,6 +38,15 @@ const Responses = ({
     );
   };
 
+  if (allResponses.length === 0) {
+    return (
+      <EmptyView
+        title={isLoading ? 'Loading responses' : 'No responses to display'}
+        subTitle={'Check back later'}
+      />
+    );
+  }
+
   return (
     <View
       testID={testID ?? 'responses-component'}
@@ -50,18 +59,12 @@ const Responses = ({
         onEndReachedThreshold={0.25}
         onEndReached={onEndReached}
         refreshing={false}
-        ListEmptyComponent={
-          <NoResponsesFound
-            text={isLoading ? 'Loading responses' : 'No responses found'}
-          />
-        }
         onRefresh={onRefresh}
         extraData={[allResponses]}
         contentContainerStyle={styles.container}
         ListFooterComponent={() => (
           <View style={{paddingBottom: PaddingConstants.tab2}} />
         )}
-        // ListHeaderComponent={renderResponseFilterView}
       />
     </View>
   );
