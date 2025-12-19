@@ -18,6 +18,8 @@ import {baseTextStyles} from '../../styles/text.styles';
 import {convertDateTimeAgo} from '../../Utils/TimeUtils';
 import NewResponseDot from '../feedback/feedbackCell/NewResponseDot';
 import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
+import EmptyList from '../../routes/commonUI/EmptyList';
+import {EmptyView} from '../closedloop/EmptyComment';
 
 const NotificationItem = ({item, index}) => {
   const text = item.notificationText;
@@ -85,13 +87,12 @@ const PushNotification = props => {
   };
 
   let renderContainer = () => {
-    if (notificationLogs.length !== 0) {
+    if (notificationLogs.length === 0) {
       return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <TextLabel baseTextStyle={baseTextStyles.primaryRegularText}>
-            {translate('dashboard.no_notification_to_display')}
-          </TextLabel>
-        </View>
+        <EmptyView
+          title={translate('dashboard.no_notification_to_display')}
+          subTitle={'check back later'}
+        />
       );
     } else {
       return (

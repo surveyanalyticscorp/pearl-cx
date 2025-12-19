@@ -28,7 +28,7 @@ const TicketDetailsTitle = () => {
         text={`Ticket #${ticketId}`}
       />
       <HorizontalSpaceBox />
-      <CopyIcon size={16} tintColor={Colors.white} />
+      <CopyIcon size={14} tintColor={Colors.white} />
     </Pressable>
   );
 };
