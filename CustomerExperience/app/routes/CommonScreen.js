@@ -30,6 +30,9 @@ import {CentralizedRootCause} from '../components/closedloop/TicketRootCause/Cen
 import {OldRootCause} from '../components/closedloop/TicketRootCause/OldRootCause';
 import FilterTicket from '../components/closedloop/takeaction/FilterTickets';
 import AiTagsFilter from '../components/closedloop/takeaction/AiTagsFilter';
+import CopyTicketIdButton from '../components/closedloop/TicketOverview/components/CopyTicketIdButton';
+import SegmentSelector from '../components/SegmentSelector';
+import TicketDetailsTitle from '../components/closedloop/TicketOverview/components/TicketDetailsTitle';
 
 const DateRangeTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
@@ -266,6 +269,9 @@ const CommonScreens = RootStack => {
         headerTitleStyle: textStyles.headerTitleStyle,
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
         headerRight: props => <View />,
+        headerTitle: props => {
+          return <TicketDetailsTitle />;
+        },
         // headerRight: (props) => <EditTicket {...props} route={route} />,
         // headerLeft: (props) => <MenuIcon />,
       })}

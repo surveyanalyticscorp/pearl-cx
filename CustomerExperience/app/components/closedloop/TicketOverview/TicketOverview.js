@@ -8,7 +8,7 @@ import {translate} from '../../../Utils/MultilinguaUtils';
 import ticketOverviewStyles from './ticket.overview.style';
 import TicketOverviewContainer from './components/TicketOverviewContainer';
 import useUpdateTicket from './hooks/useUpdateTicket';
-import DescriptionView from './components/DescriptionView';
+import DetailsView from './components/DescriptionView';
 import DeleteView from './components/DeleteView';
 import ContactView from './components/ContactView';
 import StatusView from './components/StatusView';
@@ -193,10 +193,10 @@ export default function TicketOverview(props) {
             <PriorityView onPress={handlePrioritySelection} />
             <AssignedToView />
           </TicketStatusPriorityView>
-          <DescriptionView showResponseButton={isFromClosedLoopScreen}>
+          <DetailsView showResponseButton={isFromClosedLoopScreen}>
             <TicketDescription onPress={onPressDescriptionMore} />
             <Tag tags={ticketDetails?.tags ?? []} />
-          </DescriptionView>
+          </DetailsView>
           <ContactView />
           <DeleteView />
         </View>
