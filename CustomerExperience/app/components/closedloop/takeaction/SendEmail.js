@@ -46,6 +46,8 @@ import QPBottomSheet from '../takeaction/QPBottomSheet';
 import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
 import {buttonStyles} from '../../../styles/button.styles';
 import InsertLinkModal from './InsertLinkModal';
+import GestureHandleBar from '../../../routes/commonUI/GestureHandleBar';
+import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 
 const INSERT_LINK = 'customInsertLink';
 
@@ -420,8 +422,12 @@ export const SendEmail = props => {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={40}>
-        <RenderHeader />
+        <VerticalSpaceBox />
+        <GestureHandleBar />
+        <VerticalSpaceBox />
 
+        <RenderHeader />
+        <VerticalSpaceBox />
         <EmailOptions
           onPressAiButton={onPressAiButton}
           body={body}
@@ -510,7 +516,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderTopEndRadius: 5,
     borderTopStartRadius: 5,
-    marginTop: MarginConstants.tab2,
+    // marginTop: MarginConstants.tab2,
     paddingTop: PaddingConstants.tab1,
     paddingHorizontal: PaddingConstants.tab1_2x,
   },

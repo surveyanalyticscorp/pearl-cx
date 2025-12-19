@@ -1,18 +1,17 @@
 import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import DescriptionHeader from './DescriptionHeader';
 import {translate} from '../../../../Utils/MultilinguaUtils';
 import {ChildContainer} from '../../../../widgets/ParentContainer';
 import ShowTitleAndText from '../../ui/ShowTitleAndText';
-import TextLabel from '../../../../widgets/TextLabel/TextLabel';
 import TakeActionButton from './TakeActionButton';
 import {Colors} from '../../../../styles/color.constants';
 import {MarginConstants} from '../../../../styles/margin.constants';
 import {PaddingConstants} from '../../../../styles/padding.constants';
 
-const ContactView = ({onTakeActionHandler, children}) => {
-  const {panelMember, comment} = useSelector(state => state.dashboard.ticket);
+const ContactView = ({children}) => {
+  const {panelMember} = useSelector(state => state.dashboard.ticket);
 
   return (
     <View testID="contact-view" style={[styles.ticketStatusContainer]}>
@@ -47,7 +46,7 @@ const ContactView = ({onTakeActionHandler, children}) => {
 
         {children}
       </ChildContainer>
-      <TakeActionButton onTakeActionHandler={onTakeActionHandler} />
+      <TakeActionButton />
     </View>
   );
 };

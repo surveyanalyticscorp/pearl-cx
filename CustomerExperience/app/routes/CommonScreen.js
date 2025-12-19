@@ -364,6 +364,8 @@ const CommonScreens = RootStack => {
         title: 'Send email',
         headerTitleStyle: textStyles.headerTitleStyle,
         headerShown: false,
+        gestureEnabled: true,
+        ...TransitionPresets.ModalPresentationIOS,
       })}
     />,
 

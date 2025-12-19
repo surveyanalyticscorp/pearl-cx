@@ -20,34 +20,44 @@ import {
 import {FontFamily} from '../../../../styles/font.constants';
 import {TextSizes} from '../../../../styles/textsize.constants';
 import {showErrorFlashMessage} from '../../../../Utils/Utility';
+import {useNavigation} from '@react-navigation/native';
 
+const validateOtherText = selectedRootCauses => {
+  return !(
+    selectedRootCauses.isOtherChecked &&
+    selectedRootCauses.otherText.length <= 0
+  );
+};
 const Update = () => {
   const dispatch = useDispatch();
   const ticketId = useSelector(state => state.dashboard.ticket?.id);
   const feedbackApiKey = useSelector(
     state => state.global.userInfo?.feedbackApiKey,
   );
+  const navigation = useNavigation();
   const selectedRootCauses = useSelector(
     state => state.dashboard.selectedRootCauses,
   );
-  console.log('UPDATE', selectedRootCauses);
+
+  const handleUpdate = () => {
+    dispatch(
+      updateCentralizedRootCause(ticketId, selectedRootCauses, feedbackApiKey),
+    );
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  };
 
   const onPress = () => {
-    if (
-      selectedRootCauses.isOtherChecked &&
-      selectedRootCauses.otherText.length <= 0
-    ) {
+    // console.log('onPress UPDATE', selectedRootCauses);
+
+    if (!validateOtherText(selectedRootCauses)) {
       showErrorFlashMessage('Please enter the other text');
-    } else {
-      dispatch(
-        updateCentralizedRootCause(
-          ticketId,
-          selectedRootCauses,
-          feedbackApiKey,
-        ),
-      );
+      return;
     }
-    console.log('UPDATE button pressed', selectedRootCauses);
+
+    handleUpdate();
+    // console.log('UPDATE button pressed', selectedRootCauses);
   };
 
   return (
@@ -103,17 +113,16 @@ const TagItem = ({item, index}) => {
   useEffect(() => {
     setIsChecked(isTagChecked(selectedRootCauses, item.id));
   }, [selectedRootCauses, item]);
-  const updateTag = (item_, index) => {
-    const selectedSubTags = item_.rcSubTags.map(subTag => ({
+  const updateTag = (tagItem, tagIndex) => {
+    const selectedSubTags = tagItem.rcSubTags.map(subTag => ({
       id: subTag.id,
       isTag: false,
     }));
 
-    dispatch(
-      isChecked
-        ? removeDraftTags([{id: item.id, isTag: true}, ...selectedSubTags])
-        : addDraftTags([{id: item.id, isTag: true}, ...selectedSubTags]),
-    );
+    const tagsToUpdate = [{id: item.id, isTag: true}, ...selectedSubTags];
+    const action = isChecked ? removeDraftTags : addDraftTags;
+
+    dispatch(action(tagsToUpdate));
   };
   if (item.rcSubTags && item.rcSubTags.length > 0) {
     return (
@@ -172,7 +181,8 @@ const SubTagItem = ({item, index}) => {
 
   const updateSubTag = (item_, index_) => {
     const tag = {id: item_.id, isTag: false};
-    dispatch(isChecked ? removeDraftTags([tag]) : addDraftTags([tag]));
+    const action = isChecked ? removeDraftTags : addDraftTags;
+    dispatch(action([tag]));
   };
   return (
     <CheckBoxItem
@@ -204,9 +214,10 @@ export const OtherTag = () => {
 
   console.log('otherTag', isOtherChecked, otherText);
 
-  const update = () => {
-    console.log(!isOtherChecked, otherText);
-    dispatch(addDraftTags([], !isOtherChecked, otherText));
+  const toggleOtherSelection = () => {
+    const newCheckedState = !isOtherChecked;
+    console.log(newCheckedState, otherText);
+    dispatch(addDraftTags([], newCheckedState, otherText));
   };
 
   const updateOtherText = text => {
@@ -220,7 +231,7 @@ export const OtherTag = () => {
           textStyle={styles.otherText}
           isChecked={isOtherChecked}
           title={otherText}
-          onPress={update}
+          onPress={toggleOtherSelection}
         />
       </View>
     );
@@ -228,7 +239,7 @@ export const OtherTag = () => {
 
   return (
     <View style={styles.otherTag}>
-      <Pressable onPress={update}>
+      <Pressable onPress={toggleOtherSelection}>
         <CheckBox isChecked={isOtherChecked} />
       </Pressable>
       <TextInput
@@ -264,8 +275,8 @@ export const CentralizedRootCause = props => {
       <FlatList
         style={styles.flatList}
         data={centralizedRootCauseList}
-        contentContainerStyle={{flexGrow: 0}}
-        listKey={`rootCauses-CentralizedRootCause`}
+        contentContainerStyle={styles.flatListContent}
+        listKey={'rootCauses-CentralizedRootCause'}
         renderItem={({item, index}) => (
           <RootCauseItem index={index} item={item} />
         )}
@@ -288,6 +299,9 @@ const styles = StyleSheet.create({
   flatList: {
     flex: 1,
     marginHorizontal: MarginConstants.tab1,
+  },
+  flatListContent: {
+    flexGrow: 0,
   },
 
   tag: {

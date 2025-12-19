@@ -19,17 +19,8 @@ import AssigneeBottomSheet from './components/AssigneeBottomSheet';
 import {getClosedLoopTicketItem} from '../../../redux/actions/dashboard.actions';
 import QPBottomSheet from '../takeaction/QPBottomSheet';
 import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
-import TicketTakeAction from '../takeaction/TIcketTakeAction';
-import useActionHandler from './components/useActionHandler';
-import ShowTitleAndText, {Title} from '../ui/ShowTitleAndText';
-import {
-  CommentText,
-  getFoldedDescriptionText,
-  getFoldedText,
-} from '../TicketComments';
-import StringUtils from '../../../Utils/StringUtils';
-import TextLabel from '../../../widgets/TextLabel/TextLabel';
-import {get} from 'lodash';
+import {Title} from '../ui/ShowTitleAndText';
+import {CommentText, getFoldedDescriptionText} from '../TicketComments';
 import {DescriptionDetails} from './components/DescriptionDetails';
 import {Tag} from '../ui/Tags';
 
@@ -53,8 +44,6 @@ const DescriptionBottomSheet = ({isVisible, onClose, onPress}) => {
 };
 const TicketDescription = ({onPress}) => {
   const {comment} = useSelector(state => state.dashboard.ticket);
-  const temp =
-    "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum";
   if (comment && comment.length > 0) {
     return (
       <View>
@@ -70,7 +59,7 @@ const TicketDescription = ({onPress}) => {
 };
 
 export default function TicketOverview(props) {
-  const {handleTicketAction} = useActionHandler();
+  // const {handleTicketAction} = useActionHandler();
   const [descriptionBottomSheetVisible, setDescriptionBottomSheetVisible] =
     useState(false);
   const onCloseDescriptionBottomSheet = () => {
@@ -80,8 +69,8 @@ export default function TicketOverview(props) {
   const onPressDescriptionMore = () => {
     setDescriptionBottomSheetVisible(true);
   };
-  const [actionBottomSheetVisible, setActionBottomSheetVisible] =
-    useState(false);
+  // const [actionBottomSheetVisible, setActionBottomSheetVisible] =
+  //   useState(false);
   const isFromClosedLoopScreen =
     translate('dashboard.closed_loop') === props.route.params.prevScreen;
 
@@ -109,10 +98,10 @@ export default function TicketOverview(props) {
     setStatusBottomSheetVisible(false);
   };
 
-  const fall = new Animated.Value(1);
-  const onTakeActionHandler = () => {
-    setActionBottomSheetVisible(true);
-  };
+  // const fall = new Animated.Value(1);
+  // const onTakeActionHandler = () => {
+  //   setActionBottomSheetVisible(true);
+  // };
   const handleStatusSelection = () => {
     setStatusBottomSheetVisible(true);
   };
@@ -172,20 +161,20 @@ export default function TicketOverview(props) {
     }, 2000);
   }, [dispatch, ticketDetails.id, feedbackApiKey]);
 
-  const onCloseActionBottomSheet = () => {
-    setActionBottomSheetVisible(false);
-  };
+  // const onCloseActionBottomSheet = () => {
+  //   setActionBottomSheetVisible(false);
+  // };
 
-  const handleActionPress = useCallback(
-    item => {
-      console.log('onPressAction', item);
-      setActionBottomSheetVisible(false);
-      handleTicketAction(item);
-    },
-    [handleTicketAction],
-  );
+  // const handleActionPress = useCallback(
+  //   item => {
+  //     console.log('onPressAction', item);
+  //     setActionBottomSheetVisible(false);
+  //     handleTicketAction(item);
+  //   },
+  //   [handleTicketAction],
+  // );
 
-  const onPressAction = handleActionPress;
+  // const onPressAction = handleActionPress;
 
   const [assigneeBottomSheetVisible, setAssigneeBottomSheetVisible] =
     useState(false);
@@ -195,9 +184,6 @@ export default function TicketOverview(props) {
   return (
     <TicketOverviewContainer>
       <Animated.ScrollView
-        style={{
-          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-        }}
         refreshControl={
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
         }>
@@ -211,7 +197,7 @@ export default function TicketOverview(props) {
             <TicketDescription onPress={onPressDescriptionMore} />
             <Tag tags={ticketDetails?.tags ?? []} />
           </DescriptionView>
-          <ContactView onTakeActionHandler={onTakeActionHandler} />
+          <ContactView />
           <DeleteView />
         </View>
       </Animated.ScrollView>
@@ -227,7 +213,7 @@ export default function TicketOverview(props) {
         onClose={onCloseAssigneeBottomSheet}
         visible={assigneeBottomSheetVisible}
       />
-      <QPBottomSheet
+      {/* <QPBottomSheet
         visible={actionBottomSheetVisible}
         onClose={onCloseActionBottomSheet}
         headerComponent={
@@ -237,7 +223,7 @@ export default function TicketOverview(props) {
           />
         }>
         <TicketTakeAction onPress={onPressAction} />
-      </QPBottomSheet>
+      </QPBottomSheet> */}
       <DescriptionBottomSheet
         onClose={onCloseDescriptionBottomSheet}
         isVisible={descriptionBottomSheetVisible}
