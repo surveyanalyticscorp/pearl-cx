@@ -285,8 +285,7 @@ const styles = StyleSheet.create({
   activeDrawerRow: {
     backgroundColor: Colors.primary + '20', // Add transparency to primary color
     borderRadius: 8,
-    paddingVertical: PaddingConstants.tab1,
-    paddingHorizontal: PaddingConstants.tab1,
+    paddingVertical: PaddingConstants.halfTab,
   },
   activeLabelStyle: {
     fontFamily: FontFamily.regular, // Make active text bold if you have medium weight

@@ -19,7 +19,7 @@ import {convertDateTimeAgo} from '../../Utils/TimeUtils';
 import NewResponseDot from '../feedback/feedbackCell/NewResponseDot';
 import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
 import EmptyList from '../../routes/commonUI/EmptyList';
-import {EmptyView} from '../closedloop/EmptyComment';
+import {EmptyView} from '../closedloop/EmptyVIew';
 
 const NotificationItem = ({item, index}) => {
   const text = item.notificationText;

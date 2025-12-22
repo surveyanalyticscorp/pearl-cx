@@ -37,7 +37,7 @@ import SendButton from '../../widgets/SendButton';
 import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
 import EmptyList from '../../routes/commonUI/EmptyList';
-import {EmptyView} from './EmptyComment';
+import {EmptyView} from './EmptyVIew';
 export function getFoldedText(text, MAX_WORD_LENGTH = 10) {
   if (StringUtils.getWords(text).length > MAX_WORD_LENGTH) {
     return `${StringUtils.getWords(text).slice(0, MAX_WORD_LENGTH).join(' ')}

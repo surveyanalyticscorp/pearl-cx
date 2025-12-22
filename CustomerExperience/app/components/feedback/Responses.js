@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {MarginConstants} from '../../styles/margin.constants';
-import {EmptyView} from '../closedloop/EmptyComment';
+import {EmptyView} from '../closedloop/EmptyVIew';
 
 const Responses = ({
   onRefresh,
