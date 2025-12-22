@@ -44,7 +44,9 @@ const Update = () => {
       updateCentralizedRootCause(ticketId, selectedRootCauses, feedbackApiKey),
     );
     if (navigation.canGoBack()) {
-      navigation.goBack();
+      navigation.navigate('TicketDetails', {
+        selectedTab: 'root_cause.root_cause',
+      });
     }
   };
 

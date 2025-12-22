@@ -34,6 +34,7 @@ export default function TicketDetails(props) {
   const ticketItem = props.route.params.ticketItem;
   const prevScreen = props.route.params.prevScreen;
   const notificationId = props.route.params.notificationId;
+  const selectedTab = props.route.params?.selectedTab;
 
   const dispatch = useDispatch();
   const windowDimensions = useWindowDimensions();
@@ -62,11 +63,11 @@ export default function TicketDetails(props) {
     [notificationId, ticketItem.id],
   );
 
-  useEffect(() => {
-    props.navigation.setOptions({
-      title: `Ticket #${ticketItem.id}`,
-    });
-  }, [props.navigation, ticketItem.id]);
+  // useEffect(() => {
+  //   props.navigation.setOptions({
+  //     title: `Ticket #${ticketItem.id}`,
+  //   });
+  // }, [props.navigation, ticketItem.id]);
 
   useEffect(() => {
     if (authToken) {
@@ -80,6 +81,7 @@ export default function TicketDetails(props) {
     <RenderSpinner />
   ) : (
     <TicketTabs.Navigator
+      initialRouteName={selectedTab ? translate(selectedTab) : translate('close_loop.overview')}
       tabBarOptions={{
         labelStyle: {
           width: windowDimensions.width / 4,

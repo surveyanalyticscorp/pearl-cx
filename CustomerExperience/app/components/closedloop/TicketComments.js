@@ -405,6 +405,87 @@ const CommentBox = () => {
   );
 };
 
+const CommentBox2 = () => {
+  const authToken = useSelector(state => state.global.authToken);
+  const ticketId = useSelector(state => state.dashboard.ticket.id);
+  const dispatch = useDispatch();
+  const textInputRef = useRef();
+  const parentComment = useSelector(state => state.dashboard.parentComment);
+  const {emailAddress, firstName, lastName, userID} = useSelector(
+    state => state.global.userInfo,
+  );
+  const [commentText, setCommentText] = useState('');
+  const [textInputHeight, setTextInputHeight] = useState(0);
+  // const userInfo = useSelector(state => state.global.userInfo);
+  const UIalignItems = textInputHeight < 48 ? 'center' : 'flex-end';
+  // console.log('USER_INFO', JSON.stringify(userInfo));
+
+  // const marginForCommentBox = parentId > 0 ? MarginConstants.tab4 : 0;
+
+  useEffect(() => {
+    if (parentComment.isFocused) {
+      textInputRef.current.focus();
+    }
+  }, [parentComment]);
+
+  const commentState = {
+    commentBy: `${firstName} ${lastName}`.trim(), //mehedi.hasan
+    userName: `${firstName} ${lastName}`.trim(),
+    userEmailAddress: `${emailAddress}`,
+    userId: userID,
+    ticketId: ticketId,
+    parentId: parentComment.id,
+    subscriberId: global.subscriberId,
+  };
+
+  const onChangeCommentHandler = text => {
+    setCommentText(text);
+  };
+
+  const handleOnSubmit = () => {
+    if (StringUtils.isEmptyOrNull(commentText) || commentText.length === 0) {
+      return;
+    }
+    console.log(
+      JSON.stringify({COMMENT_STATE: commentState, text: commentText}),
+    );
+
+    dispatch(
+      postAddTicketComment(
+        authToken,
+        {...commentState, text: commentText, parentId: parentComment.id},
+        ticketId,
+      ),
+    );
+    dispatch(resetParentComment());
+    setCommentText('');
+  };
+
+  return (
+    <CommentBoxParentContainer
+      textInputHeight={textInputHeight}
+      UIalignItems={UIalignItems}>
+      <CommentBoxChildContainer UIalignItems={UIalignItems}>
+        {console.log('KEYBOARD')}
+        <CommentTextInput
+          ref={textInputRef}
+          defaultValue={commentText}
+          textInputHeight={textInputHeight}
+          setTextInputHeight={setTextInputHeight}
+          onChangeHandler={onChangeCommentHandler}
+          hasParentId={parentComment.id > 0}
+        />
+        <TextLengthCount
+          textLength={commentText.length}
+          maxCountLength={MAX_COMMENT_LENGTH}
+        />
+      </CommentBoxChildContainer>
+      <HorizontalSpaceBox />
+      <SendButton handleOnSubmit={handleOnSubmit} />
+    </CommentBoxParentContainer>
+  );
+};
+
 const ShowFlatList = ({data, onRefresh_, refreshing_}) => {
   const ticketComments = useSelector(state => state.dashboard.ticketComments);
 
@@ -468,7 +549,7 @@ export default function TicketComments(props) {
         keyboardVerticalOffset={
           Platform.OS === 'ios' ? 130 : MarginConstants.tab4 * 40
         }>
-        <CommentBox />
+        <CommentBox2 />
       </KeyboardAvoidingView>
     </Animated.View>
   );
