@@ -964,7 +964,6 @@ export function* updateCentralizedRootCause(action) {
         response: json,
       });
       fetchClosedLoopTicketItem(action);
-      showSuccessFlashMessage(json.message ?? 'Updated');
     }
   } catch (error) {
     showErrorFlashMessage(

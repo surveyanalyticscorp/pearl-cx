@@ -159,6 +159,11 @@ export const updateCentralizedRootCause = (
   feedbackApiKey,
 });
 
+export const resetCentralizedRootCause = () => ({
+  type: CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED,
+  response: {},
+});
+
 export const addDraftTags = (tagList, isOtherChecked, otherText) => ({
   type: ADD_DRAFT_CENTRALIZED_ROOT_CAUSE,
   tagList,

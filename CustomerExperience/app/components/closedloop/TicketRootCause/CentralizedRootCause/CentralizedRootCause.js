@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {use, useEffect, useState} from 'react';
 import {StyleSheet, View, FlatList, Pressable, TextInput} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {baseTextStyles} from '../../../../styles/text.styles';
@@ -15,11 +15,15 @@ import {isTagChecked, getTagCountFromSelectedList} from '../utils';
 import {
   addDraftTags,
   removeDraftTags,
+  resetCentralizedRootCause,
   updateCentralizedRootCause,
 } from '../../../../redux/actions/closedloop.actions';
 import {FontFamily} from '../../../../styles/font.constants';
 import {TextSizes} from '../../../../styles/textsize.constants';
-import {showErrorFlashMessage} from '../../../../Utils/Utility';
+import {
+  showErrorFlashMessage,
+  showSuccessFlashMessage,
+} from '../../../../Utils/Utility';
 import {useNavigation} from '@react-navigation/native';
 
 const validateOtherText = selectedRootCauses => {
@@ -34,20 +38,30 @@ const Update = () => {
   const feedbackApiKey = useSelector(
     state => state.global.userInfo?.feedbackApiKey,
   );
+  const updateResponse = useSelector(
+    state => state.dashboard.centralizedRootCauseUpdateStatus,
+  );
   const navigation = useNavigation();
   const selectedRootCauses = useSelector(
     state => state.dashboard.selectedRootCauses,
   );
 
+  useEffect(() => {
+    if (updateResponse?.status === 'success') {
+      showSuccessFlashMessage(updateResponse?.message ?? 'Updated');
+      dispatch(resetCentralizedRootCause());
+      if (navigation.canGoBack()) {
+        navigation.navigate('TicketDetails', {
+          selectedTab: 'root_cause.root_cause',
+        });
+      }
+    }
+  }, [updateResponse, navigation, dispatch]);
+
   const handleUpdate = () => {
     dispatch(
       updateCentralizedRootCause(ticketId, selectedRootCauses, feedbackApiKey),
     );
-    if (navigation.canGoBack()) {
-      navigation.navigate('TicketDetails', {
-        selectedTab: 'root_cause.root_cause',
-      });
-    }
   };
 
   const onPress = () => {
