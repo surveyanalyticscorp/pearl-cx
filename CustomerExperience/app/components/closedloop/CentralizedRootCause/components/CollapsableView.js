@@ -33,14 +33,14 @@ const Collapsible = ({
   ).current;
 
   const toggle = () => {
+    const nextState = !isOpen;
+    setIsOpen(nextState);
+
     Animated.timing(animatedHeight, {
-      toValue: isOpen ? 0 : contentHeight,
+      toValue: nextState ? contentHeight : 0,
       duration: 250,
       useNativeDriver: false,
-    }).start(() => {
-      const next = !isOpen;
-      setIsOpen(next);
-    });
+    }).start();
   };
 
   const onMeasure = e => {
@@ -74,13 +74,18 @@ const Collapsible = ({
       </Pressable>
 
       {/* Off-screen measurement of content */}
-      <View style={styles.hiddenContent} onLayout={onMeasure}>
+      <View
+        style={styles.hiddenContent}
+        onLayout={onMeasure}
+        pointerEvents="none">
         {children}
       </View>
 
       {/* Animated visible content */}
-      <Animated.View style={{height: animatedHeight, overflow: 'hidden'}}>
-        <View pointerEvents={isOpen ? 'auto' : 'none'}>{children}</View>
+      <Animated.View
+        style={{height: animatedHeight, overflow: 'hidden'}}
+        pointerEvents={isOpen ? 'auto' : 'none'}>
+        {isOpen ? children : null}
       </Animated.View>
     </View>
   );

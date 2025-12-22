@@ -81,7 +81,9 @@ export default function TicketDetails(props) {
     <RenderSpinner />
   ) : (
     <TicketTabs.Navigator
-      initialRouteName={selectedTab ? translate(selectedTab) : translate('close_loop.overview')}
+      initialRouteName={
+        selectedTab ? translate(selectedTab) : translate('close_loop.overview')
+      }
       tabBarOptions={{
         labelStyle: {
           width: windowDimensions.width / 4,
