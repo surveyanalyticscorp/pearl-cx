@@ -1,5 +1,11 @@
 import React, {useState, useCallback} from 'react';
-import {View, FlatList, ScrollView, RefreshControl} from 'react-native';
+import {
+  View,
+  FlatList,
+  ScrollView,
+  RefreshControl,
+  StyleSheet,
+} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {NoItemsFound} from '../../../routes/commonUI/CommonUI';
@@ -10,11 +16,13 @@ import SelectSorting from '../takeaction/SelectSorting';
 import {baseTextStyles} from '../../../styles/text.styles';
 import ActivityText from '../../../widgets/closedloopWidget/ActivityText';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
-import SortingToggleButton from '../../../widgets/closedloopWidget/SortingToggleButton';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 import styles from './ticketActivity.style';
 import QPBottomSheet from '../takeaction/QPBottomSheet';
 import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
+import {MarginConstants} from '../../../styles/margin.constants';
+import DropDownButton from '../takeaction/DropDownButton';
+import QPDropDownMenu from '../takeaction/QPDropDownMenu';
 
 const TicketActivityContainer = ({children}) => {
   return <View style={styles.rootContainer}>{children}</View>;
@@ -50,14 +58,6 @@ export function getTicketActivityList(list, item) {
   }
 }
 
-const SortingView = ({onPress, text}) => {
-  return (
-    <View style={styles.sortingView}>
-      <SortingToggleButton onPress={onPress} text={text} />
-    </View>
-  );
-};
-
 export default function TicketActivity(props) {
   const sortingList = [
     {id: 0, title: translate('activity.latest').toLocaleLowerCase()},
@@ -77,6 +77,7 @@ export default function TicketActivity(props) {
   const ticketActivityList = useSelector(
     state => state.dashboard.ticketActivity,
   );
+  const [dropDownPosition, setDropDownPosition] = useState({x: 0, y: 0});
 
   const openSortingBottomSheet = () => {
     setSortingBottomSheetVisible(true);
@@ -104,10 +105,22 @@ export default function TicketActivity(props) {
   };
   return (
     <TicketActivityContainer style={styles.rootContainer}>
-      <SortingView
-        onPress={openSortingBottomSheet}
-        text={sortingList[currentSortingIndex].title}
-      />
+      <View style={activityStyles.sortingView}>
+        <DropDownButton
+          label={sortingList[currentSortingIndex].title}
+          onPress={openSortingBottomSheet}
+          isOpen={sortingBottomSheetVisible}
+          style={{margin: MarginConstants.tab1}}
+          onLayout={event => {
+            const {height, x, y} = event.nativeEvent.layout;
+            console.log('DropDownButton height:', height, 'y:', y, 'x:', x);
+            setDropDownPosition({
+              x: x,
+              y: height * 4,
+            });
+          }}
+        />
+      </View>
 
       <FlatList
         testID="flatlist-activity"
@@ -125,7 +138,7 @@ export default function TicketActivity(props) {
         keyExtractor={item => JSON.stringify(item.id)}
       />
 
-      <QPBottomSheet
+      {/* <QPBottomSheet
         visible={sortingBottomSheetVisible}
         onClose={onCloseSortingBottomSheet}
         headerComponent={
@@ -142,7 +155,36 @@ export default function TicketActivity(props) {
             onCloseSortingBottomSheet();
           }}
         />
-      </QPBottomSheet>
+      </QPBottomSheet> */}
+
+      <QPDropDownMenu
+        visible={sortingBottomSheetVisible}
+        onClose={() => setSortingBottomSheetVisible(false)}
+        anchorPosition={dropDownPosition}
+        anchorType="top"
+        items={sortingList.map(item => item.title)}
+        onSelectItem={selectedTitle => {
+          const selectedIndex = sortingList.findIndex(
+            item => item.title === selectedTitle,
+          );
+          if (selectedIndex !== -1) {
+            setCurrentIndex(selectedIndex);
+          }
+          setSortingBottomSheetVisible(false);
+        }}
+        selectedItem={sortingList[currentSortingIndex].title}
+      />
     </TicketActivityContainer>
   );
 }
+
+const activityStyles = StyleSheet.create({
+  sortingView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'flex-start',
+    marginBottom: MarginConstants.halfTab,
+    backgroundColor: Colors.white,
+  },
+});

@@ -23,6 +23,8 @@ import {Title} from '../ui/ShowTitleAndText';
 import {CommentText, getFoldedDescriptionText} from '../TicketComments';
 import {DescriptionDetails} from './components/DescriptionDetails';
 import {Tag} from '../ui/Tags';
+import TicketDetailsTitle from './components/TicketDetailsTitle';
+import TicketIdCopy from './components/TicketIdCopy';
 
 const TicketStatusPriorityView = ({children}) => {
   return (
@@ -194,6 +196,7 @@ export default function TicketOverview(props) {
             <AssignedToView />
           </TicketStatusPriorityView>
           <DetailsView showResponseButton={isFromClosedLoopScreen}>
+            <TicketIdCopy />
             <TicketDescription onPress={onPressDescriptionMore} />
             <Tag tags={ticketDetails?.tags ?? []} />
           </DetailsView>

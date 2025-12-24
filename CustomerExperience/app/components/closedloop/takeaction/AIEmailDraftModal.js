@@ -1,33 +1,15 @@
-import React, {useEffect, useState, useCallback, useRef} from 'react';
-import {
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily} from '../../../styles/font.constants';
-import {FaIcon, IonIcon} from '../../../Utils/IconUtils';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  AI_ROUTER_API_KEY,
-  AI_ROUTER_API_URL,
-  REFINE_DEFAULT,
-} from '../../../api/Constant';
-import {apiHandler} from '../../../api/ApiHandler';
-import QPSpinner from '../../../widgets/QPSpinner';
-import {showErrorFlashMessage} from '../../../Utils/Utility';
+import {REFINE_DEFAULT} from '../../../api/Constant';
 import {MarginConstants} from '../../../styles/margin.constants';
-import StringUtils from '../../../Utils/StringUtils';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
 import {EmailBodyTextView} from './sendEmail/AiEmailBodyTextView';
-import QPBottomSheet from './QPBottomSheet';
-import QPBottomSheetHeader from './QPBottomSheetHeader';
 import {HorizontalSpaceBox} from '../../../widgets/SpaceBox';
 import EndAlignedView from '../../../routes/commonUI/EndAlignedView';
 import StartAlignedView from '../../../routes/commonUI/StartAlignedView';
@@ -38,8 +20,8 @@ import {
 } from '../../../redux/actions/closedloop.actions';
 import QPLoader from '../../../widgets/QPLoader';
 import QPAIIcon from '../../../../assets/images/qp_ai.svg';
-import DropDownIcon from '../../../../assets/images/dropdown_icon.svg';
 import RegenerateIcon from '../../../../assets/images/regenerate_icon.svg';
+import DropDownButton from './DropDownButton';
 
 const RenderAILogo = () => {
   return (
@@ -61,29 +43,6 @@ const RenderLoadingSpinner = ({isLoading}) => {
     </View>
   );
 };
-
-function DropDownButton({label, onPress, isOpen, onLayout}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      onLayout={onLayout}
-      style={styles.dropDownButton}>
-      <DropDownIcon
-        height={MarginConstants.tab1_2x}
-        width={MarginConstants.tab1_2x}
-        color={Colors.filterIconColor}
-      />
-      <Text style={{...styles.chipButtonText, color: Colors.filterIconColor}}>
-        {StringUtils.uppercaseFirstChar(label)}
-      </Text>
-      <FaIcon
-        name={isOpen ? 'caret-down' : 'caret-up'}
-        size={MarginConstants.tab1_2x}
-        color={Colors.filterIconColor}
-      />
-    </Pressable>
-  );
-}
 
 function RegenerateButton({onPress}) {
   return (
@@ -242,6 +201,7 @@ const AIEmailDraftModal = ({onClose, setEmailBody}) => {
       <EmailGenarationActionContainer>
         <StartAlignedView>
           <DropDownButton
+            hasIcon={true}
             label={draftType}
             onPress={onPressDropDown}
             isOpen={isDropDownOpen}
@@ -260,6 +220,7 @@ const AIEmailDraftModal = ({onClose, setEmailBody}) => {
         visible={isDropDownOpen}
         onClose={() => setIsDropDownOpen(false)}
         anchorPosition={dropDownPosition}
+        anchorType="bottom"
         items={dropDownItems}
         onSelectItem={onSelectDropDownItem}
         selectedItem={draftType}

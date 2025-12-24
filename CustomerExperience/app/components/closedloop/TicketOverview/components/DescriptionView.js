@@ -8,7 +8,6 @@ import DescriptionHeader from './DescriptionHeader';
 import {ChildContainer} from '../../../../widgets/ParentContainer';
 import {translate} from '../../../../Utils/MultilinguaUtils';
 import ticketOverviewStyles from '../ticket.overview.style';
-import CopyTicketIdButton from './CopyTicketIdButton';
 import NPSScoreComponent from './NPSScoreComponent';
 import ConditionalResponseButton from './ConditionalResponseButton';
 
@@ -22,10 +21,7 @@ const DetailsView = ({showResponseButton, children}) => {
     <View
       testID="description-view"
       style={ticketOverviewStyles.ticketStatusContainer}>
-      <View style={ticketOverviewStyles.rowContainer}>
-        <DescriptionHeader text={'Details'} />
-        <CopyTicketIdButton />
-      </View>
+      <DescriptionHeader text={'Details'} />
       <ChildContainer style={{paddingHorizontal: 0}}>
         <ShowTitleAndText
           title={translate('close_loop.origin_segment')}

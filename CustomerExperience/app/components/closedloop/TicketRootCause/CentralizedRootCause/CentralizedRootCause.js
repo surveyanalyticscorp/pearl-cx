@@ -1,5 +1,12 @@
-import React, {use, useEffect, useState} from 'react';
-import {StyleSheet, View, FlatList, Pressable, TextInput} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  Platform,
+  View,
+  FlatList,
+  Pressable,
+  TextInput,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {baseTextStyles} from '../../../../styles/text.styles';
 import {VerticalSpaceBox} from '../../../../widgets/SpaceBox';
@@ -287,7 +294,7 @@ export const CentralizedRootCause = props => {
   );
 
   return (
-    <SafeAreaView style={styles.rootContainer}>
+    <View style={styles.rootContainer}>
       <FlatList
         style={styles.flatList}
         data={centralizedRootCauseList}
@@ -301,7 +308,7 @@ export const CentralizedRootCause = props => {
       />
 
       <Update />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -361,9 +368,11 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: 4,
     borderTopEndRadius: 4,
     height: PaddingConstants.tab1_6x,
+    paddingHorizontal: PaddingConstants.tab1,
   },
   otherText: {
     ...baseTextStyles.primaryRegularText,
+    textAlign: 'left',
   },
   addButton: {
     marginHorizontal: MarginConstants.tab1,

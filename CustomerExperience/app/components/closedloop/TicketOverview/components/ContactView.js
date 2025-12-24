@@ -46,7 +46,7 @@ const ContactView = ({children}) => {
 
         {children}
       </ChildContainer>
-      <TakeActionButton />
+      {panelMember?.email?.length > 0 ? <TakeActionButton /> : <View />}
     </View>
   );
 };

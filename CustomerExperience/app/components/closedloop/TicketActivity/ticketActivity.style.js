@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 
   rootContainer: {
     flex: 1,
-    margin: MarginConstants.tab1,
+    backgroundColor: Colors.white,
   },
 
   commentFooter: {
@@ -44,9 +44,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: Colors.white,
     margin: MarginConstants.tab1,
-    borderRadius: 5,
+    borderRadius: 4,
     padding: MarginConstants.tab1_2x,
+    // Shadow for iOS
+    shadowColor: Colors.black || '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
+
   renderItemContainerStyle: {
     flex: 1,
     justifyContent: 'center',
@@ -83,12 +93,7 @@ const styles = StyleSheet.create({
     marginStart: MarginConstants.halfTab,
     textAlign: 'right',
   },
-  sortingView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    marginBottom: MarginConstants.halfTab,
-  },
+
   contentContainer: {backgroundColor: Colors.white, height: '100%'},
 });
 
