@@ -47,7 +47,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
                     self.launchSurveyOnApiSuccess(withURL: response)
                     
                 } else {
-                    self.iView?.removeFromSuperview()
+                    self.closeSurveyWindow()
                     LogUtils.printMessage(logTag: LogTag.LOG_ERROR, message: "❌ surveyURL is missing or empty")
                 }
             } else {
@@ -197,11 +197,36 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     }
     
     public func launchFeedbackSurvey(touchPoint: TouchPoint) {
+        verifyRestingPeriodAndLaunchSurvey(touchPoint: touchPoint)
+    }
+    
+    private func verifyRestingPeriodAndLaunchSurvey(touchPoint: TouchPoint) {
+        //Check if this survey is launched previously. If yes then check if resting period(no of days) is over since last launch.
+        if (CacheUtils.getIsSurveyLaunched(key: String(touchPoint.surveyId))) {
+            var lastSurveyLaunchedTimestamp: Int64 = CacheUtils.getInt64(key: kSurveyLaunchedTimeInMilliseonds + String(touchPoint.surveyId)) ?? 0
+            var restingPeriodTimeInMilliseconds: Int64 = (Int64(touchPoint.restingPeriodInDays ?? restingPeriodInDays) * Date.msPerMinute)
+            var restingPeriodTimestamp : Int64 = lastSurveyLaunchedTimestamp + restingPeriodTimeInMilliseconds
+            if (Date().currentTimeInMilliseconds > restingPeriodTimestamp) {
+                fetchSurveyURLandLaunchSurvey(touchPoint: touchPoint)
+            }
+        } else { //if survey has not lanched yet, go ahead and fetch survey URL and launch survey.
+            fetchSurveyURLandLaunchSurvey(touchPoint: touchPoint)
+        }
+        
+    }
+    
+    private func fetchSurveyURLandLaunchSurvey(touchPoint: TouchPoint) {
         currentTouchPoint = touchPoint
         self.getAPIResponse(touchPoint: touchPoint)
     }
     
     public func closeSurveyWindow() {
+        //Set setIsSurveyLaunched to true for this surveyId also
+        //Save current time in milliseconds against survey id
+        //if same survey is fired again we will check if resting period(no of days) is over since last launch.
+        CacheUtils.setIsSurveyLaunched(key: String(currentTouchPoint.surveyId), value: true)
+        CacheUtils.set(key: kSurveyLaunchedTimeInMilliseonds + String(currentTouchPoint.surveyId), value: Date().currentTimeInMilliseconds)
+        
         self.iView?.removeFromSuperview()
     }
     
@@ -395,7 +420,7 @@ public class QuestionProCXManager: NSObject, UIAlertViewDelegate, CXServiceDeleg
     }
     
     @objc func aDismissWebview(_ sender: Any) {
-        self.iView?.removeFromSuperview()
+        self.closeSurveyWindow()
     }
     
     @objc func goToPreviousPage(_ sender: Any) {

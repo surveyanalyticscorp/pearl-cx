@@ -9,6 +9,9 @@ import Foundation
 
 public let ksurveyURL  = "surveyURL"
 public let kisDialog = "isDialog"
+public let kSurveyLaunchedTimeInMilliseonds = "surveyLaunchedTimeInMilliseonds"
+
+public let restingPeriodInDays = 30
 
 /******* Keychain Constant *********/
 public let kKeyChainWrapperBundleId = "com.surveyAnalytics.mobileCX"
