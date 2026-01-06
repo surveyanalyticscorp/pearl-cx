@@ -22,10 +22,14 @@ export const NoTicketFound = ({onPressReset}) => {
       <TextLabel
         baseTextStyle={baseTextStyles.largeMediumText}
         fontWeight={FontWeight.bold}
-        text={'Oops! No tickets found'}
+        text={'There are no tickets yet'}
       />
       <VerticalSpaceBox />
-      <TextLabel text={'Try using a different filter criteria'} />
+      <TextLabel
+        text={
+          'Tickets from all sources, including CX action alerts and manual entries, will appear here.'
+        }
+      />
       <VerticalSpaceBox />
       <IconButton
         onPress={onPressReset}

@@ -41,8 +41,8 @@ const Responses = ({
   if (allResponses.length === 0 && !isLoading) {
     return (
       <EmptyView
-        title={'No responses to display'}
-        subTitle={'Check back later'}
+        title={'There are no responses yet'}
+        subTitle={'Get customer insights based on their answers'}
       />
     );
   }

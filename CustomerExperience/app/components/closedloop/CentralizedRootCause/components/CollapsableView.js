@@ -19,12 +19,16 @@ if (Platform.OS === 'android') {
 
 const Collapsible = ({
   headerTitle,
+  headerTitleStyle = styles.title,
   leadingComponent,
+  leadingComponentStyle = styles.leading,
   tailingComponent,
+  tailingComponentStyle = styles.trailing,
   style,
   headerStyle,
   children,
   isInitiallyOpen = false,
+  setIsOpenExternal,
 }) => {
   const [isOpen, setIsOpen] = useState(isInitiallyOpen);
   const [contentHeight, setContentHeight] = useState(0);
@@ -35,6 +39,7 @@ const Collapsible = ({
   const toggle = () => {
     const nextState = !isOpen;
     setIsOpen(nextState);
+    setIsOpenExternal?.(nextState);
 
     Animated.timing(animatedHeight, {
       toValue: nextState ? contentHeight : 0,
@@ -57,10 +62,10 @@ const Collapsible = ({
     <View style={style ?? styles.container}>
       <Pressable style={headerStyle ?? styles.header} onPress={toggle}>
         {leadingComponent && (
-          <View style={styles.leading}>{leadingComponent}</View>
+          <View style={leadingComponentStyle}>{leadingComponent}</View>
         )}
-        <Text style={styles.title}>{headerTitle}</Text>
-        <View style={styles.trailing}>
+        <Text style={headerTitleStyle}>{headerTitle}</Text>
+        <View style={tailingComponentStyle}>
           {tailingComponent ? (
             tailingComponent
           ) : (

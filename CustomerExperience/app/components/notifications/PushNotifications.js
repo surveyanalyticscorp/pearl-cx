@@ -90,8 +90,10 @@ const PushNotification = props => {
     if (notificationLogs.length === 0) {
       return (
         <EmptyView
-          title={translate('dashboard.no_notification_to_display')}
-          subTitle={'check back later'}
+          title={'There are no notifications yet'}
+          subTitle={
+            "You'll be notified of activity like new tickets, status updates, comments, etc."
+          }
         />
       );
     } else {
