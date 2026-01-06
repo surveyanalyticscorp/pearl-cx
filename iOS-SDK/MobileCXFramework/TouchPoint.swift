@@ -36,6 +36,7 @@ public class TouchPoint {
     public var  customVariable3 = "";
     public var themeColor: String? = "";
     public var customVariables: [Int: String]? = [:];
+    public var restingPeriodInDays: Int? = 30;
     public var apiBaseUrl: String = "";
     public var accessToken: String = "";
     public var port: String = "";

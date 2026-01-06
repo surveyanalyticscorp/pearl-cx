@@ -38,3 +38,14 @@ extension UIColor {
         }
     }
 }
+
+extension Date {
+    var currentTimeInMilliseconds: Int64 {
+        return Int64((self.timeIntervalSince1970 * 1000.0).rounded())
+    }
+    
+    /// Static constant for milliseconds in one day
+    static let msPerMinute: Int64 = 60_000
+    static let msPerHour: Int64 = 3_600_000
+    static let millisecondsPerDay: Int64 = 86_400_000
+}
