@@ -291,10 +291,14 @@ public class CacheUtils {
     
     public static func clearAllUserDefaults() {
         // ✅ Define keys to preserve during session clear
-        let keysToPreserve: Set<String> = [kApiKey, kDataCenter, "interceptsSetup"]
+        let keysToPreserve: Set<String> = [kApiKey, kDataCenter, kVisitorUUID]
+        let dynamicKeySubstringsToPreserve: [String] = [ kIsSurveyLaunched ]
         
         sdkUserDefaults.dictionaryRepresentation().keys.forEach { key in
-            if keysToPreserve.contains(key) {
+            
+            let shouldPreserve = keysToPreserve.contains(key) || dynamicKeySubstringsToPreserve.contains { key.contains($0) }
+            
+            if shouldPreserve {
                 LogUtils.printMessage(message: "🔒 Preserving key: \(key)")
             } else {
                 LogUtils.printMessage(message: "🗑️ Clearing data for \(key)")
@@ -331,5 +335,17 @@ public class CacheUtils {
     
     @MainActor public static func resetScreenVisitCountForInterceptId(key: String) {
         setScreenVisitCountForInterceptId(key: key, value: 1)
+    }
+    
+    @MainActor public static func setVisitorUUID(key: String, value: String) {
+        sdkUserDefaults.set(value, forKey: key);
+        sdkUserDefaults.synchronize()
+    }
+    
+    @MainActor public static func getVisitorUUID(key: String) -> String {
+        if let uuid = sdkUserDefaults.string(forKey: key) {
+            return uuid
+        }
+        return "";
     }
 }
