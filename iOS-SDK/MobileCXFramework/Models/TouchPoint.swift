@@ -24,8 +24,15 @@ public class TouchPoint {
        case DATA_CENTER_KSA
     }
     
+    public enum PLATFORM: String {
+        case ANDROID = "android"
+        case IOS = "ios"
+        case FLUTTER = "flutter"
+        case REACT_NATIVE = "react-native"
+    }
+    
     public var dataCenter = DataCenter.DATA_CENTER_US;
-    public var customVariables: [Int: String]? = [:];
+    public var platform: PLATFORM.RawValue = PLATFORM.IOS.rawValue;
     
     public static func initTouchPoint(dataCenter: DataCenter) -> TouchPoint {
         return TouchPoint(dataCenter: dataCenter)

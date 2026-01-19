@@ -148,26 +148,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         return instance!
     }
     
-//    func setDataMappingForAPICall(customVariables: [Int: String]) -> [[String: String]] {
-//        var customVariablesPayload : [[String: String]] = []
-//        for (key, value) in customVariables {
-//            let customKey = "custom\(key)"
-//            let customVars: [String: String] = [
-//                "variableName": customKey,
-//                "value": value
-//            ]
-//            customVariablesPayload.append(customVars)
-//        }
-//        
-//        LogUtils.printMessage(message: "Body Custom Variables: ----------> \(String(describing: customVariablesPayload))")
-//        
-//        if let jsonData = try? JSONSerialization.data(withJSONObject: customVariablesPayload, options: .prettyPrinted),
-//               let jsonString = String(data: jsonData, encoding: .utf8) {
-//            LogUtils.printMessage(message: " ----------> ✅ JSON Output:\n\(jsonString)")
-//            }
-//        return customVariablesPayload
-//    }
-    
     func setDataMappingForAPICall(dataMappings: [DataMappings], interceptData: Intercept) -> [[String: String]] {
         // Only include mappings whose displayName appears in the intercept's own dataMappings list.
         let interceptDisplayNames = Set(interceptData.dataMappings.map { $0.displayName })
@@ -261,7 +241,9 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     
     public func fetchAndSetupIntercepts() async {
         let surveyLogicUtilsInstance = SurveyLaunchLogicUtils.getInstance();
+        let visitorUUID = CacheUtils.getVisitorUUID(key: kVisitorUUID)
         let mobileVisitorAPIURL = APIUtils.getVisitorMobileAPIURL()
+        let platform : String = self.touchPoint?.platform ?? TouchPoint.PLATFORM.IOS.rawValue
         do {
             let response: ApiResponse = try await ApiServiceCX.shared.request(
                 urlString: mobileVisitorAPIURL,
@@ -269,14 +251,17 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 headers: [
                     "x-app-key": self.iApiKey,
                     "package-name": kPackageName,
+                    "visitor-id": visitorUUID,
+                    "x-platform": platform,
+                    "x-device-id": GlobalUtils.getDeviceId()
                 ],
                 responseType: ApiResponse.self
                 )
             LogUtils.printMessage(message: "fetch and etup intercepts  \(response)")
             visitorApiResponse = response
             self.initCallbackDelegate?.initSDKSuccess()
+            CacheUtils.setVisitorUUID(key: kVisitorUUID, value: visitorApiResponse.visitor.uuid)
             let intercepts = visitorApiResponse.project.intercepts
-            
             do {
                 let encodedData = try JSONEncoder().encode(intercepts)
                 CacheUtils.setIntercepts(key: kIntercepts, value: encodedData)
