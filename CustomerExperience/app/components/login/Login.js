@@ -228,7 +228,10 @@ export const RenderSpinnerLoginButton = ({login}) => {
         }
       } else if (token.startsWith('FCM_') && token.includes('ERROR')) {
         // Handle error tokens - proceed with login but log the error
-        console.log('FCM token error detected, proceeding with error token:', token);
+        console.log(
+          'FCM token error detected, proceeding with error token:',
+          token,
+        );
         loginAction(token);
       } else {
         console.log('loginAction: called:');

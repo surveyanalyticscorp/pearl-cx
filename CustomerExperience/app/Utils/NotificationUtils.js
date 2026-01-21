@@ -64,13 +64,15 @@ export async function checkNotificationPermission() {
     if (enabled) {
       getToken();
     } else {
-      requestUserPermission().then(() => {
-        getToken();
-      }).catch(error => {
-        console.error('Error in requestUserPermission:', error);
-        // Set error token to prevent infinite loops
-        AsyncStorage.setItem(ASYNC_PUSH_TOKEN, 'FCM_PERMISSION_ERROR');
-      });
+      requestUserPermission()
+        .then(() => {
+          getToken();
+        })
+        .catch(error => {
+          console.error('Error in requestUserPermission:', error);
+          // Set error token to prevent infinite loops
+          AsyncStorage.setItem(ASYNC_PUSH_TOKEN, 'FCM_PERMISSION_ERROR');
+        });
     }
   } catch (error) {
     console.error('Error in checkNotificationPermission:', error);
