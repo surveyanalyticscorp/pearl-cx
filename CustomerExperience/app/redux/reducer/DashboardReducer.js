@@ -31,6 +31,7 @@ import {
   GET_TAGLIST,
   GET_TAGLIST_RECEIVED,
   UPDATE_SINGLE_TAG,
+  CLEAR_TAG_FILTER,
 } from '../actions/closedloop.actions';
 import {
   CLEAR_CLOSED_LOOP_TICKET_DETAILS,
@@ -586,6 +587,15 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         ticketTags: updatingSingleTag(state.ticketTags, action.tag),
+      };
+    }
+    case CLEAR_TAG_FILTER: {
+      return {
+        ...state,
+        ticketTags: state.ticketTags.map(tag => ({
+          ...tag,
+          isChecked: false,
+        })),
       };
     }
 

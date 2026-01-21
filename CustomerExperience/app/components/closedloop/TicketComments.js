@@ -221,7 +221,7 @@ export const CommentInput = React.forwardRef(
         ref={ref}
         value={value}
         multiline
-        maxLength={MAX_COMMENT_LENGTH}
+        // maxLength={MAX_COMMENT_LENGTH}
         placeholderTextColor={Colors.borderColor}
         style={[
           {
@@ -377,7 +377,7 @@ const CommentParentItem = ({item}) => {
   );
 };
 
-const CommentBox = () => {
+const CommentBox = ({isKeyboardVisible, setKeyboardVisible}) => {
   const authToken = useSelector(state => state.global.authToken);
   const ticketId = useSelector(state => state.dashboard.ticket.id);
   const dispatch = useDispatch();
@@ -388,7 +388,6 @@ const CommentBox = () => {
   );
   const [commentText, setCommentText] = useState('');
   const [textInputHeight, setTextInputHeight] = useState(0);
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [isInputFocused, setInputFocused] = useState(false);
   // const userInfo = useSelector(state => state.global.userInfo);
   const UIalignItems = textInputHeight < 48 ? 'center' : 'flex-end';
@@ -398,46 +397,6 @@ const CommentBox = () => {
   const shouldShowSendButton = isKeyboardVisible || isInputFocused;
 
   // const marginForCommentBox = parentId > 0 ? MarginConstants.tab4 : 0;
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        console.log('Keyboard shown');
-        setKeyboardVisible(true);
-      },
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        console.log('Keyboard hidden');
-        setKeyboardVisible(false);
-      },
-    );
-
-    // Add additional listeners for better cross-platform support
-    const keyboardWillShowListener = Keyboard.addListener(
-      'keyboardWillShow',
-      () => {
-        console.log('Keyboard will show');
-        setKeyboardVisible(true);
-      },
-    );
-    const keyboardWillHideListener = Keyboard.addListener(
-      'keyboardWillHide',
-      () => {
-        console.log('Keyboard will hide');
-        setKeyboardVisible(false);
-      },
-    );
-
-    return () => {
-      keyboardDidHideListener.remove();
-      keyboardDidShowListener.remove();
-      keyboardWillShowListener.remove();
-      keyboardWillHideListener.remove();
-    };
-  }, []);
 
   useEffect(() => {
     if (parentComment.isFocused) {
@@ -509,10 +468,6 @@ const CommentBox = () => {
         </CommentBoxChildContainer>
         <VerticalSpaceBox />
         <CommentBottomContainer>
-          <TextLengthCount
-            textLength={commentText.length}
-            maxCountLength={MAX_COMMENT_LENGTH}
-          />
           <HorizontalSpaceBox />
           {shouldShowSendButton && (
             <SendCommentButton
@@ -567,6 +522,47 @@ export default function TicketComments(props) {
   const dispatch = useDispatch();
 
   const [refreshing, setRefreshing] = useState(false);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        console.log('Keyboard shown');
+        setKeyboardVisible(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        console.log('Keyboard hidden');
+        setKeyboardVisible(false);
+      },
+    );
+
+    // Add additional listeners for better cross-platform support
+    const keyboardWillShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      () => {
+        console.log('Keyboard will show');
+        setKeyboardVisible(true);
+      },
+    );
+    const keyboardWillHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      () => {
+        console.log('Keyboard will hide');
+        setKeyboardVisible(false);
+      },
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+      keyboardWillShowListener.remove();
+      keyboardWillHideListener.remove();
+    };
+  }, []);
 
   const makeAPICall = () => {
     dispatch(getClosedLoopTicketItemComments(authToken, ticketId));
@@ -584,8 +580,13 @@ export default function TicketComments(props) {
   }, []);
 
   return (
-    <Animated.View testID={'ticket-comments'} style={[styles.container]}>
-      <ShowFlatList onRefresh_={onRefresh} refreshing_={refreshing} />
+    <View testID={'ticket-comments'} style={[styles.container]}>
+      <View style={{flex: 1, position: 'relative'}}>
+        <ShowFlatList onRefresh_={onRefresh} refreshing_={refreshing} />
+        {isKeyboardVisible && (
+          <View style={styles.shadowOverlay} pointerEvents="none" />
+        )}
+      </View>
 
       <KeyboardAvoidingView
         enabled
@@ -593,9 +594,12 @@ export default function TicketComments(props) {
         keyboardVerticalOffset={
           Platform.OS === 'ios' ? 130 : MarginConstants.tab4 * 40
         }>
-        <CommentBox />
+        <CommentBox
+          isKeyboardVisible={isKeyboardVisible}
+          setKeyboardVisible={setKeyboardVisible}
+        />
       </KeyboardAvoidingView>
-    </Animated.View>
+    </View>
   );
 }
 
@@ -620,7 +624,11 @@ const styles = StyleSheet.create({
     marginHorizontal: MarginConstants.halfTab,
   },
 
-  borderStyle: {borderColor: Colors.darkerGrey, borderWidth: 1},
+  borderStyle: {
+    borderColor: Colors.darkerGrey,
+    borderRadius: 2,
+    borderWidth: 1,
+  },
   commentBoxContainer: {
     minHeight: MarginConstants.tab2 * 3,
     flexDirection: 'row',
@@ -722,12 +730,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     fontFamily: FontFamily.regular,
-    fontSize: TextSizes.mediumText,
+    fontSize: TextSizes.secondary,
     color: Colors.primary,
   },
   commentParentItemContainer: {
     margin: MarginConstants.tab1,
     padding: PaddingConstants.halfTab,
     borderWidth: 1,
+  },
+  shadowOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    zIndex: 1,
   },
 });

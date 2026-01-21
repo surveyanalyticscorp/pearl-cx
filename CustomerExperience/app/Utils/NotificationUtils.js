@@ -24,7 +24,10 @@ async function requestUserPermission() {
     await messaging().requestPermission();
     getToken();
   } catch (error) {
-    console.log('permission rejected');
+    console.error('Permission rejected with error:', error);
+    // Set error token to prevent infinite loops
+    AsyncStorage.setItem(ASYNC_PUSH_TOKEN, 'FCM_PERMISSION_REJECTED');
+    throw error; // Re-throw to be handled by caller
   }
 }
 
@@ -36,24 +39,43 @@ let getToken = () => {
         .getToken()
         .then(token => {
           console.log('FCM TOKEN', token);
-          AsyncStorage.setItem(ASYNC_PUSH_TOKEN, token);
+          if (token) {
+            AsyncStorage.setItem(ASYNC_PUSH_TOKEN, token);
+          } else {
+            console.log('FCM TOKEN is null or empty');
+          }
+        })
+        .catch(error => {
+          console.error('Error getting FCM token:', error);
+          // Set a placeholder token to prevent infinite loops
+          AsyncStorage.setItem(ASYNC_PUSH_TOKEN, 'FCM_TOKEN_ERROR');
         });
     }
   });
 };
 
 export async function checkNotificationPermission() {
-  const authStatus = await messaging().requestPermission();
-  console.log('FCM AUTH STATUS', authStatus);
-  const enabled =
-    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-  if (enabled) {
-    getToken();
-  } else {
-    requestUserPermission().then(() => {
+  try {
+    const authStatus = await messaging().requestPermission();
+    console.log('FCM AUTH STATUS', authStatus);
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (enabled) {
       getToken();
-    });
+    } else {
+      requestUserPermission().then(() => {
+        getToken();
+      }).catch(error => {
+        console.error('Error in requestUserPermission:', error);
+        // Set error token to prevent infinite loops
+        AsyncStorage.setItem(ASYNC_PUSH_TOKEN, 'FCM_PERMISSION_ERROR');
+      });
+    }
+  } catch (error) {
+    console.error('Error in checkNotificationPermission:', error);
+    // Set error token to prevent infinite loops
+    AsyncStorage.setItem(ASYNC_PUSH_TOKEN, 'FCM_CHECK_PERMISSION_ERROR');
   }
 }
 

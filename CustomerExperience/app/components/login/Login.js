@@ -214,12 +214,22 @@ export const RenderSpinnerLoginButton = ({login}) => {
         console.log('handleSignInWithPushToken: token:', token);
         if (pushTokenRetryCount < 3) {
           setPushTokenRetryCount(pushTokenRetryCount + 1);
-          checkNotificationPermission().then(() => handleSignInWithPushToken());
+          // Add delay between retries to prevent rapid loops
+          setTimeout(() => {
+            checkNotificationPermission().then(() => {
+              // Add another timeout before retry to allow token generation
+              setTimeout(() => handleSignInWithPushToken(), 2000);
+            });
+          }, 1000);
         } else {
-          showErrorFlashMessage(
-            'Failed to get push notification token. Please check your network or try again later.',
-          );
+          console.log('Max retries reached, proceeding with dummy token');
+          // Use dummy token after max retries to allow login to proceed
+          loginAction('PUSH_TOKEN_RETRY_EXCEEDED');
         }
+      } else if (token.startsWith('FCM_') && token.includes('ERROR')) {
+        // Handle error tokens - proceed with login but log the error
+        console.log('FCM token error detected, proceeding with error token:', token);
+        loginAction(token);
       } else {
         console.log('loginAction: called:');
         loginAction(token);

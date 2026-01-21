@@ -131,7 +131,7 @@ export const createFilterState = (item, getIdsFunction) => {
     priority: getIdsFunction(item.priority) ?? '',
     assignToId: item.assignToId,
     type: getIdsFunction(item.type) ?? '',
-    // tags: getNames(item.aiTags) ?? '',
+    tags: getNames(item.tags) ?? '',
   };
 };
 
@@ -440,8 +440,11 @@ export default function ClosedLoop(props) {
   };
 
   const applyFilter = item => {
+    console.log('FILTER_TICKET_ITEMS', JSON.stringify(item));
     setFilterData(item);
+
     const newFilterState = createFilterState(item, getIds);
+    console.log('newFilterState', JSON.stringify(newFilterState));
     setFilterState(state => ({
       ...state,
       ...newFilterState,

@@ -72,6 +72,7 @@ export const GENERATE_REFINE_EMAIL_DRAFT_RECEIVED =
 
 export const UPDATE_TAGS = 'UPDATE_TAGS';
 export const UPDATE_SINGLE_TAG = 'UPDATE_SINGLE_TAG';
+export const CLEAR_TAG_FILTER = 'CLEAR_TAG_FILTER';
 
 export const GET_TAGLIST = 'GET_TAGLIST';
 export const GET_TAGLIST_RECEIVED = 'GET_TAGLIST_RECEIVED';
@@ -259,4 +260,8 @@ export const updateSingleTag = tag => ({
 export const updateTags = tags => ({
   type: UPDATE_TAGS,
   tags,
+});
+
+export const clearTagFilter = () => ({
+  type: CLEAR_TAG_FILTER,
 });

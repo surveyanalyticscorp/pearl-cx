@@ -8,7 +8,10 @@ import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import {Title} from './ShowTitleAndText';
 import {useDispatch} from 'react-redux';
-import {updateTags} from '../../../redux/actions/closedloop.actions';
+import {
+  updateSingleTag,
+  updateTags,
+} from '../../../redux/actions/closedloop.actions';
 import {useNavigation} from '@react-navigation/native';
 
 const TagItem = ({item, _}) => {
@@ -16,7 +19,8 @@ const TagItem = ({item, _}) => {
   const navigation = useNavigation();
 
   const onPress = () => {
-    dispatch(updateTags(item.name));
+    dispatch(updateSingleTag({...item, isChecked: !item.isChecked}));
+
     if (navigation.canGoBack()) {
       navigation.goBack();
     }

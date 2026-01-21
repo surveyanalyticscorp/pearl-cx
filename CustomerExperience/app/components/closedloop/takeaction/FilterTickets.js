@@ -19,7 +19,10 @@ import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {updateSingleTag} from '../../../redux/actions/closedloop.actions';
+import {
+  clearTagFilter,
+  updateSingleTag,
+} from '../../../redux/actions/closedloop.actions';
 
 const FilterSection = ({title, filterData, onItemSelect, testID}) => {
   return (
@@ -68,18 +71,19 @@ const AITagsFilterSection = ({title, testID}) => {
       </View>
 
       <View style={styles.chipContainer} testID={testID}>
-        {aiTags
-          .filter(tag => tag.isChecked)
-          .map((item, index) => (
-            <ChipItem
-              key={index}
-              textStyle={textStyles.optionText}
-              item={item}
-              title={item?.name}
-              index={index}
-              onPress={onItemSelect}
-            />
-          ))}
+        {aiTags &&
+          aiTags
+            .filter(tag => tag.isChecked)
+            .map((item, index) => (
+              <ChipItem
+                key={index}
+                textStyle={textStyles.optionText}
+                item={item}
+                title={item?.name}
+                index={index}
+                onPress={onItemSelect}
+              />
+            ))}
       </View>
     </View>
   );
@@ -140,6 +144,7 @@ const ItemSeparator = () => {
 };
 
 const FilterTicket = ({route, navigation}) => {
+  const dispatch = useDispatch();
   const {data, onPressHandler} = route.params;
   const tags = useSelector(state => state.dashboard.ticketTags);
   const [status, setStatus] = useState(data.status);
@@ -203,9 +208,19 @@ const FilterTicket = ({route, navigation}) => {
       assignToId,
       tags: tags.filter(tag => tag.isChecked),
     };
+
     onPressHandler(updatedData, 'apply');
     navigateBack();
-  }, [data, status, priority, type, assignToId, onPressHandler, navigateBack]);
+  }, [
+    data,
+    status,
+    priority,
+    type,
+    assignToId,
+    onPressHandler,
+    tags,
+    navigateBack,
+  ]);
 
   const resetFilterState = useCallback(
     filterArray => filterArray.map(item => ({...item, isChecked: false})),
@@ -217,6 +232,7 @@ const FilterTicket = ({route, navigation}) => {
     setPriority(prevState => resetFilterState(prevState));
     setType(prevState => resetFilterState(prevState));
     setAssignToId(data.userId);
+    dispatch(clearTagFilter());
   }, [data.userId, resetFilterState]);
 
   return (
@@ -251,7 +267,7 @@ const FilterTicket = ({route, navigation}) => {
         />
         <ItemSeparator />
 
-        {/* <AITagsFilterSection title={'AI Tags'} testID="render-ai-tags" /> */}
+        <AITagsFilterSection title={'AI Tags'} testID="render-ai-tags" />
         <ItemSeparator />
 
         <ShowMyTicketsFilter
