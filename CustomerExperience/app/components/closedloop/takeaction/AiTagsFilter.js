@@ -141,12 +141,10 @@ const AiTagsFilter = () => {
 
         <AiTagsSection
           title="Available Tags"
-          filterData={filteredTags}
+          filterData={[...filteredTags]}
           onItemSelect={handleTagSelect}
           testID="render-ai-tags"
         />
-
-        <VerticalSpaceBox multiplyBy={6} />
       </View>
     </View>
   );

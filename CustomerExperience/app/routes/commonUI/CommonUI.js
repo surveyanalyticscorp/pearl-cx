@@ -648,7 +648,7 @@ const styles = StyleSheet.create({
   },
   chipContainer: {
     borderRadius: 20,
-    paddingHorizontal: PaddingConstants.tab2,
+    paddingHorizontal: PaddingConstants.tab1,
     paddingVertical: PaddingConstants.tab1,
     margin: MarginConstants.tab1,
     alignItems: 'center',
