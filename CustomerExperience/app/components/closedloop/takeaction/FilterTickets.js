@@ -1,5 +1,12 @@
 import React, {useState, useCallback} from 'react';
-import {View, Text, StyleSheet, Platform, Switch} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  Switch,
+  ScrollView,
+} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
@@ -23,6 +30,7 @@ import {
   clearTagFilter,
   updateSingleTag,
 } from '../../../redux/actions/closedloop.actions';
+import {get} from 'lodash';
 
 const FilterSection = ({title, filterData, onItemSelect, testID}) => {
   return (
@@ -43,6 +51,41 @@ const FilterSection = ({title, filterData, onItemSelect, testID}) => {
   );
 };
 
+const AITagsChipList = ({
+  checkedTags,
+  onItemSelect,
+  onCountChipPress,
+  testID,
+}) => {
+  const visibleTags = checkedTags.slice(0, 4);
+  const remainingCount = checkedTags.length - 4;
+
+  return (
+    <View style={styles.chipContainer} testID={testID}>
+      {visibleTags.map((item, index) => (
+        <ChipItem
+          key={index}
+          textStyle={textStyles.optionText}
+          item={item}
+          title={item?.name}
+          index={index}
+          onPress={onItemSelect}
+        />
+      ))}
+      {remainingCount > 0 && (
+        <ChipItem
+          key="count-chip"
+          textStyle={textStyles.optionText}
+          item={{name: `${remainingCount}+`, isChecked: true}}
+          title={`${remainingCount}+`}
+          index={-1}
+          onPress={onCountChipPress}
+        />
+      )}
+    </View>
+  );
+};
+
 const AITagsFilterSection = ({title, testID}) => {
   const dispatch = useDispatch();
   const aiTags = useSelector(state => state.dashboard.ticketTags);
@@ -53,10 +96,14 @@ const AITagsFilterSection = ({title, testID}) => {
   const onItemSelect = useCallback((item, index) => {
     dispatch(updateSingleTag({...item, isChecked: !item.isChecked}));
   }, []);
-
+  console.log('AI_TAGS', JSON.stringify(aiTags));
   let navigation = useNavigation();
   const navigateToAiTagsModal = () => {
     navigation.navigate('AiTagsFilter');
+  };
+
+  const getTags = () => {
+    return aiTags ? aiTags.filter(tag => tag.isChecked) : [];
   };
   return (
     <View style={styles.sectionContainer}>
@@ -65,26 +112,17 @@ const AITagsFilterSection = ({title, testID}) => {
         <QPButton
           style={buttonStyles.textButton}
           textStyle={buttonStyles.textButtonTextPrimaryLarge}
-          buttonText={'Select >'}
+          buttonText={getTags().length > 0 ? 'Edit' : 'Select'}
           onPress={navigateToAiTagsModal}
         />
       </View>
 
-      <View style={styles.chipContainer} testID={testID}>
-        {aiTags &&
-          aiTags
-            .filter(tag => tag.isChecked)
-            .map((item, index) => (
-              <ChipItem
-                key={index}
-                textStyle={textStyles.optionText}
-                item={item}
-                title={item?.name}
-                index={index}
-                onPress={onItemSelect}
-              />
-            ))}
-      </View>
+      <AITagsChipList
+        checkedTags={getTags()}
+        onItemSelect={onItemSelect}
+        onCountChipPress={navigateToAiTagsModal}
+        testID={testID}
+      />
     </View>
   );
 };
@@ -237,7 +275,7 @@ const FilterTicket = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.innerContainer}>
+      <ScrollView style={styles.innerContainer}>
         <PanelHandler />
         <View style={styles.headerContainer}>
           <TextLabel text={'Filter by'} style={styles.headerText} />
@@ -276,7 +314,7 @@ const FilterTicket = ({route, navigation}) => {
           onToggle={toggleMyTicketVisibility}
         />
         <VerticalSpaceBox multiplyBy={6} />
-      </View>
+      </ScrollView>
       <ActionButtons onCancel={onCancel} onApply={onApplyFilterHandler} />
     </View>
   );
