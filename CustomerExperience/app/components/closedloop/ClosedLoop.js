@@ -191,7 +191,7 @@ const ClosedLoopTicketList = ({
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const itemPerPage = 50;
+  const itemPerPage = 100;
   const statusId = useSelector(state => state.global.statusId);
   console.log('STATUS_ID_FILTER', statusId);
 

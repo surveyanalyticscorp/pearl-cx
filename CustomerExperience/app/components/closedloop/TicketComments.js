@@ -42,6 +42,7 @@ import {EmptyView} from './EmptyVIew';
 import Collapsible from './CentralizedRootCause/components/CollapsableView';
 import {max} from 'lodash';
 import SendCommentButton from '../../widgets/SendCommentButton';
+import ListItemSeparator from '../../routes/commonUI/ListItemSeparator';
 export function getFoldedText(text, MAX_WORD_LENGTH = 10) {
   if (StringUtils.getWords(text).length > MAX_WORD_LENGTH) {
     return `${StringUtils.getWords(text).slice(0, MAX_WORD_LENGTH).join(' ')}
@@ -143,10 +144,10 @@ const CommentBoxParentContainer = ({
 }) => {
   // Account for input padding (top + bottom) and additional space for bottom container
   const totalHeight = Math.max(
-    MarginConstants.tab2 * 3, // minimum height
+    // minimum height
     textInputHeight +
-      MarginConstants.halfTab * 2 +
-      MarginConstants.tab2 +
+      // MarginConstants.halfTab * 2 +
+      // MarginConstants.tab2 +
       (sendButtonVisible ? MarginConstants.tab1_4x : 0), // content + padding + bottom space
   );
 
@@ -241,7 +242,7 @@ export const CommentInput = React.forwardRef(
         onContentSizeChange={event_ => {
           // Get content height and ensure it doesn't exceed reasonable limits
           const contentHeight = event_.nativeEvent.contentSize.height;
-          setTextInputHeight(Math.min(contentHeight, 100)); // Cap the height
+          setTextInputHeight(Math.min(contentHeight, 120)); // Cap the height
         }}
         returnKeyType={'default'}
       />
@@ -587,7 +588,7 @@ export default function TicketComments(props) {
           <View style={styles.shadowOverlay} pointerEvents="none" />
         )}
       </View>
-
+      <ListItemSeparator />
       <KeyboardAvoidingView
         enabled
         behavior={Platform.OS === 'ios' ? 'position' : 'height'}
@@ -626,7 +627,7 @@ const styles = StyleSheet.create({
 
   borderStyle: {
     borderColor: Colors.darkerGrey,
-    borderRadius: 2,
+    borderRadius: 8,
     borderWidth: 1,
   },
   commentBoxContainer: {
@@ -637,7 +638,7 @@ const styles = StyleSheet.create({
     marginBottom:
       Platform.OS === 'ios' ? MarginConstants.tab2 * 3 : MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab2,
-    backgroundColor: Colors.grey,
+    backgroundColor: Colors.white,
   },
 
   commentUserView: {
