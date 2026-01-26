@@ -20,7 +20,7 @@ import {getClosedLoopTicketItem} from '../../../redux/actions/dashboard.actions'
 import QPBottomSheet from '../takeaction/QPBottomSheet';
 import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
 import {Title} from '../ui/ShowTitleAndText';
-import {CommentText, getFoldedDescriptionText} from '../TicketComments';
+import {CommentText, getFoldedDescriptionText} from '../TicketCommentsUtils';
 import {DescriptionDetails} from './components/DescriptionDetails';
 import {Tag} from '../ui/Tags';
 import TicketDetailsTitle from './components/TicketDetailsTitle';

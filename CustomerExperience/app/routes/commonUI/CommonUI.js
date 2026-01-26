@@ -492,10 +492,15 @@ export const FilterDateBox = () => {
   );
 };
 
-export const Avatar = ({title, style}) => {
+export const Avatar = ({title, style, textStyle}) => {
   return (
     <View style={[styles.avatarView, {...style}]}>
-      <Text style={[baseTextStyles.mediumRegularText, {color: Colors.white}]}>
+      <Text
+        style={[
+          baseTextStyles.mediumRegularText,
+          {color: Colors.white},
+          {...textStyle},
+        ]}>
         {getNameInitials(title ?? 'NA')}
       </Text>
     </View>

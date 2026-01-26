@@ -58,8 +58,11 @@ const QPTextField = props => {
       // Force update the underlying text input
       if (fieldRef.current.setValue) {
         fieldRef.current.setValue(props.value);
-      } else if (fieldRef.current._textInput && fieldRef.current._textInput.setNativeProps) {
-        fieldRef.current._textInput.setNativeProps({ text: props.value });
+      } else if (
+        fieldRef.current._textInput &&
+        fieldRef.current._textInput.setNativeProps
+      ) {
+        fieldRef.current._textInput.setNativeProps({text: props.value});
       }
     }
   }, [props.value]);
