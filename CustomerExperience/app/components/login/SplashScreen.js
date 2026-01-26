@@ -35,6 +35,7 @@ import DeviceInfo from 'react-native-device-info';
 import AppInfo from '../../Utils/AppInfo';
 import useLogoutProcess from '../../routes/drawerContent/useLogoutProcess';
 import CXLogo from './components/CXLogo';
+import useLoginPersistence from '../../routes/drawerContent/useLoginPersistance';
 
 const isExpireDateValid = expireDate => {
   const today = new Date();

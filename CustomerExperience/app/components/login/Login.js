@@ -53,6 +53,8 @@ import {useLoginError} from './hooks/useLoginError';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {getApiValidationErrorMessage} from '../../Utils/ErrorValidationUtils';
+import useLoginPersistence from '../../routes/drawerContent/useLoginPersistance';
+import {keysToRemove} from '../../routes/drawerContent/useLogoutProcess';
 
 export const checkValidation = ({email, password, accessCode}) => {
   if (!validateEmail(email)) {
@@ -150,7 +152,7 @@ export const RenderSpinnerLoginButton = ({login}) => {
       );
       console.log('LOGIN ERROR', JSON.stringify(errorMessage));
       setTimeout(() => {
-        AsyncStorage.clear().then(() => {
+        AsyncStorage.multiRemove(keysToRemove).then(() => {
           dispatch(clearUserInfo());
         });
       }, 1000);
@@ -296,15 +298,31 @@ export const RenderSpinnerLoginButton = ({login}) => {
 };
 
 const Login = props => {
-  const [login, setLogin] = useState({email: '', password: '', accessCode: ''});
-  const setEmail = email => {
-    setLogin({...login, email});
+  const {email, accessCode} = useLoginPersistence();
+
+  const [login, setLogin] = useState({
+    email: '',
+    password: '',
+    accessCode: '',
+  });
+
+  // Update local state when persistence hook loads values
+  useEffect(() => {
+    if (email) {
+      setLogin(prevLogin => ({...prevLogin, email: email}));
+    }
+    if (accessCode) {
+      setLogin(prevLogin => ({...prevLogin, accessCode: accessCode}));
+    }
+  }, [email, accessCode]);
+  const setEmail = email_ => {
+    setLogin(prevLogin => ({...prevLogin, email: email_}));
   };
-  const setPassword = password => {
-    setLogin({...login, password});
+  const setPassword = password_ => {
+    setLogin(prevLogin => ({...prevLogin, password: password_}));
   };
-  const setAccessCode = accessCode => {
-    setLogin({...login, accessCode});
+  const setAccessCode = accessCode_ => {
+    setLogin(prevLogin => ({...prevLogin, accessCode: accessCode_}));
   };
   return (
     <LoginBackground>

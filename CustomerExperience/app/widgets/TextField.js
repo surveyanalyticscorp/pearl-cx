@@ -52,6 +52,18 @@ const QPTextField = props => {
   const fieldRef = props.ref ?? React.createRef();
   const [secureText, setSecureText] = useState(props.secureText);
 
+  // Imperatively update the text field when value changes from persistence
+  React.useEffect(() => {
+    if (fieldRef.current && props.value && props.value !== '') {
+      // Force update the underlying text input
+      if (fieldRef.current.setValue) {
+        fieldRef.current.setValue(props.value);
+      } else if (fieldRef.current._textInput && fieldRef.current._textInput.setNativeProps) {
+        fieldRef.current._textInput.setNativeProps({ text: props.value });
+      }
+    }
+  }, [props.value]);
+
   const onSubmit = () => {
     let {current: field} = fieldRef;
     props.onSubmit && props.onSubmit(field.value());
@@ -99,7 +111,7 @@ const QPTextField = props => {
         label={label}
         value={props.value}
         placeholderTextColor={Colors.borderColor}
-        defaultValue={defaultValue}
+        defaultValue={props.value ? undefined : defaultValue}
         secureTextEntry={secureText}
         keyboardType={keyboardType}
         onEndEditing={onEndEditing}

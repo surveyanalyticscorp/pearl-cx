@@ -11,7 +11,7 @@ import {Sizes} from '../styles/Size.constant';
 import {PaddingConstants} from '../styles/padding.constants';
 import StringUtils from '../Utils/StringUtils';
 import DeviceInfo from 'react-native-device-info';
-import {DrawerActions, useNavigationState} from '@react-navigation/native';
+import {DrawerActions} from '@react-navigation/native';
 import {translate} from '../Utils/MultilinguaUtils';
 import TicketSync from '../components/TicketSync';
 import ClosedLoopSvgIcon from '../../assets/images/closed_loop.svg';
@@ -20,7 +20,7 @@ import TextLabel from '../../app/widgets/TextLabel/TextLabel';
 import useLogoutProcess from './drawerContent/useLogoutProcess';
 import logoutDialog from './drawerContent/LogoutDialog';
 import ResponsesIcon from '../widgets/IconWidget/ResponsesIcon';
-import QuestionProBanner from '../../assets/images/questionpro_banner.svg';
+import useLoginPersistence from './drawerContent/useLoginPersistance';
 
 const LogoutButtonIcon = () => {
   return (
@@ -61,11 +61,22 @@ const AppVersion = () => {
 };
 const UserName = () => {
   const userInfo = useSelector(state => state.global.userInfo);
+  const {saveCredentials} = useLoginPersistence();
+  const accessCode = useSelector(state => state.global.accessCode);
+  console.log('USER_INFO', userInfo.emailAddress, accessCode);
   console.log('USER_INFO', 'DRAWER _content');
   let username = StringUtils.isNotEmpty(StringUtils.reformatName(userInfo))
     ? StringUtils.reformatName(userInfo)
     : userInfo.emailAddress;
 
+  useEffect(() => {
+    if (
+      StringUtils.isNotEmpty(userInfo.emailAddress) &&
+      StringUtils.isNotEmpty(accessCode)
+    ) {
+      saveCredentials(userInfo.emailAddress, accessCode);
+    }
+  }, [userInfo, accessCode]);
   return (
     <TextLabel
       text={username}

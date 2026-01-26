@@ -16,7 +16,7 @@ const AccessCodeTextInput = ({defaultValue, value, setAccessCode}) => {
     <QPTextField
       testID="companyCodeTextField"
       defaultValue={defaultValue ?? ''}
-      label={translate('onBoarding.companyCode')}
+      label={'Access Code'}
       style={loginStyles.emailInput}
       value={value}
       // onEndEdit={handleAccessCode}
