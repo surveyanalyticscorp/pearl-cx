@@ -2,7 +2,11 @@ CustomerExperience/android/app/release
 CustomerExperience/.yarn
 CustomerExperience/coverage
 
-
 CustomerExperience/debugTool/image_1.png
 CustomerExperience/debugTool/image_2.png
 CustomerExperience/debugTool/image_3.png
+
+CustomerExperience/docs/android/upgrade-targetsdk-35.md
+CustomerExperience/.github/copilot-instructions.md
+
+

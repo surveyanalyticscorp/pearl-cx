@@ -219,6 +219,14 @@ export const textStyles = StyleSheet.create({
     marginHorizontal: MarginConstants.halfTab,
     color: Colors.filterIconColor,
   },
+
+  optionText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.primary,
+    marginHorizontal: MarginConstants.halfTab,
+    color: Colors.filterIconColor,
+  },
+
   optionTextBold: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.primary,
@@ -239,6 +247,12 @@ export const textStyles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.primary,
     color: Colors.white,
+  },
+  chipText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    marginHorizontal: MarginConstants.halfTab,
+    color: Colors.filterIconColor,
   },
 });
 // primaryButton: {

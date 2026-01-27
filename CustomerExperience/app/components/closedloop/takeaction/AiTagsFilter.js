@@ -17,6 +17,8 @@ import {
   getTaglist,
   updateSingleTag,
 } from '../../../redux/actions/closedloop.actions';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {MarginConstants} from '../../../styles/margin.constants';
 
 // Search bar component
 const SearchBar = ({searchText, onSearchChange, placeholder}) => {
@@ -43,8 +45,8 @@ const AiTagsSection = ({title, filterData, onItemSelect, testID}) => {
       <View style={styles.chipContainer} testID={testID}>
         {filterData.map((item, index) => (
           <ChipItem
-            key={item.id + item?.name}
-            textStyle={textStyles.optionText}
+            key={item.id + item?.name + index}
+            textStyle={styles.chipText}
             title={item?.name}
             item={item}
             index={index}
@@ -121,7 +123,7 @@ const AiTagsFilter = () => {
   }, [navigateBack]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
         <PanelHandler />
         <View style={styles.headerContainer}>
@@ -146,7 +148,7 @@ const AiTagsFilter = () => {
           testID="render-ai-tags"
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -210,5 +212,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: PaddingConstants.tab2,
     paddingVertical: PaddingConstants.halfTab,
     minWidth: 80,
+  },
+  chipText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    marginHorizontal: MarginConstants.halfTab,
+    color: Colors.filterIconColor,
   },
 });

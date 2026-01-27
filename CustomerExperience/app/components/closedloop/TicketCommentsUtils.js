@@ -40,9 +40,7 @@ import SendCommentButton from '../../widgets/SendCommentButton';
 export function getFoldedText(text, MAX_WORD_LENGTH = 10) {
   if (StringUtils.getWords(text).length > MAX_WORD_LENGTH) {
     return `${StringUtils.getWords(text).slice(0, MAX_WORD_LENGTH).join(' ')}
-      <span style="color:${
-        Colors.filterIconColor
-      };"><b> ...see more</b></span>`;
+      <span style="color:${Colors.accentLight};"> ...see more</span>`;
   }
   return text;
 }
@@ -138,7 +136,7 @@ export const CommentParentItemContainer = ({isSelected, children}) => {
       testID="comment-parent-item-container"
       style={[
         styles.commentParentItemContainer,
-        {borderColor: isSelected ? Colors.darkGrey : Colors.transparent},
+        {borderColor: isSelected ? Colors.transparent : Colors.transparent},
       ]}>
       {children}
     </ScrollView>
@@ -359,7 +357,7 @@ export const CommentParentItem = ({item}) => {
             fontSize: TextSizes.secondary,
             fontWeight:
               Platform.OS === 'ios' ? FontWeight._400 : FontWeight._600,
-            color: Colors.filterIconColor,
+            color: Colors.evenDarkerGrey,
           }}
           style={{
             marginStart: MarginConstants.tab1_8x,
@@ -453,6 +451,7 @@ export const CommentBox = ({isKeyboardVisible, setKeyboardVisible}) => {
     );
     dispatch(resetParentComment());
     setCommentText('');
+    setKeyboardVisible(false);
   };
 
   return (
@@ -593,7 +592,7 @@ const styles = StyleSheet.create({
   commentSelectedTextView: {
     flex: 1,
     marginEnd: MarginConstants.halfTab,
-    backgroundColor: Colors.darkGrey,
+    backgroundColor: Colors.white,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
   },
@@ -651,7 +650,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
-    color: Colors.primary,
+    color: Colors.evenDarkerGrey,
   },
   commentParentItemContainer: {
     margin: MarginConstants.tab1,

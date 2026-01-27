@@ -30,7 +30,7 @@ import {
   clearTagFilter,
   updateSingleTag,
 } from '../../../redux/actions/closedloop.actions';
-import {get} from 'lodash';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const FilterSection = ({title, filterData, onItemSelect, testID}) => {
   return (
@@ -40,7 +40,7 @@ const FilterSection = ({title, filterData, onItemSelect, testID}) => {
         {filterData.map((item, index) => (
           <ChipItem
             key={index}
-            textStyle={textStyles.optionText}
+            textStyle={textStyles.chipText}
             item={item}
             index={index}
             onPress={onItemSelect}
@@ -65,7 +65,7 @@ const AITagsChipList = ({
       {visibleTags.map((item, index) => (
         <ChipItem
           key={index}
-          textStyle={textStyles.optionText}
+          textStyle={textStyles.chipText}
           item={item}
           title={item?.name}
           index={index}
@@ -75,7 +75,7 @@ const AITagsChipList = ({
       {remainingCount > 0 && (
         <ChipItem
           key="count-chip"
-          textStyle={textStyles.optionText}
+          textStyle={textStyles.chipText}
           item={{name: `${remainingCount}+`, isChecked: true}}
           title={`${remainingCount}+`}
           index={-1}
@@ -274,14 +274,13 @@ const FilterTicket = ({route, navigation}) => {
   }, [data.userId, resetFilterState]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <PanelHandler />
+      <View style={styles.headerContainer}>
+        <TextLabel text={'Filter by'} style={styles.headerText} />
+        <CloseButton onPressClose={navigateBack} />
+      </View>
       <ScrollView style={styles.innerContainer}>
-        <PanelHandler />
-        <View style={styles.headerContainer}>
-          <TextLabel text={'Filter by'} style={styles.headerText} />
-          <CloseButton onPressClose={navigateBack} />
-        </View>
-
         <FilterSection
           title={translate('close_loop.status')}
           filterData={status}
@@ -316,7 +315,7 @@ const FilterTicket = ({route, navigation}) => {
         <VerticalSpaceBox multiplyBy={6} />
       </ScrollView>
       <ActionButtons onCancel={onCancel} onApply={onApplyFilterHandler} />
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -653,8 +653,8 @@ const styles = StyleSheet.create({
   },
   chipContainer: {
     borderRadius: 20,
-    paddingHorizontal: PaddingConstants.tab1,
-    paddingVertical: PaddingConstants.tab1,
+    paddingHorizontal: PaddingConstants.halfTab,
+    paddingVertical: PaddingConstants.halfTab,
     margin: MarginConstants.tab1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -666,7 +666,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#045EBF',
   },
   chipText: {
-    fontSize: TextSizes.semiSecondary2,
+    fontSize: TextSizes.secondary,
     fontFamily: FontFamily.regular,
     textAlign: 'center',
   },
