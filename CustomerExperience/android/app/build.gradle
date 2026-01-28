@@ -189,7 +189,16 @@ android {
         pickFirst "lib/arm64-v8a/libc++_shared.so"
         pickFirst "lib/x86/libc++_shared.so"
         pickFirst "lib/x86_64/libc++_shared.so"
+
+        //  // Exclude Firebase messaging manifest to avoid conflicts
+        // exclude 'META-INF/com/android/build/gradle/app-metadata.properties'
+   
     }
+
+     // Force exclude problematic Firebase resources
+    // aaptOptions {
+    //     ignoreAssetsPattern "!.svn:!.git:.*:!CVS:!thumbs.db:!picasa.ini:!*.scc:*~"
+    // }
 
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
@@ -204,6 +213,14 @@ android {
             }
         }
     }
+
+    configurations.all {
+        resolutionStrategy.force 'androidx.appcompat:appcompat:1.6.1'
+        resolutionStrategy.force 'androidx.core:core:1.9.0'
+
+         
+        
+    }
 }
 
 dependencies {
@@ -216,8 +233,25 @@ dependencies {
 //    implementation project(':react-native-device-info')
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    implementation 'org.jetbrains:annotations:16.0.2'
-    implementation 'com.google.firebase:firebase-messaging:23.0.8'
+    implementation 'org.jetbrains:annotations:24.0.1'          // Updated from 16.0.2
+    implementation 'com.google.firebase:firebase-messaging:23.0.8'  // Updated from 23.0.8
+
+// implementation 'com.google.firebase:firebase-messaging:23.4.1'  // Updated from 23.0.8
+// implementation 'com.google.firebase:firebase-messaging:22.0.0'  // Downgrade from 23.4.1
+
+ // Force consistent AndroidX versions to fix release build
+implementation 'androidx.appcompat:appcompat:1.6.1'        // Updated from 1.4.2
+implementation 'androidx.core:core:1.9.0'                  // Updated from 1.8.0  
+implementation 'androidx.fragment:fragment:1.5.5'          // Updated from 1.5.0
+implementation 'androidx.activity:activity:1.6.1'          // Updated from 1.5.0
+
+// Add missing AppCompat components for SDK 35
+implementation 'androidx.appcompat:appcompat-resources:1.6.1'
+implementation 'com.google.android.material:material:1.8.0'
+
+// Add missing animation/transition resources for NetInfo compatibility
+implementation 'androidx.transition:transition:1.4.1'
+implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
 //    implementation("androidx.work:work-runtime:$work_version"){
 //        force = true
 //    }
