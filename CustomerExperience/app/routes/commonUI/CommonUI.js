@@ -658,6 +658,7 @@ const styles = StyleSheet.create({
     margin: MarginConstants.tab1,
     alignItems: 'center',
     justifyContent: 'center',
+    minWidth: MarginConstants.tab1_8x,
   },
   chipInactive: {
     backgroundColor: '#EEF3FB',

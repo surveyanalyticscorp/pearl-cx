@@ -304,7 +304,7 @@ const FilterTicket = ({route, navigation}) => {
         />
         <ItemSeparator />
 
-        <AITagsFilterSection title={'AI Tags'} testID="render-ai-tags" />
+        <AITagsFilterSection title={'AI tags'} testID="render-ai-tags" />
         <ItemSeparator />
 
         <ShowMyTicketsFilter

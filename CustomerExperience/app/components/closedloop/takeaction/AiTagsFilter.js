@@ -127,7 +127,7 @@ const AiTagsFilter = () => {
       <View style={styles.innerContainer}>
         <PanelHandler />
         <View style={styles.headerContainer}>
-          <TextLabel text={'AI Tags'} style={styles.headerText} />
+          <TextLabel text={'AI tags'} style={styles.headerText} />
           <DoneButton onDone={onDoneHandler} />
         </View>
 
@@ -142,7 +142,7 @@ const AiTagsFilter = () => {
         <VerticalSpaceBox multiplyBy={3} />
 
         <AiTagsSection
-          title="Available Tags"
+          title="Available tags"
           filterData={[...filteredTags]}
           onItemSelect={handleTagSelect}
           testID="render-ai-tags"
