@@ -30,7 +30,7 @@ import {
   clearTagFilter,
   updateSingleTag,
 } from '../../../redux/actions/closedloop.actions';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import SafeAreaView from 'react-native-safe-area-view';
 
 const FilterSection = ({title, filterData, onItemSelect, testID}) => {
   return (
@@ -129,6 +129,7 @@ const AITagsFilterSection = ({title, testID}) => {
 
 // Component for the "Show My Tickets" toggle switch
 const ShowMyTicketsFilter = ({assignToId, userId, onToggle}) => {
+  console.log('ShowMyTicketsFilter', assignToId);
   return (
     <View testID="render-show-tickets" style={styles.sectionContainer}>
       <View style={styles.switchContainer}>
@@ -141,7 +142,6 @@ const ShowMyTicketsFilter = ({assignToId, userId, onToggle}) => {
           thumbColor={
             assignToId.length > 0 ? Colors.accentLight : Colors.filterIconColor
           }
-          ios_backgroundColor={Colors.evenDarkerGrey}
           onValueChange={onToggle}
           value={assignToId.length > 0}
         />

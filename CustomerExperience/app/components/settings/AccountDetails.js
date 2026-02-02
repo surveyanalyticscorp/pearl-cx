@@ -10,7 +10,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_USER_CREDENTIALS} from '../../api/Constant';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import SafeAreaView from 'react-native-safe-area-view';
 
 export default function AccountDetails(props) {
   const [userCredentials, setUserCredentials] = useState('');

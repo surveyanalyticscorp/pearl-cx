@@ -7,7 +7,7 @@ import {
   Pressable,
   TextInput,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import SafeAreaView from 'react-native-safe-area-view';
 import {baseTextStyles} from '../../../../styles/text.styles';
 import {VerticalSpaceBox} from '../../../../widgets/SpaceBox';
 import {PaddingConstants} from '../../../../styles/padding.constants';

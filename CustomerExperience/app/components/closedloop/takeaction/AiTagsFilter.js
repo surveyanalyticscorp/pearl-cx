@@ -17,7 +17,7 @@ import {
   getTaglist,
   updateSingleTag,
 } from '../../../redux/actions/closedloop.actions';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import SafeAreaView from 'react-native-safe-area-view';
 import {MarginConstants} from '../../../styles/margin.constants';
 
 // Search bar component
@@ -96,13 +96,6 @@ const AiTagsFilter = () => {
 
   const handleTagSelect = useCallback((item, index) => {
     dispatch(updateSingleTag({...item, isChecked: !item.isChecked}));
-    // setAiTagsState(prevState =>
-    //   prevState.map(tagItem =>
-    //     tagItem.id === item.id
-    //       ? {...tagItem, isChecked: !tagItem.isChecked}
-    //       : tagItem,
-    //   ),
-    // );
     console.log('handleTagSelect item:', item);
   }, []);
 
