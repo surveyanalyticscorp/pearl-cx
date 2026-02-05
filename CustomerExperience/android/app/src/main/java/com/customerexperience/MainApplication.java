@@ -5,6 +5,7 @@ import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
 import androidx.multidex.MultiDexApplication;
@@ -14,6 +15,9 @@ import android.content.IntentFilter;
 import android.os.Build;
 import javax.annotation.Nullable;
 public class MainApplication extends Application implements ReactApplication {
+
+
+
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
@@ -34,21 +38,22 @@ public class MainApplication extends Application implements ReactApplication {
         protected String getJSMainModuleName() {
           return "index";
         }
-
-          // @Override
-          // protected String getJSBundleFile() {
-          //     return CodePush.getJSBundleFile();
-          // }
       };
 
+
+ 
   @Override
   public ReactNativeHost getReactNativeHost() {
+   
     return mReactNativeHost;
-  }
+  
+    }
 
   @Override
   public void onCreate() {
     super.onCreate();
+    // If you opted-in for the New Architecture, we enable the TurboModule system
+    // ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;ß
 //    SoLoader.init(this, /* native exopackage */ false);
   }
 

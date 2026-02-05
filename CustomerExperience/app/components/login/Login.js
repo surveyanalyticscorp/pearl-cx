@@ -44,7 +44,7 @@ import {
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 import {getExpireDate} from '../../Utils/TimeUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/native';
 import EmailTextInput from './components/EmailTextInput';
 import PasswordTextInput from './components/PasswordTextInput';
 import AccessCodeTextInput from './components/AccessCodeTextInput';

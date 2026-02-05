@@ -7,7 +7,7 @@ import {Colors} from '../../../../styles/color.constants';
 import {PaddingConstants} from '../../../../styles/padding.constants';
 import {useSelector} from 'react-redux';
 import {isObjectEmpty} from '../../../../Utils/Utility';
-import useNavigation from '../../../../hooks/useNavigation';
+import useActionNavigation from '../../../../hooks/useNavigation';
 
 export function hasPanelMemberObj(obj) {
   return obj !== null && obj !== undefined && !isObjectEmpty(obj);
@@ -16,7 +16,7 @@ export function hasPanelMemberObj(obj) {
 const TakeActionButton = () => {
   const panelMember = useSelector(state => state.dashboard.ticket.panelMember);
   const hasPanelMember = hasPanelMemberObj(panelMember);
-  const {navigateToSendEmail} = useNavigation();
+  const {navigateToSendEmail} = useActionNavigation();
   return (
     <View style={styles.takeActionContainer}>
       <QPButton

@@ -8,14 +8,22 @@ import * as RootNavigation from '../routes/RootNavigation';
 import {CommonActions} from '@react-navigation/native';
 
 export const requestNotificationPermission = async () => {
-  if (Platform.OS === 'android') {
-    try {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-      );
-    } catch (err) {
-      console.log(err);
-    }
+  if (Platform.OS !== 'android') return true;
+
+  // Android 13+ only
+  if (Platform.Version < 33) return true;
+
+  const permission = PermissionsAndroid.PERMISSIONS?.POST_NOTIFICATIONS;
+
+  // Critical: never pass null/undefined to native
+  if (!permission) return true;
+
+  try {
+    const result = await PermissionsAndroid.request(permission);
+    return result === PermissionsAndroid.RESULTS.GRANTED;
+  } catch (err) {
+    console.log(err);
+    return false;
   }
 };
 

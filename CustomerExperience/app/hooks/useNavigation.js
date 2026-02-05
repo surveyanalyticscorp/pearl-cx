@@ -1,7 +1,7 @@
-import {useNavigation as useReactNavigation} from '@react-navigation/core';
+import {useNavigation as useReactNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 
-const useNavigation = () => {
+const useActionNavigation = () => {
   const navigation = useReactNavigation();
   const panelMember = useSelector(state => state.dashboard.ticket.panelMember);
   const ticketId = useSelector(state => state.dashboard.ticket.id);
@@ -52,4 +52,4 @@ const useNavigation = () => {
   };
 };
 
-export default useNavigation;
+export default useActionNavigation;

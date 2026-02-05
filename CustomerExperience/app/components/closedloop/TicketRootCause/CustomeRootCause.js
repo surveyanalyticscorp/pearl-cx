@@ -9,7 +9,7 @@ import {MaterialIcons} from '../../../Utils/IconUtils';
 import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {TagViewItem} from './TagViewItem';
 import {getSelectedTagList} from './utils';
