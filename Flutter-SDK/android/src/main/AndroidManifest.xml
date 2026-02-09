@@ -1,0 +1,28 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permissions required by QuestionPro CX SDK -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!--
+      Merged into host app. Host app owns launcher / MainActivity.
+      QuestionPro CX: API key and survey activity are below.
+    -->
+    <application
+        android:name=".MyApplication">
+        <!-- QuestionPro CX API key (required: exact key name from SDK docs). Override in app manifest if needed. -->
+        <meta-data
+            android:name="cx_manifest_api_key"
+            android:value="df77758b-7fe5-45af-98eb-512e6036a0f3"
+            tools:replace="android:value" />
+
+        <!-- QuestionPro CX: activity to show the feedback/survey screen -->
+        <activity
+            android:name="com.questionpro.cxlib.InteractionActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+    </application>
+</manifest>
