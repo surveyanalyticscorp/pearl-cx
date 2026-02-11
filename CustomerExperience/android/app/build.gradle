@@ -315,4 +315,27 @@ configurations.configureEach {
     }
 }
 
+tasks.register("cleanStaleBundledReactResources") {
+    doLast {
+        def resDir = file("src/main/res")
+        if (!resDir.exists()) return
 
+        def stale = fileTree(resDir) {
+            include "drawable-*/node_modules_*"
+            include "drawable-*/assets_*"
+            include "drawable-*/app_config_*"
+
+            include "raw/node_modules_*"
+            include "raw/assets_*"
+            include "raw/app_config_*"
+        }
+
+        if (!stale.isEmpty()) {
+            println("Deleting stale JS-bundled resources from src/main/res:")
+            stale.files.each { f -> println(" - " + f.path) }
+            stale.files.each { f -> f.delete() }
+        }
+    }
+}
+
+preBuild.dependsOn("cleanStaleBundledReactResources")

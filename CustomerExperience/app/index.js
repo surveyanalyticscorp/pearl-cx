@@ -27,6 +27,7 @@ import {
   checkNotificationPermission,
   requestNotificationPermission,
 } from './Utils/NotificationUtils';
+import {Colors} from './styles/color.constants';
 
 // import codePush from 'react-native-code-push';
 
@@ -111,7 +112,10 @@ const CxApp = () => {
     <Provider store={store}>
       <PaperProvider>
         <SafeAreaProvider>
-          <StatusBar barStyle={'light-content'} />
+          <StatusBar
+            barStyle={'light-content'}
+            backgroundColor={Colors.white}
+          />
           {styleBuilt ? <SplashScreen /> : <View />}
           <Toast config={toastConfig} />
         </SafeAreaProvider>

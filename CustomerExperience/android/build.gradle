@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath('com.android.tools.build:gradle:7.1.3')
+        classpath('com.android.tools.build:gradle:7.2.2')
         classpath ('com.facebook.react:react-native-gradle-plugin')
         classpath 'com.google.gms:google-services:4.3.15'
         classpath("de.undercouch:gradle-download-task:5.0.1")
@@ -66,4 +66,44 @@ allprojects {
 
         }
     }
+}
+
+// --- Fix: Reanimated Boost download URL (JFrog -> archives.boost.io) ---
+subprojects { sub ->
+  if (sub.name == "react-native-reanimated") {
+    sub.afterEvaluate {
+      // Works with Reanimated v2.x which defines downloadBoost task
+      def t = tasks.findByName("downloadBoost")
+      if (t != null) {
+        t.doFirst {
+          // Reanimated uses a Download task with `src` property
+          def oldUrl = null
+          try { oldUrl = t.src } catch (ignored) {}
+          println("Reanimated: overriding Boost download URL. Old=" + oldUrl)
+
+          // If it's a string:
+          if (t.hasProperty("src") && t.src instanceof String) {
+            t.src = t.src.replace(
+              "https://boostorg.jfrog.io/artifactory/main/",
+              "https://archives.boost.io/"
+            )
+          }
+
+          // If it's a list:
+          if (t.hasProperty("src") && (t.src instanceof List)) {
+            t.src = t.src.collect { u ->
+              u.toString().replace(
+                "https://boostorg.jfrog.io/artifactory/main/",
+                "https://archives.boost.io/"
+              )
+            }
+          }
+
+          println("Reanimated: new Boost src=" + t.src)
+        }
+      } else {
+        println("Reanimated: downloadBoost task not found (nothing to override).")
+      }
+    }
+  }
 }
