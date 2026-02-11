@@ -1,88 +1,81 @@
 # math_flutter
 
-Flutter plugin for QuestionPro CX SDK integration on Android.
+Flutter plugin for QuestionPro CX SDK integration on **Android and iOS**.
 
-## Architecture Overview
-
-### 1. Application Initialization
-
-**MyApplication.kt**
-- Declares `MyApplication` as the Application class
-- SDK initializes **immediately** when app starts in `onCreate()`
-- Creates TouchPoint with `DataCenter.US`
-- Registers initialization callbacks
-
-**AndroidManifest.xml**
-- Declares `MyApplication` as application class: `android:name=".MyApplication"`
-- Contains API key metadata: `cx_manifest_api_key`
-- Registers `InteractionActivity` for survey display
-
-### 2. Plugin Communication
-
-**MathFlutterPlugin.kt**
-- Creates MethodChannel: `"math_flutter"`
-- Handles two methods:
-  - `initializeSurvey`: Confirms SDK connection (no survey ID needed)
-  - `launchSurvey`: Launches survey with given survey ID
-
-### 3. Flutter/Dart Side
-
-**MathFlutter.dart**
-- Provides two static methods:
-  - `initializeSurvey()`: Verifies platform channel connection
-  - `launchSurvey(String surveyId)`: Displays survey screen
+Collect customer feedback and display surveys in your Flutter app using the QuestionPro CX platform.
 
 ---
 
-## Communication Flow
+## 🚀 Quick Start
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  Flutter/Dart Layer (MathFlutter)                       │
-│  ─────────────────────────────────────────────────      │
-│  MethodChannel('math_flutter')                          │
-│  └─> invokeMethod('initializeSurvey')                   │
-└───────────────────┬─────────────────────────────────────┘
-                    │
-                    ▼  Platform Channel
-┌─────────────────────────────────────────────────────────┐
-│  Native Android Layer (MathFlutterPlugin)               │
-│  ─────────────────────────────────────────────────      │
-│  MethodChannel.setMethodCallHandler                     │
-│  └─> when "initializeSurvey"                            │
-│      └─> result.success("SDK initialized in Application")│
-└─────────────────────────────────────────────────────────┘
+### 1. Add to pubspec.yaml
+
+```yaml
+dependencies:
+  math_flutter: ^0.8.0
 ```
 
----
+### 2. Get Your API Key
 
-## Usage
+Get your QuestionPro CX API key from your [QuestionPro account](https://www.questionpro.com/).
 
-### Basic Setup (No Survey ID Required)
+### 3. Platform Setup
+
+#### Android Setup
+
+Add the API key to your app's `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<application>
+    <!-- Your existing config -->
+    
+    <!-- Add QuestionPro CX API key -->
+    <meta-data
+        android:name="cx_manifest_api_key"
+        android:value="YOUR_API_KEY_HERE" />
+</application>
+```
+
+**That's it for Android!** The plugin reads the API key from the manifest automatically.
+
+#### iOS Setup
+
+No additional configuration needed - API key is provided at runtime via code.
+
+### 4. Initialize in Your App
 
 ```dart
+import 'dart:io' show Platform;
 import 'package:math_flutter/math_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Optional: Confirm SDK connection
-  // SDK is already initialized in MyApplication.onCreate()
-  await MathFlutter.initializeSurvey();
+  // Initialize QuestionPro CX SDK
+  if (Platform.isIOS) {
+    // iOS: API key required as parameter
+    await MathFlutter.initializeSurvey(
+      apiKey: 'YOUR_API_KEY_HERE',
+      dataCenter: 'US', // or 'EU'
+    );
+  } else {
+    // Android: Reads from AndroidManifest.xml
+    await MathFlutter.initializeSurvey(
+      dataCenter: 'US', // or 'EU'
+    );
+  }
   
   runApp(MyApp());
 }
 ```
 
-**Your app will run successfully without any survey ID.** The SDK initializes automatically on the native side.
-
-### Launching a Survey (Survey ID Required)
+### 5. Launch Surveys
 
 ```dart
-// Only needed when you want to display a survey to the user
-await MathFlutter.launchSurvey('your_survey_id_here');
+// Display a survey to your users
+await MathFlutter.launchSurvey('your_survey_id');
 
-// Example: Add a button to launch survey
+// Example: Add a button
 ElevatedButton(
   onPressed: () async {
     await MathFlutter.launchSurvey('123456789');
@@ -93,66 +86,234 @@ ElevatedButton(
 
 ---
 
-## Current Behavior
+## 📖 API Reference
 
-When you run the app:
-1. ✅ SDK initializes in `MyApplication.onCreate()` (Android native)
-2. ✅ Flutter calls `initializeSurvey()` - confirms connection
-3. ✅ App displays (no survey ID needed)
+### `initializeSurvey()`
 
-Survey ID is **only needed** when:
-- You want to actually display a survey to the user
-- You call `launchSurvey()` with a specific survey ID
+Initializes the QuestionPro CX SDK. Call this once during app startup.
+
+```dart
+Future<String> initializeSurvey({
+  String? apiKey,
+  String dataCenter = 'US',
+})
+```
+
+**Parameters:**
+- `apiKey` (optional): Your QuestionPro CX API key
+  - **Required for iOS** (no manifest file)
+  - **Optional for Android** (reads from AndroidManifest.xml)
+- `dataCenter` (optional): `'US'` or `'EU'`. Defaults to `'US'`
+
+**Returns:** Success message from the SDK
+
+**Platform-Specific Examples:**
+
+```dart
+// Android - reads API key from AndroidManifest.xml
+await MathFlutter.initializeSurvey(dataCenter: 'US');
+
+// iOS - requires API key parameter  
+await MathFlutter.initializeSurvey(
+  apiKey: 'your_api_key_here',
+  dataCenter: 'US',
+);
+
+// Cross-platform approach
+if (Platform.isIOS) {
+  await MathFlutter.initializeSurvey(
+    apiKey: 'your_api_key',
+    dataCenter: 'US',
+  );
+} else {
+  await MathFlutter.initializeSurvey(dataCenter: 'US');
+}
+```
+
+### `launchSurvey()`
+
+Displays a survey to the user.
+
+```dart
+Future<void> launchSurvey(String surveyId)
+```
+
+**Parameters:**
+- `surveyId` (required): The ID of the survey to display (as a string)
+
+**Example:**
+```dart
+await MathFlutter.launchSurvey('123456789');
+```
 
 ---
 
-## Key Components
+## 🏗️ Architecture Overview
 
-### Android Native:
-- **MyApplication.kt**: Initializes QuestionPro CX SDK on app startup
-- **MathFlutterPlugin.kt**: Handles Flutter platform channel communication
-- **AndroidManifest.xml**: Declares application class, API key, and InteractionActivity
-- **InteractionActivity**: Native activity for displaying surveys (from QuestionPro SDK)
+### Communication Flow
 
-### Flutter/Dart:
+```
+┌─────────────────────────────────────────────────────────┐
+│  Flutter/Dart Layer (MathFlutter)                       │
+│  ─────────────────────────────────────────────────      │
+│  MethodChannel('math_flutter')                          │
+│  └─> initializeSurvey(apiKey: '...')                    │
+│  └─> launchSurvey(surveyId: '...')                      │
+└───────────────────┬─────────────────────────────────────┘
+                    │
+                    ▼  Platform Channel
+┌─────────────────────────────────────────────────────────┐
+│  Native Platform (Android/iOS)                          │
+│  ─────────────────────────────────────────────────      │
+│  • Initializes QuestionPro CX SDK                       │
+│  • Launches InteractionActivity/Survey View             │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Key Components
+
+#### Android:
+- **MathFlutterPlugin.kt**: Handles method channel communication and SDK initialization
+- **AndroidManifest.xml**: Contains API key metadata and declares InteractionActivity
+- **InteractionActivity**: Native activity provided by QuestionPro SDK for displaying surveys
+
+#### iOS:
+- **MathFlutterPlugin.swift**: Handles method channel communication and SDK initialization
+- **QuestionProCXFramework**: Native iOS SDK from QuestionPro
+
+#### Flutter/Dart:
 - **MathFlutter**: Main plugin class with static methods
 - **MethodChannel**: Bridge for Flutter ↔ Native communication
 
 ---
 
-## Survey Launch Flow
+## 🔒 Security Best Practices
+
+### Protecting Your API Key
+
+#### Android
+Your API key is stored in `AndroidManifest.xml` which is compiled into your app. Best practices:
+
+**✅ Do:**
+- Add `AndroidManifest.xml` API key configuration to your app repository (it's required for the app to work)
+- Use different API keys for development and production builds
+- Consider using build variants or flavors with different manifests for different environments
+- Rotate API keys periodically in your QuestionPro account
+
+**❌ Don't:**
+- Share your production API key publicly
+- Use the same API key across multiple unrelated apps
+- Commit sensitive survey configurations to public repositories
+
+#### iOS
+Your API key is passed at runtime. Best practices:
+
+**✅ Do:**
+- Store API keys in secure configuration files
+- Use environment variables or build configurations
+- Use different API keys for development and production
+
+**❌ Don't:**
+- Hardcode production API keys in source code
+- Commit API keys to public repositories
+- Include API keys in client-side code that gets published
+
+### Recommended Approach: Environment Variables
+
+Use dart-define or environment-specific configuration:
 
 ```dart
-// From Flutter side
-await MathFlutter.launchSurvey('123');
+// Pass via dart-define when building:
+// flutter build --dart-define=QUESTIONPRO_API_KEY=your_key
 
-// ↓ Platform Channel ↓
+const apiKey = String.fromEnvironment('QUESTIONPRO_API_KEY', defaultValue: '');
 
-// Native side receives and launches InteractionActivity
-val intent = Intent(activity, InteractionActivity::class.java)
-intent.putExtra("SURVEY_ID", surveyId.toLong())
-activity.startActivity(intent)
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  if (Platform.isIOS) {
+    await MathFlutter.initializeSurvey(
+      apiKey: apiKey,
+      dataCenter: 'US',
+    );
+  } else {
+    // Android reads from manifest
+    await MathFlutter.initializeSurvey(dataCenter: 'US');
+  }
+  
+  runApp(MyApp());
+}
+```
+
+For Android, use different `AndroidManifest.xml` files per build variant:
+```
+android/app/src/
+  ├── main/AndroidManifest.xml
+  ├── debug/AndroidManifest.xml   (dev API key)
+  └── release/AndroidManifest.xml (prod API key)
 ```
 
 ---
 
-## Installation
+## 📋 Requirements
 
-Add to your `pubspec.yaml`:
+- **Flutter:** `>=3.0.0`
+- **Dart:** `>=3.0.0 <4.0.0`
+- **Android:** minSdkVersion 24 (Android 7.0+)
+- **iOS:** iOS 14.0+
 
-```yaml
-dependencies:
-  math_flutter:
-    path: ../math_flutter  # or use git/pub.dev URL
+---
+
+## 🐛 Troubleshooting
+
+### Android Issues
+
+**Q: App crashes on launch or "MISSING_API_KEY" error**
+- Ensure you've added the API key metadata to your app's `AndroidManifest.xml` (under `<application>` tag)
+- Verify the metadata name is exactly: `cx_manifest_api_key`
+- Make sure the value is not empty
+
+**Q: Survey doesn't display**
+- Check that you've called `initializeSurvey()` before `launchSurvey()`
+- Verify the survey ID is correct
+- Check that internet permissions are granted
+- Ensure the survey is active in your QuestionPro account
+- Check Android logcat for QuestionPro SDK error messages
+
+### iOS Issues
+
+**Q: Build fails with CocoaPods error**
+- Run `cd ios && pod install && cd ..`
+- Try `pod deintegrate` then `pod install`
+
+**Q: Survey doesn't appear**
+- Ensure you've called `initializeSurvey()` with a valid API key
+- Check the survey ID matches your QuestionPro configuration
+- Verify iOS deployment target is 14.0+
+
+---
+
+## 📦 Example App
+
+See the `/example` folder for a complete working example.
+
+```bash
+cd example
+flutter pub get
+flutter run
 ```
 
-## Requirements
+---
 
-- Flutter SDK: `>=3.0.0`
-- Dart SDK: `>=3.0.0 <4.0.0`
-- Android minSdkVersion: 24
-- QuestionPro CX Android SDK: 2.2.2
+## 📄 License
 
-## License
+MIT License - see LICENSE file for details.
 
-See LICENSE file.
+---
+
+## 🔗 Resources
+
+- [QuestionPro CX](https://www.questionpro.com/)
+- [QuestionPro Android SDK](https://github.com/surveyanalyticscorp/android-cx)
+- [QuestionPro iOS SDK](https://github.com/surveyanalyticscorp/ios-cx)
+- [Report Issues](https://github.com/Dilpreet010/math_operations/issues)

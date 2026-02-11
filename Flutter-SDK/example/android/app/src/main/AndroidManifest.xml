@@ -25,6 +25,11 @@
             </intent-filter>
         </activity>
         
+        <!-- QuestionPro CX API Key - REPLACE WITH YOUR OWN KEY -->
+        <meta-data
+            android:name="cx_manifest_api_key"
+            android:value="YOUR_API_KEY_HERE" />
+        
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

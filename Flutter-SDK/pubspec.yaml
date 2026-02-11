@@ -1,6 +1,6 @@
 name: math_flutter
-description: Flutter plugin for QuestionPro CX interaction SDK (Android).
-version: 0.6.0
+description: Flutter plugin for QuestionPro CX SDK integration. Supports Android and iOS platforms for customer feedback and survey collection.
+version: 0.8.0
 homepage: https://github.com/Dilpreet010/math_operations
 
 environment:
@@ -21,4 +21,6 @@ flutter:
     platforms:
       android:
         package: com.example.math_flutter
+        pluginClass: MathFlutterPlugin
+      ios:
         pluginClass: MathFlutterPlugin

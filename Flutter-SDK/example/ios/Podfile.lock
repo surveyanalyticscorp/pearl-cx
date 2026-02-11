@@ -1,0 +1,33 @@
+PODS:
+  - Flutter (1.0.0)
+  - math_flutter (0.7.0):
+    - Flutter
+    - QuestionProCXFramework
+  - QuestionProCXFramework (2.2.5)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - math_flutter (from `.symlinks/plugins/math_flutter/ios`)
+  - QuestionProCXFramework (from `https://github.com/surveyanalyticscorp/ios-cx`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  math_flutter:
+    :path: ".symlinks/plugins/math_flutter/ios"
+  QuestionProCXFramework:
+    :git: https://github.com/surveyanalyticscorp/ios-cx
+
+CHECKOUT OPTIONS:
+  QuestionProCXFramework:
+    :commit: 161ee908d371cead7a8160148bff21994ddb2926
+    :git: https://github.com/surveyanalyticscorp/ios-cx
+
+SPEC CHECKSUMS:
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  math_flutter: 9ae0412a6c49ca68c32943330eb580b18b04a2fd
+  QuestionProCXFramework: 56c0e23eabd4d5a511947442609f6d01c15049b9
+
+PODFILE CHECKSUM: ca1361991eef14d58621757f4882f053b83ea766
+
+COCOAPODS: 1.16.2

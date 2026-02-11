@@ -23,6 +23,7 @@ class MathFlutterPlugin :
     private lateinit var channel: MethodChannel
     private var applicationContext: Context? = null
     private var activity: Activity? = null
+    private var isInitialized = false
 
     companion object {
         private const val CHANNEL = "math_flutter"
@@ -37,7 +38,10 @@ class MathFlutterPlugin :
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "initializeSurvey" -> initializeSurvey(result)
+            "initializeSurvey" -> {
+                val dataCenter = call.argument<String>("dataCenter") ?: "US"
+                initializeSurvey(dataCenter, result)
+            }
             "launchSurvey" -> {
                 val surveyId = call.argument<String>("surveyId") ?: ""
                 launchSurvey(surveyId, result)
@@ -46,11 +50,59 @@ class MathFlutterPlugin :
         }
     }
 
-    private fun initializeSurvey(result: MethodChannel.Result) {
-        // SDK is already initialized in MyApplication.onCreate()
-        // This method just confirms the connection is working
-        Log.d(TAG, "initializeSurvey called - SDK initialized in Application")
-        result.success("SDK initialized in Application")
+    private fun initializeSurvey(dataCenterStr: String, result: MethodChannel.Result) {
+        val ctx = applicationContext
+        if (ctx == null) {
+            result.error("NO_CONTEXT", "Application context not available", null)
+            return
+        }
+
+        if (isInitialized) {
+            result.success("SDK already initialized")
+            return
+        }
+
+        try {
+            // Read API key from AndroidManifest.xml metadata
+            val appInfo = ctx.packageManager.getApplicationInfo(
+                ctx.packageName,
+                android.content.pm.PackageManager.GET_META_DATA
+            )
+            val apiKey = appInfo.metaData?.getString("cx_manifest_api_key")
+
+            if (apiKey.isNullOrEmpty()) {
+                result.error(
+                    "MISSING_API_KEY",
+                    "API key not found in AndroidManifest.xml. Add <meta-data android:name=\"cx_manifest_api_key\" android:value=\"YOUR_API_KEY\" /> to your AndroidManifest.xml",
+                    null
+                )
+                return
+            }
+
+            val dataCenter = when (dataCenterStr.uppercase()) {
+                "EU" -> DataCenter.EU
+                else -> DataCenter.US
+            }
+
+            val touchPoint = TouchPoint.Builder(dataCenter).build()
+
+            QuestionProCX.getInstance().init(ctx, touchPoint, object : IQuestionProInitCallback {
+                override fun onInitializationSuccess(message: String?) {
+                    Log.d(TAG, "QuestionPro CX SDK initialized successfully: $message")
+                    isInitialized = true
+                    result.success("SDK initialized successfully")
+                }
+
+                override fun onInitializationFailure(error: String?) {
+                    Log.e(TAG, "QuestionPro CX SDK initialization failed: $error")
+                    result.error("INIT_FAILED", error ?: "Initialization failed", null)
+                }
+            })
+            
+        } catch (e: Exception) {
+            Log.e(TAG, "initializeSurvey error", e)
+            result.error("INIT_EXCEPTION", e.message, null)
+        }
     }
 
     private fun launchSurvey(surveyId: String, result: MethodChannel.Result) {

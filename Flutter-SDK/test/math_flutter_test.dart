@@ -8,7 +8,7 @@ void main() {
   const MethodChannel channel = MethodChannel('math_flutter');
 
   setUp(() {
-    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
       channel,
       (MethodCall methodCall) async {
@@ -34,7 +34,7 @@ void main() {
   });
 
   tearDown(() {
-    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, null);
   });
 
