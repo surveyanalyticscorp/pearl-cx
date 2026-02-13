@@ -43,6 +43,12 @@ public class APIUtils {
         return components.url?.absoluteString ?? ""
     }
     
+    public static func getExcludedSurveyFeedbackURL() -> String {
+        var components = getBaseURL()
+        components.path = kSurveyFeebackExcludedFeedback
+        return components.url?.absoluteString ?? ""
+    }
+    
     public static func getCoreSurveyFeedbackURL() -> String {
         var components = getBaseURL()
         components.path = kCoreSurveyFeedbackURL
@@ -50,18 +56,18 @@ public class APIUtils {
     }
     
     @MainActor
-    public static func updateInterceptSurveyLaunchEvent(interceptData: Intercept, visitorId: String, surveyType: String) -> Void {
+    public static func updateInterceptSurveyLaunchEvent(interceptData: Intercept, visitorId: String) -> Void {
         let apiKey: String = CacheUtils.getFromUserDefaults(key: kApiKey, type: String.self)!
         var bodyParam = [:] as [String: Any]
         bodyParam["ruleGroupId"] = interceptData.ruleGroupId;
         bodyParam["interceptId"] = interceptData.id;
         bodyParam["surveyId"] = interceptData.surveyId;
-        bodyParam["surveyType"] = surveyType
+        bodyParam["surveyType"] = InterceptSurveyLaunchEvent.LAUNCHED.rawValue;
         let updateInterceptSurveyLaunchEventURL = self.getUpdateInterceptSurveyLaunchEventURL()
         
         Task {
             do {
-                let response: InterceptSurveyLaunchEventResponse = try await ApiServiceCX.shared.request(
+                let _: InterceptSurveyLaunchEventResponse = try await ApiServiceCX.shared.request(
                     urlString: updateInterceptSurveyLaunchEventURL,
                     method: .POST,
                     headers: [
@@ -72,6 +78,34 @@ public class APIUtils {
                     body: bodyParam,
                     responseType: InterceptSurveyLaunchEventResponse.self
                 )
+            } catch {
+                
+            }
+        }
+    }
+    
+    @MainActor
+    public static func executeExcludedFeedbackEvent(interceptData: Intercept, visitorId: String) {
+        let apiKey: String = CacheUtils.getFromUserDefaults(key: kApiKey, type: String.self)!
+        var bodyParam = [:] as [String: Any]
+        bodyParam["ruleGroupId"] = interceptData.ruleGroupId;
+        bodyParam["interceptId"] = interceptData.id;
+        bodyParam["surveyId"] = interceptData.surveyId;
+        bodyParam["surveyType"] = InterceptSurveyLaunchEvent.EXCLUDED.rawValue;
+        let excludedFeedbackEventURL = self.getExcludedSurveyFeedbackURL()
+        let bodyArray = [bodyParam]
+        Task {
+            do {
+                let _: InterceptSurveyLaunchEventResponse = try await ApiServiceCX.shared.request(
+                    urlString: excludedFeedbackEventURL,
+                    method: .POST,
+                    headers: [
+                        "x-app-key": apiKey,
+                        "package-name": kPackageName,
+                        "visitor-id": visitorId
+                    ],
+                    body: bodyArray,
+                    responseType: InterceptSurveyLaunchEventResponse.self)
             } catch {
                 
             }
