@@ -2,26 +2,24 @@
  * TypeScript type definitions for QuestionPro Survey Intercept SDK
  */
 
+import { DataCenter } from ".";
+
 /**
  * Configuration options for the Survey SDK
  */
 export interface ConfigureOptions {
   /** Required API key for authentication */
   apiKey: string;
-  /** Optional server URL for the QuestionPro instance */
-  serverUrl?: string;
-  /** Optional user email for targeting */
-  email?: string;
-  /** Optional flag to enable logging */
-  enableLogging?: boolean;
-  /** Optional custom variables for survey targeting and personalization */
-  variables?: Record<string, any>;
+  /** Optional flag to enable debug mode */
+  enableDebug?: boolean;
+  /** Required data center for the SDK */
+  dataCenter: DataCenter;
 }
 
 /**
  * Event data structure for survey events
  */
-export interface SurveyEvent {
+interface SurveyEvent {
   /** Type of the event */
   type: 'survey_shown' | 'survey_completed' | 'survey_dismissed' | 'error';
   /** Optional event data */
