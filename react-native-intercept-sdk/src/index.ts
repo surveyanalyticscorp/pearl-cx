@@ -1,11 +1,11 @@
 import { NativeModules, Platform, NativeEventEmitter } from 'react-native';
-import { DataMapping } from './types';
+import { ConfigureOptions, DataMapping } from './types';
 
-export interface ConfigureOptions {
+/*export interface ConfigureOptions {
   apiKey: string;
   dataCenter: DataCenter;
   enableDebug?: boolean;
-}
+}*/
 
 interface SurveyResult {
   success: boolean;
@@ -38,7 +38,7 @@ const LINKING_ERROR =
 
 //console.log('🔍 Available NativeModules:', Object.keys(NativeModules));
 //console.log('🔍 Looking for InterceptSdk:', !!NativeModules.InterceptSdk);
-console.log('🔍 InterceptSdk methods:', NativeModules.InterceptSdk ? Object.keys(NativeModules.InterceptSdk) : 'Not found');
+//console.log('🔍 InterceptSdk methods:', NativeModules.InterceptSdk ? Object.keys(NativeModules.InterceptSdk) : 'Not found');
 
 // Get the native module
 const InterceptSdkNative = NativeModules.InterceptSdk
