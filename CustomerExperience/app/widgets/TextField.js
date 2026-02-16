@@ -62,6 +62,7 @@ const QPTextField = props => {
       props.textStyle ?? {
         color: Colors.filterIconColor,
         fontFamily: FontFamily.regular,
+        fontSize: TextSizes.secondary,
       },
     [props.textStyle],
   );
@@ -89,20 +90,27 @@ const QPTextField = props => {
         mode="flat" // closest to old underline style; change to "outlined" if you prefer
         label={label}
         value={value !== '' ? value : props.value ? value : defaultValue}
-        placeholder={props.placeholder}
-        placeholderTextColor={Colors.borderColor}
+        placeholder={label} // Show placeholder when not focused and empty
+        placeholderTextColor={Colors.evenDarkerGrey}
         autoCapitalize="none"
         autoCorrect={false}
-        autoFocus={props.autofocus}
         keyboardType={keyboardType}
         secureTextEntry={secureText}
         returnKeyType={returnKey}
-        underlineColor={props.baseColor || Colors.primary}
-        activeUnderlineColor={props.tintColor || Colors.accentLight}
-        textColor={props.textColor || Colors.primary}
+        underlineColor={Colors.filterIconColor}
+        activeUnderlineColor={Colors.accentLight}
+        textColor={Colors.filterIconColor}
+        theme={{
+          colors: {
+            placeholder: Colors.evenDarkerGrey,
+            text: Colors.filterIconColor,
+            primary: Colors.accentLight,
+          },
+        }}
         style={[
           {backgroundColor: 'transparent'},
           {fontSize: TextSizes.primary},
+          {fontFamily: FontFamily.regular},
           textStyle,
         ]}
         accessibilityLabel={props.accessibilityLabel ?? 'text-field'}
@@ -127,7 +135,7 @@ export default QPTextField;
 const styles = StyleSheet.create({
   passwordVisibilityButton: {
     position: 'absolute',
-    top: MarginConstants.tab4,
+    top: MarginConstants.tab1_4x,
     right: MarginConstants.tab1,
     paddingVertical: PaddingConstants.halfTab,
   },
