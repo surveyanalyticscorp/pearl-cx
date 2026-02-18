@@ -41,14 +41,14 @@ Add the QuestionPro CX Framework to your iOS project:
 Add to your `ios/Podfile`:
 ```ruby
 pod 'react-native-survey-intercept', :path => '../node_modules/@npm-questionpro/react-native-survey-intercept'
-pod 'QuestionProCXFramework', :git => 'https://github.com/surveyanalyticscorp/ios-cx.git', :tag => '2.2.5'
+pod 'QuestionProCXFramework', :git => 'https://github.com/surveyanalyticscorp/ios-cx.git', :tag => '2.2.6'
 ```
 
 #### Option 2: Swift Package Manager
 1. Open your iOS project in Xcode
 2. Go to Project Settings > Package Dependencies
 3. Add: `https://github.com/surveyanalyticscorp/ios-cx.git`
-4. Select version `2.2.5` or later
+4. Select version `2.2.6` or later
 
 ### 3. Android Setup
 
@@ -189,7 +189,7 @@ enum DataCenter {
 
 ## Native SDK Versions
 
-- **iOS**: QuestionPro CX Framework v2.2.5+
+- **iOS**: QuestionPro CX Framework v2.2.4+
 - **Android**: QuestionPro CX SDK v2.2.3+
 
 **Returns:** Function to unsubscribe from events

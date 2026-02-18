@@ -1,6 +1,6 @@
 {
   "name": "@npm-questionpro/react-native-survey-intercept",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "React Native SDK wrapper for QuestionPro Survey Intercept SDK",
   "main": "lib/commonjs/index.js",
   "files": [
@@ -18,7 +18,8 @@
   "scripts": {
     "prepare": "bob build",
     "build": "bob build",
-    "example": "cd example && npm start"
+    "example": "cd example && npm start",
+    "rebuild": "npm cache clean --force && npm install && npm run build"
   },
   "keywords": [
     "react-native",

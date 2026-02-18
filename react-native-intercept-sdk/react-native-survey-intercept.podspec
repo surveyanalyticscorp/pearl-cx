@@ -43,7 +43,7 @@ Pod::Spec.new do |s|
     echo "⚠️  IMPORTANT: QuestionProCXFramework dependency required"
     echo ""
     echo "Add to your app via CocoaPods (Podfile):"
-    echo "pod 'QuestionProCXFramework', :git => 'https://github.com/surveyanalyticscorp/ios-cx.git', :tag => '2.2.5'"
+    echo "pod 'QuestionProCXFramework', :git => 'https://github.com/surveyanalyticscorp/ios-cx.git', :tag => '2.2.6'"
     echo ""
     echo "OR add via SPM (Xcode):"
     echo "https://github.com/surveyanalyticscorp/ios-cx.git"
