@@ -96,7 +96,8 @@ class InterceptSdk: RCTEventEmitter, QuestionProInitDelegate {
                 }
 
                 // Initialize TouchPoint with data center
-                let touchPoint = TouchPoint.initTouchPoint(dataCenter: dataCenter)
+                let touchPoint = TouchPoint.initTouchPoint(dataCenter: dataCenter);
+                touchPoint.platform = TouchPoint.PLATFORM.REACT_NATIVE.rawValue;
                 
 
                 // Get main window for configuration

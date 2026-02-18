@@ -6,6 +6,7 @@ import android.util.Log
 
 import com.questionpro.cxlib.QuestionProCX;
 import com.questionpro.cxlib.enums.DataCenter;
+import com.questionpro.cxlib.enums.Platform;
 import com.questionpro.cxlib.interfaces.IQuestionProInitCallback;
 import com.questionpro.cxlib.model.TouchPoint;
 
@@ -53,11 +54,10 @@ class InterceptSdkModule(private val reactContext: ReactApplicationContext) : Re
         
         if (enableDebug) {
             Log.d("InterceptSdk", "Using DataCenter: $dataCenter")
-            Log.d("InterceptSdk", "Debug mode enabled")
         }
             
             val touchPoint = TouchPoint.Builder(dataCenter)
-                .isFlutterApp(true)
+                .setPlatform(Platform.REACT_NATIVE)
                 .build()
 
             QuestionProCX.getInstance().init(reactContext, touchPoint, object : IQuestionProInitCallback {
@@ -172,7 +172,7 @@ class InterceptSdkModule(private val reactContext: ReactApplicationContext) : Re
             val result = Arguments.createMap().apply {
                 putBoolean("success", true)
                 putString("eventId", "native_${System.currentTimeMillis()}")
-                putString("message", "Event notified successfully")
+                putString("message", "Event notified successfully123")
             }
             promise.resolve(result)
         } catch (e: Exception) {
