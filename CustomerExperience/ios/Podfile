@@ -1,13 +1,12 @@
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 
-$FirebaseSDKVersion = '8.15.0'
 $RNFirebaseAsStaticFramework = true
 $RNFirebaseAnalyticsWithoutAdIdSupport=true
 
 platform :ios, '13.0'
 install! 'cocoapods', :deterministic_uuids => false
-
+use_modular_headers!
 target 'CustomerExperience' do
   # pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   # pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"

@@ -44,6 +44,16 @@ export function getFoldedText(text, MAX_WORD_LENGTH = 10) {
   }
   return text;
 }
+
+export function getFoldedTextByCharacter(text, MAX_CHAR_LENGTH = 256) {
+  if (text.length > MAX_CHAR_LENGTH) {
+    return `${text.slice(0, MAX_CHAR_LENGTH)}<span style="color:${
+      Colors.accentLight
+    };"> ...see more</span>`;
+  }
+  return text;
+}
+
 export function getFoldedDescriptionText(text, MAX_WORD_LENGTH = 10) {
   if (StringUtils.getWords(text).length > MAX_WORD_LENGTH) {
     return `${StringUtils.getWords(text).slice(0, MAX_WORD_LENGTH).join(' ')}
@@ -100,12 +110,6 @@ export const CommentCancelReplyButton = ({isSelected, toggle}) => {
 export const CommentText = ({text}) => {
   const {width} = useWindowDimensions();
   const systemFonts = [...defaultSystemFonts, FontFamily.regular];
-
-  console.log('HTML comment', text);
-  console.log(
-    'HTML text',
-    JSON.stringify(StringUtils.formatCommentToHTML(text)),
-  );
 
   return (
     <View testID="comment-text-container">
@@ -297,8 +301,9 @@ export const CommentItem = ({item, isSelected = false}) => {
             style={styles.commentDateText}
           />
         </View>
+        <VerticalSpaceBox multiplyBy={0.5} />
         <CommentText
-          text={isFolded ? getFoldedText(text.trim()) : text.trim()}
+          text={isFolded ? getFoldedTextByCharacter(text.trim()) : text.trim()}
         />
       </UserNameAndCommentContainer>
     </Pressable>
