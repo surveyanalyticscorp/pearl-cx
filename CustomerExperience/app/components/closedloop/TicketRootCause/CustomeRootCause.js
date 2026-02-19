@@ -145,7 +145,7 @@ export const CustomRootCauseHeader = ({children}) => {
 export const CustomRootCause = () => {
   const dispatch = useDispatch();
   const centralizeRootCause = useSelector(
-    state => state.dashboard.ticket?.centralizeRootCause,
+    state => state.dashboard.ticket?.centralizeRootCause ?? {},
   );
 
   useEffect(() => {
@@ -160,9 +160,9 @@ export const CustomRootCause = () => {
   const hasRootCause = () => {
     return (
       (centralizeRootCause &&
-        centralizeRootCause.centralizeRootCauseIds.length &&
+        centralizeRootCause.centralizeRootCauseIds &&
         centralizeRootCause.centralizeRootCauseIds.length > 0) ||
-      centralizeRootCause.isOtherChecked
+      (centralizeRootCause && centralizeRootCause.isOtherChecked)
     );
   };
   console.log('CentralizedRootCause in CustomRootCause:', hasRootCause);
