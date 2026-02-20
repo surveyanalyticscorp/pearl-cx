@@ -1,3 +1,10 @@
+## 0.9.12
+
+* **FIX:** Fixed Swift compiler error in iOS setDataMappings implementation
+  - Corrected method call to use `dataMappings` parameter instead of `customVariables` and `apiKey`
+  - Fixed: "Extra arguments at positions #1, #2 in call" error
+  - iOS builds now compile successfully
+
 ## 0.9.11
 
 * **FIX:** Upgraded Android SDK to v2.2.4 to support setDataMappings
