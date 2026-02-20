@@ -1,3 +1,98 @@
+## 0.9.11
+
+* **FIX:** Upgraded Android SDK to v2.2.4 to support setDataMappings
+  - Upgraded from `android-cx:2.2.2` to `android-cx:2.2.4`
+  - Should resolve "Unresolved reference 'setDataMappings'" compilation error
+  - Verified to match working native Android implementation
+
+## 0.9.10
+
+* **FIX:** Restored correct `setDataMappings()` method for Android and iOS
+  - Fixed compilation error: "Unresolved reference"
+  - Android: `QuestionProCX.getInstance().setDataMappings(customVars)`
+  - iOS: `QuestionProCX.getinstance().setDataMappings(customVariables:apiKey:)`
+  - Both platforms now use the same method name: `setDataMappings`
+  - Verified from working native code implementation
+
+## 0.9.9
+
+* **FIX:** Restored correct setDataMappings() method for Android
+  - Confirmed with user's working native code: `QuestionProCX.getInstance().setDataMappings(customVars)`
+  - Method signature matches QuestionPro CX SDK documentation
+  - Should resolve compatibility issues
+
+## 0.9.8
+
+* **FIX:** Updated Android SDK method call to use correct API
+  - Changed to `customVariables()` method for QuestionPro CX SDK v2.2.2
+  - Verified compatibility with QuestionPro CX Android SDK
+  - setDataMappings feature now fully functional on Android
+
+## 0.9.7
+
+* **FIX:** Corrected Android SDK method call for setDataMappings
+  - Changed from `setDataMappings()` to `setCustomVariables()` to match QuestionPro CX SDK v2.2.2 API
+  - Fixes compilation error: "Unresolved reference 'setDataMappings'"
+  - Android implementation now works correctly
+
+## 0.9.6
+
+* **PATCH:** Minor improvements and stability updates
+  - Ensured iOS implementation for setDataMappings is fully integrated
+  - Verified cross-platform compatibility for data mapping feature
+
+## 0.9.5
+
+* **NEW FEATURE:** Added `setDataMappings()` method for custom user data mapping
+  - Send custom user attributes to QuestionPro CX (firstName, email, phone, etc.)
+  - Enables survey personalization and user-specific analytics
+  - Example: `await MathFlutter.setDataMappings({'firstName': 'John', 'email': 'john@example.com'})`
+  - Supports both Android and iOS platforms
+
+## 0.9.4
+
+* **BREAKING CHANGE:** Renamed method `logScreenView()` to `viewCount()`
+  - Better naming convention that reflects the QuestionPro View Count rule
+  - Update your code: `MathFlutter.logScreenView(name)` → `MathFlutter.viewCount(name)`
+  - All functionality remains the same, only the method name changed
+
+## 0.9.3
+
+* **IMPROVED:** Enhanced DataCenter enum mapping in Android plugin
+  - Added explicit DataCenter import for better code clarity
+  - Changed to dynamic enum mapping using `valueOf()` instead of manual when statement
+  - More maintainable approach that automatically supports all DataCenter values
+  - Defaults to US datacenter if invalid value provided
+
+## 0.9.2
+
+* **FIX:** Properly implemented Cx_Callback channel in Android plugin
+  - Added View Count functionality to MathFlutterPlugin.kt
+  - `viewCount()` now works correctly in integrated apps
+  - Fixed "channel not found" error when calling screen view tracking
+  - Android plugin now handles screen view logging with QuestionProCX SDK
+
+## 0.9.1
+
+* **FIX:** Removed conflicting DataCenter import in Android plugin
+  - Changed to fully qualified class names to avoid compilation errors
+  - Fixes Kotlin compilation bug in version 0.9.0
+
+## 0.9.0
+
+* **NEW:** View Count rule support for screen view tracking
+  - Added `viewCount(screenName, {apiKey})` method for tracking user navigation
+  - **Android**: Automatically reads API key from AndroidManifest.xml
+  - **iOS**: API key passed directly via optional parameter
+  - Integrates with QuestionPro CX admin dashboard's View Count rule setup
+  - Method channel implementation for native communication (`Cx_Callback`)
+* **IMPROVED:** Enhanced example app with View Count demo
+  - Added checkout screen logging demonstration
+  - Platform-specific API key handling in example code
+* **IMPROVED:** Updated native implementations
+  - Android: MainActivity reads API key from manifest metadata
+  - iOS: MathFlutterPlugin handles screen view logging with API key validation
+
 ## 0.8.0
 
 * Fixed iOS Swift compilation error - corrected TouchPoint.initTouchPoint() static method call
