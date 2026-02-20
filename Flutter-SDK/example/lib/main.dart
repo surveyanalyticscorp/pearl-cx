@@ -119,6 +119,43 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _logCheckoutScreen() async {
+    try {
+      final String result;
+
+      if (Platform.isIOS) {
+        // iOS: Pass API key directly from code
+        result = await MathFlutter.viewCount(
+          'Check_out',
+          apiKey: _apiKeyController.text,
+        );
+      } else {
+        // Android: API key is read from AndroidManifest.xml
+        result = await MathFlutter.viewCount('Check_out');
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('✓ $result - Screen: Check_out'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+      print('Response from Native: $result');
+    } on PlatformException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('✗ Error: ${e.message}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      print('Error calling native method: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -219,6 +256,39 @@ class _HomePageState extends State<HomePage> {
               onPressed: _isInitialized ? _launchSurvey : null,
               icon: const Icon(Icons.launch),
               label: const Text('Launch Survey'),
+            ),
+            const SizedBox(height: 32),
+            Text(
+              '3. Log Screen View (View Count Rule)',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 8),
+            Card(
+              color: Colors.green.shade50,
+              child: const Padding(
+                padding: EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    Icon(Icons.visibility, color: Colors.green),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Logs "Check_out" screen view for View Count rule tracking',
+                        style: TextStyle(fontSize: 13),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            FilledButton.icon(
+              onPressed: _logCheckoutScreen,
+              icon: const Icon(Icons.shopping_cart_checkout),
+              label: const Text('Log Checkout Screen View'),
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
             ),
             const SizedBox(height: 32),
             const Divider(),

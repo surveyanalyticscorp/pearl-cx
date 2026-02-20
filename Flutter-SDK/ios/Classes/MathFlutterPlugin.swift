@@ -9,75 +9,120 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "math_flutter", binaryMessenger: registrar.messenger())
+        let cxChannel = FlutterMethodChannel(name: "Cx_Callback", binaryMessenger: registrar.messenger())
         let instance = MathFlutterPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
+        registrar.addMethodCallDelegate(instance, channel: cxChannel)
 
-        // Try to get window from AppDelegate (may be nil on Scene-based apps)
         if let appDelegate = UIApplication.shared.delegate as? FlutterAppDelegate {
             instance.window = appDelegate.window ?? nil
         }
     }
 
-    // MARK: - Method Channel
-
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let args = call.arguments as? [String: Any]
+        
         switch call.method {
-
         case "initializeSurvey":
-            let args = call.arguments as? [String: Any]
-            let apiKey = args?["apiKey"] as? String
-            let dataCenter = args?["dataCenter"] as? String ?? "US"
+            handleInitializeSurvey(args: args, result: result)
             
-            // iOS requires API key (no manifest file like Android)
-            guard let validApiKey = apiKey, !validApiKey.isEmpty else {
-                result(FlutterError(
-                    code: "INVALID_ARGS",
-                    message: "apiKey is required for iOS. Please pass apiKey parameter: initializeSurvey(apiKey: 'your_key')",
-                    details: nil
-                ))
-                return
-            }
-            
-            initializeSurvey(apiKey: validApiKey, dataCenter: dataCenter, result: result)
-
         case "launchSurvey":
-            if let args = call.arguments as? [String: Any],
-               let surveyIdString = args["surveyId"] as? String,
-               let surveyId = Int64(surveyIdString),
-               surveyId > 0 {
-                launchSurvey(surveyId: surveyId, result: result)
-            } else {
-                result(FlutterError(
-                    code: "INVALID_ARGS",
-                    message: "surveyId is required (positive number)",
-                    details: nil
-                ))
-            }
-
+            handleLaunchSurvey(args: args, result: result)
+            
+        case "nativeMethod":
+            handleScreenViewMethod(args: args, result: result)
+            
+        case "setDataMappings":
+            handleSetDataMappings(args: args, result: result)
+            
         default:
             result(FlutterMethodNotImplemented)
         }
     }
+    
+    // MARK: - Method Handlers
+    
+    private func handleInitializeSurvey(args: [String: Any]?, result: @escaping FlutterResult) {
+        guard let apiKey = args?["apiKey"] as? String, !apiKey.isEmpty else {
+            result(FlutterError(
+                code: "INVALID_ARGS",
+                message: "apiKey is required for iOS",
+                details: nil
+            ))
+            return
+        }
+        
+        let dataCenter = args?["dataCenter"] as? String ?? "US"
+        initializeSurvey(apiKey: apiKey, dataCenter: dataCenter, result: result)
+    }
+    
+    private func handleLaunchSurvey(args: [String: Any]?, result: @escaping FlutterResult) {
+        guard let surveyIdString = args?["surveyId"] as? String,
+              let surveyId = Int64(surveyIdString),
+              surveyId > 0 else {
+            result(FlutterError(
+                code: "INVALID_ARGS",
+                message: "surveyId must be a positive number",
+                details: nil
+            ))
+            return
+        }
+        
+        launchSurvey(surveyId: surveyId, result: result)
+    }
+    
+    private func handleScreenViewMethod(args: [String: Any]?, result: @escaping FlutterResult) {
+        guard let screenName = args?["screen_name_key"] as? String, !screenName.isEmpty else {
+            result(FlutterError(
+                code: "INVALID_ARGS",
+                message: "screen_name_key is required",
+                details: nil
+            ))
+            return
+        }
+        
+        guard let apiKey = args?["apiKey"] as? String, !apiKey.isEmpty else {
+            result(FlutterError(
+                code: "INVALID_ARGS",
+                message: "apiKey is required for iOS",
+                details: nil
+            ))
+            return
+        }
+        
+        logScreenView(screenName: screenName, apiKey: apiKey, result: result)
+    }
+    
+    private func handleSetDataMappings(args: [String: Any]?, result: @escaping FlutterResult) {
+        guard let customVariables = args?["customVariables"] as? [String: String], !customVariables.isEmpty else {
+            result(FlutterError(
+                code: "INVALID_ARGS",
+                message: "customVariables cannot be null or empty",
+                details: nil
+            ))
+            return
+        }
+        
+        guard let apiKey = args?["apiKey"] as? String, !apiKey.isEmpty else {
+            result(FlutterError(
+                code: "INVALID_ARGS",
+                message: "apiKey is required for iOS",
+                details: nil
+            ))
+            return
+        }
+        
+        setDataMappings(customVariables: customVariables, apiKey: apiKey, result: result)
+    }
 
-    // MARK: - SDK Initialization (iOS 13+ / 14+ safe)
+    // MARK: - SDK Initialization
 
     private func initializeSurvey(apiKey: String, dataCenter: String, result: @escaping FlutterResult) {
-
         if isInitialized {
             result("SDK already initialized")
             return
         }
 
-        if apiKey.isEmpty {
-            result(FlutterError(
-                code: "INVALID_ARGS",
-                message: "apiKey cannot be empty",
-                details: nil
-            ))
-            return
-        }
-
-        // Safe window retrieval for Scene-based apps (iOS 13+)
         let appWindow = window ?? UIApplication.shared
             .connectedScenes
             .compactMap { ($0 as? UIWindowScene)?.windows.first }
@@ -96,9 +141,7 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
             ? TouchPoint.DataCenter.DATA_CENTER_EU 
             : TouchPoint.DataCenter.DATA_CENTER_US
 
-        let touchPoint = TouchPoint.initTouchPoint(
-            dataCenter: dataCenterValue
-        )
+        let touchPoint = TouchPoint.initTouchPoint(dataCenter: dataCenterValue)
 
         QuestionProCX.getinstance().configure(
             apiKey: apiKey,
@@ -114,11 +157,22 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
     // MARK: - Launch Survey
 
     private func launchSurvey(surveyId: Int64, result: @escaping FlutterResult) {
-        // iOS SDK triggers survey via screen name (Intercept rule required)
-        QuestionProCX.getinstance().setScreenName(
-            screenName: "Survey_\(surveyId)"
-        )
+        QuestionProCX.getinstance().setScreenName(screenName: "Survey_\(surveyId)")
         result("Survey trigger sent")
+    }
+
+    // MARK: - Log Screen View
+
+    private func logScreenView(screenName: String, apiKey: String, result: @escaping FlutterResult) {
+        QuestionProCX.getinstance().setScreenName(screenName: screenName)
+        result("Event logged")
+    }
+    
+    // MARK: - Set Data Mappings
+    
+    private func setDataMappings(customVariables: [String: String], apiKey: String, result: @escaping FlutterResult) {
+        QuestionProCX.getinstance().setDataMappings(customVariables: customVariables, apiKey: apiKey)
+        result("Data mappings set successfully")
     }
 
     // MARK: - Init Callbacks
