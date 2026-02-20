@@ -8,7 +8,7 @@ Flutter plugin for QuestionPro CX SDK integration on Android and iOS.
 
 ```yaml
 dependencies:
-  math_flutter: ^0.9.9
+  math_flutter: ^0.9.12
 ```
 
 ### Get Your API Key

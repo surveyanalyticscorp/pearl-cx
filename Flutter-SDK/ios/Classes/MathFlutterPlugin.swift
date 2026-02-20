@@ -171,7 +171,7 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
     // MARK: - Set Data Mappings
     
     private func setDataMappings(customVariables: [String: String], apiKey: String, result: @escaping FlutterResult) {
-        QuestionProCX.getinstance().setDataMappings(customVariables: customVariables, apiKey: apiKey)
+        QuestionProCX.getinstance().setDataMappings(dataMappings: customVariables)
         result("Data mappings set successfully")
     }
 
