@@ -10,8 +10,8 @@ import {
   Alert,
 } from 'react-native';
 
-import InterceptSdk, {DataCenter} from '@questionpro/react-native-survey-intercept';
-import { DataMapping } from '@questionpro/react-native-survey-intercept/lib/typescript/types';
+import InterceptSdk, {DataCenter} from '@npm-questionpro/react-native-survey-intercept';
+import { DataMapping } from '@npm-questionpro/react-native-survey-intercept/lib/typescript/types';
 
 
 const App = () => {
@@ -55,14 +55,20 @@ const App = () => {
       console.log('🔧 Configuring SDK...');
       
       const result = await InterceptSdk.configure({
-        apiKey: '3a1a6c70-12c9-4a98-8571-bdf563331449',
-        dataCenter: DataCenter.EU,
-        enableDebug: false,
+        apiKey: '058d9ebc-c80e-4969-8196-f4feb7aae5e6',
+        dataCenter: DataCenter.US,
+        enableDebug: true,
       });
       
       console.log('✅ SDK Configuration result:', result);
-      setSdkStatus('Configured Successfully');
-      Alert.alert('Success', 'SDK configured successfully!');
+      if(result.success){
+        setSdkStatus('Configured Successfully');
+        Alert.alert('Success', 'SDK configured successfully!');
+      }else{
+        setSdkStatus('Configuration Failed');
+        Alert.alert('Failure', result.message);
+      }
+      
     } catch (error) {
       console.error('❌ SDK Configuration error:', error);
       setSdkStatus('Configuration Failed');
@@ -86,19 +92,14 @@ const App = () => {
 
   const launchSurvey = async () => {
     try {
-      console.log('🚀 Launching survey...');
-      
       const result = await InterceptSdk.setScreenVisited('survey');
-      
       console.log('✅ Survey launch result:', result);
-      //Alert.alert('Success', 'Survey launched successfully!');
     } catch (error) {
       console.error('❌ Launch survey error:', error);
-      //Alert.alert('Error', `Failed to launch survey: ${error}`);
     }
   };
 
-  const testDataMappings = async () => {
+  const setDataMappings = async () => {
   try {
     const dataMappings: DataMapping = {
       'firstName': 'ReactNative',
@@ -106,7 +107,6 @@ const App = () => {
       'emailAddress': 'sample@questionpro.com'
     };
     
-    console.log('🧪 Testing setDataMappings...');
     const result = await InterceptSdk.setDataMappings(dataMappings);
     console.log('✅ setDataMappings result:', result);
   } catch (error) {
@@ -145,7 +145,7 @@ const App = () => {
 
            <TouchableOpacity 
             style={[styles.button, styles.secondaryButton]} 
-            onPress={testDataMappings}
+            onPress={setDataMappings}
           >
             <Text style={styles.buttonText}>Map Data</Text>
           </TouchableOpacity>
