@@ -9,7 +9,8 @@ buildscript {
         minSdkVersion = 26
         compileSdkVersion = 34         // Updated from 34
         targetSdkVersion = 35          // Updated from 34
-        kotlinVersion = "1.5.31"
+//        kotlinVersion = "1.5.31"
+        kotlinVersion = "1.6.10"
         soLoaderVersion = "0.10.4"
 
          if (System.properties['os.arch'] == "aarch64") {
