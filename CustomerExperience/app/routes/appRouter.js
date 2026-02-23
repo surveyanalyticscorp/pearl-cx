@@ -232,7 +232,7 @@ const AppRouter = props => {
     </DetractorStack.Navigator>
   );
 
-  const dashboardModalStack = props => (
+  const DashboardModalStack = props => (
     <DetractorStack.Navigator mode="modal">
       <DetractorStack.Screen
         name="Dashboard"
@@ -251,7 +251,7 @@ const AppRouter = props => {
     </DetractorStack.Navigator>
   );
 
-  const settingStack = props => (
+  const SettingStack = props => (
     <SettingsStack.Navigator>
       <SettingsStack.Screen
         name={translate('settings.settings')}
@@ -282,14 +282,15 @@ const AppRouter = props => {
     return (
       <Drawer.Navigator
         mode={'modal'}
+        screenOptions={{headerShown: false}}
         drawerStyle={styles.drawerStyle}
         drawerContent={props => <DrawerContent {...props} />}>
-        <Drawer.Screen name="Dashboard" component={dashboardModalStack} />
+        <Drawer.Screen name="Dashboard" component={DashboardModalStack} />
         <Drawer.Screen name="Responses" component={ResponsesStack} />
         <Drawer.Screen name="ClosedLoop" component={ClosedLoopStack} />
         <Drawer.Screen
           name={translate('settings.settings')}
-          component={settingStack}
+          component={SettingStack}
         />
       </Drawer.Navigator>
     );
