@@ -6,6 +6,7 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
 
     private var window: UIWindow?
     private var isInitialized = false
+    private var initResult: FlutterResult?
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "math_flutter", binaryMessenger: registrar.messenger())
@@ -81,16 +82,7 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
             return
         }
         
-        guard let apiKey = args?["apiKey"] as? String, !apiKey.isEmpty else {
-            result(FlutterError(
-                code: "INVALID_ARGS",
-                message: "apiKey is required for iOS",
-                details: nil
-            ))
-            return
-        }
-        
-        logScreenView(screenName: screenName, apiKey: apiKey, result: result)
+        logScreenView(screenName: screenName, result: result)
     }
     
     private func handleSetDataMappings(args: [String: Any]?, result: @escaping FlutterResult) {
@@ -103,16 +95,7 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
             return
         }
         
-        guard let apiKey = args?["apiKey"] as? String, !apiKey.isEmpty else {
-            result(FlutterError(
-                code: "INVALID_ARGS",
-                message: "apiKey is required for iOS",
-                details: nil
-            ))
-            return
-        }
-        
-        setDataMappings(customVariables: customVariables, apiKey: apiKey, result: result)
+        setDataMappings(customVariables: customVariables, result: result)
     }
 
     // MARK: - SDK Initialization
@@ -143,15 +126,15 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
 
         let touchPoint = TouchPoint.initTouchPoint(dataCenter: dataCenterValue)
 
+        // Store result callback for async response
+        initResult = result
+
         QuestionProCX.getinstance().configure(
             apiKey: apiKey,
             touchPoint: touchPoint,
             withWindow: validWindow,
             initCallbackDelegate: self
         )
-
-        isInitialized = true
-        result("SDK initialized")
     }
 
     // MARK: - Launch Survey
@@ -163,14 +146,14 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
 
     // MARK: - Log Screen View
 
-    private func logScreenView(screenName: String, apiKey: String, result: @escaping FlutterResult) {
+    private func logScreenView(screenName: String, result: @escaping FlutterResult) {
         QuestionProCX.getinstance().setScreenName(screenName: screenName)
         result("Event logged")
     }
     
     // MARK: - Set Data Mappings
     
-    private func setDataMappings(customVariables: [String: String], apiKey: String, result: @escaping FlutterResult) {
+    private func setDataMappings(customVariables: [String: String], result: @escaping FlutterResult) {
         QuestionProCX.getinstance().setDataMappings(dataMappings: customVariables)
         result("Data mappings set successfully")
     }
@@ -178,10 +161,17 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
     // MARK: - Init Callbacks
 
     public func initSDKSuccess() {
-        print("QuestionPro CX SDK initialized successfully")
+        isInitialized = true
+        initResult?("QuestionPro CX SDK initialized successfully")
+        initResult = nil
     }
 
     public func initSDKFailed(error: String) {
-        print("QuestionPro CX SDK initialization failed: \(error)")
+        initResult?(FlutterError(
+            code: "INIT_FAILED",
+            message: error.isEmpty ? "Initialization failed" : error,
+            details: nil
+        ))
+        initResult = nil
     }
 }

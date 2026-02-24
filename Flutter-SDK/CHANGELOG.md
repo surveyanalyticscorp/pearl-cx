@@ -1,3 +1,21 @@
+## 0.10.0
+
+* **BREAKING CHANGES:** Major API improvements and simplification
+  - Added `DataCenter` enum (DataCenter.us, DataCenter.eu) replacing string-based data center selection
+  - Removed `apiKey` parameter from `viewCount()` - no longer required
+  - Removed `apiKey` parameter from `setDataMappings()` - no longer required
+  - Native SDK success/error messages now returned instead of hardcoded strings
+  - Added comprehensive documentation comments for all public APIs
+  - Simplified example app with auto-initialization
+  - Updated README with cleaner, more concise documentation
+  - Removed redundant exception handling in Dart layer
+
+* **IMPROVEMENTS:**
+  - Enhanced validation with dual-layer approach (Dart + Native)
+  - Better error messages from native SDKs
+  - Cleaner API surface with fewer parameters
+  - Improved developer experience with clear enum types
+
 ## 0.9.12
 
 * **FIX:** Fixed Swift compiler error in iOS setDataMappings implementation

@@ -119,7 +119,7 @@ class MathFlutterPlugin :
             QuestionProCX.getInstance().init(ctx, touchPoint, object : IQuestionProInitCallback {
                 override fun onInitializationSuccess(message: String?) {
                     isInitialized = true
-                    result.success("SDK initialized successfully")
+                    result.success(message ?: "SDK initialized successfully")
                 }
 
                 override fun onInitializationFailure(error: String?) {
@@ -127,7 +127,7 @@ class MathFlutterPlugin :
                 }
             })
         } catch (e: Exception) {
-            result.error("INIT_EXCEPTION", e.message, null)
+            result.error("INIT_EXCEPTION", e.message ?: "Unknown error occurred", null)
         }
     }
 
@@ -156,19 +156,8 @@ class MathFlutterPlugin :
     }
 
     private fun handleScreenView(screenName: String?, result: MethodChannel.Result) {
-        val ctx = applicationContext ?: run {
-            result.error("NO_CONTEXT", "Application context not available", null)
-            return
-        }
-
         if (screenName.isNullOrEmpty()) {
             result.error("INVALID_ARGS", "screen_name_key is required", null)
-            return
-        }
-
-        val apiKey = getApiKeyFromManifest(ctx)
-        if (apiKey.isNullOrEmpty()) {
-            result.error("MISSING_API_KEY", "API key not found in AndroidManifest.xml", null)
             return
         }
 
@@ -176,7 +165,7 @@ class MathFlutterPlugin :
             QuestionProCX.getInstance().setScreenVisited(screenName)
             result.success("Event logged")
         } catch (e: Exception) {
-            result.error("SCREEN_VIEW_ERROR", e.message, null)
+            result.error("SCREEN_VIEW_ERROR", e.message ?: "Unknown error occurred", null)
         }
     }
 

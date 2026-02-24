@@ -1,6 +1,6 @@
 name: math_flutter
 description: Flutter plugin for QuestionPro CX SDK integration. Supports Android and iOS platforms for customer feedback and survey collection.
-version: 0.9.12
+version: 0.10.0
 homepage: https://github.com/Dilpreet010/math_operations
 
 environment:
