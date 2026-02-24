@@ -420,7 +420,7 @@ export const SendEmail = props => {
     richText.current.insertLink(title, url);
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} forceInset={{top: 'never'}}>
       <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={40}>
         <VerticalSpaceBox />
         <GestureHandleBar />

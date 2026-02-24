@@ -9,7 +9,9 @@ const FeedbackStack = createStackNavigator();
 
 const ClosedLoopStack = ({navigation}) => {
   return (
-    <FeedbackStack.Navigator mode="modal" testID="closed-loop-stack">
+    <FeedbackStack.Navigator
+      screenOptions={{presentation: 'modal'}}
+      testID="closed-loop-stack">
       <FeedbackStack.Screen
         name="Closedloop"
         component={ClosedLoop}

@@ -155,7 +155,7 @@ const DrawerContent = ({navigation}) => {
       routeName: 'Dashboard',
       frontIcon: <DrawerButtonIcon name={'dashboard'} />,
       onPress: () => {
-        navigation.navigate('Dashboard');
+        navigation.navigate('DashboardTab');
       },
     },
     responses: {

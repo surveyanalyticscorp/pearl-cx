@@ -21,7 +21,7 @@ import PushNotification from '../components/notifications/PushNotifications';
 const DetractorStack = createStackNavigator();
 
 const DashboardModalStack = props => (
-  <DetractorStack.Navigator mode="modal">
+  <DetractorStack.Navigator screenOptions={{presentation: 'modal'}}>
     <DetractorStack.Screen
       name="Dashboard"
       component={dashboardStack}

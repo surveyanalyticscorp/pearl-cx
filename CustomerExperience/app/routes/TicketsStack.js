@@ -41,7 +41,7 @@ const feedbackStack = props => (
 const TicketsStack = ({navigation}) => {
   console.log('Tickets View');
   return (
-    <FeedbackStack.Navigator mode="modal">
+    <FeedbackStack.Navigator screenOptions={{presentation: 'modal'}}>
       <FeedbackStack.Screen
         name="Responses"
         component={feedbackStack}

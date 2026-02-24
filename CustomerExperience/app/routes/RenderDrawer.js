@@ -14,7 +14,7 @@ const Drawer = createDrawerNavigator();
 const RenderDrawer = () => {
   return (
     <Drawer.Navigator
-      mode={'modal'}
+      screenOptions={{headerShown: false, presentation: 'modal'}}
       drawerStyle={styles.drawerStyle}
       drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen name="Dashboard" component={DashboardModalStack} />

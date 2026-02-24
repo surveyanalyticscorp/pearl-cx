@@ -14,11 +14,11 @@ import SegmentSelector from '../components/SegmentSelector';
 import TicketDetails from '../components/closedloop/TicketDetails';
 import {TransitionPresets} from '@react-navigation/stack';
 
-const FeedbackStack = createStackNavigator();
+const FeedbackStackNavigator = createStackNavigator();
 
-const feedbackStack = props => (
-  <FeedbackStack.Navigator>
-    <FeedbackStack.Screen
+const FeedbackStack = props => (
+  <FeedbackStackNavigator.Navigator>
+    <FeedbackStackNavigator.Screen
       name={translate('responses.responses')}
       component={Feedback}
       options={({navigation, route}) => ({
@@ -30,7 +30,7 @@ const feedbackStack = props => (
         // headerRight: (props) => <SearchIcon route={'Feedback'} />,
       })}
     />
-    <FeedbackStack.Screen
+    <FeedbackStackNavigator.Screen
       name="Search Response"
       component={SearchFeedback}
       options={({navigation, route}) => ({
@@ -39,18 +39,18 @@ const feedbackStack = props => (
       })}
     />
 
-    {CommonScreens(FeedbackStack)}
-  </FeedbackStack.Navigator>
+    {CommonScreens(FeedbackStackNavigator)}
+  </FeedbackStackNavigator.Navigator>
 );
 
 const ResponsesStack = ({navigation}) => (
-  <FeedbackStack.Navigator mode="modal">
-    <FeedbackStack.Screen
+  <FeedbackStackNavigator.Navigator screenOptions={{presentation: 'modal'}}>
+    <FeedbackStackNavigator.Screen
       name="Responses"
-      component={feedbackStack}
+      component={FeedbackStack}
       options={({navigation, route}) => ({headerShown: false})}
     />
-    <FeedbackStack.Screen
+    <FeedbackStackNavigator.Screen
       name={translate('responses.sort_by')}
       component={FeedbackSorter}
       options={({navigation, route}) => ({
@@ -66,7 +66,7 @@ const ResponsesStack = ({navigation}) => (
         // },
       })}
     />
-  </FeedbackStack.Navigator>
+  </FeedbackStackNavigator.Navigator>
 );
 
 export default ResponsesStack;

@@ -164,7 +164,7 @@ const AppRouter = props => {
     });
   };
 
-  const dashboardStack = props => (
+  const DashboardStack = props => (
     <DetractorStack.Navigator>
       <DetractorStack.Screen
         name={translate('dashboard.dashboard')}
@@ -233,10 +233,10 @@ const AppRouter = props => {
   );
 
   const DashboardModalStack = props => (
-    <DetractorStack.Navigator mode="modal">
+    <DetractorStack.Navigator screenOptions={{presentation: 'modal'}}>
       <DetractorStack.Screen
-        name="Dashboard"
-        component={dashboardStack}
+        name="DashboardMain"
+        component={DashboardStack}
         options={({navigation, route}) => ({headerShown: false})}
       />
 
@@ -281,11 +281,10 @@ const AppRouter = props => {
   const RenderDrawer = () => {
     return (
       <Drawer.Navigator
-        mode={'modal'}
-        screenOptions={{headerShown: false}}
+        screenOptions={{headerShown: false, presentation: 'modal'}}
         drawerStyle={styles.drawerStyle}
         drawerContent={props => <DrawerContent {...props} />}>
-        <Drawer.Screen name="Dashboard" component={DashboardModalStack} />
+        <Drawer.Screen name="DashboardTab" component={DashboardModalStack} />
         <Drawer.Screen name="Responses" component={ResponsesStack} />
         <Drawer.Screen name="ClosedLoop" component={ClosedLoopStack} />
         <Drawer.Screen

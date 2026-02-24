@@ -7,7 +7,7 @@ const ModalStack = createStackNavigator();
 
 export function ModalStackScreen() {
   return (
-    <ModalStack.Navigator mode="modal">
+    <ModalStack.Navigator screenOptions={{presentation: 'modal'}}>
       <ModalStack.Screen
         name={translate('responses.new_ticket')}
         component={CreateTicket}
