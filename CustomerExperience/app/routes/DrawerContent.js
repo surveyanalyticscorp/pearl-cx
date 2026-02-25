@@ -1,100 +1,41 @@
 import React, {useEffect, useState} from 'react';
-import {View, Image, StyleSheet, Text, Platform, Pressable} from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  Text,
+  Platform,
+  Pressable,
+  Dimensions,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import FontIcon from 'react-native-vector-icons/FontAwesome5';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
-import {useSelector} from 'react-redux';
 import {Sizes} from '../styles/Size.constant';
-import {PaddingConstants} from '../styles/padding.constants';
-import StringUtils from '../Utils/StringUtils';
-import DeviceInfo from 'react-native-device-info';
 import {DrawerActions} from '@react-navigation/native';
 import {translate} from '../Utils/MultilinguaUtils';
-import TicketSync from '../components/TicketSync';
-import ClosedLoopSvgIcon from '../../assets/images/closed_loop.svg';
 import DrawerBackground from './commonUI/DrawerBackground';
-import TextLabel from '../../app/widgets/TextLabel/TextLabel';
 import useLogoutProcess from './drawerContent/useLogoutProcess';
 import logoutDialog from './drawerContent/LogoutDialog';
 import ResponsesIcon from '../widgets/IconWidget/ResponsesIcon';
-import useLoginPersistence from './drawerContent/useLoginPersistance';
-import ListItemSeparator from './commonUI/ListItemSeparator';
+import RenderWorkspaceInfo from './drawerContent/RenderWorkspaceInfo';
+import {
+  ClosedLoopIcon,
+  DrawerButton,
+  LogoutButtonIcon,
+  RenderDrawerButtons,
+  RenderSettingsAndLogout,
+} from './drawerContent/DrawerContentUI';
 
-const LogoutButtonIcon = () => {
-  return (
-    <FontIcon
-      size={1.3 * Sizes.icons}
-      color={Colors.accent}
-      name={'sign-out-alt'}
-      style={styles.rowIcon}
-    />
-  );
-};
+import QuestionProBanner from '../../assets/images/questionpro_banner.svg';
+
 const DrawerCXLogo = () => {
-  return (
-    <Image
-      style={styles.image}
-      source={require('../config/images/cx_logo.png')}
-      resizeMode="cover"
-    />
-  );
-};
+  const {width} = Dimensions.get('window');
 
-const AppVersion = () => {
-  let {logoutAction} = useLogoutProcess();
-  let isTokenExpired = useSelector(state => state.dashboard.isTokenExpired);
-  useEffect(() => {
-    if (isTokenExpired) {
-      console.log('EXPIRED!');
-      logoutAction();
-    } else {
-      console.log('not EXPIRED!');
-    }
-  }, [isTokenExpired]);
-  return (
-    <TextLabel style={styles.drawerVersionText}>
-      {'v ' + DeviceInfo.getVersion()}
-    </TextLabel>
-  );
+  return <QuestionProBanner height={width / 8} width={width / 2} />;
 };
-const UserName = () => {
-  const userInfo = useSelector(state => state.global.userInfo);
-  const {saveCredentials} = useLoginPersistence();
-  const accessCode = useSelector(state => state.global.accessCode);
-  console.log('USER_INFO', userInfo.emailAddress, accessCode);
-  console.log('USER_INFO', 'DRAWER _content');
-  let username = StringUtils.isNotEmpty(StringUtils.reformatName(userInfo))
-    ? StringUtils.reformatName(userInfo)
-    : userInfo.emailAddress;
-
-  useEffect(() => {
-    if (
-      StringUtils.isNotEmpty(userInfo.emailAddress) &&
-      StringUtils.isNotEmpty(accessCode)
-    ) {
-      saveCredentials(userInfo.emailAddress, accessCode);
-    }
-  }, [userInfo, accessCode]);
-  return (
-    <TextLabel
-      text={username}
-      style={{...styles.emailView, ...styles.emailCaption}}
-    />
-  );
-};
-
-const ClosedLoopIcon = ({isActive}) => (
-  <View style={styles.rowIcon}>
-    <ClosedLoopSvgIcon
-      stroke={isActive ? Colors.accentLight : Colors.accent}
-      height={1.3 * Sizes.icons}
-      width={1.3 * Sizes.icons}
-    />
-  </View>
-);
 
 const DrawerResponsesIcon = ({isActive}) => (
   <View style={styles.rowIcon}>
@@ -113,52 +54,6 @@ const DrawerButtonIcon = ({name, isActive}) => (
     style={styles.rowIcon}
   />
 );
-
-const DrawerButton = ({
-  dataObj,
-  frontIcon,
-  title,
-  onPress,
-  isActive = false,
-}) => {
-  return (
-    <Pressable onPress={onPress ?? dataObj.onPress}>
-      <View style={[styles.drawerRow, isActive && styles.activeDrawerRow]}>
-        {frontIcon ?? dataObj.frontIcon}
-        <Text style={[styles.labelStyle, isActive && styles.activeLabelStyle]}>
-          {title ?? dataObj.title}
-        </Text>
-      </View>
-    </Pressable>
-  );
-};
-
-let RenderSettingsAndLogout = ({children}) => {
-  return <View style={styles.drawerVersionContainer}>{children}</View>;
-};
-const RenderDrawerButtons = ({children}) => {
-  return (
-    <View>
-      <TicketSync />
-      {children}
-    </View>
-  );
-};
-
-const RenderWorkspaceInfo = () => {
-  const {emailAddress, firstName, lastName, organizationName} = useSelector(
-    state => state.global.userInfo,
-  );
-  return (
-    <View style={{marginTop: MarginConstants.tab2}}>
-      <ListItemSeparator />
-      <TextLabel text={organizationName} style={styles.workspaceName} />
-
-      <TextLabel text={firstName + ' ' + lastName} style={styles.userInfo} />
-      <TextLabel text={emailAddress} style={styles.userInfo} />
-    </View>
-  );
-};
 
 const DrawerContent = ({navigation}) => {
   const {logoutAction} = useLogoutProcess();
@@ -288,33 +183,18 @@ const styles = StyleSheet.create({
     width: MarginConstants.tab4 * 6,
     height: MarginConstants.tab4 * 2,
   },
-  labelStyle: {
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.primary,
-    color: Colors.accent,
-    paddingLeft: PaddingConstants.tab1,
-  },
+
   emailCaption: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     color: Colors.primary,
     textAlign: 'auto',
   },
-  drawerRow: {
-    flexDirection: 'row',
-    marginTop: MarginConstants.tab2,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
+
   rowIcon: {
     margin: MarginConstants.tab1,
   },
-  drawerVersionContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    marginBottom:
-      Platform.OS === 'ios' ? MarginConstants.tab4 : MarginConstants.tab3,
-  },
+
   drawerVersionText: {
     marginHorizontal: MarginConstants.tab1,
     marginBottom: MarginConstants.tab4,
@@ -334,26 +214,5 @@ const styles = StyleSheet.create({
   emailView: {
     marginVertical: MarginConstants.halfTab,
     marginHorizontal: MarginConstants.tab1,
-  },
-  activeDrawerRow: {
-    backgroundColor: Colors.white, // Add transparency to primary color
-    borderRadius: 8,
-    paddingVertical: PaddingConstants.halfTab,
-  },
-  activeLabelStyle: {
-    fontFamily: FontFamily.regular, // Make active text bold if you have medium weight
-    color: Colors.accentLight,
-  },
-  workspaceName: {
-    fontFamily: FontFamily.medium,
-    fontSize: TextSizes.primary,
-    color: Colors.accent,
-    paddingLeft: PaddingConstants.tab1,
-  },
-  userInfo: {
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.secondary,
-    color: Colors.accent,
-    paddingLeft: PaddingConstants.tab1,
   },
 });

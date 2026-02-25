@@ -97,6 +97,7 @@ export const CommentCancelReplyButton = ({isSelected, toggle}) => {
       testID="cancel-reply-button"
       style={{
         paddingStart: MarginConstants.tab1_2x + MarginConstants.halfTab,
+        paddingEnd: MarginConstants.tab1_2x + MarginConstants.halfTab,
         marginVertical: MarginConstants.halfTab,
       }}
       onPress={toggle}>
