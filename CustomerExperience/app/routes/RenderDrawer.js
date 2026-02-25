@@ -1,13 +1,13 @@
 import React from 'react';
+import {StyleSheet} from 'react-native';
+import DrawerContent from '../routes/DrawerContent';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import DrawerContent from './DrawerContent';
+import DashboardModalStack from './DashboardModalStack';
 import {translate} from '../Utils/MultilinguaUtils';
-import DashboardModalStack from './DashboardStack';
 import ResponsesStack from './ResponsesStack';
 import ClosedLoopStack from './ClosedLoopStack';
 import SettingStack from './SettingsStack';
 import {Colors} from '../styles/color.constants';
-import {StyleSheet} from 'react-native';
 
 const Drawer = createDrawerNavigator();
 
@@ -17,7 +17,7 @@ const RenderDrawer = () => {
       screenOptions={{headerShown: false, presentation: 'modal'}}
       drawerStyle={styles.drawerStyle}
       drawerContent={props => <DrawerContent {...props} />}>
-      <Drawer.Screen name="Dashboard" component={DashboardModalStack} />
+      <Drawer.Screen name="DashboardTab" component={DashboardModalStack} />
       <Drawer.Screen name="Responses" component={ResponsesStack} />
       <Drawer.Screen name="ClosedLoop" component={ClosedLoopStack} />
       <Drawer.Screen
