@@ -40,7 +40,6 @@ Add the QuestionPro CX Framework to your iOS project:
 #### Option 1: CocoaPods (Recommended)
 Add to your `ios/Podfile`:
 ```ruby
-pod 'react-native-survey-intercept', :path => '../node_modules/@npm-questionpro/react-native-survey-intercept'
 pod 'QuestionProCXFramework', :git => 'https://github.com/surveyanalyticscorp/ios-cx.git', :tag => '2.2.6'
 ```
 
@@ -83,7 +82,7 @@ import InterceptSdk, {DataCenter} from '@npm-questionpro/react-native-survey-int
 // Configure the SDK
 await InterceptSdk.configure({
   apiKey: 'your-api-key-here',
-  dataCenter: DataCenter.US, // Optional: US, EU, CA, SG, AU, AE, SA, KSA
+  dataCenter: DataCenter.US, // US, EU, CA, SG, AU, AE, SA, KSA
   enableDebug: true // Optional: Enable debug logging
 });
 ```
@@ -189,14 +188,8 @@ enum DataCenter {
 
 ## Native SDK Versions
 
-- **iOS**: QuestionPro CX Framework v2.2.4+
-- **Android**: QuestionPro CX SDK v2.2.3+
-
-**Returns:** Function to unsubscribe from events
-
-### `removeAllListeners(): void`
-
-Removes all event listeners. Call this when your component unmounts.
+- **iOS**: QuestionPro CX Framework v2.2.6+
+- **Android**: QuestionPro CX SDK v2.2.4+
 
 
 ## Troubleshooting
@@ -206,11 +199,32 @@ Removes all event listeners. Call this when your component unmounts.
 1. **Module not found**: Ensure QuestionProCXFramework is added to your project
 2. **Pod install fails**: Try `pod install --repo-update`
 3. **Swift compilation errors**: Verify iOS deployment target >= 15.0
+4. **Pod not installed**: If the `react-native-survey-intercept` pod is not installed, add it manually to your Podfile:
+
+```ruby
+pod 'react-native-survey-intercept', :path => '../node_modules/@npm-questionpro/react-native-survey-intercept'
+```
 
 ### Android Build Issues
 
 1. **Gradle sync fails**: Check Android SDK versions in `android/build.gradle`
 2. **Kotlin compilation errors**: Ensure Kotlin version >= 1.8.0
+3. **`lintDebug` build failure**: Lint has found errors in your Android project.
+   - Preferred: Fix the issues reported by lint in the build output.
+
+```groovy
+// ...existing code...
+android {
+    // ...existing config...
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+// ...existing code...
+```
+
 
 ### Debug Mode
 
@@ -224,19 +238,6 @@ await InterceptSdk.configure({
 ```
 
 
-
-## Troubleshooting
-
-### iOS Build Issues
-
-1. **Module not found**: Ensure QuestionProCXFramework is added to your project
-2. **Pod install fails**: Try `pod install --repo-update`
-3. **Swift compilation errors**: Verify iOS deployment target >= 15.0
-
-### Android Build Issues
-
-1. **Gradle sync fails**: Check Android SDK versions in `android/build.gradle`
-2. **Kotlin compilation errors**: Ensure Kotlin version >= 1.8.0
 
 
 ## License
