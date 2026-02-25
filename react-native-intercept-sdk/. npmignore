@@ -1,0 +1,25 @@
+# Development artifacts
+example/
+.github/
+node_modules/
+.git/
+.DS_Store
+*.log
+
+# Build cache
+.gradle/
+build/
+.bob/
+
+# IDE files
+.vscode/
+.idea/
+
+# Keep essential files
+!/lib
+!/android
+!/ios
+!/src
+!/README.md
+!/react-native-survey-intercept.podspec
+!/Package.swift
