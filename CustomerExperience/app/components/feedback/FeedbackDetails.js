@@ -157,21 +157,21 @@ const DetailsTab = createMaterialTopTabNavigator();
 const FeedbackDetailsTabStack = props => (
   <DetailsTab.Navigator
     testID="tab-navigator"
-    tabBarOptions={{
-      labelStyle: {
+    initialLayout={{width: useWindowDimensions().width}}
+    screenOptions={{
+      lazy: true,
+      tabBarLabelStyle: {
         width: useWindowDimensions().width / 3,
         fontSize: TextSizes.secondary,
         fontFamily: FontFamily.regular,
         textTransform: 'none',
       },
-      indicatorStyle: {backgroundColor: Colors.accentLight},
-      style: {backgroundColor: Colors.white, width: '100%'},
-      initialLayout: {width: useWindowDimensions().width},
-      tabStyle: {height: 1.2 * PaddingConstants.tab4},
-      activeTintColor: Colors.accentLight,
-      inactiveTintColor: Colors.primary,
+      tabBarIndicatorStyle: {backgroundColor: Colors.accentLight},
+      tabBarStyle: {backgroundColor: Colors.white, width: '100%'},
+      tabBarItemStyle: {height: 1.2 * PaddingConstants.tab4},
+      tabBarActiveTintColor: Colors.accentLight,
+      tabBarInactiveTintColor: Colors.primary,
     }}
-    lazy
     keyboardDismissMode={'auto'}>
     <DetailsTab.Screen
       name={translate('responses.feedback')}

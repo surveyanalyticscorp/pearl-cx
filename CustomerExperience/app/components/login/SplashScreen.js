@@ -23,7 +23,6 @@ import {
   setTokenExpired,
 } from '../../redux/actions/dashboard.actions';
 import {setLanguageInfo, setRangeFilter} from '../../redux/actions';
-import AppRouter from '../../routes/appRouter';
 import {setBaseUrl} from '../../redux/actions/login.actions';
 import moment from 'moment';
 import {sendAnalyticsEvent} from '../../Utils/AnalyticLogs';
@@ -144,11 +143,16 @@ function SplashScreen(props) {
     );
   };
 
-  return moveNext ? (
-    <AppRouter testID="app-router" />
-  ) : (
-    renderSplashScreenView()
-  );
+  // Notify parent component when splash initialization is complete
+  React.useEffect(() => {
+    if (moveNext) {
+      // Instead of rendering AppRouter here, just finish the splash screen
+      // The parent component should handle the transition to AppRouter
+    }
+  }, [moveNext]);
+
+  // Only show splash screen - don't render AppRouter from here
+  return renderSplashScreenView();
 }
 
 const mapStateToProps = state => {

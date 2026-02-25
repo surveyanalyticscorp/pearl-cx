@@ -84,21 +84,21 @@ export default function TicketDetails(props) {
       initialRouteName={
         selectedTab ? translate(selectedTab) : translate('close_loop.overview')
       }
-      tabBarOptions={{
-        labelStyle: {
+      initialLayout={{width: windowDimensions.width}}
+      screenOptions={{
+        lazy: true,
+        tabBarLabelStyle: {
           width: windowDimensions.width / 4,
           fontSize: TextSizes.secondary,
           fontFamily: FontFamily.regular,
           textTransform: 'none',
         },
-        indicatorStyle: {backgroundColor: Colors.accentLight},
-        style: {backgroundColor: Colors.white, width: '100%'},
-        initialLayout: {width: windowDimensions.width},
-        tabStyle: {height: 1.3 * PaddingConstants.tab4},
-        activeTintColor: Colors.accentLight,
-        inactiveTintColor: Colors.primary,
+        tabBarIndicatorStyle: {backgroundColor: Colors.accentLight},
+        tabBarStyle: {backgroundColor: Colors.white, width: '100%'},
+        tabBarItemStyle: {height: 1.3 * PaddingConstants.tab4},
+        tabBarActiveTintColor: Colors.accentLight,
+        tabBarInactiveTintColor: Colors.primary,
       }}
-      lazy
       keyboardDismissMode={'auto'}>
       <TicketTabs.Screen
         testID={'ticket-overview'}

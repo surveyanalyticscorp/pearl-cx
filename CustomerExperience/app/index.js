@@ -2,11 +2,12 @@ import * as React from 'react';
 
 import {Component} from 'react';
 import {store} from './redux/store/store';
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
 import {Provider as PaperProvider} from 'react-native-paper';
 
 // import FlashMessage from 'react-native-flash-message';
 import SplashScreen from './components/login/SplashScreen';
+import AppRouter from './routes/appRouter';
 import {NetworkMonitor} from 'react-native-redux-connectivity';
 import {
   SafeAreaProvider,
@@ -78,6 +79,28 @@ const defaultOptions = {
 // }
 
 // convert this class component as a functional component
+// Inner component to handle app routing logic
+const AppContent = () => {
+  const [splashInitialized, setSplashInitialized] = React.useState(false);
+  const authToken = useSelector(state => state.global.authToken);
+
+  // Add a timing mechanism similar to splash screen
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setSplashInitialized(true);
+    }, 1500); // Give splash screen time to initialize
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Determine what to render based on app state
+  if (!splashInitialized) {
+    return <SplashScreen />;
+  }
+
+  return <AppRouter />;
+};
+
 const CxApp = () => {
   const [styleBuilt, setStyleBuilt] = React.useState(false);
   const networkMonitor = React.useRef(new NetworkMonitor(store));
@@ -116,7 +139,7 @@ const CxApp = () => {
             barStyle={'light-content'}
             backgroundColor={Colors.white}
           />
-          {styleBuilt ? <SplashScreen /> : <View />}
+          {styleBuilt ? <AppContent /> : <View />}
           <Toast config={toastConfig} />
         </SafeAreaProvider>
       </PaperProvider>

@@ -65,16 +65,16 @@ export const RenderExitAlert = props => {
 
 export const CloseLoopTicketsTabs = props => (
   <CloseLoopTicketsTab.Navigator
-    tabBarOptions={{
-      labelStyle: {width: width / 3, fontSize: TextSizes.secondary},
-      indicatorStyle: {backgroundColor: Colors.accent},
-      style: {backgroundColor: Colors.white, width: '100%'},
-      initialLayout: {width: Dimensions.get('window').width},
-      tabStyle: {height: 1.5 * PaddingConstants.tab4},
-      activeTintColor: Colors.accent,
-      inactiveTintColor: Colors.primary,
+    initialLayout={{width: Dimensions.get('window').width}}
+    screenOptions={{
+      lazy: true,
+      tabBarLabelStyle: {width: width / 3, fontSize: TextSizes.secondary},
+      tabBarIndicatorStyle: {backgroundColor: Colors.accent},
+      tabBarStyle: {backgroundColor: Colors.white, width: '100%'},
+      tabBarItemStyle: {height: 1.5 * PaddingConstants.tab4},
+      tabBarActiveTintColor: Colors.accent,
+      tabBarInactiveTintColor: Colors.primary,
     }}
-    lazy
     keyboardDismissMode={'auto'}>
     <CloseLoopTicketsTab.Screen
       name={translate('dashboard.new')}
@@ -101,20 +101,20 @@ export const CloseLoopTicketsTabs = props => (
 
 export const DateRangeTabStack = props => (
   <DateRangeTab.Navigator
-    tabBarOptions={{
-      labelStyle: {
+    initialLayout={{width: Dimensions.get('window').width}}
+    screenOptions={{
+      lazy: true,
+      tabBarLabelStyle: {
         color: Colors.primary,
         width: width / 2,
         fontSize: TextSizes.primary,
         textTransform: 'none',
       },
 
-      indicatorStyle: {backgroundColor: Colors.accent},
-      style: {backgroundColor: Colors.white, width: '100%'},
-      initialLayout: {width: Dimensions.get('window').width},
-      tabStyle: {height: 1.3 * PaddingConstants.tab4},
+      tabBarIndicatorStyle: {backgroundColor: Colors.accent},
+      tabBarStyle: {backgroundColor: Colors.white, width: '100%'},
+      tabBarItemStyle: {height: 1.3 * PaddingConstants.tab4},
     }}
-    lazy
     keyboardDismissMode={'auto'}>
     <DateRangeTab.Screen
       name={translate('date_filter.month')}
@@ -129,16 +129,16 @@ export const DateRangeTabStack = props => (
 
 export const TicketLogTabStack = props => (
   <TicketLogTab.Navigator
-    tabBarOptions={{
-      labelStyle: {width: width / 3, fontSize: TextSizes.semiSecondary},
-      indicatorStyle: {backgroundColor: Colors.accent},
-      style: {backgroundColor: Colors.white, width: '100%'},
-      initialLayout: {width: Dimensions.get('window').width},
-      tabStyle: {height: 1.5 * PaddingConstants.tab4},
-      activeTintColor: Colors.accent,
-      inactiveTintColor: Colors.primary,
+    initialLayout={{width: Dimensions.get('window').width}}
+    screenOptions={{
+      lazy: true,
+      tabBarLabelStyle: {width: width / 3, fontSize: TextSizes.semiSecondary},
+      tabBarIndicatorStyle: {backgroundColor: Colors.accent},
+      tabBarStyle: {backgroundColor: Colors.white, width: '100%'},
+      tabBarItemStyle: {height: 1.5 * PaddingConstants.tab4},
+      tabBarActiveTintColor: Colors.accent,
+      tabBarInactiveTintColor: Colors.primary,
     }}
-    lazy
     keyboardDismissMode={'auto'}>
     <TicketLogTab.Screen
       name={translate('close_loop.overview')}

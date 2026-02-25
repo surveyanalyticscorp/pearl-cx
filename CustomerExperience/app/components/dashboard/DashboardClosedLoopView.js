@@ -33,21 +33,21 @@ const TicketTab = createMaterialTopTabNavigator();
 
 const TicketTabStack = props => (
   <TicketTab.Navigator
-    tabBarOptions={{
-      labelStyle: {
+    initialLayout={{width: useWindowDimensions().width}}
+    screenOptions={{
+      lazy: true,
+      tabBarLabelStyle: {
         width: useWindowDimensions().width / 4,
         fontSize: TextSizes.secondary,
         fontFamily: FontFamily.regular,
         textTransform: 'none',
       },
-      indicatorStyle: {backgroundColor: Colors.accentLight},
-      style: {backgroundColor: Colors.white, width: '100%'},
-      // initialLayout: {width: useWindowDimensions().width},
-      tabStyle: {height: 1.5 * PaddingConstants.tab4},
-      activeTintColor: Colors.accentLight,
-      inactiveTintColor: Colors.primary,
+      tabBarIndicatorStyle: {backgroundColor: Colors.accentLight},
+      tabBarStyle: {backgroundColor: Colors.white, width: '100%'},
+      tabBarItemStyle: {height: 1.5 * PaddingConstants.tab4},
+      tabBarActiveTintColor: Colors.accentLight,
+      tabBarInactiveTintColor: Colors.primary,
     }}
-    lazy
     keyboardDismissMode={'auto'}>
     <TicketTab.Screen
       name={translate('dashboard.new')}
