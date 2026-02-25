@@ -17,6 +17,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     @MainActor public static var instance: QuestionProCX?
     var initCallbackDelegate: QuestionProInitDelegate?
     var questionProCallbackDelegate: QuestionProCallbackDelegate?
+    private var activeTimerTasks: [Int: Task<Void, Never>] = [:]
     
     private func addRuleToSatisfiedRulesList(for id: String, newValue: String) {
         if var existingLists = satisfiedRulesForIntercept[id] {
@@ -41,20 +42,22 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         LogUtils.printMessage(message: "satisfiedRule.name \(satisfiedRule.name)")
         LogUtils.printMessage(message: "intercept id \(interceptId)")
         addRuleToSatisfiedRulesList(for: String(interceptId), newValue: satisfiedRule.name)
-        
-        if (CacheUtils.getIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId))) {
-            LogUtils.printMessage(message: "Survey already launched for this intercept id \(interceptId)")
-            if (InterceptRuleType.VIEW_COUNT.rawValue != satisfiedRule.name) {
-                return;
-            } else {
-                LogUtils.printMessage(message: "\(satisfiedRule.name)")
-            }            
+        if let task = activeTimerTasks[interceptId] {
+            task.cancel()
+            activeTimerTasks.removeValue(forKey: interceptId)
+            LogUtils.printMessage(message: "🗑️ Cleaned up timer task for intercept \(interceptId)")
         }
         if let intercept = CacheUtils.getInterceptById(key: String(interceptId)) {
             do {
                 let interceptData = try JSONDecoder().decode(Intercept.self, from: intercept)
-                
                 let showInDialog = interceptData.type == InterceptType.PROMPT.rawValue ? true : false
+                let allowMultipleResponse = interceptData.settings?.allowMultipleResponse ?? false
+                LogUtils.printMessage(logTag: .LOG_INFO, message: "allowMultipleResponse \(allowMultipleResponse)")
+                if (!allowMultipleResponse && CacheUtils.getIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId))) {
+                    LogUtils.printMessage(message: "Survey already launched for this intercept id \(interceptId)")
+                    return;
+                }
+                
                 guard !self.isSurveyDisplayed else { return }
                 if (interceptData.condition == InterceptCondition.AND.rawValue) {
                     LogUtils.printMessage(message: "AND condition")
@@ -66,7 +69,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                     } else {
                         LogUtils.printMessage(message: "all rules are not satisfied for \(interceptId)")
                     }
-                } else if (interceptData.condition == InterceptCondition.OR.rawValue){
+                } else {
                     LogUtils.printMessage(message: "OR condition")
                     self.fetchSurveyURLForSurveyId(interceptId: interceptId, interceptData: interceptData, interceptType: interceptData.type)
                 }
@@ -145,24 +148,35 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         return instance!
     }
     
-    func setCustomVariables(customVariables: [Int: String]) -> [[String: String]] {
-        var customVariablesPayload : [[String: String]] = []
-        for (key, value) in customVariables {
-            let customKey = "custom\(key)"
-            let customVars: [String: String] = [
-                "variableName": customKey,
-                "value": value
-            ]
-            customVariablesPayload.append(customVars)
-        }
-        
-        LogUtils.printMessage(message: "Body Custom Variables: ----------> \(String(describing: customVariablesPayload))")
-        
-        if let jsonData = try? JSONSerialization.data(withJSONObject: customVariablesPayload, options: .prettyPrinted),
-               let jsonString = String(data: jsonData, encoding: .utf8) {
-            LogUtils.printMessage(message: " ----------> ✅ JSON Output:\n\(jsonString)")
+    func setDataMappingForAPICall(dataMappings: [DataMappings], interceptData: Intercept) -> [[String: String]] {
+        // Only include mappings whose displayName appears in the intercept's own dataMappings list.
+        let interceptDisplayNames = Set(interceptData.dataMappings.map { $0.displayName })
+        LogUtils.printMessage(message: "🔎 Saved mappings total=\(dataMappings.count) | Intercept displayNames count=\(interceptDisplayNames.count)")
+
+        var payload: [[String: String]] = []
+        var skipped = 0
+        for dm in dataMappings {
+            guard interceptDisplayNames.contains(where: { $0.caseInsensitiveCompare(dm.displayName) == .orderedSame }) else {
+                skipped += 1
+                continue
             }
-        return customVariablesPayload
+            let item = [
+                "variableName": dm.variable,
+                "value": dm.value
+            ]
+            LogUtils.printMessage(message: " ✅ Included Mapping: variable=\(dm.variable) displayName=\(dm.displayName) value=\(dm.value)")
+            payload.append(item)
+        }
+        LogUtils.printMessage(message: "📦 Matched/Included=\(payload.count) Skipped=\(skipped)")
+        if let jsonData = try? JSONSerialization.data(withJSONObject: payload, options: .prettyPrinted),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            LogUtils.printMessage(message: " ✅ Final DataMappings Payload JSON:\n\(jsonString)")
+        }
+        return payload
+    }
+    
+    public func setDataMappings(dataMappings: [String: String]) {
+        CacheUtils.mergeUserDataMappings(userMappings: dataMappings)
     }
     
     public func fetchSurveyURLForSurveyId (interceptId: Int, interceptData: Intercept, interceptType: String) {
@@ -182,11 +196,12 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             }
         }
         
-        if (touchPoint?.customVariables != nil) {
-            let customVariables = self.touchPoint?.customVariables
-            LogUtils.printMessage(message: "Custom Variables: \(String(describing: customVariables))")
-                    
-            bodyParam["data"] = setCustomVariables(customVariables: customVariables!)
+        if let dataMappings = CacheUtils.getDataMappings() {
+            LogUtils.printMessage(message: "Data Mappings fetched (count=\(dataMappings.count))")
+            bodyParam["data"] = setDataMappingForAPICall(dataMappings: dataMappings, interceptData: interceptData)
+        } else {
+            LogUtils.printMessage(message: "⚠️ No Data Mappings found, sending empty array")
+            bodyParam["data"] = [] as [[String: String]]
         }
         
         let fetchSurveyURL = APIUtils.getFetchSurveyURL()
@@ -224,11 +239,11 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         }
     }
     
-    
-    
     public func fetchAndSetupIntercepts() async {
         let surveyLogicUtilsInstance = SurveyLaunchLogicUtils.getInstance();
+        let visitorUUID = CacheUtils.getVisitorUUID(key: kVisitorUUID)
         let mobileVisitorAPIURL = APIUtils.getVisitorMobileAPIURL()
+        let platform : String = self.touchPoint?.platform ?? TouchPoint.PLATFORM.IOS.rawValue
         do {
             let response: ApiResponse = try await ApiServiceCX.shared.request(
                 urlString: mobileVisitorAPIURL,
@@ -236,14 +251,17 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 headers: [
                     "x-app-key": self.iApiKey,
                     "package-name": kPackageName,
+                    "visitor-id": visitorUUID,
+                    "x-platform": platform,
+                    "x-device-id": GlobalUtils.getDeviceId()
                 ],
                 responseType: ApiResponse.self
                 )
             LogUtils.printMessage(message: "fetch and etup intercepts  \(response)")
             visitorApiResponse = response
             self.initCallbackDelegate?.initSDKSuccess()
+            CacheUtils.setVisitorUUID(key: kVisitorUUID, value: visitorApiResponse.visitor.uuid)
             let intercepts = visitorApiResponse.project.intercepts
-            
             do {
                 let encodedData = try JSONEncoder().encode(intercepts)
                 CacheUtils.setIntercepts(key: kIntercepts, value: encodedData)
@@ -257,6 +275,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                     interceptRules.append(interceptRule.name)
                 }
                 
+                CacheUtils.appendDataMappings(newMappings: intercept.dataMappings)
+                
                 CacheUtils.setInterceptForInterceptId(key: String(intercept.id), value: interceptRules)
                 
                 for rule in intercept.rules {
@@ -265,11 +285,15 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                     } else if (rule.name == InterceptRuleType.DATE.rawValue) {
                         surveyLogicUtilsInstance.checkSurveyLaunchDateOfMonthLogic(dates: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
                     } else if (rule.name == InterceptRuleType.TIME_SPENT.rawValue) {
-                        Task {
-                            for await timeLeft in  TimerUtils.getinstance().startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
+                        // ✅ Store the timer task properly
+                        let task = Task {
+                            for await timeLeft in TimerUtils.getinstance().startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
                                 LogUtils.printMessage(message: "⏳ Time left: \(timeLeft) sec for \(intercept.id)")
                             }
+                            // Clean up task when timer completes
+                            self.activeTimerTasks.removeValue(forKey: intercept.id)
                         }
+                        self.activeTimerTasks[intercept.id] = task
                     }
                 }
             }
@@ -288,8 +312,36 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             LogUtils.printMessage(message: "📦 App did enter background")
             Task {
                 await MainActor.run {
+                    // ✅ Cancel all active timer tasks
+                    for task in self.activeTimerTasks.values {
+                        task.cancel()
+                    }
+                    self.activeTimerTasks.removeAll()
+                    
+                    // Stop timers in TimerUtils
+                    TimerUtils.getinstance().stopAllTimersOnBackground()
+                }
+            }
+        }
+        
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.willTerminateNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            LogUtils.printMessage(message: "📦 App Killed")
+            Task {
+                await MainActor.run {
+                    // ✅ Cancel all active timer tasks
+                    for task in self.activeTimerTasks.values {
+                        task.cancel()
+                    }
+                    self.activeTimerTasks.removeAll()
+                    
+                    // Stop timers in TimerUtils
+                    TimerUtils.getinstance().stopAllTimersOnBackground()
+                    
                     self.clearSession()
-                    TimerUtils.getinstance().stopAllTimers()
                     self.resetSatisfiedRulesList()
                 }
             }
@@ -300,11 +352,47 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             object: nil,
             queue: .main
         ) { _ in
-            LogUtils.printMessage(message: "🎯 App became active")
-//            Task {
-//                await self.fetchAndSetupIntercepts()
-//            }
+            Task {
+                await MainActor.run {
+                    LogUtils.printMessage(message: "🎯 App became active")
+                    
+                    // ✅ Get the returned AsyncStreams and consume them properly
+                    let newStreams = TimerUtils.getinstance().restartAllTimersFromBeginning()
+                    
+                    // ✅ Create tasks to consume each stream
+                    for (interceptId, stream) in newStreams {
+                        let task = Task {
+                            for await timeLeft in stream {
+                                LogUtils.printMessage(message: "⏳ Restarted Timer - Time left: \(timeLeft) sec for intercept \(interceptId)")
+                            }
+                            // Clean up when timer completes naturally
+                            self.activeTimerTasks.removeValue(forKey: interceptId)
+                        }
+                        self.activeTimerTasks[interceptId] = task
+                    }
+                    
+                    LogUtils.printMessage(message: "✅ Restarted \(newStreams.count) timers from beginning")
+                }
+            }
         }
+    }
+
+    private func debugTimerStates() {
+        let activeTaskIds = activeTimerTasks.keys.sorted()
+        let timerUtilsIds = TimerUtils.getinstance().getActiveTimerIds().sorted()
+        
+        LogUtils.printMessage(message: "🔍 === TIMER STATE DEBUG ===")
+        LogUtils.printMessage(message: "🔍 Active Timer Tasks: \(activeTaskIds)")
+        LogUtils.printMessage(message: "🔍 TimerUtils Active IDs: \(timerUtilsIds)")
+        LogUtils.printMessage(message: "🔍 Task Count: \(activeTimerTasks.count)")
+        LogUtils.printMessage(message: "🔍 TimerUtils Count: \(timerUtilsIds.count)")
+        
+        if activeTaskIds != timerUtilsIds {
+            LogUtils.printMessage(message: "⚠️ MISMATCH detected between tasks and timers!")
+        } else {
+            LogUtils.printMessage(message: "✅ Timer states are synchronized")
+        }
+        LogUtils.printMessage(message: "🔍 === END DEBUG ===")
     }
     
     private func setupIntercepts() {
@@ -348,9 +436,13 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     }
 
     public func configure(apiKey: String, touchPoint: TouchPoint, withWindow aWindow: UIWindow, initCallbackDelegate: QuestionProInitDelegate?) {
+        self.clearSession()
+        CacheUtils.clearUserDefaults(key: kApiKey)
+        CacheUtils.clearUserDefaults(key: kDataCenter)
+        self.resetSatisfiedRulesList()
+        
         CacheUtils.setToUserDefaults(key: kApiKey, value: apiKey)
         CacheUtils.setToUserDefaults(key: kDataCenter, value: touchPoint.dataCenter.rawValue)
-        CacheUtils.setToUserDefaults(key: kConfigType, value: touchPoint.configType.rawValue)
         self.iApiKey = apiKey
         self.iDataCenter = touchPoint.dataCenter
         self.iBaseWindow = aWindow
@@ -358,11 +450,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         self.initCallbackDelegate = initCallbackDelegate
         self.touchPoint = touchPoint;
         
-        if (touchPoint.configType == TouchPoint.ConfigType.INTERCEPT) {
-            setupIntercepts()
-        } else {
-            setupCoreSurvey()
-        }
+        setupIntercepts()
         
         self.appLifecycleStateListener()
     }
@@ -374,18 +462,11 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     public func enableLogs(enabledLogs: Bool) {
         LogUtils.enableLogging(isLogsEnabled: enabledLogs)
     }
-
-    private var isSurveyScheduled = false
+    
     public func launchSurvey(showInDialog: Bool, triggerDelayInSeconds: Int) {
-        guard !self.isSurveyScheduled else {
-            LogUtils.printMessage(message: "Survey already scheduled, skipping.")
-            return
-        }
-        self.isSurveyScheduled = true
-        
         LogUtils.printMessage(message: "Survey URL to load: \(String(describing: iResponseURL))")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(triggerDelayInSeconds)) {
-            print("Executed after \(triggerDelayInSeconds) seconds")
+            LogUtils.printMessage(message: "Executed after \(triggerDelayInSeconds) seconds")
             self.showSurvey(isInAppSurvey: showInDialog)
             self.loadSurveyURLInWebView()
         }
@@ -488,8 +569,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         CacheUtils.clearAllUserDefaults()
     }
 
-    public func stopQuestionProCXManager() {
-        LogUtils.printMessage(message: "Manager stopped..")
+    public func closeSurveyWindow() {
+        self.iView?.removeFromSuperview()
     }
     
     public func loadSurveyURLInWebView() {
@@ -549,7 +630,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     @objc func aDismissWebview(_ sender: Any) {
         self.iView?.removeFromSuperview()
         self.isSurveyDisplayed = false
-        self.isSurveyScheduled = false
     }
     
     @objc func goToPreviousPage(_ sender: Any) {

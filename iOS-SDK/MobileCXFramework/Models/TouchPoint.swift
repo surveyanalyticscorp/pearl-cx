@@ -9,9 +9,8 @@ import Foundation
 
 public class TouchPoint {
     
-    public init(dataCenter: DataCenter, configType: ConfigType) {
+    public init(dataCenter: DataCenter) {
         self.dataCenter = dataCenter;
-        self.configType = configType;
     }
     
     public enum DataCenter: String, Codable {
@@ -25,25 +24,17 @@ public class TouchPoint {
        case DATA_CENTER_KSA
     }
     
-    public enum ConfigType: String, Codable {
-        case SURVEY
-        case INTERCEPT
+    public enum PLATFORM: String {
+        case ANDROID = "android"
+        case IOS = "ios"
+        case FLUTTER = "flutter"
+        case REACT_NATIVE = "react-native"
     }
     
     public var dataCenter = DataCenter.DATA_CENTER_US;
-    public var configType: ConfigType
-    public var customVariables: [Int: String]? = [:];
+    public var platform: PLATFORM.RawValue = PLATFORM.IOS.rawValue;
     
-    public static func initTouchPoint(dataCenter: DataCenter, configType: ConfigType) -> TouchPoint {
-        return TouchPoint(dataCenter: dataCenter, configType: configType)
-    }
-    
-    public func setCustomVariables(_ customVariables: [Int: String]?) -> TouchPoint {
-        self.customVariables = customVariables;
-        return self;
-    }
-    
-    public func getCustomVariables () -> [Int: String]? {
-        return self.customVariables
+    public static func initTouchPoint(dataCenter: DataCenter) -> TouchPoint {
+        return TouchPoint(dataCenter: dataCenter)
     }
 }

@@ -52,6 +52,36 @@ public struct Intercept: Codable {
     let ruleGroupId: Int
     let rules: [Rule]
     let settings: Settings?
+    let dataMappings: [DataMappings]
+}
+
+public struct DataMappings: Codable {
+    public let variable: String
+    public let displayName: String
+    public var value: String
+
+    // Provide default value when 'value' key is absent in API response
+    enum CodingKeys: String, CodingKey { case variable, displayName, value }
+
+    public init(variable: String, displayName: String, value: String = "") {
+        self.variable = variable
+        self.displayName = displayName
+        self.value = value
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        variable = try container.decode(String.self, forKey: .variable)
+        displayName = try container.decode(String.self, forKey: .displayName)
+        value = try container.decodeIfPresent(String.self, forKey: .value) ?? "" // default empty if missing
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(variable, forKey: .variable)
+        try container.encode(displayName, forKey: .displayName)
+        try container.encode(value, forKey: .value)
+    }
 }
 
 public struct Settings: Codable {
