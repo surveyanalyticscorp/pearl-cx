@@ -144,6 +144,7 @@ const DrawerContent = ({navigation}) => {
   // Get current route name
   const getCurrentRoute = () => {
     const state = navigation.getState();
+    console.log('DrawerContent', state, state.routes[state.index]?.name);
     return state.routes[state.index]?.name;
   };
 
@@ -152,7 +153,7 @@ const DrawerContent = ({navigation}) => {
   const buttonData = {
     dashboard: {
       title: 'Dashboard',
-      routeName: 'Dashboard',
+      routeName: 'DashboardTab',
       frontIcon: <DrawerButtonIcon name={'dashboard'} />,
       onPress: () => {
         navigation.navigate('DashboardTab');
