@@ -21,12 +21,13 @@ import useLogoutProcess from './drawerContent/useLogoutProcess';
 import logoutDialog from './drawerContent/LogoutDialog';
 import ResponsesIcon from '../widgets/IconWidget/ResponsesIcon';
 import useLoginPersistence from './drawerContent/useLoginPersistance';
+import ListItemSeparator from './commonUI/ListItemSeparator';
 
 const LogoutButtonIcon = () => {
   return (
     <FontIcon
       size={1.3 * Sizes.icons}
-      color={Colors.filterIconColor}
+      color={Colors.accent}
       name={'sign-out-alt'}
       style={styles.rowIcon}
     />
@@ -144,6 +145,21 @@ const RenderDrawerButtons = ({children}) => {
   );
 };
 
+const RenderWorkspaceInfo = () => {
+  const {emailAddress, firstName, lastName, organizationName} = useSelector(
+    state => state.global.userInfo,
+  );
+  return (
+    <View style={{marginTop: MarginConstants.tab2}}>
+      <ListItemSeparator />
+      <TextLabel text={organizationName} style={styles.workspaceName} />
+
+      <TextLabel text={firstName + ' ' + lastName} style={styles.userInfo} />
+      <TextLabel text={emailAddress} style={styles.userInfo} />
+    </View>
+  );
+};
+
 const DrawerContent = ({navigation}) => {
   const {logoutAction} = useLogoutProcess();
   const [logoutAlert, setLogoutAlert] = useState(false);
@@ -203,8 +219,8 @@ const DrawerContent = ({navigation}) => {
   return (
     <DrawerBackground>
       <DrawerCXLogo />
-      <AppVersion />
-      <UserName />
+      {/* <AppVersion /> */}
+      {/* <UserName /> */}
       <RenderDrawerButtons>
         <DrawerButton
           frontIcon={
@@ -236,10 +252,12 @@ const DrawerContent = ({navigation}) => {
         />
       </RenderDrawerButtons>
       <RenderSettingsAndLogout>
-        <DrawerButton
+        {/* <DrawerButton
           dataObj={buttonData['settings']}
           isActive={currentRoute === buttonData['settings'].routeName}
-        />
+        /> */}
+        <RenderWorkspaceInfo />
+
         <DrawerButton dataObj={buttonData['logout']} />
         {/* <LogoutButton navigation={navigation} /> */}
         {logoutAlert &&
@@ -325,5 +343,17 @@ const styles = StyleSheet.create({
   activeLabelStyle: {
     fontFamily: FontFamily.regular, // Make active text bold if you have medium weight
     color: Colors.accentLight,
+  },
+  workspaceName: {
+    fontFamily: FontFamily.medium,
+    fontSize: TextSizes.primary,
+    color: Colors.accent,
+    paddingLeft: PaddingConstants.tab1,
+  },
+  userInfo: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.secondary,
+    color: Colors.accent,
+    paddingLeft: PaddingConstants.tab1,
   },
 });
