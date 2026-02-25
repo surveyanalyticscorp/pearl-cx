@@ -85,22 +85,29 @@ const UserName = () => {
   );
 };
 
-const ClosedLoopIcon = () => (
+const ClosedLoopIcon = ({isActive}) => (
   <View style={styles.rowIcon}>
-    <ClosedLoopSvgIcon height={1.3 * Sizes.icons} width={1.3 * Sizes.icons} />
+    <ClosedLoopSvgIcon
+      stroke={isActive ? Colors.accentLight : Colors.accent}
+      height={1.3 * Sizes.icons}
+      width={1.3 * Sizes.icons}
+    />
   </View>
 );
 
-const DrawerResponsesIcon = () => (
+const DrawerResponsesIcon = ({isActive}) => (
   <View style={styles.rowIcon}>
-    <ResponsesIcon sizeMultiplyer={1.3} />
+    <ResponsesIcon
+      color={isActive ? Colors.accentLight : Colors.accent}
+      sizeMultiplyer={1.3}
+    />
   </View>
 );
 
-const DrawerButtonIcon = ({name}) => (
+const DrawerButtonIcon = ({name, isActive}) => (
   <Icon
     size={1.3 * Sizes.icons}
-    color={Colors.filterIconColor}
+    color={isActive ? Colors.accentLight : Colors.accent}
     name={name}
     style={styles.rowIcon}
   />
@@ -200,14 +207,30 @@ const DrawerContent = ({navigation}) => {
       <UserName />
       <RenderDrawerButtons>
         <DrawerButton
+          frontIcon={
+            <DrawerButtonIcon
+              name={'dashboard'}
+              isActive={currentRoute === buttonData['dashboard'].routeName}
+            />
+          }
           dataObj={buttonData['dashboard']}
           isActive={currentRoute === buttonData['dashboard'].routeName}
         />
         <DrawerButton
+          frontIcon={
+            <DrawerResponsesIcon
+              isActive={currentRoute === buttonData['responses'].routeName}
+            />
+          }
           dataObj={buttonData['responses']}
           isActive={currentRoute === buttonData['responses'].routeName}
         />
         <DrawerButton
+          frontIcon={
+            <ClosedLoopIcon
+              isActive={currentRoute === buttonData['closedLoop'].routeName}
+            />
+          }
           dataObj={buttonData['closedLoop']}
           isActive={currentRoute === buttonData['closedLoop'].routeName}
         />
@@ -250,7 +273,7 @@ const styles = StyleSheet.create({
   labelStyle: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.primary,
-    color: Colors.primary,
+    color: Colors.accent,
     paddingLeft: PaddingConstants.tab1,
   },
   emailCaption: {
@@ -295,12 +318,12 @@ const styles = StyleSheet.create({
     marginHorizontal: MarginConstants.tab1,
   },
   activeDrawerRow: {
-    backgroundColor: Colors.primary + '20', // Add transparency to primary color
+    backgroundColor: Colors.white, // Add transparency to primary color
     borderRadius: 8,
     paddingVertical: PaddingConstants.halfTab,
   },
   activeLabelStyle: {
     fontFamily: FontFamily.regular, // Make active text bold if you have medium weight
-    color: Colors.filterIconColor,
+    color: Colors.accentLight,
   },
 });

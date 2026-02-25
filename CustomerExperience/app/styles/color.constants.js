@@ -13,7 +13,7 @@ const Colors = {
   accent: '#1B3380',
   deleteButtonText: '#FFFFFF',
   deleteBackground: '#CC0000',
-
+  drawerBackground: '#EEF3FB',
   filterIconColor: '#545E6B',
   overdueAlertColor: '#EA4650',
   textAvatarBackground: '#CC6677',
