@@ -44,7 +44,8 @@ export const RenderDonutChart = ({count, showPercentageCount}) => {
           width={5 * MarginConstants.tab4}
           height={6 * MarginConstants.tab4}
           innerRadius={2.2 * MarginConstants.tab4}
-          radius={1.8 * MarginConstants.tab4}
+          radius={1.6 * MarginConstants.tab4}
+          animate={{duration: 1000}}
           style={{
             labels: {
               fill: 'transparent',
@@ -52,6 +53,11 @@ export const RenderDonutChart = ({count, showPercentageCount}) => {
           }}
           colorScale={victoryPieColorScale}
         />
+        {/* Center Label */}
+        <View style={styles.centerLabelContainer}>
+          <Text style={styles.centerLabelText}>{count.totalTickets}</Text>
+          <Text style={styles.centerLabelSubtext}>Tickets</Text>
+        </View>
       </View>
     </View>
   );
@@ -381,5 +387,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  centerLabelContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    pointerEvents: 'none', // Allow touches to pass through
+  },
+  centerLabelText: {
+    fontSize: DeviceInfo.isTablet()
+      ? TextSizes.extraLargeText
+      : TextSizes.largerText,
+    fontFamily: FontFamily.bold,
+    fontWeight: FontWeight._800,
+    color: Colors.primary,
+    textAlign: 'center',
+  },
+  centerLabelSubtext: {
+    fontSize: TextSizes.primary,
+    fontFamily: FontFamily.regular,
+    fontWeight: FontWeight._400,
+    color: Colors.filterIconColor,
+    textAlign: 'center',
+    marginTop: 2,
   },
 });

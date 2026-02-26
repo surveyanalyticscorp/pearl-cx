@@ -4,6 +4,7 @@ const factor = Platform.isPad ? 0.8 : 1;
 export const TextSizes = {
   donutPercentText: 2.2 * $rem * factor, // 30px~
   extraLargeText: 1.8 * $rem * factor, // 25px~
+  largerText: 1.4 * $rem * factor, // 20px~
   largeText: 1.3 * $rem * factor, // 18px~
   primary: 1.2 * $rem * factor, // 16.8px~
   secondary2: 1.1 * $rem * factor, // 15.4px~
