@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'math_flutter'
-  s.version          = '0.9.12'
+  s.version          = '0.11.2'
   s.summary          = 'QuestionPro CX Flutter plugin'
   s.description      = 'Flutter plugin for QuestionPro CX SDK integration on iOS and Android'
   s.homepage         = 'https://github.com/Dilpreet010/math_operations'

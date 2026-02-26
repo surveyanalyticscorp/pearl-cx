@@ -6,22 +6,42 @@ QuestionPro CX SDK integration for Flutter.
 
 ```yaml
 dependencies:
-  math_flutter: ^0.10.0
+  math_flutter: ^0.12.8
 ```
 
 ## Setup
 
 ### Android
 
-Add your API key to `android/app/src/main/AndroidManifest.xml`:
+Add your API key and survey activity configuration to `android/app/src/main/AndroidManifest.xml`:
 
 ```xml
-<application>
-    <meta-data
-        android:name="cx_manifest_api_key"
-        android:value="YOUR_API_KEY_HERE" />
-</application>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <application>
+        <!-- QuestionPro CX API Key -->
+        <meta-data
+            android:name="cx_manifest_api_key"
+            android:value="YOUR_API_KEY_HERE" />
+        
+        <!-- REQUIRED: Override activity theme for full-screen display -->
+        <activity
+            android:name="com.questionpro.cxlib.InteractionActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:finishOnTaskLaunch="false"
+            android:clearTaskOnLaunch="false"
+            tools:replace="android:theme,android:configChanges,android:windowSoftInputMode,android:launchMode" />
+    </application>
+</manifest>
 ```
+
+**Note:** 
+- The `xmlns:tools` namespace is required in your manifest tag for `tools:replace` to work.
+- `launchMode="singleInstance"` ensures the survey runs in its own task and doesn't affect your main app when closed.
 
 ### iOS
 

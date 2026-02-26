@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <application
         android:label="QuestionPro CX Example"
         android:name="${applicationName}"
@@ -24,6 +25,18 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        
+        <!-- Override QuestionPro InteractionActivity to force full-screen display -->
+        <activity
+            android:name="com.questionpro.cxlib.InteractionActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"
+            android:finishOnTaskLaunch="false"
+            android:clearTaskOnLaunch="false"
+            tools:replace="android:theme,android:configChanges,android:windowSoftInputMode,android:launchMode" />
         
         <!-- QuestionPro CX API Key - REPLACE WITH YOUR OWN KEY -->
         <meta-data

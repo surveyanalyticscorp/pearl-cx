@@ -6,6 +6,7 @@ import android.util.Log
 import com.questionpro.cxlib.QuestionProCX
 import com.questionpro.cxlib.enums.DataCenter
 import com.questionpro.cxlib.interfaces.IQuestionProInitCallback
+import com.questionpro.cxlib.interfaces.IQuestionProCallback
 import com.questionpro.cxlib.model.TouchPoint
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -41,7 +42,7 @@ class MathFlutterPlugin :
         cxChannel = MethodChannel(binding.binaryMessenger, CX_CHANNEL)
         cxChannel.setMethodCallHandler { call, result ->
             when (call.method) {
-                "nativeMethod" -> handleScreenView(
+                "setScreenVisited" -> setScreenVisited(
                     call.argument<String>("screen_name_key"),
                     result
                 )
@@ -58,14 +59,11 @@ class MathFlutterPlugin :
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "initializeSurvey" -> initializeSurvey(
+            "initialize" -> initialize(
                 call.argument<String>("dataCenter") ?: "US",
                 result
             )
-            "launchSurvey" -> launchSurvey(
-                call.argument<String>("surveyId") ?: "",
-                result
-            )
+            "getSurveyUrl" -> getSurveyUrl(result)
             "setDataMappings" -> setDataMappings(
                 call.argument<Map<String, String>>("customVariables"),
                 result
@@ -95,7 +93,7 @@ class MathFlutterPlugin :
         }
     }
 
-    private fun initializeSurvey(dataCenterStr: String, result: MethodChannel.Result) {
+    private fun initialize(dataCenterStr: String, result: MethodChannel.Result) {
         val ctx = applicationContext ?: run {
             result.error("NO_CONTEXT", "Application context not available", null)
             return
@@ -130,32 +128,18 @@ class MathFlutterPlugin :
             result.error("INIT_EXCEPTION", e.message ?: "Unknown error occurred", null)
         }
     }
-
-    private fun launchSurvey(surveyId: String, result: MethodChannel.Result) {
-        val act = activity ?: run {
-            result.error("NO_ACTIVITY", "Activity not attached", null)
-            return
-        }
-
-        val id = surveyId.toLongOrNull() ?: 0L
-        if (id <= 0) {
-            result.error("INVALID_ARGS", "surveyId must be a positive number", null)
-            return
-        }
-
-        try {
-            val intent = Intent(act, InteractionActivity::class.java).apply {
-                putExtra("SURVEY_ID", id)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            act.startActivity(intent)
-            result.success("Survey launched")
+    private fun getSurveyUrl(result: MethodChannel.Result) {
+        try { 
+            QuestionProCX.getInstance().getSurveyUrl(object : IQuestionProCallback {
+                override fun getSurveyUrl(surveyUrl: String?) {
+                    result.success(surveyUrl ?: "")
+                }
+            })
         } catch (e: Exception) {
-            result.error("LAUNCH_FAILED", e.message, null)
+            result.error("GET_SURVEY_URL_ERROR", e.message, null)
         }
     }
-
-    private fun handleScreenView(screenName: String?, result: MethodChannel.Result) {
+    private fun setScreenVisited(screenName: String?, result: MethodChannel.Result) {
         if (screenName.isNullOrEmpty()) {
             result.error("INVALID_ARGS", "screen_name_key is required", null)
             return

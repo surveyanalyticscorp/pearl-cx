@@ -24,12 +24,12 @@ class MathFlutter {
   ///
   /// [apiKey] is required for iOS, optional for Android (reads from manifest)
   /// [dataCenter] specifies the region (US or EU), defaults to US
-  static Future<String> initializeSurvey({
+  static Future<String> init({
     String? apiKey,
     DataCenter dataCenter = DataCenter.us,
   }) async {
     final String result = await _channel.invokeMethod<String>(
-          'initializeSurvey',
+          'initialize',
           <String, dynamic>{
             'apiKey': apiKey,
             'dataCenter': dataCenter.value,
@@ -39,31 +39,33 @@ class MathFlutter {
     return result;
   }
 
-  /// Launch a survey by its ID
-  ///
-  /// [surveyId] the unique identifier of the survey to display
-  static Future<void> launchSurvey(String surveyId) async {
-    await _channel.invokeMethod<void>(
-      'launchSurvey',
-      <String, dynamic>{'surveyId': surveyId},
-    );
-  }
-
   /// Log a screen view for tracking user navigation
   ///
   /// [screenName] the name of the screen being viewed (cannot be empty)
-  static Future<String> viewCount(String screenName) async {
+  static Future<String> setScreenVisited(String screenName) async {
     if (screenName.isEmpty) {
       throw ArgumentError('screenName cannot be empty');
     }
 
     final String result = await _cxChannel.invokeMethod<String>(
-          'nativeMethod',
+          'setScreenVisited',
           <String, dynamic>{
             'screen_name_key': screenName,
           },
         ) ??
         'Event logged';
+    return result;
+  }
+
+  /// Get the survey URL without launching it
+  ///
+  /// Returns the survey URL string that can be used to open the survey
+  /// in a custom web view or browser
+  static Future<String> getSurveyUrl() async {
+    final String result = await _channel.invokeMethod<String>(
+          'getSurveyUrl',
+        ) ??
+        '';
     return result;
   }
 

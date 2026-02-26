@@ -39,11 +39,7 @@ void main() {
   });
 
   test('initializeSurvey returns success message', () async {
-    final result = await MathFlutter.initializeSurvey();
+    final result = await MathFlutter.init();
     expect(result, 'SDK initialized');
-  });
-
-  test('launchSurvey completes with valid surveyId', () async {
-    await MathFlutter.launchSurvey('12345');
   });
 }

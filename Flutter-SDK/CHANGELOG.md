@@ -1,3 +1,108 @@
+## 0.12.9
+
+* **CRITICAL FIX:** App no longer closes when survey is closed (Android)
+  - Changed `launchMode` from `singleTop` to `singleInstance` to isolate survey in separate task
+  - Removed `taskAffinity=""` which was causing the survey to share the main app's task
+  - Added `finishOnTaskLaunch="false"` to prevent survey from finishing parent task
+  - Added `clearTaskOnLaunch="false"` to prevent task clearing
+  - Survey now closes completely independently from the main app
+  - Pressing back or close button on survey only closes survey, not the entire app
+  - **IMPORTANT:** Users must update their AndroidManifest.xml with new configuration (see README)
+
+## 0.12.8
+
+* **BUG FIX:** Enhanced iOS crash prevention and error handling
+  - Added try-catch blocks around all QuestionProCX SDK method calls
+  - Added proper error handling in main handle method to catch unexpected errors
+  - Added deinit method to clean up pending callbacks and prevent memory-related crashes
+  - Improved window reference handling to prevent nil pointer crashes
+  - All SDK operations now return proper FlutterError instead of crashing
+  - Survey close operations now handled gracefully without app crashes
+
+## 0.12.7
+
+* **BUG FIX:** Prevent app crash when closing survey
+  - Added `taskAffinity=""` to ensure survey activity runs in app's task
+  - Added `excludeFromRecents="true"` to prevent survey from appearing in recent apps
+  - Added `noHistory="false"` to allow proper back navigation without crashes
+  - Survey close button now properly closes only the survey, not the entire app
+  - Updated example app with proper configuration
+
+## 0.12.6
+
+* **IMPORTANT:** Added required configuration for full-screen survey display
+  - Users must override InteractionActivity in their app's AndroidManifest.xml
+  - Added tools:replace to allow theme override from app level
+  - Updated example app with full-screen configuration
+  - See README for required AndroidManifest configuration
+
+## 0.12.5
+
+* **IMPROVEMENT:** Enhanced window configuration for true edge-to-edge full-screen display
+  - Added transparent status bar and navigation bar colors
+  - Added `windowLayoutInDisplayCutoutMode` for devices with notches/cutouts
+  - Added `windowIsFloating=false` to prevent dialog-style display
+  - Created API 21+ specific styles with additional window flags
+  - Set `windowTranslucentStatus` and `windowTranslucentNavigation` to false
+  - Survey should now properly fill entire screen width and height
+
+## 0.12.4
+
+* **IMPROVEMENT:** Enhanced Android full-screen survey display configuration
+  - Added custom `FullScreenSurveyTheme` with optimized window flags
+  - Changed `windowSoftInputMode` from `adjustPan` to `adjustResize` for better keyboard handling
+  - Added `orientation|screenSize` to configChanges for better screen rotation support
+  - Enabled hardware acceleration for smoother rendering
+  - Set white background to eliminate black borders around survey content
+  - Survey now properly fills entire screen width and height on Android
+
+## 0.12.3
+
+* **IMPROVEMENT:** Enhanced survey display to full-screen mode for Android
+  - Changed InteractionActivity theme from `Theme.Translucent.NoTitleBar` to `Theme.NoTitleBar.Fullscreen`
+  - Surveys now display in full-screen on Android (no status bar, full height and width)
+  - Combined with iOS full-screen mode, surveys now display consistently across both platforms
+
+## 0.12.2
+
+* **BUG FIX:** Removed unsupported `.setFullScreen(true)` call from Android TouchPoint.Builder
+  - Fixed "Unresolved reference 'setFullScreen'" compilation error
+  - Android SDK does not support this method in TouchPoint.Builder API
+
+## 0.12.1
+
+* **IMPROVEMENT:** Enhanced survey display to full-screen mode for iOS
+  - iOS: Added `touchPoint.isFullScreenMode = true` for full-screen presentation
+  - Surveys now take full height and width of the screen when displayed on iOS
+
+* **BREAKING CHANGE:** Renamed internal method channel identifier from `nativeMethod` to `setScreenVisited`
+  - Updated method channel call in Dart from `'nativeMethod'` to `'setScreenVisited'`
+  - Updated Android Kotlin method handler from `"nativeMethod"` to `"setScreenVisited"`
+  - Updated iOS Swift method handler from `"nativeMethod"` to `"setScreenVisited"`
+  - Public API `setScreenVisited()` method remains unchanged - no changes needed in user code
+
+## 0.12.0
+
+* **BREAKING CHANGE:** Renamed internal method channel identifier from `initializeSurvey` to `initialize`
+  - Updated method channel call in Dart from `'initializeSurvey'` to `'initialize'`
+  - Updated Android Kotlin method handler from `"initializeSurvey"` to `"initialize"`
+  - Updated iOS Swift method handler from `"initializeSurvey"` to `"initialize"`
+  - Public API `init()` method remains unchanged - no changes needed in user code
+
+## 0.11.2
+
+* **BUG FIX:** Fixed getSurveyUrl callback to return result directly without mainHandler.post wrapper
+  - Prevents potential threading issues in getSurveyUrl
+
+## 0.11.1
+
+* **NEW FEATURE:** Added `getSurveyUrl()` method to retrieve survey URL without launching it
+  - Returns survey URL as a String that can be used in custom WebView or browser
+  - Implemented on both Android and iOS platforms
+
+* **BREAKING CHANGE:** Removed `launchSurvey()` method
+  - Use `getSurveyUrl()` instead to get the URL and handle navigation yourself
+
 ## 0.10.0
 
 * **BREAKING CHANGES:** Major API improvements and simplification

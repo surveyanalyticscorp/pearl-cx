@@ -6,9 +6,15 @@
     <application>
         <activity
             android:name="com.questionpro.cxlib.InteractionActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="keyboardHidden"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:theme="@style/FullScreenSurveyTheme"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:hardwareAccelerated="true"
+            android:excludeFromRecents="true"
+            android:finishOnTaskLaunch="false"
+            android:clearTaskOnLaunch="false"
+            android:alwaysRetainTaskState="false" />
     </application>
 </manifest>
