@@ -16,6 +16,7 @@ export const dashboardStyles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: Colors.white,
   },
   containerIOS: {
     flex: 1,
@@ -112,15 +113,6 @@ export const dashboardStyles = StyleSheet.create({
     fontSize: TextSizes.largeText,
   },
 
-  dashboardTitle: {
-    // color: Colors.primary,
-    color: Colors.accent,
-    backgroundColor: Colors.white,
-    fontFamily: FontFamily.medium,
-    fontWeight: FontWeight._500,
-    fontSize: TextSizes.primary,
-  },
-
   dashboardTitleContainer: {
     borderTopStartRadius: 5,
     borderTopEndRadius: 5,
@@ -215,7 +207,9 @@ export const dashboardStyles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab2,
-    borderRadius: 5,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.borderColor2,
   },
   csatChartContainer: {
     backgroundColor: Colors.white,
@@ -226,8 +220,11 @@ export const dashboardStyles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     marginTop: MarginConstants.tab2,
-    marginHorizontal: MarginConstants.tab2,
-    borderRadius: 5,
+    marginHorizontal: MarginConstants.tab1_2x,
+
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.borderColor2,
   },
   donut: {
     marginTop: MarginConstants.tab1,
@@ -369,7 +366,7 @@ export const dashboardStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: PaddingConstants.tab2,
+    paddingHorizontal: PaddingConstants.tab1_2x,
     paddingVertical: Platform.OS === 'ios' ? PaddingConstants.halfTab : 0,
   },
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Text, Platform} from 'react-native';
+import {StyleSheet, View, Text, Platform, Pressable} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
@@ -14,9 +14,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
 import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
-import {RenderStatusIcon} from '../../routes/commonUI/CommonUI';
+import {FilterIcon, RenderStatusIcon} from '../../routes/commonUI/CommonUI';
 import IconButton from '../../routes/commonUI/IconButton';
-import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTitle';
+import DashboardSegmentHeader from '../../widgets/dashboardWidget/RenderSegmentTitle';
+import LegendScoreView from '../../widgets/dashboardWidget/LegendScoreView';
 
 export const RenderDonutChart = ({count, showPercentageCount}) => {
   let victoryPieColorScale =
@@ -34,10 +35,6 @@ export const RenderDonutChart = ({count, showPercentageCount}) => {
       : [{y: 100, x: ''}];
   return (
     <View testID="render-donut-chart" style={styles.chartContainer}>
-      <RenderDonutInfoViewContainer
-        priorities={count}
-        showPercentageCount={showPercentageCount}
-      />
       <View testID="render-donut" style={styles.donut}>
         <VictoryPie
           data={dataScale}
@@ -84,26 +81,34 @@ let RenderDonutInfoViewContainer = ({priorities, showPercentageCount}) => {
 
   return (
     <View testID="render-donut-info-view-container">
-      <RenderTicketTotalView totalCount={priorities.totalTickets} />
-      <RenderTicketView
-        bgColor={Colors.critical2}
-        status={translate('dashboard.critical')}
-        ticketCount={criticalCount}
+      {/* <RenderTicketTotalView totalCount={priorities.totalTickets} /> */}
+
+      <LegendScoreView
+        title={translate('dashboard.critical')}
+        count={criticalCount}
+        percentage={`${getParcentage(totalTickets, critical)}%`}
+        backgroundColor={Colors.critical2}
       />
-      <RenderTicketView
-        bgColor={Colors.high2}
-        status={translate('dashboard.high')}
-        ticketCount={highCount}
+
+      <LegendScoreView
+        title={translate('dashboard.high')}
+        count={highCount}
+        percentage={`${getParcentage(totalTickets, high)}%`}
+        backgroundColor={Colors.high2}
       />
-      <RenderTicketView
-        bgColor={Colors.medium2}
-        status={translate('dashboard.medium')}
-        ticketCount={mediumCount}
+
+      <LegendScoreView
+        title={translate('dashboard.medium')}
+        count={mediumCount}
+        percentage={`${getParcentage(totalTickets, medium)}%`}
+        backgroundColor={Colors.medium2}
       />
-      <RenderTicketView
-        bgColor={Colors.low2}
-        status={translate('dashboard.low')}
-        ticketCount={lowCount}
+
+      <LegendScoreView
+        title={translate('dashboard.low')}
+        count={lowCount}
+        percentage={`${getParcentage(totalTickets, low)}%`}
+        backgroundColor={Colors.low2}
       />
     </View>
   );
@@ -172,21 +177,13 @@ export const ViewTicketsButton = ({statusIndex}) => {
 export const RenderStatusFilterButton = ({currentStatus, onPress}) => {
   console.log('ABUL', JSON.stringify(currentStatus));
   return (
-    <IconButton
-      buttonStyle={styles.iconButton}
-      onPress={onPress}
-      leftIcon={
-        <RenderStatusIcon
-          testID="render-status-icon"
-          title={currentStatus.title.toLowerCase()}
-        />
-      }
-      buttonText={currentStatus.title}
-      textStyle={{
-        ...buttonStyles.outlinePrimaryButtonMediumText,
-        marginHorizontal: MarginConstants.halfTab,
-      }}
-    />
+    <Pressable onPress={onPress}>
+      <FilterIcon
+        color={Colors.accentLight}
+        testID="render-status-icon"
+        title={currentStatus.title.toLowerCase()}
+      />
+    </Pressable>
   );
 };
 
@@ -203,15 +200,28 @@ export const ClosedLoopDashboard = ({openStatusBS}) => {
 
   return (
     <View style={styles.container}>
-      <DashboardWidgetTitle text={'Closedloop'}>
+      <DashboardSegmentHeader text={'Closedloop'}>
         <ViewTicketsButton statusIndex={statusIndex} />
-      </DashboardWidgetTitle>
-      <RenderStatusFilterButton
-        currentStatus={statusList[statusIndex]}
-        onPress={openStatusBS}
-      />
-      <RenderDonutChart
-        count={statusList[statusIndex].count}
+        <View
+          style={{
+            width: MarginConstants.halfTab,
+            height: MarginConstants.tab1_2x,
+            marginHorizontal: MarginConstants.tab1,
+          }}
+        />
+        <RenderStatusFilterButton
+          currentStatus={statusList[statusIndex]}
+          onPress={openStatusBS}
+        />
+      </DashboardSegmentHeader>
+      <View style={styles.donutChartWrapper}>
+        <RenderDonutChart
+          count={statusList[statusIndex].count}
+          showPercentageCount={false}
+        />
+      </View>
+      <RenderDonutInfoViewContainer
+        priorities={statusList[statusIndex].count}
         showPercentageCount={false}
       />
     </View>
@@ -221,9 +231,7 @@ export const ClosedLoopDashboard = ({openStatusBS}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-    height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 11
-      : MarginConstants.tab4 * 10,
+
     justifyContent: 'flex-start',
     margin: MarginConstants.tab2,
 
@@ -243,6 +251,11 @@ const styles = StyleSheet.create({
   donut: {
     marginTop: 0,
     backgroundColor: Colors.white,
+  },
+  donutChartWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: MarginConstants.tab1_2x,
   },
   donutInfoContainer: {
     flexDirection: 'row',
@@ -271,16 +284,7 @@ const styles = StyleSheet.create({
     padding: 2,
     fontFamily: FontFamily.regular,
   },
-  npsView: {
-    position: 'absolute',
-    left: '20%',
 
-    justifyContent: 'center',
-    alignItems: 'center',
-    top: DeviceInfo.isTablet() ? '50%' : '55%',
-    width: 3 * MarginConstants.tab4,
-    paddingHorizontal: PaddingConstants.halfTab,
-  },
   npsPercentText: {
     color: Colors.primary,
     fontSize: 1.3 * TextSizes.donutPercentText,
@@ -396,7 +400,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    pointerEvents: 'none', // Allow touches to pass through
+    pointerEvents: 'none',
   },
   centerLabelText: {
     fontSize: DeviceInfo.isTablet()

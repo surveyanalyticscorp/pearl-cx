@@ -26,6 +26,7 @@ const Colors = {
   darkGrey: '#d8d8d8',
   overlay: '#edf6fd',
   borderColor: '#A2A6A9',
+  borderColor2: '#00000033',
   dotColor: 'rgba(100,100,100,0.5)',
   dotSelectedColor: '#010B06',
   placeholderColor: 'rgba(45,76,128,0.8)',

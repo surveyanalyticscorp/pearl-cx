@@ -6,8 +6,9 @@ import {baseTextStyles} from '../../styles/text.styles';
 import StringUtils from '../../Utils/StringUtils';
 import TextLabel from '../TextLabel/TextLabel';
 import {MarginConstants} from '../../styles/margin.constants';
+import {Colors} from '../../styles/color.constants';
 
-const LegendContainer = ({justifyContent = 'flex-start', children}) => {
+export const LegendContainer = ({justifyContent = 'flex-start', children}) => {
   return (
     <View
       testID="legend-container"
@@ -36,17 +37,17 @@ const LegendScoreView = ({title, count, percentage, backgroundColor}) => {
       </LegendContainer>
       <LegendContainer justifyContent="flex-end">
         <TextLabel
-          testID="legend-score-count"
-          text={count ?? ''}
-          baseTextStyle={baseTextStyles.secondaryRegularText}
-          fontWeight={FontWeight.bold}
-          style={styles.countText}
-        />
-        <TextLabel
           testID="legend-score-percentage"
           text={`(${StringUtils.floatToDecimal(percentage)}%)`}
           baseTextStyle={baseTextStyles.secondaryRegularText}
           style={styles.parcentageText}
+        />
+        <TextLabel
+          testID="legend-score-count"
+          text={count ?? ''}
+          baseTextStyle={baseTextStyles.secondaryMediumText}
+          fontWeight={FontWeight.bold}
+          style={styles.countText}
         />
       </LegendContainer>
     </View>
@@ -62,10 +63,11 @@ const styles = StyleSheet.create({
   parcentageText: {
     textAlign: 'right',
     width: '28%',
+    color: Colors.evenDarkerGrey,
   },
   countText: {
     textAlign: 'right',
-    width: 'auto',
+    width: '28%',
   },
 });
 export default LegendScoreView;

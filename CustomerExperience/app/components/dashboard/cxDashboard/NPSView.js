@@ -5,6 +5,7 @@ import NpsGaugeChart from '../../../widgets/dashboardWidget/NpsGaugeChart';
 import NpsScoreView from './NPSScoreView';
 import BenchmarkView from './BenchmarkView';
 import ChartLegendView from './ChartLegendView';
+import ResponseCountView from './ResponeCountView';
 
 const NPSView = () => {
   return (
