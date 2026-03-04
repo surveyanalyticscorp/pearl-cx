@@ -91,8 +91,8 @@ const ForgotPassword = props => {
             <Text style={styles.forgotPasswordMessage}>
               {translate('onBoarding.forgotPasswordMessage')}
             </Text>
-            <EmailTextInput setEmail={setEmail} />
-            <AccessCodeTextInput setAccessCode={setAccessCode} />
+            <EmailTextInput value={resetData.email} setEmail={setEmail} />
+            <AccessCodeTextInput value={resetData.accessCode} setAccessCode={setAccessCode} />
           </View>
         </KeyboardAvoidingView>
         <RenderSpinnerResetButton {...props} resetData={resetData} />
