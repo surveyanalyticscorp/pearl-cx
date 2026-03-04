@@ -118,7 +118,7 @@ export const CommentText = ({text}) => {
         ignoredDomTags={['html', 'head', 'body']}
         source={{
           html: `
-          <span style="font-size: 100%; ">${StringUtils.formatCommentToHTML(
+          <span style="font-size: 100%;  ">${StringUtils.formatCommentToHTML(
             text,
           )}</span>`,
         }}
@@ -127,6 +127,7 @@ export const CommentText = ({text}) => {
         tagsStyles={{
           span: {
             color: Colors.filterIconColor,
+            lineHeight: 20, // Adjust this value as needed (or use multiplier like 1.5)
             ...baseTextStyles.secondaryRegularText,
           },
         }}
