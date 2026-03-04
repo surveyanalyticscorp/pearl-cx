@@ -12,7 +12,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
-import SafeAreaView from 'react-native-safe-area-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {FontFamily} from '../../styles/font.constants';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {HeaderFilter} from '../../routes/commonUI/CommonUI';
@@ -204,7 +204,7 @@ function Feedback(props) {
   return (
     <SafeAreaView
       testID="safe-area-view"
-      forceInset={{top: 'never', bottom: 'never'}}
+      edges={['left', 'right', 'bottom']}
       style={styles.safeAreaView}>
       <Animated.View
         style={[

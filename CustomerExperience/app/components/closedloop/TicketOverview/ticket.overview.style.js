@@ -13,7 +13,7 @@ const ticketOverviewStyles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   container: {
-    margin: MarginConstants.halfTab,
+    marginHorizontal: MarginConstants.halfTab,
     flex: 1,
   },
   ticketStatusContainer: {

@@ -28,7 +28,7 @@ import QPBottomSheet from '../closedloop/takeaction/QPBottomSheet';
 import QPBottomSheetHeader from '../closedloop/takeaction/QPBottomSheetHeader';
 import SelectStatus from '../closedloop/takeaction/SelectStatus';
 import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
-import SafeAreaView from 'react-native-safe-area-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {PaddingConstants} from '../../styles/padding.constants';
 
 const wait = timeout => {
@@ -168,7 +168,7 @@ const CxDashboard = ({route, navigation}) => {
   return (
     <SafeAreaView
       testID="cx-dashboard"
-      forceInset={{bottom: 'never', top: 'never'}}
+      edges={['left', 'right', 'bottom']}
       style={dashboardStyles.container}>
       <Animated.View
         style={[

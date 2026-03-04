@@ -18,6 +18,7 @@ import {FilterIcon, RenderStatusIcon} from '../../routes/commonUI/CommonUI';
 import IconButton from '../../routes/commonUI/IconButton';
 import DashboardSegmentHeader from '../../widgets/dashboardWidget/RenderSegmentTitle';
 import LegendScoreView from '../../widgets/dashboardWidget/LegendScoreView';
+import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
 
 export const RenderDonutChart = ({count, showPercentageCount}) => {
   let victoryPieColorScale =
@@ -202,13 +203,7 @@ export const ClosedLoopDashboard = ({openStatusBS}) => {
     <View style={styles.container}>
       <DashboardSegmentHeader text={'Closedloop'}>
         <ViewTicketsButton statusIndex={statusIndex} />
-        <View
-          style={{
-            width: MarginConstants.halfTab,
-            height: MarginConstants.tab1_2x,
-            marginHorizontal: MarginConstants.tab1,
-          }}
-        />
+        <HorizontalSpaceBox multiplyBy={4} />
         <RenderStatusFilterButton
           currentStatus={statusList[statusIndex]}
           onPress={openStatusBS}
@@ -231,7 +226,6 @@ export const ClosedLoopDashboard = ({openStatusBS}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-
     justifyContent: 'flex-start',
     margin: MarginConstants.tab1_2x,
 

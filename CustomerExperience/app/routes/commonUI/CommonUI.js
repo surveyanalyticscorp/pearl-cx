@@ -49,6 +49,7 @@ import {DMYFORMAT, HalfMonthDateYearFormat} from '../../Utils/AppConstants';
 import moment from 'moment';
 import testIDs from '../../widgets/qp-calendar/testIDs';
 import {useSelector} from 'react-redux';
+import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
 // let {width} = Dimensions.get('window');
 
 export const StatusIcon = ({
@@ -486,6 +487,7 @@ export const FilterDateBox = () => {
     <Pressable testID="Filter-Date-Box" onPress={() => filterAction()}>
       <View style={styles.filterBox}>
         <DateText />
+        <HorizontalSpaceBox />
         <CalendarIcon size={16} />
       </View>
     </Pressable>

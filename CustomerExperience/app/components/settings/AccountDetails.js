@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-// import SafeAreaView from 'react-native-safe-area-view';
+// import {SafeAreaView} from 'react-native-safe-area-context';
 import {StyleSheet, Text, View} from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
@@ -10,7 +10,7 @@ import {TextSizes} from '../../styles/textsize.constants';
 import {FontFamily} from '../../styles/font.constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ASYNC_USER_CREDENTIALS} from '../../api/Constant';
-import SafeAreaView from 'react-native-safe-area-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function AccountDetails(props) {
   const [userCredentials, setUserCredentials] = useState('');

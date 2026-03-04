@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
-import SafeAreaView from 'react-native-safe-area-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const CalendarScreen = props => {
   const [selectedYear, setSelectedYear] = useState({

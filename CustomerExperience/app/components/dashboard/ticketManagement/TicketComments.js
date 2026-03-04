@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import SafeAreaView from 'react-native-safe-area-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -15,8 +15,8 @@ import {translate} from '../../../Utils/MultilinguaUtils';
 
 export default function TicketComments(props) {
   let routeName = props.route.name;
-  const isLoading = useSelector((state) => state.global.isLoading);
-  const ticket = useSelector((state) => state.dashboard.ticketDetails);
+  const isLoading = useSelector(state => state.global.isLoading);
+  const ticket = useSelector(state => state.dashboard.ticketDetails);
   let [ticketLogs, setTicketLogs] = useState([]);
   useEffect(() => {
     if (!isObjectEmpty(ticket)) {

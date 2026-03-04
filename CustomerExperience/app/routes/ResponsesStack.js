@@ -19,7 +19,7 @@ const FeedbackStackNavigator = createStackNavigator();
 const FeedbackStack = props => (
   <FeedbackStackNavigator.Navigator>
     <FeedbackStackNavigator.Screen
-      name={translate('responses.responses')}
+      name="FeedbackList"
       component={Feedback}
       options={({navigation, route}) => ({
         headerLeft: props => <MenuIcon />,
@@ -46,12 +46,12 @@ const FeedbackStack = props => (
 const ResponsesStack = ({navigation}) => (
   <FeedbackStackNavigator.Navigator screenOptions={{presentation: 'modal'}}>
     <FeedbackStackNavigator.Screen
-      name="Responses"
+      name="ResponsesMain"
       component={FeedbackStack}
       options={({navigation, route}) => ({headerShown: false})}
     />
     <FeedbackStackNavigator.Screen
-      name={translate('responses.sort_by')}
+      name="SortResponses"
       component={FeedbackSorter}
       options={({navigation, route}) => ({
         // headerLeft: (props) => <View />,

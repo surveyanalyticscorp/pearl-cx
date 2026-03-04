@@ -21,6 +21,7 @@ import {
 import TicketOverview from './TicketOverview/TicketOverview';
 import TicketActivity from './TicketActivity/TicketActivity';
 import TicketRootCause from './TicketRootCause/TicketRootCause';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function TicketDetails(props) {
   const authToken = useSelector(state => state.global.authToken);
@@ -77,71 +78,77 @@ export default function TicketDetails(props) {
   }, [authToken]);
 
   // const CLFTicketTabStack = () => {
-  return isTicketLoading ? (
-    <RenderSpinner />
-  ) : (
-    <TicketTabs.Navigator
-      initialRouteName={
-        selectedTab ? translate(selectedTab) : translate('close_loop.overview')
-      }
-      initialLayout={{width: windowDimensions.width}}
-      screenOptions={{
-        lazy: true,
-        tabBarLabelStyle: {
-          width: windowDimensions.width / 4,
-          fontSize: TextSizes.secondary,
-          fontFamily: FontFamily.regular,
-          textTransform: 'none',
-        },
-        tabBarIndicatorStyle: {backgroundColor: Colors.accentLight},
-        tabBarStyle: {backgroundColor: Colors.white, width: '100%'},
-        tabBarItemStyle: {height: 1.3 * PaddingConstants.tab4},
-        tabBarActiveTintColor: Colors.accentLight,
-        tabBarInactiveTintColor: Colors.primary,
-      }}
-      keyboardDismissMode={'auto'}>
-      <TicketTabs.Screen
-        testID={'ticket-overview'}
-        name={translate('close_loop.overview')}
-        component={TicketOverview}
-        initialParams={{
-          screenName: translate('close_loop.overview'),
-          prevScreen: prevScreen,
-        }}
-      />
-      <TicketTabs.Screen
-        testID={'ticket-comments'}
-        name={translate('close_loop.comments')}
-        component={TicketComments}
-        initialParams={{
-          screenName: translate('close_loop.comments'),
-          prevScreen: prevScreen,
-        }}
-      />
-      <TicketTabs.Screen
-        // name={translate('responses.activity')}
-        testID={'ticket-activity'}
-        name={'Activity log'}
-        component={TicketActivity}
-        initialParams={{screenName: 'Activity log'}}
-      />
+  return (
+    <SafeAreaView style={{flex: 1}} edges={['left', 'right', 'bottom']}>
+      {isTicketLoading ? (
+        <RenderSpinner />
+      ) : (
+        <TicketTabs.Navigator
+          initialRouteName={
+            selectedTab
+              ? translate(selectedTab)
+              : translate('close_loop.overview')
+          }
+          initialLayout={{width: windowDimensions.width}}
+          screenOptions={{
+            lazy: true,
+            tabBarLabelStyle: {
+              width: windowDimensions.width / 4,
+              fontSize: TextSizes.secondary,
+              fontFamily: FontFamily.regular,
+              textTransform: 'none',
+            },
+            tabBarIndicatorStyle: {backgroundColor: Colors.accentLight},
+            tabBarStyle: {backgroundColor: Colors.white, width: '100%'},
+            tabBarItemStyle: {height: 1.3 * PaddingConstants.tab4},
+            tabBarActiveTintColor: Colors.accentLight,
+            tabBarInactiveTintColor: Colors.primary,
+          }}
+          keyboardDismissMode={'auto'}>
+          <TicketTabs.Screen
+            testID={'ticket-overview'}
+            name={translate('close_loop.overview')}
+            component={TicketOverview}
+            initialParams={{
+              screenName: translate('close_loop.overview'),
+              prevScreen: prevScreen,
+            }}
+          />
+          <TicketTabs.Screen
+            testID={'ticket-comments'}
+            name={translate('close_loop.comments')}
+            component={TicketComments}
+            initialParams={{
+              screenName: translate('close_loop.comments'),
+              prevScreen: prevScreen,
+            }}
+          />
+          <TicketTabs.Screen
+            // name={translate('responses.activity')}
+            testID={'ticket-activity'}
+            name={'Activity log'}
+            component={TicketActivity}
+            initialParams={{screenName: 'Activity log'}}
+          />
 
-      <TicketTabs.Screen
-        testID={'ticket-root-cause'}
-        name={translate('root_cause.root_cause')}
-        component={TicketRootCause}
-        initialParams={{screenName: translate('root_cause.root_cause')}}
-      />
+          <TicketTabs.Screen
+            testID={'ticket-root-cause'}
+            name={translate('root_cause.root_cause')}
+            component={TicketRootCause}
+            initialParams={{screenName: translate('root_cause.root_cause')}}
+          />
 
-      {/* <TicketTabs.Screen
-        testID={'ticket-centralized-root-cause'}
-        name={'Centralized root cause'}
-        component={CentralizedRootCause}
-        initialParams={{
-          screenName: 'Centralized root cause',
-        }}
-      /> */}
-    </TicketTabs.Navigator>
+          {/* <TicketTabs.Screen
+            testID={'ticket-centralized-root-cause'}
+            name={'Centralized root cause'}
+            component={CentralizedRootCause}
+            initialParams={{
+              screenName: 'Centralized root cause',
+            }}
+          /> */}
+        </TicketTabs.Navigator>
+      )}
+    </SafeAreaView>
   );
 }
 

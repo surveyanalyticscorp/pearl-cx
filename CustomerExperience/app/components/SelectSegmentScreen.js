@@ -23,6 +23,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import {translate} from '../Utils/MultilinguaUtils';
 import CheckmarkIcon from '../routes/commonUI/CheckmarkIcon';
 import {baseTextStyles} from '../styles/text.styles';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const SelectSegmentScreen = props => {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ const SelectSegmentScreen = props => {
   const navigation = useNavigation();
   const defaultRequestBody = {
     pageOffset: 0,
-    perPage: 20,
+    perPage: 100,
     segmentName: '',
     ownerID: ownerID,
   };
@@ -183,7 +184,7 @@ const SelectSegmentScreen = props => {
   };
 
   return (
-    <View style={styles.rootContainer}>
+    <SafeAreaView style={styles.rootContainer}>
       <View style={styles.container}>
         <View style={styles.headerRow}>
           <Text style={styles.headerText}>
@@ -194,7 +195,7 @@ const SelectSegmentScreen = props => {
 
         {globalSelectSegment()}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

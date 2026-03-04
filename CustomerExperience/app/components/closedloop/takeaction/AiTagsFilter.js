@@ -17,7 +17,7 @@ import {
   getTaglist,
   updateSingleTag,
 } from '../../../redux/actions/closedloop.actions';
-import SafeAreaView from 'react-native-safe-area-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {MarginConstants} from '../../../styles/margin.constants';
 
 // Search bar component

@@ -17,7 +17,7 @@ import {
   HalfMonthDateYearFormat,
   YMDFORMAT,
 } from '../../../Utils/AppConstants';
-import SafeAreaView from 'react-native-safe-area-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {DASHBOARD_RANGE} from '../../../redux/actions/dashboard.actions';
@@ -59,7 +59,9 @@ export default function DashboardDateFilter(props) {
       YMDFORMAT,
     );
 
-    if (moment(tempEnd).isSameOrAfter(tempStart)) {
+    if (
+      moment(tempEnd, YMDFORMAT).isSameOrAfter(moment(tempStart, YMDFORMAT))
+    ) {
       dispatch(setRangeFilter(selectedRange));
       // props.route.params.setRange(selectedRange);
 
@@ -254,13 +256,13 @@ export default function DashboardDateFilter(props) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {routeName === translate('date_filter.month')
         ? renderMonthView()
         : renderCustomView()}
 
       <SaveDashboardDate saveRange={saveRange} />
-    </SafeAreaView>
+    </View>
   );
 }
 

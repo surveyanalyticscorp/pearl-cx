@@ -25,7 +25,7 @@ import {
 } from '../../Utils/Utility';
 import StringUtils from '../../Utils/StringUtils';
 import {PaddingConstants} from '../../styles/padding.constants';
-import SafeAreaView from 'react-native-safe-area-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import QPSpinner from '../../widgets/QPSpinner';
 import {TextSizes} from '../../styles/textsize.constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';

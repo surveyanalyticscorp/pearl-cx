@@ -30,7 +30,7 @@ import {
   clearTagFilter,
   updateSingleTag,
 } from '../../../redux/actions/closedloop.actions';
-import SafeAreaView from 'react-native-safe-area-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const FilterSection = ({title, filterData, onItemSelect, testID}) => {
   return (
