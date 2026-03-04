@@ -38,10 +38,10 @@ export const RenderDonutChart = ({count, showPercentageCount}) => {
       <View testID="render-donut" style={styles.donut}>
         <VictoryPie
           data={dataScale}
-          width={5 * MarginConstants.tab4}
-          height={6 * MarginConstants.tab4}
-          innerRadius={2.2 * MarginConstants.tab4}
-          radius={1.6 * MarginConstants.tab4}
+          width={5 * MarginConstants.tab1_8x}
+          height={5 * MarginConstants.tab1_8x}
+          innerRadius={2.0 * MarginConstants.tab1_8x}
+          radius={1.6 * MarginConstants.tab1_8x}
           animate={{duration: 1000}}
           style={{
             labels: {
@@ -233,16 +233,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
 
     justifyContent: 'flex-start',
-    margin: MarginConstants.tab2,
+    margin: MarginConstants.tab1_2x,
 
-    borderRadius: 5,
+    borderRadius: 12,
+    borderColor: Colors.borderColor2,
+    borderWidth: 1,
+    paddingBottom: MarginConstants.tab1_2x,
   },
   chartContainer: {
     flex: 7,
     backgroundColor: Colors.white,
-    height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 6
-      : MarginConstants.tab4 * 5,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',

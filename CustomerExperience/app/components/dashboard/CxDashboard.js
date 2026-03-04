@@ -28,6 +28,8 @@ import QPBottomSheet from '../closedloop/takeaction/QPBottomSheet';
 import QPBottomSheetHeader from '../closedloop/takeaction/QPBottomSheetHeader';
 import SelectStatus from '../closedloop/takeaction/SelectStatus';
 import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
+import SafeAreaView from 'react-native-safe-area-view';
+import {PaddingConstants} from '../../styles/padding.constants';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -164,7 +166,7 @@ const CxDashboard = ({route, navigation}) => {
   }, []);
 
   return (
-    <View
+    <SafeAreaView
       testID="cx-dashboard"
       forceInset={{bottom: 'never', top: 'never'}}
       style={dashboardStyles.container}>
@@ -203,7 +205,7 @@ const CxDashboard = ({route, navigation}) => {
         <RenderDashboardSelectStatusFilter onClose={onCloseStatusBottomSheet} />
       </QPBottomSheet>
       <CreateTicketButton />
-    </View>
+    </SafeAreaView>
   );
 };
 

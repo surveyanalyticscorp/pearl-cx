@@ -5,6 +5,7 @@ import {dashboardStyles} from '../dashboard.style';
 import {getNPSColorByNPS} from '../../../styles/color.constants';
 import DottedLine from '../../../widgets/dashboardWidget/DottedLine';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import GoalIcon from '../../../../assets/images/goal_icon.svg';
 
 const BenchmarkIcon = ({benchmark}) => {
   return (
@@ -19,18 +20,20 @@ const BenchmarkIcon = ({benchmark}) => {
     </View>
   );
 };
-const BenchmarkView = () => {
+
+const GoalView = () => {
   const {benchmarkScore} = useSelector(
     state => state.dashboard.currentNPSData.NPSScore,
   );
   return benchmarkScore !== 0 ? (
     <View testID="benchmark-view" style={dashboardStyles.squareView}>
-      <BenchmarkIcon benchmark={benchmarkScore} />
-      <TextLabel text={`Benchmark: ${benchmarkScore}`} />
+      {/* <BenchmarkIcon benchmark={benchmarkScore} /> */}
+      <GoalIcon />
+      <TextLabel text={`Goal: ${benchmarkScore}`} />
     </View>
   ) : (
     <View style={dashboardStyles.emptyBenchmarkView} />
   );
 };
 
-export default BenchmarkView;
+export default GoalView;

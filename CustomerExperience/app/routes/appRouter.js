@@ -29,6 +29,7 @@ import {setI18nConfig} from '../Utils/MultilinguaUtils';
 import {WelcomeScreen} from '../components/dashboard/WelcomeScreen';
 import {clearLoginUser} from '../redux/actions/login.action';
 import RenderDrawer from './RenderDrawer';
+import SafeAreaView from 'react-native-safe-area-view';
 
 const AppRouter = props => {
   const authToken = useSelector(state => state.global.authToken);

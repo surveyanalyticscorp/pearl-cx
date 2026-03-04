@@ -5,6 +5,7 @@ import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {VictoryPie} from 'victory-native';
 import SmileyImageLabel from './SmileyImageLabel';
+import {View} from 'react-native';
 
 export function getCsatData(positive, neutral, negative) {
   console.log('positive', StringUtils.floatTo2DecimalPointString(positive));
@@ -39,20 +40,26 @@ const CsatChart = () => {
   ];
 
   return (
-    <VictoryPie
-      testID="csat-chart"
-      data={getCsatData(promoterPercent, passivePercent, detractorPercent)}
-      height={5 * MarginConstants.tab4}
-      width={5 * MarginConstants.tab4}
-      innerRadius={2.4 * MarginConstants.tab4}
-      radius={2.0 * MarginConstants.tab4}
-      labelRadius={2.9 * MarginConstants.tab4}
-      labelComponent={<SmileyImageLabel />}
-      padAngle={2}
-      colorScale={victoryPieColorScale}
-      endAngle={-90}
-      startAngle={90}
-    />
+    <View
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <VictoryPie
+        testID="csat-chart"
+        data={getCsatData(promoterPercent, passivePercent, detractorPercent)}
+        height={7 * MarginConstants.tab1_8x}
+        width={7 * MarginConstants.tab1_8x}
+        innerRadius={3.9 * MarginConstants.tab1_4x}
+        radius={3.2 * MarginConstants.tab1_4x}
+        labelRadius={4.5 * MarginConstants.tab1_4x}
+        labelComponent={<SmileyImageLabel />}
+        padAngle={2}
+        colorScale={victoryPieColorScale}
+        endAngle={-90}
+        startAngle={90}
+      />
+    </View>
   );
 };
 

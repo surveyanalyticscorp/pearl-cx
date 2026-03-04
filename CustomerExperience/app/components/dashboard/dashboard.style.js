@@ -24,6 +24,7 @@ export const dashboardStyles = StyleSheet.create({
   },
   scrollView: {
     flexGrow: 1,
+    paddingBottom: MarginConstants.tab1_8x + MarginConstants.tab1_4x,
   },
   imageBackgroundContainer: {
     flex: 1,
@@ -203,9 +204,8 @@ export const dashboardStyles = StyleSheet.create({
     height: DeviceInfo.isTablet()
       ? MarginConstants.tab4 * 14
       : MarginConstants.tab4 * 12,
-    flexDirection: 'column',
     justifyContent: 'center',
-    marginTop: MarginConstants.tab2,
+    marginVertical: MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab2,
     borderRadius: 12,
     borderWidth: 1,
@@ -213,15 +213,10 @@ export const dashboardStyles = StyleSheet.create({
   },
   csatChartContainer: {
     backgroundColor: Colors.white,
-    height: DeviceInfo.isTablet()
-      ? MarginConstants.tab1_4x * 14
-      : MarginConstants.tab1_4x * 13,
-    flexDirection: 'column',
     justifyContent: 'center',
-    alignSelf: 'center',
-    marginTop: MarginConstants.tab2,
-    marginHorizontal: MarginConstants.tab1_2x,
 
+    marginVertical: MarginConstants.tab1_2x,
+    marginHorizontal: MarginConstants.tab1_2x,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: Colors.borderColor2,
@@ -291,35 +286,8 @@ export const dashboardStyles = StyleSheet.create({
   contentContainer: {backgroundColor: Colors.white, height: '100%'},
   csatContainer: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
-    height: '90%',
-    top: MarginConstants.tab3,
-  },
-  csatScoreLabel: {
-    ...baseTextStyles.donutPercentRegularText,
-    position: 'absolute',
-    alignItems: 'center',
-    alignSelf: 'center',
-    top: 1.5 * MarginConstants.tab4,
-    color: Colors.filterIconColor,
-  },
-  csatToggleButton: {
-    ...buttonStyles.outlineGreyButton,
-    backgroundColor: Colors.white,
-    width: 3.5 * MarginConstants.tab4,
-    position: 'absolute',
-    alignItems: 'center',
-    alignSelf: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    top: 2.8 * MarginConstants.tab4,
-    zIndex: 100,
-  },
-  csatToggleButtonText: {
-    ...baseTextStyles.secondaryRegularText,
-    color: Colors.filterIconColor,
   },
   renderInfoContainer: {
     flexDirection: 'row',
@@ -339,10 +307,7 @@ export const dashboardStyles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignSelf: 'center',
-    top:
-      MarginConstants.tab1_16x +
-      MarginConstants.tab1_4x +
-      MarginConstants.tab1_2x,
+    top: MarginConstants.tab1_32x + MarginConstants.tab1_8x,
     width: '100%',
   },
 

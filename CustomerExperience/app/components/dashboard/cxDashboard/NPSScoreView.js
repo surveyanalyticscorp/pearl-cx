@@ -9,7 +9,19 @@ import NPSIcon from './NPSIcon';
 import TextLabel from '../../../widgets/TextLabel/TextLabel';
 import {baseTextStyles} from '../../../styles/text.styles';
 import ScoreIndicatorIcon from '../../../widgets/dashboardWidget/ScoreIndicatorIcon';
-const NpsScoreView = () => {
+import {FaIcon} from '../../../Utils/IconUtils';
+import {MarginConstants} from '../../../styles/margin.constants';
+const GapIcon = ({diff}) => {
+  return (
+    <FaIcon
+      name={diff > 0 ? 'caret-up' : 'caret-down'}
+      size={MarginConstants.tab1_2x}
+      color={diff > 0 ? Colors.promoter2 : Colors.detractor2}
+    />
+  );
+};
+
+const GapView = () => {
   const {npsPercentage, benchmarkScore} = useSelector(
     state => state.dashboard?.currentNPSData?.NPSScore,
   );
@@ -17,12 +29,14 @@ const NpsScoreView = () => {
 
   return (
     <View testID="nps-score-view" style={dashboardStyles.squareView}>
-      <NPSIcon />
-      <TextLabel text={'NPS:'} fontWeight={FontWeight.bold} />
+      {/* <NPSIcon /> */}
+      <TextLabel text={'Gap:'} fontWeight={FontWeight.bold} />
+      <GapIcon diff={npsPercentage - benchmarkScore} />
+
       <TextLabel
         text={StringUtils.floatToDecimal(npsPercentage)}
         fontWeight={FontWeight.bold}
-        color={getNPSColorByNPS(npsPercentage)}
+        // color={getNPSColorByNPS(npsPercentage)}
       />
       {hasBenchmark ? (
         <TextLabel
@@ -42,4 +56,4 @@ const NpsScoreView = () => {
   );
 };
 
-export default NpsScoreView;
+export default GapView;
