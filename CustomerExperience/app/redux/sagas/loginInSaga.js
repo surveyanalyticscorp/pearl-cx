@@ -209,7 +209,11 @@ export function* getResetPasswordLink(action) {
       'authenticateAccessCodeResponse',
       JSON.stringify(authenticateAccessCodeResponse),
     );
-    if (authenticateAccessCodeResponse?.body?.mobileAPIURL) {
+    if (
+      authenticateAccessCodeResponse &&
+      authenticateAccessCodeResponse.statusCode === 200 &&
+      authenticateAccessCodeResponse?.body?.mobileAPIURL
+    ) {
       const response = yield WebServiceHandler.postNew(
         authenticateAccessCodeResponse.body.mobileAPIURL +
           BASE_URL_NEW_MID_FIX +
@@ -217,18 +221,25 @@ export function* getResetPasswordLink(action) {
         {},
         action.param,
       );
-
-      yield put({
-        type: RESET_PASSWORD_LINK_RESPONSE,
-        response: response.body,
-      });
-      // yield showSuccessFlashMessage(response.body.message);
+      if (response?.statusCode === 200) {
+        yield put({
+          type: RESET_PASSWORD_LINK_RESPONSE,
+          response: response.body,
+        });
+        yield put({type: IS_LOADING, payload: {isLoading: false}});
+      } else {
+        yield put({type: API_ERROR, error: response});
+      }
+    } else {
+      yield put({type: API_ERROR, error: authenticateAccessCodeResponse});
     }
   } catch (error) {
     yield put({
       type: API_ERROR,
       error: error,
     });
+  } finally {
+    yield put({type: IS_LOADING, payload: {isLoading: false}});
   }
 }
 
