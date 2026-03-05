@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Pressable,
@@ -6,12 +6,10 @@ import {
   StyleSheet,
   FlatList,
   TextInput,
-  KeyboardAvoidingView,
   ScrollView,
   RefreshControl,
   Platform,
   useWindowDimensions,
-  Keyboard,
 } from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -21,14 +19,13 @@ import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {useDispatch, useSelector} from 'react-redux';
 import {Avatar} from '../../routes/commonUI/CommonUI';
 import {
-  getClosedLoopTicketItemComments,
   postAddTicketComment,
   resetParentComment,
   setParentComment,
 } from '../../redux/actions/dashboard.actions';
 import moment from 'moment';
 import StringUtils from '../../Utils/StringUtils';
-import {getDateTimeAgo, toLocalTime} from '../../Utils/TimeUtils';
+import {getDateTimeAgo} from '../../Utils/TimeUtils';
 import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {baseTextStyles} from '../../styles/text.styles';
@@ -37,6 +34,7 @@ import TextLabel from '../../widgets/TextLabel/TextLabel';
 import {EmptyView} from './EmptyVIew';
 import Collapsible from './CentralizedRootCause/components/CollapsableView';
 import SendCommentButton from '../../widgets/SendCommentButton';
+
 export function getFoldedText(text, MAX_WORD_LENGTH = 10) {
   if (StringUtils.getWords(text).length > MAX_WORD_LENGTH) {
     return `${StringUtils.getWords(text).slice(0, MAX_WORD_LENGTH).join(' ')}
@@ -81,6 +79,7 @@ export const UserAvatar = ({title}) => {
         width: size,
         height: size,
         borderRadius: size / 2,
+        marginEnd: MarginConstants.halfTab,
       }}
       textStyle={{
         fontFamily: FontFamily.regular,
@@ -330,7 +329,7 @@ export const ShowNestedFlatList = ({data, isSelected}) => {
 
 export const CommentParentItem = ({item}) => {
   // const [isCommentBoxVisible, setCommentBoxVisibility] = useState(false);
-  const [isSHowingReplies, setIsShowingReplies] = useState(false);
+  const [isShowingReplies, setIsShowingReplies] = useState(false);
   const {parentComment} = useSelector(state => state.dashboard);
   const isSelected = parentComment.id === item.id;
   const dispatch = useDispatch();
@@ -355,10 +354,10 @@ export const CommentParentItem = ({item}) => {
       {item.children.length > 0 ? (
         <Collapsible
           setIsOpenExternal={setIsShowingReplies}
-          headerTitle={`${isSHowingReplies ? 'Hide' : 'Show'} ${
-            item.children.length
-          } ${item.children.length === 1 ? 'reply' : 'replies'}`}
-          isInitiallyOpen={isSHowingReplies}
+          headerTitle={`${item.children.length} ${
+            item.children.length === 1 ? 'reply' : 'replies'
+          }`}
+          isInitiallyOpen={isShowingReplies}
           headerTitleStyle={{
             fontFamily: FontFamily.regular,
             fontSize: TextSizes.secondary,
@@ -607,10 +606,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    paddingHorizontal: MarginConstants.halfTab,
+    padding: MarginConstants.halfTab,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     borderRadius: 5,
+
+    backgroundColor: Colors.white,
   },
   commentText: {
     flex: 1,
@@ -640,7 +641,7 @@ const styles = StyleSheet.create({
   },
   replyText: {
     flex: 1,
-    marginStart: MarginConstants.tab4,
+    paddingStart: MarginConstants.tab4,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     color: Colors.filterIconColor,
