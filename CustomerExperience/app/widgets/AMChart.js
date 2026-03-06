@@ -14,7 +14,7 @@ const AMCharts = props => {
                                 .container {
                                   width: 100%;
                                   height: 100%;
-                                  zoom: 90%;
+                                  zoom: 80%;
                                   top:0;
                                   left:0;
                                   right:0;

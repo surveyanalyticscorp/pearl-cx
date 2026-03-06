@@ -180,16 +180,20 @@ export const dashboardStyles = StyleSheet.create({
 
     paddingHorizontal: PaddingConstants.halfTab,
   },
+  npsCountContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   npsPercentText: {
-    color: Colors.primary,
-    fontSize: TextSizes.donutPercentText,
-    fontFamily: FontFamily.bold,
+    color: Colors.filterIconColor,
+    fontSize: TextSizes.largeText,
+    fontFamily: FontFamily.medium,
     textAlign: 'center',
   },
   npsText: {
-    color: Colors.primary,
+    color: Colors.filterIconColor,
     fontSize: TextSizes.secondary,
-    fontFamily: FontFamily.semiBold,
+    fontFamily: FontFamily.regular,
     textAlign: 'center',
   },
   detailsText: {
@@ -266,7 +270,6 @@ export const dashboardStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: MarginConstants.tab1_2x,
   },
   roundSquareShape: {
     borderRadius: 2,

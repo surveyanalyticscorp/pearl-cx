@@ -25,7 +25,7 @@ const GapView = () => {
   const {npsPercentage, benchmarkScore} = useSelector(
     state => state.dashboard?.currentNPSData?.NPSScore,
   );
-  const hasBenchmark = benchmarkScore && benchmarkScore !== 0;
+  // const hasBenchmark = benchmarkScore && benchmarkScore !== 0;
 
   return (
     <View testID="nps-score-view" style={dashboardStyles.squareView}>
@@ -38,7 +38,7 @@ const GapView = () => {
         fontWeight={FontWeight.bold}
         // color={getNPSColorByNPS(npsPercentage)}
       />
-      {hasBenchmark ? (
+      {/* {hasBenchmark ? (
         <TextLabel
           text={`${StringUtils.floatToDecimal(npsPercentage - benchmarkScore)}`}
           baseTextStyle={baseTextStyles.semiSecondaryRegularText}
@@ -51,7 +51,7 @@ const GapView = () => {
         <ScoreIndicatorIcon diff={npsPercentage - benchmarkScore} />
       ) : (
         <View />
-      )}
+      )} */}
     </View>
   );
 };

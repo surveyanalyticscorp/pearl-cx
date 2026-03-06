@@ -5,22 +5,38 @@ import NpsGaugeChart from '../../../widgets/dashboardWidget/NpsGaugeChart';
 import GapView from './NPSScoreView';
 import GoalView from './BenchmarkView';
 import ChartLegendView from './ChartLegendView';
-import {HorizontalSpaceBox} from '../../../widgets/SpaceBox';
+import {useSelector} from 'react-redux';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import {MarginConstants} from '../../../styles/margin.constants';
+import StringUtils from '../../../Utils/StringUtils';
 
 const GapAndGoalView = ({children}) => {
   return <View style={styles.gapAndGoalContainer}>{children}</View>;
 };
 
+const NPSCountView = () => {
+  const {npsPercentage} = useSelector(
+    state => state.dashboard?.currentNPSData?.NPSScore,
+  );
+  return (
+    <View style={dashboardStyles.npsCountContainer}>
+      <TextLabel
+        text={`${StringUtils.floatTo2DecimalPoint(npsPercentage ?? 0)}%`}
+        style={dashboardStyles.npsPercentText}
+      />
+      <TextLabel text={'NPS'} style={dashboardStyles.npsText} />
+    </View>
+  );
+};
 const NPSView = () => {
   return (
     <View style={dashboardStyles.npsViewContainer}>
       <NpsGaugeChart />
-      {/* <NPSCountView /> */}
+      <NPSCountView />
       <GapAndGoalView>
         <GoalView />
         <GapView />
       </GapAndGoalView>
-
       <ChartLegendView />
     </View>
   );
@@ -32,6 +48,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    marginVertical: MarginConstants.halfTab,
   },
 });
