@@ -178,13 +178,12 @@ export const ViewTicketsButton = ({statusIndex}) => {
 export const RenderStatusFilterButton = ({currentStatus, onPress}) => {
   console.log('ABUL', JSON.stringify(currentStatus));
   return (
-    <Pressable onPress={onPress}>
-      <FilterIcon
-        color={Colors.accentLight}
-        testID="render-status-icon"
-        title={currentStatus.title.toLowerCase()}
-      />
-    </Pressable>
+    <FilterIcon
+      color={Colors.accentLight}
+      testID="render-status-icon"
+      title={currentStatus.title.toLowerCase()}
+      onPressFilter={onPress}
+    />
   );
 };
 
