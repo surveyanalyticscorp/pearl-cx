@@ -2,51 +2,40 @@ import Flutter
 import UIKit
 import QuestionProCXFramework
 
-public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate {
+public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate, QuestionProCallbackDelegate {
 
     private var window: UIWindow?
     private var isInitialized = false
     private var initResult: FlutterResult?
+    private var surveyUrlChannel: FlutterMethodChannel?
+    private var hasRepliedToInit = false
+    private let initLock = NSLock()
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "math_flutter", binaryMessenger: registrar.messenger())
         let cxChannel = FlutterMethodChannel(name: "Cx_Callback", binaryMessenger: registrar.messenger())
         let instance = MathFlutterPlugin()
+        instance.surveyUrlChannel = channel
         registrar.addMethodCallDelegate(instance, channel: channel)
         registrar.addMethodCallDelegate(instance, channel: cxChannel)
 
         if let appDelegate = UIApplication.shared.delegate as? FlutterAppDelegate {
-            instance.window = appDelegate.window ?? nil
+            instance.window = appDelegate.window
         }
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        // Wrap all method calls in error handling to prevent crashes
-        do {
-            let args = call.arguments as? [String: Any]
-            
-            switch call.method {
-            case "initialize":
-                initialize(args: args, result: result)
-                
-            case "getSurveyUrl":
-                getSurveyUrl(result: result)
-                
-            case "setScreenVisited":
-                setScreenVisited(args: args, result: result)
-                
-            case "setDataMappings":
-                handleSetDataMappings(args: args, result: result)
-                
-            default:
-                result(FlutterMethodNotImplemented)
-            }
-        } catch {
-            result(FlutterError(
-                code: "METHOD_ERROR",
-                message: "Error handling method call: \(error.localizedDescription)",
-                details: nil
-            ))
+        let args = call.arguments as? [String: Any]
+        
+        switch call.method {
+        case "initialize":
+            initialize(args: args, result: result)
+        case "setScreenVisited":
+            setScreenVisited(args: args, result: result)
+        case "setDataMappings":
+            handleSetDataMappings(args: args, result: result)
+        default:
+            result(FlutterMethodNotImplemented)
         }
     }
     
@@ -54,11 +43,7 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
     
     private func initialize(args: [String: Any]?, result: @escaping FlutterResult) {
         guard let apiKey = args?["apiKey"] as? String, !apiKey.isEmpty else {
-            result(FlutterError(
-                code: "INVALID_ARGS",
-                message: "apiKey is required for iOS",
-                details: nil
-            ))
+            result(FlutterError(code: "INVALID_ARGS", message: "apiKey is required for iOS", details: nil))
             return
         }
         
@@ -68,11 +53,7 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
     
     private func setScreenVisited(args: [String: Any]?, result: @escaping FlutterResult) {
         guard let screenName = args?["screen_name_key"] as? String, !screenName.isEmpty else {
-            result(FlutterError(
-                code: "INVALID_ARGS",
-                message: "screen_name_key is required",
-                details: nil
-            ))
+            result(FlutterError(code: "INVALID_ARGS", message: "screen_name_key is required", details: nil))
             return
         }
         
@@ -81,11 +62,7 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
     
     private func handleSetDataMappings(args: [String: Any]?, result: @escaping FlutterResult) {
         guard let customVariables = args?["customVariables"] as? [String: String], !customVariables.isEmpty else {
-            result(FlutterError(
-                code: "INVALID_ARGS",
-                message: "customVariables cannot be null or empty",
-                details: nil
-            ))
+            result(FlutterError(code: "INVALID_ARGS", message: "customVariables cannot be null or empty", details: nil))
             return
         }
         
@@ -104,11 +81,7 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
             .connectedScenes
             .compactMap({ ($0 as? UIWindowScene)?.windows.first })
             .first else {
-            result(FlutterError(
-                code: "NO_WINDOW",
-                message: "Window not available",
-                details: nil
-            ))
+            result(FlutterError(code: "NO_WINDOW", message: "Window not available", details: nil))
             return
         }
 
@@ -117,10 +90,11 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
             : TouchPoint.DataCenter.DATA_CENTER_US
 
         let touchPoint = TouchPoint.initTouchPoint(dataCenter: dataCenterValue)
-        touchPoint.isFullScreenMode = true
 
-        // Store result callback for async response
         initResult = result
+        initLock.lock()
+        hasRepliedToInit = false
+        initLock.unlock()
 
         do {
             QuestionProCX.getinstance().configure(
@@ -129,83 +103,73 @@ public class MathFlutterPlugin: NSObject, FlutterPlugin, QuestionProInitDelegate
                 withWindow: appWindow,
                 initCallbackDelegate: self
             )
+            QuestionProCX.getinstance().setQuestionProCallbackDelegate(questionProCallbackDelegate: self)
         } catch {
-            initResult?(FlutterError(
-                code: "INIT_EXCEPTION",
-                message: "SDK initialization failed: \(error.localizedDescription)",
-                details: nil
-            ))
-            initResult = nil
+            initLock.lock()
+            defer { initLock.unlock() }
+            if !hasRepliedToInit {
+                hasRepliedToInit = true
+                initResult?(FlutterError(
+                    code: "INIT_EXCEPTION",
+                    message: "SDK initialization failed: \(error.localizedDescription)",
+                    details: nil
+                ))
+                initResult = nil
+            }
         }
     }
 
-    // MARK: - Get Survey URL
-
-    private func getSurveyUrl(result: @escaping FlutterResult) {
-        do {
-            let surveyUrl = QuestionProCX.getinstance().getSurveyUrl()
-            result(surveyUrl ?? "")
-        } catch {
-            result(FlutterError(
-                code: "GET_SURVEY_URL_ERROR",
-                message: error.localizedDescription,
-                details: nil
-            ))
-        }
-    }
-
-    // MARK: - Log Screen View
+    // MARK: - Screen View & Data Mappings
 
     private func logScreenView(screenName: String, result: @escaping FlutterResult) {
         do {
             QuestionProCX.getinstance().setScreenName(screenName: screenName)
             result("Event logged")
         } catch {
-            result(FlutterError(
-                code: "SCREEN_VIEW_ERROR",
-                message: error.localizedDescription,
-                details: nil
-            ))
+            result(FlutterError(code: "SCREEN_VIEW_ERROR", message: error.localizedDescription, details: nil))
         }
     }
-    
-    // MARK: - Set Data Mappings
     
     private func setDataMappings(customVariables: [String: String], result: @escaping FlutterResult) {
         do {
             QuestionProCX.getinstance().setDataMappings(dataMappings: customVariables)
             result("Data mappings set successfully")
         } catch {
-            result(FlutterError(
-                code: "DATA_MAPPING_ERROR",
-                message: error.localizedDescription,
-                details: nil
-            ))
+            result(FlutterError(code: "DATA_MAPPING_ERROR", message: error.localizedDescription, details: nil))
         }
     }
 
-    // MARK: - Init Callbacks
+    // MARK: - QuestionPro Delegate Callbacks
 
     public func initSDKSuccess() {
-        isInitialized = true
-        initResult?("QuestionPro CX SDK initialized successfully")
-        initResult = nil
+        initLock.lock()
+        defer { initLock.unlock() }
+        if !hasRepliedToInit {
+            hasRepliedToInit = true
+            isInitialized = true
+            initResult?("QuestionPro CX SDK initialized successfully")
+            initResult = nil
+        }
     }
 
     public func initSDKFailed(error: String) {
-        initResult?(FlutterError(
-            code: "INIT_FAILED",
-            message: error.isEmpty ? "Initialization failed" : error,
-            details: nil
-        ))
-        initResult = nil
+        initLock.lock()
+        defer { initLock.unlock() }
+        if !hasRepliedToInit {
+            hasRepliedToInit = true
+            initResult?(FlutterError(code: "INIT_FAILED", message: error.isEmpty ? "Initialization failed" : error, details: nil))
+            initResult = nil
+        }
     }
     
-    // MARK: - Cleanup
+    public func getSurveyURL(surveyURL: String) {
+        guard !surveyURL.isEmpty else { return }
+        surveyUrlChannel?.invokeMethod("onSurveyUrlReceived", arguments: ["surveyUrl": surveyURL])
+    }
     
     deinit {
-        // Clean up any pending callbacks to prevent crashes
         initResult = nil
         window = nil
+        surveyUrlChannel = nil
     }
 }

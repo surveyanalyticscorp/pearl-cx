@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:math_flutter/math_flutter.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  MathFlutter.setupSurveyUrlListener();
+  MathFlutter.onSurveyUrlReceived = (url) {
+    debugPrint('Survey URL received via callback: $url');
+  };
+
   runApp(const MyApp());
 }
 
@@ -28,15 +35,16 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    //  MathFlutter.setupSurveyUrlListener();
     _initializeSdk();
   }
 
   Future<void> _initializeSdk() async {
-    await MathFlutter.init(
-      apiKey: '489c1b29-3bce-453d-b749-dad5519efc6d',
+    final result = await MathFlutter.init(
+      apiKey: 'YOUR_API_KEY',
       dataCenter: DataCenter.us,
     );
-    _getSurveyUrl();
+    debugPrint('Initialization result: $result');
   }
 
   Future<void> _logScreenView() async {
@@ -62,15 +70,6 @@ class _HomePageState extends State<HomePage> {
       debugPrint('Data mappings set successfully: $result');
     } catch (e) {
       debugPrint('Error setting data mappings: $e');
-    }
-  }
-
-  Future<void> _getSurveyUrl() async {
-    try {
-      String url = await MathFlutter.getSurveyUrl();
-      debugPrint('Survey URL: $url');
-    } catch (e) {
-      debugPrint('Error getting survey URL: $e');
     }
   }
 

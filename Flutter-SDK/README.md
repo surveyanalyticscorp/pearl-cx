@@ -6,7 +6,7 @@ QuestionPro CX SDK integration for Flutter.
 
 ```yaml
 dependencies:
-  math_flutter: ^0.12.8
+  math_flutter: ^0.14.0
 ```
 
 ## Setup
@@ -59,28 +59,34 @@ import 'package:math_flutter/math_flutter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  await MathFlutter.initializeSurvey(
-    apiKey: 'YOUR_API_KEY',
+  // Initialize SDK
+  await MathFlutter.init(
+    apiKey: 'YOUR_API_KEY',  // Required for iOS, optional for Android
     dataCenter: DataCenter.us,
   );
+  
+  // Setup survey URL listener
+  MathFlutter.setupSurveyUrlListener();
+  MathFlutter.onSurveyUrlReceived = (surveyUrl) {
+    // Handle survey URL - open in WebView or browser
+    print('Survey available: $surveyUrl');
+  };
   
   runApp(MyApp());
 }
 ```
 
-### Launch Survey
-
-```dart
-await MathFlutter.launchSurvey('123456789');
-```
-
 ### Track Screen Views
 
+Track when users visit specific screens:
+
 ```dart
-await MathFlutter.viewCount('Home_Screen');
+await MathFlutter.setScreenVisited('Home_Screen');
 ```
 
 ### Set User Data
+
+Set custom user attributes for targeting:
 
 ```dart
 await MathFlutter.setDataMappings({
@@ -92,37 +98,44 @@ await MathFlutter.setDataMappings({
 
 ## API Reference
 
-### initializeSurvey()
+### init()
 
 ```dart
-Future<String> initializeSurvey({
+Future<String> init({
   String? apiKey,
   DataCenter dataCenter = DataCenter.us,
 })
 ```
+```
 
 Initialize the QuestionPro CX SDK.
 
-- `apiKey` Required for iOS, optional for Android
+- `apiKey` Required for iOS, optional for Android (reads from AndroidManifest.xml)
 - `dataCenter` DataCenter.us or DataCenter.eu
 
-### launchSurvey()
+### setupSurveyUrlListener()
 
 ```dart
-Future<void> launchSurvey(String surveyId)
+static void setupSurveyUrlListener()
 ```
 
-Display a survey to the user.
+Sets up listener to receive survey URLs from native SDK when business rules are triggered.
 
-- `surveyId` Survey identifier
-
-### viewCount()
+### onSurveyUrlReceived
 
 ```dart
-Future<String> viewCount(String screenName)
+static void Function(String surveyUrl)? onSurveyUrlReceived
 ```
 
-Track screen view events.
+Callback that gets invoked when a survey URL is available. Set this to handle survey URLs (e.g., open in WebView).
+
+### setScreenVisited()
+
+```dart
+Future<String> setScreenVisited(String screenName)
+```
+
+Track screen view events. May trigger survey delivery based on configured rules.
 
 - `screenName` Name of the screen being viewed
 
@@ -132,27 +145,33 @@ Track screen view events.
 Future<String> setDataMappings(Map<String, String> customVariables)
 ```
 
-Set custom user attributes.
+Set custom user attributes for survey targeting.
 
 - `customVariables` Key-value pairs for user attributes
 
 ## Requirements
 
-- Flutter >=3.0.0
-- Dart >=3.0.0 <4.0.0
+- Flutter >=2.0.0
+- Dart >=2.17.0 <4.0.0
 - Android API 24+
 - iOS 14.0+
 
 ## Troubleshooting
 
-**MISSING_API_KEY error**  
-Ensure API key is in AndroidManifest.xml under application tag.
+**MISSING_API_KEY error on Android**  
+Ensure API key is in AndroidManifest.xml under application tag with name `cx_manifest_api_key`.
 
-**Survey doesn't display**  
-Initialize SDK before launching surveys. Verify survey ID is correct.
+**Survey URL not received**  
+- Ensure `setupSurveyUrlListener()` is called after `init()`
+- Check that `onSurveyUrlReceived` callback is set
+- Verify business rules are configured correctly in QuestionPro dashboard
+- Survey delivery depends on configured triggers (screen visits, user data, etc.)
 
 **iOS build fails**  
 Run `cd ios && pod install`
+
+**App closes when survey is dismissed (Android)**  
+Ensure AndroidManifest.xml has `launchMode="singleInstance"` for InteractionActivity.
 
 ## Example
 

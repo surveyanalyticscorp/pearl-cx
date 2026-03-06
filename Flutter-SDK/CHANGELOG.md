@@ -1,3 +1,16 @@
+## 0.14.0
+
+* Version bump to 0.14.0
+
+## 0.13.0
+
+* **CRITICAL FIX:** Fixed "Reply already submitted" crash when using SDK after getting survey URL
+  - Added `hasRepliedToInit` flag to prevent double replies from initialization callbacks
+  - Added synchronized blocks to ensure thread-safe reply handling
+  - Initialization callbacks now properly check if a reply has been sent before responding
+  - Prevents crash when SDK sends both success and failure callbacks
+  - App no longer crashes when clicking buttons after fetching survey URL
+
 ## 0.12.9
 
 * **CRITICAL FIX:** App no longer closes when survey is closed (Android)
