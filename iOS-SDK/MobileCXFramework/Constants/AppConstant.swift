@@ -28,6 +28,7 @@ public let kDataCenter = "dataCenter"
 public let kConfigType = "configType"
 public let kDataMappings = "DataMappings"
 public let kVisitorUUID = "VisitorUUID"
+public let kCurrentInterceptId: String = "CurrentInterceptId"
 
 //API request types
 public enum APIRequestType: String {
@@ -51,6 +52,7 @@ public let kMobileCXGetSurveyURL = "/api/v1/visitor/mobile"
 //public let kGetSurveyURL = "/cx/transactions/survey-url"
 public let kGetSurveyURL = "/api/v1/data-mapping/mobile/survey-url"
 public let kSurveyFeedbackURL = "/api/v1/visitor/mobile/survey-feedback"
+public let kSurveyFeebackExcludedFeedback = "/api/v1/visitor/mobile/excluded-feedback"
 public let kCoreSurveyFeedbackURL = "/a/api/v2/surveys/"
 
 let bundleIdentifier = Bundle.main.bundleIdentifier! as String
@@ -71,7 +73,7 @@ public enum InterceptCondition: String {
 }
 
 public enum InterceptSurveyLaunchEvent: String {
-    case MATCHED, LAUNCHED
+    case MATCHED, LAUNCHED, EXCLUDED
 }
 
 public enum LogTag: String {

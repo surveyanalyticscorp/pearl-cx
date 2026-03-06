@@ -41,6 +41,14 @@ public class CacheUtils {
         return sdkUserDefaults.data(forKey: key)
     }
     
+    public static func setCurrentInterceptId(key: String, value: String) {
+        sdkUserDefaults.set(value, forKey: key)
+    }
+    
+    public static func getCurrentInterceptId(key: String) -> String? {
+        return sdkUserDefaults.value(forKey: key) as? String
+    }
+    
     public static func getInterceptById(key: String) -> Data? {
         let intercepts = getIntercepts(key: kIntercepts);
         do {

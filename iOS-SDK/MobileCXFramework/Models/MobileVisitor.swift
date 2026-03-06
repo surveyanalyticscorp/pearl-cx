@@ -53,6 +53,13 @@ public struct Intercept: Codable {
     let rules: [Rule]
     let settings: Settings?
     let dataMappings: [DataMappings]
+    let metaData: MetaData
+}
+
+public struct MetaData: Codable {
+    public let matchedCount: Int
+    public let excludedCount: Int
+    public let visitorStatus: String
 }
 
 public struct DataMappings: Codable {
@@ -88,6 +95,22 @@ public struct Settings: Codable {
     let allowMultipleResponse: Bool
     let autoLanguageSelection: Bool
     let triggerDelayInSeconds: Int
+    let autoCloseOnCompletion: Bool
+    var samplingRate: Int = 100
+    
+    enum CodingKeys: String, CodingKey {
+        case allowMultipleResponse, autoLanguageSelection, triggerDelayInSeconds, autoCloseOnCompletion, samplingRate
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        allowMultipleResponse = try container.decode(Bool.self, forKey: .allowMultipleResponse)
+        autoLanguageSelection = try container.decode(Bool.self, forKey: .autoLanguageSelection)
+        triggerDelayInSeconds = try container.decode(Int.self, forKey: .triggerDelayInSeconds)
+        
+        self.autoCloseOnCompletion = try container.decodeIfPresent(Bool.self, forKey: .autoCloseOnCompletion) ?? false
+        self.samplingRate = try container.decodeIfPresent(Int.self, forKey: .samplingRate) ?? 100
+    }
 }
 
 // MARK: - Rule Model

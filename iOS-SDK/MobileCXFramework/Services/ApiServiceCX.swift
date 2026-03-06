@@ -27,7 +27,7 @@ public class ApiServiceCX {
         urlString: String,
         method: HTTPMethod = .GET,
         headers: [String: String]? = nil,
-        body: [String: Any]? = nil,
+        body: Any? = nil,
         responseType: T.Type
     ) async throws -> T {
         

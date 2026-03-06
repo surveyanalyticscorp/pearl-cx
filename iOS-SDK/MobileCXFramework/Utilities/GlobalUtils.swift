@@ -29,5 +29,12 @@ public class GlobalUtils {
             return fallback
         }
     }
+    
+    public static func checkSamplingLogic(samplingRate: Int, matchedCount: Int, excludedCount: Int) -> Bool {
+        let numerator = Double(matchedCount) * 100.0
+        let denominator = Double(matchedCount + excludedCount + 1)
+        let percentage = numerator / denominator
+        return percentage < Double(samplingRate)
+    }
 }
 

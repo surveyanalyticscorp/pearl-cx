@@ -41,6 +41,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     @MainActor public func launchSurveyForIntercept(interceptId: Int, satisfiedRule: Rule) {
         LogUtils.printMessage(message: "satisfiedRule.name \(satisfiedRule.name)")
         LogUtils.printMessage(message: "intercept id \(interceptId)")
+        CacheUtils.setCurrentInterceptId(key: kCurrentInterceptId, value: String(interceptId))
         addRuleToSatisfiedRulesList(for: String(interceptId), newValue: satisfiedRule.name)
         if let task = activeTimerTasks[interceptId] {
             task.cancel()
@@ -92,15 +93,15 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                     for rule in intercept.rules {
                         if (InterceptRuleType.VIEW_COUNT.rawValue == rule.name) {
                             if (rule.key == screenName) {
-                                var count = CacheUtils.getScreenVisitCountForInterceptId(key: String(intercept.id))
-                                LogUtils.printMessage(message: "Count: \(count) for \(screenName)")
-                                if (count == Int(rule.value)) {
+                                if (checkShouldShowSampling(intercept: intercept)) {
                                     self.launchSurveyForIntercept(interceptId: intercept.id, satisfiedRule: rule)
                                     CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: 1)
                                 } else {
-                                    count += 1;
-                                    CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: count)
+                                    let visitorId = CacheUtils.getVisitorUUID(key: kVisitorUUID)
+                                    APIUtils.executeExcludedFeedbackEvent(interceptData: intercept, visitorId: visitorId);
                                 }
+                                var count = CacheUtils.getScreenVisitCountForInterceptId(key: String(intercept.id))
+                                LogUtils.printMessage(message: "Count: \(count) for \(screenName)")
                             }
                         }
                     }
@@ -229,7 +230,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                     CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
                     self.launchSurvey(showInDialog: showInDialog, triggerDelayInSeconds: triggerDelayInSeconds)
                 }
-                APIUtils.updateInterceptSurveyLaunchEvent(interceptData: interceptData, visitorId: visitorId, surveyType: InterceptSurveyLaunchEvent.LAUNCHED.rawValue);
+                APIUtils.updateInterceptSurveyLaunchEvent(interceptData: interceptData, visitorId: visitorId);
             } catch {
                 self.questionProCallbackDelegate?.getSurveyURL(surveyURL: "")
                 LogUtils.printMessage(logTag: .LOG_ERROR, message: "API error -> \(error)")
@@ -278,29 +279,49 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 CacheUtils.appendDataMappings(newMappings: intercept.dataMappings)
                 
                 CacheUtils.setInterceptForInterceptId(key: String(intercept.id), value: interceptRules)
-                
-                for rule in intercept.rules {
-                    if (rule.name == InterceptRuleType.DAY.rawValue) {
-                        surveyLogicUtilsInstance.checkSurveyLaunchDayLogic(days: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
-                    } else if (rule.name == InterceptRuleType.DATE.rawValue) {
-                        surveyLogicUtilsInstance.checkSurveyLaunchDateOfMonthLogic(dates: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
-                    } else if (rule.name == InterceptRuleType.TIME_SPENT.rawValue) {
-                        // ✅ Store the timer task properly
-                        let task = Task {
-                            for await timeLeft in TimerUtils.getinstance().startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
-                                LogUtils.printMessage(message: "⏳ Time left: \(timeLeft) sec for \(intercept.id)")
+                if (checkShouldShowSampling(intercept: intercept)) {
+                    for rule in intercept.rules {
+                        if (rule.name == InterceptRuleType.DAY.rawValue) {
+                            surveyLogicUtilsInstance.checkSurveyLaunchDayLogic(days: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
+                        } else if (rule.name == InterceptRuleType.DATE.rawValue) {
+                            surveyLogicUtilsInstance.checkSurveyLaunchDateOfMonthLogic(dates: rule.value,  interceptId: intercept.id, interceptRule: rule, completionDelegate: self)
+                        } else if (rule.name == InterceptRuleType.TIME_SPENT.rawValue) {
+                            // ✅ Store the timer task properly
+                            let task = Task {
+                                for await timeLeft in TimerUtils.getinstance().startTimer(timeInterval: Int(rule.value)!, interceptId: intercept.id, interceptRule: rule, completionDelegate: self) {
+                                    LogUtils.printMessage(message: "⏳ Time left: \(timeLeft) sec for \(intercept.id)")
+                                }
+                                // Clean up task when timer completes
+                                self.activeTimerTasks.removeValue(forKey: intercept.id)
                             }
-                            // Clean up task when timer completes
-                            self.activeTimerTasks.removeValue(forKey: intercept.id)
+                            self.activeTimerTasks[intercept.id] = task
                         }
-                        self.activeTimerTasks[intercept.id] = task
                     }
+                } else {
+                    let visitorId = CacheUtils.getVisitorUUID(key: kVisitorUUID)
+                    APIUtils.executeExcludedFeedbackEvent(interceptData: intercept, visitorId: visitorId);
                 }
             }
         } catch {
             self.initCallbackDelegate?.initSDKFailed(error: error.localizedDescription)
             LogUtils.printMessage(logTag: .LOG_ERROR, message: "API error: \(error)")
         }
+    }
+    
+    func checkShouldShowSampling(intercept: Intercept) -> Bool {
+        let samplingRate = intercept.settings?.samplingRate ?? 100
+        var visitorStatus = intercept.metaData.visitorStatus
+        
+        if (visitorStatus == "") {
+            if (samplingRate >= 100) {
+                return true
+            }
+            let matchedCount = intercept.metaData.matchedCount
+            let excludedCount = intercept.metaData.excludedCount
+            return GlobalUtils.checkSamplingLogic(samplingRate: samplingRate, matchedCount: matchedCount, excludedCount: excludedCount)
+            
+        }
+        return visitorStatus != InterceptSurveyLaunchEvent.EXCLUDED.rawValue
     }
     
     func appLifecycleStateListener() {
@@ -476,10 +497,20 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             if message.name == "callbackHandler" {
                 if let messageBody = message.body as? String {
                     LogUtils.printMessage(message: "Received message: \(messageBody)")
-                    if (messageBody.contains("closeThankyouPage")) {
-                        perform(#selector(self.aDismissWebview(_:)), with: self, afterDelay: 3)
-                    } else {
-                        openInSafari(urlString: messageBody)
+                    var currentInterceptId = CacheUtils.getCurrentInterceptId(key: kCurrentInterceptId) ?? ""
+                    if let intercept = CacheUtils.getInterceptById(key: String(currentInterceptId)) {
+                        do {
+                            let interceptData = try JSONDecoder().decode(Intercept.self, from: intercept)
+                            if (interceptData.settings?.autoCloseOnCompletion ?? false) {
+                                if (messageBody.contains("closeThankyouPage")) {
+                                    perform(#selector(self.aDismissWebview(_:)), with: self, afterDelay: 3)
+                                    return
+                                }
+                                openInSafari(urlString: messageBody)
+                            }
+                        } catch {
+                            LogUtils.printMessage(logTag: .LOG_ERROR, message: "Error in close survey page -> \(error)")
+                        }
                     }
                 }
             }
