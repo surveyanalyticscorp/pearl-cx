@@ -44,7 +44,7 @@ const LegendScoreView = ({title, count, percentage, backgroundColor}) => {
         />
         <TextLabel
           testID="legend-score-count"
-          text={count ?? ''}
+          text={`${count}`}
           baseTextStyle={baseTextStyles.secondaryMediumText}
           fontWeight={FontWeight.bold}
           style={styles.countText}
