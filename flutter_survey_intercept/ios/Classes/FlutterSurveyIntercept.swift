@@ -90,7 +90,7 @@ public class FlutterSurveyIntercept: NSObject, FlutterPlugin, QuestionProInitDel
             : TouchPoint.DataCenter.DATA_CENTER_US
 
         let touchPoint = TouchPoint.initTouchPoint(dataCenter: dataCenterValue)
-
+        touchPoint.platform = TouchPoint.PLATFORM.FLUTTER.rawValue
         initResult = result
         initLock.lock()
         hasRepliedToInit = false
@@ -101,7 +101,7 @@ public class FlutterSurveyIntercept: NSObject, FlutterPlugin, QuestionProInitDel
                 apiKey: apiKey,
                 touchPoint: touchPoint,
                 withWindow: appWindow,
-                initCallbackDelegate: self
+                initCallbackDelegate: self,      
             )
             QuestionProCX.getinstance().setQuestionProCallbackDelegate(questionProCallbackDelegate: self)
         } catch {

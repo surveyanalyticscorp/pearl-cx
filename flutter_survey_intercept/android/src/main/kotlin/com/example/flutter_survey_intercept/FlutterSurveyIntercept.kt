@@ -5,6 +5,7 @@ import android.os.Looper
 import android.util.Log
 import com.questionpro.cxlib.QuestionProCX
 import com.questionpro.cxlib.enums.DataCenter
+import com.questionpro.cxlib.enums.Platform;
 import com.questionpro.cxlib.interfaces.IQuestionProInitCallback
 import com.questionpro.cxlib.interfaces.IQuestionProCallback
 import com.questionpro.cxlib.model.TouchPoint
@@ -100,7 +101,9 @@ class FlutterSurveyIntercept : FlutterPlugin, MethodChannel.MethodCallHandler, A
 
         try {
             val dataCenter = parseDataCenter(dataCenterStr)
-            val touchPoint = TouchPoint.Builder(dataCenter).build()
+            val touchPoint = TouchPoint.Builder(dataCenter)
+                .setPlatform(Platform.FLUTTER)
+                .build()
 
             hasRepliedToInit = false
 

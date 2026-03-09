@@ -23,6 +23,53 @@ Then run:
 flutter pub get
 ```
 
+### Android Configuration
+
+**1. Add JitPack Repository**
+
+In your app's `android/build.gradle` (project level), add JitPack to the repositories:
+
+```gradle
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }  // Required for QuestionProCX SDK
+    }
+}
+```
+
+Or if using newer Gradle (settings.gradle):
+
+```gradle
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }  // Required for QuestionProCX SDK
+    }
+}
+```
+
+**2. Configure AndroidManifest.xml**
+
+Add the following permissions and API key to your `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+```
+
+Inside the `<application>` tag, add your API key:
+
+```xml
+<meta-data
+    android:name="cx_manifest_api_key"
+    android:value="Your Api key" />
+```
+
+**Note:** Most manifest merger conflicts are already handled by the plugin. If you still encounter issues, add `xmlns:tools="http://schemas.android.com/tools"` to your `<manifest>` tag and `tools:replace="android:label"` to your `<application>` tag.
+
 ## Usage
 
 Import the package in your Dart code:
