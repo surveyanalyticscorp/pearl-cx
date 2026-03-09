@@ -1,29 +1,20 @@
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Image,
-  StyleSheet,
-  Text,
-  Platform,
-  Pressable,
-  Dimensions,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import React, {useState} from 'react';
+import {StyleSheet, Dimensions} from 'react-native';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
-import {Sizes} from '../styles/Size.constant';
 import {DrawerActions} from '@react-navigation/native';
 import {translate} from '../Utils/MultilinguaUtils';
 import DrawerBackground from './commonUI/DrawerBackground';
 import useLogoutProcess from './drawerContent/useLogoutProcess';
 import logoutDialog from './drawerContent/LogoutDialog';
-import ResponsesIcon from '../widgets/IconWidget/ResponsesIcon';
 import RenderWorkspaceInfo from './drawerContent/RenderWorkspaceInfo';
 import {
   ClosedLoopIcon,
   DrawerButton,
+  DrawerDashboardIcon,
+  DrawerResponsesIcon,
   LogoutButtonIcon,
   RenderDrawerButtons,
   RenderSettingsAndLogout,
@@ -36,24 +27,6 @@ const DrawerCXLogo = () => {
 
   return <QuestionProBanner height={width / 8} width={width / 2} />;
 };
-
-const DrawerResponsesIcon = ({isActive}) => (
-  <View style={styles.rowIcon}>
-    <ResponsesIcon
-      color={isActive ? Colors.accentLight : Colors.accent}
-      sizeMultiplyer={1.3}
-    />
-  </View>
-);
-
-const DrawerButtonIcon = ({name, isActive}) => (
-  <Icon
-    size={1.3 * Sizes.icons}
-    color={isActive ? Colors.accentLight : Colors.accent}
-    name={name}
-    style={styles.rowIcon}
-  />
-);
 
 const DrawerContent = ({navigation}) => {
   const {logoutAction} = useLogoutProcess();
@@ -72,7 +45,7 @@ const DrawerContent = ({navigation}) => {
     dashboard: {
       title: 'Dashboard',
       routeName: 'DashboardTab',
-      frontIcon: <DrawerButtonIcon name={'dashboard'} />,
+      frontIcon: <DrawerDashboardIcon name={'dashboard'} />,
       onPress: () => {
         navigation.navigate('DashboardTab');
       },
@@ -96,7 +69,7 @@ const DrawerContent = ({navigation}) => {
     settings: {
       title: 'Settings',
       routeName: translate('settings.settings'),
-      frontIcon: <DrawerButtonIcon name={'settings'} />,
+      frontIcon: <DrawerDashboardIcon name={'settings'} />,
       onPress: () => {
         navigation.navigate(translate('settings.settings'));
       },
@@ -119,7 +92,7 @@ const DrawerContent = ({navigation}) => {
       <RenderDrawerButtons>
         <DrawerButton
           frontIcon={
-            <DrawerButtonIcon
+            <DrawerDashboardIcon
               name={'dashboard'}
               isActive={currentRoute === buttonData['dashboard'].routeName}
             />

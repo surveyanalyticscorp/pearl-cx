@@ -15,6 +15,8 @@ import useLoginPersistence from './useLoginPersistance';
 import useLogoutProcess from './useLogoutProcess';
 import StringUtils from '../../Utils/StringUtils';
 import TextLabel from '../../widgets/TextLabel/TextLabel';
+import ResponsesIcon from '../../widgets/IconWidget/ResponsesIcon';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export const AppVersion = () => {
   let {logoutAction} = useLogoutProcess();
@@ -101,12 +103,30 @@ export const LogoutButtonIcon = () => {
   );
 };
 
+export const DrawerDashboardIcon = ({name, isActive}) => (
+  <Icon
+    size={1.3 * Sizes.icons}
+    color={isActive ? Colors.accentLight : Colors.accent}
+    name={name}
+    style={styles.rowIcon}
+  />
+);
+export const DrawerResponsesIcon = ({isActive}) => (
+  <View style={styles.rowIcon}>
+    <ResponsesIcon
+      color={isActive ? Colors.accentLight : Colors.accent}
+      sizeMultiplyer={1.3}
+    />
+  </View>
+);
+
 export const ClosedLoopIcon = ({isActive}) => (
   <View style={styles.rowIcon}>
     <ClosedLoopSvgIcon
       stroke={isActive ? Colors.accentLight : Colors.accent}
-      height={1.3 * Sizes.icons}
-      width={1.3 * Sizes.icons}
+      strokeWidth={0.7}
+      height={1.2 * Sizes.icons}
+      width={1.2 * Sizes.icons}
     />
   </View>
 );
