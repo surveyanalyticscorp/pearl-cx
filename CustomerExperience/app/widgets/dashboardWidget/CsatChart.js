@@ -6,6 +6,9 @@ import {MarginConstants} from '../../styles/margin.constants';
 import {VictoryPie} from 'victory-native';
 import SmileyImageLabel from './SmileyImageLabel';
 import {View} from 'react-native';
+import CsatPositiveIcon from '../../../assets/images/csat_positive.svg';
+import CsatNeutralIcon from '../../../assets/images/csat_neutral.svg';
+import CsatNegativeIcon from '../../../assets/images/csat_negative.svg';
 
 export function getCsatData(positive, neutral, negative) {
   console.log('positive', StringUtils.floatTo2DecimalPointString(positive));
@@ -14,17 +17,17 @@ export function getCsatData(positive, neutral, negative) {
     {
       y: positive,
       x: 'positive',
-      imageSource: require('../../../assets/images/csat_positive.png'),
+      SvgComponent: CsatPositiveIcon,
     },
     {
       y: neutral,
       x: 'neutral',
-      imageSource: require('../../../assets/images/csat_neutral.png'),
+      SvgComponent: CsatNeutralIcon,
     },
     {
       y: negative,
       x: 'negative',
-      imageSource: require('../../../assets/images/csat_negative.png'),
+      SvgComponent: CsatNegativeIcon,
     },
   ];
 }
