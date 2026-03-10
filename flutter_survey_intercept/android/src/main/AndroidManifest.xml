@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+        <application>
+            <activity
+                android:name="com.questionpro.cxlib.InteractionActivity"
+                android:theme="@style/FullScreenSurveyTheme"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:windowSoftInputMode="adjustResize"
+                android:exported="false"
+                android:launchMode="singleInstance"
+                android:hardwareAccelerated="true"
+                android:excludeFromRecents="true"
+                android:finishOnTaskLaunch="false"
+                android:clearTaskOnLaunch="false"
+                android:alwaysRetainTaskState="false" />
+    </application>
+</manifest>
