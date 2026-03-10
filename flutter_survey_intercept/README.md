@@ -134,8 +134,8 @@ Future<void> setScreenVisited() async {
 Future<void> setDataMappings() async {
     try {
         final customData = <String, String>{
-            'firstName': 'QuestionPro',
-            'lastname': '1',
+            'firstName': 'first_name',
+            'lastname': 'last_name',
             'email': 'questionpro@example.com',
         };
 

@@ -1,7 +1,9 @@
 name: flutter_survey_intercept
-description: "A new Flutter package project."
+description: |
+  Flutter plugin for QuestionPro CX survey intercept.
+  Enables rule-based in-app surveys on Flutter mobile apps.
 version: 0.0.1
-homepage:
+homepage: https://github.com/surveyanalyticscorp/pearl-cx/tree/master/flutter_survey_intercept
 
 environment:
   sdk: ^3.9.2
