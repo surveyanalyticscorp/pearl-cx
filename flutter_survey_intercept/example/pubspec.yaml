@@ -1,5 +1,5 @@
-name: math_flutter_example
-description: Example app demonstrating math_flutter plugin
+name: flutter_survey_intercept_example
+description: Example app demonstrating flutter_survey_intercept plugin
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  math_flutter:
+  flutter_survey_intercept:
     path: ../
 
 dev_dependencies:
