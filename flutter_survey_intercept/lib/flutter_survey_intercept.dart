@@ -2,7 +2,13 @@ import 'package:flutter/services.dart';
 
 enum DataCenter {
   us('US'),
-  eu('EU');
+  eu('EU'),
+  ca('CA'),
+  au('AU'),
+  sg('SG'),
+  ae('AE'),
+  sa('SA'),
+  ksa('KSA');
 
   const DataCenter(this.value);
   final String value;
@@ -26,8 +32,8 @@ class FlutterSurveyIntercept {
   }
 
   static Future<String> init({
-    String? apiKey,
-    DataCenter dataCenter = DataCenter.us,
+    required String apiKey,
+    required DataCenter dataCenter,
   }) async {
     return await _channel.invokeMethod<String>('initialize', {
           'apiKey': apiKey,
@@ -36,7 +42,7 @@ class FlutterSurveyIntercept {
         'SDK initialized';
   }
 
-  static Future<String> setScreenVisited(String screenName) async {
+  static Future<String> setScreenVisited({required String screenName}) async {
     if (screenName.isEmpty) throw ArgumentError('screenName cannot be empty');
     return await _cxChannel.invokeMethod<String>('setScreenVisited', {
           'screen_name_key': screenName,
@@ -44,9 +50,9 @@ class FlutterSurveyIntercept {
         'Event logged';
   }
 
-  static Future<String> setDataMappings(
-    Map<String, String> customVariables,
-  ) async {
+  static Future<String> setDataMappings({
+    required Map<String, String> customVariables,
+  }) async {
     return await _channel.invokeMethod<String>('setDataMappings', {
           'customVariables': customVariables,
         }) ??
