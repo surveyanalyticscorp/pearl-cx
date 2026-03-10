@@ -55,8 +55,18 @@ class FlutterSurveyIntercept : FlutterPlugin, MethodChannel.MethodCallHandler, A
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            "initialize" -> initialize(call.argument("dataCenter") ?: "US", result)
-            "setDataMappings" -> setDataMappings(call.argument("customVariables"), result)
+            "initialize" -> {
+                val apiKey = call.argument<String>("apiKey")
+                val dataCenter = call.argument<String>("dataCenter") ?: "US"
+
+                if (apiKey.isNullOrEmpty()) {
+                    result.error("MISSING_API_KEY", "apiKey is required and cannot be null or empty", null)
+                    return
+                }
+
+                initialize(apiKey, dataCenter, result)
+            }
+            "setDataMappings" -> setDataMappings(call.argument<Map<String, String>>("customVariables"), result)
             else -> result.notImplemented()
         }
     }
@@ -82,7 +92,7 @@ class FlutterSurveyIntercept : FlutterPlugin, MethodChannel.MethodCallHandler, A
         }
     }
 
-    private fun initialize(dataCenterStr: String, result: MethodChannel.Result) {
+    private fun initialize(apiKey: String, dataCenterStr: String, result: MethodChannel.Result) {
         val ctx = applicationContext ?: run {
             result.error("NO_CONTEXT", "Application context not available", null)
             return
@@ -93,15 +103,9 @@ class FlutterSurveyIntercept : FlutterPlugin, MethodChannel.MethodCallHandler, A
             return
         }
 
-        val apiKey = getApiKeyFromManifest(ctx)
-        if (apiKey.isNullOrEmpty()) {
-            result.error("MISSING_API_KEY", "API key not found in AndroidManifest.xml", null)
-            return
-        }
-
         try {
             val dataCenter = parseDataCenter(dataCenterStr)
-            val touchPoint = TouchPoint.Builder(dataCenter)
+            val touchPoint = TouchPoint.Builder(dataCenter, apiKey)
                 .setPlatform(Platform.FLUTTER)
                 .build()
 
