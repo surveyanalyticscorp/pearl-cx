@@ -91,6 +91,7 @@ public class FlutterSurveyIntercept: NSObject, FlutterPlugin, QuestionProInitDel
 
         let touchPoint = TouchPoint.initTouchPoint(dataCenter: dataCenterValue)
         touchPoint.platform = TouchPoint.PLATFORM.FLUTTER.rawValue
+        
         initResult = result
         initLock.lock()
         hasRepliedToInit = false
