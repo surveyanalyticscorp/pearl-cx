@@ -217,6 +217,7 @@ export const CommentInput = React.forwardRef(
       setTextInputHeight,
       onChangeHandler,
       hasParentId,
+      replyTo,
       onFocus,
       onBlur,
     },
@@ -224,8 +225,8 @@ export const CommentInput = React.forwardRef(
   ) => {
     const placeHolder =
       // parentComment.id > 0
-      hasParentId
-        ? translate('comment.write_a_reply')
+      hasParentId && replyTo
+        ? `Reply to ${replyTo}`
         : translate('comment.write_a_comment');
 
     return (
@@ -475,6 +476,7 @@ export const CommentBox = ({isKeyboardVisible, setKeyboardVisible}) => {
             setTextInputHeight={setTextInputHeight}
             onChangeHandler={onChangeCommentHandler}
             hasParentId={parentComment.id > 0}
+            replyTo={parentComment.commentBy}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
           />
