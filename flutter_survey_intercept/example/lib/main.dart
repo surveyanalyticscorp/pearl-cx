@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _setScreenVisited() async {
     try {
       String result;
-      result = await FlutterSurveyIntercept.setScreenVisited('check_out');
+      result = await FlutterSurveyIntercept.setScreenVisited(screenName: 'check_out');
       debugPrint('Screen view logged successfully: $result');
     } catch (e) {
       debugPrint('Error logging screen view: $e');
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
       };
 
       String result;
-      result = await FlutterSurveyIntercept.setDataMappings(customData);
+      result = await FlutterSurveyIntercept.setDataMappings(customVariables: customData);
       debugPrint('Data mappings set successfully: $result');
     } catch (e) {
       debugPrint('Error setting data mappings: $e');
