@@ -21,7 +21,7 @@ const NPSCountView = () => {
   return (
     <View style={dashboardStyles.npsCountContainer}>
       <TextLabel
-        text={`${StringUtils.floatTo2DecimalPoint(npsPercentage ?? 0)}%`}
+        text={`${StringUtils.floatTo2DecimalPoint(npsPercentage ?? 0)}`}
         style={dashboardStyles.npsPercentText}
       />
       <TextLabel text={'NPS'} style={dashboardStyles.npsText} />

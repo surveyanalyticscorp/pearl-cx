@@ -4,11 +4,8 @@ import {dashboardStyles} from '../dashboard.style';
 import {useSelector} from 'react-redux';
 import DashboardSegmentHeader from '../../../widgets/dashboardWidget/RenderSegmentTitle';
 import ResponsesButton from '../../../widgets/dashboardWidget/ResponsesButton';
-import RenderInfoContainer from '../../../widgets/dashboardWidget/RenderInfoContainer';
 import RenderCSATChart from './RenderCsatChart';
 import RenderNPSChart from './RenderNPSChart';
-import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
-import {Colors} from '../../../styles/color.constants';
 
 const RenderSegmentDashboardData = () => {
   const {scoringModel, primaryStoreName} = useSelector(
