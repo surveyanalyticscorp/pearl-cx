@@ -381,17 +381,17 @@ export default function ClosedLoop(props) {
 
   const onPressHandler = (item, index) => {
     // console.log(`onPressHandler`);
-    if (showCheckBox) {
-      if (selectedTickets.includes(item.id)) {
-        setSelectedTickets(selectedTickets.filter(id => id !== item.id));
-      } else {
-        setSelectedTickets(prevSelectedTickets => [
-          ...prevSelectedTickets,
-          item.id,
-        ]);
-      }
-      return;
-    }
+    // if (showCheckBox) {
+    //   if (selectedTickets.includes(item.id)) {
+    //     setSelectedTickets(selectedTickets.filter(id => id !== item.id));
+    //   } else {
+    //     setSelectedTickets(prevSelectedTickets => [
+    //       ...prevSelectedTickets,
+    //       item.id,
+    //     ]);
+    //   }
+    //   return;
+    // }
 
     navigation.navigate('TicketDetails', {
       ticketItem: item,

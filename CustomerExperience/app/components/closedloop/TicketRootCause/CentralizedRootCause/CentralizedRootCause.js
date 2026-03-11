@@ -41,7 +41,7 @@ const validateOtherText = selectedRootCauses => {
 };
 const Update = () => {
   const dispatch = useDispatch();
-  const ticketId = useSelector(state => state.dashboard.ticket?.id);
+  const ticket = useSelector(state => state.dashboard.ticket);
   const feedbackApiKey = useSelector(
     state => state.global.userInfo?.feedbackApiKey,
   );
@@ -59,6 +59,7 @@ const Update = () => {
       dispatch(resetCentralizedRootCause());
       if (navigation.canGoBack()) {
         navigation.navigate('TicketDetails', {
+          ticketItem: ticket,
           selectedTab: 'root_cause.root_cause',
         });
       }
@@ -67,7 +68,11 @@ const Update = () => {
 
   const handleUpdate = () => {
     dispatch(
-      updateCentralizedRootCause(ticketId, selectedRootCauses, feedbackApiKey),
+      updateCentralizedRootCause(
+        ticket?.id,
+        selectedRootCauses,
+        feedbackApiKey,
+      ),
     );
   };
 
