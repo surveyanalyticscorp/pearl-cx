@@ -88,7 +88,7 @@ const NpsGaugeChart = () => {
         max: 100,
         strictMinMax: true,
         renderer: {
-          minGridDistance: 200,
+          minGridDistance: 500,
           inside: false,
           labels: {
             template: {

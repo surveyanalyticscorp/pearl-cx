@@ -34,7 +34,7 @@ const GapView = () => {
       <GapIcon diff={npsPercentage - benchmarkScore} />
 
       <TextLabel
-        text={StringUtils.floatToDecimal(npsPercentage)}
+        text={`${StringUtils.floatTo2DecimalPoint(npsPercentage) ?? '0'}`}
         fontWeight={FontWeight.bold}
         // color={getNPSColorByNPS(npsPercentage)}
       />
