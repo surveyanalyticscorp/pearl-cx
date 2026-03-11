@@ -87,10 +87,10 @@ export const CurrentSelectedRootCasues = () => {
   return (
     <View style={styles.flatList}>
       {list.map((item, index) => (
-        <TitleAndTagsItem 
-          key={item.title.toString()} 
-          item={item} 
-          index={index} 
+        <TitleAndTagsItem
+          key={item.title.toString()}
+          item={item}
+          index={index}
         />
       ))}
     </View>
