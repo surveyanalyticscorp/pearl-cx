@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useMemo} from 'react';
 import {
   View,
   FlatList,
@@ -28,7 +28,7 @@ const TicketActivityContainer = ({children}) => {
   return <View style={styles.rootContainer}>{children}</View>;
 };
 
-const RenderActivityItem = ({item}) => {
+const RenderActivityItem = React.memo(({item}) => {
   const {userName, createdAt, activityText} = item;
   return (
     <View style={styles.myRenderItemContainerStyle}>
@@ -47,7 +47,7 @@ const RenderActivityItem = ({item}) => {
       <ActivityText text={activityText} />
     </View>
   );
-};
+});
 
 export function getTicketActivityList(list, item) {
   switch (item.id) {
@@ -100,9 +100,18 @@ export default function TicketActivity(props) {
     wait(500).then(() => setRefreshing(false));
   }, []);
 
-  const getRenderItem = ({item}) => {
-    return RenderActivityItem({item});
-  };
+  // Memoize the processed activity list to prevent unnecessary recalculations
+  const processedActivityList = useMemo(() => {
+    return getTicketActivityList(
+      ticketActivityList,
+      sortingList[currentSortingIndex],
+    );
+  }, [ticketActivityList, currentSortingIndex]);
+
+  // Memoize the render item function to prevent FlatList rerenders
+  const getRenderItem = useCallback(({item}) => {
+    return <RenderActivityItem item={item} />;
+  }, []);
   return (
     <TicketActivityContainer style={styles.rootContainer}>
       <View style={activityStyles.sortingView}>
@@ -129,10 +138,7 @@ export default function TicketActivity(props) {
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
         }
         style={styles.container}
-        data={getTicketActivityList(
-          ticketActivityList,
-          sortingList[currentSortingIndex],
-        )}
+        data={processedActivityList}
         renderItem={getRenderItem}
         ListEmptyComponent={<NoItemsFound>{'No Activity...'}</NoItemsFound>}
         keyExtractor={item => JSON.stringify(item.id)}
