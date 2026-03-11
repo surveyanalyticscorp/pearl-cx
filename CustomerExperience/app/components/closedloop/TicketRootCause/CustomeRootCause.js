@@ -85,14 +85,15 @@ export const CurrentSelectedRootCasues = () => {
   }, [centralizedRootCauseList, selectedTags]);
 
   return (
-    <FlatList
-      style={styles.flatList}
-      data={list}
-      contentContainerStyle={{flexGrow: 0}}
-      listKey={'selected-centralized-RootCause'}
-      renderItem={TitleAndTagsItem}
-      keyExtractor={(item, index) => item.title.toString()}
-    />
+    <View style={styles.flatList}>
+      {list.map((item, index) => (
+        <TitleAndTagsItem 
+          key={item.title.toString()} 
+          item={item} 
+          index={index} 
+        />
+      ))}
+    </View>
   );
 };
 
