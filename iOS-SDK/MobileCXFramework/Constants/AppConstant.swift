@@ -29,6 +29,7 @@ public let kConfigType = "configType"
 public let kDataMappings = "DataMappings"
 public let kVisitorUUID = "VisitorUUID"
 public let kCurrentInterceptId: String = "CurrentInterceptId"
+public let kIsSurveyCurrentlyVisible: String = "isSurveycurrentlyVisible"
 
 //API request types
 public enum APIRequestType: String {

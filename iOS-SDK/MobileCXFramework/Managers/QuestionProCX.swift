@@ -13,7 +13,6 @@ import WebKit
 public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate, WKScriptMessageHandler, SurveyLaunchDelegate {
     var satisfiedRulesForIntercept: [String: [[String]]] = [:]
     var visitorApiResponse: ApiResponse!
-    private var isSurveyDisplayed = false
     @MainActor public static var instance: QuestionProCX?
     var initCallbackDelegate: QuestionProInitDelegate?
     var questionProCallbackDelegate: QuestionProCallbackDelegate?
@@ -57,9 +56,11 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 if (!allowMultipleResponse && CacheUtils.getIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId))) {
                     LogUtils.printMessage(message: "Survey already launched for this intercept id \(interceptId)")
                     return;
-                }
+                }                
                 
-                guard !self.isSurveyDisplayed else { return }
+                if(CacheUtils.getIsSurveyCurrentlyVisible()) {
+                    return;
+                }
                 if (interceptData.condition == InterceptCondition.AND.rawValue) {
                     LogUtils.printMessage(message: "AND condition")
                     let satisfiedRulesCount = satisfiedRulesForIntercept[String(interceptId)]?.flatMap { $0 }.count ?? 0
@@ -90,21 +91,24 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             do {
                 let interceptData = try JSONDecoder().decode([Intercept].self, from: intercepts)
                 for intercept in interceptData {
-                    for rule in intercept.rules {
-                        if (InterceptRuleType.VIEW_COUNT.rawValue == rule.name) {
-                            if (rule.key == screenName) {
-                                if (checkShouldShowSampling(intercept: intercept)) {
-                                    self.launchSurveyForIntercept(interceptId: intercept.id, satisfiedRule: rule)
-                                    CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: 1)
-                                } else {
-                                    let visitorId = CacheUtils.getVisitorUUID(key: kVisitorUUID)
-                                    APIUtils.executeExcludedFeedbackEvent(interceptData: intercept, visitorId: visitorId);
+                    if(checkShouldShowSampling(intercept: intercept)) {
+                        for rule in intercept.rules {
+                            if (InterceptRuleType.VIEW_COUNT.rawValue == rule.name) {
+                                if (rule.key == screenName) {
+                                    var count = CacheUtils.getScreenVisitCountForInterceptId(key: String(intercept.id))
+                                    LogUtils.printMessage(message: "Count: \(count) for \(screenName)")
+                                    if (count == Int(rule.value)) {
+                                        self.launchSurveyForIntercept(interceptId: intercept.id, satisfiedRule: rule)
+                                        CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: 1)
+                                    } else {
+                                        count += 1;
+                                        CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: count)
+                                    }
                                 }
-                                var count = CacheUtils.getScreenVisitCountForInterceptId(key: String(intercept.id))
-                                LogUtils.printMessage(message: "Count: \(count) for \(screenName)")
                             }
                         }
                     }
+                    
                 }
             } catch {
                 LogUtils.printMessage(logTag: .LOG_ERROR, message: "error in view count for screen name");
@@ -527,8 +531,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     
     public func showSurvey(isInAppSurvey: Bool) {
         DispatchQueue.main.async {
-            
-            self.isSurveyDisplayed = true
+            CacheUtils.setIsSurveyCurrentlyVisible(value: true)
             
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             rect.origin.x = 0
@@ -660,7 +663,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
 
     @objc func aDismissWebview(_ sender: Any) {
         self.iView?.removeFromSuperview()
-        self.isSurveyDisplayed = false
+        CacheUtils.setIsSurveyCurrentlyVisible(value: false)
     }
     
     @objc func goToPreviousPage(_ sender: Any) {
