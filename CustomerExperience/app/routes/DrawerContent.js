@@ -129,12 +129,15 @@ const DrawerContent = ({navigation}) => {
         <DrawerButton dataObj={buttonData['logout']} />
         {/* <LogoutButton navigation={navigation} /> */}
         {logoutAlert &&
-          logoutDialog(() => {
-            setLogoutAlert(false); // Reset immediately when user confirms
-            logoutAction();
-          }, () => {
-            setLogoutAlert(false);
-          })}
+          logoutDialog(
+            () => {
+              setLogoutAlert(false); // Reset immediately when user confirms
+              logoutAction();
+            },
+            () => {
+              setLogoutAlert(false);
+            },
+          )}
       </RenderSettingsAndLogout>
     </DrawerBackground>
   );
