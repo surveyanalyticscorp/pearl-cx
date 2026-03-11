@@ -25,17 +25,18 @@ const CsatToggleButton = () => {
           text={'Top Box'}
           baseTextStyle={styles.csatToggleButtonText}
         />
-        <Switch
-          trackColor={{
-            false: Colors.darkGrey,
-            true: Colors.darkGrey,
-          }}
-          thumbColor={
-            isCsatViewTopBox ? Colors.accentLight : Colors.accentLight
-          }
-          onValueChange={toggleView}
-          value={isCsatViewTopBox}
-        />
+        <View style={styles.switchWrapper}>
+          <Switch
+            trackColor={{
+              false: Colors.white,
+              true: Colors.white,
+            }}
+            thumbColor={Colors.accentLight}
+            onValueChange={toggleView}
+            value={isCsatViewTopBox}
+            style={styles.customSwitch}
+          />
+        </View>
 
         <TextLabel
           text={'Mean CSAT'}
@@ -76,5 +77,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: PaddingConstants.tab1_2x,
     paddingVertical: PaddingConstants.halfTab,
+  },
+  switchWrapper: {
+    borderWidth: 1,
+    borderColor: Colors.accentLight,
+    borderRadius: 16,
+    marginHorizontal: MarginConstants.tab1,
+    justifyContent: 'center',
+    height: 16 + PaddingConstants.halfTab * 2,
+    width: 32 + PaddingConstants.halfTab * 2,
+    padding: PaddingConstants.halfTab,
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  customSwitch: {
+    transform: [{scaleX: 0.8}, {scaleY: 0.8}],
   },
 });
