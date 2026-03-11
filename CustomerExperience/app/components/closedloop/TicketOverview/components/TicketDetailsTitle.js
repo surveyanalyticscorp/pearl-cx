@@ -7,7 +7,7 @@ import TextLabel from '../../../../widgets/TextLabel/TextLabel';
 import {Colors} from '../../../../styles/color.constants';
 import {baseTextStyles} from '../../../../styles/text.styles';
 const TicketDetailsTitle = () => {
-  const ticketId = useSelector(state => state.dashboard.ticket.id);
+  const ticketId = useSelector(state => state.dashboard.ticket?.id);
 
   if (ticketId == null) {
     return (

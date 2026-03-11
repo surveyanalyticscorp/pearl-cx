@@ -32,7 +32,9 @@ export default function TicketDetails(props) {
   const feedbackApiKey = useSelector(
     state => state.global.userInfo.feedbackApiKey,
   );
-  const ticketItem = props.route.params.ticketItem;
+
+  const ticketItem = useSelector(state => state.dashboard.ticket);
+
   const prevScreen = props.route.params.prevScreen;
   const notificationId = props.route.params.notificationId;
   const selectedTab = props.route.params?.selectedTab;
