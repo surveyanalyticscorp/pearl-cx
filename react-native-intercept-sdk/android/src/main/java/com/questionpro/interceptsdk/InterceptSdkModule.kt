@@ -56,7 +56,7 @@ class InterceptSdkModule(private val reactContext: ReactApplicationContext) : Re
             Log.d("InterceptSdk", "Using DataCenter: $dataCenter")
         }
             
-            val touchPoint = TouchPoint.Builder(dataCenter)
+            val touchPoint = TouchPoint.Builder(dataCenter, apiKey)
                 .setPlatform(Platform.REACT_NATIVE)
                 .build()
 
