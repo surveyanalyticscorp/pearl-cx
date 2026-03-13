@@ -1,3 +1,7 @@
+## 0.1.0
+
+* Blocked multiple survey launches; only one survey is launched at a time.
+
 ## 0.0.1
 
 * Initial release of flutter_survey_intercept
