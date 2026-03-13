@@ -13,7 +13,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/surveyanalyticscorp/ios-cx.git", from: "2.2.6")
+        .package(url: "https://github.com/surveyanalyticscorp/ios-cx.git", from: "2.2.7")
     ],
     targets: [
         .target(
