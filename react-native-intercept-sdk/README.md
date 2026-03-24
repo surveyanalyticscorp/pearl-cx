@@ -40,7 +40,7 @@ Add the QuestionPro CX Framework to your iOS project:
 #### Option 1: CocoaPods (Recommended)
 Add to your `ios/Podfile`:
 ```ruby
-pod 'QuestionProCXFramework', :git => 'https://github.com/surveyanalyticscorp/ios-cx.git', :tag => '2.2.6'
+pod 'QuestionProCXFramework', :git => 'https://github.com/surveyanalyticscorp/ios-cx.git'
 ```
 
 #### Option 2: Swift Package Manager
@@ -57,10 +57,7 @@ Add the following configuration to your `android/app/src/main/AndroidManifest.xm
 
 ```xml
 <application>
-    <!-- Add your API key -->
-    <meta-data android:name="cx_manifest_api_key"
-              android:value="your-api-key-here"/>
-    
+
     <!-- Add the survey activity -->
     <activity android:name="com.questionpro.cxlib.InteractionActivity"
               android:theme="@android:style/Theme.Translucent.NoTitleBar"
