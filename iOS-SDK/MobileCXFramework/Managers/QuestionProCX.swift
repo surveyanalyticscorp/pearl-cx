@@ -90,18 +90,20 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             do {
                 let interceptData = try JSONDecoder().decode([Intercept].self, from: intercepts)
                 for intercept in interceptData {
-                    for rule in intercept.rules {
-                        if (InterceptRuleType.VIEW_COUNT.rawValue == rule.name) {
-                            if (rule.key == screenName) {
-                                if (checkShouldShowSampling(intercept: intercept)) {
-                                    self.launchSurveyForIntercept(interceptId: intercept.id, satisfiedRule: rule)
-                                    CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: 1)
-                                } else {
-                                    let visitorId = CacheUtils.getVisitorUUID(key: kVisitorUUID)
-                                    APIUtils.executeExcludedFeedbackEvent(interceptData: intercept, visitorId: visitorId);
+                    if (checkShouldShowSampling(intercept: intercept)) {
+                        for rule in intercept.rules {
+                            if (InterceptRuleType.VIEW_COUNT.rawValue == rule.name) {
+                                if (rule.key == screenName) {
+                                    var count = CacheUtils.getScreenVisitCountForInterceptId(key: String(intercept.id))
+                                    LogUtils.printMessage(message: "Count: \(count) for \(screenName)")
+                                    if (count == Int(rule.value)) {
+                                        self.launchSurveyForIntercept(interceptId: intercept.id, satisfiedRule: rule)
+                                        CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: 1)
+                                    } else {
+                                        count += 1;
+                                        CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: count)
+                                    }
                                 }
-                                var count = CacheUtils.getScreenVisitCountForInterceptId(key: String(intercept.id))
-                                LogUtils.printMessage(message: "Count: \(count) for \(screenName)")
                             }
                         }
                     }
