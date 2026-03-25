@@ -322,9 +322,9 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             let matchedCount = intercept.metaData.matchedCount
             let excludedCount = intercept.metaData.excludedCount
             let isIncluded = GlobalUtils.checkSamplingLogic(samplingRate: samplingRate, matchedCount: matchedCount, excludedCount: excludedCount)
-            if (!isIncluded) {
+            if !isIncluded {
                 let visitorId = CacheUtils.getVisitorUUID(key: kVisitorUUID)
-                APIUtils.executeExcludedFeedbackEvent(interceptData: intercept, visitorId: visitorId);
+                APIUtils.executeExcludedFeedbackEvent(interceptData: intercept, visitorId: visitorId)
             }
             return isIncluded
         }
