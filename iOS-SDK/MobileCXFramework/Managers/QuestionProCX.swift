@@ -303,9 +303,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                             self.activeTimerTasks[intercept.id] = task
                         }
                     }
-                } else {
-                    let visitorId = CacheUtils.getVisitorUUID(key: kVisitorUUID)
-                    APIUtils.executeExcludedFeedbackEvent(interceptData: intercept, visitorId: visitorId);
                 }
             }
         } catch {
@@ -324,8 +321,12 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             }
             let matchedCount = intercept.metaData.matchedCount
             let excludedCount = intercept.metaData.excludedCount
-            return GlobalUtils.checkSamplingLogic(samplingRate: samplingRate, matchedCount: matchedCount, excludedCount: excludedCount)
-            
+            let isIncluded = GlobalUtils.checkSamplingLogic(samplingRate: samplingRate, matchedCount: matchedCount, excludedCount: excludedCount)
+            if !isIncluded {
+                let visitorId = CacheUtils.getVisitorUUID(key: kVisitorUUID)
+                APIUtils.executeExcludedFeedbackEvent(interceptData: intercept, visitorId: visitorId)
+            }
+            return isIncluded
         }
         return visitorStatus != InterceptSurveyLaunchEvent.EXCLUDED.rawValue
     }
