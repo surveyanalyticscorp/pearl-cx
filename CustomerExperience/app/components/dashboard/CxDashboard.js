@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {RefreshControl, ScrollView, View} from 'react-native';
+import {Animated, RefreshControl, ScrollView, View} from 'react-native';
 import {showLoading} from '../../redux/actions/index';
 import {
   getDashboardContent,
@@ -18,7 +18,7 @@ import {setRangeFilter} from '../../redux/actions';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {HeaderFilter} from '../../routes/commonUI/CommonUI';
 import FabAddButton from '../../routes/commonUI/FabAddButton';
-import Animated from 'react-native-reanimated';
+// Animated imported from react-native above (Reanimated v3 removed Value/add/multiply)
 import {ClosedLoopDashboard} from './ClosedLoopDashboard';
 
 import RenderSegmentDashboardData from './cxDashboard/RenderSegmentDashboardData';

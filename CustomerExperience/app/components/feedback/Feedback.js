@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Animated, StyleSheet, View} from 'react-native';
 
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
@@ -17,7 +17,7 @@ import {FontFamily} from '../../styles/font.constants';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {HeaderFilter} from '../../routes/commonUI/CommonUI';
 import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
-import Animated from 'react-native-reanimated';
+// Animated from react-native used above (Reanimated v3 removed Value/add/multiply)
 import {
   fetchAllResponses,
   setAllResponsesEmpty,

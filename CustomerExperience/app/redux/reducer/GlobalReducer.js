@@ -1,4 +1,3 @@
-import {log} from 'react-native-reanimated';
 import {
   IS_DEV_MODE,
   DEV_BASE_URL,

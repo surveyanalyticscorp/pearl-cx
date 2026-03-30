@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {
+  Animated,
   View,
   FlatList,
   StyleSheet,
@@ -15,7 +16,7 @@ import {PaddingConstants} from '../../styles/padding.constants';
 import {HeaderFilter, RenderSpinner} from '../../routes/commonUI/CommonUI';
 import FabAddButton from '../../routes/commonUI/FabAddButton';
 import FilterTicket from './takeaction/FilterTickets';
-import Animated from 'react-native-reanimated';
+// Animated from react-native used above (Reanimated v3 removed Value/add/multiply)
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getClosedLoopOwnerDetails,

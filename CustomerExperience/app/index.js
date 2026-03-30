@@ -103,7 +103,7 @@ const AppContent = () => {
 
 const CxApp = () => {
   const [styleBuilt, setStyleBuilt] = React.useState(false);
-  const networkMonitor = React.useRef(new NetworkMonitor(store));
+  const networkMonitorRef = React.useRef(null);
 
   React.useEffect(() => {
     if (Platform.OS === 'ios') {
@@ -116,8 +116,8 @@ const CxApp = () => {
         ...AppInfo,
       });
     });
-    const currentNetworkMonitor = networkMonitor.current;
-    currentNetworkMonitor.start();
+    networkMonitorRef.current = new NetworkMonitor(store);
+    networkMonitorRef.current.start();
     const unsubscribe = EStyleSheet.subscribe('build', () => {
       setStyleBuilt(true);
     });
@@ -125,7 +125,7 @@ const CxApp = () => {
     checkNotificationPermission();
     // addNotificationListeners();
     return () => {
-      currentNetworkMonitor.stop();
+      if (networkMonitorRef.current) { networkMonitorRef.current.stop(); }
       AppTimeTracker.stop();
       unsubscribe();
     };

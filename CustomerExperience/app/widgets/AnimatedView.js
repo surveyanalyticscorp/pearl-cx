@@ -1,5 +1,5 @@
 import React from 'react';
-import Animated from 'react-native-reanimated';
+import {Animated} from 'react-native';
 import {dashboardStyles} from '../components/dashboard/dashboard.style';
 
 const AnimatedView = ({fall, children}) => {

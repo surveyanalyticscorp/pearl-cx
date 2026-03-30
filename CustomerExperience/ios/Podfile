@@ -33,14 +33,14 @@ target 'CustomerExperience' do
   # pod 'React-jsinspector', :path => '../node_modules/react-native/ReactCommon/jsinspector'
   # pod 'ReactCommon/callinvoker', :path => "../node_modules/react-native/ReactCommon"
   # pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
-   pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga', :modular_headers => true
+  # pod 'Yoga' removed — use_react_native! handles Yoga in RN 0.72
 
   # pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   # pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   # pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   # pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
-  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+  # pod 'RNReanimated' removed — autolinking handles Reanimated v3 in RN 0.72
     # pod 'boost', :podspec => '../node_modules/react-native/third-party-podspecs/boost.podspec'
 
 # pod for `boost` from `../node_modules/react-native/third-party-podspecs/boost.podspec`
@@ -74,7 +74,7 @@ target 'CustomerExperience' do
     #
     # Note that if you have use_frameworks! enabled, Flipper will not work and
     # you should disable the next line.
-    :fabric_enabled => flags[:fabric_enabled],
+    :fabric_enabled => false,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )  

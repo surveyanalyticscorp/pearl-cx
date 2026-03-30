@@ -1,0 +1,10 @@
+diff --git a/node_modules/@react-native-firebase/messaging/android/src/main/res/values/colors.xml b/node_modules/@react-native-firebase/messaging/android/src/main/res/values/colors.xml
+index 1234567..abcdefg 100644
+--- a/node_modules/@react-native-firebase/messaging/android/src/main/res/values/colors.xml
++++ b/node_modules/@react-native-firebase/messaging/android/src/main/res/values/colors.xml
+@@ -140,4 +140,5 @@
+   <color name="darkblue">#00008B</color>
+   <color name="navy">#000080</color>
+   <color name="black">#000000</color>
++  <color name="colorAccent">#545E6B</color>
+ </resources>
