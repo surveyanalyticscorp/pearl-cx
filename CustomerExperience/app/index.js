@@ -125,7 +125,9 @@ const CxApp = () => {
     checkNotificationPermission();
     // addNotificationListeners();
     return () => {
-      if (networkMonitorRef.current) { networkMonitorRef.current.stop(); }
+      if (networkMonitorRef.current) {
+        networkMonitorRef.current.stop();
+      }
       AppTimeTracker.stop();
       unsubscribe();
     };
