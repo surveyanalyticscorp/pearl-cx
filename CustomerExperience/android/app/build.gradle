@@ -1,11 +1,14 @@
 apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: "com.facebook.react"
 /**     
 * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  **/
 react {
+    autolinkLibrariesWithApp()
+
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '..'
     // root = file("../")
@@ -96,9 +99,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
     }
     namespace "com.questionpro.cxonthego"
 
@@ -165,7 +170,7 @@ android {
         }
     }
 
-    packagingOptions {
+    packaging {
         pickFirst "lib/armeabi-v7a/libc++_shared.so"
         pickFirst "lib/arm64-v8a/libc++_shared.so"
         pickFirst "lib/x86/libc++_shared.so"
@@ -253,7 +258,7 @@ tasks.register('copyDownloadableDepsToLibs', Copy) {
     into 'libs'
 }
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+// Native modules autolink is handled by com.facebook.react.settings plugin in settings.gradle
 //apply from: "../../node_modules/react-native/react.gradle"
 // apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 

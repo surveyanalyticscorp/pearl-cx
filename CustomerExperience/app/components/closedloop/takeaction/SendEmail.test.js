@@ -124,10 +124,11 @@ jest.mock('react-native-document-picker', () => ({
   pickSingle: jest.fn(),
 }));
 
-jest.mock('reanimated-bottom-sheet', () => {
+jest.mock('@gorhom/bottom-sheet', () => {
   return {
     __esModule: true,
     default: jest.fn().mockImplementation(({children}) => <>{children}</>),
+    BottomSheetView: ({children}) => <>{children}</>,
   };
 });
 

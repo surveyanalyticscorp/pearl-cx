@@ -747,7 +747,7 @@ describe('TicketOverview', () => {
 
 // // Mock dependencies
 // jest.mock('./hooks/useUpdateTicket', () => jest.fn(() => jest.fn()));
-// jest.mock('reanimated-bottom-sheet', () => ({
+// jest.mock('@gorhom/bottom-sheet', () => ({
 //   __esModule: true,
 //   default: jest.fn(),
 // }));

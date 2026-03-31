@@ -22,7 +22,7 @@ import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import RenderHtml from 'react-native-render-html';
 import {useSelector} from 'react-redux';
 import {AttachmentIcon} from '../../../Utils/IconUtils';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import {getDownloadPermissionAndroid} from '../../../Utils/PermissionUtils';
 import {downloadFile} from '../../../Utils/DownloadUtils';
 

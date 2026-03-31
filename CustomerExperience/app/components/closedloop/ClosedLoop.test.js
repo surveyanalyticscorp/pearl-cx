@@ -123,12 +123,14 @@ jest.mock('react-native-reanimated', () => {
 });
 
 // jest.unmock('@react-navigation/native');
-jest.mock('reanimated-bottom-sheet', () => {
+jest.mock('@gorhom/bottom-sheet', () => {
   const React = require('react');
   const {View} = require('react-native');
-  return jest.fn().mockImplementation(({children}) => {
+  const BottomSheet = jest.fn().mockImplementation(({children}) => {
     return React.createElement(View, {}, children);
   });
+  const BottomSheetView = ({children}) => React.createElement(View, {}, children);
+  return {__esModule: true, default: BottomSheet, BottomSheetView};
 });
 
 describe('ClosedLoop', () => {

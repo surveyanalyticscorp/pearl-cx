@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 
 export const downloadFile = async (url, filename) => {
   // Get the app's cache directory
