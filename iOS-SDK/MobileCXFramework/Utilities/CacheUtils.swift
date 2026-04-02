@@ -21,6 +21,14 @@ public class CacheUtils {
         return defaultValue
     }
     
+    public static func setIsSurveyCurrentlyVisible(value: Bool) {
+        sdkUserDefaults.set(value, forKey: kIsSurveyCurrentlyVisible)
+    }
+    
+    public static func getIsSurveyCurrentlyVisible() -> Bool  {
+        return sdkUserDefaults.object(forKey: kIsSurveyCurrentlyVisible) as? Bool ?? false
+    }
+    
     public static func setInterceptRulesForInterceptId(key: String, value: Data) {
         sdkUserDefaults.set(value, forKey: key)
     }
@@ -357,3 +365,4 @@ public class CacheUtils {
         return "";
     }
 }
+

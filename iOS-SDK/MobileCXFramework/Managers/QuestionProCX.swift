@@ -90,18 +90,20 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             do {
                 let interceptData = try JSONDecoder().decode([Intercept].self, from: intercepts)
                 for intercept in interceptData {
-                    for rule in intercept.rules {
-                        if (InterceptRuleType.VIEW_COUNT.rawValue == rule.name) {
-                            if (rule.key == screenName) {
-                                if (checkShouldShowSampling(intercept: intercept)) {
-                                    self.launchSurveyForIntercept(interceptId: intercept.id, satisfiedRule: rule)
-                                    CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: 1)
-                                } else {
-                                    let visitorId = CacheUtils.getVisitorUUID(key: kVisitorUUID)
-                                    APIUtils.executeExcludedFeedbackEvent(interceptData: intercept, visitorId: visitorId);
+                    if (checkShouldShowSampling(intercept: intercept)) {
+                        for rule in intercept.rules {
+                            if (InterceptRuleType.VIEW_COUNT.rawValue == rule.name) {
+                                if (rule.key == screenName) {
+                                    var count = CacheUtils.getScreenVisitCountForInterceptId(key: String(intercept.id))
+                                    LogUtils.printMessage(message: "Count: \(count) for \(screenName)")
+                                    if (count == Int(rule.value)) {
+                                        self.launchSurveyForIntercept(interceptId: intercept.id, satisfiedRule: rule)
+                                        CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: 1)
+                                    } else {
+                                        count += 1;
+                                        CacheUtils.setScreenVisitCountForInterceptId(key: String(intercept.id), value: count)
+                                    }
                                 }
-                                var count = CacheUtils.getScreenVisitCountForInterceptId(key: String(intercept.id))
-                                LogUtils.printMessage(message: "Count: \(count) for \(screenName)")
                             }
                         }
                     }
@@ -181,63 +183,67 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     }
     
     public func fetchSurveyURLForSurveyId (interceptId: Int, interceptData: Intercept, interceptType: String) {
-        let visitorId = visitorApiResponse.visitor.uuid
-        var fetchSurveyURLResponse: SurveyURL!
-        var bodyParam = [:] as [String: Any]
-        bodyParam["visitedUserId"] = visitorId;
-        bodyParam["interceptId"] = interceptId;
-        bodyParam["surveyId"] = interceptData.surveyId;
-        bodyParam["packageName"] = kPackageName;
-        var triggerDelayInSeconds = interceptData.settings?.triggerDelayInSeconds ?? 0
-        
-        if ((interceptData.settings) != nil) {
-            let settings = interceptData.settings
-            if (settings!.autoLanguageSelection) {
-                bodyParam["surveyLanguage"] = GlobalUtils.getAppLanguage()
-            }
-        }
-        
-        if let dataMappings = CacheUtils.getDataMappings() {
-            LogUtils.printMessage(message: "Data Mappings fetched (count=\(dataMappings.count))")
-            bodyParam["data"] = setDataMappingForAPICall(dataMappings: dataMappings, interceptData: interceptData)
-        } else {
-            LogUtils.printMessage(message: "⚠️ No Data Mappings found, sending empty array")
-            bodyParam["data"] = [] as [[String: String]]
-        }
-        
-        let fetchSurveyURL = APIUtils.getFetchSurveyURL()
-        Task {
-            do {
-                let response: SurveyURL = try await ApiServiceCX.shared.request(
-                    urlString: fetchSurveyURL,
-                    method: .POST,
-                    headers: [
-                        "x-app-key": self.iApiKey,
-                        "package-name": kPackageName,
-                    ],
-                    body: bodyParam,
-                    responseType: SurveyURL.self
-                )
-                fetchSurveyURLResponse = response
-                self.iResponseURL = fetchSurveyURLResponse.surveyURL
-                
-                if (interceptType == InterceptType.SURVEY_URL.rawValue) {
-                    CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
-                    self.questionProCallbackDelegate?.getSurveyURL(surveyURL: self.iResponseURL!)
-                } else {
-                    let showInDialog = interceptType == InterceptType.PROMPT.rawValue ? true : false
-                    LogUtils.printMessage(message: "Survey URL = \(self.iResponseURL!)")
-                    CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
-                    self.launchSurvey(showInDialog: showInDialog, triggerDelayInSeconds: triggerDelayInSeconds)
+        if (!self.isSurveyDisplayed) {
+            self.isSurveyDisplayed = true
+            let visitorId = visitorApiResponse.visitor.uuid
+            var fetchSurveyURLResponse: SurveyURL!
+            var bodyParam = [:] as [String: Any]
+            bodyParam["visitedUserId"] = visitorId;
+            bodyParam["interceptId"] = interceptId;
+            bodyParam["surveyId"] = interceptData.surveyId;
+            bodyParam["packageName"] = kPackageName;
+            var triggerDelayInSeconds = interceptData.settings?.triggerDelayInSeconds ?? 0
+            
+            if ((interceptData.settings) != nil) {
+                let settings = interceptData.settings
+                if (settings!.autoLanguageSelection) {
+                    bodyParam["surveyLanguage"] = GlobalUtils.getAppLanguage()
                 }
-                APIUtils.updateInterceptSurveyLaunchEvent(interceptData: interceptData, visitorId: visitorId);
-            } catch {
-                self.questionProCallbackDelegate?.getSurveyURL(surveyURL: "")
-                LogUtils.printMessage(logTag: .LOG_ERROR, message: "API error -> \(error)")
-                self.iResponseURL = ""
-                CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: false);
+            }
+            
+            if let dataMappings = CacheUtils.getDataMappings() {
+                LogUtils.printMessage(message: "Data Mappings fetched (count=\(dataMappings.count))")
+                bodyParam["data"] = setDataMappingForAPICall(dataMappings: dataMappings, interceptData: interceptData)
+            } else {
+                LogUtils.printMessage(message: "⚠️ No Data Mappings found, sending empty array")
+                bodyParam["data"] = [] as [[String: String]]
+            }
+            
+            let fetchSurveyURL = APIUtils.getFetchSurveyURL()
+            Task {
+                do {
+                    let response: SurveyURL = try await ApiServiceCX.shared.request(
+                        urlString: fetchSurveyURL,
+                        method: .POST,
+                        headers: [
+                            "x-app-key": self.iApiKey,
+                            "package-name": kPackageName,
+                        ],
+                        body: bodyParam,
+                        responseType: SurveyURL.self
+                    )
+                    fetchSurveyURLResponse = response
+                    self.iResponseURL = fetchSurveyURLResponse.surveyURL
+                    
+                    if (interceptType == InterceptType.SURVEY_URL.rawValue) {
+                        CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
+                        self.questionProCallbackDelegate?.getSurveyURL(surveyURL: self.iResponseURL!)
+                    } else {
+                        let showInDialog = interceptType == InterceptType.PROMPT.rawValue ? true : false
+                        LogUtils.printMessage(message: "Survey URL = \(self.iResponseURL!)")
+                        CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
+                        self.launchSurvey(showInDialog: showInDialog, triggerDelayInSeconds: triggerDelayInSeconds)
+                    }
+                    APIUtils.updateInterceptSurveyLaunchEvent(interceptData: interceptData, visitorId: visitorId);
+                } catch {
+                    self.questionProCallbackDelegate?.getSurveyURL(surveyURL: "")
+                    LogUtils.printMessage(logTag: .LOG_ERROR, message: "API error -> \(error)")
+                    self.iResponseURL = ""
+                    CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: false);
+                }
             }
         }
+        
     }
     
     public func fetchAndSetupIntercepts() async {
@@ -297,9 +303,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                             self.activeTimerTasks[intercept.id] = task
                         }
                     }
-                } else {
-                    let visitorId = CacheUtils.getVisitorUUID(key: kVisitorUUID)
-                    APIUtils.executeExcludedFeedbackEvent(interceptData: intercept, visitorId: visitorId);
                 }
             }
         } catch {
@@ -318,8 +321,12 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             }
             let matchedCount = intercept.metaData.matchedCount
             let excludedCount = intercept.metaData.excludedCount
-            return GlobalUtils.checkSamplingLogic(samplingRate: samplingRate, matchedCount: matchedCount, excludedCount: excludedCount)
-            
+            let isIncluded = GlobalUtils.checkSamplingLogic(samplingRate: samplingRate, matchedCount: matchedCount, excludedCount: excludedCount)
+            if !isIncluded {
+                let visitorId = CacheUtils.getVisitorUUID(key: kVisitorUUID)
+                APIUtils.executeExcludedFeedbackEvent(interceptData: intercept, visitorId: visitorId)
+            }
+            return isIncluded
         }
         return visitorStatus != InterceptSurveyLaunchEvent.EXCLUDED.rawValue
     }
@@ -528,8 +535,6 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     public func showSurvey(isInAppSurvey: Bool) {
         DispatchQueue.main.async {
             
-            self.isSurveyDisplayed = true
-            
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             rect.origin.x = 0
             rect.origin.y = 0
@@ -631,7 +636,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         if navigationType == .linkActivated {
             webView.load(navigationAction.request)
             decisionHandler(.cancel)
-            self.backButton.isHidden = false            
+            self.backButton.isHidden = false
             return
         }
         decisionHandler(.allow)
