@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import {Component} from 'react';
 import {store} from './redux/store/store';
 import {Provider, useSelector} from 'react-redux';
 import {Provider as PaperProvider} from 'react-native-paper';
@@ -9,14 +8,9 @@ import {Provider as PaperProvider} from 'react-native-paper';
 import SplashScreen from './components/login/SplashScreen';
 import AppRouter from './routes/appRouter';
 import {NetworkMonitor} from 'react-native-redux-connectivity';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {enableScreens} from 'react-native-screens';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import * as globalVariables from '../app/styles/globalStyleVariables';
-import {View, Platform, StatusBar} from 'react-native';
+import {Platform, StatusBar} from 'react-native';
 import Toast from 'react-native-toast-message';
 import toastConfig from './config/toastConfig';
 import AppTimeTracker from './Utils/AppTimeTracker';
@@ -33,8 +27,6 @@ import {Colors} from './styles/color.constants';
 // import codePush from 'react-native-code-push';
 
 // import Siren from 'react-native-siren';
-
-EStyleSheet.build(globalVariables);
 
 const defaultOptions = {
   title: 'Questionpro CX has a new update!',
@@ -102,7 +94,6 @@ const AppContent = () => {
 };
 
 const CxApp = () => {
-  const [styleBuilt, setStyleBuilt] = React.useState(false);
   const networkMonitorRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -118,9 +109,6 @@ const CxApp = () => {
     });
     networkMonitorRef.current = new NetworkMonitor(store);
     networkMonitorRef.current.start();
-    const unsubscribe = EStyleSheet.subscribe('build', () => {
-      setStyleBuilt(true);
-    });
     requestNotificationPermission();
     checkNotificationPermission();
     // addNotificationListeners();
@@ -129,7 +117,6 @@ const CxApp = () => {
         networkMonitorRef.current.stop();
       }
       AppTimeTracker.stop();
-      unsubscribe();
     };
   }, []);
 
@@ -141,7 +128,7 @@ const CxApp = () => {
             barStyle={'light-content'}
             backgroundColor={Colors.white}
           />
-          {styleBuilt ? <AppContent /> : <View />}
+          <AppContent />
           <Toast config={toastConfig} />
         </SafeAreaProvider>
       </PaperProvider>

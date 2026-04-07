@@ -3649,10 +3649,8 @@ __metadata:
     react-native-document-picker: 8.2.1
     react-native-dropdown-picker: 5.4.6
     react-native-event-listeners: ^1.0.7
-    react-native-extended-stylesheet: ^0.12.0
     react-native-flash-message: ^0.4.2
     react-native-gesture-handler: 2.30.1
-    react-native-indicators: ^0.17.0
     react-native-keyboard-aware-scroll-view: ^0.9.5
     react-native-linear-gradient: ^2.5.6
     react-native-localize: ^2.0.3
@@ -5097,13 +5095,6 @@ __metadata:
   version: 1.0.0
   resolution: "css-color-keywords@npm:1.0.0"
   checksum: 8f125e3ad477bd03c77b533044bd9e8a6f7c0da52d49bbc0bbe38327b3829d6ba04d368ca49dd9ff3b667d2fc8f1698d891c198bbf8feade1a5501bf5a296408
-  languageName: node
-  linkType: hard
-
-"css-mediaquery@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "css-mediaquery@npm:0.1.2"
-  checksum: 8e26ae52d8aaaa71893f82fc485363ff0fab494b7d3b3464572aaed50714b8b538d33dbdaa69f0c02cf7f80d1f4d9a77519306c0492223ce91b3987475031a69
   languageName: node
   linkType: hard
 
@@ -10043,13 +10034,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-resolve-path@npm:^1.1.0":
-  version: 1.1.1
-  resolution: "object-resolve-path@npm:1.1.1"
-  checksum: 5878c8978910e0ab7bf3675e35b5c9d28942b2358b31b068955281d61ea1cad2e899b3842af025efbcfe5d7dbbf0b6c822838967e378e2c132c0560319dc4754
-  languageName: node
-  linkType: hard
-
 "object.assign@npm:^4.1.0, object.assign@npm:^4.1.4, object.assign@npm:^4.1.5, object.assign@npm:^4.1.7":
   version: 4.1.7
   resolution: "object.assign@npm:4.1.7"
@@ -11078,16 +11062,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-extended-stylesheet@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "react-native-extended-stylesheet@npm:0.12.0"
-  dependencies:
-    css-mediaquery: ^0.1.2
-    object-resolve-path: ^1.1.0
-  checksum: aefd0395085e9a0327c96c8bf5d009c48df6bf785d547988e195890835fcb41958bc2c7f340edee07e0f01b82f913c18c5b48d6ef9e3abd574bfe23695de2719
-  languageName: node
-  linkType: hard
-
 "react-native-flash-message@npm:^0.4.2":
   version: 0.4.2
   resolution: "react-native-flash-message@npm:0.4.2"
@@ -11113,18 +11087,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 5dadc00208b22fc318c6e743289a083601d16997cfc33f9b12be796d21135cc44d9c850a648c40b1a40eace8080d7a79ca28b9144b1f5ee43542d0a772b4d78f
-  languageName: node
-  linkType: hard
-
-"react-native-indicators@npm:^0.17.0":
-  version: 0.17.0
-  resolution: "react-native-indicators@npm:0.17.0"
-  dependencies:
-    prop-types: ^15.5.10
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 69d0d485b6a4d81f2daaa98ca9029d0ed760470a5ae9c5cce2b81132224b5116ea9bd6829c6bc0d7b0203db4c43e876020005122c306f1a5734c4629c4bb7933
   languageName: node
   linkType: hard
 

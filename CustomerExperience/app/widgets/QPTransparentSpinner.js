@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text, Animated} from 'react-native';
-import {DotIndicator} from 'react-native-indicators';
+import AnimatedDotIndicator from './AnimatedDotIndicator';
 import {Colors} from '../styles/color.constants';
 import StringUtils from '../Utils/StringUtils';
 import {FontFamily} from '../styles/font.constants';
@@ -21,7 +21,7 @@ export const QPTransparentSpinner = ({
       animation={animationType || 'fadeIn'}
       style={{...styles.container, ...containerStyle}}>
       <View style={styles.indicatorContainer}>
-        <DotIndicator
+        <AnimatedDotIndicator
           color={idicatorColor ?? Colors.white}
           count={3}
           size={10}

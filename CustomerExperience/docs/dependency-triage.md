@@ -397,8 +397,6 @@ For each UNKNOWN dependency:
 │   │   ├── react-native-swiper@1.6.0-rc.3 ❓
 │   │   └── reanimated-bottom-sheet@1.0.0-alpha.22 ❓
 │   │
-│   └── Styling System
-│       └── react-native-extended-stylesheet@0.12.0 ❓
 │
 ├── 🎭 ANIMATIONS & GESTURES
 │   ├── react-native-reanimated@1.13.4 ⚠️ (PATCHED)

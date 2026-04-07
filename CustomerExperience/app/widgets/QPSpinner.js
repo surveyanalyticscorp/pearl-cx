@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
-import {DotIndicator} from 'react-native-indicators';
+import AnimatedDotIndicator from './AnimatedDotIndicator';
 import * as Animatable from 'react-native-animatable';
 import {Colors} from '../styles/color.constants';
 import StringUtils from '../Utils/StringUtils';
@@ -32,7 +32,7 @@ export default function QPSpinner(props) {
         useNativeDriver={true}
         animation={animationType || 'fadeIn'}
         style={[styles.defaultSpinnerContainerStyle, customSpinnerStyle]}>
-        <DotIndicator
+        <AnimatedDotIndicator
           color={spinnerColor || Colors.accent}
           count={indicatorCount || 3}
           size={size || 10}
