@@ -171,16 +171,19 @@ android {
     }
 
     packaging {
+        jniLibs {
+            // Store .so files uncompressed in the APK so the OS can mmap them
+            // directly at their on-disk alignment. Required for 16KB page size
+            // compliance on Android 15+ devices (Google Play enforcement Nov 2025).
+            // AGP 8.6+ defaults this to false; declared explicitly for clarity.
+            useLegacyPackaging = false
+        }
         pickFirst "lib/armeabi-v7a/libc++_shared.so"
         pickFirst "lib/arm64-v8a/libc++_shared.so"
         pickFirst "lib/x86/libc++_shared.so"
         pickFirst "lib/x86_64/libc++_shared.so"
-
-         // ✅ Fix duplicate folly from RN + Reanimated
-         pickFirst "lib/**/libfolly_runtime.so"
-        //  // Exclude Firebase messaging manifest to avoid conflicts
-        // exclude 'META-INF/com/android/build/gradle/app-metadata.properties'
-   
+        // Fix duplicate folly from RN + Reanimated
+        pickFirst "lib/**/libfolly_runtime.so"
     }
 
      // Force exclude problematic Firebase resources

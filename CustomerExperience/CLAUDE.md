@@ -15,14 +15,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## React Native Version & Platform Status
 
-- **React Native:** 0.75.5
-- **Android:** ✅ Builds and runs (upgraded 0.72.17 → 0.75.5, April 2026)
-- **iOS:** ✅ Builds, runs on simulator, and archives (upgraded 0.72.17 → 0.75.5, April 2026)
-- **Hermes:** OFF (`hermes_enabled: false` in Podfile)
-- **New Architecture (Fabric):** OFF (`fabric_enabled: false` in Podfile)
-- **Minimum iOS deployment target:** 13.4 (bumped from 13.0 — RN 0.75 minimum)
-- **Node requirement:** Node >= 18 (RN 0.75 dropped Node 16 support)
+- **React Native:** 0.77.2
+- **Android:** ✅ Builds and runs on emulator (upgraded 0.75.5 → 0.77.2, April 2026)
+- **iOS:** ✅ Builds and runs on simulator (upgraded 0.75.5 → 0.77.2, April 2026)
+- **Hermes:** ON (`hermesEnabled=true` in gradle.properties, `hermes_enabled: true` in Podfile) — enabled April 2026 for 16KB page size compliance
+- **New Architecture (Fabric):** OFF (`newArchEnabled=false` in gradle.properties, `fabric_enabled: false` and `new_arch_enabled: false` in Podfile)
+- **Minimum iOS deployment target:** 15.1 (bumped from 13.4 — RN 0.76 hard minimum)
+- **Node requirement:** Node >= 18 (RN 0.77 requires Node 18+)
 - **Xcode tested on:** Xcode 26.3 / iOS 26.2 SDK
+- **Android toolchain:** NDK 27.1.12297006 · Kotlin 2.0.21 (K2) · AGP 8.6.1 · Gradle 8.10.2 · compileSdk 35
+- **16KB page size:** ✅ Fully compliant. All `.so` files at 0x4000. Fixed: Hermes ON (replaces `libjsc.so`), reanimated 3.16.2 → 3.18.2, `patches/react-native-screens+3.37.0.patch` adds `-Wl,-z,max-page-size=16384` to `librnscreens.so`.
 
 ## Tech Stack
 
@@ -208,12 +210,25 @@ These constants are defined in `Constant.js` — always use them, never raw stri
 - Run `yarn ios:pod-reinstall` after ANY dependency change — not optional
 - If `yarn ios:pod-reinstall` fails with RCT-Folly conflict, delete manually: `cd ios && rm -rf Pods Podfile.lock && pod install --repo-update`
 - Xcode 26 / iOS 26 SDK is supported with the current Podfile configuration
-- Minimum deployment target is iOS 13.4 — do not lower it
+- Minimum deployment target is iOS 15.1 — do not lower it (RN 0.76 hard minimum)
 
 **Android:**
 
 - Use `--stacktrace` flag for Gradle debugging
 - Port 8081 conflict fix: `lsof -i :8081` → `kill -9 <PID>`
+- **Node 18 is required for Android builds too.** The system node at `/usr/local/bin/node` may be v16 — the Gradle daemon inherits this and `react-native config` (autolinking) fails. Always ensure Node 18 is active before any Gradle build:
+  ```bash
+  nvm use 18.20.4
+  cd android && ./gradlew --stop && cd ..   # kill any daemon started with wrong Node
+  ```
+  To make Node 18 the permanent system default: `nvm alias default 18.20.4` then symlink:
+  `ln -sf ~/.nvm/versions/node/v18.20.4/bin/node /usr/local/bin/node`
+- **RN 0.77 RNGP uses `npx` for autolinking — `npx` must be in Gradle's PATH.** If `npx` is only available via nvm (not at `/usr/local/bin/npx`), autolinking fails with exit code 126. Fixed in `android/settings.gradle` by overriding the autolinking command to call the CLI directly via `node` instead of `npx`. Note: RNGP runs from `settings.rootDir.parentFile` (the project root, not `android/`), so the path has no `../`:
+  ```groovy
+  ex.autolinkLibrariesFromCommand(
+      ["node", "node_modules/@react-native-community/cli/build/bin.js", "config"]
+  )
+  ```
 
 **Patches:**
 
@@ -235,7 +250,14 @@ This helper was removed in RN 0.74. Calling it causes `NoMethodError` during `po
 **2. `react-native-i18n` / `RNI18n` is gone**
 The app migrated to `i18n-js` (pure JS) + `react-native-localize` (autolinked). The old `pod 'RNI18n'` line has been removed from the Podfile. Do not re-add it.
 
-**3. `use_modular_headers!` removed — Firebase pods declared explicitly**
+**3. `new_arch_enabled` and `fabric_enabled` are separate parameters in RN 0.77**
+In RN 0.77, `use_react_native!` has TWO separate flags: `:fabric_enabled` and `:new_arch_enabled`. The default for `:new_arch_enabled` is `NewArchitectureHelper.new_arch_enabled`, which returns `true` when `ENV['RCT_NEW_ARCH_ENABLED']` is unset (i.e., always, unless you set the env var before pod install). Passing only `:fabric_enabled => false` still results in `RCT_NEW_ARCH_ENABLED=1` being propagated to all pods. RNReanimated reads this env var and compiles Fabric C++ files, causing build failures. **Always pass both:**
+```ruby
+:fabric_enabled => false,
+:new_arch_enabled => false,
+```
+
+**4. `use_modular_headers!` removed — Firebase pods declared explicitly**
 Global `use_modular_headers!` was removed because it causes `non-modular-include-in-framework-module` hard errors in Xcode 26 for all RN C++ pods. Instead, the Firebase dependency chain is declared explicitly in the target block with `:modular_headers => true`:
 - `GoogleUtilities`, `FirebaseCore`, `FirebaseCoreInternal`, `FirebaseCoreExtension`
 - `FirebaseInstallations`, `FirebaseMessaging`, `GoogleDataTransport`, `nanopb`, `PromisesObjC`
@@ -266,8 +288,22 @@ cd ios && rm -rf Pods Podfile.lock && pod install --repo-update && cd ..
 **10. `get_default_flags` deprecation warning**
 `get_default_flags()` is deprecated in RN 0.75 and `flags` variable is unused. This is a non-fatal warning. The call and variable remain in the Podfile to avoid accidental breakage — clean up only when doing a dedicated Podfile refactor.
 
+### Android Upgrade Gotchas (RN 0.75.5 → 0.77.2)
+
+**1. `ViewManagerWithGeneratedInterface` removed from react-android 0.77**
+`react-native-gesture-handler` 2.30.1's Old Architecture (paper) codegen interfaces (`RNGestureHandlerButtonManagerInterface`, `RNGestureHandlerRootViewManagerInterface`) extend `ViewManagerWithGeneratedInterface`, which was removed from `react-android:0.77.2`. Do NOT patch node_modules. Instead, a stub interface is maintained at `android/stubs/java/com/facebook/react/uimanager/ViewManagerWithGeneratedInterface.java` and injected into the gesture-handler module via a `subprojects` hook in `android/build.gradle`. If gesture-handler is upgraded to a version that drops this reference, delete the stub and the hook.
+
+**2. `SoLoader.init` throws checked `IOException` in RN 0.76+**
+`SoLoader.init(this, OpenSourceMergedSoMapping.INSTANCE)` declares `throws IOException`. The Java `onCreate()` method must wrap it in try/catch — it cannot declare `throws IOException` since `Application.onCreate()` does not. See `MainApplication.java`.
+
+**3. Jetifier disabled — do not re-enable**
+`android.enableJetifier=false` in `gradle.properties`. RN 0.77 is fully AndroidX — running Jetifier against the large `react-android-0.77.2.aar` causes Java heap space OOM. It is safe to leave it off permanently.
+
+**4. `com.facebook.react:react-native` artifact removed in RN 0.77**
+Libraries that still declare `implementation 'com.facebook.react:react-native:+'` will fail to resolve because RN 0.77 only publishes `com.facebook.react:react-android`. A dependency substitution rule in `android/build.gradle` (`allprojects → configurations.all → resolutionStrategy.eachDependency`) redirects the old artifact name to the new one for all subprojects automatically.
+
 ### Skipped / Deferred Items
 
-- **`rnx-kit alignDeps` still references `react-native@0.72`** in `package.json`. Update to `0.75` before running `yarn check-deps` or `yarn fix-deps`, otherwise it will suggest downgrading packages.
+- **`rnx-kit alignDeps`** references `react-native@0.77` in `package.json` (updated during 0.77 upgrade). Run `yarn check-deps` before adding new packages to verify compatibility.
 - **Reanimated 3.16.2 with Hermes OFF**: Reanimated 3.x works without Hermes but some advanced worklet features may behave differently. No issues found so far.
 - **`react-native-notifications` 5.2.0**: Autolinked successfully. Push notification runtime behaviour on iOS 26 simulator has not been tested end-to-end.

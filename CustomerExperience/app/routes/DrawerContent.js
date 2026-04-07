@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, Dimensions} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
@@ -23,9 +23,20 @@ import {
 import QuestionProBanner from '../../assets/images/questionpro_banner.svg';
 
 const DrawerCXLogo = () => {
-  const {width} = Dimensions.get('window');
+  const [containerWidth, setContainerWidth] = useState(0);
 
-  return <QuestionProBanner height={width / 8} width={width / 2} />;
+  return (
+    <View
+      style={styles.logoContainer}
+      onLayout={e => setContainerWidth(e.nativeEvent.layout.width)}>
+      {containerWidth > 0 && (
+        <QuestionProBanner
+          width={containerWidth * 0.9}
+          height={containerWidth * 0.2}
+        />
+      )}
+    </View>
+  );
 };
 
 const DrawerContent = ({navigation}) => {
@@ -146,6 +157,11 @@ const DrawerContent = ({navigation}) => {
 export default DrawerContent;
 
 const styles = StyleSheet.create({
+  logoContainer: {
+    width: '100%',
+    alignItems: 'center',
+    paddingHorizontal: MarginConstants.tab1,
+  },
   container: {
     flex: 1,
     elevation: 5,

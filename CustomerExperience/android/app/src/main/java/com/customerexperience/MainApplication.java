@@ -7,8 +7,10 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
+import com.facebook.react.soloader.OpenSourceMergedSoMapping;
 import com.facebook.soloader.SoLoader;
 import com.questionpro.cxonthego.BuildConfig;
+import java.io.IOException;
 import java.util.List;
 import androidx.multidex.MultiDexApplication;
 import android.content.BroadcastReceiver;
@@ -66,7 +68,11 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     // If you opted-in for the New Architecture, we enable the TurboModule system
     // ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
-    SoLoader.init(this, /* native exopackage */ false);
+    try {
+      SoLoader.init(this, OpenSourceMergedSoMapping.INSTANCE);
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to initialize SoLoader", e);
+    }
   }
 
     @Override

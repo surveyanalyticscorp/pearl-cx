@@ -4,7 +4,7 @@ require_relative '../node_modules/react-native/scripts/react_native_pods'
 $RNFirebaseAsStaticFramework = true
 $RNFirebaseAnalyticsWithoutAdIdSupport=true
 
-platform :ios, '13.4'
+platform :ios, '15.1'
 install! 'cocoapods', :deterministic_uuids => false
 # use_modular_headers!
 target 'CustomerExperience' do
@@ -65,17 +65,13 @@ target 'CustomerExperience' do
 
   use_react_native!(
     :path => config[:reactNativePath],
-        # Hermes is now enabled by default. Disable by setting this flag to false.
-    # Upcoming versions of React Native may rely on get_default_flags(), but
-    # we make it explicit here to aid in the React Native upgrade process.
-    :hermes_enabled => false,
-    
-    # Enables Flipper.
-    #
-    # Note that if you have use_frameworks! enabled, Flipper will not work and
-    # you should disable the next line.
+    :hermes_enabled => true,
+    # fabric_enabled and new_arch_enabled MUST both be false.
+    # In RN 0.77, new_arch_enabled defaults to true (reads ENV['RCT_NEW_ARCH_ENABLED'] which is nil → true).
+    # Omitting new_arch_enabled while setting fabric_enabled: false still results in
+    # RCT_NEW_ARCH_ENABLED=1 being propagated to all pods (including RNReanimated).
     :fabric_enabled => false,
-    # An absolute path to your application root.
+    :new_arch_enabled => false,
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )  
   # Enables Flipper.
@@ -112,12 +108,12 @@ target 'CustomerExperience' do
     
     installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.4'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
       config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
     end
   end
 
-  # Fix ReactCommon module map conflict (RN 0.75.x + Xcode 26)
+  # Fix ReactCommon module map conflict (RN 0.77.x + Xcode 26)
   conflicting_map = "#{installer.sandbox.root}/Headers/Public/ReactCommon/React-RuntimeApple.modulemap"
   File.delete(conflicting_map) if File.exist?(conflicting_map)
 end

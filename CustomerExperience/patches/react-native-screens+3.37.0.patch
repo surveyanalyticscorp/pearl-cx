@@ -1,0 +1,11 @@
+diff --git a/node_modules/react-native-screens/android/CMakeLists.txt b/node_modules/react-native-screens/android/CMakeLists.txt
+index 1234567..abcdefg 100644
+--- a/node_modules/react-native-screens/android/CMakeLists.txt
++++ b/node_modules/react-native-screens/android/CMakeLists.txt
+@@ -78,3 +78,6 @@
+         android
+     )
+ endif()
++
++# Force 16KB ELF page alignment for Google Play compliance (Android 15+)
++target_link_options(rnscreens PRIVATE "-Wl,-z,max-page-size=16384")

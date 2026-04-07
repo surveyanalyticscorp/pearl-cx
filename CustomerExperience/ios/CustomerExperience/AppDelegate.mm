@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
+#import <ReactAppDependencyProvider/RCTAppDependencyProvider.h>
 #import <Firebase.h>
 
 @implementation AppDelegate
@@ -8,6 +9,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.moduleName = @"CustomerExperience";
+  self.dependencyProvider = [RCTAppDependencyProvider new];
   self.initialProps = @{};
 
   if ([FIRApp defaultApp] == nil) {
