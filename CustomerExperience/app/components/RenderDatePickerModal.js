@@ -2,7 +2,7 @@ import React from 'react';
 import DatePicker from 'react-native-date-picker';
 // import {showSuccessFlashMessage} from '../Utils/Utility';
 import moment from 'moment';
-import {DMYFORMAT, YMDFORMAT} from '../Utils/AppConstants';
+import {DMYFORMAT} from '../Utils/AppConstants';
 import StringUtils from '../Utils/StringUtils';
 const RenderDatePickerModal = ({
   isOpen,
@@ -25,9 +25,11 @@ const RenderDatePickerModal = ({
   );
 
   const today = new Date();
-  const selectedDate = StringUtils.isNotEmpty(currentDate)
-    ? new Date(moment(currentDate, DMYFORMAT).format(YMDFORMAT))
-    : new Date();
+  const parsedMoment = moment(currentDate, DMYFORMAT, true);
+  const selectedDate =
+    StringUtils.isNotEmpty(currentDate) && parsedMoment.isValid()
+      ? parsedMoment.toDate()
+      : new Date();
 
   const minimumDate = new Date(
     new Date().setFullYear(new Date().getFullYear() - 4),
