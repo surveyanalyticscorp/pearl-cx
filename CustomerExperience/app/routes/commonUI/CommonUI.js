@@ -87,14 +87,17 @@ export const CopyIcon = ({size = 12, tintColor = Colors.filterIconColor}) => (
   />
 );
 
+import CalendarMonthSvg from '../../../assets/images/calendar_month.svg';
+
 export const CalendarIcon = ({
   size = 12,
   tintColor = Colors.filterIconColor,
 }) => (
-  <Image
+  <CalendarMonthSvg
     testID="image-calendar"
-    source={require('./../../../assets/images/date_filter_icon.png')}
-    style={{width: size, height: size, tintColor: tintColor}}
+    width={size}
+    height={size}
+    fill={tintColor}
   />
 );
 
@@ -683,7 +686,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 2,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: Colors.evenDarkerGrey,
     paddingVertical: PaddingConstants.tab1,

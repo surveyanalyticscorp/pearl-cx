@@ -8,7 +8,8 @@ import {
   RefreshControl,
   Platform,
 } from 'react-native';
-import ClosedLoopCell from './ClosedloopCell';
+// import ClosedLoopCell from './ClosedloopCell';
+import TicketCard from './TicketCard';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
@@ -176,7 +177,7 @@ const ClosedLoopTicketList = ({
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item, index}) => {
         return (
-          <ClosedLoopCell
+          <TicketCard
             data={item}
             index={index}
             showCheckBox={showCheckBox}
@@ -358,7 +359,7 @@ export default function ClosedLoop(props) {
   };
 
   const loadMoreData = () => {
-    if (ticketList.length < pagerOptions.totalCount) {
+    if (ticketList.length < pagerOptions?.totalCount) {
       setpagination(true);
       setFilterState(state => ({
         ...state,
@@ -529,12 +530,10 @@ export default function ClosedLoop(props) {
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: {flex: 1, backgroundColor: Colors.white},
 
   flatList: {
     flex: 1,
-    marginHorizontal: MarginConstants.tab1,
-    padding: MarginConstants.halfTab,
   },
 
   filterAndSearchBox: {
@@ -550,10 +549,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.white,
     marginVertical: MarginConstants.tab1,
-    marginHorizontal: MarginConstants.tab2,
+    marginHorizontal: MarginConstants.tab1_2x,
     paddingHorizontal: MarginConstants.tab1,
     paddingVertical: Platform.OS === 'ios' ? MarginConstants.halfTab : 0,
-    borderBottomWidth: 0.5,
+    borderWidth: 0.5,
+    borderRadius: 8,
     borderColor: Colors.filterIconColor,
   },
 

@@ -1,9 +1,17 @@
 import React from 'react';
 import {MarginConstants} from '../../../styles/margin.constants';
-import Icon from './../../../../assets/images/Info.svg';
+import InfoSvg from './../../../../assets/images/info.svg';
 
-const InfoIcon = ({size = MarginConstants.tab1_3x}) => {
-  return <Icon testID={'info-toast-icon'} width={size} height={size} />;
+const InfoIcon = ({size = MarginConstants.tab1_3x, tintColor}) => {
+  return (
+    <InfoSvg
+      testID={'info-toast-icon'}
+      width={size}
+      height={size}
+      fill={tintColor}
+      color={tintColor}
+    />
+  );
 };
 
 export default InfoIcon;

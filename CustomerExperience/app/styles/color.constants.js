@@ -228,13 +228,13 @@ const getPriorityFillerColorbyId = _priority => {
 };
 
 const statusColors = {
-  openBorder: Colors.promoter,
+  openBorder: '#40CA5A',
   openFiller: '#9FE4AC',
 
   closedBorder: Colors.evenDarkerGrey,
   closedFiller: Colors.darkGrey,
 
-  escalatedBorder: '#FF9045',
+  escalatedBorder: '#FF9145',
   escalatedFiller: '#FFC7A2',
 
   overDueBorder: Colors.error,

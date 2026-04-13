@@ -71,10 +71,10 @@ const DrawerContent = ({navigation}) => {
     },
     closedLoop: {
       title: 'Closedloop',
-      routeName: 'ClosedLoop',
+      routeName: 'Closedloop',
       frontIcon: <ClosedLoopIcon />,
       onPress: () => {
-        navigation.navigate('ClosedLoop');
+        navigation.navigate('Closedloop');
       },
     },
     settings: {
@@ -123,11 +123,11 @@ const DrawerContent = ({navigation}) => {
         <DrawerButton
           frontIcon={
             <ClosedLoopIcon
-              isActive={currentRoute === buttonData['closedLoop'].routeName}
+              isActive={currentRoute === buttonData['closedloop'].routeName}
             />
           }
-          dataObj={buttonData['closedLoop']}
-          isActive={currentRoute === buttonData['closedLoop'].routeName}
+          dataObj={buttonData['closedloop']}
+          isActive={currentRoute === buttonData['closedloop'].routeName}
         />
       </RenderDrawerButtons>
       <RenderSettingsAndLogout>

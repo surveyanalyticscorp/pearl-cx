@@ -154,8 +154,8 @@ describe('commonUI components', () => {
     const {getByTestId} = render(<CalendarIcon />);
     const icon = getByTestId('image-calendar');
     expect(icon).toBeTruthy();
-    expect(icon.props.style.width).toBe(12);
-    expect(icon.props.style.height).toBe(12);
+    expect(icon.props.width).toBe(12);
+    expect(icon.props.height).toBe(12);
   });
 
   test('should render ResponsesIcon correctly', () => {

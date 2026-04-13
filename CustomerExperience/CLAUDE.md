@@ -121,6 +121,7 @@ API endpoints and app-wide constants are in `app/config/Constant.js`. Never hard
 - Use the `$rem` constant from `app/styles/globalStyleVariables.js` for sizing and spacing — never raw pixel numbers
 - Colors, spacing, fonts → `app/styles/globalStyleVariables.js` — never hardcode values
 - React Native Paper (`PaperProvider`) wraps the app — use Paper components where they exist before building custom ones
+- **SVG assets** — import SVGs as React components (`import MySvg from './path/to/file.svg'`) and render with `width`, `height`, and `fill` props. Never use `<Image source={require(...)} />` for `.svg` files.
 
 ### Testing
 
@@ -143,6 +144,15 @@ Saga tests are co-located with saga files (e.g. `dashboard.saga.test.js`).
 - Use `Pressable` for touchables (not `TouchableOpacity`/`TouchableHighlight`); match existing code if already inconsistent
 - Screens: `useSafeAreaInsets` from `react-native-safe-area-context` — never `SafeAreaView` from `react-native`
 - Always handle loading, error, and empty states — never assume API data exists
+- **Conditional styles** — apply state-based style variants as `[styles.base, condition && styles.variant]` referencing named `StyleSheet` entries. Never create anonymous style objects for static values inline.
+
+---
+
+### Component File Organisation
+
+- Group sub-components of a complex component in a subdirectory named after the parent (e.g. `ticketCard/` alongside `TicketCard.js`)
+- Each sub-component file owns only its own `StyleSheet.create()` styles
+- The parent file contains only data wiring and the container shell — no inline child component definitions
 
 ---
 

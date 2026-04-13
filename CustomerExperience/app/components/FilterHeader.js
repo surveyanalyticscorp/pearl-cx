@@ -1,5 +1,11 @@
 import {DMYFORMAT, HalfMonthDateYearFormat} from '../Utils/AppConstants';
-import {StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {Colors} from '../styles/color.constants';
 import {MarginConstants} from '../styles/margin.constants';
 import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
@@ -79,7 +85,7 @@ const FilterHeader = props => {
 
   return (
     <View style={styles.filterHeader}>
-      <TouchableWithoutFeedback testID="filter-calendar" onPress={filterAction}>
+      <Pressable testID="filter-calendar" onPress={filterAction}>
         <View style={styles.filterLeftView}>
           <LineIcon name={'calendar'} size={Sizes.icons} color={Colors.white} />
           <View style={styles.filterCalendarView}>
@@ -87,9 +93,9 @@ const FilterHeader = props => {
             <Text style={styles.dateText}>{endDate}</Text>
           </View>
         </View>
-      </TouchableWithoutFeedback>
+      </Pressable>
       <View style={styles.filterArrowIconView}>
-        <TouchableWithoutFeedback
+        <Pressable
           testID="left-arrow"
           hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
           onPress={reduceRange}>
@@ -99,8 +105,8 @@ const FilterHeader = props => {
             color={Colors.white}
             style={{marginRight: MarginConstants.tab2}}
           />
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
+        </Pressable>
+        <Pressable
           testID="right-arrow"
           hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
           onPress={addRange}>
@@ -109,7 +115,7 @@ const FilterHeader = props => {
             size={Sizes.inlineIcons}
             color={Colors.white}
           />
-        </TouchableWithoutFeedback>
+        </Pressable>
       </View>
     </View>
   );

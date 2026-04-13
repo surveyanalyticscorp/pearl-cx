@@ -67,7 +67,7 @@ const DashboardStack = props => (
         headerTitle: props => {
           return (
             <SegmentSelector
-              screenName={'ClosedLoop'}
+              screenName={'Closedloop'}
               navigation={navigation}
             />
           );
