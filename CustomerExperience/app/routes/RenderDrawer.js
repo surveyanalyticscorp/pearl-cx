@@ -19,7 +19,7 @@ const RenderDrawer = () => {
       drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen name="DashboardTab" component={DashboardModalStack} />
       <Drawer.Screen name="Responses" component={ResponsesStack} />
-      <Drawer.Screen name="ClosedLoop" component={ClosedLoopStack} />
+      <Drawer.Screen name="Closedloop" component={ClosedLoopStack} />
       <Drawer.Screen
         name={translate('settings.settings')}
         component={SettingStack}

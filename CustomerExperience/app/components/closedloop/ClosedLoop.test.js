@@ -129,11 +129,12 @@ jest.mock('@gorhom/bottom-sheet', () => {
   const BottomSheet = jest.fn().mockImplementation(({children}) => {
     return React.createElement(View, {}, children);
   });
-  const BottomSheetView = ({children}) => React.createElement(View, {}, children);
+  const BottomSheetView = ({children}) =>
+    React.createElement(View, {}, children);
   return {__esModule: true, default: BottomSheet, BottomSheetView};
 });
 
-describe('ClosedLoop', () => {
+describe('Closedloop', () => {
   let store;
   let props;
 

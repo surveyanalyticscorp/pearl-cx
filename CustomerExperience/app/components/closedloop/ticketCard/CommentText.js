@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   commentText: {
     ...baseTextStyles.primaryRegularText,
     color: Colors.filterIconColor,
-    marginHorizontal: MarginConstants.halfTab,
+    marginHorizontal: 0,
     marginBottom: MarginConstants.tab1_2x,
     lineHeight: COMMENT_LINE_HEIGHT,
   },

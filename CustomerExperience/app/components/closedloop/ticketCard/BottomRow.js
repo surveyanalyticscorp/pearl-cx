@@ -1,6 +1,9 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {Colors, getPriorityBorderColorbyId} from '../../../styles/color.constants';
+import {
+  Colors,
+  getPriorityBorderColorbyId,
+} from '../../../styles/color.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import moment from 'moment';
@@ -20,14 +23,15 @@ const BottomRow = ({name, issueDate, isOverdue, priority, status}) => {
   return (
     <View style={styles.bottomRow}>
       <Avatar title={name} style={styles.avatar} />
-      <HorizontalSpaceBox />
+      <HorizontalSpaceBox multiplyBy={4} />
       <View style={styles.metaContainer}>
         <View style={styles.metaItem}>
-          <View style={[styles.dateInner, isOverdue && styles.dateInnerOverdue]}>
+          <View
+            style={[styles.dateInner, isOverdue && styles.dateInnerOverdue]}>
             {isOverdue ? (
-              <InfoIcon size={16} tintColor={Colors.white} />
+              <InfoIcon size={22} tintColor={Colors.white} />
             ) : (
-              <CalendarIcon size={16} tintColor={Colors.filterIconColor} />
+              <CalendarIcon size={22} tintColor={Colors.filterIconColor} />
             )}
             <Text
               style={[
@@ -38,8 +42,10 @@ const BottomRow = ({name, issueDate, isOverdue, priority, status}) => {
             </Text>
           </View>
         </View>
+        <HorizontalSpaceBox multiplyBy={4} />
+
         <View style={styles.metaItem}>
-          <IonIcons name="flag" size={16} color={priorityColor} />
+          <IonIcons name="flag" size={22} color={priorityColor} />
           <Text
             style={[
               baseTextStyles.secondaryRegularText,
@@ -51,6 +57,8 @@ const BottomRow = ({name, issueDate, isOverdue, priority, status}) => {
             {priorityText}
           </Text>
         </View>
+        <HorizontalSpaceBox multiplyBy={4} />
+
         <View style={styles.statusPillCell}>
           <StatusPill status={status} />
         </View>
@@ -76,11 +84,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   dateInner: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: PaddingConstants.tab1,
+    paddingVertical: PaddingConstants.halfTab,
   },
   dateInnerOverdue: {
     backgroundColor: Colors.critical2,
@@ -91,6 +102,7 @@ const styles = StyleSheet.create({
   statusPillCell: {
     flex: 1,
     alignItems: 'flex-end',
+    justifyContent: 'flex-end',
   },
 });
 

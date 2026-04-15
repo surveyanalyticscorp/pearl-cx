@@ -69,7 +69,7 @@ const DrawerContent = ({navigation}) => {
         navigation.navigate('Responses');
       },
     },
-    closedLoop: {
+    closedloop: {
       title: 'Closedloop',
       routeName: 'Closedloop',
       frontIcon: <ClosedLoopIcon />,

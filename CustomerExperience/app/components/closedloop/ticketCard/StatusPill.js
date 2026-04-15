@@ -4,6 +4,7 @@ import {Colors, getStatusBorderColor} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {baseTextStyles} from '../../../styles/text.styles';
 import {getStatusById} from '../../../Utils/TicketUtils';
+import {MarginConstants} from '../../../styles/margin.constants';
 
 const StatusPill = ({status}) => {
   const statusText = getStatusById(status);
@@ -29,12 +30,14 @@ const StatusPill = ({status}) => {
 const styles = StyleSheet.create({
   statusPill: {
     borderRadius: 20,
-    paddingHorizontal: PaddingConstants.tab1_2x,
+    paddingHorizontal: PaddingConstants.halfTab,
     paddingVertical: PaddingConstants.halfTab,
+    width: MarginConstants.tab1_7x + MarginConstants.tab3,
   },
   statusPillText: {
     ...baseTextStyles.secondaryRegularText,
     marginHorizontal: 0,
+    textAlign: 'center',
   },
 });
 
