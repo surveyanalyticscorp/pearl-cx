@@ -88,6 +88,7 @@ export const CopyIcon = ({size = 12, tintColor = Colors.filterIconColor}) => (
 );
 
 import CalendarMonthSvg from '../../../assets/images/calendar_month.svg';
+import {getAvatarColor} from '../../Utils/AvatarBackgroundColor';
 
 export const CalendarIcon = ({
   size = 12,
@@ -499,7 +500,11 @@ export const FilterDateBox = () => {
 
 export const Avatar = ({title, style, textStyle}) => {
   return (
-    <View style={[styles.avatarView, {...style}]}>
+    <View
+      style={[
+        styles.avatarView,
+        {...style, backgroundColor: getAvatarColor(title)},
+      ]}>
       <Text
         style={[
           baseTextStyles.mediumRegularText,
@@ -714,7 +719,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: MarginConstants.tab3,
     width: MarginConstants.tab3,
-    backgroundColor: Colors.textAvatarBackground,
     marginHorizontal: MarginConstants.halfTab,
     alignItems: 'center',
     justifyContent: 'center',
