@@ -379,6 +379,12 @@ export default function CreateTicket(props) {
       }),
     );
   };
+  console.log(
+    'SEGMENT_TEST',
+    JSON.stringify(segmentDetails),
+    'ticketState',
+    JSON.stringify(ticketState),
+  );
 
   useEffect(() => {
     getTicketOwnerList(segmentId);
@@ -393,11 +399,12 @@ export default function CreateTicket(props) {
   };
 
   const handleSegmentSelection = () => {
-    const pushAction = StackActions.push(translate('dashboard.segment'), {
-      currentSegmentId: segmentId,
-      setSegmentSelection: setSegmentSelection,
-    });
-    navigation.dispatch(pushAction);
+    // const pushAction = StackActions.push(translate('dashboard.segment'), {
+    //   currentSegmentId: segmentId,
+    //   setSegmentSelection: setSegmentSelection,
+    // });
+    // navigation.dispatch(pushAction);
+    setSegmentBottomSheetVisible(true);
   };
 
   const handleOwnerSelection = () => {
@@ -500,6 +507,7 @@ export default function CreateTicket(props) {
   const RenderSegmentBottomSheet = ({visible, onClose}) => {
     return (
       <QPBottomSheet
+        bottomSheetHeight="50%"
         visible={visible}
         onClose={onClose}
         headerComponent={

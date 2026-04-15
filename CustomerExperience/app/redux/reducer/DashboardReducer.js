@@ -162,7 +162,10 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         segmentState: action.response.body,
-        segmentList: getSegmentListData(state, action.response.body),
+        segmentList: getSegmentListData(
+          state.segmentList,
+          action.response.body,
+        ),
       };
     }
 
@@ -609,12 +612,12 @@ const dashboardReducer = (state = initialState, action) => {
   }
 };
 
-const getSegmentListData = (state, segmentDetails_) => {
+const getSegmentListData = (segmentList, segmentDetails_) => {
   if (segmentDetails_.pageOffset === '0') {
     return [...segmentDetails_.segments];
   } else {
     return getUniqueValues(
-      [...state.segmentList, ...segmentDetails_.segments],
+      [...segmentList, ...segmentDetails_.segments],
       'segmentID',
     );
     // [...new Map(list.map((item) => [item['segmentID'], item])).values()];
