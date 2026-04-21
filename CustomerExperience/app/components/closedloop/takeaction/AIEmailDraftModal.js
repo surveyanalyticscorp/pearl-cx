@@ -136,6 +136,7 @@ const AIEmailDraftModal = ({onClose, setEmailBody}) => {
       />
 
       <QPBottomSheet
+        bottomSheetHeight="80%"
         visible={isDropDownOpen}
         onClose={() => setIsDropDownOpen(false)}>
         <RefineOptionsSheet

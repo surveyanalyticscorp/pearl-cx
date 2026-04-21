@@ -149,6 +149,54 @@ style={[baseTextStyles.secondaryRegularText, smallFontStyle]}
 
 **Spacing on small screens** — `HorizontalSpaceBox` and `VerticalSpaceBox` accept a `multiplyBy` prop; halve it (`multiplyBy={1}` instead of `multiplyBy={2}`) when `isSmallScreen` is true to recover horizontal space without hardcoding pixel values.
 
+**Button sizing on small screens** — override button geometry via named `StyleSheet` entries appended to the style array:
+
+```js
+// In StyleSheet.create():
+buttonContainerSmall: {
+  paddingHorizontal: PaddingConstants.halfTab,       // 4px vs default 16px
+},
+buttonSmall: {
+  height: MarginConstants.tab1_5x,                  // 40px vs default 48px
+  paddingHorizontal: MarginConstants.tab1,           // 8px vs default ~17.5px
+},
+buttonTextSmall: {
+  fontSize: TextSizes.semiSecondary,
+},
+
+// Applied conditionally:
+style={[buttonStyles.primaryButton, styles.buttonFlex, isSmallScreen && styles.buttonSmall]}
+textStyle={[buttonStyles.primaryButtonText, isSmallScreen && styles.buttonTextSmall]}
+```
+
+### Bottom Sheets (QPBottomSheet)
+
+`QPBottomSheet` (`app/components/closedloop/takeaction/QPBottomSheet.js`) uses `maxHeight: 80%` by default — content that overflows is **clipped**, not scrolled.
+
+**When the sheet content needs to scroll** (e.g. lists, chip sections), you must do all three:
+
+1. Pass `bottomSheetHeight="X%"` to `QPBottomSheet` — this switches it from `maxHeight` to a fixed `height`, giving child views a bounded space to flex into.
+2. Add `flex: 1` to the content container inside the sheet.
+3. Wrap scrollable sections in `<ScrollView>` and keep action buttons **outside** the `ScrollView` so they stay pinned at the bottom.
+
+```jsx
+// Caller (e.g. AIEmailDraftModal.js)
+<QPBottomSheet bottomSheetHeight="80%" visible={...} onClose={...}>
+  <MySheet ... />
+</QPBottomSheet>
+
+// Sheet component
+<View style={styles.container}>           {/* flex: 1 */}
+  <ScrollView contentContainerStyle={styles.scrollContent}>
+    {/* scrollable body sections */}
+  </ScrollView>
+  <ListItemSeparator />
+  <ActionButtons />                       {/* always visible, outside scroll */}
+</View>
+```
+
+Without `bottomSheetHeight`, `flex: 1` on the child has no bounded parent height and the `ScrollView` has no defined scroll region — the action buttons will be clipped.
+
 ### Testing
 
 Saga tests are co-located with saga files (e.g. `dashboard.saga.test.js`).
