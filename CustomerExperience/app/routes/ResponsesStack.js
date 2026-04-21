@@ -10,7 +10,9 @@ import CommonScreens from './CommonScreen';
 import HeaderBackLeft from './commonUI/HeaderBackLeft';
 import MenuIcon from './commonUI/MenuIcon';
 import {translate} from '../Utils/MultilinguaUtils';
-import SegmentSelector from '../components/SegmentSelector';
+import SegmentSelector, {
+  NotiificationIcon,
+} from '../components/SegmentSelector';
 import TicketDetails from '../components/closedloop/TicketDetails';
 import {TransitionPresets} from '@react-navigation/stack';
 
@@ -26,6 +28,11 @@ const FeedbackStack = props => (
         headerTitle: props => (
           <SegmentSelector screenName={translate('responses.responses')} />
         ),
+        headerRight: () => <NotiificationIcon />,
+        headerTitleAlign: 'left',
+        headerTitleContainerStyle: {
+          width: '100%',
+        },
         // headerRight: (props) => <SearchIcon route={'Feedback'} />,
         // headerRight: (props) => <SearchIcon route={'Feedback'} />,
       })}

@@ -62,12 +62,13 @@ const styles = StyleSheet.create({
   },
   parcentageText: {
     textAlign: 'right',
-    width: '28%',
+    minWidth: '10%',
     color: Colors.evenDarkerGrey,
   },
   countText: {
     textAlign: 'right',
-    width: '28%',
+    minWidth: '5%',
+    marginStart: MarginConstants.tab1_2x,
   },
 });
 export default LegendScoreView;

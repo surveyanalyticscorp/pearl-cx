@@ -5,12 +5,16 @@ import TicketFilter from '../components/dashboard/components/TicketFilter';
 import {CloseButton} from './commonUI/CommonUI';
 import {translate} from '../Utils/MultilinguaUtils';
 import CxDashboard from '../components/dashboard/CxDashboard';
-import SegmentSelector from '../components/SegmentSelector';
+import SegmentSelector, {
+  NotiificationIcon,
+} from '../components/SegmentSelector';
 import MenuIcon from './commonUI/MenuIcon';
 import Feedback from '../components/feedback/Feedback';
 import HeaderBackLeft from './commonUI/HeaderBackLeft';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
 import CommonScreens from './CommonScreen';
+import {MarginConstants} from '../styles/margin.constants';
+import {Colors} from '../styles/color.constants';
 
 const DetractorStack = createStackNavigator();
 
@@ -30,6 +34,12 @@ const DashboardStack = props => (
         },
 
         headerLeft: props => <MenuIcon />,
+        headerRight: () => <NotiificationIcon />,
+        headerTitleAlign: 'left',
+        headerTitleContainerStyle: {
+          width: '100%',
+          right: 0,
+        },
       })}
     />
 
@@ -48,13 +58,18 @@ const DashboardStack = props => (
       component={Feedback}
       options={({navigation, route}) => ({
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
-
         headerTitle: props => {
           return (
             <SegmentSelector screenName={'Responses'} navigation={navigation} />
           );
         },
+        headerRight: () => <NotiificationIcon />,
+        headerTitleAlign: 'left',
         headerShown: true,
+        headerTitleContainerStyle: {
+          width: '100%',
+          right: 0,
+        },
       })}
     />
     <DetractorStack.Screen
@@ -63,7 +78,6 @@ const DashboardStack = props => (
       component={ClosedLoop}
       options={({navigation, route}) => ({
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
-
         headerTitle: props => {
           return (
             <SegmentSelector
@@ -72,7 +86,13 @@ const DashboardStack = props => (
             />
           );
         },
+        headerRight: () => <NotiificationIcon />,
+        headerTitleAlign: 'left',
         headerShown: true,
+        headerTitleContainerStyle: {
+          width: '100%',
+          right: 0,
+        },
       })}
     />
     {CommonScreens(DetractorStack)}

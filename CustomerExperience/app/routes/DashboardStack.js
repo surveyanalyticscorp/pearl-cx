@@ -11,7 +11,9 @@ import {FontFamily} from '../styles/font.constants';
 import CommonScreens from './CommonScreen';
 import {CloseButton} from './commonUI/CommonUI';
 import MenuIcon from './commonUI/MenuIcon';
-import SegmentSelector from '../components/SegmentSelector';
+import SegmentSelector, {
+  NotiificationIcon,
+} from '../components/SegmentSelector';
 import ClosedLoop from '../components/closedloop/ClosedLoop';
 import Feedback from '../components/feedback/Feedback';
 import {translate} from '../Utils/MultilinguaUtils';
@@ -63,6 +65,11 @@ const dashboardStack = props => (
         },
 
         headerLeft: props => <MenuIcon />,
+        headerRight: () => <NotiificationIcon />,
+        headerTitleAlign: 'left',
+        headerTitleContainerStyle: {
+          width: '100%',
+        },
       })}
     />
 
@@ -81,13 +88,17 @@ const dashboardStack = props => (
       component={Feedback}
       options={({navigation, route}) => ({
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
-
         headerTitle: props => {
           return (
             <SegmentSelector screenName={'Responses'} navigation={navigation} />
           );
         },
+        headerRight: () => <NotiificationIcon />,
+        headerTitleAlign: 'left',
         headerShown: true,
+        headerTitleContainerStyle: {
+          width: '100%',
+        },
       })}
     />
     <DetractorStack.Screen
@@ -96,7 +107,6 @@ const dashboardStack = props => (
       component={ClosedLoop}
       options={({navigation, route}) => ({
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
-
         headerTitle: props => {
           return (
             <SegmentSelector
@@ -105,7 +115,12 @@ const dashboardStack = props => (
             />
           );
         },
+        headerRight: () => <NotiificationIcon />,
+        headerTitleAlign: 'left',
         headerShown: true,
+        headerTitleContainerStyle: {
+          width: '100%',
+        },
       })}
     />
     {CommonScreens(DetractorStack)}

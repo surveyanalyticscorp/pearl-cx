@@ -18,6 +18,7 @@ import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
 import {textStyles} from '../../../styles/text.styles';
 import {HorizontalSpaceBox, VerticalSpaceBox} from '../../../widgets/SpaceBox';
+import ActionButtons from '../../../routes/commonUI/ActionButtons';
 import {
   CloseButton,
   PanelHandler,
@@ -150,27 +151,6 @@ const ShowMyTicketsFilter = ({assignToId, userId, onToggle}) => {
   );
 };
 
-const ActionButtons = ({onCancel, onApply}) => {
-  return (
-    <View style={[styles.rowContainer, styles.buttonContainer]}>
-      <QPButton
-        style={[buttonStyles.outlinePrimaryButton, styles.buttonFlex]}
-        buttonColor={Colors.white}
-        onPress={onCancel}
-        textStyle={buttonStyles.outlinePrimaryButtonText}
-        buttonText={translate('clear') || 'Clear'}
-      />
-      <HorizontalSpaceBox multiplyBy={2} />
-      <QPButton
-        style={[buttonStyles.primaryButton, styles.buttonFlex]}
-        buttonColor={Colors.accentLight}
-        onPress={onApply}
-        textStyle={buttonStyles.primaryButtonText}
-        buttonText={translate('apply') || 'Apply'}
-      />
-    </View>
-  );
-};
 
 const ItemSeparator = () => {
   return (
@@ -374,13 +354,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: PaddingConstants.tab1,
     paddingVertical: PaddingConstants.halfTab,
-  },
-  buttonContainer: {
-    paddingHorizontal: PaddingConstants.tab1_2x,
-    justifyContent: 'flex-end',
-  },
-  buttonFlex: {
-    flex: 1,
   },
   filterListContainer: {
     flexGrow: 0,

@@ -105,6 +105,7 @@ export const DateRangeTabStack = props => (
     screenOptions={{
       lazy: true,
       tabBarLabelStyle: {
+        ...textStyles.headerTitleStyle,
         color: Colors.primary,
         width: width / 2,
         fontSize: TextSizes.primary,
@@ -138,6 +139,7 @@ export const TicketLogTabStack = props => (
       tabBarItemStyle: {height: 1.5 * PaddingConstants.tab4},
       tabBarActiveTintColor: Colors.accent,
       tabBarInactiveTintColor: Colors.primary,
+      headerTitleStyle: textStyles.headerTitleStyle,
     }}
     keyboardDismissMode={'auto'}>
     <TicketLogTab.Screen
@@ -178,6 +180,8 @@ const CommonScreens = RootStack => {
         headerShown: false,
         // gestureDirection: 'vertical',
         gestureEnabled: true,
+        headerTitleStyle: textStyles.headerTitleStyle,
+
         ...TransitionPresets.ModalPresentationIOS,
         // headerLeft: props => <HeaderBackLeft />,
         // headerRight: props => <SaveDashboardDate {...props} route={route} />,

@@ -663,7 +663,7 @@ const styles = StyleSheet.create({
   },
   chipContainer: {
     borderRadius: 20,
-    paddingHorizontal: PaddingConstants.halfTab,
+    paddingHorizontal: PaddingConstants.tab1,
     paddingVertical: PaddingConstants.halfTab,
     margin: MarginConstants.tab1,
     alignItems: 'center',
@@ -713,6 +713,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    borderBottomColor: Colors.darkGrey,
+    borderBottomWidth: 1,
   },
   avatarView: {
     flexDirection: 'row',

@@ -27,12 +27,14 @@ const styles = StyleSheet.create({
   introPageContainer: {
     alignItems: 'center',
     justifyContent: 'flex-end',
+
+    marginBottom: MarginConstants.tab1_8x,
   },
   logoImageView: {
     justifyContent: 'center',
     alignItems: 'center',
     height: '80%',
-    width: '100%',
+    width: '80%',
   },
   introView: {
     alignItems: 'center',

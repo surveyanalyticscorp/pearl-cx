@@ -113,6 +113,21 @@ target 'CustomerExperience' do
     end
   end
 
+  # fmt 11.x consteval is broken on Apple Clang (Xcode 26+).
+  # base.h only disables it for Apple clang < 14 — patch to disable for all Apple builds.
+  fmt_base_h = "#{installer.sandbox.root}/fmt/include/fmt/base.h"
+  if File.exist?(fmt_base_h)
+    content = File.read(fmt_base_h)
+    patched = content.gsub(
+      '__apple_build_version__ < 14000029L',
+      '__apple_build_version__ < 99999999L'
+    )
+    if content != patched
+      FileUtils.chmod(0644, fmt_base_h)
+      File.write(fmt_base_h, patched)
+    end
+  end
+
   # Fix ReactCommon module map conflict (RN 0.77.x + Xcode 26)
   conflicting_map = "#{installer.sandbox.root}/Headers/Public/ReactCommon/React-RuntimeApple.modulemap"
   File.delete(conflicting_map) if File.exist?(conflicting_map)

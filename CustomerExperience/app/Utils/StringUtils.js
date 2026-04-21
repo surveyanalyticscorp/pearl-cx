@@ -265,6 +265,13 @@ export default class StringUtils {
     return text.replace(/\r?\n|\r/g, '');
   }
 
+  static toSnakeCase(str) {
+    if (!str) {
+      return str;
+    }
+    return str.toLowerCase().replace(/[\s-]+/g, '_');
+  }
+
   static uppercaseFirstChar(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }

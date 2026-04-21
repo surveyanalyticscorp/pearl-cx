@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, Pressable, StyleSheet, Platform} from 'react-native';
+import {Text, View, Pressable, StyleSheet} from 'react-native';
 import {Colors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
@@ -57,7 +57,7 @@ const RenderSegmentSelector = ({
       <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.darkGrey} />
     </Pressable>
   ) : (
-    <View style={styles.rowContainer}>
+    <View style={styles.innerContainer}>
       <SegmentText
         screenName={screenName}
         segmentName={currentSegment.currentSegment}
@@ -101,37 +101,31 @@ const SegmentSelector = props => {
   };
 
   return (
-    <View style={styles.rowContainer}>
+    <View style={styles.titleWrapper}>
       <RenderSegmentSelector
         segmentList={segmentList}
         screenName={props.screenName}
         currentSegment={currentSegment}
         onPress={onPressHandle}
       />
-      <NotiificationIcon />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {flex: 1},
-  rowContainer: {
+  titleWrapper: {
+    flex: 1,
+  },
+  innerContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '100%',
-  },
-
-  innerContainer: {
-    maxWidth: Platform.OS === 'ios' ? '100%' : '80%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginEnd: MarginConstants.tab1_4x,
   },
   notificationContainer: {
     position: 'relative',
+    marginRight: MarginConstants.tab1_2x,
   },
   badge: {
     position: 'absolute',
