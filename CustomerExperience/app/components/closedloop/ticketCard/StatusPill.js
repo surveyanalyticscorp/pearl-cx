@@ -1,10 +1,13 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import {Colors, getStatusBorderColor} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {baseTextStyles} from '../../../styles/text.styles';
 import {getStatusById} from '../../../Utils/TicketUtils';
 import {MarginConstants} from '../../../styles/margin.constants';
+import {TextSizes} from '../../../styles/textsize.constants';
+
+const isSmallScreen = Dimensions.get('window').width <= 375;
 
 const StatusPill = ({status}) => {
   const statusText = getStatusById(status);
@@ -20,7 +23,12 @@ const StatusPill = ({status}) => {
   const textColor = isNew ? Colors.filterIconColor : Colors.white;
   return (
     <View style={[styles.statusPill, pillStyle]}>
-      <Text style={[styles.statusPillText, {color: textColor}]}>
+      <Text
+        style={[
+          styles.statusPillText,
+          {color: textColor},
+          isSmallScreen && {fontSize: TextSizes.semiSecondary},
+        ]}>
         {statusText}
       </Text>
     </View>

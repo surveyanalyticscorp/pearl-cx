@@ -508,7 +508,7 @@ export const Avatar = ({title, style, textStyle}) => {
       <Text
         style={[
           baseTextStyles.mediumRegularText,
-          {color: Colors.white},
+          {color: Colors.white, marginHorizontal: 0, textAlign: 'center'},
           {...textStyle},
         ]}>
         {getNameInitials(title ?? 'NA')}

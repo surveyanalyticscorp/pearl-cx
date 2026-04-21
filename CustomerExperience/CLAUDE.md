@@ -123,6 +123,32 @@ API endpoints and app-wide constants are in `app/config/Constant.js`. Never hard
 - React Native Paper (`PaperProvider`) wraps the app — use Paper components where they exist before building custom ones
 - **SVG assets** — import SVGs as React components (`import MySvg from './path/to/file.svg'`) and render with `width`, `height`, and `fill` props. Never use `<Image source={require(...)} />` for `.svg` files.
 
+### Responsive UI
+
+**`$rem` does NOT scale with phone screen size.** All phones — iPhone SE, iPhone 14, iPhone 14 Pro Max, and equivalent Androids — produce a `tempWidth` below 300 (after dividing logical pixels by `PixelRatio`), so they all receive the platform default: `$rem = 15` (iOS) or `$rem = 14` (Android). `$rem` only steps up for tablets/iPads. Do not rely on `$rem` to distinguish phone sizes.
+
+**For phone-size responsiveness, use a `Dimensions` check:**
+
+```js
+import {Dimensions} from 'react-native';
+const isSmallScreen = Dimensions.get('window').width <= 375;
+```
+
+- `≤ 375px` covers iPhone SE 2nd/3rd gen and small Android phones (~360dp)
+- Declare `isSmallScreen` at module level (outside the component) — computed once, no re-render cost
+
+**Font scaling on small screens** — use `TextSizes.semiSecondary` (0.9 × `$rem` ≈ 13.5px) as the step-down from the default `TextSizes.secondary` (`$rem` ≈ 15px):
+
+```js
+import {TextSizes} from '../styles/textsize.constants';
+const smallFontStyle = isSmallScreen ? {fontSize: TextSizes.semiSecondary} : null;
+
+// Apply as the last style in the array so it overrides baseTextStyles
+style={[baseTextStyles.secondaryRegularText, smallFontStyle]}
+```
+
+**Spacing on small screens** — `HorizontalSpaceBox` and `VerticalSpaceBox` accept a `multiplyBy` prop; halve it (`multiplyBy={1}` instead of `multiplyBy={2}`) when `isSmallScreen` is true to recover horizontal space without hardcoding pixel values.
+
 ### Testing
 
 Saga tests are co-located with saga files (e.g. `dashboard.saga.test.js`).
