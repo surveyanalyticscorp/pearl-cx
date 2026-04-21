@@ -29,6 +29,8 @@
 - If `yarn ios:pod-reinstall` fails with RCT-Folly conflict, delete manually: `cd ios && rm -rf Pods Podfile.lock && pod install --repo-update`
 - Xcode 26 / iOS 26 SDK is supported with the current Podfile configuration
 - Minimum deployment target is iOS 15.1 — do not lower it (RN 0.76 hard minimum)
+- **Xcode archive "Can't find node" error:** Xcode's GUI shell doesn't inherit your terminal PATH, so nvm-managed `node` is invisible. Fixed by sourcing `with-environment.sh` in both "Bundle React Native code and images" build phases in `project.pbxproj` — this causes RN to read `ios/.xcode.env.local` (which sets `NODE_BINARY` to the absolute nvm path). The `ios/.xcode.env.local` must contain:
+  `export NODE_BINARY=/Users/mehedihasan/.nvm/versions/node/v18.20.4/bin/node`
 
 **Android:**
 
