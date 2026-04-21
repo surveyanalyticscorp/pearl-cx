@@ -7,15 +7,15 @@ import {FontFamily} from '../../../../styles/font.constants';
 import {MarginConstants} from '../../../../styles/margin.constants';
 import RegenerateIcon from '../../../../../assets/images/regenerate.svg';
 
-const RegenerateButton = ({onPress}) => (
-  <Pressable onPress={onPress} style={styles.button}>
+const RegenerateButton = ({onPress, isSmallScreen}) => (
+  <Pressable onPress={onPress} style={[styles.button, isSmallScreen && styles.buttonCompact]}>
     <View style={styles.labelRow}>
       <RegenerateIcon
         height={MarginConstants.tab1_2x}
         width={MarginConstants.tab1_2x}
         color={Colors.accentLightBlue}
       />
-      <Text style={styles.label}>{'Regenerate'}</Text>
+      <Text style={[styles.label, isSmallScreen && styles.labelCompact]}>{'Regenerate'}</Text>
     </View>
   </Pressable>
 );
@@ -31,6 +31,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  buttonCompact: {
+    marginEnd: MarginConstants.tab1,
+    padding: PaddingConstants.halfTab,
+  },
   labelRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -40,5 +44,9 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
     marginHorizontal: MarginConstants.tab1,
     color: Colors.accentLightBlue,
+  },
+  labelCompact: {
+    fontSize: TextSizes.semiSecondary,
+    marginHorizontal: MarginConstants.halfTab,
   },
 });
