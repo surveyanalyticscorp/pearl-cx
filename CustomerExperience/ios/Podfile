@@ -131,6 +131,40 @@ target 'CustomerExperience' do
   # Fix ReactCommon module map conflict (RN 0.77.x + Xcode 26)
   conflicting_map = "#{installer.sandbox.root}/Headers/Public/ReactCommon/React-RuntimeApple.modulemap"
   File.delete(conflicting_map) if File.exist?(conflicting_map)
+
+  # Add a Run Script build phase to copy Hermes dSYM into the archive.
+  # The pre-built hermes.xcframework ships without dSYMs; this phase copies the
+  # manually-downloaded dSYM (ios/hermes-dsym/hermes.framework.dSYM) into
+  # $DWARF_DSYM_FOLDER_PATH so App Store Connect upload includes it.
+  # See docs/PLATFORM_SETUP.md for the download instructions.
+  main_project = installer.aggregate_targets
+    .find { |t| t.name == 'Pods-CustomerExperience' }
+    &.user_project
+
+  if main_project
+    main_project.targets.each do |target|
+      next unless target.name == 'CustomerExperience'
+
+      existing = target.build_phases.find { |p|
+        p.respond_to?(:name) && p.name == '[RN] Copy Hermes dSYM'
+      }
+      next if existing
+
+      phase = main_project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
+      phase.name = '[RN] Copy Hermes dSYM'
+      phase.shell_script = <<~SHELL
+        if [ "$ACTION" = "install" ]; then
+          HERMES_DSYM="${SRCROOT}/hermes-dsym/hermes.framework.dSYM"
+          if [ -d "$HERMES_DSYM" ]; then
+            cp -r "$HERMES_DSYM" "${DWARF_DSYM_FOLDER_PATH}/hermes.framework.dSYM"
+          fi
+        fi
+      SHELL
+      phase.run_only_for_deployment_postprocessing = '1'
+      target.build_phases << phase
+    end
+    main_project.save
+  end
 end
 
 #  def find_and_replace(dir, findstr, replacestr)

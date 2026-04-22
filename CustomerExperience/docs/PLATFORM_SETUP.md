@@ -50,6 +50,36 @@
   )
   ```
 
+**Hermes dSYM (App Store Connect upload):**
+
+The pre-built `hermes.xcframework` ships without a separate dSYM file, so App Store Connect upload reports "Upload symbols failed" for `hermes.framework`. The DWARF debug info is embedded in the binary itself — extract it once with `dsymutil` and commit the result.
+
+**One-time setup (already done for RN 0.77.2):**
+
+```bash
+# Download the hermes iOS release artifact from the RN v<VERSION> GitHub release assets:
+# react-native-artifacts-<VERSION>-hermes-ios-release.tar.gz
+# Extract it, then run:
+
+dsymutil path/to/hermes.xcframework/ios-arm64/hermes.framework/hermes \
+  -o ios/hermes-dsym/hermes.framework.dSYM
+```
+
+The result lives at `ios/hermes-dsym/hermes.framework.dSYM/` and is committed to git.
+
+The Podfile `post_install` hook adds a `[RN] Copy Hermes dSYM` build phase to the main app target — it copies the dSYM into `$DWARF_DSYM_FOLDER_PATH` automatically on every Archive build.
+
+After setup, verify with:
+```bash
+dwarfdump --uuid ios/hermes-dsym/hermes.framework.dSYM/Contents/Resources/DWARF/hermes
+# UUID must match the one in the Xcode error
+```
+
+**When upgrading RN:** download the new hermes iOS release artifact, re-run `dsymutil` targeting the new binary, replace `ios/hermes-dsym/hermes.framework.dSYM/`, commit, and run `yarn ios:pod-reinstall`.
+
+**If the app is already uploaded but symbols are missing:**
+- Xcode Organizer → select the archive → **Upload dSYMs...** — uploads symbols only, no new build number needed.
+
 **Patches:**
 
 - `patches/` directory contains `patch-package` patches for several RN libraries
