@@ -1,29 +1,27 @@
 import React, {useMemo} from 'react';
-import {View, ScrollView} from 'react-native';
+import {ScrollView} from 'react-native';
 import {useWindowDimensions} from 'react-native';
 import {Colors} from '../../../../styles/color.constants';
 import {FontFamily} from '../../../../styles/font.constants';
 import {baseTextStyles} from '../../../../styles/text.styles';
 import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
-import StringUtils from '../../../../Utils/StringUtils';
 
 export const EmailBodyTextView = ({text}) => {
-  const {width, height} = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
-  const memoizedSystemFonts = useMemo(
+  const systemFonts = useMemo(
     () => [...defaultSystemFonts, FontFamily.regular],
     [],
   );
 
-  const memoizedHtmlSource = useMemo(
+  const htmlSource = useMemo(
     () => ({
-      html: `
-    <span style="font-size: 100%;">${text}</span>`,
+      html: `<span style="font-size: 100%;">${text}</span>`,
     }),
     [text],
   );
 
-  const memoizedTagsStyles = useMemo(
+  const tagsStyles = useMemo(
     () => ({
       span: {
         color: Colors.filterIconColor,
@@ -33,33 +31,18 @@ export const EmailBodyTextView = ({text}) => {
     [],
   );
 
-  const memoizedRenderContent = useMemo(
-    () => (
-      <ScrollView
-        style={{flex: 1, backgroundColor: Colors.white}}
-        scrollEnabled={true}
-        testID="email-body-text-container">
-        <RenderHTML
-          ignoredDomTags={['html', 'head', 'body']}
-          source={memoizedHtmlSource}
-          contentWidth={width / 0.5}
-          systemFonts={memoizedSystemFonts}
-          tagsStyles={memoizedTagsStyles}
-        />
-      </ScrollView>
-    ),
-    [memoizedHtmlSource, memoizedTagsStyles, memoizedSystemFonts, width],
+  return (
+    <ScrollView
+      style={{flexShrink: 1, backgroundColor: Colors.white}}
+      scrollEnabled={true}
+      testID="email-body-text-container">
+      <RenderHTML
+        contentWidth={width}
+        ignoredDomTags={['html', 'head', 'body']}
+        source={htmlSource}
+        systemFonts={systemFonts}
+        tagsStyles={tagsStyles}
+      />
+    </ScrollView>
   );
-
-  console.log('HTML comment', text);
-  console.log(
-    'HTML text',
-    JSON.stringify(StringUtils.formatCommentToHTML(text)),
-  );
-
-  // if (StringUtils.isEmpty(text)) {
-  //   return <View />;
-  // }
-
-  return memoizedRenderContent;
 };

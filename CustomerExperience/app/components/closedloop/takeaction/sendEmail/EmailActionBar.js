@@ -3,7 +3,6 @@ import {Dimensions} from 'react-native';
 import EmailActionContainer from './EmailActionContainer';
 import RefineButton from './RefineButton';
 import RegenerateButton from './RegenerateButton';
-import InsertButton from './InsertButton';
 import {HorizontalSpaceBox} from '../../../../widgets/SpaceBox';
 import EndAlignedView from '../../../../routes/commonUI/EndAlignedView';
 import StartAlignedView from '../../../../routes/commonUI/StartAlignedView';
@@ -15,7 +14,6 @@ const EmailActionBar = ({
   onPressDropDown,
   isDropDownOpen,
   onPressRegenerate,
-  onPressInsert,
 }) => (
   <EmailActionContainer>
     <StartAlignedView>
@@ -25,11 +23,12 @@ const EmailActionBar = ({
         isOpen={isDropDownOpen}
         isSmallScreen={isSmallScreen}
       />
+      <HorizontalSpaceBox multiplyBy={2} />
+      <RegenerateButton
+        onPress={onPressRegenerate}
+        isSmallScreen={isSmallScreen}
+      />
     </StartAlignedView>
-    <EndAlignedView>
-      <RegenerateButton onPress={onPressRegenerate} isSmallScreen={isSmallScreen} />
-      <InsertButton onPress={onPressInsert} isSmallScreen={isSmallScreen} />
-    </EndAlignedView>
   </EmailActionContainer>
 );
 

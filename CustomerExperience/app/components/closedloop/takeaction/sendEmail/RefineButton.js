@@ -10,15 +10,24 @@ import DropDownIcon from '../../../../../assets/images/dropdown_icon.svg';
 import {HorizontalSpaceBox} from '../../../../widgets/SpaceBox';
 import StringUtils from '../../../../Utils/StringUtils';
 
-const RefineButton = ({selectedRefineOptions, onPress, isOpen, isSmallScreen}) => (
-  <Pressable onPress={onPress} style={[styles.button, isSmallScreen && styles.buttonCompact]}>
+const RefineButton = ({
+  selectedRefineOptions,
+  onPress,
+  isOpen,
+  isSmallScreen,
+}) => (
+  <Pressable
+    onPress={onPress}
+    style={[styles.button, isSmallScreen && styles.buttonCompact]}>
     <View style={styles.labelRow}>
       <DropDownIcon
         height={MarginConstants.tab1_2x}
         width={MarginConstants.tab1_2x}
         color={Colors.accentLight}
       />
-      <Text style={[styles.label, isSmallScreen && styles.labelCompact]}>{'Refine'}</Text>
+      <Text style={[styles.label, isSmallScreen && styles.labelCompact]}>
+        {'Refine'}
+      </Text>
     </View>
   </Pressable>
 );
@@ -28,10 +37,8 @@ export default RefineButton;
 const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
-    marginEnd: MarginConstants.tab1_4x,
     backgroundColor: Colors.white,
     padding: PaddingConstants.tab1,
-    minWidth: MarginConstants.tab1_16x,
     borderColor: Colors.borderColor,
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -39,7 +46,6 @@ const styles = StyleSheet.create({
   buttonCompact: {
     marginEnd: MarginConstants.tab1,
     padding: PaddingConstants.halfTab,
-    minWidth: 0,
   },
   labelRow: {
     flexDirection: 'row',

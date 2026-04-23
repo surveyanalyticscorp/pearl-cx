@@ -6,13 +6,13 @@ import {TextSizes} from '../../../../styles/textsize.constants';
 import {FontFamily} from '../../../../styles/font.constants';
 import QPButton from '../../../../widgets/Button';
 
-const InsertButton = ({onPress, isSmallScreen}) => (
+const InsertButton = ({onPress}) => (
   <QPButton
     buttonText={'Insert'}
     buttonColor={Colors.accentLight}
     onPress={onPress}
-    textStyle={[styles.text, isSmallScreen && styles.textCompact]}
-    style={[styles.button, isSmallScreen && styles.buttonCompact]}
+    textStyle={[styles.text]}
+    style={[styles.button]}
   />
 );
 
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     height: MarginConstants.tab1_6x,
-    paddingHorizontal: MarginConstants.tab2,
+    paddingHorizontal: MarginConstants.tab1_2x,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.accentLight,
@@ -30,16 +30,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
   },
-  buttonCompact: {
-    paddingHorizontal: MarginConstants.tab1,
-    height: MarginConstants.tab1_5x,
-  },
   text: {
     color: Colors.white,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary2,
-  },
-  textCompact: {
-    fontSize: TextSizes.semiSecondary,
   },
 });

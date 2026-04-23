@@ -8,14 +8,18 @@ import {MarginConstants} from '../../../../styles/margin.constants';
 import RegenerateIcon from '../../../../../assets/images/regenerate.svg';
 
 const RegenerateButton = ({onPress, isSmallScreen}) => (
-  <Pressable onPress={onPress} style={[styles.button, isSmallScreen && styles.buttonCompact]}>
+  <Pressable
+    onPress={onPress}
+    style={[styles.button, isSmallScreen && styles.buttonCompact]}>
     <View style={styles.labelRow}>
       <RegenerateIcon
         height={MarginConstants.tab1_2x}
         width={MarginConstants.tab1_2x}
         color={Colors.accentLightBlue}
       />
-      <Text style={[styles.label, isSmallScreen && styles.labelCompact]}>{'Regenerate'}</Text>
+      <Text style={[styles.label, isSmallScreen && styles.labelCompact]}>
+        {'Regenerate'}
+      </Text>
     </View>
   </Pressable>
 );
@@ -25,7 +29,6 @@ export default RegenerateButton;
 const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
-    marginEnd: MarginConstants.tab1_4x,
     backgroundColor: Colors.white,
     padding: PaddingConstants.tab1,
     alignItems: 'center',
