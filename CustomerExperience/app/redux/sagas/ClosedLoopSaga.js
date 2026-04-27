@@ -109,6 +109,8 @@ import {
   ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL,
   SEND_EMAIL_RECEIVED,
+  SEND_EMAIL_FAILED,
+  sendEmailFailed,
   TICKET_ESCALATION_RECIEVED,
   UPDATE_CENTRALIZED_ROOT_CAUSE,
   UPDATE_ROOT_CAUSE,
@@ -760,12 +762,7 @@ export function* sendEmail(action) {
     });
     showSuccessFlashMessage(json.message);
   } catch (error) {
-    showErrorFlashMessage(error.message);
-    console.log('ERROR:', JSON.stringify(error));
-    // yield put({
-    //   type: API_ERROR,
-    //   error: error,
-    // });
+    yield put(sendEmailFailed());
   }
 }
 export function* watchSendEmail() {

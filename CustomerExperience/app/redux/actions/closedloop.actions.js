@@ -11,6 +11,8 @@ export const GET_EMAIL_TEMPLATES_RECEIVED = 'GET_EMAIL_TEMPLATES_RECEIVED';
 export const SEND_EMAIL = 'SEND_EMAIL';
 export const RESET_SEND_EMAIL_RESPONSE = 'RESET_SEND_EMAIL_RESPONSE';
 export const SEND_EMAIL_RECEIVED = 'SEND_EMAIL_RECEIVED';
+export const SEND_EMAIL_FAILED = 'SEND_EMAIL_FAILED';
+export const RESET_SEND_EMAIL_ERROR = 'RESET_SEND_EMAIL_ERROR';
 
 export const GET_LATEST_COMMENT = 'GET_LATEST_COMMENT';
 export const LATEST_COMMENT_RECEIVED = 'LATEST_COMMENT_RECEIVED';
@@ -112,6 +114,14 @@ export const sendEmail = (token, ticketId, param) => ({
 
 export const resetSendEmailResponse = () => ({
   type: RESET_SEND_EMAIL_RESPONSE,
+});
+
+export const sendEmailFailed = () => ({
+  type: SEND_EMAIL_FAILED,
+});
+
+export const resetSendEmailError = () => ({
+  type: RESET_SEND_EMAIL_ERROR,
 });
 
 // Takes CX Ticket ID

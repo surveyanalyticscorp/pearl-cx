@@ -24,6 +24,7 @@ import {
   getActionHistoryDetails,
   getActionHistorySummary,
   resetSendEmailResponse,
+  resetSendEmailError,
 } from '../../../redux/actions/closedloop.actions';
 import StringUtils from '../../../Utils/StringUtils';
 import {isObjectEmpty} from '../../../Utils/Utility';
@@ -48,6 +49,7 @@ import {buttonStyles} from '../../../styles/button.styles';
 import InsertLinkModal from './InsertLinkModal';
 import GestureHandleBar from '../../../routes/commonUI/GestureHandleBar';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
+import EmailSentOverlay from './sendEmail/EmailSentOverlay';
 
 const INSERT_LINK = 'customInsertLink';
 
@@ -279,7 +281,10 @@ export const SendEmail = props => {
     state => state.dashboard.emailData.defaultTemplate,
   );
   const navigation = useNavigation();
-  const {emailSentResponse} = useSelector(state => state.dashboard.emailData);
+  const {emailSentResponse, emailSendError} = useSelector(
+    state => state.dashboard.emailData,
+  );
+  const [overlayStatus, setOverlayStatus] = useState(null);
   console.log('props.route.params', props.route.params);
   const ticketId = JSON.stringify(props.route.params.ticketId);
   const toEmail = props.route.params.toEmail ?? '';
@@ -315,17 +320,26 @@ export const SendEmail = props => {
     setEmailDraftBottomSheetVisible(false);
   };
   useEffect(() => {
-    if (
-      emailSentResponse &&
-      emailSentResponse.status &&
-      emailSentResponse.status === 'success'
-    ) {
-      setTimeout(() => {
+    if (emailSentResponse?.status === 'success') {
+      setOverlayStatus('success');
+      const timer = setTimeout(() => {
+        dispatch(resetSendEmailResponse());
         navigation.goBack();
       }, 1000);
-      dispatch(resetSendEmailResponse());
+      return () => clearTimeout(timer);
     }
   }, [emailSentResponse, dispatch, navigation]);
+
+  useEffect(() => {
+    if (emailSendError) {
+      setOverlayStatus('error');
+      const timer = setTimeout(() => {
+        dispatch(resetSendEmailError());
+        setOverlayStatus(null);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [emailSendError, dispatch]);
 
   useEffect(() => {
     if (!isObjectEmpty(defaultEmail)) {
@@ -503,6 +517,9 @@ export const SendEmail = props => {
         isVisible={isInsertLinkModalVisible}
         insertLink={insertLinkOnEditor}
       />
+      {overlayStatus !== null && (
+        <EmailSentOverlay isSuccess={overlayStatus === 'success'} />
+      )}
     </SafeAreaView>
   );
 };

@@ -16,6 +16,8 @@ import {
   MEDIA_FILE_UPLOAD_RESET,
   MEDIA_FILE_UPLOAD_RESPONSE,
   RESET_SEND_EMAIL_RESPONSE,
+  SEND_EMAIL_FAILED,
+  RESET_SEND_EMAIL_ERROR,
   ROOT_CASUES_RECEIVED,
   ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL_RECEIVED,
@@ -123,7 +125,7 @@ const initialState = {
   ticketSync: true,
   apiCallStatus: {},
   welcomeScreenData: {},
-  emailData: {currentEmailBody: {}, emailSentResponse: {}},
+  emailData: {currentEmailBody: {}, emailSentResponse: {}, emailSendError: false},
   generatedEmailDraftResponse: {
     context: '',
     response: {},
@@ -365,6 +367,18 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         emailData: {...state.emailData, emailSentResponse: action.response},
+      };
+    }
+    case SEND_EMAIL_FAILED: {
+      return {
+        ...state,
+        emailData: {...state.emailData, emailSendError: true},
+      };
+    }
+    case RESET_SEND_EMAIL_ERROR: {
+      return {
+        ...state,
+        emailData: {...state.emailData, emailSendError: false},
       };
     }
 
