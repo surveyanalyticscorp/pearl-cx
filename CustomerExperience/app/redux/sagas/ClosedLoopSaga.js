@@ -760,7 +760,7 @@ export function* sendEmail(action) {
       type: MEDIA_FILE_UPLOAD_RESET,
       response: [],
     });
-    showSuccessFlashMessage(json.message);
+    // showSuccessFlashMessage(json.message);
   } catch (error) {
     yield put(sendEmailFailed());
   }
