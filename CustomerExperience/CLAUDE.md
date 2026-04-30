@@ -227,6 +227,7 @@ Saga tests are co-located with saga files (e.g. `dashboard.saga.test.js`).
 - Group sub-components of a complex component in a subdirectory named after the parent (e.g. `ticketCard/` alongside `TicketCard.js`)
 - Each sub-component file owns only its own `StyleSheet.create()` styles
 - The parent file contains only data wiring and the container shell — no inline child component definitions
+- Custom hooks for a component live in a `hooks/` subdirectory alongside that component (e.g. `sendEmail/hooks/useSendEmail.js`)
 
 ---
 

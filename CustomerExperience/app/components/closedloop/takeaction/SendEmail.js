@@ -41,6 +41,7 @@ import {translate} from '../../../Utils/MultilinguaUtils';
 import {useNavigation} from '@react-navigation/native';
 import SendEmailTo from './sendEmail/SendEmailTo';
 import EmailOptions from './sendEmail/EmailOptions';
+import EmailEditorContext from './sendEmail/EmailEditorContext';
 import AIEmailDraftModal from './AIEmailDraftModal';
 import {FontFamilyStylesheet} from '../../../config/fonts/StyleSheet';
 import QPBottomSheet from '../takeaction/QPBottomSheet';
@@ -325,7 +326,7 @@ export const SendEmail = props => {
       const timer = setTimeout(() => {
         dispatch(resetSendEmailResponse());
         navigation.goBack();
-      }, 1000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [emailSentResponse, dispatch, navigation]);
@@ -336,7 +337,7 @@ export const SendEmail = props => {
       const timer = setTimeout(() => {
         dispatch(resetSendEmailError());
         setOverlayStatus(null);
-      }, 1000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [emailSendError, dispatch]);
@@ -434,6 +435,8 @@ export const SendEmail = props => {
     richText.current.insertLink(title, url);
   };
   return (
+    <EmailEditorContext.Provider
+      value={{blurEditor: () => richText.current?.dismissKeyboard()}}>
     <SafeAreaView style={styles.container} forceInset={{top: 'never'}}>
       <KeyboardAwareScrollView enableOnAndroid={true} extraScrollHeight={40}>
         <VerticalSpaceBox />
@@ -521,6 +524,7 @@ export const SendEmail = props => {
         <EmailSentOverlay isSuccess={overlayStatus === 'success'} />
       )}
     </SafeAreaView>
+    </EmailEditorContext.Provider>
   );
 };
 

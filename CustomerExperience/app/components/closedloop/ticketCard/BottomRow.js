@@ -17,7 +17,9 @@ import {HorizontalSpaceBox} from '../../../widgets/SpaceBox';
 import StatusPill from './StatusPill';
 
 const isSmallScreen = Dimensions.get('window').width <= 375;
-const smallFontStyle = isSmallScreen ? {fontSize: TextSizes.semiSecondary} : null;
+const smallFontStyle = isSmallScreen
+  ? {fontSize: TextSizes.semiSecondary}
+  : null;
 
 const BottomRow = ({name, issueDate, isOverdue, priority, status}) => {
   const priorityText = getPriorityById(priority);
@@ -27,7 +29,7 @@ const BottomRow = ({name, issueDate, isOverdue, priority, status}) => {
   return (
     <View style={styles.bottomRow}>
       <Avatar title={name} style={styles.avatar} />
-      <HorizontalSpaceBox multiplyBy={4} />
+      <HorizontalSpaceBox multiplyBy={2} />
       <View style={styles.metaContainer}>
         <View style={styles.dateMetaItem}>
           <View

@@ -26,15 +26,15 @@ export const IntroPage = ({image, introTitle, description}) => {
 const styles = StyleSheet.create({
   introPageContainer: {
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
 
     marginBottom: MarginConstants.tab1_8x,
   },
   logoImageView: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: '80%',
-    width: '80%',
+    marginBottom: MarginConstants.tab1_4x,
+    marginTop: MarginConstants.tab1_8x,
   },
   introView: {
     alignItems: 'center',

@@ -16,7 +16,10 @@ const TopRow = ({email, hasPanelMember, ticketId}) => (
       </Text>
     </View>
     <Text
-      style={[baseTextStyles.primaryRegularText, {color: Colors.accentLight}]}>
+      style={[
+        baseTextStyles.primaryRegularText,
+        {color: Colors.accentLight, marginHorizontal: 0},
+      ]}>
       {`#${ticketId}`}
     </Text>
   </View>

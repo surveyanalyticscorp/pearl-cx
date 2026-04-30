@@ -111,8 +111,8 @@ android {
         applicationId "com.questionpro.cxonthego"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 32
-        versionName "1.8.9"
+        versionCode 33
+        versionName "1.9.0"
         multiDexEnabled true
     }
 

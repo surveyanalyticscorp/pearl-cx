@@ -55,7 +55,7 @@
 | 1b | Wix Notifications Listeners | `Utils/NotificationUtils.js`, `components/notifications/` | 🔴 HIGH | ⬜ Not Started | — | — |
 | 2 | Root & App Entry | `index.js`, `routes/appRouter.js` | 🔴 HIGH | ⬜ Not Started | — | — |
 | 3 | ClosedLoop Saga | `redux/sagas/ClosedLoopSaga.js` | 🔴 HIGH | ⬜ Not Started | — | — |
-| 4 | ClosedLoop Screens | `components/closedloop/ClosedLoop.js`, `TicketDetails.js`, `TakeActionScreen.js`, `takeaction/` | 🟡 MEDIUM | ⬜ Not Started | — | — |
+| 4 | ClosedLoop Screens | `components/closedloop/ClosedLoop.js`, `TicketDetails.js`, `TakeActionScreen.js`, `takeaction/` | 🟡 MEDIUM | 🔧 Partial | 2026-04-27 | Timer leak fixed in SendEmail.js — full screen audit pending |
 | 5 | Dashboard & Charts | `components/dashboard/CxDashboard.js`, `ClosedLoopDashboard.js` | 🟡 MEDIUM | ⬜ Not Started | — | — |
 | 6 | Navigation & Routing | `routes/appRouter.js`, `RootNavigation.js`, `RenderDrawer.js`, `DrawerContent.js` | 🟡 MEDIUM | ⬜ Not Started | — | — |
 | 7 | Sagas — Dashboard, Feedback, Login, Notification | `redux/sagas/dashboardSaga.js`, `feedbackSaga.js`, `loginInSaga.js`, `notificationSaga.js` | 🟡 MEDIUM | ⬜ Not Started | — | — |
@@ -166,7 +166,15 @@ Sub-priority audit order (most runtime-frequent first):
 - **Heap delta after fix:** [before retained size → after retained size]
 ```
 
-*(No fixes yet — hunting hasn't started)*
+### Fix: clearTimeout cleanup in SendEmail success/error useEffects
+- **Segment:** #4 — ClosedLoop Screens
+- **File(s) changed:** `app/components/closedloop/takeaction/SendEmail.js`
+- **What was leaking:** Two `useEffect` hooks called `setTimeout` without storing the timer ID, so `clearTimeout` was never called. If the bottom sheet was dismissed while a timer was in flight, the callback still fired — calling `navigation.goBack()`, `dispatch()`, and `setOverlayStatus()` on an unmounted component.
+- **The fix:** Store timer ID in `const timer = setTimeout(...)` and return `() => clearTimeout(timer)` from each `useEffect`.
+- **Test added:** —
+- **Verified on iOS:** ⬜
+- **Verified on Android:** ⬜
+- **Heap delta after fix:** not measured
 
 ---
 

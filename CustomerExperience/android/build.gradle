@@ -66,6 +66,32 @@ subprojects { project ->
                 ]
             }
         }
+
+        // AGP 8.2+ validates @InputFile properties at task-execution time. reanimated 3.x has no
+        // typedef annotations so extractAnnotations never creates typedefs.txt, but syncLibJars
+        // still declares it as a required input. A simple configuration-time file creation is wiped
+        // by `clean`, so instead we register a stub task and wire it as a dependency so Gradle
+        // re-creates the empty file after every clean, before the validation fires.
+        if (project.name == "react-native-reanimated") {
+            ['debug', 'release'].each { variantName ->
+                def capitalizedVariant = variantName.capitalize()
+                def typedefFile = project.file(
+                    "${project.buildDir}/intermediates/annotations_typedef_file" +
+                    "/${variantName}/extract${capitalizedVariant}Annotations/typedefs.txt"
+                )
+                def stubTaskName = "createReanimated${capitalizedVariant}TypedefStub"
+                def stubTask = project.tasks.register(stubTaskName) {
+                    outputs.file(typedefFile)
+                    doLast {
+                        typedefFile.parentFile.mkdirs()
+                        typedefFile.createNewFile()
+                    }
+                }
+                project.tasks.matching { it.name == "sync${capitalizedVariant}LibJars" }.configureEach {
+                    dependsOn(stubTask)
+                }
+            }
+        }
     }
 }
 
