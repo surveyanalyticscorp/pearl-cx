@@ -4,7 +4,7 @@ import {Colors, textColors} from '../../../styles/color.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import Swiper from 'react-native-swiper';
-import SafeAreaView from 'react-native-safe-area-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {StackActions} from '@react-navigation/native';

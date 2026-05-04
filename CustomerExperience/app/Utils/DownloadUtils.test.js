@@ -1,10 +1,10 @@
 // DownloadUtils.test.js
 import {Platform} from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import {downloadFile} from './DownloadUtils';
 
 // Mock RNFetchBlob
-jest.mock('rn-fetch-blob', () => ({
+jest.mock('react-native-blob-util', () => ({
   config: jest.fn().mockReturnThis(),
   fetch: jest.fn(),
   fs: {

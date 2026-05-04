@@ -3,12 +3,14 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  TextInput,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import DeviceInfo from 'react-native-device-info';
 import {
   getDeviceType,
+  isObjectEmpty,
   isStringNullOrEmpty,
   showErrorFlashMessage,
   validateEmail,
@@ -42,7 +44,7 @@ import {
 import {checkNotificationPermission} from '../../Utils/NotificationUtils';
 import {getExpireDate} from '../../Utils/TimeUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
-import {useNavigation} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/native';
 import EmailTextInput from './components/EmailTextInput';
 import PasswordTextInput from './components/PasswordTextInput';
 import AccessCodeTextInput from './components/AccessCodeTextInput';
@@ -51,6 +53,9 @@ import LoginBackground from './components/LoginBackground';
 import {useLoginError} from './hooks/useLoginError';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {MarginConstants} from '../../styles/margin.constants';
+import {getApiValidationErrorMessage} from '../../Utils/ErrorValidationUtils';
+import useLoginPersistence from '../../routes/drawerContent/useLoginPersistance';
+import {keysToRemove} from '../../routes/drawerContent/useLogoutProcess';
 
 export const checkValidation = ({email, password, accessCode}) => {
   if (!validateEmail(email)) {
@@ -129,11 +134,31 @@ export const RenderSpinnerLoginButton = ({login}) => {
     subscriberId,
     userInfo,
     bearerToken,
+    authToken,
   } = useSelector(state => state.global);
 
   const globalAccessCode = useSelector(state => state.global.accessCode);
 
-  useLoginError(isError, errorMessage);
+  // useLoginError(isError, errorMessage);
+
+  useEffect(() => {
+    console.log('LOGIN ERROR', isError, errorMessage);
+    if (isError) {
+      let message = getApiValidationErrorMessage(errorMessage, 'login');
+      const loginError = 'Invalid email/password combination.';
+      const customeErrorMessage = 'Invalid credentials. Please try again';
+
+      showErrorFlashMessage(
+        message === loginError ? customeErrorMessage : message,
+      );
+      console.log('LOGIN ERROR', JSON.stringify(errorMessage));
+      setTimeout(() => {
+        AsyncStorage.multiRemove(keysToRemove).then(() => {
+          dispatch(clearUserInfo());
+        });
+      }, 1000);
+    }
+  }, [isError, errorMessage]);
 
   useEffect(() => {
     if (
@@ -149,13 +174,15 @@ export const RenderSpinnerLoginButton = ({login}) => {
 
   useEffect(() => {
     if (clfBaseUrl && StringUtils.isNotEmpty(clfBaseUrl)) {
+      console.log('USER_INFO', 'LOGIN');
+
       global.clfBaseUrl = clfBaseUrl;
       setAsyncStorageData(baseUrl, subscriberId, globalAccessCode, clfBaseUrl);
       callClfAuth(clfBaseUrl);
     }
   }, [clfBaseUrl]);
 
-  function callClfAuth() {
+  const callClfAuth = () => {
     AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(token => {
       const data = {
         clfBaseUrl,
@@ -170,16 +197,47 @@ export const RenderSpinnerLoginButton = ({login}) => {
       dispatch(clearError());
       dispatch(getClfAuth(data));
     });
-  }
+  };
 
-  const handleSignInWithPushToken = () => {
+  // Add a ref to track retries
+  const [pushTokenRetryCount, setPushTokenRetryCount] = useState(0);
+
+  const handleSignInWithPushToken = async () => {
+    // Check if running on simulator/emulator
+    const isEmulator = await DeviceInfo.isEmulator();
+    if (isEmulator) {
+      console.log('Running on simulator/emulator, skipping push token logic.');
+      // Use a dummy token for simulator
+      loginAction('SIMULATOR_DUMMY_TOKEN');
+      return;
+    }
+
     AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(token => {
       if (isStringNullOrEmpty(token)) {
         console.log('handleSignInWithPushToken: token:', token);
-        checkNotificationPermission().then(() => handleSignInWithPushToken());
+        if (pushTokenRetryCount < 3) {
+          setPushTokenRetryCount(pushTokenRetryCount + 1);
+          // Add delay between retries to prevent rapid loops
+          setTimeout(() => {
+            checkNotificationPermission().then(() => {
+              // Add another timeout before retry to allow token generation
+              setTimeout(() => handleSignInWithPushToken(), 2000);
+            });
+          }, 1000);
+        } else {
+          console.log('Max retries reached, proceeding with dummy token');
+          // Use dummy token after max retries to allow login to proceed
+          loginAction('PUSH_TOKEN_RETRY_EXCEEDED');
+        }
+      } else if (token.startsWith('FCM_') && token.includes('ERROR')) {
+        // Handle error tokens - proceed with login but log the error
+        console.log(
+          'FCM token error detected, proceeding with error token:',
+          token,
+        );
+        loginAction(token);
       } else {
         console.log('loginAction: called:');
-
         loginAction(token);
       }
     });
@@ -241,16 +299,31 @@ export const RenderSpinnerLoginButton = ({login}) => {
 };
 
 const Login = props => {
-  console.log('LOGIN RENDERED');
-  const [login, setLogin] = useState({email: '', password: '', accessCode: ''});
-  const setEmail = email => {
-    setLogin({...login, email});
+  const {email, accessCode} = useLoginPersistence();
+
+  const [login, setLogin] = useState({
+    email: '',
+    password: '',
+    accessCode: '',
+  });
+
+  // Update local state when persistence hook loads values
+  useEffect(() => {
+    if (email) {
+      setLogin(prevLogin => ({...prevLogin, email: email}));
+    }
+    if (accessCode) {
+      setLogin(prevLogin => ({...prevLogin, accessCode: accessCode}));
+    }
+  }, [email, accessCode]);
+  const setEmail = email_ => {
+    setLogin(prevLogin => ({...prevLogin, email: email_}));
   };
-  const setPassword = password => {
-    setLogin({...login, password});
+  const setPassword = password_ => {
+    setLogin(prevLogin => ({...prevLogin, password: password_}));
   };
-  const setAccessCode = accessCode => {
-    setLogin({...login, accessCode});
+  const setAccessCode = accessCode_ => {
+    setLogin(prevLogin => ({...prevLogin, accessCode: accessCode_}));
   };
   return (
     <LoginBackground>

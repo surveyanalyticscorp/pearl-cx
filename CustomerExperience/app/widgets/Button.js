@@ -1,34 +1,43 @@
 import React from 'react';
 
-import {buttonColors, textColors} from '../styles/color.constants';
+import {
+  buttonColors,
+  textColors,
+  disabledButtonColors,
+} from '../styles/color.constants';
 import {Platform, StyleSheet, Text, Pressable, Dimensions} from 'react-native';
 import {MarginConstants} from '../styles/margin.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
 const screen = Dimensions.get('screen');
-const QPButton = props => {
-  let style = props.style ? props.style : styles.button;
-  let textStyle = props.textStyle ? props.textStyle : styles.text;
-
-  const onPress = () => {
-    props.onPress && props.onPress();
-  };
-
+const QPButton = ({
+  style = styles.button,
+  textStyle,
+  onPress,
+  buttonText,
+  buttonColor,
+  isDisabled = false,
+  testID = 'QPButton',
+}) => {
+  const backgroundColor =
+    buttonColor ?? style.backgroundColor ?? buttonColors.backgroundColor;
+  const textStyle_ = isDisabled
+    ? styles.disabledButtonText
+    : textStyle ?? styles.text;
   return (
     <Pressable
-      disabled={props.disabled ?? false}
-      testID={props.testID ?? 'QPButton'}
+      disabled={isDisabled}
+      testID={testID}
       style={[
         style,
         {
-          backgroundColor:
-            props.buttonColor ??
-            style.backgroundColor ??
-            buttonColors.backgroundColor,
+          backgroundColor: isDisabled
+            ? disabledButtonColors.buttonColor
+            : backgroundColor,
         },
       ]}
-      onPress={onPress}>
-      <Text style={textStyle}>{props.buttonText}</Text>
+      onPress={isDisabled ? null : onPress}>
+      <Text style={textStyle_}>{buttonText}</Text>
     </Pressable>
   );
 };
@@ -46,6 +55,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: textColors.primary,
     fontFamily: FontFamily.semiBold,
+    fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
+  },
+  disabledButtonText: {
+    alignSelf: 'center',
+    color: disabledButtonColors.textColor,
+    fontFamily: FontFamily.regular,
     fontSize: Platform.isPad ? TextSizes.primary : TextSizes.secondary,
   },
 });

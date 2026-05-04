@@ -28,7 +28,9 @@ build/
 .gradle
 local.properties
 *.iml
-
+build/
+*.hprof
+.cxx/
 # node.js
 #
 node_modules/
@@ -48,15 +50,16 @@ buck-out/
 # For more information about the recommended setup visit:
 # https://docs.fastlane.tools/best-practices/source-control/
 
-*/fastlane/report.xml
-*/fastlane/Preview.html
-*/fastlane/screenshots
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
 
 # Bundle artifact
 *.jsbundle
-
-# CocoaPods
+# Ruby / CocoaPods
 /ios/Pods/
+/vendor/bundle/
 
 # yarn
 .yarn/
@@ -71,3 +74,8 @@ android/app/debug/
 # Ignore Gradle build outputs
 android/**/build/
 
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
+ 
+# testing
+/coverage

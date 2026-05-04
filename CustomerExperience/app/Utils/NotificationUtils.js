@@ -4,18 +4,26 @@ import {ASYNC_PUSH_TOKEN} from '../api/Constant';
 import {isStringNullOrEmpty} from './Utility';
 import {Notifications} from 'react-native-notifications';
 import {AppState, PermissionsAndroid, Platform} from 'react-native';
-import * as RootNagation from '../routes/RootNavigation';
+import * as RootNavigation from '../routes/RootNavigation';
 import {CommonActions} from '@react-navigation/native';
 
 export const requestNotificationPermission = async () => {
-  if (Platform.OS === 'android') {
-    try {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-      );
-    } catch (err) {
-      console.log(err);
-    }
+  if (Platform.OS !== 'android') return true;
+
+  // Android 13+ only
+  if (Platform.Version < 33) return true;
+
+  const permission = PermissionsAndroid.PERMISSIONS?.POST_NOTIFICATIONS;
+
+  // Critical: never pass null/undefined to native
+  if (!permission) return true;
+
+  try {
+    const result = await PermissionsAndroid.request(permission);
+    return result === PermissionsAndroid.RESULTS.GRANTED;
+  } catch (err) {
+    console.log(err);
+    return false;
   }
 };
 
@@ -24,7 +32,10 @@ async function requestUserPermission() {
     await messaging().requestPermission();
     getToken();
   } catch (error) {
-    console.log('permission rejected');
+    console.error('Permission rejected with error:', error);
+    // Set error token to prevent infinite loops
+    AsyncStorage.setItem(ASYNC_PUSH_TOKEN, 'FCM_PERMISSION_REJECTED');
+    throw error; // Re-throw to be handled by caller
   }
 }
 
@@ -36,24 +47,45 @@ let getToken = () => {
         .getToken()
         .then(token => {
           console.log('FCM TOKEN', token);
-          AsyncStorage.setItem(ASYNC_PUSH_TOKEN, token);
+          if (token) {
+            AsyncStorage.setItem(ASYNC_PUSH_TOKEN, token);
+          } else {
+            console.log('FCM TOKEN is null or empty');
+          }
+        })
+        .catch(error => {
+          console.error('Error getting FCM token:', error);
+          // Set a placeholder token to prevent infinite loops
+          AsyncStorage.setItem(ASYNC_PUSH_TOKEN, 'FCM_TOKEN_ERROR');
         });
     }
   });
 };
 
 export async function checkNotificationPermission() {
-  const authStatus = await messaging().requestPermission();
-  console.log('FCM AUTH STATUS', authStatus);
-  const enabled =
-    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-  if (enabled) {
-    getToken();
-  } else {
-    requestUserPermission().then(() => {
+  try {
+    const authStatus = await messaging().requestPermission();
+    console.log('FCM AUTH STATUS', authStatus);
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (enabled) {
       getToken();
-    });
+    } else {
+      requestUserPermission()
+        .then(() => {
+          getToken();
+        })
+        .catch(error => {
+          console.error('Error in requestUserPermission:', error);
+          // Set error token to prevent infinite loops
+          AsyncStorage.setItem(ASYNC_PUSH_TOKEN, 'FCM_PERMISSION_ERROR');
+        });
+    }
+  } catch (error) {
+    console.error('Error in checkNotificationPermission:', error);
+    // Set error token to prevent infinite loops
+    AsyncStorage.setItem(ASYNC_PUSH_TOKEN, 'FCM_CHECK_PERMISSION_ERROR');
   }
 }
 
@@ -195,7 +227,7 @@ export async function actionOnNotification(
   const waitForNavigation = () => {
     return new Promise(resolve => {
       const checkNavigation = () => {
-        if (RootNagation.navigationRef.current) {
+        if (RootNavigation.navigationRef.current) {
           resolve();
         } else {
           setTimeout(checkNavigation, 100); // Check every 100ms
@@ -213,7 +245,7 @@ export async function actionOnNotification(
     await waitForNavigation();
 
     // Ensure we're not already on the TicketDetails screen
-    const currentRoute = RootNagation.navigationRef.current.getCurrentRoute();
+    const currentRoute = RootNavigation.navigationRef.current.getCurrentRoute();
     if (
       currentRoute?.name === 'TicketDetails' &&
       currentRoute?.params?.ticketItem?.id === ticketItem.id
@@ -221,7 +253,7 @@ export async function actionOnNotification(
       console.log('Already on the correct ticket details screen');
 
       // Update the route params instead of navigating
-      RootNagation.navigationRef.current?.dispatch({
+      RootNavigation.navigationRef.current?.dispatch({
         ...CommonActions.setParams({
           ticketItem: ticketItem, // new or updated data
           parentRoute: 'Dashboard', // if needed
@@ -234,7 +266,7 @@ export async function actionOnNotification(
     }
 
     console.log('Navigating to TicketDetails...');
-    RootNagation.navigate('TicketDetails', {
+    RootNavigation.navigate('TicketDetails', {
       ticketItem: ticketItem,
       parentRoute: 'Dashboard',
       notificationId: notificationId,

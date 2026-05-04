@@ -11,6 +11,7 @@ const QPDropDownMenu = ({
   visible,
   onClose,
   anchorPosition,
+  anchorType = 'top', // 'top' or 'bottom'
   items,
   onSelectItem,
   selectedItem,
@@ -37,17 +38,22 @@ const QPDropDownMenu = ({
 
   if (!visible) return null;
 
+  // Create position style based on anchor type
+  const positionStyle =
+    anchorType === 'bottom'
+      ? {
+          bottom: anchorPosition.y,
+          left: anchorPosition.x,
+        }
+      : {
+          top: anchorPosition.y,
+          left: anchorPosition.x,
+        };
+
   return (
     <Modal transparent visible={visible} onRequestClose={onClose}>
       <Pressable style={styles.overlay} onPress={onClose}>
-        <View
-          style={[
-            styles.menuContainer,
-            {
-              bottom: anchorPosition.y,
-              left: anchorPosition.x,
-            },
-          ]}>
+        <View style={[styles.menuContainer, positionStyle]}>
           <FlatList
             data={items}
             renderItem={renderItem}
@@ -69,7 +75,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: Colors.white,
     borderWidth: 1,
-    borderColor: Colors.borderColor,
+    borderColor: Colors.accentLight,
     padding: PaddingConstants.halfTab,
     minWidth: MarginConstants.tab1_16x + MarginConstants.tab1_4x,
     maxHeight: 200,

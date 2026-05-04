@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-// import SafeAreaView from 'react-native-safe-area-view';
+// import {SafeAreaView} from 'react-native-safe-area-context';
 import {StyleSheet, Text, View} from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';

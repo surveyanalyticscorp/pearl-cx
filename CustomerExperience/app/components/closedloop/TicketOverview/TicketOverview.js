@@ -1,8 +1,6 @@
 import React, {useCallback, useState} from 'react';
-import {RefreshControl, View} from 'react-native';
-import BottomSheet from 'reanimated-bottom-sheet';
+import {Pressable, RefreshControl, View} from 'react-native';
 import Animated from 'react-native-reanimated';
-import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
 import {useDispatch, useSelector} from 'react-redux';
 import {getStatusIndexById, statusList} from '../../../Utils/TicketUtils';
 import SelectStatus from '../takeaction/SelectStatus';
@@ -10,7 +8,7 @@ import {translate} from '../../../Utils/MultilinguaUtils';
 import ticketOverviewStyles from './ticket.overview.style';
 import TicketOverviewContainer from './components/TicketOverviewContainer';
 import useUpdateTicket from './hooks/useUpdateTicket';
-import DescriptionView from './components/DescriptionView';
+import DetailsView from './components/DescriptionView';
 import DeleteView from './components/DeleteView';
 import ContactView from './components/ContactView';
 import StatusView from './components/StatusView';
@@ -21,19 +19,60 @@ import AssigneeBottomSheet from './components/AssigneeBottomSheet';
 import {getClosedLoopTicketItem} from '../../../redux/actions/dashboard.actions';
 import QPBottomSheet from '../takeaction/QPBottomSheet';
 import QPBottomSheetHeader from '../takeaction/QPBottomSheetHeader';
-import TicketTakeAction from '../takeaction/TIcketTakeAction';
-import useActionHandler from './components/useActionHandler';
+import {Title} from '../ui/ShowTitleAndText';
+import {CommentText, getFoldedDescriptionText} from '../TicketCommentsUtils';
+import {DescriptionDetails} from './components/DescriptionDetails';
+import {Tag} from '../ui/Tags';
+import TicketDetailsTitle from './components/TicketDetailsTitle';
+import TicketIdCopy from './components/TicketIdCopy';
 
 const TicketStatusPriorityView = ({children}) => {
   return (
     <View style={ticketOverviewStyles.ticketStatusContainer}>{children}</View>
   );
 };
+const DescriptionBottomSheet = ({isVisible, onClose, onPress}) => {
+  return (
+    <QPBottomSheet
+      visible={isVisible}
+      onClose={onClose}
+      bottomSheetHeight="80%"
+      headerComponent={
+        <QPBottomSheetHeader headerLabel="Description" onClose={onClose} />
+      }>
+      <DescriptionDetails onPress={onPress} />
+    </QPBottomSheet>
+  );
+};
+const TicketDescription = ({onPress}) => {
+  const {comment} = useSelector(state => state.dashboard.ticket);
+  if (comment && comment.length > 0) {
+    return (
+      <View>
+        <Pressable onPress={onPress}>
+          <Title text={`${translate('ticket_overview.description')}:`} />
+          <CommentText text={getFoldedDescriptionText(comment, 20)} />
+        </Pressable>
+      </View>
+    );
+  } else {
+    return <View />;
+  }
+};
 
 export default function TicketOverview(props) {
-  const {handleTicketAction} = useActionHandler();
-  const [actionBottomSheetVisible, setActionBottomSheetVisible] =
+  // const {handleTicketAction} = useActionHandler();
+  const [descriptionBottomSheetVisible, setDescriptionBottomSheetVisible] =
     useState(false);
+  const onCloseDescriptionBottomSheet = () => {
+    setDescriptionBottomSheetVisible(false);
+  };
+
+  const onPressDescriptionMore = () => {
+    setDescriptionBottomSheetVisible(true);
+  };
+  // const [actionBottomSheetVisible, setActionBottomSheetVisible] =
+  //   useState(false);
   const isFromClosedLoopScreen =
     translate('dashboard.closed_loop') === props.route.params.prevScreen;
 
@@ -49,79 +88,69 @@ export default function TicketOverview(props) {
   const dispatch = useDispatch();
   console.log('TTTTT', ticketDetails ?? '');
 
-  /// BOTTOM SHEET
-
-  // variables for bottom sheet
-  const statusBottomSheet = React.useRef();
-  const priorityBottomSheet = React.useRef();
-  const assigneeBottomSheet = React.useRef();
-  const statusBottomSheetSnapPoints = ['55', '0'];
-
-  const fall = new Animated.Value(1);
-  const onTakeActionHandler = () => {
-    setActionBottomSheetVisible(true);
+  const [priorityBottomSheetVisible, setPriorityBottomSheetVisible] =
+    useState(false);
+  const onClosePriorityBottomSheet = () => {
+    setPriorityBottomSheetVisible(false);
   };
+
+  const [statusBottomSheetVisible, setStatusBottomSheetVisible] =
+    useState(false);
+  const onCloseStatusBottomSheet = () => {
+    setStatusBottomSheetVisible(false);
+  };
+
+  // const fall = new Animated.Value(1);
+  // const onTakeActionHandler = () => {
+  //   setActionBottomSheetVisible(true);
+  // };
   const handleStatusSelection = () => {
-    priorityBottomSheet.current.snapTo(1);
-    statusBottomSheet.current.snapTo(0);
-    assigneeBottomSheet.current.snapTo(1);
+    setStatusBottomSheetVisible(true);
   };
 
   const handlePrioritySelection = () => {
-    priorityBottomSheet.current.snapTo(0);
-    statusBottomSheet.current.snapTo(1);
-    assigneeBottomSheet.current.snapTo(1);
+    setPriorityBottomSheetVisible(true);
   };
-  const handleOwnerSelection = () => {
-    priorityBottomSheet.current.snapTo(1);
-    statusBottomSheet.current.snapTo(1);
-    assigneeBottomSheet.current.snapTo(0);
-  };
+  const handleOwnerSelection = useCallback(() => {
+    setAssigneeBottomSheetVisible(true);
+  }, []);
 
-  const renderStatusHeader = () => {
-    return <BottomSheetHeader title={'Status'} onPressClose={closeBS} />;
-  };
+  const handleStatusPress = useCallback(
+    (item, index, onClose) => {
+      if (ticketDetails.status === item.id) {
+        onClose();
+        return;
+      }
+      if (item.id === 2) {
+        // popup assign user bottom sheet and let him choose an assignee
+        handleOwnerSelection();
+      } else {
+        updateTicket({status: item.id});
+      }
+      setStatusIndex(index);
+      onClose();
+    },
+    [ticketDetails.status, handleOwnerSelection, updateTicket],
+  );
 
-  const RenderStatusSelectContent = () => {
+  const RenderStatusBottomSheet = ({onClose, visible}) => {
     return (
-      <View style={ticketOverviewStyles.contentContainer}>
+      <QPBottomSheet
+        visible={visible}
+        onClose={onClose}
+        headerComponent={
+          <QPBottomSheetHeader headerLabel={'Status'} onClose={onClose} />
+        }>
         <SelectStatus
           data={statusList}
           screenName={'TicketOverview'}
           selectedIndex={statusIndex}
-          handleOnPress={(item, index) => {
-            if (ticketDetails.status === item.id) {
-              closeBS();
-              return;
-            }
-            if (item.id === 2) {
-              // popup assign user bottom sheet and let him choose an assignee
-              handleOwnerSelection();
-            } else {
-              updateTicket({status: item.id});
-            }
-            setStatusIndex(index);
-          }}
+          handleOnPress={(item, index) =>
+            handleStatusPress(item, index, onClose)
+          }
         />
-      </View>
+      </QPBottomSheet>
     );
-  };
-
-  const RenderStatusBottomSheet = () => {
-    return (
-      <BottomSheet
-        ref={statusBottomSheet}
-        snapPoints={statusBottomSheetSnapPoints}
-        initialSnap={statusBottomSheetSnapPoints.length - 1}
-        renderContent={RenderStatusSelectContent}
-        renderHeader={renderStatusHeader}
-        callbackNode={fall}
-      />
-    );
-  };
-
-  const closeBS = () => {
-    statusBottomSheet.current.snapTo(statusBottomSheetSnapPoints.length - 1);
   };
 
   const onRefresh = useCallback(() => {
@@ -132,23 +161,31 @@ export default function TicketOverview(props) {
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
-  }, []);
+  }, [dispatch, ticketDetails.id, feedbackApiKey]);
 
-  const onCloseActionBottomSheet = () => {
-    setActionBottomSheetVisible(false);
-  };
+  // const onCloseActionBottomSheet = () => {
+  //   setActionBottomSheetVisible(false);
+  // };
 
-  const onPressAction = item => {
-    console.log('onPressAction', item);
-    setActionBottomSheetVisible(false);
-    handleTicketAction(item);
+  // const handleActionPress = useCallback(
+  //   item => {
+  //     console.log('onPressAction', item);
+  //     setActionBottomSheetVisible(false);
+  //     handleTicketAction(item);
+  //   },
+  //   [handleTicketAction],
+  // );
+
+  // const onPressAction = handleActionPress;
+
+  const [assigneeBottomSheetVisible, setAssigneeBottomSheetVisible] =
+    useState(false);
+  const onCloseAssigneeBottomSheet = () => {
+    setAssigneeBottomSheetVisible(false);
   };
   return (
     <TicketOverviewContainer>
       <Animated.ScrollView
-        style={{
-          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-        }}
         refreshControl={
           <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
         }>
@@ -158,15 +195,28 @@ export default function TicketOverview(props) {
             <PriorityView onPress={handlePrioritySelection} />
             <AssignedToView />
           </TicketStatusPriorityView>
-          <DescriptionView showResponseButton={isFromClosedLoopScreen} />
-          <ContactView onTakeActionHandler={onTakeActionHandler} />
+          <DetailsView showResponseButton={isFromClosedLoopScreen}>
+            <TicketIdCopy />
+            <TicketDescription onPress={onPressDescriptionMore} />
+            <Tag tags={ticketDetails?.tags ?? []} />
+          </DetailsView>
+          <ContactView />
           <DeleteView />
         </View>
       </Animated.ScrollView>
-      <RenderStatusBottomSheet />
-      <PriorityBottomSheet ref={priorityBottomSheet} fall={fall} />
-      <AssigneeBottomSheet ref={assigneeBottomSheet} fall={fall} />
-      <QPBottomSheet
+      <RenderStatusBottomSheet
+        visible={statusBottomSheetVisible}
+        onClose={onCloseStatusBottomSheet}
+      />
+      <PriorityBottomSheet
+        visible={priorityBottomSheetVisible}
+        onClose={onClosePriorityBottomSheet}
+      />
+      <AssigneeBottomSheet
+        onClose={onCloseAssigneeBottomSheet}
+        visible={assigneeBottomSheetVisible}
+      />
+      {/* <QPBottomSheet
         visible={actionBottomSheetVisible}
         onClose={onCloseActionBottomSheet}
         headerComponent={
@@ -176,7 +226,11 @@ export default function TicketOverview(props) {
           />
         }>
         <TicketTakeAction onPress={onPressAction} />
-      </QPBottomSheet>
+      </QPBottomSheet> */}
+      <DescriptionBottomSheet
+        onClose={onCloseDescriptionBottomSheet}
+        isVisible={descriptionBottomSheetVisible}
+      />
     </TicketOverviewContainer>
   );
 }

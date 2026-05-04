@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
 const SmileyImageLabel = props => {
   const {x, y, index, datum} = props;
@@ -26,9 +26,10 @@ const SmileyImageLabel = props => {
     <View testID="no-view" />
   ) : (
     <View testID="label-container" style={style_.labelContainer}>
-      <Image
+      <datum.SvgComponent
         testID="image-label"
-        source={datum.imageSource}
+        width={20}
+        height={20}
         style={style_.imageLabel}
       />
     </View>

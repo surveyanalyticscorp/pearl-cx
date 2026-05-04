@@ -1,0 +1,219 @@
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, FlatList} from 'react-native';
+import {baseTextStyles} from '../../../styles/text.styles';
+import {MarginConstants} from '../../../styles/margin.constants';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
+import IconButton from '../../../routes/commonUI/IconButton';
+import {MaterialIcons} from '../../../Utils/IconUtils';
+import {Colors} from '../../../styles/color.constants';
+import {PaddingConstants} from '../../../styles/padding.constants';
+import {TextSizes} from '../../../styles/textsize.constants';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {TagViewItem} from './TagViewItem';
+import {getSelectedTagList} from './utils';
+import {resetDraftTags} from '../../../redux/actions/closedloop.actions';
+
+export const PathTextLabel = ({title}) => {
+  return (
+    <TextLabel baseTextStyle={baseTextStyles.semiMediumLightText}>
+      {title}
+    </TextLabel>
+  );
+};
+export const TitleAndTagsItem = ({item, index}) => {
+  return (
+    <View style={styles.titleAndTagsView}>
+      <PathTextLabel title={item.title} />
+      <FlatList
+        style={styles.tagList}
+        data={item.items}
+        horizontal
+        contentContainerStyle={{flexGrow: 0}}
+        listKey={`rootCauseItemList-${index}`}
+        renderItem={TagViewItem}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
+  );
+};
+
+export const OtherSelectedTag = () => {
+  const {isOtherChecked, otherText} = useSelector(
+    state => state.dashboard.ticket?.centralizeRootCause ?? {},
+  );
+
+  if (isOtherChecked) {
+    return (
+      <View>
+        <PathTextLabel title="Others (Custom root cause)" />
+        <TextLabel
+          baseTextStyle={{
+            color: Colors.filterIconColor,
+            ...baseTextStyles.semiSecondaryRegularText,
+          }}
+          style={{
+            alignSelf: 'flex-start',
+            padding: PaddingConstants.tab1,
+            backgroundColor: Colors.negativePromter,
+          }}
+          text={otherText}
+        />
+      </View>
+    );
+  }
+  return <View />;
+};
+export const CurrentSelectedRootCasues = () => {
+  const centralizedRootCauseList = useSelector(
+    state => state.dashboard.centralizedRootCauseList,
+  );
+
+  const [list, setList] = useState([]);
+
+  const selectedTags = useSelector(
+    state =>
+      state.dashboard.ticket?.centralizeRootCause?.centralizeRootCauseIds ?? [],
+  );
+  console.log(
+    'CENTRALIZED_ROOT_CAUSE_LIST_CURRENT_SELECTED',
+    JSON.stringify(list),
+  );
+  useEffect(() => {
+    setList(getSelectedTagList(centralizedRootCauseList, selectedTags));
+  }, [centralizedRootCauseList, selectedTags]);
+
+  return (
+    <View style={styles.flatList}>
+      {list.map((item, index) => (
+        <TitleAndTagsItem
+          key={item.title.toString()}
+          item={item}
+          index={index}
+        />
+      ))}
+    </View>
+  );
+};
+
+export const EditCustomRootCause = ({onPress}) => {
+  return (
+    <IconButton
+      buttonStyle={styles.buttonStyle}
+      textStyle={styles.buttonStyleText}
+      leftIcon={
+        <MaterialIcons name="edit" size={20} color={Colors.accentLight} />
+      }
+      buttonText={'Edit'}
+      onPress={onPress}
+    />
+  );
+};
+export const AddCustomRootCause = ({onPress}) => {
+  return (
+    <View>
+      <TextLabel
+        baseTextStyle={baseTextStyles.secondaryLightText}
+        text={'Currently, this ticket does not have any custom root causes.'}
+      />
+      <VerticalSpaceBox />
+      <IconButton
+        buttonStyle={styles.buttonStyle}
+        textStyle={styles.buttonStyleText}
+        leftIcon={
+          <MaterialIcons name="add" size={20} color={Colors.accentLight} />
+        }
+        buttonText={'Add'}
+        onPress={onPress}
+      />
+    </View>
+  );
+};
+
+export const CustomRootCauseHeader = ({children}) => {
+  return (
+    <View style={styles.headerContainer}>
+      <TextLabel
+        baseTextStyle={baseTextStyles.primaryMediumText}
+        text={'Custom root causes'}
+      />
+      {children}
+    </View>
+  );
+};
+
+export const CustomRootCause = () => {
+  const dispatch = useDispatch();
+  const centralizeRootCause = useSelector(
+    state => state.dashboard.ticket?.centralizeRootCause ?? {},
+  );
+
+  useEffect(() => {
+    dispatch(resetDraftTags());
+  }, [dispatch]);
+
+  const navigation = useNavigation();
+  const onPress = () => {
+    navigation.navigate('CentralizedRootCause');
+  };
+
+  const hasRootCause = () => {
+    return (
+      (centralizeRootCause &&
+        centralizeRootCause.centralizeRootCauseIds &&
+        centralizeRootCause.centralizeRootCauseIds.length > 0) ||
+      (centralizeRootCause && centralizeRootCause.isOtherChecked)
+    );
+  };
+  console.log('CentralizedRootCause in CustomRootCause:', hasRootCause);
+  return (
+    <View style={styles.rootview}>
+      <CustomRootCauseHeader>
+        {hasRootCause() ? <EditCustomRootCause onPress={onPress} /> : null}
+      </CustomRootCauseHeader>
+
+      {hasRootCause() ? <CurrentSelectedRootCasues /> : null}
+      <OtherSelectedTag />
+      <VerticalSpaceBox />
+      {!hasRootCause() ? <AddCustomRootCause onPress={onPress} /> : null}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  rootview: {
+    marginVertical: MarginConstants.tab1_2x,
+    marginHorizontal: MarginConstants.tab1_2x,
+  },
+
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    minHeight: MarginConstants.tab1_6x,
+  },
+
+  flatList: {
+    marginVertical: MarginConstants.tab1,
+  },
+  tagList: {
+    marginVertical: MarginConstants.tab1,
+  },
+  titleAndTagsView: {
+    marginVertical: MarginConstants.tab1,
+  },
+  buttonStyle: {
+    width: PaddingConstants.tab1_8x + PaddingConstants.tab1_2x,
+    paddingHorizontal: PaddingConstants.tab1_2x,
+    height: MarginConstants.tab1_6x,
+    borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonStyleText: {
+    color: Colors.accentLight,
+    fontSize: TextSizes.secondary2,
+  },
+});

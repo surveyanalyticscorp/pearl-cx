@@ -311,3 +311,7 @@ export const sortingList = [
   {id: 0, title: translate('activity.latest').toLocaleLowerCase()},
   {id: 1, title: translate('activity.oldest').toLocaleLowerCase()},
 ];
+
+export const removeItemFromArray = (arr = [], index) => {
+  return arr.splice(index, 1);
+};

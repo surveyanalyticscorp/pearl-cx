@@ -1,12 +1,12 @@
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 
-$FirebaseSDKVersion = '8.15.0'
 $RNFirebaseAsStaticFramework = true
 $RNFirebaseAnalyticsWithoutAdIdSupport=true
 
-platform :ios, '11.0'
-
+platform :ios, '15.1'
+install! 'cocoapods', :deterministic_uuids => false
+# use_modular_headers!
 target 'CustomerExperience' do
   # pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   # pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
@@ -33,14 +33,14 @@ target 'CustomerExperience' do
   # pod 'React-jsinspector', :path => '../node_modules/react-native/ReactCommon/jsinspector'
   # pod 'ReactCommon/callinvoker', :path => "../node_modules/react-native/ReactCommon"
   # pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
-   pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga', :modular_headers => true
+  # pod 'Yoga' removed — use_react_native! handles Yoga in RN 0.72
 
   # pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   # pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   # pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   # pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
-  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+  # pod 'RNReanimated' removed — autolinking handles Reanimated v3 in RN 0.72
     # pod 'boost', :podspec => '../node_modules/react-native/third-party-podspecs/boost.podspec'
 
 # pod for `boost` from `../node_modules/react-native/third-party-podspecs/boost.podspec`
@@ -60,12 +60,19 @@ target 'CustomerExperience' do
 
   config = use_native_modules!
 
+    # Flags change depending on the env values.
+  flags = get_default_flags()
+
   use_react_native!(
     :path => config[:reactNativePath],
-    # to enable hermes on iOS, change `false` to `true` and then install pods
-    :hermes_enabled => false,
-    :fabric_enabled => false # Set to true if you are using the new Fabric architecture
-
+    :hermes_enabled => true,
+    # fabric_enabled and new_arch_enabled MUST both be false.
+    # In RN 0.77, new_arch_enabled defaults to true (reads ENV['RCT_NEW_ARCH_ENABLED'] which is nil → true).
+    # Omitting new_arch_enabled while setting fabric_enabled: false still results in
+    # RCT_NEW_ARCH_ENABLED=1 being propagated to all pods (including RNReanimated).
+    :fabric_enabled => false,
+    :new_arch_enabled => false,
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
   )  
   # Enables Flipper.
   #
@@ -73,7 +80,15 @@ target 'CustomerExperience' do
   # you should disable the next line.
   # use_flipper!()
 
-  pod 'RNI18n', :path => '../node_modules/react-native-i18n'
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'FirebaseCoreExtension', :modular_headers => true
+  pod 'FirebaseInstallations', :modular_headers => true
+  pod 'FirebaseMessaging', :modular_headers => true
+  pod 'GoogleDataTransport', :modular_headers => true
+  pod 'nanopb', :modular_headers => true
+  pod 'PromisesObjC', :modular_headers => true
   
 
 
@@ -89,17 +104,68 @@ target 'CustomerExperience' do
     # end
   # end
  
-    react_native_post_install(installer)
-    __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    react_native_post_install(installer, config[:reactNativePath], :mac_catalyst_enabled => false)
     
-    # Fix for Flipper-Glog
-    # installer.pods_project.targets.each do |target|
-    #   target.build_configurations.each do |config|
-    #     config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
-    #     config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-    #   end
-    # end
+    installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
+      config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+    end
   end
+
+  # fmt 11.x consteval is broken on Apple Clang (Xcode 26+).
+  # base.h only disables it for Apple clang < 14 — patch to disable for all Apple builds.
+  fmt_base_h = "#{installer.sandbox.root}/fmt/include/fmt/base.h"
+  if File.exist?(fmt_base_h)
+    content = File.read(fmt_base_h)
+    patched = content.gsub(
+      '__apple_build_version__ < 14000029L',
+      '__apple_build_version__ < 99999999L'
+    )
+    if content != patched
+      FileUtils.chmod(0644, fmt_base_h)
+      File.write(fmt_base_h, patched)
+    end
+  end
+
+  # Fix ReactCommon module map conflict (RN 0.77.x + Xcode 26)
+  conflicting_map = "#{installer.sandbox.root}/Headers/Public/ReactCommon/React-RuntimeApple.modulemap"
+  File.delete(conflicting_map) if File.exist?(conflicting_map)
+
+  # Add a Run Script build phase to copy Hermes dSYM into the archive.
+  # The pre-built hermes.xcframework ships without dSYMs; this phase copies the
+  # manually-downloaded dSYM (ios/hermes-dsym/hermes.framework.dSYM) into
+  # $DWARF_DSYM_FOLDER_PATH so App Store Connect upload includes it.
+  # See docs/PLATFORM_SETUP.md for the download instructions.
+  main_project = installer.aggregate_targets
+    .find { |t| t.name == 'Pods-CustomerExperience' }
+    &.user_project
+
+  if main_project
+    main_project.targets.each do |target|
+      next unless target.name == 'CustomerExperience'
+
+      existing = target.build_phases.find { |p|
+        p.respond_to?(:name) && p.name == '[RN] Copy Hermes dSYM'
+      }
+      next if existing
+
+      phase = main_project.new(Xcodeproj::Project::Object::PBXShellScriptBuildPhase)
+      phase.name = '[RN] Copy Hermes dSYM'
+      phase.shell_script = <<~SHELL
+        if [ "$ACTION" = "install" ]; then
+          HERMES_DSYM="${SRCROOT}/hermes-dsym/hermes.framework.dSYM"
+          if [ -d "$HERMES_DSYM" ]; then
+            cp -r "$HERMES_DSYM" "${DWARF_DSYM_FOLDER_PATH}/hermes.framework.dSYM"
+          fi
+        fi
+      SHELL
+      phase.run_only_for_deployment_postprocessing = '1'
+      target.build_phases << phase
+    end
+    main_project.save
+  end
+end
 
 #  def find_and_replace(dir, findstr, replacestr)
 #   Dir[dir].each do |name|

@@ -7,9 +7,15 @@ import {useNavigation} from '@react-navigation/native';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {MarginConstants} from '../../styles/margin.constants';
-import NoResponsesFound from './NoResponsesFound';
+import {EmptyView} from '../closedloop/EmptyVIew';
 
-const Responses = ({onRefresh, onEndReached, isLoading, testID}) => {
+const Responses = ({
+  onRefresh,
+  onEndReached,
+  isLoading,
+  testID,
+  isPagination,
+}) => {
   const navigation = useNavigation();
   const allResponses = useSelector(state => state.response.allResponses);
   const authToken = useSelector(state => state.global.authToken);
@@ -32,6 +38,15 @@ const Responses = ({onRefresh, onEndReached, isLoading, testID}) => {
     );
   };
 
+  if (allResponses.length === 0 && !isLoading) {
+    return (
+      <EmptyView
+        title={'There are no responses yet'}
+        subTitle={'Get customer insights based on their answers'}
+      />
+    );
+  }
+
   return (
     <View
       testID={testID ?? 'responses-component'}
@@ -44,18 +59,12 @@ const Responses = ({onRefresh, onEndReached, isLoading, testID}) => {
         onEndReachedThreshold={0.25}
         onEndReached={onEndReached}
         refreshing={false}
-        ListEmptyComponent={
-          <NoResponsesFound
-            text={isLoading ? 'Loading responses' : 'No responses found'}
-          />
-        }
         onRefresh={onRefresh}
         extraData={[allResponses]}
         contentContainerStyle={styles.container}
         ListFooterComponent={() => (
           <View style={{paddingBottom: PaddingConstants.tab2}} />
         )}
-        // ListHeaderComponent={renderResponseFilterView}
       />
     </View>
   );

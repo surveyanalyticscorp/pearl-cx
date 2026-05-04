@@ -7,27 +7,26 @@ import {Colors} from '../../../../styles/color.constants';
 import {PaddingConstants} from '../../../../styles/padding.constants';
 import {useSelector} from 'react-redux';
 import {isObjectEmpty} from '../../../../Utils/Utility';
+import useActionNavigation from '../../../../hooks/useNavigation';
 
 export function hasPanelMemberObj(obj) {
   return obj !== null && obj !== undefined && !isObjectEmpty(obj);
 }
 
-const TakeActionButton = ({onTakeActionHandler}) => {
+const TakeActionButton = () => {
   const panelMember = useSelector(state => state.dashboard.ticket.panelMember);
   const hasPanelMember = hasPanelMemberObj(panelMember);
-
+  const {navigateToSendEmail} = useActionNavigation();
   return (
     <View style={styles.takeActionContainer}>
       <QPButton
         disabled={!hasPanelMember}
         testID="TakeActionButton"
-        buttonColor={
-          hasPanelMember ? Colors.accentLight : Colors.filterIconColor
-        }
-        style={buttonStyles.primaryButton}
-        onPress={onTakeActionHandler}
-        buttonText={translate('ticket_overview.take_action')}
-        textStyle={buttonStyles.primaryButtonText}
+        buttonColor={hasPanelMember ? Colors.white : Colors.filterIconColor}
+        style={buttonStyles.outlinePrimaryButton}
+        onPress={navigateToSendEmail}
+        buttonText={translate('action_email.respond_via_email')}
+        textStyle={buttonStyles.outlinePrimaryButtonText}
       />
     </View>
   );

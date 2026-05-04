@@ -1,328 +1,300 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   View,
-  Pressable,
   Text,
   StyleSheet,
-  FlatList,
-  SafeAreaView,
   Platform,
+  Switch,
+  ScrollView,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import {
-  CheckBoxItem,
-  CheckRadioButtonItem,
-} from '../../../routes/commonUI/CommonUI';
+import {ChipItem} from '../../../routes/commonUI/CommonUI';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import QPButton from '../../../widgets/Button';
 import {buttonStyles} from '../../../styles/button.styles';
 import {textStyles} from '../../../styles/text.styles';
-import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
-// import IconTextModalDropdown from '../../../widgets/drop-down/IconTextModalDropdown';
-// import IonIcons from 'react-native-vector-icons/Ionicons';
+import {HorizontalSpaceBox, VerticalSpaceBox} from '../../../widgets/SpaceBox';
+import ActionButtons from '../../../routes/commonUI/ActionButtons';
+import {
+  CloseButton,
+  PanelHandler,
+} from '../../../routes/commonUI/BottomSheetHeader';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  clearTagFilter,
+  updateSingleTag,
+} from '../../../redux/actions/closedloop.actions';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
-const FilterTicket = ({data, onPressHandler}) => {
+const FilterSection = ({title, filterData, onItemSelect, testID}) => {
+  return (
+    <View style={styles.sectionContainer}>
+      <Text style={styles.titleText}>{title}</Text>
+      <View style={styles.chipContainer} testID={testID}>
+        {filterData.map((item, index) => (
+          <ChipItem
+            key={index}
+            textStyle={textStyles.chipText}
+            item={item}
+            index={index}
+            onPress={onItemSelect}
+          />
+        ))}
+      </View>
+    </View>
+  );
+};
+
+const AITagsChipList = ({
+  checkedTags,
+  onItemSelect,
+  onCountChipPress,
+  testID,
+}) => {
+  const visibleTags = checkedTags.slice(0, 4);
+  const remainingCount = checkedTags.length - 4;
+
+  return (
+    <View style={styles.chipContainer} testID={testID}>
+      {visibleTags.map((item, index) => (
+        <ChipItem
+          key={index}
+          textStyle={textStyles.chipText}
+          item={item}
+          title={item?.name}
+          index={index}
+          onPress={onItemSelect}
+        />
+      ))}
+      {remainingCount > 0 && (
+        <ChipItem
+          key="count-chip"
+          textStyle={textStyles.chipText}
+          item={{name: `${remainingCount}+`, isChecked: true}}
+          title={`${remainingCount}+`}
+          index={-1}
+          onPress={onCountChipPress}
+        />
+      )}
+    </View>
+  );
+};
+
+const AITagsFilterSection = ({title, testID}) => {
+  const dispatch = useDispatch();
+  const aiTags = useSelector(state => state.dashboard.ticketTags);
+
+  // const [aiTagsState, setAiTagsState] = useState([
+  //   ...aiTags.filter(tag => tag.isChecked),
+  // ]);
+  const onItemSelect = useCallback((item, index) => {
+    dispatch(updateSingleTag({...item, isChecked: !item.isChecked}));
+  }, []);
+  console.log('AI_TAGS', JSON.stringify(aiTags));
+  let navigation = useNavigation();
+  const navigateToAiTagsModal = () => {
+    navigation.navigate('AiTagsFilter');
+  };
+
+  const getTags = () => {
+    return aiTags ? aiTags.filter(tag => tag.isChecked) : [];
+  };
+  return (
+    <View style={styles.sectionContainer}>
+      <View style={{...styles.rowContainer, justifyContent: 'space-between'}}>
+        <Text style={styles.titleText}>{title}</Text>
+        <QPButton
+          style={buttonStyles.textButton}
+          textStyle={buttonStyles.textButtonTextPrimaryLarge}
+          buttonText={getTags().length > 0 ? 'Edit' : 'Select'}
+          onPress={navigateToAiTagsModal}
+        />
+      </View>
+
+      <AITagsChipList
+        checkedTags={getTags()}
+        onItemSelect={onItemSelect}
+        onCountChipPress={navigateToAiTagsModal}
+        testID={testID}
+      />
+    </View>
+  );
+};
+
+// Component for the "Show My Tickets" toggle switch
+const ShowMyTicketsFilter = ({assignToId, userId, onToggle}) => {
+  console.log('ShowMyTicketsFilter', assignToId);
+  return (
+    <View testID="render-show-tickets" style={styles.sectionContainer}>
+      <View style={styles.switchContainer}>
+        <Text style={styles.titleText}>{translate('only_my_tickets')}</Text>
+        <Switch
+          trackColor={{
+            false: Colors.darkGrey,
+            true: Colors.darkGrey,
+          }}
+          thumbColor={
+            assignToId.length > 0 ? Colors.accentLight : Colors.filterIconColor
+          }
+          onValueChange={onToggle}
+          value={assignToId.length > 0}
+        />
+      </View>
+    </View>
+  );
+};
+
+
+const ItemSeparator = () => {
+  return (
+    <>
+      <VerticalSpaceBox multiplyBy={2} />
+      <ListItemSeparator style={{marginVertical: MarginConstants.tab1}} />
+    </>
+  );
+};
+
+const FilterTicket = ({route, navigation}) => {
+  const dispatch = useDispatch();
+  const {data, onPressHandler} = route.params;
+  const tags = useSelector(state => state.dashboard.ticketTags);
   const [status, setStatus] = useState(data.status);
   const [priority, setPriority] = useState(data.priority);
   const [type, setType] = useState(data.type);
-  // const [showMyTickets, setShowMyTickets] = useState(data.showMyTickets);
-  // const [hasOwner, setHasOwner] = useState(data.assignToId.length > 0);
-  // const [managerlist, setManagerList] = useState(data.managers);
+  const [aiTags, setAiTags] = useState(tags);
   const [assignToId, setAssignToId] = useState(data.assignToId);
-  console.log('MANAGERS', JSON.stringify(data));
 
-  // let [managerlist, setManagerList] = useState(data.managers);
-  let [selectedManager, setSelectedManager] = useState(
-    data.selectedManager ?? [],
+  const handleStatusSelect = useCallback((item, index) => {
+    setStatus(prevState =>
+      prevState.map((statusItem, idx) =>
+        idx === index
+          ? {...statusItem, isChecked: !statusItem.isChecked}
+          : statusItem,
+      ),
+    );
+  }, []);
+
+  const handlePrioritySelect = useCallback((item, index) => {
+    setPriority(prevState =>
+      prevState.map((priorityItem, idx) =>
+        idx === index
+          ? {...priorityItem, isChecked: !priorityItem.isChecked}
+          : priorityItem,
+      ),
+    );
+  }, []);
+
+  const handleTypeSelect = useCallback((selectedItem, index) => {
+    setType(prevState =>
+      prevState.map(typeItem => ({
+        ...typeItem,
+        isChecked:
+          typeItem.id === selectedItem.id ? !typeItem.isChecked : false,
+      })),
+    );
+  }, []);
+  // const handleAiTagsSelect = useCallback((item, index) => {
+  //   setAiTags(prevState =>
+  //     prevState.map((tagItem, idx) =>
+  //       idx === index ? {...tagItem, isChecked: !tagItem.isChecked} : tagItem,
+  //     ),
+  //   );
+  // }, []);
+
+  const toggleMyTicketVisibility = useCallback(() => {
+    setAssignToId(state => (state.length > 0 ? '' : data.userId));
+  }, [data.userId]);
+
+  const navigateBack = useCallback(() => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
+  }, [navigation]);
+  const onApplyFilterHandler = useCallback(() => {
+    const updatedData = {
+      ...data,
+      status,
+      priority,
+      type,
+      assignToId,
+      tags: tags.filter(tag => tag.isChecked),
+    };
+
+    onPressHandler(updatedData, 'apply');
+    navigateBack();
+  }, [
+    data,
+    status,
+    priority,
+    type,
+    assignToId,
+    onPressHandler,
+    tags,
+    navigateBack,
+  ]);
+
+  const resetFilterState = useCallback(
+    filterArray => filterArray.map(item => ({...item, isChecked: false})),
+    [],
   );
 
-  const RenderStatusFilter = () => {
-    const selectedStatus = (item, index) => {
-      setStatus(prevState => {
-        const temp = [...prevState];
-        temp[index].isChecked = !prevState[index].isChecked;
-        return temp;
-      });
-    };
-    return (
-      <View testID="render-status" style={styles.sectionContainer}>
-        <Text style={styles.titleText}>{translate('close_loop.status')}</Text>
-        <FlatList
-          style={styles.flatList}
-          data={status}
-          keyExtractor={(item, index) => item.toString()}
-          numColumns={3}
-          renderItem={({item, index}) => (
-            <CheckBoxItem
-              textStyle={textStyles.optionText}
-              item={item}
-              index={index}
-              onPress={selectedStatus}
-            />
-          )}
-        />
-      </View>
-    );
-  };
-
-  const RenderPriorityFilter = () => {
-    const selectedPriority = (item, index) => {
-      setPriority(prevState => {
-        const temp = [...prevState];
-        temp[index].isChecked = !prevState[index].isChecked;
-        return temp;
-      });
-    };
-    return (
-      <View testID="render-priority" style={styles.sectionContainer}>
-        <Text style={styles.titleText}>{translate('close_loop.priority')}</Text>
-        <FlatList
-          data={priority}
-          keyExtractor={(item, index) => item.toString()}
-          numColumns={3}
-          renderItem={({item, index}) => (
-            <CheckBoxItem
-              textStyle={textStyles.optionText}
-              item={item}
-              index={index}
-              onPress={selectedPriority}
-            />
-          )}
-        />
-      </View>
-    );
-  };
-
-  const RenderTypeFilter = ({typelist}) => {
-    const selectType = index => {
-      setType(prevState =>
-        prevState.map((item, index_, arr) => {
-          item.isChecked = index === index_;
-          return item;
-        }),
-      );
-    };
-    return (
-      <View testID="render-ticket-type" style={styles.sectionContainer}>
-        <Text style={styles.titleText}>Type</Text>
-        <FlatList
-          data={typelist}
-          keyExtractor={(item, index) => item.toString()}
-          numColumns={3}
-          renderItem={({item, index}) => (
-            <CheckRadioButtonItem
-              textStyle={textStyles.optionText}
-              item={item}
-              index={index}
-              onPress={selectType}
-            />
-          )}
-        />
-      </View>
-    );
-  };
-  const RenderShowMyTicketsFilter = ({assignToId, userId}) => {
-    const toggleMyTicketVisibility = index => {
-      setAssignToId(state => (state.length > 0 ? '' : userId));
-    };
-    return (
-      <View testID="render-show-tickets" style={styles.sectionContainer}>
-        <Text style={styles.titleText}>Show tickets</Text>
-        <CheckBoxItem
-          textStyle={textStyles.optionText}
-          item={{
-            title: translate('only_my_tickets'),
-            isChecked: assignToId.length > 0,
-          }}
-          index={0}
-          onPress={toggleMyTicketVisibility}
-        />
-      </View>
-    );
-  };
-
-  // const RenderAssigneeDropDown = () => {
-  //   const defaultText = 'Select...';
-  //   const list = managerlist.filter((item) => item.isChecked === false);
-  //   return (
-  //     <View>
-  //       <Text style={styles.titleText}>Assignee</Text>
-  //       <RenderAssigneeList />
-  //       <IconTextModalDropdown
-  //         style={styles.modelDropdown}
-  //         textStyle={styles.dropdownText}
-  //         dropdownTextStyle={styles.dropdownText}
-  //         arrowIconColor={Colors.secondary}
-  //         options={list.map((item) => item.ownerName)}
-  //         defaultValue={defaultText}
-  //         renderRow={dropdownRenderRow}
-  //         onSelect={(_index) => {
-  //           setAssigneeManager(list[_index], true);
-  //           // setSelectedManager((state) => [...state, managerlist[_index]]);
-  //           // setManagerList((state) =>
-  //           //   state.filter((item) => item.ownerID !== state[_index].ownerID),
-  //           // );
-  //         }}
-  //       />
-  //     </View>
-  //   );
-  // };
-
-  // const setAssigneeManager = (item, isChecked) => {
-  //   let index = 0;
-  //   managerlist.map((item_, index_) => {
-  //     if (item_.ownerID === item.ownerID) {
-  //       index = index_;
-  //     }
-  //   });
-
-  //   setManagerList((prevState) => {
-  //     const temp = [...prevState];
-  //     temp[index].isChecked = isChecked;
-  //     return temp;
-  //   });
-  // };
-  const dropdownRenderRow = (rowData, rowID, highlighted) => {
-    return (
-      <View
-        style={[
-          styles.dropdownRow,
-          {backgroundColor: highlighted ? Colors.overlay : Colors.white},
-        ]}>
-        {/* <RenderRoundImageOrColor data={rowData} /> */}
-        <Text style={styles.dropdownText}>{rowData}</Text>
-      </View>
-    );
-  };
-
-  const onCancelHandler = () => {
-    // close filter screen
-    onPressHandler(null, 'close');
-  };
-
-  const onApplyFilterHandler = () => {
-    // apply filter
-    // close filter
-
-    data.status = status;
-    data.priority = priority;
-    data.type = type;
-    // data.managers = managerlist;
-    data.selectedManager = selectedManager;
-    data.assignToId = assignToId;
-    // data.showMyTickets = showMyTickets;
-    onPressHandler(data, 'apply');
-  };
-
-  // const onClearHandler = () => {
-  //   // clear filter fields
-
-  //   setPriority((prevState) => {
-  //     const temp = prevState.map((item) => ({...item, isChecked: false}));
-  //     return temp;
-  //   });
-
-  //   setStatus((prevState) => {
-  //     const temp = prevState.map((item) => ({...item, isChecked: false}));
-  //     return temp;
-  //   });
-
-  //   setType((prevState) => {
-  //     const temp = prevState.map((item) => ({...item, isChecked: false}));
-  //     return temp;
-  //   });
-
-  //   selectedManager = [];
-  // };
-
-  const RenderButtons = () => {
-    return (
-      <View
-        style={[
-          styles.rowContainer,
-          {
-            paddingHorizontal: PaddingConstants.tab1_2x,
-            justifyContent: 'flex-end',
-          },
-        ]}>
-        {/* <QPButton
-          style={{...buttonStyles.outlineButton, margin: MarginConstants.tab2}}
-          buttonColor={Colors.white}
-          onPress={onCancelHandler}
-          textStyle={buttonStyles.outlineButtonText}
-          buttonText={'Close'}
-        /> */}
-
-        <QPButton
-          style={{
-            ...buttonStyles.primaryButton,
-            flex: 1,
-          }}
-          buttonColor={Colors.accentLight}
-          onPress={onApplyFilterHandler}
-          textStyle={buttonStyles.primaryButtonText}
-          buttonText={'Apply'}
-        />
-      </View>
-    );
-  };
-
-  // const assigneeCell = ({item, index}) => {
-  //   return (
-  //     <View style={[styles.assigneeCell, styles.rowContainer]}>
-  //       <Pressable
-  //         style={styles.rowContainer}
-  //         onPress={() => {
-  //           // setSelectedManager((state) =>
-  //           //   state.filter((item_) => item_.ownerID !== state[index].ownerID),
-  //           // );
-  //           // setManagerList((state) => [...state, selectedManager[index]]);
-  //           console.log({SELECTED_INDEX: index});
-
-  //           setAssigneeManager(item, false);
-  //         }}>
-  //         <Text style={styles.departmentNameText}>{item.ownerName}</Text>
-  //         <IonIcons name="close" size={20} color={Colors.filterIconColor} />
-  //       </Pressable>
-  //     </View>
-  //   );
-  // };
-
-  // const RenderAssigneeList = () => {
-  //   const list = managerlist.filter((item) => item.isChecked);
-  //   return (
-  //     <View style={[{margin: MarginConstants.halfTab}]}>
-  //       <FlatList
-  //         horizontal={true}
-  //         data={list}
-  //         renderItem={assigneeCell}
-  //         keyExtractor={(item) => item.toString()}
-  //       />
-  //     </View>
-  //   );
-  // };
+  const onCancel = useCallback(() => {
+    setStatus(prevState => resetFilterState(prevState));
+    setPriority(prevState => resetFilterState(prevState));
+    setType(prevState => resetFilterState(prevState));
+    setAssignToId(data.userId);
+    dispatch(clearTagFilter());
+  }, [data.userId, resetFilterState]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.innerContainer}>
-        <RenderStatusFilter />
-        <VerticalSpaceBox multiplyBy={2} />
-        <RenderPriorityFilter />
-        <VerticalSpaceBox multiplyBy={2} />
-        <RenderTypeFilter typelist={type} />
-        <VerticalSpaceBox multiplyBy={2} />
-        <RenderShowMyTicketsFilter
+      <PanelHandler />
+      <View style={styles.headerContainer}>
+        <TextLabel text={'Filter by'} style={styles.headerText} />
+        <CloseButton onPressClose={navigateBack} />
+      </View>
+      <ScrollView style={styles.innerContainer}>
+        <FilterSection
+          title={translate('close_loop.status')}
+          filterData={status}
+          onItemSelect={handleStatusSelect}
+          testID="render-status"
+        />
+        <ItemSeparator />
+
+        <FilterSection
+          title={translate('close_loop.priority')}
+          filterData={priority}
+          onItemSelect={handlePrioritySelect}
+          testID="render-priority"
+        />
+        <ItemSeparator />
+        <FilterSection
+          title="Type"
+          filterData={type}
+          onItemSelect={handleTypeSelect}
+          testID="render-ticket-type"
+        />
+        <ItemSeparator />
+
+        <AITagsFilterSection title={'AI tags'} testID="render-ai-tags" />
+        <ItemSeparator />
+
+        <ShowMyTicketsFilter
           assignToId={assignToId}
           userId={data.userId}
+          onToggle={toggleMyTicketVisibility}
         />
-        <VerticalSpaceBox multiplyBy={2} />
-        {/* <RenderAssigneeDropDown /> */}
-        <RenderButtons />
-      </View>
+        <VerticalSpaceBox multiplyBy={6} />
+      </ScrollView>
+      <ActionButtons onCancel={onCancel} onApply={onApplyFilterHandler} />
     </SafeAreaView>
   );
 };
@@ -330,12 +302,7 @@ const FilterTicket = ({data, onPressHandler}) => {
 export default FilterTicket;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.white,
-  },
   rowContainer: {
-    flex: 1,
     flexDirection: 'row',
   },
   sectionContainer: {
@@ -346,11 +313,22 @@ const styles = StyleSheet.create({
     padding: PaddingConstants.halfTab,
     alignItems: 'center',
   },
-  innerContainer: {
-    flex: 1,
-    paddingHorizontal: PaddingConstants.tab1_2x,
-  },
+  innerContainer: {},
 
+  container: {
+    backgroundColor: Colors.white,
+    flex: 1,
+    paddingVertical: PaddingConstants.tab1_2x,
+    paddingHorizontal: PaddingConstants.tab1,
+
+    justifyContent: 'space-between',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingEnd: PaddingConstants.tab1,
+  },
   assigneeCell: {
     borderWidth: 1,
     borderRadius: 2,
@@ -361,15 +339,30 @@ const styles = StyleSheet.create({
   titleText: {
     fontFamily: FontFamily.medium,
     fontSize: TextSizes.primary,
-    paddingHorizontal: PaddingConstants.tab1,
+    padding: PaddingConstants.tab1,
     color: Colors.filterIconColor,
   },
-  // optionText: {
-  //   fontFamily: FontFamily.regular,
-  //   fontSize: TextSizes.secondary,
-  //   marginHorizontal: MarginConstants.halfTab,
-  //   color: Colors.filterIconColor,
-  // },
+  headerText: {
+    fontFamily: FontFamily.regular,
+    fontSize: TextSizes.extraLargeText,
+    padding: PaddingConstants.tab1,
+    color: Colors.filterIconColor,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: PaddingConstants.tab1,
+    paddingVertical: PaddingConstants.halfTab,
+  },
+  filterListContainer: {
+    flexGrow: 0,
+  },
+  chipContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: PaddingConstants.halfTab,
+  },
 
   fiiledButtonText: {
     fontFamily: FontFamily.regular,

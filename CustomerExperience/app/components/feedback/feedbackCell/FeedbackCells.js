@@ -132,8 +132,8 @@ let RenderResponseContainer = ({
           />
           {/* <NPSIcon sentiment={sentiment} />
           <NPSAnswerText sentiment={sentiment} answerText={answerText} /> */}
-          <NPSIcon sentiment={'Promoter'} />
-          <NPSAnswerText sentiment={'Promoter'} answerText={answerText} />
+          <NPSIcon sentiment={sentiment} />
+          <NPSAnswerText sentiment={sentiment} answerText={answerText} />
           <HorizontalSpaceBox />
           <UserName
             isNewResponse={isNewResponse}
@@ -278,7 +278,18 @@ const styles = StyleSheet.create({
     paddingVertical: PaddingConstants.tab1_2x,
     paddingHorizontal: PaddingConstants.tab1_2x,
     backgroundColor: Colors.white,
-    borderRadius: 2,
+    borderColor: Colors.borderColor,
+    borderRadius: 12,
+    // Elevation for Android
+    elevation: 3,
+    // Shadow for iOS
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
   },
 
   rowContainer: {

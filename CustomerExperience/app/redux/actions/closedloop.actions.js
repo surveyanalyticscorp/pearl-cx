@@ -11,6 +11,8 @@ export const GET_EMAIL_TEMPLATES_RECEIVED = 'GET_EMAIL_TEMPLATES_RECEIVED';
 export const SEND_EMAIL = 'SEND_EMAIL';
 export const RESET_SEND_EMAIL_RESPONSE = 'RESET_SEND_EMAIL_RESPONSE';
 export const SEND_EMAIL_RECEIVED = 'SEND_EMAIL_RECEIVED';
+export const SEND_EMAIL_FAILED = 'SEND_EMAIL_FAILED';
+export const RESET_SEND_EMAIL_ERROR = 'RESET_SEND_EMAIL_ERROR';
 
 export const GET_LATEST_COMMENT = 'GET_LATEST_COMMENT';
 export const LATEST_COMMENT_RECEIVED = 'LATEST_COMMENT_RECEIVED';
@@ -37,6 +39,15 @@ export const UPDATE_CENTRALIZED_ROOT_CAUSE = 'UPDATE_CENTRALIZED_ROOT_CAUSE';
 export const CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED =
   'CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED';
 
+export const ADD_DRAFT_CENTRALIZED_ROOT_CAUSE =
+  'ADD_DRAFT_CENTRALIZED_ROOT_CAUSE';
+
+export const REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE =
+  'REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE';
+
+export const RESET_DRAFT_CENTRALIZED_ROOT_CAUSE =
+  'RESET_DRAFT_CENTRALIZED_ROOT_CAUSE';
+
 export const UPDATE_TICKET_ESCALATION = 'UPDATE_TICKET_ESCALATION';
 export const TICKET_ESCALATION_RECIEVED = 'TICKET_ESCALATION_RECIEVED';
 
@@ -60,6 +71,16 @@ export const GENERATE_EMAIL_DRAFT_RECEIVED = 'GENERATE_EMAIL_DRAFT_RECEIVED';
 export const GENERATE_REFINE_EMAIL_DRAFT = 'GENERATE_REFINE_EMAIL_DRAFT';
 export const GENERATE_REFINE_EMAIL_DRAFT_RECEIVED =
   'GENERATE_REFINE_EMAIL_DRAFT_RECEIVED';
+
+export const UPDATE_TAGS = 'UPDATE_TAGS';
+export const UPDATE_SINGLE_TAG = 'UPDATE_SINGLE_TAG';
+export const CLEAR_TAG_FILTER = 'CLEAR_TAG_FILTER';
+
+export const GET_TAGLIST = 'GET_TAGLIST';
+export const GET_TAGLIST_RECEIVED = 'GET_TAGLIST_RECEIVED';
+
+export const REMOVE_TICKET_TAG = 'REMOVE_TICKET_TAG';
+export const RESET_TICKET_TAG = 'RESET_TICKET_TAG';
 
 export const syncTickets = ({token, param, feedbackID}) => ({
   type: GET_TICKET_LIST_SYNC,
@@ -93,6 +114,14 @@ export const sendEmail = (token, ticketId, param) => ({
 
 export const resetSendEmailResponse = () => ({
   type: RESET_SEND_EMAIL_RESPONSE,
+});
+
+export const sendEmailFailed = () => ({
+  type: SEND_EMAIL_FAILED,
+});
+
+export const resetSendEmailError = () => ({
+  type: RESET_SEND_EMAIL_ERROR,
 });
 
 // Takes CX Ticket ID
@@ -130,15 +159,44 @@ export const updateRootCause = (token, ticketId, param, feedbackApiKey) => ({
   feedbackApiKey,
 });
 
-export const updateCentralizedRootCause = (ticketId, param) => ({
+export const updateCentralizedRootCause = (
+  ticketId,
+  param,
+  feedbackApiKey,
+) => ({
   type: UPDATE_CENTRALIZED_ROOT_CAUSE,
   ticketId,
   param,
+  feedbackApiKey,
+});
+
+export const resetCentralizedRootCause = () => ({
+  type: CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED,
+  response: {},
+});
+
+export const addDraftTags = (tagList, isOtherChecked, otherText) => ({
+  type: ADD_DRAFT_CENTRALIZED_ROOT_CAUSE,
+  tagList,
+  isOtherChecked,
+  otherText,
+});
+
+export const removeDraftTags = (tagList, isOtherChecked, otherText) => ({
+  type: REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE,
+  tagList,
+  isOtherChecked,
+  otherText,
+});
+
+export const resetDraftTags = () => ({
+  type: RESET_DRAFT_CENTRALIZED_ROOT_CAUSE,
 });
 
 export const getCentralizedRootCause = () => ({
   type: CENTRALIZED_ROOT_CAUSE,
 });
+
 export const setStatusFilterById = statusId => ({
   type: SET_TICKET_FILTER_BY_STATUS_ID,
   statusId,
@@ -198,4 +256,22 @@ export const generateEmailDraft = (param, ticketId, feedbackId) => ({
 export const generateRefineEmailDraft = param => ({
   type: GENERATE_REFINE_EMAIL_DRAFT,
   param,
+});
+export const getTaglist = ({feedbackId, param}) => ({
+  type: GET_TAGLIST,
+  feedbackId,
+  param,
+});
+
+export const updateSingleTag = tag => ({
+  type: UPDATE_SINGLE_TAG,
+  tag,
+});
+export const updateTags = tags => ({
+  type: UPDATE_TAGS,
+  tags,
+});
+
+export const clearTagFilter = () => ({
+  type: CLEAR_TAG_FILTER,
 });

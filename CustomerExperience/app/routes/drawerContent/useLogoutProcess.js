@@ -3,9 +3,22 @@ import {useDispatch, useSelector} from 'react-redux';
 import {clearError, clearUserInfo} from '../../redux/actions';
 import {doLogout} from '../../redux/actions/login.actions';
 import {
-  ASYNC_LOGGED_IN_ALREADY,
-  ASYNC_PUSH_TOKEN,
+  ASYNC_AUTH_TOKEN,
+  ASYNC_BEARER_TOKEN,
+  ASYNC_USER_INFO,
   ASYNC_USER_CREDENTIALS,
+  ASYNC_RESET_CREDENTIALS,
+  ASYNC_PUSH_TOKEN,
+  BASE_URL,
+  ASYNC_CLF_BASE_URL,
+  ACCESS_CODE,
+  ASYNC_LOGGED_IN_ALREADY,
+  SUBSCRIBER_ID,
+  ASYNC_LAST_LOGIN,
+  ASYNC_LOGIN_EXPIRE_DATE,
+  ASYNC_RESPONSES_WITH_CX_MANAGER,
+  ASYNC_APP_USAGE_TIME_TRACK_DATA,
+  ASYNC_TICKET_SYNC_STATUS,
 } from '../../api/Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Notifications} from 'react-native-notifications';
@@ -17,6 +30,25 @@ import DeviceInfo from 'react-native-device-info';
 import {isStringNullOrEmpty} from '../../Utils/Utility';
 import messaging from '@react-native-firebase/messaging';
 
+export const keysToRemove = [
+  ASYNC_AUTH_TOKEN,
+  ASYNC_BEARER_TOKEN,
+  ASYNC_USER_INFO,
+  ASYNC_USER_CREDENTIALS,
+  ASYNC_RESET_CREDENTIALS,
+  ASYNC_PUSH_TOKEN,
+  BASE_URL,
+  ASYNC_CLF_BASE_URL,
+  ACCESS_CODE,
+  SUBSCRIBER_ID,
+  ASYNC_LAST_LOGIN,
+  ASYNC_LOGIN_EXPIRE_DATE,
+  ASYNC_RESPONSES_WITH_CX_MANAGER,
+  ASYNC_APP_USAGE_TIME_TRACK_DATA,
+  ASYNC_TICKET_SYNC_STATUS,
+
+  // Add any other session-specific keys that need to be cleared
+];
 const useLogoutProcess = () => {
   const dispatch = useDispatch();
   const authToken = useSelector(state => state.global.authToken);
@@ -33,8 +65,10 @@ const useLogoutProcess = () => {
   const removeCashedData = () => {
     console.log('USE_LOGOUT', 'removeCashedData');
 
-    AsyncStorage.clear().then(() => {
-      console.log('USE_LOGOUT', 'AsyncStorage.clear() success');
+    // Define keys to remove during logout
+
+    AsyncStorage.multiRemove(keysToRemove).then(() => {
+      console.log('USE_LOGOUT', 'AsyncStorage keys removed successfully');
 
       global.baseUrl = '';
       global.clfBaseUrl = '';

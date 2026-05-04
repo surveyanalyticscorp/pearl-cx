@@ -34,11 +34,11 @@ describe('Colors', () => {
     expect(Colors.accentLight).toBe('#1b87e6');
     expect(Colors.checkboxColor).toBe('#ababab');
     expect(Colors.accent).toBe('#1B3380');
-    expect(Colors.deleteBackground).toBe('#cc000012');
-    expect(Colors.deleteButtonText).toBe('#cc0000');
+    expect(Colors.deleteBackground).toBe('#CC0000');
+    expect(Colors.deleteButtonText).toBe('#FFFFFF');
     expect(Colors.filterIconColor).toBe('#545E6B');
     expect(Colors.overdueAlertColor).toBe('#EA4650');
-    expect(Colors.textAvatarBackground).toBe('#cc6677');
+    expect(Colors.textAvatarBackground).toBe('#CC6677');
     expect(Colors.accentGradient).toBe('rgba(239, 246, 252, 1)');
     expect(Colors.gradientColor).toBe('#8AC0EA');
     expect(Colors.grey).toBe('#f9f9f9');
@@ -76,12 +76,12 @@ describe('Colors', () => {
     expect(Colors.passive).toBe('#FFE300');
     expect(Colors.passive2).toBe('#FFCB47');
     expect(Colors.critical).toBe('#E53251');
-    expect(Colors.critical2).toBe('#DA2222');
+    expect(Colors.critical2).toBe('#F85271');
     expect(Colors.high).toBe('#FF6103');
-    expect(Colors.high2).toBe('#E4632D');
-    expect(Colors.medium2).toBe('#F6C140');
+    expect(Colors.high2).toBe('#F69A79');
+    expect(Colors.medium2).toBe('#F1DA7E');
 
-    expect(Colors.low2).toBe('#A6BE54');
+    expect(Colors.low2).toBe('#42BD84');
     expect(Colors.negativePromter).toBe('#E8E8E8');
     expect(Colors.positivePromter).toBe('#90BA5B');
     expect(Colors.negativePassive).toBe('#CE3E3E');
@@ -109,7 +109,7 @@ describe('getPriorityBorderColor', () => {
 
   it('returns the correct color for "Low" priority', () => {
     const color = getPriorityBorderColor('low');
-    expect(color).toBe('#A6BE54');
+    expect(color).toBe('#42BD84');
   });
 
   it('returns the correct color for "Unassigned" priority', () => {
@@ -141,7 +141,7 @@ describe('getPriorityBorderColorbyId', () => {
 
   it('returns the correct color for priority ID 0', () => {
     const color = getPriorityBorderColorbyId(0);
-    expect(color).toBe('#A6BE54');
+    expect(color).toBe('#42BD84');
   });
 });
 describe('getPriorityFillerColor', () => {
@@ -300,7 +300,7 @@ describe('priorityColors', () => {
     expect(priorityColors.high.filler).toBe('#E4632D33');
     expect(priorityColors.normal.border).toBe('#F6C140');
     expect(priorityColors.normal.filler).toBe('#F6C14033');
-    expect(priorityColors.low.border).toBe('#A6BE54');
+    expect(priorityColors.low.border).toBe('#42BD84');
     expect(priorityColors.low.filler).toBe('#A6BE5433');
     expect(priorityColors.unassigned.border).toBe('#d8d8d8');
     expect(priorityColors.unassigned.filler).toBe('#D8D8D833');
@@ -310,17 +310,17 @@ describe('priorityColors', () => {
 describe('getNPSColor', () => {
   it('returns the correct color for "Detractor" sentiment', () => {
     const color = getNPSColor('Detractor');
-    expect(color).toBe('#FF7681');
+    expect(color).toBe('#F85271');
   });
 
   it('returns the correct color for "Passive" sentiment', () => {
     const color = getNPSColor('Passive');
-    expect(color).toBe('#FFCB47');
+    expect(color).toBe('#F1DA7E');
   });
 
   it('returns the correct color for "Promoter" sentiment', () => {
     const color = getNPSColor('Promoter');
-    expect(color).toBe('#1BA758');
+    expect(color).toBe('#42BD84');
   });
 });
 

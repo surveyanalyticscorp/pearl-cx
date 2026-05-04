@@ -1,0 +1,72 @@
+diff --git a/node_modules/victory-pie/es/slice.js b/node_modules/victory-pie/es/slice.js
+index 1234567..abcdefg 100644
+--- a/node_modules/victory-pie/es/slice.js
++++ b/node_modules/victory-pie/es/slice.js
+@@ -78,7 +78,7 @@
+ };
+
+ var Slice = function (props) {
+-  props = evaluateProps(props);
++  props = evaluateProps(_objectSpread({ pathComponent: React.createElement(Path, null), role: "presentation", shapeRendering: "auto" }, props));
+   var defaultTransform = props.origin ? "translate(".concat(props.origin.x, ", ").concat(props.origin.y, ")") : undefined;
+   return React.cloneElement(props.pathComponent, _objectSpread({}, props.events, {
+     "aria-label": props.ariaLabel,
+@@ -105,9 +105,4 @@
+   sliceEndAngle: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
+   sliceStartAngle: PropTypes.oneOfType([PropTypes.number, PropTypes.func])
+ });
+-Slice.defaultProps = {
+-  pathComponent: React.createElement(Path, null),
+-  role: "presentation",
+-  shapeRendering: "auto"
+-};
+-export default Slice;
++export default Slice;
+diff --git a/node_modules/victory-pie/lib/slice.js b/node_modules/victory-pie/lib/slice.js
+index 1234567..abcdefg 100644
+--- a/node_modules/victory-pie/lib/slice.js
++++ b/node_modules/victory-pie/lib/slice.js
+@@ -107,7 +107,7 @@
+ };
+
+ var Slice = function (props) {
+-  props = evaluateProps(props);
++  props = evaluateProps(_objectSpread({ pathComponent: _react.default.createElement(_victoryCore.Path, null), role: "presentation", shapeRendering: "auto" }, props));
+   var defaultTransform = props.origin ? "translate(".concat(props.origin.x, ", ").concat(props.origin.y, ")") : undefined;
+   return _react.default.cloneElement(props.pathComponent, _objectSpread({}, props.events, {
+     "aria-label": props.ariaLabel,
+@@ -134,10 +134,5 @@
+   sliceEndAngle: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.func]),
+   sliceStartAngle: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.func])
+ });
+-Slice.defaultProps = {
+-  pathComponent: _react.default.createElement(_victoryCore.Path, null),
+-  role: "presentation",
+-  shapeRendering: "auto"
+-};
+ var _default = Slice;
+ exports.default = _default;
+diff --git a/node_modules/victory-pie/src/slice.js b/node_modules/victory-pie/src/slice.js
+index 1234567..abcdefg 100644
+--- a/node_modules/victory-pie/src/slice.js
++++ b/node_modules/victory-pie/src/slice.js
+@@ -69,7 +69,7 @@
+ };
+
+ const Slice = (props) => {
+-  props = evaluateProps(props);
++  props = evaluateProps({ pathComponent: <Path />, role: "presentation", shapeRendering: "auto", ...props });
+   const defaultTransform = props.origin
+     ? `translate(${props.origin.x}, ${props.origin.y})`
+     : undefined;
+@@ -102,10 +102,4 @@
+   sliceStartAngle: PropTypes.oneOfType([PropTypes.number, PropTypes.func])
+ };
+
+-Slice.defaultProps = {
+-  pathComponent: <Path />,
+-  role: "presentation",
+-  shapeRendering: "auto"
+-};
+-
+ export default Slice;

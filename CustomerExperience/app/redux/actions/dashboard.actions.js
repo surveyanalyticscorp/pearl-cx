@@ -59,6 +59,8 @@ export const CLOSED_LOOP_TICKET_ITEM_ACTIVITY_RECEIVED =
 
 export const CREATE_CLF_TICKET = 'CREATE_CLF_TICKET';
 export const CREATE_CLF_TICKET_RECIEVED = 'CREATE_CLF_TICKET_RECIEVED';
+export const RESET_CREATE_CLF_TICKET_RECIEVED =
+  'RESET_CREATE_CLF_TICKET_RECIEVED';
 
 export const UPDATE_CLF_TICKET = 'UPDATE_CLF_TICKET';
 export const UPDATE_CLF_TICKET_RECIEVED = 'UPDATE_CLF_TICKET_RECIEVED';
@@ -195,8 +197,7 @@ export const createClfTicket = (param, feedbackApiKey) => ({
 });
 
 export const resetCreateTicketResponse = () => ({
-  type: CREATE_CLF_TICKET_RECIEVED,
-  response: {},
+  type: RESET_CREATE_CLF_TICKET_RECIEVED,
 });
 
 export const updateClfTicket = (token, param, ticketId, feedbackApiKey) => ({

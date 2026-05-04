@@ -1,5 +1,5 @@
-import {create} from 'lodash';
-import {getUniqueValues} from '../../Utils/TicketUtils';
+import {create, get} from 'lodash';
+import {getUniqueValues, removeItemFromArray} from '../../Utils/TicketUtils';
 import {CLEAR_USER_INFO} from '../actions';
 import {
   ACTIONS_RECEIVED,
@@ -16,6 +16,8 @@ import {
   MEDIA_FILE_UPLOAD_RESET,
   MEDIA_FILE_UPLOAD_RESPONSE,
   RESET_SEND_EMAIL_RESPONSE,
+  SEND_EMAIL_FAILED,
+  RESET_SEND_EMAIL_ERROR,
   ROOT_CASUES_RECEIVED,
   ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL_RECEIVED,
@@ -23,6 +25,15 @@ import {
   GENERATE_REFINE_EMAIL_DRAFT_RECEIVED,
   GENERATE_EMAIL_DRAFT_RECEIVED,
   generateEmailDraft,
+  ADD_DRAFT_CENTRALIZED_ROOT_CAUSE,
+  REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE,
+  RESET_DRAFT_CENTRALIZED_ROOT_CAUSE,
+  UPDATE_TAGS,
+  REMOVE_TICKET_TAG,
+  GET_TAGLIST,
+  GET_TAGLIST_RECEIVED,
+  UPDATE_SINGLE_TAG,
+  CLEAR_TAG_FILTER,
 } from '../actions/closedloop.actions';
 import {
   CLEAR_CLOSED_LOOP_TICKET_DETAILS,
@@ -51,12 +62,17 @@ import {
   IS_CSAT_VIEW_TOP_BOX,
   SET_MOVE_NEXT,
   CLEAR_DASHBOARD,
+  RESET_CREATE_CLF_TICKET_RECIEVED,
 } from '../actions/dashboard.actions';
 import {
   SET_EMAIL_SUBJECT,
   TOGGLE_TEMPLATE_BOTTOM_SHEET,
 } from '../actions/email.actions';
 import {REFINE_DEFAULT} from '../../api/Constant';
+import {
+  addTags,
+  removeTags,
+} from '../../components/closedloop/TicketRootCause/utils';
 
 const initialState = {
   dashboardData: {},
@@ -94,6 +110,7 @@ const initialState = {
   rootCauseList: [],
   rootCauseActionList: [],
   centralizedRootCauseList: [],
+  selectedRootCauses: {},
   isSegmentSelectorOpen: false,
   ownerDetails: {},
   allOwnersDetails: {},
@@ -101,13 +118,14 @@ const initialState = {
   currentFeedback: {},
   ticketFilter: {},
   ticket: {},
+  ticketTags: [],
   ticketComments: [],
   ticketActivity: [],
   createTicketResponse: {},
   ticketSync: true,
   apiCallStatus: {},
   welcomeScreenData: {},
-  emailData: {currentEmailBody: {}, emailSentResponse: {}},
+  emailData: {currentEmailBody: {}, emailSentResponse: {}, emailSendError: false},
   generatedEmailDraftResponse: {
     context: '',
     response: {},
@@ -122,6 +140,7 @@ const initialState = {
   expirationDate: '',
   isCsatViewTopBox: true,
   skipWelcome: false,
+  centralizedRootCauseUpdateStatus: {},
 };
 
 const dashboardReducer = (state = initialState, action) => {
@@ -145,7 +164,10 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         segmentState: action.response.body,
-        segmentList: getSegmentListData(state, action.response.body),
+        segmentList: getSegmentListData(
+          state.segmentList,
+          action.response.body,
+        ),
       };
     }
 
@@ -234,6 +256,10 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         ticket: action.ticketData,
+        selectedRootCauses: {
+          ...(action.ticketData.centralizeRootCause ?? {}),
+          hasUpdated: false,
+        },
         ticketComments: action.ticketComments,
         ticketActivity: action.ticketActivity,
       };
@@ -267,11 +293,23 @@ const dashboardReducer = (state = initialState, action) => {
       };
     }
 
+    case RESET_CREATE_CLF_TICKET_RECIEVED: {
+      return {
+        ...state,
+        createTicketResponse: {},
+      };
+    }
+
     case UPDATE_CLF_TICKET_RECIEVED: {
       return {
         ...state,
         apiCallStatus: action.response,
         ticket: action.ticketData,
+        selectedRootCauses: {
+          ...(action.ticketData.centralizeRootCause ?? {}),
+          hasUpdated: false,
+        },
+
         ticketComments: action.ticketComments,
         ticketActivity: action.ticketActivity,
       };
@@ -331,6 +369,18 @@ const dashboardReducer = (state = initialState, action) => {
         emailData: {...state.emailData, emailSentResponse: action.response},
       };
     }
+    case SEND_EMAIL_FAILED: {
+      return {
+        ...state,
+        emailData: {...state.emailData, emailSendError: true},
+      };
+    }
+    case RESET_SEND_EMAIL_ERROR: {
+      return {
+        ...state,
+        emailData: {...state.emailData, emailSendError: false},
+      };
+    }
 
     case MEDIA_FILE_UPLOAD_RESPONSE: {
       return {
@@ -363,7 +413,54 @@ const dashboardReducer = (state = initialState, action) => {
     case CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED: {
       return {
         ...state,
-        ticket: action.response,
+        centralizedRootCauseUpdateStatus: action.response,
+      };
+    }
+    case ADD_DRAFT_CENTRALIZED_ROOT_CAUSE: {
+      return {
+        ...state,
+
+        selectedRootCauses: {
+          ...state.selectedRootCauses,
+          isOtherChecked:
+            action.isOtherChecked ??
+            state.selectedRootCauses?.isOtherChecked ??
+            false,
+          otherText:
+            action.otherText ?? state.selectedRootCauses?.otherText ?? '',
+          centralizeRootCauseIds: addTags(
+            state.selectedRootCauses.centralizeRootCauseIds,
+            action.tagList,
+          ),
+          hasUpdated: true,
+        },
+      };
+    }
+
+    case REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE: {
+      return {
+        ...state,
+
+        selectedRootCauses: {
+          ...state.selectedRootCauses,
+          isOtherChecked:
+            action.isOtherChecked ?? state.selectedRootCauses.isOtherChecked,
+          otherText: action.otherText ?? state.selectedRootCauses.otherText,
+          centralizeRootCauseIds: removeTags(
+            state.selectedRootCauses.centralizeRootCauseIds,
+            action.tagList,
+          ),
+          hasUpdated: true,
+        },
+      };
+    }
+    case RESET_DRAFT_CENTRALIZED_ROOT_CAUSE: {
+      return {
+        ...state,
+        selectedRootCauses: {
+          ...(state.ticket.centralizeRootCause ?? {}),
+          hasUpdated: false,
+        },
       };
     }
 
@@ -378,6 +475,10 @@ const dashboardReducer = (state = initialState, action) => {
       return {
         ...state,
         ticket: action.ticketData,
+        selectedRootCauses: {
+          ...(action.ticketData.centralizeRootCause ?? {}),
+          hasUpdated: false,
+        },
       };
     }
 
@@ -495,18 +596,42 @@ const dashboardReducer = (state = initialState, action) => {
       };
     }
 
+    case UPDATE_TAGS: {
+      return {...state, ticketTags: action.tags};
+    }
+
+    case UPDATE_SINGLE_TAG: {
+      return {
+        ...state,
+        ticketTags: updatingSingleTag(state.ticketTags, action.tag),
+      };
+    }
+    case CLEAR_TAG_FILTER: {
+      return {
+        ...state,
+        ticketTags: state.ticketTags.map(tag => ({
+          ...tag,
+          isChecked: false,
+        })),
+      };
+    }
+
+    case GET_TAGLIST_RECEIVED: {
+      return {...state, ticketTags: getTags(state.ticketTags, action.response)};
+    }
+
     default: {
       return state;
     }
   }
 };
 
-const getSegmentListData = (state, segmentDetails_) => {
+const getSegmentListData = (segmentList, segmentDetails_) => {
   if (segmentDetails_.pageOffset === '0') {
     return [...segmentDetails_.segments];
   } else {
     return getUniqueValues(
-      [...state.segmentList, ...segmentDetails_.segments],
+      [...segmentList, ...segmentDetails_.segments],
       'segmentID',
     );
     // [...new Map(list.map((item) => [item['segmentID'], item])).values()];
@@ -531,5 +656,31 @@ const getCurrentNPS = (segmentId, npsScoreList) => {
     element => element['storeId'] === segmentId,
   );
   return index >= 0 ? npsScoreList[index] : {};
+};
+
+const getTags = (currentTags, tags) => {
+  if (currentTags.length === 0) {
+    return tags.map(tag => ({
+      ...tag,
+      isChecked: false,
+    }));
+  }
+  if (currentTags[0].id === tags[0].id) {
+    return currentTags;
+  }
+
+  return [
+    ...currentTags,
+    ...tags.map(tag => ({
+      ...tag,
+      isChecked: false,
+    })),
+  ];
+};
+
+export const updatingSingleTag = (currentTags, tag) => {
+  return currentTags.map(t =>
+    t.id === tag.id ? {...t, isChecked: tag.isChecked} : t,
+  );
 };
 export default dashboardReducer;

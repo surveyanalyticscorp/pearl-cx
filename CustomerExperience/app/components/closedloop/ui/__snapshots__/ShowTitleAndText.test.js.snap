@@ -4,8 +4,8 @@ exports[`ShowTitleAndText renders correctly 1`] = `
 <View
   style={
     {
-      "alignItems": "center",
-      "flexDirection": "row",
+      "alignItems": "flex-start",
+      "flexDirection": "column",
       "justifyContent": "space-between",
       "marginVertical": 3.75,
     }
@@ -13,12 +13,12 @@ exports[`ShowTitleAndText renders correctly 1`] = `
   testID="show-title-and-text"
 >
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "alignItems": "flex-start",
         "color": "#545E6B",
-        "flex": 2,
-        "fontFamily": "FiraSans-Regular",
+        "fontFamily": "FiraSans-Light",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
@@ -28,13 +28,14 @@ exports[`ShowTitleAndText renders correctly 1`] = `
     testID="text-label"
   />
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
-        "flex": 3,
-        "fontFamily": "FiraSans-Light",
-        "fontSize": 15,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 18,
         "fontWeight": "400",
+        "marginBottom": 7.5,
         "marginHorizontal": 3.75,
       }
     }
@@ -47,8 +48,8 @@ exports[`ShowTitleAndText renders correctly with isSubtextHighlighted 1`] = `
 <View
   style={
     {
-      "alignItems": "center",
-      "flexDirection": "row",
+      "alignItems": "flex-start",
+      "flexDirection": "column",
       "justifyContent": "space-between",
       "marginVertical": 3.75,
     }
@@ -56,12 +57,12 @@ exports[`ShowTitleAndText renders correctly with isSubtextHighlighted 1`] = `
   testID="show-title-and-text"
 >
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "alignItems": "flex-start",
         "color": "#545E6B",
-        "flex": 2,
-        "fontFamily": "FiraSans-Regular",
+        "fontFamily": "FiraSans-Light",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
@@ -71,13 +72,14 @@ exports[`ShowTitleAndText renders correctly with isSubtextHighlighted 1`] = `
     testID="text-label"
   />
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#1b87e6",
-        "flex": 3,
-        "fontFamily": "FiraSans-Light",
-        "fontSize": 15,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 18,
         "fontWeight": "400",
+        "marginBottom": 7.5,
         "marginHorizontal": 3.75,
       }
     }
@@ -90,8 +92,8 @@ exports[`ShowTitleAndText renders correctly with subText 1`] = `
 <View
   style={
     {
-      "alignItems": "center",
-      "flexDirection": "row",
+      "alignItems": "flex-start",
+      "flexDirection": "column",
       "justifyContent": "space-between",
       "marginVertical": 3.75,
     }
@@ -99,12 +101,12 @@ exports[`ShowTitleAndText renders correctly with subText 1`] = `
   testID="show-title-and-text"
 >
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "alignItems": "flex-start",
         "color": "#545E6B",
-        "flex": 2,
-        "fontFamily": "FiraSans-Regular",
+        "fontFamily": "FiraSans-Light",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
@@ -114,13 +116,14 @@ exports[`ShowTitleAndText renders correctly with subText 1`] = `
     testID="text-label"
   />
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
-        "flex": 3,
-        "fontFamily": "FiraSans-Light",
-        "fontSize": 15,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 18,
         "fontWeight": "400",
+        "marginBottom": 7.5,
         "marginHorizontal": 3.75,
       }
     }
@@ -135,8 +138,8 @@ exports[`ShowTitleAndText renders correctly with title 1`] = `
 <View
   style={
     {
-      "alignItems": "center",
-      "flexDirection": "row",
+      "alignItems": "flex-start",
+      "flexDirection": "column",
       "justifyContent": "space-between",
       "marginVertical": 3.75,
     }
@@ -144,12 +147,12 @@ exports[`ShowTitleAndText renders correctly with title 1`] = `
   testID="show-title-and-text"
 >
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "alignItems": "flex-start",
         "color": "#545E6B",
-        "flex": 2,
-        "fontFamily": "FiraSans-Regular",
+        "fontFamily": "FiraSans-Light",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
@@ -161,13 +164,14 @@ exports[`ShowTitleAndText renders correctly with title 1`] = `
     title
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
-        "flex": 3,
-        "fontFamily": "FiraSans-Light",
-        "fontSize": 15,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 18,
         "fontWeight": "400",
+        "marginBottom": 7.5,
         "marginHorizontal": 3.75,
       }
     }
@@ -180,8 +184,8 @@ exports[`ShowTitleAndText renders correctly with title and subText 1`] = `
 <View
   style={
     {
-      "alignItems": "center",
-      "flexDirection": "row",
+      "alignItems": "flex-start",
+      "flexDirection": "column",
       "justifyContent": "space-between",
       "marginVertical": 3.75,
     }
@@ -189,12 +193,12 @@ exports[`ShowTitleAndText renders correctly with title and subText 1`] = `
   testID="show-title-and-text"
 >
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "alignItems": "flex-start",
         "color": "#545E6B",
-        "flex": 2,
-        "fontFamily": "FiraSans-Regular",
+        "fontFamily": "FiraSans-Light",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
@@ -206,13 +210,14 @@ exports[`ShowTitleAndText renders correctly with title and subText 1`] = `
     title
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#545E6B",
-        "flex": 3,
-        "fontFamily": "FiraSans-Light",
-        "fontSize": 15,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 18,
         "fontWeight": "400",
+        "marginBottom": 7.5,
         "marginHorizontal": 3.75,
       }
     }
@@ -227,8 +232,8 @@ exports[`ShowTitleAndText renders correctly with title, subText and isSubtextHig
 <View
   style={
     {
-      "alignItems": "center",
-      "flexDirection": "row",
+      "alignItems": "flex-start",
+      "flexDirection": "column",
       "justifyContent": "space-between",
       "marginVertical": 3.75,
     }
@@ -236,12 +241,12 @@ exports[`ShowTitleAndText renders correctly with title, subText and isSubtextHig
   testID="show-title-and-text"
 >
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "alignItems": "flex-start",
         "color": "#545E6B",
-        "flex": 2,
-        "fontFamily": "FiraSans-Regular",
+        "fontFamily": "FiraSans-Light",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
@@ -253,13 +258,14 @@ exports[`ShowTitleAndText renders correctly with title, subText and isSubtextHig
     title
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#1b87e6",
-        "flex": 3,
-        "fontFamily": "FiraSans-Light",
-        "fontSize": 15,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 18,
         "fontWeight": "400",
+        "marginBottom": 7.5,
         "marginHorizontal": 3.75,
       }
     }
@@ -274,8 +280,8 @@ exports[`ShowTitleAndText should render correctly with title, subText and isSubt
 <View
   style={
     {
-      "alignItems": "center",
-      "flexDirection": "row",
+      "alignItems": "flex-start",
+      "flexDirection": "column",
       "justifyContent": "space-between",
       "marginVertical": 3.75,
     }
@@ -283,12 +289,12 @@ exports[`ShowTitleAndText should render correctly with title, subText and isSubt
   testID="show-title-and-text"
 >
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "alignItems": "flex-start",
         "color": "#545E6B",
-        "flex": 2,
-        "fontFamily": "FiraSans-Regular",
+        "fontFamily": "FiraSans-Light",
         "fontSize": 15,
         "fontWeight": "400",
         "marginHorizontal": 3.75,
@@ -300,13 +306,14 @@ exports[`ShowTitleAndText should render correctly with title, subText and isSubt
     title
   </Text>
   <Text
+    ellipsizeMode="middle"
     style={
       {
         "color": "#1b87e6",
-        "flex": 3,
-        "fontFamily": "FiraSans-Light",
-        "fontSize": 15,
+        "fontFamily": "FiraSans-Regular",
+        "fontSize": 18,
         "fontWeight": "400",
+        "marginBottom": 7.5,
         "marginHorizontal": 3.75,
       }
     }

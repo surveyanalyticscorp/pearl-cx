@@ -43,8 +43,9 @@ import {
   SET_TOKEN_EXPIRE_DATE,
   IS_CSAT_VIEW_TOP_BOX,
   SET_MOVE_NEXT,
+  RESET_CREATE_CLF_TICKET_RECIEVED,
 } from '../actions/dashboard.actions';
-import {assign, assignWith, has} from 'lodash';
+import {SET_EMAIL_SUBJECT} from '../actions/email.actions';
 
 const initialState = {
   dashboardData: {},
@@ -81,6 +82,8 @@ const initialState = {
   segmentList: [],
   rootCauseList: [],
   rootCauseActionList: [],
+  centralizedRootCauseList: [],
+  selectedRootCauses: {},
   isSegmentSelectorOpen: false,
   ownerDetails: {},
   allOwnersDetails: {},
@@ -88,12 +91,19 @@ const initialState = {
   currentFeedback: {},
   ticketFilter: {},
   ticket: {},
+  ticketTags: [],
   ticketComments: [],
   ticketActivity: [],
+  createTicketResponse: {},
   ticketSync: true,
   apiCallStatus: {},
   welcomeScreenData: {},
   emailData: {currentEmailBody: {}, emailSentResponse: {}},
+  generatedEmailDraftResponse: {
+    context: '',
+    response: {},
+  },
+  isEmailTemplateOpen: false,
   mediaFileList: [],
   ticketDeleteStatus: {status: 'default'},
   ticketActionHistory: {summary: {}, details: {}},
@@ -103,10 +113,7 @@ const initialState = {
   expirationDate: '',
   isCsatViewTopBox: true,
   skipWelcome: false,
-
-  centralizedRootCauseList: [],
-  createTicketResponse: {},
-  isEmailTemplateOpen: false,
+  centralizedRootCauseUpdateStatus: {},
 };
 
 // write test for dashboard reducer
@@ -863,6 +870,9 @@ describe('Dashboard Reducer', () => {
         buttonText: 'rootCause1',
         buttonUrl: 'https://rootCause1.com',
       },
+      selectedRootCauses: {
+        hasUpdated: false,
+      },
     });
   });
 
@@ -1059,6 +1069,9 @@ describe('Dashboard Reducer', () => {
         buttonText: 'rootCause1',
         buttonUrl: 'https://rootCause1.com',
       },
+      selectedRootCauses: {
+        hasUpdated: false,
+      },
       ticketComments: [
         {
           id: '1',
@@ -1192,6 +1205,26 @@ describe('Dashboard Reducer', () => {
     });
   });
 
+  it('should handle RESET_CREATE_CLF_TICKET_RECIEVED', () => {
+    expect(
+      dashboardReducer(
+        {
+          ...initialState,
+          createTicketResponse: {
+            id: '1',
+            name: 'test',
+          },
+        },
+        {
+          type: RESET_CREATE_CLF_TICKET_RECIEVED,
+        },
+      ),
+    ).toEqual({
+      ...initialState,
+      createTicketResponse: {},
+    });
+  });
+
   it('should handle UPDATE_CLF_TICKET_RECIEVED', () => {
     expect(
       dashboardReducer(initialState, {
@@ -1232,6 +1265,9 @@ describe('Dashboard Reducer', () => {
         buttonText: 'rootCause1',
         buttonUrl: 'https://rootCause1.com',
       },
+      selectedRootCauses: {
+        hasUpdated: false,
+      },
       apiCallStatus: {hasNextCall: true, status: 'success'},
       ticketComments: [
         {
@@ -1249,6 +1285,7 @@ describe('Dashboard Reducer', () => {
       ],
     });
   });
+
   it('should handle FIRST_TIME_CLOSED_LOOP_SEGMENT_DETAILS_RECEIVED', () => {
     expect(
       dashboardReducer(initialState, {
@@ -1294,6 +1331,24 @@ describe('Dashboard Reducer', () => {
       ticketComments: [],
     });
   });
+
+  it('should handle SET_EMAIL_SUBJECT', () => {
+    expect(
+      dashboardReducer(initialState, {
+        type: SET_EMAIL_SUBJECT,
+        emailSubject: 'Test Email Subject',
+      }),
+    ).toEqual({
+      ...initialState,
+      emailData: {
+        currentEmailBody: {
+          subject: 'Test Email Subject',
+        },
+        emailSentResponse: {},
+      },
+    });
+  });
+
   // test getUniqueValues
   it('should handle getUniqueValues', () => {
     expect(

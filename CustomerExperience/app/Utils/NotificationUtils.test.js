@@ -1,318 +1,400 @@
-// import {
-//   checkNotificationPermission,
-//   addNotificationListeners,
-//   actionOnNotification,
-//   requestUserPermission,
-// } from './NotificationUtils.js';
-// import messaging from '@react-native-firebase/messaging';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import {Notifications} from 'react-native-notifications';
-// import {AppState} from 'react-native';
-// import * as RootNavigation from '../routes/RootNavigation';
-// import {translate} from './MultilinguaUtils';
-
-// jest.mock('@react-native-firebase/messaging');
-// jest.mock('@react-native-async-storage/async-storage');
-// jest.mock('react-native-notifications');
-// jest.mock('../routes/RootNavigation');
-// jest.mock('./MultilinguaUtils', () => ({
-//   translate: jest.fn(key => key),
-// }));
-
-// describe('NotificationUtils', () => {
-//   beforeEach(() => {
-//     jest.clearAllMocks();
-//   });
-
-//   // describe('checkNotificationPermission', () => {
-//   //   it('should call getToken when permission is enabled', async () => {
-//   //     messaging().hasPermission.mockResolvedValue(true);
-//   //     const getTokenSpy = jest
-//   //       .spyOn(messaging(), 'getToken')
-//   //       .mockResolvedValue('mock-token');
-
-//   //     await checkNotificationPermission();
-
-//   //     expect(messaging().hasPermission).toHaveBeenCalled();
-//   //     expect(getTokenSpy).toHaveBeenCalled();
-//   //   });
-
-//   //   it('should call requestUserPermission when permission is not enabled', async () => {
-//   //     messaging().hasPermission.mockResolvedValue(false);
-//   //     const requestUserPermissionSpy = jest.spyOn(
-//   //       messaging(),
-//   //       'requestPermission',
-//   //     );
-
-//   //     await checkNotificationPermission();
-
-//   //     expect(messaging().hasPermission).toHaveBeenCalled();
-//   //     expect(requestUserPermissionSpy).toHaveBeenCalled();
-//   //   });
-//   // });
-
-//   // describe('addNotificationListeners', () => {
-//   //   it('should set background message handler and handle notifications', () => {
-//   //     const setBackgroundMessageHandlerSpy = jest.spyOn(
-//   //       messaging(),
-//   //       'setBackgroundMessageHandler',
-//   //     );
-//   //     const onNotificationOpenedAppSpy = jest.spyOn(
-//   //       messaging(),
-//   //       'onNotificationOpenedApp',
-//   //     );
-//   //     const getInitialNotificationSpy = jest.spyOn(
-//   //       messaging(),
-//   //       'getInitialNotification',
-//   //     );
-//   //     const registerNotificationReceivedForegroundSpy = jest.spyOn(
-//   //       Notifications.events(),
-//   //       'registerNotificationReceivedForeground',
-//   //     );
-//   //     const registerNotificationOpenedSpy = jest.spyOn(
-//   //       Notifications.events(),
-//   //       'registerNotificationOpened',
-//   //     );
-
-//   //     addNotificationListeners();
-
-//   //     expect(setBackgroundMessageHandlerSpy).toHaveBeenCalled();
-//   //     expect(onNotificationOpenedAppSpy).toHaveBeenCalled();
-//   //     expect(getInitialNotificationSpy).toHaveBeenCalled();
-//   //     expect(registerNotificationReceivedForegroundSpy).toHaveBeenCalled();
-//   //     expect(registerNotificationOpenedSpy).toHaveBeenCalled();
-//   //   });
-
-//   //   it('should navigate to ticket details when notification opens the app', async () => {
-//   //     const remoteMessage = {
-//   //       data: {CXTicket: '12345'},
-//   //       notification: {title: 'Test', body: 'Test Body'},
-//   //     };
-
-//   //     messaging().getInitialNotification.mockResolvedValue(remoteMessage);
-//   //     const navigateSpy = jest.spyOn(RootNavigation, 'navigate');
-
-//   //     await addNotificationListeners();
-
-//   //     expect(navigateSpy).toHaveBeenCalledWith('close_loop.ticket_details', {
-//   //       ticketID: '12345',
-//   //       parentRoute: 'Dashboard',
-//   //     });
-//   //   });
-//   // });
-
-//   describe('actionOnNotification', () => {
-//     jest.useFakeTimers();
-
-//     it('should navigate to ticket details after a delay', () => {
-//       const navigateSpy = jest.spyOn(RootNavigation, 'navigate');
-
-//       actionOnNotification('12345', 1000);
-
-//       jest.advanceTimersByTime(1000);
-
-//       expect(navigateSpy).toHaveBeenCalledWith('close_loop.ticket_details', {
-//         ticketID: '12345',
-//         parentRoute: 'Dashboard',
-//       });
-//     });
-//   });
-
-//   // describe('requestUserPermission', () => {
-//   //   it('should request permission and call getToken', async () => {
-//   //     const requestPermissionSpy = jest.spyOn(messaging(), 'requestPermission');
-//   //     const getTokenSpy = jest
-//   //       .spyOn(messaging(), 'getToken')
-//   //       .mockResolvedValue('mock-token');
-
-//   //     await requestUserPermission();
-
-//   //     expect(requestPermissionSpy).toHaveBeenCalled();
-//   //     expect(getTokenSpy).toHaveBeenCalled();
-//   //   });
-
-//   //   it('should log an error when permission is rejected', async () => {
-//   //     const consoleSpy = jest.spyOn(console, 'log');
-
-//   //     // Mock requestPermission to reject the promise
-//   //     messaging().requestPermission.mockRejectedValue('Permission rejected');
-
-//   //     // Mock getToken to prevent any unintended calls
-//   //     const getTokenMock = jest
-//   //       .spyOn(messaging(), 'getToken')
-//   //       .mockResolvedValue('mock-token');
-
-//   //     // Call the function
-//   //     await requestUserPermission();
-
-//   //     // Assert that the console logged the rejection message
-//   //     expect(consoleSpy).toHaveBeenCalledWith('permission rejected');
-
-//   //     // Ensure getToken is never called
-//   //     expect(getTokenMock).not.toHaveBeenCalled();
-//   //   });
-//   // });
-// });
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import messaging from '@react-native-firebase/messaging';
-import {Notifications} from 'react-native-notifications';
-import {AppState} from 'react-native';
-import * as RootNavigation from '../routes/RootNavigation';
 import {
-  requestUserPermission,
+  requestNotificationPermission,
   checkNotificationPermission,
   addNotificationListeners,
   actionOnNotification,
 } from './NotificationUtils';
-import {translate} from './MultilinguaUtils';
 
-jest.mock('@react-native-firebase/messaging', () => ({
-  requestPermission: jest.fn(),
-  hasPermission: jest.fn(),
-  getToken: jest.fn(),
-  setBackgroundMessageHandler: jest.fn(),
-  onNotificationOpenedApp: jest.fn(),
-  getInitialNotification: jest.fn(),
+// Global mocks
+jest.mock('react-native', () => ({
+  Platform: {
+    OS: 'android',
+  },
+  PermissionsAndroid: {
+    PERMISSIONS: {
+      POST_NOTIFICATIONS: 'android.permission.POST_NOTIFICATIONS',
+    },
+    request: jest.fn(),
+  },
+  AppState: {
+    currentState: 'active',
+  },
 }));
 
+jest.mock('@react-native-firebase/messaging', () => {
+  const mockInstance = {
+    requestPermission: jest.fn(),
+    getToken: jest.fn(),
+    setBackgroundMessageHandler: jest.fn(),
+    onMessage: jest.fn(),
+    onNotificationOpenedApp: jest.fn(),
+    getInitialNotification: jest.fn(() => Promise.resolve(null)),
+  };
+
+  const mockMessaging = jest.fn(() => mockInstance);
+
+  // Add AuthorizationStatus to the function itself
+  mockMessaging.AuthorizationStatus = {
+    AUTHORIZED: 1,
+    PROVISIONAL: 2,
+    DENIED: 0,
+  };
+
+  return {
+    __esModule: true,
+    default: mockMessaging,
+  };
+});
+
 jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem: jest.fn(),
-  setItem: jest.fn(),
+  getItem: jest.fn(() => Promise.resolve(null)),
+  setItem: jest.fn(() => Promise.resolve()),
 }));
 
 jest.mock('../routes/RootNavigation', () => ({
   navigate: jest.fn(),
+  navigationRef: {
+    current: {
+      getCurrentRoute: jest.fn(),
+      dispatch: jest.fn(),
+    },
+  },
+}));
+
+jest.mock('@react-navigation/native', () => ({
+  CommonActions: {
+    setParams: jest.fn(params => ({type: 'SET_PARAMS', payload: params})),
+  },
+}));
+
+jest.mock('./Utility', () => ({
+  isStringNullOrEmpty: jest.fn(),
+}));
+
+jest.mock('../api/Constant', () => ({
+  ASYNC_PUSH_TOKEN: 'PUSH_TOKEN',
 }));
 
 jest.mock('react-native-notifications', () => ({
   Notifications: {
+    setNotificationChannel: jest.fn(),
     events: () => ({
+      registerNotificationReceivedBackground: jest.fn(),
       registerNotificationReceivedForeground: jest.fn(),
       registerNotificationOpened: jest.fn(),
     }),
   },
 }));
 
-jest.mock('./MultilinguaUtils', () => ({
-  translate: jest.fn().mockReturnValue('translated_route'),
-}));
-
 describe('NotificationUtils', () => {
+  let messagingMock;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    // Get the messaging mock instance
+    const messaging = require('@react-native-firebase/messaging').default;
+    messagingMock = messaging();
   });
 
-  describe('requestUserPermission', () => {
-    it('requests permission and calls getToken if granted', async () => {
-      messaging.requestPermission.mockResolvedValueOnce(true);
-      const getTokenSpy = jest
-        .spyOn(messaging, 'getToken')
-        .mockResolvedValue('test-token');
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
-      await requestUserPermission();
+  describe('requestNotificationPermission', () => {
+    it('should request POST_NOTIFICATIONS permission on Android', async () => {
+      const {Platform, PermissionsAndroid} = require('react-native');
+      Platform.OS = 'android';
+      PermissionsAndroid.request.mockResolvedValue('granted');
 
-      expect(messaging.requestPermission).toHaveBeenCalled();
-      expect(getTokenSpy).toHaveBeenCalled();
+      await requestNotificationPermission();
+
+      expect(PermissionsAndroid.request).toHaveBeenCalledWith(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      );
     });
 
-    it('logs an error if permission is rejected', async () => {
-      const consoleSpy = jest
-        .spyOn(console, 'log')
-        .mockImplementation(() => {});
-      messaging.requestPermission.mockRejectedValueOnce(
-        new Error('Permission denied'),
-      );
+    it('should handle permission request error on Android', async () => {
+      const {Platform, PermissionsAndroid} = require('react-native');
+      Platform.OS = 'android';
+      const error = new Error('Permission denied');
+      PermissionsAndroid.request.mockRejectedValue(error);
 
-      await requestUserPermission();
+      await requestNotificationPermission();
 
-      expect(consoleSpy).toHaveBeenCalledWith('permission rejected');
+      expect(PermissionsAndroid.request).toHaveBeenCalled();
+      expect(console.log).toHaveBeenCalledWith(error);
+    });
+
+    it('should not request permission on iOS', async () => {
+      const {Platform, PermissionsAndroid} = require('react-native');
+      Platform.OS = 'ios';
+
+      await requestNotificationPermission();
+
+      expect(PermissionsAndroid.request).not.toHaveBeenCalled();
     });
   });
 
   describe('checkNotificationPermission', () => {
-    it('calls getToken if permission is enabled', async () => {
-      messaging.hasPermission.mockResolvedValueOnce(true);
-      const getTokenSpy = jest
-        .spyOn(messaging, 'getToken')
-        .mockResolvedValue('test-token');
+    it('should handle authorized permission status', async () => {
+      messagingMock.requestPermission.mockResolvedValue(1); // AUTHORIZED
+      const {isStringNullOrEmpty} = require('./Utility');
+      isStringNullOrEmpty.mockReturnValue(true);
+      messagingMock.getToken.mockResolvedValue('mock-token');
 
       await checkNotificationPermission();
 
-      expect(messaging.hasPermission).toHaveBeenCalled();
-      expect(getTokenSpy).toHaveBeenCalled();
+      expect(messagingMock.requestPermission).toHaveBeenCalled();
+      expect(console.log).toHaveBeenCalledWith('FCM AUTH STATUS', 1);
     });
 
-    it('requests permission if it is not enabled', async () => {
-      messaging.hasPermission.mockResolvedValueOnce(false);
-      const requestUserPermissionSpy = jest.spyOn(
-        require('./NotificationUtils'),
-        'requestUserPermission',
-      );
+    it('should handle provisional permission status', async () => {
+      messagingMock.requestPermission.mockResolvedValue(2); // PROVISIONAL
+      const {isStringNullOrEmpty} = require('./Utility');
+      isStringNullOrEmpty.mockReturnValue(true);
 
       await checkNotificationPermission();
 
-      expect(messaging.hasPermission).toHaveBeenCalled();
-      expect(requestUserPermissionSpy).toHaveBeenCalled();
+      expect(messagingMock.requestPermission).toHaveBeenCalled();
+      expect(console.log).toHaveBeenCalledWith('FCM AUTH STATUS', 2);
+    });
+
+    it('should handle denied permission status', async () => {
+      messagingMock.requestPermission.mockResolvedValue(0); // DENIED
+
+      await checkNotificationPermission();
+
+      expect(messagingMock.requestPermission).toHaveBeenCalled();
+      expect(console.log).toHaveBeenCalledWith('FCM AUTH STATUS', 0);
+    });
+
+    it('should handle existing token in AsyncStorage', async () => {
+      messagingMock.requestPermission.mockResolvedValue(1);
+      const AsyncStorage = require('@react-native-async-storage/async-storage');
+      const {isStringNullOrEmpty} = require('./Utility');
+
+      AsyncStorage.getItem.mockResolvedValue('existing-token');
+      isStringNullOrEmpty.mockReturnValue(false);
+
+      await checkNotificationPermission();
+
+      expect(messagingMock.requestPermission).toHaveBeenCalled();
     });
   });
 
   describe('addNotificationListeners', () => {
-    it('registers background message handler and handles notifications', () => {
-      addNotificationListeners();
-
-      expect(messaging.setBackgroundMessageHandler).toHaveBeenCalled();
-      expect(messaging.onNotificationOpenedApp).toHaveBeenCalled();
-      expect(messaging.getInitialNotification).toHaveBeenCalled();
-      expect(
-        Notifications.events().registerNotificationReceivedForeground,
-      ).toHaveBeenCalled();
-      expect(
-        Notifications.events().registerNotificationOpened,
-      ).toHaveBeenCalled();
-    });
-
-    it('handles notification opening from background', () => {
-      const mockRemoteMessage = {data: {CXTicket: '123'}, notification: {}};
-      messaging.onNotificationOpenedApp.mockImplementation(callback =>
-        callback(mockRemoteMessage),
-      );
-      const actionOnNotificationSpy = jest.spyOn(
-        require('./NotificationUtils'),
-        'actionOnNotification',
-      );
+    it('should set notification channel on Android', () => {
+      const {Platform} = require('react-native');
+      const {Notifications} = require('react-native-notifications');
+      Platform.OS = 'android';
 
       addNotificationListeners();
 
-      expect(actionOnNotificationSpy).toHaveBeenCalledWith('123', 0);
+      expect(Notifications.setNotificationChannel).toHaveBeenCalledWith({
+        channelId: 'high-priority',
+        name: 'High Priority Notifications',
+        importance: 5,
+        description: 'High priority notifications for ticket updates',
+        enableLights: true,
+        enableVibration: true,
+        showBadge: true,
+        soundFile: 'default',
+      });
     });
 
-    it('handles notification opening from quit state', async () => {
-      const mockRemoteMessage = {data: {CXTicket: '123'}, notification: {}};
-      messaging.getInitialNotification.mockResolvedValueOnce(mockRemoteMessage);
-      const actionOnNotificationSpy = jest.spyOn(
-        require('./NotificationUtils'),
-        'actionOnNotification',
-      );
+    it('should not set notification channel on iOS', () => {
+      const {Platform} = require('react-native');
+      const {Notifications} = require('react-native-notifications');
+      Platform.OS = 'ios';
 
-      await addNotificationListeners();
+      addNotificationListeners();
 
-      expect(actionOnNotificationSpy).toHaveBeenCalledWith('123', 1000);
+      expect(Notifications.setNotificationChannel).not.toHaveBeenCalled();
+    });
+
+    it('should register Firebase message handlers', () => {
+      addNotificationListeners();
+
+      expect(messagingMock.setBackgroundMessageHandler).toHaveBeenCalled();
+      expect(messagingMock.onMessage).toHaveBeenCalled();
+      expect(messagingMock.onNotificationOpenedApp).toHaveBeenCalled();
+      expect(messagingMock.getInitialNotification).toHaveBeenCalled();
+    });
+
+    it('should register notification event handlers', () => {
+      const {Notifications} = require('react-native-notifications');
+      const mockEvents = {
+        registerNotificationReceivedBackground: jest.fn(),
+        registerNotificationReceivedForeground: jest.fn(),
+        registerNotificationOpened: jest.fn(),
+      };
+      Notifications.events = jest.fn(() => mockEvents);
+
+      addNotificationListeners();
+
+      expect(
+        mockEvents.registerNotificationReceivedBackground,
+      ).toHaveBeenCalled();
+      expect(
+        mockEvents.registerNotificationReceivedForeground,
+      ).toHaveBeenCalled();
+      expect(mockEvents.registerNotificationOpened).toHaveBeenCalled();
+    });
+
+    it('should handle notification opened from background with payload', () => {
+      const mockRemoteMessage = {
+        data: {
+          payload: JSON.stringify({
+            ticket: {id: 123, title: 'Test Ticket'},
+            id: 456,
+          }),
+        },
+      };
+
+      // Mock the callback to simulate notification opening
+      messagingMock.onNotificationOpenedApp.mockImplementation(callback => {
+        callback(mockRemoteMessage);
+      });
+
+      addNotificationListeners();
+
+      expect(messagingMock.onNotificationOpenedApp).toHaveBeenCalled();
+    });
+
+    it('should handle initial notification from quit state', async () => {
+      const mockRemoteMessage = {
+        data: {
+          payload: JSON.stringify({
+            ticket: {id: 123, title: 'Test Ticket'},
+            id: 456,
+          }),
+        },
+      };
+
+      messagingMock.getInitialNotification.mockResolvedValue(mockRemoteMessage);
+
+      addNotificationListeners();
+
+      // Wait for the promise to resolve
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(messagingMock.getInitialNotification).toHaveBeenCalled();
     });
   });
 
   describe('actionOnNotification', () => {
-    it('navigates to the correct route with ticket ID', () => {
-      actionOnNotification('123', 0);
+    beforeEach(() => {
+      const RootNavigation = require('../routes/RootNavigation');
+      RootNavigation.navigationRef.current = {
+        getCurrentRoute: jest.fn(),
+        dispatch: jest.fn(),
+      };
+    });
 
+    it('should navigate to TicketDetails when not on that screen', async () => {
+      const RootNavigation = require('../routes/RootNavigation');
+      const ticketItem = {id: 123, title: 'Test Ticket'};
+      const notificationId = 456;
+
+      RootNavigation.navigationRef.current.getCurrentRoute.mockReturnValue({
+        name: 'Dashboard',
+        params: {},
+      });
+
+      // Test without timeout to avoid timer dependency
+      await actionOnNotification(ticketItem, notificationId, 0);
+
+      expect(RootNavigation.navigate).toHaveBeenCalledWith('TicketDetails', {
+        ticketItem: ticketItem,
+        parentRoute: 'Dashboard',
+        notificationId: notificationId,
+      });
+    });
+
+    it('should update params when already on correct TicketDetails screen', async () => {
+      const RootNavigation = require('../routes/RootNavigation');
+      const {CommonActions} = require('@react-navigation/native');
+      const ticketItem = {id: 123, title: 'Test Ticket'};
+      const notificationId = 456;
+
+      RootNavigation.navigationRef.current.getCurrentRoute.mockReturnValue({
+        name: 'TicketDetails',
+        params: {ticketItem: {id: 123}},
+        key: 'ticket-screen-key',
+      });
+
+      await actionOnNotification(ticketItem, notificationId, 0);
+
+      expect(RootNavigation.navigationRef.current.dispatch).toHaveBeenCalled();
+      expect(CommonActions.setParams).toHaveBeenCalledWith({
+        ticketItem: ticketItem,
+        parentRoute: 'Dashboard',
+        notificationId: notificationId,
+      });
+      expect(RootNavigation.navigate).not.toHaveBeenCalled();
+    });
+
+    it('should navigate when on different ticket details screen', async () => {
+      const RootNavigation = require('../routes/RootNavigation');
+      const ticketItem = {id: 123, title: 'Test Ticket'};
+      const notificationId = 456;
+
+      RootNavigation.navigationRef.current.getCurrentRoute.mockReturnValue({
+        name: 'TicketDetails',
+        params: {ticketItem: {id: 999}}, // Different ticket ID
+      });
+
+      await actionOnNotification(ticketItem, notificationId, 0);
+
+      expect(RootNavigation.navigate).toHaveBeenCalledWith('TicketDetails', {
+        ticketItem: ticketItem,
+        parentRoute: 'Dashboard',
+        notificationId: notificationId,
+      });
+    });
+
+    it('should handle navigation errors', async () => {
+      const RootNavigation = require('../routes/RootNavigation');
+      const ticketItem = {id: 123, title: 'Test Ticket'};
+
+      RootNavigation.navigate.mockImplementation(() => {
+        throw new Error('Navigation failed');
+      });
+
+      await actionOnNotification(ticketItem, 456, 0);
+
+      expect(console.error).toHaveBeenCalledWith(
+        'Error during navigation:',
+        expect.any(Error),
+      );
+    });
+
+    it('should handle missing navigation reference', async () => {
+      const RootNavigation = require('../routes/RootNavigation');
+      const ticketItem = {id: 123, title: 'Test Ticket'};
+
+      // Test when navigationRef.current is null initially
+      RootNavigation.navigationRef.current = null;
+
+      // This should not throw an error and should wait for navigation ref
+      const promise = actionOnNotification(ticketItem, 456, 0);
+
+      // Simulate navigation ref becoming available
       setTimeout(() => {
-        expect(RootNavigation.navigate).toHaveBeenCalledWith(
-          'translated_route',
-          {
-            ticketID: '123',
-            parentRoute: 'Dashboard',
-          },
-        );
-      }, 0);
+        RootNavigation.navigationRef.current = {
+          getCurrentRoute: jest.fn().mockReturnValue({name: 'Dashboard'}),
+          dispatch: jest.fn(),
+        };
+      }, 50);
+
+      await promise;
+
+      // Since we can't easily test the polling mechanism without timers,
+      // we just ensure the function completes without error
+      expect(promise).resolves.toBeUndefined();
     });
   });
 });

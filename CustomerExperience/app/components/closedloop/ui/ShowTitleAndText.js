@@ -27,23 +27,22 @@ export const ShowTitleAndText = ({title, subText, isSubtextHighlighted}) => {
 
 const styles = StyleSheet.create({
   titleTextContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     marginVertical: MarginConstants.halfTab,
   },
   titleText: {
-    ...baseTextStyles.secondaryRegularText,
+    ...baseTextStyles.secondaryLightText,
     color: Colors.filterIconColor,
 
     alignItems: 'flex-start',
     paddingBottom: PaddingConstants.halfTab,
-    flex: 2,
   },
 
   subText: {
-    ...baseTextStyles.secondaryLightText,
-    flex: 3,
+    ...baseTextStyles.primaryRegularText,
+    marginBottom: MarginConstants.tab1,
   },
 });
 export default ShowTitleAndText;

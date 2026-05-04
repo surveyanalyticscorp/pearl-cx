@@ -1,4 +1,4 @@
-import SafeAreaView from 'react-native-safe-area-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import React from 'react';
 import {StyleSheet, View, Text, TouchableWithoutFeedback} from 'react-native';
 import {MarginConstants} from '../../styles/margin.constants';

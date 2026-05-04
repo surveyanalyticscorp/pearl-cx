@@ -1,24 +1,13 @@
 import React from 'react';
-import {
-  View,
-  TouchableWithoutFeedback,
-  Text,
-  Image,
-  StyleSheet,
-  Platform,
-} from 'react-native';
+import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
 import moment from 'moment';
+import {HalfMonthDateYearFormat} from '../../Utils/AppConstants';
 import {
-  HalfMonthDateYearFormat,
-  DMY_AT_TIME__SHORT_FORMAT,
-} from '../../Utils/AppConstants';
-import {
-  Avatar,
   CheckBoxItem,
   ExclaimationIcon,
   PriorityUI,
@@ -185,7 +174,7 @@ export default function ClosedLoopCell({
   // console.log(JSON.stringify(data));
 
   return (
-    <TouchableWithoutFeedback
+    <Pressable
       testID="closedloop-cell"
       onPress={() => {
         onPressHandler(data, index);
@@ -232,7 +221,7 @@ export default function ClosedLoopCell({
           <VerticalSpaceBox />
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    </Pressable>
   );
 }
 

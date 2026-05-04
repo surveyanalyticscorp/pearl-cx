@@ -5,7 +5,12 @@ import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
+import com.facebook.react.defaults.DefaultReactNativeHost;
+import com.facebook.react.soloader.OpenSourceMergedSoMapping;
 import com.facebook.soloader.SoLoader;
+import com.questionpro.cxonthego.BuildConfig;
+import java.io.IOException;
 import java.util.List;
 import androidx.multidex.MultiDexApplication;
 import android.content.BroadcastReceiver;
@@ -15,8 +20,11 @@ import android.os.Build;
 import javax.annotation.Nullable;
 public class MainApplication extends Application implements ReactApplication {
 
+
+
+
   private final ReactNativeHost mReactNativeHost =
-      new ReactNativeHost(this) {
+      new DefaultReactNativeHost(this) {
         @Override
         public boolean getUseDeveloperSupport() {
           return BuildConfig.DEBUG;
@@ -34,22 +42,37 @@ public class MainApplication extends Application implements ReactApplication {
         protected String getJSMainModuleName() {
           return "index";
         }
-
-          // @Override
-          // protected String getJSBundleFile() {
-          //     return CodePush.getJSBundleFile();
-          // }
+               @Override
+        protected boolean isNewArchEnabled() {
+          return BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+        }
+ 
+        @Override
+        protected Boolean isHermesEnabled() {
+          return BuildConfig.IS_HERMES_ENABLED;
+        }
+      
       };
 
+
+ 
   @Override
   public ReactNativeHost getReactNativeHost() {
+   
     return mReactNativeHost;
-  }
+  
+    }
 
   @Override
   public void onCreate() {
     super.onCreate();
-//    SoLoader.init(this, /* native exopackage */ false);
+    // If you opted-in for the New Architecture, we enable the TurboModule system
+    // ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
+    try {
+      SoLoader.init(this, OpenSourceMergedSoMapping.INSTANCE);
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to initialize SoLoader", e);
+    }
   }
 
     @Override

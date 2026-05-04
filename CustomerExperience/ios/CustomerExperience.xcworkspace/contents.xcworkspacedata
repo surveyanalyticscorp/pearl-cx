@@ -2,12 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/mehedihasan/Documents/project/cx_app/pearl-cx/CustomerExperience/ios/CustomerExperience.xcodeproj">
+      location = "group:CustomerExperience.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:CustomerExperience.xcodeproj">
    </FileRef>
 </Workspace>

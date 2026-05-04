@@ -38,17 +38,17 @@ const SelectPriority = ({data, selectedIndex, handleOnPress, screenName}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={data}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderRow}
-        ItemSeparatorComponent={ListItemSeparator}
-        ListFooterComponent={
-          <ApplyButton buttonText={buttonTitle} onPress={onApplyPress} />
-        }
-      />
-    </View>
+    <FlatList
+      style={styles.container}
+      contentContainerStyle={{flexGrow: 0}}
+      data={data}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={renderRow}
+      ItemSeparatorComponent={ListItemSeparator}
+      ListFooterComponent={
+        <ApplyButton buttonText={buttonTitle} onPress={onApplyPress} />
+      }
+    />
   );
 };
 
@@ -56,7 +56,7 @@ export default SelectPriority;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1, // Remove flex: 1 for shrink-wrap
     backgroundColor: Colors.white,
     padding: PaddingConstants.tab1_2x,
   },

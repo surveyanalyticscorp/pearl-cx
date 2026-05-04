@@ -9,13 +9,13 @@ export const MarginConstants = {
   halfTab_5x: 5 * ((factor * $rem) / 2),
   tab1: factor * $rem, // 8px
   tab1_2x: factor * $rem * 2, // 16px
-  tab1_3x: factor * $rem * 3,
-  tab1_4x: factor * $rem * 4,
-  tab1_5x: factor * $rem * 5,
-  tab1_6x: factor * $rem * 6,
-  tab1_7x: factor * $rem * 7,
-  tab1_8x: factor * $rem * 8,
-  tab1_16x: factor * $rem * 16,
+  tab1_3x: factor * $rem * 3, // 24px
+  tab1_4x: factor * $rem * 4, // 32px
+  tab1_5x: factor * $rem * 5, // 40px
+  tab1_6x: factor * $rem * 6, // 48px
+  tab1_7x: factor * $rem * 7, // 56px
+  tab1_8x: factor * $rem * 8, // 64px
+  tab1_16x: factor * $rem * 16, // 128px
   tab1_24x: factor * $rem * 24,
   tab1_32x: factor * $rem * 32,
   tab2: factor * $rem + 10,

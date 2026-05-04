@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   FlatList,
   Platform,
@@ -10,9 +10,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {getClosedLoopSegmentDetails} from '../redux/actions/dashboard.actions';
 import {CloseButton, NoItemsFound} from '../routes/commonUI/CommonUI';
+import useSegmentList from '../hooks/useSegmentList';
 import ListItemSeparator from '../routes/commonUI/ListItemSeparator';
 import {Colors} from '../styles/color.constants';
 import {FontFamily, FontWeight} from '../styles/font.constants';
@@ -22,58 +21,29 @@ import {TextSizes} from '../styles/textsize.constants';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {translate} from '../Utils/MultilinguaUtils';
 import CheckmarkIcon from '../routes/commonUI/CheckmarkIcon';
-import {baseTextStyles} from '../styles/text.styles';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const SelectSegmentScreen = props => {
-  const dispatch = useDispatch();
   let currentSegmentId = props.route.params.currentSegmentId;
   const setSegmentSelection = props.route.params.setSegmentSelection;
-  // const [isLoading, setLoading] = useState(false);
   const textInputRef = useRef();
-  const authToken = useSelector(state => state.global.authToken);
-  const ownerID = useSelector(state => state.global.userInfo.userID);
-  const segmentList = useSelector(state => state.dashboard.segmentList);
   const navigation = useNavigation();
-  const defaultRequestBody = {
-    pageOffset: 0,
-    perPage: 20,
-    segmentName: '',
-    ownerID: ownerID,
-  };
-  // const [pageOffset, setPageOffset] = useState(0);
-  const [requestBody, setRequestBody] = useState(defaultRequestBody);
+  const {segmentList, loadMoreData, onSearchHandler, refresh} =
+    useSegmentList();
   const [searchText, setSearchText] = useState('');
+
   const handleSegmentSelectionAction = item => {
-    // setPageOffset(0);
-    setRequestBody(defaultRequestBody);
+    refresh();
     setSegmentSelection(item);
     if (navigation.canGoBack) {
       navigation.goBack();
     }
   };
 
-  useEffect(() => {
-    getSegmentData();
-  }, [requestBody]);
-
-  const loadMoreData = () => {
-    // setPageOffset(pageOffset + 1);
-    setRequestBody(prevState => ({
-      ...prevState,
-      pageOffset: prevState.pageOffset + 1,
-    }));
-  };
-
-  const getSegmentData = () => {
-    // setLoading(true);
-    dispatch(
-      getClosedLoopSegmentDetails(authToken, {
-        pageOffset: `${requestBody.pageOffset}`,
-        perPage: `${requestBody.perPage}`,
-        segmentName: requestBody.segmentName,
-        ownerID: `${requestBody.ownerID}`,
-      }),
-    );
+  const clearSearchHandler = () => {
+    refresh();
+    setSearchText('');
+    textInputRef.current.clear();
   };
 
   const renderRow = ({item, index}) => {
@@ -90,20 +60,6 @@ const SelectSegmentScreen = props => {
         </View>
       </TouchableWithoutFeedback>
     );
-  };
-
-  const onSearchHandler = text => {
-    // console.log('TEXT_INPUT:', JSON.stringify(textInputRef.current));
-
-    setRequestBody({
-      ...defaultRequestBody,
-      segmentName: text ?? '',
-    });
-  };
-
-  const clearSearchHandler = () => {
-    setRequestBody(defaultRequestBody);
-    textInputRef.current.clear();
   };
 
   const renderSegmentSearch = () => {
@@ -130,19 +86,16 @@ const SelectSegmentScreen = props => {
           <TextInput
             testID="search-input"
             ref={textInputRef}
-            defaultValue={requestBody.segmentName}
             style={[styles.searchInput, {flex: 1}]}
             placeholder={translate('select_segment.search_segment_name')}
             returnKeyType={'search'}
             placeholderTextColor={Colors.borderColor}
+            onChangeText={setSearchText}
             onSubmitEditing={event => {
-              // console.log('KEYBOARD_SEARCH', JSON.stringify(event.nativeEvent));
               onSearchHandler(event.nativeEvent.text);
-              // setSearchText(event.nativeEvent.text);
-              // onSearchHandler();
             }}
           />
-          {requestBody.segmentName.length > 0 ? (
+          {searchText.length > 0 ? (
             <Pressable
               testID="clear-button"
               style={[styles.searchInput]}
@@ -172,7 +125,7 @@ const SelectSegmentScreen = props => {
         renderItem={renderRow}
         ItemSeparatorComponent={ListItemSeparator}
         ListHeaderComponent={renderSegmentSearch}
-        onEndReached={loadMoreData}
+        // onEndReached={loadMoreData}
         onEndReachedThreshold={0.25}
         ListEmptyComponent={<NoItemsFound>No Segment found</NoItemsFound>}
         // ListFooterComponent={isLoading && <RenderSpinner />}
@@ -183,7 +136,7 @@ const SelectSegmentScreen = props => {
   };
 
   return (
-    <View style={styles.rootContainer}>
+    <SafeAreaView style={styles.rootContainer}>
       <View style={styles.container}>
         <View style={styles.headerRow}>
           <Text style={styles.headerText}>
@@ -194,7 +147,7 @@ const SelectSegmentScreen = props => {
 
         {globalSelectSegment()}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

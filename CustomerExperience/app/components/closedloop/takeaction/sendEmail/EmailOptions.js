@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import RenderTicketId from './TicketId';
 import TemplateIcon from './TemplateIcon';
 import AttachmentUploadIcon from './AttachmentUploadIcon';
-import SendIcon from './SendIcon';
+import SendEmailButton from './SendEmailButton';
 import {MarginConstants} from '../../../../styles/margin.constants';
 import AiDraftButton from './AiDraftButton';
 
@@ -18,7 +18,7 @@ const EmailOptions = ({onPressAiButton, onPressTemplate, body}) => {
         <AiDraftButton onPress={onPressAiButton} />
         <TemplateIcon onPressTemplate={onPressTemplate} />
         <AttachmentUploadIcon />
-        <SendIcon emailBody={body} />
+        <SendEmailButton emailBody={body} />
       </View>
     </View>
   );

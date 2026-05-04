@@ -21,7 +21,7 @@ import {dashboardStyles} from '../dashboard.style';
 import TicketWidget from './TicketWidget';
 import {TextSizes} from '../../../styles/textsize.constants';
 import QPSpinner from '../../../widgets/QPSpinner';
-import ActionButton from 'react-native-action-button';
+// import ActionButton from 'react-native-action-button';
 import ArrayUtils from '../../../Utils/ArrayUtils';
 import {translate} from '../../../Utils/MultilinguaUtils';
 
@@ -112,7 +112,7 @@ function SearchTicket(props) {
             <View style={{paddingBottom: PaddingConstants.tab2}} />
           )}
         />
-        <ActionButton
+        {/* <ActionButton
           buttonColor={Colors.accent}
           buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
           onPress={() => {
@@ -120,7 +120,7 @@ function SearchTicket(props) {
               parentRoute: 'Dashboard',
             });
           }}
-        />
+        /> */}
       </View>
     );
   };

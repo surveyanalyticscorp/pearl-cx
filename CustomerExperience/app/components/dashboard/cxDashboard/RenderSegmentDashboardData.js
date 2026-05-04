@@ -2,9 +2,8 @@ import React from 'react';
 import {View} from 'react-native';
 import {dashboardStyles} from '../dashboard.style';
 import {useSelector} from 'react-redux';
-import DashboardWidgetTitle from '../../../widgets/dashboardWidget/RenderSegmentTitle';
+import DashboardSegmentHeader from '../../../widgets/dashboardWidget/RenderSegmentTitle';
 import ResponsesButton from '../../../widgets/dashboardWidget/ResponsesButton';
-import RenderInfoContainer from '../../../widgets/dashboardWidget/RenderInfoContainer';
 import RenderCSATChart from './RenderCsatChart';
 import RenderNPSChart from './RenderNPSChart';
 
@@ -27,10 +26,10 @@ const RenderSegmentDashboardData = () => {
           ? dashboardStyles.csatChartContainer
           : dashboardStyles.chartContainer
       }>
-      <DashboardWidgetTitle text={title}>
+      <DashboardSegmentHeader text={title}>
         <ResponsesButton />
-      </DashboardWidgetTitle>
-      <RenderInfoContainer />
+      </DashboardSegmentHeader>
+      {/* <RenderInfoContainer /> */}
       {scoringModel && scoringModel === 1 ? (
         <RenderCSATChart />
       ) : (

@@ -10,13 +10,13 @@ import {DMYFORMAT, YMDFORMAT} from '../../../Utils/AppConstants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Colors} from '../../../styles/color.constants';
-import ActionButton from 'react-native-action-button';
+// import ActionButton from 'react-native-action-button';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {Sizes} from '../../../styles/Size.constant';
 import {usePrevious} from '../../../Utils/Utility';
 import {translate} from '../../../Utils/MultilinguaUtils';
 
-const DetractorScenes = (props) => {
+const DetractorScenes = props => {
   let initialData = [
     {
       key: 'new',
@@ -98,13 +98,13 @@ const DetractorScenes = (props) => {
         apiHandler.getCXDetractorTicket(
           props.authToken,
           params,
-          (response) => {
+          response => {
             setCallAPI(false);
             let data = [...responseData];
             data[responseCount].data = response.body;
             setResponseData(data);
           },
-          (error) => {
+          error => {
             setCallAPI(false);
             setShowLoader(false);
           },
@@ -124,7 +124,7 @@ const DetractorScenes = (props) => {
     );
   };
 
-  const renderRow = (rowItem) => {
+  const renderRow = rowItem => {
     let commentText = rowItem.item.comment.replace(/\n/g, ' ');
     return (
       <TicketWidget comment={commentText} item={rowItem.item} {...props} />
@@ -149,7 +149,7 @@ const DetractorScenes = (props) => {
     apiHandler.getCXDetractorTicket(
       props.authToken,
       params,
-      (response) => {
+      response => {
         let data = [...responseData];
         data[dataCount].pageOffset = response.body.pageOffset;
         data[dataCount].data.tickets = [
@@ -158,11 +158,11 @@ const DetractorScenes = (props) => {
         ];
         setResponseData(data);
       },
-      (error) => {},
+      error => {},
     );
   };
 
-  let setTicketFilter = (value) => {
+  let setTicketFilter = value => {
     if (filterObject.value !== value) {
       setResponseData(initialData);
     }
@@ -213,7 +213,7 @@ const DetractorScenes = (props) => {
       <View style={dashboardStyles.container}>
         <FlatList
           data={tickets}
-          keyExtractor={(item) => item.ticketID + ''}
+          keyExtractor={item => item.ticketID + ''}
           renderItem={renderRow}
           onEndReachedThreshold={0.01}
           refreshing={false}
@@ -224,7 +224,7 @@ const DetractorScenes = (props) => {
           )}
           ListHeaderComponent={renderTicketFilterView}
         />
-        <ActionButton
+        {/* <ActionButton
           buttonColor={Colors.accent}
           buttonTextStyle={{fontSize: TextSizes.donutPercentText}}
           onPress={() => {
@@ -232,7 +232,7 @@ const DetractorScenes = (props) => {
               parentRoute: 'Dashboard',
             });
           }}
-        />
+        /> */}
       </View>
     );
   };
@@ -248,7 +248,7 @@ const DetractorScenes = (props) => {
   return showLoader ? renderSpinner() : renderDetractorTickets();
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     isLoading: state.global.isLoading,
     authToken: state.global.authToken,
@@ -257,6 +257,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(DetractorScenes);

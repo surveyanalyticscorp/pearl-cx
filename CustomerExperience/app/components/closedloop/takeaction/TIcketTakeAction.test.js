@@ -1,61 +1,61 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
 import TicketTakeAction from './TicketTakeAction';
+import useActionHandler from '../../closedloop/TicketOverview/components/useActionHandler';
+
+jest.mock(
+  '../../closedloop/TicketOverview/components/useActionHandler',
+  () => ({
+    __esModule: true,
+    default: jest.fn(),
+  }),
+);
 
 describe('TicketTakeAction Component', () => {
   const mockData = [
-    {icon: 'check-circle', title: 'Approve'},
-    {icon: 'cancel', title: 'Reject'},
-    {icon: 'info', title: 'More Info'},
+    {id: 'approve', icon: 'check-circle', title: 'Approve'},
+    {id: 'reject', icon: 'cancel', title: 'Reject'},
+    {id: 'info', icon: 'info', title: 'More Info'},
   ];
+  const mockOnPress = jest.fn();
+  const mockedUseActionHandler = useActionHandler;
 
-  const mockHandleOnPress = jest.fn();
+  beforeEach(() => {
+    mockOnPress.mockClear();
+    mockedUseActionHandler.mockReturnValue({actionDataList: mockData});
+  });
 
-  it('renders correctly', () => {
-    const {getByTestId} = render(
-      <TicketTakeAction data={mockData} handleOnPress={mockHandleOnPress} />,
+  it('renders rows and basic structure correctly', () => {
+    const {getByTestId, getByText} = render(
+      <TicketTakeAction onPress={mockOnPress} />,
     );
 
-    // Check if the container and flatlist are present
     expect(getByTestId('take-action-container')).toBeTruthy();
-    expect(getByTestId('take-action-flatlist')).toBeTruthy();
+    expect(getByTestId('take-action-list')).toBeTruthy();
 
-    // Check if the first row's elements are rendered correctly
     expect(getByTestId('row-touchable-0')).toBeTruthy();
     expect(getByTestId('row-icon-0')).toBeTruthy();
-    expect(getByTestId('row-title-0')).toBeTruthy();
-
-    // Verify if the text content is correct
-    expect(getByTestId('row-title-0').props.children).toBe('Approve');
-    expect(getByTestId('row-title-1').props.children).toBe('Reject');
-    expect(getByTestId('row-title-2').props.children).toBe('More Info');
+    expect(getByText('Approve')).toBeTruthy();
+    expect(getByText('Reject')).toBeTruthy();
+    expect(getByText('More Info')).toBeTruthy();
   });
 
-  it('calls handleOnPress with correct item when row is pressed', () => {
-    const {getByTestId} = render(
-      <TicketTakeAction data={mockData} handleOnPress={mockHandleOnPress} />,
-    );
+  it('calls onPress with the correct item when a row is pressed', () => {
+    const {getByTestId} = render(<TicketTakeAction onPress={mockOnPress} />);
 
-    // Simulate press on the first item
-    fireEvent.press(getByTestId('row-touchable-0'));
-
-    // Check if handleOnPress was called with the correct item
-    expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[0]);
-
-    // Simulate press on the second item
     fireEvent.press(getByTestId('row-touchable-1'));
+    expect(mockOnPress).toHaveBeenCalledWith(mockData[1]);
 
-    // Check if handleOnPress was called with the correct item
-    expect(mockHandleOnPress).toHaveBeenCalledWith(mockData[1]);
+    fireEvent.press(getByTestId('row-touchable-2'));
+    expect(mockOnPress).toHaveBeenCalledWith(mockData[2]);
   });
 
-  it('renders the correct number of rows based on the data provided', () => {
-    const {getAllByTestId} = render(
-      <TicketTakeAction data={mockData} handleOnPress={mockHandleOnPress} />,
-    );
+  it('renders the same number of rows as the action data list', () => {
+    const {getByTestId} = render(<TicketTakeAction onPress={mockOnPress} />);
 
-    // Check if the correct number of rows are rendered
-    const rows = getAllByTestId(/row-touchable-/);
-    expect(rows.length).toBe(mockData.length);
+    const rows = mockData.map((_, index) =>
+      getByTestId(`row-touchable-${index}`),
+    );
+    expect(rows).toHaveLength(mockData.length);
   });
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import {KeyboardAvoidingView, View} from 'react-native';
 import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
-import BottomSheet from 'reanimated-bottom-sheet';
+import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
 // import Animated from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -18,7 +18,7 @@ const RenderSegmentBottomSheet = ({callbackNode}) => {
   const dispatch = useDispatch();
   const bs = React.useRef(null);
   //   const fall = new Animated.Value(1);
-  const bsSnapPoints = ['50%', '0%'];
+  const bsSnapPoints = ['50%'];
 
   const isSegmentSelectorOpen = useSelector(
     state => state.dashboard.isSegmentSelectorOpen,
@@ -34,9 +34,12 @@ const RenderSegmentBottomSheet = ({callbackNode}) => {
   //   );
   useEffect(() => {
     if (bs.current) {
-      bs.current.snapTo(isSegmentSelectorOpen ? 0 : bsSnapPoints.length - 1);
+      if (isSegmentSelectorOpen) {
+        bs.current.snapToIndex(0);
+      } else {
+        bs.current.close();
+      }
     }
-    // console.log({isOpen: props.isSegmentSelectorOpen});
   }, [isSegmentSelectorOpen]);
 
   const renderSelectSegmentHeader = () => {
@@ -82,12 +85,14 @@ const RenderSegmentBottomSheet = ({callbackNode}) => {
     <BottomSheet
       ref={bs}
       snapPoints={bsSnapPoints}
-      initialSnap={bsSnapPoints.length - 1}
-      renderContent={renderSelectSegment}
-      renderHeader={renderSelectSegmentHeader}
-      callbackNode={callbackNode}
-      enabledInnerScrolling={true}
-    />
+      index={-1}
+      enablePanDownToClose={true}
+    >
+      <BottomSheetView>
+        {renderSelectSegmentHeader()}
+        {renderSelectSegment({})}
+      </BottomSheetView>
+    </BottomSheet>
   );
 };
 

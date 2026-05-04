@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/mehedihasan/Desktop/react-native-artifacts-0.77.2-hermes-ios-release/destroot/Library/Frameworks/universal/hermes.xcframework/ios-arm64/hermes.framework/hermes'
+relocations:     []
+...

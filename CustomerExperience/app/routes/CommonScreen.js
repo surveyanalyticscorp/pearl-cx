@@ -5,6 +5,7 @@ import UpdateTicket from '../components/dashboard/ticketManagement/UpdateTicket'
 import React from 'react';
 import {Colors} from '../styles/color.constants';
 import {TextSizes} from '../styles/textsize.constants';
+import {textStyles} from '../styles/text.styles';
 import {PaddingConstants} from '../styles/padding.constants';
 import DashboardDateFilter from '../components/dashboard/components/DashboardDateFilter';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -23,9 +24,15 @@ import SelectEmailTemplate from '../components/closedloop/takeaction/SelectEmail
 import SendEmail from '../components/closedloop/takeaction/SendEmail';
 import ActionEmailHistory from '../components/closedloop/takeaction/ActionEmailHistory';
 import HeaderBackLeft from './commonUI/HeaderBackLeft';
-import {CloseButton, SaveDashboardDate} from './commonUI/CommonUI';
-import Notification from '../components/notifications/Notification';
+import {CloseButton} from './commonUI/CommonUI';
 import PushNotification from '../components/notifications/PushNotifications';
+import {CentralizedRootCause} from '../components/closedloop/TicketRootCause/CentralizedRootCause/CentralizedRootCause';
+import {OldRootCause} from '../components/closedloop/TicketRootCause/OldRootCause';
+import FilterTicket from '../components/closedloop/takeaction/FilterTickets';
+import AiTagsFilter from '../components/closedloop/takeaction/AiTagsFilter';
+import CopyTicketIdButton from '../components/closedloop/TicketOverview/components/CopyTicketIdButton';
+import SegmentSelector from '../components/SegmentSelector';
+import TicketDetailsTitle from '../components/closedloop/TicketOverview/components/TicketDetailsTitle';
 
 const DateRangeTab = createMaterialTopTabNavigator();
 const TicketLogTab = createMaterialTopTabNavigator();
@@ -58,16 +65,16 @@ export const RenderExitAlert = props => {
 
 export const CloseLoopTicketsTabs = props => (
   <CloseLoopTicketsTab.Navigator
-    tabBarOptions={{
-      labelStyle: {width: width / 3, fontSize: TextSizes.secondary},
-      indicatorStyle: {backgroundColor: Colors.accent},
-      style: {backgroundColor: Colors.white, width: '100%'},
-      initialLayout: {width: Dimensions.get('window').width},
-      tabStyle: {height: 1.5 * PaddingConstants.tab4},
-      activeTintColor: Colors.accent,
-      inactiveTintColor: Colors.primary,
+    initialLayout={{width: Dimensions.get('window').width}}
+    screenOptions={{
+      lazy: true,
+      tabBarLabelStyle: {width: width / 3, fontSize: TextSizes.secondary},
+      tabBarIndicatorStyle: {backgroundColor: Colors.accent},
+      tabBarStyle: {backgroundColor: Colors.white, width: '100%'},
+      tabBarItemStyle: {height: 1.5 * PaddingConstants.tab4},
+      tabBarActiveTintColor: Colors.accent,
+      tabBarInactiveTintColor: Colors.primary,
     }}
-    lazy
     keyboardDismissMode={'auto'}>
     <CloseLoopTicketsTab.Screen
       name={translate('dashboard.new')}
@@ -94,18 +101,21 @@ export const CloseLoopTicketsTabs = props => (
 
 export const DateRangeTabStack = props => (
   <DateRangeTab.Navigator
-    tabBarOptions={{
-      labelStyle: {
+    initialLayout={{width: Dimensions.get('window').width}}
+    screenOptions={{
+      lazy: true,
+      tabBarLabelStyle: {
+        ...textStyles.headerTitleStyle,
         color: Colors.primary,
         width: width / 2,
-        fontSize: TextSizes.secondary,
+        fontSize: TextSizes.primary,
+        textTransform: 'none',
       },
-      indicatorStyle: {backgroundColor: Colors.accent},
-      style: {backgroundColor: Colors.white, width: '100%'},
-      initialLayout: {width: Dimensions.get('window').width},
-      tabStyle: {height: 1.3 * PaddingConstants.tab4},
+
+      tabBarIndicatorStyle: {backgroundColor: Colors.accent},
+      tabBarStyle: {backgroundColor: Colors.white, width: '100%'},
+      tabBarItemStyle: {height: 1.3 * PaddingConstants.tab4},
     }}
-    lazy
     keyboardDismissMode={'auto'}>
     <DateRangeTab.Screen
       name={translate('date_filter.month')}
@@ -120,16 +130,17 @@ export const DateRangeTabStack = props => (
 
 export const TicketLogTabStack = props => (
   <TicketLogTab.Navigator
-    tabBarOptions={{
-      labelStyle: {width: width / 3, fontSize: TextSizes.semiSecondary},
-      indicatorStyle: {backgroundColor: Colors.accent},
-      style: {backgroundColor: Colors.white, width: '100%'},
-      initialLayout: {width: Dimensions.get('window').width},
-      tabStyle: {height: 1.5 * PaddingConstants.tab4},
-      activeTintColor: Colors.accent,
-      inactiveTintColor: Colors.primary,
+    initialLayout={{width: Dimensions.get('window').width}}
+    screenOptions={{
+      lazy: true,
+      tabBarLabelStyle: {width: width / 3, fontSize: TextSizes.semiSecondary},
+      tabBarIndicatorStyle: {backgroundColor: Colors.accent},
+      tabBarStyle: {backgroundColor: Colors.white, width: '100%'},
+      tabBarItemStyle: {height: 1.5 * PaddingConstants.tab4},
+      tabBarActiveTintColor: Colors.accent,
+      tabBarInactiveTintColor: Colors.primary,
+      headerTitleStyle: textStyles.headerTitleStyle,
     }}
-    lazy
     keyboardDismissMode={'auto'}>
     <TicketLogTab.Screen
       name={translate('close_loop.overview')}
@@ -169,12 +180,89 @@ const CommonScreens = RootStack => {
         headerShown: false,
         // gestureDirection: 'vertical',
         gestureEnabled: true,
-        ...TransitionPresets.ModalPresentationIOS,
+        headerTitleStyle: textStyles.headerTitleStyle,
 
+        ...TransitionPresets.ModalPresentationIOS,
         // headerLeft: props => <HeaderBackLeft />,
         // headerRight: props => <SaveDashboardDate {...props} route={route} />,
       })}
     />,
+
+    // <RootStack.Screen
+    //   key={'TicketFilter'}
+    //   name={translate('filter_by') ?? 'Filter by'}
+    //   component={FilterTicket}
+    //   // component={DashboardDateFilter}
+    //   options={({navigation, route}) => ({
+    //     headerShown: true,
+    //     gestureEnabled: false,
+    //     ...TransitionPresets.ModalPresentationIOS,
+    //   })}
+    // />,
+
+    // AiTagsFilter
+
+    <RootStack.Screen
+      key={'TicketFilter'}
+      name={'TicketFilter'}
+      component={FilterTicket}
+      options={({navigation, route}) => ({
+        headerShown: false,
+        gestureEnabled: true,
+        title: translate('filter_by') ?? 'Filter by',
+        headerTitleStyle: textStyles.headerTitleStyle,
+        ...TransitionPresets.ModalPresentationIOS,
+
+        // headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+        // headerRight: props => <View />,
+      })}
+    />,
+
+    <RootStack.Screen
+      key={'AiTagsFilter'}
+      name={'AiTagsFilter'}
+      component={AiTagsFilter}
+      options={({navigation, route}) => ({
+        headerShown: false,
+        gestureEnabled: true,
+        title: 'AI Tags',
+        headerTitleStyle: textStyles.headerTitleStyle,
+        ...TransitionPresets.ModalPresentationIOS,
+
+        // headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+        // headerRight: props => <View />,
+      })}
+    />,
+
+    <RootStack.Screen
+      key={'OldRootCause'}
+      name={'OldRootCause'}
+      component={OldRootCause}
+      options={({navigation, route}) => ({
+        // headerShown: false,
+        title: 'Old Root Cause',
+        headerTitleStyle: textStyles.headerTitleStyle,
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+        headerRight: props => <View />,
+        // headerRight: (props) => <EditTicket {...props} route={route} />,
+        // headerLeft: (props) => <MenuIcon />,
+      })}
+    />,
+    <RootStack.Screen
+      key={'CentralizedRootCause'}
+      name={'CentralizedRootCause'}
+      component={CentralizedRootCause}
+      options={({navigation, route}) => ({
+        // headerShown: false,
+        title: 'Centralized Root Cause',
+        headerTitleStyle: textStyles.headerTitleStyle,
+        headerLeft: props => <HeaderBackLeft {...props} route={route} />,
+        headerRight: props => <View />,
+        // headerRight: (props) => <EditTicket {...props} route={route} />,
+        // headerLeft: (props) => <MenuIcon />,
+      })}
+    />,
+
     <RootStack.Screen
       key={'TicketDetails'}
       name={'TicketDetails'}
@@ -182,8 +270,12 @@ const CommonScreens = RootStack => {
       options={({navigation, route}) => ({
         // headerShown: false,
         title: 'Ticket Details',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
         headerRight: props => <View />,
+        headerTitle: props => {
+          return <TicketDetailsTitle />;
+        },
         // headerRight: (props) => <EditTicket {...props} route={route} />,
         // headerLeft: (props) => <MenuIcon />,
       })}
@@ -195,6 +287,7 @@ const CommonScreens = RootStack => {
       component={FeedbackDetails}
       options={({navigation, route}) => ({
         title: translate('close_loop.view_response'),
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}
     />,
@@ -203,6 +296,7 @@ const CommonScreens = RootStack => {
       name={translate('close_loop.update_ticket')}
       component={UpdateTicket}
       options={({navigation, route}) => ({
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}
     />,
@@ -226,6 +320,7 @@ const CommonScreens = RootStack => {
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
         headerShown: true,
         title: 'New ticket',
+        headerTitleStyle: textStyles.headerTitleStyle,
         // gestureDirection: 'vertical',
         // gestureEnabled: true,
         // ...TransitionPresets.ModalPresentationIOS,
@@ -243,7 +338,8 @@ const CommonScreens = RootStack => {
       name={'TicketTakeAction'}
       component={TicketTakeAction}
       options={({navigation, route}) => ({
-        title: 'Take action ',
+        title: 'Take action',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerShown: false,
         // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
         // headerRight: (props) => <EditTicket {...props} route={route} />,
@@ -266,6 +362,7 @@ const CommonScreens = RootStack => {
       component={SelectEmailTemplate}
       options={({navigation, route}) => ({
         title: 'Select template',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerShown: false,
       })}
     />,
@@ -275,7 +372,10 @@ const CommonScreens = RootStack => {
       component={SendEmail}
       options={({navigation, route}) => ({
         title: 'Send email',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerShown: false,
+        gestureEnabled: true,
+        ...TransitionPresets.ModalPresentationIOS,
       })}
     />,
 
@@ -285,6 +385,7 @@ const CommonScreens = RootStack => {
       component={ActionEmailHistory}
       options={({navigation, route}) => ({
         title: 'Action email history',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerShown: false,
       })}
     />,
@@ -295,6 +396,7 @@ const CommonScreens = RootStack => {
       component={PushNotification}
       options={({navigation, route}) => ({
         title: 'Notifications',
+        headerTitleStyle: textStyles.headerTitleStyle,
         headerShown: true,
         headerLeft: props => <HeaderBackLeft {...props} route={route} />,
       })}

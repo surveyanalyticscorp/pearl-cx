@@ -1,53 +1,61 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Animated, StyleSheet, View} from 'react-native';
 
 import {MarginConstants} from '../../styles/margin.constants';
 import {Colors} from '../../styles/color.constants';
 import {clearError, setError, setRangeFilter} from '../../redux/actions';
 import {connect, useDispatch, useSelector} from 'react-redux';
 import QPSpinner from '../../widgets/QPSpinner';
-import {showErrorFlashMessage, usePrevious} from '../../Utils/Utility';
+import {usePrevious} from '../../Utils/Utility';
 import ArrayUtils from '../../Utils/ArrayUtils';
 import {TextSizes} from '../../styles/textsize.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
-import SafeAreaView from 'react-native-safe-area-view';
-import {apiHandler} from '../../api/ApiHandler';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {FontFamily} from '../../styles/font.constants';
-import {Sizes} from '../../styles/Size.constant';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {dashboardStyles} from '../dashboard/dashboard.style';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {HeaderFilter} from '../../routes/commonUI/CommonUI';
 import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
-import FabAddButton from '../../routes/commonUI/FabAddButton';
-import Animated from 'react-native-reanimated';
-import {useIsFocused} from '@react-navigation/native';
+// Animated from react-native used above (Reanimated v3 removed Value/add/multiply)
 import {
-  clearResponseData,
   fetchAllResponses,
   setAllResponsesEmpty,
   setResponseReadList,
 } from '../../redux/actions/feedback.actions';
 import SelectSorting from '../closedloop/takeaction/SelectSorting';
-import BottomSheet from 'reanimated-bottom-sheet';
-import {last} from 'lodash';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {ASYNC_RESPONSES_WITH_CX_MANAGER} from '../../api/Constant';
 import Responses from './Responses';
-import NoResponsesFound from './NoResponsesFound';
-import FeedbackCell from './feedbackCell/FeedbackCells';
-const FeedbackTab = createMaterialTopTabNavigator();
+import QPBottomSheet from '../closedloop/takeaction/QPBottomSheet';
+import QPBottomSheetHeader from '../closedloop/takeaction/QPBottomSheetHeader';
 const FormContext = React.createContext();
+
+const SortingBottomSheet = ({
+  onClose,
+  isVisible,
+  sortingText,
+  setSortingText,
+  sortingList,
+}) => {
+  return (
+    <QPBottomSheet
+      visible={isVisible}
+      onClose={onClose}
+      headerComponent={
+        <QPBottomSheetHeader headerLabel="Status" onClose={onClose} />
+      }>
+      <SelectSorting
+        data={sortingList}
+        selectedIndex={sortingText['index']}
+        handleOnPress={(item, index) => {
+          setSortingText(sortingList[index].title, index);
+          onClose();
+        }}
+      />
+    </QPBottomSheet>
+  );
+};
 
 function Feedback(props) {
   let dispatch = useDispatch();
@@ -55,8 +63,6 @@ function Feedback(props) {
   const allResponses = useSelector(state => state.response.allResponses);
 
   let currentSegment = useSelector(state => state.dashboard.currentSegment);
-  let [feedbackData, setFeedbackData] = useState(allResponses);
-  let [ticketStatus, setTicketStatus] = useState([]);
   let [pageOffset, setPageOffset] = useState(0);
   let [pagination, setPagination] = useState(false);
   let [showLoader, setShowLoader] = useState(false);
@@ -73,12 +79,10 @@ function Feedback(props) {
     {id: 3, title: 'Email'},
   ];
   const [currentSortingIndex, setCurrentIndex] = useState(0);
-
-  // sorting bottom sheet stuff
   const fall = new Animated.Value(1);
-  const sortingBottomSheet = React.useRef();
-  const sortingBottomSheetSnapPoints = ['45%', '0%'];
 
+  const [sortingBottomSheetVisible, setSortingBottomSheetVisible] =
+    useState(false);
   const asyncGetResponseIDs = async () => {
     try {
       let resIds = JSON.parse(await getItem());
@@ -90,36 +94,13 @@ function Feedback(props) {
     }
   };
 
-  const openSortingBottomSheet = () => {
-    sortingBottomSheet.current.snapTo(0);
-  };
-  const closeSortingBottomSheet = () => {
-    sortingBottomSheet.current.snapTo(sortingBottomSheetSnapPoints.length - 1);
-  };
+  const openSortingBottomSheet = useCallback(() => {
+    setSortingBottomSheetVisible(true);
+  }, []);
 
-  const renderSortingHeader = _title => {
-    return (
-      <BottomSheetHeader
-        title={translate('responses.sort_by')}
-        onPressClose={closeSortingBottomSheet}
-      />
-    );
-  };
-
-  const renderSortingSelectContent = () => {
-    return (
-      <View style={styles.contentContainer}>
-        <SelectSorting
-          data={sortingList}
-          selectedIndex={currentSortingIndex}
-          handleOnPress={(item, index) => {
-            setSortText(sortingList[index].title, index);
-            closeSortingBottomSheet();
-          }}
-        />
-      </View>
-    );
-  };
+  const closeSortingBottomSheet = useCallback(() => {
+    setSortingBottomSheetVisible(false);
+  }, []);
 
   const onSuccess = success => {
     setShowLoader(false);
@@ -196,7 +177,7 @@ function Feedback(props) {
 
   let onEndReached = () => {
     setPagination(state => !state);
-    setPageOffset(pageOffset + 1);
+    setPageOffset(state => state + 1);
   };
 
   let onRefresh = () => {
@@ -220,22 +201,10 @@ function Feedback(props) {
     );
   };
 
-  const dateRangeHandler = range_ => {
-    dispatch(setRangeFilter(range_));
-    // setFeedbackData([]);
-    dispatch(setAllResponsesEmpty());
-    setPageOffset(0);
-    setShowLoader(true);
-  };
-
-  const filterHandler = () => {
-    openSortingBottomSheet();
-  };
-
   return (
     <SafeAreaView
       testID="safe-area-view"
-      forceInset={{top: 'never', bottom: 'never'}}
+      edges={['left', 'right', 'bottom']}
       style={styles.safeAreaView}>
       <Animated.View
         style={[
@@ -244,7 +213,7 @@ function Feedback(props) {
         ]}>
         <HeaderFilter
           testID="header-filter"
-          onPressFilter={filterHandler}
+          onPressFilter={openSortingBottomSheet}
           hasSortIcon={true}
           hasFilterIcon={false}
         />
@@ -256,7 +225,6 @@ function Feedback(props) {
           }}></View>
         <FormContext.Provider
           value={{
-            ticketStatus: ticketStatus,
             feedbackData: [],
             onFeedbackEndReached: onEndReached,
             onRefresh: onRefresh,
@@ -275,15 +243,13 @@ function Feedback(props) {
         </FormContext.Provider>
         {showLoader && renderSpinner()}
       </Animated.View>
-      <BottomSheet
-        testID="sorting-bottom-sheet"
-        ref={sortingBottomSheet}
-        snapPoints={sortingBottomSheetSnapPoints}
-        initialSnap={sortingBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderSortingSelectContent}
-        renderHeader={renderSortingHeader}
-        callbackNode={fall}
+
+      <SortingBottomSheet
+        isVisible={sortingBottomSheetVisible}
+        onClose={closeSortingBottomSheet}
+        sortingText={sortingText}
+        setSortingText={setSortText}
+        sortingList={sortingList}
       />
     </SafeAreaView>
   );

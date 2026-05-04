@@ -25,23 +25,37 @@ import LoginBackground from './components/LoginBackground';
 import {useState} from 'react';
 import useForgotPasswordProcess from './components/hooks/useForgotPasswordProcess';
 import {clearResetPasswordLinkResponse} from '../../redux/actions/login.actions';
-import {showSuccessFlashMessage} from '../../Utils/Utility';
+import {
+  showErrorFlashMessage,
+  showSuccessFlashMessage,
+} from '../../Utils/Utility';
 import {loginStyles} from './login.styles';
 
 let RenderSpinnerResetButton = ({resetData}) => {
   // const navigation = useNavigation();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const {onResetPasswordClick} = useForgotPasswordProcess(resetData);
-  const {isLoading, resetPasswordLinkResponse} = useSelector(
-    state => state.global,
-  );
-  useEffect(() => {
-    if (resetPasswordLinkResponse?.message) {
-      dispatch(clearResetPasswordLinkResponse());
-      showSuccessFlashMessage('Reset password link sent to your email');
-    }
-  }, [resetPasswordLinkResponse]);
+  const {isLoading} = useSelector(state => state.global);
+  // useEffect(() => {
+  //   console.log(
+  //     'Forgot PAss',
+  //     resetPasswordLinkResponse,
+  //     isError,
+  //     errorMessage,
+  //   );
+  //   if (resetPasswordLinkResponse?.message) {
+  //     dispatch(clearResetPasswordLinkResponse());
+  //     showSuccessFlashMessage('Reset password link sent to your email');
+  //   }
+  //   if (isError && errorMessage) {
+  //     dispatch(clearResetPasswordLinkResponse());
+  //     showErrorFlashMessage(
+  //       errorMessage.errorAlert ??
+  //         'Something went wrong, please try again later',
+  //     );
+  //   }
+  // }, [resetPasswordLinkResponse, isError, errorMessage]);
 
   return isLoading ? (
     <View style={styles.resetPswdButton}>
@@ -91,8 +105,11 @@ const ForgotPassword = props => {
             <Text style={styles.forgotPasswordMessage}>
               {translate('onBoarding.forgotPasswordMessage')}
             </Text>
-            <EmailTextInput setEmail={setEmail} />
-            <AccessCodeTextInput setAccessCode={setAccessCode} />
+            <EmailTextInput value={resetData.email} setEmail={setEmail} />
+            <AccessCodeTextInput
+              value={resetData.accessCode}
+              setAccessCode={setAccessCode}
+            />
           </View>
         </KeyboardAvoidingView>
         <RenderSpinnerResetButton {...props} resetData={resetData} />

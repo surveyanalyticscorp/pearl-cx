@@ -1,67 +1,57 @@
-// import React from 'react';
-// import {render, fireEvent} from '@testing-library/react-native';
-// import TextField from './TextField';
-
-// describe('TextField Component', () => {
-//   it('renders the TextField with default size', () => {
-//     const {getByTestId} = render(<TextField />);
-//     const image = getByTestId('text-field');
-
-//     // Check if the image is rendered
-//     expect(image).toBeTruthy();
-//   });
-
-//   it('renders the TextField with custom size', () => {
-//     const {getByTestId} = render(<TextField testID="test-id" />);
-//     const image = getByTestId('test-id');
-
-//     // Check if the image is rendered
-//     expect(image).toBeTruthy();
-//   });
-//   it('renders the TextField with the correct placeholder', () => {
-//     const {getByTestId} = render(<TextField placeholder="test-placeholder" />);
-//     const image = getByTestId('text-field');
-
-//     // Check if the image is rendered
-//     expect(image).toBeTruthy();
-//   });
-//   it('renders the TextField with the correct label', () => {
-//     const {getByTestId} = render(<TextField label="test-label" />);
-//     const image = getByTestId('text-field');
-
-//     // Check if the image is rendered
-//     expect(image).toBeTruthy();
-//   });
-//   it('renders the TextField with the correct accessibilityLabel', () => {
-//     const {getByTestId} = render(
-//       <TextField accessibilityLabel="test-accessibilityLabel" />,
-//     );
-//     const image = getByTestId('text-field');
-
-//     // Check if the image is rendered
-//     expect(image).toBeTruthy();
-//   });
-
-//   // test onChangeText event
-//   it('calls onChangeText when the text field is changed', () => {
-//     const mockOnChangeText = jest.fn();
-//     const {getByTestId} = render(<TextField onChange={mockOnChangeText} />);
-//     const textField = getByTestId('text-field');
-//     fireEvent.changeText(textField, 'test-text');
-//     expect(mockOnChangeText).toHaveBeenCalledWith('test-text');
-//   });
-
-//   // test renderVisibility component
-//   it('renders the renderVisibility component', () => {
-//     const {getByTestId} = render(<TextField secureText={true} value="test" />);
-//     const renderVisibility = getByTestId('render-visibility-icon');
-//     expect(renderVisibility).toBeTruthy();
-//   });
-// });
-
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
 import QPTextField from './TextField';
+
+// Mock StringUtils
+jest.mock('../Utils/StringUtils', () => ({
+  isNotEmpty: jest.fn(value => value && value.length > 0),
+}));
+
+// Mock SVG icons
+jest.mock(
+  './../../assets/images/visibility.svg',
+  () => 'PasswordVisibilitySVGIcon',
+);
+jest.mock(
+  './../../assets/images/visibility_off.svg',
+  () => 'PasswordVisibility_offSVGIcon',
+);
+
+// Mock style constants
+jest.mock('../styles/color.constants', () => ({
+  Colors: {
+    filterIconColor: '#000000',
+    accentLight: '#007AFF',
+    primary: '#000000',
+    borderColor: '#CCCCCC',
+  },
+}));
+
+jest.mock('../styles/textsize.constants', () => ({
+  TextSizes: {
+    primary: 16,
+    secondary: 14,
+  },
+}));
+
+jest.mock('../styles/font.constants', () => ({
+  FontFamily: {
+    regular: 'System',
+  },
+}));
+
+jest.mock('../styles/margin.constants', () => ({
+  MarginConstants: {
+    tab4: 16,
+    tab1: 4,
+  },
+}));
+
+jest.mock('../styles/padding.constants', () => ({
+  PaddingConstants: {
+    halfTab: 2,
+  },
+}));
 
 describe('TextField Component', () => {
   it('renders the TextField with default size', () => {
@@ -91,11 +81,11 @@ describe('TextField Component', () => {
   });
 
   it('renders the TextField with the correct accessibilityLabel', () => {
-    const {getAllByAccessibilityValue} = render(
+    const {getByTestId} = render(
       <QPTextField accessibilityLabel="test-accessibilityLabel" />,
     );
-    const textField = getAllByAccessibilityValue('test-accessibilityLabel');
-    expect(textField).toBeTruthy();
+    const textField = getByTestId('text-field');
+    expect(textField.props.accessibilityLabel).toBe('test-accessibilityLabel');
   });
 
   // Test onChangeText event
@@ -132,7 +122,7 @@ describe('TextField Component', () => {
     const {getByTestId} = render(
       <QPTextField secureText={true} value="test" />,
     );
-    const visibilityIcon = getByTestId('render-visibility-icon');
+    const visibilityIcon = getByTestId('password-visibility-button');
     expect(visibilityIcon).toBeTruthy();
   });
 
@@ -141,7 +131,7 @@ describe('TextField Component', () => {
     const {getByTestId} = render(
       <QPTextField secureText={true} value="test" />,
     );
-    const visibilityIcon = getByTestId('render-visibility-icon');
+    const visibilityIcon = getByTestId('password-visibility-button');
     fireEvent.press(visibilityIcon);
     const textField = getByTestId('text-field');
     expect(textField.props.secureTextEntry).toBe(false);
@@ -156,7 +146,7 @@ describe('TextField Component', () => {
     expect(textField.props.returnKeyType).toBe('next');
 
     // Check if placeholder is empty by default
-    expect(textField.props.placeholder).toBeUndefined(); // or adjust if placeholder exists
+    expect(textField.props.placeholder).toBeUndefined();
   });
 
   it('applies custom style', () => {

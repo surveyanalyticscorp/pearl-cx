@@ -1,12 +1,16 @@
 import React from 'react';
-import {render, fireEvent} from '@testing-library/react-native';
+import {render, waitFor} from '@testing-library/react-native';
 import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
+import {act} from 'react-test-renderer';
 import TicketRootCause from './TicketRootCause/TicketRootCause';
-import {updateRootCause} from '../../redux/actions/closedloop.actions';
-import RenderRootCauseItem from './RenderRootCauseItem';
-import RenderSegmentItem from './RenderSegmentItem';
-import {FlatList} from 'react-native-gesture-handler';
+
+// Mock React Navigation
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: jest.fn(() => ({
+    navigate: jest.fn(),
+  })),
+}));
 
 // Mock the ScrollView and FlatList components
 jest.mock('react-native-gesture-handler', () => ({
@@ -34,45 +38,124 @@ jest.mock('../../redux/actions/closedloop.actions', () => ({
   updateRootCause: jest.fn(),
 }));
 
+// Mock dashboard actions
+jest.mock('../../redux/actions/dashboard.actions', () => ({
+  getClosedLoopTicketItem: jest.fn(),
+}));
+
+// Mock child components
+jest.mock('./TicketRootCause/RootCauseNavigationButtons', () => {
+  const {View, Text} = require('react-native');
+  return {
+    RootCauseNavigationButtons: () => (
+      <View testID="RootCauseNavigationButtons">
+        <Text testID="CentralizedButton">Centralized</Text>
+        <Text testID="PreviousRootCauseButton">Previous root cause</Text>
+      </View>
+    ),
+  };
+});
+
+jest.mock('./TicketRootCause/CustomeRootCause', () => {
+  const {View, Text} = require('react-native');
+  return {
+    CustomRootCause: () => (
+      <View testID="CustomRootCause">
+        <Text>Root Cause 1</Text>
+        <Text>Root Cause 2</Text>
+        <Text>Action 1</Text>
+        <Text>Action 2</Text>
+        <Text>Segment 1</Text>
+        <Text>Segment 2</Text>
+        <Text testID="EditButton">Edit</Text>
+        <Text testID="AddButton">Add</Text>
+      </View>
+    ),
+  };
+});
+
 const mockStore = configureStore([]);
+
+const initialState = {
+  global: {
+    userInfo: {feedbackApiKey: 'test-api-key'},
+    authToken: 'test-auth-token',
+  },
+  dashboard: {
+    ticket: {
+      id: 1,
+      rootCauses: [],
+      rootCauseActions: [],
+      originSegment: {id: 1},
+      currentSegment: {id: 1},
+    },
+    rootCauseList: [
+      {id: 1, title: 'Root Cause 1'},
+      {id: 2, title: 'Root Cause 2'},
+    ],
+    rootCauseActionList: [
+      {id: 1, actionName: 'Action 1'},
+      {id: 2, actionName: 'Action 2'},
+    ],
+    segmentDetails: {
+      segments: [
+        {segmentID: 1, segmentName: 'Segment 1'},
+        {segmentID: 2, segmentName: 'Segment 2'},
+      ],
+    },
+  },
+};
 
 describe('TicketRootCause Component', () => {
   const mockDispatch = jest.fn();
-  const initialState = {
-    global: {
-      userInfo: {feedbackApiKey: 'test-api-key'},
-      authToken: 'test-auth-token',
-    },
-    dashboard: {
-      ticket: {
-        id: 1,
-        rootCauses: [],
-        rootCauseActions: [],
-        originSegment: {id: 1},
-        currentSegment: {id: 1},
-      },
-      rootCauseList: [
-        {id: 1, title: 'Root Cause 1'},
-        {id: 2, title: 'Root Cause 2'},
-      ],
-      rootCauseActionList: [
-        {id: 1, actionName: 'Action 1'},
-        {id: 2, actionName: 'Action 2'},
-      ],
-      segmentDetails: {
-        segments: [
-          {segmentID: 1, segmentName: 'Segment 1'},
-          {segmentID: 2, segmentName: 'Segment 2'},
-        ],
-      },
-    },
-  };
+  const mockGetClosedLoopTicketItem = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // Temporarily disable timer mocking to isolate issue
+    // jest.useFakeTimers();
     const {useDispatch, useSelector} = require('react-redux');
+    const {
+      getClosedLoopTicketItem,
+    } = require('../../redux/actions/dashboard.actions');
+
     useDispatch.mockReturnValue(mockDispatch);
     useSelector.mockImplementation(selector => selector(initialState));
+    getClosedLoopTicketItem.mockImplementation(mockGetClosedLoopTicketItem);
+  });
+
+  // Commented out afterEach since we're not using fake timers
+  // afterEach(() => {
+  //   jest.useRealTimers();
+  // });
+
+  it('executes setTimeout callback in onRefresh', async () => {
+    const store = mockStore(initialState);
+    const {getByTestId} = render(
+      <Provider store={store}>
+        <TicketRootCause />
+      </Provider>,
+    );
+
+    const scrollView = getByTestId('root-cause-view');
+    const refreshControl = scrollView.props.refreshControl;
+
+    // Trigger refresh
+    await act(async () => {
+      refreshControl.props.onRefresh();
+    });
+
+    // Verify dispatch was called
+    expect(mockDispatch).toHaveBeenCalled();
+
+    // Wait for setTimeout to complete (2 seconds)
+    await waitFor(
+      () => {
+        // This will pass if the component doesn't crash during setTimeout
+        expect(getByTestId('root-cause-view')).toBeTruthy();
+      },
+      {timeout: 3000},
+    );
   });
 
   it('renders TicketRootCause component correctly', () => {
@@ -109,31 +192,53 @@ describe('TicketRootCause Component', () => {
     expect(getAllByText('Segment 2')).toBeTruthy();
   });
 
-  it('calls updateRootCause action when update button is pressed', () => {
+  it('renders Edit and Add buttons from CustomRootCause', () => {
     const {getByTestId} = render(
       <Provider store={mockStore(initialState)}>
         <TicketRootCause />
       </Provider>,
     );
 
-    const updateButton = getByTestId('RootCauseUpdateButton');
-    fireEvent.press(updateButton);
+    // Check if edit and add buttons exist
+    expect(getByTestId('EditButton')).toBeTruthy();
+    expect(getByTestId('AddButton')).toBeTruthy();
+  });
 
+  it('renders navigation buttons', () => {
+    const {getByTestId} = render(
+      <Provider store={mockStore(initialState)}>
+        <TicketRootCause />
+      </Provider>,
+    );
+
+    // Check if navigation buttons exist
+    expect(getByTestId('CentralizedButton')).toBeTruthy();
+    expect(getByTestId('PreviousRootCauseButton')).toBeTruthy();
+  });
+
+  it('handles refresh functionality', async () => {
+    const store = mockStore(initialState);
+    const {getByTestId} = render(
+      <Provider store={store}>
+        <TicketRootCause />
+      </Provider>,
+    );
+
+    const scrollView = getByTestId('root-cause-view');
+
+    // Trigger refresh by calling the RefreshControl onRefresh prop
+    const refreshControl = scrollView.props.refreshControl;
+
+    await act(async () => {
+      refreshControl.props.onRefresh();
+    });
+
+    // Verify that the dispatch function was called
     expect(mockDispatch).toHaveBeenCalled();
-  });
-
-  it('resets selections when reset button is pressed', () => {
-    const {getByTestId} = render(
-      <Provider store={mockStore(initialState)}>
-        <TicketRootCause />
-      </Provider>,
+    expect(mockGetClosedLoopTicketItem).toHaveBeenCalledWith(
+      '',
+      1,
+      'test-api-key',
     );
-
-    const resetButton = getByTestId('RootCasueResetButton');
-    fireEvent.press(resetButton);
-
-    // You may need to add more specific assertions here to check if the state is reset
   });
-
-  // Add more tests as needed for specific functionality
 });

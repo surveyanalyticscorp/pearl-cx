@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Platform, StyleSheet, TextInput, View, Image} from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  View,
+  Image,
+} from 'react-native';
 import {
   Colors,
   getPriorityBorderColorbyId,
@@ -11,10 +18,6 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {RenderStatusIcon} from '../../../routes/commonUI/CommonUI';
-import BottomSheetHeader from '../../../routes/commonUI/BottomSheetHeader';
-import QPSpinner from '../../../widgets/QPSpinner';
-import BottomSheet from 'reanimated-bottom-sheet';
-import Animated from 'react-native-reanimated';
 import SelectPriority from '../../closedloop/takeaction/SelectPriority';
 import SelectStatus from '../../closedloop/takeaction/SelectStatus';
 import {
@@ -58,8 +61,10 @@ import {ANALYTICS_EVENTS} from '../../../Utils/Analytic.constants';
 import {sendAnalyticsEvent} from '../../../Utils/AnalyticLogs';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ShowInputError from '../../../routes/commonUI/ShowInputError';
-import {get} from 'lodash';
 import {getApiValidationErrorMessage} from '../../../Utils/ErrorValidationUtils';
+import {QPTransparentSpinner} from '../../../widgets/QPTransparentSpinner';
+import QPBottomSheet from '../../closedloop/takeaction/QPBottomSheet';
+import QPBottomSheetHeader from '../../closedloop/takeaction/QPBottomSheetHeader';
 
 const INPUTTYPES = {
   EMAIL: 'EMAIL',
@@ -295,42 +300,15 @@ const RenderCustomerNameInput = ({
   );
 };
 
-const CreateTicketButton = ({showLoading, onPress}) => {
-  return (
-    <View>
-      {showLoading ? (
-        <View
-          style={[
-            styles.buttonStyle,
-            {
-              backgroundColor: Colors.accentLight,
-            },
-          ]}>
-          <QPSpinner spinnerColor={Colors.white} />
-        </View>
-      ) : (
-        <RenderCreateTicketButton handleCreateTicket={onPress} />
-      )}
-    </View>
-  );
-};
-
 const CreateTicketForm = ({children, fall}) => {
   return (
-    <Animated.ScrollView
-      style={[
-        styles.container,
-        {
-          opacity: Animated.add(0.3, Animated.multiply(fall, 1.0)),
-          marginHorizontal: MarginConstants.tab1_2x,
-        },
-      ]}>
+    <ScrollView style={styles.container}>
       <KeyboardAwareScrollView
         enableOnAndroid={true}
         contentContainerStyle={styles.innerContainer}>
         {children}
       </KeyboardAwareScrollView>
-    </Animated.ScrollView>
+    </ScrollView>
   );
 };
 
@@ -350,7 +328,6 @@ export default function CreateTicket(props) {
   const {feedbackApiKey, emailAddress, firstName, lastName} = useSelector(
     state => state.global.userInfo,
   );
-  // const [priority, setPriority] = useState('Select');
   const [priorityIndex, setPriorityIndex] = useState(0);
   const [segment, setSegment] = useState(
     translate('select_segment.select_segment'),
@@ -361,44 +338,11 @@ export default function CreateTicket(props) {
     translate('ticket_overview.select_ticket_owner'),
   );
   const [ticketOwnerIndex, setTIcketOwnerIndex] = useState(-1);
-  // const [status, setStatus] = useState('Select');
   const [statusIndex, setStatusIndex] = useState(0);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(moment().format(DMYFORMAT));
   const navigation = useNavigation();
-  // let userInfo = {
-  //   emailAddress: '',
-  //   firstName: '',
-  //   mobileNumber: '',
-  //   comment: '',
-  // };
 
-  // const [issueDate, setIssueDate] = useState(
-  // );
-  // const [bottomSheet, setBottomSheet] = useState('priority');
-
-  // console.log('DETAILS_OF_PROPS', JSON.stringify(props.route.params));
-  // variables for bottom sheet
-  const priorityBottomSheet = React.useRef();
-  const statusBottomSheet = React.useRef();
-  const segmentBottomSheet = React.useRef();
-  const ownerBottomSheet = React.useRef();
-  // const calendarBottomSheet = React.useRef();
-
-  const fall = new Animated.Value(1);
-  const priorityBottomSheetSnapPoints = [
-    Platform.OS === 'ios' ? '50%' : '55%',
-    '0%',
-  ];
-  const statusBottomSheetSnapPoints = [
-    Platform.OS === 'ios' ? '55%' : '50%',
-    '0%',
-  ];
-  const segmentBottomSheetSnapPoints = ['45%', '0%'];
-  const ownerBottomSheetSnapPoints = ['45%', '0%'];
-  // const calenderBottomSheetSnapPoints = ['45%', '0%'];
-
-  // const [shadow, setShadow] = useState(false);
   const createTicketResponse = useSelector(
     state => state.dashboard.createTicketResponse,
   );
@@ -435,54 +379,39 @@ export default function CreateTicket(props) {
       }),
     );
   };
+  console.log(
+    'SEGMENT_TEST',
+    JSON.stringify(segmentDetails),
+    'ticketState',
+    JSON.stringify(ticketState),
+  );
 
   useEffect(() => {
     getTicketOwnerList(segmentId);
   }, [segmentId]);
 
-  const closeAllBottomSheet = () => {
-    priorityBottomSheet.current.snapTo(
-      priorityBottomSheetSnapPoints.length - 1,
-    );
-    statusBottomSheet.current.snapTo(statusBottomSheetSnapPoints.length - 1);
-  };
-
   const handleStatusSelection = () => {
-    priorityBottomSheet.current.snapTo(
-      priorityBottomSheetSnapPoints.length - 1,
-    );
-    // open status selection bottom sheet
-    statusBottomSheet.current.snapTo(0);
+    setStatusBottomSheetVisible(true);
   };
 
   const handlePrioritySelection = () => {
-    // closeAllBottomSheet();
-    statusBottomSheet.current.snapTo(statusBottomSheetSnapPoints.length - 1);
-
-    // open priority selection bottom sheet
-    priorityBottomSheet.current.snapTo(0);
+    setPriorityBottomSheetVisible(true);
   };
 
   const handleSegmentSelection = () => {
-    // open segment selection bottom sheet
-    // segmentBottomSheet.current.snapTo(0);
-
-    const pushAction = StackActions.push(translate('dashboard.segment'), {
-      currentSegmentId: segmentId,
-      setSegmentSelection: setSegmentSelection,
-    });
-    navigation.dispatch(pushAction);
+    // const pushAction = StackActions.push(translate('dashboard.segment'), {
+    //   currentSegmentId: segmentId,
+    //   setSegmentSelection: setSegmentSelection,
+    // });
+    // navigation.dispatch(pushAction);
+    setSegmentBottomSheetVisible(true);
   };
 
   const handleOwnerSelection = () => {
-    closeAllBottomSheet();
-    // open owner selection bottom sheet
-    ownerBottomSheet.current.snapTo(0);
+    setOwnerBottomSheetVisible(true);
   };
 
   const handleDateSelection = () => {
-    // open owner selection bottom sheet
-    // calendarBottomSheet.current.snapTo(0);
     setShowCalendar(true);
   };
 
@@ -528,9 +457,14 @@ export default function CreateTicket(props) {
     console.log('createTicketResponse', JSON.stringify(response));
   };
 
-  const renderPrioritySelectContent = () => {
+  const RenderPriorityBottomSheet = ({visible, onClose}) => {
     return (
-      <View style={styles.contentContainer}>
+      <QPBottomSheet
+        visible={visible}
+        onClose={onClose}
+        headerComponent={
+          <QPBottomSheetHeader headerLabel="Priority" onClose={onClose} />
+        }>
         <SelectPriority
           data={priorityList}
           selectedIndex={priorityIndex}
@@ -541,20 +475,48 @@ export default function CreateTicket(props) {
               priority: item.id,
             }));
             setPriorityIndex(index);
+            onClose();
           }}
         />
-      </View>
+      </QPBottomSheet>
     );
   };
 
-  const renderSegmentSelectContent = () => {
+  const RenderStatusBottomSheet = ({onClose, visible}) => {
     return (
-      <View style={styles.contentContainer}>
+      <QPBottomSheet
+        visible={visible}
+        onClose={onClose}
+        headerComponent={
+          <QPBottomSheetHeader headerLabel="Status" onClose={onClose} />
+        }>
+        <SelectStatus
+          data={statusListForCreateTicket}
+          screenName={'CreateTicket'}
+          selectedIndex={statusIndex}
+          handleOnPress={(item, index) => {
+            setTicketState(state => ({...state, status: item.id}));
+            setStatusIndex(index);
+            onClose();
+          }}
+        />
+      </QPBottomSheet>
+    );
+  };
+
+  const RenderSegmentBottomSheet = ({visible, onClose}) => {
+    return (
+      <QPBottomSheet
+        bottomSheetHeight="50%"
+        visible={visible}
+        onClose={onClose}
+        headerComponent={
+          <QPBottomSheetHeader headerLabel="Segment" onClose={onClose} />
+        }>
         <SelectSegment
           data={segmentDetails.segments}
           selectedIndex={segmentIndex}
           handleOnPress={(item, index) => {
-            // console.log(JSON.stringify(item));
             setSegment(item.segmentName);
             setSegmentIndex(index);
             setSegmentId(prev => item.segmentID);
@@ -563,38 +525,28 @@ export default function CreateTicket(props) {
               ...state,
               currentSegmentId: item.segmentID,
             }));
+            onClose();
           }}
         />
-      </View>
+      </QPBottomSheet>
     );
   };
 
-  const renderStatusSelectContent = () => {
+  const RenderOwnerBottomSheet = ({onClose, visible}) => {
     return (
-      <View style={styles.contentContainer}>
-        <SelectStatus
-          data={statusListForCreateTicket}
-          screenName={'CreateTicket'}
-          selectedIndex={statusIndex}
-          handleOnPress={(item, index) => {
-            // console.log(JSON.stringify(item));
-            // setStatus(item.title);
-            setTicketState(state => ({...state, status: item.id}));
-            setStatusIndex(index);
-          }}
-        />
-      </View>
-    );
-  };
-
-  const renderOwnerSelectContent = () => {
-    return (
-      <View style={styles.contentContainer}>
+      <QPBottomSheet
+        visible={visible}
+        onClose={onClose}
+        headerComponent={
+          <QPBottomSheetHeader
+            headerLabel={translate('ticket_overview.select_ticket_owner')}
+            onClose={onClose}
+          />
+        }>
         <SelectTicketOwner
           data={owners}
           selectedIndex={ticketOwnerIndex}
           handleOnPress={(item, index) => {
-            // console.log(JSON.stringify(item));
             setTicketOwner(item.ownerName);
             setTIcketOwnerIndex(index);
             setTicketState(state => ({
@@ -602,122 +554,16 @@ export default function CreateTicket(props) {
               assignToId: item.ownerID,
               ownerId: item.ownerID,
             }));
+            onClose();
           }}
         />
-      </View>
-    );
-  };
-
-  const renderPriorityHeader = _title => {
-    return (
-      <BottomSheetHeader
-        title={'Priority'}
-        onPressClose={() =>
-          priorityBottomSheet.current.snapTo(
-            priorityBottomSheetSnapPoints.length - 1,
-          )
-        }
-      />
-    );
-  };
-
-  const renderStatusHeader = _title => {
-    return (
-      <BottomSheetHeader
-        title={'Status'}
-        onPressClose={() =>
-          statusBottomSheet.current.snapTo(
-            statusBottomSheetSnapPoints.length - 1,
-          )
-        }
-      />
-    );
-  };
-
-  const renderSegmentHeader = _title => {
-    return (
-      <BottomSheetHeader
-        title={translate('select_segment.select_segment')}
-        onPressClose={() =>
-          segmentBottomSheet.current.snapTo(
-            segmentBottomSheetSnapPoints.length - 1,
-          )
-        }
-      />
-    );
-  };
-
-  const renderOwnerHeader = _title => {
-    return (
-      <BottomSheetHeader
-        title={translate('ticket_overview.select_ticket_owner')}
-        onPressClose={() =>
-          ownerBottomSheet.current.snapTo(ownerBottomSheetSnapPoints.length - 1)
-        }
-      />
-    );
-  };
-
-  const RenderPriorityBottomSheet = () => {
-    return (
-      <BottomSheet
-        ref={priorityBottomSheet}
-        snapPoints={priorityBottomSheetSnapPoints}
-        initialSnap={priorityBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderPrioritySelectContent}
-        renderHeader={renderPriorityHeader}
-        callbackNode={fall}
-      />
-    );
-  };
-
-  const RenderStatusBottomSheet = () => {
-    return (
-      <BottomSheet
-        ref={statusBottomSheet}
-        snapPoints={statusBottomSheetSnapPoints}
-        initialSnap={statusBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderStatusSelectContent}
-        renderHeader={renderStatusHeader}
-        callbackNode={fall}
-      />
-    );
-  };
-
-  const RenderSegmentBottomSheet = () => {
-    return (
-      <BottomSheet
-        ref={segmentBottomSheet}
-        snapPoints={segmentBottomSheetSnapPoints}
-        initialSnap={segmentBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderSegmentSelectContent}
-        renderHeader={renderSegmentHeader}
-        callbackNode={fall}
-      />
-    );
-  };
-
-  const RenderOwnerBottomSheet = () => {
-    return (
-      <BottomSheet
-        ref={ownerBottomSheet}
-        snapPoints={ownerBottomSheetSnapPoints}
-        initialSnap={ownerBottomSheetSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderOwnerSelectContent}
-        renderHeader={renderOwnerHeader}
-        callbackNode={fall}
-      />
+      </QPBottomSheet>
     );
   };
 
   let setCalendarDate = (isStartDate = false, date) => {
     console.log('setCalendarDate', date);
 
-    // let tempDate = moment(date, 'YYYY-MM-DD').format(DMYFORMAT);
     setSelectedDate(moment(date).format(DMYFORMAT));
     setTicketState(state => ({
       ...state,
@@ -725,9 +571,33 @@ export default function CreateTicket(props) {
     }));
   };
 
+  const [priorityBottomSheetVisible, setPriorityBottomSheetVisible] =
+    useState(false);
+  const onClosePriorityBottomSheet = () => {
+    setPriorityBottomSheetVisible(false);
+  };
+
+  const [statusBottomSheetVisible, setStatusBottomSheetVisible] =
+    useState(false);
+  const onCloseStatusBottomSheet = () => {
+    setStatusBottomSheetVisible(false);
+  };
+
+  const [segmentBottomSheetVisible, setSegmentBottomSheetVisible] =
+    useState(false);
+  const onCloseSegmentBottomSheet = () => {
+    setSegmentBottomSheetVisible(false);
+  };
+
+  const [ownerBottomSheetVisible, setOwnerBottomSheetVisible] = useState(false);
+  const onCloseOwnerBottomSheet = () => {
+    setOwnerBottomSheetVisible(false);
+  };
+
   return (
     <CreateTicketContainer>
-      <CreateTicketForm fall={fall}>
+      {showLoading && <QPTransparentSpinner subText={'Creating ticket...'} />}
+      <CreateTicketForm>
         <VerticalSpaceBox multiplyBy={2} />
         <RenderCustomerNameInput
           defaultValue={customerName}
@@ -831,17 +701,27 @@ export default function CreateTicket(props) {
         />
 
         <VerticalSpaceBox multiplyBy={4} />
-        <CreateTicketButton
-          onPress={handleCreateTicket}
-          showLoading={showLoading}
-        />
+        <RenderCreateTicketButton handleCreateTicket={handleCreateTicket} />
+
         <VerticalSpace />
       </CreateTicketForm>
 
-      <RenderPriorityBottomSheet />
-      <RenderStatusBottomSheet />
-      <RenderSegmentBottomSheet />
-      <RenderOwnerBottomSheet />
+      <RenderPriorityBottomSheet
+        visible={priorityBottomSheetVisible}
+        onClose={onClosePriorityBottomSheet}
+      />
+      <RenderStatusBottomSheet
+        visible={statusBottomSheetVisible}
+        onClose={onCloseStatusBottomSheet}
+      />
+      <RenderSegmentBottomSheet
+        onClose={onCloseSegmentBottomSheet}
+        visible={segmentBottomSheetVisible}
+      />
+      <RenderOwnerBottomSheet
+        onClose={onCloseOwnerBottomSheet}
+        visible={ownerBottomSheetVisible}
+      />
       <RenderDatePickerModal
         isOpen={showCalendar}
         setOpen={setShowCalendar}
@@ -849,8 +729,6 @@ export default function CreateTicket(props) {
         setDate={setCalendarDate}
         isStartDate={true}
       />
-      {/* <RenderCalenderBottomSheet /> */}
-      {/* {showCalendar ? renderCalendarViewOnModal() : <View />} */}
     </CreateTicketContainer>
   );
 }
@@ -867,6 +745,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    marginHorizontal: MarginConstants.tab1_2x,
   },
   innerContainer: {
     flex: 1,

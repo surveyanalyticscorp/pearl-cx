@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {
   Modal,
   StyleSheet,
@@ -42,9 +42,11 @@ const QPBottomSheet = ({
   contentStyle,
   bottomSheetHeight,
 }) => {
-  const sheetHeight = getHeightFromPercentage(bottomSheetHeight);
+  const sheetHeight =
+    bottomSheetHeight && getHeightFromPercentage(bottomSheetHeight);
+  const maxSheetHeight = SCREEN_HEIGHT * 0.8; // 80% of screen by default
   const translateY = useRef(
-    new Animated.Value(sheetHeight ?? SCREEN_HEIGHT),
+    new Animated.Value(sheetHeight ?? maxSheetHeight),
   ).current;
   const pan = useRef(new Animated.ValueXY()).current;
 
@@ -58,10 +60,10 @@ const QPBottomSheet = ({
         }
       },
       onPanResponderRelease: (_, gestureState) => {
-        const threshold = (sheetHeight ?? SCREEN_HEIGHT) * 0.3;
+        const threshold = (sheetHeight ?? maxSheetHeight) * 0.3;
         if (gestureState.dy > threshold) {
           Animated.timing(translateY, {
-            toValue: sheetHeight ?? SCREEN_HEIGHT,
+            toValue: sheetHeight ?? maxSheetHeight,
             duration: 300,
             useNativeDriver: true,
           }).start(() => {
@@ -87,12 +89,13 @@ const QPBottomSheet = ({
       }).start();
     } else {
       Animated.timing(translateY, {
-        toValue: sheetHeight ?? SCREEN_HEIGHT,
+        toValue: sheetHeight ?? maxSheetHeight,
         duration: 300,
+        bounciness: 5,
         useNativeDriver: true,
       }).start(onClose);
     }
-  }, [visible, sheetHeight]);
+  }, [visible, sheetHeight, maxSheetHeight, onClose, translateY]);
 
   return (
     <Modal
@@ -106,7 +109,9 @@ const QPBottomSheet = ({
             styles.modalContent,
             contentStyle,
             {
-              height: sheetHeight ?? undefined, // undefined = wrap content
+              // Only set maxHeight unless a fixed height is provided
+              height: sheetHeight ?? undefined,
+              maxHeight: sheetHeight ? undefined : maxSheetHeight,
               transform: [{translateY: Animated.add(translateY, pan.y)}],
             },
           ]}>
@@ -121,7 +126,7 @@ const QPBottomSheet = ({
 
 const styles = StyleSheet.create({
   modalOverlay: {
-    flex: 1,
+    flex: 1, // Restore flex: 1
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-end',
   },
@@ -131,6 +136,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 16,
     width: '100%',
     alignContent: 'center',
+    // Remove alignSelf: 'flex-end'
   },
   dragIndicator: {
     width: SCREEN_WIDTH * 0.4,

@@ -1,9 +1,14 @@
 import React from 'react';
-import {Pressable} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {toggleCsatView} from '../../redux/actions/dashboard.actions';
-import {dashboardStyles} from '../../components/dashboard/dashboard.style';
 import TextLabel from '../TextLabel/TextLabel';
+import {buttonStyles} from '../../styles/button.styles';
+import {Colors} from '../../styles/color.constants';
+import {MarginConstants} from '../../styles/margin.constants';
+import {baseTextStyles} from '../../styles/text.styles';
+import {Switch} from 'react-native-paper';
+import {PaddingConstants} from '../../styles/padding.constants';
 
 const CsatToggleButton = () => {
   const dispatch = useDispatch();
@@ -14,18 +19,78 @@ const CsatToggleButton = () => {
   };
 
   return (
-    <Pressable
-      style={dashboardStyles.csatToggleButton}
-      testID="csat-toggle-button"
-      onPress={toggleView}>
-      <TextLabel
-        style={dashboardStyles.csatToggleButtonText}
-        testID="csat-toggle-button-text"
-        text={label}
-      />
-      {/* <CaretDownIcon /> */}
-    </Pressable>
+    <View style={styles.csatToggleButtonView}>
+      <View style={styles.switchContainer}>
+        <TextLabel
+          text={'Top Box'}
+          baseTextStyle={styles.csatToggleButtonText}
+        />
+        <View style={styles.switchWrapper}>
+          <Switch
+            trackColor={{
+              false: Colors.white,
+              true: Colors.white,
+            }}
+            thumbColor={Colors.accentLight}
+            onValueChange={toggleView}
+            value={isCsatViewTopBox}
+            style={styles.customSwitch}
+          />
+        </View>
+
+        <TextLabel
+          text={'Mean CSAT'}
+          baseTextStyle={styles.csatToggleButtonText}
+        />
+      </View>
+    </View>
   );
 };
 
 export default CsatToggleButton;
+
+const styles = StyleSheet.create({
+  csatToggleButtonView: {
+    width: '100%',
+    position: 'absolute',
+    alignItems: 'center',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    top: MarginConstants.tab1_2x,
+    zIndex: 100,
+  },
+  csatToggleButton: {
+    backgroundColor: Colors.white,
+    alignItems: 'center',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  csatToggleButtonText: {
+    ...baseTextStyles.secondaryRegularText,
+    color: Colors.filterIconColor,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: PaddingConstants.tab1_2x,
+    paddingVertical: PaddingConstants.halfTab,
+  },
+  switchWrapper: {
+    borderWidth: 1,
+    borderColor: Colors.accentLight,
+    borderRadius: 16,
+    marginHorizontal: MarginConstants.tab1,
+    justifyContent: 'center',
+    height: 16 + PaddingConstants.halfTab * 2,
+    width: 32 + PaddingConstants.halfTab * 2,
+    padding: PaddingConstants.halfTab,
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  customSwitch: {
+    transform: [{scaleX: 0.8}, {scaleY: 0.8}],
+  },
+});

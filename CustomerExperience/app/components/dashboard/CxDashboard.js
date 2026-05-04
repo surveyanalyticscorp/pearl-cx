@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {RefreshControl, ScrollView, View, SafeAreaView} from 'react-native';
+import {Animated, RefreshControl, ScrollView, View} from 'react-native';
 import {showLoading} from '../../redux/actions/index';
 import {
   getDashboardContent,
   getFirstTimeClosedLoopSegmentDetails,
+  setStatusIndex,
 } from '../../redux/actions/dashboard.actions';
 import {useDispatch, useSelector} from 'react-redux';
 import {dashboardStyles} from './dashboard.style';
@@ -17,15 +18,18 @@ import {setRangeFilter} from '../../redux/actions';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {HeaderFilter} from '../../routes/commonUI/CommonUI';
 import FabAddButton from '../../routes/commonUI/FabAddButton';
-import Animated from 'react-native-reanimated';
-import {
-  ClosedLoopDashboard,
-  StatusDashboardBottomSheet,
-} from './ClosedLoopDashboard';
+// Animated imported from react-native above (Reanimated v3 removed Value/add/multiply)
+import {ClosedLoopDashboard} from './ClosedLoopDashboard';
 
 import RenderSegmentDashboardData from './cxDashboard/RenderSegmentDashboardData';
 import useBackHandler from './hooks/useBackHandler';
 import {useNavigation} from '@react-navigation/native';
+import QPBottomSheet from '../closedloop/takeaction/QPBottomSheet';
+import QPBottomSheetHeader from '../closedloop/takeaction/QPBottomSheetHeader';
+import SelectStatus from '../closedloop/takeaction/SelectStatus';
+import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {PaddingConstants} from '../../styles/padding.constants';
 
 const wait = timeout => {
   return new Promise(resolve => {
@@ -84,16 +88,11 @@ const CxDashboard = ({route, navigation}) => {
   let [refreshing, setRefreshing] = useState(false);
   const {renderExitAlert, exitAlert} = useBackHandler(navigation);
 
-  const statusBottomSheetRef = React.useRef();
-  const statusBottomSheetSnapPoints = ['62%', '0%'];
   const fall = new Animated.Value(1);
 
-  // useEffect(() => {
-  //   Notifications.registerRemoteNotifications();
-  // }, []);
-  const openStatusBS = () => {
-    statusBottomSheetRef.current.snapTo(0);
-  };
+  const openStatusBS = useCallback(() => {
+    setStatusBottomSheetVisible(true);
+  }, []);
 
   const getSegmentData = () => {
     dispatch(
@@ -160,10 +159,16 @@ const CxDashboard = ({route, navigation}) => {
     }
   };
 
+  const [statusBottomSheetVisible, setStatusBottomSheetVisible] =
+    useState(false);
+  const onCloseStatusBottomSheet = useCallback(() => {
+    setStatusBottomSheetVisible(false);
+  }, []);
+
   return (
-    <View
+    <SafeAreaView
       testID="cx-dashboard"
-      forceInset={{bottom: 'never', top: 'never'}}
+      edges={['left', 'right', 'bottom']}
       style={dashboardStyles.container}>
       <Animated.View
         style={[
@@ -188,13 +193,41 @@ const CxDashboard = ({route, navigation}) => {
           {exitAlert && renderExitAlert()}
         </ScrollView>
       </Animated.View>
-      <StatusDashboardBottomSheet
-        ref={statusBottomSheetRef}
-        snapPoints={statusBottomSheetSnapPoints}
-        fall={fall}
-      />
+      <QPBottomSheet
+        visible={statusBottomSheetVisible}
+        onClose={onCloseStatusBottomSheet}
+        headerComponent={
+          <QPBottomSheetHeader
+            headerLabel="Status"
+            onClose={onCloseStatusBottomSheet}
+          />
+        }>
+        <RenderDashboardSelectStatusFilter onClose={onCloseStatusBottomSheet} />
+      </QPBottomSheet>
       <CreateTicketButton />
-    </View>
+    </SafeAreaView>
   );
 };
+
+function RenderDashboardSelectStatusFilter({onClose}) {
+  const dispatch = useDispatch();
+  const ticketCount = useSelector(
+    state => state.dashboard.dashBoardTicketCount,
+  );
+  const statusIndex = useSelector(
+    state => state.dashboard.currentStatusIndexForFilter,
+  );
+  const statusList = getDashboardStatusListForBottomList(ticketCount);
+  return (
+    <SelectStatus
+      data={statusList}
+      screenName={'Dashboard'}
+      selectedIndex={statusIndex}
+      handleOnPress={(item, index) => {
+        dispatch(setStatusIndex(index));
+        onClose();
+      }}
+    />
+  );
+}
 export default CxDashboard;

@@ -5,7 +5,7 @@ import ActionEmailHistory from './ActionEmailHistory';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
 import {downloadFile} from '../../../Utils/DownloadUtils';
 import {getDownloadPermissionAndroid} from '../../../Utils/PermissionUtils';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import {Linking, Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -30,7 +30,7 @@ jest.mock('../../../Utils/PermissionUtils', () => ({
   getDownloadPermissionAndroid: jest.fn(),
 }));
 
-jest.mock('rn-fetch-blob', () => ({
+jest.mock('react-native-blob-util', () => ({
   ios: {
     previewDocument: jest.fn(),
   },

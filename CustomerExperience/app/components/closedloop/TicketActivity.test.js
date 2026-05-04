@@ -15,8 +15,12 @@ jest.mock('react-native-reanimated', () => {
   return Reanimated;
 });
 
-// mock reanimated-bottom-sheet
-jest.mock('reanimated-bottom-sheet', () => 'mockBottomSheet');
+// mock @gorhom/bottom-sheet
+jest.mock('@gorhom/bottom-sheet', () => ({
+  __esModule: true,
+  default: 'mockBottomSheet',
+  BottomSheetView: 'mockBottomSheetView',
+}));
 
 const mockStore = configureStore([]);
 const initialState = {

@@ -8,11 +8,10 @@ import DescriptionHeader from './DescriptionHeader';
 import {ChildContainer} from '../../../../widgets/ParentContainer';
 import {translate} from '../../../../Utils/MultilinguaUtils';
 import ticketOverviewStyles from '../ticket.overview.style';
-import CopyTicketIdButton from './CopyTicketIdButton';
 import NPSScoreComponent from './NPSScoreComponent';
 import ConditionalResponseButton from './ConditionalResponseButton';
 
-const DescriptionView = ({showResponseButton}) => {
+const DetailsView = ({showResponseButton, children}) => {
   const ticket = useSelector(state => state.dashboard.ticket);
   const createdDate =
     ticket !== undefined
@@ -22,10 +21,7 @@ const DescriptionView = ({showResponseButton}) => {
     <View
       testID="description-view"
       style={ticketOverviewStyles.ticketStatusContainer}>
-      <View style={ticketOverviewStyles.rowContainer}>
-        <DescriptionHeader text={'Details'} />
-        <CopyTicketIdButton />
-      </View>
+      <DescriptionHeader text={'Details'} />
       <ChildContainer style={{paddingHorizontal: 0}}>
         <ShowTitleAndText
           title={translate('close_loop.origin_segment')}
@@ -40,10 +36,13 @@ const DescriptionView = ({showResponseButton}) => {
           subText={createdDate}
         />
         <NPSScoreComponent />
+
+        {children}
+
         <ConditionalResponseButton showResponseButton={showResponseButton} />
       </ChildContainer>
     </View>
   );
 };
 
-export default DescriptionView;
+export default DetailsView;

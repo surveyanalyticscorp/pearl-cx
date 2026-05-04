@@ -1,19 +1,17 @@
 import React from 'react';
-import {ImageBackground, SafeAreaView, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
+import {Colors} from '../../styles/color.constants';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const DrawerBackground = ({children}) => {
   return (
-    <ImageBackground
-      testID="drawer-container"
-      resizeMode={'cover'}
-      source={require('../../../app/config/images/drawerBanner.png')}
-      style={styles.container}>
+    <View testID="drawer-container" style={styles.container}>
       <SafeAreaView
         forceInset={{top: 'always', bottom: 'never'}}
         style={styles.safeArea}>
         {children}
       </SafeAreaView>
-    </ImageBackground>
+    </View>
   );
 };
 
@@ -29,5 +27,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 5,
     zIndex: 100,
+    backgroundColor: Colors.drawerBackground,
   },
 });

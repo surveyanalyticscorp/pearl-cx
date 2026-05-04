@@ -18,7 +18,7 @@ const SegmentTextForIpad = ({screenName, segmentName}) => {
 
 const DefaultSegmentText = ({screenName, segmentName}) => {
   return (
-    <View style={{width: '100%', flexDirection: 'column'}}>
+    <View style={{flex: 1, flexDirection: 'column'}}>
       <Text numberOfLines={1} ellipsizeMode="tail" style={styles.appbarTitle}>
         {screenName}
       </Text>

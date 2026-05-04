@@ -5,14 +5,13 @@ import DescriptionHeader from './DescriptionHeader';
 import {translate} from '../../../../Utils/MultilinguaUtils';
 import {ChildContainer} from '../../../../widgets/ParentContainer';
 import ShowTitleAndText from '../../ui/ShowTitleAndText';
-import TextLabel from '../../../../widgets/TextLabel/TextLabel';
 import TakeActionButton from './TakeActionButton';
 import {Colors} from '../../../../styles/color.constants';
 import {MarginConstants} from '../../../../styles/margin.constants';
 import {PaddingConstants} from '../../../../styles/padding.constants';
 
-const ContactView = ({onTakeActionHandler}) => {
-  const {panelMember, comment} = useSelector(state => state.dashboard.ticket);
+const ContactView = ({children}) => {
+  const {panelMember} = useSelector(state => state.dashboard.ticket);
 
   return (
     <View testID="contact-view" style={[styles.ticketStatusContainer]}>
@@ -44,17 +43,10 @@ const ContactView = ({onTakeActionHandler}) => {
         ) : (
           <View />
         )}
-        {comment?.length > 0 ? (
-          <ShowTitleAndText
-            title={`${translate('ticket_overview.description')}:`}
-            subText={''}
-          />
-        ) : (
-          <View />
-        )}
-        {comment?.length > 0 ? <TextLabel text={comment} /> : <View />}
+
+        {children}
       </ChildContainer>
-      <TakeActionButton onTakeActionHandler={onTakeActionHandler} />
+      {panelMember?.email?.length > 0 ? <TakeActionButton /> : <View />}
     </View>
   );
 };

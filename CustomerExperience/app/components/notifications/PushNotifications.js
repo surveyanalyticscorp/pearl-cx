@@ -18,6 +18,8 @@ import {baseTextStyles} from '../../styles/text.styles';
 import {convertDateTimeAgo} from '../../Utils/TimeUtils';
 import NewResponseDot from '../feedback/feedbackCell/NewResponseDot';
 import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
+import EmptyList from '../../routes/commonUI/EmptyList';
+import {EmptyView} from '../closedloop/EmptyVIew';
 
 const NotificationItem = ({item, index}) => {
   const text = item.notificationText;
@@ -87,11 +89,12 @@ const PushNotification = props => {
   let renderContainer = () => {
     if (notificationLogs.length === 0) {
       return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={styles.boldFont}>
-            {translate('dashboard.no_notification_to_display')}
-          </Text>
-        </View>
+        <EmptyView
+          title={'There are no notifications yet'}
+          subTitle={
+            "You'll be notified of activity like new tickets, status updates, comments, etc."
+          }
+        />
       );
     } else {
       return (

@@ -49,6 +49,7 @@ import {DMYFORMAT, HalfMonthDateYearFormat} from '../../Utils/AppConstants';
 import moment from 'moment';
 import testIDs from '../../widgets/qp-calendar/testIDs';
 import {useSelector} from 'react-redux';
+import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
 // let {width} = Dimensions.get('window');
 
 export const StatusIcon = ({
@@ -86,14 +87,18 @@ export const CopyIcon = ({size = 12, tintColor = Colors.filterIconColor}) => (
   />
 );
 
+import CalendarMonthSvg from '../../../assets/images/calendar_month.svg';
+import {getAvatarColor} from '../../Utils/AvatarBackgroundColor';
+
 export const CalendarIcon = ({
   size = 12,
   tintColor = Colors.filterIconColor,
 }) => (
-  <Image
+  <CalendarMonthSvg
     testID="image-calendar"
-    source={require('./../../../assets/images/date_filter_icon.png')}
-    style={{width: size, height: size, tintColor: tintColor}}
+    width={size}
+    height={size}
+    fill={tintColor}
   />
 );
 
@@ -323,10 +328,23 @@ export const RenderSpinner = () => {
     </View>
   );
 };
-export const CheckBoxItem = ({item, title, index, onPress, textStyle}) => {
+export const CheckBoxItem = ({
+  item,
+  title,
+  isChecked,
+  index,
+  onPress,
+  textStyle,
+  style,
+  isDisabled = false,
+}) => {
   const _textStyle = textStyle ?? styles.checkBoxText;
   return (
-    <Pressable testID="check-box-button" onPress={() => onPress(item, index)}>
+    <Pressable
+      isDisabled={isDisabled}
+      testID="check-box-button"
+      style={[style, {opacity: isDisabled ? 0.5 : 1}]}
+      onPress={() => (isDisabled ? null : onPress(item, index))}>
       <View style={styles.checkBoxRow}>
         {/* <CheckBox
             disabled={false}
@@ -337,9 +355,44 @@ export const CheckBoxItem = ({item, title, index, onPress, textStyle}) => {
               // onPress(index);
             }}
           /> */}
-        <CheckBox isChecked={item.isChecked} />
-        <Text style={_textStyle}>{item.title ? item.title : title}</Text>
+        <CheckBox isChecked={item?.isChecked ?? isChecked} />
+        <Text style={_textStyle}>{item?.title ? item.title : title}</Text>
       </View>
+    </Pressable>
+  );
+};
+
+export const ChipItem = ({
+  item,
+  title,
+  isChecked,
+  index,
+  onPress,
+  textStyle,
+  style,
+  isDisabled = false,
+}) => {
+  const isActive = item?.isChecked ?? isChecked;
+  const chipStyle = [
+    styles.chipContainer,
+    isActive ? styles.chipActive : styles.chipInactive,
+    style,
+  ];
+
+  // Ensure text color is applied correctly by putting textStyle first, then override with active/inactive colors
+  const chipTextStyle = [
+    styles.chipText,
+    textStyle, // Apply custom text style first
+    isActive ? styles.chipTextActive : styles.chipTextInactive, // Then override with color based on state
+  ];
+
+  return (
+    <Pressable
+      isDisabled={isDisabled}
+      testID="chip-button"
+      style={[chipStyle, {opacity: isDisabled ? 0.5 : 1}]}
+      onPress={() => (isDisabled ? null : onPress(item, index))}>
+      <Text style={chipTextStyle}>{item?.title ? item.title : title}</Text>
     </Pressable>
   );
 };
@@ -438,16 +491,26 @@ export const FilterDateBox = () => {
     <Pressable testID="Filter-Date-Box" onPress={() => filterAction()}>
       <View style={styles.filterBox}>
         <DateText />
+        <HorizontalSpaceBox />
         <CalendarIcon size={16} />
       </View>
     </Pressable>
   );
 };
 
-export const Avatar = ({title, style}) => {
+export const Avatar = ({title, style, textStyle}) => {
   return (
-    <View style={[styles.avatarView, {...style}]}>
-      <Text style={[baseTextStyles.mediumRegularText, {color: Colors.white}]}>
+    <View
+      style={[
+        styles.avatarView,
+        {...style, backgroundColor: getAvatarColor(title)},
+      ]}>
+      <Text
+        style={[
+          baseTextStyles.mediumRegularText,
+          {color: Colors.white, marginHorizontal: 0, textAlign: 'center'},
+          {...textStyle},
+        ]}>
         {getNameInitials(title ?? 'NA')}
       </Text>
     </View>
@@ -569,63 +632,7 @@ export const HeaderFilter = ({
         />
       )}
       {endComponent}
-      {/* <View
-          style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end'}}>
-          {getSearchIcon()}
-        </View> */}
     </View>
-  );
-};
-const SegmentSelector = ({segmentName, segmentList, onPressHandle}) => {
-  const segmentSelectorStyles = StyleSheet.create({
-    container: {flex: 1},
-    appbarTitle: {fontSize: TextSizes.primary, color: Colors.white},
-    innerContainer: {
-      flex: 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-  });
-  return segmentList && segmentList.length ? (
-    <View style={segmentSelectorStyles.container}>
-      <Pressable
-        // onPress={() => {
-        //   dispatch(setSegmentSelectorOpen(true));
-        // }}
-        onPress={onPressHandle}>
-        <View style={segmentSelectorStyles.innerContainer}>
-          <Text style={segmentSelectorStyles.appbarTitle}>{segmentName}</Text>
-
-          <SimpleLineIcon
-            name={'arrow-down'}
-            size={15}
-            color={Colors.darkGrey}
-          />
-        </View>
-      </Pressable>
-      {/* <MainDropDown
-      options={segmentOptions.map((item) => item.segmentName)}
-      defaultText={selectedSegment.segmentName}
-      onSelection={(index) => {
-        console.log(
-          `Selected : ${JSON.stringify(segmentOptions[index])}`,
-        );
-        //////
-        dispatch(setSegment(segmentOptions[index]));
-  
-        // dispatch({
-        //   type: SEGMENT_SELECTED,
-        //   payload: segmentOptions[index],
-        // });
-  
-        // updateSegment(`${segmentOptions[index]}`);
-        //////
-      }}
-    />*/}
-    </View>
-  ) : (
-    <Text style={segmentSelectorStyles.appbarTitle}>{segmentName}</Text>
   );
 };
 
@@ -654,11 +661,37 @@ const styles = StyleSheet.create({
     fontSize: TextSizes.secondary,
     fontFamily: FontFamily.regular,
   },
+  chipContainer: {
+    borderRadius: 20,
+    paddingHorizontal: PaddingConstants.tab1,
+    paddingVertical: PaddingConstants.halfTab,
+    margin: MarginConstants.tab1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: MarginConstants.tab1_8x,
+  },
+  chipInactive: {
+    backgroundColor: '#EEF3FB',
+  },
+  chipActive: {
+    backgroundColor: '#045EBF',
+  },
+  chipText: {
+    fontSize: TextSizes.secondary,
+    fontFamily: FontFamily.regular,
+    textAlign: 'center',
+  },
+  chipTextInactive: {
+    color: '#545E6B',
+  },
+  chipTextActive: {
+    color: '#FFFFFF',
+  },
   filterBox: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 2,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: Colors.evenDarkerGrey,
     paddingVertical: PaddingConstants.tab1,
@@ -671,13 +704,21 @@ const styles = StyleSheet.create({
     paddingVertical: PaddingConstants.halfTab,
     paddingHorizontal: PaddingConstants.tab2,
     backgroundColor: Colors.white,
+    // Bottom shadow
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   avatarView: {
     flexDirection: 'row',
     borderRadius: 50,
     height: MarginConstants.tab3,
     width: MarginConstants.tab3,
-    backgroundColor: Colors.textAvatarBackground,
     marginHorizontal: MarginConstants.halfTab,
     alignItems: 'center',
     justifyContent: 'center',

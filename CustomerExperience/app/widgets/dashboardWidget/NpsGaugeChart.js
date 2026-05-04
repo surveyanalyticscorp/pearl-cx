@@ -9,29 +9,41 @@ import {TextSizes} from '../../styles/textsize.constants';
 
 export const populateHands = (nps, benchmark) => {
   let hands = [];
-  if (benchmark !== 0) {
+
+  // Create dotted line effect for benchmark using multiple small segments
+  const segments = [
+    {start: '10%', end: '20%'},
+    {start: '30%', end: '40%'},
+    {start: '50%', end: '60%'},
+    {start: '70%', end: '80%'},
+    {start: '90%', end: '98%'},
+  ];
+
+  // Add each segment as a separate hand to create dotted effect
+  segments.forEach(segment => {
     hands.push({
       type: 'ClockHand',
       value: benchmark,
-      fill: Colors.borderColor,
-      stroke: Colors.borderColor,
-      innerRadius: '00%',
-      radius: '100%',
-      startWidth: 0.01,
-      endWidth: 0.01,
+      fill: Colors.filterIconColor,
+      stroke: Colors.filterIconColor,
+      innerRadius: segment.start,
+      radius: segment.end,
+      startWidth: 3,
+      endWidth: 3,
       pin: {
-        disabled: false,
+        disabled: true,
       },
     });
-  }
+  });
 
+  // Main NPS hand
   hands.push({
     type: 'ClockHand',
     value: nps,
     fill: Colors.filterIconColor,
     stroke: Colors.filterIconColor,
     innerRadius: '00%',
-    radius: '100%',
+    radius: '95%',
     startWidth: 10,
     endWidth: 0.1,
     pin: {
@@ -76,7 +88,7 @@ const NpsGaugeChart = () => {
         max: 100,
         strictMinMax: true,
         renderer: {
-          minGridDistance: 200,
+          minGridDistance: 500,
           inside: false,
           labels: {
             template: {
@@ -110,9 +122,10 @@ const NpsGaugeChart = () => {
 const styles = StyleSheet.create({
   chartContainer: {
     zIndex: 0,
-    height: '50%',
-    width: '70%',
-    margin: 0,
+    height: '40%',
+    width: '100%',
+    margin: 1,
+    alignSelf: 'center',
   },
 });
 

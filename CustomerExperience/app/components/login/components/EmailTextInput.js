@@ -4,14 +4,15 @@ import {useDispatch} from 'react-redux';
 import {setLoginEmail} from '../../../redux/actions/login.action';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {loginStyles} from '../login.styles';
+import {Colors} from '../../../styles/color.constants';
+import useLoginPersistence from '../../../routes/drawerContent/useLoginPersistance';
 const EmailTextInput = ({defaultValue, value, setEmail}) => {
-  // const email = useSelector(state => state.login.email);
   const dispatch = useDispatch();
 
   const handleEmail = text => {
     setEmail ? setEmail(text) : dispatch(setLoginEmail(text));
   };
-
+  console.log('useLoginPersistence emailInput', value);
   return (
     <QPTextField
       secureText={false}

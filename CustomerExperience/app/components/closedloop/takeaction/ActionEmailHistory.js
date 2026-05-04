@@ -19,12 +19,14 @@ import {Avatar, CloseButton} from '../../../routes/commonUI/CommonUI';
 import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
 import {isObjectEmpty} from '../../../Utils/Utility';
 import {convertDateTimeAgo} from '../../../Utils/TimeUtils';
-import RenderHtml from 'react-native-render-html';
+import RenderHTML, {defaultSystemFonts} from 'react-native-render-html';
 import {useSelector} from 'react-redux';
 import {AttachmentIcon} from '../../../Utils/IconUtils';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import {getDownloadPermissionAndroid} from '../../../Utils/PermissionUtils';
 import {downloadFile} from '../../../Utils/DownloadUtils';
+import StringUtils from '../../../Utils/StringUtils';
+import {baseTextStyles} from '../../../styles/text.styles';
 
 const RenderHeader = () => {
   return (
@@ -140,14 +142,27 @@ const AttachmentItem = ({item, index}) => {
 
 const EmailBody = ({body}) => {
   const {width} = useWindowDimensions();
+  const systemFonts = [...defaultSystemFonts, FontFamily.regular];
+
   const source = {
-    html: `
-  ${body}`,
+    html: `<span>${body}</span>`,
   };
 
   return (
     <View style={styles.emailBody}>
-      <RenderHtml source={source} contentWidth={width / 0.5} />
+      <RenderHTML
+        source={source}
+        contentWidth={width / 0.5}
+        systemFonts={systemFonts}
+        ignoredDomTags={['html', 'head', 'body']}
+        tagsStyles={{
+          span: {
+            color: Colors.filterIconColor,
+            lineHeight: 20,
+            ...baseTextStyles.secondaryRegularText,
+          },
+        }}
+      />
     </View>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Text, Platform} from 'react-native';
+import {StyleSheet, View, Text, Platform, Pressable} from 'react-native';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
 import {TextSizes} from '../../styles/textsize.constants';
@@ -14,13 +14,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import QPButton from '../../widgets/Button';
 import {buttonStyles} from '../../styles/button.styles';
 import {getDashboardStatusListForBottomList} from '../../Utils/TicketUtils';
-import {RenderStatusIcon} from '../../routes/commonUI/CommonUI';
-import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
+import {FilterIcon, RenderStatusIcon} from '../../routes/commonUI/CommonUI';
 import IconButton from '../../routes/commonUI/IconButton';
-import BottomSheet from 'reanimated-bottom-sheet';
-import SelectStatus from '../closedloop/takeaction/SelectStatus';
-import {setStatusIndex} from '../../redux/actions/dashboard.actions';
-import DashboardWidgetTitle from '../../widgets/dashboardWidget/RenderSegmentTitle';
+import DashboardSegmentHeader from '../../widgets/dashboardWidget/RenderSegmentTitle';
+import LegendScoreView from '../../widgets/dashboardWidget/LegendScoreView';
+import {HorizontalSpaceBox} from '../../widgets/SpaceBox';
 
 export const RenderDonutChart = ({count, showPercentageCount}) => {
   let victoryPieColorScale =
@@ -38,17 +36,14 @@ export const RenderDonutChart = ({count, showPercentageCount}) => {
       : [{y: 100, x: ''}];
   return (
     <View testID="render-donut-chart" style={styles.chartContainer}>
-      <RenderDonutInfoViewContainer
-        priorities={count}
-        showPercentageCount={showPercentageCount}
-      />
       <View testID="render-donut" style={styles.donut}>
         <VictoryPie
           data={dataScale}
-          width={5 * MarginConstants.tab4}
-          height={6 * MarginConstants.tab4}
-          innerRadius={2.2 * MarginConstants.tab4}
-          radius={1.8 * MarginConstants.tab4}
+          width={5 * MarginConstants.tab1_8x}
+          height={5 * MarginConstants.tab1_8x}
+          innerRadius={2.0 * MarginConstants.tab1_8x}
+          radius={1.6 * MarginConstants.tab1_8x}
+          animate={{duration: 1000}}
           style={{
             labels: {
               fill: 'transparent',
@@ -56,46 +51,65 @@ export const RenderDonutChart = ({count, showPercentageCount}) => {
           }}
           colorScale={victoryPieColorScale}
         />
+        {/* Center Label */}
+        <View style={styles.centerLabelContainer}>
+          <Text style={styles.centerLabelText}>{count.totalTickets}</Text>
+          <Text style={styles.centerLabelSubtext}>Tickets</Text>
+        </View>
       </View>
     </View>
   );
 };
 
 let RenderDonutInfoViewContainer = ({priorities, showPercentageCount}) => {
+  const {totalTickets, critical, high, medium, low} = priorities;
+
+  const criticalCount = showPercentageCount
+    ? `${getParcentage(totalTickets, critical)}%`
+    : `${critical}`;
+
+  const highCount = showPercentageCount
+    ? `${getParcentage(totalTickets, high)}%`
+    : `${high}`;
+
+  const mediumCount = showPercentageCount
+    ? `${getParcentage(totalTickets, medium)}%`
+    : `${medium}`;
+
+  const lowCount = showPercentageCount
+    ? `${getParcentage(totalTickets, low)}%`
+    : `${low}`;
+
   return (
     <View testID="render-donut-info-view-container">
-      <RenderTicketTotalView totalCount={priorities.totalTickets} />
-      <RenderTicketView
-        totalTickets={priorities.totalTickets}
-        count={priorities.critical}
-        bgColor={Colors.critical2}
-        status={translate('dashboard.critical')}
-        textColor={Colors.white}
-        showPercentageCount={showPercentageCount}
+      {/* <RenderTicketTotalView totalCount={priorities.totalTickets} /> */}
+
+      <LegendScoreView
+        title={translate('dashboard.critical')}
+        count={criticalCount}
+        percentage={`${getParcentage(totalTickets, critical)}%`}
+        backgroundColor={Colors.critical2}
       />
-      <RenderTicketView
-        totalTickets={priorities.totalTickets}
-        count={priorities.high}
-        bgColor={Colors.high2}
-        status={translate('dashboard.high')}
-        textColor={Colors.white}
-        showPercentageCount={showPercentageCount}
+
+      <LegendScoreView
+        title={translate('dashboard.high')}
+        count={highCount}
+        percentage={`${getParcentage(totalTickets, high)}%`}
+        backgroundColor={Colors.high2}
       />
-      <RenderTicketView
-        totalTickets={priorities.totalTickets}
-        count={priorities.medium}
-        bgColor={Colors.medium2}
-        status={translate('dashboard.medium')}
-        textColor={Colors.white}
-        showPercentageCount={showPercentageCount}
+
+      <LegendScoreView
+        title={translate('dashboard.medium')}
+        count={mediumCount}
+        percentage={`${getParcentage(totalTickets, medium)}%`}
+        backgroundColor={Colors.medium2}
       />
-      <RenderTicketView
-        totalTickets={priorities.totalTickets}
-        count={priorities.low}
-        bgColor={Colors.low2}
-        status={translate('dashboard.low')}
-        textColor={Colors.white}
-        showPercentageCount={showPercentageCount}
+
+      <LegendScoreView
+        title={translate('dashboard.low')}
+        count={lowCount}
+        percentage={`${getParcentage(totalTickets, low)}%`}
+        backgroundColor={Colors.low2}
       />
     </View>
   );
@@ -104,24 +118,14 @@ let RenderDonutInfoViewContainer = ({priorities, showPercentageCount}) => {
 export const getParcentage = (total, count) =>
   Number((total === 0 ? 0 : (100 * count) / total).toFixed(2));
 
-export const RenderTicketView = ({
-  totalTickets,
-  count,
-  bgColor,
-  status,
-  showPercentageCount,
-}) => {
-  const ticketCount = showPercentageCount
-    ? `${getParcentage(totalTickets, count)}%`
-    : `${count}`;
-
+export const RenderTicketView = ({bgColor, status, ticketCount}) => {
   return (
     <View testID="render-ticket-view" style={styles.donutInfoContainer}>
       <View
         style={[styles.ticketStatusIndicatorView, {backgroundColor: bgColor}]}
       />
       <Text testID="render-ticket-text" style={styles.ticketText}>
-        {ticketCount}
+        {ticketCount ?? 0}
       </Text>
       <View
         testID="render-ticket-status-view"
@@ -166,7 +170,7 @@ export const ViewTicketsButton = ({statusIndex}) => {
       style={buttonStyles.textButton}
       onPress={navigateToCLosedLoop}
       buttonText={`${translate('dashboard.tickets')}`}
-      textStyle={buttonStyles.textButtonText}
+      textStyle={buttonStyles.textButtonTextPrimary}
     />
   );
 };
@@ -174,77 +178,14 @@ export const ViewTicketsButton = ({statusIndex}) => {
 export const RenderStatusFilterButton = ({currentStatus, onPress}) => {
   console.log('ABUL', JSON.stringify(currentStatus));
   return (
-    <IconButton
-      buttonStyle={styles.iconButton}
-      onPress={onPress}
-      leftIcon={
-        <RenderStatusIcon
-          testID="render-status-icon"
-          title={currentStatus.title.toLowerCase()}
-        />
-      }
-      buttonText={currentStatus.title}
-      textStyle={{
-        ...buttonStyles.outlinePrimaryButtonMediumText,
-        marginHorizontal: MarginConstants.halfTab,
-      }}
+    <FilterIcon
+      color={Colors.accentLight}
+      testID="render-status-icon"
+      title={currentStatus.title.toLowerCase()}
+      onPressFilter={onPress}
     />
   );
 };
-
-export const StatusDashboardBottomSheet = React.forwardRef(
-  ({snapPoints, fall}, ref) => {
-    const dispatch = useDispatch();
-    const ticketCount = useSelector(
-      state => state.dashboard.dashBoardTicketCount,
-    );
-    const statusIndex = useSelector(
-      state => state.dashboard.currentStatusIndexForFilter,
-    );
-    const statusList = getDashboardStatusListForBottomList(ticketCount);
-
-    const closeStatusSelection = () => {
-      // close status selection bottom sheet
-      ref.current.snapTo(snapPoints.length - 1);
-    };
-
-    const renderStatusSelectContent = () => {
-      return (
-        <View style={styles.contentContainer}>
-          <SelectStatus
-            data={statusList}
-            screenName={'Dashboard'}
-            selectedIndex={statusIndex}
-            handleOnPress={(item, index) => {
-              dispatch(setStatusIndex(index));
-              closeStatusSelection();
-            }}
-          />
-        </View>
-      );
-    };
-
-    const renderStatusHeader = _title => {
-      return (
-        <BottomSheetHeader
-          title={translate('close_loop.status')}
-          onPressClose={() => ref.current.snapTo(snapPoints.length - 1)}
-        />
-      );
-    };
-    return (
-      <BottomSheet
-        ref={ref}
-        snapPoints={snapPoints}
-        initialSnap={snapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderStatusSelectContent}
-        renderHeader={renderStatusHeader}
-        callbackNode={fall}
-      />
-    );
-  },
-);
 
 export const ClosedLoopDashboard = ({openStatusBS}) => {
   const statusIndex = useSelector(
@@ -259,15 +200,22 @@ export const ClosedLoopDashboard = ({openStatusBS}) => {
 
   return (
     <View style={styles.container}>
-      <DashboardWidgetTitle text={'Closedloop'}>
+      <DashboardSegmentHeader text={'Closedloop'}>
         <ViewTicketsButton statusIndex={statusIndex} />
-      </DashboardWidgetTitle>
-      <RenderStatusFilterButton
-        currentStatus={statusList[statusIndex]}
-        onPress={openStatusBS}
-      />
-      <RenderDonutChart
-        count={statusList[statusIndex].count}
+        <HorizontalSpaceBox multiplyBy={4} />
+        <RenderStatusFilterButton
+          currentStatus={statusList[statusIndex]}
+          onPress={openStatusBS}
+        />
+      </DashboardSegmentHeader>
+      <View style={styles.donutChartWrapper}>
+        <RenderDonutChart
+          count={statusList[statusIndex].count}
+          showPercentageCount={false}
+        />
+      </View>
+      <RenderDonutInfoViewContainer
+        priorities={statusList[statusIndex].count}
         showPercentageCount={false}
       />
     </View>
@@ -277,20 +225,17 @@ export const ClosedLoopDashboard = ({openStatusBS}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-    height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 11
-      : MarginConstants.tab4 * 10,
     justifyContent: 'flex-start',
-    margin: MarginConstants.tab2,
+    margin: MarginConstants.tab1_2x,
 
-    borderRadius: 5,
+    borderRadius: 12,
+    borderColor: Colors.borderColor2,
+    borderWidth: 1,
+    paddingBottom: MarginConstants.tab1_2x,
   },
   chartContainer: {
     flex: 7,
     backgroundColor: Colors.white,
-    height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 6
-      : MarginConstants.tab4 * 5,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -299,6 +244,11 @@ const styles = StyleSheet.create({
   donut: {
     marginTop: 0,
     backgroundColor: Colors.white,
+  },
+  donutChartWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: MarginConstants.tab1_2x,
   },
   donutInfoContainer: {
     flexDirection: 'row',
@@ -327,16 +277,7 @@ const styles = StyleSheet.create({
     padding: 2,
     fontFamily: FontFamily.regular,
   },
-  npsView: {
-    position: 'absolute',
-    left: '20%',
 
-    justifyContent: 'center',
-    alignItems: 'center',
-    top: DeviceInfo.isTablet() ? '50%' : '55%',
-    width: 3 * MarginConstants.tab4,
-    paddingHorizontal: PaddingConstants.halfTab,
-  },
   npsPercentText: {
     color: Colors.primary,
     fontSize: 1.3 * TextSizes.donutPercentText,
@@ -443,5 +384,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  centerLabelContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    pointerEvents: 'none',
+  },
+  centerLabelText: {
+    fontSize: DeviceInfo.isTablet()
+      ? TextSizes.extraLargeText
+      : TextSizes.largerText,
+    fontFamily: FontFamily.bold,
+    fontWeight: FontWeight._800,
+    color: Colors.primary,
+    textAlign: 'center',
+  },
+  centerLabelSubtext: {
+    fontSize: TextSizes.primary,
+    fontFamily: FontFamily.regular,
+    fontWeight: FontWeight._400,
+    color: Colors.filterIconColor,
+    textAlign: 'center',
+    marginTop: 2,
   },
 });

@@ -1,118 +1,40 @@
-import React, {useEffect, useState} from 'react';
-import {View, Image, StyleSheet, Text, Platform, Pressable} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import FontIcon from 'react-native-vector-icons/FontAwesome5';
+import React, {useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {Colors} from '../styles/color.constants';
 import {FontFamily} from '../styles/font.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {MarginConstants} from '../styles/margin.constants';
-import {useSelector} from 'react-redux';
-import {Sizes} from '../styles/Size.constant';
-import {PaddingConstants} from '../styles/padding.constants';
-import StringUtils from '../Utils/StringUtils';
-import DeviceInfo from 'react-native-device-info';
 import {DrawerActions} from '@react-navigation/native';
 import {translate} from '../Utils/MultilinguaUtils';
-import TicketSync from '../components/TicketSync';
-import ClosedLoopSvgIcon from '../../assets/images/closed_loop.svg';
 import DrawerBackground from './commonUI/DrawerBackground';
-import TextLabel from '../../app/widgets/TextLabel/TextLabel';
 import useLogoutProcess from './drawerContent/useLogoutProcess';
 import logoutDialog from './drawerContent/LogoutDialog';
-import ResponsesIcon from '../widgets/IconWidget/ResponsesIcon';
+import RenderWorkspaceInfo from './drawerContent/RenderWorkspaceInfo';
+import {
+  ClosedLoopIcon,
+  DrawerButton,
+  DrawerDashboardIcon,
+  DrawerResponsesIcon,
+  LogoutButtonIcon,
+  RenderDrawerButtons,
+  RenderSettingsAndLogout,
+} from './drawerContent/DrawerContentUI';
+
 import QuestionProBanner from '../../assets/images/questionpro_banner.svg';
 
-const LogoutButtonIcon = () => {
-  return (
-    <FontIcon
-      size={1.3 * Sizes.icons}
-      color={Colors.filterIconColor}
-      name={'sign-out-alt'}
-      style={styles.rowIcon}
-    />
-  );
-};
 const DrawerCXLogo = () => {
-  return (
-    <Image
-      style={styles.image}
-      source={require('../config/images/cx_logo.png')}
-      resizeMode="cover"
-    />
-  );
-};
-
-const AppVersion = () => {
-  let {logoutAction} = useLogoutProcess();
-  let isTokenExpired = useSelector(state => state.dashboard.isTokenExpired);
-  useEffect(() => {
-    if (isTokenExpired) {
-      console.log('EXPIRED!');
-      logoutAction();
-    } else {
-      console.log('not EXPIRED!');
-    }
-  }, [isTokenExpired]);
-  return (
-    <TextLabel style={styles.drawerVersionText}>
-      {'v ' + DeviceInfo.getVersion()}
-    </TextLabel>
-  );
-};
-const UserName = () => {
-  const userInfo = useSelector(state => state.global.userInfo);
-  let username = StringUtils.isNotEmpty(StringUtils.reformatName(userInfo))
-    ? StringUtils.reformatName(userInfo)
-    : userInfo.emailAddress;
+  const [containerWidth, setContainerWidth] = useState(0);
 
   return (
-    <TextLabel
-      text={username}
-      style={{...styles.emailView, ...styles.emailCaption}}
-    />
-  );
-};
-
-const ClosedLoopIcon = () => (
-  <View style={styles.rowIcon}>
-    <ClosedLoopSvgIcon height={1.3 * Sizes.icons} width={1.3 * Sizes.icons} />
-  </View>
-);
-
-const DrawerResponsesIcon = () => (
-  <View style={styles.rowIcon}>
-    <ResponsesIcon sizeMultiplyer={1.3} />
-  </View>
-);
-
-const DrawerButtonIcon = ({name}) => (
-  <Icon
-    size={1.3 * Sizes.icons}
-    color={Colors.filterIconColor}
-    name={name}
-    style={styles.rowIcon}
-  />
-);
-
-const DrawerButton = ({dataObj, frontIcon, title, onPress}) => {
-  return (
-    <Pressable onPress={onPress ?? dataObj.onPress}>
-      <View style={styles.drawerRow}>
-        {frontIcon ?? dataObj.frontIcon}
-        <Text style={styles.labelStyle}>{title ?? dataObj.title}</Text>
-      </View>
-    </Pressable>
-  );
-};
-
-let RenderSettingsAndLogout = ({children}) => {
-  return <View style={styles.drawerVersionContainer}>{children}</View>;
-};
-const RenderDrawerButtons = ({children}) => {
-  return (
-    <View>
-      <TicketSync />
-      {children}
+    <View
+      style={styles.logoContainer}
+      onLayout={e => setContainerWidth(e.nativeEvent.layout.width)}>
+      {containerWidth > 0 && (
+        <QuestionProBanner
+          width={containerWidth * 0.9}
+          height={containerWidth * 0.2}
+        />
+      )}
     </View>
   );
 };
@@ -121,31 +43,44 @@ const DrawerContent = ({navigation}) => {
   const {logoutAction} = useLogoutProcess();
   const [logoutAlert, setLogoutAlert] = useState(false);
 
+  // Get current route name
+  const getCurrentRoute = () => {
+    const state = navigation.getState();
+    console.log('DrawerContent', state, state.routes[state.index]?.name);
+    return state.routes[state.index]?.name;
+  };
+
+  const currentRoute = getCurrentRoute();
+
   const buttonData = {
     dashboard: {
       title: 'Dashboard',
-      frontIcon: <DrawerButtonIcon name={'dashboard'} />,
+      routeName: 'DashboardTab',
+      frontIcon: <DrawerDashboardIcon name={'dashboard'} />,
       onPress: () => {
-        navigation.navigate('Dashboard');
+        navigation.navigate('DashboardTab');
       },
     },
     responses: {
       title: 'Responses',
+      routeName: 'Responses',
       frontIcon: <DrawerResponsesIcon />,
       onPress: () => {
         navigation.navigate('Responses');
       },
     },
-    closedLoop: {
+    closedloop: {
       title: 'Closedloop',
+      routeName: 'Closedloop',
       frontIcon: <ClosedLoopIcon />,
       onPress: () => {
-        navigation.navigate('ClosedLoop');
+        navigation.navigate('Closedloop');
       },
     },
     settings: {
       title: 'Settings',
-      frontIcon: <DrawerButtonIcon name={'settings'} />,
+      routeName: translate('settings.settings'),
+      frontIcon: <DrawerDashboardIcon name={'settings'} />,
       onPress: () => {
         navigation.navigate(translate('settings.settings'));
       },
@@ -163,21 +98,57 @@ const DrawerContent = ({navigation}) => {
   return (
     <DrawerBackground>
       <DrawerCXLogo />
-      <AppVersion />
-      <UserName />
+      {/* <AppVersion /> */}
+      {/* <UserName /> */}
       <RenderDrawerButtons>
-        <DrawerButton dataObj={buttonData['dashboard']} />
-        <DrawerButton dataObj={buttonData['responses']} />
-        <DrawerButton dataObj={buttonData['closedLoop']} />
+        <DrawerButton
+          frontIcon={
+            <DrawerDashboardIcon
+              name={'dashboard'}
+              isActive={currentRoute === buttonData['dashboard'].routeName}
+            />
+          }
+          dataObj={buttonData['dashboard']}
+          isActive={currentRoute === buttonData['dashboard'].routeName}
+        />
+        <DrawerButton
+          frontIcon={
+            <DrawerResponsesIcon
+              isActive={currentRoute === buttonData['responses'].routeName}
+            />
+          }
+          dataObj={buttonData['responses']}
+          isActive={currentRoute === buttonData['responses'].routeName}
+        />
+        <DrawerButton
+          frontIcon={
+            <ClosedLoopIcon
+              isActive={currentRoute === buttonData['closedloop'].routeName}
+            />
+          }
+          dataObj={buttonData['closedloop']}
+          isActive={currentRoute === buttonData['closedloop'].routeName}
+        />
       </RenderDrawerButtons>
       <RenderSettingsAndLogout>
-        <DrawerButton dataObj={buttonData['settings']} />
+        {/* <DrawerButton
+          dataObj={buttonData['settings']}
+          isActive={currentRoute === buttonData['settings'].routeName}
+        /> */}
+        <RenderWorkspaceInfo />
+
         <DrawerButton dataObj={buttonData['logout']} />
         {/* <LogoutButton navigation={navigation} /> */}
         {logoutAlert &&
-          logoutDialog(logoutAction, () => {
-            setLogoutAlert(false);
-          })}
+          logoutDialog(
+            () => {
+              setLogoutAlert(false); // Reset immediately when user confirms
+              logoutAction();
+            },
+            () => {
+              setLogoutAlert(false);
+            },
+          )}
       </RenderSettingsAndLogout>
     </DrawerBackground>
   );
@@ -186,6 +157,11 @@ const DrawerContent = ({navigation}) => {
 export default DrawerContent;
 
 const styles = StyleSheet.create({
+  logoContainer: {
+    width: '100%',
+    alignItems: 'center',
+    paddingHorizontal: MarginConstants.tab1,
+  },
   container: {
     flex: 1,
     elevation: 5,
@@ -202,33 +178,18 @@ const styles = StyleSheet.create({
     width: MarginConstants.tab4 * 6,
     height: MarginConstants.tab4 * 2,
   },
-  labelStyle: {
-    fontFamily: FontFamily.regular,
-    fontSize: TextSizes.primary,
-    color: Colors.primary,
-    paddingLeft: PaddingConstants.tab1,
-  },
+
   emailCaption: {
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
     color: Colors.primary,
     textAlign: 'auto',
   },
-  drawerRow: {
-    flexDirection: 'row',
-    marginTop: MarginConstants.tab2,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
+
   rowIcon: {
     margin: MarginConstants.tab1,
   },
-  drawerVersionContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    marginBottom:
-      Platform.OS === 'ios' ? MarginConstants.tab4 : MarginConstants.tab3,
-  },
+
   drawerVersionText: {
     marginHorizontal: MarginConstants.tab1,
     marginBottom: MarginConstants.tab4,

@@ -18,7 +18,7 @@ const getButtonTitle = screenName => {
     case 'CreateTicket':
       return 'Set status';
     case 'Dashboard':
-      return 'Set filter by status';
+      return 'Apply';
     default:
       return 'Update status';
   }
@@ -48,18 +48,17 @@ const SelectStatus = ({data, selectedIndex, handleOnPress, screenName}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        style={styles.flatList}
-        data={data}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderRow}
-        ItemSeparatorComponent={statusListItemSeparator}
-        ListFooterComponent={
-          <ApplyButton buttonText={buttonTitle} onPress={onApplyPress} />
-        }
-      />
-    </View>
+    <FlatList
+      style={styles.container}
+      contentContainerStyle={{flexGrow: 0}}
+      data={data}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={renderRow}
+      ItemSeparatorComponent={statusListItemSeparator}
+      ListFooterComponent={
+        <ApplyButton buttonText={buttonTitle} onPress={onApplyPress} />
+      }
+    />
   );
 };
 
@@ -67,9 +66,9 @@ export default SelectStatus;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: Colors.white,
     paddingHorizontal: PaddingConstants.tab1_2x,
+    paddingBottom: PaddingConstants.tab1_2x,
   },
   row: {
     flexDirection: 'row',

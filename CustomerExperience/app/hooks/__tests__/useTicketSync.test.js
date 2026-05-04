@@ -2,6 +2,7 @@ import {renderHook, act} from '@testing-library/react-hooks';
 import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useTicketSync from '../useTicketSync';
+import {GET_TICKET_LIST_SYNC} from '../../redux/actions/closedloop.actions';
 
 // Mock the dependencies
 jest.mock('react-redux', () => ({
@@ -25,7 +26,7 @@ describe('useTicketSync', () => {
     // Setup default mock implementations
     useDispatch.mockReturnValue(mockDispatch);
     mockDispatch.mockImplementation(action => {
-      if (action.type === 'SYNC_TICKETS') {
+      if (action?.type === GET_TICKET_LIST_SYNC) {
         return mockSyncTickets();
       }
       return Promise.resolve();

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import SafeAreaView from 'react-native-safe-area-view';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -68,7 +68,7 @@ function UpdateTicket(props) {
     let statusId =
       status === translate('dashboard.escalated')
         ? 5
-        : statusOptions.findIndex((item) => item === status);
+        : statusOptions.findIndex(item => item === status);
     let params = {
       statusID: statusId,
     };
@@ -81,7 +81,7 @@ function UpdateTicket(props) {
       ArrayUtils.isNotEmpty(segmentOptions)
     ) {
       let selectedSegment = segmentOptions.find(
-        (item) => item.segmentName === segment,
+        item => item.segmentName === segment,
       );
       let selectedSegmentId = selectedSegment.segmentID;
       let params = {
@@ -164,7 +164,7 @@ function UpdateTicket(props) {
           options={options}
           defaultValue={defaultText}
           renderRow={dropdownRenderRow}
-          onSelect={(i) => {
+          onSelect={i => {
             setDataOnSelection(header, options, i);
           }}
         />
@@ -191,14 +191,14 @@ function UpdateTicket(props) {
 
   let getSegmentArray = () => {
     if (ArrayUtils.isNotEmpty(segmentOptions)) {
-      return segmentOptions.map((item) => item.segmentName);
+      return segmentOptions.map(item => item.segmentName);
     }
     return [];
   };
 
   let getOwners = () => {
     if (ArrayUtils.isNotEmpty(ownerOptions)) {
-      return ownerOptions.map((item) => item.ownerName);
+      return ownerOptions.map(item => item.ownerName);
     }
     return [];
   };
@@ -244,7 +244,7 @@ function UpdateTicket(props) {
           style={styles.commentText}
           value={comment}
           placeholder={translate('close_loop.addition_comments')}
-          onChangeText={(text) => {
+          onChangeText={text => {
             StringUtils.isNotEmpty(validationError) && setValidationError('');
             setComment(text);
           }}
@@ -253,7 +253,7 @@ function UpdateTicket(props) {
     );
   };
 
-  let validationAction = (body) => {
+  let validationAction = body => {
     for (const [key, value] of Object.entries(body)) {
       if (key === 'managerComment' && StringUtils.isEmpty(value)) {
         setValidationError(translate('close_loop.please_add_comments'));
@@ -268,10 +268,10 @@ function UpdateTicket(props) {
     if (status === 'Escalated') {
       statusId = 5; //To match web app
     } else if (StringUtils.isNotEmpty(status)) {
-      statusId = statusOptions.findIndex((item) => item === status);
+      statusId = statusOptions.findIndex(item => item === status);
     }
 
-    let priorityId = priorityOptions.findIndex((item) => item === priority);
+    let priorityId = priorityOptions.findIndex(item => item === priority);
     priorityId = priorityId === -1 ? 0 : priorityId;
 
     if (status === 'Escalated' && ArrayUtils.isEmpty(segmentOptions)) {
@@ -289,11 +289,9 @@ function UpdateTicket(props) {
         setValidationError('Please select the owner');
       } else {
         let selectedSegment = segmentOptions.find(
-          (item) => item.segmentName === segment,
+          item => item.segmentName === segment,
         );
-        let selectedOwner = ownerOptions.find(
-          (item) => item.ownerName === owner,
-        );
+        let selectedOwner = ownerOptions.find(item => item.ownerName === owner);
 
         let body = {
           priorityID: priorityId,
@@ -308,7 +306,7 @@ function UpdateTicket(props) {
     }
   };
 
-  let updateTicketAPIAction = (body) => {
+  let updateTicketAPIAction = body => {
     if (validationAction(body)) {
       setLoading(true);
       props.updateTicket();
@@ -318,14 +316,14 @@ function UpdateTicket(props) {
         () => {
           setLoading(false);
           if (props.route.params.parentRoute === 'Dashboard') {
-            props.navigation.navigate('Dashboard');
+            props.navigation.navigate('DashboardTab');
             props.navigation.push(translate('close_loop.close_loop'));
             props.clearTicketDetails();
           } else {
             props.navigation.navigate('Responses');
           }
         },
-        (error) => {
+        error => {
           setLoading(false);
           showErrorFlashMessage(error);
         },
@@ -392,7 +390,7 @@ function dropdownRenderRow(rowData, rowID, highlighted) {
   );
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     authToken: state.global.authToken,
     ticket: state.dashboard.ticketDetails,
@@ -401,7 +399,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   getClosedLoopSegments: (token, params) => {
     dispatch(getClosedLoopSegmentDetails(token, params));
   },

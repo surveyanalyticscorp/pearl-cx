@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {Pressable, View, StyleSheet} from 'react-native';
-import {TextField} from 'react-native-material-textfield';
+import {TextInput} from 'react-native-paper';
+
 import {Colors} from '../styles/color.constants';
 import StringUtils from '../Utils/StringUtils';
 import {TextSizes} from '../styles/textsize.constants';
@@ -10,25 +11,22 @@ import PasswordVisibilitySVGIcon from './../../assets/images/visibility.svg';
 import PasswordVisibility_offSVGIcon from './../../assets/images/visibility_off.svg';
 import {PaddingConstants} from '../styles/padding.constants';
 
-const VisibilityOnIcon = () => {
-  return (
-    <PasswordVisibilitySVGIcon
-      height={24}
-      width={24}
-      fill={Colors.filterIconColor}
-    />
-  );
-};
+const VisibilityOnIcon = () => (
+  <PasswordVisibilitySVGIcon
+    height={24}
+    width={24}
+    fill={Colors.filterIconColor}
+  />
+);
 
-const VisibilityOffIcon = () => {
-  return (
-    <PasswordVisibility_offSVGIcon
-      height={24}
-      width={24}
-      fill={Colors.filterIconColor}
-    />
-  );
-};
+const VisibilityOffIcon = () => (
+  <PasswordVisibility_offSVGIcon
+    height={24}
+    width={24}
+    fill={Colors.filterIconColor}
+  />
+);
+
 const RenderPasswordVisibility = ({
   secureText,
   value,
@@ -37,7 +35,10 @@ const RenderPasswordVisibility = ({
 }) => {
   const isVisibility = secureText && StringUtils.isNotEmpty(value);
   return isVisibility ? (
-    <Pressable style={styles.passwordVisibilityButton} onPress={onPress}>
+    <Pressable
+      testID="password-visibility-button"
+      style={styles.passwordVisibilityButton}
+      onPress={onPress}>
       {isPasswordVisible ? <VisibilityOffIcon /> : <VisibilityOnIcon />}
     </Pressable>
   ) : (
@@ -46,85 +47,95 @@ const RenderPasswordVisibility = ({
 };
 
 const QPTextField = props => {
-  const fieldRef = props.ref ?? React.createRef();
-  const [secureText, setSecureText] = useState(props.secureText);
+  // NOTE: react-native-paper TextInput is controlled via `value`.
+  // So we don't need the old ref/setValue/setNativeProps workaround.
+  const [secureText, setSecureText] = useState(!!props.secureText);
+
+  const keyboardType = props.keyboardType ?? 'default';
+  const returnKey = props.returnKey ?? 'next';
+  const label = props.label ?? '';
+  const defaultValue = props.defaultValue ?? '';
+  const containerStyle = [props?.style, {paddingVertical: 0}];
+
+  const textStyle = useMemo(
+    () =>
+      props.textStyle ?? {
+        color: Colors.filterIconColor,
+        fontFamily: FontFamily.regular,
+        fontSize: TextSizes.secondary,
+      },
+    [props.textStyle],
+  );
+
+  const value = props.value ?? '';
+  const isPasswordVisible = secureText;
 
   const onSubmit = () => {
-    let {current: field} = fieldRef;
-    props.onSubmit && props.onSubmit(field.value());
+    props.onSubmit && props.onSubmit(value);
   };
 
   const onEndEditing = () => {
-    let {current: field} = fieldRef;
-    props.onEndEdit && props.onEndEdit(field.value());
+    props.onEndEdit && props.onEndEdit(value);
   };
 
   const onChange = text => {
     props.onChange && props.onChange(text);
   };
 
-  const changePwdType = () => {
-    setSecureText(!secureText);
-  };
-
-  let keyboardType = props.keyboardType ? props.keyboardType : 'default';
-  let returnKey = props.returnKey ? props.returnKey : 'next';
-  let label = props.label ? props.label : '';
-  let defaultValue = props.defaultValue ? props.defaultValue : '';
-  let style = [props?.style, {paddingVertical: 0}];
-  let isPasswordVisible = secureText;
-  let textStyle = props.textStyle
-    ? props.textStyle
-    : {color: Colors.filterIconColor, fontFamily: FontFamily.regular};
+  const changePwdType = () => setSecureText(prev => !prev);
 
   return (
-    <View testID="text-field-container" style={style}>
-      <TextField
-        labelTextStyle={textStyle}
-        titleTextStyle={textStyle}
-        affixTextStyle={textStyle}
-        style={textStyle}
+    <View testID="text-field-container" style={containerStyle}>
+      <TextInput
+        mode="flat" // closest to old underline style; change to "outlined" if you prefer
+        label={label}
+        value={value !== '' ? value : props.value ? value : defaultValue}
+        placeholder={label} // Show placeholder when not focused and empty
+        placeholderTextColor={Colors.evenDarkerGrey}
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType={keyboardType}
+        secureTextEntry={secureText}
+        returnKeyType={returnKey}
+        underlineColor={Colors.filterIconColor}
+        activeUnderlineColor={Colors.accentLight}
+        textColor={Colors.filterIconColor}
+        theme={{
+          colors: {
+            placeholder: Colors.evenDarkerGrey,
+            text: Colors.filterIconColor,
+            primary: Colors.accentLight,
+          },
+        }}
+        style={[
+          {backgroundColor: 'transparent'},
+          {fontSize: TextSizes.primary},
+          {fontFamily: FontFamily.regular},
+          textStyle,
+        ]}
         accessibilityLabel={props.accessibilityLabel ?? 'text-field'}
         testID={props.testID ?? 'text-field'}
-        underlineColorAndroid="transparent"
-        autoCapitalize={'none'}
-        autoCorrect={false}
-        autoFocus={props.autofocus}
-        tintColor={props.tintColor || Colors.accent}
-        textColor={props.textColor || Colors.primary}
-        baseColor={props.baseColor || Colors.primary}
-        label={label}
-        value={props.value}
-        placeholderTextColor={Colors.borderColor}
-        defaultValue={defaultValue}
-        secureTextEntry={secureText}
-        keyboardType={keyboardType}
-        onEndEditing={onEndEditing}
-        onSubmitEditing={onSubmit}
         onChangeText={onChange}
-        ref={fieldRef}
-        placeholder={props.placeholder}
-        fontSize={TextSizes.primary}
-        labelFontSize={TextSizes.secondary}
-        returnKeyType={returnKey}
+        onSubmitEditing={onSubmit}
+        onEndEditing={onEndEditing}
       />
 
       <RenderPasswordVisibility
         secureText={props.secureText}
-        value={props.value}
+        value={value}
         isPasswordVisible={isPasswordVisible}
         onPress={changePwdType}
       />
     </View>
   );
 };
+
 export default QPTextField;
 
 const styles = StyleSheet.create({
   passwordVisibilityButton: {
-    flex: 1,
     position: 'absolute',
-    top: MarginConstants.tab4,
+    top: MarginConstants.tab1_4x,
     right: MarginConstants.tab1,
     paddingVertical: PaddingConstants.halfTab,
   },

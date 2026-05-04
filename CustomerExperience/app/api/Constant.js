@@ -36,7 +36,7 @@ export const DEV_BASE_URL = 'https://cxlabs3.questionpro.com/a/nativehtml';
 
 // for LIVE
 export const CLF_BASE_URL = `https://${
-  IS_DEV_MODE ? 'clfqa' : 'clf'
+  IS_DEV_MODE ? 'clfqa1' : 'clf'
 }-backend.questionpro.com/api`;
 
 export const INIT_BASE = 'https://api.questionpro.com';
@@ -141,6 +141,10 @@ export const CLF_GET_ROOT_CAUSE_ACTIONS = '/mobile/root-cause-action'; // subscr
 // /mobile/root-cause-action
 
 export const CLF_GET_CENTRALIZED_ROOT_CAUSE = '/mobile/root-cause/central'; // subscriberId
+export const CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_PREFIX = '/mobile/tickets/';
+
+export const CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_POSTFIX =
+  '/update-centralize-root-cause';
 
 export const CLF_UPDATE_ROOT_CAUSE_PREFIX = '/mobile/tickets/'; // ticketId
 export const CLF_UPDATE_ROOT_CAUSE_POSTFIX = '/update-root-causes';
@@ -161,6 +165,8 @@ export const CLF_GET_ACTION_DETAILS_POSTFIX = `/action-mails`;
 export const CLF_GET_NOTIFICATIONS = `/notifications/users/`;
 export const CLF_PATCH_READ_NOTIFCATION = `/mobile-notifications/`;
 export const NOTIFICATIONS_PER_PAGE = 50;
+
+export const CLF_GET_TAGLIST = '/mobile/tag/';
 
 export const EMAIL = 'email';
 export const PHONE = 'phone';

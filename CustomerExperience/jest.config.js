@@ -33,6 +33,8 @@ module.exports = {
     '\\.svg': '<rootDir>/__mocks__/svgMock.js',
     '^react-native-reanimated$':
       '<rootDir>/__mocks__/react-native-reanimated.js',
+    '^react-native-reanimated/mock$':
+      '<rootDir>/__mocks__/react-native-reanimated.js',
     '^react-native-gesture-handler$':
       '<rootDir>/__mocks__/react-native-gesture-handler.js',
     '^@react-native-firebase/messaging$':

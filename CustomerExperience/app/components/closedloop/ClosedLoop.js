@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {
+  Animated,
   View,
   FlatList,
   StyleSheet,
@@ -7,19 +8,16 @@ import {
   RefreshControl,
   Platform,
 } from 'react-native';
-import ClosedLoopCell from './ClosedloopCell';
+// import ClosedLoopCell from './ClosedloopCell';
+import TicketCard from './TicketCard';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../styles/color.constants';
-
 import {MarginConstants} from '../../styles/margin.constants';
 import {PaddingConstants} from '../../styles/padding.constants';
 import {HeaderFilter, RenderSpinner} from '../../routes/commonUI/CommonUI';
-
-import BottomSheetHeader from '../../routes/commonUI/BottomSheetHeader';
 import FabAddButton from '../../routes/commonUI/FabAddButton';
 import FilterTicket from './takeaction/FilterTickets';
-import Animated from 'react-native-reanimated';
-import BottomSheet from 'reanimated-bottom-sheet';
+// Animated from react-native used above (Reanimated v3 removed Value/add/multiply)
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getClosedLoopOwnerDetails,
@@ -27,7 +25,6 @@ import {
 } from '../../redux/actions/dashboard.actions';
 import moment from 'moment';
 import {DMYFORMAT, YMDFORMAT} from '../../Utils/AppConstants';
-import {setRangeFilter} from '../../redux/actions';
 
 import {
   priorityList,
@@ -91,6 +88,61 @@ export const getFilterCount = filterState => {
 
   return count;
 };
+
+export const clearPriorityFilter = () => {
+  return priorityList.map(value => ({
+    ...value,
+    isChecked: false,
+  }));
+};
+
+export const clearStatusFilter = () => {
+  return statusList.map(value => ({
+    ...value,
+    isChecked: false,
+  }));
+};
+
+export const clearTypeFilter = () => {
+  return ticketTypeList.map(value => ({
+    ...value,
+    isChecked: false,
+  }));
+};
+
+export const clearAssignToIdFilter = () => {
+  return [];
+};
+
+export const getIds = items =>
+  items
+    .filter(item => item.isChecked === true)
+    .map(id => id.id)
+    .toString();
+
+export const getNames = items =>
+  items
+    .filter(item => item.isChecked === true)
+    .map(item => item.name)
+    .toString();
+
+export const createFilterState = (item, getIdsFunction) => {
+  return {
+    pageNumber: 1,
+    status: getIdsFunction(item.status) ?? '',
+    priority: getIdsFunction(item.priority) ?? '',
+    assignToId: item.assignToId,
+    type: getIdsFunction(item.type) ?? '',
+    tags: getNames(item.tags) ?? '',
+  };
+};
+
+export const wait = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout);
+  });
+};
+
 const ClosedLoopTicketList = ({
   onPressReset,
   onRefresh,
@@ -117,7 +169,6 @@ const ClosedLoopTicketList = ({
       extraData={[ticketList]}
       ListEmptyComponent={
         !isTicketLoading && !isPagination ? (
-          // <NoItemsFound>No tickets found</NoItemsFound>
           <NoTicketFound onPressReset={onPressReset} />
         ) : (
           <View />
@@ -126,13 +177,12 @@ const ClosedLoopTicketList = ({
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item, index}) => {
         return (
-          <ClosedLoopCell
+          <TicketCard
             data={item}
             index={index}
             showCheckBox={showCheckBox}
             isSelected={selectedTickets.includes(item.id)}
             onPressHandler={() => onPressHandler(item, index)}
-            // onLongPressHandler={() => onLongPressHandler(item, index)}
           />
         );
       }}
@@ -143,20 +193,16 @@ const ClosedLoopTicketList = ({
 export default function ClosedLoop(props) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const itemPerPage = 20;
+  const itemPerPage = 100;
   const statusId = useSelector(state => state.global.statusId);
   console.log('STATUS_ID_FILTER', statusId);
 
   const [pageNumber, setPageNumber] = useState(1);
-  const {feedbackApiKey, feedbackID, userID} = useSelector(
-    state => state.global.userInfo,
-  );
-  // const [isLoading, setLoading] = useState(false);
+  const {feedbackApiKey, userID} = useSelector(state => state.global.userInfo);
   const [isPagination, setpagination] = useState(false);
-  const {authToken, isTicketLoading, range, subscriberId} = useSelector(
+  const {authToken, isTicketLoading, range} = useSelector(
     state => state.global,
   );
-  const [isSearchVisible, setSearchVisibility] = useState(false);
   const [searchText, setSearchText] = useState('');
   const initialFilterState = {
     feedbackApiKey: feedbackApiKey,
@@ -190,6 +236,7 @@ export default function ClosedLoop(props) {
   const owners = useSelector(state => state.dashboard.ownerDetails.owners);
   const [refreshing, setRefreshing] = useState(false);
   const {ticketDeleteStatus} = useSelector(state => state.dashboard);
+  // const ticketTags = useSelector(state => state.dashboard.ticketTags);
 
   useEffect(() => {
     if (
@@ -208,8 +255,6 @@ export default function ClosedLoop(props) {
     }));
     const status = statusList.map(value => ({...value, isChecked: false}));
     const type = ticketTypeList.map(value => ({...value, isChecked: false}));
-    // const managers = owners.map((value) => ({...value, isChecked: false}));
-    // const showMyTickets = true;
     const assignToId = JSON.stringify(userID);
     const userId = JSON.stringify(userID);
     return {
@@ -219,15 +264,12 @@ export default function ClosedLoop(props) {
       type: type,
       assignToId,
       userId,
-      // showMyTickets: showMyTickets,
     };
   };
 
   const [filterData, setFilterData] = useState(sampleFilterData());
-  // console.log('OWNERS', JSON.stringify(owners));
 
   const resetFilterState = range_ => {
-    // setTicketList([]);
     setPageNumber(1);
     setFilterState(state => ({
       ...state,
@@ -237,18 +279,10 @@ export default function ClosedLoop(props) {
     }));
   };
 
-  let getDataOnNewRange = range_ => {
-    dispatch(setRangeFilter(range_));
-    // reset pageNumber, ticket list, range
-
-    resetFilterState(range_);
-  };
-
   const filterByStatus = statusId_ => {
     let tempStatusData = [];
 
     filterData.status.map(value => {
-      // console.log('STATUS_ID_FILTER', 'STATUS OBJECT', JSON.stringify(value));
       tempStatusData.push({
         ...value,
         isChecked: value.id === parseInt(statusId_),
@@ -292,11 +326,6 @@ export default function ClosedLoop(props) {
     getTicketOwnerList(currentSegment.currentSegmentID);
   };
 
-  const wait = timeout => {
-    return new Promise(resolve => {
-      setTimeout(resolve, timeout);
-    });
-  };
   const onRefresh = useCallback(() => {
     resetFilterState(range);
     setRefreshing(true);
@@ -330,7 +359,7 @@ export default function ClosedLoop(props) {
   };
 
   const loadMoreData = () => {
-    if (ticketList.length < pagerOptions.totalCount) {
+    if (ticketList.length < pagerOptions?.totalCount) {
       setpagination(true);
       setFilterState(state => ({
         ...state,
@@ -354,17 +383,17 @@ export default function ClosedLoop(props) {
 
   const onPressHandler = (item, index) => {
     // console.log(`onPressHandler`);
-    if (showCheckBox) {
-      if (selectedTickets.includes(item.id)) {
-        setSelectedTickets(selectedTickets.filter(id => id !== item.id));
-      } else {
-        setSelectedTickets(prevSelectedTickets => [
-          ...prevSelectedTickets,
-          item.id,
-        ]);
-      }
-      return;
-    }
+    // if (showCheckBox) {
+    //   if (selectedTickets.includes(item.id)) {
+    //     setSelectedTickets(selectedTickets.filter(id => id !== item.id));
+    //   } else {
+    //     setSelectedTickets(prevSelectedTickets => [
+    //       ...prevSelectedTickets,
+    //       item.id,
+    //     ]);
+    //   }
+    //   return;
+    // }
 
     navigation.navigate('TicketDetails', {
       ticketItem: item,
@@ -387,12 +416,6 @@ export default function ClosedLoop(props) {
     );
   };
 
-  const getIds = items =>
-    items
-      .filter(item => item.isChecked === true)
-      .map(id => id.id)
-      .toString();
-
   const getOwnerIds = items =>
     items
       .filter(item => item.isChecked === true)
@@ -400,85 +423,50 @@ export default function ClosedLoop(props) {
       .toString();
 
   const handleAction = (item, action) => {
+    onCloseFilter();
     switch (action) {
       case 'apply':
         applyFilter(item);
         break;
       default:
-        closeFilter();
+        break;
     }
   };
-  const closeFilter = () => {
-    bs.current.snapTo(bsSnapPoints.length - 1);
-  };
+
   const openFilter = () => {
-    bs.current.snapTo(0);
+    console.log('FILTER_DATA', JSON.stringify(filterData));
+    navigation.navigate('TicketFilter', {
+      data: filterData,
+      onPressHandler: handleAction,
+    });
   };
 
   const applyFilter = item => {
+    console.log('FILTER_TICKET_ITEMS', JSON.stringify(item));
     setFilterData(item);
 
-    // console.log('StatusParam: ', JSON.stringify(item));
-    // setTicketList([]);
+    const newFilterState = createFilterState(item, getIds);
+    console.log('newFilterState', JSON.stringify(newFilterState));
     setFilterState(state => ({
       ...state,
-      pageNumber: 1,
-      status: getIds(item.status) ?? '',
-      priority: getIds(item.priority) ?? '',
-      assignToId: item.assignToId,
-      type: getIds(item.type) ?? '',
-      // showMyTickets: item.showMyTickets,
+      ...newFilterState,
     }));
-
-    // console.log('Apply filter');
-    closeFilter();
-  };
-
-  const renderFilterHeader = () => {
-    return (
-      <BottomSheetHeader
-        title={translate('ticket_overview.filter_ticket')}
-        onPressClose={() => closeFilter()}
-      />
-    );
   };
 
   // variables for bottom sheet
-  const bs = React.useRef(null);
   const fall = new Animated.Value(1);
 
-  const bsSnapPoints = ['64%', '0%'];
-  const [shadow, setShadow] = useState(false);
-
   const clearFilterData = item => {
-    const priority = priorityList.map(value => ({
-      ...value,
-      isChecked: false,
-    }));
-    const status = statusList.map(value => ({...value, isChecked: false}));
-    const type = ticketTypeList.map(value => ({...value, isChecked: false}));
-    // const managers = owners.map((value) => ({...value, isChecked: false}));
-
     switch (item) {
       case 'priority':
-        return priorityList.map(value => ({
-          ...value,
-          isChecked: false,
-        }));
-
+        return clearPriorityFilter();
       case 'status':
-        return statusList.map(value => ({
-          ...value,
-          isChecked: false,
-        }));
-
+        return clearStatusFilter();
       case 'type':
-        return ticketTypeList.map(value => ({
-          ...value,
-          isChecked: false,
-        }));
-
+        return clearTypeFilter();
       case 'assignToId':
+        return clearAssignToIdFilter();
+      default:
         return [];
     }
   };
@@ -495,6 +483,11 @@ export default function ClosedLoop(props) {
     setSearchText(initialFilterState.search);
   }, []);
 
+  const [filterBottomSheetVisible, setFilterBottomSheetVisible] =
+    useState(false);
+  const onCloseFilter = () => {
+    setFilterBottomSheetVisible(false);
+  };
   return isTicketLoading && !isPagination ? (
     <RenderSpinner />
   ) : (
@@ -532,27 +525,15 @@ export default function ClosedLoop(props) {
         />
         <FabAddButton onPress={onFabHandler} />
       </Animated.View>
-
-      <BottomSheet
-        ref={bs}
-        snapPoints={bsSnapPoints}
-        initialSnap={bsSnapPoints.length - 1}
-        enabledGestureInteraction={true}
-        renderContent={renderFilterContent}
-        renderHeader={renderFilterHeader}
-        callbackNode={fall}
-      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: {flex: 1, backgroundColor: Colors.white},
 
   flatList: {
     flex: 1,
-    marginHorizontal: MarginConstants.tab1,
-    padding: MarginConstants.halfTab,
   },
 
   filterAndSearchBox: {
@@ -568,10 +549,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.white,
     marginVertical: MarginConstants.tab1,
-    marginHorizontal: MarginConstants.tab2,
+    marginHorizontal: MarginConstants.tab1_2x,
     paddingHorizontal: MarginConstants.tab1,
     paddingVertical: Platform.OS === 'ios' ? MarginConstants.halfTab : 0,
-    borderBottomWidth: 0.5,
+    borderWidth: 0.5,
+    borderRadius: 8,
     borderColor: Colors.filterIconColor,
   },
 

@@ -1,5 +1,12 @@
 import React, {useState, useRef} from 'react';
-import {View, StyleSheet, FlatList, Pressable} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  KeyboardAvoidingView,
+  SafeAreaView,
+} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
@@ -52,19 +59,26 @@ const SelectTicketOwner = ({data, selectedIndex, handleOnPress}) => {
   };
 
   return (
-    <View testID="SelectTicketOwner" style={styles.container}>
-      <SearchTextInput
-        ref={textInputRef}
-        placeholder={translate('search')}
-        returnKeyType={'search'}
-        onChangeText={filterOwnerList}
-      />
+    <KeyboardAvoidingView
+      testID="SelectTicketOwner"
+      behavior="height"
+      style={styles.container}
+      contentContainerStyle={{flexGrow: 0}}
+      keyboardShouldPersistTaps={'handled'}>
       <FlatList
         style={styles.flatList}
         data={ownerData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
         ItemSeparatorComponent={ListItemSeparator}
+        ListHeaderComponent={
+          <SearchTextInput
+            ref={textInputRef}
+            placeholder={translate('search')}
+            returnKeyType={'search'}
+            onChangeText={filterOwnerList}
+          />
+        }
         ListEmptyComponent={
           <NoItemsFound>No Assignee/Owner found</NoItemsFound>
         }
@@ -77,7 +91,7 @@ const SelectTicketOwner = ({data, selectedIndex, handleOnPress}) => {
         buttonText={translate('select')}
         textStyle={styles.takeActionText}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -85,9 +99,12 @@ export default SelectTicketOwner;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    minHeight: '80%',
     backgroundColor: Colors.white,
     paddingHorizontal: PaddingConstants.tab1_2x,
+  },
+  flatList: {
+    maxHeight: '70%',
   },
   row: {
     flexDirection: 'row',
@@ -106,7 +123,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.filterIconColor,
-    marginBottom: MarginConstants.tab2,
+    marginBottom: MarginConstants.tab1_4x,
   },
   title: {
     flex: 1,

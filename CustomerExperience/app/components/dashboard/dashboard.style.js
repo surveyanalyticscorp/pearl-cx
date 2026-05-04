@@ -16,6 +16,7 @@ export const dashboardStyles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: Colors.white,
   },
   containerIOS: {
     flex: 1,
@@ -23,6 +24,7 @@ export const dashboardStyles = StyleSheet.create({
   },
   scrollView: {
     flexGrow: 1,
+    paddingBottom: MarginConstants.tab1_8x + MarginConstants.tab1_4x,
   },
   imageBackgroundContainer: {
     flex: 1,
@@ -112,15 +114,6 @@ export const dashboardStyles = StyleSheet.create({
     fontSize: TextSizes.largeText,
   },
 
-  dashboardTitle: {
-    // color: Colors.primary,
-    color: Colors.accent,
-    backgroundColor: Colors.white,
-    fontFamily: FontFamily.medium,
-    fontWeight: FontWeight._500,
-    fontSize: TextSizes.primary,
-  },
-
   dashboardTitleContainer: {
     borderTopStartRadius: 5,
     borderTopEndRadius: 5,
@@ -187,16 +180,20 @@ export const dashboardStyles = StyleSheet.create({
 
     paddingHorizontal: PaddingConstants.halfTab,
   },
+  npsCountContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   npsPercentText: {
-    color: Colors.primary,
-    fontSize: TextSizes.donutPercentText,
-    fontFamily: FontFamily.bold,
+    color: Colors.filterIconColor,
+    fontSize: TextSizes.largeText,
+    fontFamily: FontFamily.medium,
     textAlign: 'center',
   },
   npsText: {
-    color: Colors.primary,
+    color: Colors.filterIconColor,
     fontSize: TextSizes.secondary,
-    fontFamily: FontFamily.semiBold,
+    fontFamily: FontFamily.regular,
     textAlign: 'center',
   },
   detailsText: {
@@ -209,24 +206,24 @@ export const dashboardStyles = StyleSheet.create({
   chartContainer: {
     backgroundColor: Colors.white,
     height: DeviceInfo.isTablet()
-      ? MarginConstants.tab4 * 13
-      : MarginConstants.tab4 * 11,
-    flexDirection: 'column',
+      ? MarginConstants.tab4 * 14
+      : MarginConstants.tab4 * 12,
     justifyContent: 'center',
-    marginTop: MarginConstants.tab2,
+    marginVertical: MarginConstants.tab2,
     marginHorizontal: MarginConstants.tab2,
-    borderRadius: 5,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.borderColor2,
   },
   csatChartContainer: {
     backgroundColor: Colors.white,
-    height: DeviceInfo.isTablet()
-      ? MarginConstants.tab1_4x * 14
-      : MarginConstants.tab1_4x * 13,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    marginTop: MarginConstants.tab2,
-    marginHorizontal: MarginConstants.tab2,
-    borderRadius: 5,
+    justifyContent: 'center',
+
+    marginVertical: MarginConstants.tab1_2x,
+    marginHorizontal: MarginConstants.tab1_2x,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.borderColor2,
   },
   donut: {
     marginTop: MarginConstants.tab1,
@@ -273,7 +270,6 @@ export const dashboardStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: MarginConstants.tab1_2x,
   },
   roundSquareShape: {
     borderRadius: 2,
@@ -286,41 +282,15 @@ export const dashboardStyles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
+    alignSelf: 'center',
     height: '100%',
   },
   contentContainer: {backgroundColor: Colors.white, height: '100%'},
   csatContainer: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
-    height: '90%',
-    top: MarginConstants.tab3,
-  },
-  csatScoreLabel: {
-    ...baseTextStyles.donutPercentRegularText,
-    position: 'absolute',
-    alignItems: 'center',
-    alignSelf: 'center',
-    top: 1.5 * MarginConstants.tab4,
-    color: Colors.filterIconColor,
-  },
-  csatToggleButton: {
-    ...buttonStyles.outlineGreyButton,
-    backgroundColor: Colors.white,
-    width: 3.5 * MarginConstants.tab4,
-    position: 'absolute',
-    alignItems: 'center',
-    alignSelf: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    top: 2.8 * MarginConstants.tab4,
-    zIndex: 100,
-  },
-  csatToggleButtonText: {
-    ...baseTextStyles.secondaryRegularText,
-    color: Colors.filterIconColor,
   },
   renderInfoContainer: {
     flexDirection: 'row',
@@ -340,10 +310,7 @@ export const dashboardStyles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignSelf: 'center',
-    top:
-      MarginConstants.tab1_16x +
-      MarginConstants.tab1_4x +
-      MarginConstants.tab1_2x,
+    top: MarginConstants.tab1_32x + MarginConstants.tab1_8x,
     width: '100%',
   },
 
@@ -367,7 +334,7 @@ export const dashboardStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: PaddingConstants.tab2,
+    paddingHorizontal: PaddingConstants.tab1_2x,
     paddingVertical: Platform.OS === 'ios' ? PaddingConstants.halfTab : 0,
   },
 

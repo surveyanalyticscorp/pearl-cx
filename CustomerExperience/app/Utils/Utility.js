@@ -2,7 +2,6 @@ import React, {useEffect, useRef} from 'react';
 import {Colors} from '../styles/color.constants';
 import {EMAIL_PATTERN} from '../api/Constant';
 import Toast from 'react-native-toast-message';
-import {IonIcon} from './IconUtils';
 
 export const isStringNullOrEmpty = string => {
   if (string) {
@@ -38,12 +37,12 @@ export const showErrorFlashMessage = error => {
       headerText: 'Error',
       bodyText: error ?? 'something went worng, please try again later.',
       leadingIcon: {
-        color: Colors.deleteButtonText,
+        color: Colors.deleteBackground,
         testID: 'error-toast-icon',
         name: 'alert-circle-outline',
       },
       trailingIcon: {
-        color: Colors.deleteButtonText,
+        color: Colors.deleteBackground,
         onPress: () => Toast.hide(),
         testID: 'close-toast-button',
       },

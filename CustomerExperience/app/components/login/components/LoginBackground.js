@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
-import {ImageBackground, SafeAreaView, StyleSheet} from 'react-native';
+import {ImageBackground, StyleSheet} from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {useSelector} from 'react-redux';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const LoginBackground = ({children}) => {
   return (

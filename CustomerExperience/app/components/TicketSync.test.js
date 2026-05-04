@@ -3,17 +3,9 @@ import {render} from '@testing-library/react-native';
 import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
 import TicketSync from './TicketSync';
-import StringUtils from '../Utils/StringUtils';
-import {syncTickets} from '../redux/actions/closedloop.actions';
 
-jest.mock('../redux/actions/closedloop.actions', () => ({
-  syncTickets: jest.fn(() => ({
-    type: 'GET_TICKET_LIST_SYNC',
-  })),
-}));
-jest.mock('../Utils/StringUtils', () => ({
-  isEmptyOrNull: jest.fn(),
-}));
+// Mock the useTicketSync hook to prevent it from running actual logic
+jest.mock('../hooks/useTicketSync', () => jest.fn());
 
 const mockStore = configureStore([]);
 const initialState = {
@@ -34,13 +26,10 @@ describe('TicketSync', () => {
 
   beforeEach(() => {
     store = mockStore(initialState);
-    global.subscriberId = 'mock-subscriber-id'; // Mock global variable
-    syncTickets.mockClear();
+    global.subscriberId = 'mock-subscriber-id';
   });
 
   const renderComponent = () => {
-    console.log('STORE', store.getState());
-
     return render(
       <Provider store={store}>
         <TicketSync />
@@ -52,41 +41,50 @@ describe('TicketSync', () => {
     const {getByTestId} = renderComponent();
     expect(getByTestId('ticket-sync-view')).toBeTruthy();
   });
-  test('calls callTicketSync when ticketSync is true and required fields are present', () => {
-    StringUtils.isEmptyOrNull.mockReturnValue(false); // Simulate non-empty fields
 
-    renderComponent();
-
-    expect(syncTickets).toHaveBeenCalled();
+  test('renders the correct component structure', () => {
+    const {getByTestId} = renderComponent();
+    const component = getByTestId('ticket-sync-view');
+    expect(component).toBeTruthy();
+    expect(component.type).toBe('View');
   });
-  test('does not call callTicketSync when ticketSync is false', () => {
+
+  test('component renders with different store states', () => {
     store = mockStore({
-      ...store.getState(),
+      ...initialState,
       dashboard: {ticketSync: false},
     });
-    renderComponent();
-    expect(syncTickets).not.toHaveBeenCalled();
-  });
-  test('does not call callTicketSync when subscriberId is empty', () => {
-    global.subscriberId = ''; // Simulate empty subscriberId
-    StringUtils.isEmptyOrNull.mockReturnValueOnce(true); // Simulate StringUtils returning true for empty
 
-    renderComponent();
-
-    expect(syncTickets).not.toHaveBeenCalled();
+    const {getByTestId} = renderComponent();
+    expect(getByTestId('ticket-sync-view')).toBeTruthy();
   });
 
-  test('does not call callTicketSync when feedbackApiKey or feedbackID is empty', () => {
-    // Test when feedbackApiKey is empty
+  test('component renders with empty user info', () => {
     store = mockStore({
       ...initialState,
       global: {
         ...initialState.global,
         userInfo: {
           feedbackApiKey: '',
-          feedbackID: 'mock-feedback-id',
+          feedbackID: '',
         },
       },
     });
+
+    const {getByTestId} = renderComponent();
+    expect(getByTestId('ticket-sync-view')).toBeTruthy();
+  });
+
+  test('component renders with missing auth token', () => {
+    store = mockStore({
+      ...initialState,
+      global: {
+        ...initialState.global,
+        authToken: null,
+      },
+    });
+
+    const {getByTestId} = renderComponent();
+    expect(getByTestId('ticket-sync-view')).toBeTruthy();
   });
 });

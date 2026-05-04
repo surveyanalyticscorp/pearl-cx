@@ -15,7 +15,7 @@ const ErrorToast = ({text1, props}) => {
         <TextLabel
           numberOfLines={1}
           text={text1 ?? props.bodyText ?? ''}
-          color={Colors.deleteButtonText}
+          color={Colors.deleteBackground}
           style={{
             padding: PaddingConstants.halfTab,
             ...baseTextStyles.semiSecondaryRegular2Text,

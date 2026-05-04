@@ -67,6 +67,10 @@ import {
   CLF_GET_CENTRALIZED_ROOT_CAUSE,
   getGenerateEmailDraftEndPoint,
   POST_GENERATE_REFINED_EMAIL_DRAFT,
+  CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_POSTFIX,
+  CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_PREFIX,
+  CLF_GET_TAGLIST,
+  FEEDBACK,
 } from '../../api/Constant';
 import StringUtils from '../../Utils/StringUtils';
 import {
@@ -77,6 +81,7 @@ import {
   ACTION_HISTORY_SUMMARY_RECEIVED,
   CENTRALIZED_ROOT_CAUSE,
   CENTRALIZED_ROOT_CAUSE_RECEIVED,
+  CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED,
   DELETE_TICKET,
   DELETE_TICKET_COMPLETE,
   GENERATE_EMAIL_DRAFT,
@@ -90,6 +95,8 @@ import {
   GET_EMAIL_TEMPLATES_RECEIVED,
   GET_LATEST_COMMENT,
   GET_ROOT_CASUES,
+  GET_TAGLIST,
+  GET_TAGLIST_RECEIVED,
   GET_TICKET_LIST_SYNC,
   GET_TICKET_LIST_SYNC_RECEIVED,
   GET_TICKET_STATUS_HISTORY,
@@ -102,7 +109,10 @@ import {
   ROOT_CAUSE_UPDATE_RECEIVED,
   SEND_EMAIL,
   SEND_EMAIL_RECEIVED,
+  SEND_EMAIL_FAILED,
+  sendEmailFailed,
   TICKET_ESCALATION_RECIEVED,
+  UPDATE_CENTRALIZED_ROOT_CAUSE,
   UPDATE_ROOT_CAUSE,
   UPDATE_TICKET_ESCALATION,
 } from '../actions/closedloop.actions';
@@ -750,14 +760,9 @@ export function* sendEmail(action) {
       type: MEDIA_FILE_UPLOAD_RESET,
       response: [],
     });
-    showSuccessFlashMessage(json.message);
+    // showSuccessFlashMessage(json.message);
   } catch (error) {
-    showErrorFlashMessage(error.message);
-    console.log('ERROR:', JSON.stringify(error));
-    // yield put({
-    //   type: API_ERROR,
-    //   error: error,
-    // });
+    yield put(sendEmailFailed());
   }
 }
 export function* watchSendEmail() {
@@ -933,6 +938,45 @@ export function* watchUpdateRootCause() {
   yield takeLatest(UPDATE_ROOT_CAUSE, updateRootCauseAndAction);
 }
 
+export function* updateCentralizedRootCause(action) {
+  try {
+    const json = yield WebServiceHandler.postNew(
+      getClfUrl(
+        CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_PREFIX +
+          action.ticketId +
+          CLF_UPDATE_CENTRALIZED_ROOT_CAUSE_POSTFIX,
+      ),
+      getBearerTokenStatic(),
+      action.param,
+    );
+    JSON.stringify(
+      'action',
+      JSON.stringify(action),
+      'json',
+      JSON.stringify(json),
+    );
+    if (json.status === 'success') {
+      yield put({
+        type: CENTRALIZED_ROOT_CAUSE_UPDATE_RECEIVED,
+        response: json,
+      });
+      fetchClosedLoopTicketItem(action);
+    }
+  } catch (error) {
+    showErrorFlashMessage(
+      error.message ?? error.status ?? JSON.stringify(error),
+    );
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchUpdateCentralizedRootCause() {
+  yield takeLatest(UPDATE_CENTRALIZED_ROOT_CAUSE, updateCentralizedRootCause);
+}
+
 export function* deleteTickets(action) {
   try {
     const json = yield WebServiceHandler.delete(
@@ -1076,4 +1120,27 @@ export function* generateRefinedEmailDraft(action) {
 
 export function* watchGenerateRefinedEmailDraft() {
   yield takeLatest(GENERATE_REFINE_EMAIL_DRAFT, generateRefinedEmailDraft);
+}
+
+export function* getTaglist(action) {
+  try {
+    const json = yield WebServiceHandler.get(
+      getClfUrl(CLF_GET_TAGLIST + FEEDBACK + action.feedbackId),
+      getBearerTokenStatic(),
+      action.param,
+    );
+    yield put({
+      type: GET_TAGLIST_RECEIVED,
+      response: json.data,
+    });
+  } catch (error) {
+    console.log('ERROR:', JSON.stringify(error));
+    yield put({
+      type: API_ERROR,
+      error: error,
+    });
+  }
+}
+export function* watchGetTaglist() {
+  yield takeLatest(GET_TAGLIST, getTaglist);
 }

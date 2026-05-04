@@ -8,14 +8,17 @@ const Colors = {
   transparentBackground: 'rgba(0,0,0,0.05)',
   black: '#000000',
   accentLight: '#1b87e6',
+  accentLightBlue: '#1b87e6',
+  accentLightBackground: '#1b87e61d',
   checkboxColor: '#ababab',
   accent: '#1B3380',
-  deleteBackground: '#cc000012',
-  deleteButtonText: '#cc0000',
-
+  hoverBlue: '#045EBF',
+  deleteButtonText: '#FFFFFF',
+  deleteBackground: '#CC0000',
+  drawerBackground: '#EEF3FB',
   filterIconColor: '#545E6B',
   overdueAlertColor: '#EA4650',
-  textAvatarBackground: '#cc6677',
+  textAvatarBackground: '#CC6677',
   accentGradient: 'rgba(239, 246, 252, 1)',
   gradientColor: '#8AC0EA',
   grey: '#f9f9f9',
@@ -25,6 +28,7 @@ const Colors = {
   darkGrey: '#d8d8d8',
   overlay: '#edf6fd',
   borderColor: '#A2A6A9',
+  borderColor2: '#00000033',
   dotColor: 'rgba(100,100,100,0.5)',
   dotSelectedColor: '#010B06',
   placeholderColor: 'rgba(45,76,128,0.8)',
@@ -86,9 +90,14 @@ const textColors = {
 };
 
 const buttonColors = {
-  backgroundColor: '#193F8B',
+  backgroundColor: Colors.accentLight,
   positive: Colors.accent,
   negative: Colors.secondary,
+};
+
+const disabledButtonColors = {
+  textColor: Colors.evenDarkerGrey,
+  buttonColor: '#E6E6E6',
 };
 
 const getStatusBorderColor = _status => {
@@ -221,13 +230,13 @@ const getPriorityFillerColorbyId = _priority => {
 };
 
 const statusColors = {
-  openBorder: Colors.promoter,
+  openBorder: '#40CA5A',
   openFiller: '#9FE4AC',
 
   closedBorder: Colors.evenDarkerGrey,
   closedFiller: Colors.darkGrey,
 
-  escalatedBorder: '#FF9045',
+  escalatedBorder: '#FF9145',
   escalatedFiller: '#FFC7A2',
 
   overDueBorder: Colors.error,
@@ -297,6 +306,7 @@ export {
   buttonColors,
   statusColors,
   priorityColors,
+  disabledButtonColors,
   getPriorityBorderColor,
   getPriorityFillerColor,
   getStatusBorderColor,

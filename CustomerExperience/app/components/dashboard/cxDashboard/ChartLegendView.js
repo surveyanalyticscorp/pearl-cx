@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import {dashboardStyles} from '../dashboard.style';
 import LegendScoreView from '../../../widgets/dashboardWidget/LegendScoreView';
 import {Colors} from '../../../styles/color.constants';
+import ResponseCountView from './ResponeCountView';
 
 const ChartLegendView = () => {
   const {
@@ -23,6 +24,7 @@ const ChartLegendView = () => {
           ? dashboardStyles.csatLegendContainer
           : dashboardStyles.npsLegendContainer
       }>
+      <ResponseCountView />
       <LegendScoreView
         title={scoringModel === 1 ? 'Negatives' : 'Detractors'}
         count={detractors}

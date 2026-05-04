@@ -5,21 +5,29 @@ import {
   Text,
   StyleSheet,
   FlatList,
+  Pressable,
 } from 'react-native';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
-import IonIcon from 'react-native-vector-icons/Ionicons';
 import CheckmarkIcon from '../../../routes/commonUI/CheckmarkIcon';
+import {useSelector} from 'react-redux';
+import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
+import {PaddingConstants} from '../../../styles/padding.constants';
 
 const SelectSegment = props => {
-  const [data, setData] = useState(props.data);
+  const data = useSelector(state => state.dashboard.segmentList);
   const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
+  console.log(
+    'SEGMENT_TEST',
 
+    'SelectSegment component',
+    JSON.stringify(data),
+  );
   const renderRow = ({item, index}) => {
     return (
-      <TouchableWithoutFeedback
+      <Pressable
         testID="select-segment-button"
         onPress={
           () => {
@@ -32,7 +40,7 @@ const SelectSegment = props => {
           <Text style={styles.title}>{item.segmentName}</Text>
           {selectedIndex === index ? <CheckmarkIcon index={index} /> : <View />}
         </View>
-      </TouchableWithoutFeedback>
+      </Pressable>
     );
   };
 
@@ -43,6 +51,7 @@ const SelectSegment = props => {
         data={data}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
+        ItemSeparatorComponent={<ListItemSeparator />}
       />
     </View>
   );
@@ -54,19 +63,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
+    paddingHorizontal: PaddingConstants.tab1_2x,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    margin: MarginConstants.tab1,
-    borderWidth: 0.5,
-    padding: MarginConstants.tab1,
+
+    paddingVertical: MarginConstants.tab1_2x,
   },
   title: {
     flex: 1,
     fontFamily: FontFamily.regular,
     fontSize: TextSizes.secondary,
-    marginStart: MarginConstants.halfTab,
     color: Colors.filterIconColor,
+  },
+  flatList: {
+    paddingTop: PaddingConstants.tab1,
+    maxHeight: '70%',
   },
 });

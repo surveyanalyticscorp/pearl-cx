@@ -4,8 +4,7 @@
 
 import RNLocalize from 'react-native-localize';
 import {I18nManager} from 'react-native';
-// import * as i18n from 'i18n-js';
-import I18n from 'react-native-i18n';
+import I18n from 'i18n-js';
 import memoize from 'lodash.memoize';
 
 const translationGetters = {
