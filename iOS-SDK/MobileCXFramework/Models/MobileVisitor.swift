@@ -54,6 +54,46 @@ public struct Intercept: Codable {
     let settings: Settings?
     let dataMappings: [DataMappings]
     let metaData: MetaData
+    let widgetSettings: WidgetSettings?
+
+    enum CodingKeys: String, CodingKey {
+        case id, type, condition, surveyId, ruleGroupId, rules, settings, dataMappings, metaData, widgetSettings
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        type = try container.decode(String.self, forKey: .type)
+        condition = try container.decode(String.self, forKey: .condition)
+        surveyId = try container.decode(Int.self, forKey: .surveyId)
+        ruleGroupId = try container.decode(Int.self, forKey: .ruleGroupId)
+        rules = try container.decode([Rule].self, forKey: .rules)
+        settings = try container.decodeIfPresent(Settings.self, forKey: .settings)
+        dataMappings = try container.decode([DataMappings].self, forKey: .dataMappings)
+        metaData = try container.decode(MetaData.self, forKey: .metaData)
+
+        if type == InterceptType.PROMPT.rawValue {
+            widgetSettings = try container.decodeIfPresent(WidgetSettings.self, forKey: .widgetSettings)
+        } else if var ws = try container.decodeIfPresent(WidgetSettings.self, forKey: .widgetSettings) {
+            ws.position = nil
+            ws.widgetWindowHeight = nil
+            ws.widgetWindowWidth = nil
+            widgetSettings = ws
+        } else {
+            widgetSettings = nil
+        }
+    }
+}
+
+// MARK: - WidgetSettings Model
+public struct WidgetSettings: Codable {
+    let iconColor: String?
+    let textColor: String
+    let backgroundColor: String
+    let widgetTitle: String
+    var position: String?
+    var widgetWindowHeight: Int?
+    var widgetWindowWidth: Int?
 }
 
 public struct MetaData: Codable {

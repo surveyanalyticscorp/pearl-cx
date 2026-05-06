@@ -59,7 +59,7 @@ public let kCoreSurveyFeedbackURL = "/a/api/v2/surveys/"
 let bundleIdentifier = Bundle.main.bundleIdentifier! as String
 public let kPackageName = bundleIdentifier
 
-public let kEnvironment = kProductionEnvironment
+public let kEnvironment = kStagingEnvironment
 
 public enum InterceptType: String {
     case PROMPT, EMBED, SURVEY_URL
@@ -86,5 +86,16 @@ public enum LogTag: String {
         case .LOG_INFO: return "SDK_INFO"
         }
     }
-    
+}
+
+public enum WidgetPosition: String, Codable {
+    case TOP_CENTER, CENTER_CENTER, BOTTOM_CENTER
+
+    var method: String {
+        switch self {
+        case .CENTER_CENTER: return "CENTER_CENTER"
+        case .BOTTOM_CENTER: return "BOTTOM_CENTER"
+        case .TOP_CENTER: return "TOP_CENTER"
+        }
+    }
 }
