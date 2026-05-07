@@ -1,8 +1,8 @@
 diff --git a/node_modules/react-native-tab-view/src/TabBar.tsx b/node_modules/react-native-tab-view/src/TabBar.tsx
-index 1234567..abcdefg 100644
+index 1234567..abcdef0 100644
 --- a/node_modules/react-native-tab-view/src/TabBar.tsx
 +++ b/node_modules/react-native-tab-view/src/TabBar.tsx
-@@ -448,7 +448,7 @@
+@@ -448,5 +448,5 @@
            {renderTabBarItem ? (
              renderTabBarItem(props)
            ) : (
@@ -10,7 +10,7 @@ index 1234567..abcdefg 100644
 +            (() => { const { key: _k, ...rest } = props; return <TabBarItem key={_k} {...rest} />; })()
            )}
 diff --git a/node_modules/react-native-tab-view/lib/commonjs/TabBar.js b/node_modules/react-native-tab-view/lib/commonjs/TabBar.js
-index 1234567..abcdefg 100644
+index 1234567..abcdef0 100644
 --- a/node_modules/react-native-tab-view/lib/commonjs/TabBar.js
 +++ b/node_modules/react-native-tab-view/lib/commonjs/TabBar.js
 @@ -304,7 +304,7 @@
@@ -23,7 +23,7 @@ index 1234567..abcdefg 100644
    }, [activeColor, android_ripple, gap, getAccessibilityLabel, getAccessible, getLabelText, getTestID, inactiveColor, isWidthDynamic, jumpTo, labelStyle, layout, navigationState, onTabLongPress, onTabPress, position, pressColor, pressOpacity, renderBadge, renderIcon, renderLabel, renderTabBarItem, routes, scrollEnabled, tabStyle, tabWidths]);
    const keyExtractor = React.useCallback(item => item.key, []);
 diff --git a/node_modules/react-native-tab-view/lib/module/TabBar.js b/node_modules/react-native-tab-view/lib/module/TabBar.js
-index 1234567..abcdefg 100644
+index 1234567..abcdef0 100644
 --- a/node_modules/react-native-tab-view/lib/module/TabBar.js
 +++ b/node_modules/react-native-tab-view/lib/module/TabBar.js
 @@ -295,7 +295,7 @@

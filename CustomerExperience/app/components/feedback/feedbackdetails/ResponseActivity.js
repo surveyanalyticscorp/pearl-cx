@@ -105,7 +105,7 @@ const ResponseActivity = props => {
     return (
       <View>
         <View style={styles.statusRow}>
-          <Avatar title={commentBy} />
+          {commentBy && <Avatar title={commentBy} />}
           <TextLabel
             text={(commentBy ?? 'N/A').trim()}
             baseTextStyle={baseTextStyles.secondaryRegularText}

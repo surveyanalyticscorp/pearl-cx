@@ -1,6 +1,6 @@
 import React from 'react';
 import {MarginConstants} from '../../../styles/margin.constants';
-import InfoSvg from './../../../../assets/images/info.svg';
+import InfoSvg from '../../../../assets/images/Info.svg';
 
 const InfoIcon = ({size = MarginConstants.tab1_3x, tintColor}) => {
   return (

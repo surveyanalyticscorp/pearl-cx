@@ -36,7 +36,7 @@ export const DEV_BASE_URL = 'https://cxlabs3.questionpro.com/a/nativehtml';
 
 // for LIVE
 export const CLF_BASE_URL = `https://${
-  IS_DEV_MODE ? 'clfqa1' : 'clf'
+  IS_DEV_MODE ? 'clfqa' : 'clf'
 }-backend.questionpro.com/api`;
 
 export const INIT_BASE = 'https://api.questionpro.com';

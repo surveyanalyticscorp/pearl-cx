@@ -79,3 +79,13 @@ android/**/build/
  
 # testing
 /coverage
+
+# iOS build artifacts and archives
+ios/build/
+ios/**/*.xcarchive
+
+# Reanimated Android build outputs (written back into node_modules during builds)
+node_modules/react-native-reanimated/android/build/
+
+# Kotlin error logs
+android/.kotlin/
