@@ -88,9 +88,9 @@ public struct Intercept: Codable {
 // MARK: - WidgetSettings Model
 public struct WidgetSettings: Codable {
     let iconColor: String?
-    let textColor: String
-    let backgroundColor: String
-    let widgetTitle: String
+    let textColor: String?
+    let backgroundColor: String?
+    let widgetTitle: String?
     var position: String?
     var widgetWindowHeight: Int?
     var widgetWindowWidth: Int?

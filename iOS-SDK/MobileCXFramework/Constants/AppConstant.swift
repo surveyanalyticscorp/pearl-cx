@@ -59,7 +59,7 @@ public let kCoreSurveyFeedbackURL = "/a/api/v2/surveys/"
 let bundleIdentifier = Bundle.main.bundleIdentifier! as String
 public let kPackageName = bundleIdentifier
 
-public let kEnvironment = kStagingEnvironment
+public let kEnvironment = kProductionEnvironment
 
 public enum InterceptType: String {
     case PROMPT, EMBED, SURVEY_URL
