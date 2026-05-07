@@ -43,7 +43,7 @@ const SortingBottomSheet = ({
       visible={isVisible}
       onClose={onClose}
       headerComponent={
-        <QPBottomSheetHeader headerLabel="Status" onClose={onClose} />
+        <QPBottomSheetHeader headerLabel="Filter by" onClose={onClose} />
       }>
       <SelectSorting
         data={sortingList}
