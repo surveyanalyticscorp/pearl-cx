@@ -2,23 +2,21 @@ import React from 'react';
 import {
   // useWindowDimensions,
   StyleSheet,
-  Text,
   View,
   // FlatList,
   ScrollView,
   Pressable,
 } from 'react-native';
-import {Colors, buttonColors} from '../../../styles/color.constants';
-import {TextSizes} from '../../../styles/textsize.constants';
+import TextLabel from '../../../widgets/TextLabel/TextLabel';
+import {Colors} from '../../../styles/color.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
-// import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
-import {FontFamily} from '../../../styles/font.constants';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {ShowResponseTicketList} from '../FeedbackDetails';
-import {textStyles} from '../../../styles/text.styles';
+import {textStyles, baseTextStyles} from '../../../styles/text.styles';
+import {FontWeight} from '../../../styles/font.constants';
 
 const ResponseProfile = props => {
   const {panelMember, surveyDetails} = useSelector(state => state.response);
@@ -27,16 +25,41 @@ const ResponseProfile = props => {
   console.log(`FEEDBACK_DATA_SURVEY: ${JSON.stringify(surveyDetails)}`);
   console.log(`FEEDBACK_DATA_PROFILE: ${JSON.stringify(panelMember)}`);
 
+  const Count = ({text, backgroundColor, textColor}) => {
+    return (
+      <View
+        style={{
+          backgroundColor: backgroundColor,
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: PaddingConstants.halfTab,
+        }}>
+        <TextLabel
+          text={text}
+          color={textColor}
+          style={{
+            margin: 0,
+          }}
+        />
+      </View>
+    );
+  };
+
   const SurveyCounterView = ({children}) => {
     const color = Colors.accent;
     return (
       <View style={[styles.counterView, {borderColor: color}]}>
-        <Text style={[styles.counterTitle, {color: color}]}>
-          {translate('dashboard.surveys')}
-        </Text>
-        <Text style={[styles.counterText, {backgroundColor: color}]}>
-          {children}
-        </Text>
+        <TextLabel
+          color={color}
+          text={translate('dashboard.surveys')}
+          style={styles.counterTitle}
+        />
+
+        <Count
+          text={children}
+          backgroundColor={color}
+          textColor={Colors.white}
+        />
       </View>
     );
   };
@@ -45,13 +68,17 @@ const ResponseProfile = props => {
     const color = Colors.accentLight;
     return (
       <View style={[styles.counterView, {borderColor: color}]}>
-        <Text style={[styles.counterTitle, {color: color}]}>
-          {' '}
-          {translate('dashboard.tickets')}
-        </Text>
-        <Text style={[styles.counterText, {backgroundColor: color}]}>
-          {children}
-        </Text>
+        <TextLabel
+          color={color}
+          text={translate('dashboard.tickets')}
+          style={styles.counterTitle}
+        />
+
+        <Count
+          text={children}
+          backgroundColor={color}
+          textColor={Colors.white}
+        />
       </View>
     );
   };
@@ -60,7 +87,7 @@ const ResponseProfile = props => {
     return (
       <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
         <SurveyCounterView>
-          {panelMember.totalSurveysResponded ?? 0}
+          {panelMember?.totalSurveysResponded ?? 0}
         </SurveyCounterView>
         <TicketCounterView>
           {responseTickets?.data?.length ?? 0}
@@ -78,9 +105,10 @@ const ResponseProfile = props => {
         }}
         style={styles.contactBox}>
         <IonIcon name="call" size={12} color={Colors.filterIconColor} />
-        <Text style={textStyles.secondaryTextAccentColor}>
-          {panelMember.phone ?? 'N/A'}
-        </Text>
+        <TextLabel
+          text={panelMember.phone ?? 'N/A'}
+          baseTextStyle={textStyles.secondaryTextAccentColor}
+        />
       </Pressable>
     );
   };
@@ -94,9 +122,9 @@ const ResponseProfile = props => {
         }}
         style={styles.contactBox}>
         <IonIcon name="mail" size={14} color={Colors.filterIconColor} />
-        <Text style={textStyles.secondaryTextAccentColor}>
+        <TextLabel baseTextStyle={textStyles.secondaryTextAccentColor}>
           {panelMember.emailAddress ?? 'N/A'}
-        </Text>
+        </TextLabel>
       </Pressable>
     );
   };
@@ -106,12 +134,12 @@ const ResponseProfile = props => {
       <View
         testID="name-details"
         style={{marginVertical: MarginConstants.tab1}}>
-        <Text style={textStyles.secondaryTextBold}>
+        <TextLabel baseTextStyle={textStyles.secondaryTextBold}>
           {translate('profile.name')}
-        </Text>
-        <Text style={textStyles.secondaryText}>
+        </TextLabel>
+        <TextLabel baseTextStyle={textStyles.secondaryText}>
           {panelMember.name ?? 'N/A'}
-        </Text>
+        </TextLabel>
       </View>
     );
   };
@@ -119,9 +147,9 @@ const ResponseProfile = props => {
   const RenderContactDetails = () => {
     return (
       <View style={{marginVertical: MarginConstants.tab2}}>
-        <Text style={textStyles.secondaryTextBold}>
+        <TextLabel baseTextStyle={textStyles.secondaryTextBold}>
           {translate('profile.contact_information')}
-        </Text>
+        </TextLabel>
         <RenderPhoneNumber />
         <RenderEmailAddress />
       </View>
@@ -130,12 +158,12 @@ const ResponseProfile = props => {
   const RenderDateDetails = () => {
     return (
       <View style={{marginVertical: MarginConstants.tab1}}>
-        <Text style={textStyles.secondaryTextBold}>
+        <TextLabel baseTextStyle={textStyles.secondaryTextBold}>
           {translate('profile.date')}
-        </Text>
-        <Text style={textStyles.secondaryText}>
+        </TextLabel>
+        <TextLabel baseTextStyle={textStyles.secondaryText}>
           {data.surveyTakenDate ?? 'N/A'}
-        </Text>
+        </TextLabel>
       </View>
     );
   };
@@ -143,9 +171,9 @@ const ResponseProfile = props => {
   const ProfileDetails = () => {
     return (
       <View style={{margin: MarginConstants.tab2}}>
-        <Text style={styles.profileHeader}>
+        <TextLabel baseTextStyle={baseTextStyles.largeMediumText}>
           {translate('profile.profile_details')}
-        </Text>
+        </TextLabel>
         <View style={styles.border} />
 
         <View style={{marginHorizontal: MarginConstants.tab2}}>
@@ -186,53 +214,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: 'row',
     width: '25%',
-    margin: MarginConstants.tab4,
-    alignItems: 'baseline',
-  },
-  ticketCounterView: {
-    borderRadius: 2,
-    borderColor: Colors.accentLight,
-    borderWidth: 1,
-    flexDirection: 'row',
-    width: '20%',
-    margin: MarginConstants.tab4,
-    alignItems: 'baseline',
+    margin: MarginConstants.tab1_4x,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   counterTitle: {
-    fontSize: TextSizes.secondary,
     textAlign: 'center',
     flex: 1,
-    padding: PaddingConstants.halfTab,
-  },
-  ticketCounterTitle: {
-    fontSize: TextSizes.secondary,
-    fontWeight: 'bold',
-    color: Colors.accentLight,
-    textAlign: 'center',
-    flex: 1,
-    padding: PaddingConstants.halfTab,
+    paddingHorizontal: PaddingConstants.halfTab,
   },
   counterText: {
-    fontSize: TextSizes.secondary,
-    color: Colors.white,
-    backgroundColor: Colors.accent,
     textAlign: 'center',
     padding: PaddingConstants.halfTab,
-  },
-  profileHeader: {
-    fontSize: TextSizes.largeText,
-    fontWeight: 'bold',
-    color: Colors.filterIconColor,
-  },
-  secondaryTitle: {
-    fontSize: TextSizes.secondary,
-    color: Colors.filterIconColor,
-    fontWeight: 'bold',
-  },
-  secondaryText: {
-    fontSize: TextSizes.secondary,
-    color: Colors.filterIconColor,
-    fontWeight: '900',
   },
   contactBox: {
     flexDirection: 'row',
@@ -240,13 +233,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: PaddingConstants.halfTab,
     alignItems: 'center',
     alignContent: 'center',
-  },
-
-  contactText: {
-    fontSize: TextSizes.secondary,
-    color: Colors.accentLight,
-    fontFamily: FontFamily.regular,
-
-    marginHorizontal: MarginConstants.tab1,
   },
 });

@@ -1,6 +1,6 @@
 import {Dimensions, Platform, StyleSheet} from 'react-native';
 import {MarginConstants} from './margin.constants';
-import {FontFamily} from './font.constants';
+import {FontFamily, FontWeight} from './font.constants';
 import {TextSizes} from './textsize.constants';
 import {Colors} from './color.constants';
 
@@ -208,10 +208,11 @@ export const textStyles = StyleSheet.create({
     color: Colors.accentLight,
   },
   secondaryTextBold: {
-    ...baseTextStyles.secondaryRegularText,
+    fontFamily: FontFamily.bold,
+    fontSize: TextSizes.secondary,
     marginHorizontal: MarginConstants.halfTab,
     color: Colors.filterIconColor,
-    fontWeight: 'bold',
+    fontWeight: FontWeight.bold,
   },
   optionText: {
     fontFamily: FontFamily.regular,
