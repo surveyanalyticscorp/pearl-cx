@@ -11,15 +11,8 @@ import {
   getPriorityById,
   getStatusById,
   getTicketTypeById,
+  taglist,
 } from '../../Utils/TicketUtils';
-
-export const taglist = [
-  'status',
-  'priority',
-  'type',
-  // 'showMyTickets',
-  'assignToId',
-];
 
 const ShowFilterTag = ({handleFilterTag, filterData}) => {
   let [list, setList] = useState([]);

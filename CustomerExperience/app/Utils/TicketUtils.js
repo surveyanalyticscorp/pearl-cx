@@ -2,6 +2,8 @@ import React, {Image} from 'react';
 import {ResponsesIcon, RenderStatusIcon} from '../routes/commonUI/CommonUI';
 import StringUtils from './StringUtils';
 import {translate} from './MultilinguaUtils';
+import moment from 'moment';
+import {DMYFORMAT, YMDFORMAT} from './AppConstants';
 
 export const wordsToBold = [
   'HIGH',
@@ -315,3 +317,55 @@ export const sortingList = [
 export const removeItemFromArray = (arr = [], index) => {
   return arr.splice(index, 1);
 };
+
+export const taglist = ['status', 'priority', 'type', 'assignToId'];
+
+export const convertDateToYMDFORMAT = date =>
+  moment(date, DMYFORMAT).format(YMDFORMAT);
+
+export const getFilterCount = filterState => {
+  let count = 0;
+  for (let tag of taglist) {
+    if (filterState.hasOwnProperty(tag) && filterState[tag]) {
+      if (filterState[tag].length > 0) {
+        count++;
+      }
+    }
+  }
+  return count;
+};
+
+export const clearPriorityFilter = () =>
+  priorityList.map(value => ({...value, isChecked: false}));
+
+export const clearStatusFilter = () =>
+  statusList.map(value => ({...value, isChecked: false}));
+
+export const clearTypeFilter = () =>
+  ticketTypeList.map(value => ({...value, isChecked: false}));
+
+export const clearAssignToIdFilter = () => [];
+
+export const getIds = items =>
+  items
+    .filter(item => item.isChecked === true)
+    .map(id => id.id)
+    .toString();
+
+export const getNames = items =>
+  items
+    .filter(item => item.isChecked === true)
+    .map(item => item.name)
+    .toString();
+
+export const createFilterState = (item, getIdsFunction) => ({
+  pageNumber: 1,
+  status: getIdsFunction(item.status) ?? '',
+  priority: getIdsFunction(item.priority) ?? '',
+  assignToId: item.assignToId,
+  type: getIdsFunction(item.type) ?? '',
+  tags: getNames(item.tags) ?? '',
+});
+
+export const wait = timeout =>
+  new Promise(resolve => setTimeout(resolve, timeout));

@@ -9,9 +9,9 @@ import {
 } from '@testing-library/react-native';
 import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
-import ClosedLoop, {
+import ClosedLoop, {SearchBox} from './ClosedLoop';
+import {
   getFilterCount,
-  SearchBox,
   convertDateToYMDFORMAT,
   clearPriorityFilter,
   clearStatusFilter,
@@ -19,7 +19,7 @@ import ClosedLoop, {
   clearAssignToIdFilter,
   getIds,
   createFilterState,
-} from './ClosedLoop';
+} from '../../Utils/TicketUtils';
 import {mockNavigate} from '@react-navigation/native';
 
 const mockStore = configureStore([]);
