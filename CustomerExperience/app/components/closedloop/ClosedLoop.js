@@ -39,6 +39,7 @@ import {baseTextStyles} from '../../styles/text.styles';
 import {useNavigation} from '@react-navigation/native';
 import {NoTicketFound} from './NoTicketFound';
 import {showSuccessFlashMessage} from '../../Utils/Utility';
+import {VerticalSpaceBox} from '../../widgets/SpaceBox';
 
 export const SearchIcon = () => {
   return (
@@ -502,7 +503,7 @@ export default function ClosedLoop(props) {
           onPressFilter={openFilter}
           filterCount={getFilterCount(filterState)}
         />
-
+        <VerticalSpaceBox />
         {ticketList.length > 0 ? (
           <SearchBox
             onResetSearch={onResetSearch}
