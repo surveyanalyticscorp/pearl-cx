@@ -275,3 +275,15 @@ export const updateTags = tags => ({
 export const clearTagFilter = () => ({
   type: CLEAR_TAG_FILTER,
 });
+
+export const SAVE_TICKET_FILTER_DATA = 'SAVE_TICKET_FILTER_DATA';
+export const CLEAR_TICKET_FILTER_DATA = 'CLEAR_TICKET_FILTER_DATA';
+
+export const saveTicketFilterData = filterData => ({
+  type: SAVE_TICKET_FILTER_DATA,
+  payload: filterData,
+});
+
+export const clearTicketFilterData = () => ({
+  type: CLEAR_TICKET_FILTER_DATA,
+});

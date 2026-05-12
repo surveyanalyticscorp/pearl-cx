@@ -10,7 +10,7 @@ const useSegmentList = () => {
 
   const defaultParams = {
     pageOffset: 0,
-    perPage: 100,
+    perPage: 256,
     segmentName: '',
     ownerID,
   };

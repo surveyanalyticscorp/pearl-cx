@@ -13,7 +13,11 @@ import {
   getClosedLoopOwnerDetails,
   getClosedLoopTicketList,
 } from '../../redux/actions/dashboard.actions';
-import {convertDateToYMDFORMAT, getFilterCount, wait} from '../../Utils/TicketUtils';
+import {
+  convertDateToYMDFORMAT,
+  getFilterCount,
+  wait,
+} from '../../Utils/TicketUtils';
 import {translate} from '../../Utils/MultilinguaUtils';
 import {resetDeleteTicketStatus} from '../../redux/actions/closedloop.actions';
 import {useNavigation} from '@react-navigation/native';
@@ -47,6 +51,7 @@ export default function ClosedLoop(props) {
     useState(false);
 
   const fall = useRef(new Animated.Value(1)).current;
+  const isFirstRender = useRef(true);
 
   const {
     filterState,
@@ -81,7 +86,11 @@ export default function ClosedLoop(props) {
   }, [createTicketResponse]);
 
   useEffect(() => {
-    resetFilterState(range);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    resetFilter(range);
   }, [currentSegment]);
 
   const makeAPICall = () => {

@@ -34,6 +34,8 @@ import {
   GET_TAGLIST_RECEIVED,
   UPDATE_SINGLE_TAG,
   CLEAR_TAG_FILTER,
+  SAVE_TICKET_FILTER_DATA,
+  CLEAR_TICKET_FILTER_DATA,
 } from '../actions/closedloop.actions';
 import {
   CLEAR_CLOSED_LOOP_TICKET_DETAILS,
@@ -116,7 +118,7 @@ const initialState = {
   allOwnersDetails: {},
   currentSegment: {},
   currentFeedback: {},
-  ticketFilter: {},
+  ticketFilter: null,
   ticket: {},
   ticketTags: [],
   ticketComments: [],
@@ -618,6 +620,14 @@ const dashboardReducer = (state = initialState, action) => {
 
     case GET_TAGLIST_RECEIVED: {
       return {...state, ticketTags: getTags(state.ticketTags, action.response)};
+    }
+
+    case SAVE_TICKET_FILTER_DATA: {
+      return {...state, ticketFilter: action.payload};
+    }
+
+    case CLEAR_TICKET_FILTER_DATA: {
+      return {...state, ticketFilter: null};
     }
 
     default: {

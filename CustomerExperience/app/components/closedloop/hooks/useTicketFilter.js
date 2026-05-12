@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   clearAssignToIdFilter,
   clearPriorityFilter,
@@ -12,14 +12,22 @@ import {
   statusList,
   ticketTypeList,
 } from '../../../Utils/TicketUtils';
+import {
+  clearTagFilter,
+  clearTicketFilterData,
+  saveTicketFilterData,
+} from '../../../redux/actions/closedloop.actions';
 
 const ITEMS_PER_PAGE = 100;
 
 const useTicketFilter = () => {
+  const dispatch = useDispatch();
   const {feedbackApiKey, userID} = useSelector(state => state.global.userInfo);
   const {range} = useSelector(state => state.global);
   const owners = useSelector(state => state.dashboard.ownerDetails.owners);
   const statusId = useSelector(state => state.global.statusId);
+  const savedFilterData = useSelector(state => state.dashboard.ticketFilter);
+  const ticketTags = useSelector(state => state.dashboard.ticketTags);
 
   const initialFilterState = useMemo(
     () => ({
@@ -52,8 +60,28 @@ const useTicketFilter = () => {
 
   const [pageNumber, setPageNumber] = useState(1);
   const [searchText, setSearchText] = useState('');
-  const [filterState, setFilterState] = useState(initialFilterState);
-  const [filterData, setFilterData] = useState(() => sampleFilterData());
+  const [filterState, setFilterState] = useState(() => {
+    if (savedFilterData) {
+      const restored = createFilterState(
+        {...savedFilterData, tags: ticketTags ?? []},
+        getIds,
+      );
+      return {...initialFilterState, ...restored};
+    }
+    return initialFilterState;
+  });
+  const [filterData, setFilterData] = useState(() => {
+    if (savedFilterData) {
+      return {
+        ...sampleFilterData(),
+        status: savedFilterData.status,
+        priority: savedFilterData.priority,
+        type: savedFilterData.type,
+        assignToId: savedFilterData.assignToId,
+      };
+    }
+    return sampleFilterData();
+  });
 
   const resetFilterState = useCallback(range_ => {
     setPageNumber(1);
@@ -98,13 +126,28 @@ const useTicketFilter = () => {
     setFilterData(item);
     const newFilterState = createFilterState(item, getIds);
     setFilterState(state => ({...state, ...newFilterState}));
-  }, []);
+    dispatch(saveTicketFilterData({
+      status: item.status,
+      priority: item.priority,
+      type: item.type,
+      assignToId: item.assignToId,
+    }));
+  }, [dispatch]);
 
-  const resetFilter = useCallback(() => {
-    setFilterState(initialFilterState);
+  const resetFilter = useCallback((range_) => {
+    const freshState = {
+      ...initialFilterState,
+      ...(range_ ? {
+        fromDate: convertDateToYMDFORMAT(range_.startDate),
+        toDate: convertDateToYMDFORMAT(range_.endDate),
+      } : {}),
+    };
+    setFilterState(freshState);
     setFilterData(sampleFilterData());
     setSearchText('');
-  }, [initialFilterState, sampleFilterData]);
+    dispatch(clearTicketFilterData());
+    dispatch(clearTagFilter());
+  }, [initialFilterState, sampleFilterData, dispatch]);
 
   const onResetSearch = useCallback(() => {
     setSearchText('');
