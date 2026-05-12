@@ -1,11 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Keyboard,
-  StyleSheet,
-  TextInput,
-  Pressable,
-  View,
-} from 'react-native';
+import {Keyboard, StyleSheet, TextInput, Pressable, View} from 'react-native';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../../styles/color.constants';
 import {FontFamily, FontWeight} from '../../styles/font.constants';
@@ -34,7 +28,7 @@ const SegmentSearchHeader = ({onSearch, onClear}) => {
           testID="search-input"
           style={[styles.searchInput, {flex: 1}]}
           value={searchText}
-          placeholder={translate('select_segment.search_segment_name')}
+          placeholder={'Search using segment name'}
           returnKeyType={'search'}
           placeholderTextColor={Colors.borderColor}
           onChangeText={handleChangeText}

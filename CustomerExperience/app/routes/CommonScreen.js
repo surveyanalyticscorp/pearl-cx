@@ -14,7 +14,6 @@ import TicketOverview from '../components/dashboard/ticketManagement/TicketOverv
 import TicketComments from '../components/dashboard/ticketManagement/TicketComments';
 import DetractorScenes from '../components/dashboard/components/DetractorScenes';
 import {translate} from '../Utils/MultilinguaUtils';
-import SelectSegmentScreen from '../components/SelectSegmentScreen';
 
 import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket';
 import TicketDetails from '../components/closedloop/TicketDetails';
@@ -301,15 +300,6 @@ const CommonScreens = RootStack => {
       })}
     />,
 
-    <RootStack.Screen
-      key={translate('dashboard.segment')}
-      name={translate('dashboard.segment')}
-      component={SelectSegmentScreen}
-      options={({navigation, route}) => ({
-        headerShown: false,
-        // headerLeft: (props) => <HeaderBackLeft {...props} route={route} />,
-      })}
-    />,
     <RootStack.Screen
       key={translate('responses.new_ticket')}
       name={translate('responses.new_ticket')}

@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {Text, View, Pressable, StyleSheet} from 'react-native';
 import {Colors} from '../styles/color.constants';
-import {TextSizes} from '../styles/textsize.constants';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -9,11 +8,14 @@ import {
   setSegment,
 } from '../redux/actions/dashboard.actions';
 import {useEffect} from 'react';
-import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../Utils/MultilinguaUtils';
 import {MarginConstants} from '../styles/margin.constants';
 import SegmentText from './SegmentText';
 import {IonIcon} from '../Utils/IconUtils';
+import {StackActions, useNavigation} from '@react-navigation/native';
+import QPBottomSheet from './closedloop/takeaction/QPBottomSheet';
+import QPBottomSheetHeader from './closedloop/takeaction/QPBottomSheetHeader';
+import {SegmentSheetContent} from './selectSegmentScreen/SegmentSheetContent';
 
 export const NotiificationIcon = () => {
   const navigation = useNavigation();
@@ -28,7 +30,6 @@ export const NotiificationIcon = () => {
       onPress={() => {
         const action = StackActions.push('notifications');
         navigation.dispatch(action);
-        // navigation.navigate('Notifications');
       }}
       style={styles.notificationContainer}>
       <IonIcon name={'notifications'} size={22} color={Colors.white} />
@@ -53,7 +54,6 @@ const RenderSegmentSelector = ({
         screenName={screenName}
         segmentName={currentSegment.currentSegment ?? ''}
       />
-
       <SimpleLineIcon name={'arrow-down'} size={15} color={Colors.darkGrey} />
     </Pressable>
   ) : (
@@ -68,16 +68,14 @@ const RenderSegmentSelector = ({
 
 const SegmentSelector = props => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
   const authToken = useSelector(state => state.global.authToken);
   const segmentList = useSelector(
     state => state.dashboard.segmentDetails.segments,
   );
   const currentSegment = useSelector(state => state.dashboard.currentSegment);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    console.log('SELECTED SEGMENT__', JSON.stringify(props));
-
     if (currentSegment.currentSegmentID) {
       dispatch(
         getClosedLoopOwnerDetails(authToken, {
@@ -87,33 +85,47 @@ const SegmentSelector = props => {
     }
   }, [currentSegment]);
 
-  const onPressHandle = () => {
-    const pushAction = StackActions.push(translate('dashboard.segment'), {
-      currentSegmentId: currentSegment.currentSegmentID,
-      setSegmentSelection: setSegmentSelection,
-    });
+  const closeSheet = useCallback(() => setVisible(false), []);
 
-    navigation.dispatch(pushAction);
-  };
-
-  const setSegmentSelection = segment_ => {
-    dispatch(setSegment(segment_));
-  };
+  const onSegmentSelected = useCallback(
+    segment_ => {
+      dispatch(setSegment(segment_));
+      closeSheet();
+    },
+    [dispatch, closeSheet],
+  );
 
   return (
-    <View style={styles.titleWrapper}>
-      <RenderSegmentSelector
-        segmentList={segmentList}
-        screenName={props.screenName}
-        currentSegment={currentSegment}
-        onPress={onPressHandle}
-      />
-    </View>
+    <>
+      <View style={styles.titleWrapper}>
+        <RenderSegmentSelector
+          segmentList={segmentList}
+          screenName={props.screenName}
+          currentSegment={currentSegment}
+          onPress={() => setVisible(true)}
+        />
+      </View>
+
+      <QPBottomSheet
+        visible={visible}
+        onClose={closeSheet}
+        bottomSheetHeight="80%"
+        headerComponent={
+          <QPBottomSheetHeader
+            headerLabel={translate('dashboard.segment')}
+            onClose={closeSheet}
+          />
+        }>
+        <SegmentSheetContent
+          currentSegmentId={currentSegment.currentSegmentID}
+          onSelect={onSegmentSelected}
+        />
+      </QPBottomSheet>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
   titleWrapper: {
     flex: 1,
   },
