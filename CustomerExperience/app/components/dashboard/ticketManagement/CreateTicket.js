@@ -65,6 +65,7 @@ import {getApiValidationErrorMessage} from '../../../Utils/ErrorValidationUtils'
 import {QPTransparentSpinner} from '../../../widgets/QPTransparentSpinner';
 import QPBottomSheet from '../../closedloop/takeaction/QPBottomSheet';
 import QPBottomSheetHeader from '../../closedloop/takeaction/QPBottomSheetHeader';
+import useSegmentList from '../../../hooks/useSegmentList';
 
 const INPUTTYPES = {
   EMAIL: 'EMAIL',
@@ -348,6 +349,7 @@ export default function CreateTicket(props) {
   );
 
   const dispatch = useDispatch();
+  useSegmentList();
   const [showLoading, setLoading] = useState(false);
   const [errorInputType, setErrorInputType] = useState(new Map());
   const [ticketState, setTicketState] = useState({
