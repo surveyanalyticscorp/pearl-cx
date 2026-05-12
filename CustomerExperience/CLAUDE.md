@@ -115,6 +115,14 @@ API endpoints and app-wide constants are in `app/config/Constant.js`. Never hard
 - Central router: `app/routes/appRouter.js` · Drawer: `app/components/view/DrawerContent.js`
 - Never hardcode screen names — always use screen name constants
 
+#### Segment Picker — bottom sheet, not a screen
+The global segment selector (`app/components/SegmentSelector.js`) appears in the header of Dashboard, Responses, and ClosedLoop. Tapping it opens a `QPBottomSheet` inline — it is **not** a navigation screen and has **no route registration**. Do not add it back to `CommonScreen.js`.
+
+Content lives in `app/components/selectSegmentScreen/`:
+- `SegmentSheetContent.js` — FlatList wired to `useSegmentList`, owns selection logic
+- `SegmentSearchHeader.js` — search input with clear button
+- `SegmentRow.js` — individual segment row
+
 ### Styling Rules
 
 - Use **`StyleSheet.create()`** from React Native for ALL styles
