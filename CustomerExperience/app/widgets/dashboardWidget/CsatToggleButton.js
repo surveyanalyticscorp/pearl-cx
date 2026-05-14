@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {toggleCsatView} from '../../redux/actions/dashboard.actions';
 import TextLabel from '../TextLabel/TextLabel';
@@ -19,7 +19,10 @@ const CsatToggleButton = () => {
   };
 
   return (
-    <View style={styles.csatToggleButtonView}>
+    <Pressable
+      style={styles.csatToggleButtonView}
+      testID="csat-toggle-button"
+      onPress={toggleView}>
       <View style={styles.switchContainer}>
         <TextLabel
           text={'Top Box'}
@@ -37,13 +40,15 @@ const CsatToggleButton = () => {
             style={styles.customSwitch}
           />
         </View>
-
         <TextLabel
           text={'Mean CSAT'}
           baseTextStyle={styles.csatToggleButtonText}
         />
+        <Text testID="csat-toggle-button-text" style={styles.csatToggleButtonLabel}>
+          {label}
+        </Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 
@@ -92,5 +97,9 @@ const styles = StyleSheet.create({
   },
   customSwitch: {
     transform: [{scaleX: 0.8}, {scaleY: 0.8}],
+  },
+  csatToggleButtonLabel: {
+    ...baseTextStyles.secondaryRegularText,
+    color: Colors.filterIconColor,
   },
 });

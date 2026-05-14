@@ -26,7 +26,7 @@ const Label = () => {
   const {isCsatViewTopBox} = useSelector(state => state.dashboard);
 
   return (
-    <Text testID="csat-score-label" style={[styles.csatScoreLabel]}>
+    <Text testID="csat-score-mode" style={[styles.csatScoreLabel]}>
       {isCsatViewTopBox ? 'Mean CSAT' : 'Top Box'}
     </Text>
   );

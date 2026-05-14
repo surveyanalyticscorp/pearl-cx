@@ -1,6 +1,6 @@
 'use strict';
 
-import React, {Component} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 
 import {
   StyleSheet,
@@ -28,191 +28,331 @@ const TOUCHABLE_ELEMENTS = [
   'TouchableWithoutFeedback',
   'TouchableNativeFeedback',
 ];
+
 let dropDownWidth = 100;
-let noOfElementToBeDisplayed = 5;
 
-export default class ModalDropdown extends Component {
-  static propTypes = {
-    disabled: PropTypes.bool,
-    scrollEnabled: PropTypes.bool,
-    defaultIndex: PropTypes.number,
-    defaultValue: PropTypes.string,
-    options: PropTypes.array,
+const ModalDropdown = ({
+  disabled = false,
+  scrollEnabled = true,
+  defaultIndex = -1,
+  defaultValue = 'Please select...',
+  options = null,
+  animated = true,
+  showsVerticalScrollIndicator = true,
+  keyboardShouldPersistTaps = 'never',
+  accessible,
+  style,
+  textStyle,
+  dropdownStyle,
+  dropdownTextStyle,
+  dropdownTextHighlightStyle,
+  adjustFrame,
+  renderRow,
+  renderSeparator,
+  renderButtonText,
+  onDropdownWillShow,
+  onDropdownWillHide,
+  onSelect,
+  arrowIconColor,
+  isRTL,
+  children,
+  ...rest
+}) => {
+  const buttonRef = useRef(null);
+  const buttonFrameRef = useRef(null);
+  const nextValueRef = useRef(null);
+  const nextIndexRef = useRef(null);
+  const flatListRef = useRef(null);
 
-    accessible: PropTypes.bool,
-    animated: PropTypes.bool,
-    showsVerticalScrollIndicator: PropTypes.bool,
-    keyboardShouldPersistTaps: PropTypes.string,
+  const [accessibleState] = useState(!!accessible);
+  const [loading, setLoading] = useState(!options);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [buttonText, setButtonText] = useState(defaultValue);
+  const [selectedIndex, setSelectedIndex] = useState(defaultIndex);
 
-    style: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.object,
-      PropTypes.array,
-    ]),
-    textStyle: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.object,
-      PropTypes.array,
-    ]),
-    dropdownStyle: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.object,
-      PropTypes.array,
-    ]),
-    dropdownTextStyle: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.object,
-      PropTypes.array,
-    ]),
-    dropdownTextHighlightStyle: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.object,
-      PropTypes.array,
-    ]),
+  useEffect(() => {
+    setButtonText(defaultValue);
+  }, [defaultValue]);
 
-    adjustFrame: PropTypes.func,
-    renderRow: PropTypes.func,
-    renderSeparator: PropTypes.func,
-    renderButtonText: PropTypes.func,
+  const updatePosition = useCallback(callback => {
+    if (buttonRef.current?.measure) {
+      buttonRef.current.measure((fx, fy, width, height, px, py) => {
+        buttonFrameRef.current = {x: px, y: py, w: width, h: height};
+        callback?.();
+      });
+    }
+  }, []);
 
-    onDropdownWillShow: PropTypes.func,
-    onDropdownWillHide: PropTypes.func,
-    onSelect: PropTypes.func,
-  };
+  const show = useCallback(() => {
+    updatePosition(() => setShowDropdown(true));
+  }, [updatePosition]);
 
-  static defaultProps = {
-    disabled: false,
-    scrollEnabled: true,
-    defaultIndex: -1,
-    defaultValue: 'Please select...',
-    options: null,
-    animated: true,
-    dropDownTag: 0,
-    showsVerticalScrollIndicator: true,
-    keyboardShouldPersistTaps: 'never',
-  };
+  const hide = useCallback(() => {
+    setShowDropdown(false);
+  }, []);
 
-  constructor(props) {
-    super(props);
+  const select = useCallback(
+    idx => {
+      let value = defaultValue;
+      if (idx == null || !options || idx >= options.length) {
+        idx = defaultIndex;
+      }
+      if (idx >= 0) {
+        value = renderButtonText
+          ? renderButtonText(options[idx])
+          : options[idx].toString();
+      }
+      nextValueRef.current = value;
+      nextIndexRef.current = idx;
+      setButtonText(value);
+      setSelectedIndex(idx);
+    },
+    [defaultValue, options, defaultIndex, renderButtonText],
+  );
 
-    this._button = null;
-    this._buttonFrame = null;
-    this._nextValue = null;
-    this._nextIndex = null;
+  const onLayout = useCallback(event => {
+    dropDownWidth = event.nativeEvent.layout.width;
+  }, []);
 
-    this.state = {
-      accessible: !!props.accessible,
-      loading: !props.options,
-      showDropdown: false,
-      buttonText: props.defaultValue,
-      selectedIndex: props.defaultIndex,
+  const onButtonPress = useCallback(() => {
+    if (!onDropdownWillShow || onDropdownWillShow() !== false) {
+      show();
+    }
+  }, [onDropdownWillShow, show]);
+
+  const onRequestClose = useCallback(() => {
+    if (!onDropdownWillHide || onDropdownWillHide() !== false) {
+      hide();
+    }
+  }, [onDropdownWillHide, hide]);
+
+  const onModalPress = useCallback(() => {
+    if (!onDropdownWillHide || onDropdownWillHide() !== false) {
+      hide();
+    }
+  }, [onDropdownWillHide, hide]);
+
+  const calcPosition = useCallback(() => {
+    const {width: windowWidth, height: windowHeight} = Dimensions.get('window');
+    const frame = buttonFrameRef.current;
+
+    const dropdownHeight =
+      options.length < 5
+        ? (MarginConstants.tab4 + StyleSheet.hairlineWidth) * options.length
+        : (MarginConstants.tab4 + StyleSheet.hairlineWidth) * 5;
+
+    const bottomSpace = windowHeight - frame.y - frame.h;
+    const rightSpace = windowWidth - frame.x;
+    const showInBottom =
+      bottomSpace >= dropdownHeight || bottomSpace >= frame.y;
+    const showInLeft = rightSpace >= frame.x;
+
+    const positionStyle = {
+      height: dropdownHeight,
+      top: showInBottom
+        ? frame.y + frame.h
+        : Math.max(0, frame.y - dropdownHeight),
     };
-  }
 
-  componentWillUnmount() {
-    this.flatListRef = null;
-  }
+    if (showInLeft) {
+      positionStyle.left = frame.x;
+    } else {
+      const dropdownWidth =
+        (dropdownStyle && StyleSheet.flatten(dropdownStyle).width) ||
+        (style && StyleSheet.flatten(style).width) ||
+        -1;
+      if (dropdownWidth !== -1) {
+        positionStyle.width = dropdownWidth;
+      }
+      positionStyle.right = rightSpace - frame.w;
+    }
 
-  componentDidUpdate(prevProps) {
-    let {buttonText, selectedIndex} = this.state;
-    const {defaultIndex, defaultValue, options} = this.props;
+    return adjustFrame ? adjustFrame(positionStyle) : positionStyle;
+  }, [options, dropdownStyle, style, adjustFrame]);
 
-    if (prevProps.selectedIndex !== this.props.selectedIndex) {
-      buttonText = this._nextValue == null ? buttonText : this._nextValue;
-      selectedIndex = this._nextIndex == null ? selectedIndex : this._nextIndex;
-      if (selectedIndex < 0) {
-        selectedIndex = defaultIndex;
-        if (selectedIndex < 0) {
-          buttonText = defaultValue;
+  const onRowPress = useCallback(
+    (rowData, rowID, highlightRow) => {
+      if (!onSelect || onSelect(rowID, rowData) !== false) {
+        highlightRow.highlight(rowID);
+        const value =
+          (renderButtonText && renderButtonText(rowData)) ||
+          rowData.toString();
+        nextValueRef.current = value;
+        nextIndexRef.current = rowID;
+        setButtonText(value);
+        setSelectedIndex(rowID);
+      }
+      if (!onDropdownWillHide || onDropdownWillHide() !== false) {
+        setShowDropdown(false);
+      }
+    },
+    [onSelect, renderButtonText, onDropdownWillHide],
+  );
+
+  const renderSeparatorDefault = useCallback(
+    (sectionID, rowID) => (
+      <View
+        style={[styles.separator, {backgroundColor: Colors.darkerGrey}]}
+        key={`spr_${rowID}`}
+      />
+    ),
+    [],
+  );
+
+  const renderItem = useCallback(
+    ({item, index, separators}) => {
+      const key = `row_${index}`;
+      const highlighted = index === selectedIndex;
+      const row = !renderRow ? (
+        <Text
+          style={[
+            styles.rowText,
+            dropdownTextStyle,
+            highlighted && styles.highlightedRowText,
+            highlighted && dropdownTextHighlightStyle,
+          ]}>
+          {item}
+        </Text>
+      ) : (
+        renderRow(item, index, highlighted)
+      );
+      const preservedProps = {
+        key,
+        accessible: accessibleState,
+        onPress: () => onRowPress(item, index, separators),
+      };
+      if (TOUCHABLE_ELEMENTS.find(name => name === row.type.displayName)) {
+        const props = {...row.props, key: preservedProps.key, onPress: preservedProps.onPress};
+        const {children: rowChildren} = row.props;
+        switch (row.type.displayName) {
+          case 'TouchableHighlight':
+            return (
+              <TouchableHighlight {...props}>{rowChildren}</TouchableHighlight>
+            );
+          case 'Pressable':
+            return <Pressable {...props}>{rowChildren}</Pressable>;
+          case 'TouchableWithoutFeedback':
+            return (
+              <TouchableWithoutFeedback {...props}>
+                {rowChildren}
+              </TouchableWithoutFeedback>
+            );
+          case 'TouchableNativeFeedback':
+            return (
+              <TouchableNativeFeedback {...props}>
+                {rowChildren}
+              </TouchableNativeFeedback>
+            );
+          default:
+            break;
         }
       }
-      this._nextValue = null;
-      this._nextIndex = null;
+      return <TouchableHighlight {...preservedProps}>{row}</TouchableHighlight>;
+    },
+    [
+      selectedIndex,
+      renderRow,
+      dropdownTextStyle,
+      dropdownTextHighlightStyle,
+      accessibleState,
+      onRowPress,
+    ],
+  );
 
-      this.setState({
-        loading: !options,
-        buttonText,
-        selectedIndex,
-      });
-    }
-
-    if (prevProps.defaultValue !== defaultValue) {
-      this.setState({
-        buttonText: defaultValue,
-      });
-    }
-  }
-
-  render() {
+  const renderDropdownList = useCallback(() => {
+    const initialIndex = options.findIndex(item => item === defaultValue);
     return (
-      <View {...this.props}>
-        {this._renderButton()}
-        {this._renderModal()}
-      </View>
+      <FlatList
+        ref={flatListRef}
+        data={options}
+        scrollEnabled={scrollEnabled}
+        style={styles.list}
+        keyExtractor={(item, i) => `key-${i}`}
+        renderItem={renderItem}
+        ItemSeparatorComponent={renderSeparator || renderSeparatorDefault}
+        automaticallyAdjustContentInsets={false}
+        showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+        keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+        getItemLayout={(data, i) => ({
+          length: MarginConstants.tab4,
+          offset: MarginConstants.tab4 * i,
+          index: i,
+        })}
+        initialScrollIndex={initialIndex}
+        extraData={defaultValue}
+      />
     );
-  }
+  }, [
+    options,
+    scrollEnabled,
+    renderItem,
+    renderSeparator,
+    renderSeparatorDefault,
+    showsVerticalScrollIndicator,
+    keyboardShouldPersistTaps,
+    defaultValue,
+  ]);
 
-  _updatePosition(callback) {
-    if (this._button && this._button.measure) {
-      this._button.measure((fx, fy, width, height, px, py) => {
-        this._buttonFrame = {x: px, y: py, w: width, h: height};
-        callback && callback();
-      });
+  const arrowIcon = showDropdown ? 'arrow-up' : 'arrow-down';
+  const arrowColor = arrowIconColor || Colors.accent;
+  const alignContentForText = isRTL ? 'flex-end' : 'flex-start';
+  const alignContentForIcon = isRTL ? 'flex-start' : 'flex-end';
+
+  const renderModalDropdown = () => {
+    if (!showDropdown || !buttonFrameRef.current) {
+      return null;
     }
-  }
-
-  show() {
-    this._updatePosition(() => {
-      this.setState({
-        showDropdown: true,
-      });
-    });
-  }
-
-  hide() {
-    this.setState({
-      showDropdown: false,
-    });
-  }
-
-  select(idx) {
-    const {defaultValue, options, defaultIndex, renderButtonText} = this.props;
-
-    let value = defaultValue;
-    if (idx == null || !options || idx >= options.length) {
-      idx = defaultIndex;
-    }
-
-    if (idx >= 0) {
-      value = renderButtonText
-        ? renderButtonText(options[idx])
-        : options[idx].toString();
-    }
-
-    this._nextValue = value;
-    this._nextIndex = idx;
-
-    this.setState({
-      buttonText: value,
-      selectedIndex: idx,
-    });
-  }
-
-  _renderButton() {
-    const {disabled, accessible, children, textStyle, arrowIconColor, isRTL} =
-      this.props;
-    const {buttonText, showDropdown} = this.state;
-    const arrowIcon = showDropdown ? 'arrow-up' : 'arrow-down';
-    const arrowColor = arrowIconColor || Colors.accent;
-    const alignContentForText = isRTL ? 'flex-end' : 'flex-start';
-    const alignContentForIcon = isRTL ? 'flex-start' : 'flex-end';
+    const frameStyle = calcPosition();
+    const animationType = animated ? 'fade' : 'none';
     return (
+      <Modal
+        animationType={animationType}
+        visible={true}
+        transparent={true}
+        onRequestClose={onRequestClose}
+        supportedOrientations={[
+          'portrait',
+          'portrait-upside-down',
+          'landscape',
+          'landscape-left',
+          'landscape-right',
+        ]}>
+        <TouchableWithoutFeedback
+          accessible={accessibleState}
+          disabled={!showDropdown}
+          onPress={onModalPress}>
+          <View style={styles.modal}>
+            <View
+              style={[
+                styles.dropdown,
+                {
+                  width: dropDownWidth,
+                  borderColor: Colors.darkGrey,
+                  backgroundColor: Colors.white,
+                },
+                dropdownStyle,
+                frameStyle,
+              ]}>
+              {loading ? (
+                <ActivityIndicator size="small" />
+              ) : (
+                renderDropdownList()
+              )}
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  };
+
+  return (
+    <View {...rest}>
       <Pressable
-        ref={button => (this._button = button)}
+        ref={buttonRef}
         disabled={disabled}
-        accessible={accessible}
-        onPress={this._onButtonPress}
-        onLayout={this.onLayout}>
+        accessible={accessibleState}
+        onPress={onButtonPress}
+        onLayout={onLayout}>
         {children || (
           <View
             style={[
@@ -254,252 +394,53 @@ export default class ModalDropdown extends Component {
           </View>
         )}
       </Pressable>
-    );
-  }
+      {renderModalDropdown()}
+    </View>
+  );
+};
 
-  _onButtonPress = () => {
-    const {onDropdownWillShow} = this.props;
-    if (!onDropdownWillShow || onDropdownWillShow() !== false) {
-      this.show();
-    }
-  };
+ModalDropdown.propTypes = {
+  disabled: PropTypes.bool,
+  scrollEnabled: PropTypes.bool,
+  defaultIndex: PropTypes.number,
+  defaultValue: PropTypes.string,
+  options: PropTypes.array,
+  accessible: PropTypes.bool,
+  animated: PropTypes.bool,
+  showsVerticalScrollIndicator: PropTypes.bool,
+  keyboardShouldPersistTaps: PropTypes.string,
+  style: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.array,
+  ]),
+  textStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.array,
+  ]),
+  dropdownStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.array,
+  ]),
+  dropdownTextStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.array,
+  ]),
+  dropdownTextHighlightStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.array,
+  ]),
+  adjustFrame: PropTypes.func,
+  renderRow: PropTypes.func,
+  renderSeparator: PropTypes.func,
+  renderButtonText: PropTypes.func,
+  onDropdownWillShow: PropTypes.func,
+  onDropdownWillHide: PropTypes.func,
+  onSelect: PropTypes.func,
+};
 
-  onLayout = event => {
-    dropDownWidth = event.nativeEvent.layout.width;
-  };
-
-  _renderModal() {
-    const {animated, accessible, dropdownStyle} = this.props;
-    const {showDropdown, loading} = this.state;
-    if (showDropdown && this._buttonFrame) {
-      const frameStyle = this._calcPosition();
-      const animationType = animated ? 'fade' : 'none';
-      return (
-        <Modal
-          animationType={animationType}
-          visible={true}
-          transparent={true}
-          onRequestClose={this._onRequestClose}
-          supportedOrientations={[
-            'portrait',
-            'portrait-upside-down',
-            'landscape',
-            'landscape-left',
-            'landscape-right',
-          ]}>
-          <TouchableWithoutFeedback
-            accessible={accessible}
-            disabled={!showDropdown}
-            onPress={this._onModalPress}>
-            <View style={styles.modal}>
-              <View
-                style={[
-                  styles.dropdown,
-                  {
-                    width: dropDownWidth,
-                    borderColor: Colors.darkGrey,
-                    backgroundColor: Colors.white,
-                  },
-                  dropdownStyle,
-                  frameStyle,
-                ]}>
-                {loading ? this._renderLoading() : this._renderDropdown()}
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
-      );
-    }
-  }
-
-  _calcPosition() {
-    const {dropdownStyle, style, adjustFrame, options} = this.props;
-
-    const dimensions = Dimensions.get('window');
-    const windowWidth = dimensions.width;
-    const windowHeight = dimensions.height;
-
-    /*const dropdownHeight = (dropdownStyle && StyleSheet.flatten(dropdownStyle).height) ||
-            StyleSheet.flatten(styles.dropdown).height;*/
-    let dropdownHeight = null;
-    if (options.length < 5)
-      dropdownHeight =
-        (MarginConstants.tab4 + StyleSheet.hairlineWidth) * options.length;
-    else dropdownHeight = (MarginConstants.tab4 + StyleSheet.hairlineWidth) * 5;
-
-    const bottomSpace =
-      windowHeight - this._buttonFrame.y - this._buttonFrame.h;
-    const rightSpace = windowWidth - this._buttonFrame.x;
-    const showInBottom =
-      bottomSpace >= dropdownHeight || bottomSpace >= this._buttonFrame.y;
-    const showInLeft = rightSpace >= this._buttonFrame.x;
-
-    const positionStyle = {
-      height: dropdownHeight,
-      top: showInBottom
-        ? this._buttonFrame.y + this._buttonFrame.h
-        : Math.max(0, this._buttonFrame.y - dropdownHeight),
-    };
-
-    if (showInLeft) {
-      positionStyle.left = this._buttonFrame.x;
-    } else {
-      const dropdownWidth =
-        (dropdownStyle && StyleSheet.flatten(dropdownStyle).width) ||
-        (style && StyleSheet.flatten(style).width) ||
-        -1;
-      if (dropdownWidth !== -1) {
-        positionStyle.width = dropdownWidth;
-      }
-      positionStyle.right = rightSpace - this._buttonFrame.w;
-    }
-
-    return adjustFrame ? adjustFrame(positionStyle) : positionStyle;
-  }
-
-  _onRequestClose = () => {
-    const {onDropdownWillHide} = this.props;
-    if (!onDropdownWillHide || onDropdownWillHide() !== false) {
-      this.hide();
-    }
-  };
-
-  _onModalPress = () => {
-    const {onDropdownWillHide} = this.props;
-    if (!onDropdownWillHide || onDropdownWillHide() !== false) {
-      this.hide();
-    }
-  };
-
-  _renderLoading() {
-    return <ActivityIndicator size="small" />;
-  }
-
-  _renderDropdown() {
-    const {
-      scrollEnabled,
-      renderSeparator,
-      showsVerticalScrollIndicator,
-      keyboardShouldPersistTaps,
-      options,
-    } = this.props;
-    let index = this.props.options.findIndex(
-      item => item === this.props.defaultValue,
-    );
-
-    return (
-      <FlatList
-        ref={ref => {
-          this.flatListRef = ref;
-        }}
-        data={options}
-        scrollEnabled={scrollEnabled}
-        style={styles.list}
-        keyExtractor={(item, i) => `key-${i}`}
-        renderItem={this._renderItem}
-        ItemSeparatorComponent={renderSeparator || this._renderSeparator}
-        automaticallyAdjustContentInsets={false}
-        showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-        keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-        getItemLayout={(data, index) => ({
-          length: MarginConstants.tab4,
-          offset: MarginConstants.tab4 * index,
-          index,
-        })}
-        initialScrollIndex={index}
-        extraData={this.props.defaultValue}
-      />
-    );
-  }
-
-  _renderItem = ({item, index, separators}) => {
-    const {
-      renderRow,
-      dropdownTextStyle,
-      dropdownTextHighlightStyle,
-      accessible,
-    } = this.props;
-    const {selectedIndex} = this.state;
-    const key = `row_${index}`;
-    const highlighted = index === selectedIndex;
-    const row = !renderRow ? (
-      <Text
-        style={[
-          styles.rowText,
-          dropdownTextStyle,
-          highlighted && styles.highlightedRowText,
-          highlighted && dropdownTextHighlightStyle,
-        ]}>
-        {item}
-      </Text>
-    ) : (
-      renderRow(item, index, highlighted)
-    );
-    const preservedProps = {
-      key,
-      accessible,
-      onPress: () => this._onRowPress(item, index, separators),
-    };
-    if (TOUCHABLE_ELEMENTS.find(name => name === row.type.displayName)) {
-      const props = {...row.props};
-      props.key = preservedProps.key;
-      props.onPress = preservedProps.onPress;
-      const {children} = row.props;
-      switch (row.type.displayName) {
-        case 'TouchableHighlight': {
-          return <TouchableHighlight {...props}>{children}</TouchableHighlight>;
-        }
-        case 'Pressable': {
-          return <Pressable {...props}>{children}</Pressable>;
-        }
-        case 'TouchableWithoutFeedback': {
-          return (
-            <TouchableWithoutFeedback {...props}>
-              {children}
-            </TouchableWithoutFeedback>
-          );
-        }
-        case 'TouchableNativeFeedback': {
-          return (
-            <TouchableNativeFeedback {...props}>
-              {children}
-            </TouchableNativeFeedback>
-          );
-        }
-        default:
-          break;
-      }
-    }
-    return <TouchableHighlight {...preservedProps}>{row}</TouchableHighlight>;
-  };
-
-  _onRowPress(rowData, rowID, highlightRow) {
-    const {onSelect, renderButtonText, onDropdownWillHide} = this.props;
-    if (!onSelect || onSelect(rowID, rowData) !== false) {
-      highlightRow.highlight(rowID);
-      const value =
-        (renderButtonText && renderButtonText(rowData)) || rowData.toString();
-      this._nextValue = value;
-      this._nextIndex = rowID;
-      this.setState({
-        buttonText: value,
-        selectedIndex: rowID,
-      });
-    }
-    if (!onDropdownWillHide || onDropdownWillHide() !== false) {
-      this.setState({
-        showDropdown: false,
-      });
-    }
-  }
-
-  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => {
-    const key = `spr_${rowID}`;
-    return (
-      <View
-        style={[styles.separator, {backgroundColor: Colors.darkerGrey}]}
-        key={key}
-      />
-    );
-  };
-}
+export default ModalDropdown;

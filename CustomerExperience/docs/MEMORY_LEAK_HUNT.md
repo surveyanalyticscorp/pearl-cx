@@ -168,7 +168,7 @@ Sub-priority audit order (most runtime-frequent first):
 
 ### Fix: clearTimeout cleanup in SendEmail success/error useEffects
 - **Segment:** #4 — ClosedLoop Screens
-- **File(s) changed:** `app/components/closedloop/takeaction/SendEmail.js`
+- **File(s) changed:** `app/components/closedloop/sendEmail/SendEmail.js`
 - **What was leaking:** Two `useEffect` hooks called `setTimeout` without storing the timer ID, so `clearTimeout` was never called. If the bottom sheet was dismissed while a timer was in flight, the callback still fired — calling `navigation.goBack()`, `dispatch()`, and `setOverlayStatus()` on an unmounted component.
 - **The fix:** Store timer ID in `const timer = setTimeout(...)` and return `() => clearTimeout(timer)` from each `useEffect`.
 - **Test added:** —

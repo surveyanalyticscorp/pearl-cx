@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, Pressable, Platform} from 'react-native';
 import {MarginConstants} from '../styles/margin.constants';
 import {Colors} from '../styles/color.constants';
@@ -13,7 +13,6 @@ import moment from 'moment';
 import Calendar from './qp-calendar/calendar';
 
 const QPCalendar = props => {
-  let ref = useRef(null);
   let [selectedDate, setSelectedDate] = useState(props.selectedDate);
 
   let getTheme = () => {
@@ -57,7 +56,6 @@ const QPCalendar = props => {
     return (
       <View>
         <ModalDropdown
-          ref={ref}
           style={styles.modelDropdown}
           textStyle={styles.dropdownText}
           dropdownTextStyle={styles.dropdownText}
@@ -111,7 +109,7 @@ const QPCalendar = props => {
     }
   };
 
-  let renderCalendarHeader = date => {
+  let renderCalendarHeader = () => {
     let tempDate = moment(selectedDate, 'YYYY-MM-DD').format('YYYY-MMMM-DD');
     let components = tempDate.split('-');
     return (
@@ -165,7 +163,7 @@ const QPCalendar = props => {
         firstDay={1}
         hideArrows={true}
         headerStyle={styles.calendarHeader}
-        current={selectedDate} // Initially visible month
+        current={selectedDate}
         markedDates={JSON.parse(
           JSON.stringify({
             [selectedDate]: {

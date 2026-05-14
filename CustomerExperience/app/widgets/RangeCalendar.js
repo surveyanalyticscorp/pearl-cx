@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   Modal,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -23,7 +22,6 @@ import {PaddingConstants} from '../styles/padding.constants';
 import {TextSizes} from '../styles/textsize.constants';
 import {FontFamily} from '../styles/font.constants';
 import moment from 'moment';
-// import DatePicker from './DatePicker';
 
 export default function RangeCalendar(props) {
   let [startDate, setStartDate] = useState(props.startDate);
@@ -143,17 +141,7 @@ export default function RangeCalendar(props) {
   };
 
   let renderDatePicker = () => {
-    return (
-      <View style={styles.datePicker}>
-        {/* <DatePicker
-          onSubmit={setSelectedData}
-          dateFormat={DMYFORMAT}
-          savedDate={startDateSelected ? startDate : endDate}
-          minYear={1970}
-          maxYear={2050}
-        /> */}
-      </View>
-    );
+    return <View style={styles.datePicker} />;
   };
 
   let renderStartDateCell = () => {
@@ -323,11 +311,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: Colors.accent,
   },
-  keyboardContainer: {
-    flex: 1,
-    padding: PaddingConstants.halfTab,
-    marginTop: Platform.select({ios: 20, android: 0}),
-  },
   preDefinedDateContainer: {
     padding: PaddingConstants.tab1,
     margin: MarginConstants.tab1,
@@ -335,28 +318,10 @@ const styles = StyleSheet.create({
     height: PaddingConstants.tab4,
     flexDirection: 'row',
   },
-  dateInput: {
-    marginHorizontal: MarginConstants.tab2,
-    height: MarginConstants.tab2,
-    marginTop: MarginConstants.tab1,
-    marginBottom: MarginConstants.tab1,
-    paddingHorizontal: MarginConstants.halfTab,
-  },
   selectedDate: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-  },
-  customDateContainer: {
-    minHeight: 4 * MarginConstants.tab4,
-    backgroundColor: Colors.white,
-    marginHorizontal: MarginConstants.tab1,
-  },
-  startTextFieldContainer: {
-    marginBottom: MarginConstants.tab2,
-  },
-  endTextFieldContainer: {
-    marginTop: MarginConstants.tab2,
   },
   datePicker: {
     margin: MarginConstants.tab1,

@@ -65,20 +65,17 @@ jest.mock('./takeaction/FilterTickets', () => {
   return jest.fn(() => React.createElement(View, {testID: 'filter-tickets'}));
 });
 
-jest.mock('./takeaction/QPBottomSheet', () => {
+jest.mock('../../widgets/QPBottomSheet', () => {
   const React = require('react');
   const {View} = require('react-native');
-  return jest.fn(({children}) =>
-    React.createElement(View, {testID: 'qp-bottom-sheet'}, children),
-  );
-});
-
-jest.mock('./takeaction/QPBottomSheetHeader', () => {
-  const React = require('react');
-  const {View} = require('react-native');
-  return jest.fn(() =>
-    React.createElement(View, {testID: 'qp-bottom-sheet-header'}),
-  );
+  return {
+    QPBottomSheet: jest.fn(({children}) =>
+      React.createElement(View, {testID: 'qp-bottom-sheet'}, children),
+    ),
+    QPBottomSheetHeader: jest.fn(() =>
+      React.createElement(View, {testID: 'qp-bottom-sheet-header'}),
+    ),
+  };
 });
 
 jest.mock('../../Utils/MultilinguaUtils', () => ({

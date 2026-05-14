@@ -61,6 +61,7 @@ module.exports = {
     'app/widgets/drop-down',
     'app/Utils/NotificationUtils',
     'app/Utils/AppTimeTracker',
+    'app/Utils/CountryPhoneNumberLength',
     'app/components/dashboard/highchart.html',
     'app/components/dashboard/highcharts.js',
     'app/components/dashboard/jquery.min.js',

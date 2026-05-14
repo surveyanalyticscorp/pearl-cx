@@ -23,22 +23,19 @@ jest.mock('../../routes/commonUI/FabAddButton', () => () => (
 ));
 
 // Mock QPBottomSheet components
-jest.mock(
-  '../closedloop/takeaction/QPBottomSheet',
-  () =>
-    ({children, visible, testID, ...props}) =>
-      visible ? (
-        <div testID={testID || 'qp-bottom-sheet'} {...props}>
-          {children}
-        </div>
-      ) : null,
-);
-
-jest.mock('../closedloop/takeaction/QPBottomSheetHeader', () => props => (
-  <div testID="qp-bottom-sheet-header" {...props}>
-    QPBottomSheetHeader
-  </div>
-));
+jest.mock('../../widgets/QPBottomSheet', () => ({
+  QPBottomSheet: ({children, visible, testID, ...props}) =>
+    visible ? (
+      <div testID={testID || 'qp-bottom-sheet'} {...props}>
+        {children}
+      </div>
+    ) : null,
+  QPBottomSheetHeader: props => (
+    <div testID="qp-bottom-sheet-header" {...props}>
+      QPBottomSheetHeader
+    </div>
+  ),
+}));
 
 jest.mock('../closedloop/takeaction/SelectStatus', () => props => (
   <div testID="select-status" {...props}>
@@ -917,18 +914,18 @@ describe('CxDashboard Component', () => {
     ]);
 
     // Mock QPBottomSheet to ensure it renders when visible is true
-    jest.doMock(
-      '../closedloop/takeaction/QPBottomSheet',
-      () =>
-        ({children, visible, onClose}) => {
-          if (!visible) return null;
-          return React.createElement(
-            'View',
-            {testID: 'bottom-sheet'},
-            children,
-          );
-        },
-    );
+    jest.doMock('../../widgets/QPBottomSheet', () => ({
+      QPBottomSheet: ({children, visible, onClose}) => {
+        if (!visible) return null;
+        return React.createElement('View', {testID: 'bottom-sheet'}, children);
+      },
+      QPBottomSheetHeader: props =>
+        React.createElement(
+          'div',
+          {testID: 'qp-bottom-sheet-header', ...props},
+          'QPBottomSheetHeader',
+        ),
+    }));
 
     const {getByTestId} = renderComponent({
       dashboard: {

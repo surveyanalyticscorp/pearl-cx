@@ -27,8 +27,7 @@ import SelectSorting from '../closedloop/takeaction/SelectSorting';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import {ASYNC_RESPONSES_WITH_CX_MANAGER} from '../../api/Constant';
 import Responses from './Responses';
-import QPBottomSheet from '../closedloop/takeaction/QPBottomSheet';
-import QPBottomSheetHeader from '../closedloop/takeaction/QPBottomSheetHeader';
+import {QPBottomSheet, QPBottomSheetHeader} from '../widgets/QPBottomSheet';
 const FormContext = React.createContext();
 
 const SortingBottomSheet = ({

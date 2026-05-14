@@ -144,7 +144,6 @@ const styles = StyleSheet.create({
   markerBarsIndicatorNegative: {
     height: 6,
     flex: 2,
-    // justifyContent: 'flex-end',
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
   },
@@ -152,7 +151,6 @@ const styles = StyleSheet.create({
   markerBarsIndicatorPositive: {
     height: 6,
     flex: 2,
-    // justifyContent: 'flex-start',
     alignItems: 'flex-start',
     justifyContent: 'flex-end',
   },

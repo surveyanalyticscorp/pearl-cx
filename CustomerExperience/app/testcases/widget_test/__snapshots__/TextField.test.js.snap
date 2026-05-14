@@ -13,174 +13,112 @@ exports[`renders correctly 1`] = `
   testID="text-field-container"
 >
   <View
-    onResponderRelease={[Function]}
-    onStartShouldSetResponder={[Function]}
-    pointerEvents="auto"
+    style={
+      [
+        {
+          "backgroundColor": "rgb(231, 231, 231)",
+          "borderTopLeftRadius": 4,
+          "borderTopRightRadius": 4,
+        },
+        {
+          "backgroundColor": "transparent",
+          "color": "#545E6B",
+          "fontFamily": "FiraSans-Regular",
+        },
+      ]
+    }
   >
     <View
       collapsable={false}
       style={
-        {
-          "alignItems": "flex-end",
-          "flexDirection": "row",
-          "height": 70,
-          "paddingBottom": 8,
-          "paddingLeft": 0,
-          "paddingRight": 0,
-          "paddingTop": 16,
-        }
-      }
-    >
-      <View
-        pointerEvents="none"
-        style={
-          {
-            "bottom": 0,
-            "left": 0,
-            "overflow": "hidden",
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
-          }
-        }
-      >
-        <View
-          collapsable={false}
-          style={
-            {
-              "borderColor": "rgba(112, 112, 112, 1)",
-              "borderStyle": "solid",
-              "borderWidth": 0.5,
-              "bottom": 0,
-              "left": -3,
-              "position": "absolute",
-              "right": -3,
-              "top": -3,
-            }
-          }
-        />
-      </View>
-      <View
-        style={
-          {
-            "alignSelf": "stretch",
-            "flex": 1,
-          }
-        }
-      >
-        <View
-          collapsable={false}
-          style={
-            {
-              "left": "-100%",
-              "paddingLeft": "50%",
-              "position": "absolute",
-              "top": 0,
-              "transform": [
-                {
-                  "scale": 1,
-                },
-                {
-                  "translateY": 23.5,
-                },
-                {
-                  "translateX": 0,
-                },
-              ],
-              "width": "200%",
-            }
-          }
-        >
-          <Text
-            collapsable={false}
-            numberOfLines={1}
-            style={
-              {
-                "color": "rgba(112, 112, 112, 1)",
-                "fontFamily": "FiraSans-Regular",
-                "fontSize": 18,
-                "includeFontPadding": false,
-                "lineHeight": 18,
-                "textAlign": "left",
-                "textAlignVertical": "top",
-              }
-            }
-          >
-            
-          </Text>
-        </View>
-        <View
-          style={
-            {
-              "alignItems": "flex-end",
-              "flex": 1,
-              "flexDirection": "row",
-            }
-          }
-        >
-          <TextInput
-            accessibilityLabel="text-field"
-            autoCapitalize="none"
-            autoCorrect={false}
-            disableFullscreenUI={true}
-            editable={true}
-            keyboardType="default"
-            onBlur={[Function]}
-            onChange={[Function]}
-            onChangeText={[Function]}
-            onContentSizeChange={[Function]}
-            onEndEditing={[Function]}
-            onFocus={[Function]}
-            onSubmitEditing={[Function]}
-            placeholderTextColor="#A2A6A9"
-            returnKeyType="next"
-            selectionColor="#1b87e6"
-            style={
-              [
-                {
-                  "flex": 1,
-                  "includeFontPadding": false,
-                  "margin": 0,
-                  "padding": 0,
-                  "paddingTop": 0,
-                  "textAlign": "left",
-                  "textAlignVertical": "top",
-                  "top": 2,
-                },
-                {
-                  "color": "#707070",
-                  "fontSize": 18,
-                  "height": 27,
-                },
-                {
-                  "color": "#545E6B",
-                  "fontFamily": "FiraSans-Regular",
-                },
-              ]
-            }
-            testID="text-field"
-            underlineColorAndroid="transparent"
-            value=""
-          />
-        </View>
-      </View>
-    </View>
-    <View
-      style={
         [
           {
-            "alignItems": "flex-start",
-            "flexDirection": "row",
-            "justifyContent": "flex-end",
+            "bottom": 0,
+            "height": 2,
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "zIndex": 1,
           },
           {
-            "minHeight": 8,
-            "paddingLeft": 0,
-            "paddingRight": 0,
+            "backgroundColor": "#545E6B",
+            "transform": [
+              {
+                "scaleY": 0.5,
+              },
+            ],
           },
         ]
       }
     />
+    <View
+      style={
+        [
+          {
+            "paddingBottom": 0,
+            "paddingTop": 0,
+          },
+          {
+            "minHeight": 64,
+          },
+        ]
+      }
+    >
+      <TextInput
+        accessibilityLabel="text-field"
+        autoCapitalize="none"
+        autoCorrect={false}
+        editable={true}
+        keyboardType="default"
+        maxFontSizeMultiplier={1.5}
+        multiline={false}
+        onBlur={[Function]}
+        onChangeText={[Function]}
+        onEndEditing={[Function]}
+        onFocus={[Function]}
+        onSubmitEditing={[Function]}
+        placeholderTextColor="#9B9B9B"
+        returnKeyType="next"
+        secureTextEntry={false}
+        selectionColor="#1b87e6"
+        style={
+          [
+            {
+              "flexGrow": 1,
+              "margin": 0,
+            },
+            {
+              "paddingLeft": 12,
+              "paddingRight": 12,
+            },
+            {
+              "height": 64,
+            },
+            {
+              "paddingBottom": 0,
+              "paddingTop": 0,
+            },
+            {
+              "color": "#545E6B",
+              "fontFamily": "System",
+              "fontSize": 15,
+              "fontVariant": undefined,
+              "fontWeight": undefined,
+              "textAlign": "left",
+              "textAlignVertical": "center",
+            },
+            false,
+            [
+              {},
+            ],
+          ]
+        }
+        testID="text-field"
+        textColor="#545E6B"
+        underlineColorAndroid="transparent"
+        value=""
+      />
+    </View>
   </View>
   <View />
 </View>

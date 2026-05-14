@@ -88,6 +88,38 @@ describe('IconComponents', () => {
     expect(icon.props.color).toBe(Colors.accentLight);
   });
 
+  test('FaIcon should use default size and color when not provided', () => {
+    const {getByTestId} = render(<FaIcon name="star" testID="fa-default" />);
+    const icon = getByTestId('fa-default');
+    expect(icon.props.size).toBe(24);
+    expect(icon.props.color).toBe(Colors.borderColor);
+  });
+
+  test('IonIcon should use default size and color when not provided', () => {
+    const {getByTestId} = render(<IonIcon name="star" testID="ion-default" />);
+    const icon = getByTestId('ion-default');
+    expect(icon.props.size).toBe(24);
+    expect(icon.props.color).toBe(Colors.borderColor);
+  });
+
+  test('MaterialIcons should use default size and color when not provided', () => {
+    const {getByTestId} = render(
+      <MaterialIcons name="star" testID="material-default" />,
+    );
+    const icon = getByTestId('material-default');
+    expect(icon.props.size).toBe(24);
+    expect(icon.props.color).toBe(Colors.borderColor);
+  });
+
+  test('MaterialCommunityIcons should use default size and color when not provided', () => {
+    const {getByTestId} = render(
+      <MaterialCommunityIcons name="star" testID="mc-default" />,
+    );
+    const icon = getByTestId('mc-default');
+    expect(icon.props.size).toBe(24);
+    expect(icon.props.color).toBe(Colors.borderColor);
+  });
+
   test('getMimeIconName should return correct icon name for different mime types', () => {
     expect(getMimeIconName('image/jpeg')).toBe('file-photo-o');
     expect(getMimeIconName('video/mp4')).toBe('file-video-o');

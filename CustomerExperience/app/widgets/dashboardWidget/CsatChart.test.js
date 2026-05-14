@@ -58,25 +58,13 @@ describe('CsatChart Component', () => {
   });
 });
 describe('CsatChart Data Function', () => {
-  it('should return the correct data structure with image sources', () => {
+  it('should return the correct data structure with SvgComponent references', () => {
     const data = getCsatData(0.5, 0.3, 0.2);
 
     expect(data).toEqual([
-      {
-        y: 0.5,
-        x: 'positive',
-        imageSource: 'test-file-stub',
-      },
-      {
-        y: 0.3,
-        x: 'neutral',
-        imageSource: 'test-file-stub',
-      },
-      {
-        y: 0.2,
-        x: 'negative',
-        imageSource: 'test-file-stub',
-      },
+      {y: 0.5, x: 'positive', SvgComponent: 'test-file-stub'},
+      {y: 0.3, x: 'neutral', SvgComponent: 'test-file-stub'},
+      {y: 0.2, x: 'negative', SvgComponent: 'test-file-stub'},
     ]);
   });
 });

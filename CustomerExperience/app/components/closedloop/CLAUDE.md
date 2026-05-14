@@ -55,36 +55,37 @@ Ticket detail screen is `TicketDetails` — navigated to with `navigation.naviga
 | `AITagsFilterSection.js` | AI tags checkbox section — reads `state.dashboard.ticketTags` from Redux. |
 | `AITagsChipList.js` | Chip list display for selected AI tags. |
 | `ShowMyTicketsFilter.js` | "Show only my tickets" toggle row. |
-| `QPBottomSheet.js` | Generic bottom sheet wrapper. Pass `bottomSheetHeight="X%"` when content must scroll (see root CLAUDE.md). |
-| `QPBottomSheetHeader.js` | Header row for bottom sheets. |
+| `QPBottomSheet` / `QPBottomSheetHeader` | **Moved to `app/widgets/QPBottomSheet/`.** Import: `import {QPBottomSheet, QPBottomSheetHeader} from '../../../widgets/QPBottomSheet'`. |
 | `SelectStatus.js` | Status picker bottom sheet. |
 | `SelectPriority.js` | Priority picker bottom sheet. |
 | `SelectSorting.js` | Sort options bottom sheet. |
 | `SelectSegment.js` | Segment picker bottom sheet. |
 | `SelectTicketOwner.js` | Assignee picker bottom sheet. |
-| `SelectEmailTemplate.js` | Email template picker. |
-| `SendEmail.js` | Send email screen — wraps the `sendEmail/` sub-components. |
 | `TIcketTakeAction.js` | Orchestrates the take-action bottom sheet flow. |
-| `DropDownButton.js` / `QPDropDownMenu.js` | Dropdown UI widgets. |
+| `DropDownButton.js` / `QPDropDownMenu.js` | Dropdown UI widgets. Shared with `sendEmail/`. |
 | `PriorityItem.js` / `StatusItem.js` | Individual picker row items. |
 | `AiTagsFilter.js` | Older AI tags filter (check if still used before modifying). |
-| `AIEmailDraftModal.js` | Modal wrapping the AI email draft generation flow. |
-| `RefineOptionsSheet.js` | Options sheet for refining an AI email draft. |
-| `InsertLinkModal.js` | Modal for inserting a hyperlink into an email. |
-| `ActionEmailHistory.js` | Shows previously sent emails for a ticket. |
 
-### `takeaction/sendEmail/`
-All files are sub-components of the send-email flow. Key ones:
+### `sendEmail/`
+All Action Email feature files. See `sendEmail/CLAUDE.md` for full details.
 
 | File | Purpose |
 |---|---|
-| `hooks/useSendEmail.js` | Handles send-email form state and submission. |
-| `hooks/useEmailDraft.js` | Manages draft state (to/subject/body). |
-| `hooks/useDraftGeneration.js` | Calls AI endpoint to generate email draft. |
-| `EmailEditorContext.js` | React context shared across email editor sub-components. |
-| `EmailActionContainer.js` | Top-level layout for the email composition view. |
-| `AiDraftButton.js` | Button that triggers AI draft generation. |
-| `RefineButton.js` / `RefineDropDown.js` | Refine-draft UI. |
+| `SendEmail.js` | Main compose screen. Routes: `sendEmail`. |
+| `ActionEmailHistory.js` | Prior email history screen. Route: `actionEmailHistory`. |
+| `AIEmailDraftModal.js` | AI draft generation modal content. |
+| `RefineOptionsSheet.js` | Tone/intent chip picker for refining AI drafts. |
+| `SelectEmailTemplate.js` | Template list inside the template bottom sheet. |
+| `InsertLinkModal.js` | Modal for inserting a hyperlink into the rich editor. |
+| `EmailComposerBody.js` | `KeyboardAwareScrollView` with all compose-area sub-components. |
+| `EmailTemplateSheet.js` / `AIEmailDraftSheet.js` | Bottom sheet wrappers for template picker and AI draft flow. |
+| `EmailEditorContext.js` | React context providing `blurEditor` to child components. |
+| `hooks/useSendEmail.js` | Handles email submission with validation. |
+| `hooks/useEmailDraft.js` | Manages AI draft state and refine interactions. |
+| `hooks/useDraftGeneration.js` | Dispatches AI draft/refine actions, tracks loading. |
+| `hooks/useEmailBody.js` | Body state management (`subject`, `emailBody`, `attachments`). |
+| `hooks/useKeyboardState.js` | Keyboard visibility and height for toolbar positioning. |
+| `hooks/useEmailScreenActions.js` | Orchestrates overlays, bottom sheets, template/AI draft actions. |
 
 ### `takeaction/closedLoopCell/`
 | File | Purpose |
@@ -338,4 +339,6 @@ Only filter selections persist across navigation. Search text always resets to e
 
 | Date | Change |
 |---|---|
+| 2026-05-13 | **QPBottomSheet widget move** — `QPBottomSheet.js`, `QPBottomSheetHeader.js`, and their tests moved from `takeaction/` to `app/widgets/QPBottomSheet/`. Barrel export (`index.js`) added. All 14 consumer files updated to named imports: `import {QPBottomSheet, QPBottomSheetHeader} from '../../../widgets/QPBottomSheet'`. 100% test coverage achieved across all three files. |
+| 2026-05-13 | **Action Email refactor** — All Action Email feature files moved from `takeaction/` and `takeaction/sendEmail/` to a new top-level `sendEmail/` directory. `CommonScreen.js` updated (import paths changed, legacy `SelectEmailTemplate` route removed). `sendEmail/CLAUDE.md` created. `DropDownButton` remains in `takeaction/` as a shared utility. |
 | 2026-05-11 | **Filter Persistence** — Filter selections (status, priority, type, AI tags, assignToId) now persist across navigation via `state.dashboard.ticketFilter` in Redux. New actions: `saveTicketFilterData`, `clearTicketFilterData`. Filter resets on segment change. Fixed crash caused by `currentSegment` useEffect firing on mount (added `isFirstRender` ref guard in `ClosedLoop.js`). Fixed crash caused by missing `tags` field when calling `createFilterState` during filter restoration. |

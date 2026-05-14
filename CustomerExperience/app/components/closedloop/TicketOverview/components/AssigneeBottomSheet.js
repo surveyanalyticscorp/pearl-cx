@@ -4,8 +4,7 @@ import {useSelector} from 'react-redux';
 import {getOwnerIndex} from '../../../../Utils/TicketUtils';
 import {translate} from '../../../../Utils/MultilinguaUtils';
 import SelectTicketOwner from '../../takeaction/SelectTicketOwner';
-import QPBottomSheet from '../../takeaction/QPBottomSheet';
-import QPBottomSheetHeader from '../../takeaction/QPBottomSheetHeader';
+import {QPBottomSheet, QPBottomSheetHeader} from '../../../../widgets/QPBottomSheet';
 
 const AssigneeBottomSheet = ({onClose, visible}) => {
   const STATUS_ESCALATED = 2;

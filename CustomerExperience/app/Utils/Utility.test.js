@@ -128,6 +128,8 @@ import {
   usePrevious,
   showErrorFlashMessage,
   showSuccessFlashMessage,
+  showInfoFlashMessage,
+  getDeviceType,
 } from './Utility';
 
 jest.mock('react-native-flash-message', () => ({
@@ -140,6 +142,10 @@ jest.mock('react-native-toast-message', () => ({
 }));
 
 describe('Utility functions', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('isStringNullOrEmpty', () => {
     it('should return true for null or empty strings', () => {
       expect(isStringNullOrEmpty(null)).toBe(true);
@@ -251,11 +257,81 @@ describe('Utility functions', () => {
       });
     });
 
+    it('should use default message if message is not provided', () => {
+      showSuccessFlashMessage();
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          props: expect.objectContaining({bodyText: 'Success'}),
+        }),
+      );
+    });
+
     it('should call Toast.hide when close icon is pressed in success toast', () => {
       showSuccessFlashMessage();
       const {onPress} = Toast.show.mock.calls[0][0].props.trailingIcon;
       onPress();
       expect(Toast.hide).toHaveBeenCalled();
+    });
+  });
+
+  describe('showInfoFlashMessage', () => {
+    it('should call Toast.show with info type', () => {
+      const message = 'This is info';
+      showInfoFlashMessage(message);
+      expect(Toast.show).toHaveBeenCalledWith({
+        type: 'custom_info',
+        props: {
+          headerText: 'Info',
+          bodyText: message,
+          leadingIcon: expect.objectContaining({
+            name: 'alert-circle-sharp',
+          }),
+          trailingIcon: expect.objectContaining({
+            onPress: expect.any(Function),
+          }),
+        },
+      });
+    });
+
+    it('should use default message if message is not provided', () => {
+      showInfoFlashMessage();
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          props: expect.objectContaining({bodyText: 'Info'}),
+        }),
+      );
+    });
+
+    it('should call Toast.hide when close icon is pressed in info toast', () => {
+      showInfoFlashMessage('info');
+      const {onPress} = Toast.show.mock.calls[0][0].props.trailingIcon;
+      onPress();
+      expect(Toast.hide).toHaveBeenCalled();
+    });
+  });
+
+  describe('getDeviceType', () => {
+    it('should return 1 for ios', () => {
+      expect(getDeviceType('ios')).toBe(1);
+    });
+
+    it('should return 0 for android', () => {
+      expect(getDeviceType('android')).toBe(0);
+    });
+
+    it('should return 0 for any non-ios type', () => {
+      expect(getDeviceType('web')).toBe(0);
+      expect(getDeviceType(undefined)).toBe(0);
+    });
+  });
+
+  describe('isObjectEmpty edge cases', () => {
+    it('should return null/falsy for null input', () => {
+      expect(isObjectEmpty(null)).toBeFalsy();
+    });
+
+    it('should return null/falsy for undefined input', () => {
+      expect(isObjectEmpty(undefined)).toBeFalsy();
     });
   });
 });

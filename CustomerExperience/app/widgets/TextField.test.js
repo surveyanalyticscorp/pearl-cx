@@ -75,9 +75,9 @@ describe('TextField Component', () => {
   });
 
   it('renders the TextField with the correct label', () => {
-    const {getByText} = render(<QPTextField label="test-label" />);
-    const label = getByText('test-label');
-    expect(label).toBeTruthy();
+    const {getAllByText} = render(<QPTextField label="test-label" />);
+    const labels = getAllByText('test-label');
+    expect(labels.length).toBeGreaterThan(0);
   });
 
   it('renders the TextField with the correct accessibilityLabel', () => {

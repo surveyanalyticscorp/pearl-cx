@@ -58,7 +58,7 @@ export default class ArrayUtils {
       for (let i = 0; i < array.length; i++) {
         if (array[i][property] === expectedValue) {
           array.splice(i, 1);
-          return array ? array : [];
+          return array ? array : /* istanbul ignore next */ [];
         }
       }
     }

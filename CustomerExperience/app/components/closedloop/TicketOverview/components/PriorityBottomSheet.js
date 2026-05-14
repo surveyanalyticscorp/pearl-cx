@@ -7,8 +7,7 @@ import {
   priorityList,
 } from '../../../../Utils/TicketUtils';
 import SelectPriority from '../../takeaction/SelectPriority';
-import QPBottomSheet from '../../takeaction/QPBottomSheet';
-import QPBottomSheetHeader from '../../takeaction/QPBottomSheetHeader';
+import {QPBottomSheet, QPBottomSheetHeader} from '../../../../widgets/QPBottomSheet';
 
 const PriorityBottomSheet = ({visible, onClose}, ref) => {
   const updateTicket = useUpdateTicket();

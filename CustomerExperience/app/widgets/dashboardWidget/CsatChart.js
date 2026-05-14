@@ -1,53 +1,35 @@
 import React from 'react';
-import StringUtils from '../../Utils/StringUtils';
 import {useSelector} from 'react-redux';
 import {Colors} from '../../styles/color.constants';
 import {MarginConstants} from '../../styles/margin.constants';
 import {VictoryPie} from 'victory-native';
 import SmileyImageLabel from './SmileyImageLabel';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import CsatPositiveIcon from '../../../assets/images/csat_positive.svg';
 import CsatNeutralIcon from '../../../assets/images/csat_neutral.svg';
 import CsatNegativeIcon from '../../../assets/images/csat_negative.svg';
 
 export function getCsatData(positive, neutral, negative) {
-  console.log('positive', StringUtils.floatTo2DecimalPointString(positive));
-
   return [
-    {
-      y: positive,
-      x: 'positive',
-      SvgComponent: CsatPositiveIcon,
-    },
-    {
-      y: neutral,
-      x: 'neutral',
-      SvgComponent: CsatNeutralIcon,
-    },
-    {
-      y: negative,
-      x: 'negative',
-      SvgComponent: CsatNegativeIcon,
-    },
+    {y: positive, x: 'positive', SvgComponent: CsatPositiveIcon},
+    {y: neutral, x: 'neutral', SvgComponent: CsatNeutralIcon},
+    {y: negative, x: 'negative', SvgComponent: CsatNegativeIcon},
   ];
 }
+
 const CsatChart = () => {
   const {promoterPercent, passivePercent, detractorPercent} = useSelector(
     state => state.dashboard.currentNPSData.NPSScore,
   );
 
-  let victoryPieColorScale = [
+  const victoryPieColorScale = [
     Colors.promoter3,
     Colors.passive3,
     Colors.detractor3,
   ];
 
   return (
-    <View
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
+    <View style={styles.container}>
       <VictoryPie
         testID="csat-chart"
         data={getCsatData(promoterPercent, passivePercent, detractorPercent)}
@@ -65,5 +47,12 @@ const CsatChart = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default CsatChart;

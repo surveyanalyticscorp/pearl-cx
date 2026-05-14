@@ -43,14 +43,38 @@ The project has ~146 test files but coverage reporting is disabled and several h
 
 ---
 
-## Phase 4: Widget Tests
+## Phase 4: Widget Tests — ✅ COMPLETE
 
-| Task | File | Tests to write | Status |
-|------|------|---------------|--------|
-| Create test | `app/testcases/widget_test/QPSpinner.test.js` | Renders correctly (snapshot), renders AnimatedDotIndicator, custom spinnerColor, spinnerText present/absent | [ ] |
-| Create test | `app/testcases/widget_test/QPTransparentSpinner.test.js` | Renders correctly (snapshot), renders AnimatedDotIndicator, subText present/absent | [ ] |
+All `app/widgets/` files now have test coverage: **40 test suites, 212 tests, 0 failures**.
 
-**Pattern to follow:** `app/testcases/widget_test/AnimatedDotIndicator.test.js`
+Tests are co-located with source files (e.g. `app/widgets/Button.test.js`), not in `app/testcases/widget_test/`.
+
+| Status | File / Suite | Notes |
+|--------|-------------|-------|
+| ✅ | `QPBottomSheet/QPBottomSheet.test.js` | 20 tests, PanResponder callbacks |
+| ✅ | `QPBottomSheet/QPBottomSheetHeader.test.js` | 3 tests |
+| ✅ | `QPBottomSheet/index.test.js` | barrel export identity |
+| ✅ | `QPSpinner.test.js` | spinnerText, props — mocks react-native-animatable |
+| ✅ | `QPTransparentSpinner.test.js` | subText, props |
+| ✅ | `QPLoader.test.js` | GIF loader, spinnerText |
+| ✅ | `QPWebView.test.js` | render, loading spinner |
+| ✅ | `Button.test.js` | press, disabled, buttonColor |
+| ✅ | `TextField.test.js` | placeholder, label, events, password |
+| ✅ | `CustomTextField.test.js` | controlled/uncontrolled, label anim, password |
+| ✅ | `SpaceBox.test.js` | VerticalSpaceBox + HorizontalSpaceBox |
+| ✅ | `TextLabel/TextLabel.test.js` | text, children, color, testID |
+| ✅ | `SendCommentButton.test.js` | press, props |
+| ✅ | `SendButton.test.js` | press, props (unused widget) |
+| ✅ | `NPSAnswerText.test.js` | all sentiments (unused widget) |
+| ✅ | `QPCalendar.test.js` | render, header, year dropdown (unused widget) |
+| ✅ | `RangeCalendar.test.js` | modal, predefined types, custom mode, validation (unused widget) |
+| ✅ | `drop-down/ModalDropdown.test.js` | defaultValue, disabled, RTL |
+| ✅ | `dashboardWidget/*.test.js` | all 10 dashboard widgets |
+| ✅ | `closedloopWidget/ActivityText.test.js` | RenderHTML mock |
+| ✅ | `IconWidget/*.test.js` | all 4 icon widgets |
+| ✅ | `HorizontalScaleBar.test.js` | render smoke |
+| ✅ | `ParentContainer.test.js` | render smoke |
+| ✅ | `NPSIcon.test.js` | render smoke |
 
 ---
 
@@ -61,7 +85,6 @@ The project has ~146 test files but coverage reporting is disabled and several h
 | Dashboard saga | `app/redux/sagas/dashboardSaga.js` | Medium | Requires `WebServiceHandler` mocking — active tests already exist in `app/testcases/dashboard.saga.test.js` |
 | Feedback saga | `app/redux/sagas/feedbackSaga.js` | Medium | Requires `WebServiceHandler` mocking |
 | Components | `app/components/` (~54% covered) | High | Large scope; 74 of ~161 files have tests |
-| Widgets (dropdowns) | `app/widgets/drop-down/` | Medium | Listed in `coveragePathIgnorePatterns` — excluded by design |
 
 ---
 
@@ -69,13 +92,13 @@ The project has ~146 test files but coverage reporting is disabled and several h
 
 | Category | Source Files | With Tests | Gap |
 |----------|-------------|-----------|-----|
-| Utils | 18 | 18 | 0 |
+| **Utils** | **20** | **20** | **✅ 0 — 100% Stmts/Branches/Functions/Lines** |
 | API Layer | 3 | 2 | 1 (Constant.js — partial) |
 | Redux Actions | 8 | 3 | **5 missing** |
 | Redux Reducers | 6 | 5 | **1 missing** |
 | Redux Sagas | 5 | 2 | 3 missing (1 ignored by design) |
 | Components | ~161 | ~74 | ~87 missing |
-| Widgets | ~30 | ~17 | ~13 missing |
+| **Widgets** | **~30** | **~30** | **✅ 0 missing — 100% covered** |
 
 ---
 
@@ -98,6 +121,6 @@ yarn test --testPathPattern=path/to/MyFile.test.js
 ## Notes
 
 - `collectCoverage` is currently `false` in `jest.config.js` — enable it to see reports
-- `coveragePathIgnorePatterns` in `jest.config.js` intentionally excludes: calendars, dashboard charts, notification utils, routes, several saga files
+- `coveragePathIgnorePatterns` in `jest.config.js` intentionally excludes: calendars, dashboard charts, notification utils, routes, several saga files, `CountryPhoneNumberLength` (pure data file — no instrumentable logic)
 - Test pattern: use `renderer.create().root.findAllByType()` for components using `Animated.View` — `toJSON()` returns null for animated trees in this test env
 - Saga tests use `runSaga` from `redux-saga` with mocked `WebServiceHandler`

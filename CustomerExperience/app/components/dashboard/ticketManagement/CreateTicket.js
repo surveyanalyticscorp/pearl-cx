@@ -63,8 +63,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ShowInputError from '../../../routes/commonUI/ShowInputError';
 import {getApiValidationErrorMessage} from '../../../Utils/ErrorValidationUtils';
 import {QPTransparentSpinner} from '../../../widgets/QPTransparentSpinner';
-import QPBottomSheet from '../../closedloop/takeaction/QPBottomSheet';
-import QPBottomSheetHeader from '../../closedloop/takeaction/QPBottomSheetHeader';
+import {QPBottomSheet, QPBottomSheetHeader} from '../../../widgets/QPBottomSheet';
 import useSegmentList from '../../../hooks/useSegmentList';
 
 const INPUTTYPES = {

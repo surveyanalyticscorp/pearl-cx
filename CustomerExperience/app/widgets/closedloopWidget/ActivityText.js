@@ -9,31 +9,24 @@ import {wordsToBold} from '../../Utils/TicketUtils';
 import {PaddingConstants} from '../../styles/padding.constants';
 
 const ActivityText = React.memo(({text}) => {
-  // Memoize system fonts to prevent recreation on every render
   const systemFonts = useMemo(
     () => [...defaultSystemFonts, FontFamily.regular, FontFamily.medium],
     [],
   );
 
   const {width} = useWindowDimensions();
-
-  // Memoize content width calculation
   const contentWidth = useMemo(() => width / 0.5, [width]);
 
-  // Memoize HTML content processing to prevent expensive regex operations
-  const htmlContent = useMemo(() => {
-    return StringUtils.formatActivityToHTML(text, wordsToBold);
-  }, [text]);
+  const htmlContent = useMemo(
+    () => StringUtils.formatActivityToHTML(text, wordsToBold),
+    [text],
+  );
 
-  // Memoize source object to prevent unnecessary prop changes
   const sourceObject = useMemo(
-    () => ({
-      html: `<span>${htmlContent}</span>`,
-    }),
+    () => ({html: `<span>${htmlContent}</span>`}),
     [htmlContent],
   );
 
-  // Memoize tag styles to prevent object recreation
   const tagStyles = useMemo(
     () => ({
       span: {

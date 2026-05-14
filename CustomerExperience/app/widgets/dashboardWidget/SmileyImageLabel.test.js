@@ -2,34 +2,32 @@ import React from 'react';
 import {render} from '@testing-library/react-native';
 import SmileyImageLabel from './SmileyImageLabel';
 
+const MockSvgComponent = () => null;
+
 describe('SmileyImageLabel Component', () => {
-  it('renders the SmileyImageLabel with default size', () => {
+  it('renders the no-view placeholder when datum.y is 0', () => {
     const {getByTestId} = render(
       <SmileyImageLabel
         x={0}
         y={0}
         index={0}
-        datum={{y: 0, imageSource: 'test-image-source'}}
+        datum={{y: 0, SvgComponent: MockSvgComponent}}
       />,
     );
     const image = getByTestId('no-view');
-
-    // Check if the image is rendered
     expect(image).toBeTruthy();
   });
 
-  it('renders the SmileyImageLabel with custom size', () => {
+  it('renders the label-container with SvgComponent when datum.y is non-zero', () => {
     const {getByTestId} = render(
       <SmileyImageLabel
         x={0}
         y={0}
         index={0}
-        datum={{y: 1, imageSource: 'test-image-source'}}
+        datum={{y: 1, SvgComponent: MockSvgComponent}}
       />,
     );
     const image = getByTestId('label-container');
-
-    // Check if the image is rendered
     expect(image).toBeTruthy();
   });
 });

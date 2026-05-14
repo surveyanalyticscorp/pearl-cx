@@ -14,75 +14,98 @@ exports[`FilterHeader matches snapshot 1`] = `
   }
 >
   <View
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": undefined,
+        "disabled": undefined,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
     accessible={true}
+    collapsable={false}
     focusable={true}
+    onBlur={[Function]}
     onClick={[Function]}
+    onFocus={[Function]}
     onResponderGrant={[Function]}
     onResponderMove={[Function]}
     onResponderRelease={[Function]}
     onResponderTerminate={[Function]}
     onResponderTerminationRequest={[Function]}
     onStartShouldSetResponder={[Function]}
-    style={
-      {
-        "flexDirection": "row",
-        "marginRight": 7.5,
-      }
-    }
     testID="filter-calendar"
   >
-    <Text
-      allowFontScaling={false}
-      style={
-        [
-          {
-            "color": "#ffffff",
-            "fontSize": 18,
-          },
-          undefined,
-          {
-            "fontFamily": "simple-line-icons",
-            "fontStyle": "normal",
-            "fontWeight": "normal",
-          },
-          {},
-        ]
-      }
-    >
-      
-    </Text>
     <View
       style={
         {
-          "alignItems": "center",
           "flexDirection": "row",
-          "marginHorizontal": 17.5,
+          "marginRight": 7.5,
         }
       }
     >
       <Text
+        allowFontScaling={false}
+        style={
+          [
+            {
+              "color": "#ffffff",
+              "fontSize": 18,
+            },
+            undefined,
+            {
+              "fontFamily": "simple-line-icons",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            {},
+          ]
+        }
+      >
+        
+      </Text>
+      <View
         style={
           {
-            "color": "#ffffff",
-            "fontFamily": "FiraSans-Regular",
-            "fontSize": 15,
+            "alignItems": "center",
+            "flexDirection": "row",
+            "marginHorizontal": 17.5,
           }
         }
       >
-        Nov 18, 2025
-         - 
-      </Text>
-      <Text
-        style={
-          {
-            "color": "#ffffff",
-            "fontFamily": "FiraSans-Regular",
-            "fontSize": 15,
+        <Text
+          style={
+            {
+              "color": "#ffffff",
+              "fontFamily": "FiraSans-Regular",
+              "fontSize": 15,
+            }
           }
-        }
-      >
-        Nov 25, 2025
-      </Text>
+        >
+          May 07, 2026
+           - 
+        </Text>
+        <Text
+          style={
+            {
+              "color": "#ffffff",
+              "fontFamily": "FiraSans-Regular",
+              "fontSize": 15,
+            }
+          }
+        >
+          May 14, 2026
+        </Text>
+      </View>
     </View>
   </View>
   <View
@@ -96,9 +119,26 @@ exports[`FilterHeader matches snapshot 1`] = `
       }
     }
   >
-    <Text
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
       accessible={true}
-      allowFontScaling={false}
+      collapsable={false}
       focusable={true}
       hitSlop={
         {
@@ -108,37 +148,60 @@ exports[`FilterHeader matches snapshot 1`] = `
           "top": 10,
         }
       }
+      onBlur={[Function]}
       onClick={[Function]}
+      onFocus={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}
       onResponderRelease={[Function]}
       onResponderTerminate={[Function]}
       onResponderTerminationRequest={[Function]}
       onStartShouldSetResponder={[Function]}
-      style={
-        [
-          {
-            "color": "#ffffff",
-            "fontSize": 15,
-          },
-          {
-            "marginRight": 17.5,
-          },
-          {
-            "fontFamily": "simple-line-icons",
-            "fontStyle": "normal",
-            "fontWeight": "normal",
-          },
-          {},
-        ]
-      }
       testID="left-arrow"
     >
-      
-    </Text>
-    <Text
+      <Text
+        allowFontScaling={false}
+        style={
+          [
+            {
+              "color": "#ffffff",
+              "fontSize": 15,
+            },
+            {
+              "marginRight": 17.5,
+            },
+            {
+              "fontFamily": "simple-line-icons",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            {},
+          ]
+        }
+      >
+        
+      </Text>
+    </View>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
       accessible={true}
-      allowFontScaling={false}
+      collapsable={false}
       focusable={true}
       hitSlop={
         {
@@ -148,32 +211,38 @@ exports[`FilterHeader matches snapshot 1`] = `
           "top": 10,
         }
       }
+      onBlur={[Function]}
       onClick={[Function]}
+      onFocus={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}
       onResponderRelease={[Function]}
       onResponderTerminate={[Function]}
       onResponderTerminationRequest={[Function]}
       onStartShouldSetResponder={[Function]}
-      style={
-        [
-          {
-            "color": "#ffffff",
-            "fontSize": 15,
-          },
-          undefined,
-          {
-            "fontFamily": "simple-line-icons",
-            "fontStyle": "normal",
-            "fontWeight": "normal",
-          },
-          {},
-        ]
-      }
       testID="right-arrow"
     >
-      
-    </Text>
+      <Text
+        allowFontScaling={false}
+        style={
+          [
+            {
+              "color": "#ffffff",
+              "fontSize": 15,
+            },
+            undefined,
+            {
+              "fontFamily": "simple-line-icons",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            {},
+          ]
+        }
+      >
+        
+      </Text>
+    </View>
   </View>
 </View>
 `;

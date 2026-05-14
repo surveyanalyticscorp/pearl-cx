@@ -13,8 +13,7 @@ import {MarginConstants} from '../styles/margin.constants';
 import SegmentText from './SegmentText';
 import {IonIcon} from '../Utils/IconUtils';
 import {StackActions, useNavigation} from '@react-navigation/native';
-import QPBottomSheet from './closedloop/takeaction/QPBottomSheet';
-import QPBottomSheetHeader from './closedloop/takeaction/QPBottomSheetHeader';
+import {QPBottomSheet, QPBottomSheetHeader} from '../widgets/QPBottomSheet';
 import {SegmentSheetContent} from './selectSegmentScreen/SegmentSheetContent';
 
 export const NotiificationIcon = () => {

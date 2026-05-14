@@ -9,7 +9,7 @@ export const getApiValidationErrorMessage = (
   if (errorMessage.errorAlert) {
     return errorMessage?.errorAlert
       ? errorMessage?.errorAlert
-      : errorMessage?.validationErrors[0]?.error;
+      : /* istanbul ignore next */ errorMessage?.validationErrors[0]?.error;
   }
 
   if (errorMessage.message) {

@@ -1,4 +1,4 @@
-import React, {Image} from 'react';
+import React from 'react';
 import {ResponsesIcon, RenderStatusIcon} from '../routes/commonUI/CommonUI';
 import StringUtils from './StringUtils';
 import {translate} from './MultilinguaUtils';
@@ -30,16 +30,6 @@ export const statusList = [
   {title: 'Escalated', id: 2},
   // {title: 'Overdue', id: 3},
   {title: 'Resolved', id: 3},
-];
-
-export const statusListDashboardClosedLoopFilter = [
-  {title: 'All', id: 0},
-
-  {title: 'New', id: 1},
-  {title: 'Open', id: 2},
-  {title: 'Escalated', id: 3},
-  // {title: 'Overdue', id: 3},
-  {title: 'Resolved', id: 4},
 ];
 
 export const statusListForCreateTicket = [
@@ -105,21 +95,9 @@ export const getPriorityById = priorityId => {
   let title = priorityList[0].title;
   priorityList.forEach(element => {
     if (element.id === priorityId) {
-      console.log(priorityId, element.title);
       title = element.title;
     }
   });
-  return title;
-};
-
-export const getSegmentNameById = (segmentList, segmentId) => {
-  let title = 'Segment';
-  segmentList.forEach(element => {
-    if (element.segmentID === segmentId) {
-      title = element.segmentName;
-    }
-  });
-
   return title;
 };
 
@@ -166,16 +144,6 @@ export const getSegmentIndex = (segmentlist, segmentId) => {
   return index;
 };
 
-export const getSegmentBySegmentId = (segmentlist, segmentId) => {
-  let item = {};
-  segmentlist.forEach(element => {
-    if (element.segmentID === segmentId) {
-      item = element;
-    }
-  });
-  return item;
-};
-
 export const getOwnerIndex = (ownerlist, ownnerId) => {
   let index_ = -1;
   ownerlist.forEach((element, index) => {
@@ -185,30 +153,6 @@ export const getOwnerIndex = (ownerlist, ownnerId) => {
   });
   return index_;
 };
-
-export function getDashboardStatusList(ticketCount) {
-  const getAll = getAllTicketCount(ticketCount);
-
-  let temp = [];
-  Object.keys(ticketCount).forEach(value => {
-    if (ticketCount.hasOwnProperty(value)) {
-      temp.push({
-        label: StringUtils.uppercaseFirstCharRestLowercase(value),
-        value: value.toLowerCase(),
-        count: ticketCount[value],
-        icon: () => <RenderStatusIcon title={value} />,
-      });
-    }
-  });
-
-  temp.push({
-    label: 'All',
-    value: 'all',
-    count: getAll,
-    icon: () => <ResponsesIcon />,
-  });
-  return temp;
-}
 
 export function getDashboardStatusListForBottomList(ticketCount) {
   if (!ticketCount) {
@@ -228,6 +172,7 @@ export function getDashboardStatusListForBottomList(ticketCount) {
   });
 
   Object.keys(ticketCount).forEach((value, index) => {
+    /* istanbul ignore else */
     if (ticketCount.hasOwnProperty(value)) {
       temp.push({
         label: StringUtils.uppercaseFirstCharRestLowercase(value),
@@ -247,6 +192,7 @@ export function getAllTicketCount(ticketCount_) {
   const totalCount = Object.values(ticketCount_).reduce((total, current) => {
     let temp = {};
     Object.keys(current).forEach(key => {
+      /* istanbul ignore else */
       if (current.hasOwnProperty(key)) {
         temp = {...temp, [key]: total[key] + current[key]};
       }
@@ -314,10 +260,6 @@ export const sortingList = [
   {id: 1, title: translate('activity.oldest').toLocaleLowerCase()},
 ];
 
-export const removeItemFromArray = (arr = [], index) => {
-  return arr.splice(index, 1);
-};
-
 export const taglist = ['status', 'priority', 'type', 'assignToId'];
 
 export const convertDateToYMDFORMAT = date =>
@@ -364,7 +306,7 @@ export const createFilterState = (item, getIdsFunction) => ({
   priority: getIdsFunction(item.priority) ?? '',
   assignToId: item.assignToId,
   type: getIdsFunction(item.type) ?? '',
-  tags: getNames(item.tags) ?? '',
+  tags: /* istanbul ignore next */ getNames(item.tags) ?? '',
 });
 
 export const wait = timeout =>

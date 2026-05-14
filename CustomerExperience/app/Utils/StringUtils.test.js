@@ -15,20 +15,6 @@ describe('StringUtils', () => {
     });
   });
 
-  describe('isNullString', () => {
-    test('should return true for string "null"', () => {
-      expect(StringUtils.isNullString('null')).toBe(true);
-    });
-
-    test('should return false for string "hello"', () => {
-      expect(StringUtils.isNullString('hello')).toBe(false);
-    });
-
-    test('should return false for empty string', () => {
-      expect(StringUtils.isNullString('')).toBe(false);
-    });
-  });
-
   describe('isNotEmpty', () => {
     test('should return false for null', () => {
       expect(StringUtils.isNotEmpty(null)).toBe(false);
@@ -84,15 +70,6 @@ describe('StringUtils', () => {
 
     test('should return empty string for empty HTML string', () => {
       expect(StringUtils.getTextFromHtmlString('<div></div>')).toBe('');
-    });
-  });
-
-  describe('cleanWordHTML', () => {
-    test('should remove Word-specific tags and styles', () => {
-      const html =
-        '<o:p>hello</o:p><span style="mso-style-name:style">text</span>';
-      const expected = '&nbsp;text';
-      expect(StringUtils.cleanWordHTML(html)).toBe(expected);
     });
   });
 
@@ -152,6 +129,9 @@ describe('StringUtils', () => {
       const text = '';
       expect(StringUtils.getTrimmedNoOfResponses(text)).toBe('');
     });
+    test('should format non-round thousands with one decimal place', () => {
+      expect(StringUtils.getTrimmedNoOfResponses(1500)).toBe('1.5K');
+    });
   });
 
   // New test cases to cover all methods in StringUtils.js
@@ -188,6 +168,9 @@ describe('StringUtils', () => {
     test('if empty string is passed, it should return empty string', () => {
       const shortText = '';
       expect(StringUtils.getShortTextTruncateMiddle(shortText, 20)).toBe('');
+    });
+    test('should use default maxLength of 30 when not provided', () => {
+      expect(StringUtils.getShortTextTruncateMiddle('Short')).toBe('Short');
     });
   });
 
@@ -233,45 +216,6 @@ describe('StringUtils', () => {
     });
   });
 
-  describe('getTextArraySeparatedByNewline', () => {
-    test('should split text into an array by newline', () => {
-      const text = 'line1\nline2\nline3';
-      expect(StringUtils.getTextArraySeparatedByNewline(text)).toEqual([
-        'line1',
-        'line2',
-        'line3',
-      ]);
-    });
-    test('if empty string is passed, it should return empty array', () => {
-      const text = '';
-      expect(StringUtils.getTextArraySeparatedByNewline(text)).toEqual([]);
-    });
-  });
-
-  describe('getTextArraySeparatedBy', () => {
-    test('should split text into an array by specified symbol', () => {
-      const text = 'item1,item2,item3';
-      expect(StringUtils.getTextArraySeparatedBy(text, ',')).toEqual([
-        'item1',
-        'item2',
-        'item3',
-      ]);
-    });
-    test('if empty string is passed, it should return empty array', () => {
-      const text = '';
-      expect(StringUtils.getTextArraySeparatedBy(text, ',')).toEqual([]);
-    });
-  });
-
-  describe('getTextForPropertySeparatedByNewline', () => {
-    test('should return text separated by newline for the given property', () => {
-      const obj = {items: [{text: 'Item1'}, {text: 'Item2'}]};
-      expect(
-        StringUtils.getTextForPropertySeparatedByNewline(obj, 'items'),
-      ).toBe('Item1\nItem2');
-    });
-  });
-
   describe('removeSpecialCharacters', () => {
     it('should remove single and double quotes, question marks from a string', () => {
       expect(StringUtils.removeSpecialCharacters("Hello 'world'?")).toBe(
@@ -304,21 +248,6 @@ describe('StringUtils', () => {
     });
     it('should return the same string if no HTML tags are present', () => {
       expect(StringUtils.convertToPlainText('Hello world')).toBe('Hello world');
-    });
-  });
-
-  describe('getPlainTextWithoutSpecialCharacters', () => {
-    it('should remove HTML tags and special characters', () => {
-      expect(
-        StringUtils.getPlainTextWithoutSpecialCharacters(
-          "<p>It's a 'test'?</p>",
-        ),
-      ).toBe('Its a test');
-    });
-    it('should return plain text if no HTML tags or special characters are present', () => {
-      expect(
-        StringUtils.getPlainTextWithoutSpecialCharacters('Hello world'),
-      ).toBe('Hello world');
     });
   });
 
@@ -396,19 +325,14 @@ describe('StringUtils', () => {
     it('should return an empty array if the string is null', () => {
       expect(StringUtils.getWords(null)).toEqual([]);
     });
-  });
-
-  describe('removeLinesAndWhiteSpaces', () => {
-    it('should remove all lines from a string', () => {
-      expect(StringUtils.removeLinesAndWhiteSpaces('Hello\nWorld\n')).toBe(
-        'HelloWorld',
-      );
+    it('should preserve @[name](id) mention patterns as single tokens', () => {
+      const result = StringUtils.getWords('@[Alice](123) hello');
+      expect(result).toContain('@[Alice](123)');
+      expect(result).toContain('hello');
     });
-    it('should return an empty string if the string is empty', () => {
-      expect(StringUtils.removeLinesAndWhiteSpaces('')).toBe('');
-    });
-    it('should return an empty string if the string is null', () => {
-      expect(StringUtils.removeLinesAndWhiteSpaces(null)).toBe('');
+    it('should filter out empty strings from consecutive spaces', () => {
+      const result = StringUtils.getWords('hello  world');
+      expect(result).toEqual(['hello', 'world']);
     });
   });
 
@@ -427,6 +351,9 @@ describe('StringUtils', () => {
       expect(StringUtils.truncateFileName(fileName, maxLength)).toBe(
         'test_test_t...st_test_test.txt',
       );
+    });
+    test('should use default maxLength of 30 when not provided', () => {
+      expect(StringUtils.truncateFileName('short.txt')).toBe('short.txt');
     });
   });
   describe('reformatName', () => {
@@ -456,6 +383,63 @@ describe('StringUtils', () => {
     test('should return the formatted name if it is a person name', () => {
       const name = 'John Doe';
       expect(StringUtils.reformatComplexName(name)).toBe('John Doe');
+    });
+  });
+
+  describe('formatActivityToHTML', () => {
+    test('should wrap matching words in bold tags', () => {
+      const result = StringUtils.formatActivityToHTML('Status is OPEN now', [
+        'OPEN',
+      ]);
+      expect(result).toBe('Status is <b>OPEN</b> now');
+    });
+    test('should wrap multiple words in bold tags', () => {
+      const result = StringUtils.formatActivityToHTML(
+        'Priority HIGH, Status NEW',
+        ['HIGH', 'NEW'],
+      );
+      expect(result).toBe('Priority <b>HIGH</b>, Status <b>NEW</b>');
+    });
+    test('should return the original text if no words match', () => {
+      const result = StringUtils.formatActivityToHTML('No match here', [
+        'OPEN',
+      ]);
+      expect(result).toBe('No match here');
+    });
+    test('should return the original text for empty wordsToBold array', () => {
+      const result = StringUtils.formatActivityToHTML('Some text', []);
+      expect(result).toBe('Some text');
+    });
+  });
+
+  describe('toSnakeCase', () => {
+    test('should convert spaces and hyphens to underscores', () => {
+      expect(StringUtils.toSnakeCase('Hello World')).toBe('hello_world');
+      expect(StringUtils.toSnakeCase('hello-world')).toBe('hello_world');
+    });
+    test('should return falsy value unchanged', () => {
+      expect(StringUtils.toSnakeCase(null)).toBeNull();
+      expect(StringUtils.toSnakeCase('')).toBe('');
+    });
+  });
+
+  describe('truncateCustomerName', () => {
+    test('should return the name unchanged when within maxLength', () => {
+      expect(StringUtils.truncateCustomerName('Alice', 100)).toBe('Alice');
+    });
+    test('should use default maxLength of 100 when not provided', () => {
+      expect(StringUtils.truncateCustomerName('Alice')).toBe('Alice');
+    });
+    test('should truncate and add ellipsis when name exceeds maxLength', () => {
+      const longName = 'VeryLongCustomerNameThatExceedsLimit';
+      const result = StringUtils.truncateCustomerName(longName, 10);
+      expect(result).toContain('...');
+      expect(result.length).toBeLessThan(longName.length);
+    });
+    test('should use custom firstCharCount and lastCharCount', () => {
+      const longName = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const result = StringUtils.truncateCustomerName(longName, 10, 3, 3);
+      expect(result).toBe('ABC...XYZ');
     });
   });
 

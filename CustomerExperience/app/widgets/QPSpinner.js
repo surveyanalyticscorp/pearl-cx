@@ -46,11 +46,6 @@ export default function QPSpinner(props) {
 }
 
 const styles = StyleSheet.create({
-  defaultButtonStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#25CAC6',
-  },
   defaultSpinnerContainerStyle: {
     justifyContent: 'center',
     alignItems: 'center',

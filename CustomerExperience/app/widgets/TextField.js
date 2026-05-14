@@ -90,7 +90,7 @@ const QPTextField = props => {
         mode="flat" // closest to old underline style; change to "outlined" if you prefer
         label={label}
         value={value !== '' ? value : props.value ? value : defaultValue}
-        placeholder={label} // Show placeholder when not focused and empty
+        placeholder={props.placeholder || undefined}
         placeholderTextColor={Colors.evenDarkerGrey}
         autoCapitalize="none"
         autoCorrect={false}

@@ -56,12 +56,12 @@ const RenderPasswordVisibility = ({
 };
 
 const CustomTextField = props => {
-  const fieldRef = props.ref ?? useRef();
+  const internalRef = useRef();
+  const fieldRef = props.ref ?? internalRef;
   const [secureText, setSecureText] = useState(props.secureText);
   const [isFocused, setIsFocused] = useState(false);
   const [internalValue, setInternalValue] = useState(props.defaultValue || '');
 
-  // Animation for floating label
   const labelAnimation = useRef(
     new Animated.Value(
       props.value || props.defaultValue || internalValue ? 1 : 0,
@@ -103,7 +103,6 @@ const CustomTextField = props => {
     setSecureText(!secureText);
   };
 
-  // Add value() method to ref for compatibility
   if (fieldRef.current) {
     fieldRef.current.value = () => currentValue;
   }
@@ -118,13 +117,11 @@ const CustomTextField = props => {
     ? props.textStyle
     : {color: Colors.filterIconColor, fontFamily: FontFamily.regular};
 
-  // Color calculations
   const tintColor = props.tintColor || Colors.accentLight;
   const textColor = props.textColor || Colors.primary;
   const baseColor = props.baseColor || Colors.primary;
   const placeholderTextColor = props.placeholderTextColor || Colors.borderColor;
 
-  // Label styles
   const labelTop = labelAnimation.interpolate({
     inputRange: [0, 1],
     outputRange: [20, 0],
@@ -144,7 +141,6 @@ const CustomTextField = props => {
 
   return (
     <View testID="text-field-container" style={[styles.container, style]}>
-      {/* Floating Label */}
       {label ? (
         <Animated.Text
           style={[
@@ -160,9 +156,8 @@ const CustomTextField = props => {
         </Animated.Text>
       ) : null}
 
-      {/* Text Input */}
       <TextInput
-        key={props.value || 'empty'} // Force re-render when value changes
+        key={props.value || 'empty'}
         ref={fieldRef}
         style={[
           styles.textInput,
@@ -193,7 +188,6 @@ const CustomTextField = props => {
         selectionColor={tintColor}
       />
 
-      {/* Underline */}
       <View
         style={[
           styles.underline,
@@ -204,7 +198,6 @@ const CustomTextField = props => {
         ]}
       />
 
-      {/* Password Visibility Toggle */}
       <RenderPasswordVisibility
         secureText={props.secureText}
         value={currentValue}

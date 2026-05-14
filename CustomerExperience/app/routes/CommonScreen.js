@@ -19,9 +19,8 @@ import CreateTicket from '../components/dashboard/ticketManagement/CreateTicket'
 import TicketDetails from '../components/closedloop/TicketDetails';
 import TicketTakeAction from '../components/closedloop/takeaction/TIcketTakeAction';
 import FeedbackSorter from '../components/feedback/FeedbackSorter';
-import SelectEmailTemplate from '../components/closedloop/takeaction/SelectEmailTemplate';
-import SendEmail from '../components/closedloop/takeaction/SendEmail';
-import ActionEmailHistory from '../components/closedloop/takeaction/ActionEmailHistory';
+import SendEmail from '../components/closedloop/sendEmail/SendEmail';
+import ActionEmailHistory from '../components/closedloop/sendEmail/ActionEmailHistory';
 import HeaderBackLeft from './commonUI/HeaderBackLeft';
 import {CloseButton} from './commonUI/CommonUI';
 import PushNotification from '../components/notifications/PushNotifications';
@@ -346,16 +345,6 @@ const CommonScreens = RootStack => {
       })}
     />,
 
-    <RootStack.Screen
-      key={'SelectEmailTemplate'}
-      name={'SelectEmailTemplate'}
-      component={SelectEmailTemplate}
-      options={({navigation, route}) => ({
-        title: 'Select template',
-        headerTitleStyle: textStyles.headerTitleStyle,
-        headerShown: false,
-      })}
-    />,
     <RootStack.Screen
       key={'sendEmail'}
       name={'sendEmail'}

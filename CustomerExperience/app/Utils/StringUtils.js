@@ -3,10 +3,6 @@ export default class StringUtils {
     return !str || str.length === 0;
   }
 
-  static isNullString(str) {
-    return this.isNotEmpty(str) && str.toLowerCase() === 'null';
-  }
-
   static isNotEmpty(str) {
     return !this.isEmpty(str);
   }
@@ -35,65 +31,6 @@ export default class StringUtils {
     return div.textContent || div.innerText || '';
   }
 
-  static cleanWordHTML(html) {
-    html = html.replace(/<o:p>\s*<\/o:p>/g, '');
-    html = html.replace(/<o:p>.*?<\/o:p>/g, '&nbsp;');
-    html = html.replace(/\s*mso-[^:]+:[^;"]+;?/gi, '');
-    html = html.replace(/\s*MARGIN: 0cm 0cm 0pt\s*;/gi, '');
-    html = html.replace(/\s*MARGIN: 0cm 0cm 0pt\s*"/gi, '"');
-    html = html.replace(/\s*TEXT-INDENT: 0cm\s*;/gi, '');
-    html = html.replace(/\s*TEXT-INDENT: 0cm\s*"/gi, '"');
-    html = html.replace(/\s*TEXT-ALIGN: [^\s;]+;?"/gi, '"');
-    html = html.replace(/\s*PAGE-BREAK-BEFORE: [^\s;]+;?"/gi, '"');
-    html = html.replace(/\s*FONT-VARIANT: [^\s;]+;?"/gi, '"');
-    html = html.replace(/\s*tab-stops:[^;"]*;?/gi, '');
-    html = html.replace(/\s*tab-stops:[^"]*/gi, '');
-    html = html.replace(/\s*face="[^"]*"/gi, '');
-    html = html.replace(/\s*face=[^ >]*/gi, '');
-    html = html.replace(/\s*FONT-FAMILY:[^;"]*;?/gi, '');
-    html = html.replace(/<(\w[^>]*) class=([^ |>]*)([^>]*)/gi, '<$1$3');
-    html = html.replace(/<(\w[^>]*) style="([^\"]*)"([^>]*)/gi, '<$1$3');
-    html = html.replace(/\s*style="\s*"/gi, '');
-    html = html.replace(/<SPAN\s*[^>]*>\s*&nbsp;\s*<\/SPAN>/gi, '&nbsp;');
-    html = html.replace(/<SPAN\s*[^>]*><\/SPAN>/gi, '');
-    html = html.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi, '<$1$3');
-    html = html.replace(/<SPAN\s*>(.*?)<\/SPAN>/gi, '$1');
-    html = html.replace(/<FONT\s*>(.*?)<\/FONT>/gi, '$1');
-    html = html.replace(/<\\?\?xml[^>]*>/gi, '');
-    html = html.replace(/<\/?\w+:[^>]*>/gi, '');
-    html = html.replace(/<H\d>\s*<\/H\d>/gi, '');
-    html = html.replace(/<H1([^>]*)>/gi, '');
-    html = html.replace(/<H2([^>]*)>/gi, '');
-    html = html.replace(/<H3([^>]*)>/gi, '');
-    html = html.replace(/<H4([^>]*)>/gi, '');
-    html = html.replace(/<H5([^>]*)>/gi, '');
-    html = html.replace(/<H6([^>]*)>/gi, '');
-    html = html.replace(/<table([^>]*)>/gi, '');
-    html = html.replace(/<tr([^>]*)>/gi, '');
-    html = html.replace(/<td([^>]*)>/gi, '');
-    html = html.replace(/<b([^>]*)>/gi, '');
-    html = html.replace(/<strong([^>]*)>/gi, '');
-    html = html.replace(/<ul([^>]*)>/gi, '');
-    html = html.replace(/<li([^>]*)>/gi, '');
-    html = html.replace(/<ol([^>]*)>/gi, '');
-    html = html.replace(/<(U|I|STRIKE)>&nbsp;<\/\1>/g, '&nbsp;');
-    html = html.replace(/<(B|b)>&nbsp;<\/\b|B>/g, '');
-    html = html.replace(/<\/H\d>/gi, '<br>'); //remove this to take out breaks where Heading tags were
-    html = html.replace(/<([^\s>]+)[^>]*>\s*<\/\1>/g, '');
-    html = html.replace(/<([^\s>]+)[^>]*>\s*<\/\1>/g, '');
-    html = html.replace(/<([^\s>]+)[^>]*>\s*<\/\1>/g, '');
-
-    //some RegEx code for the picky browsers
-    var re = new RegExp('(<P)([^>]*>.*?)(</P>)', 'gi');
-    html = html.replace(re, '<div$2</div>');
-
-    var re2 = new RegExp('(<font|<FONT)([^*>]*>.*?)(</FONT>|</font>)', 'gi');
-    html = html.replace(re2, '<div$2</div>');
-    html = html.replace(/size|SIZE = ([\d]{1})/g, '');
-
-    return html;
-  }
-
   static formatCommentToHTML(commentText) {
     return commentText.replace(/\@\[([^\]]+)\]\(([^\)]+)\)/g, `<b>$1</b>`);
   }
@@ -110,19 +47,6 @@ export default class StringUtils {
     // const pattern = new RegExp(`(${wordsToBold.join('|')})`, 'g');
 
     // return activityText.replace(pattern, `<b>$1</b>`);
-  }
-
-  static escapeHtml(str) {
-    if (typeof str !== 'string') {
-      return '';
-    }
-
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
   }
 
   static getWords(text) {
@@ -153,14 +77,6 @@ export default class StringUtils {
 
     // Return the count of words
     return words;
-  }
-
-  static removeLinesAndWhiteSpaces(str) {
-    // Fix to remove new line characters and handle multiple spaces
-    if (!str) {
-      return '';
-    }
-    return str.replace(/[\n\r]/g, '').replace(/\s{2,}/g, ' ');
   }
 
   static convertStringToNumberElseReturnZero(str) {
@@ -214,37 +130,6 @@ export default class StringUtils {
     return Math.random().toString(36).substring(7);
   }
 
-  static getTextArraySeparatedByNewline(text) {
-    if (!text || text.trim() === '') {
-      return [];
-    }
-    let textLines = text;
-    textLines = textLines.replace('\r\n', '\n');
-    return textLines.split('\n');
-  }
-
-  static getTextArraySeparatedBy(text, symbol) {
-    if (!text || text.trim() === '') {
-      return [];
-    }
-    let textLines = text;
-    return textLines.split(symbol);
-  }
-
-  static getTextForPropertySeparatedByNewline(obj, property) {
-    const lastItemIndex = obj[property].length - 1;
-    let itemsTextSeparatedByNewLine = '';
-    for (let i = 0; i < obj[property].length; i++) {
-      let item = obj[property][i];
-
-      itemsTextSeparatedByNewLine += this.emptyIfUndefined(item.text);
-      const isNotLastItem = i != lastItemIndex;
-      itemsTextSeparatedByNewLine += isNotLastItem ? '\n' : '';
-    }
-
-    return itemsTextSeparatedByNewLine;
-  }
-
   static removeSpecialCharacters(text) {
     return text.replace(/['"?]/g, '');
   }
@@ -255,10 +140,6 @@ export default class StringUtils {
 
   static convertToPlainText(text) {
     return text.replace(/(<([^>]+)>)/gi, '');
-  }
-
-  static getPlainTextWithoutSpecialCharacters(text) {
-    return this.convertToPlainText(this.removeSpecialCharacters(text));
   }
 
   static removeNewLines(text) {
