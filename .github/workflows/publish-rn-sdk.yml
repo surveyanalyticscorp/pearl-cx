@@ -19,6 +19,11 @@ on:
         description: 'Release notes (optional)'
         required: false
         type: string
+      dry_run:
+        description: 'Dry run - verify changes without publishing or committing'
+        required: false
+        type: boolean
+        default: true  # safe by default — must explicitly set false to publish
 
 jobs:
   publish:
@@ -43,23 +48,29 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # ── Print run mode ───────────────────────────────────────────────────
+      - name: Print run mode
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
+            echo "🧪 DRY RUN MODE — no files will be committed, nothing will be published"
+          else
+            echo "🚀 LIVE MODE — changes will be committed and published to NPM"
+          fi
+
       # ── Update Android native SDK version ──────────────────────────────
       - name: Update Android SDK version in build.gradle
         run: |
           sed -i "s/com.github.surveyanalyticscorp:android-cx:[^'\"']*/com.github.surveyanalyticscorp:android-cx:${{ github.event.inputs.android_version }}/g" \
             android/build.gradle
           echo "✅ Android version set to ${{ github.event.inputs.android_version }}"
-          grep "android-cx" android/build.gradle
 
       # ── Update iOS native SDK version ───────────────────────────────────
       - name: Update iOS SDK version in podspec
         run: |
-          # Finds the podspec file automatically — works regardless of its exact name
           PODSPEC=$(find . -maxdepth 1 -name "*.podspec" | head -1)
           echo "Found podspec: $PODSPEC"
           sed -i "s/s\.dependency 'InterceptSDK', '[^']*'/s.dependency 'InterceptSDK', '${{ github.event.inputs.ios_version }}'/" "$PODSPEC"
           echo "✅ iOS version set to ${{ github.event.inputs.ios_version }}"
-          grep "dependency" "$PODSPEC"
 
       # ── Update NPM version ──────────────────────────────────────────────
       - name: Set NPM package version
@@ -78,7 +89,7 @@ jobs:
               ios: '${{ github.event.inputs.ios_version }}'
             };
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-            console.log('Native versions written to package.json');
+            console.log('✅ Native versions written to package.json');
           "
 
       # ── Verification ────────────────────────────────────────────────────
@@ -89,9 +100,35 @@ jobs:
         run: npx tsc --noEmit --skipLibCheck
         continue-on-error: false
 
-      # ── Commit version bump back to repo ────────────────────────────────
+      # ── Dry run summary (only runs when dry_run = true) ─────────────────
+      - name: Dry run summary
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        run: |
+          echo ""
+          echo "╔══════════════════════════════════════════╗"
+          echo "║           DRY RUN SUMMARY                ║"
+          echo "╚══════════════════════════════════════════╝"
+          echo ""
+          echo "📦 NPM version that would be published:"
+          node -p "require('./package.json').version"
+          echo ""
+          echo "📱 Native versions that would be embedded:"
+          node -p "JSON.stringify(require('./package.json')._nativeVersions, null, 2)"
+          echo ""
+          echo "🤖 Android — android/build.gradle (android-cx line):"
+          grep "android-cx" android/build.gradle
+          echo ""
+          echo "🍎 iOS — podspec dependency line:"
+          grep "dependency" *.podspec
+          echo ""
+          echo "✅ All checks passed."
+          echo "⚠️  Nothing was committed. Nothing was published to NPM."
+          echo "👉 To do a real release, re-run the workflow with dry_run = false"
+
+      # ── Commit version bump back to repo (skipped on dry run) ───────────
       - name: Commit and tag
-        working-directory: .   # git commands must run from repo root
+        if: ${{ github.event.inputs.dry_run == 'false' }}
+        working-directory: .
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -106,14 +143,16 @@ jobs:
           git tag rn-sdk-v${{ github.event.inputs.npm_version }}
           git push origin HEAD --tags
 
-      # ── Publish to NPM ───────────────────────────────────────────────────
+      # ── Publish to NPM (skipped on dry run) ─────────────────────────────
       - name: Publish to NPM
+        if: ${{ github.event.inputs.dry_run == 'false' }}
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # ── Create GitHub Release ────────────────────────────────────────────
+      # ── Create GitHub Release (skipped on dry run) ───────────────────────
       - name: Create GitHub Release
+        if: ${{ github.event.inputs.dry_run == 'false' }}
         uses: actions/github-script@v7
         with:
           script: |
