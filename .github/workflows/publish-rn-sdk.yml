@@ -23,30 +23,30 @@ on:
         description: 'Dry run - verify changes without publishing or committing'
         required: false
         type: boolean
-        default: true  # safe by default — must explicitly set false to publish
+        default: true
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        # All steps run from within the RN SDK folder
-        working-directory: react-native-intercept-sdk
+    # NOTE: No job-level working-directory here — we set it per step explicitly
+    # to avoid conflicts between repo root (git) and SDK folder (npm/gradle)
 
     steps:
+      # ── Checkout ─────────────────────────────────────────────────────────
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_PAT }}
 
-      # ── Configure git to use PAT for push operations ─────────────────────
+      # ── Git auth — runs from repo root ────────────────────────────────────
       - name: Configure git authentication
-        working-directory: .
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          echo "✅ Git auth configured"
 
+      # ── Node setup ───────────────────────────────────────────────────────
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -54,63 +54,72 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
+        working-directory: react-native-intercept-sdk
         run: npm install
 
       # ── Print run mode ───────────────────────────────────────────────────
       - name: Print run mode
         run: |
           if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
-            echo "🧪 DRY RUN MODE — no files will be committed, nothing will be published"
+            echo "🧪 DRY RUN MODE — nothing will be committed or published"
           else
             echo "🚀 LIVE MODE — changes will be committed and published to NPM"
           fi
 
-      # ── Update Android native SDK version ──────────────────────────────
+      # ── Update Android native SDK version ────────────────────────────────
       - name: Update Android SDK version in build.gradle
+        working-directory: react-native-intercept-sdk
         run: |
-          sed -i "s/com.github.surveyanalyticscorp:android-cx:[^'\"']*/com.github.surveyanalyticscorp:android-cx:${{ github.event.inputs.android_version }}/g" \
+          sed -i "s/com.github.surveyanalyticscorp:android-cx:[^'\"' ]*/com.github.surveyanalyticscorp:android-cx:${{ github.event.inputs.android_version }}/g" \
             android/build.gradle
           echo "✅ Android version set to ${{ github.event.inputs.android_version }}"
 
-      # ── Update iOS native SDK version ───────────────────────────────────
+      # ── Update iOS native SDK version ────────────────────────────────────
       - name: Update iOS SDK version in podspec
+        working-directory: react-native-intercept-sdk
         run: |
           PODSPEC=$(find . -maxdepth 1 -name "*.podspec" | head -1)
+          if [ -z "$PODSPEC" ]; then
+            echo "❌ No podspec file found"
+            exit 1
+          fi
           echo "Found podspec: $PODSPEC"
           sed -i "s/s\.dependency 'InterceptSDK', '[^']*'/s.dependency 'InterceptSDK', '${{ github.event.inputs.ios_version }}'/" "$PODSPEC"
           echo "✅ iOS version set to ${{ github.event.inputs.ios_version }}"
 
-      # ── Update NPM version ──────────────────────────────────────────────
-      - name: Set NPM package version
-        run: |
-          npm version ${{ github.event.inputs.npm_version }} --no-git-tag-version
-          echo "✅ NPM version set to ${{ github.event.inputs.npm_version }}"
-
-      # ── Store native version metadata in package.json ───────────────────
-      - name: Write native version metadata
+      # ── Update package.json version and native metadata ───────────────────
+      # Using node directly instead of `npm version` to avoid git interactions
+      - name: Set NPM package version and write native metadata
+        working-directory: react-native-intercept-sdk
         run: |
           node -e "
             const fs = require('fs');
             const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            pkg.version = '${{ github.event.inputs.npm_version }}';
             pkg._nativeVersions = {
               android: '${{ github.event.inputs.android_version }}',
               ios: '${{ github.event.inputs.ios_version }}'
             };
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-            console.log('✅ Native versions written to package.json');
+            console.log('✅ package.json updated');
+            console.log('  version:', pkg.version);
+            console.log('  _nativeVersions:', JSON.stringify(pkg._nativeVersions));
           "
 
-      # ── Verification ────────────────────────────────────────────────────
+      # ── Run tests ────────────────────────────────────────────────────────
       - name: Run tests
+        working-directory: react-native-intercept-sdk
         run: npm test --if-present
 
+      # ── TypeScript check ─────────────────────────────────────────────────
       - name: TypeScript check
+        working-directory: react-native-intercept-sdk
         run: npx tsc --noEmit --skipLibCheck
-        continue-on-error: false
 
-      # ── Dry run summary (only runs when dry_run = true) ─────────────────
+      # ── Dry run summary ──────────────────────────────────────────────────
       - name: Dry run summary
         if: ${{ github.event.inputs.dry_run == 'true' }}
+        working-directory: react-native-intercept-sdk
         run: |
           echo ""
           echo "╔══════════════════════════════════════════╗"
@@ -124,22 +133,21 @@ jobs:
           node -p "JSON.stringify(require('./package.json')._nativeVersions, null, 2)"
           echo ""
           echo "🤖 Android — android/build.gradle (android-cx line):"
-          grep "android-cx" android/build.gradle
+          grep "android-cx" android/build.gradle || echo "  ⚠️ android-cx not found — check build.gradle path"
           echo ""
           echo "🍎 iOS — podspec dependency line:"
-          grep "dependency" *.podspec
+          grep "dependency" *.podspec || echo "  ⚠️ No podspec dependency found"
           echo ""
           echo "✅ All checks passed."
           echo "⚠️  Nothing was committed. Nothing was published to NPM."
-          echo "👉 To do a real release, re-run the workflow with dry_run = false"
+          echo "👉 Re-run with dry_run = false to do a real release."
 
-      # ── Commit version bump back to repo (skipped on dry run) ───────────
+      # ── Commit + tag + push (live only) ──────────────────────────────────
       - name: Commit and tag
         if: ${{ github.event.inputs.dry_run == 'false' }}
-        working-directory: .
         run: |
           git add react-native-intercept-sdk/android/build.gradle
-          git add react-native-intercept-sdk/*.podspec
+          git add "react-native-intercept-sdk/"*.podspec
           git add react-native-intercept-sdk/package.json
           git commit -m "chore(rn-sdk): release v${{ github.event.inputs.npm_version }}
 
@@ -148,15 +156,17 @@ jobs:
           ${{ github.event.inputs.release_notes }}"
           git tag rn-sdk-v${{ github.event.inputs.npm_version }}
           git push origin HEAD --tags
+          echo "✅ Committed and tagged rn-sdk-v${{ github.event.inputs.npm_version }}"
 
-      # ── Publish to NPM (skipped on dry run) ─────────────────────────────
+      # ── Publish to NPM (live only) ───────────────────────────────────────
       - name: Publish to NPM
         if: ${{ github.event.inputs.dry_run == 'false' }}
+        working-directory: react-native-intercept-sdk
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # ── Create GitHub Release (skipped on dry run) ───────────────────────
+      # ── GitHub Release (live only) ───────────────────────────────────────
       - name: Create GitHub Release
         if: ${{ github.event.inputs.dry_run == 'false' }}
         uses: actions/github-script@v7
