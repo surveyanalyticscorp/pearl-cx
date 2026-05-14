@@ -1,0 +1,136 @@
+name: Publish React Native Intercept SDK to NPM
+
+on:
+  workflow_dispatch:
+    inputs:
+      android_version:
+        description: 'Android SDK version (e.g. 2.2.6)'
+        required: true
+        type: string
+      ios_version:
+        description: 'iOS SDK version (e.g. 1.0.0)'
+        required: true
+        type: string
+      npm_version:
+        description: 'NPM package version to publish (e.g. 1.0.0)'
+        required: true
+        type: string
+      release_notes:
+        description: 'Release notes (optional)'
+        required: false
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # All steps run from within the RN SDK folder
+        working-directory: react-native-intercept-sdk
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install
+
+      # ── Update Android native SDK version ──────────────────────────────
+      - name: Update Android SDK version in build.gradle
+        run: |
+          sed -i "s/com.github.surveyanalyticscorp:android-cx:[^'\"']*/com.github.surveyanalyticscorp:android-cx:${{ github.event.inputs.android_version }}/g" \
+            android/build.gradle
+          echo "✅ Android version set to ${{ github.event.inputs.android_version }}"
+          grep "android-cx" android/build.gradle
+
+      # ── Update iOS native SDK version ───────────────────────────────────
+      - name: Update iOS SDK version in podspec
+        run: |
+          # Finds the podspec file automatically — works regardless of its exact name
+          PODSPEC=$(find . -maxdepth 1 -name "*.podspec" | head -1)
+          echo "Found podspec: $PODSPEC"
+          sed -i "s/s\.dependency 'InterceptSDK', '[^']*'/s.dependency 'InterceptSDK', '${{ github.event.inputs.ios_version }}'/" "$PODSPEC"
+          echo "✅ iOS version set to ${{ github.event.inputs.ios_version }}"
+          grep "dependency" "$PODSPEC"
+
+      # ── Update NPM version ──────────────────────────────────────────────
+      - name: Set NPM package version
+        run: |
+          npm version ${{ github.event.inputs.npm_version }} --no-git-tag-version
+          echo "✅ NPM version set to ${{ github.event.inputs.npm_version }}"
+
+      # ── Store native version metadata in package.json ───────────────────
+      - name: Write native version metadata
+        run: |
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            pkg._nativeVersions = {
+              android: '${{ github.event.inputs.android_version }}',
+              ios: '${{ github.event.inputs.ios_version }}'
+            };
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+            console.log('Native versions written to package.json');
+          "
+
+      # ── Verification ────────────────────────────────────────────────────
+      - name: Run tests
+        run: npm test --if-present
+
+      - name: TypeScript check
+        run: npx tsc --noEmit --skipLibCheck
+        continue-on-error: false
+
+      # ── Commit version bump back to repo ────────────────────────────────
+      - name: Commit and tag
+        working-directory: .   # git commands must run from repo root
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add react-native-intercept-sdk/android/build.gradle
+          git add react-native-intercept-sdk/*.podspec
+          git add react-native-intercept-sdk/package.json
+          git commit -m "chore(rn-sdk): release v${{ github.event.inputs.npm_version }}
+
+          Android SDK: ${{ github.event.inputs.android_version }}
+          iOS SDK:     ${{ github.event.inputs.ios_version }}
+          ${{ github.event.inputs.release_notes }}"
+          git tag rn-sdk-v${{ github.event.inputs.npm_version }}
+          git push origin HEAD --tags
+
+      # ── Publish to NPM ───────────────────────────────────────────────────
+      - name: Publish to NPM
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ── Create GitHub Release ────────────────────────────────────────────
+      - name: Create GitHub Release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: 'rn-sdk-v${{ github.event.inputs.npm_version }}',
+              name: 'RN SDK v${{ github.event.inputs.npm_version }}',
+              body: [
+                '## React Native Intercept SDK',
+                '',
+                '### Native SDK Versions',
+                '- 🤖 Android: `${{ github.event.inputs.android_version }}`',
+                '- 🍎 iOS: `${{ github.event.inputs.ios_version }}`',
+                '',
+                '${{ github.event.inputs.release_notes }}'
+              ].join('\n'),
+              draft: false,
+              prerelease: false
+            });
