@@ -39,10 +39,13 @@ jobs:
         with:
           token: ${{ secrets.GH_PAT }}
 
-       - name: Configure git authentication
+      # ── Configure git to use PAT for push operations ─────────────────────
+      - name: Configure git authentication
+        working-directory: .
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
-        working-directory: .
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -135,8 +138,6 @@ jobs:
         if: ${{ github.event.inputs.dry_run == 'false' }}
         working-directory: .
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add react-native-intercept-sdk/android/build.gradle
           git add react-native-intercept-sdk/*.podspec
           git add react-native-intercept-sdk/package.json
