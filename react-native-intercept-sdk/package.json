@@ -1,6 +1,6 @@
 {
   "name": "@npm-questionpro/react-native-survey-intercept",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "React Native SDK wrapper for QuestionPro Survey Intercept SDK",
   "main": "lib/commonjs/index.js",
   "files": [
@@ -71,5 +71,9 @@
       "module",
       "typescript"
     ]
+  },
+  "_nativeVersions": {
+    "android": "2.2.7",
+    "ios": "2.2.7"
   }
 }

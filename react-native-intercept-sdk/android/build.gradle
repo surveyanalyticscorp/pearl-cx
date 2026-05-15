@@ -98,5 +98,5 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
   
   // QuestionPro Android CX SDK
-  implementation 'com.github.surveyanalyticscorp:android-cx:2.2.6'
+  implementation 'com.github.surveyanalyticscorp:android-cx:2.2.7'
 }
