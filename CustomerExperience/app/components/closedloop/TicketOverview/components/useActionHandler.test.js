@@ -45,4 +45,22 @@ describe('useActionHandler', () => {
     });
     expect(mockNavigate).toHaveBeenCalled();
   });
+
+  it('handles case 2 (promptCall) without throwing', () => {
+    const {result} = renderHook(() => useActionHandler(), {wrapper});
+    expect(() => {
+      act(() => {
+        result.current.handleTicketAction({id: 2});
+      });
+    }).not.toThrow();
+  });
+
+  it('handles case 3 (promptSms) without throwing', () => {
+    const {result} = renderHook(() => useActionHandler(), {wrapper});
+    expect(() => {
+      act(() => {
+        result.current.handleTicketAction({id: 3});
+      });
+    }).not.toThrow();
+  });
 });

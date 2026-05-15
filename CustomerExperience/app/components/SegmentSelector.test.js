@@ -1,7 +1,6 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
-import SegmentSelector from './SegmentSelector';
-import {NotiificationIcon} from './SegmentSelector';
+import SegmentSelector, {NotiificationIcon} from './SegmentSelector';
 import {useDispatch, useSelector} from 'react-redux';
 import {StackActions, useNavigation} from '@react-navigation/native';
 
@@ -99,5 +98,56 @@ describe('SegmentSelector Component', () => {
 
     expect(getByText('Segment 1')).toBeTruthy();
     expect(queryByTestId('Pressable')).toBeNull();
+  });
+});
+
+describe('NotiificationIcon', () => {
+  const navigationDispatch = jest.fn();
+  beforeEach(() => {
+    useNavigation.mockReturnValue({dispatch: navigationDispatch});
+    navigationDispatch.mockClear();
+  });
+
+  it('renders without badge when no unread notifications', () => {
+    useSelector.mockImplementation(selector =>
+      selector({
+        notification: {notificationLogs: [{id: 1, hasRead: true}]},
+      }),
+    );
+    const {queryByText} = render(<NotiificationIcon />);
+    expect(queryByText('1')).toBeNull();
+  });
+
+  it('shows badge count for unread notifications', () => {
+    useSelector.mockImplementation(selector =>
+      selector({
+        notification: {
+          notificationLogs: [
+            {id: 1, hasRead: false},
+            {id: 2, hasRead: false},
+          ],
+        },
+      }),
+    );
+    const {getByText} = render(<NotiificationIcon />);
+    expect(getByText('2')).toBeTruthy();
+  });
+
+  it('dispatches navigation on press', () => {
+    useSelector.mockImplementation(selector =>
+      selector({notification: {notificationLogs: []}}),
+    );
+    const {UNSAFE_getByType} = render(<NotiificationIcon />);
+    const {Pressable} = require('react-native');
+    fireEvent.press(UNSAFE_getByType(Pressable));
+    expect(navigationDispatch).toHaveBeenCalled();
+  });
+
+  it('handles null notificationLogs gracefully', () => {
+    useSelector.mockImplementation(selector =>
+      selector({notification: {notificationLogs: null}}),
+    );
+    const {toJSON} = render(<NotiificationIcon />);
+    expect(toJSON()).toBeTruthy();
   });
 });

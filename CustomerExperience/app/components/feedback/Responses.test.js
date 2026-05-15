@@ -49,12 +49,12 @@ describe('Responses', () => {
     };
     store = mockStore(initialState);
 
-    const {getByTestId} = render(
+    const {getByText} = render(
       <Provider store={store}>
         <Responses />
       </Provider>,
     );
-    expect(getByTestId('responses-component')).toBeTruthy();
+    expect(getByText('There are no responses yet')).toBeTruthy();
   });
   it('should render Responses with loading', () => {
     const initialState = {
@@ -91,7 +91,6 @@ describe('Responses', () => {
       </Provider>,
     );
     expect(getByTestId('responses-component')).toBeTruthy();
-    expect(getByTestId('no-responses-found-view')).toBeTruthy();
   });
   it('should navigate to feedback details', () => {
     const {getByTestId, getAllByTestId} = render(

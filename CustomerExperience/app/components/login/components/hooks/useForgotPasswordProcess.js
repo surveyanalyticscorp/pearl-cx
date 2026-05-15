@@ -58,6 +58,9 @@ const useForgotPasswordProcess = resetData => {
       errorMessage,
       resetPasswordLinkResponse,
     );
+    if (isError && errorMessage?.message) {
+      showErrorFlashMessage(errorMessage.message);
+    }
     if (resetPasswordLinkResponse && resetPasswordLinkResponse?.message) {
       showSuccessFlashMessage('Reset password link sent to your email');
       dispatch(clearResetPasswordLinkResponse());

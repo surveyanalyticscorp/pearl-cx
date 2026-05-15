@@ -332,8 +332,14 @@ describe('login sagas', () => {
     it('should dispatch RESET_PASSWORD_LINK_RESPONSE on success', async () => {
       const dispatched = [];
       const action = {param: {accessCode: '123'}};
-      const mockAuthResponse = {body: {mobileAPIURL: 'https://example.com'}};
-      const mockResetResponse = {body: {message: 'Reset link sent'}};
+      const mockAuthResponse = {
+        statusCode: 200,
+        body: {mobileAPIURL: 'https://example.com'},
+      };
+      const mockResetResponse = {
+        statusCode: 200,
+        body: {message: 'Reset link sent'},
+      };
 
       WebServiceHandler.postNew
         .mockResolvedValueOnce(mockAuthResponse)
@@ -349,10 +355,9 @@ describe('login sagas', () => {
 
       expect(dispatched).toEqual([
         {type: IS_LOADING, payload: {isLoading: true}},
-        {
-          type: RESET_PASSWORD_LINK_RESPONSE,
-          response: mockResetResponse.body,
-        },
+        {type: RESET_PASSWORD_LINK_RESPONSE, response: mockResetResponse.body},
+        {type: IS_LOADING, payload: {isLoading: false}},
+        {type: IS_LOADING, payload: {isLoading: false}},
       ]);
     });
 
@@ -361,7 +366,7 @@ describe('login sagas', () => {
       const action = {param: {accessCode: '123'}};
       const mockError = {message: 'Error sending reset link'};
 
-      WebServiceHandler.postNew.mockRejectedValue(mockError);
+      WebServiceHandler.postNew.mockRejectedValueOnce(mockError);
 
       await runSaga(
         {
@@ -373,10 +378,8 @@ describe('login sagas', () => {
 
       expect(dispatched).toEqual([
         {type: IS_LOADING, payload: {isLoading: true}},
-        {
-          type: 'API_ERROR',
-          error: mockError,
-        },
+        {type: 'API_ERROR', error: mockError},
+        {type: IS_LOADING, payload: {isLoading: false}},
       ]);
     });
   });

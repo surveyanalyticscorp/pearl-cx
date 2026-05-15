@@ -209,7 +209,7 @@ describe('SplashScreen', () => {
 
         expect(calls).toContainEqual([
           {
-            payload: true,
+            isFirstTime: true,
             type: 'SET_IS_FIRST_TIME',
           },
         ]);

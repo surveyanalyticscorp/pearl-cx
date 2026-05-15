@@ -66,11 +66,11 @@ export default function TicketDetails(props) {
     [notificationId, ticketItem.id],
   );
 
-  // useEffect(() => {
-  //   props.navigation.setOptions({
-  //     title: `Ticket #${ticketItem.id}`,
-  //   });
-  // }, [props.navigation, ticketItem.id]);
+  useEffect(() => {
+    props.navigation.setOptions({
+      title: `Ticket #${ticketItem.id}`,
+    });
+  }, [props.navigation, ticketItem.id]);
 
   useEffect(() => {
     if (authToken) {

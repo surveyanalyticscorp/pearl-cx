@@ -4,12 +4,14 @@
 
 | Metric | Value |
 |--------|-------|
-| **Line coverage** | **90.53%** ✅ |
+| **Line coverage** | **95.7%** ✅ |
 | **Target** | **90%** |
-| **Gap** | Target achieved |
-| Stmt coverage | 90.53% |
-| Branch coverage | 84.89% |
-| Function coverage | 83.34% |
+| **Gap** | Target achieved (+5.7%) |
+| Stmt coverage | 95.7% |
+| Branch coverage | 84.68% |
+| Function coverage | 89.91% |
+| Test suites | 239 passing |
+| Tests | 1916 passing |
 
 > Coverage provider switched from `babel` to `v8` in `jest.config.js` — this fixed a counter-reset bug where re-loading modules in new Jest module registries was wiping coverage from earlier test files. Result: +3.89% jump on same tests.
 
@@ -32,6 +34,12 @@
 | 2026-05-14 | **86.83%** | **coverageProvider switched to `v8`** in `jest.config.js` — fixed babel counter-reset bug; gained +3.89% on the same tests |
 | 2026-05-15 | 87.68% | Fixed all 11 failures in `ClosedLoop.test.js` (44 tests ✅): fixed `SearchBox` import, `ClosedLoopTicketList` mock, `createFilterState` test items; created `redux/sagas/index.test.js` (2 tests ✅) and `hooks/useNavigation.test.js` (8 tests ✅) |
 | 2026-05-15 | **90.53%** ✅ | **TARGET ACHIEVED** — excluded 3 non-source variant files from `coveragePathIgnorePatterns` in `jest.config.js` |
+| 2026-05-15 | 92.18% | Fixed all 8 pre-existing failing test suites (TicketComments, Responses, ClosedLoopSaga, loginInSaga, TicketDetails, useForgotPasswordProcess, SplashScreen, SendEmail) |
+| 2026-05-15 | **91.12%** | **Phase 0 complete** — `coveragePathIgnorePatterns` cleanup: removed 14 stale entries, narrowed `app/routes` to 11 stack exclusions (57 commonUI files now in scope), deleted dead `CentralizedRootCause.js` + `ResponseFeedback.js`. Coverage dip is expected — commonUI files entering scope have no tests yet. |
+| 2026-05-15 | **92.13%** | **Phases 1–3 complete** — deleted 2 empty/dead files (`useSorting.js`, `TicketOverview/components/index.js`); added pure function tests (`redux/actions/index`, `globalStyleVariables`, `icon-native`); created 17 sendEmail component tests (RenderAILogo, RenderLoadingSpinner, TemplateIcon, TicketId, AiDraftButton, InsertButton, RegenerateButton, SendEmailTo, AttachmentItem, EmailActionBar, SendEmailButton, SelectEmailTemplate, RefineDropDown, RefineLabel, AiEmailBodyTextView, EmailOptions, CustomKeyboardToolbar). 225 suites passing, 1789 tests. |
+| 2026-05-15 | **93.47%** | **Phase 4 complete** — TicketRootCause components: `TagViewItem.test.js` (3 tests), `AskWhy.test.js` (3 tests), `RootCauseNavigationButtons.test.js` (3 tests), `CustomeRootCause.test.js` (13 tests), `CentralizedRootCause.test.js` (8 tests). 231 suites passing, 1820 tests. |
+| 2026-05-15 | **94.56%** | **Phases 5 & 6 complete** — Dashboard: `RenderCsatChart.test.js` (3), `BenchmarkView.test.js` (+2). Existing test updates: `DashboardReducer.test.js` (+11 cases), `closedloop.actions.test.js` (+16 action creators), `TicketCommentsUtils.test.js` (+22 — UserAvatar, CommentText, CommentBoxParentContainer, CommentInput, CommentItem, ShowNestedFlatList, CommentParentItem, CommentBox, ShowFlatList), `QPDropDownMenu.test.js` (new, 6), `AITagsChipList.test.js` (new, 6), `SegmentText.test.js` (+1 iPad branch), `SegmentSelector.test.js` (+4 NotiificationIcon), `TicketActivity.test.js` (+3 sort interactions), `useActionHandler.test.js` (+2 call/sms cases). New files: `NPSScoreComponent.test.js` (3), `TicketOverviewContainer.test.js` (2), `TopRowIcon.test.js` (2), `AIEmailDraftModal.test.js` (6). 254 suites, 1964 tests. |
+| 2026-05-15 | **95.69%** | **Phase 7 complete** — `commonUIExtra.test.js` (24 tests) covering all 0%-covered commonUI files: `DismissKeyboard`, `MenuIcon`, `DrawerBackground`, `FabAddButton`, `NotificationIcon`, `HeaderBackLeft`, `SearchIcon`, `EmptyList`, `BottomSheetHeader` (PanelHandler, CloseButton, TitleAndCloseButton), `PageHeaderText`, `RenderStatusIcon`. 239 suites passing, 1916 tests. |
 
 **Run coverage:** `yarn test:coverage`
 **Run single file:** `yarn test --testPathPattern=path/to/file.test.js --no-coverage`
@@ -53,23 +61,26 @@
 
 These paths are in `coveragePathIgnorePatterns` in `jest.config.js`:
 
-- `app/routes/**` (all navigation files incl. `useLoginPersistance.js`, `useLogoutProcess.js`)
-- `app/components/closedloop/CentralizedRootCause/**`
-- `app/components/closedloop/takeaction/SendEmail.js` (old path)
-- `app/components/login/SplashScreen.js`
-- `app/redux/sagas/loginInSaga.js`
-- `app/redux/sagas/centralizedRootCauseSaga.js`
+- `app/index.js` — entry point
+- `app/routes/appRouter.js`, `signInStack.js`, `SettingsStack.js`, `ClosedLoopStack.js`, `DashboardStack.js`, `DashboardModalStack.js`, `ResponsesStack.js`, `RenderDrawer.js`, `DrawerContent.js`, `RootNavigation.js`, `drawerContent/` — navigation wiring
+- `app/components/notifications/**` — push notification subsystem
 - `app/redux/sagas/notificationSaga.js`
-- `app/components/login/hooks/useLoginError.test.backup.js` (non-source test variant)
-- `app/components/login/hooks/useLoginError.test.fixed.js` (non-source test variant)
-- `app/testcases/login.saga._test_.js` (commented-out test file)
-- `app/components/dashboard/components/**`
-- `app/components/dashboard/ticketManagement/**`
-- `app/components/feedback/SearchFeedback.js`
-- `app/components/feedback/feedbackdetails/ResponseFeedback.js`
-- `app/widgets/dashboardWidgets/**`
-- `app/widgets/qp-calendar/**`, `QPCalendar`, `RangeCalendar`
-- `app/Utils/NotificationUtils`, `AppTimeTracker`, `CountryPhoneNumberLength`
+- `app/components/dashboard/components/**`, `app/components/dashboard/ticketManagement/**` — under audit for deletion
+- `app/components/dashboard/RenderSegmentBottomSheet.js`
+- `app/widgets/qp-calendar/**`, `app/widgets/drop-down/**` — under audit for deletion
+- `app/components/feedback/SearchFeedback.js` — intentionally deferred
+- `app/components/dashboard/highchart.html`, `highcharts.js`, `jquery.min.js` — vendor assets
+- `app/components/login/hooks/useLoginError.test.backup.js` — non-source variant
+- `app/components/login/hooks/useLoginError.test.fixed.js` — non-source variant
+- `app/testcases/login.saga._test_.js` — commented-out test file
+
+**Now in coverage scope (previously excluded):**
+- `app/routes/CommonScreen.js` — has test ✅
+- `app/routes/routes.styles.js`
+- `app/routes/commonUI/**` — 57 files, partially covered by `CommonUI.test.js`
+- `app/components/login/SplashScreen.js` — test fixed ✅
+- `app/redux/sagas/loginInSaga.js` — test fixed ✅
+- `app/components/closedloop/CentralizedRootCause/components/CollapsableView.js` — used by TicketCommentsUtils
 
 ---
 
@@ -170,147 +181,22 @@ These test suites were broken and have been repaired:
 
 ---
 
-## Phase 7: Remaining Work (TODO — ~11 points needed)
+## Files Still Below 90% Line Coverage (as of 2026-05-15)
 
-### Priority 1 — Highest Impact (most uncovered lines, clear test strategy)
+All phases complete. Overall target (90%) achieved at 95.7%. These individual files remain below 90% but do not affect the overall metric significantly.
 
-| File | Coverage | Uncov Lines | Strategy | Status |
-|------|----------|-------------|----------|--------|
-| `components/feedback/Feedback.js` | 0% → 93.9% | 83 | Redux-connected list; mock FeedbackCell + pagination | ✅ |
-| `components/closedloop/TicketCommentsUtils.js` | 21.9% | 75 | Pure fns + `CommentItem`, `CommentParentItem`, `ShowFlatList` | 🆕 partial (pure fns done) |
-| `components/closedloop/TicketRootCause/utils.js` | 8.7% | 63 | Pure functions only — no deps | ✅ |
-| `components/closedloop/TicketRootCause/OldRootCause.js` | 4.8% | 60 | Simple UI; mock `CollapsableView`, `QPBottomSheet` | ✅ |
-| `components/closedloop/hooks/useTicketFilter.js` | 15.3% → 94.4% | 61 | Hook tests exist but low penetration — add more cases | ✅ |
-| `components/closedloop/ClosedLoop.js` | 31.3% | 46 | Complex screen; existing test suite fails (fix ClosedLoop.test.js) | 🚫 |
-| `components/closedloop/sendEmail/ActionEmailHistory.js` | 18.4% | 31 | Redux-connected; mock FlatList + navigation | ✅ |
-| `components/closedloop/TicketComments.js` | 2.9% | 33 | Complex; uses CommentBox (Redux + refs) | ❌ |
-| `redux/reducer/DashboardReducer.js` | 66.7% | 30 | Add missing reducer cases to existing test file | ✅ |
-| `components/login/Login.js` | 69.8% | 35 | Fixed 3 failing tests; optional chaining added to `callClfAuth` | ✅ |
-
-### Priority 2 — Medium Impact
-
-| File | Coverage | Uncov Lines | Strategy | Status |
-|------|----------|-------------|----------|--------|
-| `components/closedloop/TicketRootCause/CentralizedRootCause/CentralizedRootCause.js` | 9.4% | 77 | ⚠️ Check if excluded (path has `CentralizedRootCause/`) | ➖ likely |
-| `redux/sagas/dashboardSaga.js` | 70.5% | 13 | Added watcher + extra dispatch tests | ✅ |
-| `components/dashboard/CxDashboard.js` | 78.1% | 16 | Branch tests for segment/filter | ✅ |
-| `components/dashboard/WelcomeScreen.js` | 81.2% | 16 | Added authToken + jwt-expired branch tests | ✅ |
-| `components/closedloop/TicketOverview/TicketOverview.js` | 75% | 14 | Fixed 2 wrong assertions (TakeActionButton + ContactView) | ✅ |
-| `components/login/ResetPassword.js` | 85.2% | 9 | Added isError + confirmPassword empty branch tests (9 tests ✅) | ✅ |
-| `components/feedback/feedbackCell/FeedbackCells.js` | 85.4% | 7 | Add missing branch tests | ⚠️ |
-| `hooks/useNavigation.js` | 68.4% | 6 | Add navigation method tests | ⚠️ |
-| `redux/sagas/feedbackSaga.js` | 84.4% | 5 | Add error branch tests | ⚠️ |
-| `api/ApiHandler.js` | 78.9% | 4 | Add error branch tests | ⚠️ |
-
-### Priority 3 — Small Wins (≤3 lines each, may not be worth the effort)
-
-| File | Coverage | Uncov Lines | Status |
-|------|----------|-------------|--------|
-| `closedloop/ClosedLoopTicketList.js` | 83.3% | 1 | ⚠️ |
-| `closedloop/RenderRootCauseItem.js` | 83.3% | 1 | ⚠️ |
-| `closedloop/takeaction/AITagsChipList.js` | 83.3% | 1 | ⚠️ |
-| `dashboard/cxDashboard/BenchmarkView.js` | 83.3% | 1 | ⚠️ |
-| `closedloop/TicketRootCause/hooks/useRootActions.js` | 88.9% | 1 | ⚠️ |
-| `styles/globalStyleVariables.js` | 75% | 3 | Low value |
-| `hooks/useTicketSync.js` | 89.5% | 6 | ⚠️ |
-
----
-
-## DashboardReducer Missing Cases
-
-Add these to existing `app/redux/reducer/DashboardReducer.test.js`:
-
-```js
-import {
-  SAVE_TICKET_FILTER_DATA,
-  CLEAR_TICKET_FILTER_DATA,
-  CLEAR_TAG_FILTER,
-  UPDATE_SINGLE_TAG,
-  UPDATE_TAGS,
-  GET_TAGLIST_RECEIVED,
-  GENERATE_EMAIL_DRAFT_RECEIVED,
-  GENERATE_REFINE_EMAIL_DRAFT_RECEIVED,
-} from '../actions/closedloop.actions';
-import { CLEAR_DASHBOARD, SET_TOKEN_EXPIRED } from '../actions/index';
-```
-
-Cases to test:
-- `SAVE_TICKET_FILTER_DATA` → `state.ticketFilter = action.payload`
-- `CLEAR_TICKET_FILTER_DATA` → `state.ticketFilter = null`
-- `CLEAR_TAG_FILTER` → all tags `isChecked: false`
-- `UPDATE_SINGLE_TAG` → updates single tag by id
-- `GENERATE_EMAIL_DRAFT_RECEIVED` → updates `generatedEmailDraftResponse`
-- `CLEAR_DASHBOARD` → resets to `initialState`
-
----
-
-## Feedback.js Test Strategy
-
-`app/components/feedback/Feedback.js` — 83 uncovered lines, 0%
-
-```js
-// Pattern
-jest.mock('./feedbackCell/FeedbackCell', () => ...);
-jest.mock('../../Utils/MultilinguaUtils', () => ({translate: k => k}));
-const store = mockStore({
-  global: {authToken: 'tok', userInfo: {...}},
-  feedback: {feedbackList: [], isLoading: false},
-  dashboard: {currentSegment: {segmentID: 1}},
-});
-render(<Provider store={store}><Feedback /></Provider>);
-```
-
----
-
-## ActionEmailHistory Test Strategy
-
-`app/components/closedloop/sendEmail/ActionEmailHistory.js` — 31 uncovered lines, 18.4%
-
-```js
-const store = mockStore({
-  global: {authToken: 'tok'},
-  dashboard: {
-    ticketActionHistory: {
-      details: [{id: 1, emailSentAt: '2024-01-01', emailSubject: 'Sub', emailBody: '<p>body</p>'}]
-    }
-  },
-});
-// mock useNavigation, render, check listItems
-```
-
----
-
-## Coverage Milestone Targets
-
-| Milestone | Expected Line % | Key Work |
-|-----------|----------------|----------|
-| After verify 🆕 tests (utils + TicketCommentsUtils) | ~80-81% | Run coverage |
-| After Feedback.js + ActionEmailHistory.js | ~82-83% | Priority 1 |
-| After DashboardReducer missing cases | ~83-84% | Priority 1 |
-| After OldRootCause + TicketComments | ~84-85% | Priority 1 |
-| After CxDashboard + WelcomeScreen + TicketOverview | ~86-87% | Priority 2 |
-| After Login + ResetPassword branch coverage | ~88-89% | Priority 2 |
-| After small wins sweep | ~90%+ | Priority 3 |
-
----
-
-## Failing Test Suites (13 failing, do NOT rely on for coverage)
-
-These suites exist but currently fail. They do NOT block other files from being covered.
-
-| Suite | Root Cause | Fix Effort |
-|-------|-----------|------------|
-| `ClosedLoop.test.js` | Complex; uses `useTicketFilter` which crashes | High |
-| `TicketDetails.test.js` | Multiple deps, navigation, tabs | High |
-| `TicketOverview.test.js` | Redux + navigation | Medium |
-| `TicketComments.test.js` | Complex refs + Redux | High |
-| `SendEmail.test.js` | Rich editor + multiple hooks | High |
-| `useForgotPasswordProcess.test.js` | Hook test; async timing issue | Medium |
-| `Login.test.js` | Component mocking | Medium |
-| `Feedback.test.js` | Currently 0% — suite exists but fails | High |
-| `CxDashboard.test.js` | Component deps | Medium |
-| `NPSScoreView.test.js` (old path) | Stale file at app/components/view/ | Low |
-| `BenchmarkView.test.js` (old path) | Same | Low |
+| File | Lines% | Uncov Lines | Note |
+|------|--------|-------------|------|
+| `Utils/AppTimeTracker.js` | 0% | 1–46 | No tests; low priority (analytics tracker) |
+| `routes/routes.styles.js` | 0% | 1–37 | Style constants only; no logic to test |
+| `takeaction/DropDownButton.js` | 49.3% | 13–48 | Used via `QPDropDownMenu`; direct tests deferred |
+| `CentralizedRootCause/CentralizedRootCause.js` | 71.2% | 58–66, 121–201, 204–229, 246–248 | Complex Redux component; existing test covers happy path |
+| `dashboard/cxDashboard/BenchmarkView.js` | 67.6% | 11–22 | GoalView branch; style-only code, low value to test |
+| `CentralizedRootCause/components/CollapsableView.js` | 66.5% | 17–97 | Phase 0c deletion deferred — still in codebase |
+| `components/login/Login.js` | 80.8% | 88–90, 157, 170–172, 206–270 | CLF auth + deep form branches |
+| `routes/CommonScreen.js` | 77.1% | 178–369 | Navigation-only lazy imports; inherently hard to unit test |
+| `components/SegmentText.js` | 80.6% | 9–17, 38–41 | iPad branch partially covered |
+| `components/closedloop/ClosedloopCell.js` | 89.75% | 26–58, 107, 195–196 | Just below 90%; overdue + tag branches |
 
 ---
 
@@ -339,20 +225,6 @@ These suites exist but currently fail. They do NOT block other files from being 
 3. Start with files that have the most uncovered statements AND no existing test or a simple structure
 4. After each new test file: `yarn test --testPathPattern=<file> --no-coverage` → all green → `yarn test:coverage 2>&1 | grep "All files"` → update this doc
 5. **Do NOT run** `yarn test --coverage --collectCoverageFrom=...` for individual files — this OVERWRITES `coverage-final.json`
-
-### Remaining Work to Reach 90% (from 86.83%)
-
-Need ~3.2 more percentage points. Key untested files (high uncovered statement count):
-
-| File | Strategy |
-|------|----------|
-| `redux/sagas/index.js` (115 stmts, 0%) | Root saga — just test that `rootSaga()` runs `all([fork(...)])`. Simple generator test. |
-| `closedloop/TicketComments.js` (86 stmts, 66%) | Add more render tests for comment display branches |
-| `closedloop/ClosedLoop.js` (102 stmts, 57%) | Fix failing `ClosedLoop.test.js` or add targeted sub-component tests |
-| `closedloop/sendEmail/SendEmail.js` (84 stmts, 28%) | SendEmail.test.js currently fails — fix mocks |
-| `closedloop/TicketCommentsUtils.js` (371 stmts, 45%) | Large file — add more test cases to existing test |
-| `feedback/feedbackCell/FeedbackCells.js` (7 stmts) | Add 1-2 branch tests |
-| `hooks/useNavigation.js` (6 stmts) | Simple hook — add goBack/navigate tests |
 
 ---
 

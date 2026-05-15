@@ -35,6 +35,7 @@
     "test:singleFileCoverageOld": "jest --coverage --testPathPattern=app/routes/CommonScreen.test.js.test.js -u",
     "test:singleFileCoverage": "jest --collectCoverageFrom=\"<rootDir>/app/**/*.{js,jsx}\" --testPathPattern=app/components/view/CalendarScreen.test.js -u",
     "test:singleDirectoryCoverage": "jest --coverage --testPathPattern=CustomerExperience/app/components/closedloop/TicketOverview/hooks/",
+    "test:coverageReport": "jest --coverage -u --coverageReporters=text 2>&1 | sed -n '/File.*Stmts/,/^$/p' >coverage-report.txt",
     "android:go": "rm -rf node_modules && yarn cache clean && yarn && yarn cache clean && cd android && ./gradlew clean --stacktrace && cd .. && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/generated/res/react && react-native run-android"
   },
   "dependencies": {

@@ -36,4 +36,14 @@ describe('BenchmarkView', () => {
     const {getByTestId} = render(wrap());
     expect(getByTestId('goal-icon')).toBeTruthy();
   });
+
+  it('renders Goal label with score 0', () => {
+    const {getByText} = render(wrap(0));
+    expect(getByText('Goal: 0')).toBeTruthy();
+  });
+
+  it('renders Goal label with negative score', () => {
+    const {getByText} = render(wrap(-20));
+    expect(getByText('Goal: -20')).toBeTruthy();
+  });
 });

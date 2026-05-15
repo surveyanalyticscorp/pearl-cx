@@ -1,11 +1,12 @@
 import React from 'react';
 import {render} from '@testing-library/react-native';
-import TicketComments, {
+import TicketComments from './TicketComments';
+import {
   getFoldedText,
   CommentCancelReplyButton,
   CommentText,
   CommentParentItemContainer,
-} from './TicketComments';
+} from './TicketCommentsUtils';
 import configureStore from 'redux-mock-store';
 import {Provider} from 'react-redux';
 
@@ -81,7 +82,18 @@ jest.mock('react-native', () => {
 
 jest.mock('../../styles/font.constants', () => ({
   FontFamily: {
+    light: 'System',
     regular: 'System',
+    medium: 'System',
+    semiBold: 'System',
+    bold: 'System',
+  },
+  FontWeight: {
+    bold: '700',
+    semiBold: '600',
+    medium: '500',
+    normal: '400',
+    light: '300',
   },
 }));
 
@@ -149,7 +161,7 @@ describe('getFoldedText', () => {
       5,
     );
     expect(foldedText).toBe(`This is a long text
-      <span style="color:#1b87e6;"><b> ...see more</b></span>`);
+      <span style="color:#1b87e6;"> ...see more</span>`);
   });
 });
 

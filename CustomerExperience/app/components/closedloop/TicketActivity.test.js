@@ -22,6 +22,36 @@ jest.mock('@gorhom/bottom-sheet', () => ({
   BottomSheetView: 'mockBottomSheetView',
 }));
 
+jest.mock('../closedloop/takeaction/DropDownButton', () => ({label, onPress}) => {
+  const {Pressable, Text} = require('react-native');
+  return (
+    <Pressable testID="sort-dropdown" onPress={onPress}>
+      <Text>{label}</Text>
+    </Pressable>
+  );
+});
+
+jest.mock('../closedloop/takeaction/QPDropDownMenu', () => ({visible, onClose, onSelectItem, items}) => {
+  if (!visible) return null;
+  const React = require('react');
+  const {View, Pressable, Text} = require('react-native');
+  return (
+    <View testID="sort-menu">
+      {(items || []).map(item => (
+        <Pressable
+          key={item}
+          testID={`sort-item-${item}`}
+          onPress={() => onSelectItem && onSelectItem(item)}>
+          <Text>{item}</Text>
+        </Pressable>
+      ))}
+      <Pressable testID="sort-close" onPress={onClose}>
+        <Text>Close</Text>
+      </Pressable>
+    </View>
+  );
+});
+
 const mockStore = configureStore([]);
 const initialState = {
   global: {
@@ -131,6 +161,40 @@ describe('TicketActivity Component', () => {
     const dayAgoElements = getAllByText('1 day ago');
     expect(dayAgoElements.length).toBe(2); // Assuming there are two activities
     expect(getByText('Activity 1')).toBeTruthy();
+  });
+
+  it('opens sort dropdown on sort button press', () => {
+    const {getByTestId} = render(
+      <Provider store={store}>
+        <TicketActivity />
+      </Provider>,
+    );
+    fireEvent.press(getByTestId('sort-dropdown'));
+    expect(getByTestId('sort-menu')).toBeTruthy();
+  });
+
+  it('closes sort menu when close pressed', () => {
+    const {getByTestId, queryByTestId} = render(
+      <Provider store={store}>
+        <TicketActivity />
+      </Provider>,
+    );
+    fireEvent.press(getByTestId('sort-dropdown'));
+    expect(getByTestId('sort-menu')).toBeTruthy();
+    fireEvent.press(getByTestId('sort-close'));
+    expect(queryByTestId('sort-menu')).toBeNull();
+  });
+
+  it('changes sort order when sort item selected', () => {
+    const {getByTestId, queryByTestId} = render(
+      <Provider store={store}>
+        <TicketActivity />
+      </Provider>,
+    );
+    fireEvent.press(getByTestId('sort-dropdown'));
+    fireEvent.press(getByTestId('sort-item-activity.oldest'));
+    // dropdown closes after selection
+    expect(queryByTestId('sort-menu')).toBeNull();
   });
 
   describe('getTicketActivityList', () => {

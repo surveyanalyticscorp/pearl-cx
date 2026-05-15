@@ -5,12 +5,20 @@ import {
   GET_DEFAULT_EMAIL_TEMPLATE,
   GET_EMAIL_TEMPLATES,
   SEND_EMAIL,
+  RESET_SEND_EMAIL_RESPONSE,
+  SEND_EMAIL_FAILED,
+  RESET_SEND_EMAIL_ERROR,
   GET_LATEST_COMMENT,
   GET_TICKET_STATUS_HISTORY,
   SET_TICKET_FILTER_BY_STATUS_ID,
   GET_ROOT_CASUES,
   GET_ACTIONS,
   UPDATE_ROOT_CAUSE,
+  UPDATE_CENTRALIZED_ROOT_CAUSE,
+  CENTRALIZED_ROOT_CAUSE,
+  ADD_DRAFT_CENTRALIZED_ROOT_CAUSE,
+  REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE,
+  RESET_DRAFT_CENTRALIZED_ROOT_CAUSE,
   UPDATE_TICKET_ESCALATION,
   DELETE_TICKET,
   DELETE_TICKET_STATUS_RESET,
@@ -20,6 +28,12 @@ import {
   MEDIA_FILE_UPLOAD_RESET,
   GENERATE_EMAIL_DRAFT,
   GENERATE_REFINE_EMAIL_DRAFT,
+  GET_TAGLIST,
+  UPDATE_SINGLE_TAG,
+  UPDATE_TAGS,
+  CLEAR_TAG_FILTER,
+  SAVE_TICKET_FILTER_DATA,
+  CLEAR_TICKET_FILTER_DATA,
 } from './closedloop.actions';
 
 describe('Closed Loop Actions', () => {
@@ -256,5 +270,85 @@ describe('Closed Loop Actions', () => {
       param,
     };
     expect(actions.generateRefineEmailDraft(param)).toEqual(expectedAction);
+  });
+
+  it('should create resetSendEmailResponse action', () => {
+    expect(actions.resetSendEmailResponse()).toEqual({type: RESET_SEND_EMAIL_RESPONSE});
+  });
+
+  it('should create sendEmailFailed action', () => {
+    expect(actions.sendEmailFailed()).toEqual({type: SEND_EMAIL_FAILED});
+  });
+
+  it('should create resetSendEmailError action', () => {
+    expect(actions.resetSendEmailError()).toEqual({type: RESET_SEND_EMAIL_ERROR});
+  });
+
+  it('should create getCentralizedRootCause action', () => {
+    expect(actions.getCentralizedRootCause()).toEqual({type: CENTRALIZED_ROOT_CAUSE});
+  });
+
+  it('should create updateCentralizedRootCause action', () => {
+    const result = actions.updateCentralizedRootCause('t1', {ids: [1]}, 'key123');
+    expect(result.type).toBe(UPDATE_CENTRALIZED_ROOT_CAUSE);
+    expect(result.ticketId).toBe('t1');
+    expect(result.feedbackApiKey).toBe('key123');
+  });
+
+  it('should create resetCentralizedRootCause action', () => {
+    expect(actions.resetCentralizedRootCause()).toEqual(
+      expect.objectContaining({type: expect.any(String)}),
+    );
+  });
+
+  it('should create addDraftTags action', () => {
+    const result = actions.addDraftTags([1, 2], true, 'text');
+    expect(result.type).toBe(ADD_DRAFT_CENTRALIZED_ROOT_CAUSE);
+    expect(result.tagList).toEqual([1, 2]);
+    expect(result.isOtherChecked).toBe(true);
+    expect(result.otherText).toBe('text');
+  });
+
+  it('should create removeDraftTags action', () => {
+    const result = actions.removeDraftTags([1], false, '');
+    expect(result.type).toBe(REMOVE_DRAFT_CENTRALIZED_ROOT_CAUSE);
+    expect(result.tagList).toEqual([1]);
+  });
+
+  it('should create resetDraftTags action', () => {
+    expect(actions.resetDraftTags().type).toBe(RESET_DRAFT_CENTRALIZED_ROOT_CAUSE);
+  });
+
+  it('should create getTaglist action', () => {
+    const result = actions.getTaglist({feedbackId: 'fid', param: {p: 1}});
+    expect(result.type).toBe(GET_TAGLIST);
+    expect(result.feedbackId).toBe('fid');
+    expect(result.param).toEqual({p: 1});
+  });
+
+  it('should create updateSingleTag action', () => {
+    const tag = {id: 1, isChecked: true};
+    expect(actions.updateSingleTag(tag)).toEqual({type: UPDATE_SINGLE_TAG, tag});
+  });
+
+  it('should create updateTags action', () => {
+    const tags = [{id: 1}, {id: 2}];
+    expect(actions.updateTags(tags)).toEqual({type: UPDATE_TAGS, tags});
+  });
+
+  it('should create clearTagFilter action', () => {
+    expect(actions.clearTagFilter()).toEqual({type: CLEAR_TAG_FILTER});
+  });
+
+  it('should create saveTicketFilterData action', () => {
+    const filterData = {status: 'open'};
+    expect(actions.saveTicketFilterData(filterData)).toEqual({
+      type: SAVE_TICKET_FILTER_DATA,
+      payload: filterData,
+    });
+  });
+
+  it('should create clearTicketFilterData action', () => {
+    expect(actions.clearTicketFilterData()).toEqual({type: CLEAR_TICKET_FILTER_DATA});
   });
 });

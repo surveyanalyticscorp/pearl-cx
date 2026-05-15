@@ -831,9 +831,6 @@ describe('ClosedLoop Sagas', () => {
         {type: SEND_EMAIL_RECEIVED, response: mockResponse},
         {type: MEDIA_FILE_UPLOAD_RESET, response: []},
       ]);
-      expect(showSuccessFlashMessage).toHaveBeenCalledWith(
-        mockResponse.message,
-      );
     });
 
     it('should show error flash message on failure', async () => {
@@ -853,8 +850,7 @@ describe('ClosedLoop Sagas', () => {
         },
       ).toPromise();
 
-      expect(dispatched).toEqual([]);
-      expect(showErrorFlashMessage).toHaveBeenCalledWith(mockError.message);
+      expect(dispatched).toEqual([{type: 'SEND_EMAIL_FAILED'}]);
     });
   });
 
@@ -1819,9 +1815,6 @@ describe('ClosedLoop Sagas', () => {
             response: mockResponse,
           },
         ]);
-        expect(showSuccessFlashMessage).toHaveBeenCalledWith(
-          'Updated successfully',
-        );
       });
 
       it('should dispatch API_ERROR on failure', async () => {

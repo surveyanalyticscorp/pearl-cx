@@ -36,10 +36,11 @@ const AnimatedDotIndicator = ({
   }, []);
 
   return (
-    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+    <View testID="dot-indicator-container" style={{flexDirection: 'row', alignItems: 'center'}}>
       {animations.map((anim, i) => (
         <Animated.View
           key={i}
+          testID={`dot-${i}`}
           style={{
             width: size,
             height: size,
