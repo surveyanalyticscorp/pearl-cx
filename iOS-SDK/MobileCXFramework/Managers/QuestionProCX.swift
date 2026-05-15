@@ -552,6 +552,11 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 safeArea: safeArea,
                 fallbackSize: rect.size
             ))
+            //Only apply rounded corners for in app survey (popup)
+            if (isInAppSurvey) {
+                frontView.layer.cornerRadius = IN_APP_SURVEY_CORNER_RADIUS
+                frontView.layer.masksToBounds = true
+            }
             frontView.backgroundColor = .white
 
             let configuration = WKWebViewConfiguration()

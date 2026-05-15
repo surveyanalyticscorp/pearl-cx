@@ -99,3 +99,6 @@ public enum WidgetPosition: String, Codable {
         }
     }
 }
+
+//Numeric constants
+public let IN_APP_SURVEY_CORNER_RADIUS: CGFloat = 12.0
