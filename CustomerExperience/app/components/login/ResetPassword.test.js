@@ -140,4 +140,30 @@ describe('ResetPassword Component', () => {
       'Password123',
     );
   });
+
+  it('shows error from Redux isError state', async () => {
+    store = mockStore({
+      global: {
+        ...initialState.global,
+        isError: true,
+        errorMessage: {errorAlert: 'Server error occurred'},
+      },
+    });
+
+    renderComponent();
+
+    await waitFor(() => {
+      expect(showErrorFlashMessage).toHaveBeenCalledWith('Server error occurred');
+    });
+  });
+
+  it('calls showErrorFlashMessage when password is filled but confirm password is empty', () => {
+    const {getByTestId} = renderComponent();
+    fireEvent.changeText(getByTestId('password-input'), 'Password123');
+    fireEvent.press(getByTestId('SignInButton'));
+
+    expect(showErrorFlashMessage).toHaveBeenCalledWith(
+      'onBoarding.invalidPassword',
+    );
+  });
 });

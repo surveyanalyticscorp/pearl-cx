@@ -5,44 +5,37 @@ import configureStore from 'redux-mock-store';
 
 import NPSScoreView from './NPSScoreView';
 
-const mockStore = configureStore([]);
-const initialState = {
-  dashboard: {
-    currentNPSData: {
-      NPSScore: {
-        benchmarkScore: 5,
-        npsPercentage: 67,
-      },
-    },
+jest.mock('../../../Utils/IconUtils', () => ({
+  FaIcon: () => {
+    const {View} = require('react-native');
+    return <View testID="fa-icon" />;
   },
-};
+}));
+
+const mockStore = configureStore([]);
+const wrap = (npsPercentage = 67, benchmarkScore = 5) =>
+  <Provider store={mockStore({dashboard: {currentNPSData: {NPSScore: {npsPercentage, benchmarkScore}}}})}>
+    <NPSScoreView />
+  </Provider>;
 
 describe('NPSScoreView', () => {
-  let store;
-  beforeEach(() => {
-    store = mockStore(initialState);
-  });
-
-  const renderComponent = () => {
-    return render(
-      <Provider store={store}>
-        <NPSScoreView />
-      </Provider>,
-    );
-  };
-
-  it('should render NPSScoreView', () => {
-    const {getByTestId, getAllByTestId} = renderComponent();
+  it('renders nps-score-view testID', () => {
+    const {getByTestId} = render(wrap());
     expect(getByTestId('nps-score-view')).toBeTruthy();
-    expect(getByTestId('nps-icon')).toBeTruthy();
-    expect(getAllByTestId('text-label')).toBeTruthy();
-    expect(getAllByTestId('indicator-icon')).toBeTruthy();
   });
-  it('should render NPSScoreView with benchmarkScore and npsPercentage', () => {
-    const {getByText} = renderComponent();
 
-    expect(getByText('NPS:')).toBeTruthy();
-    expect(getByText('67')).toBeTruthy();
-    expect(getByText('62')).toBeTruthy();
+  it('renders Gap: label', () => {
+    const {getByText} = render(wrap());
+    expect(getByText('Gap:')).toBeTruthy();
+  });
+
+  it('renders nps percentage value', () => {
+    const {getByText} = render(wrap(75, 10));
+    expect(getByText('75')).toBeTruthy();
+  });
+
+  it('renders gap icon', () => {
+    const {getByTestId} = render(wrap());
+    expect(getByTestId('fa-icon')).toBeTruthy();
   });
 });

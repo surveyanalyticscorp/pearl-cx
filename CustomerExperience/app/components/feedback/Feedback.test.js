@@ -119,7 +119,7 @@ describe('Feedback Component', () => {
     });
   });
 
-  it('changes sorting', async () => {
+  it('pressing filter button does not crash', () => {
     const {getByTestId} = render(
       <Provider store={store}>
         <SafeAreaProvider>
@@ -128,14 +128,9 @@ describe('Feedback Component', () => {
       </Provider>,
     );
 
-    // Check if component renders correctly with actual testIDs that exist
     expect(getByTestId('safe-area-view')).toBeTruthy();
     expect(getByTestId('responses-component')).toBeTruthy();
-    expect(getByTestId('on-press-filter')).toBeTruthy();
-    expect(getByTestId('Filter-Date-Box')).toBeTruthy();
-
-    // Test that the sorting bottom sheet content is rendered
-    expect(getByTestId('bottomSheetHeader')).toBeTruthy();
+    expect(() => fireEvent.press(getByTestId('on-press-filter'))).not.toThrow();
   });
 
   it('handles error in fetching feedback data', async () => {

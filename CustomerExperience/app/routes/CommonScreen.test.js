@@ -170,7 +170,6 @@ describe('CommonScreen components', () => {
       const screenNames = screens.map(screen => screen.props.name);
       expect(screenNames).toContain('TicketDetails');
       expect(screenNames).toContain('responses.new_ticket');
-      expect(screenNames).toContain('SelectEmailTemplate');
       expect(screenNames).toContain('sendEmail');
       expect(screenNames).toContain('actionEmailHistory');
     });

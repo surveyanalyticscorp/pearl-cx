@@ -213,6 +213,8 @@ Saga tests are co-located with saga files (e.g. `dashboard.saga.test.js`).
 
 **AsyncStorage keys** (from `Constant.js`, never raw strings): `ASYNC_AUTH_TOKEN` · `ASYNC_USER_INFO` · `ASYNC_LOGGED_IN_ALREADY`
 
+**Coverage exclusions** — `jest.config.js` `coveragePathIgnorePatterns` lists files excluded from coverage reporting. If you create variant files (`.backup.js`, `.fixed.js`, `._test_.js`, fully-commented-out files) they will be picked up by `collectCoverageFrom: ['app/**/*.{js,jsx}']` and counted as 0%-covered source, dragging the metric down. Add them to `coveragePathIgnorePatterns` immediately. Current target: **90% line coverage** (achieved) — see `docs/TEST_COVERAGE_PLAN.md`.
+
 ---
 
 ## Critical Conventions — ALWAYS FOLLOW

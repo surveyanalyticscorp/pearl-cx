@@ -17,6 +17,16 @@ jest.mock('@react-navigation/native', () => ({
   },
 }));
 
+jest.mock('../widgets/QPBottomSheet', () => ({
+  QPBottomSheet: ({visible, children}) =>
+    visible ? require('react').createElement('View', {testID: 'segment-sheet'}, children) : null,
+  QPBottomSheetHeader: () => null,
+}));
+
+jest.mock('./selectSegmentScreen/SegmentSheetContent', () => ({
+  SegmentSheetContent: () => null,
+}));
+
 describe('SegmentSelector Component', () => {
   const dispatch = jest.fn();
   const navigationDispatch = jest.fn();
@@ -26,10 +36,11 @@ describe('SegmentSelector Component', () => {
     useNavigation.mockReturnValue({dispatch: navigationDispatch});
     useSelector.mockImplementation(selector =>
       selector({
-        global: {authToken: 'dummy_token'},
+        global: {authToken: 'dummy_token', userInfo: {userID: 'user123'}},
         dashboard: {
           segmentDetails: {segments: ['Segment 1', 'Segment 2']},
           currentSegment: {currentSegment: 'Segment 1', currentSegmentID: '1'},
+          segmentList: [],
         },
         notification: {
           notificationLogs: [
@@ -51,22 +62,14 @@ describe('SegmentSelector Component', () => {
     expect(getByText('Segment 1')).toBeTruthy();
   });
 
-  it('should dispatch navigation action on press', () => {
-    const {getByText} = render(<SegmentSelector screenName="TestScreen" />);
+  it('should open bottom sheet on press when multiple segments', () => {
+    const {getByText, getByTestId} = render(
+      <SegmentSelector screenName="TestScreen" />,
+    );
 
     fireEvent.press(getByText('Segment 1'));
 
-    expect(StackActions.push).toHaveBeenCalledWith(
-      expect.stringContaining('dashboard.segment'),
-      expect.objectContaining({
-        currentSegmentId: '1',
-        setSegmentSelection: expect.any(Function),
-      }),
-    );
-
-    expect(navigationDispatch).toHaveBeenCalledWith({
-      type: 'PUSH',
-    });
+    expect(getByTestId('segment-sheet')).toBeTruthy();
   });
 
   it('should dispatch getClosedLoopOwnerDetails when currentSegment changes', () => {
@@ -82,7 +85,7 @@ describe('SegmentSelector Component', () => {
   it('should render SegmentText without Pressable if only one segment', () => {
     useSelector.mockImplementationOnce(selector =>
       selector({
-        global: {authToken: 'dummy_token'},
+        global: {authToken: 'dummy_token', userInfo: {userID: 'user123'}},
         dashboard: {
           segmentDetails: {segments: ['Segment 1']},
           currentSegment: {currentSegment: 'Segment 1', currentSegmentID: '1'},

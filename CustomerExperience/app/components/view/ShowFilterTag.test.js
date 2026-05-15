@@ -1,6 +1,6 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
-import ShowFilterTag, {taglist} from './ShowFilterTag';
+import ShowFilterTag from './ShowFilterTag';
 import {
   getStatusById,
   getPriorityById,
@@ -11,6 +11,7 @@ jest.mock('react-native-vector-icons/Ionicons', () => 'Icon');
 
 // Mocking utility functions
 jest.mock('../../Utils/TicketUtils', () => ({
+  taglist: ['status', 'priority', 'type', 'assignToId'],
   getStatusById: jest.fn(id => `Status ${id}`),
   getPriorityById: jest.fn(id => `Priority ${id}`),
   getTicketTypeById: jest.fn(id => `Type ${id}`),

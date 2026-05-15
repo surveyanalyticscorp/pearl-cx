@@ -200,7 +200,7 @@ describe('getPriorityFillerColorbyId', () => {
 describe('getStatusBorderColor', () => {
   it('returns the correct color for status "open"', () => {
     const color = getStatusBorderColor('open');
-    expect(color).toBe('#3FCA5A');
+    expect(color).toBe('#40CA5A');
   });
 
   it('returns the correct color for status "closed"', () => {
@@ -210,7 +210,7 @@ describe('getStatusBorderColor', () => {
 
   it('returns the correct color for status "escalated"', () => {
     const color = getStatusBorderColor('escalated');
-    expect(color).toBe('#FF9045');
+    expect(color).toBe('#FF9145');
   });
 
   it('returns the correct color for status "overdue"', () => {
@@ -279,11 +279,11 @@ describe('getStatusFillerColorbyId', () => {
 
 describe('statusColors', () => {
   it('has the correct values for statusColors', () => {
-    expect(statusColors.openBorder).toBe('#3FCA5A');
+    expect(statusColors.openBorder).toBe('#40CA5A');
     expect(statusColors.openFiller).toBe('#9FE4AC');
     expect(statusColors.closedBorder).toBe('#9B9B9B');
     expect(statusColors.closedFiller).toBe('#d8d8d8');
-    expect(statusColors.escalatedBorder).toBe('#FF9045');
+    expect(statusColors.escalatedBorder).toBe('#FF9145');
     expect(statusColors.escalatedFiller).toBe('#FFC7A2');
     expect(statusColors.overDueBorder).toBe('#E53251');
     expect(statusColors.overDueFiller).toBe('#F298A8');

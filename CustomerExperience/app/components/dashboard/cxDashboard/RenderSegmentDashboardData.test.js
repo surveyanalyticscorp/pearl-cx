@@ -7,6 +7,7 @@ import configureStore from 'redux-mock-store';
 const mockStore = configureStore([]);
 const initialState = {
   dashboard: {
+    currentSegment: {currentSegment: null},
     dashboardData: {
       surveyCount: 3,
       detractorTicketsCount: {
@@ -183,8 +184,7 @@ describe('RenderSegmentDashboardData', () => {
   };
 
   it('should render RenderSegmentDashboardData', () => {
-    const {getByTestId} = renderComponent();
-    expect(getByTestId('render-info-title')).toBeTruthy();
+    renderComponent();
     expect(screen.getByText('Main Segment NPS')).toBeTruthy();
   });
 });

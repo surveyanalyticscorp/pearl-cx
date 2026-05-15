@@ -16,7 +16,8 @@ module.exports = {
 
   testPathIgnorePatterns: ['/node_modules/', '/android/', '/ios/'],
   moduleDirectories: ['node_modules'],
-  collectCoverage: false,
+  collectCoverage: true,
+  coverageProvider: 'v8',
   collectCoverageFrom: ['app/**/*.{js,jsx}'],
 
   moduleNameMapper: {
@@ -44,6 +45,8 @@ module.exports = {
 
     'react-native-device-info$':
       '<rootDir>/__mocks__/react-native-device-info.js',
+    '^@react-native-clipboard/clipboard$':
+      '<rootDir>/__mocks__/@react-native-clipboard/clipboard.js',
   },
   coveragePathIgnorePatterns: [
     'app/components/Notification.js',
@@ -78,6 +81,9 @@ module.exports = {
     'app/components/closedloop/CentralizedRootCause',
     'app/redux/sagas/centralizedRootCauseSaga.js',
     'app/redux/sagas/loginInSaga.js',
+    'app/components/login/hooks/useLoginError.test.backup.js',
+    'app/components/login/hooks/useLoginError.test.fixed.js',
+    'app/testcases/login.saga._test_.js',
   ],
 
   testTimeout: 30000,

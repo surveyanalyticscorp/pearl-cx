@@ -80,7 +80,7 @@ describe('ClosedLoopDashboard Components', () => {
   it('renders ClosedLoopDashboard correctly', () => {
     const {getByTestId} = renderComponent(<ClosedLoopDashboard />);
     expect(getByTestId('ViewTicketsButton')).toBeTruthy();
-    expect(getByTestId('icon-button')).toBeTruthy();
+    expect(getByTestId('on-press-filter-icon')).toBeTruthy();
     expect(getByTestId('render-donut-chart')).toBeTruthy();
   });
 
@@ -121,7 +121,7 @@ describe('ClosedLoopDashboard Components', () => {
       />,
     );
 
-    const button = getByTestId('icon-button');
+    const button = getByTestId('on-press-filter-icon');
     fireEvent.press(button);
     expect(mockPress).toHaveBeenCalled();
   });
@@ -133,8 +133,8 @@ describe('ClosedLoopDashboard Components', () => {
     expect(mockSetStatusFilterById).toHaveBeenCalled();
     expect(mockSetStatusIndex).toHaveBeenCalled();
   });
-  it('renders the correct percentage', () => {
-    const {getByTestId} = renderComponent(
+  it('renders RenderDonutChart with totalTickets count', () => {
+    const {getByText} = renderComponent(
       <RenderDonutChart
         count={{
           totalTickets: 10,
@@ -146,7 +146,7 @@ describe('ClosedLoopDashboard Components', () => {
         showPercentageCount={true}
       />,
     );
-    const percentage = getByTestId('render-donut-info-view-container');
-    expect(percentage).toBeTruthy();
+    expect(getByText('10')).toBeTruthy();
+    expect(getByText('Tickets')).toBeTruthy();
   });
 });

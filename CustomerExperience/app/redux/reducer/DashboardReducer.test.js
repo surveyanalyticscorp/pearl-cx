@@ -45,7 +45,23 @@ import {
   SET_MOVE_NEXT,
   RESET_CREATE_CLF_TICKET_RECIEVED,
 } from '../actions/dashboard.actions';
-import {SET_EMAIL_SUBJECT} from '../actions/email.actions';
+import {
+  SET_EMAIL_SUBJECT,
+  TOGGLE_TEMPLATE_BOTTOM_SHEET,
+} from '../actions/email.actions';
+import {
+  SAVE_TICKET_FILTER_DATA,
+  CLEAR_TICKET_FILTER_DATA,
+  CLEAR_TAG_FILTER,
+  UPDATE_SINGLE_TAG,
+  UPDATE_TAGS,
+  GET_TAGLIST_RECEIVED,
+  GENERATE_EMAIL_DRAFT_RECEIVED,
+  GENERATE_REFINE_EMAIL_DRAFT_RECEIVED,
+  RESET_SEND_EMAIL_RESPONSE,
+  SEND_EMAIL_FAILED,
+} from '../actions/closedloop.actions';
+import {CLEAR_DASHBOARD} from '../actions/dashboard.actions';
 
 const initialState = {
   dashboardData: {},
@@ -89,7 +105,7 @@ const initialState = {
   allOwnersDetails: {},
   currentSegment: {},
   currentFeedback: {},
-  ticketFilter: {},
+  ticketFilter: null,
   ticket: {},
   ticketTags: [],
   ticketComments: [],
@@ -98,7 +114,7 @@ const initialState = {
   ticketSync: true,
   apiCallStatus: {},
   welcomeScreenData: {},
-  emailData: {currentEmailBody: {}, emailSentResponse: {}},
+  emailData: {currentEmailBody: {}, emailSentResponse: {}, emailSendError: false},
   generatedEmailDraftResponse: {
     context: '',
     response: {},
@@ -950,6 +966,7 @@ describe('Dashboard Reducer', () => {
       ...initialState,
       emailData: {
         currentEmailBody: {},
+        emailSendError: false,
         emailSentResponse: {
           id: '1',
           name: 'template1',
@@ -1344,6 +1361,7 @@ describe('Dashboard Reducer', () => {
         currentEmailBody: {
           subject: 'Test Email Subject',
         },
+        emailSendError: false,
         emailSentResponse: {},
       },
     });
@@ -1496,5 +1514,116 @@ describe('Dashboard Reducer', () => {
         buttonUrl: 'https://rootCause3.com',
       },
     ]);
+  });
+});
+
+describe('DashboardReducer — missing cases', () => {
+  const baseState = dashboardReducer(undefined, {type: '@@INIT'});
+
+  it('SAVE_TICKET_FILTER_DATA stores payload in ticketFilter', () => {
+    const payload = {status: 'open', priority: 'high'};
+    const state = dashboardReducer(baseState, {
+      type: SAVE_TICKET_FILTER_DATA,
+      payload,
+    });
+    expect(state.ticketFilter).toEqual(payload);
+  });
+
+  it('CLEAR_TICKET_FILTER_DATA resets ticketFilter to null', () => {
+    const withFilter = {...baseState, ticketFilter: {status: 'open'}};
+    const state = dashboardReducer(withFilter, {type: CLEAR_TICKET_FILTER_DATA});
+    expect(state.ticketFilter).toBeNull();
+  });
+
+  it('CLEAR_TAG_FILTER sets all ticketTags isChecked to false', () => {
+    const withTags = {
+      ...baseState,
+      ticketTags: [
+        {id: 1, name: 'Tag1', isChecked: true},
+        {id: 2, name: 'Tag2', isChecked: true},
+      ],
+    };
+    const state = dashboardReducer(withTags, {type: CLEAR_TAG_FILTER});
+    expect(state.ticketTags.every(t => t.isChecked === false)).toBe(true);
+  });
+
+  it('UPDATE_SINGLE_TAG updates the matching tag isChecked by id', () => {
+    const withTags = {
+      ...baseState,
+      ticketTags: [
+        {id: 1, name: 'Tag1', isChecked: false},
+        {id: 2, name: 'Tag2', isChecked: false},
+      ],
+    };
+    const state = dashboardReducer(withTags, {
+      type: UPDATE_SINGLE_TAG,
+      tag: {id: 1, isChecked: true},
+    });
+    expect(state.ticketTags[0].isChecked).toBe(true);
+    expect(state.ticketTags[1].isChecked).toBe(false);
+  });
+
+  it('UPDATE_TAGS replaces ticketTags with action.tags', () => {
+    const tags = [{id: 10, name: 'NewTag', isChecked: false}];
+    const state = dashboardReducer(baseState, {type: UPDATE_TAGS, tags});
+    expect(state.ticketTags).toEqual(tags);
+  });
+
+  it('GET_TAGLIST_RECEIVED populates ticketTags when empty', () => {
+    const response = [{id: 1, name: 'Tag1'}, {id: 2, name: 'Tag2'}];
+    const state = dashboardReducer(baseState, {
+      type: GET_TAGLIST_RECEIVED,
+      response,
+    });
+    expect(state.ticketTags).toHaveLength(2);
+    expect(state.ticketTags[0].isChecked).toBe(false);
+  });
+
+  it('GENERATE_EMAIL_DRAFT_RECEIVED updates generatedEmailDraftResponse', () => {
+    const response = {context: 'ctx', subject: 'Hi', body: 'Dear ...'};
+    const state = dashboardReducer(baseState, {
+      type: GENERATE_EMAIL_DRAFT_RECEIVED,
+      response,
+    });
+    expect(state.generatedEmailDraftResponse.context).toBe('ctx');
+    expect(state.generatedEmailDraftResponse.response.subject).toBe('Hi');
+  });
+
+  it('GENERATE_REFINE_EMAIL_DRAFT_RECEIVED updates response inside generatedEmailDraftResponse', () => {
+    const response = {subject: 'Refined', body: 'Updated body'};
+    const state = dashboardReducer(baseState, {
+      type: GENERATE_REFINE_EMAIL_DRAFT_RECEIVED,
+      response,
+    });
+    expect(state.generatedEmailDraftResponse.response).toEqual(response);
+  });
+
+  it('CLEAR_DASHBOARD resets state to initialState', () => {
+    const dirty = {...baseState, ticketFilter: {x: 1}, ticketTags: [{id: 1}]};
+    const state = dashboardReducer(dirty, {type: CLEAR_DASHBOARD});
+    expect(state.ticketFilter).toBeNull();
+    expect(state.ticketTags).toEqual([]);
+  });
+
+  it('RESET_SEND_EMAIL_RESPONSE clears emailSentResponse', () => {
+    const withSent = {
+      ...baseState,
+      emailData: {...baseState.emailData, emailSentResponse: {id: 99}},
+    };
+    const state = dashboardReducer(withSent, {type: RESET_SEND_EMAIL_RESPONSE});
+    expect(state.emailData.emailSentResponse).toEqual({});
+  });
+
+  it('SEND_EMAIL_FAILED sets emailSendError to true', () => {
+    const state = dashboardReducer(baseState, {type: SEND_EMAIL_FAILED});
+    expect(state.emailData.emailSendError).toBe(true);
+  });
+
+  it('TOGGLE_TEMPLATE_BOTTOM_SHEET updates isEmailTemplateOpen', () => {
+    const state = dashboardReducer(baseState, {
+      type: TOGGLE_TEMPLATE_BOTTOM_SHEET,
+      isOpen: true,
+    });
+    expect(state.isEmailTemplateOpen).toBe(true);
   });
 });

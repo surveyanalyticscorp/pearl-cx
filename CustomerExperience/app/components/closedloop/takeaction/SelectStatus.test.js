@@ -4,15 +4,20 @@ import SelectStatus from './SelectStatus';
 import {ApplyButton} from '../../../routes/commonUI/CommonUI';
 
 jest.mock('../../../routes/commonUI/CommonUI', () => {
-  const actual = jest.requireActual('../../../routes/commonUI/CommonUI');
-  const {Pressable, Text} = require('react-native');
+  const {Pressable, Text, View} = require('react-native');
   return {
-    ...actual,
     ApplyButton: jest.fn(({buttonText, onPress}) => (
       <Pressable testID="ApplyButton" onPress={onPress}>
         <Text>{buttonText}</Text>
       </Pressable>
     )),
+    CheckBoxItem: jest.fn(({title, onPress}) => (
+      <Pressable testID={`checkbox-${title}`} onPress={onPress}>
+        <Text>{title}</Text>
+      </Pressable>
+    )),
+    RadioButtonCheckbox: jest.fn(() => <View />),
+    RenderStatusIcon: jest.fn(() => <View />),
   };
 });
 

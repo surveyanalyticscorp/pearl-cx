@@ -31,6 +31,8 @@ jest.mock('react-native-date-picker', () => {
 jest.mock('moment', () =>
   jest.fn(() => ({
     format: jest.fn().mockReturnValue('2024-10-24'),
+    isValid: jest.fn().mockReturnValue(true),
+    toDate: jest.fn().mockReturnValue(new Date('2024-10-24')),
   })),
 );
 

@@ -14,8 +14,8 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 
 jest.mock('../../redux/actions/login.actions', () => ({
   authenticatePanel: jest.fn(() => ({type: 'AUTHENTICATE_PANEL'})),
-  doLogin: jest.fn(),
-  getClfAuth: jest.fn(),
+  doLogin: jest.fn(() => ({type: 'DO_LOGIN'})),
+  getClfAuth: jest.fn(() => ({type: 'GET_CLF_AUTH'})),
 }));
 
 jest.mock('../../redux/actions/index', () => ({
@@ -25,9 +25,6 @@ jest.mock('../../redux/actions/index', () => ({
   })),
   clearUserInfo: jest.fn(() => ({type: 'CLEAR_USER_INFO'})),
   showLoading: jest.fn(() => ({type: 'SHOW_LOADING'})),
-}));
-
-jest.mock('../../redux/actions', () => ({
   setDynamicLink: jest.fn(() => ({type: 'SET_DYNAMIC_LINK'})),
 }));
 

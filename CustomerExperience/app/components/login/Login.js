@@ -186,10 +186,10 @@ export const RenderSpinnerLoginButton = ({login}) => {
     AsyncStorage.getItem(ASYNC_PUSH_TOKEN).then(token => {
       const data = {
         clfBaseUrl,
-        emailAddress: userInfo.emailAddress,
-        userID: userInfo.userID,
-        feedbackID: userInfo.feedbackID,
-        feedbackApiKey: userInfo.feedbackApiKey,
+        emailAddress: userInfo?.emailAddress,
+        userID: userInfo?.userID,
+        feedbackID: userInfo?.feedbackID,
+        feedbackApiKey: userInfo?.feedbackApiKey,
         pushToken: token,
         deviceType: getDeviceType(Platform.OS),
       };

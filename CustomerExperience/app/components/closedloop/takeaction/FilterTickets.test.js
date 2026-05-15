@@ -1,11 +1,16 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
+import {Provider} from 'react-redux';
+import configureStore from 'redux-mock-store';
 import FilterTicket from './FilterTickets';
 
 // Mock the translation function
 jest.mock('../../../Utils/MultilinguaUtils', () => ({
   translate: jest.fn(key => key),
 }));
+
+const mockStore = configureStore([]);
+const store = mockStore({dashboard: {ticketTags: []}});
 
 const mockData = {
   status: [
@@ -26,15 +31,24 @@ const mockData = {
 };
 
 const mockOnPressHandler = jest.fn();
+const mockNavigation = {goBack: jest.fn(), canGoBack: jest.fn(() => true)};
+
+const makeRoute = (data = mockData) => ({
+  params: {data, onPressHandler: mockOnPressHandler},
+});
 
 describe('FilterTicket Component', () => {
+  const wrap = ui => <Provider store={store}>{ui}</Provider>;
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders correctly', () => {
     const {getByTestId} = render(
-      <FilterTicket data={mockData} onPressHandler={mockOnPressHandler} />,
+      wrap(
+        <FilterTicket route={makeRoute()} navigation={mockNavigation} />,
+      ),
     );
 
     expect(getByTestId('render-status')).toBeTruthy();
@@ -45,10 +59,11 @@ describe('FilterTicket Component', () => {
 
   it('calls onPressHandler with correct data when Apply is pressed', () => {
     const {getByText} = render(
-      <FilterTicket data={mockData} onPressHandler={mockOnPressHandler} />,
+      wrap(
+        <FilterTicket route={makeRoute()} navigation={mockNavigation} />,
+      ),
     );
 
-    // Simulate pressing the 'apply' button (note: lowercase due to translation mock)
     const applyButton = getByText('apply');
     fireEvent.press(applyButton);
 
@@ -66,20 +81,22 @@ describe('FilterTicket Component', () => {
 
   it('calls Clear button and resets filters', () => {
     const {getByText} = render(
-      <FilterTicket data={mockData} onPressHandler={mockOnPressHandler} />,
+      wrap(
+        <FilterTicket route={makeRoute()} navigation={mockNavigation} />,
+      ),
     );
 
-    // Click clear button
     const clearButton = getByText('clear');
     fireEvent.press(clearButton);
 
-    // Clear should not call onPressHandler directly, it just resets internal state
     expect(mockOnPressHandler).not.toHaveBeenCalled();
   });
 
   it('toggles my tickets switch correctly', () => {
     const {getByRole} = render(
-      <FilterTicket data={mockData} onPressHandler={mockOnPressHandler} />,
+      wrap(
+        <FilterTicket route={makeRoute()} navigation={mockNavigation} />,
+      ),
     );
 
     const switchElement = getByRole('switch');
@@ -98,14 +115,12 @@ describe('FilterTicket Component', () => {
     };
 
     const {getByText} = render(
-      <FilterTicket data={testData} onPressHandler={mockOnPressHandler} />,
+      wrap(
+        <FilterTicket route={makeRoute(testData)} navigation={mockNavigation} />,
+      ),
     );
 
-    // Click on status filter
-    const openStatus = getByText('Open');
-    fireEvent.press(openStatus);
-
-    // Verify component still renders after state change
+    fireEvent.press(getByText('Open'));
     expect(getByText('Open')).toBeTruthy();
   });
 
@@ -119,14 +134,12 @@ describe('FilterTicket Component', () => {
     };
 
     const {getByText} = render(
-      <FilterTicket data={testData} onPressHandler={mockOnPressHandler} />,
+      wrap(
+        <FilterTicket route={makeRoute(testData)} navigation={mockNavigation} />,
+      ),
     );
 
-    // Click on priority filter
-    const highPriority = getByText('High');
-    fireEvent.press(highPriority);
-
-    // Verify component still renders after state change
+    fireEvent.press(getByText('High'));
     expect(getByText('High')).toBeTruthy();
   });
 
@@ -140,14 +153,12 @@ describe('FilterTicket Component', () => {
     };
 
     const {getByText} = render(
-      <FilterTicket data={testData} onPressHandler={mockOnPressHandler} />,
+      wrap(
+        <FilterTicket route={makeRoute(testData)} navigation={mockNavigation} />,
+      ),
     );
 
-    // Click on type filter
-    const bugType = getByText('Bug');
-    fireEvent.press(bugType);
-
-    // Verify component still renders after state change
+    fireEvent.press(getByText('Bug'));
     expect(getByText('Bug')).toBeTruthy();
   });
 
@@ -158,13 +169,15 @@ describe('FilterTicket Component', () => {
     };
 
     const {getByRole} = render(
-      <FilterTicket
-        data={testDataWithAssignment}
-        onPressHandler={mockOnPressHandler}
-      />,
+      wrap(
+        <FilterTicket
+          route={makeRoute(testDataWithAssignment)}
+          navigation={mockNavigation}
+        />,
+      ),
     );
 
     const switchElement = getByRole('switch');
-    expect(switchElement.props.value).toBe(true); // Should be true when assignToId has value
+    expect(switchElement.props.value).toBe(true);
   });
 });

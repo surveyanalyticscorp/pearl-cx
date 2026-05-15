@@ -34,9 +34,8 @@ describe('CalendarScreen', () => {
   });
 
   it('does not display the modal when showCalendar is false', () => {
-    const {getByTestId} = renderComponent(false);
-    const modal = getByTestId('calendar-modal');
-    expect(modal.props.visible).toBe(false);
+    const {queryByTestId} = renderComponent(false);
+    expect(queryByTestId('calendar-modal')).toBeNull();
   });
 
   it('calls closeCalendar with false when close button is pressed', () => {

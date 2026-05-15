@@ -1,6 +1,10 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
+import {Provider} from 'react-redux';
+import configureStore from 'redux-mock-store';
 import SelectSegment from './SelectSegment';
+
+const mockStore = configureStore([]);
 
 describe('SelectSegment Component', () => {
   const mockData = [
@@ -11,13 +15,20 @@ describe('SelectSegment Component', () => {
 
   const mockHandleOnPress = jest.fn();
 
+  const makeStore = (segments = mockData) =>
+    mockStore({dashboard: {segmentList: segments}});
+  const wrap = (ui, segments) =>
+    <Provider store={makeStore(segments)}>{ui}</Provider>;
+
   it('renders SelectSegment component correctly', () => {
     const {getByText} = render(
-      <SelectSegment
-        data={mockData}
-        selectedIndex={0}
-        handleOnPress={mockHandleOnPress}
-      />,
+      wrap(
+        <SelectSegment
+          data={mockData}
+          selectedIndex={0}
+          handleOnPress={mockHandleOnPress}
+        />,
+      ),
     );
 
     // Ensure all segment names are rendered
@@ -28,11 +39,13 @@ describe('SelectSegment Component', () => {
 
   it('calls handleOnPress when a segment is pressed', () => {
     const {getAllByTestId} = render(
-      <SelectSegment
-        data={mockData}
-        selectedIndex={0}
-        handleOnPress={mockHandleOnPress}
-      />,
+      wrap(
+        <SelectSegment
+          data={mockData}
+          selectedIndex={0}
+          handleOnPress={mockHandleOnPress}
+        />,
+      ),
     );
 
     // Press the second segment
@@ -48,11 +61,13 @@ describe('SelectSegment Component', () => {
 
   it('displays a checkmark icon for the selected segment', () => {
     const {getAllByTestId, queryByTestId} = render(
-      <SelectSegment
-        data={mockData}
-        selectedIndex={1}
-        handleOnPress={mockHandleOnPress}
-      />,
+      wrap(
+        <SelectSegment
+          data={mockData}
+          selectedIndex={1}
+          handleOnPress={mockHandleOnPress}
+        />,
+      ),
     );
 
     // Check that only the second segment has the checkmark icon
@@ -65,11 +80,13 @@ describe('SelectSegment Component', () => {
 
   it('updates the selected index when a new segment is pressed', () => {
     const {getAllByTestId, queryByTestId} = render(
-      <SelectSegment
-        data={mockData}
-        selectedIndex={0}
-        handleOnPress={mockHandleOnPress}
-      />,
+      wrap(
+        <SelectSegment
+          data={mockData}
+          selectedIndex={0}
+          handleOnPress={mockHandleOnPress}
+        />,
+      ),
     );
 
     const segmentButtons = getAllByTestId('select-segment-button');

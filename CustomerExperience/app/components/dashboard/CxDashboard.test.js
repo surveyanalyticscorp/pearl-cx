@@ -149,6 +149,9 @@ jest.mock('victory-native', () => ({
 const mockStore = configureStore([]);
 const {useSelector} = require('react-redux');
 
+const mockDashboardData = {primaryStoreNPS: 50, csatScore: 80};
+const mockTicketStatusCounts = [{id: 0, count: 5}, {id: 1, count: 3}];
+
 const renderComponent = (initialState = {}, props = {}) => {
   const defaultState = {
     dashboard: {

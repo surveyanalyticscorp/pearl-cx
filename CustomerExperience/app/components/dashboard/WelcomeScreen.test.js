@@ -137,6 +137,55 @@ describe('WelcomeScreen and Child Components', () => {
   });
 });
 
+describe('WelcomeScreen — authToken effect', () => {
+  it('dispatches API calls when authToken, global.bearerToken and global.clfBaseUrl are all set', async () => {
+    global.bearerToken = 'bearerTok';
+    global.clfBaseUrl = 'https://clf.example.com';
+    global.subscriberId = 'sub123';
+
+    const store = mockStore(initialState);
+    render(
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <WelcomeScreen />
+        </SafeAreaProvider>
+      </Provider>,
+    );
+
+    await waitFor(() => {
+      const types = store.getActions().map(a => a.type);
+      expect(types.some(t => t === 'GET_WELCOME_SCREEN_DATA')).toBe(true);
+    });
+
+    delete global.bearerToken;
+    delete global.clfBaseUrl;
+  });
+});
+
+describe('RenderCountData — jwt expired', () => {
+  it('renders without crash when clfData string contains jwt expired', () => {
+    const store = mockStore({
+      ...initialState,
+      dashboard: {
+        welcomeScreenData: {
+          cxData: {body: {newResponses: 0}},
+          clfData: JSON.stringify({error: 'jwt expired'}),
+        },
+      },
+    });
+
+    const {getByTestId} = render(
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <WelcomeScreen />
+        </SafeAreaProvider>
+      </Provider>,
+    );
+
+    expect(getByTestId('render-welcome-screen')).toBeTruthy();
+  });
+});
+
 describe('SkipButton', () => {
   let store;
 

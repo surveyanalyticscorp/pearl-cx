@@ -102,16 +102,14 @@ describe('TakeActionButton', () => {
     });
     jest.clearAllMocks();
   });
-  it('renders correctly', () => {
-    // mock the onTakeActionHandler function
-    const mockOnTakeActionHandler = jest.fn();
+  it('renders correctly and navigates to sendEmail on press', () => {
     const {getByTestId} = renderComponent(
-      <TakeActionButton onTakeActionHandler={mockOnTakeActionHandler} />,
+      <TakeActionButton />,
       store,
     );
     expect(getByTestId('TakeActionButton')).toBeTruthy();
     fireEvent.press(getByTestId('TakeActionButton'));
-    expect(mockOnTakeActionHandler).toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith('sendEmail', expect.any(Object));
   });
 });
 
@@ -262,18 +260,17 @@ describe('ContactView Component', () => {
     // The comment is available in the store but not rendered in this component
   });
 
-  it('calls the onTakeActionHandler when "Take Action" button is pressed', () => {
+  it('navigates to sendEmail when "Take Action" button is pressed', () => {
     const {getByTestId} = render(
       <Provider store={store}>
-        <ContactView onTakeActionHandler={mockTakeActionHandler} />
+        <ContactView />
       </Provider>,
     );
 
     const takeActionButton = getByTestId('TakeActionButton');
-
     fireEvent.press(takeActionButton);
 
-    expect(mockTakeActionHandler).toHaveBeenCalledTimes(1);
+    expect(mockNavigate).toHaveBeenCalledWith('sendEmail', expect.any(Object));
   });
 });
 

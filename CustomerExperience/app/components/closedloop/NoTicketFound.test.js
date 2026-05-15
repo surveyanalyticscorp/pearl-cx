@@ -4,7 +4,7 @@ import NoTicketFound from './NoTicketFound';
 
 describe('NoTicketFound Component', () => {
   it('renders correctly with expected elements', () => {
-    const {getByTestId, getByText, getByA11yLabel, getByA11yHint} = render(
+    const {getByTestId, getByText, getByA11yHint} = render(
       <NoTicketFound onPressReset={jest.fn()} />,
     );
 
@@ -12,12 +12,16 @@ describe('NoTicketFound Component', () => {
     expect(getByTestId('no-ticket-found')).toBeTruthy();
 
     // Ensure the correct text is displayed
-    expect(getByText('Oops! No tickets found')).toBeTruthy();
-    expect(getByText('Try using a different filter criteria')).toBeTruthy();
+    expect(getByText('There are no tickets yet')).toBeTruthy();
+    expect(
+      getByText(
+        'Tickets from all sources, including CX action alerts and manual entries, will appear here.',
+      ),
+    ).toBeTruthy();
     expect(getByText('Reset filters')).toBeTruthy();
 
     // Accessibility checks
-    // expect(getByA11yLabel('No tickets found')).toBeTruthy();
+    expect(getByTestId('no-ticket-found')).toBeTruthy();
     expect(getByA11yHint('Try using a different filter criteria')).toBeTruthy();
   });
 
