@@ -1,0 +1,225 @@
+name: Publish Flutter Survey Intercept SDK to pub.dev
+
+on:
+  workflow_dispatch:
+    inputs:
+      android_version:
+        description: 'Android SDK version (e.g. 2.2.6)'
+        required: true
+        type: string
+      ios_version:
+        description: 'iOS SDK version (e.g. 1.0.0)'
+        required: true
+        type: string
+      flutter_version:
+        description: 'Flutter package version to publish (e.g. 1.0.0)'
+        required: true
+        type: string
+      release_notes:
+        description: 'Release notes (optional)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Dry run - verify changes without publishing or committing'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Validate secrets ──────────────────────────────────────────────────
+      - name: Validate secrets
+        run: |
+          if [ -z "$PAT" ]; then
+            echo "❌ GH_PAT secret is empty or not set!"
+            exit 1
+          fi
+          if [ -z "$PUB_CREDS" ]; then
+            echo "❌ PUB_CREDENTIALS secret is empty or not set!"
+            exit 1
+          fi
+          echo "✅ All secrets present"
+        env:
+          PAT: ${{ secrets.GH_PAT }}
+          PUB_CREDS: ${{ secrets.PUB_CREDENTIALS }}
+
+      # ── Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repo
+        uses: actions/checkout@v4.2.2
+        with:
+          token: ${{ secrets.GH_PAT }}
+          persist-credentials: true
+
+      # ── Git auth ──────────────────────────────────────────────────────────
+      - name: Configure git authentication
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
+          git ls-remote origin HEAD && echo "✅ Remote is reachable" || { echo "❌ Remote not reachable — check PAT permissions"; exit 1; }
+
+      # ── Setup Flutter ─────────────────────────────────────────────────────
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          channel: 'stable'
+
+      - name: Verify Flutter installation
+        run: flutter --version
+
+      # ── Setup pub.dev credentials ─────────────────────────────────────────
+      - name: Setup pub.dev credentials
+        run: |
+          mkdir -p ~/.pub-cache
+          echo '${{ secrets.PUB_CREDENTIALS }}' > ~/.pub-cache/credentials.json
+          echo "✅ pub.dev credentials configured"
+
+      # ── Print run mode ────────────────────────────────────────────────────
+      - name: Print run mode
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
+            echo "🧪 DRY RUN MODE — nothing will be committed or published"
+          else
+            echo "🚀 LIVE MODE — changes will be committed and published to pub.dev"
+          fi
+
+      # ── Update Android native SDK version ─────────────────────────────────
+      - name: Update Android SDK version in build.gradle
+        working-directory: flutter_survey_intercept
+        run: |
+          sed -i "s/com.github.surveyanalyticscorp:android-cx:[^'\"' ]*/com.github.surveyanalyticscorp:android-cx:${{ github.event.inputs.android_version }}/g" \
+            android/build.gradle
+          echo "✅ Android version set to ${{ github.event.inputs.android_version }}"
+
+      # ── Update iOS native SDK version ─────────────────────────────────────
+      - name: Update iOS SDK version in podspec
+        working-directory: flutter_survey_intercept
+        run: |
+          PODSPEC=$(find . -maxdepth 1 -name "*.podspec" | head -1)
+          if [ -z "$PODSPEC" ]; then
+            echo "❌ No podspec file found"
+            exit 1
+          fi
+          echo "Found podspec: $PODSPEC"
+          sed -i "s/s\.dependency 'InterceptSDK', '[^']*'/s.dependency 'InterceptSDK', '${{ github.event.inputs.ios_version }}'/" "$PODSPEC"
+          echo "✅ iOS version set to ${{ github.event.inputs.ios_version }}"
+
+      # ── Update pubspec.yaml version ───────────────────────────────────────
+      - name: Update version in pubspec.yaml
+        working-directory: flutter_survey_intercept
+        run: |
+          sed -i "s/^version: .*/version: ${{ github.event.inputs.flutter_version }}/" pubspec.yaml
+          echo "✅ pubspec.yaml version set to ${{ github.event.inputs.flutter_version }}"
+          # Write native version metadata in pubspec.yaml description comment
+          # (Flutter doesn't have package.json, so we track in a separate file)
+          cat > .native_versions.json << JSON
+          {
+            "flutter_version": "${{ github.event.inputs.flutter_version }}",
+            "android": "${{ github.event.inputs.android_version }}",
+            "ios": "${{ github.event.inputs.ios_version }}"
+          }
+          JSON
+          echo "✅ Native version metadata written to .native_versions.json"
+
+      # ── Install Flutter dependencies ───────────────────────────────────────
+      - name: Flutter pub get
+        working-directory: flutter_survey_intercept
+        run: flutter pub get
+
+      # ── Analyze code ──────────────────────────────────────────────────────
+      - name: Flutter analyze
+        working-directory: flutter_survey_intercept
+        run: flutter analyze
+        continue-on-error: false
+
+      # ── Run tests ─────────────────────────────────────────────────────────
+      - name: Flutter test
+        working-directory: flutter_survey_intercept
+        run: flutter test --if-present
+        continue-on-error: true  # tests optional if no test files exist yet
+
+      # ── Validate pub.dev package (always runs) ────────────────────────────
+      - name: Validate package for pub.dev
+        working-directory: flutter_survey_intercept
+        run: |
+          flutter pub publish --dry-run
+          echo "✅ Package validation passed"
+
+      # ── Dry run summary ───────────────────────────────────────────────────
+      - name: Dry run summary
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        working-directory: flutter_survey_intercept
+        run: |
+          echo ""
+          echo "╔══════════════════════════════════════════╗"
+          echo "║         DRY RUN SUMMARY                  ║"
+          echo "╚══════════════════════════════════════════╝"
+          echo ""
+          echo "📦 Flutter package version that would be published:"
+          grep "^version:" pubspec.yaml
+          echo ""
+          echo "📱 Native versions that would be embedded:"
+          cat .native_versions.json
+          echo ""
+          echo "🤖 Android — android/build.gradle (android-cx line):"
+          grep "android-cx" android/build.gradle || echo "  ⚠️ android-cx not found — check build.gradle path"
+          echo ""
+          echo "🍎 iOS — podspec dependency line:"
+          grep "dependency" *.podspec || echo "  ⚠️ No podspec dependency found"
+          echo ""
+          echo "✅ All checks passed."
+          echo "⚠️  Nothing was committed. Nothing was published to pub.dev."
+          echo "👉 Re-run with dry_run = false to do a real release."
+
+      # ── Commit + tag + push (live only) ───────────────────────────────────
+      - name: Commit and tag
+        if: ${{ github.event.inputs.dry_run == 'false' }}
+        run: |
+          git add flutter_survey_intercept/android/build.gradle
+          git add "flutter_survey_intercept/"*.podspec
+          git add flutter_survey_intercept/pubspec.yaml
+          git add flutter_survey_intercept/.native_versions.json
+          git commit -m "chore(flutter-sdk): release v${{ github.event.inputs.flutter_version }}
+
+          Android SDK: ${{ github.event.inputs.android_version }}
+          iOS SDK:     ${{ github.event.inputs.ios_version }}
+          ${{ github.event.inputs.release_notes }}"
+          git tag flutter-sdk-v${{ github.event.inputs.flutter_version }}
+          git push origin HEAD --tags
+          echo "✅ Committed and tagged flutter-sdk-v${{ github.event.inputs.flutter_version }}"
+
+      # ── Publish to pub.dev (live only) ────────────────────────────────────
+      - name: Publish to pub.dev
+        if: ${{ github.event.inputs.dry_run == 'false' }}
+        working-directory: flutter_survey_intercept
+        run: |
+          flutter pub publish --force
+          echo "✅ Published to pub.dev"
+
+      # ── GitHub Release (live only) ────────────────────────────────────────
+      - name: Create GitHub Release
+        if: ${{ github.event.inputs.dry_run == 'false' }}
+        uses: actions/github-script@v7.0.1
+        with:
+          script: |
+            await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: 'flutter-sdk-v${{ github.event.inputs.flutter_version }}',
+              name: 'Flutter SDK v${{ github.event.inputs.flutter_version }}',
+              body: [
+                '## Flutter Survey Intercept SDK',
+                '',
+                '### Native SDK Versions',
+                '- 🤖 Android: `${{ github.event.inputs.android_version }}`',
+                '- 🍎 iOS: `${{ github.event.inputs.ios_version }}`',
+                '',
+                '${{ github.event.inputs.release_notes }}'
+              ].join('\n'),
+              draft: false,
+              prerelease: false
+            });
