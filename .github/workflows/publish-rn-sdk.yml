@@ -25,39 +25,58 @@ on:
         type: boolean
         default: true
 
+env:
+  # Opt into Node.js 24 to fix deprecation warning
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   publish:
     runs-on: ubuntu-latest
-    # NOTE: No job-level working-directory here — we set it per step explicitly
-    # to avoid conflicts between repo root (git) and SDK folder (npm/gradle)
 
     steps:
-      # ── Checkout ─────────────────────────────────────────────────────────
+      # ── Validate GH_PAT secret exists ────────────────────────────────────
+      - name: Validate GH_PAT secret
+        run: |
+          if [ -z "${{ secrets.GH_PAT }}" ]; then
+            echo "❌ GH_PAT secret is empty or not set!"
+            echo "Go to: pearl-cx repo → Settings → Secrets and variables → Actions"
+            echo "Add a secret named exactly: GH_PAT"
+            exit 1
+          else
+            echo "✅ GH_PAT secret is present (length: ${#PAT} chars)"
+          fi
+        env:
+          PAT: ${{ secrets.GH_PAT }}
+
+      # ── Checkout ──────────────────────────────────────────────────────────
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_PAT }}
+          persist-credentials: true  # ensures token is kept for subsequent git ops
 
-      # ── Git auth — runs from repo root ────────────────────────────────────
+      # ── Git auth ──────────────────────────────────────────────────────────
       - name: Configure git authentication
         run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          echo "✅ Git auth configured"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
+          echo "✅ Git remote URL updated with PAT"
+          # Verify the remote is reachable
+          git ls-remote origin HEAD && echo "✅ Remote is reachable" || echo "❌ Remote not reachable — check PAT permissions"
 
-      # ── Node setup ───────────────────────────────────────────────────────
+      # ── Node setup ────────────────────────────────────────────────────────
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         working-directory: react-native-intercept-sdk
         run: npm install
 
-      # ── Print run mode ───────────────────────────────────────────────────
+      # ── Print run mode ────────────────────────────────────────────────────
       - name: Print run mode
         run: |
           if [ "${{ github.event.inputs.dry_run }}" == "true" ]; then
@@ -66,7 +85,7 @@ jobs:
             echo "🚀 LIVE MODE — changes will be committed and published to NPM"
           fi
 
-      # ── Update Android native SDK version ────────────────────────────────
+      # ── Update Android native SDK version ─────────────────────────────────
       - name: Update Android SDK version in build.gradle
         working-directory: react-native-intercept-sdk
         run: |
@@ -74,7 +93,7 @@ jobs:
             android/build.gradle
           echo "✅ Android version set to ${{ github.event.inputs.android_version }}"
 
-      # ── Update iOS native SDK version ────────────────────────────────────
+      # ── Update iOS native SDK version ─────────────────────────────────────
       - name: Update iOS SDK version in podspec
         working-directory: react-native-intercept-sdk
         run: |
@@ -87,8 +106,7 @@ jobs:
           sed -i "s/s\.dependency 'InterceptSDK', '[^']*'/s.dependency 'InterceptSDK', '${{ github.event.inputs.ios_version }}'/" "$PODSPEC"
           echo "✅ iOS version set to ${{ github.event.inputs.ios_version }}"
 
-      # ── Update package.json version and native metadata ───────────────────
-      # Using node directly instead of `npm version` to avoid git interactions
+      # ── Update package.json ───────────────────────────────────────────────
       - name: Set NPM package version and write native metadata
         working-directory: react-native-intercept-sdk
         run: |
@@ -106,17 +124,17 @@ jobs:
             console.log('  _nativeVersions:', JSON.stringify(pkg._nativeVersions));
           "
 
-      # ── Run tests ────────────────────────────────────────────────────────
+      # ── Run tests ─────────────────────────────────────────────────────────
       - name: Run tests
         working-directory: react-native-intercept-sdk
         run: npm test --if-present
 
-      # ── TypeScript check ─────────────────────────────────────────────────
+      # ── TypeScript check ──────────────────────────────────────────────────
       - name: TypeScript check
         working-directory: react-native-intercept-sdk
         run: npx tsc --noEmit --skipLibCheck
 
-      # ── Dry run summary ──────────────────────────────────────────────────
+      # ── Dry run summary ───────────────────────────────────────────────────
       - name: Dry run summary
         if: ${{ github.event.inputs.dry_run == 'true' }}
         working-directory: react-native-intercept-sdk
@@ -142,7 +160,7 @@ jobs:
           echo "⚠️  Nothing was committed. Nothing was published to NPM."
           echo "👉 Re-run with dry_run = false to do a real release."
 
-      # ── Commit + tag + push (live only) ──────────────────────────────────
+      # ── Commit + tag + push (live only) ───────────────────────────────────
       - name: Commit and tag
         if: ${{ github.event.inputs.dry_run == 'false' }}
         run: |
@@ -158,7 +176,7 @@ jobs:
           git push origin HEAD --tags
           echo "✅ Committed and tagged rn-sdk-v${{ github.event.inputs.npm_version }}"
 
-      # ── Publish to NPM (live only) ───────────────────────────────────────
+      # ── Publish to NPM (live only) ────────────────────────────────────────
       - name: Publish to NPM
         if: ${{ github.event.inputs.dry_run == 'false' }}
         working-directory: react-native-intercept-sdk
@@ -166,7 +184,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # ── GitHub Release (live only) ───────────────────────────────────────
+      # ── GitHub Release (live only) ────────────────────────────────────────
       - name: Create GitHub Release
         if: ${{ github.event.inputs.dry_run == 'false' }}
         uses: actions/github-script@v7
