@@ -232,7 +232,7 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                         let showInDialog = interceptType == InterceptType.PROMPT.rawValue ? true : false
                         LogUtils.printMessage(message: "Survey URL = \(self.iResponseURL!)")
                         CacheUtils.setIsSurveyLaunchedForInterceptId(key: kIsSurveyLaunched + String(interceptId), value: true);
-                        self.launchSurvey(showInDialog: showInDialog, triggerDelayInSeconds: triggerDelayInSeconds)
+                        self.launchSurvey(showInDialog: showInDialog, triggerDelayInSeconds: triggerDelayInSeconds, widgetSettings: interceptData.widgetSettings)
                     }
                     APIUtils.updateInterceptSurveyLaunchEvent(interceptData: interceptData, visitorId: visitorId);
                 } catch {
@@ -454,8 +454,8 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
                 
                 let showInDialog: Bool = true
                 let triggerDelayInSeconds: Int = 0
-                
-                self.launchSurvey(showInDialog: showInDialog, triggerDelayInSeconds: triggerDelayInSeconds)
+
+                self.launchSurvey(showInDialog: showInDialog, triggerDelayInSeconds: triggerDelayInSeconds, widgetSettings: nil)
             } catch {
                 LogUtils.printMessage(logTag: .LOG_ERROR, message: "API error -> \(error)")
                 self.iResponseURL = ""
@@ -491,11 +491,11 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
         LogUtils.enableLogging(isLogsEnabled: enabledLogs)
     }
     
-    public func launchSurvey(showInDialog: Bool, triggerDelayInSeconds: Int) {
+    public func launchSurvey(showInDialog: Bool, triggerDelayInSeconds: Int, widgetSettings: WidgetSettings? = nil) {
         LogUtils.printMessage(message: "Survey URL to load: \(String(describing: iResponseURL))")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(triggerDelayInSeconds)) {
             LogUtils.printMessage(message: "Executed after \(triggerDelayInSeconds) seconds")
-            self.showSurvey(isInAppSurvey: showInDialog)
+            self.showSurvey(isInAppSurvey: showInDialog, widgetSettings: widgetSettings)
             self.loadSurveyURLInWebView()
         }
     }
@@ -532,27 +532,33 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             }
         }
     
-    public func showSurvey(isInAppSurvey: Bool) {
+    public func showSurvey(isInAppSurvey: Bool, widgetSettings: WidgetSettings? = nil) {
         DispatchQueue.main.async {
-            
             var rect = UIApplication.shared.keyWindow?.frame ?? CGRect.zero
             rect.origin.x = 0
             rect.origin.y = 0
             let screenRect = UIScreen.main.bounds
             rect.size.width = screenRect.size.width
             rect.size.height = screenRect.size.height
-            
+
             self.iView = UIView(frame: rect)
             self.iView?.backgroundColor = UIColor.black.withAlphaComponent(0.6)
 
-            let frontView = UIView(frame: CGRect(
-                x: isInAppSurvey ? screenRect.size.width * 0.05 : 0,
-                y: isInAppSurvey ? screenRect.size.height * 0.15 : 70,
-                width: isInAppSurvey ? screenRect.size.width * 0.9 : self.iView!.frame.size.width,
-                height: isInAppSurvey ? screenRect.size.height * 0.7 : self.iView!.frame.size.height
+            let safeArea = self.iBaseWindow?.safeAreaInsets ?? .zero
+            let frontView = UIView(frame: self.buildFrontViewFrame(
+                isInAppSurvey: isInAppSurvey,
+                widgetSettings: widgetSettings,
+                screenRect: screenRect,
+                safeArea: safeArea,
+                fallbackSize: rect.size
             ))
+            //Only apply rounded corners for in app survey (popup)
+            if (isInAppSurvey) {
+                frontView.layer.cornerRadius = IN_APP_SURVEY_CORNER_RADIUS
+                frontView.layer.masksToBounds = true
+            }
             frontView.backgroundColor = .white
-            
+
             let configuration = WKWebViewConfiguration()
             if #available(iOS 14.0, *) {
                 let webpagePreferences = WKWebpagePreferences()
@@ -562,42 +568,82 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
             let contentController = WKUserContentController()
             contentController.add(self, name: "callbackHandler")
             configuration.userContentController = contentController
-            self.iWebView = WKWebView(frame: CGRect(x: 0, y: 30, width: frontView.frame.size.width, height: frontView.frame.size.height - 20), configuration: configuration)
+            self.iWebView = WKWebView(
+                frame: CGRect(x: 0, y: 40, width: frontView.frame.size.width, height: frontView.frame.size.height - 40),
+                configuration: configuration
+            )
             self.iWebView?.navigationDelegate = self
             self.iWebView?.allowsLinkPreview = false
-            
+
             frontView.addSubview(self.iWebView!)
             self.iView?.addSubview(frontView)
             self.iBaseWindow?.addSubview(self.iView!)
             self.iBaseWindow?.bringSubviewToFront(self.iView!)
-            
-            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: frontView.frame.size.width, height: 40))
-            headerView.backgroundColor = UIColor.white
-            frontView.addSubview(headerView)
-            let doneButton = UIButton(type: .custom)
-            doneButton.addTarget(self, action: #selector(self.aDismissWebview(_:)), for: .touchUpInside)
 
-            let closeButtonImage = UIImage(systemName: "xmark",
-                                           withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
-            doneButton.setImage(closeButtonImage, for: .normal)
-            doneButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
-            doneButton.layer.cornerRadius = doneButton.bounds.size.width / 2
-            
-            doneButton.frame = isInAppSurvey ? CGRect(x: screenRect.size.width * 0.80, y: 15, width: 25, height: 25) : CGRect(x: self.iView!.frame.size.width - 40, y: 15, width: 20, height: 20)
-            
-            
-            frontView.addSubview(doneButton)
-            
-            self.backButton.addTarget(self, action: #selector(self.goToPreviousPage(_:)), for: .touchUpInside)
-            let backButtonImage = UIImage(systemName: "chevron.backward",
-                                           withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
-            self.backButton.setImage(backButtonImage, for: .normal)
-            self.backButton.tintColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
-            self.backButton.layer.cornerRadius = self.backButton.bounds.size.width / 2
-            self.backButton.frame = CGRect(x: 20, y: 10, width: 25, height: 25)
-            self.backButton.isHidden = true
-            frontView.addSubview(self.backButton)
+            frontView.addSubview(self.buildHeaderView(width: frontView.frame.size.width, widgetSettings: widgetSettings))
         }
+    }
+
+    private func buildFrontViewFrame(
+        isInAppSurvey: Bool,
+        widgetSettings: WidgetSettings?,
+        screenRect: CGRect,
+        safeArea: UIEdgeInsets,
+        fallbackSize: CGSize
+    ) -> CGRect {
+        guard isInAppSurvey else {
+            return CGRect(x: 0, y: 70, width: fallbackSize.width, height: fallbackSize.height)
+        }
+        guard let ws = widgetSettings, let ww = ws.widgetWindowWidth, let wh = ws.widgetWindowHeight else {
+            return CGRect(
+                x: screenRect.width * 0.05,
+                y: screenRect.height * 0.15,
+                width: screenRect.width * 0.9,
+                height: screenRect.height * 0.7
+            )
+        }
+        let viewWidth  = screenRect.width  * CGFloat(ww) / 100.0
+        let viewHeight = screenRect.height * CGFloat(wh) / 100.0
+        let viewX = (screenRect.width - viewWidth) / 2
+        let viewY: CGFloat
+        switch ws.position?.uppercased() {
+        case WidgetPosition.TOP_CENTER.rawValue:
+            viewY = safeArea.top + 8
+        case WidgetPosition.BOTTOM_CENTER.rawValue:
+            viewY = screenRect.height - viewHeight - safeArea.bottom - 8
+        default: // CENTER_CENTER and unrecognized values
+            viewY = (screenRect.height - viewHeight) / 2
+        }
+        return CGRect(x: viewX, y: viewY, width: viewWidth, height: viewHeight)
+    }
+
+    private func buildHeaderView(width: CGFloat, widgetSettings: WidgetSettings?) -> UIView {
+        let defaultIconColor = UIColor(red: 27/255.0, green: 51/255.0, blue: 128/255.0, alpha: 1.0)
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 40))
+        headerView.backgroundColor = widgetSettings?.backgroundColor?.toUIColor() ?? .white
+
+        backButton.addTarget(self, action: #selector(goToPreviousPage(_:)), for: .touchUpInside)
+        backButton.setImage(UIImage(systemName: "chevron.backward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .bold)), for: .normal)
+        backButton.tintColor = widgetSettings?.iconColor?.toUIColor() ?? defaultIconColor
+        backButton.frame = CGRect(x: 20, y: 8, width: 20, height: 20)
+        backButton.isHidden = true
+        headerView.addSubview(backButton)
+
+        let titleLabel = UILabel(frame: CGRect(x: 50, y: 8, width: width - 95, height: 20))
+        titleLabel.text = widgetSettings?.widgetTitle ?? ""
+        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        titleLabel.textColor = widgetSettings?.textColor?.toUIColor() ?? .black
+        headerView.addSubview(titleLabel)
+
+        let doneButton = UIButton(type: .system)
+        doneButton.addTarget(self, action: #selector(aDismissWebview(_:)), for: .touchUpInside)
+        doneButton.setImage(UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .bold)), for: .normal)
+        doneButton.tintColor = widgetSettings?.iconColor?.toUIColor() ?? defaultIconColor
+        doneButton.frame = CGRect(x: width - 40, y: 8, width: 20, height: 20)
+        headerView.addSubview(doneButton)
+
+        return headerView
     }
     
     private func clearSession() {
@@ -682,4 +728,16 @@ public class QuestionProCX: NSObject, UIAlertViewDelegate, WKNavigationDelegate,
     }
 }
 
-
+private extension String {
+    func toUIColor() -> UIColor? {
+        var hex = self.trimmingCharacters(in: .whitespacesAndNewlines)
+        if hex.hasPrefix("#") { hex = String(hex.dropFirst()) }
+        guard hex.count == 6, let value = UInt64(hex, radix: 16) else { return nil }
+        return UIColor(
+            red: CGFloat((value >> 16) & 0xFF) / 255.0,
+            green: CGFloat((value >> 8) & 0xFF) / 255.0,
+            blue: CGFloat(value & 0xFF) / 255.0,
+            alpha: 1.0
+        )
+    }
+}
