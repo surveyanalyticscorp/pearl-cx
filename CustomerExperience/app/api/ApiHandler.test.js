@@ -210,4 +210,127 @@ describe('ApiHandler', () => {
     expect(successCallback).not.toHaveBeenCalled();
     expect(errorCallback).toHaveBeenCalledWith(mockError);
   });
+
+  it('should handle getNotificationData with non-200 statusCode', async () => {
+    const badResponse = {statusCode: 400, body: 'error'};
+    WebServiceHandler.get.mockResolvedValue(badResponse);
+
+    await apiHandler.getNotificationData(
+      header,
+      successCallback,
+      errorCallback,
+    );
+
+    expect(successCallback).not.toHaveBeenCalled();
+    expect(errorCallback).not.toHaveBeenCalled();
+  });
+
+  it('should handle clearNotification with non-200 statusCode', async () => {
+    const badResponse = {statusCode: 400, body: 'error'};
+    WebServiceHandler.postNew.mockResolvedValue(badResponse);
+
+    await apiHandler.clearNotification(
+      header,
+      data,
+      successCallback,
+      errorCallback,
+    );
+
+    expect(successCallback).not.toHaveBeenCalled();
+    expect(errorCallback).not.toHaveBeenCalled();
+  });
+
+  it('should handle getNotificationData with null response', async () => {
+    WebServiceHandler.get.mockResolvedValue(null);
+
+    await apiHandler.getNotificationData(
+      header,
+      successCallback,
+      errorCallback,
+    );
+
+    expect(successCallback).not.toHaveBeenCalled();
+    expect(errorCallback).not.toHaveBeenCalled();
+  });
+
+  it('should handle clearNotification with null response', async () => {
+    WebServiceHandler.postNew.mockResolvedValue(null);
+
+    await apiHandler.clearNotification(
+      header,
+      data,
+      successCallback,
+      errorCallback,
+    );
+
+    expect(successCallback).not.toHaveBeenCalled();
+    expect(errorCallback).not.toHaveBeenCalled();
+  });
+
+  it('should call generateEmailWithAI with correct parameters', async () => {
+    const apiKey = 'mockApiKey';
+    const url = 'https://api.example.com/email';
+    WebServiceHandler.postNew.mockResolvedValue(mockResponse);
+
+    await apiHandler.generateEmailWithAI(
+      url,
+      apiKey,
+      data,
+      successCallback,
+      errorCallback,
+    );
+
+    expect(WebServiceHandler.postNew).toHaveBeenCalledWith(
+      url,
+      {'api-key': apiKey},
+      data,
+    );
+    expect(successCallback).toHaveBeenCalledWith(mockResponse);
+    expect(errorCallback).not.toHaveBeenCalled();
+  });
+
+  it('should handle error for generateEmailWithAI', async () => {
+    const apiKey = 'mockApiKey';
+    const url = 'https://api.example.com/email';
+    WebServiceHandler.postNew.mockRejectedValue(mockError);
+
+    await apiHandler.generateEmailWithAI(
+      url,
+      apiKey,
+      data,
+      successCallback,
+      errorCallback,
+    );
+
+    expect(WebServiceHandler.postNew).toHaveBeenCalledWith(
+      url,
+      {'api-key': apiKey},
+      data,
+    );
+    expect(successCallback).not.toHaveBeenCalled();
+    expect(errorCallback).toHaveBeenCalledWith(mockError);
+  });
+
+  it('should use default empty data object when not provided in getCXDetractorTicket', async () => {
+    WebServiceHandler.postNew.mockResolvedValue(mockResponse);
+
+    await apiHandler.getCXDetractorTicket(token, undefined, successCallback);
+
+    expect(WebServiceHandler.postNew).toHaveBeenCalledWith(
+      CX_DETRACTOR_TICKETS,
+      header,
+      {},
+    );
+    expect(successCallback).toHaveBeenCalledWith(mockResponse);
+  });
+
+  it('should use default empty errorCallback when not provided in getFeedbackResponseList', async () => {
+    WebServiceHandler.postNew.mockRejectedValue(mockError);
+
+    // Call without errorCallback - should use default
+    await apiHandler.getFeedbackResponseList(token, data, successCallback);
+
+    expect(WebServiceHandler.postNew).toHaveBeenCalled();
+    expect(successCallback).not.toHaveBeenCalled();
+  });
 });
