@@ -153,6 +153,21 @@ Final Coverage:
 **Total tests added in session 2:** 31 new tests
 **Commits:** 2 commits
 
+## Remaining Opportunities (For Next Session)
+
+**High-priority files with low branch coverage:**
+1. TicketComments.js (92.06% stmt, 55.55% branch) - Complex keyboard handling, needs edge cases
+2. SegmentText.js (80.59% stmt, 66.66% branch) - Missing 20% of statements
+3. ClosedLoop.js (91.13% stmt, 96.15% branch) - High branches already covered, focus on statement gaps
+4. NotificationUtils.js (80.21% stmt, 86.79% branch) - Missing 20% of statements
+5. WebServiceHandler.js (92.64% stmt, 83.01% branch) - Can improve fetch error branches
+
+**Files approaching 100%:**
+- SegmentSelector.js (94.37% stmt, 88.23% branch) - Very close to full coverage
+- ResponseTicketCell.js (100% stmt, 91.66% branch)
+- TicketUtils.js (100% stmt, 98.61% branch)
+- StringUtils.js (100% stmt, 100% branch) ✓
+
 ## Work Log
 - [session 1] Created 12 test files with 167 total tests, improved branch coverage by 0.71 percentage points, improved overall line coverage by 0.16 percentage points
 - [session 2] Enhanced 4 existing test files with 31 additional tests, improved overall coverage: stmt +0.04pp, branch +0.29pp, func +0.37pp, lines +0.20pp. Final: 95.89% stmt / 85.68% branch / 90.28% func / 95.89% lines
