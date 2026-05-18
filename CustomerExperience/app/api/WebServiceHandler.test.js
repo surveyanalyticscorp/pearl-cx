@@ -452,4 +452,148 @@ describe('WebServiceHandler', () => {
       expect(err.statusCode).toBe(400);
     });
   });
+
+  it('should handle null headers in makeApiCall', async () => {
+    fetch.mockResponseOnce(JSON.stringify(successResponse));
+
+    const apiMethod = 'GET';
+    const url = 'https://example.com/api';
+    const headerParam = null;
+    const queryParam = {};
+
+    const result = await WebServiceHandler.makeApiCall(
+      apiMethod,
+      url,
+      headerParam,
+      queryParam,
+      null,
+    );
+    expect(result).toBeDefined();
+    expect(fetch).toHaveBeenCalledWith(
+      url + '?',
+      expect.objectContaining({headers: {}}),
+    );
+  });
+
+  it('should handle success response with status field (not statusCode)', async () => {
+    const responseWithStatus = {status: 'SUCCESS', data: 'success'};
+    fetch.mockResponseOnce(JSON.stringify(responseWithStatus));
+
+    const url = 'api';
+    const headerParam = {Authorization: 'Bearer token'};
+    const queryParam = {};
+
+    const result = await WebServiceHandler.makeApiCall(
+      'GET',
+      url,
+      headerParam,
+      queryParam,
+      null,
+    );
+    expect(result).toBeDefined();
+  });
+
+  it('should handle error response where error field is null', async () => {
+    const responseWithNullError = {statusCode: 400, error: null};
+    fetch.mockResponseOnce(JSON.stringify(responseWithNullError));
+
+    const url = 'api';
+    const result = await WebServiceHandler.makeApiCall(
+      'GET',
+      url,
+      {},
+      {},
+      null,
+    );
+    expect(result).toBeDefined();
+  });
+
+  it('should handle patch method fetch errors silently', async () => {
+    fetch.mockRejectOnce(new Error('Patch error'));
+
+    const url = 'api';
+    const headerParam = {Authorization: 'Bearer token'};
+    const parameter = {key: 'value'};
+
+    const result = WebServiceHandler.patch(url, headerParam, parameter);
+    expect(result).toBeInstanceOf(Promise);
+    // The patch method does not reject on error, so we just verify it returns a promise
+  });
+
+  it('should handle postUploadFile without queryParam', () => {
+    fetch.mockResponseOnce(JSON.stringify(successResponse));
+
+    const url = 'api';
+    const headerParam = {Authorization: 'Bearer token'};
+    const formData = new FormData();
+    const mockFile = new Blob(['test'], {type: 'text/plain'});
+    formData.append('file', mockFile);
+
+    return WebServiceHandler.postUploadFile(
+      url,
+      headerParam,
+      formData,
+      null,
+    ).then(response => {
+      expect(fetch).toHaveBeenCalledWith(
+        `${global.baseUrl}api`,
+        expect.anything(),
+      );
+      expect(response).toBeDefined();
+    });
+  });
+
+  it('should handle multiple query parameters in parameter method', () => {
+    const parameter = {
+      status: 'active',
+      priority: 'high',
+      page: '1',
+      sortBy: 'date',
+    };
+    const result = WebServiceHandler.parameter(parameter);
+    expect(result).toContain('status=active');
+    expect(result).toContain('priority=high');
+    expect(result).toContain('page=1');
+    expect(result).toContain('sortBy=date');
+  });
+
+  it('should URL encode special characters in parameter values', () => {
+    const parameter = {search: 'hello world & special@chars'};
+    const result = WebServiceHandler.parameter(parameter);
+    expect(result).toContain('hello%20world');
+    expect(result).toContain('%26');
+    expect(result).toContain('%40');
+  });
+
+  it('should use full URL without prepending baseUrl when URL contains http', () => {
+    fetch.mockResponseOnce(JSON.stringify(successResponse));
+
+    const fullUrl = 'https://external.api.com/endpoint';
+    const headerParam = {};
+    const parameter = {};
+
+    return WebServiceHandler.get(fullUrl, headerParam, parameter).then(() => {
+      expect(fetch).toHaveBeenCalledWith(
+        fullUrl + '?',
+        expect.anything(),
+      );
+    });
+  });
+
+  it('should use full URL in POST request when URL contains http', () => {
+    fetch.mockResponseOnce(JSON.stringify(successResponse));
+
+    const fullUrl = 'https://external.api.com/endpoint';
+    const headerParam = {};
+    const parameter = {test: 'data'};
+
+    return WebServiceHandler.postNew(fullUrl, headerParam, parameter, {}).then(
+      () => {
+        expect(fetch).toHaveBeenCalledWith(
+          fullUrl + '?',
+          expect.anything(),
+        );
+      },
+    );
+  });
 });

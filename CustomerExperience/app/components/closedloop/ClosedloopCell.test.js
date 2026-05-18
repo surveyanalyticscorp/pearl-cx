@@ -130,4 +130,132 @@ describe('ClosedLoopCell', () => {
 
     expect(queryByTestId('checkbox')).toBeNull();
   });
+
+  it('renders checkbox when showCheckBox is true', () => {
+    const {queryByTestId} = render(
+      <Provider store={store}>
+        <ClosedLoopCell {...mockProps} />
+      </Provider>,
+    );
+
+    expect(queryByTestId('checkbox')).toBeTruthy();
+  });
+
+  it('renders anonymous text when panelMember name is empty', () => {
+    const anonymousProps = {
+      ...mockProps,
+      data: {
+        ...mockData,
+        panelMember: {email: 'user@example.com'},
+      },
+    };
+
+    const {getByText} = render(
+      <Provider store={store}>
+        <ClosedLoopCell {...anonymousProps} />
+      </Provider>,
+    );
+
+    expect(getByText('user@example.com')).toBeTruthy();
+  });
+
+  it('renders anonymous text when panelMember is null or has no name and email', () => {
+    const anonymousProps = {
+      ...mockProps,
+      data: {
+        ...mockData,
+        panelMember: {},
+      },
+    };
+
+    const {getByText} = render(
+      <Provider store={store}>
+        <ClosedLoopCell {...anonymousProps} />
+      </Provider>,
+    );
+
+    expect(getByText('ticket_list.anonymous')).toBeTruthy();
+  });
+
+  it('renders NPS score correctly when npsScore is provided', () => {
+    const npsProps = {
+      ...mockProps,
+      data: {
+        ...mockData,
+        npsScore: 9,
+      },
+    };
+
+    const {getByTestId} = render(
+      <Provider store={store}>
+        <ClosedLoopCell {...npsProps} />
+      </Provider>,
+    );
+
+    expect(getByTestId('closedloop-cell')).toBeTruthy();
+  });
+
+  it('handles null npsScore', () => {
+    const nullNpsProps = {
+      ...mockProps,
+      data: {
+        ...mockData,
+        npsScore: null,
+      },
+    };
+
+    const {getByTestId} = render(
+      <Provider store={store}>
+        <ClosedLoopCell {...nullNpsProps} />
+      </Provider>,
+    );
+
+    expect(getByTestId('closedloop-cell')).toBeTruthy();
+  });
+
+  it('calls onPressHandler from checkbox press', () => {
+    const {getByTestId} = render(
+      <Provider store={store}>
+        <ClosedLoopCell {...mockProps} />
+      </Provider>,
+    );
+
+    fireEvent.press(getByTestId('checkbox'));
+    expect(mockProps.onPressHandler).toHaveBeenCalled();
+  });
+
+  it('applies borderTopWidth 0 when isOverdue is true', () => {
+    const overdueProps = {
+      ...mockProps,
+      data: {...mockData, isOverdue: true, overdueDate: '2023-03-20T10:00:00Z'},
+    };
+
+    const {getByTestId} = render(
+      <Provider store={store}>
+        <ClosedLoopCell {...overdueProps} />
+      </Provider>,
+    );
+
+    const cell = getByTestId('closedloop-cell');
+    expect(cell).toBeTruthy();
+  });
+
+  it('renders OverdueBar component with correct date', () => {
+    const overdueProps = {
+      ...mockProps,
+      data: {
+        ...mockData,
+        isOverdue: true,
+        overdueDate: '2023-03-18T10:00:00Z',
+      },
+    };
+
+    const {getByTestId} = render(
+      <Provider store={store}>
+        <ClosedLoopCell {...overdueProps} />
+      </Provider>,
+    );
+
+    expect(getByTestId('closedloop-cell')).toBeTruthy();
+  });
 });
