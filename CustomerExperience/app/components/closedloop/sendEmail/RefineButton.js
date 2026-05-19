@@ -6,7 +6,7 @@ import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {FaIcon} from '../../../Utils/IconUtils';
-import DropDownIcon from '../../../assets/images/dropdown_icon.svg';
+import DropDownIcon from '../../../../assets/images/dropdown_icon.svg';
 import {HorizontalSpaceBox} from '../../../widgets/SpaceBox';
 import StringUtils from '../../../Utils/StringUtils';
 

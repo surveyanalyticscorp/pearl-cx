@@ -3,7 +3,7 @@ import {Pressable, StyleSheet} from 'react-native';
 import {MaterialIcons} from '../../../Utils/IconUtils';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {Colors} from '../../../styles/color.constants';
-import QPAIIcon from '../../../assets/images/qp_ai.svg';
+import QPAIIcon from '../../../../assets/images/qp_ai.svg';
 
 const AiDraftButton = ({onPress}) => {
   return (

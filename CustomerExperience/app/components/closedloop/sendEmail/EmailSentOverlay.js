@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import CheckSvg from '../../../assets/images/check.svg';
+import CheckSvg from '../../../../assets/images/check.svg';
 import {MaterialIcons} from '../../../Utils/IconUtils';
 import {Colors} from '../../../styles/color.constants';
 import {FontFamily} from '../../../styles/font.constants';

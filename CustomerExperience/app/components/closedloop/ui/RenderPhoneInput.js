@@ -9,6 +9,7 @@ import {MarginConstants} from '../../../styles/margin.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import CountryPhoneNumberLength from '../../../Utils/CountryPhoneNumberLength';
+import PhoneIcon from '../../../../assets/images/phone.svg';
 
 const RenderPhoneInput = ({setTicketState}) => {
   const [text, setText] = useState(' ');
@@ -25,9 +26,7 @@ const RenderPhoneInput = ({setTicketState}) => {
   return (
     <View>
       <IconAndTitleText
-        icon={
-          <MaterialIcon name={'call'} size={14} color={Colors.lightBlack} />
-        }
+        icon={<PhoneIcon width={16} height={16} />}
         title={translate('create_new_ticket.phone_number')}
       />
 

@@ -5,7 +5,7 @@ import {PaddingConstants} from '../../../styles/padding.constants';
 import {TextSizes} from '../../../styles/textsize.constants';
 import {FontFamily} from '../../../styles/font.constants';
 import {MarginConstants} from '../../../styles/margin.constants';
-import RegenerateIcon from '../../../assets/images/regenerate.svg';
+import RegenerateIcon from '../../../../assets/images/regenerate.svg';
 
 const RegenerateButton = ({onPress, isSmallScreen}) => (
   <Pressable

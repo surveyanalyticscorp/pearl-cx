@@ -12,7 +12,7 @@ import StringUtils from '../../../Utils/StringUtils';
 import ActionButtons from '../../../routes/commonUI/ActionButtons';
 import ListItemSeparator from '../../../routes/commonUI/ListItemSeparator';
 import {HorizontalSpaceBox, VerticalSpaceBox} from '../../../widgets/SpaceBox';
-import QPAIIcon from '../../../assets/images/qp_ai.svg';
+import QPAIIcon from '../../../../assets/images/qp_ai.svg';
 
 const isSmallScreen = Dimensions.get('window').width <= 375;
 

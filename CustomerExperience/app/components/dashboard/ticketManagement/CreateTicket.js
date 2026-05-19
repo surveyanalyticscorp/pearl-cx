@@ -49,10 +49,8 @@ import {StackActions, useNavigation} from '@react-navigation/native';
 import {translate} from '../../../Utils/MultilinguaUtils';
 import {VerticalSpaceBox} from '../../../widgets/SpaceBox';
 import ShowTitleAndDropdown from '../../closedloop/ui/ShowTitleAndDropdown';
-import DateFilterIcon from '../../../widgets/IconWidget/DateFilterIcon';
 import PersonIcon from '../../../widgets/IconWidget/PersonIcon';
 import IconAndTitleText from '../../closedloop/ui/IconAndTitleText';
-import StatusIcon from '../../../widgets/IconWidget/StatusIcon';
 import RenderPhoneInput from '../../closedloop/ui/RenderPhoneInput';
 import RenderCreateTicketButton from './RenderCreateTicketButton';
 import {IonIcon, MaterialIcons} from '../../../Utils/IconUtils';
@@ -63,8 +61,19 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ShowInputError from '../../../routes/commonUI/ShowInputError';
 import {getApiValidationErrorMessage} from '../../../Utils/ErrorValidationUtils';
 import {QPTransparentSpinner} from '../../../widgets/QPTransparentSpinner';
-import {QPBottomSheet, QPBottomSheetHeader} from '../../../widgets/QPBottomSheet';
+import {
+  QPBottomSheet,
+  QPBottomSheetHeader,
+} from '../../../widgets/QPBottomSheet';
 import useSegmentList from '../../../hooks/useSegmentList';
+import EmailIcon from '../../../../assets/images/email.svg';
+import CustomerIcon from '../../../../assets/images/customer.svg';
+import SegmentIcon from '../../../../assets/images/segment.svg';
+import StatusIcon from '../../../../assets/images/status.svg';
+import DateIcon from '../../../../assets/images/date.svg';
+import CommentIcon from '../../../../assets/images/comment.svg';
+import OwnerIcon from '../../../../assets/images/owner.svg';
+import PriorityIcon from '../../../../assets/images/priority.svg';
 
 const INPUTTYPES = {
   EMAIL: 'EMAIL',
@@ -77,6 +86,8 @@ const INPUTTYPES = {
   DESCRIPTION: 'DESCRIPTION',
   OWNER: 'OWNER',
 };
+
+export const CREATE_TICKET_ICON_SIZE = 16;
 
 const checkValidation = ticketState => {
   // convert errorInputTypes to map
@@ -155,23 +166,19 @@ const CreateTicketContainer = ({children}) => {
   );
 };
 const RenderMaterialIcon = ({iconName}) => (
-  <MaterialIcon name={iconName} size={14} color={Colors.lightBlack} />
+  <MaterialIcon
+    name={iconName}
+    size={CREATE_TICKET_ICON_SIZE}
+    color={Colors.lightBlack}
+  />
 );
 
-const SegmentIcon = () => {
-  const segmentIcon = './../../../../assets/images/segment_icon.png';
-
-  return (
-    <Image
-      // source={require('./../../../assets/images/segment_icon.png')}
-      source={require(segmentIcon)}
-      style={styles.image}
-    />
-  );
-};
-
 const RenderMateriaCommunityIcon = ({iconName}) => (
-  <MaterialCommunityIcon name={iconName} size={14} color={Colors.lightBlack} />
+  <MaterialCommunityIcon
+    name={iconName}
+    size={CREATE_TICKET_ICON_SIZE}
+    color={Colors.lightBlack}
+  />
 );
 const RenderTextInput = ({
   multiline = false,
@@ -219,7 +226,10 @@ const RenderEmailAddressInput = ({
     <View>
       <IconAndTitleText
         icon={
-          <IonIcon name={'mail'} size={14} color={Colors.filterIconColor} />
+          <EmailIcon
+            width={CREATE_TICKET_ICON_SIZE}
+            height={CREATE_TICKET_ICON_SIZE}
+          />
         }
         title={'Email'}
       />
@@ -250,10 +260,9 @@ const RenderDescriptionInput = ({
     <View>
       <IconAndTitleText
         icon={
-          <MaterialIcons
-            name={'chat-bubble'}
-            size={14}
-            color={Colors.filterIconColor}
+          <CommentIcon
+            width={CREATE_TICKET_ICON_SIZE}
+            height={CREATE_TICKET_ICON_SIZE}
           />
         }
         title={translate('ticket_overview.description')}
@@ -286,7 +295,12 @@ const RenderCustomerNameInput = ({
   return (
     <View>
       <IconAndTitleText
-        icon={<PersonIcon size={12} />}
+        icon={
+          <CustomerIcon
+            width={CREATE_TICKET_ICON_SIZE}
+            height={CREATE_TICKET_ICON_SIZE}
+          />
+        }
         title={'Customer name'}
       />
       <RenderTextInput
@@ -619,7 +633,12 @@ export default function CreateTicket(props) {
 
         <VerticalSpaceBox multiplyBy={2} />
         <ShowTitleAndDropdown
-          titleIcon={<SegmentIcon />}
+          titleIcon={
+            <SegmentIcon
+              width={CREATE_TICKET_ICON_SIZE}
+              height={CREATE_TICKET_ICON_SIZE}
+            />
+          }
           title={'Segment'}
           currentItemName={segment}
           onPress={handleSegmentSelection}
@@ -630,7 +649,12 @@ export default function CreateTicket(props) {
 
         <VerticalSpaceBox multiplyBy={2} />
         <ShowTitleAndDropdown
-          titleIcon={<DateFilterIcon size={12} />}
+          titleIcon={
+            <DateIcon
+              width={CREATE_TICKET_ICON_SIZE}
+              height={CREATE_TICKET_ICON_SIZE}
+            />
+          }
           title={'Date'}
           currentItemName={moment(selectedDate, DMYFORMAT).format(
             FullMonthDateYearFormat,
@@ -645,7 +669,10 @@ export default function CreateTicket(props) {
 
         <ShowTitleAndDropdown
           titleIcon={
-            <IonIcon name={'flag'} size={14} color={Colors.filterIconColor} />
+            <PriorityIcon
+              width={CREATE_TICKET_ICON_SIZE}
+              height={CREATE_TICKET_ICON_SIZE}
+            />
           }
           title={'Priority'}
           currentItemName={`${
@@ -655,7 +682,7 @@ export default function CreateTicket(props) {
           frontIcon={
             <IonIcon
               name={'flag'}
-              size={14}
+              size={CREATE_TICKET_ICON_SIZE}
               color={getPriorityBorderColorbyId(ticketState.priority)}
             />
           }
@@ -667,14 +694,19 @@ export default function CreateTicket(props) {
         <VerticalSpaceBox multiplyBy={2} />
 
         <ShowTitleAndDropdown
-          titleIcon={<StatusIcon size={12} />}
+          titleIcon={
+            <StatusIcon
+              width={CREATE_TICKET_ICON_SIZE}
+              height={CREATE_TICKET_ICON_SIZE}
+            />
+          }
           title={'Status'}
           currentItemName={`${getStatusById(ticketState.status) ?? 'New'}`}
           onPress={handleStatusSelection}
           frontIcon={
             <RenderStatusIcon
               title={getStatusById(ticketState.status) ?? 'New'}
-              size={14}
+              size={CREATE_TICKET_ICON_SIZE}
             />
           }
           hasArrowDownIcon
@@ -684,7 +716,12 @@ export default function CreateTicket(props) {
         <VerticalSpaceBox multiplyBy={2} />
 
         <ShowTitleAndDropdown
-          titleIcon={<RenderMateriaCommunityIcon iconName={'shield-account'} />}
+          titleIcon={
+            <OwnerIcon
+              width={CREATE_TICKET_ICON_SIZE}
+              height={CREATE_TICKET_ICON_SIZE}
+            />
+          }
           title={'Ticket owner'}
           currentItemName={`${ticketOwner ?? ''}`}
           onPress={handleOwnerSelection}
@@ -828,7 +865,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     height: '100%',
   },
-  image: {width: 14, height: 14},
+  image: {width: CREATE_TICKET_ICON_SIZE, height: CREATE_TICKET_ICON_SIZE},
 
   qpButtonTextStyles: {
     fontFamily: FontFamily.light,

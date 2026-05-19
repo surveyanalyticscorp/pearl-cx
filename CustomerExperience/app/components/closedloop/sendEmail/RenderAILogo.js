@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import StartAlignedView from '../../../routes/commonUI/StartAlignedView';
-import QPAIIcon from '../../../assets/images/qp_ai.svg';
+import QPAIIcon from '../../../../assets/images/qp_ai.svg';
 import {MarginConstants} from '../../../styles/margin.constants';
 import {PaddingConstants} from '../../../styles/padding.constants';
 import {Colors} from '../../../styles/color.constants';
