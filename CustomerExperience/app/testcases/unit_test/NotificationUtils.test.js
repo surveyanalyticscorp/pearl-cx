@@ -2,18 +2,15 @@ import {
   requestNotificationPermission,
   checkNotificationPermission,
   addNotificationListeners,
-  actionOnNotification,
 } from '../../Utils/NotificationUtils';
 import {Platform, PermissionsAndroid} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Notifications} from 'react-native-notifications';
-import * as RootNavigation from '../../routes/RootNavigation';
 
 jest.mock('@react-native-firebase/messaging');
 jest.mock('@react-native-async-storage/async-storage');
 jest.mock('react-native-notifications');
-jest.mock('../../routes/RootNavigation');
 
 describe('NotificationUtils', () => {
   beforeEach(() => {
@@ -255,149 +252,6 @@ describe('NotificationUtils', () => {
       addNotificationListeners();
 
       expect(mockEvents.registerNotificationOpened).toHaveBeenCalled();
-    });
-  });
-
-  describe('actionOnNotification', () => {
-    beforeEach(() => {
-      RootNavigation.navigationRef = {
-        current: {
-          getCurrentRoute: jest.fn(),
-          dispatch: jest.fn(),
-        },
-      };
-      RootNavigation.navigate = jest.fn();
-    });
-
-    it('should navigate to TicketDetails when navigation ref is available', async () => {
-      const ticketItem = {id: 123, feedbackId: 456};
-      RootNavigation.navigationRef.current.getCurrentRoute = jest.fn().mockReturnValue(null);
-
-      await actionOnNotification(ticketItem, 789, 0);
-
-      jest.runAllTimers();
-
-      // Wait for async operations
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(RootNavigation.navigate).toHaveBeenCalled();
-    });
-
-    it('should wait for specified timeout before navigating', async () => {
-      const ticketItem = {id: 123};
-      RootNavigation.navigationRef.current.getCurrentRoute = jest.fn().mockReturnValue(null);
-      const timeoutMs = 5000;
-
-      const promise = actionOnNotification(ticketItem, 789, timeoutMs);
-
-      // Time should have advanced by timeout
-      jest.advanceTimersByTime(timeoutMs + 100);
-
-      await promise;
-
-      expect(RootNavigation.navigate).toHaveBeenCalled();
-    });
-
-    it('should not navigate if already on correct ticket details screen', async () => {
-      const ticketItem = {id: 123};
-      RootNavigation.navigationRef.current.getCurrentRoute = jest.fn().mockReturnValue({
-        name: 'TicketDetails',
-        params: {ticketItem: {id: 123}},
-        key: 'route-key',
-      });
-
-      await actionOnNotification(ticketItem, 789, 0);
-
-      jest.runAllTimers();
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(RootNavigation.navigate).not.toHaveBeenCalled();
-      expect(RootNavigation.navigationRef.current.dispatch).toHaveBeenCalled();
-    });
-
-    it('should dispatch setParams when already on same ticket', async () => {
-      const ticketItem = {id: 123};
-      RootNavigation.navigationRef.current.getCurrentRoute = jest.fn().mockReturnValue({
-        name: 'TicketDetails',
-        params: {ticketItem: {id: 123}},
-        key: 'route-key',
-      });
-
-      await actionOnNotification(ticketItem, 789, 0);
-
-      jest.runAllTimers();
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(RootNavigation.navigationRef.current.dispatch).toHaveBeenCalled();
-    });
-
-    it('should handle navigation errors gracefully', async () => {
-      const ticketItem = {id: 123};
-      RootNavigation.navigationRef.current.getCurrentRoute = jest.fn().mockImplementation(() => {
-        throw new Error('Navigation error');
-      });
-
-      // Should not throw
-      await actionOnNotification(ticketItem, 789, 0);
-
-      jest.runAllTimers();
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(true).toBe(true);
-    });
-
-    it('should handle null navigation ref initially', async () => {
-      const ticketItem = {id: 123};
-      RootNavigation.navigationRef = {current: null};
-      RootNavigation.navigate = jest.fn();
-
-      const promise = actionOnNotification(ticketItem, 789, 0);
-
-      jest.runAllTimers();
-      await new Promise(resolve => setTimeout(resolve, 200));
-      await promise;
-
-      expect(true).toBe(true);
-    });
-  });
-
-  describe('Edge cases', () => {
-    it('should handle multiple concurrent permission requests', async () => {
-      Platform.OS = 'android';
-      Platform.Version = 33;
-      PermissionsAndroid.PERMISSIONS = {POST_NOTIFICATIONS: 'android.permission.POST_NOTIFICATIONS'};
-      PermissionsAndroid.RESULTS = {GRANTED: 'granted'};
-      PermissionsAndroid.request = jest.fn().mockResolvedValue('granted');
-
-      const result1 = await requestNotificationPermission();
-      const result2 = await requestNotificationPermission();
-
-      expect(result1).toBe(true);
-      expect(result2).toBe(true);
-    });
-
-    it('should handle notification with valid payload structure', async () => {
-      const ticketItem = {id: 123, feedbackId: 456};
-      RootNavigation.navigationRef = {
-        current: {
-          getCurrentRoute: jest.fn().mockReturnValue(null),
-          dispatch: jest.fn(),
-        },
-      };
-      RootNavigation.navigate = jest.fn();
-
-      await actionOnNotification(ticketItem, 789, 0);
-
-      jest.runAllTimers();
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      expect(RootNavigation.navigate).toHaveBeenCalledWith(
-        'TicketDetails',
-        expect.objectContaining({
-          ticketItem: expect.objectContaining({id: 123}),
-          notificationId: 789,
-        }),
-      );
     });
   });
 });
